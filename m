@@ -2,68 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EFC67D2AE
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 18:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C1967D2CD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 18:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjAZRIA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 12:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
+        id S232246AbjAZRLp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 12:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjAZRHt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 12:07:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC82103;
-        Thu, 26 Jan 2023 09:07:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 560E8B81EBB;
-        Thu, 26 Jan 2023 17:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B97C433D2;
-        Thu, 26 Jan 2023 17:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674752863;
-        bh=ydUIGYOf/GoJoEjhC3lCcrLPdl45ouGCDNjPs+UrcXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZyRNr78FbZMAfN4ZWotWZwJ/+Tuuw7EEIdKZVmaEr79q7Gfqo/7byOpjdtngLHm7f
-         iJ50uUxpgpRaySdNAr8G64PG1UnkD4CfQnQQgaXFHQIcgpB6+iQlD6IqRo413yRqCK
-         yWsWWDbNy/mkVRIH4IKBNHRpCjTq9AI05rVDL6NiVAW8CobsujkjFmSgXckIpzuVOx
-         I7WvKRtV9iJXAn1mLctiaA3E0uqrnJqWzbNVH0ErVnzFpAfy9TemTsVo31ObrqQRym
-         wEEmKTCFh00u3QaXJeAMvw5DfBqHW3Poh2j36xmJyjsWFkTk4mvoHuOZJ8Au0RsBU2
-         iJMhqLpqenYZg==
-Date:   Thu, 26 Jan 2023 17:07:40 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     William Roberts <bill.c.roberts@gmail.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-Message-ID: <Y9KzXPuMUAa47lj3@kernel.org>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
- <Y8tcEtr8Kl3p4qtA@kernel.org>
- <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+        with ESMTP id S229437AbjAZRLl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 12:11:41 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC8966FAE
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 09:11:28 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id z5so2462497wrt.6
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 09:11:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2pHKQJWH1KmYh2TGTU2wH9BfmH0u+CHZy41N/emBPgk=;
+        b=w24l95Uz6BBmWmGf88j0Gi82dTVQBE+FS0LpyNo+Vt5fHlmZEKu3/cQuOx7+V2CnAV
+         A6fNrol+i/YH+LKUsZU+E7qCRqio2lATUDapOCd/fk9/zFiXiXcAHApKgWy6ydP+ibNM
+         TDKYTFd9WXvvgvYrqRNGAf9d3W7pVl8pBhwIiBtRcm9eFjkmNq620XBOVM0C29u+zHwc
+         D0WEC/5JQ5d24OYtq4VTgEBKFiv1YBF4WeEd3mXxi6+qQHJkX0lAHYn2KGUaBuhdjUGS
+         U8Pm9GM+wGxohk4CyWHKmanCLhtw+B6z/vXqNkwJzSsQpzLbQJKa/f3rOCfHYO0otHB3
+         lzCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2pHKQJWH1KmYh2TGTU2wH9BfmH0u+CHZy41N/emBPgk=;
+        b=uAZNLVzo2AMy6r1XObuyOD9pKSwHusk7rTW4xNqwp+z0svEsUahHiSqnCjqn88hUK1
+         ym02VGBjshw5Jel5v5Okku2O+I+cL743UQzQSTYCfIU0T2n6/M4bibbFfc7bhNce1qgI
+         NxR+sSsPN5qxwwq4cKZ9dxUkkW2P30MoOTtM/smVOKdx8XjNTNyfhTfvgFsvlkXDXtI8
+         7eUcwpfaAFqk7BpvkOrFVEO0t21Ns4WXupLuKva40EiNKTnNkL70JT565/LUTus7eUOk
+         HfmRYFjOwBJjy2U33XtP9kwLhVNjl2IiA6Nftl9dFD938DLY1r55mGI2QWkzdwFoxDcR
+         uXpQ==
+X-Gm-Message-State: AFqh2ko123sSs05iCtWJODrpsNsaY+AMjJoTirW8h8CGRBnUKhdFSfJV
+        PO0yWsBK0DBcWCMbyz33GKYQEA==
+X-Google-Smtp-Source: AMrXdXurdgjmMvj6kxwr5UCaP/4FD4WnkTDZtww2X0SCWt/zdnMlwB/liKai/m1BDKy/JKcJdXnTHg==
+X-Received: by 2002:adf:df02:0:b0:2bd:db66:54eb with SMTP id y2-20020adfdf02000000b002bddb6654ebmr40272833wrl.20.1674753086710;
+        Thu, 26 Jan 2023 09:11:26 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id f12-20020adfdb4c000000b002bfb1de74absm1903884wrj.114.2023.01.26.09.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 09:11:26 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Thu, 26 Jan 2023 18:11:21 +0100
+Subject: [PATCH v2] power: reset: add Odroid Go Ultra poweroff driver
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230126-b4-odroid-go-ultra-poweroff-v2-1-a8c50866f4ac@linaro.org>
+X-B4-Tracking: v=1; b=H4sIADi00mMC/x2NQQrCMBAAv1L27EJNRNSviIdNsmkXQrZsbBVK/
+ 27wOHOY2aGxCTd4DDsYb9JEawd3GiDOVCdGSZ3Bjc6PZ3fFcEFNppJwUlzL2wgX/bBpzhhvOUW
+ 6++w5QC8EaozBqMa5N+paSpeLcZbvf/l8HccPSlXVYYIAAAA=
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +72,223 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:48:25AM -0600, William Roberts wrote:
-> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > <bill.c.roberts@gmail.com> wrote:
-> > > >
-> > > > > What's the use case of using the creation data and ticket in this
-> > > > > context? Who gets the creationData and the ticket?
-> > > > > Could a user supplied outsideInfo work? IIRC I saw some patches
-> > > > > flying around where the sessions will get encrypted and presumably
-> > > > > correctly as well. This would allow the transfer of that
-> > > > > outsideInfo, like the NV Index PCR value to be included and
-> > > > > integrity protected by the session HMAC.
-> > > >
-> > > > The goal is to ensure that the key was generated by the kernel. In
-> > > > the absence of the creation data, an attacker could generate a
-> > > > hibernation image using their own key and trick the kernel into
-> > > > resuming arbitrary code. We don't have any way to pass secret data
-> > > > from the hibernate kernel to the resume kernel, so I don't think
-> > > > there's any easy way to do it with outsideinfo.
-> > >
-> > > Can we go back again to why you can't use locality?  It's exactly
-> > > designed for this since locality is part of creation data.  Currently
-> > > everything only uses locality 0, so it's impossible for anyone on Linux
-> > > to produce a key with anything other than 0 in the creation data for
-> > > locality.  However, the dynamic launch people are proposing that the
-> > > Kernel should use Locality 2 for all its operations, which would allow
-> > > you to distinguish a key created by the kernel from one created by a
-> > > user by locality.
-> > >
-> > > I think the previous objection was that not all TPMs implement
-> > > locality, but then not all laptops have TPMs either, so if you ever
-> > > come across one which has a TPM but no locality, it's in a very similar
-> > > security boat to one which has no TPM.
-> >
-> > Kernel could try to use locality 2 and use locality 0 as fallback.
-> 
-> I don't think that would work for Matthew, they need something
-> reliable to indicate key provenance.
-> 
-> I was informed that all 5 localities should be supported starting
-> with Gen 7 Kaby Lake launched in 2016. Don't know if this is
-> still "too new".
+The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
+to its two PMICs in order, this represents the poweroff scheme needed to complete
+a clean poweroff of the system.
 
-What about having opt-in flag that distributions can then enable?
+This implement this scheme by implementing a self registering driver to permit
+using probe defer until both pmics are finally probed.
 
-BR, Jarkko
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Previous submission was at [1], but I converted it to an independent
+platform device with device auto registration to permit waiting for
+both the PMICs drivers to probe.
+
+[1] https://lore.kernel.org/all/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org/
+---
+Changes in v2:
+- Switched to devm_register_sys_off_handler()
+- Link to v1: https://lore.kernel.org/r/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org
+---
+ drivers/power/reset/Kconfig                    |   7 ++
+ drivers/power/reset/Makefile                   |   1 +
+ drivers/power/reset/odroid-go-ultra-poweroff.c | 151 +++++++++++++++++++++++++
+ 3 files changed, 159 insertions(+)
+
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index a8c46ba5878f..26860c2e05a9 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -141,6 +141,13 @@ config POWER_RESET_OCELOT_RESET
+ 	help
+ 	  This driver supports restart for Microsemi Ocelot SoC and similar.
+ 
++config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
++	bool "Odroid Go Ultra power-off driver"
++	depends on ARCH_MESON || COMPILE_TEST
++	depends on MFD_RK808
++	help
++	  This driver supports Power off for Odroid Go Ultra device.
++
+ config POWER_RESET_OXNAS
+ 	bool "OXNAS SoC restart driver"
+ 	depends on ARCH_OXNAS
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 0a39424fc558..d763e6735ee3 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -17,6 +17,7 @@ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+ obj-$(CONFIG_POWER_RESET_OXNAS) += oxnas-restart.o
+ obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+ obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
++obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) += odroid-go-ultra-poweroff.o
+ obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+ obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
+ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+diff --git a/drivers/power/reset/odroid-go-ultra-poweroff.c b/drivers/power/reset/odroid-go-ultra-poweroff.c
+new file mode 100644
+index 000000000000..51f54e65c927
+--- /dev/null
++++ b/drivers/power/reset/odroid-go-ultra-poweroff.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
++ */
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/of_platform.h>
++#include <linux/mfd/rk808.h>
++#include <linux/regmap.h>
++#include <linux/module.h>
++#include <linux/reboot.h>
++#include <linux/i2c.h>
++
++/*
++ * The Odroid Go Ultra has 2 PMICs:
++ * - RK818 (manages the battery and USB-C power supply)
++ * - RK817
++ * Both PMICs feeds power to the S922X SoC, so they must be powered-off in sequence.
++ * Vendor does power-off the RK817 first, then the RK818 so here we follow this sequence.
++ */
++
++struct odroid_go_ultra_poweroff_data {
++	struct device *dev;
++	struct rk808 *rk817;
++	struct rk808 *rk818;
++};
++
++static int odroid_go_ultra_poweroff_prepare(struct sys_off_data *data)
++{
++	struct odroid_go_ultra_poweroff_data *poweroff_data = data->cb_data;
++	int ret;
++
++	dev_info(poweroff_data->dev, "Setting PMICs for power off");
++
++	/* RK817 */
++	ret = regmap_update_bits(poweroff_data->rk817->regmap, RK817_SYS_CFG(3), DEV_OFF, DEV_OFF);
++	if (ret) {
++		dev_err(poweroff_data->dev, "failed to poweroff rk817\n");
++		return notifier_from_errno(ret);
++	}
++
++	/* RK818 */
++	ret = regmap_update_bits(poweroff_data->rk818->regmap, RK818_DEVCTRL_REG, DEV_OFF, DEV_OFF);
++	if (ret) {
++		dev_err(poweroff_data->dev, "failed to poweroff rk818\n");
++		return notifier_from_errno(ret);
++	}
++
++	return NOTIFY_OK;
++}
++
++static int odroid_go_ultra_poweroff_get_pmic_drvdata(const char *compatible, struct rk808 **pmic)
++{
++	struct device_node *pmic_node;
++	struct i2c_client *pmic_client;
++
++	pmic_node = of_find_compatible_node(NULL, NULL, compatible);
++	if (!pmic_node)
++		return -ENODEV;
++
++	pmic_client = of_find_i2c_device_by_node(pmic_node);
++	of_node_put(pmic_node);
++	if (!pmic_client)
++		return -EPROBE_DEFER;
++
++	*pmic = i2c_get_clientdata(pmic_client);
++
++	put_device(&pmic_client->dev);
++
++	if (!*pmic)
++		return -EPROBE_DEFER;
++
++	return 0;
++}
++
++static int odroid_go_ultra_poweroff_probe(struct platform_device *pdev)
++{
++	struct odroid_go_ultra_poweroff_data *poweroff_data;
++	int ret;
++
++	poweroff_data = devm_kzalloc(&pdev->dev, sizeof(*poweroff_data), GFP_KERNEL);
++	if (!poweroff_data)
++		return -ENOMEM;
++
++	dev_set_drvdata(&pdev->dev, poweroff_data);
++
++	/* RK818 */
++	ret = odroid_go_ultra_poweroff_get_pmic_drvdata("rockchip,rk818",
++							&poweroff_data->rk818);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to get rk818 mfd data\n");
++
++	/* RK817 */
++	ret = odroid_go_ultra_poweroff_get_pmic_drvdata("rockchip,rk817",
++							&poweroff_data->rk817);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to get rk817 mfd data\n");
++
++	/* Register as SYS_OFF_MODE_POWER_OFF_PREPARE because regmap_update_bits may sleep */
++	ret = devm_register_sys_off_handler(&pdev->dev,
++					    SYS_OFF_MODE_POWER_OFF_PREPARE,
++					    SYS_OFF_PRIO_DEFAULT,
++					    odroid_go_ultra_poweroff_prepare,
++					    poweroff_data);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to register sys-off handler\n");
++
++	dev_info(&pdev->dev, "Registered Power-Off handler\n");
++
++	return 0;
++}
++
++static struct platform_device *pdev;
++
++static struct platform_driver odroid_go_ultra_poweroff_driver = {
++	.driver = {
++		.name	= "odroid-go-ultra-poweroff",
++	},
++	.probe = odroid_go_ultra_poweroff_probe,
++};
++
++static int __init odroid_go_ultra_poweroff_init(void)
++{
++	int ret;
++
++	/* Only create when running on the Odroid Go Ultra device */
++	if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
++		return -ENODEV;
++
++	ret = platform_driver_register(&odroid_go_ultra_poweroff_driver);
++	if (ret)
++		return ret;
++
++	pdev = platform_device_register_resndata(NULL, "odroid-go-ultra-poweroff", -1,
++						 NULL, 0, NULL, 0);
++
++	return PTR_ERR_OR_ZERO(pdev);
++}
++
++static void __exit odroid_go_ultra_poweroff_exit(void)
++{
++	platform_device_unregister(pdev);
++	platform_driver_unregister(&odroid_go_ultra_poweroff_driver);
++}
++
++module_init(odroid_go_ultra_poweroff_init);
++module_exit(odroid_go_ultra_poweroff_exit);
++
++MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
++MODULE_DESCRIPTION("Odroid Go Ultra poweroff driver");
++MODULE_LICENSE("GPL");
+
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230126-b4-odroid-go-ultra-poweroff-c8fdca93f3eb
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
