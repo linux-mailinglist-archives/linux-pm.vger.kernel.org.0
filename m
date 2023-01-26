@@ -2,80 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175AC67D9D9
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 00:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48B867D7E2
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 22:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbjAZXnj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 18:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S229948AbjAZVol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 16:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbjAZXnc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 18:43:32 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A81849011;
-        Thu, 26 Jan 2023 15:43:21 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so2297193wmc.1;
-        Thu, 26 Jan 2023 15:43:21 -0800 (PST)
+        with ESMTP id S229510AbjAZVok (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 16:44:40 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803804B19D
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 13:44:39 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id p24so3074704plw.11
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 13:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=EONYoIxZjQ2TsLY9+i04B1myHyhVfZp+OAShfITEebg=;
-        b=SLrvUsVpk/8wYUgiDh8+8xfwGmz+PuigYX0XGJ3C5LG+5NbRY/OXV/A6mn564EVVWr
-         BQn9m+lYalUK1Q/5CgoF+1gaepal+ISvm8jC/nnFTd2IMRiOPpEABSB3DP6jiVGrfYMq
-         m3HUmyaNxZ+pn9PcLCBe5/tuoAvL43QoBcwEWnKGE3x0l910TQ68G9gK1h59BCWoFMOq
-         963XbYi1uNEGrX4o590PbXMZm7tNi4mCN5K9t0hC7vy14Ks392Fubx8caokp8rSLhRyy
-         XNcxBGlPcViMPb29sbANp1+k1uhz0wty+vTiBFcyrEGEKogiuf+G1E8FiT5OS2ZLy3G3
-         wp1Q==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+kUUbeTcOb48mchbBpgI5nGJekzLPc7/rMLlF3T9Qg=;
+        b=fEgM5rKPANKOUbnIZ4fIWaVG/+FQlGzqDhNnF1LStNnwquJUBTZ2kdeMosqKoVljdv
+         N4Gwz/dQ7gtNCfTaMMKHYNpFXRJv2cs34pstV5BKvG6w5wQ4d9VS8ylZ8NdXlGKaTWlS
+         QHNcoEQOaih5eMAokvejIV5F5x64aYUBQA6V8hg4u5gT3cDGu8uwwY0gNox/kcRvXKIV
+         AM/Q9xaRuAgzuLR4ZdQrG5oFH/G9uh2W+Le3QWHG52AXikt2wgHdzSxjKvvjC1ZGeOlc
+         npHUd7KSaPjT4WKJy//GY+kW+74XhxP099KEIsDDXlvSjNKOhZQRNrVgMKgS+6lFmjAB
+         HO5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EONYoIxZjQ2TsLY9+i04B1myHyhVfZp+OAShfITEebg=;
-        b=K5WekQr3N9/X0W6KfCY2TXF6zdHgvletcZheKJXpP7DAeH613ZT+bk43KycUuUbUim
-         sJm96Ck58eDSlTgZc9nrHKzWTQwiqNTZWJn/W5OZb9Iqtp8JyvUIKLC3QxH/CkGVMpUf
-         Fh25IQaaVdPXQ3ujFVTdBgjRBElgnIKhlCxD2kmGM6mry83Rv5YBNUjdw9SryBrcch7G
-         0raq58vGv6FMRK6LoPd7WG3IBLdYtZTt6GzvHhjEPuYBn1ksFwwUTgjbDPSELo4L9BDb
-         ENYc1Gn+Pzje7GK0QcSGBMM9KzsTJvy00SMV84CmcwI31ePPsWizDv64WN9P8RtEq4DC
-         EU9Q==
-X-Gm-Message-State: AFqh2kqTO9H0Ta7LV27fdBry/9Ti6SEiPPNI2dLuCOIMx2qObnRx/0i1
-        +gvvCVfLGJ/85/WL4UaOwEM=
-X-Google-Smtp-Source: AMrXdXtClFX3qNEKpixctJRKjnKhz717i7YBO0EMNuKGjh+4T+5edcCNG6tl549AQ9+f/vxqSfgo8g==
-X-Received: by 2002:a05:600c:1609:b0:3db:12a:5e65 with SMTP id m9-20020a05600c160900b003db012a5e65mr36540049wmn.4.1674776599385;
-        Thu, 26 Jan 2023 15:43:19 -0800 (PST)
-Received: from Ansuel-xps. (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
-        by smtp.gmail.com with ESMTPSA id az26-20020a05600c601a00b003d99469ece1sm6183454wmb.24.2023.01.26.15.43.18
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u+kUUbeTcOb48mchbBpgI5nGJekzLPc7/rMLlF3T9Qg=;
+        b=Mg9ZjYGbpJSrQnwTiOBvs3+mwlvAy67hVH/nQnJQYBwrUj7cSMcg1VbBQOm+Rg12L+
+         wsNYDkacEVR6w3tE7JxozgFREW52tPf9miRBcLMR7MbG4e6zx2Z9yUkqVyqdtP4ywT67
+         U4akpztkTxr2XffPvAoNvCeeL4c5EDeHfSoGJEDrgyckwu7UDjQjv7W58ATLtejjwO9U
+         t4bj4Sws2DNV5pB8NMJkQgzXK+jlxGT33XS0QMni7Vfmb1ImYe4HNJo2L8VK/VUrgZop
+         6VDiAwP0YJKd1zs3r8yVdNSknbKN6TQq76Tb3tiykZleoWVuGsyvfqGhiWPawUfKc1hP
+         bXpQ==
+X-Gm-Message-State: AFqh2ko8FDkYEq6jC9B0+SKEZtzNT90Bi+2kFyN31FrTHm7P1JhFF5KS
+        OcHQFa+OmjZjl+oSYhs8nIhPlg==
+X-Google-Smtp-Source: AMrXdXtdQ60E/LXiefNHC76IQiSidH3VSWOLq/MvcCNQW//2VwOKK5SL1RQ/a6uponsBrzegqsz1vg==
+X-Received: by 2002:a17:902:ea0e:b0:195:f0f9:a9fb with SMTP id s14-20020a170902ea0e00b00195f0f9a9fbmr29004394plg.11.1674769479046;
+        Thu, 26 Jan 2023 13:44:39 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b00194ab9a4febsm1440489ple.74.2023.01.26.13.44.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 15:43:18 -0800 (PST)
-Message-ID: <63d31016.050a0220.a8e15.261d@mx.google.com>
-X-Google-Original-Message-ID: <Y9Lz6X9qKT4HICIV@Ansuel-xps.>
-Date:   Thu, 26 Jan 2023 22:43:05 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v4 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make
- cpr bindings optional
-References: <20230126150026.14590-1-ansuelsmth@gmail.com>
- <167475624070.2087166.4816561741085643801.robh@kernel.org>
+        Thu, 26 Jan 2023 13:44:38 -0800 (PST)
+Message-ID: <63d2f446.170a0220.38cbb.23d7@mx.google.com>
+Date:   Thu, 26 Jan 2023 13:44:38 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167475624070.2087166.4816561741085643801.robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.2-rc5-141-g0bb04b623f4c
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.2-rc5-141-g0bb04b623f4c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,86 +71,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:05:46PM -0600, Rob Herring wrote:
-> 
-> On Thu, 26 Jan 2023 16:00:24 +0100, Christian Marangi wrote:
-> > The qcom-cpufreq-nvmem driver supports 2 kind of devices:
-> > - pre-cpr that doesn't have power-domains and base everything on nvmem
-> >   cells and multiple named microvolt bindings.
-> >   Doesn't need required-opp binding in the opp nodes as they are only
-> >   used for genpd based devices.
-> > - cpr-based that require power-domain in the cpu nodes and use various
-> >   source to decide the correct voltage and freq
-> >   Require required-opp binding since they need to be linked to the
-> >   related opp-level.
-> > 
-> > When the schema was introduced, it was wrongly set to always require these
-> > binding but this is not the case for pre-cpr devices.
-> > 
-> > Make the power-domain and the required-opp optional and set them required
-> > only for qcs404 based devices.
-> > 
-> > Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> > Changes v4:
-> > - Explain why required-opp needs to be conditional
-> > - Split additional ref part
-> > Changesv3:
-> > - No change
-> > Changes v2:
-> > - Reword commit description
-> > - Fix condition order
-> > - Add allOf
-> > 
-> >  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 62 +++++++++++--------
-> >  1 file changed, 37 insertions(+), 25 deletions(-)
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml: 'anyOf' conditional failed, one must be fixed:
-> 	'type' is a required property
-> 	'properties' is a required property
-> 	'patternProperties' is a required property
-> 	hint: 'additionalProperties' depends on 'properties' or 'patternProperties'
-> 	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml: 'anyOf' conditional failed, one must be fixed:
-> 	'properties' is a required property
-> 	'patternProperties' is a required property
-> 	hint: Metaschema for devicetree binding documentation
-> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230126150026.14590-1-ansuelsmth@gmail.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
->
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc5-141-g0=
+bb04b623f4c)
 
-Hi, Rob, was aware of this error but it was expected from the split of
-patches. (since i made each part of the patch conditional the check
-complain for no binding defined)
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+2-rc5-141-g0bb04b623f4c/
 
-If we really want I can send v5 that should fix this bisect problem by
-swapping patch 1 with patch 2 and rebasing.
+Tree: pm
+Branch: testing
+Git Describe: v6.2-rc5-141-g0bb04b623f4c
+Git Commit: 0bb04b623f4c836a9df3199616369010dbf5ce17
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-I already have that ready and fix this bisect error.
+Warnings Detected:
 
--- 
-	Ansuel
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
