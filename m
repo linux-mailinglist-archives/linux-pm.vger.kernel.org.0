@@ -2,193 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960CD67CBB8
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 14:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90F167CD32
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 15:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbjAZNNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 08:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S229713AbjAZOAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 09:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbjAZNNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 08:13:48 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC865EDA;
-        Thu, 26 Jan 2023 05:13:46 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id cd0bcdb537e2997b; Thu, 26 Jan 2023 14:13:44 +0100
-Received: from kreacher.localnet (unknown [213.134.163.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B32E9781613;
-        Thu, 26 Jan 2023 14:13:43 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points table
-Date:   Thu, 26 Jan 2023 14:13:43 +0100
-Message-ID: <5926007.lOV4Wx5bFT@kreacher>
-In-Reply-To: <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
-References: <5665899.DvuYhMxLoT@kreacher> <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com> <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
+        with ESMTP id S231644AbjAZN7o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 08:59:44 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B21822DCF;
+        Thu, 26 Jan 2023 05:59:21 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id ss4so5191812ejb.11;
+        Thu, 26 Jan 2023 05:59:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=43F6h9YunM+69Z36jRkqCn+nLpqlYVOHKUoqzV2k/mo=;
+        b=2nCbX8lD16bxO5PHW25XvIE1BBpSUg0VuU53xdFLWWVoo+vJnqhNjegS6ffc6f/O7T
+         2Ji2XMsuqskKR2uwBR2We2F/dC4/pCJLdgr0yrYV3OymRlslOXtmIFfnQ25NY8hHUD3/
+         wC6vpC0keOq29mEs70+CiMwVGsu75uw+r9kLCre1yrAU3aPh396xDZV082tz4u74aUeg
+         mUx+dYenQs6XNu4QZnXxr7DmtQYIWD2L9Da4/fcDh/gaPaDD1XCGNzEwfgg6pmlmwf/t
+         RfoUE1vQwf1diwWRXyo07ftUHXnW9FKhvm8PuP7qRjOMJfiw70Lk2Ln0g7okUj1I+45n
+         Fdjw==
+X-Gm-Message-State: AFqh2kpEN6cp260zFj21dbQXgF4Xf/w4zR2GRlkhsf572GwYU+QqA97c
+        iB/D60pQODRkKJTUed+oeV1tFhGaqSXWz6vHKhRVedCc
+X-Google-Smtp-Source: AMrXdXs3IwC1anuKCeyYYqZfq6z9Rl0mHJUq4BdORfmnCA++koi3DqsJV3RYLkO4CWSrVye6YFZivh1BFsazPB+wg48=
+X-Received: by 2002:a17:907:d10f:b0:872:be4b:1b65 with SMTP id
+ uy15-20020a170907d10f00b00872be4b1b65mr5179111ejc.125.1674741557984; Thu, 26
+ Jan 2023 05:59:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20230123163046.358879-1-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0iK-ob4Mhh-Upq01gq6SPsYuAD22E-o0zwcoL1hLiP3JQ@mail.gmail.com>
+ <1b9aa29a3c217eed97e2a732ba94bfc03f95f320.camel@linux.intel.com> <CAJZ5v0hGPYfJ_H-+PWTaSPc3DjNDt4O5AWsGJUxjtU3jgDtktw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hGPYfJ_H-+PWTaSPc3DjNDt4O5AWsGJUxjtU3jgDtktw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 26 Jan 2023 14:59:06 +0100
+Message-ID: <CAJZ5v0gaY3itbQLEVGXjBfZBQbHAZ7Yp2e0yES=GYzaoVd_9zw@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: int340x_thermal: Add production mode attribute
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.174
-X-CLIENT-HOSTNAME: 213.134.163.174
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedggeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeifedrudejgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddujeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgv
- rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, January 26, 2023 1:02:59 AM CET srinivas pandruvada wrote:
-> Hi Rafael,
-> 
-> 
-> On Wed, 2023-01-25 at 16:20 +0100, Rafael J. Wysocki wrote:
-> > Hi Srinivas,
-> > 
-> > On Wed, Jan 25, 2023 at 3:55 PM Rafael J. Wysocki <rjw@rjwysocki.net>
-> > wrote:
-> > > 
-> > > Hi All,
-> > > 
-> > > This series replaces the following patch:
-> > > 
-> > > https://patchwork.kernel.org/project/linux-pm/patch/2147918.irdbgypaU6@kreacher/
-> > > 
-> > > but it has been almost completely rewritten, so I've dropped all
-> > > tags from it.
-> > > 
-> > > 
-> 
-> [...]
-> 
-> > > The series is on top of this patch:
-> > > 
-> > > https://patchwork.kernel.org/project/linux-pm/patch/2688799.mvXUDI8C0e@kreacher/
-> > > 
-> > > which applies on top of the linux-next branch in linux-pm.git from
-> > > today.
-> > 
-> > There are two additional branches in linux-pm.git:
-> > 
-> > thermal-intel-fixes
-> On two systems test, no issues are observed.
+On Tue, Jan 24, 2023 at 5:20 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Jan 24, 2023 at 5:10 PM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >
+> > On Tue, 2023-01-24 at 15:22 +0100, Rafael J. Wysocki wrote:
+> > > On Mon, Jan 23, 2023 at 5:31 PM Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > >
+> > > > It is possible that the system manufacturer locks down thermal
+> > > > tuning
+> > > > beyond what is usually done on the given platform. In that case
+> > > > user
+> > > > space calibration tools should not try to adjust the thermal
+> > > > configuration of the system.
+> > > >
+> > > > To allow user space to check if that is the case, add a new sysfs
+> > > > attribute "production_mode" that will be present when the ACPI DCFG
+> > > > method is present under the INT3400 device object in the ACPI
+> > > > Namespace.
+> > > >
+> > > > Signed-off-by: Srinivas Pandruvada
+> > > > <srinivas.pandruvada@linux.intel.com>
+> > > > ---
+> > > > v3:
+> > > > Build warning reported by for missing static
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > >
+> > > > v2
+> > > > Addressed comments from Rafael:
+> > > > - Updated commit excatly same as Rafael wrote
+> > > > - Removed production_mode_support bool
+> > > > - Use sysfs_emit
+> > > > - Update documentation
+> > > >
+> > > >  .../driver-api/thermal/intel_dptf.rst         |  3 ++
+> > > >  .../intel/int340x_thermal/int3400_thermal.c   | 48
+> > > > +++++++++++++++++++
+> > > >  2 files changed, 51 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/driver-api/thermal/intel_dptf.rst
+> > > > b/Documentation/driver-api/thermal/intel_dptf.rst
+> > > > index 372bdb4d04c6..f5c193cccbda 100644
+> > > > --- a/Documentation/driver-api/thermal/intel_dptf.rst
+> > > > +++ b/Documentation/driver-api/thermal/intel_dptf.rst
+> > > > @@ -84,6 +84,9 @@ DPTF ACPI Drivers interface
+> > > >         https:/github.com/intel/thermal_daemon for decoding
+> > > >         thermal table.
+> > > >
+> > > > +``production_mode`` (RO)
+> > > > +       When different from zero, manufacturer locked thermal
+> > > > configuration
+> > > > +       from further changes.
+> > > >
+> > > >  ACPI Thermal Relationship table interface
+> > > >  ------------------------------------------
+> > > > diff --git
+> > > > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > > > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > > > index db8a6f63657d..23ea21238bbd 100644
+> > > > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > > > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > > > @@ -60,6 +60,7 @@ struct int3400_thermal_priv {
+> > > >         int odvp_count;
+> > > >         int *odvp;
+> > > >         u32 os_uuid_mask;
+> > > > +       int production_mode;
+> > > >         struct odvp_attr *odvp_attrs;
+> > > >  };
+> > > >
+> > > > @@ -315,6 +316,44 @@ static int int3400_thermal_get_uuids(struct
+> > > > int3400_thermal_priv *priv)
+> > > >         return result;
+> > > >  }
+> > > >
+> > > > +static ssize_t production_mode_show(struct device *dev, struct
+> > > > device_attribute *attr,
+> > > > +                                    char *buf)
+> > > > +{
+> > > > +       struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+> > > > +
+> > > > +       return sysfs_emit(buf, "%d\n", priv->production_mode);
+> > > > +}
+> > > > +
+> > > > +static DEVICE_ATTR_RO(production_mode);
+> > > > +
+> > > > +static int production_mode_init(struct int3400_thermal_priv *priv)
+> > > > +{
+> > > > +       unsigned long long mode;
+> > > > +       acpi_status status;
+> > > > +       int ret;
+> > > > +
+> > > > +       priv->production_mode = -1;
+> > > > +
+> > > > +       status = acpi_evaluate_integer(priv->adev->handle, "DCFG",
+> > > > NULL, &mode);
+> > > > +       /* If the method is not present, this is not an error */
+> > > > +       if (ACPI_FAILURE(status))
+> > > > +               return 0;
+> > > > +
+> > > > +       ret = sysfs_create_file(&priv->pdev->dev.kobj,
+> > > > &dev_attr_production_mode.attr);
+> > > > +       if (ret)
+> > > > +               return ret;
+> > > > +
+> > > > +       priv->production_mode = mode;
+> > > > +
+> > > > +       return 0;
+> > > > +}
+> > > > +
+> > > > +static void production_mode_exit(struct int3400_thermal_priv
+> > > > *priv)
+> > > > +{
+> > > > +       if (priv->production_mode >= 0)
+> > > > +               sysfs_remove_file(&priv->pdev->dev.kobj,
+> > > > &dev_attr_production_mode.attr);
+> > >
+> > > Isn't it OK to call sysfs_remove_file() if the given attribute is not
+> > > there?
+> > >
+> > I think it will be OK. But remove call will traverse 6 levels of
+> > function taking semaphores and finally call into kernfs_find_ns(),
+> > where it will search a hash table and fail. So much more processing
+> > than checking one if() condition.
+>
+> Fair enough.
 
-Great!  I'll move this to linux-next then.
-
-> > thermal-intel-testing
-> branch: thermal-intel-test
-> 
-> No issues, but number of trips are not same as invalid trips are not
-> registered.
-> Not sure if this is correct.
-
-It may not be.  At least it is a change in behavior that is not expected to
-happen after these changes.
-
-> At boot up they may be invalid, but
-> firmware may update later (Not aware of such scenario).
-> 
-> For example, the hot is not registered.
-> 
-> Current:
-> 
-> thermal_zone9/trip_point_0_type:critical
-> thermal_zone9/trip_point_0_temp:125050
-> thermal_zone9/trip_point_0_hyst:0
-> 
-> thermal_zone9/trip_point_1_type:hot
-> thermal_zone9/trip_point_1_temp:-273250
-> thermal_zone9/trip_point_1_hyst:0
-
-So this means that _HOT is evaluated successfully (or the trip point index
-would be negative), but it probably returned an invalid temperature (likely 0)
-that has been turned into an error by the temperature range check in the
-new ACPI helper introduced by the change.
-
-OK, thanks for testing!
-
-I've added the appended patch to the thermal-intel-test branch.  Can you please
-check if it makes that difference in behavior go away?
-
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] thermal: ACPI: Initialize trips if temperature is out of range
-
-In some cases it is still useful to register a trip point if the
-temperature returned by the corresponding ACPI thermal object (for
-example, _HOT) is invalid to start with, because the same ACPI
-thermal object may start to return a valid temperature after a
-system configuration change (for example, from an AC power source
-to battery an vice versa).
-
-For this reason, if the ACPI thermal object evaluated by
-thermal_acpi_trip_init() successfully returns a temperature value that
-is out of the range of values taken into account, initialize the trip
-point using THERMAL_TEMP_INVALID as the temperature value instead of
-returning an error to allow the user of the trip point to decide what
-to do with it.
-
-Also update pch_wpt_add_acpi_psv_trip() to reject trip points with
-invalid temperature values.
-
-Fixes: 7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_pch_thermal.c |    2 +-
- drivers/thermal/thermal_acpi.c            |    7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_acpi.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_acpi.c
-+++ linux-pm/drivers/thermal/thermal_acpi.c
-@@ -64,13 +64,14 @@ static int thermal_acpi_trip_init(struct
- 		return -ENODATA;
- 	}
- 
--	if (temp < TEMP_MIN_DECIK || temp >= TEMP_MAX_DECIK) {
-+	if (temp >= TEMP_MIN_DECIK && temp <= TEMP_MAX_DECIK) {
-+		trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	} else {
- 		acpi_handle_debug(adev->handle, "%s result %llu out of range\n",
- 				  obj_name, temp);
--		return -ENODATA;
-+		trip->temperature = THERMAL_TEMP_INVALID;
- 	}
- 
--	trip->temperature = deci_kelvin_to_millicelsius(temp);
- 	trip->hysteresis = 0;
- 	trip->type = type;
- 
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -107,7 +107,7 @@ static void pch_wpt_add_acpi_psv_trip(st
- 		return;
- 
- 	ret = thermal_acpi_trip_passive(adev, &ptd->trips[*nr_trips]);
--	if (ret)
-+	if (ret || ptd->trips[*nr_trips].temperature <= 0)
- 		return;
- 
- 	++(*nr_trips);
-
-
-
+So applied as 6.3 material, thanks!
