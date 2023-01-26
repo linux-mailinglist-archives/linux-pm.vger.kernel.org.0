@@ -2,116 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7E767D20E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 17:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1553767D212
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 17:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjAZQps (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 11:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S229530AbjAZQru (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 11:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbjAZQpq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 11:45:46 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A1829146
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 08:45:44 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so3640246wmb.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 08:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Enp/w3Qf2+GBmoyJP5YWXCVerkN6XQoAVEmGTL8/Ffk=;
-        b=Xyd0fYZ2Z4Dzdql/uaBJ46hhSoEIk6ggT9SW7hNelJ9d8vwaT/Xy0l0fAkQIgpf2I4
-         PKfY8tBcZE64dUARwFW2rq5uxcbQT8F1Zk9LK9nxb0w3UVpSKA+gIftlV3iNejyfXr4U
-         oehQ5kfsD9r5X5Qxm4tK15vQxNLwcHhPp0LNEgzXpWbnsHvnrvBF8XN/WSS16xKy6PtP
-         592DmMk9cQfMMHttk0gelbDdOmf72iCNh+1vVzAUEKd9iNsJbqCKdmfNxsA8Km3TQQIx
-         k0WE75bQ6r9GJFKuFiSR4hXyBGMTkc7EAMHNQovYjlTX1kFADz86TmpQIKPWNHf4CZr0
-         mSlA==
+        with ESMTP id S229851AbjAZQru (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 11:47:50 -0500
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB533A91;
+        Thu, 26 Jan 2023 08:47:47 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id bk15so6641988ejb.9;
+        Thu, 26 Jan 2023 08:47:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Enp/w3Qf2+GBmoyJP5YWXCVerkN6XQoAVEmGTL8/Ffk=;
-        b=hAhm+7ZgEpJomzjLDGC+1a7iI4wmdRbqn68jhsz/VoXKKwHPjSSevnlPx5HPGGWlX6
-         m3A/EAbHDlDUmQpVdlLIN2nHfg9g4veDMRf01cKjPX1KB9QT5YEWY/H2Hfycaf/gXboN
-         jpfIMeTLvWsh/t7R19dRnl2j7o+B54zggjGhlXM3CdL/k5hYk01QcMhbQneqZ3IBinSj
-         ZQw+mUERBf25VqNJxsWSTqYIvvUPp/DpJ/63RZMByi2/jRZc0ZDfumuxWXQ0oMOYkSFt
-         ShnIRMl+f7W7drHJ72WFd4/FlNM71jdqs6g3psqf67JTX2VgXvZcdk9rXBH4pWDHNvS2
-         IHwQ==
-X-Gm-Message-State: AFqh2kpBj+wGJEVLFOlHxdjn5AkTauXvnIg5EnOjoHb2lY2xAlF/UcMb
-        THj24vCOmwLbEoqfnT/dIV4FKw==
-X-Google-Smtp-Source: AMrXdXsKsISR6oTne7xdvre6hZVcKLtZaCbJ0x+f/yFt4nW5JdHTj2Y8qWEvDgl0kEkdPIRSNpzWFA==
-X-Received: by 2002:a05:600c:1e1d:b0:3cf:674a:aefe with SMTP id ay29-20020a05600c1e1d00b003cf674aaefemr35700234wmb.22.1674751542929;
-        Thu, 26 Jan 2023 08:45:42 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a05600c3c8600b003db06493ee7sm6005683wmb.47.2023.01.26.08.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 08:45:42 -0800 (PST)
-Message-ID: <ff3aebd7-2932-fd9f-3e82-fe123b770a87@linaro.org>
-Date:   Thu, 26 Jan 2023 16:45:41 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tVtxoYcAJiNZA/xK4oj3uHYKyVzBhkS4aamUvP5k4So=;
+        b=wWKqY2USF0eaxGQx7jeJBfbatlWb7yCGbkjtp04oEH19u3+t7iXk0HgkM+c235F4AB
+         mtcWpiIiztQMxG0Z2vNFKJTnUDHeuXHrLrOjOa0HSy0rLgbJZqwtJIavzUEb+y9I7Kxm
+         0nS0smo1/0Sz5LLSF1gcsoq4couBoDXIs9T1Z06FkDw1JsfG4E/1v0em6RSmhkV1fP4k
+         ZU+lfYIFUriIDKzLLNOU1wYIusfaPDgYLJmxGzlJSifa5Omq88phMveoP11197oLtNlA
+         ej2RvjjuWvkZIxutDiLb7QEVL8zR4+Kjh5/TJNBypQcUxtLC/QFMvWyluF323OGdJb9u
+         M9NA==
+X-Gm-Message-State: AFqh2kos9Qiz6X2Au7h+SlqIhLlTrbAlyvfLX/IXP3HMpBj1gxBj5fDF
+        wHs9vgVA+++IrsR0h6XDqlimjFIpgBKp5DDLFRk=
+X-Google-Smtp-Source: AMrXdXtLNQgRLnkWewPCvyuMjfKKVUnX2TdqXxFc3uMk23jqDgCN/knZnC+Aqcyt4vOf9Qs9Dtj/UOOAuMESPJ7nw4M=
+X-Received: by 2002:a17:907:d10f:b0:872:be4b:1b65 with SMTP id
+ uy15-20020a170907d10f00b00872be4b1b65mr5357694ejc.125.1674751665699; Thu, 26
+ Jan 2023 08:47:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Cc:     agross@kernel.org, andersson@kernel.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
-References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
- <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
- <Y86CPmgvAi+kChQI@gerhold.net>
- <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
- <df4c76eb-aec7-823e-28f9-5ba96cc200c6@linaro.org>
- <b7343ea6-7194-e709-8fed-4a1a17f7beb5@linaro.org>
-In-Reply-To: <b7343ea6-7194-e709-8fed-4a1a17f7beb5@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org> <20230118181622.33335-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20230118181622.33335-3-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 26 Jan 2023 17:47:34 +0100
+Message-ID: <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/01/2023 16:32, Bryan O'Donoghue wrote:
-> The only input clock to GCC is XO or buffered CXO if routed through the 
-> PMIC.
-> 
-> You can select via GCC::RCGR where dsiX_phy_pll_out_byteclk is *sourced* 
-> from XO, GPLL0_AUX or P_DSI0_PHYPLL_BYTE.
-> 
-> So, obvs the byte clock can be any one of those input sources.
-> 
-> But the question is, if you select dsi0_phy_pll_out_byteclk - what 
-> provides it ?
-> 
-> Reviewing the LK bootloader for 3.18, it *looks* to me like the dsi0 pll 
-> is always switched on. The downstream kernel tree doesn't represent that.
-> 
-> 0x01A9811C MDSS_DSI_0_CLK_CTRL
-> Type: RW
-> Reset State: 0x00000000 -> BIT(4) -> Turns on/off BYTECLK for the DSI. 
-> If set to 1, clock is ON.
-> 
-> Hmm. I think actually it must be the case that DSI1 is a slave of DSI0.
+On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> From: Daniel Lezcano <daniel.lezcano@kernel.org>
+>
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+>
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/intel/intel_soc_dts_iosf.c | 58 ++++++++--------------
+>  drivers/thermal/intel/intel_soc_dts_iosf.h |  2 +-
+>  2 files changed, 23 insertions(+), 37 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+> index 342b0bb5a56d..130c416ec601 100644
+> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
+> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+> @@ -71,20 +71,13 @@ static int get_tj_max(u32 *tj_max)
+>         return err;
+>  }
+>
+> -static int sys_get_trip_temp(struct thermal_zone_device *tzd, int trip,
+> -                            int *temp)
+> +static int get_trip_temp(struct intel_soc_dts_sensors *sensors, int trip, int *temp)
+>  {
+>         int status;
+>         u32 out;
+> -       struct intel_soc_dts_sensor_entry *dts;
+> -       struct intel_soc_dts_sensors *sensors;
+>
+> -       dts = tzd->devdata;
+> -       sensors = dts->sensors;
+> -       mutex_lock(&sensors->dts_update_lock);
+>         status = iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_REG_READ,
+>                                SOC_DTS_OFFSET_PTPS, &out);
+> -       mutex_unlock(&sensors->dts_update_lock);
+>         if (status)
+>                 return status;
+>
+> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
+>         if (status)
+>                 goto err_restore_te_out;
+>
+> -       dts->trip_types[thres_index] = trip_type;
+> -
+> +       status = get_trip_temp(sensors, thres_index, &temp);
+> +       if (status)
+> +               goto err_restore_te_out;
+> +
+> +       dts->trips[thres_index].type = trip_type;
+> +       dts->trips[thres_index].temperature = temp;
 
-* If and only if you set P_DSI0_PHYPLL_BYTE::SRC_SEL = 0x01, using 
-SRC_SEL = 0 (XO) or SRC_SEL = 0x02 (GPLL0_AUX) should negate the dependency.
+This change doesn't look correct to me, because this function takes
+temp as an argument and it is used to populate the trip with it at
+least in some cases.
 
-I'll review downstream further - perhaps DSI1 in practice doesn't set 
-P_DSI0_PHYPLL_BYTE as the source clock..
+Why should temp be overwritten here?
 
----
-bod
-
+> +
+>         return 0;
+>  err_restore_te_out:
+>         iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
+> @@ -202,24 +200,12 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
+>
+>         mutex_lock(&sensors->dts_update_lock);
+>         status = update_trip_temp(tzd->devdata, trip, temp,
+> -                                 dts->trip_types[trip]);
+> +                                 dts->trips[trip].type);
+>         mutex_unlock(&sensors->dts_update_lock);
+>
+>         return status;
+>  }
+>
+> -static int sys_get_trip_type(struct thermal_zone_device *tzd,
+> -                            int trip, enum thermal_trip_type *type)
+> -{
+> -       struct intel_soc_dts_sensor_entry *dts;
+> -
+> -       dts = tzd->devdata;
+> -
+> -       *type = dts->trip_types[trip];
+> -
+> -       return 0;
+> -}
+> -
+>  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+>                              int *temp)
+>  {
+> @@ -245,8 +231,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+>
+>  static struct thermal_zone_device_ops tzone_ops = {
+>         .get_temp = sys_get_curr_temp,
+> -       .get_trip_temp = sys_get_trip_temp,
+> -       .get_trip_type = sys_get_trip_type,
+>         .set_trip_temp = sys_set_trip_temp,
+>  };
+>
+> @@ -320,7 +304,8 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+>         dts->trip_mask = trip_mask;
+>         dts->trip_count = trip_count;
+>         snprintf(name, sizeof(name), "soc_dts%d", id);
+> -       dts->tzone = thermal_zone_device_register(name,
+> +       dts->tzone = thermal_zone_device_register_with_trips(name,
+> +                                                 dts->trips,
+>                                                   trip_count,
+>                                                   trip_mask,
+>                                                   dts, &tzone_ops,
+> @@ -430,27 +415,28 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
+>                 notification = false;
+>         else
+>                 notification = true;
+> -       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+> -               sensors->soc_dts[i].sensors = sensors;
+> -               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
+> -                                          notification, trip_count,
+> -                                          read_only_trip_count);
+> -               if (ret)
+> -                       goto err_free;
+> -       }
+>
+>         for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+>                 ret = update_trip_temp(&sensors->soc_dts[i], 0, 0,
+>                                        THERMAL_TRIP_PASSIVE);
+>                 if (ret)
+> -                       goto err_remove_zone;
+> +                       goto err_free;
+>
+>                 ret = update_trip_temp(&sensors->soc_dts[i], 1, 0,
+>                                        THERMAL_TRIP_PASSIVE);
+>                 if (ret)
+> -                       goto err_remove_zone;
+> +                       goto err_free;
+>         }
+>
+> +       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+> +               sensors->soc_dts[i].sensors = sensors;
+> +               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
+> +                                          notification, trip_count,
+> +                                          read_only_trip_count);
+> +               if (ret)
+> +                       goto err_remove_zone;
+> +       }
+> +
+>         return sensors;
+>  err_remove_zone:
+>         for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i)
+> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.h b/drivers/thermal/intel/intel_soc_dts_iosf.h
+> index c54945748200..ee0a39e3edd3 100644
+> --- a/drivers/thermal/intel/intel_soc_dts_iosf.h
+> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.h
+> @@ -27,7 +27,7 @@ struct intel_soc_dts_sensor_entry {
+>         u32 store_status;
+>         u32 trip_mask;
+>         u32 trip_count;
+> -       enum thermal_trip_type trip_types[2];
+> +       struct thermal_trip trips[2];
+>         struct thermal_zone_device *tzone;
+>         struct intel_soc_dts_sensors *sensors;
+>  };
+> --
+> 2.34.1
+>
