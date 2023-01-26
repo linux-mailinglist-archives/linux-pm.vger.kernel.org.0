@@ -2,165 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B1F67D7B7
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 22:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175AC67D9D9
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 00:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjAZVbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 16:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S233580AbjAZXnj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 18:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjAZVbA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 16:31:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31C8D520;
-        Thu, 26 Jan 2023 13:30:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58BE3B81F21;
-        Thu, 26 Jan 2023 21:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728B7C433D2;
-        Thu, 26 Jan 2023 21:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674768656;
-        bh=GakT+DU3G1IWkvYMyHJ7PmIJbKenlLyYfEtm1r43zCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j8VmXuo6pnreB0wuvLcADBdapg9fUU6jfuDPv6Ga+8hBThdp1Alfl9KSGExC6mJUN
-         7UnnRzf9VDF8arhDtg9scxseA/oSBgWYrvm8FGsrSBJZHfybcEGwJFQ3DryGjE4cxY
-         dQeqFhMVPqPXzzl4CKF3+dedgFDQeRyejXJGC9yRxpy58vChFHcfxlZBEwFsv1qnOU
-         9GyD2yZuYpfPbsTjg2SZZjyl+2R0BKKJJL8G3nY8Ll5V69wugUzkZa4lJrsUF/gq8D
-         td6srB+uQpp08Bnvmsngqr5inFftYH8HyjcQC3S47u1Bbnvey95sm5ZXtU+dwnIvIa
-         Fwx48anoEkmow==
-Date:   Thu, 26 Jan 2023 21:30:53 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     William Roberts <bill.c.roberts@gmail.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-Message-ID: <Y9LxDYYEp0qTfhqN@kernel.org>
-References: <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
- <Y8tcEtr8Kl3p4qtA@kernel.org>
- <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
- <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
- <Y9K2mOsmB1+CFk9l@kernel.org>
- <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
+        with ESMTP id S233598AbjAZXnc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 18:43:32 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A81849011;
+        Thu, 26 Jan 2023 15:43:21 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so2297193wmc.1;
+        Thu, 26 Jan 2023 15:43:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=EONYoIxZjQ2TsLY9+i04B1myHyhVfZp+OAShfITEebg=;
+        b=SLrvUsVpk/8wYUgiDh8+8xfwGmz+PuigYX0XGJ3C5LG+5NbRY/OXV/A6mn564EVVWr
+         BQn9m+lYalUK1Q/5CgoF+1gaepal+ISvm8jC/nnFTd2IMRiOPpEABSB3DP6jiVGrfYMq
+         m3HUmyaNxZ+pn9PcLCBe5/tuoAvL43QoBcwEWnKGE3x0l910TQ68G9gK1h59BCWoFMOq
+         963XbYi1uNEGrX4o590PbXMZm7tNi4mCN5K9t0hC7vy14Ks392Fubx8caokp8rSLhRyy
+         XNcxBGlPcViMPb29sbANp1+k1uhz0wty+vTiBFcyrEGEKogiuf+G1E8FiT5OS2ZLy3G3
+         wp1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EONYoIxZjQ2TsLY9+i04B1myHyhVfZp+OAShfITEebg=;
+        b=K5WekQr3N9/X0W6KfCY2TXF6zdHgvletcZheKJXpP7DAeH613ZT+bk43KycUuUbUim
+         sJm96Ck58eDSlTgZc9nrHKzWTQwiqNTZWJn/W5OZb9Iqtp8JyvUIKLC3QxH/CkGVMpUf
+         Fh25IQaaVdPXQ3ujFVTdBgjRBElgnIKhlCxD2kmGM6mry83Rv5YBNUjdw9SryBrcch7G
+         0raq58vGv6FMRK6LoPd7WG3IBLdYtZTt6GzvHhjEPuYBn1ksFwwUTgjbDPSELo4L9BDb
+         ENYc1Gn+Pzje7GK0QcSGBMM9KzsTJvy00SMV84CmcwI31ePPsWizDv64WN9P8RtEq4DC
+         EU9Q==
+X-Gm-Message-State: AFqh2kqTO9H0Ta7LV27fdBry/9Ti6SEiPPNI2dLuCOIMx2qObnRx/0i1
+        +gvvCVfLGJ/85/WL4UaOwEM=
+X-Google-Smtp-Source: AMrXdXtClFX3qNEKpixctJRKjnKhz717i7YBO0EMNuKGjh+4T+5edcCNG6tl549AQ9+f/vxqSfgo8g==
+X-Received: by 2002:a05:600c:1609:b0:3db:12a:5e65 with SMTP id m9-20020a05600c160900b003db012a5e65mr36540049wmn.4.1674776599385;
+        Thu, 26 Jan 2023 15:43:19 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.gmail.com with ESMTPSA id az26-20020a05600c601a00b003d99469ece1sm6183454wmb.24.2023.01.26.15.43.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 15:43:18 -0800 (PST)
+Message-ID: <63d31016.050a0220.a8e15.261d@mx.google.com>
+X-Google-Original-Message-ID: <Y9Lz6X9qKT4HICIV@Ansuel-xps.>
+Date:   Thu, 26 Jan 2023 22:43:05 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ilia Lin <ilia.lin@kernel.org>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v4 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make
+ cpr bindings optional
+References: <20230126150026.14590-1-ansuelsmth@gmail.com>
+ <167475624070.2087166.4816561741085643801.robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <167475624070.2087166.4816561741085643801.robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:32:22AM -0600, William Roberts wrote:
-> On Thu, Jan 26, 2023 at 11:21 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Tue, Jan 24, 2023 at 07:38:04AM -0500, James Bottomley wrote:
-> > > On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
-> > > > On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
-> > > > wrote:
-> > > > >
-> > > > > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > > > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > > > > <bill.c.roberts@gmail.com> wrote:
-> > > > > > >
-> > > > > > > > What's the use case of using the creation data and ticket in
-> > > > > > > > this context? Who gets the creationData and the ticket?
-> > > > > > > > Could a user supplied outsideInfo work? IIRC I saw some
-> > > > > > > > patches flying around where the sessions will get encrypted
-> > > > > > > > and presumably correctly as well. This would allow the
-> > > > > > > > transfer of that outsideInfo, like the NV Index PCR value to
-> > > > > > > > be included and integrity protected by the session HMAC.
-> > > > > > >
-> > > > > > > The goal is to ensure that the key was generated by the kernel.
-> > > > > > > In the absence of the creation data, an attacker could generate
-> > > > > > > a hibernation image using their own key and trick the kernel
-> > > > > > > into resuming arbitrary code. We don't have any way to pass
-> > > > > > > secret data from the hibernate kernel to the resume kernel, so
-> > > > > > > I don't think there's any easy way to do it with outsideinfo.
-> > > > > >
-> > > > > > Can we go back again to why you can't use locality?  It's exactly
-> > > > > > designed for this since locality is part of creation data.
-> > > > > > Currently everything only uses locality 0, so it's impossible for
-> > > > > > anyone on Linux to produce a key with anything other than 0 in
-> > > > > > the creation data for locality.  However, the dynamic launch
-> > > > > > people are proposing that the Kernel should use Locality 2 for
-> > > > > > all its operations, which would allow you to distinguish a key
-> > > > > > created by the kernel from one created by a user by locality.
-> > > > > >
-> > > > > > I think the previous objection was that not all TPMs implement
-> > > > > > locality, but then not all laptops have TPMs either, so if you
-> > > > > > ever come across one which has a TPM but no locality, it's in a
-> > > > > > very similar security boat to one which has no TPM.
-> > > > >
-> > > > > Kernel could try to use locality 2 and use locality 0 as fallback.
-> > > >
-> > > > I don't think that would work for Matthew, they need something
-> > > > reliable to indicate key provenance.
-> > >
-> > > No, I think it would be good enough: locality 0 means anyone (including
-> > > the kernel on a machine which doesn't function correctly) could have
-> > > created this key.  Locality 2 would mean only the kernel could have
-> > > created this key.
-> > >
-> > > By the time the kernel boots and before it loads the hibernation image
-> > > it will know the answer to the question "does my TPM support locality
-> > > 2", so it can use that in its security assessment: if the kernel
-> > > supports locality 2 and the key wasn't created in locality 2 then
-> > > assume an attack.  Obviously, if the kernel doesn't support locality 2
-> > > then the hibernation resume has to accept any old key, but that's the
-> > > same as the situation today.
-> >
-> > This sounds otherwise great to me but why bother even allowing a
-> > machine with no-locality TPM to be involved with hibernate? Simply
-> > detect locality support during driver initialization and disallow
-> > sealed hibernation (or whatever the feature was called) if localities
-> > were not detected.
-> >
-> > I get supporting old hardware with old features but it does not make
-> > sense to maintain new features with hardware, which clearly does not
-> > scale, right?
-> >
-> > BR, Jarkko
+On Thu, Jan 26, 2023 at 04:05:46PM -0600, Rob Herring wrote:
 > 
-> Here's a thought, what if we had a static/cmd line configurable
-> no-auth NV Index and writelocked it with the expected key information,
-> name or something. I guess the problem is atomicity with write/lock,
-> but can't the kernel lock out all other users?
+> On Thu, 26 Jan 2023 16:00:24 +0100, Christian Marangi wrote:
+> > The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+> > - pre-cpr that doesn't have power-domains and base everything on nvmem
+> >   cells and multiple named microvolt bindings.
+> >   Doesn't need required-opp binding in the opp nodes as they are only
+> >   used for genpd based devices.
+> > - cpr-based that require power-domain in the cpu nodes and use various
+> >   source to decide the correct voltage and freq
+> >   Require required-opp binding since they need to be linked to the
+> >   related opp-level.
+> > 
+> > When the schema was introduced, it was wrongly set to always require these
+> > binding but this is not the case for pre-cpr devices.
+> > 
+> > Make the power-domain and the required-opp optional and set them required
+> > only for qcs404 based devices.
+> > 
+> > Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> > Changes v4:
+> > - Explain why required-opp needs to be conditional
+> > - Split additional ref part
+> > Changesv3:
+> > - No change
+> > Changes v2:
+> > - Reword commit description
+> > - Fix condition order
+> > - Add allOf
+> > 
+> >  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 62 +++++++++++--------
+> >  1 file changed, 37 insertions(+), 25 deletions(-)
+> > 
 > 
-> An attacker would need to issue tpm2_startup, which in this case would DOS
-> the kernel in both scenarios. If an attacker already wrote and locked the NV
-> index, that would also be a DOS. If they already wrote it, the kernel simply
-> writes whatever they want. Is there an attack I am missing?
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> I guess the issue here would be setup, since creating the NV index requires
-> hierarchy auth, does the kernel have platform auth or is that already shut down
-> by firmware (I can't recall)? A null hierarchy volatile lockable index would be
-> nice for this, too bad that doesn't exist.
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml: 'anyOf' conditional failed, one must be fixed:
+> 	'type' is a required property
+> 	'properties' is a required property
+> 	'patternProperties' is a required property
+> 	hint: 'additionalProperties' depends on 'properties' or 'patternProperties'
+> 	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml: 'anyOf' conditional failed, one must be fixed:
+> 	'properties' is a required property
+> 	'patternProperties' is a required property
+> 	hint: Metaschema for devicetree binding documentation
+> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230126150026.14590-1-ansuelsmth@gmail.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+>
 
-How do you see this would better when compared to finding a way to use
-locality, which could potentially be made to somewhat simple to setup
-(practically zero config)?
+Hi, Rob, was aware of this error but it was expected from the split of
+patches. (since i made each part of the patch conditional the check
+complain for no binding defined)
 
-BR, Jarkko
+If we really want I can send v5 that should fix this bisect problem by
+swapping patch 1 with patch 2 and rebasing.
+
+I already have that ready and fix this bisect error.
+
+-- 
+	Ansuel
