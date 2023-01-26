@@ -2,157 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AEA67D014
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 16:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86E267D034
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 16:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbjAZPYd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 10:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S231893AbjAZP3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 10:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbjAZPYP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 10:24:15 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AD9C64E;
-        Thu, 26 Jan 2023 07:24:03 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ss4so5870230ejb.11;
-        Thu, 26 Jan 2023 07:24:03 -0800 (PST)
+        with ESMTP id S232097AbjAZP3m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 10:29:42 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FC055B1
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 07:29:40 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso3463589wmc.4
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 07:29:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=36ptyI51QZl1lF0nXOH5sL81j6kCyJc2TJBHKS4gWCY=;
+        b=ti7BQ89IH6jJGhHpbHQdRCviihGgD/O4MfHqO/tKxDoljbNkfMKLwMGO32ru3TM0lm
+         ovKQ9fu57Y0VMY5EU1kjTl6/2iSLw4Im048aPwViQUjY+rdRV2Fr77ONVFzr002UmHjz
+         RRHTbY34rEMX53EZJrvhVWKesoZxCT0m0piLM5kBDA5WO5xzkhzAgD2AaEBzSjQKycjw
+         chwY6xjlB5V33vlACNpaLMGq0iPoYf+N5AvlZ1lyjRNXdEwmvwVXSS5mvFQYH60yD1G3
+         U3EQySr2J0kRXQ3H1Uxqz7glbhzC8BHnbCh/a1MjKljXT3r01h5YwiXTQiiFGXBJqVL7
+         A4XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9mQTrKO47iVy6ecofzVF7H1qY1Ps8Tg5sjQ9tgtCXwE=;
-        b=gydInbp5vcpiQN63OHROrBnyPSemg9fL/5Tlx3YBwugzeh2/+eVEQnCluc4rN8N8jJ
-         49OEgqBOMv4h1Hx55uirI2aPZJeeXhFGsDgiAM2Z+2jyybEdE+dJaVlr4B13Pjlrwrz2
-         oh18ODRvgqr63UFGD5Lq+rb+tFrokmYEwqYze+zV8zNlbeSbawoVL+S9OmqTLOnG+SHl
-         J3AYK2Am0m9A/g93jKUyFkLK7S8yOpultz5PjzdJz2D87Uax4InzkU1GhJHhBP9e5jXR
-         CwWX1I0phPSUda1s/KiIT7+G98VZ+6uEGysPjjgWu6veLmieRlYu4bL0TcJpcjFJ1DqG
-         Y0QQ==
-X-Gm-Message-State: AFqh2krJseMRWamBaEnmQAnNj/ZjKGh/wYL+FuDE2bqkmNfJS9mMASRI
-        1Y1N8ayoT93Y9D9Xlw9WATmOnI+hF2j6Q+LX+SY=
-X-Google-Smtp-Source: AMrXdXtUirjeZqai26ZIG2nsvBwgblruf53rcbGBcN0jkCktmiA9ANGtQMqLxKmWo9J3NKVPxG6NUpAJVYypPh4r/EE=
-X-Received: by 2002:a17:907:d10f:b0:872:be4b:1b65 with SMTP id
- uy15-20020a170907d10f00b00872be4b1b65mr5262556ejc.125.1674746339134; Thu, 26
- Jan 2023 07:18:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=36ptyI51QZl1lF0nXOH5sL81j6kCyJc2TJBHKS4gWCY=;
+        b=lHr0oQ7cYDaZ9fjV7IA5NWObbf05j6g7pr/bXiUpK3tqGl9jDJlEk4woPJ6C9akPfD
+         SjhxOKSTZeVvUlxv7n0gRnWj9+dvNO9UZ35sgpfWN6Sa6S524gsNpPcf8YdzI7uupGp0
+         p/+M0AR1dBaJUZj0n/HngBhWx4IojoFJbc+sHHFpaBq/xjWFZcebXJwVbRpYjPOvuu47
+         YPwPrw71aTsuqGAsnpfuz4BfJwP1EYKmUOwQ8r+gLYdlSokh67Kt85r9ueKD9JoDbd0k
+         W+XTpPoCEl8RrktBFSHPq1N8GvO9Jvd+Bm1DzWF+eSSay5o4ygW+NuhCtQUynfzvqFUJ
+         UAzw==
+X-Gm-Message-State: AFqh2kodi9/yIWHH88YVU+MgGE0iwfdgEphaucd8m3CMBuJramDDIwZO
+        9qK2bjC/x7AGUEN8UkGc5k2fAQ==
+X-Google-Smtp-Source: AMrXdXvcSThOnYqAUTMGMUEcUGsCBnqaWIcnrIeb6n+jrCvIwnFbBOnDt+bNl7lZP/hCUF3r+3HA/A==
+X-Received: by 2002:a05:600c:1508:b0:3d3:5166:2da4 with SMTP id b8-20020a05600c150800b003d351662da4mr35819772wmg.8.1674746978603;
+        Thu, 26 Jan 2023 07:29:38 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm11437669wmo.2.2023.01.26.07.29.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 07:29:38 -0800 (PST)
+Message-ID: <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
+Date:   Thu, 26 Jan 2023 15:29:36 +0000
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org> <20230118181622.33335-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20230118181622.33335-2-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 26 Jan 2023 16:18:47 +0100
-Message-ID: <CAJZ5v0hGDDemXBa0jMHeBr4sLX24WO6+AWzrnA2--knP3Kg9zQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for processor_thermal_device_pci
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
+ <Y86CPmgvAi+kChQI@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y86CPmgvAi+kChQI@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
->
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  .../processor_thermal_device_pci.c            | 53 ++++++++-----------
->  1 file changed, 22 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index bf1b1cdfade4..c7d50862bf56 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -144,34 +144,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
->         return 0;
->  }
->
-> -static int sys_get_trip_temp(struct thermal_zone_device *tzd,
-> -                            int trip, int *temp)
-> -{
-> -       struct proc_thermal_pci *pci_info = tzd->devdata;
-> -       u32 _temp;
-> -
-> -       proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_THRES_0, &_temp);
-> -       if (!_temp) {
-> -               *temp = THERMAL_TEMP_INVALID;
-> -       } else {
-> -               int tjmax;
-> -
-> -               proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_TJMAX, &tjmax);
-> -               _temp = tjmax - _temp;
-> -               *temp = (unsigned long)_temp * 1000;
-> -       }
-> -
-> -       return 0;
-> -}
-> -
-> -static int sys_get_trip_type(struct thermal_zone_device *tzd, int trip,
-> -                             enum thermal_trip_type *type)
-> -{
-> -       *type = THERMAL_TRIP_PASSIVE;
-> -
-> -       return 0;
-> -}
-> -
->  static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
->  {
->         struct proc_thermal_pci *pci_info = tzd->devdata;
-> @@ -200,10 +172,26 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp
->         return 0;
->  }
->
-> +static int get_trip_temp(struct proc_thermal_pci *pci_info)
-> +{
-> +       int temp, tjmax;
-> +
-> +       proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_THRES_0, &temp);
-> +       if (!temp)
-> +               return THERMAL_TEMP_INVALID;
-> +
-> +       proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_TJMAX, &tjmax);
-> +       temp = (tjmax - temp) * 1000;
-> +
-> +       return temp;
-> +}
-> +
-> +static struct thermal_trip psv_trip = {
-> +       .type = THERMAL_TRIP_PASSIVE,
-> +};
-> +
->  static struct thermal_zone_device_ops tzone_ops = {
->         .get_temp = sys_get_curr_temp,
-> -       .get_trip_temp = sys_get_trip_temp,
-> -       .get_trip_type = sys_get_trip_type,
->         .set_trip_temp  = sys_set_trip_temp,
->  };
->
-> @@ -251,7 +239,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
->         if (ret)
->                 goto err_ret_thermal;
->
-> -       pci_info->tzone = thermal_zone_device_register("TCPU_PCI", 1, 1, pci_info,
-> +       psv_trip.temperature = get_trip_temp(pci_info);
-> +
-> +       pci_info->tzone = thermal_zone_device_register_with_trips("TCPU_PCI", &psv_trip,
-> +                                                       1, 1, pci_info,
->                                                         &tzone_ops,
->                                                         &tzone_params, 0, 0);
->         if (IS_ERR(pci_info->tzone)) {
-> --
+On 23/01/2023 12:49, Stephan Gerhold wrote:
+>> - Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
+>>    Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
+>>    GCC_BYTE1_CFG_RCGR : SRC_SEL
+>>    Root Source Select
+>>    000 : cxo
+>>    001 : dsi0_phy_pll_out_byteclk
+>>    010 : GPLL0_OUT_AUX
+>>    011 : gnd
+>>    100 : gnd
+>>    101 : gnd
+>>    110 : gnd
+>>    111 : reserved - Stephan/Bryan
+>>
+> I'm confused. Are you not contradicting yourself here? You say that
+> dsi0_phy_pll (dsi ZERO) is used to clock GCC_BYTE1_CFG_RCGR. Then why
+> do you add dsi1_phy_pll (dsi ONE) to the gcc clock list?
 
-Applied as 6.3 material with edits in the subject and changelog, thanks!
+So my understanding of the clock tree here is that 
+dsi0_phy_pll_out_byteclk is a legacy name.
+
+Its perfectly possible to have DSI0 and DSI0_PHY switched off and to 
+have DSI1/DSI1_PHY operable.
+
+dsi0_phy_pll_out_byteclk is perhaps an unfortunate name and probably 
+should have been renamed.
+
+> To me this looks like a confirmation of what downstream does, that both
+> DSI byte clocks are actually sourced from the dsi0_phy and the PLL of
+
+A better name would have been dsiX_phy_pll_out_byteclk.
+
+---
+bod
