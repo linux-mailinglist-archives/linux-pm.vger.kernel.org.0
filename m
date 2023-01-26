@@ -2,67 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB2C67C7AD
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 10:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35B667C8A1
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 11:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236594AbjAZJn4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 04:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S236342AbjAZKed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 05:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236578AbjAZJn4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 04:43:56 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42266ACA9
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 01:43:54 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id kt14so3591075ejc.3
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 01:43:54 -0800 (PST)
+        with ESMTP id S229674AbjAZKea (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 05:34:30 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE1D577CD
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 02:34:27 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ud5so3890475ejc.4
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 02:34:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZkQeQrjxFirNA98ICYKxraGXUpMqPIXkoDOLmYL5f6I=;
-        b=Xibvy4IdYxiDWH+gnKHlUpWVPI9wU/B0ZoN0P//fYD4WC+hEwxBPryaGf4s6nAXv5Z
-         HMgvfoMK3Wd4k2h6nc0b7AOE4Ze+yp2m6GUtteaXzzYG84/sLRXWS4DvHMPm7oWC9Tio
-         7HlljcK/6nvQ5dxdJGiIRfX57jnxmWdforNwP02hQquppkHPehjIVTKwMl/qsDUI0F1+
-         OQPRt5N0eRrSzAk/Zs+qdq/zhv3sj0VailSq9os+G0Fg67nf24ItvQIgJT3HGerV4Zt1
-         8hq7uXmS4M+84My5CIgcQmSYAnDiAlGshAk8LhJA6qDI4IYsyaMaEoz++gzMy6+slouM
-         6TOQ==
+        bh=yNKGiFVF7gZl8W9gtBpFjfAaHbcRzsNNp7MAmipi5tM=;
+        b=sUSCEuKpo0FtzU8NNmxCzR/r2KwAtc7S3/o1ClFq6L9vLkC3QIXXqEZ1opixeisU2G
+         iQTu9Eem/CRw6cJOSeu7z6mPcb7H/FVOfoZ44gOSFpxE8OI6Gwzrgh5AEeogGN8s+g4i
+         KCHz5FZ76MAQjOHnzVRtA3LXcGWipp0RxLRwDT/QDXulGWbSn6K0iQT23A+suDeAfldL
+         ZlqmQnVFVyHgdNSeaLuxDM27lWzd7rcg7/8h+i2P943Mv4R0tr4a03cqFezJDRNzYFec
+         U2fF6z/pk8rZeVEQD1pEE4HvcznmUxdp79rYtx0UoQRipTTEKRNGgyHYqLf3I5Fma1c5
+         r06A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZkQeQrjxFirNA98ICYKxraGXUpMqPIXkoDOLmYL5f6I=;
-        b=jfZPKJ01WynYUolXhb0JVW32B/0VnAwxAKGrfqHpv70lBOc9fyPCNZ8VRl4wKv3HoZ
-         OeXILk0amqoRqeBYAIGDr/yqr/bQ5xsnXqE+hxlhwKtkjRaBsss25V730UnFdnt6xscA
-         f1xpCZzOMOsrkN2FS/67XiMUAIatBlkAFCEyixn4hgfyi0WYbZCIyAv7e+dDDNYTqiKs
-         ItFN9UWKYnPMg46LASKBfIAyUyqqxCnWpP//fXBU5ZBxN37YMFgv/U05TaU0FsjBhgcV
-         f4xEvwxe580acf/vHsTUBaaE4JJWxy41Ax8I9kVXHFLesnGsyNScAx5WKYhMC6dlQT1P
-         B2Lg==
-X-Gm-Message-State: AO0yUKXR+HVjjevxpJXYp/LeFXkwHGK0/yi2MFuZx3xkaGXpIi6hhVnz
-        9VhmsHKbwg8x/E7SGabWazoqfXzn0QYW+y7eYeDVSg==
-X-Google-Smtp-Source: AK7set8wQ5OBxV3pr4cshnfVzFeiOtgXomMd6lzXhm4mJtrNqwdgad4opn6PrAzJm+2VbQdaLtrD8eaK54pDT7f35oY=
-X-Received: by 2002:a17:906:eced:b0:878:4ea8:6c2f with SMTP id
- qt13-20020a170906eced00b008784ea86c2fmr650138ejb.115.1674726233044; Thu, 26
- Jan 2023 01:43:53 -0800 (PST)
+        bh=yNKGiFVF7gZl8W9gtBpFjfAaHbcRzsNNp7MAmipi5tM=;
+        b=pRhwrl1j4+JMzTHSokyiJB/hPuwgaFWpOn1KAftzJzvVIO1j0gcDHoIjsHPFF4P180
+         GDV05NPf98OzVvw30PeQYyikp3ub6zR22+0zCqYjohqirktTRnAMcjz5vfeJPSvUpA/D
+         srmmdRGzXVSoHUDzAy39vJkchMt3vKT0R/QoWP3VD0moLThDJJZPX/JTZ2PvvRD6EybN
+         1qwzG7C+g/DJMnY0O08T4BOtIL8In10rdvsvBoYJyXJBmqaoN9Zt9U7KvBiUOOlMPTH5
+         x4gbPSlwJfnmJy9Xar9UEiEF1fWoFrYiBPlv0PbL8oipZZFW3Ccf3bA8DWzNYBbgTAjf
+         016g==
+X-Gm-Message-State: AFqh2koznnR8xNjO/l94FnV1k4uuD6R5dFBR+keNJkPnH3WKpJaBE2Yc
+        dF7YKPnn15rJ7JghuPef2firfESPyfKWYo38Dr95LA==
+X-Google-Smtp-Source: AMrXdXu0EMTejStEvfuw0MDinG//EO3AdM5XPHW4c5XWtjDfz8npqgxmZS5z1qRVIzw1wvFeVznkiNtOTi4NmJ3dBNA=
+X-Received: by 2002:a17:906:80da:b0:872:618e:b01c with SMTP id
+ a26-20020a17090680da00b00872618eb01cmr3636438ejx.275.1674729266315; Thu, 26
+ Jan 2023 02:34:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-6-bchihi@baylibre.com>
- <80ce4ea3-6ebd-c249-45bd-a2f04343690b@collabora.com> <CAGuA+opCcdbPbasadEFbKw1nSy-kbK3WzKG=wXn6dtzynjrY1Q@mail.gmail.com>
- <243ad9f8-76f6-3e60-91ae-21d04ba6f262@gmail.com>
-In-Reply-To: <243ad9f8-76f6-3e60-91ae-21d04ba6f262@gmail.com>
+References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-3-bchihi@baylibre.com>
+ <20230125203420.GA2855708-robh@kernel.org>
+In-Reply-To: <20230125203420.GA2855708-robh@kernel.org>
 From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Thu, 26 Jan 2023 10:43:17 +0100
-Message-ID: <CAGuA+ooybKdNdmUqN9xQpuSNFfSnA6+yj-UrmMkU9RZv1KE1qg@mail.gmail.com>
-Subject: Re: [PATCH v11 5/6] arm64/dts/mt8195: Add thermal zones and thermal nodes
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+Date:   Thu, 26 Jan 2023 11:33:50 +0100
+Message-ID: <CAGuA+oq1F4UnEz+ujjtaj=+WCMZOky38B4z4go7TXhMYt1EeEw@mail.gmail.com>
+Subject: Re: [PATCH v11 2/6] dt-bindings/thermal/mediatek: Add LVTS thermal
+ controllers dt-binding definition
+To:     Rob Herring <robh@kernel.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
@@ -76,51 +74,180 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 8:09 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
->
->
->
-> On 25/01/2023 16:10, Balsam CHIHI wrote:
-> > On Tue, Jan 24, 2023 at 4:37 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
-> >>> From: Balsam CHIHI <bchihi@baylibre.com>
-> >>>
-> >>> Add thermal zones and thermal nodes for the mt8195.
-> >>>
-> >>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> >>
-> >> You should change the commit title to reflect the same syntax that you can find
-> >> in a `git log --oneline arch/arm64/boot/dts/mediatek/`.
-> >>
-> >> arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
-> >>
-> >> or
-> >>
-> >> arm64: dts: mt8195: Add thermal zones and thermal nodes
-> >>
-> >
-> > Hi Angelo,
-> >
-> > Thank you for the review.
-> > Should I resend with the fix?
-> > Or you would fix it when applying it like Matthias did for "[PATCH v11
-> > 3/6] arm64/dts/mt8195: Add efuse node to mt8195"?
-> >
->
-> If you need to send a new version for any reason, then please update. Otherwise
-> I'll fix it once I can take it.
+Hi Rob,
 
-Hi Matthias,
+On Wed, Jan 25, 2023 at 9:34 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Jan 24, 2023 at 02:17:13PM +0100, bchihi@baylibre.com wrote:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+>
+> dt-bindings: thermal: ... for the subject
 
-OK.
-I appreciate it,
-thank you.
+I will fix it.
+
+>
+> > Add LVTS thermal controllers dt-binding definition for mt8195.
+> >
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >  .../thermal/mediatek,lvts-thermal.yaml        | 107 ++++++++++++++++++
+> >  include/dt-bindings/thermal/mediatek-lvts.h   |  19 ++++
+> >  2 files changed, 126 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> >  create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> > new file mode 100644
+> > index 000000000000..12bfbdd8ff89
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> > @@ -0,0 +1,107 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
+> > +
+> > +maintainers:
+> > +  - Balsam CHIHI <bchihi@baylibre.com>
+> > +
+> > +description: |
+> > +  LVTS is a thermal management architecture composed of three subsystems,
+> > +  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
+> > +  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
+> > +  a Digital controller (LVTS_CTRL).
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8195-lvts-ap
+> > +      - mediatek,mt8195-lvts-mcu
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +    description: LVTS reset for clearing temporary data on AP/MCU.
+> > +
+> > +  nvmem-cells:
+> > +    minItems: 1
+> > +    items:
+> > +      - description: Calibration eFuse data 1 for LVTS
+> > +      - description: Calibration eFuse data 2 for LVTS
+> > +
+> > +  nvmem-cell-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - const: lvts-calib-data-1
+> > +      - const: lvts-calib-data-2
+> > +
+> > +  "#thermal-sensor-cells":
+> > +    const: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - resets
+> > +  - nvmem-cells
+> > +  - nvmem-cell-names
+> > +  - "#thermal-sensor-cells"
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/mt8195-clk.h>
+> > +    #include <dt-bindings/reset/mt8195-resets.h>
+> > +    #include <dt-bindings/thermal/mediatek-lvts.h>
+> > +
+> > +    soc {
+> > +      #address-cells = <2>;
+> > +      #size-cells = <2>;
+> > +
+> > +      lvts_mcu: thermal-sensor@11278000 {
+> > +        compatible = "mediatek,mt8195-lvts-mcu";
+> > +        reg = <0 0x11278000 0 0x1000>;
+> > +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
+> > +        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
+> > +        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
+> > +        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
+> > +        #thermal-sensor-cells = <1>;
+> > +      };
+> > +    };
+> > +
+> > +    thermal_zones: thermal-zones {
+> > +      cpu0-thermal {
+> > +        polling-delay = <1000>;
+> > +        polling-delay-passive = <250>;
+> > +        thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
+> > +
+> > +        trips {
+> > +          cpu0_alert: trip-alert {
+> > +            temperature = <85000>;
+> > +            hysteresis = <2000>;
+> > +            type = "passive";
+> > +          };
+> > +
+> > +          cpu0_crit: trip-crit {
+> > +            temperature = <100000>;
+> > +            hysteresis = <2000>;
+> > +            type = "critical";
+> > +          };
+> > +        };
+> > +      };
+> > +    };
+> > diff --git a/include/dt-bindings/thermal/mediatek-lvts.h b/include/dt-bindings/thermal/mediatek-lvts.h
+> > new file mode 100644
+> > index 000000000000..428a95c18509
+> > --- /dev/null
+> > +++ b/include/dt-bindings/thermal/mediatek-lvts.h
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ */
+>
+> Okay with GPL 4? GPL-2.0-only
+>
+> Dual license please. Consistent with your .dts files.
+
+I will fix this too.
+
+>
+> > +/*
+> > + * Copyright (c) 2023 MediaTek Inc.
+> > + * Author: Balsam CHIHI <bchihi@baylibre.com>
+> > + */
+> > +
+> > +#ifndef __MEDIATEK_LVTS_DT_H
+> > +#define __MEDIATEK_LVTS_DT_H
+> > +
+> > +#define MT8195_MCU_BIG_CPU0  0
+> > +#define MT8195_MCU_BIG_CPU1  1
+> > +#define MT8195_MCU_BIG_CPU2  2
+> > +#define MT8195_MCU_BIG_CPU3  3
+> > +#define MT8195_MCU_LITTLE_CPU0       4
+> > +#define MT8195_MCU_LITTLE_CPU1       5
+> > +#define MT8195_MCU_LITTLE_CPU2       6
+> > +#define MT8195_MCU_LITTLE_CPU3       7
+> > +
+> > +#endif /* __MEDIATEK_LVTS_DT_H */
+> > --
+> > 2.34.1
+> >
+
+Thank you for the review.
 
 Best regards,
 Balsam
-
->
-> Regards,
-> Matthias
