@@ -2,108 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AF167CB0F
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 13:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61BB67CB66
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 13:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbjAZMpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 07:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S231129AbjAZM4Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 07:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjAZMpx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 07:45:53 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C66659992
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 04:45:50 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u5so687210pfm.10
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 04:45:50 -0800 (PST)
+        with ESMTP id S236426AbjAZM4X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 07:56:23 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD516952B;
+        Thu, 26 Jan 2023 04:55:56 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id v6so4787930ejg.6;
+        Thu, 26 Jan 2023 04:55:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQBrpKdtF81iXahPtF6gU+IPWtlOgCZq7sNUlQBczDo=;
-        b=bMI2xEvHCOBw/DZewO0k/Ohq8kIIP0JsaF9SK+iKCGjS02Wctxn9Cpbg7nMZTWw4eo
-         XMnIG7omfgGfipSH/PwDeD2VN9IbaN33PADGKe7AcdrD6rNcHGvT47rsach+HUEljG11
-         5onzj/nepw/GneyCzttuxs+dCX4TrpY7Qo2m4EwaI7DShRo/h9jt/7IrbPPSRJ6yRP8s
-         rEEuKGWyI8Kaivq9ZRD4r4TddEwUBMmNPsL5gX2Ll5Wo/ek0aXFrJvp43pbAk5mLbujN
-         p4XUwrThc4HV+9qvC8W+r1UfftvM/s+cBSCOkoURSaQHwe/EOwG0H6oXugxuUTu3FXgB
-         DP7A==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dOHjVOgAZUX0rRLXe2h9UYJji2SuNMNcGeYAyIod1qY=;
+        b=L1uyLtyXQoje6+jhddxHqy6spvTqXhZmDlWGR1FGBeqikj/BElV5p5oMAF+0nXzFqg
+         YJ6EU0bx4h/H3ACfThwfp+KfoaI3NBfrvOi3+qnkJTnYBVCdIfDPTJmZSTHNfpsH+Bpl
+         YUIY9HhRzgyL7H1V6ZMp/Grx3R8mUbMZC+L+sImzx3XkjwYX9VG46L+1i5MroXv+K/O5
+         1wFYU5aLv1eQwwlaEQYuHS8ZFShAiO9gYS7jhO7qhkTi0d7AVOnUY52r00LwhnVh3NBb
+         0ayj7qJ8z6gH12TvYbh5tmPoaC8141wYBkmCBLlVGVs+RszAr1sjONlkROn9BRa6p505
+         jG1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sQBrpKdtF81iXahPtF6gU+IPWtlOgCZq7sNUlQBczDo=;
-        b=4oAFBnnW2fyVUnW3dUz9fa7laiZTZv0TbENAhkYtysIbkga3xXgLZYJZDDCB9M5oTY
-         SIwhMb924iCT73WhXVigsAvpKSaz9+G0axE2cGzaM8Wsy2p4sPNH3QZw8edxVVhc3EVW
-         5K84tgBQufjA3Wn45B7X/3WBFd8ajcF27Zl0IrRTyXtd94OpzRsVplDQplu8LDssjGVN
-         fhCGjTnpONypDa7Dc33dRGGqTN/ENRu1MAobWAk1yg+U4PKlgevHxkoobtQMfImlfUMw
-         0XKvp0yw5+hjZ6qcq82TvSaIyKzpTOXWgQmAJjfp+7IIo5V69TLLXC48tXcGqREdwnTh
-         3BYg==
-X-Gm-Message-State: AO0yUKW3OYVfmQdkLksPqRU7yxYIsAWxX+wC/Tk6Eqgs7l4WAlSzwdrA
-        kHRPS57aRoZPntalTq3PpJNzHl7y9Nhg3d4s1ccXwA==
-X-Google-Smtp-Source: AK7set9GuXW5qS1QMdZByaefsiV9jzqn+8eQhW82mxF+fn13Cl4JPjXgS1YfrESUzXLoFDvulLlEMDcFbmdOeUlwdNQ=
-X-Received: by 2002:a63:a5c:0:b0:4d9:8f35:e0c with SMTP id z28-20020a630a5c000000b004d98f350e0cmr858530pgk.89.1674737148966;
- Thu, 26 Jan 2023 04:45:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org> <ac3ed1da-fcd1-d8e9-7770-8a047f0e392d@linaro.org>
-In-Reply-To: <ac3ed1da-fcd1-d8e9-7770-8a047f0e392d@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 26 Jan 2023 13:45:12 +0100
-Message-ID: <CAPDyKFr9ePUvi-h_jJByrfsBKp+Mu+oyn=qcgp=Ta_jjygEeLw@mail.gmail.com>
-Subject: Re: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dOHjVOgAZUX0rRLXe2h9UYJji2SuNMNcGeYAyIod1qY=;
+        b=onI9TCX3JID0a9HOGIasV0uNqUeUtQNgcqu2Oh1/rNGJJb0DuQ6KT/HCqfinQ94GUd
+         jruLTlTsKcwuJpUPTmqOefnmbozFX3SKdbGOm3v2Kwhom0JAbJOc4aSNKlQkezFvQa/v
+         6Uu8fDE3aLinmcSLtmg4WJZxiBLhf84sla4Jf3fIvDNO0LSu0Kc0UIEVh6U7i6peZIL0
+         oKgasqINqmzF3apy5pfesXndicJzCA/k9E47VMRoV4XYF6+KfdDEXDSD/od7tknpLDBc
+         n3BvxEemOY0Pn+XGJJjSDamyraA1BLw5SRStdMMM5PbhFFuXrtekLkwpuZRc+TqeaiFJ
+         WzXw==
+X-Gm-Message-State: AFqh2kpaLknwaXzlXn3/vD6mpYNM3eBnSQIkpI6fqhLx/9n+V/8qaSvz
+        dsqjVajRdsXhRkmEMptKrlHHzRZ2PPY=
+X-Google-Smtp-Source: AMrXdXv1qtoWxCvb7UPySKi4Cz07AO2uqjYmCsCuDFvI7KPz5yoPXz54F+eB4UAqkcbPLT+k2eEcwg==
+X-Received: by 2002:a17:907:674c:b0:7c4:fe36:5b80 with SMTP id qm12-20020a170907674c00b007c4fe365b80mr39044656ejc.62.1674737754680;
+        Thu, 26 Jan 2023 04:55:54 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id cm20-20020a170907939400b00871cb1b8f63sm564099ejc.26.2023.01.26.04.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 04:55:54 -0800 (PST)
+Date:   Thu, 26 Jan 2023 13:55:52 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Johan Hovold <johan@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
+ usage
+Message-ID: <Y9J4WAFyXyV/nqlG@orome>
+References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="A9WxDdyRC/ykeBGC"
+Content-Disposition: inline
+In-Reply-To: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 17:46, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Krzysztof,
->
->
-> On 25/01/2023 12:34, Krzysztof Kozlowski wrote:
-> > The runtime Power Management of CPU topology is not compatible with
-> > PREEMPT_RT:
-> > 1. Core cpuidle path disables IRQs.
-> > 2. Core cpuidle calls cpuidle-psci.
-> > 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
-> >     pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
-> >     spinlocks (which are sleeping on PREEMPT_RT).
-> >
-> > Deep sleep modes are not a priority of Realtime kernels because the
-> > latencies might become unpredictable.  On the other hand the PSCI CPU
-> > idle power domain is a parent of other devices and power domain
-> > controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
-> >
-> > Disable the idle callbacks in cpuidle-psci and mark the domain as
-> > always on.  This is a trade-off between making PREEMPT_RT working and
-> > still having a proper power domain hierarchy in the system.
->
-> Wouldn't make sense to rely on the latency constraint framework ?
 
-The main problem is that for runtime PM there is a per device spinlock
-being used, which becomes a sleepable lock on PREEMPT_RT.
+--A9WxDdyRC/ykeBGC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In other words, the only simple solution is to avoid the calls to
-runtime PM in the idle path.
+On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
+>=20
+> Hi,
+>=20
+> does anyone know what is the purpose of the get_thermal_instance() usage =
+in
+> this code:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/dr=
+ivers/thermal/tegra/soctherm.c?h=3Dthermal/linux-next#n623
+>=20
+> The driver is using a function which is reserved for the thermal core. It
+> should not.
+>=20
+> Is the following change ok ?
+>=20
+> diff --git a/drivers/thermal/tegra/soctherm.c
+> b/drivers/thermal/tegra/soctherm.c
+> index 220873298d77..5f552402d987 100644
+> --- a/drivers/thermal/tegra/soctherm.c
+> +++ b/drivers/thermal/tegra/soctherm.c
+> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
+> thermal_zone_device *tz, int trip
+>  				continue;
+>=20
+>  			cdev =3D ts->throt_cfgs[i].cdev;
+> -			if (get_thermal_instance(tz, cdev, trip_id))
+> -				stc =3D find_throttle_cfg_by_name(ts, cdev->type);
+> -			else
+> +			stc =3D find_throttle_cfg_by_name(ts, cdev->type);
+> +			if (!stc)
+>  				continue;
+>=20
+>  			return throttrip_program(dev, sg, stc, temp);
+> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
+> *dev,
+>  			continue;
+>=20
+>  		cdev =3D ts->throt_cfgs[i].cdev;
+> -		if (get_thermal_instance(tz, cdev, trip))
+> -			stc =3D find_throttle_cfg_by_name(ts, cdev->type);
+> -		else
+> +
+> +		stc =3D find_throttle_cfg_by_name(ts, cdev->type);
+> +		if (!stc)
+>  			continue;
+>=20
+>  		ret =3D throttrip_program(dev, sg, stc, temperature);
 
-[...]
+There's a small difference in behavior after applying this patch. Prior
+to this I get (on Tegra210):
 
-Kind regards
-Uffe
+	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips,=
+ will use critical trips as shut down temp
+	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when cpu reaches 102500 mC
+	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
+e for cpu to 102500
+	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
+ottle when cpu reaches 102500 mC
+	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when gpu reaches 103000 mC
+	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
+e for gpu to 103000
+	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
+ottle when gpu reaches 103000 mC
+	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when pll reaches 103000 mC
+	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when mem reaches 103000 mC
+
+and after these changes, it turns into:
+
+	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips,=
+ will use critical trips as shut down temp
+	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when cpu reaches 102500 mC
+	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
+e for cpu to 102500
+	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
+ottle when cpu reaches 102500 mC
+	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when gpu reaches 103000 mC
+	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
+e for gpu to 103000
+	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
+ottle when gpu reaches 103000 mC
+	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when pll reaches 103000 mC
+	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
+e for pll to 103000
+	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
+ottle when pll reaches 103000 mC
+	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
+t down when mem reaches 103000 mC
+	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
+e for mem to 103000
+	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
+ottle when mem reaches 103000 mC
+
+The "programming throttle ..." messages are something I've added locally
+to trace what gets called. So it looks like for "pll" and "mem" thermal
+zones, we now program trip points whereas we previously didn't.
+
+I'll take a closer look to see if we can replace the calls to
+get_thermal_instance() by something else.
+
+Thierry
+
+--A9WxDdyRC/ykeBGC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPSeFUACgkQ3SOs138+
+s6EqwxAAtLTapa6oayggK4aPNTYkNjnKTeqLxhazJHvW8NNNf3KjMBoOwFEkzv2Q
+LQFmlqfSqfeTEBkVA6U1b8qQedI2xxOfww+i9KCv47FBF2jfKjFAjQBzrffZjulr
+ixPfacly61f/a/8nvsrLcjamhQ5TlqIriMyYpnL5ASQXZ1Ao3VW2G7Sl+Hw6YpWc
++r+5OXLe+EGAhOT7k66djDDl9X9q33vB6opp+fF4SbM07KQv5nunSK5FOISG9vpy
+gYZLn7bq2AMcwRf9G7+1tGIgA9ROjFO6zjSow/QOTngywuUa/yfYX0okFmn4HSgU
+uEdpcSbyderE0ZlM51lv/Ro1P4I3eSbfK4WUUei0bWFD8/+sb01yut+sowZmrdB6
+sH8QW0VhqnK2NdjKn9H4phaJOymo/EF9qwQ1WryqtukNeGDhiWjQZsZPzZIiR3AF
+qpM+H+FIwrqoosovwsfeGoyZ2q+f3wmzc8DA/WEp74BUQJCmr5Zysq8mVjp8oA2q
+waKStPprkRtL3f/gS/x+lQd7wVw30xcRvvFRPnr9gzKQIguXTT1HmNXFSWUlTNWP
+B2pj1zsHUrKg1CKMJlxGzBjMPkfyS49Cn5ieKYHpc/LlV5FpwbC0TrQYgOobnN+J
+tEzQitYy3nNMzoeWT5x37MfSWjKhI5jpfoYK84BlKuMgN1gGL5w=
+=iYA1
+-----END PGP SIGNATURE-----
+
+--A9WxDdyRC/ykeBGC--
