@@ -2,115 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86E267D034
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 16:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE6367D052
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 16:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjAZP3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 10:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S230207AbjAZPef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 10:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjAZP3m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 10:29:42 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FC055B1
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 07:29:40 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso3463589wmc.4
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 07:29:39 -0800 (PST)
+        with ESMTP id S230129AbjAZPed (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 10:34:33 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA896A334
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 07:34:17 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id hw16so5995956ejc.10
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 07:34:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=36ptyI51QZl1lF0nXOH5sL81j6kCyJc2TJBHKS4gWCY=;
-        b=ti7BQ89IH6jJGhHpbHQdRCviihGgD/O4MfHqO/tKxDoljbNkfMKLwMGO32ru3TM0lm
-         ovKQ9fu57Y0VMY5EU1kjTl6/2iSLw4Im048aPwViQUjY+rdRV2Fr77ONVFzr002UmHjz
-         RRHTbY34rEMX53EZJrvhVWKesoZxCT0m0piLM5kBDA5WO5xzkhzAgD2AaEBzSjQKycjw
-         chwY6xjlB5V33vlACNpaLMGq0iPoYf+N5AvlZ1lyjRNXdEwmvwVXSS5mvFQYH60yD1G3
-         U3EQySr2J0kRXQ3H1Uxqz7glbhzC8BHnbCh/a1MjKljXT3r01h5YwiXTQiiFGXBJqVL7
-         A4XA==
+        bh=qGnF5JEUOP/9Gz3yuVHJBVOWbau8dZyNvnJs2NiL0u4=;
+        b=NwuiyYDUtEwQCcuGPxk9KjHLPcMW+cTgBiZjcYxdH4oiTXPzoQRy91ITgCnC9ir6e9
+         E+rmVlzFsIAOKew/6XY2u/b7FzNOAJT8DT7D16fLKVztpfN+2LxUYDpnGweM80UTy/Gb
+         pzH15Qliv1ND84wou0xqg6Mlr/9GClRCq2SOt+8GtkqgQVbUPWdIbu2T0UUmrLzesBPH
+         ZKzlyczwCf35+GeJnlhEMDW6l8BdBjwmcIlmLx3j9anfntZc2b8BW0BaGowVlXxIgE5M
+         8887efSQyqQU8dKUdvFdJOW2/8aNC+Jz2fLDVLm9+jmgeWPgFhdqazVgjhsHopBYRynP
+         ROWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=36ptyI51QZl1lF0nXOH5sL81j6kCyJc2TJBHKS4gWCY=;
-        b=lHr0oQ7cYDaZ9fjV7IA5NWObbf05j6g7pr/bXiUpK3tqGl9jDJlEk4woPJ6C9akPfD
-         SjhxOKSTZeVvUlxv7n0gRnWj9+dvNO9UZ35sgpfWN6Sa6S524gsNpPcf8YdzI7uupGp0
-         p/+M0AR1dBaJUZj0n/HngBhWx4IojoFJbc+sHHFpaBq/xjWFZcebXJwVbRpYjPOvuu47
-         YPwPrw71aTsuqGAsnpfuz4BfJwP1EYKmUOwQ8r+gLYdlSokh67Kt85r9ueKD9JoDbd0k
-         W+XTpPoCEl8RrktBFSHPq1N8GvO9Jvd+Bm1DzWF+eSSay5o4ygW+NuhCtQUynfzvqFUJ
-         UAzw==
-X-Gm-Message-State: AFqh2kodi9/yIWHH88YVU+MgGE0iwfdgEphaucd8m3CMBuJramDDIwZO
-        9qK2bjC/x7AGUEN8UkGc5k2fAQ==
-X-Google-Smtp-Source: AMrXdXvcSThOnYqAUTMGMUEcUGsCBnqaWIcnrIeb6n+jrCvIwnFbBOnDt+bNl7lZP/hCUF3r+3HA/A==
-X-Received: by 2002:a05:600c:1508:b0:3d3:5166:2da4 with SMTP id b8-20020a05600c150800b003d351662da4mr35819772wmg.8.1674746978603;
-        Thu, 26 Jan 2023 07:29:38 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm11437669wmo.2.2023.01.26.07.29.37
+        bh=qGnF5JEUOP/9Gz3yuVHJBVOWbau8dZyNvnJs2NiL0u4=;
+        b=1CCbM6qYRMImKtqvBmHAyqPh61WIi61+rufRGczldw6/iKu0LkOqi9n2lCqBnJ2M0D
+         INY6hVEbBkpE7c5uSrS06IEHYi2WOIoEBMew273Ch/TOBmKL+EssGw/1otumWYRhN88F
+         YTWAIRgC/zZi7PIDhYq63P2vk6eC3qC7Ucnq7tQw+8IA05IPfu0VtDB2X54DJqz9EMkU
+         6TffUzMApesJwg2ysIxRepoNdcfFBynikCYbZiSN+qca3evrQJBcOTBEpflsfadELbTu
+         DZOtIGza8gqFLPtXgHLrLr6LKlc3rWGPE7bX/vm/nqDA1nMYa4snAQRdb/mPZP9Lthie
+         LMjg==
+X-Gm-Message-State: AO0yUKWpfhWbOcZcyuKKKqQEZRkPKZsk1W80OdBdccdA9ErAwpFSo2d0
+        YYlamnewptltmN/l7263JQGGbA==
+X-Google-Smtp-Source: AK7set+IK5iXu+sQ3ynJ6pEMSmqCZn6CKH9DbV/Ba01kpOWJqVxjsZEWLpCsrKKoWkFYIoI5dWp/Tg==
+X-Received: by 2002:a17:906:bc51:b0:878:673f:5492 with SMTP id s17-20020a170906bc5100b00878673f5492mr2180594ejv.40.1674747255668;
+        Thu, 26 Jan 2023 07:34:15 -0800 (PST)
+Received: from [192.168.1.101] (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
+        by smtp.gmail.com with ESMTPSA id ck7-20020a170906c44700b007c0fd177c0bsm752292ejb.46.2023.01.26.07.34.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:29:38 -0800 (PST)
-Message-ID: <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
-Date:   Thu, 26 Jan 2023 15:29:36 +0000
+        Thu, 26 Jan 2023 07:34:15 -0800 (PST)
+Message-ID: <df4c76eb-aec7-823e-28f9-5ba96cc200c6@linaro.org>
+Date:   Thu, 26 Jan 2023 16:34:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
+ Thunderbird/102.7.0
 Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
 References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
  <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
  <Y86CPmgvAi+kChQI@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <Y86CPmgvAi+kChQI@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/01/2023 12:49, Stephan Gerhold wrote:
->> - Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
->>    Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
->>    GCC_BYTE1_CFG_RCGR : SRC_SEL
->>    Root Source Select
->>    000 : cxo
->>    001 : dsi0_phy_pll_out_byteclk
->>    010 : GPLL0_OUT_AUX
->>    011 : gnd
->>    100 : gnd
->>    101 : gnd
->>    110 : gnd
->>    111 : reserved - Stephan/Bryan
->>
-> I'm confused. Are you not contradicting yourself here? You say that
-> dsi0_phy_pll (dsi ZERO) is used to clock GCC_BYTE1_CFG_RCGR. Then why
-> do you add dsi1_phy_pll (dsi ONE) to the gcc clock list?
 
-So my understanding of the clock tree here is that 
-dsi0_phy_pll_out_byteclk is a legacy name.
 
-Its perfectly possible to have DSI0 and DSI0_PHY switched off and to 
-have DSI1/DSI1_PHY operable.
+On 26.01.2023 16:29, Bryan O'Donoghue wrote:
+> On 23/01/2023 12:49, Stephan Gerhold wrote:
+>>> - Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
+>>>    Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
+>>>    GCC_BYTE1_CFG_RCGR : SRC_SEL
+>>>    Root Source Select
+>>>    000 : cxo
+>>>    001 : dsi0_phy_pll_out_byteclk
+>>>    010 : GPLL0_OUT_AUX
+>>>    011 : gnd
+>>>    100 : gnd
+>>>    101 : gnd
+>>>    110 : gnd
+>>>    111 : reserved - Stephan/Bryan
+>>>
+>> I'm confused. Are you not contradicting yourself here? You say that
+>> dsi0_phy_pll (dsi ZERO) is used to clock GCC_BYTE1_CFG_RCGR. Then why
+>> do you add dsi1_phy_pll (dsi ONE) to the gcc clock list?
+> 
+> So my understanding of the clock tree here is that dsi0_phy_pll_out_byteclk is a legacy name.
+> 
+> Its perfectly possible to have DSI0 and DSI0_PHY switched off and to have DSI1/DSI1_PHY operable.
+> 
+> dsi0_phy_pll_out_byteclk is perhaps an unfortunate name and probably should have been renamed.
+> 
+>> To me this looks like a confirmation of what downstream does, that both
+>> DSI byte clocks are actually sourced from the dsi0_phy and the PLL of
+> 
+> A better name would have been dsiX_phy_pll_out_byteclk.
+I believe Stephan is just confused what the clock source of both
+pairs of GCC DSI clocks are, as you're suggesting that:
 
-dsi0_phy_pll_out_byteclk is perhaps an unfortunate name and probably 
-should have been renamed.
+phy_clock0
+  |_gcc_clock0
 
-> To me this looks like a confirmation of what downstream does, that both
-> DSI byte clocks are actually sourced from the dsi0_phy and the PLL of
+and
 
-A better name would have been dsiX_phy_pll_out_byteclk.
+phy_clock0 (yes, zero)
+  |_gcc_clock1
 
----
-bod
+whereas on most other SoCs the following is true:
+
+phy_clock0
+  |_gcc_clock0
+
+phy_clock1
+  |_gcc_clock_1
+
+Konrad
+> 
+> ---
+> bod
