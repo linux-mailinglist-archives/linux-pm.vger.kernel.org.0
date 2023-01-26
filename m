@@ -2,104 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FBD67C9A0
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 12:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA1667CA03
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 12:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237017AbjAZLTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 06:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S237227AbjAZLed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 06:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbjAZLS5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 06:18:57 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65BB4997C
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:18:51 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so3043513wmb.2
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:18:51 -0800 (PST)
+        with ESMTP id S236632AbjAZLeb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 06:34:31 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873A5E054
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:34:30 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id j5so1244349pjn.5
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p3zgwj/N2m78fr4mQomhV+/0L8iV0s8h+XqoJd6wA6U=;
-        b=LXLuoY62A52JG2d1O1qQQxvByARad/iGJzYq2HxpgW8+sUarqND5Kz5zV4gyPoNL1i
-         yq9Mr6mWWPDplbks3qmsHiQPllaKr+R+859bmxlHrnqwGHCvYKV61T8L6KD2TIDB9qkO
-         b4H8Q+jVKPt6Sl9NySyFGKGgb5eAyLUztAkIVNkWxBmVq+Ri6qHYIJ73RMW1tenreXwA
-         Kdp365+K6AFazBHK8Igp2A6JTTEzf9jFdzEZayIwn+ZrZqiCG9SZRbu+wexvfOZcV0aN
-         qpARl0E3/2XT1NKblMYE3xkN8O4r3xMJ8rVtguA2OUUd1SNFcVeObKX34hUczu1mBkzh
-         5zpQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qBh5t0y71nJcUSs92Uh6oBnoeSzlfaLeUxXU3JwGQNQ=;
+        b=b9jabVi8mtM/LqwzV82zy61YMKfr7zkBDsuY0b63mnruwGQuqDtKAk85nd/i0649j+
+         tGwXtV8iRX5EMMNomPzWMQpgGZDRRd7JMkDoyGep+2m6nNW3kS/7kDGczHqq90ORBZ7L
+         5b29LevLHkV8jNJWl2lOp27BcG1XpdwH/TAe5ol44VWlRJAlqJ41/ARv2LS374lHxgiy
+         J0NAV+GyYBiFbah+1Yvxl/wJkpQFmMQpfBSlnBzwm3nLfi1Wbu7WUBVHNdvtIH1dfPoK
+         vxVArOSeXPVWY2/CRLjl3aSENuAaCR9aQhUpN5FCL7XORWoQa1MwhOnvfHX/2tATYDa0
+         McCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p3zgwj/N2m78fr4mQomhV+/0L8iV0s8h+XqoJd6wA6U=;
-        b=eisCYYePmJ5tB2HPXRgEaUGqcnx6k0ucA0T9wKqgjtXfzHAk8q7FHnrV6RaU03LO/U
-         gzyX++9QLjLX6fF73ROD0ZxOCZE6wUb47dab167Ra6k7WSMlOCLQpN5zjVn0nbQtVf62
-         iwmvQ6nmIOo9yVqQibdsQUfAECvwl4JcYl8qBoIEO0jGE2KBRJKpBe9JihS3wES8a88P
-         ewndybYopOx/+ijeZapovgqBsrRipauV1xnZPiSEnmYPANGH6t+KLf6ruqtVg+ldrN5A
-         WX25cxo2YIgVtC1deRdBV1/fDu6RF8UQu17irkIke5I40lh9OQ8fpMnsuOle/NY7mQ2+
-         BUbg==
-X-Gm-Message-State: AO0yUKWxad1OgPgUe3JhnePNLYqfsghDZ774m+DIpoa5XdwXgOGPP990
-        I8eqp1gg2Dx5O+DR93LtpgJfZw==
-X-Google-Smtp-Source: AK7set9lB/2kTVzhBnU62TmJMHNYHvsyX3yIGi3D04EymHpXcSdwKyllD5e8qRMiDwpXFiut+Ar65A==
-X-Received: by 2002:a05:600c:310c:b0:3dc:18de:b20d with SMTP id g12-20020a05600c310c00b003dc18deb20dmr7272177wmo.33.1674731929685;
-        Thu, 26 Jan 2023 03:18:49 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05600c071500b003db1ca20170sm1136755wmn.37.2023.01.26.03.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 03:18:49 -0800 (PST)
-Message-ID: <407f1860-faaf-be6e-cde2-17272e65ee87@linaro.org>
-Date:   Thu, 26 Jan 2023 12:18:47 +0100
+        bh=qBh5t0y71nJcUSs92Uh6oBnoeSzlfaLeUxXU3JwGQNQ=;
+        b=pMZcup/OwSPsduhEfuQ+7wUMPnB8KcMzMdtr6P5SwS8v6O5zR3GcOVUPjR05ApFcpt
+         jPtRBYBBVyCW5qSDDq7OtfKLe8gQV+AJ3PWdV8XiVzG07HJi9sogxHsuxrBmiSPt/kdD
+         JAirk8gtsLFh6LPi3YSAQQ0Iz8FYwFbr3JH9c+dgCO7NZoC2FvBd22M5hVzeZCa39raV
+         0rq0ct403RQORc3bbn9kApv1XIA+tYqxAKuv9VYcZ1FPnJsw65xao5MhHsL0Ow0gFEuA
+         Ql1KGrw3436jBBqZhqY1kRq5MoFCZgfHbKsXVs7CZN1jT9W9aSQbgCqrKk11sOiEJSgv
+         RYww==
+X-Gm-Message-State: AO0yUKVatrD0w6wgatwsNgpIPGZE+MPTObdbFmLl8qX6rVhaAgeFC4n3
+        Ew/ajReK7IyEim++Y2wLU8wECli9BhDZszzwYY4=
+X-Google-Smtp-Source: AK7set/duFloqAII/UN7OhMsFAX2GQb0GPZFV06dprTjmC8s3DWpi2U8IssKocRC+S0mATOyGWo0BQPa2ueq3b4YXws=
+X-Received: by 2002:a17:90a:f2c9:b0:22c:3185:ebce with SMTP id
+ gt9-20020a17090af2c900b0022c3185ebcemr105964pjb.140.1674732869836; Thu, 26
+ Jan 2023 03:34:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: opp: opp-v2-kryo-cpu: enlarge
- opp-supported-hw maximum
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230123193422.15972-1-ansuelsmth@gmail.com>
- <20230123193422.15972-2-ansuelsmth@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123193422.15972-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: patriciajohnvan@gmail.com
+Received: by 2002:a05:7300:6482:b0:96:13ba:269b with HTTP; Thu, 26 Jan 2023
+ 03:34:29 -0800 (PST)
+From:   Dina Mckenna <dinamckenna9@gmail.com>
+Date:   Thu, 26 Jan 2023 11:34:29 +0000
+X-Google-Sender-Auth: uOIQZChBREAV8fmDhfRb2dFDjMY
+Message-ID: <CAHqodhQMi+nBd1iXjr=hYS1uCN0-Jbdg=59xJvv4bxM93rRN5A@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1042 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5865]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [patriciajohnvan[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/01/2023 20:34, Christian Marangi wrote:
-> Enlarge opp-supported-hw maximum value. In recent SoC we started
-> matching more bit and we currently match mask of 112. The old maximum of
-> 7 was good for old SoC that didn't had complex id, but now this is
-> limiting and we need to enlarge it to support more variants.
-> 
-> Document all the various mask that can be used and limit them to only
-> reasonable values instead of using a generic maximum limit.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
+Hello My Dear,
 
+ I am sending the same message to you. My names are Mrs. Dina Mckenna
+Howley, a widow diagnosed with brain tumor disease which has gotten to
+a very bad stage, Please I want you to understand the most important
+reason why I am contacting you through this medium is because I need
+your sincerity and ability to carry out this transaction and fulfill
+my final wish in implementing the charitable investment project in
+your country as it requires absolute trust and devotion without any
+failure, which i believe that you will not expose this to anyone or
+betray this trust and confident that I am about to entrust on you for
+the mutual benefit of the orphans and the less privilege. I have some
+funds I inherited from my late husband, the sum of ($ 11,000,000.00)
+deposited with the Bank. Having known my present health condition, I
+decided to entrust this fund to you believing that you will utilize it
+the way i am going to instruct herein.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It will be my pleasure to compensate you as my Investment
+Manager/Partner with 35% percent of the total money for your effort in
+handling the transaction, 5% percent for any expenses or processing
+charges fee that will involve during this process while 60% of the
+fund will be Invested into the charity project there in your country.
+Therefore I am waiting for your prompt respond, if only you are
+interested in this humanitarian project for further details of the
+transaction and execution of this charitable project for the glory and
+honor of God the merciful compassionate. Your urgent reply will be
+appreciated.
 
-Best regards,
-Krzysztof
-
+God bless you.
+Sincerely Sister in Christ
+Mrs. Dina Mckenna Howley.
