@@ -2,216 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61BB67CB66
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 13:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960CD67CBB8
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 14:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjAZM4Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 07:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S235878AbjAZNNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 08:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236426AbjAZM4X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 07:56:23 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD516952B;
-        Thu, 26 Jan 2023 04:55:56 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id v6so4787930ejg.6;
-        Thu, 26 Jan 2023 04:55:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dOHjVOgAZUX0rRLXe2h9UYJji2SuNMNcGeYAyIod1qY=;
-        b=L1uyLtyXQoje6+jhddxHqy6spvTqXhZmDlWGR1FGBeqikj/BElV5p5oMAF+0nXzFqg
-         YJ6EU0bx4h/H3ACfThwfp+KfoaI3NBfrvOi3+qnkJTnYBVCdIfDPTJmZSTHNfpsH+Bpl
-         YUIY9HhRzgyL7H1V6ZMp/Grx3R8mUbMZC+L+sImzx3XkjwYX9VG46L+1i5MroXv+K/O5
-         1wFYU5aLv1eQwwlaEQYuHS8ZFShAiO9gYS7jhO7qhkTi0d7AVOnUY52r00LwhnVh3NBb
-         0ayj7qJ8z6gH12TvYbh5tmPoaC8141wYBkmCBLlVGVs+RszAr1sjONlkROn9BRa6p505
-         jG1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dOHjVOgAZUX0rRLXe2h9UYJji2SuNMNcGeYAyIod1qY=;
-        b=onI9TCX3JID0a9HOGIasV0uNqUeUtQNgcqu2Oh1/rNGJJb0DuQ6KT/HCqfinQ94GUd
-         jruLTlTsKcwuJpUPTmqOefnmbozFX3SKdbGOm3v2Kwhom0JAbJOc4aSNKlQkezFvQa/v
-         6Uu8fDE3aLinmcSLtmg4WJZxiBLhf84sla4Jf3fIvDNO0LSu0Kc0UIEVh6U7i6peZIL0
-         oKgasqINqmzF3apy5pfesXndicJzCA/k9E47VMRoV4XYF6+KfdDEXDSD/od7tknpLDBc
-         n3BvxEemOY0Pn+XGJJjSDamyraA1BLw5SRStdMMM5PbhFFuXrtekLkwpuZRc+TqeaiFJ
-         WzXw==
-X-Gm-Message-State: AFqh2kpaLknwaXzlXn3/vD6mpYNM3eBnSQIkpI6fqhLx/9n+V/8qaSvz
-        dsqjVajRdsXhRkmEMptKrlHHzRZ2PPY=
-X-Google-Smtp-Source: AMrXdXv1qtoWxCvb7UPySKi4Cz07AO2uqjYmCsCuDFvI7KPz5yoPXz54F+eB4UAqkcbPLT+k2eEcwg==
-X-Received: by 2002:a17:907:674c:b0:7c4:fe36:5b80 with SMTP id qm12-20020a170907674c00b007c4fe365b80mr39044656ejc.62.1674737754680;
-        Thu, 26 Jan 2023 04:55:54 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id cm20-20020a170907939400b00871cb1b8f63sm564099ejc.26.2023.01.26.04.55.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 04:55:54 -0800 (PST)
-Date:   Thu, 26 Jan 2023 13:55:52 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
-Message-ID: <Y9J4WAFyXyV/nqlG@orome>
-References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+        with ESMTP id S236182AbjAZNNs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 08:13:48 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC865EDA;
+        Thu, 26 Jan 2023 05:13:46 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id cd0bcdb537e2997b; Thu, 26 Jan 2023 14:13:44 +0100
+Received: from kreacher.localnet (unknown [213.134.163.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id B32E9781613;
+        Thu, 26 Jan 2023 14:13:43 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points table
+Date:   Thu, 26 Jan 2023 14:13:43 +0100
+Message-ID: <5926007.lOV4Wx5bFT@kreacher>
+In-Reply-To: <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
+References: <5665899.DvuYhMxLoT@kreacher> <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com> <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="A9WxDdyRC/ykeBGC"
-Content-Disposition: inline
-In-Reply-To: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.174
+X-CLIENT-HOSTNAME: 213.134.163.174
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedggeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeifedrudejgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddujeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgv
+ rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thursday, January 26, 2023 1:02:59 AM CET srinivas pandruvada wrote:
+> Hi Rafael,
+> 
+> 
+> On Wed, 2023-01-25 at 16:20 +0100, Rafael J. Wysocki wrote:
+> > Hi Srinivas,
+> > 
+> > On Wed, Jan 25, 2023 at 3:55 PM Rafael J. Wysocki <rjw@rjwysocki.net>
+> > wrote:
+> > > 
+> > > Hi All,
+> > > 
+> > > This series replaces the following patch:
+> > > 
+> > > https://patchwork.kernel.org/project/linux-pm/patch/2147918.irdbgypaU6@kreacher/
+> > > 
+> > > but it has been almost completely rewritten, so I've dropped all
+> > > tags from it.
+> > > 
+> > > 
+> 
+> [...]
+> 
+> > > The series is on top of this patch:
+> > > 
+> > > https://patchwork.kernel.org/project/linux-pm/patch/2688799.mvXUDI8C0e@kreacher/
+> > > 
+> > > which applies on top of the linux-next branch in linux-pm.git from
+> > > today.
+> > 
+> > There are two additional branches in linux-pm.git:
+> > 
+> > thermal-intel-fixes
+> On two systems test, no issues are observed.
 
---A9WxDdyRC/ykeBGC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Great!  I'll move this to linux-next then.
 
-On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
->=20
-> Hi,
->=20
-> does anyone know what is the purpose of the get_thermal_instance() usage =
-in
-> this code:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/dr=
-ivers/thermal/tegra/soctherm.c?h=3Dthermal/linux-next#n623
->=20
-> The driver is using a function which is reserved for the thermal core. It
-> should not.
->=20
-> Is the following change ok ?
->=20
-> diff --git a/drivers/thermal/tegra/soctherm.c
-> b/drivers/thermal/tegra/soctherm.c
-> index 220873298d77..5f552402d987 100644
-> --- a/drivers/thermal/tegra/soctherm.c
-> +++ b/drivers/thermal/tegra/soctherm.c
-> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
-> thermal_zone_device *tz, int trip
->  				continue;
->=20
->  			cdev =3D ts->throt_cfgs[i].cdev;
-> -			if (get_thermal_instance(tz, cdev, trip_id))
-> -				stc =3D find_throttle_cfg_by_name(ts, cdev->type);
-> -			else
-> +			stc =3D find_throttle_cfg_by_name(ts, cdev->type);
-> +			if (!stc)
->  				continue;
->=20
->  			return throttrip_program(dev, sg, stc, temp);
-> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
-> *dev,
->  			continue;
->=20
->  		cdev =3D ts->throt_cfgs[i].cdev;
-> -		if (get_thermal_instance(tz, cdev, trip))
-> -			stc =3D find_throttle_cfg_by_name(ts, cdev->type);
-> -		else
-> +
-> +		stc =3D find_throttle_cfg_by_name(ts, cdev->type);
-> +		if (!stc)
->  			continue;
->=20
->  		ret =3D throttrip_program(dev, sg, stc, temperature);
+> > thermal-intel-testing
+> branch: thermal-intel-test
+> 
+> No issues, but number of trips are not same as invalid trips are not
+> registered.
+> Not sure if this is correct.
 
-There's a small difference in behavior after applying this patch. Prior
-to this I get (on Tegra210):
+It may not be.  At least it is a change in behavior that is not expected to
+happen after these changes.
 
-	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips,=
- will use critical trips as shut down temp
-	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when cpu reaches 102500 mC
-	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
-e for cpu to 102500
-	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
-ottle when cpu reaches 102500 mC
-	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when gpu reaches 103000 mC
-	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
-e for gpu to 103000
-	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
-ottle when gpu reaches 103000 mC
-	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when pll reaches 103000 mC
-	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when mem reaches 103000 mC
+> At boot up they may be invalid, but
+> firmware may update later (Not aware of such scenario).
+> 
+> For example, the hot is not registered.
+> 
+> Current:
+> 
+> thermal_zone9/trip_point_0_type:critical
+> thermal_zone9/trip_point_0_temp:125050
+> thermal_zone9/trip_point_0_hyst:0
+> 
+> thermal_zone9/trip_point_1_type:hot
+> thermal_zone9/trip_point_1_temp:-273250
+> thermal_zone9/trip_point_1_hyst:0
 
-and after these changes, it turns into:
+So this means that _HOT is evaluated successfully (or the trip point index
+would be negative), but it probably returned an invalid temperature (likely 0)
+that has been turned into an error by the temperature range check in the
+new ACPI helper introduced by the change.
 
-	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips,=
- will use critical trips as shut down temp
-	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when cpu reaches 102500 mC
-	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
-e for cpu to 102500
-	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
-ottle when cpu reaches 102500 mC
-	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when gpu reaches 103000 mC
-	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
-e for gpu to 103000
-	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
-ottle when gpu reaches 103000 mC
-	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when pll reaches 103000 mC
-	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
-e for pll to 103000
-	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
-ottle when pll reaches 103000 mC
-	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shu=
-t down when mem reaches 103000 mC
-	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttl=
-e for mem to 103000
-	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will thr=
-ottle when mem reaches 103000 mC
+OK, thanks for testing!
 
-The "programming throttle ..." messages are something I've added locally
-to trace what gets called. So it looks like for "pll" and "mem" thermal
-zones, we now program trip points whereas we previously didn't.
+I've added the appended patch to the thermal-intel-test branch.  Can you please
+check if it makes that difference in behavior go away?
 
-I'll take a closer look to see if we can replace the calls to
-get_thermal_instance() by something else.
+---
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] thermal: ACPI: Initialize trips if temperature is out of range
 
-Thierry
+In some cases it is still useful to register a trip point if the
+temperature returned by the corresponding ACPI thermal object (for
+example, _HOT) is invalid to start with, because the same ACPI
+thermal object may start to return a valid temperature after a
+system configuration change (for example, from an AC power source
+to battery an vice versa).
 
---A9WxDdyRC/ykeBGC
-Content-Type: application/pgp-signature; name="signature.asc"
+For this reason, if the ACPI thermal object evaluated by
+thermal_acpi_trip_init() successfully returns a temperature value that
+is out of the range of values taken into account, initialize the trip
+point using THERMAL_TEMP_INVALID as the temperature value instead of
+returning an error to allow the user of the trip point to decide what
+to do with it.
 
------BEGIN PGP SIGNATURE-----
+Also update pch_wpt_add_acpi_psv_trip() to reject trip points with
+invalid temperature values.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPSeFUACgkQ3SOs138+
-s6EqwxAAtLTapa6oayggK4aPNTYkNjnKTeqLxhazJHvW8NNNf3KjMBoOwFEkzv2Q
-LQFmlqfSqfeTEBkVA6U1b8qQedI2xxOfww+i9KCv47FBF2jfKjFAjQBzrffZjulr
-ixPfacly61f/a/8nvsrLcjamhQ5TlqIriMyYpnL5ASQXZ1Ao3VW2G7Sl+Hw6YpWc
-+r+5OXLe+EGAhOT7k66djDDl9X9q33vB6opp+fF4SbM07KQv5nunSK5FOISG9vpy
-gYZLn7bq2AMcwRf9G7+1tGIgA9ROjFO6zjSow/QOTngywuUa/yfYX0okFmn4HSgU
-uEdpcSbyderE0ZlM51lv/Ro1P4I3eSbfK4WUUei0bWFD8/+sb01yut+sowZmrdB6
-sH8QW0VhqnK2NdjKn9H4phaJOymo/EF9qwQ1WryqtukNeGDhiWjQZsZPzZIiR3AF
-qpM+H+FIwrqoosovwsfeGoyZ2q+f3wmzc8DA/WEp74BUQJCmr5Zysq8mVjp8oA2q
-waKStPprkRtL3f/gS/x+lQd7wVw30xcRvvFRPnr9gzKQIguXTT1HmNXFSWUlTNWP
-B2pj1zsHUrKg1CKMJlxGzBjMPkfyS49Cn5ieKYHpc/LlV5FpwbC0TrQYgOobnN+J
-tEzQitYy3nNMzoeWT5x37MfSWjKhI5jpfoYK84BlKuMgN1gGL5w=
-=iYA1
------END PGP SIGNATURE-----
+Fixes: 7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/intel/intel_pch_thermal.c |    2 +-
+ drivers/thermal/thermal_acpi.c            |    7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
---A9WxDdyRC/ykeBGC--
+Index: linux-pm/drivers/thermal/thermal_acpi.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_acpi.c
++++ linux-pm/drivers/thermal/thermal_acpi.c
+@@ -64,13 +64,14 @@ static int thermal_acpi_trip_init(struct
+ 		return -ENODATA;
+ 	}
+ 
+-	if (temp < TEMP_MIN_DECIK || temp >= TEMP_MAX_DECIK) {
++	if (temp >= TEMP_MIN_DECIK && temp <= TEMP_MAX_DECIK) {
++		trip->temperature = deci_kelvin_to_millicelsius(temp);
++	} else {
+ 		acpi_handle_debug(adev->handle, "%s result %llu out of range\n",
+ 				  obj_name, temp);
+-		return -ENODATA;
++		trip->temperature = THERMAL_TEMP_INVALID;
+ 	}
+ 
+-	trip->temperature = deci_kelvin_to_millicelsius(temp);
+ 	trip->hysteresis = 0;
+ 	trip->type = type;
+ 
+Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
++++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+@@ -107,7 +107,7 @@ static void pch_wpt_add_acpi_psv_trip(st
+ 		return;
+ 
+ 	ret = thermal_acpi_trip_passive(adev, &ptd->trips[*nr_trips]);
+-	if (ret)
++	if (ret || ptd->trips[*nr_trips].temperature <= 0)
+ 		return;
+ 
+ 	++(*nr_trips);
+
+
+
