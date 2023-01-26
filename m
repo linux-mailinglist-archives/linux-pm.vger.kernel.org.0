@@ -2,122 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B14067D8B4
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 23:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925E867D9CB
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 00:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjAZWny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 17:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S233545AbjAZXl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 18:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbjAZWnx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 17:43:53 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBED28D21
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 14:43:51 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id lp10so2895672pjb.4
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 14:43:51 -0800 (PST)
+        with ESMTP id S233538AbjAZXl6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 18:41:58 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE12D474DF
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 15:41:27 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id q10so3474408wrm.4
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 15:41:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFmyaM0qz+rP4yApBEttqduj7Z0OhMB/DfI8H+Cxm7o=;
-        b=ToCn803vC3/2IxDu/GKQ6uEKkfLf2ohR1BjDYu1h0dj3Onrq4G1F98z67g0wI5qure
-         cybGG3OUv832mfxhdAGnSR7dBnUYoYyl/immJn2lYF4rIHeuptoGaxV8+3a4Gj3GBPH2
-         UBmo3T+2eUf+EBzbSsTCZH4WxmiaOKIIatcrWffs6f4NFML9Okq/MyoOWxhcox5B285d
-         570yYtFEo2a4zwD2PLJeiudaTFyJ3MRKPNwzBB/Z9UZyvECXEkqNn9SJu5f5BlQV/oS4
-         4YzHO+9nfo3JRqRw9p9ruu2O67PxCpQyzIk2j68wlkwHs18dUOLF9JIPdWmEg9Rsz1Lg
-         1o6w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PnAyme+18j6KOPf6iRNbRr3tHa520TeEGKv2pHUyxsg=;
+        b=EVaGZ2eSnG+0XVwaIjbh+ZI03+/vFgVhoQhIG3OghMLgQ5R+zljPkZIZTclKyOWu/l
+         f+GYYrKqS3qHX9MaWjVNZ0zEhtWAWq0fv4LqpdcpR4mSEnb8Ns36h+DVRh6gOVfOcxsP
+         rMMeGeL/krHqLBVhNJ7QG0Cr8f7+K/6bh3hRzkHXjW0HCiLXpohwfSbYPVSrASdbTho/
+         /WmsfmMnkx84ZELcOG2C0kxnY/bkqatTcX6efPE0z9kpIeM5xdQY8n0nV3Ptgt2kF+49
+         hEP0vR8XEupELCm0FWZXNlftC+3k+76Y5KGkuOopclEZiGXqZnp2pa9WbcoVOfcIoCA6
+         5iog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFmyaM0qz+rP4yApBEttqduj7Z0OhMB/DfI8H+Cxm7o=;
-        b=Fm5SWJG/QxyLDK1KQwcW5x9vDZzjLZGHkbxmtGZZExiO/5nNrg3Vn3N1V8lt177NWp
-         vYJRUg6EE9Gu0c6q18PndoLCHM+cI5cq7cZoP4kIxdJfw42TEwpJ8LD5btiWx39zeylR
-         RGx6Zn9CM9lHLiJdmyOApDV71kE/vTtcad9cbfRjBCApz9SUDFV9QElJ7v63LYRgjdlJ
-         97YEqVFfjJw08hC9z33KDP2h281CyXSBBFpWmKJDXxvPX6/8mP1Zd5ggYVIyJueB+v0E
-         /gmYYfB4pm5uEu8y3Roq+ZwBzl3zCM3A63he0J2NNaI/WkyLFYDu6oandi6Myp3Opg2F
-         /Hog==
-X-Gm-Message-State: AFqh2krz/pRsuLF5bXqaWCAtNV3z5vDfw+cnjhwe117vngcDgS5aaF8z
-        EGGsPR2fdbqvwlYU0th7bYZ30Q==
-X-Google-Smtp-Source: AMrXdXuTdeV/8t6XkbnhsD07G5vLYy6Ac3Q2DyKs0AFTVHK8sWOYASSvfvHGsHkc+/vbp9e+OsjJww==
-X-Received: by 2002:a05:6a20:3d09:b0:b8:6fe8:5ed7 with SMTP id y9-20020a056a203d0900b000b86fe85ed7mr53553747pzi.44.1674773031010;
-        Thu, 26 Jan 2023 14:43:51 -0800 (PST)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056a001c8f00b0059260f01115sm165090pfw.76.2023.01.26.14.43.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Jan 2023 14:43:50 -0800 (PST)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Shuah Khan'" <skhan@linuxfoundation.org>,
-        "'Huang Rui'" <ray.huang@amd.com>, <li.meng@amd.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>, <sedat.dilek@gmail.com>
-References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <000601d92db7$39e9d0b0$adbd7210$@telus.net> <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
-In-Reply-To: <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
-Subject: RE: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
-Date:   Thu, 26 Jan 2023 14:43:53 -0800
-Message-ID: <008501d931d7$aaba8360$002f8a20$@telus.net>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PnAyme+18j6KOPf6iRNbRr3tHa520TeEGKv2pHUyxsg=;
+        b=wRAL0XGgXkpcA9UiWHJ0YIKt9fZMKoxE90/uNn5+aSGAWp8M3+GIAKqAeBL+XxNp/2
+         O2ETqAbc/fbT7pM85FH1Y9C1SJOps5tUc5fKOyzDXxy1Kg/kOuY+4nnSqdrFw7J/KKAq
+         IH5Dh6p8Ss22YC3CiWLP3w2crWdTR6Ofr76+nIz+IzDP5RcjdJnWfMJxAi4RBBSp3FO8
+         PdIwCnT3y638VKZhy9jrHqqOB8qUkljUZh6j2AUyUm0coxyB8odjetDDSHzvu1OdcXjL
+         Lj8b05abR/gPKbmokzONL/tvD0rUJ50EqwHfoGIw5Fvie3Gi4hz/imZdL/Dx01UEvLpT
+         HmwQ==
+X-Gm-Message-State: AFqh2kpSqywNH46bhPrc4NJ8WVvS9thZYaXSCJr/YrPm1pg6gpLcwH0J
+        0SmxJF1YCQD2oINdnP7nTVaXkw==
+X-Google-Smtp-Source: AMrXdXt7ZykcZm8+avHGdBvOtqm7wIEodJMiz/bX3gyWZfzVQr/vlnHzmmcdMAu5FAZDPJXoB1VG1A==
+X-Received: by 2002:adf:e197:0:b0:2be:546f:50c2 with SMTP id az23-20020adfe197000000b002be546f50c2mr25865313wrb.12.1674776425507;
+        Thu, 26 Jan 2023 15:40:25 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id s5-20020a5d5105000000b002bdfcd8c77csm2481182wrt.101.2023.01.26.15.40.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 15:40:24 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [RFC] PM: domains: Skip disabling unused domains if provider has sync_state
+Date:   Fri, 27 Jan 2023 01:40:13 +0200
+Message-Id: <20230126234013.3638425-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQGd7wYRnyVvksQxjZQjWj1dK3j3EwMDsqvcAhOVwtSu/xNR8A==
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2023.01.25 09:03 Shuah Khan wrote:
-> On 1/21/23 09:41, Doug Smythies wrote:
->> Revert the portion of a recent Makefile change that incorrectly
->> deletes source files when doing "make clean".
->> 
->> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
->> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
->> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
->> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
->> Acked-by: Huang Rui <ray.huang@amd.com>
->> Signed-off-by: Doug Smythies <dsmythies@telus.net>
->> ---
->> v2: fix address list.
->> ---
->>   tools/testing/selftests/amd-pstate/Makefile | 5 -----
->>   1 file changed, 5 deletions(-)
->> 
->> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
->> index 5f195ee756d6..5fd1424db37d 100644
->> --- a/tools/testing/selftests/amd-pstate/Makefile
->> +++ b/tools/testing/selftests/amd-pstate/Makefile
->> @@ -7,11 +7,6 @@ all:
->>   uname_M := $(shell uname -m 2>/dev/null || echo not)
->>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->> 
->> -ifeq (x86,$(ARCH))
->> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
->> -endif
->> -
->
-> This looks good - Do you need these files to run this test and if so
-> do these need to installed when the test is run on a test system?
+Currently, there are cases when a domain needs to remain enabled until
+the consumer driver probes. Sometimes such consumer drivers may be built
+as modules. Since the genpd_power_off_unused is called too early for
+such consumer driver modules to get a chance to probe, the domain, since
+it is unused, will get disabled. On the other hand, the best time for
+an unused domain to be disabled is on the provider's sync_state
+callback. So, if the provider has registered a sync_state callback,
+assume the unused domains for that provider will be disabled on its
+sync_state callback.
 
-I do not know.
-It is a question for the AMD people.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-> Now applied to linux-kselftest fixes. I will send this up for the next
-> rc.
+This approach has been applied for unused clocks as well.
+With this patch merged in, all the providers that have sync_state
+callback registered will leave the domains enabled unless the provider's
+sync_state callback explicitly disables them. So those providers will
+need to add the disabling part to their sync_state callback. On the
+other hand, the platforms that have cases where domains need to remain
+enabled (even if unused) until the consumer driver probes, will be able,
+with this patch in, to run without the pd_ignore_unused kernel argument,
+which seems to be the case for most Qualcomm platforms, at this moment.
 
-Thank you
-... Doug
+ drivers/base/power/domain.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 84662d338188..8e72e8e38c77 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
+ 	mutex_lock(&gpd_list_lock);
+ 
+ 	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+-		genpd_queue_power_off_work(genpd);
++		if (!dev_has_sync_state(genpd->provider->dev))
++			genpd_queue_power_off_work(genpd);
+ 
+ 	mutex_unlock(&gpd_list_lock);
+ 
+-- 
+2.34.1
 
