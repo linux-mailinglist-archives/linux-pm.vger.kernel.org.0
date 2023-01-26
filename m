@@ -2,163 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F8A67D2E4
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 18:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6E867D2E2
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 18:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjAZRRw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 12:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S229813AbjAZRR1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 12:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjAZRRu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 12:17:50 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDC91BCF;
-        Thu, 26 Jan 2023 09:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674753467; x=1706289467;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=b7Spntogh5Ps68+tL6zpclEU2jPr+rJmf4JqoHkUBgw=;
-  b=Kosofd6FAWzT01gsv/6jKgR1eAlNxGKsm0v6WMd9GY+qh9csDNOXITlF
-   LIdv4M2jrUbC94velY8g5klxAcQnrNrafjSurODx7eeOd4PF+mqo40JLn
-   aLs5RQlMhD+0hm+l3HZy9eFibnJdhk2gVsFI+MvnW5NrvvbuLNxcKBUGN
-   qIjHc1tOP2TFs5EzDUy6txfmbt26UvpcUUhFSr18x5kB0CKGykV6TRpWw
-   +SazaV3a5jEcghY/cwSB3cy2p+LtliWq784S+Qc3AqaAiw/xyWuyJQMpk
-   L6GtWFC3mRvAl66G4LImYxhUR5uwwuRbZCN/WngXXwEm+fZfT8QYc81pM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="326903693"
-X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="326903693"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 09:17:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="836785192"
-X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="836785192"
-Received: from linjiaji-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.70.36])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 09:17:18 -0800
-Message-ID: <3c45463d2dc546b4198272107738cc073b3d23c0.camel@linux.intel.com>
-Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points
- table
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Date:   Thu, 26 Jan 2023 09:17:18 -0800
-In-Reply-To: <5926007.lOV4Wx5bFT@kreacher>
-References: <5665899.DvuYhMxLoT@kreacher>
-         <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com>
-         <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
-         <5926007.lOV4Wx5bFT@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S229770AbjAZRR1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 12:17:27 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B0B69B26
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 09:17:20 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id 88so2147337pjo.3
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 09:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3LdgpTlEgty1WnHkAxeI7hHxiUlX7CMtzCAZFT80kVo=;
+        b=dBQOuCT+f5rAuaJgafkIxH5eUXKdTq0I1XZ0XkHxe3iL6PGy9KSZZg15IoUlBEno+B
+         rZ9v6tq8c7H4RrcGawC2jb5XYV+Bllzm5vQRKIb64qgDflMNwMNonzfnfYMHkRk8fWR8
+         GSPXWFJJI0subQGjZWLCLeJUpjbg/mR6jbXLshLiOST6KY+qZzY8mj58YuKMFbA33BTK
+         KcYgNnxUb+tjwo0JE2oNNcTf5gXiS5PNY+Yptwq4Mw+X6Mj3I0ixjN127ZZK+LeONC6D
+         n8tZeYmhZcPKJ4i/Il8ySnoo3yzUpPSr+Xua5rTCGYXGKoE3VijSem+JUxImtxXiFpqc
+         4Wig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3LdgpTlEgty1WnHkAxeI7hHxiUlX7CMtzCAZFT80kVo=;
+        b=3SwihfWbjXB9Fk17VtsutLmnpFQ0ipXer775tOrMd4cdpmhJZ4wBEEnJNrOvWDxqJM
+         3MgWUxr/yMGh6yGJkGGuqD1olSgKvMGBBhC3iUziBBfgPPXHLmhdb1j/mgatT+7o5ifY
+         YKq7K9pEb4dOjr7V542+T/nrW6ummrckfgKkkzdbBJ1GNTo7PvnZW5sAdtQFXZkMMAac
+         HzsVePmCOQIFYxefqmxDgLVTii0l3SZJqpBUpITI56GnB+nd4Yo3X1Woc2tfMw98U58K
+         h7vs6ajfokeEfjbC/NRLajpnrdCAtK59Xu/8PbAa8E7bTNRnB0bB+Nk39mhx0njiPT18
+         YDRw==
+X-Gm-Message-State: AFqh2kqsxFQKMKSQd1GUVZbSAU88ses0PAlbr+mEf+Rf/NQk9kD2eh/M
+        Y9azISvEXQRAtl9FVtrQ2EikLw==
+X-Google-Smtp-Source: AMrXdXsl2ZkpqCJXn8efjbAeLKqEm4t6woQp7cZUbGGnEdcVR3RbQcpvFXPN3CBjPVsXAMJSzc05ag==
+X-Received: by 2002:a05:6a20:3a8f:b0:af:74f5:93a3 with SMTP id d15-20020a056a203a8f00b000af74f593a3mr36406329pzh.61.1674753440033;
+        Thu, 26 Jan 2023 09:17:20 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q9-20020a656249000000b0048f8efc53a6sm913023pgv.80.2023.01.26.09.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 09:17:19 -0800 (PST)
+Message-ID: <63d2b59f.650a0220.2f1d9.12fa@mx.google.com>
+Date:   Thu, 26 Jan 2023 09:17:19 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.2-rc5-104-ga91e079a2f6a
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.2-rc5-104-ga91e079a2f6a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc5-104-ga=
+91e079a2f6a)
 
-On Thu, 2023-01-26 at 14:13 +0100, Rafael J. Wysocki wrote:
-> On Thursday, January 26, 2023 1:02:59 AM CET srinivas pandruvada
-> wrote:
-> > Hi Rafael,
-> > 
-> > 
-> 
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+2-rc5-104-ga91e079a2f6a/
 
-[...]
+Tree: pm
+Branch: testing
+Git Describe: v6.2-rc5-104-ga91e079a2f6a
+Git Commit: a91e079a2f6a26dd09fbd45d53e03e7c089282c0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> I've added the appended patch to the thermal-intel-test branch.  Can
-> you please
-> check if it makes that difference in behavior go away?
-I synced the tree again and your patch in thermal-intel-test fixes the
-issue.
+Warnings Detected:
 
-Thanks,
-Srinivas
-> 
-> ---
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] thermal: ACPI: Initialize trips if temperature is
-> out of range
-> 
-> In some cases it is still useful to register a trip point if the
-> temperature returned by the corresponding ACPI thermal object (for
-> example, _HOT) is invalid to start with, because the same ACPI
-> thermal object may start to return a valid temperature after a
-> system configuration change (for example, from an AC power source
-> to battery an vice versa).
-> 
-> For this reason, if the ACPI thermal object evaluated by
-> thermal_acpi_trip_init() successfully returns a temperature value
-> that
-> is out of the range of values taken into account, initialize the trip
-> point using THERMAL_TEMP_INVALID as the temperature value instead of
-> returning an error to allow the user of the trip point to decide what
-> to do with it.
-> 
-> Also update pch_wpt_add_acpi_psv_trip() to reject trip points with
-> invalid temperature values.
-> 
-> Fixes: 7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
-> Reported-by: Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/thermal/intel/intel_pch_thermal.c |    2 +-
->  drivers/thermal/thermal_acpi.c            |    7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_acpi.c
-> +++ linux-pm/drivers/thermal/thermal_acpi.c
-> @@ -64,13 +64,14 @@ static int thermal_acpi_trip_init(struct
->                 return -ENODATA;
->         }
->  
-> -       if (temp < TEMP_MIN_DECIK || temp >= TEMP_MAX_DECIK) {
-> +       if (temp >= TEMP_MIN_DECIK && temp <= TEMP_MAX_DECIK) {
-> +               trip->temperature =
-> deci_kelvin_to_millicelsius(temp);
-> +       } else {
->                 acpi_handle_debug(adev->handle, "%s result %llu out
-> of range\n",
->                                   obj_name, temp);
-> -               return -ENODATA;
-> +               trip->temperature = THERMAL_TEMP_INVALID;
->         }
->  
-> -       trip->temperature = deci_kelvin_to_millicelsius(temp);
->         trip->hysteresis = 0;
->         trip->type = type;
->  
-> Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-> +++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-> @@ -107,7 +107,7 @@ static void pch_wpt_add_acpi_psv_trip(st
->                 return;
->  
->         ret = thermal_acpi_trip_passive(adev, &ptd-
-> >trips[*nr_trips]);
-> -       if (ret)
-> +       if (ret || ptd->trips[*nr_trips].temperature <= 0)
->                 return;
->  
->         ++(*nr_trips);
-> 
-> 
-> 
+arc:
 
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
