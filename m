@@ -2,203 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA5467CD60
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 15:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DA967CE05
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 15:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjAZOQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 09:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S232160AbjAZO0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 09:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjAZOQM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 09:16:12 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02D64109C;
-        Thu, 26 Jan 2023 06:16:11 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id rl14so5454654ejb.2;
-        Thu, 26 Jan 2023 06:16:11 -0800 (PST)
+        with ESMTP id S232005AbjAZO0g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 09:26:36 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6D911679;
+        Thu, 26 Jan 2023 06:26:17 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1229219wms.2;
+        Thu, 26 Jan 2023 06:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=N/zj2NLkkvJCQd5BlKbuQt5xCuylxPf8hWYFMpsNH/U=;
+        b=c8FRZoMJJeocgRwS8FAGK4sX7GEVF9IBTBhSvPWd92cn+m2v7UwZziWihnNMYYjjiu
+         Rsq74S5Q1VDl9q800DxtDjI3vbDJz/ojQYWhKp9i8/8Tx3nbpBtMe3U43liHXA7YcAfc
+         uBTnz/ko4LD96ixfdEoDzmhE+2uQmwdxODre39fsHmM4wVwteN7gvzpQvvXnKBq5g2nb
+         EkH6N96NGQIHqanJV3B7gZclLcWt3M0e3nO+2n8GN+CrwjVgkEAdjHzklT4PJxMaTuoX
+         pPzpRDATJloPiVzisKYcXtd+Ea8NtccBQmt2+LO9KvKLMJUpbQk77PubvwjMAhz0encT
+         2MYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=afe3c3FZB7RJeEJIEhaJHSck4Xy8uR9qBSE0PIRAeQU=;
-        b=tmr3klucKE7kOyN3Ag3dJ9qCTuwhkCqCioyD7/dnaE/W5MVI+vuCDzON57TpJvDKRi
-         00Oq9TDiaB9nMNLKbDLge3FaSRJfx8BKyendjARoCUrfrYx8fyIc9e4AzfkRFsY2jWfh
-         8LFSqw7lh8owJZvI0zs1eEU5BjAU8Is7xC57MMN2e2mkPn+vEMadb9gsn1IPj6nmziTG
-         cMOIkg0q/XbOfl9Hp1XMP+vaGKs9/W8f/uBjBewbUodLzcjNFSlzL1FYuzSX5ZNMOjlm
-         OtaP+YELDaLUxsjIKcAo+h5Pt7SRlxzV+OXD12jEIeWj8yQypI5425jA+Rz8cCsdAwD4
-         vxuw==
-X-Gm-Message-State: AFqh2koFjQLJID4w9TRrk0DszbCUzR6bk8Am3I1shsbGIoDqylrRVxHq
-        nEYLAo31Z7hNmsLU2IaanZ2ye1nNTaAqh9dHmHLaTDng
-X-Google-Smtp-Source: AMrXdXsNOhijei6u9jBrfj6OKlC4lN2bQdo6do1jqyJ+rbxe/I0uQAOptJRQR74OfQF4tAr7iiRpTgbTDIFWWR7bVwg=
-X-Received: by 2002:a17:906:f6cb:b0:870:fef9:9001 with SMTP id
- jo11-20020a170906f6cb00b00870fef99001mr6112056ejb.25.1674742570093; Thu, 26
- Jan 2023 06:16:10 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N/zj2NLkkvJCQd5BlKbuQt5xCuylxPf8hWYFMpsNH/U=;
+        b=1SQRW0qgRFW3UEfZBWS46CcJNCNYXw2AoV9RilZmk220wqDbQXmvrn01mt4vbOUL3E
+         VZ1aI33nvUfkyAgFDnDPxMVp6M1CejX32VYWNW5QmFDdUE6U1n70oGtT210U2BYjOEBX
+         op3l91kmH4UztjN9oIYZSU+/DVv7u4ktwP5Z8gb0tpNXqbTGDgYOps/nY32Oohnxd0J0
+         auylb9mEBLaqTlMrUhfbjfp8X408aVk7ESKgNRD8qdlkvaDGnnNyum1avftD94l+pOBg
+         ph9AZPMsPc4XZodjRFfqwJ6cDo8itwC32eFhcEVpvNGGJqeqofCzglCFO6Ctt+wLCMpu
+         DtTQ==
+X-Gm-Message-State: AFqh2kpw9EhqoXiM/irl9JmVWQ9zchjFm4yThIupeSm+WJTpPdyjqPJD
+        7ty3l/snKhOu4KhT0eYBYtU=
+X-Google-Smtp-Source: AMrXdXtGExADdDcIuqfZhNrDNq/eJH+XrzYdkLshuY6/JHCgSreV5P5gPtfJiG8Ht8ynnEUDLfKAvg==
+X-Received: by 2002:a05:600c:4e93:b0:3db:d3f:a91f with SMTP id f19-20020a05600c4e9300b003db0d3fa91fmr33815447wmq.23.1674743131157;
+        Thu, 26 Jan 2023 06:25:31 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05600c1d0400b003db2dede1a2sm5357982wms.26.2023.01.26.06.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 06:25:30 -0800 (PST)
+Message-ID: <63d28d5a.050a0220.7afab.f613@mx.google.com>
+X-Google-Original-Message-ID: <Y9KNWZav9rN/2AuJ@Ansuel-xps.>
+Date:   Thu, 26 Jan 2023 15:25:29 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make
+ cpr bindings optional
+References: <20230123193422.15972-1-ansuelsmth@gmail.com>
+ <102e76fd-50bc-9403-b03f-f96a3d3869bd@linaro.org>
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20230118181622.33335-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 26 Jan 2023 15:15:58 +0100
-Message-ID: <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <102e76fd-50bc-9403-b03f-f96a3d3869bd@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
->
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  .../thermal/intel/intel_quark_dts_thermal.c   | 56 +++++++++----------
->  1 file changed, 25 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-> index 3eafc6b0e6c3..4e1d1799ec22 100644
-> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-> @@ -84,6 +84,7 @@
->  #define QRK_DTS_MASK_TP_THRES          0xFF
->  #define QRK_DTS_SHIFT_TP               8
->  #define QRK_DTS_ID_TP_CRITICAL         0
-> +#define QRK_DTS_ID_TP_HOT              1
->  #define QRK_DTS_SAFE_TP_THRES          105
->
->  /* Thermal Sensor Register Lock */
-> @@ -104,6 +105,7 @@ struct soc_sensor_entry {
->         u32 store_ptps;
->         u32 store_dts_enable;
->         struct thermal_zone_device *tzone;
-> +       struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
->  };
->
->  static struct soc_sensor_entry *soc_dts;
-> @@ -172,7 +174,7 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
->         return ret;
->  }
->
-> -static int _get_trip_temp(int trip, int *temp)
-> +static int get_trip_temp(int trip, int *temp)
->  {
->         int status;
->         u32 out;
-> @@ -197,17 +199,6 @@ static int _get_trip_temp(int trip, int *temp)
->         return 0;
->  }
->
-> -static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
-> -                               int trip, int *temp)
-> -{
-> -       return _get_trip_temp(trip, temp);
-> -}
-> -
-> -static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
-> -{
-> -       return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
-> -}
-> -
->  static int update_trip_temp(struct soc_sensor_entry *aux_entry,
->                                 int trip, int temp)
->  {
-> @@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
->         return update_trip_temp(tzd->devdata, trip, temp);
->  }
->
-> -static int sys_get_trip_type(struct thermal_zone_device *thermal,
-> -               int trip, enum thermal_trip_type *type)
-> -{
-> -       if (trip)
-> -               *type = THERMAL_TRIP_HOT;
-> -       else
-> -               *type = THERMAL_TRIP_CRITICAL;
-> -
-> -       return 0;
-> -}
-> -
->  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->                                 int *temp)
->  {
-> @@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
->
->  static struct thermal_zone_device_ops tzone_ops = {
->         .get_temp = sys_get_curr_temp,
-> -       .get_trip_temp = sys_get_trip_temp,
-> -       .get_trip_type = sys_get_trip_type,
->         .set_trip_temp = sys_set_trip_temp,
-> -       .get_crit_temp = sys_get_crit_temp,
->         .change_mode = sys_change_mode,
->  };
->
-> @@ -344,7 +321,7 @@ static void free_soc_dts(struct soc_sensor_entry *aux_entry)
->  static struct soc_sensor_entry *alloc_soc_dts(void)
->  {
->         struct soc_sensor_entry *aux_entry;
-> -       int err;
-> +       int err, temperature;
->         u32 out;
->         int wr_mask;
->
-> @@ -385,10 +362,27 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
->                         goto err_ret;
->         }
->
-> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
-> -                       QRK_MAX_DTS_TRIPS,
-> -                       wr_mask,
-> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
-> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
-> +       if (err)
-> +               goto err_ret;
-> +
-> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
-> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-> +
-> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
-> +       if (err)
-> +               goto err_ret;
+On Thu, Jan 26, 2023 at 12:17:56PM +0100, Krzysztof Kozlowski wrote:
+> On 23/01/2023 20:34, Christian Marangi wrote:
+> > The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+> > - pre-cpr that doesn't have power-domains and base everything on nvmem
+> >   cells and multiple named microvolt bindings
+> > - cpr-based that require power-domain in the cpu nodes and use various
+> >   source to decide the correct voltage and freq
+> > 
+> > When the schema was introduced, it was wrongly set to always require these
+> > binding but this is not the case for pre-cpr devices.
+> > 
+> > Make the power-domain optional and set them required only for qcs404
+> > based devices.
+> > 
+> > While at it also make more clear what the opp-table supports by adding
+> > ref to the opp-v2-kryo-cpu and opp-v2-qcom-level schema.
+> > 
+> > Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> > 
+> > Changes v2:
+> > - Reword commit description
+> > - Fix condition order
+> > - Add allOf
+> > 
+> >  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 81 +++++++++++++------
+> >  1 file changed, 56 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+> > index 9c086eac6ca7..6f5e7904181f 100644
+> > --- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+> > +++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+> > @@ -17,6 +17,9 @@ description: |
+> >    on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
+> >    according to the required OPPs defined in the CPU OPP tables.
+> >  
+> > +  For old implementation efuses are parsed to select the correct opp table and
+> > +  voltage and CPR is not supported/used.
+> > +
+> >  select:
+> >    properties:
+> >      compatible:
+> > @@ -33,37 +36,65 @@ select:
+> >    required:
+> >      - compatible
+> >  
+> > -properties:
+> > -  cpus:
+> > -    type: object
+> > -
+> > -    patternProperties:
+> > -      '^cpu@[0-9a-f]+$':
+> > -        type: object
+> > -
+> > -        properties:
+> > -          power-domains:
+> > -            maxItems: 1
+> > -
+> > -          power-domain-names:
+> > -            items:
+> > -              - const: cpr
+> > -
+> > -        required:
+> > -          - power-domains
+> > -          - power-domain-names
+> > -
+> >  patternProperties:
+> >    '^opp-table(-[a-z0-9]+)?$':
+> > -    if:
+> > +    allOf:
+> > +      - if:
+> > +          properties:
+> > +            compatible:
+> > +              const: operating-points-v2-kryo-cpu
+> > +        then:
+> > +          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
+> > +
+> > +      - if:
+> > +          properties:
+> > +            compatible:
+> > +              const: operating-points-v2-qcom-level
+> > +        then:
+> > +          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
+> 
+> This entire part looks independent, please split it into separate patch
+> with its own explanation. What I still miss here - why do you remove
+> "required-opps" from required properties. It's not clear to me at all.
+> 
 
-If I'm not mistaken, this won't even try to register the thermal zone
-if at least one trip cannot be initialized, but previously it was
-registered in that case, but the trips that failed to respond were
-disabled.
+Hi, the required-opps needs to be part of this patch since they are only
+needed for genpd based devices.
 
-This is a change in behavior that would at least need to be documented
-in the changelog, but it isn't.
+I will split the additional if parts in another patch since they are not
+related.
 
-I'm not sure if it is safe to make even, however.
-
-> +
-> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = temperature;
-> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
-> +
-> +       aux_entry->tzone =
-> +               thermal_zone_device_register_with_trips("quark_dts",
-> +                                                       aux_entry->trips,
-> +                                                       QRK_MAX_DTS_TRIPS,
-> +                                                       wr_mask,
-> +                                                       aux_entry, &tzone_ops,
-> +                                                       NULL, 0, polling_delay);
->         if (IS_ERR(aux_entry->tzone)) {
->                 err = PTR_ERR(aux_entry->tzone);
->                 goto err_ret;
-> --
-> 2.34.1
->
+-- 
+	Ansuel
