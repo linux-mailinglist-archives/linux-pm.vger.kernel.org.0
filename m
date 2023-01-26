@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D18B67C998
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 12:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FBD67C9A0
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Jan 2023 12:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237227AbjAZLSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 06:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S237017AbjAZLTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 06:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236718AbjAZLSC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 06:18:02 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61902A175
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:18:00 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id m14so955132wrg.13
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:18:00 -0800 (PST)
+        with ESMTP id S234220AbjAZLS5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 06:18:57 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65BB4997C
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:18:51 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so3043513wmb.2
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 03:18:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NqdjA3+9Qt11hSZoRLBAVvtnUOg90LKLkfkURZqojVc=;
-        b=bmia+l1T8qeG6L9k0m4kQUz0Ep/IY4J7ax4evRMageigmFN69g9Y8uq3e/dgb8K0wV
-         duq5xED/VvbXaHYnpNWf0MSqKk2LfLxGG9j1/UMPnxq1iE/BfU+YXnSif+kz3pPfceup
-         hMpGeXfMv8dJqIAGLlAenz3CA60wWt+jwdn3let/kfBkuf0WlJGJzkHVM5ksbrN1FXR7
-         QtNmytC7WiL87rQnzrRbSULMaXnv7kTS4/I+Y9V9XbMb0LKGeHjUN4XJ5tJe0hI8/BV2
-         iQs66vjTfZ9oFjvwFNMGjrKmeR+lFoomrCDgJv4/VERUghK6YZmamv1KIdzhJ3l5ZAdB
-         jUAA==
+        bh=p3zgwj/N2m78fr4mQomhV+/0L8iV0s8h+XqoJd6wA6U=;
+        b=LXLuoY62A52JG2d1O1qQQxvByARad/iGJzYq2HxpgW8+sUarqND5Kz5zV4gyPoNL1i
+         yq9Mr6mWWPDplbks3qmsHiQPllaKr+R+859bmxlHrnqwGHCvYKV61T8L6KD2TIDB9qkO
+         b4H8Q+jVKPt6Sl9NySyFGKGgb5eAyLUztAkIVNkWxBmVq+Ri6qHYIJ73RMW1tenreXwA
+         Kdp365+K6AFazBHK8Igp2A6JTTEzf9jFdzEZayIwn+ZrZqiCG9SZRbu+wexvfOZcV0aN
+         qpARl0E3/2XT1NKblMYE3xkN8O4r3xMJ8rVtguA2OUUd1SNFcVeObKX34hUczu1mBkzh
+         5zpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NqdjA3+9Qt11hSZoRLBAVvtnUOg90LKLkfkURZqojVc=;
-        b=muxzGJVXGTTijq4SGX3oCjo3D0AaYSZNIduwvxPtooF3vkXBGtmNNcXiP6Va5Tu8wQ
-         UqDpi8y6ayChysdUKmzzrY1kcZH29KhyoJN0a8bKrPGobGHlJZ8ergFYkdjrMtYmZ9v6
-         4Q6QwJBnIdOZw380q8s043c3C4DC4YNR52m5+rORUONjbFk3uYuNHqwyctP+BSuT7t+C
-         JfHidBKkiziFOKXUIwWkwa6t9UrDFthyYv9Wn8l0jcNDXMkDxeyGcJbinlpAsYbkvSNZ
-         wA7UiQGWzc8Ngi+oXJe+BhAI5CDxZCPxPLkd0kIgGlHp3mxjZfOO+oB6UKyzfhDiQ9D4
-         Fd0g==
-X-Gm-Message-State: AFqh2kqAzUuQD83KRd2ArOsaeTVB+yJY3q3HMkfyXH/eXDtIOqS+Uk65
-        vjLK7rH0axg5blchSRn5ECBBYg==
-X-Google-Smtp-Source: AMrXdXtXwwsVoDPpG4FBWmaSo/IllaxkAIiivnsODY1DCtiKwSb4Jyo7v20kIZn0Ymcluujwf0ocbQ==
-X-Received: by 2002:a05:6000:16ce:b0:2bd:d9cc:920a with SMTP id h14-20020a05600016ce00b002bdd9cc920amr37171755wrf.45.1674731879174;
-        Thu, 26 Jan 2023 03:17:59 -0800 (PST)
+        bh=p3zgwj/N2m78fr4mQomhV+/0L8iV0s8h+XqoJd6wA6U=;
+        b=eisCYYePmJ5tB2HPXRgEaUGqcnx6k0ucA0T9wKqgjtXfzHAk8q7FHnrV6RaU03LO/U
+         gzyX++9QLjLX6fF73ROD0ZxOCZE6wUb47dab167Ra6k7WSMlOCLQpN5zjVn0nbQtVf62
+         iwmvQ6nmIOo9yVqQibdsQUfAECvwl4JcYl8qBoIEO0jGE2KBRJKpBe9JihS3wES8a88P
+         ewndybYopOx/+ijeZapovgqBsrRipauV1xnZPiSEnmYPANGH6t+KLf6ruqtVg+ldrN5A
+         WX25cxo2YIgVtC1deRdBV1/fDu6RF8UQu17irkIke5I40lh9OQ8fpMnsuOle/NY7mQ2+
+         BUbg==
+X-Gm-Message-State: AO0yUKWxad1OgPgUe3JhnePNLYqfsghDZ774m+DIpoa5XdwXgOGPP990
+        I8eqp1gg2Dx5O+DR93LtpgJfZw==
+X-Google-Smtp-Source: AK7set9lB/2kTVzhBnU62TmJMHNYHvsyX3yIGi3D04EymHpXcSdwKyllD5e8qRMiDwpXFiut+Ar65A==
+X-Received: by 2002:a05:600c:310c:b0:3dc:18de:b20d with SMTP id g12-20020a05600c310c00b003dc18deb20dmr7272177wmo.33.1674731929685;
+        Thu, 26 Jan 2023 03:18:49 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a18-20020adffad2000000b002be53aa2260sm1106381wrs.117.2023.01.26.03.17.57
+        by smtp.gmail.com with ESMTPSA id i21-20020a05600c071500b003db1ca20170sm1136755wmn.37.2023.01.26.03.18.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 03:17:58 -0800 (PST)
-Message-ID: <102e76fd-50bc-9403-b03f-f96a3d3869bd@linaro.org>
-Date:   Thu, 26 Jan 2023 12:17:56 +0100
+        Thu, 26 Jan 2023 03:18:49 -0800 (PST)
+Message-ID: <407f1860-faaf-be6e-cde2-17272e65ee87@linaro.org>
+Date:   Thu, 26 Jan 2023 12:18:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr
- bindings optional
+Subject: Re: [PATCH v3 2/2] dt-bindings: opp: opp-v2-kryo-cpu: enlarge
+ opp-supported-hw maximum
 Content-Language: en-US
 To:     Christian Marangi <ansuelsmth@gmail.com>,
         Andy Gross <agross@kernel.org>,
@@ -71,14 +71,14 @@ To:     Christian Marangi <ansuelsmth@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230123193422.15972-1-ansuelsmth@gmail.com>
+ <20230123193422.15972-2-ansuelsmth@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123193422.15972-1-ansuelsmth@gmail.com>
+In-Reply-To: <20230123193422.15972-2-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,93 +86,19 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 23/01/2023 20:34, Christian Marangi wrote:
-> The qcom-cpufreq-nvmem driver supports 2 kind of devices:
-> - pre-cpr that doesn't have power-domains and base everything on nvmem
->   cells and multiple named microvolt bindings
-> - cpr-based that require power-domain in the cpu nodes and use various
->   source to decide the correct voltage and freq
+> Enlarge opp-supported-hw maximum value. In recent SoC we started
+> matching more bit and we currently match mask of 112. The old maximum of
+> 7 was good for old SoC that didn't had complex id, but now this is
+> limiting and we need to enlarge it to support more variants.
 > 
-> When the schema was introduced, it was wrongly set to always require these
-> binding but this is not the case for pre-cpr devices.
+> Document all the various mask that can be used and limit them to only
+> reasonable values instead of using a generic maximum limit.
 > 
-> Make the power-domain optional and set them required only for qcs404
-> based devices.
-> 
-> While at it also make more clear what the opp-table supports by adding
-> ref to the opp-v2-kryo-cpu and opp-v2-qcom-level schema.
-> 
-> Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
-> 
-> Changes v2:
-> - Reword commit description
-> - Fix condition order
-> - Add allOf
-> 
->  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 81 +++++++++++++------
->  1 file changed, 56 insertions(+), 25 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
-> index 9c086eac6ca7..6f5e7904181f 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
-> @@ -17,6 +17,9 @@ description: |
->    on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
->    according to the required OPPs defined in the CPU OPP tables.
->  
-> +  For old implementation efuses are parsed to select the correct opp table and
-> +  voltage and CPR is not supported/used.
-> +
->  select:
->    properties:
->      compatible:
-> @@ -33,37 +36,65 @@ select:
->    required:
->      - compatible
->  
-> -properties:
-> -  cpus:
-> -    type: object
-> -
-> -    patternProperties:
-> -      '^cpu@[0-9a-f]+$':
-> -        type: object
-> -
-> -        properties:
-> -          power-domains:
-> -            maxItems: 1
-> -
-> -          power-domain-names:
-> -            items:
-> -              - const: cpr
-> -
-> -        required:
-> -          - power-domains
-> -          - power-domain-names
-> -
->  patternProperties:
->    '^opp-table(-[a-z0-9]+)?$':
-> -    if:
-> +    allOf:
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              const: operating-points-v2-kryo-cpu
-> +        then:
-> +          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
-> +
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              const: operating-points-v2-qcom-level
-> +        then:
-> +          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
 
-This entire part looks independent, please split it into separate patch
-with its own explanation. What I still miss here - why do you remove
-"required-opps" from required properties. It's not clear to me at all.
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
