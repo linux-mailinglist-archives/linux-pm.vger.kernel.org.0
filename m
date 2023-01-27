@@ -2,60 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8044867E9E9
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 16:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DB867E9EC
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 16:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbjA0PqG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Jan 2023 10:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S233311AbjA0PqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Jan 2023 10:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbjA0Ppw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 10:45:52 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E127F83968
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 07:45:28 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id q10so5344185wrm.4
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 07:45:28 -0800 (PST)
+        with ESMTP id S234633AbjA0Ppy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 10:45:54 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856C183277
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 07:45:30 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id z5so5339334wrt.6
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 07:45:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iFVYW1O2xATTJriM1RmoRREy/G+c337SmUDoCitpzco=;
-        b=491Ky8TrcAcsgeprw2ZEB8sgi6R/oZLzhKDU0+d3vG7v1nc6h3yA74RGbYkvWZUGx7
-         Q0tkN7Dadn3um5AJed8e+Uxhes1ERabJDnCU7A/6BYpFnpWWdaXrjj6Il3p1I8VpHSkG
-         GcA/06V6Xi9eNuaFlGDUTvJpxTr14Y8ACoeJpbQF/LNMv1Wf6ztmsMWEw5xZ+CFIsPM2
-         kvhpuAsK+d+Qf4DWi8UDauaU6DtDoRIbhKjGCPvOGetFluXBsSa2quz3+OMoDtbDdLRE
-         9m3F2z8NigSQc5pUGYdpfWr19F6Ur2lAMmbkHomvcHHW3zFYNsJTejBJ00gnD8XDdA2M
-         n2vQ==
+        bh=pizfg/aH6e9K5CXGoTWYposMWJMO47zqqi8cq0NPoNU=;
+        b=hWjOUen6VB+r+Bf1HFCafrQMXmXl835/ZOBdz6umvqbR2mgz2vUW+KQX09IJ3SXHuK
+         1A76JaZo2UnxxNAMibz/Udf2YyQ/sHrcmJnIVTJLHKRGOd2HO1rnEStn5OTWu3m7BAat
+         KBvJlh88kgcaYcz41Z0B5ZdJ54uGX/gpZZpkfd+7Df2sSviqRuwpvQ63BEMF2+gO8SjX
+         YXg0dXoyWCbmkn/9CWLD1BOBdUQ4OeACCNUl5j5ZUkz6TLPnEgHoSmE2k5z3FtcdD7vX
+         peDYH9vTTwsaCSY/l5pDqN18pjrTIXMNDCfLmQjPIje48qWGzMBoA0sOtxKV53J/2lkR
+         ckAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iFVYW1O2xATTJriM1RmoRREy/G+c337SmUDoCitpzco=;
-        b=eImo24/vp3uHdv2nikyff7Fx5yMRbIIY0yThZ3q/akvDo7wyV/brnHMLzTc3NwDgww
-         jtNspb+e5Yl7S/yEPRfBFgMj7PwEDgSAh8zMW/+lKFPDCNaK+s/Y7ym1nELLwfxsgm12
-         w8XaGZlCTq3+MM/bBMbYB8+KiCEmR1KpvP6844PdDOhx/cmKPf3Af5XGnV4lXhUCqXWp
-         9is63kpqzD9Bl+1bX86Ifx394WwM3XTx3eAtxV8u4rmUFUdpBFuu73ljNQpK1atQCtGV
-         8Vs0Wpwi6anPHU7ImoiO9ai1pOLf664+ijOBIYDK7NIEs4SShqcFfIkAsjfmk0q/EDFL
-         W/DQ==
-X-Gm-Message-State: AFqh2kr9MQ4BLmSfcQdsP+7P0MuqTQTrWSp7jDFXiFLxRx1odLN727tU
-        fByneXcsXy3SCuxBu52mdha5ug==
-X-Google-Smtp-Source: AMrXdXtQHXWwiOsqOaUoE38vnif7eGDE3q2bHlH287lAZAfafj8qRbLU4OGjDi/NT1osbLuzBAwQdQ==
-X-Received: by 2002:a5d:6e8b:0:b0:2bd:d9b5:8191 with SMTP id k11-20020a5d6e8b000000b002bdd9b58191mr35643805wrz.61.1674834318557;
-        Fri, 27 Jan 2023 07:45:18 -0800 (PST)
+        bh=pizfg/aH6e9K5CXGoTWYposMWJMO47zqqi8cq0NPoNU=;
+        b=4Avs6Cg1ADIozb/SzRv1iHZJB0tRSm3yFg/5rjN68m2LEg63pRIVaAmQ2CR+3me9fL
+         u7PfK5wlorKr0ilSLfFXgiGOeHMdbzDP0rfArrnp6hBlIPjfhO9+vHwOLgZYobI3TEIz
+         7HNFkewTqEKM+1wU04hA0kg5eM25Num+4jr6RI2pYBW91SeEKMKa6ZsQTh/CtZx0aGMn
+         BNOom5VFoArFUWXSWLE+evhhIkyp61SAMHTMpw/oJZk83bLA+zOQQgx1Gq071iTB7EUc
+         8PjDG2Pqi073zVsiIbzqFxsGNWQkMYElruSIp9VZNpAWk6iYjo0xI3ZBzA+QeLcPicl3
+         MjLA==
+X-Gm-Message-State: AFqh2kqvpHq12spMzHpzZkg69smQec9MQKJ2So1UHdbgjUabMsQbTAks
+        Fn9zJJ+PH5JHY7gIDxe5KbO4LA==
+X-Google-Smtp-Source: AMrXdXsxzSN0WyjWzIdnAj4L8HtS85ARxt8imhE3EgjX9zbIsSGmlZ1+pv0OcjI1zkVtWVDICMmOgw==
+X-Received: by 2002:a05:6000:98d:b0:2bd:f172:94fe with SMTP id by13-20020a056000098d00b002bdf17294femr38050435wrb.17.1674834319583;
+        Fri, 27 Jan 2023 07:45:19 -0800 (PST)
 Received: from [127.0.1.1] (62.213.132.195.rev.sfr.net. [195.132.213.62])
-        by smtp.googlemail.com with ESMTPSA id z12-20020adff74c000000b00291f1a5ced6sm4381153wrp.53.2023.01.27.07.45.17
+        by smtp.googlemail.com with ESMTPSA id z12-20020adff74c000000b00291f1a5ced6sm4381153wrp.53.2023.01.27.07.45.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 07:45:18 -0800 (PST)
+        Fri, 27 Jan 2023 07:45:19 -0800 (PST)
 From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Fri, 27 Jan 2023 16:44:45 +0100
-Subject: [PATCH v9 4/5] thermal: mediatek: add callback for raw to mcelsius conversion
+Date:   Fri, 27 Jan 2023 16:44:46 +0100
+Subject: [PATCH v9 5/5] thermal: mediatek: add delay after thermal banks
+ initialization
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221018-up-i350-thermal-bringup-v9-4-55a1ae14af74@baylibre.com>
+Message-Id: <20221018-up-i350-thermal-bringup-v9-5-55a1ae14af74@baylibre.com>
 References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
 In-Reply-To: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -77,11 +78,11 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Michael Kao <michael.kao@mediatek.com>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674834313; l=1727;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674834313; l=1567;
  i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
- bh=oneS0GOcwyJu/jpresdHeaeVd8flLXASRISr19OSr48=;
- b=PnXR/TW2vh+td5o1N+8uUQCOh9ZzJAzZGpiVAX0YLZpxZwaJwd1lZr59Yb9Anlyb3xTwr21LnY1B
- TWBcJGy7ALBoVPKUNGYbCNIimiZR/rmYuY5AQNwYV5OoL/voXYml
+ bh=fzmYYuArpv3TgjQmZi16fKXqYLE8Qo9JdtSrD1YAY5s=;
+ b=MFTrCKH6Grd+hiqf7XlaT3d7PqHP384ilZ1t/Y0qFtXPGTpXcf79S/w4BloEnMVX32kgpJ/LQKIK
+ q29F4NunDC16TysUENhaOg467p+38Wwi/oLGbSzCHLmF+AGZ0vQC
 X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
  pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,53 +94,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Set a callback at probe time instead of checking the version at
-each get_sensor_temp().
+Thermal sensor reads performed immediately after thermal bank
+initialization returns bogus values. This is currently tackled by returning
+0 if the temperature is bogus (exceeding 200000).
 
+Instead, add a delay between the bank init and the thermal zone device
+register to properly fix this.
+
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/thermal/mtk_thermal.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/thermal/mtk_thermal.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 3a5df1440822..b8e06f6c7c42 100644
+index b8e06f6c7c42..ab7db385afb3 100644
 --- a/drivers/thermal/mtk_thermal.c
 +++ b/drivers/thermal/mtk_thermal.c
-@@ -307,6 +307,8 @@ struct mtk_thermal {
+@@ -730,14 +730,6 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
  
- 	const struct mtk_thermal_data *conf;
- 	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-+
-+	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
- };
+ 		temp = mt->raw_to_mcelsius(mt, i, raw);
  
- /* MT8183 thermal sensor data */
-@@ -726,13 +728,7 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
- 		raw = readl(mt->thermal_base + conf->msr[i]);
- 
--		if (mt->conf->version == MTK_THERMAL_V1) {
--			temp = raw_to_mcelsius_v1(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
--			temp = raw_to_mcelsius_v2(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		}
-+		temp = mt->raw_to_mcelsius(mt, i, raw);
- 
- 		/*
- 		 * The first read of a sensor often contains very high bogus
-@@ -1150,6 +1146,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	mtk_thermal_turn_on_buffer(mt, apmixed_base);
- 
-+	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
-+				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
-+
- 	if (mt->conf->version == MTK_THERMAL_V2) {
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+-		/*
+-		 * The first read of a sensor often contains very high bogus
+-		 * temperature value. Filter these out so that the system does
+-		 * not immediately shut down.
+-		 */
+-		if (temp > 200000)
+-			temp = 0;
+-
+ 		if (temp > max)
+ 			max = temp;
  	}
+@@ -1160,6 +1152,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, mt);
+ 
++	// Delay for thermal banks to be ready
++	msleep(30);
++
+ 	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+ 					      &mtk_thermal_ops);
+ 	if (IS_ERR(tzdev)) {
 
 -- 
 2.39.1
