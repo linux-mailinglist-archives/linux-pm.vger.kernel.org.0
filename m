@@ -2,122 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734CF67DC85
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 04:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DC467DCD3
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 05:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjA0DIG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 22:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S232406AbjA0ERQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 23:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjA0DIF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 22:08:05 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752CA227A1;
-        Thu, 26 Jan 2023 19:08:03 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-16346330067so4931662fac.3;
-        Thu, 26 Jan 2023 19:08:03 -0800 (PST)
+        with ESMTP id S232229AbjA0ERP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 23:17:15 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BEF7377C
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 20:17:06 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id g23so3787888plq.12
+        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 20:17:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWVjgWC+CRaiVU6jf3be0WvlqWbyqa4cbGUte3LE0QY=;
-        b=SvGlwWDC+KblJS2mqQCluTm269HgIQaXn+HLtXa7cMZkrTaP7lnJrOIR33mFaXXtH/
-         8cL8KrnTBBZBGVXsgQ1DKAHWIM1+EKPpFW4p8IgxhR84Xbv3LigkPTByRA4kMaEdj6TU
-         k7Kv1PNhnRA8GIoxbImSjJVcnIGMd9W4vnrh7KM6GtdcdB294Ly2ExbAI4DPIRsycidq
-         ebpds6vqjuZg4C56lG2puV681tfO6LsMOE0MJ0KcEX5tTtzSLpp1IujIkVVhugeAFgp9
-         cvAJNHs9DU6/eY5NWUZIL8O6Ph//ikJT+Lk7G/rojhpgq5p2I7AuJy6bEG+5t5c459tI
-         xUFg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P7ZY02wnB++PrtjjVebywq2P+KdwsUUnvCgPrCN1viE=;
+        b=O1dz04cJ9kZB389iORyVGSppE1KZyeImi1gkXdGZe+K6gTCkXMDsrzWFY/B1rG4uZY
+         WsPe9B61kEKUrWaOtn/KkG6VGyorkeI4CgGpvzq6csEgwlPPcRRrjzHlnFBjGsjXGswi
+         oT6I1R0Xe+hMpv8JH4B+88d1P/RDoM0LUxCyqEqup+80+okrXb4RLJEhfuYDlZOVDdk8
+         F1yifj+oHz0wluaxO0aItc5lHE2nkkpE4zSGTePtL3m2rC97jKI7OdX6HI5d1++8Bo4R
+         yFi8Lt5dD/yR+jk2yiQnLMmMnhDFfRBuyQ5mwGOyZNHEfWzjpnQukJwrjtnx+5aFNESG
+         qMGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eWVjgWC+CRaiVU6jf3be0WvlqWbyqa4cbGUte3LE0QY=;
-        b=osUSeku/sP88UW/fmIhl0IgJ5hEaMz7tsq4ANNqgk4hTplAKS8QMG8uTA69E1EIZ8f
-         lcAhQsEhme9lnsx6jmJRNv5ue+xI4Z2VFf5AfV1gG4Ta2doUhhmfvEMDxcdcqV2OM74N
-         1UM6X9MInzTNkoJ3xePre6Ffm6ooNrGNxHOLg6Imm8lFb1wB2SP2abJT52v36/1tH3x4
-         LFNPOa6MAUxfTYyjr0UTSzqVO/v1mBnF9N27ZDMA8i1/FUbx5WvHwg0tLzQd5GD54iPw
-         tro+IxOIfFrjfVzArNZp8PUspW2IvRyOnhCPOdf9+FmUAyKfHUKwcClsrkviA/z0Fmqc
-         UMnA==
-X-Gm-Message-State: AFqh2koVJAGiwEyHBWif0QmVpLDqz6XG5Pd+QMz370sZHKKEyFU5eP/c
-        727sKVSxlvq7+4xcXoAlEXgQ+k22K3QEfB4VtpU=
-X-Google-Smtp-Source: AMrXdXtwNNbWR+EBpOWIEthHcrNWHYhATjGinf4U7RAj7/ORzz2dj7jhO7LE+yBhT7G/zMVkJANBNpaCoJ1m0UeBexw=
-X-Received: by 2002:a05:6870:44d0:b0:15b:96b8:e2be with SMTP id
- t16-20020a05687044d000b0015b96b8e2bemr2351141oai.38.1674788882705; Thu, 26
- Jan 2023 19:08:02 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7ZY02wnB++PrtjjVebywq2P+KdwsUUnvCgPrCN1viE=;
+        b=ebNRKwrWM2VLrELbc5v2+kRQvzMOUvfSgkPMHZ4cenkpYBMNfTl5tt/z78ZZfXsbrY
+         7HeAA+xByxi0OobF1IskgktULq7jx5KTPTPYGJp8dveQpW1Tk5ensXEdDDrmeBVM7hiQ
+         BAkpGTLH9np/ZSQ4lJ4HC9vgaka/WDj4UXrkNN778fYSTPn3jSv8H4Gf8/s1Vp1bgeX9
+         YvhnXdbc/EEX6seWwdUyWekPa8XxMoXQlxQPYSonXyWWkFyY8O0cqEMlh8Ajq5NyEwpx
+         jYnu16rKBUCdSkz2IYtv+M5RPGSoTOZAGeHx5U4UzQe9cxUWah10PAs8vsQrl37rctG7
+         QFKQ==
+X-Gm-Message-State: AFqh2koksvZx6f/90gaivj8lVq7CT7f8pC4cz4uQHdSXEVS+AKfkKzwE
+        UXtJndkvKlDjMPhbJdVcOdMEeg29IFHvvfh9
+X-Google-Smtp-Source: AMrXdXviEje4NBqjKMkEyy4TLr/lPqx6nBeGPG8VZTMVcSSpAEjb5nSV2Wrb7k5N2Pep7SUuznqsXg==
+X-Received: by 2002:a17:902:6bc6:b0:194:9c69:290c with SMTP id m6-20020a1709026bc600b001949c69290cmr34716033plt.67.1674793026085;
+        Thu, 26 Jan 2023 20:17:06 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id x7-20020a1709029a4700b001949b915188sm1786613plv.12.2023.01.26.20.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 20:17:05 -0800 (PST)
+Date:   Fri, 27 Jan 2023 09:47:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: mediatek-hw: Register to module device table
+Message-ID: <20230127041703.325luwaf47topv4b@vireshk-i7>
+References: <20230126154856.1322193-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-References: <20230123153745.3185032-1-robdclark@gmail.com> <20230125040403epcms1p1646e9668b87df3e9c344ad58d39b6eb6@epcms1p1>
- <CGME20230123153745epcas1p17e57cf83ed371e86258139473befc615@epcms1p3>
- <CAF6AEGud-ESF=VgcaSFzKsWas0H5eSXZDdZGcnd8Ju=pr-W2EQ@mail.gmail.com> <20230125054626epcms1p38d34dc65cbc9cb29dd707a4b2cac8fb4@epcms1p3>
-In-Reply-To: <20230125054626epcms1p38d34dc65cbc9cb29dd707a4b2cac8fb4@epcms1p3>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 26 Jan 2023 19:08:01 -0800
-Message-ID: <CAF6AEGvkepf4eLKqXYkadOvtu_7ehCzmgoiq3_s7qvJXi_n3sw@mail.gmail.com>
-Subject: Re: Re: [PATCH] PM / devfreq: Fix build issues with devfreq disabled
-To:     myungjoo.ham@samsung.com
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230126154856.1322193-1-nfraprado@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 9:46 PM MyungJoo Ham <myungjoo.ham@samsung.com> wrote:
->
-> >On Tue, Jan 24, 2023 at 8:04 PM MyungJoo Ham <myungjoo.ham@samsung.com> wrote:
-> >>
-> >> >Sender : Rob Clark <robdclark@gmail.com>
-> >> >Date : 2023-01-24 00:37 (GMT+9)
-> >> >Title : [PATCH] PM / devfreq: Fix build issues with devfreq disabled
-> >> >
-> >> >From: Rob Clark <robdclark@chromium.org>
-> >> >
-> >> >The existing no-op shims for when PM_DEVFREQ (or an individual governor)
-> >> >only do half the job.  The governor specific config/tuning structs need
-> >> >to be available to avoid compile errors in drivers using devfreq.
-> >> >
-> >> >Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
-> >> >Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >>
-> >> Doesn't this imply that DRM_MSM should depend on PM_DEVFREQ ?
-> >>
-> >> It appears that gpu/drm/msm/DRM_MSM uses PM_DEVFREQ without actually
-> >> declaring the dependency on PM_DEVFREQ.
-> >> You cannot use SIMPLE_ONDEMAND without DEVFREQ.
-> >
-> >Possibly that would resolve some issues, and that might have been my
-> >mistake in assuming that depending on SIMPLE_ONDEMAND implied a
-> >dependency on DEFREQ (which seems like a reasonable assumption, IMHO)
-> >
-> >But AFAICT some kernel configs that could otherwise use DRM_MSM don't
-> >support PM_DEVFREQ.. either way, lets solve this properly and remove
-> >needless dependencies on devfreq.
-> >
-> >BR,
-> >-R
->
-> Ok. You are enabling struct and enum only and that looks harmless.
->
-> PTAL, Chanwoo.
->
-> Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+On 26-01-23, 10:48, Nícolas F. R. A. Prado wrote:
+> Register the compatibles for this module on the module device table so
+> it can be automatically loaded when a matching device is found on the
+> system.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+>  drivers/cpufreq/mediatek-cpufreq-hw.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> index f80339779084..115b0eda38c1 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> @@ -324,6 +324,7 @@ static const struct of_device_id mtk_cpufreq_hw_match[] = {
+>  	{ .compatible = "mediatek,cpufreq-hw", .data = &cpufreq_mtk_offsets },
+>  	{}
+>  };
+> +MODULE_DEVICE_TABLE(of, mtk_cpufreq_hw_match);
+>  
+>  static struct platform_driver mtk_cpufreq_hw_driver = {
+>  	.probe = mtk_cpufreq_hw_driver_probe,
 
-Thanks, if possible, an ack to land this via msm-next would avoid
-build break headaches with COMPILE_TEST=y and other more obscure
-setups
+Applied. Thanks.
 
-BR,
--R
+-- 
+viresh
