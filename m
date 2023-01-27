@@ -2,263 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB89567EED3
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 20:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021F767EF74
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 21:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjA0TyV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Jan 2023 14:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
+        id S232372AbjA0UVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Jan 2023 15:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbjA0TyI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 14:54:08 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D98888F28
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 11:51:15 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id k18so6066068pll.5
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 11:51:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rI3B29BWDMyy9KKoss/dhVg7Dl8oDvx9k3GAo8kFYmU=;
-        b=SsKa7FiocMjn5802PA1/JsY01o8yP2xo7d4WoqFF21rGL6XXOCbSgGL6TJeEEDC1wR
-         PhxUapkXz2Bp1yhictQed2sdThlnPWrSEhhtGwxFREj20L2LuFhXUUN49JrVbRkub/XC
-         m7NSrHlnaT0tSgp/xXtOY/b4YPnFiouH68CGGj3dGrqLdU0qU68b9NjxSTnamMkWggaS
-         4HdWKwLaiBtPsmt9WcmU08axHx1hK3hD8z5P3wcW8OmZDoO3dZc8P1YUoVAv0ndjQrlj
-         C8BZoN99Z598KRa6CYjjmIWsjIAD/i7147xcIeLQCEY44UuHaWOKQkm8GC9eSAoTajKU
-         zGtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rI3B29BWDMyy9KKoss/dhVg7Dl8oDvx9k3GAo8kFYmU=;
-        b=zUoCkR2YJ2vqteeXzJmRtnp03znn5yEcKtIM7DNcgtAN4u25oz86cDieASEnBZwQJB
-         9S8KmN4sKVW5wQAdtslHIbAtYws3dEtc9F7hagiUwhlwnyhf4w64XZbrZSaFBAcfndrh
-         NH6978ThUNyoHvrul1mcpLj0kGpupyFzsM5KHMCyDmqnuTfDRaoGxGGF0hflrBLrBpwg
-         xhG4hsJdxoJ0BLhZ6ytHY/090lbzi4BMhnNIIuvT5YS3KIXZVn/ArvoqqnG8aEACPE4G
-         RVNvNHGqUxC8Y4q8dEB9wGlgO6JEtFkJ/dr/V9Fz12Ke3bntfqVux13xP6xP7XX1hnOX
-         200A==
-X-Gm-Message-State: AFqh2kohtjEap9E+g4o7EcxemEzxjpPa83hRs31iPd2kfIaG/ixvy2cV
-        TMg/43/5Aq93SdzhrDE84k0o0wyMkvr41sP9HLEIXQ==
-X-Google-Smtp-Source: AMrXdXuaSou2Mau5lrDV0ZPPM22irKuKTY0RsTudVelKDnM0a1b1X0Ztu7wcAg7uuGJKNrE1EgIQPw==
-X-Received: by 2002:a17:90a:30d:b0:229:f58a:9f65 with SMTP id 13-20020a17090a030d00b00229f58a9f65mr31553986pje.2.1674849001500;
-        Fri, 27 Jan 2023 11:50:01 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s5-20020a637705000000b004da425922c6sm2687891pgc.74.2023.01.27.11.50.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 11:50:01 -0800 (PST)
-Message-ID: <63d42ae9.630a0220.bb9b1.4eba@mx.google.com>
-Date:   Fri, 27 Jan 2023 11:50:01 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232517AbjA0UU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 15:20:59 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5071751B7;
+        Fri, 27 Jan 2023 12:20:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674850857; x=1706386857;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u6MpzPbX664ez0Ky4XTyLndB/xCrayjarXRpIpUFxhE=;
+  b=ShwA5t33oBbUhynOLU/7dtTV2knF55nZWGpubYMFlUWMAXUTMO5guAeB
+   EE81bpoZ9Ol4Kn0pmZ0W5mRoa8Om/P55W8NtZghXmS5g3Ha8TV+GyRJW0
+   g8BVA1fc4BBccvj/tsvKUol72xqdpdYjJa6G6u7fvT9IpSwhdbaMqx856
+   ADYQe7/JhRiUzc5q34UGH6Pqu2WQCayBEK2O/zBiIyDWfFuypzenAKsI9
+   oOBy8gTXvXHcHKjBeuYBJsoixiqa5Aah4aKsynQcKPTOAflIm2Gj4o8Pw
+   pLbOdcy/1EC8Gmqzgv3kkA0mtHHgad5sXjsK8uKezWTgLEtsgJDDaOohH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310804592"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="310804592"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 12:20:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="693840010"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="693840010"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga008.jf.intel.com with ESMTP; 27 Jan 2023 12:20:56 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v4 0/3] Use idle_inject framework for intel_powerclamp
+Date:   Fri, 27 Jan 2023 12:20:45 -0800
+Message-Id: <20230127202048.992504-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: acpi-6.2-rc6-146-g628c61874ffd
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 86 runs,
- 3 regressions (acpi-6.2-rc6-146-g628c61874ffd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 86 runs, 3 regressions (acpi-6.2-rc6-146-g628c61874ffd)
+Dropped the per core idle injection patch from this series. Hence the
+subject of this series is changed. Now it is just for using
+idle inject framework for intel_powerclamp.
 
-Regressions Summary
--------------------
+The old cover letter:
+This series introduces per CPU idle injection. In preparation for this
+enhance the existing powercap/idle_inject and modify intel_powerclamp
+to use this. Then add per core idle injection driver.
 
-platform                     | arch | lab             | compiler | defconfi=
-g          | regressions
------------------------------+------+-----------------+----------+---------=
------------+------------
-cubietruck                   | arm  | lab-baylibre    | gcc-10   | multi_v7=
-_defconfig | 1          =
+v4:
+- Dropped the per core idle inject patch
 
-imx53-qsrb                   | arm  | lab-pengutronix | gcc-10   | multi_v7=
-_defconfig | 1          =
+v3
+- Change callback from per CPU to per device and use in intel_powerclamp
+- Remove unused var in per cpu idle injection module
 
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-10   | multi_v7=
-_defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-6.2=
--rc6-146-g628c61874ffd/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: acpi-6.2-rc6-146-g628c61874ffd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      628c61874ffd18b2ac7596523a60d3a4b3a0e567 =
+v2
+- Update based on feedback from Rafael on patch 2/4
+- Kconfig dependency issue
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+Srinivas Pandruvada (3):
+  powercap: idle_inject: Export symbols
+  powercap: idle_inject: Add update callback
+  thermal/drivers/intel_powerclamp: Use powercap idle-inject framework
 
-Test Regressions
----------------- =
+ drivers/powercap/idle_inject.c           |  57 +++-
+ drivers/thermal/intel/Kconfig            |   2 +
+ drivers/thermal/intel/intel_powerclamp.c | 374 ++++++++++-------------
+ include/linux/idle_inject.h              |   3 +
+ 4 files changed, 209 insertions(+), 227 deletions(-)
 
+-- 
+2.37.2
 
-
-platform                     | arch | lab             | compiler | defconfi=
-g          | regressions
------------------------------+------+-----------------+----------+---------=
------------+------------
-cubietruck                   | arm  | lab-baylibre    | gcc-10   | multi_v7=
-_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d41da35d920fb81c915f2d
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.2-rc6-146-g6=
-28c61874ffd/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.2-rc6-146-g6=
-28c61874ffd/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d41da35d920fb81c915f32
-        failing since 8 days (last pass: v6.1-rc8-176-gcb06e36a6532, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-27T18:53:01.497744  + set +x
-    2023-01-27T18:53:01.507001  <8>[   14.747892] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3229509_1.5.2.4.1>
-    2023-01-27T18:53:01.616085  / # #
-    2023-01-27T18:53:01.719669  export SHELL=3D/bin/sh
-    2023-01-27T18:53:01.720718  #
-    2023-01-27T18:53:01.823019  / # export SHELL=3D/bin/sh. /lava-3229509/e=
-nvironment
-    2023-01-27T18:53:01.824059  =
-
-    2023-01-27T18:53:01.824620  / # . /lava-3229509/environment<3>[   15.04=
-8441] Bluetooth: hci0: command 0xfc18 tx timeout
-    2023-01-27T18:53:01.926944  /lava-3229509/bin/lava-test-runner /lava-32=
-29509/1
-    2023-01-27T18:53:01.928599   =
-
-    ... (13 line(s) more)  =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g          | regressions
------------------------------+------+-----------------+----------+---------=
------------+------------
-imx53-qsrb                   | arm  | lab-pengutronix | gcc-10   | multi_v7=
-_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d41d33c46b1face4915eec
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.2-rc6-146-g6=
-28c61874ffd/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qs=
-rb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.2-rc6-146-g6=
-28c61874ffd/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qs=
-rb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d41d33c46b1face4915eef
-        new failure (last pass: v6.1-rc8-156-g0a9e32afe717)
-
-    2023-01-27T18:51:14.696335  + set +x
-    2023-01-27T18:51:14.696472  [   12.862839] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-889654_1.5.2.3.1>
-    2023-01-27T18:51:14.804182  / # #
-    2023-01-27T18:51:14.905958  export SHELL=3D/bin/sh
-    2023-01-27T18:51:14.906574  #
-    2023-01-27T18:51:15.008484  / # export SHELL=3D/bin/sh. /lava-889654/en=
-vironment
-    2023-01-27T18:51:15.009020  =
-
-    2023-01-27T18:51:15.110278  / # . /lava-889654/environment/lava-889654/=
-bin/lava-test-runner /lava-889654/1
-    2023-01-27T18:51:15.110866  =
-
-    2023-01-27T18:51:15.113889  / # /lava-889654/bin/lava-test-runner /lava=
--889654/1 =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g          | regressions
------------------------------+------+-----------------+----------+---------=
------------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-10   | multi_v7=
-_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d41ce40902abc458915ebc
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.2-rc6-146-g6=
-28c61874ffd/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-li=
-bretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.2-rc6-146-g6=
-28c61874ffd/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-li=
-bretech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d41ce40902abc458915ec1
-        failing since 8 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-27T18:49:47.996065  <8>[   11.078961] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3229497_1.5.2.4.1>
-    2023-01-27T18:49:48.101257  / # #
-    2023-01-27T18:49:48.202968  export SHELL=3D/bin/sh
-    2023-01-27T18:49:48.203356  #
-    2023-01-27T18:49:48.304719  / # export SHELL=3D/bin/sh. /lava-3229497/e=
-nvironment
-    2023-01-27T18:49:48.305083  =
-
-    2023-01-27T18:49:48.406428  / # . /lava-3229497/environment/lava-322949=
-7/bin/lava-test-runner /lava-3229497/1
-    2023-01-27T18:49:48.407047  =
-
-    2023-01-27T18:49:48.410754  / # /lava-3229497/bin/lava-test-runner /lav=
-a-3229497/1
-    2023-01-27T18:49:48.520636  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =20
