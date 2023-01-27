@@ -2,150 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2280E67F014
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 22:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BF467F02D
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 22:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjA0VD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Jan 2023 16:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S231910AbjA0VOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Jan 2023 16:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjA0VD4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 16:03:56 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACE287154
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 13:03:55 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j17so4319666wms.0
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 13:03:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TkMgIg4fQzJfYGBpNPz1PQWebK98PEAd/0J55gUrVm0=;
-        b=pIeiRMg6iet/r1JbKwx+ppFEX7mnWDj3z/GmW+2pjB7E/EPYLGB29PrD+iixK8ht10
-         7+/4l7qeZbTNIsFkNx0//SaoK4Jzz0NlNTUWSc/kgdMPrmxA0f70DLOtHtn4OOKr63dB
-         wW8ATi21Iw94Q35XHHSBWGOlMjPKy7dHbtSO7ELAzdQrsfbBIcePZc6bbd11ET0eBR10
-         ruipHy9HN9JSul9GQv28PDQAMHaqpr6rYvAa//IqivLeKP3sRJZAwIyY5TeMmPcaWNoW
-         e4ZBYUkZNyU6+yAPNlJCv+yOXHSqWJn1jccigMdVoiMtORSen/RiUs1PDGRKTjsbne1h
-         tXRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TkMgIg4fQzJfYGBpNPz1PQWebK98PEAd/0J55gUrVm0=;
-        b=SXJEhCyCX1mP1MK2q5vs+cNxkWG5Cak945gOxSlRs4+mjhxfO2vzSQu+no/5YyKF/v
-         hMQ+vEwaByKPZFnx3YxaYHuLV3dInRcYQdl/AX+oZAYsRCZ5xScKC2PfCJdykFfT08gh
-         WmqAdbM+wjf/JuxHdv/3+tDrZ/Fnx36x6O3CZcIGd9xPGR0XkW7Jdk6gGoMUpghmIYZV
-         /KGDfPiX3RRgNln8PeQNAylzkDj/jzkA72QZKw7vthKb7SM2TUTnxV3EgkcNrkBTjV3a
-         bzmN0z3k9ARu1Yja1oat0euEyPVW0+XNS3lT87fbpwp5Wu8OVuFLXNyPjToOGhJ1h4SC
-         J77Q==
-X-Gm-Message-State: AFqh2ko6WSeTUB7RtTZRlaQfC42Tsvo8/QzwjZcUbbxc/vSpdyBXzVqu
-        WgF5Jd+jyVISXjNHru/SMG7MiA==
-X-Google-Smtp-Source: AMrXdXsl90rZ6ZM9bYIrrvDZZ3ypzuTE9VNVL3N0wOe3smxl6WFD5ugsqSaWPbOjg6ZDMt5BvOe9tA==
-X-Received: by 2002:a05:600c:5d1:b0:3d0:761b:f86 with SMTP id p17-20020a05600c05d100b003d0761b0f86mr41605947wmd.28.1674853433500;
-        Fri, 27 Jan 2023 13:03:53 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id x10-20020a05600c420a00b003c6b70a4d69sm5078137wmh.42.2023.01.27.13.03.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 13:03:53 -0800 (PST)
-Message-ID: <7a01c3f6-3800-472e-e18f-82af1b3f8d9e@linaro.org>
-Date:   Fri, 27 Jan 2023 22:03:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 5/5] thermal: mediatek: add delay after thermal banks
- initialization
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Michael Kao <michael.kao@mediatek.com>
-References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
- <20221018-up-i350-thermal-bringup-v9-5-55a1ae14af74@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221018-up-i350-thermal-bringup-v9-5-55a1ae14af74@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232012AbjA0VOh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 16:14:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8EB783C7;
+        Fri, 27 Jan 2023 13:14:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E973EB821E1;
+        Fri, 27 Jan 2023 21:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C1B0C433EF;
+        Fri, 27 Jan 2023 21:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674854074;
+        bh=aTDZ+XKoF3xdRrGU8ruppha6VU6GWXE+OuyMdY3RBOU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=J6VPvky7FItaqyR71cdiVzUZa+gJtr10qo1CZFVDTGWGqpQ+JKg79kt+9gUQybHCh
+         wYRt5F52N54JFFNHpRVcCBZmVx/um8DHDc5LVJY9WynGwusxW3BYGOu9zuU2e8cqeL
+         t9ARg8WSCzG4SZi3Jk2G6++xer54ALhdtsb6PHWG30DVStoV83TyZEpkl1ldyWSOmz
+         ewn2RhqUsjOOi/V+RcvD3mWMububYm1v6MJGwmc5s6OHN2ra85pipWuovYZ07OmlMO
+         sUPmcYnzRl3OgVNCRungvHx/5FDzGttm9makQ7J84MwXQk69RBTJ6UovrfMcG0XJpg
+         HIzHHUSnWOX+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 81A2BE52504;
+        Fri, 27 Jan 2023 21:14:34 +0000 (UTC)
+Subject: Re: [GIT PULL] Thermal control fixes for v6.2-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0gFS6URrN3fe4p6fv5oGL34XuT7-xGNdLnYELZOgfwjmw@mail.gmail.com>
+References: <CAJZ5v0gFS6URrN3fe4p6fv5oGL34XuT7-xGNdLnYELZOgfwjmw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0gFS6URrN3fe4p6fv5oGL34XuT7-xGNdLnYELZOgfwjmw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.2-rc6
+X-PR-Tracked-Commit-Id: acd7e9ee57c880b99671dd99680cb707b7b5b0ee
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 274d2f8b0c032ca3c1ae88194b75edd2669368b0
+Message-Id: <167485407452.14056.18295878093691467732.pr-tracker-bot@kernel.org>
+Date:   Fri, 27 Jan 2023 21:14:34 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
-> Thermal sensor reads performed immediately after thermal bank
-> initialization returns bogus values. This is currently tackled by returning
-> 0 if the temperature is bogus (exceeding 200000).
-> 
-> Instead, add a delay between the bank init and the thermal zone device
-> register to properly fix this.
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   drivers/thermal/mtk_thermal.c | 11 +++--------
->   1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index b8e06f6c7c42..ab7db385afb3 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -730,14 +730,6 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   
->   		temp = mt->raw_to_mcelsius(mt, i, raw);
->   
-> -		/*
-> -		 * The first read of a sensor often contains very high bogus
-> -		 * temperature value. Filter these out so that the system does
-> -		 * not immediately shut down.
-> -		 */
-> -		if (temp > 200000)
-> -			temp = 0;
-> -
->   		if (temp > max)
->   			max = temp;
->   	}
-> @@ -1160,6 +1152,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	platform_set_drvdata(pdev, mt);
->   
-> +	// Delay for thermal banks to be ready
+The pull request you sent on Fri, 27 Jan 2023 15:47:38 +0100:
 
-Coding style for comments is : /* */
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.2-rc6
 
-No need to resend, I'll take care of changing the comment format.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/274d2f8b0c032ca3c1ae88194b75edd2669368b0
 
-> +	msleep(30);
-> +
->   	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->   					      &mtk_thermal_ops);
->   	if (IS_ERR(tzdev)) {
-> 
+Thank you!
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
