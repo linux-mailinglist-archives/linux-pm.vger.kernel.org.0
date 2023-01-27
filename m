@@ -2,122 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925E867D9CB
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 00:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734CF67DC85
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Jan 2023 04:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbjAZXl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Jan 2023 18:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S231540AbjA0DIG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Jan 2023 22:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbjAZXl6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 18:41:58 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE12D474DF
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 15:41:27 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q10so3474408wrm.4
-        for <linux-pm@vger.kernel.org>; Thu, 26 Jan 2023 15:41:27 -0800 (PST)
+        with ESMTP id S231266AbjA0DIF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Jan 2023 22:08:05 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752CA227A1;
+        Thu, 26 Jan 2023 19:08:03 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-16346330067so4931662fac.3;
+        Thu, 26 Jan 2023 19:08:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PnAyme+18j6KOPf6iRNbRr3tHa520TeEGKv2pHUyxsg=;
-        b=EVaGZ2eSnG+0XVwaIjbh+ZI03+/vFgVhoQhIG3OghMLgQ5R+zljPkZIZTclKyOWu/l
-         f+GYYrKqS3qHX9MaWjVNZ0zEhtWAWq0fv4LqpdcpR4mSEnb8Ns36h+DVRh6gOVfOcxsP
-         rMMeGeL/krHqLBVhNJ7QG0Cr8f7+K/6bh3hRzkHXjW0HCiLXpohwfSbYPVSrASdbTho/
-         /WmsfmMnkx84ZELcOG2C0kxnY/bkqatTcX6efPE0z9kpIeM5xdQY8n0nV3Ptgt2kF+49
-         hEP0vR8XEupELCm0FWZXNlftC+3k+76Y5KGkuOopclEZiGXqZnp2pa9WbcoVOfcIoCA6
-         5iog==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWVjgWC+CRaiVU6jf3be0WvlqWbyqa4cbGUte3LE0QY=;
+        b=SvGlwWDC+KblJS2mqQCluTm269HgIQaXn+HLtXa7cMZkrTaP7lnJrOIR33mFaXXtH/
+         8cL8KrnTBBZBGVXsgQ1DKAHWIM1+EKPpFW4p8IgxhR84Xbv3LigkPTByRA4kMaEdj6TU
+         k7Kv1PNhnRA8GIoxbImSjJVcnIGMd9W4vnrh7KM6GtdcdB294Ly2ExbAI4DPIRsycidq
+         ebpds6vqjuZg4C56lG2puV681tfO6LsMOE0MJ0KcEX5tTtzSLpp1IujIkVVhugeAFgp9
+         cvAJNHs9DU6/eY5NWUZIL8O6Ph//ikJT+Lk7G/rojhpgq5p2I7AuJy6bEG+5t5c459tI
+         xUFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PnAyme+18j6KOPf6iRNbRr3tHa520TeEGKv2pHUyxsg=;
-        b=wRAL0XGgXkpcA9UiWHJ0YIKt9fZMKoxE90/uNn5+aSGAWp8M3+GIAKqAeBL+XxNp/2
-         O2ETqAbc/fbT7pM85FH1Y9C1SJOps5tUc5fKOyzDXxy1Kg/kOuY+4nnSqdrFw7J/KKAq
-         IH5Dh6p8Ss22YC3CiWLP3w2crWdTR6Ofr76+nIz+IzDP5RcjdJnWfMJxAi4RBBSp3FO8
-         PdIwCnT3y638VKZhy9jrHqqOB8qUkljUZh6j2AUyUm0coxyB8odjetDDSHzvu1OdcXjL
-         Lj8b05abR/gPKbmokzONL/tvD0rUJ50EqwHfoGIw5Fvie3Gi4hz/imZdL/Dx01UEvLpT
-         HmwQ==
-X-Gm-Message-State: AFqh2kpSqywNH46bhPrc4NJ8WVvS9thZYaXSCJr/YrPm1pg6gpLcwH0J
-        0SmxJF1YCQD2oINdnP7nTVaXkw==
-X-Google-Smtp-Source: AMrXdXt7ZykcZm8+avHGdBvOtqm7wIEodJMiz/bX3gyWZfzVQr/vlnHzmmcdMAu5FAZDPJXoB1VG1A==
-X-Received: by 2002:adf:e197:0:b0:2be:546f:50c2 with SMTP id az23-20020adfe197000000b002be546f50c2mr25865313wrb.12.1674776425507;
-        Thu, 26 Jan 2023 15:40:25 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id s5-20020a5d5105000000b002bdfcd8c77csm2481182wrt.101.2023.01.26.15.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 15:40:24 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [RFC] PM: domains: Skip disabling unused domains if provider has sync_state
-Date:   Fri, 27 Jan 2023 01:40:13 +0200
-Message-Id: <20230126234013.3638425-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=eWVjgWC+CRaiVU6jf3be0WvlqWbyqa4cbGUte3LE0QY=;
+        b=osUSeku/sP88UW/fmIhl0IgJ5hEaMz7tsq4ANNqgk4hTplAKS8QMG8uTA69E1EIZ8f
+         lcAhQsEhme9lnsx6jmJRNv5ue+xI4Z2VFf5AfV1gG4Ta2doUhhmfvEMDxcdcqV2OM74N
+         1UM6X9MInzTNkoJ3xePre6Ffm6ooNrGNxHOLg6Imm8lFb1wB2SP2abJT52v36/1tH3x4
+         LFNPOa6MAUxfTYyjr0UTSzqVO/v1mBnF9N27ZDMA8i1/FUbx5WvHwg0tLzQd5GD54iPw
+         tro+IxOIfFrjfVzArNZp8PUspW2IvRyOnhCPOdf9+FmUAyKfHUKwcClsrkviA/z0Fmqc
+         UMnA==
+X-Gm-Message-State: AFqh2koVJAGiwEyHBWif0QmVpLDqz6XG5Pd+QMz370sZHKKEyFU5eP/c
+        727sKVSxlvq7+4xcXoAlEXgQ+k22K3QEfB4VtpU=
+X-Google-Smtp-Source: AMrXdXtwNNbWR+EBpOWIEthHcrNWHYhATjGinf4U7RAj7/ORzz2dj7jhO7LE+yBhT7G/zMVkJANBNpaCoJ1m0UeBexw=
+X-Received: by 2002:a05:6870:44d0:b0:15b:96b8:e2be with SMTP id
+ t16-20020a05687044d000b0015b96b8e2bemr2351141oai.38.1674788882705; Thu, 26
+ Jan 2023 19:08:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230123153745.3185032-1-robdclark@gmail.com> <20230125040403epcms1p1646e9668b87df3e9c344ad58d39b6eb6@epcms1p1>
+ <CGME20230123153745epcas1p17e57cf83ed371e86258139473befc615@epcms1p3>
+ <CAF6AEGud-ESF=VgcaSFzKsWas0H5eSXZDdZGcnd8Ju=pr-W2EQ@mail.gmail.com> <20230125054626epcms1p38d34dc65cbc9cb29dd707a4b2cac8fb4@epcms1p3>
+In-Reply-To: <20230125054626epcms1p38d34dc65cbc9cb29dd707a4b2cac8fb4@epcms1p3>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 26 Jan 2023 19:08:01 -0800
+Message-ID: <CAF6AEGvkepf4eLKqXYkadOvtu_7ehCzmgoiq3_s7qvJXi_n3sw@mail.gmail.com>
+Subject: Re: Re: [PATCH] PM / devfreq: Fix build issues with devfreq disabled
+To:     myungjoo.ham@samsung.com
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, there are cases when a domain needs to remain enabled until
-the consumer driver probes. Sometimes such consumer drivers may be built
-as modules. Since the genpd_power_off_unused is called too early for
-such consumer driver modules to get a chance to probe, the domain, since
-it is unused, will get disabled. On the other hand, the best time for
-an unused domain to be disabled is on the provider's sync_state
-callback. So, if the provider has registered a sync_state callback,
-assume the unused domains for that provider will be disabled on its
-sync_state callback.
+On Tue, Jan 24, 2023 at 9:46 PM MyungJoo Ham <myungjoo.ham@samsung.com> wrote:
+>
+> >On Tue, Jan 24, 2023 at 8:04 PM MyungJoo Ham <myungjoo.ham@samsung.com> wrote:
+> >>
+> >> >Sender : Rob Clark <robdclark@gmail.com>
+> >> >Date : 2023-01-24 00:37 (GMT+9)
+> >> >Title : [PATCH] PM / devfreq: Fix build issues with devfreq disabled
+> >> >
+> >> >From: Rob Clark <robdclark@chromium.org>
+> >> >
+> >> >The existing no-op shims for when PM_DEVFREQ (or an individual governor)
+> >> >only do half the job.  The governor specific config/tuning structs need
+> >> >to be available to avoid compile errors in drivers using devfreq.
+> >> >
+> >> >Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
+> >> >Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>
+> >> Doesn't this imply that DRM_MSM should depend on PM_DEVFREQ ?
+> >>
+> >> It appears that gpu/drm/msm/DRM_MSM uses PM_DEVFREQ without actually
+> >> declaring the dependency on PM_DEVFREQ.
+> >> You cannot use SIMPLE_ONDEMAND without DEVFREQ.
+> >
+> >Possibly that would resolve some issues, and that might have been my
+> >mistake in assuming that depending on SIMPLE_ONDEMAND implied a
+> >dependency on DEFREQ (which seems like a reasonable assumption, IMHO)
+> >
+> >But AFAICT some kernel configs that could otherwise use DRM_MSM don't
+> >support PM_DEVFREQ.. either way, lets solve this properly and remove
+> >needless dependencies on devfreq.
+> >
+> >BR,
+> >-R
+>
+> Ok. You are enabling struct and enum only and that looks harmless.
+>
+> PTAL, Chanwoo.
+>
+> Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+Thanks, if possible, an ack to land this via msm-next would avoid
+build break headaches with COMPILE_TEST=y and other more obscure
+setups
 
-This approach has been applied for unused clocks as well.
-With this patch merged in, all the providers that have sync_state
-callback registered will leave the domains enabled unless the provider's
-sync_state callback explicitly disables them. So those providers will
-need to add the disabling part to their sync_state callback. On the
-other hand, the platforms that have cases where domains need to remain
-enabled (even if unused) until the consumer driver probes, will be able,
-with this patch in, to run without the pd_ignore_unused kernel argument,
-which seems to be the case for most Qualcomm platforms, at this moment.
-
- drivers/base/power/domain.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 84662d338188..8e72e8e38c77 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
- 	mutex_lock(&gpd_list_lock);
- 
- 	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
--		genpd_queue_power_off_work(genpd);
-+		if (!dev_has_sync_state(genpd->provider->dev))
-+			genpd_queue_power_off_work(genpd);
- 
- 	mutex_unlock(&gpd_list_lock);
- 
--- 
-2.34.1
-
+BR,
+-R
