@@ -2,177 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B7D67F1F9
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Jan 2023 00:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743AB67F5CA
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Jan 2023 08:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjA0XFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Jan 2023 18:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S232438AbjA1HwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Jan 2023 02:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjA0XFP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Jan 2023 18:05:15 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006FC7375F
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 15:05:10 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j36-20020a05600c1c2400b003dc39cb9c33so2201652wms.1
-        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 15:05:10 -0800 (PST)
+        with ESMTP id S231651AbjA1HwH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Jan 2023 02:52:07 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C9177DF0
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 23:52:04 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id l8so4912830wms.3
+        for <linux-pm@vger.kernel.org>; Fri, 27 Jan 2023 23:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xqwMmYjC0dFtZeRAWk2Olug2QMDHtx6nG0vcXJrQXG4=;
-        b=vhnyz36GmjI3i9iki/+P8lFMMsRiiCB4iYuTca1NWzlWseng5ZjkP6yKVj+qcHUivP
-         Ty4xlkVEKB+lh6VdT1bTZ3ak5zpj/LnilQlWAm2Sun42htU2Ws8cDl04ol/LYjGQY64E
-         nb5zBUcbD03SgkdtNS1phBxIN39W92HEL7px/In7PYs077RzwcdPUWsltp1Z4bKc8AFq
-         /wv1w7OhczHdebgaABqI4+iHWbaGTDHgJ/3KpKk4PTzClbTtnQAbOVnMH/tgJOrtijgB
-         BwSyBWA1C+E+WCwilJOLcYmJXkVEgB3i9NCVuqO3tTyjFhdJkkS2/pDNhaTt/woTTSUa
-         T8zQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AwT09QFvbeIdYBJsfcmVCJn9nySi46ioy4UiTZXOQBU=;
+        b=O9xMHDeSECxW7o24q/6NUFHzLv5SOU7LuUFzeYGUCKEUfx5ZJ3tE4pipR2JhWAP+jg
+         hPoesVW7rhnn9xzLRSskElx6CmZTetOAxdvriYZEZTJ3pb68iL6YW2YkYWFg4wHIA6W9
+         5xBJLfpPHq4CK6+Z536WA3f+hDRxMti0zb848BvE1aXs/kGND7eqyknPpj4d9vnu3vLK
+         OL3D+AkI/gJ0VG58PsxRDY1/OamUADlhthBOy+c2/99cAyHEiW1M+ZlMgAs4eYJusHOG
+         qhdU+mBXeUO9K12bPXjy8LTm0Wk86BNUNKc3vG8qiBAy+AmBL0E3kLLkVznbDvrsY/sc
+         OV2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xqwMmYjC0dFtZeRAWk2Olug2QMDHtx6nG0vcXJrQXG4=;
-        b=Bt0wAmA1BOGCmjjWVnNnk2wOiq6IHXZo0hAnCSVTKeLK5M/LLhlCsVM1C3LlCNMBWb
-         7gnIGqfVLZIIXxp1SaRQbI1+pqDFVJoMkB57NUghva4j/Wacx0ITdp4qxISxdOj2EJd1
-         MyNE4/Ekni2m4QskhluhtdfvdANF7kXnECTwHDpmpVqKOopMTevU3PlfkCAWrYBw/Z3M
-         p5UmlEV0AHljNj+TvNV62UKfzd0qss7OoHzq4sSzS4IG2VSLThwhJArDaU3N1qUoRCou
-         29LElF/Tk4/fxOtKqWaH/D6nsiSu3sDqnmKVLQG5khTKE6ptEA1WYvAsvZ9udYMdvseS
-         PxGQ==
-X-Gm-Message-State: AO0yUKWUUNdWFzgO/8uZDSBV5dlwPg5VG4TFnUqs7Ml7+LSr16T0lGU6
-        vLpMyMylwvrUI6Bjjyu4Q0t9YA==
-X-Google-Smtp-Source: AK7set8JnqreRtXSQJRQJz4sCnWMynTv6v7RwqUxSxuFo7iTkUriG60xhMgzRwKI8iHoTvQRJ5A/kQ==
-X-Received: by 2002:a7b:c7ce:0:b0:3dc:42d2:aeee with SMTP id z14-20020a7bc7ce000000b003dc42d2aeeemr2324613wmk.25.1674860709362;
-        Fri, 27 Jan 2023 15:05:09 -0800 (PST)
-Received: from lion.. (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a05600c3c8600b003db06493ee7sm10447206wmb.47.2023.01.27.15.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 15:05:08 -0800 (PST)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AwT09QFvbeIdYBJsfcmVCJn9nySi46ioy4UiTZXOQBU=;
+        b=Nf/qE2rG8rEmAsAY+bpfujrmFu6y+tYp7h6dDkqsScpgsUfr9kZIY36HGLZWIMWUG3
+         n7C1eL/NJyq/NGDCZhABDlmgiXldnIw0G1kfmb6uGUXZiFaM/xcLUd2ZDezrDnjRFHsU
+         O9/I0BQbSgEx9Xuxt9sKdNTbui6ntSyoChT88YIE9SeUUEmiMur1TUgzwpc1BI01hfJM
+         mZZp5eEDS17mMNXmoc7l6ab2nGl9ukwQibaSKqpl1WA2z822i3LaeHW/QhOpwS9EpjzD
+         JtrjVlr3GIH8pVWmFpVO/1i9hNDMEkjeDtydO0bkuk7y2uxnqK0Pu1dgs8sF9i4MCpG/
+         kM0w==
+X-Gm-Message-State: AFqh2kqtGuKhuqwyYAO1hHRGAniE0PL96We4oNzsCcsrEZ7nA0JYJrL1
+        4MMt5oDROVa4nTqPeXQGlRoggA==
+X-Google-Smtp-Source: AMrXdXvSNekIIQS28DBo7WV5qCK0p341YhGJ92/g23fsqCqTUyMImv07j8DGXqwVqRJdkFHAGIuVOA==
+X-Received: by 2002:a05:600c:3ba9:b0:3da:b40f:7a55 with SMTP id n41-20020a05600c3ba900b003dab40f7a55mr48469547wms.6.1674892323044;
+        Fri, 27 Jan 2023 23:52:03 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id v1-20020a5d6781000000b002b9b9445149sm6701742wru.54.2023.01.27.23.52.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 23:52:02 -0800 (PST)
+Message-ID: <64b7e7f1-44ff-09fe-c292-40eaa30a76a1@linaro.org>
+Date:   Sat, 28 Jan 2023 08:52:00 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 2/5] thermal: mediatek: control buffer enablement
+ tweaks
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v7 2/2] dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for smb2 driver
-Date:   Fri, 27 Jan 2023 23:05:06 +0000
-Message-Id: <20230127230506.3140297-2-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230127230506.3140297-1-caleb.connolly@linaro.org>
-References: <20230127230506.3140297-1-caleb.connolly@linaro.org>
-MIME-Version: 1.0
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Michael Kao <michael.kao@mediatek.com>
+References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v9-2-55a1ae14af74@baylibre.com>
+ <eb3b9439-172b-daea-8f0f-53c8fe7648f9@linaro.org>
+ <df39cc8c-29db-f401-e1a2-1a3b7e962a7e@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <df39cc8c-29db-f401-e1a2-1a3b7e962a7e@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-driver.
+On 27/01/2023 23:21, Amjad Ouled-Ameur wrote:
+> 
+> On 1/27/23 22:48, Daniel Lezcano wrote:
+>> On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
+>>> From: Markus Schneider-Pargmann <msp@baylibre.com>
+>>>
+>>> Add logic in order to be able to turn on the control buffer on MT8365.
+>>> This change now allows to have control buffer support for 
+>>> MTK_THERMAL_V1,
+>>> and it allows to define the register offset, and mask used to enable it.
+>>>
+>>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+>>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+>>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>>> Reviewed-by: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@collabora.com>
+>>> ---
+>>>   drivers/thermal/mtk_thermal.c | 25 ++++++++++++++++++-------
+>>>   1 file changed, 18 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/mtk_thermal.c 
+>>> b/drivers/thermal/mtk_thermal.c
+>>> index 8440692e3890..d8ddceb75372 100644
+>>> --- a/drivers/thermal/mtk_thermal.c
+>>> +++ b/drivers/thermal/mtk_thermal.c
+>>> @@ -271,6 +271,9 @@ struct mtk_thermal_data {
+>>>       bool need_switch_bank;
+>>>       struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
+>>>       enum mtk_thermal_version version;
+>>> +    u32 apmixed_buffer_ctl_reg;
+>>> +    u32 apmixed_buffer_ctl_mask;
+>>> +    u32 apmixed_buffer_ctl_set;
+>>>   };
+>>>     struct mtk_thermal {
+>>> @@ -514,6 +517,9 @@ static const struct mtk_thermal_data 
+>>> mt7622_thermal_data = {
+>>>       .adcpnp = mt7622_adcpnp,
+>>>       .sensor_mux_values = mt7622_mux_values,
+>>>       .version = MTK_THERMAL_V2,
+>>> +    .apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
+>>> +    .apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
+>>> +    .apmixed_buffer_ctl_set = BIT(0),
+>>>   };
+>>>     /*
+>>> @@ -963,14 +969,18 @@ static const struct of_device_id 
+>>> mtk_thermal_of_match[] = {
+>>>   };
+>>>   MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
+>>>   -static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
+>>> +static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
+>>> +                       void __iomem *apmixed_base)
+>>>   {
+>>> -    int tmp;
+>>> +    u32 tmp;
+>>> +
+>>> +    if (!mt->conf->apmixed_buffer_ctl_reg)
+>>> +        return;
+>>>   -    tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
+>>> -    tmp &= ~(0x37);
+>>> -    tmp |= 0x1;
+>>> -    writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
+>>> +    tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
+>>> +    tmp &= mt->conf->apmixed_buffer_ctl_mask;
+>>> +    tmp |= mt->conf->apmixed_buffer_ctl_set;
+>>> +    writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
+>>>       udelay(200);
+>>>   }
+>>>   @@ -1070,8 +1080,9 @@ static int mtk_thermal_probe(struct 
+>>> platform_device *pdev)
+>>>           goto err_disable_clk_auxadc;
+>>>       }
+>>>   +    mtk_thermal_turn_on_buffer(mt, apmixed_base);
+>>> +
+>>>       if (mt->conf->version == MTK_THERMAL_V2) {
+>>> -        mtk_thermal_turn_on_buffer(apmixed_base);
+>>>           mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>>>       }
+>>
+>> This change conflicts with commit 4f2ee0aa2e706
+>>
+>> I fixed it with:
+>>
+>> -       if (mt->conf->version != MTK_THERMAL_V1) {
+>> -               mtk_thermal_turn_on_buffer(apmixed_base);
+>> +       mtk_thermal_turn_on_buffer(apmixed_base);
+>> +
+>> +       if (mt->conf->version != MTK_THERMAL_V1)
+>>                 mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>> -       }
+>>
+> I think it's rather MTK_THERMAL_V2 and not MTK_THERMAL_V1. Other than 
+> that, it looks
 
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../power/supply/qcom,pmi8998-charger.yaml    | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+It was before if (version == MTK_THERMAL_V2). Now there is a V3, so it 
+is replaced by if (version != MTK_THERMAL_V1) in order to include the V3
 
-diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-new file mode 100644
-index 000000000000..277c47e048b6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/qcom,pmi8998-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-+
-+maintainers:
-+  - Caleb Connolly <caleb.connolly@linaro.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pmi8998-charger
-+      - qcom,pm660-charger
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 4
-+
-+  interrupt-names:
-+    items:
-+      - const: usb-plugin
-+      - const: bat-ov
-+      - const: wdog-bark
-+      - const: usbin-icl-change
-+
-+  io-channels:
-+    items:
-+      - description: USB in current in uA
-+      - description: USB in voltage in uV
-+
-+  io-channel-names:
-+    items:
-+      - const: usbin_i
-+      - const: usbin_v
-+
-+  monitored-battery:
-+    description: phandle to the simple-battery node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - io-channels
-+  - io-channel-names
-+  - monitored-battery
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    pmic {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      #interrupt-cells = <4>;
-+
-+      charger@1000 {
-+        compatible = "qcom,pmi8998-charger";
-+        reg = <0x1000>;
-+
-+        interrupts = <0x2 0x12 0x2 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x6 IRQ_TYPE_EDGE_RISING>,
-+                     <0x2 0x16 0x1 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "usb-plugin", "bat-ov", "wdog-bark", "usbin-icl-change";
-+
-+        io-channels = <&pmi8998_rradc 3>,
-+                      <&pmi8998_rradc 4>;
-+        io-channel-names = "usbin_i",
-+                           "usbin_v";
-+
-+        monitored-battery = <&battery>;
-+      };
-+    };
+
+>> Let me know if there is something wrong.
+>>
+>>
+
 -- 
-2.39.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
