@@ -2,374 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D99B68003F
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Jan 2023 17:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC403680112
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Jan 2023 20:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbjA2Qfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Jan 2023 11:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S234915AbjA2TA2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Jan 2023 14:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbjA2Qfn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Jan 2023 11:35:43 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5368A768B
-        for <linux-pm@vger.kernel.org>; Sun, 29 Jan 2023 08:35:41 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id hx15so6167006ejc.11
-        for <linux-pm@vger.kernel.org>; Sun, 29 Jan 2023 08:35:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bEJqjhExw3XhDISkGotPw0loVyyd7R2Pjy/+5c+ADMU=;
-        b=nAAZ+eviyQuDofxt3MI1PHEQAwixy5V8uVD/Vdph4soiUb9jN11Q1RgX6nmL0+2w9Y
-         nMkPgU4JIlOUT47G5qYeW3rASQNxOGeygaqSaVhO17f5vVVC3OPruh1ghYgzHjFxJmT0
-         VfUGognuYExTJ8QWApEYPmY988CI/fOtV8ANI+i153tx+aoKgqu7cqwuGfd4h2Dzj0wF
-         S52TPhsaOtOWB+76XJLI6rDS1qF/HTTs36H2Nf4RgYf7yIrVt1CHWHE+ndiPH6aRwth+
-         5zoBDzItbfTMX+quMvPTPQBEYUZN4FjeRz90de0ffq1zabUj5gSYn+OJcxPqnM33RBqV
-         kBcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bEJqjhExw3XhDISkGotPw0loVyyd7R2Pjy/+5c+ADMU=;
-        b=pCzFZNdDXZ4C7ZUeKrzvWc92NLmfwhRlod5QnYeo5ND80uD4xa/0Pxph4SIo4PlHhO
-         CvVcSkU+RXLO2uEbgprnAhDzBRVM1amvg0tukQLo5I6BepG7IM8bI+vjxdCbRRfR+fHP
-         nYXe2QhOUlbPk7a20HzPlR1J5jLbeG2NhhnJ4d4jSusBwWIDsFqZk/gShWksRb9SutrY
-         c3Me2Wt0MExBj8IpKrMQfNpXlkk0X7/UOMGQhKsirPBW9uFYjU4bIfAkMifGSsZAtqqM
-         OcOg9nQEfDb5L7REwpw7U9qn9uN8ASUgu+iCgAM4bMg/ARG7aX4y6A3rHkdTeOQNq6hR
-         jh1g==
-X-Gm-Message-State: AFqh2kqmGX/TtQOwHg3ukQDXXNve7v6lzS4DU9L+y63qHm0m7o/tuAdy
-        c1MxeiQxt50h+mTB/0IixHUkEw==
-X-Google-Smtp-Source: AMrXdXsp1fpInGMy1OgifKNBGnZrF4d0V/YmU99OobfApdYq4kiMEEh1RQ3dQvsR+ypZaqGE2bUqSA==
-X-Received: by 2002:a17:907:1248:b0:84d:45db:b203 with SMTP id wc8-20020a170907124800b0084d45dbb203mr39789012ejb.12.1675010139857;
-        Sun, 29 Jan 2023 08:35:39 -0800 (PST)
-Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170906274400b0088224df181asm2674013ejd.224.2023.01.29.08.35.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 08:35:39 -0800 (PST)
-Date:   Sun, 29 Jan 2023 16:35:38 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
-        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH v4] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <20230129163538.mxkr5ib2glqu36ww@airbuntu>
-References: <20230119174244.2059628-1-vincent.guittot@linaro.org>
+        with ESMTP id S234897AbjA2TAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Jan 2023 14:00:25 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441311969A;
+        Sun, 29 Jan 2023 11:00:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675018824; x=1706554824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qcLePQTbrzoLvq+ElRVOT/zcQr0y/IMDSu9rw90ydJ4=;
+  b=EmpB0/dZ3ieBAkwgEtfdOZVUYlB42m59sHmfhn3cKtmzK4HCorvKeRK3
+   D8quRut1uBE2haOyDEhqyTyv2bqDtNjB1QxIwG34ZAux2ZYMKlDXb44wF
+   FNyJhIEXrSEnb9IRbnUB+B626c4zuL0T6lyo8T14mFKWsx50x9ZVwnlax
+   7104DKtwhNIN7L5Lgi03cSmxNTThp8OZ4O50jIa5SSz4eI1nHHATPpoeS
+   uMfSyrfmUkQ4ZejDf245v24DZktVkzM2803dnalVocppsm9rBZu9iiTpA
+   JQ6ZuepQ6j5IsjhYtYpmLqCBmLg0jzO+ZtK3klAK65WRPc4PviNKO691Q
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="307071745"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="307071745"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 11:00:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="806429240"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="806429240"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Jan 2023 11:00:21 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMCua-00032E-1L;
+        Sun, 29 Jan 2023 19:00:20 +0000
+Date:   Mon, 30 Jan 2023 03:00:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        phone-devel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] power: supply: add Qualcomm PMI8998 SMB2 Charger
+ driver
+Message-ID: <202301300204.VMpH8OI5-lkp@intel.com>
+References: <20230127230506.3140297-1-caleb.connolly@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119174244.2059628-1-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230127230506.3140297-1-caleb.connolly@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/19/23 18:42, Vincent Guittot wrote:
-> By taking into account uclamp_min, the 1:1 relation between task misfit
-> and cpu overutilized is no more true as a task with a small util_avg may
-> not fit a high capacity cpu because of uclamp_min constraint.
-> 
-> Add a new state in util_fits_cpu() to reflect the case that task would fit
-> a CPU except for the uclamp_min hint which is a performance requirement.
-> 
-> Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
-> can use this new value to take additional action to select the best CPU
-> that doesn't match uclamp_min hint.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
+Hi Caleb,
 
-I did improve my unit test so that I look at overutilized and misfit condition.
+Thank you for the patch! Perhaps something to improve:
 
-Of course I had to hack the kernel to expose something to manipulate the
-thermal pressure signal. I also made sure to use the sched_energy_aware knob to
-switch between using EAS/CAS so that both feec() and sic() are exercised.
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on robh/for-next linus/master v6.2-rc5 next-20230127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-My test system is pinebook pro which has a simple 2 level capacities - but
-I couldn't catch anything wrong. Only one unrelated failure - see below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Caleb-Connolly/dt-bindings-power-supply-qcom-pmi8998-charger-add-bindings-for-smb2-driver/20230128-172503
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20230127230506.3140297-1-caleb.connolly%40linaro.org
+patch subject: [PATCH v7 1/2] power: supply: add Qualcomm PMI8998 SMB2 Charger driver
+config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20230130/202301300204.VMpH8OI5-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/703a352943e95de330efc87cd3feab1c6534603a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Caleb-Connolly/dt-bindings-power-supply-qcom-pmi8998-charger-add-bindings-for-smb2-driver/20230128-172503
+        git checkout 703a352943e95de330efc87cd3feab1c6534603a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/bluetooth/ drivers/net/ethernet/mediatek/ drivers/power/supply/
 
-I'd be happy to give this my Reviewed-and-tested-by. What's the plan for the
-removal the capacity_inversion logic?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-And nit: subject line could still be improved :) This is a lot more than
-unlinking misfit from OU.
+All warnings (new ones prefixed by >>):
 
-> 
-> Change since v3:
-> - Keep current condition for uclamp_max_fits in util_fits_cpu()
-> - Update some comments
-> 
->  kernel/sched/fair.c | 105 ++++++++++++++++++++++++++++++++++----------
->  1 file changed, 82 insertions(+), 23 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4db72f8f84e..54e14da53274 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4561,8 +4561,8 @@ static inline int util_fits_cpu(unsigned long util,
->  	 * handle the case uclamp_min > uclamp_max.
->  	 */
->  	uclamp_min = min(uclamp_min, uclamp_max);
-> -	if (util < uclamp_min && capacity_orig != SCHED_CAPACITY_SCALE)
-> -		fits = fits && (uclamp_min <= capacity_orig_thermal);
-> +	if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
-> +		return -1;
->  
->  	return fits;
->  }
-> @@ -4572,7 +4572,11 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
->  	unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
->  	unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
->  	unsigned long util = task_util_est(p);
-> -	return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
-> +	/*
-> +	 * Return true only if the cpu fully fits the task requirements, which
-> +	 * include the utilization but also the performance hints.
-> +	 */
-> +	return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
->  }
->  
->  static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
-> @@ -6138,6 +6142,7 @@ static inline bool cpu_overutilized(int cpu)
->  	unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
->  	unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
->  
-> +	/* Return true only if the utilization doesn't fits CPU's capacity */
->  	return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
->  }
->  
-> @@ -6931,6 +6936,7 @@ static int
->  select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
->  {
->  	unsigned long task_util, util_min, util_max, best_cap = 0;
-> +	int fits, best_fits = 0;
->  	int cpu, best_cpu = -1;
->  	struct cpumask *cpus;
->  
-> @@ -6946,12 +6952,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
->  
->  		if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
->  			continue;
-> -		if (util_fits_cpu(task_util, util_min, util_max, cpu))
-> +
-> +		fits = util_fits_cpu(task_util, util_min, util_max, cpu);
-> +
-> +		/* This CPU fits with all requirements */
-> +		if (fits > 0)
->  			return cpu;
-> +		/*
-> +		 * Only the min performance hint (i.e. uclamp_min) doesn't fit.
-> +		 * Look for the CPU with best capacity.
-> +		 */
-> +		else if (fits < 0)
-> +			cpu_cap = capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu));
->  
-> -		if (cpu_cap > best_cap) {
-> +		/*
-> +		 * First, select CPU which fits better (-1 being better than 0).
-> +		 * Then, select the one with best capacity at same level.
-> +		 */
-> +		if ((fits < best_fits) ||
-> +		    ((fits == best_fits) && (cpu_cap > best_cap))) {
->  			best_cap = cpu_cap;
->  			best_cpu = cpu;
-> +			best_fits = fits;
->  		}
->  	}
-
-Not something you introduced, but I had a 'failure' case when I ran a task with
-(uclamp_min, uclamp_max) = (1024, 1024) followed by (0, 0) in CAS.
-
-The task was basically stuck on big core and I check if the task can run on the
-smallest possible capacity in my test.
-
-This is a separate problem that we should address out of this patch. One can
-argue CAS is not energy aware, so any fitting cpu is okay. But one of the goals
-of uclamp_max is to help keep some busy tasks away from bigger cores when
-possible - not only for power reasons, but also for perf reasons as they can
-'steal' resources from other tasks. So the lack of a more comprehensive search
-is a weakness and something we can improve on.
-
-feec() behaves fine - but after applying some fixes that I've been sleeping on
-for a bit. Should see them in your inbox now.
-
-Thanks for the patch! I am still wary of the complexity, but the fallback
-search could lead to better placement results now.
+   drivers/power/supply/qcom_pmi8998_charger.c: In function 'smb2_probe':
+>> drivers/power/supply/qcom_pmi8998_charger.c:979:62: warning: format '%s' expects argument of type 'char *', but argument 4 has type 'const void *' [-Wformat=]
+     979 |         desc->name = devm_kasprintf(chip->dev, GFP_KERNEL, "%s-charger",
+         |                                                             ~^
+         |                                                              |
+         |                                                              char *
+         |                                                             %p
+     980 |                                     device_get_match_data(chip->dev));
+         |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                     |
+         |                                     const void *
 
 
-Cheers
+vim +979 drivers/power/supply/qcom_pmi8998_charger.c
 
---
-Qais Yousef
+   934	
+   935	static int smb2_probe(struct platform_device *pdev)
+   936	{
+   937		struct power_supply_config supply_config = {};
+   938		struct power_supply_desc *desc;
+   939		struct smb2_chip *chip;
+   940		int rc, irq;
+   941	
+   942		chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+   943		if (!chip)
+   944			return -ENOMEM;
+   945	
+   946		chip->dev = &pdev->dev;
+   947		chip->name = pdev->name;
+   948	
+   949		chip->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+   950		if (!chip->regmap)
+   951			return dev_err_probe(chip->dev, -ENODEV,
+   952					     "failed to locate the regmap\n");
+   953	
+   954		rc = device_property_read_u32(chip->dev, "reg", &chip->base);
+   955		if (rc < 0)
+   956			return dev_err_probe(chip->dev, rc,
+   957					     "Couldn't read base address\n");
+   958	
+   959		chip->usb_in_v_chan = devm_iio_channel_get(chip->dev, "usbin_v");
+   960		if (IS_ERR(chip->usb_in_v_chan))
+   961			return dev_err_probe(chip->dev, PTR_ERR(chip->usb_in_v_chan),
+   962					     "Couldn't get usbin_v IIO channel\n");
+   963	
+   964		chip->usb_in_i_chan = devm_iio_channel_get(chip->dev, "usbin_i");
+   965		if (IS_ERR(chip->usb_in_i_chan)) {
+   966			return dev_err_probe(chip->dev, PTR_ERR(chip->usb_in_i_chan),
+   967					     "Couldn't get usbin_i IIO channel\n");
+   968		}
+   969	
+   970		rc = smb2_init_hw(chip);
+   971		if (rc < 0)
+   972			return rc;
+   973	
+   974		supply_config.drv_data = chip;
+   975		supply_config.of_node = pdev->dev.of_node;
+   976	
+   977		desc = devm_kzalloc(chip->dev, sizeof(smb2_psy_desc), GFP_KERNEL);
+   978		memcpy(desc, &smb2_psy_desc, sizeof(smb2_psy_desc));
+ > 979		desc->name = devm_kasprintf(chip->dev, GFP_KERNEL, "%s-charger",
+   980					    device_get_match_data(chip->dev));
+   981	
+   982		chip->chg_psy =
+   983			devm_power_supply_register(chip->dev, desc, &supply_config);
+   984		if (IS_ERR(chip->chg_psy))
+   985			return dev_err_probe(chip->dev, PTR_ERR(chip->chg_psy),
+   986					     "failed to register power supply\n");
+   987	
+   988		rc = power_supply_get_battery_info(chip->chg_psy, &chip->batt_info);
+   989		if (rc)
+   990			return dev_err_probe(chip->dev, rc,
+   991					     "Failed to get battery info\n");
+   992	
+   993		rc = devm_delayed_work_autocancel(chip->dev, &chip->status_change_work,
+   994						  smb2_status_change_work);
+   995		if (rc)
+   996			return dev_err_probe(chip->dev, rc,
+   997					     "Failed to init status change work\n");
+   998	
+   999		rc = (chip->batt_info->voltage_max_design_uv - 3487500) / 7500 + 1;
+  1000		rc = regmap_update_bits(chip->regmap, chip->base + FLOAT_VOLTAGE_CFG,
+  1001					FLOAT_VOLTAGE_SETTING_MASK, rc);
+  1002		if (rc < 0)
+  1003			return dev_err_probe(chip->dev, rc, "Couldn't set vbat max\n");
+  1004	
+  1005		rc = smb2_init_irq(chip, &irq, "bat-ov", smb2_handle_batt_overvoltage);
+  1006		if (rc < 0)
+  1007			return rc;
+  1008	
+  1009		rc = smb2_init_irq(chip, &chip->cable_irq, "usb-plugin",
+  1010				   smb2_handle_usb_plugin);
+  1011		if (rc < 0)
+  1012			return rc;
+  1013	
+  1014		rc = smb2_init_irq(chip, &irq, "usbin-icl-change",
+  1015				   smb2_handle_usb_icl_change);
+  1016		if (rc < 0)
+  1017			return rc;
+  1018		rc = smb2_init_irq(chip, &irq, "wdog-bark", smb2_handle_wdog_bark);
+  1019		if (rc < 0)
+  1020			return rc;
+  1021	
+  1022		rc = dev_pm_set_wake_irq(chip->dev, chip->cable_irq);
+  1023		if (rc < 0)
+  1024			return dev_err_probe(chip->dev, rc, "Couldn't set wake irq\n");
+  1025	
+  1026		platform_set_drvdata(pdev, chip);
+  1027	
+  1028		/* Initialise charger state */
+  1029		schedule_delayed_work(&chip->status_change_work, 0);
+  1030	
+  1031		return 0;
+  1032	}
+  1033	
 
->  
-> @@ -6964,7 +6986,11 @@ static inline bool asym_fits_cpu(unsigned long util,
->  				 int cpu)
->  {
->  	if (sched_asym_cpucap_active())
-> -		return util_fits_cpu(util, util_min, util_max, cpu);
-> +		/*
-> +		 * Return true only if the cpu fully fits the task requirements
-> +		 * which include the utilization and the performance hints.
-> +		 */
-> +		return (util_fits_cpu(util, util_min, util_max, cpu) > 0);
->  
->  	return true;
->  }
-> @@ -7331,6 +7357,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  	unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
->  	struct root_domain *rd = this_rq()->rd;
->  	int cpu, best_energy_cpu, target = -1;
-> +	int prev_fits = -1, best_fits = -1;
-> +	unsigned long best_thermal_cap = 0;
-> +	unsigned long prev_thermal_cap = 0;
->  	struct sched_domain *sd;
->  	struct perf_domain *pd;
->  	struct energy_env eenv;
-> @@ -7366,6 +7395,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  		unsigned long prev_spare_cap = 0;
->  		int max_spare_cap_cpu = -1;
->  		unsigned long base_energy;
-> +		int fits, max_fits = -1;
->  
->  		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
->  
-> @@ -7418,7 +7448,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  					util_max = max(rq_util_max, p_util_max);
->  				}
->  			}
-> -			if (!util_fits_cpu(util, util_min, util_max, cpu))
-> +
-> +			fits = util_fits_cpu(util, util_min, util_max, cpu);
-> +			if (!fits)
->  				continue;
->  
->  			lsub_positive(&cpu_cap, util);
-> @@ -7426,7 +7458,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  			if (cpu == prev_cpu) {
->  				/* Always use prev_cpu as a candidate. */
->  				prev_spare_cap = cpu_cap;
-> -			} else if (cpu_cap > max_spare_cap) {
-> +				prev_fits = fits;
-> +			} else if ((fits > max_fits) ||
-> +				   ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
->  				/*
->  				 * Find the CPU with the maximum spare capacity
->  				 * among the remaining CPUs in the performance
-> @@ -7434,6 +7468,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  				 */
->  				max_spare_cap = cpu_cap;
->  				max_spare_cap_cpu = cpu;
-> +				max_fits = fits;
->  			}
->  		}
->  
-> @@ -7452,26 +7487,50 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  			if (prev_delta < base_energy)
->  				goto unlock;
->  			prev_delta -= base_energy;
-> +			prev_thermal_cap = cpu_thermal_cap;
->  			best_delta = min(best_delta, prev_delta);
->  		}
->  
->  		/* Evaluate the energy impact of using max_spare_cap_cpu. */
->  		if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
-> +			/* Current best energy cpu fits better */
-> +			if (max_fits < best_fits)
-> +				continue;
-> +
-> +			/*
-> +			 * Both don't fit performance hint (i.e. uclamp_min)
-> +			 * but best energy cpu has better capacity.
-> +			 */
-> +			if ((max_fits < 0) &&
-> +			    (cpu_thermal_cap <= best_thermal_cap))
-> +				continue;
-> +
->  			cur_delta = compute_energy(&eenv, pd, cpus, p,
->  						   max_spare_cap_cpu);
->  			/* CPU utilization has changed */
->  			if (cur_delta < base_energy)
->  				goto unlock;
->  			cur_delta -= base_energy;
-> -			if (cur_delta < best_delta) {
-> -				best_delta = cur_delta;
-> -				best_energy_cpu = max_spare_cap_cpu;
-> -			}
-> +
-> +			/*
-> +			 * Both fit for the task but best energy cpu has lower
-> +			 * energy impact.
-> +			 */
-> +			if ((max_fits > 0) && (best_fits > 0) &&
-> +			    (cur_delta >= best_delta))
-> +				continue;
-> +
-> +			best_delta = cur_delta;
-> +			best_energy_cpu = max_spare_cap_cpu;
-> +			best_fits = max_fits;
-> +			best_thermal_cap = cpu_thermal_cap;
->  		}
->  	}
->  	rcu_read_unlock();
->  
-> -	if (best_delta < prev_delta)
-> +	if ((best_fits > prev_fits) ||
-> +	    ((best_fits > 0) && (best_delta < prev_delta)) ||
-> +	    ((best_fits < 0) && (best_thermal_cap > prev_thermal_cap)))
->  		target = best_energy_cpu;
->  
->  	return target;
-> @@ -10265,24 +10324,23 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
->  	 */
->  	update_sd_lb_stats(env, &sds);
->  
-> -	if (sched_energy_enabled()) {
-> -		struct root_domain *rd = env->dst_rq->rd;
-> -
-> -		if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
-> -			goto out_balanced;
-> -	}
-> -
-> -	local = &sds.local_stat;
-> -	busiest = &sds.busiest_stat;
-> -
->  	/* There is no busy sibling group to pull tasks from */
->  	if (!sds.busiest)
->  		goto out_balanced;
->  
-> +	busiest = &sds.busiest_stat;
-> +
->  	/* Misfit tasks should be dealt with regardless of the avg load */
->  	if (busiest->group_type == group_misfit_task)
->  		goto force_balance;
->  
-> +	if (sched_energy_enabled()) {
-> +		struct root_domain *rd = env->dst_rq->rd;
-> +
-> +		if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
-> +			goto out_balanced;
-> +	}
-> +
->  	/* ASYM feature bypasses nice load balance check */
->  	if (busiest->group_type == group_asym_packing)
->  		goto force_balance;
-> @@ -10295,6 +10353,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
->  	if (busiest->group_type == group_imbalanced)
->  		goto force_balance;
->  
-> +	local = &sds.local_stat;
->  	/*
->  	 * If the local group is busier than the selected busiest group
->  	 * don't try and pull any tasks.
-> -- 
-> 2.34.1
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
