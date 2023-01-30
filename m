@@ -2,204 +2,347 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F3768072B
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 09:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E00468076E
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 09:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbjA3IPP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 30 Jan 2023 03:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S229965AbjA3Ibd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Jan 2023 03:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235984AbjA3IO5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 03:14:57 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8012D40FD;
-        Mon, 30 Jan 2023 00:14:32 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id v19so9293201qtq.13;
-        Mon, 30 Jan 2023 00:14:32 -0800 (PST)
+        with ESMTP id S235425AbjA3Ibc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 03:31:32 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FA52411C
+        for <linux-pm@vger.kernel.org>; Mon, 30 Jan 2023 00:31:29 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a3so3545682wrt.6
+        for <linux-pm@vger.kernel.org>; Mon, 30 Jan 2023 00:31:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=bigQDrQ/5/NkjvhOHWX8st4r93BNOKDn4v9DrfYJQJo=;
+        b=ynvaNDQtSNFtorJe9hVYtkepolL0QEleDPvW/3Upke/rliVQAaNR3XUS6RVDvOojbc
+         plWWupRFPUcnNySEWavfCSMhCLPfRdSBIze93nSK5vCq6drXY8MmGId/tVRr5+gjzpZ5
+         PRBt3FyDcNT353v5ayjZnku0hCQgtAtwdFSr6aiMKgiNTU3tzQofOxTgL5mqhdh2xA2C
+         o2pwPLnEFf8CJA/fNwXBb77izR6EgC4jtykX7qehKhu3fetuwBlgvy8VUmlM+zpbs56q
+         s5zB4Vi1/4ymiEVAXq2UiCqlGBI2vDmSXy0DBlwZo8BwO4eg8wKyvQPZhq5F49ZzmyGF
+         fwiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H7fRCUm0+mZO3MCq7UV1u68gA0oeT47CFJL7j8NId5w=;
-        b=2aDR+DwiUzqjMunc+lmZBi+RQ2xoxHoCht5Go9tUExVLBEREjr0CLgARAlGAMEq/Qg
-         wWiRcIUpwTFaW7qrtjMLaHKWEiTYssTB4KVhHqFQ6eEHRyt4eV/CquPf5Or8VN4qtpMY
-         8vxG/lUmvp/8/hS4IDcnFkXQNyPZb73P1X6FU64y7/t9Qxmi4w18SjbT7HtiVcgfRwkB
-         /yIYZfWcD4GlbyocanASGOP0VXB5MBzPksOMAnAEN6vferlWYL/aO7zLnOhQQBkP/cIy
-         xQWS9QZE71D8GhfHzqetTn8VttJHYdNdzQ4DGa4Mi9SCou9CF0SNRz8iJM6yen6GT/Xu
-         ulYw==
-X-Gm-Message-State: AO0yUKXfveuehQQ81Rl5bJtIvQnukhxfoBP/HApxjk0ij4YUFoWGdDIb
-        iSb9o5xsje0B6OEvkGfrpbiGG2MT5/SYkw==
-X-Google-Smtp-Source: AK7set9p6MOJaaS8bGYs1SSSRPJX0c1E2QNeCvSd3cVTl4vePgOiOrxi/cYJUx/vjMpu+dmKn5Lxcw==
-X-Received: by 2002:a05:622a:83:b0:3b8:629e:afd9 with SMTP id o3-20020a05622a008300b003b8629eafd9mr7154646qtw.17.1675066412900;
-        Mon, 30 Jan 2023 00:13:32 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id p74-20020a37424d000000b0071a5dbcafbfsm4816787qka.29.2023.01.30.00.13.32
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bigQDrQ/5/NkjvhOHWX8st4r93BNOKDn4v9DrfYJQJo=;
+        b=gGEMt26DujkoKz8IU1W25oTidyczy1scO5XlfVylY8toxIISahnI9tzST5CmTIUa/o
+         o1RnXY1cE4z6ylkWehigh8eRRlT3PB+IQpear9SaWxtJZmvOSBaB4QUL1fqdw6KmpVtI
+         m8eOq62tmsjrbS0P6U/eePS5hPw+k2LSUoAp77RG/LF5Dz69n2XVzo5WZLZWXLkGzuX8
+         jGjfj15FLrl2s601jo3iqervzTU+sQr5oFegBstcrxvbBOGT7FK0q/gP+JJNKzs2uyzm
+         bNrxBtEOk717Hzz5ZLZ0dWsRJCTiC1b0f/uL+YMBgSLFTDlZc0oIz2DCjmss1n0OqDuQ
+         bUkw==
+X-Gm-Message-State: AO0yUKW/NmfbzHMs8Vrod8dfTrbKgHE43KWsGf7EnSqyWTPAjCFcUJIl
+        gZhDXUF08aeBtFkg0IxJd3NE7vSjzWPIC05MMzw=
+X-Google-Smtp-Source: AK7set9v5OBcLmXVGardaGi9WIL53mteSOQtxeVjTIulDEZPObXjqhevvmIh5/ELSQl69i+PeaNWwg==
+X-Received: by 2002:a5d:504f:0:b0:2bf:b036:ffe3 with SMTP id h15-20020a5d504f000000b002bfb036ffe3mr19144712wrt.45.1675067488090;
+        Mon, 30 Jan 2023 00:31:28 -0800 (PST)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id c7-20020adffb47000000b002ba2646fd30sm12869981wrs.36.2023.01.30.00.31.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 00:13:32 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id m199so13018180ybm.4;
-        Mon, 30 Jan 2023 00:13:32 -0800 (PST)
-X-Received: by 2002:a25:e650:0:b0:80b:8b72:39fc with SMTP id
- d77-20020a25e650000000b0080b8b7239fcmr1827613ybh.202.1675066412208; Mon, 30
- Jan 2023 00:13:32 -0800 (PST)
+        Mon, 30 Jan 2023 00:31:27 -0800 (PST)
+Message-ID: <4b4e8438-a1f6-221c-d4ea-0ef6bdd37dd9@linaro.org>
+Date:   Mon, 30 Jan 2023 09:31:26 +0100
 MIME-Version: 1.0
-References: <20230125083248.1305270-1-victor.liu@nxp.com> <CAMuHMdU0KaRyP0qxJLwit1G=7zMr1k5wpCkG-wD31958mrKRWg@mail.gmail.com>
- <7c84cbd1808dc89f9ddaece13f846c4fbd12935a.camel@nxp.com> <eea19462-8dfa-8e10-2638-70f6f1ecc193@linaro.org>
- <2d06468ab1274af3c84e61dbca8d172b9d64cd68.camel@nxp.com> <f551d663-f7b6-5ae3-89a9-af1ae0d6216e@linaro.org>
-In-Reply-To: <f551d663-f7b6-5ae3-89a9-af1ae0d6216e@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 30 Jan 2023 09:13:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV0EJP5UXri3phWsCDRaoXuB=ZWK=ibwd6i-V=9f_bLkA@mail.gmail.com>
-Message-ID: <CAMuHMdV0EJP5UXri3phWsCDRaoXuB=ZWK=ibwd6i-V=9f_bLkA@mail.gmail.com>
-Subject: Re: [PATCH] driver: bus: simple-pm-bus: Add Freescale i.MX8qm/qxp CSR
- compatible strings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Liu Ying <victor.liu@nxp.com>, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-imx@nxp.com,
-        Rob Herring <robh@kernel.org>, Lee Jones <lee@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2] power: reset: add Odroid Go Ultra poweroff driver
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+References: <20230126-b4-odroid-go-ultra-poweroff-v2-1-a8c50866f4ac@linaro.org>
+ <20230129234705.djmoir4wsshoptwo@mercury.elektranox.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230129234705.djmoir4wsshoptwo@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+On 30/01/2023 00:47, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Thu, Jan 26, 2023 at 06:11:21PM +0100, Neil Armstrong wrote:
+>> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
+>> to its two PMICs in order, this represents the poweroff scheme needed to complete
+>> a clean poweroff of the system.
+>>
+>> This implement this scheme by implementing a self registering driver to permit
+>> using probe defer until both pmics are finally probed.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>> Previous submission was at [1], but I converted it to an independent
+>> platform device with device auto registration to permit waiting for
+>> both the PMICs drivers to probe.
+>>
+>> [1] https://lore.kernel.org/all/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org/
+>> ---
+>> Changes in v2:
+>> - Switched to devm_register_sys_off_handler()
+>> - Link to v1: https://lore.kernel.org/r/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org
+>> ---
+>>   drivers/power/reset/Kconfig                    |   7 ++
+>>   drivers/power/reset/Makefile                   |   1 +
+>>   drivers/power/reset/odroid-go-ultra-poweroff.c | 151 +++++++++++++++++++++++++
+>>   3 files changed, 159 insertions(+)
+>>
+>> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+>> index a8c46ba5878f..26860c2e05a9 100644
+>> --- a/drivers/power/reset/Kconfig
+>> +++ b/drivers/power/reset/Kconfig
+>> @@ -141,6 +141,13 @@ config POWER_RESET_OCELOT_RESET
+>>   	help
+>>   	  This driver supports restart for Microsemi Ocelot SoC and similar.
+>>   
+>> +config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
+>> +	bool "Odroid Go Ultra power-off driver"
+>> +	depends on ARCH_MESON || COMPILE_TEST
+>> +	depends on MFD_RK808
+> 
+> You are not accessing any symbols from the MFD driver, so you can
+> append "|| COMPILE_TEST".
+> 
+> It will be fun to coordinate the merging, because of my series
+> renaming it to MFD_RK8XX :/
+> 
+> https://lore.kernel.org/all/20230127181244.160887-1-sebastian.reichel@collabora.com/
 
-On Sun, Jan 29, 2023 at 11:49 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 29/01/2023 09:13, Liu Ying wrote:
-> > On Thu, 2023-01-26 at 13:45 +0100, Krzysztof Kozlowski wrote:
-> >> On 26/01/2023 03:54, Liu Ying wrote:
-> >>> On Wed, 2023-01-25 at 10:05 +0100, Geert Uytterhoeven wrote:
-> >>>> On Wed, Jan 25, 2023 at 9:31 AM Liu Ying <victor.liu@nxp.com>
-> >>>> wrote:
-> >>>>> Freescale i.MX8qm/qxp CSR module matches with what the simple
-> >>>>> power
-> >>>>> managed bus driver does, considering it needs an IPG clock to
-> >>>>> be
-> >>>>> enabled before accessing it's child devices, the child devices
-> >>>>> need
-> >>>>> to be populated by the CSR module and the child devices' power
-> >>>>> management operations need to be propagated to their parent
-> >>>>> devices.
-> >>>>> Add the CSR module's compatible strings to
-> >>>>> simple_pm_bus_of_match[]
-> >>>>> table to support the CSR module.
-> >>>>>
-> >>>>> Suggested-by: Rob Herring <robh@kernel.org>
-> >>>>> Suggested-by: Lee Jones <lee@kernel.org>
-> >>>>> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+If I do not depend anymore on `struct rk808`, so I don't depend anymore on it,
+but if it doesn't probe I won't get the regmap from the i2c device.
 
-> >>>>> The CSR module's dt-binding documentation can be found at
-> >>>>> Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
-> >>>>>
-> >>>>> Suggested by Rob and Lee in this thread:
+So it will be a runtime dependency instead, so it's ok to drop.
 
-> >>>
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fproject%2Flinux-arm-kernel%2Fpatch%2F20221017075702.4182846-1-victor.liu%40nxp.com%2F&data=05%7C01%7Cvictor.liu%40nxp.com%7C87515adc8fc3401f410808daff9b3279%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638103339276325657%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=FFz5gSIPc6vyvb1IJ1Umu62WpzjNLIiQIi2sOA3RQGc%3D&reserved=0
-> >>>>>
-> >>>>>  drivers/bus/simple-pm-bus.c | 2 ++
-> >>>>>  1 file changed, 2 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-
-> >>>>> pm-
-> >>>>> bus.c
-> >>>>> index 7afe1947e1c0..4a7575afe6c6 100644
-> >>>>> --- a/drivers/bus/simple-pm-bus.c
-> >>>>> +++ b/drivers/bus/simple-pm-bus.c
-> >>>>> @@ -120,6 +120,8 @@ static const struct of_device_id
-> >>>>> simple_pm_bus_of_match[] = {
-> >>>>>         { .compatible = "simple-mfd",   .data = ONLY_BUS },
-> >>>>>         { .compatible = "isa",          .data = ONLY_BUS },
-> >>>>>         { .compatible = "arm,amba-bus", .data = ONLY_BUS },
-> >>>>> +       { .compatible = "fsl,imx8qm-lvds-csr", },
-> >>>>> +       { .compatible = "fsl,imx8qxp-mipi-lvds-csr", },
-> >>>>
-> >>>> I did read the thread linked above, and I still think you should
-> >>>> just
-> >>>> add "simple-pm-bus" to the compatible value in DTS, so no driver
-> >>>> change
-> >>>> is needed, cfr.
-> >>>> Documentation/devicetree/bindings/bus/renesas,bsc.yaml.
-> >>
-> >> I don't think we want to start putting specific compatibles here. We
-> >> don't do it for simple-mfd, syscon and simple-bus, so neither should
-> >> we
-> >> do it here.
-> >>
-> >>> This means that i.MX8qm/qxp CSR module dt-binding documentation
-> >>> needs
-> >>> to be changed.  I'd like to know how Rob and Krzysztof think about
-> >>> that.
-> >>
-> >> The fsl,imx8qxp-csr.yaml bindings are broken anyway... You have
-> >> device
-> >> specific bindings for non-simple device but use simple-mfd. You
-> >> cannot.
-> >> simple-mfd means it is simple and none of the resources are needed
-> >> for
-> >> children, but that binding contradicts it.
-> >>
-> >> Now you kind of try to extend it even more make it more and more
-> >> broken.
-> >>
-> >> Rework the bindings keeping them backwards compatible. The
-> >> combination
-> >> with simple-mfd should be deprecated and you can add whatever is
-> >> needed
-> >> for a proper setup.
-> >
-> > I did try to rework the bindings and make the combination with simple-
-> > mfd deprecated. However, it reminds me the problem that "simple-pm-bus"
-> > and "syscon" can not be in compatible string at the same time,
-> > otherwise, nodename should match '^syscon@[0-9a-f]+$' and '^bus@[0-9a-
-> > f]+$' at the same time. I mentioned the problem in the same thread[1]
-> > where Rob and Lee suggest to go with this patch. "syscon" is needed
-> > since i.MX8qxp MIPI DSI/LVDS combo PHY node references the CSR module
-> > through a phandle, so dropping/deprecating "syscon" is a no-go.
-> >
-> > Also, as Rob mentioned in [1] "if register space is all mixed together,
-> > then it is the former and an MFD", I think the CSR module should fall
-> > into the simple-mfd category.
->
-> You are now mixing MFD with simple-mfd. If you have clocks there or any
-> other resources, it's not simple-mfd anymore.
+But I'll need to add a depend to guard of_find_i2c_device_by_node()
 
-I beg to differ (but not w.r.t. the other resources): if any "glue" device
-between parent and child hierarchies does not call pm_runtime_enable(),
-Runtime PM (which is a Linux thing, not a DT thing) for the children
-may not work correctly, as it won't propagate correctly to the parent.
-So IMHO this is something to fix in Linux, not in DT.
+> 
+>> +	help
+>> +	  This driver supports Power off for Odroid Go Ultra device.
+>> +
+>>   config POWER_RESET_OXNAS
+>>   	bool "OXNAS SoC restart driver"
+>>   	depends on ARCH_OXNAS
+>> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+>> index 0a39424fc558..d763e6735ee3 100644
+>> --- a/drivers/power/reset/Makefile
+>> +++ b/drivers/power/reset/Makefile
+>> @@ -17,6 +17,7 @@ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+>>   obj-$(CONFIG_POWER_RESET_OXNAS) += oxnas-restart.o
+>>   obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+>>   obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
+>> +obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) += odroid-go-ultra-poweroff.o
+>>   obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+>>   obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
+>>   obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+>> diff --git a/drivers/power/reset/odroid-go-ultra-poweroff.c b/drivers/power/reset/odroid-go-ultra-poweroff.c
+>> new file mode 100644
+>> index 000000000000..51f54e65c927
+>> --- /dev/null
+>> +++ b/drivers/power/reset/odroid-go-ultra-poweroff.c
+>> @@ -0,0 +1,151 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
+>> + */
+>> +#include <linux/kernel.h>
+>> +#include <linux/init.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/mfd/rk808.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/module.h>
+>> +#include <linux/reboot.h>
+>> +#include <linux/i2c.h>
+>> +
+>> +/*
+>> + * The Odroid Go Ultra has 2 PMICs:
+>> + * - RK818 (manages the battery and USB-C power supply)
+>> + * - RK817
+>> + * Both PMICs feeds power to the S922X SoC, so they must be powered-off in sequence.
+>> + * Vendor does power-off the RK817 first, then the RK818 so here we follow this sequence.
+>> + */
+>> +
+>> +struct odroid_go_ultra_poweroff_data {
+>> +	struct device *dev;
+>> +	struct rk808 *rk817;
+>> +	struct rk808 *rk818;
+>> +};
+>> +
+>> +static int odroid_go_ultra_poweroff_prepare(struct sys_off_data *data)
+>> +{
+>> +	struct odroid_go_ultra_poweroff_data *poweroff_data = data->cb_data;
+>> +	int ret;
+>> +
+>> +	dev_info(poweroff_data->dev, "Setting PMICs for power off");
+>> +
+>> +	/* RK817 */
+>> +	ret = regmap_update_bits(poweroff_data->rk817->regmap, RK817_SYS_CFG(3), DEV_OFF, DEV_OFF);
+>> +	if (ret) {
+>> +		dev_err(poweroff_data->dev, "failed to poweroff rk817\n");
+>> +		return notifier_from_errno(ret);
+>> +	}
+>> +
+>> +	/* RK818 */
+>> +	ret = regmap_update_bits(poweroff_data->rk818->regmap, RK818_DEVCTRL_REG, DEV_OFF, DEV_OFF);
+>> +	if (ret) {
+>> +		dev_err(poweroff_data->dev, "failed to poweroff rk818\n");
+>> +		return notifier_from_errno(ret);
+>> +	}
+>> +
+>> +	return NOTIFY_OK;
+>> +}
+>> +
+>> +static int odroid_go_ultra_poweroff_get_pmic_drvdata(const char *compatible, struct rk808 **pmic)
+>> +{
+>> +	struct device_node *pmic_node;
+>> +	struct i2c_client *pmic_client;
+>> +
+>> +	pmic_node = of_find_compatible_node(NULL, NULL, compatible);
+>> +	if (!pmic_node)
+>> +		return -ENODEV;
+>> +
+>> +	pmic_client = of_find_i2c_device_by_node(pmic_node);
+>> +	of_node_put(pmic_node);
+>> +	if (!pmic_client)
+>> +		return -EPROBE_DEFER;
+>> +
+>> +	*pmic = i2c_get_clientdata(pmic_client);
+> 
+> You are only using the regmap, so you can skip the rk808 struct step
+> and directly get and store the regmap: >
+> *pmic = dev_get_regmap(&pmic_client->dev, NULL);
 
-> > Take i.MX8qxp MIPI DSI/LVDS CSR module as
-> > an example, child device pxl2dpi register offset is 0x40, while child
-> > device ldb register offsets are 0x20 and 0xe0.
-> >
-> > Geert, Krzysztof, can you please consider to keep this patch as-is,
-> > since it seems that there is no other option?
->
-> There are other options, why do you say there is no? Making it proper
-> binding/driver for its children without abusing simple bindings. Simple
-> bindings are for simple cases and this turns out not the simple case.
+Indeed ti makes things much simpler.
 
-Or drop the ".data = ONLY_BUS" for "simple-mfd"?
-(and treat "simple-bus" the same as "simple-pm-bus", too ;-)
+> 
+>> +	put_device(&pmic_client->dev);
+> 
+> Technically this allows releasing the PMIC device with the poweroff
+> driver still probed. I guess it's mostly a theoretical thing in this
+> case, but people tend to cargo copy. I suggest to store the struct
+> device handle in odroid_go_ultra_poweroff_data and then use
+> dev_get_regmap() in the poweroff handler. Finally add a put_device()
+> via devm_add_action_or_reset().
 
-Gr{oetje,eeting}s,
+Indeed, this makes it much cleaner.
 
-                        Geert
+> 
+>> +	if (!*pmic)
+>> +		return -EPROBE_DEFER;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int odroid_go_ultra_poweroff_probe(struct platform_device *pdev)
+>> +{
+>> +	struct odroid_go_ultra_poweroff_data *poweroff_data;
+>> +	int ret;
+>> +
+>> +	poweroff_data = devm_kzalloc(&pdev->dev, sizeof(*poweroff_data), GFP_KERNEL);
+>> +	if (!poweroff_data)
+>> +		return -ENOMEM;
+>> +
+>> +	dev_set_drvdata(&pdev->dev, poweroff_data);
+>> +
+>> +	/* RK818 */
+>> +	ret = odroid_go_ultra_poweroff_get_pmic_drvdata("rockchip,rk818",
+>> +							&poweroff_data->rk818);
+>> +	if (ret)
+>> +		return dev_err_probe(&pdev->dev, ret, "failed to get rk818 mfd data\n");
+>> +
+>> +	/* RK817 */
+>> +	ret = odroid_go_ultra_poweroff_get_pmic_drvdata("rockchip,rk817",
+>> +							&poweroff_data->rk817);
+>> +	if (ret)
+>> +		return dev_err_probe(&pdev->dev, ret, "failed to get rk817 mfd data\n");
+>> +
+>> +	/* Register as SYS_OFF_MODE_POWER_OFF_PREPARE because regmap_update_bits may sleep */
+>> +	ret = devm_register_sys_off_handler(&pdev->dev,
+>> +					    SYS_OFF_MODE_POWER_OFF_PREPARE,
+>> +					    SYS_OFF_PRIO_DEFAULT,
+>> +					    odroid_go_ultra_poweroff_prepare,
+>> +					    poweroff_data);
+>> +	if (ret)
+>> +		return dev_err_probe(&pdev->dev, ret, "failed to register sys-off handler\n");
+>> +
+>> +	dev_info(&pdev->dev, "Registered Power-Off handler\n");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_device *pdev;
+>> +
+>> +static struct platform_driver odroid_go_ultra_poweroff_driver = {
+>> +	.driver = {
+>> +		.name	= "odroid-go-ultra-poweroff",
+>> +	},
+>> +	.probe = odroid_go_ultra_poweroff_probe,
+>> +};
+>> +
+>> +static int __init odroid_go_ultra_poweroff_init(void)
+>> +{
+>> +	int ret;
+>> +
+>> +	/* Only create when running on the Odroid Go Ultra device */
+>> +	if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
+>> +		return -ENODEV;
+>> +
+>> +	ret = platform_driver_register(&odroid_go_ultra_poweroff_driver);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	pdev = platform_device_register_resndata(NULL, "odroid-go-ultra-poweroff", -1,
+>> +						 NULL, 0, NULL, 0);
+>> +
+>> +	return PTR_ERR_OR_ZERO(pdev);
+> 
+> This is missing platform_driver_unregister() in the error path.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Ack
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+>> +}
+>> +
+>> +static void __exit odroid_go_ultra_poweroff_exit(void)
+>> +{
+> 
+> if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
+> 		return;
+
+Ack
+
+> 
+>> +	platform_device_unregister(pdev);
+>> +	platform_driver_unregister(&odroid_go_ultra_poweroff_driver);
+>> +}
+>> +
+>> +module_init(odroid_go_ultra_poweroff_init);
+>> +module_exit(odroid_go_ultra_poweroff_exit);
+>> +
+>> +MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
+>> +MODULE_DESCRIPTION("Odroid Go Ultra poweroff driver");
+>> +MODULE_LICENSE("GPL");
+> 
+> Thanks,
+> 
+> -- Sebastian
+
+Thanks,
+Neil
