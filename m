@@ -2,137 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C737681D7B
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 22:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3984681E85
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 23:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjA3VzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Jan 2023 16:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S229986AbjA3W5p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Jan 2023 17:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjA3VzW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 16:55:22 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB87D37F2E;
-        Mon, 30 Jan 2023 13:55:20 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UKjWOv024216;
-        Mon, 30 Jan 2023 21:55:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gboaOLZbeOYcm0WHEM6U1xOOIRgeNG+thaSdtg1tNmo=;
- b=AymFxeKa8r7tGD+pKskYHN4ZJLfqQJoYVtAnXMpNiI83riPvZg6xYr9S3vaB6dH2gurG
- OscF8PeWzzgBw0YeR8N3qR9ikW075oXVh2NimXjquj+GX1cL58MLS8DeGlp3parAjPt8
- MD43hD0kpugL7vhvZeSa6P0euBNYg7Do2lzDY3zFj1mgC7peb9izl3Nf4zUGApH9+c0Q
- JC0M/CEeN53I0jQeAvFhYcXWjh59Ow5B5ftGK+vL0e7J05rQKyQdC1GZGdo8D+GsCUN1
- 47U7Sf9ZTn9M7pspaq9Vef78lJV+G05ho2gmc1xSrKnGr4LGum5zpxR3zkukb+cWqc7/ 1A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncvfpcmre-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 21:55:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30ULtBX4001051
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 21:55:11 GMT
-Received: from [10.111.174.112] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 13:55:09 -0800
-Message-ID: <c2bba35e-ea83-0f82-992e-a8ddeb106276@quicinc.com>
-Date:   Mon, 30 Jan 2023 13:55:08 -0800
+        with ESMTP id S229725AbjA3W5l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 17:57:41 -0500
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8616727D6C;
+        Mon, 30 Jan 2023 14:57:40 -0800 (PST)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-15fe106c7c7so17187595fac.8;
+        Mon, 30 Jan 2023 14:57:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RsVWxlkQYCHAIRMaNLAnFZ5h9tURIR8RlLwfOVsH1ro=;
+        b=t7A99f6TaoR4kpnsDeswkbwsMm6p+G+K+F2ft66M/6Mtr8QNS+TONW1Iu7yl2zmjrh
+         ubx+hKdTF7/6SG90FRetBYgAiKiJNho6OLszfdK1kK+8tEyaVPd8CInK5JGE75pUaWS/
+         rnn5AE6LtulckNMUrv8TJKkqiyASbo5sCk8etwTMvnST7M7C7zTJy8cDRVN6F2QxlcZl
+         k7/rscWmh9oQjgSz+uP8p2mOpJM+/UZU4Mhh57Q41ppaYCwIQSmp6tey26+Ykp5w/Tw6
+         ZDB8yvItnt3fHWbKMepeWfhXbbhNF76y8oT3VfrPV5M6wCxsVjSilKlAIx8Ke509c5sP
+         DYHg==
+X-Gm-Message-State: AO0yUKXtoyPtzqQHbfo7SlUeNt93UYVgAzlDwjh87MtpYx/m0fkAG3OF
+        wSm3I4Eh6ug2a/GLgVCBlQ==
+X-Google-Smtp-Source: AK7set8UXW6Q5xKbJK9q9i8EwSLlkVVbTjyGS+GbjCsLlbPmYxm7gaVxfLexzkbJrbDj2ZP0VK7NfQ==
+X-Received: by 2002:a05:6870:82a2:b0:15f:2e21:a795 with SMTP id q34-20020a05687082a200b0015f2e21a795mr5059625oae.9.1675119459743;
+        Mon, 30 Jan 2023 14:57:39 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id os13-20020a0568707d0d00b0014fb4bdc746sm5807660oab.8.2023.01.30.14.57.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 14:57:39 -0800 (PST)
+Received: (nullmailer pid 3680271 invoked by uid 1000);
+        Mon, 30 Jan 2023 22:57:38 -0000
+Date:   Mon, 30 Jan 2023 16:57:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, iresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550
+ compatible
+Message-ID: <167511945818.3680212.2462768912519621362.robh@kernel.org>
+References: <20230130123046.3229654-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
-To:     Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@nxp.com>,
-        <djakov@kernel.org>
-CC:     Vivek Aknurwar <quic_viveka@quicinc.com>,
-        <quic_okukatla@quicinc.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "abel >> Philipp Zabel" <p.zabel@pengutronix.de>,
-        <abelvesa@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
- <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
- <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
- <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
- <35dcb764-e340-5fe7-6637-cdb5f84266ce@linaro.org>
- <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
- <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
- <Y9fZ6GUzWsCMXzba@linaro.org>
-Content-Language: en-US
-From:   Mike Tipton <quic_mdtipton@quicinc.com>
-In-Reply-To: <Y9fZ6GUzWsCMXzba@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: C1EauuXgQs6pDzk93uzDi1pYQwV5oFTu
-X-Proofpoint-ORIG-GUID: C1EauuXgQs6pDzk93uzDi1pYQwV5oFTu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
- spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300202
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130123046.3229654-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/30/2023 6:53 AM, Abel Vesa wrote:
-> On 23-01-23 22:58:49, Bryan O'Donoghue wrote:
->> On 23/01/2023 20:37, Mike Tipton wrote:
->>>
->>> This isn't actually changing it for all providers. Only for those that
->>> define the get_bw() callback. Right now that's only qcom/msm8974 and
->>> imx/imx. If get_bw() isn't defined, then icc_node_add() defaults to
->>> INT_MAX. So, the logical behavior in that case is unchanged. Which means
->>> this isn't even changing the behavior for rpmh yet, either.
->>
->> Yes that adds up.
->>
->> Looking at the commit for get_bw() for the 8974, I think this change would
->> be OK with the intent of this commit
->>
->> commit 9caf2d956cfa254c6d89c5f4d7b3f8235d75b28f
->> Author: Georgi Djakov <georgi.djakov@linaro.org>
->> Date:   Mon Nov 9 14:45:12 2020 +0200
->>
->> @Abel what effect will skipping pre->aggregation() have on i.MX ?
+
+On Mon, 30 Jan 2023 14:30:46 +0200, Abel Vesa wrote:
+> Add compatible for EPSS CPUFREQ-HW on SM8550.
+> Also document the interrupts.
 > 
-> I don't think there is any impact on i.MX platforms.
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
 > 
-> Peng, any input?
-
-It should only have an impact if there are nodes left enabled from 
-bootloaders that nobody votes for and need to be turned off.
-
-The imx get_bw() callback returns zero for everything. So, the previous 
-icc_node_add() behavior would call set() with zero for everything and 
-give the provider an opportunity to disable all nodes by default. After 
-this change, set() won't be called from icc_node_add() anymore. And 
-because init_bw is zero, set() won't be called in icc_sync_state() 
-either. So, it's possible for certain nodes to be left enabled whereas 
-previously they were disabled during imx probe.
-
-If this change does result in nodes being left enabled, then the ideal 
-fix would be for get_bw() to return non-zero for nodes enabled from 
-boot. That would result in them being disabled in icc_sync_state().
-
-Should be same possible impact for qcom/msm8974.
-
+> The v1 is here:
+> https://lore.kernel.org/all/20221116115046.2687244-1-abel.vesa@linaro.org/
 > 
->>
->> ---
->> bod
+> Changes since v1:
+>  * dropped the interrupts related properties as they are already there.
+> 
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
