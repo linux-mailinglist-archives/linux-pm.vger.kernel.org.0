@@ -2,102 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670826819DC
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 20:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E061B681A18
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 20:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbjA3THb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Jan 2023 14:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S238040AbjA3TN4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Jan 2023 14:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbjA3THa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 14:07:30 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A397538B5C;
-        Mon, 30 Jan 2023 11:07:28 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id e536acd3fe07cf94; Mon, 30 Jan 2023 20:07:26 +0100
-Received: from kreacher.localnet (unknown [213.134.169.112])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 246EA2528287;
-        Mon, 30 Jan 2023 20:07:26 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+        with ESMTP id S238300AbjA3TNw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 14:13:52 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1762693;
+        Mon, 30 Jan 2023 11:13:41 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id kt14so34836992ejc.3;
+        Mon, 30 Jan 2023 11:13:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AF1ytHP8yIyD33XjERJjWJgeLd5sZmmY2qcXpld0hmk=;
+        b=5jmcA5qsn70rwYYqHQOrS8fni7G/BkrUGTic11TJcA+1jkXm2kmH8Wrw1R1JGlJtWd
+         hCpQjzs2jjTJOierD18/261C6c+9ei+hT0cBwBAfNnz7RdUx6KprPM8xgBySXU4GvHs9
+         hPC/QXFQrc0nzgRagipdnycMOv9UECbWusGpm+4kgIydFoLKkDlJYDWDj0XOrlbpRCp3
+         MNRnutLWlV1AzkLjGV9UgGGRadfmW76t2QGcvYLVFKyf9ObPrmxkuKjLZ1SdK5Gyx8SN
+         Vj61k5BsHgdkJUFjD2mSJzB1ZgobKjNxBG5ohk8OamarZMT7dzYYipWiNsPNNsyo2SPQ
+         PZVA==
+X-Gm-Message-State: AFqh2kpsd5+BW0DiSttWqZGLH0MQ6qxA1LqTscaxyEDBIGrFw1qcAz7t
+        y7HR1W6L1xWuc4KyVz5hE5hRDRZan+8CvcrpluTtxHDp4XM=
+X-Google-Smtp-Source: AMrXdXtwgvtL34Ya4QUw4+O+GI4+Uu/LUQaoUd34IgcpjkCKRYATzrxmUKA8Gy/+7oCNRZTgtKKY5Zoz1L/NPpwYzTM=
+X-Received: by 2002:a17:906:60c8:b0:877:612e:517e with SMTP id
+ f8-20020a17090660c800b00877612e517emr7090384ejk.152.1675106019926; Mon, 30
+ Jan 2023 11:13:39 -0800 (PST)
+MIME-Version: 1.0
+References: <1751684.VLH7GnMWUR@kreacher>
+In-Reply-To: <1751684.VLH7GnMWUR@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Jan 2023 20:13:28 +0100
+Message-ID: <CAJZ5v0jpmyBGFMhhKqGH6kfsuAGhhvqwbiM_Ck++_N9kUOav0Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/8] thermal: intel: intel_pch: Code simplification and cleanups
+To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Linux ACPI <linux-acpi@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        David Box <david.e.box@linux.intel.com>
-Subject: [PATCH v1 8/8] thermal: intel: intel_pch: Refer to thermal zone name directly
-Date:   Mon, 30 Jan 2023 20:07:17 +0100
-Message-ID: <837557782.0ifERbkFSE@kreacher>
-In-Reply-To: <1751684.VLH7GnMWUR@kreacher>
-References: <1751684.VLH7GnMWUR@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+        David Box <david.e.box@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.112
-X-CLIENT-HOSTNAME: 213.134.169.112
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeiledrudduvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdduuddvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdho
- rhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhhiugdrvgdrsghogieslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Jan 30, 2023 at 8:08 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> Hi All,
+>
+> This patch series removes some uneeded code and data structures from the
+> intel_pch_thermal driver, rearranges it and does some assorted minor cleanups
+> (no change in behavior should result from it).
+>
+> Please refer to the individual patch changelogs for details.
 
-Make intel_pch_thermal_probe() use a const char pointer instead of
-a struct board_info one for accessing the thermal zone name.
+I forgot to mention that this series is applicable on top of
 
-No intentional functional impact.
+https://patchwork.kernel.org/project/linux-pm/patch/5641279.DvuYhMxLoT@kreacher/
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+which in turn applies on top of the current thermal branch in linux-pm.git,
+that is also present in the linux-next branch in linux-pm.git.
 
-BTW, Srinivas, I'm wondering if user space would be terribly confused by
-changing this driver to use "Intel PCH" as the thermal zone name of all
-of the supported platforms?
-
----
- drivers/thermal/intel/intel_pch_thermal.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -175,7 +175,7 @@ static int intel_pch_thermal_probe(struc
- 				   const struct pci_device_id *id)
- {
- 	enum pch_board_ids board_id = id->driver_data;
--	const struct board_info *bi = &board_info[board_id];
-+	const char *zone_name = board_info[board_id].name;
- 	struct pch_thermal_device *ptd;
- 	u16 trip_temp;
- 	int nr_trips;
-@@ -249,12 +249,12 @@ read_trips:
- 
- 	nr_trips += pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
- 
--	ptd->tzd = thermal_zone_device_register_with_trips(bi->name, ptd->trips,
-+	ptd->tzd = thermal_zone_device_register_with_trips(zone_name, ptd->trips,
- 							   nr_trips, 0, ptd,
- 							   &tzd_ops, NULL, 0, 0);
- 	if (IS_ERR(ptd->tzd)) {
- 		dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
--			bi->name);
-+			zone_name);
- 		err = PTR_ERR(ptd->tzd);
- 		goto error_cleanup;
- 	}
-
-
-
+Thanks!
