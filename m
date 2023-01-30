@@ -2,108 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AB46813D0
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 15:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1116813F2
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Jan 2023 15:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbjA3Oxf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Jan 2023 09:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S235504AbjA3O7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Jan 2023 09:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbjA3Oxe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 09:53:34 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF4E29435
-        for <linux-pm@vger.kernel.org>; Mon, 30 Jan 2023 06:53:33 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id q8so8177758wmo.5
-        for <linux-pm@vger.kernel.org>; Mon, 30 Jan 2023 06:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ySyb+9DeL5fJ0AqcUKPoABZaZNyjzAc//xSJ1ODmiuU=;
-        b=JvdL81gB+V5vx6+HLY85U0rgTxjMwC0gvfTyDTmtTOCx8xh8EBdnu0pDspLJV0HZo3
-         TCnPIi9tr+cFIbjmt9foLdiGqiM9fP2CawjIdBHp+Mhqe3vhIQkikf7wyGAl+/kubDrB
-         ZESx1z6oMb2R3Z0IHUCuVtiIoCSFaJl4jhG2U6wsawPJc645tVzoKjA931jFvdwA0J18
-         zVtKMlc4GvWnjskN2h5TwVqKB4/AtbB1SUeVT58cpfhGZbk3r/lswQQx78G9muEkvoCa
-         KhviC8rbuAH1qpRjMjIcSDaIdqKE3UWLoWEMFZIhYiqAQc5a+8jgVzSKx8tBpnb2+OpH
-         yjgA==
+        with ESMTP id S230073AbjA3O7B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Jan 2023 09:59:01 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3CE18ABA;
+        Mon, 30 Jan 2023 06:59:00 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id gr7so7905991ejb.5;
+        Mon, 30 Jan 2023 06:59:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ySyb+9DeL5fJ0AqcUKPoABZaZNyjzAc//xSJ1ODmiuU=;
-        b=rqGlfCQzLYt1X4Onx3ct00n1rhpTPVK2Uxlr6F47sZC4dN8tw7NlaybbuPzxLcGBt6
-         vVoaE6apHnQQaymQ71v8DkDEndSpAV3pkELSKR9fe+pFEMfzTSUPeywnEmauieaqIWyZ
-         AR8Q2vbhMXqKZnb2i3HEtqaV+cOqntoYIprmHLS3GD/AMwuqSpn2N7V09H6HSQTRGn2D
-         0E85y3a6nVjcVXGjep48NzImaRu+LdDKWHyfTex1PVa2mLtuPCnBOXF/Ht1a7ai4H8IU
-         QZHYL9bASiFI2dtA+6U4mVHMRgWsAg5WlPrNhFyEodu9Rn4+Q+502EdsgqFsckW6gg6v
-         tEVA==
-X-Gm-Message-State: AO0yUKUggZh+4eMTurlTgG7JvFdiafY+IB47xG3GCH4mnLuL+oHBB7pV
-        vVuo7neve+Vg4i0KOi39lshApg==
-X-Google-Smtp-Source: AK7set+7061y1dLtcQauJpeIRhWsE/OPFF1N/OwHvBvzWw6ZsTiAcij0rsvYYsbhx/z3ZiOR6whsfw==
-X-Received: by 2002:a05:600c:5008:b0:3d9:f559:1f7e with SMTP id n8-20020a05600c500800b003d9f5591f7emr6446029wmr.20.1675090412131;
-        Mon, 30 Jan 2023 06:53:32 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm12167977wrw.15.2023.01.30.06.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 06:53:30 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:53:28 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Peng Fan <peng.fan@nxp.com>, djakov@kernel.org
-Cc:     Mike Tipton <quic_mdtipton@quicinc.com>,
-        Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org,
-        quic_okukatla@quicinc.com, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "abel >> Philipp Zabel" <p.zabel@pengutronix.de>,
-        abelvesa@kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
-Message-ID: <Y9fZ6GUzWsCMXzba@linaro.org>
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
- <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
- <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
- <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
- <35dcb764-e340-5fe7-6637-cdb5f84266ce@linaro.org>
- <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
- <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HXpn0pvpxd/hsTOS/Zxnka5NhAaFb1JpHZULVuihYL0=;
+        b=riTrcH9Sv6Hqpc9OC0FUXm2ykvr9/FruKK+w/dNHussYZtzo3Rib1naPNr4FE4c4m/
+         cOVbN5uPI3QZT+pD8F4HzPicPw2o2tWNruNgT8a6DIIoAacNt4WuPEKy51thm9p42Z7p
+         n0v1kiq5H8hwV94EvxduEdo4UhA/4nUFnhVIWmEGT10vqjWUK4jUh/5W6nCOww2IbS0J
+         yBv/hmGGbrQxch2vkwdglnFHV1u/LMFwyPqPsYY96myoDNs2o2VSGzk+GWl33+lFKqIg
+         1D7YKdDmSm+Q/ghVNHCbho7FdcaSiQxQZiisfwwfPFPW/NuL1C6HnJT1H0by5PY+K/N4
+         4skA==
+X-Gm-Message-State: AO0yUKUBu96QT3d4G0ZBx4zrskm3F72JVYctkZ3lhn3m1wPoj0MA/CD4
+        2qMSRCxmxFTnnTC3ZPIvZRkklC9I2OGOyDcySuY=
+X-Google-Smtp-Source: AK7set9qw9Mc3nCBkoXqXHHY3ekTjdcOGuVO/iIRdcNKDMjis+Lmxf5OWPNnF2YvbljAJSVsHpdfkDWpYZaW2nZ5UG0=
+X-Received: by 2002:a17:906:1dcd:b0:87f:575a:9b67 with SMTP id
+ v13-20020a1709061dcd00b0087f575a9b67mr2531895ejh.274.1675090739222; Mon, 30
+ Jan 2023 06:58:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <12138067.O9o76ZdvQC@kreacher> <12124970.O9o76ZdvQC@kreacher>
+ <mafs0sfgybc3q.fsf_-_@amazon.de> <CAJZ5v0hAjKvinPqX2VuCv1jVu50jrnDpECaO=sA2CQZFHZpJdA@mail.gmail.com>
+ <mafs0zga0ds30.fsf_-_@amazon.de>
+In-Reply-To: <mafs0zga0ds30.fsf_-_@amazon.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Jan 2023 15:58:47 +0100
+Message-ID: <CAJZ5v0j1CBe7Hjhg7Tzm3HkuinA9zgtPffMtd96ZaOds=US+xQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit"
+ frequency QoS
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-01-23 22:58:49, Bryan O'Donoghue wrote:
-> On 23/01/2023 20:37, Mike Tipton wrote:
-> > 
-> > This isn't actually changing it for all providers. Only for those that
-> > define the get_bw() callback. Right now that's only qcom/msm8974 and
-> > imx/imx. If get_bw() isn't defined, then icc_node_add() defaults to
-> > INT_MAX. So, the logical behavior in that case is unchanged. Which means
-> > this isn't even changing the behavior for rpmh yet, either.
-> 
-> Yes that adds up.
-> 
-> Looking at the commit for get_bw() for the 8974, I think this change would
-> be OK with the intent of this commit
-> 
-> commit 9caf2d956cfa254c6d89c5f4d7b3f8235d75b28f
-> Author: Georgi Djakov <georgi.djakov@linaro.org>
-> Date:   Mon Nov 9 14:45:12 2020 +0200
-> 
-> @Abel what effect will skipping pre->aggregation() have on i.MX ?
+On Mon, Jan 30, 2023 at 3:18 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
+>
+> Hi Rafael,
+>
+> On Thu, Dec 29 2022, Rafael J. Wysocki wrote:
+>
+> > On Thu, Dec 29, 2022 at 1:58 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
+> >>
+> >> Hi Rafael,
+> >>
+> >> On Wed, Dec 28 2022, Rafael J. Wysocki wrote:
+> >> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> >
+> >> > When _PPC returns 0, it means that the CPU frequency is not limited by
+> >> > the platform firmware, so make acpi_processor_get_platform_limit()
+> >> > update the frequency QoS request used by it to "no limit" in that case.
+> >> >
+> >> > This addresses a problem with limiting CPU frequency artificially on
+> >> > some systems after CPU offline/online to the frequency that corresponds
+> >> > to the first entry in the _PSS return package.
+> >> >
+> >> > Reported-by: Pratyush Yadav <ptyadav@amazon.de>
+> >> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> > ---
+> [...]
+> >>
+> >> One small thing I noticed: in acpi_processor_ppc_init() "no limit" value
+> >> is set to INT_MAX and here it is set to FREQ_QOS_MAX_DEFAULT_VALUE. Both
+> >> should evaluate to the same value but I think it would be nice if the
+> >> same thing is used in both places. Perhaps you can fix that up when
+> >> applying?
+> >
+> > Yes, I'll do that.
+>
+> Following up on this series. I do not see it queued anywhere in the
+> linux-pm [0] tree. I would like to have this in the v6.3 merge window if
+> possible.
+>
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
 
-I don't think there is any impact on i.MX platforms.
+It's already in the mainline:
 
-Peng, any input?
-
-> 
-> ---
-> bod
+e8a0e30b742f cpufreq: intel_pstate: Drop ACPI _PSS states table patching
+99387b016022 ACPI: processor: perflib: Avoid updating frequency QoS
+unnecessarily
+c02d5feb6e2f ACPI: processor: perflib: Use the "no limit" frequency QoS
