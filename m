@@ -2,116 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26740683643
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 20:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFB3683651
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 20:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjAaTSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 14:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S231857AbjAaTUp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 14:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAaTSK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 14:18:10 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5599911EAC;
-        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id me3so44675047ejb.7;
-        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
+        with ESMTP id S231388AbjAaTUo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 14:20:44 -0500
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885F159B53;
+        Tue, 31 Jan 2023 11:20:39 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id k4so4703890edo.12;
+        Tue, 31 Jan 2023 11:20:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PgqXjqu7PB4cDpZ4t5aYViWzYUyq/bNQ+W4YAsennk4=;
-        b=uU7se3VGBpAAkNx7sZ+NqrPzdyHiDcWBsY71wZJpoZND8nX8VkqsryDDfL6jlQMirS
-         1cS294PrCZU7wMPy7d4G8LOTyeCkPliq3SSF27KduRecWT0v+tM3q07LUyAr6rfRnedU
-         MoQFirplm+xRIWSSQffkG11GNVpiY16VcOTfh8G/+Xyjz6+zDhJ9f2rM80knwN/gT0Bh
-         JIBu2mkiHZWtbwuP0Lo42DCWU7EWSl3pqtvysCJ5gISHb+NI9Ifxsg+PMUUXc/7CH1X1
-         aLa8buzkwKaQ7uGM0ya6BVyGNkUBrFJKlUxQFnJ6Up6NTVqFVJFfcG8efFPpMUKBabRy
-         jovQ==
-X-Gm-Message-State: AO0yUKUf83v7fbsvizJEIrpSvawPVTH7DvDaDI+xiDWjc8VrBw1oLkil
-        tCGjGQeymLsQqpBKz/MaizTGKcBcGBd8z8Hm2UU=
-X-Google-Smtp-Source: AK7set/8MNl94eWnK+p2gRPKvJNunvkkdqU775q8MznNt3ygHG6M0TswuNUlDSLpgbXu/IiXn0SeDaSBftVXXzqBmgY=
-X-Received: by 2002:a17:906:95d7:b0:88a:30dc:5730 with SMTP id
- n23-20020a17090695d700b0088a30dc5730mr2170974ejy.25.1675192685276; Tue, 31
- Jan 2023 11:18:05 -0800 (PST)
+        bh=y9Y3rd8N1l2GXRIbzxx3hyWv/IYyZijcmJlQtBVvwqw=;
+        b=dDAl3yDMyqSDxeEEdTBftczUEDqZJyTwBO/kjaHPEL4Uyu+WitovrFtimkJxQEWvYL
+         XBn7KKAofzpmlKBZXHfBgKCX2gVRFdAg5o63O4ZL/7gdhG/mW8pCBnMq0gzYp3qMzsfM
+         2ckBHhQrPcWY3isGtqLotJA6VsUwoFQYQ6vpgFwkAeV6ryT5YZmiYQifbL0hiUL8fNqe
+         +2uCgSaDoW+3QVb9zOfFU1AcdJmfro0/lpS2HiD8AgIbpETV67BXDDs32H0DPaJW1bIs
+         lSJGXNUwHmALcb6H9N8tt5T34eondpBlGVNZCS3u09ewSgDf8rS+gAO3He1xqlK+F5RI
+         ZrYQ==
+X-Gm-Message-State: AO0yUKV6PQfzvPNhsebu6PKx4IxPH2yyT0aB59vXgFY1LdZhV2iXBG2M
+        jWkmdXY5IazeqxkkFk58U9s6na40h9/QO/xHAMn2OOE0qoo=
+X-Google-Smtp-Source: AK7set915NSePsR0Olqkqiu8CNDk75eBKRAuaD7Ko8O305vkAam6scnB0J2UwlrNnD3E9LMToD9jpR8njhq+kCJzUT0=
+X-Received: by 2002:a05:6402:845:b0:4a2:56e7:178 with SMTP id
+ b5-20020a056402084500b004a256e70178mr2179594edz.58.1675192837874; Tue, 31 Jan
+ 2023 11:20:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
- <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
-In-Reply-To: <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
+References: <1751684.VLH7GnMWUR@kreacher> <837557782.0ifERbkFSE@kreacher> <03b7e4ae-04b6-42ca-cad0-7828797f7bf9@linaro.org>
+In-Reply-To: <03b7e4ae-04b6-42ca-cad0-7828797f7bf9@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 31 Jan 2023 20:17:54 +0100
-Message-ID: <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
+Date:   Tue, 31 Jan 2023 20:20:26 +0100
+Message-ID: <CAJZ5v0hgAsh9FQBb_X+1sSqAwjt-E6rKYO8Y8ue_6GmjwLy-Qw@mail.gmail.com>
+Subject: Re: [PATCH v1 8/8] thermal: intel: intel_pch: Refer to thermal zone
+ name directly
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Box <david.e.box@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 6:03 PM Daniel Lezcano
+On Tue, Jan 31, 2023 at 5:02 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
->
-> Hi Rafael,
->
->
-> On 26/01/2023 17:47, Rafael J. Wysocki wrote:
-> > On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> From: Daniel Lezcano <daniel.lezcano@kernel.org>
-> >>
-> >> The thermal framework gives the possibility to register the trip
-> >> points with the thermal zone. When that is done, no get_trip_* ops are
-> >> needed and they can be removed.
-> >>
-> >> Convert ops content logic into generic trip points and register them with the
-> >> thermal zone.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
->
-> [ ... ]
->
-> >> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
-> >>          if (status)
-> >>                  goto err_restore_te_out;
-> >>
-> >> -       dts->trip_types[thres_index] = trip_type;
-> >> -
-> >> +       status = get_trip_temp(sensors, thres_index, &temp);
-> >> +       if (status)
-> >> +               goto err_restore_te_out;
-> >> +
-> >> +       dts->trips[thres_index].type = trip_type;
-> >> +       dts->trips[thres_index].temperature = temp;
+> On 30/01/2023 20:07, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > This change doesn't look correct to me, because this function takes
-> > temp as an argument and it is used to populate the trip with it at
-> > least in some cases.
+> > Make intel_pch_thermal_probe() use a const char pointer instead of
+> > a struct board_info one for accessing the thermal zone name.
 > >
-> > Why should temp be overwritten here?
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > BTW, Srinivas, I'm wondering if user space would be terribly confused by
+> > changing this driver to use "Intel PCH" as the thermal zone name of all
+> > of the supported platforms?
+> >
+> > ---
+> >   drivers/thermal/intel/intel_pch_thermal.c |    6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
+> > +++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+> > @@ -175,7 +175,7 @@ static int intel_pch_thermal_probe(struc
+> >                                  const struct pci_device_id *id)
+> >   {
+> >       enum pch_board_ids board_id = id->driver_data;
+> > -     const struct board_info *bi = &board_info[board_id];
+> > +     const char *zone_name = board_info[board_id].name;
 >
-> You are correct. This is wrong.
->
-> I think we should call get_trip_temp() before calling update_trip_temp()
-> instead of passing a zero temperature parameter
+> Assuming you will change 'board_info[board_id].name' by
+> 'board_info[board_id]'
 
-update_trip_temp() is sort of a misnomer, because it is used for
-initializing a trip point for example in
-intel_soc_dts_iosf_add_read_only_critical_trip() and in this
-particular case get_trip_temp() need not be called before it.
+Hmm, why would that be required?
 
-This driver seems to be in need of a cleanup.
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+Anyway, though, I'm planning to use this replacement patch instead of
+the $subject one:
+
+https://lore.kernel.org/linux-pm/12166249.O9o76ZdvQC@kreacher/
