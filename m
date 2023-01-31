@@ -2,362 +2,243 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26D4682E47
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6946682EC1
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 15:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjAaNph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 08:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S230213AbjAaOE5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 09:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbjAaNpf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:45:35 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AAF269F;
-        Tue, 31 Jan 2023 05:45:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ITB6hgLkZFfgdtfSy/LMjXv69VrPt8FDt1v+lx6lnKUrZYGHz0JgG6CTHqZm3Rdd6bVtzctG3GVvxMXUGbwZi/EwwBxvWn0uJpryQLMFH/MZyrt7hjW5HY2UVoHmH3me9HzkN36+H9xR13dPeBZvBn/VUP/IXwjtgNyQbJuIAfWkJD08RfGE6lxt6SayKJU4IkfYfMLh5mnsjs3dGpxvU615hv7YGIrt0i8FxxUkvhqhy0zg9BC+3Zccpl2oVQWeah1B9ge9b5nNj8gN32x521x5dnxPMdY/HuEMx25adAOE1hSkYHgkXOoP96/qad5uI4J1AWKq3Ai4Kp/XEM77MA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nccBz8KxqZozH7rewRRfIA7ohOl0tqXWxI9KsrmD1ls=;
- b=i0z/rZOd5SL/SPRoOThO2FiZ0stcGZ1SeAlB8RkApsbXF0xbYNnMNVeOaS95QkQVNc/aGSF2693zifDK0BJRkPy/JwQ32xzWC8SUINTZnYFe//FZdSijQpc/Qr0Fosd5o3hNUGdTt7xpF3u71i8QBjfGdEukQz01ASwjPMN3OSL91HxcVSg9kv0XFm6FZzV39KArgO7SnHBRL4uOEUWbxWqAAOslHZEkJ+6cE2VMACo2BXvP8wSV2KBzcMmnf3emP1G9E+Ao4eLDb1wXRYYLtDd7mdkKINn0H8V25Gqmw5OsJyVUgq9G59U/rISrufjJxLjEAdGGacmHTGQmySd+dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nccBz8KxqZozH7rewRRfIA7ohOl0tqXWxI9KsrmD1ls=;
- b=lDLVwdwcKcehviZtaebJrOGqYd8UUVySzYKowawIVihseSUfi3lYcsQWDD5wtcaC2g5uPw12Cap7sBOKi+MNxm0fsNv9ovjC56+7ABVpK5zEsZ9UVOsErg4nQnqzNoZgta4IzR96ni1xJnp7L3NzG9u94hxUETXb5u8OZ1XyMlY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH0PR12MB5281.namprd12.prod.outlook.com (2603:10b6:610:d4::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
- 2023 13:45:31 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a59e:bafb:f202:313c]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a59e:bafb:f202:313c%7]) with mapi id 15.20.6043.036; Tue, 31 Jan 2023
- 13:45:30 +0000
-Message-ID: <661a55c4-5703-ef84-728a-229997737416@amd.com>
-Date:   Tue, 31 Jan 2023 07:45:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 5/6] cpufreq: amd_pstate: Add guided mode control
- support via sysfs
-Content-Language: en-US
-To:     Wyes Karny <wyes.karny@amd.com>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>, Perry.Yuan@amd.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>
-References: <20230131052141.96475-1-wyes.karny@amd.com>
- <20230131052141.96475-6-wyes.karny@amd.com>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20230131052141.96475-6-wyes.karny@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0016.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:22c::8) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S231350AbjAaOEo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 09:04:44 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DA965A2
+        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 06:04:43 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h16so14277727wrz.12
+        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 06:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=22OuGl1Rl5k/omloIRKBcTeCPAl/PTnUyUtJ/lKNdiM=;
+        b=if/PCWHwByy4LBuPHrr9Kzs1K4sedSNOpWUedCcfI3eoKRddTZm7EWjEuc5LqcmjBn
+         lvCsVQvpr6idngYZ0gqKrzcWPPrv/DzbYKkUqgDpWR8cSXCYTA34CfZInXIoGI3TaV9s
+         ShwAOkL30yfCyIUp/LcSq0yK7r/mSlsX/4wotibK9TgekBfqEHcQY6VHb9V6wTC9btbl
+         AU4Q13gbVmsj4NIYBjxVDFWXQ+TqJu1q6Eaj2CuBgj1GNyHfIyiHqvzR0f1jLm53RzCU
+         BSmvRxdOOPBnRX2N60lq8g46hvLR7qzkNZmxuZgXERjDMiIfxM7+4owadOWJWHoeBFfV
+         7WWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=22OuGl1Rl5k/omloIRKBcTeCPAl/PTnUyUtJ/lKNdiM=;
+        b=6k5OsiBWuFu8WLd4Ul5p0H5rSHZWwTxq3H+IjwRgHqONJt6bfrPow4o7gqNFb73DEA
+         ow3BaHAPVjA/SYf6HvMPM4mgUtoe2/aJETg54sUWLdjkLMFPcPNTEuDJBM3eZcJN3jf4
+         jPsKb+/e6BzixCH+nOD2QEy6L1qtj9xsR4vXyd8GZUoQsyrhkL0qk8AzZFgU62v+FU+l
+         auZtJq8aEtFhweb0URKZ1KHN+ltXbUwjg/UHPtyjYguGVJjUUFJc1F+cKD5Ah8KIIWkh
+         1/nYi5vEGhM0PbXYO3B4agaWTXjHhVYBhhQNq9qEb8FGrdOJosmYGajpBjWNvkNddGuf
+         DTqg==
+X-Gm-Message-State: AO0yUKWCkalhnpA76qV3ao3wXP0mwPGIhqeXt+Z5n1gBkBTDvYAR2Tc2
+        SISiysTQZ4VcniyouKA6g13uSw==
+X-Google-Smtp-Source: AK7set+5o21SMWNGyITnSJ6WfocSug+a1HYqAQ+171bk74m6Z8XUUaom0+C7HcRgU/XweK6pBB9Hyw==
+X-Received: by 2002:a5d:658d:0:b0:2bf:ae43:108d with SMTP id q13-20020a5d658d000000b002bfae43108dmr25647204wru.28.1675173881683;
+        Tue, 31 Jan 2023 06:04:41 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
+        by smtp.gmail.com with ESMTPSA id l15-20020a5d6d8f000000b002bfb37497a8sm15760650wrs.31.2023.01.31.06.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 06:04:41 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH v3] dt-bindings: thermal: mediatek: Add LVTS thermal controllers
+Date:   Tue, 31 Jan 2023 15:04:39 +0100
+Message-Id: <20230131140439.600164-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230126161048.94089-1-bchihi@baylibre.com>
+References: <20230126161048.94089-1-bchihi@baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH0PR12MB5281:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20300c41-d4f5-42bb-0b9e-08db03916ad3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ri5Aq0rscDRaIUwdt9BLKtiQzU5VXNVQzotIPF+5Q6Tg0VY2jf7xGALY7OPEUltEFvDOH3IQR3Kq3HSCi/Vnolfh4V/s78jQEyNEiHMVhYldsRXzbbY8yVvh9yDXIuNq0SeQwmad1Au1uJ7cQ1jBf4xv4mblVGqwOd/HlJxFJQKZYtG0bEo2lyMR4mg8LNAQlFpiwog/MCwKoGhn/V+RrX+L9ZouWxYO4w03qkhwgcp5zD3ayBMARKA7EcG6xwhI/Cd/R+6vWEEQQ59FGMnreMXauD1qeEkTpf2sq5wHx1VryY/apCsLPqOZ715j6unKycXCj/u6/pROdCBvE7jOvdR/p9FoaKXjNRH5gHq2bMC71xHX+hySSXCw1T52biV7QhtZdOTRHKjcjU50oB+usVB2yb/cc7WRb3VJlZev0Yr1p6NmngxrDJUwbbBJ0QZrZuDdJj+1b+Dskj3M9bPFl97d0kvPM1y60sSHjHDRIAXtUrJa+jehKpE6289r/UKiUcE9+vg8f2mDba+gslBAwKJfw70jR3OxMEbrwEOQfs2ZXcSAIHlgSB5OAYwcyC0ON9wUX100HigP487NfbOYJa0f790rhVi9RcEjdhKOLEFFkvlluGY4kYHlQzbBS+XjekeF3lwC1XYQ8UEUkjMNrfuQWd1A7iszT6ohzBgRP8WaqHaljliRnwljWYcrWSYeb2TIT13PRNfXJ6cze7xl4vVdldwFVIRg/T6Uw4fTQuw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(366004)(396003)(39860400002)(346002)(451199018)(8676002)(66556008)(66476007)(66946007)(2616005)(83380400001)(316002)(6636002)(110136005)(6506007)(478600001)(6666004)(6486002)(53546011)(54906003)(6512007)(186003)(36756003)(38100700002)(86362001)(31686004)(7416002)(2906002)(44832011)(31696002)(4326008)(5660300002)(8936002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzZwemhSdVU3NXY5RTNkSE84ajUyMzRJOTlHRGNsYldYLzNSVjFCVTNabktS?=
- =?utf-8?B?QzhmVDdqUWd0Ykk3NmtLVEYrVG1aL2VlalNNb0l0cUNHYjA3UFBrYy9FeHRw?=
- =?utf-8?B?RE5WeUs4SWZiVGhoUFNRemVNMjRtNWUxSnRiMkJNMUtiL0k0Q0wrRVdKVHJo?=
- =?utf-8?B?TXVIRHEzTHZOZUhOTUZkNEZ1NE1WWDFENlZsM3pkN2FwbWNFWi9kQnpUTmVU?=
- =?utf-8?B?bUNzYXZxWHdzWUdyRk1BV3ZiMTV4U25selZvZUs2dUJ4azFKWk1qbDg2b1Zw?=
- =?utf-8?B?VW81cnR3czkxVDF5KzluRnBBcWgwK0NNNzFEaFBNYmxYcUZacEM0N1F4d0FB?=
- =?utf-8?B?MnQ5cXl6M2NBV1RQT1R6bnkvWUlLdGtGbDJib29xd3ovNWxjclRQa3JKWXBC?=
- =?utf-8?B?aFNSeUNCNFE1UkZJaGlYRlJFTUFNZXh4K2taeTRqaVZnTWllb3VnQ0FhMUVh?=
- =?utf-8?B?VWRZVS9FUDBlL1VLRERBSEZDMDQ2S2IwcTJCemlWMHJXQStrZUJpY0RmeWQx?=
- =?utf-8?B?QjZYMWNPZ0ZvUHVyU0dKNlRDcjNvdDgrRVc2bjdBbnlmUzBJMGtjM2ZxTVI1?=
- =?utf-8?B?Qm9OaEIrc3ZmMDlrZkxobEFyeXhlMlZSUE43ckNFelo5L1ZXbTVKNlZYbTF2?=
- =?utf-8?B?WStPbmt5MmVNN0RQRWZDTmlSNTFTUkE0Zms0ZEltd1VBSHhSeGRINVpqUGRF?=
- =?utf-8?B?VHN1c0lzaDNqZUt4SEhEZGNOY2MxWm1LcmVUMzhJd3E3Sm5XODc5OXJqOEVh?=
- =?utf-8?B?TkJWeHEyQjAxZS93S3AwMkl6QXJIbkZYNEd2dnJKZmpjc2lKZ3dUNTgwdGZ4?=
- =?utf-8?B?MHZiZm91Wks0emZ4NTNPUHB0M1lVL0JTcHNNbHNBUk44eW53Y2RBa0Zidjh3?=
- =?utf-8?B?cm4wUlEzMmJ3b2FldDRGSTlGY1hhS3pHaitza0JLb0dJS2pKclB0Q2hoekNo?=
- =?utf-8?B?TGxrZUMvZHdtWWFOOTJhbVhTNDNuUURNZUg5R1BJcnd0OW5tYmxNVDFmNFhU?=
- =?utf-8?B?a2p0alBuaExzUysyRDZReHZHSzdRWUhhTE0rMzNQSDNlZ1UzSW5MQ0xxaXVw?=
- =?utf-8?B?WitGMkoremsvN2FlZ3NCKzdOcXYyMlRFdTJXY0w1VkZ1dHo5OGFJSFg2bUly?=
- =?utf-8?B?UHBZcm15Q0ljL2dzMkYzVHRkWERVWk03MkVtbUoyWGdWaHJ6QWJoRVdpcU4z?=
- =?utf-8?B?Y0R1bjVPL1hqdS9zQldzcVd0MEZ0M3ZMbGZOZVAxdlhGblk1b2FleEdvbGkx?=
- =?utf-8?B?akk2ZkxuVzlSaHV5VUlTRWRsdXlyeldwY3hPcDJsOFY1OFIyc2Y5VGVZbjNI?=
- =?utf-8?B?NEMyWVhYQllSaWIrWHRmZkFsVldrQldtRHRVdHBScVNTMXlPd1ArUVFvaUlu?=
- =?utf-8?B?b3dUekE5UmpZRnFnZDhFMjhseFVZWjNSZjNtY2NzendOV0pMU1d4ak5oTUhl?=
- =?utf-8?B?eWNpRzBKcDJSR1FuMVNPK3hoR0dINFpRV3VmVlBvSHlVb1hoVHhZekdZQTA4?=
- =?utf-8?B?aHNUdEtKWWtIZ3VuWXhidWozc0p5eTNYalhYYjREMWhFRUt1bUlwdkJrN1FO?=
- =?utf-8?B?MlBkc0xBSGRMZkdYWGkrMHNjZHc0cUx2M09IZzZSR211MHFXZlBCVTQ1cVRH?=
- =?utf-8?B?N1EvUG1lc21ub2VEcnFTSlRIMVNzR0JVYjdNNHhZZ3dXcmQwTjdFQy9NV2lY?=
- =?utf-8?B?SWdveFhQR013NUc5QXMrR2U5OFRoamcxN2JJRGovVTRSbG10RG9VMXN6ZXZZ?=
- =?utf-8?B?M2dvY1JLeExRVnpiZldna2VoRy9UendBaHIwaTg2VSs2N3B4WFYvd1hJN2da?=
- =?utf-8?B?dHZuR2x2N28yeTJGajJiV3RBa1BlLytYeXRiWnpDNEl0WnJ4c1hLQVNhUWtB?=
- =?utf-8?B?WjdzK1d6VmNqYm1kSDZESnhLcUNpdG4yZUltenJCVDBTSFRSNDZMQmdaUytT?=
- =?utf-8?B?bk9aVnJnM0I4dlVLMU5uaDcvYjhWakRLbDkxcjNNV2NuZm1ObHF4bDV6ZzZq?=
- =?utf-8?B?NC8zbWtRSUN3YTh6Q3VzMXZqWEMzeHlXeGNrdXVRZGMvTDlGaThzQWZmN1Rn?=
- =?utf-8?B?NFdpZHpMbmtXT0RHclRDRVdTaEFvWTJCbmh6ejEvTGljVGo1MXNERFVCM1J3?=
- =?utf-8?B?cmVURmk1ZFRlQ3Y2enJaMEl6bU9JQzdrNU55Z0Z2RE5jNHkwMWdNM1crTTg1?=
- =?utf-8?Q?41RXwyt/9U6xzJz/rftLl7IUwzTZX5vg1C6+60sz49Lo?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20300c41-d4f5-42bb-0b9e-08db03916ad3
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 13:45:30.2124
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yNdgBAfv6pw1zMQka+rdggjQudtK4u+QLzjJpbtNjyWohoynHPVVwvag/PocDudWPuwxQVTkuJMmFjiIr1plGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5281
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/30/23 23:21, Wyes Karny wrote:
-> amd_pstate driver's `status` sysfs entry helps to control the driver's
-> mode dynamically by user. After the addition of guided mode the
-> combinations of mode transitions have been increased (16 combinations).
-> Therefore optimise the amd_pstate_update_status function by implementing
-> a state transition table.
-> 
-> There are 4 states amd_pstate supports, namely: 'disable', 'passive',
-> 'active', and 'guided'.  The transition from any state to any other
-> state is possible after this change. Only if the state requested matches
-> with the current state then -EBUSY value is returned.
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-I realized this after I finished reviewing doc patch, but you probably 
-want to explain -EBUSY return code in documentation patch too.
+Add LVTS thermal controllers dt-binding definition for mt8195.
 
-> 
-> Sysfs interface:
-> 
-> To disable amd_pstate driver:
->   # echo disable > /sys/devices/system/cpu/amd_pstate/status
-> 
-> To enable passive mode:
->   # echo passive > /sys/devices/system/cpu/amd_pstate/status
-> 
-> To change mode to active:
->   # echo active > /sys/devices/system/cpu/amd_pstate/status
-> 
-> To change mode to guided:
->   # echo guided > /sys/devices/system/cpu/amd_pstate/status
-> 
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> ---
->   drivers/cpufreq/amd-pstate.c | 150 +++++++++++++++++++++++++----------
->   1 file changed, 108 insertions(+), 42 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 48ab4684c3a5..6c522dec6967 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -65,6 +65,8 @@ static struct cpufreq_driver amd_pstate_epp_driver;
->   static int cppc_state = AMD_PSTATE_DISABLE;
->   struct kobject *amd_pstate_kobj;
->   
-> +typedef int (*cppc_mode_transition_fn)(int);
-> +
->   static inline int get_mode_idx_from_str(const char *str, size_t size)
->   {
->   	int i;
-> @@ -797,6 +799,105 @@ static ssize_t show_energy_performance_preference(
->   	return sysfs_emit(buf, "%s\n", energy_perf_strings[preference]);
->   }
->   
-> +static void amd_pstate_driver_cleanup(void)
-> +{
-> +	amd_pstate_enable(false);
-> +	cppc_state = AMD_PSTATE_DISABLE;
-> +	current_pstate_driver = NULL;
-> +}
-> +
-> +static int amd_pstate_register_driver(int mode)
-> +{
-> +	int ret;
-> +
-> +	if (mode == AMD_PSTATE_PASSIVE || mode == AMD_PSTATE_GUIDED)
-> +		current_pstate_driver = &amd_pstate_driver;
-> +	else if (mode == AMD_PSTATE_ACTIVE)
-> +		current_pstate_driver = &amd_pstate_epp_driver;
-> +	else
-> +		return -EINVAL;
-> +
-> +	cppc_state = mode;
-> +	ret = cpufreq_register_driver(current_pstate_driver);
-> +	if (ret) {
-> +		amd_pstate_driver_cleanup();
-> +		return ret;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int amd_pstate_unregister_driver(int dummy)
-> +{
-> +	int ret;
-> +
-> +	ret = cpufreq_unregister_driver(current_pstate_driver);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	amd_pstate_driver_cleanup();
-> +	return 0;
-> +}
-> +
-> +static int amd_pstate_change_mode_without_dvr_change(int mode)
-> +{
-> +	int cpu = 0;
-> +
-> +	cppc_state = mode;
-> +
-> +	if (boot_cpu_has(X86_FEATURE_CPPC) || cppc_state == AMD_PSTATE_ACTIVE)
-> +		return 0;
-> +
-> +	for_each_present_cpu(cpu) {
-> +		cppc_set_auto_sel(cpu, (cppc_state == AMD_PSTATE_PASSIVE) ? 0 : 1);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int amd_pstate_change_driver_mode(int mode)
-> +{
-> +	int ret;
-> +
-> +	ret = amd_pstate_unregister_driver(0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = amd_pstate_register_driver(mode);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +/* Mode transition table */
+Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+---
+Changelog:
+  v3:
+     - Fixed subject prefix
+     - Fixed licenses GPL-2.0-only OR BSD-2-Clause
+       to GPL-2.0 OR MIT (to match DT)
+     - Fixed matching dt-binding file names
+  v2:
+     - Fixed subject prefix
+     - Fixed licenses GPL-2.0+ to GPL-2.0
+     - Added dual licenses
+---
+---
+ .../thermal/mediatek,lvts-thermal.yaml        | 107 ++++++++++++++++++
+ .../thermal/mediatek,lvts-thermal.h           |  19 ++++
+ 2 files changed, 126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 include/dt-bindings/thermal/mediatek,lvts-thermal.h
 
-This seems to be a pointless comment to me.
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+new file mode 100644
+index 000000000000..5fa5c7a1a417
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+@@ -0,0 +1,107 @@
++# SPDX-License-Identifier: (GPL-2.0 OR MIT)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
++
++maintainers:
++  - Balsam CHIHI <bchihi@baylibre.com>
++
++description: |
++  LVTS is a thermal management architecture composed of three subsystems,
++  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
++  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
++  a Digital controller (LVTS_CTRL).
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt8195-lvts-ap
++      - mediatek,mt8195-lvts-mcu
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++    description: LVTS reset for clearing temporary data on AP/MCU.
++
++  nvmem-cells:
++    minItems: 1
++    items:
++      - description: Calibration eFuse data 1 for LVTS
++      - description: Calibration eFuse data 2 for LVTS
++
++  nvmem-cell-names:
++    minItems: 1
++    items:
++      - const: lvts-calib-data-1
++      - const: lvts-calib-data-2
++
++  "#thermal-sensor-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - resets
++  - nvmem-cells
++  - nvmem-cell-names
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/reset/mt8195-resets.h>
++    #include <dt-bindings/thermal/mediatek,lvts-thermal.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      lvts_mcu: thermal-sensor@11278000 {
++        compatible = "mediatek,mt8195-lvts-mcu";
++        reg = <0 0x11278000 0 0x1000>;
++        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
++        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
++        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
++        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
++        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
++        #thermal-sensor-cells = <1>;
++      };
++    };
++
++    thermal_zones: thermal-zones {
++      cpu0-thermal {
++        polling-delay = <1000>;
++        polling-delay-passive = <250>;
++        thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
++
++        trips {
++          cpu0_alert: trip-alert {
++            temperature = <85000>;
++            hysteresis = <2000>;
++            type = "passive";
++          };
++
++          cpu0_crit: trip-crit {
++            temperature = <100000>;
++            hysteresis = <2000>;
++            type = "critical";
++          };
++        };
++      };
++    };
+diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+new file mode 100644
+index 000000000000..ca1ef29a8fee
+--- /dev/null
++++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
++/*
++ * Copyright (c) 2023 MediaTek Inc.
++ * Author: Balsam CHIHI <bchihi@baylibre.com>
++ */
++
++#ifndef __MEDIATEK_LVTS_DT_H
++#define __MEDIATEK_LVTS_DT_H
++
++#define MT8195_MCU_BIG_CPU0		0
++#define MT8195_MCU_BIG_CPU1		1
++#define MT8195_MCU_BIG_CPU2		2
++#define MT8195_MCU_BIG_CPU3		3
++#define MT8195_MCU_LITTLE_CPU0	4
++#define MT8195_MCU_LITTLE_CPU1	5
++#define MT8195_MCU_LITTLE_CPU2	6
++#define MT8195_MCU_LITTLE_CPU3	7
++
++#endif /* __MEDIATEK_LVTS_DT_H */
+-- 
+2.34.1
 
-> +cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
-> +	[AMD_PSTATE_DISABLE]         = {
-> +		[AMD_PSTATE_DISABLE]     = NULL,
-> +		[AMD_PSTATE_PASSIVE]     = amd_pstate_register_driver,
-> +		[AMD_PSTATE_ACTIVE]      = amd_pstate_register_driver,
-> +		[AMD_PSTATE_GUIDED]      = amd_pstate_register_driver,
-> +	},
-> +	[AMD_PSTATE_PASSIVE]         = {
-> +		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
-> +		[AMD_PSTATE_PASSIVE]     = NULL,
-> +		[AMD_PSTATE_ACTIVE]      = amd_pstate_change_driver_mode,
-> +		[AMD_PSTATE_GUIDED]      = amd_pstate_change_mode_without_dvr_change,
-> +	},
-> +	[AMD_PSTATE_ACTIVE]          = {
-> +		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
-> +		[AMD_PSTATE_PASSIVE]     = amd_pstate_change_driver_mode,
-> +		[AMD_PSTATE_ACTIVE]      = NULL,
-> +		[AMD_PSTATE_GUIDED]      = amd_pstate_change_driver_mode,
-> +	},
-> +	[AMD_PSTATE_GUIDED]          = {
-> +		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
-> +		[AMD_PSTATE_PASSIVE]     = amd_pstate_change_mode_without_dvr_change,
-> +		[AMD_PSTATE_ACTIVE]      = amd_pstate_change_driver_mode,
-> +		[AMD_PSTATE_GUIDED]      = NULL,
-> +	},
-> +};
-> +
->   static ssize_t amd_pstate_show_status(char *buf)
->   {
->   	if (!current_pstate_driver)
-> @@ -805,57 +906,22 @@ static ssize_t amd_pstate_show_status(char *buf)
->   	return sysfs_emit(buf, "%s\n", amd_pstate_mode_string[cppc_state]);
->   }
->   
-> -static void amd_pstate_driver_cleanup(void)
-> -{
-> -	current_pstate_driver = NULL;
-> -}
-> -
->   static int amd_pstate_update_status(const char *buf, size_t size)
->   {
-> -	int ret;
->   	int mode_idx;
->   
-> -	if (size > 7 || size < 6)
-> +	if (size > strlen("passive") || size < strlen("active"))
->   		return -EINVAL;
-> -	mode_idx = get_mode_idx_from_str(buf, size);
->   
-> -	switch(mode_idx) {
-> -	case AMD_PSTATE_DISABLE:
-> -		if (!current_pstate_driver)
-> -			return -EINVAL;
-> -		if (cppc_state == AMD_PSTATE_ACTIVE)
-> -			return -EBUSY;
-> -		ret = cpufreq_unregister_driver(current_pstate_driver);
-> -		amd_pstate_driver_cleanup();
-> -		break;
-> -	case AMD_PSTATE_PASSIVE:
-> -		if (current_pstate_driver) {
-> -			if (current_pstate_driver == &amd_pstate_driver)
-> -				return 0;
-> -			cpufreq_unregister_driver(current_pstate_driver);
-> -			cppc_state = AMD_PSTATE_PASSIVE;
-> -			current_pstate_driver = &amd_pstate_driver;
-> -		}
-> +	mode_idx = get_mode_idx_from_str(buf, size);
->   
-> -		ret = cpufreq_register_driver(current_pstate_driver);
-> -		break;
-> -	case AMD_PSTATE_ACTIVE:
-> -		if (current_pstate_driver) {
-> -			if (current_pstate_driver == &amd_pstate_epp_driver)
-> -				return 0;
-> -			cpufreq_unregister_driver(current_pstate_driver);
-> -			current_pstate_driver = &amd_pstate_epp_driver;
-> -			cppc_state = AMD_PSTATE_ACTIVE;
-> -		}
-> +	if (mode_idx < 0 || mode_idx >= AMD_PSTATE_MAX)
-> +		return -EINVAL;
->   
-> -		ret = cpufreq_register_driver(current_pstate_driver);
-> -		break;
-> -	default:
-> -		ret = -EINVAL;
-> -		break;
-> -	}
-> +	if (mode_state_machine[cppc_state][mode_idx])
-> +		return mode_state_machine[cppc_state][mode_idx](mode_idx);
->   
-> -	return ret;
-> +	return -EBUSY;
->   }
->   
->   static ssize_t show_status(struct kobject *kobj,
-
-With one nit fixed,
-
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
