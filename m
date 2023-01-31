@@ -2,105 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2C8682DA0
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22EF682DAE
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjAaNUA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 08:20:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S230432AbjAaNWH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 08:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbjAaNTw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:19:52 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015FF2D4D
-        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 05:19:30 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id y1so14198242wru.2
-        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 05:19:30 -0800 (PST)
+        with ESMTP id S229997AbjAaNWG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:22:06 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD98B40F1;
+        Tue, 31 Jan 2023 05:22:05 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so5015265wms.1;
+        Tue, 31 Jan 2023 05:22:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CMo1Uvj2rFI4YHTrqKmdTiIi+u7MqVqqdbblHM1ubeA=;
-        b=kT92r7GyRZTYR8mGvgkCO/iUaBkKd9TU3//8coQoHSHU+cufA/dutHuoRLuzdyc612
-         cmMfzb32RJyjFvQBBazq4YCQZjXecLfEvDgswp3vd5OrAovEyua7dmxfVhBAynZr9X5R
-         Z0w0gg3rmzsp6BhvnC368L3nI/Zdj5m6hy8RQiVJLY1XkBJzBHqZ2mM5dpIjz0vqzUBJ
-         pF66ooIVvEvvgLvrI59mXLlVQpMLH715+rNS6fu+ZhoeXdRHTQgc6bPEHtBeCFoQNQXS
-         /zBc2fq5ZJOVg+my1zToMpg8UTKAftWOoYJXVXf3w8MsWv/lUK9oKNblKUdnP2+a/Kbi
-         mTiQ==
+        bh=Jr1LFm9oA7+foo+bfSwGKpAHgIHcluy5xuCOann7pyQ=;
+        b=HYCL6Z8jvYMOh3R1SPFZxahL/annJqPo4HTtLg8EFsx6FnL2WqrUtS3PeevzRryilE
+         1RSzOuMRt15k8Sb4N1i8RgAti3ochDwPwvWwKRe6pXn7jV4wC092o0tXKUrSgHvcp8Kx
+         tUg7A2l1wU1lkVTPnAwihysAPSS4zauzZeSb/KJrNQywkgXDVwNN313OfsqISgns3wMw
+         R2HDv9iS2MwOdsLQFqSzz6jG9/Z4kzWhxfVQlP1hr4k60FdjK6zn28XATIc1dXDUP/xX
+         q2BrIG96dy2vHNGz05hXCqx348YPB4BQDjHESI8KUMsNLfRqUh+zZQVKlkvw7NIibnBM
+         Hnhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMo1Uvj2rFI4YHTrqKmdTiIi+u7MqVqqdbblHM1ubeA=;
-        b=GglgaCGqgZSl+MexwK/7D2od8VJwuJB69lszaYrfQku2ONkX5NY1UDrOfgtql+8Z5u
-         rJAgMC8H5Db5OR3kOCBeKp3dvag+ME3ZwLjGgyM2j5CedSSZARd1IIcCk6149ivvdIf0
-         G6lvfmJF461WuGC9zWeV8KxlnLd+veLgqPS9n3FOTkwJvXqQBniG/FgDAYNfG0XynlrX
-         swuSQMYE71M9668kZVJzIkCl1E0OPxPXvvoveDFYFDc0dQkecbsXVDhXSgDPssSWLNqC
-         Tc1ck2U0UfPDPeXLym3al4GMfy8naqqQ+hwejF5ldg3ox3emAHrjyoZDfLOobEUCcOwd
-         Vn+Q==
-X-Gm-Message-State: AO0yUKVZ55gf7BkmZDdDHjXPo3VSAQsUEqVWrTuDD1IBq92hZOt/T21h
-        QqfUjCb3fXGBh+uSSGAxoQozcg==
-X-Google-Smtp-Source: AK7set8+z14j6byknzmPNfNDAcrTd590sAlEwun1KVKdHHIegxp6ZEjbaL4ahrm/j8PcjQbdAxnScg==
-X-Received: by 2002:adf:a11e:0:b0:2bf:e9dc:5536 with SMTP id o30-20020adfa11e000000b002bfe9dc5536mr7841401wro.45.1675171167643;
-        Tue, 31 Jan 2023 05:19:27 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id b14-20020adff90e000000b002be34f87a34sm14918057wrr.1.2023.01.31.05.19.25
+        bh=Jr1LFm9oA7+foo+bfSwGKpAHgIHcluy5xuCOann7pyQ=;
+        b=BSIcyvPsHTrWM4/AYG3tSoxcPJbnT4t5RmvkqtXLnf1sR8qE/794BEuVpqvYYLqmUv
+         /scQlQ6EcHZdldU589ycKbGTOc/vyi3hb/jg8LKkHdtXUgM4+nmCVtwhCw9n6QiY7nH4
+         xhbEtT15q53XLV+wyx731TtqIShZU/K0/jERxI/GVClhzaJp5tClPQzg2Tz5a4oP+Mbz
+         O5C4fvmHC3V0/KaQDoGDl1doZoCQ1n0ZDP7mg6kPQIAdvmkyQCVXfOV9mqNL8WlXd86C
+         WBfblWWqCrUL9DPgF9Qu85kKZpjm57QnbFebEzZH6TiVACm42CmnBGYMwyMJc+vGLYiA
+         ry6A==
+X-Gm-Message-State: AFqh2kpIzp8N5sPgoYHf03dCcIK0e0HCI6v0aPNFPI5HHV+uVSNlc+jH
+        ZkvZFC1iV1Febl+0FnuB88SKQuOkqqM=
+X-Google-Smtp-Source: AMrXdXuvvddG0FTWrGWrwSEzgoKZht0FgNrkaUZipnCC0rF/Ib9qQ06Mv+6JlCf/IPSVU6/AnWLrzw==
+X-Received: by 2002:a05:600c:a4e:b0:3db:14d0:65be with SMTP id c14-20020a05600c0a4e00b003db14d065bemr48477657wmq.34.1675171324336;
+        Tue, 31 Jan 2023 05:22:04 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id j39-20020a05600c48a700b003db12112fcfsm1716851wmp.4.2023.01.31.05.22.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:19:27 -0800 (PST)
-Message-ID: <05668142-761b-e422-5c81-15a70fa77be8@linaro.org>
-Date:   Tue, 31 Jan 2023 14:19:24 +0100
+        Tue, 31 Jan 2023 05:22:03 -0800 (PST)
+Message-ID: <3d9ba55f-68fb-3643-9ab5-dacb903a5996@gmail.com>
+Date:   Tue, 31 Jan 2023 14:22:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/8] thermal: intel: intel_pch: Eliminate redundant
- return pointers
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 01/14] soc: mediatek: mtk-svs: restore default voltages
+ when svs_init02() fail
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Box <david.e.box@linux.intel.com>
-References: <1751684.VLH7GnMWUR@kreacher> <1847763.CQOukoFCf9@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1847763.CQOukoFCf9@kreacher>
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230111074528.29354-1-roger.lu@mediatek.com>
+ <20230111074528.29354-2-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230111074528.29354-2-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/01/2023 19:59, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+On 11/01/2023 08:45, Roger Lu wrote:
+> If svs init02 fail, it means we cannot rely on svs bank voltages anymore.
+> We need to disable svs function and restore DVFS opp voltages back to the
+> default voltages for making sure we have enough DVFS voltages.
 > 
-> Both pch_wpt_init() and pch_wpt_get_temp() can return the proper
-> result via their return values, so they do not need to use return
-> pointers.
-> 
-> Modify them accordingly.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Fixes: 681a02e95000 ("soc: mediatek: SVS: introduce MTK SVS engine")
+> Fixes: 0bbb09b2af9d ("soc: mediatek: SVS: add mt8192 SVS GPU driver")
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+
+Applied, thanks!
+
 > ---
-
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+>   drivers/soc/mediatek/mtk-svs.c | 24 ++++++++++++++++++++++--
+>   1 file changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index 0469c9dfeb04..2df30a6bca28 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -1461,6 +1461,7 @@ static int svs_init02(struct svs_platform *svsp)
+>   {
+>   	struct svs_bank *svsb;
+>   	unsigned long flags, time_left;
+> +	int ret;
+>   	u32 idx;
+>   
+>   	for (idx = 0; idx < svsp->bank_max; idx++) {
+> @@ -1479,7 +1480,8 @@ static int svs_init02(struct svs_platform *svsp)
+>   							msecs_to_jiffies(5000));
+>   		if (!time_left) {
+>   			dev_err(svsb->dev, "init02 completion timeout\n");
+> -			return -EBUSY;
+> +			ret = -EBUSY;
+> +			goto out_of_init02;
+>   		}
+>   	}
+>   
+> @@ -1497,12 +1499,30 @@ static int svs_init02(struct svs_platform *svsp)
+>   		if (svsb->type == SVSB_HIGH || svsb->type == SVSB_LOW) {
+>   			if (svs_sync_bank_volts_from_opp(svsb)) {
+>   				dev_err(svsb->dev, "sync volt fail\n");
+> -				return -EPERM;
+> +				ret = -EPERM;
+> +				goto out_of_init02;
+>   			}
+>   		}
+>   	}
+>   
+>   	return 0;
+> +
+> +out_of_init02:
+> +	for (idx = 0; idx < svsp->bank_max; idx++) {
+> +		svsb = &svsp->banks[idx];
+> +
+> +		spin_lock_irqsave(&svs_lock, flags);
+> +		svsp->pbank = svsb;
+> +		svs_switch_bank(svsp);
+> +		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
+> +		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
+> +		spin_unlock_irqrestore(&svs_lock, flags);
+> +
+> +		svsb->phase = SVSB_PHASE_ERROR;
+> +		svs_adjust_pm_opp_volts(svsb);
+> +	}
+> +
+> +	return ret;
+>   }
+>   
+>   static void svs_mon_mode(struct svs_platform *svsp)
