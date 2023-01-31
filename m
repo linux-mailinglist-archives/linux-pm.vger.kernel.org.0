@@ -2,111 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB296832D6
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 17:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B876832E6
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 17:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjAaQgX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 11:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S231145AbjAaQlS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 11:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjAaQgV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 11:36:21 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F5E73598;
-        Tue, 31 Jan 2023 08:36:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A743113E;
-        Tue, 31 Jan 2023 08:36:51 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 646273F64C;
-        Tue, 31 Jan 2023 08:36:07 -0800 (PST)
-Message-ID: <a5ac2767-6b15-23a2-9ebf-1aa02ee9c4f1@arm.com>
-Date:   Tue, 31 Jan 2023 17:36:05 +0100
+        with ESMTP id S229961AbjAaQlO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 11:41:14 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060E418140
+        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 08:41:13 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id m14so14320352wrg.13
+        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 08:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YhWVpau0dXVwuELHoiPSUTlj3PZlVLW33aApp56jjJQ=;
+        b=XKthMvlgA/Bv+b9UI+yMfqrwXyTzSuIBhWFrW0Aycn8TriVqabWKz/VgmFvGrh+YYW
+         EryzlHCVV4FnyV0qqUvcLN6wdIM9Y99EIJMnKE84BkIuEuWc2yS/6HHbWXq9mckuTvXQ
+         GahdU2iufjpVawa08dYd+kht1Nl4kMHmHRf3Nh3oUkyvSlTyF/eEwfQeikkXlAmx4uJp
+         7qzkPjBIuyrd7qtMq5ojgdj0GMYD5fsHDxKLjRZiSlWQCE3cFpxWTBKxsXw8xvsJdnhR
+         6cqZfQhzmAWV+EFajkUuz0utSoWTETBCKuazudXKwk/nIBNHAL16QHF5GkR41kNLXyXT
+         Au+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YhWVpau0dXVwuELHoiPSUTlj3PZlVLW33aApp56jjJQ=;
+        b=6lp/qBi3M2tJ7fj41jxY38Bt38Xl2G9w7zssm8Qmr1gHQIbUhMhbDW5X6nFkSm10Tp
+         gkF4KLMxYVuTjLJZtIrR2EXEVyhfoTZZgMO8ePRml/r6othtMH649t9JujPlq7wWZ2iD
+         +hOaESf940quasaPIyO0svRbjRM+DXByf6D6CMk37D3KC2TQciodWi9ZPRKL2Cmjyj0O
+         R+DkzoKmdfBz3BesYjMteaTRtwja72MOdZlsVzqWJPpcGJmdDWStmUudoBKlurzHc0S0
+         zX4GvvJjPpMQh1a0XTpXIj0OaOIKDfRXIBlKOX3aGNGpjhETsvJOmqzgb8g79dy82G24
+         BINg==
+X-Gm-Message-State: AO0yUKUd8QArpcOcdixJ/rQJP6rBsfgsb/ax8d8DeFNymRDwVbtCgZGY
+        Xsu8nmC3/uGCSJaARlDRhO341W85isOv93kV
+X-Google-Smtp-Source: AK7set8jSCvPamJdPNrdVYHcStifk4Yp2eqGvyzpIZ28Z24OGqEkWQ0/RrhD1sNzkk6J8odImxuxVw==
+X-Received: by 2002:adf:e90f:0:b0:2bf:ee0f:9f04 with SMTP id f15-20020adfe90f000000b002bfee0f9f04mr7421527wrm.45.1675183271438;
+        Tue, 31 Jan 2023 08:41:11 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id b14-20020adff90e000000b002be34f87a34sm15369083wrr.1.2023.01.31.08.41.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 08:41:11 -0800 (PST)
+Message-ID: <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
+Date:   Tue, 31 Jan 2023 17:41:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v4] sched/fair: unlink misfit task from cpu overutilized
+Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for
+ quark_dts
 Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
-        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-References: <20230119174244.2059628-1-vincent.guittot@linaro.org>
- <d5012cdf-ad5b-adf8-11f6-8ac2c3a89f0b@arm.com>
- <20230129162120.ynzgsxsdjwluucmk@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230129162120.ynzgsxsdjwluucmk@airbuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Amit Kucheria <amitk@kernel.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/01/2023 17:21, Qais Yousef wrote:
-> On 01/26/23 12:42, Dietmar Eggemann wrote:
->> On 19/01/2023 17:42, Vincent Guittot wrote:
+On 26/01/2023 15:15, Rafael J. Wysocki wrote:
+> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> The thermal framework gives the possibility to register the trip
+>> points with the thermal zone. When that is done, no get_trip_* ops are
+>> needed and they can be removed.
+>>
+>> Convert ops content logic into generic trip points and register them with the
+>> thermal zone.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
 
-[...]
+[ ... ]
 
->> We had already this discussion whether this patch can also remove
->> Capacity Inversion (CapInv).
->>
->> After studying the code again, I'm not so sure anymore.
->>
->> This patch:
->>
->> (1) adds a dedicated return value (-1) to util_fits_cpu() when:
->>
->> `util fits 80% capacity_of() && util < uclamp_min && uclamp_min >
->> capacity_orig_thermal (region c)`
->>
->> (2) Enhancements to the CPU selection in sic() and feec() to cater for
->> this new return value.
+>> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
+>> -                       QRK_MAX_DTS_TRIPS,
+>> -                       wr_mask,
+>> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
+>> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
+>> +       if (err)
+>> +               goto err_ret;
+>> +
+>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
+>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
+>> +
+>> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
+>> +       if (err)
+>> +               goto err_ret;
 > 
-> -1 means that the task fits, but only uclamp_min hint fails. ie: the task util
-> is small enough to run on this cpu, but it would like to run faster and this
-> cpu can't satisfy this request at the moment.
-
-Agreed.
-
->> IMHO this doesn't make the intention of CapInv in util_fits_cpu()
->> obsolete, which is using:
->>
->> in CapInv:
->>
->>   capacity_orig         = capacity_orig_of() - thermal_load_avg
->>   capacity_orig_thermal = capacity_orig_of() - thermal_load_avg
->>
->> not in CapInv:
->>
->>   capacity_orig         = capacity_orig_of()
->>   capacity_orig_thermal = capacity_orig_of() - th_pressure
->>
->> Maybe I still miss a bit of the story?
+> If I'm not mistaken, this won't even try to register the thermal zone
+> if at least one trip cannot be initialized, but previously it was
+> registered in that case, but the trips that failed to respond were
+> disabled.
 > 
-> Vincent approach is different to mine. I tried to hide all the complexity in
-> util_fits_cpu() so all users don't care.
+> This is a change in behavior that would at least need to be documented
+> in the changelog, but it isn't.
 > 
-> But with Vincent changes, now the decision is delegated to the caller to decide
-> what to do if thermal pressure is causing trouble.
-> 
-> IOW, I expect this line only stay after Vincent patch
-> 
-> 	capacity_orig_thermal = capacity_orig_of() - th_pressure
+> I'm not sure if it is safe to make even, however.
 
-OK, makes sense (for now - rework of what capacity_orig_thermal should
-really be still ahead of us).
+Thanks for catching this.
 
-Thanks!
+Two solutions:
 
--- Dietmar
+1. Set the temperature to THERMAL_TEMP_INVALID and change 
+get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is 
+THERMAL_TEMP_INVALID
 
-[...]
+2. Register only the valid trip points.
+
+What would be the preferable way ?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
