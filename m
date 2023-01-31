@@ -2,166 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643B868281E
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 10:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2009682A75
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 11:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjAaJGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 04:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S229880AbjAaK0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 05:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbjAaJF2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 04:05:28 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2075.outbound.protection.outlook.com [40.107.95.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77EE1D938;
-        Tue, 31 Jan 2023 01:01:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gL+g2H2z/3sAKymJQGGAGYa098Bdv2LZWNUsMz+J6LHX7t4ta9YHE60jMQal9A+LXNlMioAJdKNqBJA4rCJ2L6R9bTH2iCvTC5Bt1lCFoV9OltC/GPzVpibVCIwtljkDOTc47m0mdj3bl/v4zXaWX1dkd6zSCp8irksQX7P5ZPnUSQS70I/Wzx4PndFIEfay2WdbiGEoZLC5stkAoonNH+keQxr6BR6SPd2gCBCRzZ+OwTLUTq39U9a07z8N5uqCoqtyIdp49Xc5/jAHUOu8pSOZ1LJYjk9sWrgED7GQQWtMBhQ2zxeTVlJVtv0O91q5P2Smmsb4lwyq2ya8dXriLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Noen4OCHV20exX3SkQuvyAz5WIkB8aTweLqLsdGjQI4=;
- b=as6c3xMX7Vt0vZuw/mWkhS4KHWh6M5PmuSXcVolJdtl1TaI0tVXvhJoyOavq/RYAB7iuHuJDeeg9fWwD+2BJv7duBz/2ukrXr8KEcKnBIlL18Hol/wrbUihMlTdj+3UfhP2Gbry3xpzWn5PVrs158cAFFLwA0fDmChlIBmDXZZOCqqbGa3yMcTX4dyAr9nhNntYdNCTm5HcSKJDuYXXE08Dbs8MWcXFP/e99otfb3/qWetUfQAk+CZJRZMRDSLnE8CFMGCF2zLjwnunBHbb4iVZkoP8gmZtg5wQka6mWJ6sutddKYlTOCY++OoBEYRDFGN/4jzWbkSvgnkXw8gRFJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Noen4OCHV20exX3SkQuvyAz5WIkB8aTweLqLsdGjQI4=;
- b=0299HKv+OYn09+Hse/yEIq2lxOyRbEhNh/0yE8tNZVCP3Wg8q8umKej8VKbpxdFSMvWN7B50c7NRRp5cTQWl97gTkXCa919vf+OxK7yQvZP+IWLDJvzFlbtc1mZhMDlYVZi+u+bZzy/6WJ68xvK0LVMZlEYxwi2FKbO4LKw19LQ=
-Received: from MW4PR04CA0117.namprd04.prod.outlook.com (2603:10b6:303:83::32)
- by SA3PR12MB8000.namprd12.prod.outlook.com (2603:10b6:806:31f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
- 2023 09:01:23 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::78) by MW4PR04CA0117.outlook.office365.com
- (2603:10b6:303:83::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38 via Frontend
- Transport; Tue, 31 Jan 2023 09:01:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6043.22 via Frontend Transport; Tue, 31 Jan 2023 09:01:22 +0000
-Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 31 Jan 2023 03:01:18 -0600
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
-        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v12 11/11] Documentation: amd-pstate: introduce new global sysfs attributes
-Date:   Tue, 31 Jan 2023 17:00:16 +0800
-Message-ID: <20230131090016.3970625-12-perry.yuan@amd.com>
+        with ESMTP id S229868AbjAaK0k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 05:26:40 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561C46E91
+        for <linux-pm@vger.kernel.org>; Tue, 31 Jan 2023 02:26:37 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:fd54:3eff:f16a:8c82])
+        by baptiste.telenet-ops.be with bizsmtp
+        id FNSa2900B3oGUMV01NSaDd; Tue, 31 Jan 2023 11:26:35 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMnqG-007vjW-8v;
+        Tue, 31 Jan 2023 11:26:34 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMnqU-000NPv-6X;
+        Tue, 31 Jan 2023 11:26:34 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] thermal: Drop spaces before TABs
+Date:   Tue, 31 Jan 2023 11:26:32 +0100
+Message-Id: <cda2b9ee52a49fa3904d209097754cd757728a4f.1675160668.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230131090016.3970625-1-perry.yuan@amd.com>
-References: <20230131090016.3970625-1-perry.yuan@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|SA3PR12MB8000:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ff5bbab-5b3e-4404-c5b8-08db0369b9fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: odUHlkWadRm9/XoIQjY+/bVyajqG9Msb6IezeNAgqgqQa9LH0y7YBJz8349bxmgLoAGikH6f71SxenbhS0+fRYf8KueLZGDRsh8O6sh/jkaeZmsncYNFwMNm3fKU0aJWoAKhWUjfpvyRmFoBkcQhWXfAo6HzEbcKyQ39thwPaLjH7kfukyoDjNY72PjeICe3El/2uE6qs91Z8rTDAINwPFaxezQw002zr+YhOD6cuECCi227ixEtI9ibixz2OXrKqdwRry/Eep4IxCQp+xyII3gCvOrNcHRVZ3EWmqQVQbrQeWo3L+HA6gICjSC/sujPST9ZTQ9GtSvLSsaz7BMJzeOXOKpaR4iB3OXTu46YbtRF5IYvlxDAqdFKYprsAUQ0C+xgdh19gOoRHfvWn1DmbR1u7wvGZh2lpM3XQcjNFdefVS5Nvf1G2+PosF959UGpnNyygcv9Kh1ReCrh5o50axI6+ytx/Y+gh24zn8i+P4Ns7wNOEO1OYoCKfPD+ry7E1wxiOdoDgemlHTXzmCTQt6/d6QyJx1ZRT1sVYUUquX2d/0F80pYNpOUJrJy0CH7OtisCjpKhmLP9Njuwnvm48TlyQ7CmoLYeLQQyfaIsOQ/FiaC8EIXjXNVlJLhROHPpssm2IFpD1MM6wXUu4lupIlaEsYsb1s/O64/jn6RZfRN8GWcoeintYzwHm3QuKau8k65GPJOnbMXgfyKOBqeowSV6YxJdDaY3GCtG+4EIISs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199018)(36840700001)(40470700004)(46966006)(8936002)(2906002)(8676002)(4326008)(44832011)(336012)(478600001)(36756003)(40460700003)(5660300002)(186003)(16526019)(26005)(7696005)(2616005)(40480700001)(86362001)(1076003)(426003)(47076005)(41300700001)(82310400005)(356005)(81166007)(83380400001)(70586007)(70206006)(82740400003)(316002)(36860700001)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 09:01:22.8360
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ff5bbab-5b3e-4404-c5b8-08db0369b9fd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8000
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The amd-pstate driver supports switching working modes at runtime.
-Users can view and change modes by interacting with the "status" sysfs
-attribute.
+There is never a need to have a space before a TAB, but they hurt the
+eyes of vim users.
 
-1) check driver mode:
-$ cat /sys/devices/system/cpu/amd-pstate/status
-
-2) switch mode:
-`# echo "passive" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
-or
-`# echo "active" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
-
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Tested-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- Documentation/admin-guide/pm/amd-pstate.rst | 29 +++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/thermal/Makefile               |  2 +-
+ drivers/thermal/st/st_thermal.h        | 18 +++++++++---------
+ drivers/thermal/st/st_thermal_memmap.c |  2 +-
+ drivers/thermal/st/st_thermal_syscfg.c |  2 +-
+ drivers/thermal/thermal_of.c           |  2 +-
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index b6aee69f564f..5304adf2fc2f 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -339,6 +339,35 @@ processor must provide at least nominal performance requested and go higher if c
- operating conditions allow.
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 60f0dfa9aae241df..d8f1ab250cb1a1f8 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -41,7 +41,7 @@ obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
+ obj-$(CONFIG_RZG2L_THERMAL)	+= rzg2l_thermal.o
+ obj-$(CONFIG_KIRKWOOD_THERMAL)  += kirkwood_thermal.o
+ obj-y				+= samsung/
+-obj-$(CONFIG_DOVE_THERMAL)  	+= dove_thermal.o
++obj-$(CONFIG_DOVE_THERMAL)	+= dove_thermal.o
+ obj-$(CONFIG_DB8500_THERMAL)	+= db8500_thermal.o
+ obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
+ obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
+diff --git a/drivers/thermal/st/st_thermal.h b/drivers/thermal/st/st_thermal.h
+index d661b2f2ef29f2c5..0e819ee93bbd54b0 100644
+--- a/drivers/thermal/st/st_thermal.h
++++ b/drivers/thermal/st/st_thermal.h
+@@ -38,10 +38,10 @@ struct st_thermal_sensor;
+  *
+  * @power_ctrl:		Function for powering on/off a sensor. Clock to the
+  *			sensor is also controlled from this function.
+- * @alloc_regfields: 	Allocate regmap register fields, specific to a sensor.
+- * @do_memmap_regmap: 	Memory map the thermal register space and init regmap
++ * @alloc_regfields:	Allocate regmap register fields, specific to a sensor.
++ * @do_memmap_regmap:	Memory map the thermal register space and init regmap
+  *			instance or find regmap instance.
+- * @register_irq: 	Register an interrupt handler for a sensor.
++ * @register_irq:	Register an interrupt handler for a sensor.
+  */
+ struct st_thermal_sensor_ops {
+ 	int (*power_ctrl)(struct st_thermal_sensor *, enum st_thermal_power_state);
+@@ -56,15 +56,15 @@ struct st_thermal_sensor_ops {
+  *
+  * @reg_fields:		Pointer to the regfields array for a sensor.
+  * @sys_compat:		Pointer to the syscon node compatible string.
+- * @ops: 		Pointer to private thermal ops for a sensor.
+- * @calibration_val: 	Default calibration value to be written to the DCORRECT
++ * @ops:		Pointer to private thermal ops for a sensor.
++ * @calibration_val:	Default calibration value to be written to the DCORRECT
+  *			register field for a sensor.
+- * @temp_adjust_val: 	Value to be added/subtracted from the data read from
++ * @temp_adjust_val:	Value to be added/subtracted from the data read from
+  *			the sensor. If value needs to be added please provide a
+  *			positive value and if it is to be subtracted please
+- * 			provide a negative value.
+- * @crit_temp: 		The temperature beyond which the SoC should be shutdown
+- * 			to prevent damage.
++ *			provide a negative value.
++ * @crit_temp:		The temperature beyond which the SoC should be shutdown
++ *			to prevent damage.
+  */
+ struct st_thermal_compat_data {
+ 	char *sys_compat;
+diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
+index d68596c40be99009..7266d0d74fd8d3cf 100644
+--- a/drivers/thermal/st/st_thermal_memmap.c
++++ b/drivers/thermal/st/st_thermal_memmap.c
+@@ -27,7 +27,7 @@ static const struct reg_field st_mmap_thermal_regfields[MAX_REGFIELDS] = {
+ 	 * written simultaneously for powering on and off the temperature
+ 	 * sensor. regmap_update_bits() will be used to update the register.
+ 	 */
+-	[INT_THRESH_HI]	= REG_FIELD(STIH416_MPE_INT_THRESH, 	0,  7),
++	[INT_THRESH_HI]	= REG_FIELD(STIH416_MPE_INT_THRESH,	0,  7),
+ 	[DCORRECT]	= REG_FIELD(STIH416_MPE_CONF,		5,  9),
+ 	[OVERFLOW]	= REG_FIELD(STIH416_MPE_STATUS,		9,  9),
+ 	[DATA]		= REG_FIELD(STIH416_MPE_STATUS,		11, 18),
+diff --git a/drivers/thermal/st/st_thermal_syscfg.c b/drivers/thermal/st/st_thermal_syscfg.c
+index 94efecf35cf83c2d..1106be5a1eded52e 100644
+--- a/drivers/thermal/st/st_thermal_syscfg.c
++++ b/drivers/thermal/st/st_thermal_syscfg.c
+@@ -35,7 +35,7 @@ static const struct reg_field st_415sas_regfields[MAX_REGFIELDS] = {
+ 	[TEMP_PWR] = REG_FIELD(STIH415_SAS_THSENS_CONF,   9,  9),
+ 	[DCORRECT] = REG_FIELD(STIH415_SAS_THSENS_CONF,   4,  8),
+ 	[OVERFLOW] = REG_FIELD(STIH415_SAS_THSENS_STATUS, 8,  8),
+-	[DATA] 	   = REG_FIELD(STIH415_SAS_THSENS_STATUS, 10, 16),
++	[DATA]	   = REG_FIELD(STIH415_SAS_THSENS_STATUS, 10, 16),
+ };
  
- 
-+User Space Interface in ``sysfs``
-+=================================
-+
-+Global Attributes
-+-----------------
-+
-+``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
-+control its functionality at the system level.  They are located in the
-+``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
-+
-+``status``
-+	Operation mode of the driver: "active", "passive" or "disable".
-+
-+	"active"
-+		The driver is functional and in the ``active mode``
-+
-+	"passive"
-+		The driver is functional and in the ``passive mode``
-+
-+	"disable"
-+		The driver is unregistered and not functional now.
-+
-+        This attribute can be written to in order to change the driver's
-+        operation mode or to unregister it.  The string written to it must be
-+        one of the possible values of it and, if successful, writing one of
-+        these values to the sysfs file will cause the driver to switch over
-+        to the operation mode represented by that string - or to be
-+        unregistered in the "disable" case.
-+
- ``cpupower`` tool support for ``amd-pstate``
- ===============================================
- 
+ static const struct reg_field st_415mpe_regfields[MAX_REGFIELDS] = {
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index ff4d12ef51bcb6ed..8f4d5d671def1258 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -469,7 +469,7 @@ EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);
+  * @ops: A set of thermal sensor ops
+  *
+  * Return: a valid thermal zone structure pointer on success.
+- * 	- EINVAL: if the device tree thermal description is malformed
++ *	- EINVAL: if the device tree thermal description is malformed
+  *	- ENOMEM: if one structure can not be allocated
+  *	- Other negative errors are returned by the underlying called functions
+  */
 -- 
 2.34.1
 
