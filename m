@@ -2,68 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885C3683630
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 20:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26740683643
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 20:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjAaTLn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 14:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S230324AbjAaTSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 14:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjAaTLl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 14:11:41 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F259757;
-        Tue, 31 Jan 2023 11:11:22 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id mc11so22126758ejb.10;
-        Tue, 31 Jan 2023 11:11:22 -0800 (PST)
+        with ESMTP id S229488AbjAaTSK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 14:18:10 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5599911EAC;
+        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id me3so44675047ejb.7;
+        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Tj0B2PQQQxR/rYyVsTlUwChxXn317haBHssuZ5ZKr0=;
-        b=iexSjDmiJRhSBfhKq0wQULQGguBxwHBcaJ3vhTYbdz9/4z7/m66dCgTpiEKlSi5QV7
-         4XEpTI4X/w8yxUwGZw5PNibTxn48t1cDfvkrw0V0lysbZPYEU9anKtJTKLmkV4T+D6Y+
-         m253CvsmTOR3e93PAMEtnDt1IOMmz3g+uinVwYqsZFn/MJSFYDZzDXyRefwHLwPSfUA0
-         LkoHAH8Hby3ZybwXhNenlu2u1EC3wBXoaYkxN4xUEvT+XHATvEY/UmkPgVGTezl0VUHr
-         KMe5MONzYnRPpD9zWowJuJ5ltNb8m1oMz8lxKha7Ywg9W1zQqg17dsMbm+n9diDIyzwc
-         Id9w==
-X-Gm-Message-State: AFqh2kpv/KDixrluSiYPNfe7puvDObb3G5121IDT6YKH13YK0gezms3i
-        KA1muLWaM2iU9tRkuX2jv6yTfp4SHeAlNlI3gUc=
-X-Google-Smtp-Source: AMrXdXtQTTHdk8ueOISoJacuHi8SLaecWPqeHwKjbXofOFyGnO9Zu88BjZOdI0mcRJnvaVkd71hV3i7D/VH5OdBs9ZQ=
-X-Received: by 2002:a17:907:c928:b0:85e:4218:c011 with SMTP id
- ui40-20020a170907c92800b0085e4218c011mr8652949ejc.258.1675192276763; Tue, 31
- Jan 2023 11:11:16 -0800 (PST)
+        bh=PgqXjqu7PB4cDpZ4t5aYViWzYUyq/bNQ+W4YAsennk4=;
+        b=uU7se3VGBpAAkNx7sZ+NqrPzdyHiDcWBsY71wZJpoZND8nX8VkqsryDDfL6jlQMirS
+         1cS294PrCZU7wMPy7d4G8LOTyeCkPliq3SSF27KduRecWT0v+tM3q07LUyAr6rfRnedU
+         MoQFirplm+xRIWSSQffkG11GNVpiY16VcOTfh8G/+Xyjz6+zDhJ9f2rM80knwN/gT0Bh
+         JIBu2mkiHZWtbwuP0Lo42DCWU7EWSl3pqtvysCJ5gISHb+NI9Ifxsg+PMUUXc/7CH1X1
+         aLa8buzkwKaQ7uGM0ya6BVyGNkUBrFJKlUxQFnJ6Up6NTVqFVJFfcG8efFPpMUKBabRy
+         jovQ==
+X-Gm-Message-State: AO0yUKUf83v7fbsvizJEIrpSvawPVTH7DvDaDI+xiDWjc8VrBw1oLkil
+        tCGjGQeymLsQqpBKz/MaizTGKcBcGBd8z8Hm2UU=
+X-Google-Smtp-Source: AK7set/8MNl94eWnK+p2gRPKvJNunvkkdqU775q8MznNt3ygHG6M0TswuNUlDSLpgbXu/IiXn0SeDaSBftVXXzqBmgY=
+X-Received: by 2002:a17:906:95d7:b0:88a:30dc:5730 with SMTP id
+ n23-20020a17090695d700b0088a30dc5730mr2170974ejy.25.1675192685276; Tue, 31
+ Jan 2023 11:18:05 -0800 (PST)
 MIME-Version: 1.0
 References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com> <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
-In-Reply-To: <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
+ <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
+ <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
+In-Reply-To: <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 31 Jan 2023 20:11:05 +0100
-Message-ID: <CAJZ5v0iOYH4WR5WoH=jL6VWKhB4CMeZv5V3U0Q_c_qdCJvvvBw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
+Date:   Tue, 31 Jan 2023 20:17:54 +0100
+Message-ID: <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
         Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
+On Tue, Jan 31, 2023 at 6:03 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> On 26/01/2023 15:15, Rafael J. Wysocki wrote:
+>
+> Hi Rafael,
+>
+>
+> On 26/01/2023 17:47, Rafael J. Wysocki wrote:
 > > On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
 > > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> From: Daniel Lezcano <daniel.lezcano@kernel.org>
 > >>
 > >> The thermal framework gives the possibility to register the trip
 > >> points with the thermal zone. When that is done, no get_trip_* ops are
@@ -77,45 +85,33 @@ On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
 >
 > [ ... ]
 >
-> >> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
-> >> -                       QRK_MAX_DTS_TRIPS,
-> >> -                       wr_mask,
-> >> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
-> >> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
-> >> +       if (err)
-> >> +               goto err_ret;
+> >> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
+> >>          if (status)
+> >>                  goto err_restore_te_out;
+> >>
+> >> -       dts->trip_types[thres_index] = trip_type;
+> >> -
+> >> +       status = get_trip_temp(sensors, thres_index, &temp);
+> >> +       if (status)
+> >> +               goto err_restore_te_out;
 > >> +
-> >> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
-> >> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-> >> +
-> >> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
-> >> +       if (err)
-> >> +               goto err_ret;
+> >> +       dts->trips[thres_index].type = trip_type;
+> >> +       dts->trips[thres_index].temperature = temp;
 > >
-> > If I'm not mistaken, this won't even try to register the thermal zone
-> > if at least one trip cannot be initialized, but previously it was
-> > registered in that case, but the trips that failed to respond were
-> > disabled.
+> > This change doesn't look correct to me, because this function takes
+> > temp as an argument and it is used to populate the trip with it at
+> > least in some cases.
 > >
-> > This is a change in behavior that would at least need to be documented
-> > in the changelog, but it isn't.
-> >
-> > I'm not sure if it is safe to make even, however.
+> > Why should temp be overwritten here?
 >
-> Thanks for catching this.
+> You are correct. This is wrong.
 >
-> Two solutions:
->
-> 1. Set the temperature to THERMAL_TEMP_INVALID and change
-> get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is
-> THERMAL_TEMP_INVALID
->
-> 2. Register only the valid trip points.
->
-> What would be the preferable way ?
+> I think we should call get_trip_temp() before calling update_trip_temp()
+> instead of passing a zero temperature parameter
 
-I think that the trip points that are registered currently need to
-still be registered after the change.
+update_trip_temp() is sort of a misnomer, because it is used for
+initializing a trip point for example in
+intel_soc_dts_iosf_add_read_only_critical_trip() and in this
+particular case get_trip_temp() need not be called before it.
 
-Does registering a trip point with the temperature set to
-THERMAL_TEMP_INVALID cause it to be effectively disabled?
+This driver seems to be in need of a cleanup.
