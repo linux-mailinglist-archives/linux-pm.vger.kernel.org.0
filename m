@@ -2,86 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271EB68318F
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 16:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8A5683148
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 16:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbjAaPcf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 10:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S233197AbjAaPVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 10:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbjAaPcb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 10:32:31 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Jan 2023 07:32:31 PST
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C757199FB;
-        Tue, 31 Jan 2023 07:32:31 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id EC25A11F6B51;
-        Tue, 31 Jan 2023 16:13:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1675178012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SEAFekxO4H1r0D0uCq8wnBQbhqfRc6NLBnWGl+JsmXc=;
-        b=tjKz44pDJwB6f8baVJEvgny1EJsyMst+Y/ZkdXo6IoXPslCNquifKGGDuTBpDrJsCBe2Ky
-        g6RyIOi/LTpj+Id7xPevFkXwYi99T4Sho7F8ZnU4Iq2Lkb265x52TShUvMwLfY8SGdj0Yv
-        HO1C6GCKW6by2OC8izCMKYkkoeW9lEE=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Wyes Karny <wyes.karny@amd.com>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S230054AbjAaPUg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 10:20:36 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DAE5866F;
+        Tue, 31 Jan 2023 07:18:32 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12708689wma.1;
+        Tue, 31 Jan 2023 07:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBwrI8hKmSv5gQ7N7D3hIfQL3dVj+xe6qEN98lCdCy0=;
+        b=KUvk6pa+U6ArxTo3fM5DG3JpjKo5Mparu+2/mk+iCDI/peBaxA3PK9rAFfvRCUXu57
+         kS6KKtIfsB5+4KDeLjxkUqzowUynUK6Bggov5so9huUjuB8vxtXaylHXdP9YeSHzt7tx
+         9Rmk6bn88UuIjtj63z/UaEyg0XCx7lxEYHS64Ulhv8bqk2KhIYBGAOYBYowTAlPDYEiu
+         OQ53w+e3VH2C0NOAQmDH15haFVFBqsOU+BmdaIq3ZG4PItdg7kzy+QpQt1H+WoWwsfle
+         Brbx9uW1Z2/pjU1oX93aoRVkElmYBJaqeWPOd3wUAVTHJCZQ72d3FtbyROAH+yDL3voH
+         4Big==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bBwrI8hKmSv5gQ7N7D3hIfQL3dVj+xe6qEN98lCdCy0=;
+        b=UgpC9zeGEF/tKv+TCTCXPEfW8sVqz/OpWCjdkZiSKDXcWMjBkH8C1VVjpanVWufFxR
+         qibvClZNhWtXUdTdEZize5quw0riwKBPRMcRqAV+l5EKKjTi4jkAEdSwrvVszRE+p5bF
+         lpfnhOFLzA8bogdQUHz0wFxfMDQPcTiaB0MUE7RsYPHn1FjglVpNlzIHpmoeHyj4VI39
+         c6z5koFvnguBFNeNToUdedghyRJ5vJx2AjrdzS6XGlYpIwvh+jv5P+Qs97yobj9IDQmo
+         QXgUUPr66w+qibf7Ha3utZLC1zlvXXiqIeuZ+n5aQDc4TT21cw82Z2QG6AshgFd6Zx8I
+         5luw==
+X-Gm-Message-State: AO0yUKXRqMLnkVoKWXmNFWL+AWWftVRCHeBz1bbjAFVS3TL8QVovHLOZ
+        toibGtwrFVBc0tSld4MFVlhDKziyvtk=
+X-Google-Smtp-Source: AK7set+VVu+M+aULp66owrhILnZtcngXHdXkQ2pADm4UZQdos1fjvbwnPnM2kpyojLmxxTWfqCzXpg==
+X-Received: by 2002:a05:600c:3492:b0:3dc:de85:5007 with SMTP id a18-20020a05600c349200b003dcde855007mr5985854wmq.21.1675178311223;
+        Tue, 31 Jan 2023 07:18:31 -0800 (PST)
+Received: from localhost.localdomain (93-34-88-241.ip49.fastwebnet.it. [93.34.88.241])
+        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm2854861wmj.0.2023.01.31.07.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 07:18:30 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com, torvic9@mailbox.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>, gautham.shenoy@amd.com
-Subject: Re: [PATCH v4 0/6] amd_pstate: Add guided autonomous mode support
-Date:   Tue, 31 Jan 2023 16:13:30 +0100
-Message-ID: <5643269.DvuYhMxLoT@natalenko.name>
-In-Reply-To: <1501106335.274.1675161471528@office.mailbox.org>
-References: <20230131052141.96475-1-wyes.karny@amd.com>
- <1501106335.274.1675161471528@office.mailbox.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v5 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify supported opp tables
+Date:   Tue, 31 Jan 2023 16:18:17 +0100
+Message-Id: <20230131151819.16612-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello.
+Add additional info on what opp tables the defined devices in this schema
+supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+and reference them.
 
-On =FAter=FD 31. ledna 2023 11:37:51 CET torvic9@mailbox.org wrote:
-> Can you rebase this patchset onto the newest EPP v12 series [1] ?
->=20
-> [1] https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@=
-amd.com/
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+Changes v5:
+- Swap patch 1 and patch 2 to fix dt_check_warning on single
+  patch bisecting 
+Changes v4:
+- Add patch split from patch 1
 
-You may consider trying my rebase here: [1].
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
-This commit applies to v11+v3 series. I hope I didn't miss anything.
-
-If interested, please let me know whether it works for you.
-
-Thanks.
-
-[1] https://codeberg.org/pf-kernel/linux/commit/438525b8029b23967722e9c7af9=
-7c6b8deb25029
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..7c42d9439abd 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -55,15 +55,32 @@ properties:
+ 
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
+-      properties:
+-        compatible:
+-          const: operating-points-v2-kryo-cpu
+-    then:
+-      patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          patternProperties:
++            '^opp-?[0-9]+$':
++              required:
++                - required-opps
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
+ 
+ additionalProperties: true
+ 
+-- 
+2.38.1
 
