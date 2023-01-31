@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B018682E1D
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC994682E26
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjAaNhn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 08:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S231822AbjAaNk0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 08:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjAaNhn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:37:43 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBED650875;
-        Tue, 31 Jan 2023 05:37:37 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso4454082wmp.3;
-        Tue, 31 Jan 2023 05:37:37 -0800 (PST)
+        with ESMTP id S232069AbjAaNkZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:40:25 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C59B5143F;
+        Tue, 31 Jan 2023 05:40:23 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so10646323wmq.0;
+        Tue, 31 Jan 2023 05:40:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gN8Wq5E0N3HaFBsHRV9eya7b4jMZgDEegEG0/7rxU6Y=;
-        b=M6fdQdSxkncaF2gGsMGmgwiRTx17JrkmhphINg4jzKeXIuUUE1NClOZlA7lVuWJSjN
-         v+SEeYL251vyLO2jJDt2liXop052ZSYklXuUYxSCDnEm/j+QWu6ecEzDtxaiXYvozVhP
-         GrYlTT9qUcHjJ7SKnGBvyPkvBFAga/Z5tWgD2xAENUFPlL6H5ne63PQ0IGYZeJDuKweG
-         +oMFYUHPIQ4bwSSfJ09zxZIqEREqJa8kfxaX17h+xwP5tBxPCocx6ANCbJdzFgk7oVwR
-         /QrcBX1MqLYpJSm45IIwP74qjZeF319LZw2WmJ5KRm1Xe+JtbsIVJ5PCSJ50n3+Z9KmN
-         zO5g==
+        bh=GFfnKzW9khIrRw3lbxbS734cPxF5yNl0uJsJQazws/8=;
+        b=T9+RLizSsnKshbSBWeeW9niEYTMA4aK8QJGntvDs58DAs2bQE5DmB4KM2UrFxz47yv
+         9xgskCl2Vu+Nb69q9FZp2QbJCBe6M8AB9KpwlJJ3Z/5Z7/kQaTiNioV37W9XH+G0IxTJ
+         QDelaSU9HpVExuchwQ2L/HoUDh/NC5KnSAbim6YHbYE1wrNWw8LzmC8tyT/37jMGFoq0
+         UtLjzEs91A/9qgC7ZmHAMRMZJKdlEjxHy8lcIxY2tOMNhb6ZBwii8EOCJOPFJeSMDSUV
+         JjBeqqCLDxKKg1C/51MXUSgN8qCPJp/LqaK8xADKrMUWiIgDcZVPGZf7wqIenJeOwEWP
+         bH6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gN8Wq5E0N3HaFBsHRV9eya7b4jMZgDEegEG0/7rxU6Y=;
-        b=MESju2UZ8LVS4b/NugiwCfbs0s+WMH4O3MGA91D9pEIm+nbOLU+ksJw1tnJ6452EgA
-         FQYuvEtyEEyImGClg9xsAWxp/8oOJeYFirl4umTMX66eF0SlFVq6sh8w46Djgb8rllFh
-         T6riT5HkgotfL8HwPnAxnW0WDboL3aFt79ZOs3jIESsng8VrDl4mAkDUCuS9wzs4M0GN
-         5x98vaY9c+tzj3UnqMvC6wihnC3Icgfkh9kil4RgwoZGCZXl0gWEEH0FraPxBu2P+sI0
-         3lSKibi7dtNAEtCaljjppJ8gyydrtnjzLkll4fYwN6feXvzPoGTBFMTfl8p2iw9Bfer3
-         PtYw==
-X-Gm-Message-State: AO0yUKXQkOuSFJIZu+Y1DHw6b84IoFzU/I4oTAG9yl0AAQpqXJDytggW
-        kd8Kboz1j2CPT5QXji7Hc8o=
-X-Google-Smtp-Source: AK7set++xleaE8Iw4YlNEsa+QphiRF4k9n4Zuxxob7UJsMazROSSd23CO1qgR/pRIHH2ikmmllOqcA==
-X-Received: by 2002:a05:600c:314f:b0:3dc:4aa6:a8a9 with SMTP id h15-20020a05600c314f00b003dc4aa6a8a9mr3641957wmo.7.1675172256417;
-        Tue, 31 Jan 2023 05:37:36 -0800 (PST)
+        bh=GFfnKzW9khIrRw3lbxbS734cPxF5yNl0uJsJQazws/8=;
+        b=lI8D8zCcTTZl8GA9ZDPVBGN6YwztNDqlkc6EWUYfW/EhoeH/22dOvsmf/23Zijkuyf
+         4uO8MWoctGld6z97UgdY8zivCwQxl6MtOUKGiW2svo8nesVBeDCmn5fOJWP+w66ZtQPj
+         Qi783ALvKIxiKNlzRSOQgcl7Y6SxaC15v5JZkuxAtEL6hYd8ttUhQhjWsmiUQVlpHh6m
+         BSemt77GY0B2lRHCLl4K151r8nnwFKDbrO7xnGXc0xVXCDO9oJa7oovSwrNJiloNa4Pg
+         uNUk1Ek3uGScOUcvJfTgxD8nCXijoiR+Pop7n2Jaqt91ixCkat4BU3JkqFNzJxJDsXFD
+         3hzw==
+X-Gm-Message-State: AO0yUKW9L/yd4ImC5jLjVbzOGoXi3IrD91TIdrySKASv3RAsEeJ9zY5l
+        UAB8s1evUBhah4dPD+0Spc8=
+X-Google-Smtp-Source: AK7set88Xp9NVoXxldr7uLaJ0otyv5du9npLziyeCkNyEz4Sim7shGX6WN1XMa+HkK5cSNS3PfTbjA==
+X-Received: by 2002:a1c:7312:0:b0:3dd:62fe:9914 with SMTP id d18-20020a1c7312000000b003dd62fe9914mr2100438wmb.18.1675172421680;
+        Tue, 31 Jan 2023 05:40:21 -0800 (PST)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c3-20020a1c3503000000b003dc1d668866sm19247111wma.10.2023.01.31.05.37.35
+        by smtp.gmail.com with ESMTPSA id p7-20020a1c5447000000b003dc433355aasm12513740wmi.18.2023.01.31.05.40.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:37:35 -0800 (PST)
-Message-ID: <2995be5e-88e9-f00d-7bce-2f7c9eb5724d@gmail.com>
-Date:   Tue, 31 Jan 2023 14:37:34 +0100
+        Tue, 31 Jan 2023 05:40:21 -0800 (PST)
+Message-ID: <64702a9b-6c78-3065-8335-28d31c6fc1ab@gmail.com>
+Date:   Tue, 31 Jan 2023 14:40:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 12/14] soc: mediatek: mtk-svs: use svs get efuse common
- function
+Subject: Re: [PATCH v4 13/14] soc: mediatek: mtk-svs: use common function to
+ disable restore voltages
 Content-Language: en-US
 To:     Roger Lu <roger.lu@mediatek.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     Fan Chen <fan.chen@mediatek.com>,
         linux-pm@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230111074528.29354-1-roger.lu@mediatek.com>
- <20230111074528.29354-13-roger.lu@mediatek.com>
+ <20230111074528.29354-14-roger.lu@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230111074528.29354-13-roger.lu@mediatek.com>
+In-Reply-To: <20230111074528.29354-14-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,165 +86,118 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 On 11/01/2023 08:45, Roger Lu wrote:
-> SVS might need to read both svs efuse and thermal efuse on the probe flow.
-> Therefore, add a common efuse read function to remove the superfluous
-> codes.
+> The timing of disabling SVS bank and restore default voltage is more
+> than one place. Therefore, add a common function to use for removing
+> the superfluous codes.
 > 
 > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-
-Looks good to me, could you please rebase.
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Same here, change looks good. Could you please rebase and resend:
 
 Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 > ---
->   drivers/soc/mediatek/mtk-svs.c | 69 ++++++++++++----------------------
->   1 file changed, 24 insertions(+), 45 deletions(-)
+>   drivers/soc/mediatek/mtk-svs.c | 54 ++++++++++++++--------------------
+>   1 file changed, 22 insertions(+), 32 deletions(-)
 > 
 > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index bd23d1111d7b..a7f0a6f02d52 100644
+> index a7f0a6f02d52..89117807e85d 100644
 > --- a/drivers/soc/mediatek/mtk-svs.c
 > +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -1758,26 +1758,28 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
->   	return 0;
+> @@ -648,6 +648,25 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
+>   	return ret;
 >   }
 >   
-> -static int svs_thermal_efuse_get_data(struct svs_platform *svsp)
-> +static int svs_get_efuse_data(struct svs_platform *svsp,
-> +			      const char *nvmem_cell_name,
-> +			      u32 **svsp_efuse, size_t *svsp_efuse_max)
+> +static void svs_bank_disable_and_restore_default_volts(struct svs_platform *svsp,
+> +						       struct svs_bank *svsb)
+> +{
+> +	unsigned long flags;
+> +
+> +	if (svsb->mode_support == SVSB_MODE_ALL_DISABLE)
+> +		return;
+> +
+> +	spin_lock_irqsave(&svs_lock, flags);
+> +	svsp->pbank = svsb;
+> +	svs_switch_bank(svsp);
+> +	svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
+> +	svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
+> +	spin_unlock_irqrestore(&svs_lock, flags);
+> +
+> +	svsb->phase = SVSB_PHASE_ERROR;
+> +	svs_adjust_pm_opp_volts(svsb);
+> +}
+> +
+>   #ifdef CONFIG_DEBUG_FS
+>   static int svs_dump_debug_show(struct seq_file *m, void *p)
 >   {
->   	struct nvmem_cell *cell;
->   
-> -	/* Thermal efuse parsing */
-> -	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
-> +	cell = nvmem_cell_get(svsp->dev, nvmem_cell_name);
->   	if (IS_ERR_OR_NULL(cell)) {
-> -		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n", PTR_ERR(cell));
-> +		dev_err(svsp->dev, "no \"%s\"? %ld\n",
-> +			nvmem_cell_name, PTR_ERR(cell));
->   		return PTR_ERR(cell);
->   	}
->   
-> -	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
-> -	if (IS_ERR(svsp->tefuse)) {
-> -		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
-> -			PTR_ERR(svsp->tefuse));
-> +	*svsp_efuse = nvmem_cell_read(cell, svsp_efuse_max);
-> +	if (IS_ERR(*svsp_efuse)) {
-> +		dev_err(svsp->dev, "cannot read \"%s\" efuse: %ld\n",
-> +			nvmem_cell_name, PTR_ERR(*svsp_efuse));
->   		nvmem_cell_put(cell);
-> -		return PTR_ERR(svsp->tefuse);
-> +		return PTR_ERR(*svsp_efuse);
->   	}
->   
-> -	svsp->tefuse_max /= sizeof(u32);
-> +	*svsp_efuse_max /= sizeof(u32);
->   	nvmem_cell_put(cell);
->   
->   	return 0;
-> @@ -1825,7 +1827,8 @@ static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
->   		svsb->vmax += svsb->dvt_fixed;
->   	}
->   
-> -	ret = svs_thermal_efuse_get_data(svsp);
-> +	ret = svs_get_efuse_data(svsp, "t-calibration-data",
-> +				 &svsp->tefuse, &svsp->tefuse_max);
->   	if (ret)
->   		return false;
->   
-> @@ -1930,7 +1933,8 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
->   		}
->   	}
->   
-> -	ret = svs_thermal_efuse_get_data(svsp);
-> +	ret = svs_get_efuse_data(svsp, "t-calibration-data",
-> +				 &svsp->tefuse, &svsp->tefuse_max);
->   	if (ret)
->   		return false;
->   
-> @@ -2039,32 +2043,6 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
->   	return true;
->   }
->   
-> -static bool svs_is_efuse_data_correct(struct svs_platform *svsp)
-> -{
-> -	struct nvmem_cell *cell;
-> -
-> -	/* Get svs efuse by nvmem */
-> -	cell = nvmem_cell_get(svsp->dev, "svs-calibration-data");
-> -	if (IS_ERR(cell)) {
-> -		dev_err(svsp->dev, "no \"svs-calibration-data\"? %ld\n",
-> -			PTR_ERR(cell));
-> -		return false;
-> -	}
-> -
-> -	svsp->efuse = nvmem_cell_read(cell, &svsp->efuse_max);
-> -	if (IS_ERR(svsp->efuse)) {
-> -		dev_err(svsp->dev, "cannot read svs efuse: %ld\n",
-> -			PTR_ERR(svsp->efuse));
-> -		nvmem_cell_put(cell);
-> -		return false;
-> -	}
-> -
-> -	svsp->efuse_max /= sizeof(u32);
-> -	nvmem_cell_put(cell);
-> -
-> -	return true;
-> -}
-> -
->   static struct device *svs_get_subsys_device(struct svs_platform *svsp,
->   					    const char *node_name)
+> @@ -724,7 +743,6 @@ static ssize_t svs_enable_debug_write(struct file *filp,
 >   {
-> @@ -2404,8 +2382,9 @@ static int svs_probe(struct platform_device *pdev)
->   	if (ret)
+>   	struct svs_bank *svsb = file_inode(filp)->i_private;
+>   	struct svs_platform *svsp = dev_get_drvdata(svsb->dev);
+> -	unsigned long flags;
+>   	int enabled, ret;
+>   	char *buf = NULL;
+>   
+> @@ -740,16 +758,8 @@ static ssize_t svs_enable_debug_write(struct file *filp,
 >   		return ret;
 >   
-> -	if (!svs_is_efuse_data_correct(svsp)) {
-> -		dev_notice(svsp->dev, "efuse data isn't correct\n");
-> +	ret = svs_get_efuse_data(svsp, "svs-calibration-data",
-> +				 &svsp->efuse, &svsp->efuse_max);
-> +	if (ret) {
->   		ret = -EPERM;
->   		goto svs_probe_free_efuse;
->   	}
-> @@ -2413,13 +2392,13 @@ static int svs_probe(struct platform_device *pdev)
->   	if (!svsp_data->efuse_parsing(svsp)) {
->   		dev_err(svsp->dev, "efuse data parsing failed\n");
->   		ret = -EPERM;
-> -		goto svs_probe_free_resource;
-> +		goto svs_probe_free_tefuse;
+>   	if (!enabled) {
+> -		spin_lock_irqsave(&svs_lock, flags);
+> -		svsp->pbank = svsb;
+> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
+>   		svsb->mode_support = SVSB_MODE_ALL_DISABLE;
+> -		svs_switch_bank(svsp);
+> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
+> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
+> -		spin_unlock_irqrestore(&svs_lock, flags);
+> -
+> -		svsb->phase = SVSB_PHASE_ERROR;
+> -		svs_adjust_pm_opp_volts(svsb);
 >   	}
 >   
->   	ret = svs_bank_resource_setup(svsp);
->   	if (ret) {
->   		dev_err(svsp->dev, "svs bank resource setup fail: %d\n", ret);
-> -		goto svs_probe_free_resource;
-> +		goto svs_probe_free_tefuse;
+>   	kfree(buf);
+> @@ -1532,16 +1542,7 @@ static int svs_init02(struct svs_platform *svsp)
+>   out_of_init02:
+>   	for (idx = 0; idx < svsp->bank_max; idx++) {
+>   		svsb = &svsp->banks[idx];
+> -
+> -		spin_lock_irqsave(&svs_lock, flags);
+> -		svsp->pbank = svsb;
+> -		svs_switch_bank(svsp);
+> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
+> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
+> -		spin_unlock_irqrestore(&svs_lock, flags);
+> -
+> -		svsb->phase = SVSB_PHASE_ERROR;
+> -		svs_adjust_pm_opp_volts(svsb);
+> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
 >   	}
 >   
->   	svsp->main_clk = devm_clk_get(svsp->dev, "main");
-> @@ -2427,12 +2406,12 @@ static int svs_probe(struct platform_device *pdev)
->   		dev_err(svsp->dev, "failed to get clock: %ld\n",
->   			PTR_ERR(svsp->main_clk));
->   		ret = PTR_ERR(svsp->main_clk);
-> -		goto svs_probe_free_resource;
-> +		goto svs_probe_free_tefuse;
+>   	return ret;
+> @@ -1587,7 +1588,6 @@ static int svs_suspend(struct device *dev)
+>   {
+>   	struct svs_platform *svsp = dev_get_drvdata(dev);
+>   	struct svs_bank *svsb;
+> -	unsigned long flags;
+>   	int ret;
+>   	u32 idx;
+>   
+> @@ -1599,17 +1599,7 @@ static int svs_suspend(struct device *dev)
+>   
+>   	for (idx = 0; idx < svsp->bank_max; idx++) {
+>   		svsb = &svsp->banks[idx];
+> -
+> -		/* This might wait for svs_isr() process */
+> -		spin_lock_irqsave(&svs_lock, flags);
+> -		svsp->pbank = svsb;
+> -		svs_switch_bank(svsp);
+> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
+> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
+> -		spin_unlock_irqrestore(&svs_lock, flags);
+> -
+> -		svsb->phase = SVSB_PHASE_ERROR;
+> -		svs_adjust_pm_opp_volts(svsb);
+> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
 >   	}
 >   
->   	ret = svs_clk_enable(svsp);
->   	if (ret)
-> -		goto svs_probe_free_resource;
-> +		goto svs_probe_free_tefuse;
->   
->   	svsp->base = of_iomap(svsp->dev->of_node, 0);
->   	if (IS_ERR_OR_NULL(svsp->base)) {
-> @@ -2477,7 +2456,7 @@ static int svs_probe(struct platform_device *pdev)
->   svs_probe_clk_disable:
->   	svs_clk_disable(svsp);
->   
-> -svs_probe_free_resource:
-> +svs_probe_free_tefuse:
->   	if (!IS_ERR_OR_NULL(svsp->tefuse))
->   		kfree(svsp->tefuse);
->   
+>   	ret = reset_control_assert(svsp->rst);
