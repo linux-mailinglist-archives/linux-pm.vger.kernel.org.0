@@ -2,152 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB20682CCA
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 13:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B75682D1D
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 13:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjAaMmY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 07:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S230245AbjAaM7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 07:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjAaMmX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 07:42:23 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320FF59F8;
-        Tue, 31 Jan 2023 04:42:23 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jh15so5873289plb.8;
-        Tue, 31 Jan 2023 04:42:23 -0800 (PST)
+        with ESMTP id S229613AbjAaM7r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 07:59:47 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8226A4DCE8;
+        Tue, 31 Jan 2023 04:59:39 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h12so14109464wrv.10;
+        Tue, 31 Jan 2023 04:59:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yVPlqWdyzakqT8A0oiBlN6ELSaA4FijmFZ/f8hBpSb0=;
-        b=XNjSuciVozPlCMf5ihdSXuioYZPON6d+ZFbO1IfiSBrGttMPr5hyxsABsNk7bxuk+A
-         Rld4u0v8FcZYDzsz+Vusi90Dmj+5hUv+9buwFU92ikWhQ8x4on2alV2a5cHEJDbG3As8
-         mhfv1ZyzY2cmgw1IWdW1MbtzrgKqZ1usAILviUaxHnmPsuS2xJhx5Ep8kk90xgmv38TF
-         DhrrFv6MNBTPMlG4XuEm7MudCDrMOEwgOl6RSWGmQxQfVy2t0d2Lct3xySX66H1n7MZJ
-         TaobB772CSK6XCZHXRv6Hcf7NHJDsF+Qrazg6ZCJn8QKagX3RwS6YVU3Pbf4ZgIUn9qT
-         uG2g==
+        bh=3UndeySbwJtYhBstLS+7W0sTuNpKqoxWhQG5bKCKu1E=;
+        b=kcA47SugyoASWc7ydEtwePhQFM0twx4+y19Z7wadyt7XQFZsZEJSpna+gvXiMiscEq
+         IFOkCKqb6zFJl8Hll5lSlYJu8amy7v6m6HNpc7AB9o177uxiIjaCKPFc5aRo5PGFxVyM
+         N23MA+9g8B+nUGHIW9Quq4A9Sveb1HSRp+4DNsKCP3RuIeVz14NU5O9RVD3WVhrkrhSi
+         cW4H8Mnj8bCiB/ngDAqhyGzFIbm3qfrp0Ki3vJdRZ8cyBKvwWmUFbvPcgGIxNETLk0ZI
+         gnslR4N/O0vXCZbyvSER8rWmxvarMbqbS+BGhLdFvPRPiNwKx0TUzkj0BOC1LoqtbaWw
+         d4tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yVPlqWdyzakqT8A0oiBlN6ELSaA4FijmFZ/f8hBpSb0=;
-        b=vaUgTeBeicxJe0NEXLL/sJycCIBK+d0nCqAWjI2bRaHDl8sLLw8SVic+NmUtOYV0/3
-         aA5s/cxSW/nfXMaVe+nJeDX8FZfpQoQdBE5B42rzSmFi91DHKxoYbntJO7HSyOJl1hM2
-         WW3key+6oYgq4g3cNZbUyFVStbzXRTqM4cAdGrHVnAkntTj8eAMssGD2nFoCh/ZKnMA3
-         q2WHXS0IzK58XRL7S6WsR73YoIayCj33pn/sk4XPMYDulQTHDcjIPBgOwL3UVpm80QF5
-         TXE26icnrImheNUyaF6pozIUsA6XTeiz4/uk6MoJvvF+YvFdYFzn5gckgtSfU2/n9ff7
-         3CKg==
-X-Gm-Message-State: AO0yUKVV4gAVsomM52J1yy9dvucrI6/daXa6oiZVe/sRfiDaFsKDr4F9
-        TliwyOs5iwiSC0exeee+TOw=
-X-Google-Smtp-Source: AK7set9LJLOYk1jCM9i+2oLYrMZvin4DbigkZZE5RXUHNhyJVfOknN7WGNZT0ELlQhpHLXkZzNDp3Q==
-X-Received: by 2002:a17:902:da92:b0:196:7df6:2d38 with SMTP id j18-20020a170902da9200b001967df62d38mr9687039plx.7.1675168942642;
-        Tue, 31 Jan 2023 04:42:22 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-4.three.co.id. [180.214.232.4])
-        by smtp.gmail.com with ESMTPSA id t19-20020a1709028c9300b001965f761e6dsm6949475plo.182.2023.01.31.04.42.18
+        bh=3UndeySbwJtYhBstLS+7W0sTuNpKqoxWhQG5bKCKu1E=;
+        b=UzBLMJ0qv30AYvfjVxtGt5ttmjP4l09pHe6rJOvvt3Fzf//XkDNctMzZ8R3481eEMP
+         Js2y6fZSof4IgeHsUiidLf6WeB8aalEABrsRHxQstVEvsLTTrkJIOidauaBv/zn67S9r
+         Q4EEPmH1gMvAlJZobiLDT7XNxaIjwoIpPK76HdF3k33SW3k204o8p2vMxNh4j0rQet5c
+         BYEg45ykXVRJY8TclEDVHb8xruh57DI+MPQwkgOqFD6wJQrVhBiybKLr0nBsusLb44Rt
+         RpXQrztRBMU6DXRBh2YRwPsTETpklmPMQHtZfsy5QzABXzW4hoUB9jJWIhVGKlZZv8vL
+         efXA==
+X-Gm-Message-State: AFqh2kqnT3Y+wPvX/Vfy/5eAm+7qzZlHkhAghwaRtIBrcJVMysGWE7gv
+        65JLw1EwP8UAI13hjPXy9AM=
+X-Google-Smtp-Source: AMrXdXuQTnI7ooh6atfJ1l+iKecwB8hqvSyt3CFwVI9zZ+9rWAa4lGHia0YO6Ocu7iA5lZ7l35q2iw==
+X-Received: by 2002:adf:a31a:0:b0:2bf:96ae:7cc8 with SMTP id c26-20020adfa31a000000b002bf96ae7cc8mr33668033wrb.4.1675169977792;
+        Tue, 31 Jan 2023 04:59:37 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id b14-20020a05600010ce00b0029e1aa67fd2sm14798814wrx.115.2023.01.31.04.59.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 04:42:22 -0800 (PST)
-Message-ID: <65c16136-025a-f2f0-402f-a341f3da2723@gmail.com>
-Date:   Tue, 31 Jan 2023 19:42:15 +0700
+        Tue, 31 Jan 2023 04:59:37 -0800 (PST)
+Message-ID: <561d9a97-64c7-6633-ff10-d85ae2c7f314@gmail.com>
+Date:   Tue, 31 Jan 2023 13:59:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 6/6] Documentation: amd_pstate: Update amd_pstate
- status sysfs for guided
+Subject: Re: [PATCH v4 03/14] soc: mediatek: mtk-svs: enable the IRQ later
 Content-Language: en-US
-To:     Wyes Karny <wyes.karny@amd.com>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, santosh.shukla@amd.com,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>
-References: <20230131052141.96475-1-wyes.karny@amd.com>
- <20230131052141.96475-7-wyes.karny@amd.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230131052141.96475-7-wyes.karny@amd.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Ricardo Ribalda <ribalda@chromium.org>
+References: <20230111074528.29354-1-roger.lu@mediatek.com>
+ <20230111074528.29354-4-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230111074528.29354-4-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/31/23 12:21, Wyes Karny wrote:
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 5304adf2fc2f..56a3d11f51a5 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -303,13 +303,18 @@ efficiency frequency management method on AMD processors.
->  AMD Pstate Driver Operation Modes
->  =================================
->  
-> -``amd_pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
-> -CPPC non-autonomous(passive) mode.
-> -active mode and passive mode can be chosen by different kernel parameters.
-> -When in Autonomous mode, CPPC ignores requests done in the Desired Performance
-> -Target register and takes into account only the values set to the Minimum requested
-> -performance, Maximum requested performance, and Energy Performance Preference
-> -registers. When Autonomous is disabled, it only considers the Desired Performance Target.
-> +``amd_pstate`` CPPC has 3 operation modes: autonomous (active) mode,
-> +non-autonomous (passive) mode and guided autonomous (guided) mode.
-> +Active/passive/guided mode can be chosen by different kernel parameters.
-> +
-> +- In autonomous mode, platform ignores the desired performance level request
-> +  and takes into account only the values set to the minimum, maximum and energy
-> +  performance preference registers.
-> +- In non-autonomous mode, platform gets desired performance level
-> +  from OS directly through Desired Performance Register.
-> +- In guided-autonomous mode, platform sets operating performance level
-> +  autonomously according to the current workload and within the limits set by
-> +  OS through min and max performance registers.
->  
->  Active Mode
->  ------------
-> @@ -338,6 +343,15 @@ to the Performance Reduction Tolerance register. Above the nominal performance l
->  processor must provide at least nominal performance requested and go higher if current
->  operating conditions allow.
->  
-> +Guided Mode
-> +-----------
-> +
-> +``amd_pstate=guided``
-> +
-> +If ``amd_pstate=guided`` is passed to kernel command line option then this mode
-> +is activated.  In this mode, driver requests minimum and maximum performance
-> +level and the platform autonomously selects a performance level in this range
-> +and appropriate to the current workload.
->  
->  User Space Interface in ``sysfs``
->  =================================
-> @@ -358,6 +372,9 @@ control its functionality at the system level.  They are located in the
->  	"passive"
->  		The driver is functional and in the ``passive mode``
->  
-> +        "guided"
-> +                The driver is functional and in the ``guided mode``
-> +
->  	"disable"
->  		The driver is unregistered and not functional now.
->  
 
-LGTM, thanks!
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On 11/01/2023 08:45, Roger Lu wrote:
+> From: Ricardo Ribalda <ribalda@chromium.org>
+> 
+> If the system does not come from reset (like when is booted via
+> kexec(), the peripheral might trigger an IRQ before the data structures
+> are initialized.
+> 
+> Fixes:
+> 
+> [    0.227710] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000f08
+> [    0.227913] Call trace:
+> [    0.227918]  svs_isr+0x8c/0x538
+> 
 
--- 
-An old man doll... just what I always wanted! - Clara
+This patch is different from
+https://lore.kernel.org/r/20221127-mtk-svs-v2-0-145b07663ea8@chromium.org
 
+If you think the patch from Ricardo is wrong, then you should have mentioned 
+that in the review.
+
+Regards,
+Matthias
+
+> Fixes: 681a02e95000 ("soc: mediatek: SVS: introduce MTK SVS engine")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 28 ++++++++++++++--------------
+>   1 file changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index a803b92afc3d..64d4d03ab71c 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -2403,20 +2403,6 @@ static int svs_probe(struct platform_device *pdev)
+>   		goto svs_probe_free_resource;
+>   	}
+>   
+> -	svsp_irq = platform_get_irq(pdev, 0);
+> -	if (svsp_irq < 0) {
+> -		ret = svsp_irq;
+> -		goto svs_probe_free_resource;
+> -	}
+> -
+> -	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> -					IRQF_ONESHOT, svsp->name, svsp);
+> -	if (ret) {
+> -		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+> -			svsp_irq, ret);
+> -		goto svs_probe_free_resource;
+> -	}
+> -
+>   	svsp->main_clk = devm_clk_get(svsp->dev, "main");
+>   	if (IS_ERR(svsp->main_clk)) {
+>   		dev_err(svsp->dev, "failed to get clock: %ld\n",
+> @@ -2438,6 +2424,20 @@ static int svs_probe(struct platform_device *pdev)
+>   		goto svs_probe_clk_disable;
+>   	}
+>   
+> +	svsp_irq = platform_get_irq(pdev, 0);
+> +	if (svsp_irq < 0) {
+> +		ret = svsp_irq;
+> +		goto svs_probe_iounmap;
+> +	}
+> +
+> +	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> +					IRQF_ONESHOT, svsp->name, svsp);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+> +			svsp_irq, ret);
+> +		goto svs_probe_iounmap;
+> +	}
+> +
+>   	ret = svs_start(svsp);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "svs start fail: %d\n", ret);
