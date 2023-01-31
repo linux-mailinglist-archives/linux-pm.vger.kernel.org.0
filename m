@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFF6682DCC
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F50682DE7
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Jan 2023 14:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjAaNZ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 08:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S232209AbjAaNbM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 08:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbjAaNZR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:25:17 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C1A41B6D;
-        Tue, 31 Jan 2023 05:25:12 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l8so10330266wms.3;
-        Tue, 31 Jan 2023 05:25:12 -0800 (PST)
+        with ESMTP id S232323AbjAaNa7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 08:30:59 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78574DBF3;
+        Tue, 31 Jan 2023 05:30:47 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso7773768wms.4;
+        Tue, 31 Jan 2023 05:30:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DDykM3xjoJqJ0kl5mL74IPEifh1EPorjz4JkjoCu2Ck=;
-        b=CURwR0Lgn9WhsX6ywDQm13K/RhmiZivoGl4GvCyWc7PwAhJpbignBeXv5vigmQ5mZj
-         OoCB8gMREUJGLd6cFDwESGZ6YSfutnNT4KTQbj05ipxpxkmSahMQI9K/w65C65Lbb3Wh
-         d41drc6ykkp/N0MEO9RYJLc2hXLAfhP+q2UdaEbb97JF6OH5Ivdk3KSNlvjmqUUyBfew
-         F/Oo0wOC2zoXCIQ/aC0/ZKb3FDdfxpLF2HApWFA9G01FvgZAGf0I8d68NULtliZIl8ph
-         1LsmT5fjRKpHo3nU60H7MidQnMNfr6JH5xAuTVm6Eb8Y5nojh6Qnut1873pm+aF4D2Ts
-         G6qw==
+        bh=GlJgCog2Hv8jB8412B4wI1AwEbA0UN9A/8RVLd437gg=;
+        b=lmUEaSQsWaxheHAZrGoD6GfSUA+RbAdbdhfinS5hw+aurNtAA90Wnh8auikxHeq4Ls
+         577MVNxMeg6DkKPS8Q894c48ZFihssvGG9cYaTB1ESrwBZCT4chLPszsO1ACGTR6Pl2j
+         VqrbKRa/S6u4ensww/+oBfYBFB2cMnxV3v3M6IJHdkLc1DAvarp1W8dE6/5Haxg4LINk
+         u4G1giaLslAjO9tVaezL2rzywjOay10Zg87QogUX3INl+qeWlzncVOzivNcs/VZiIAVK
+         PVqBo+U5bNT5DxvfV9BRO7UyXU9FwqsEe7hPGaoEtVN9hidmPezh6PJ5xDPmFPa1V4uT
+         FIWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DDykM3xjoJqJ0kl5mL74IPEifh1EPorjz4JkjoCu2Ck=;
-        b=NRhvYtXNCjVVd02rHL82/yFLI4FIEt1rdkoJiV4xStxfwbXjDyYUP6EpDlnrlheS/Y
-         UfITfNlKtCGcmPg0bwj/bWD4WSy0x00tDkqhb1yF832/dM9STiV5YD8DONirTtc5iOLG
-         3CsyNT11uULbly6SAeTAcgrl/RrkP9AKDLQSJJAxXfWdsvnKDvmHk2Lj28+DE+xfStjN
-         DFJtScySALUxDi1FxHl7TrUmhakuKxYTabEL2eyG2zIg1Hg1EjgopkfsLcw6vYMgiC/U
-         V0c+QCe7QvKC0WsCPh9WV0rId4EF45GC8JKt6hnBfzBkO+gRa7f+2nzPxjoZYA0kMqTd
-         F41A==
-X-Gm-Message-State: AO0yUKVmE7kl5fE6yLdDkYzNrXRavQ/BB8olvbHg7qAiAmRbBoBJCNdv
-        VBu0J2ErV+CTu0EKVw/uLxQ=
-X-Google-Smtp-Source: AK7set+SfF/7IYY5GviCD1PQ1TFPd91rN8Dki0ogSFZXZligftSvL1B0QOl7tXj5CqIA7yNb8/V70g==
-X-Received: by 2002:a05:600c:a0e:b0:3dd:1b02:23b7 with SMTP id z14-20020a05600c0a0e00b003dd1b0223b7mr4163860wmp.10.1675171510655;
-        Tue, 31 Jan 2023 05:25:10 -0800 (PST)
+        bh=GlJgCog2Hv8jB8412B4wI1AwEbA0UN9A/8RVLd437gg=;
+        b=mpHZUNH73rFVF2KTuLnqY8nYfh+WkZD+ov5VNYIZrGRpE9/C3YbFNaF0WoGZYPZQcH
+         YHrvjy5mAJhJCJ3E0b3c8xOyx4V/ejrc7LWmixkWycQO4JrJ6vY28L//af0YhO7Y2kaS
+         wLY+9apJ5cZY0RjGEUr5DDBUxPyaptCGdygSYiLPxhh02q1Hzke/o20avsSHvyx0TKRf
+         jhxQFnMNIqQuSMKCc3HrMTzA4U9kZq8C/pbwnbZtV3By/eOciar2dyJKcWovOytKGdmd
+         Ts0DiYPtHn3dDZow/Kr4Ed/z5W/3W3jfMuvcoa3nmox3VAm6+pkViFiJmIeGNxYDRfq2
+         s5Vg==
+X-Gm-Message-State: AO0yUKUlYrml9RJINdwi73v+wUSyR9+PF7MnXIxIgvMszf7HuWheFWJi
+        fW93NTAdyMjE0/CCutmN17I=
+X-Google-Smtp-Source: AK7set8/csf6Jb47rd2+WT8vJqeSqRgiZXGTv0gl7wmEt9eROuj0FoQXqNwIKgx+X51hhlnfWyt1hw==
+X-Received: by 2002:a1c:f014:0:b0:3dc:4318:d00d with SMTP id a20-20020a1cf014000000b003dc4318d00dmr14993723wmb.11.1675171846445;
+        Tue, 31 Jan 2023 05:30:46 -0800 (PST)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l4-20020a7bc444000000b003db03725e86sm15793911wmi.8.2023.01.31.05.25.09
+        by smtp.gmail.com with ESMTPSA id h6-20020a05600c2ca600b003dd1bd66e0dsm2807447wmc.3.2023.01.31.05.30.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:25:10 -0800 (PST)
-Message-ID: <575d0d40-4a23-20af-f8c3-221c8fb0be1a@gmail.com>
-Date:   Tue, 31 Jan 2023 14:25:08 +0100
+        Tue, 31 Jan 2023 05:30:45 -0800 (PST)
+Message-ID: <bcb229bf-4243-05aa-93db-98af1c779880@gmail.com>
+Date:   Tue, 31 Jan 2023 14:30:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 10/14] soc: mediatek: mtk-svs: move svs_platform_probe
- into probe
+Subject: Re: [PATCH v4 11/14] soc: mediatek: mtk-svs: delete superfluous
+ platform data entries
 Content-Language: en-US
 To:     Roger Lu <roger.lu@mediatek.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     Fan Chen <fan.chen@mediatek.com>,
         linux-pm@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230111074528.29354-1-roger.lu@mediatek.com>
- <20230111074528.29354-11-roger.lu@mediatek.com>
+ <20230111074528.29354-12-roger.lu@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230111074528.29354-11-roger.lu@mediatek.com>
+In-Reply-To: <20230111074528.29354-12-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,8 +88,8 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 11/01/2023 08:45, Roger Lu wrote:
 > From: Matthias Brugger <matthias.bgg@gmail.com>
 > 
-> Moving svs_platform_probe into driver probe function will allow us to
-> reduce svs_platform members. This will be done in a follow-up patch.
+> The platform name and efuse parsing function pointer are only used while
+> probing the device. Use them from the svs_platform_data struct instead.
 > 
 > Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -98,52 +98,97 @@ On 11/01/2023 08:45, Roger Lu wrote:
 Applied, thanks!
 
 > ---
->   drivers/soc/mediatek/mtk-svs.c | 20 ++++----------------
->   1 file changed, 4 insertions(+), 16 deletions(-)
+>   drivers/soc/mediatek/mtk-svs.c | 22 ++++++++++++----------
+>   1 file changed, 12 insertions(+), 10 deletions(-)
 > 
 > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index 354582825082..9d9210c22289 100644
+> index 9d9210c22289..bd23d1111d7b 100644
 > --- a/drivers/soc/mediatek/mtk-svs.c
 > +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -2387,17 +2387,17 @@ static const struct of_device_id svs_of_match[] = {
->   	},
->   };
+> @@ -313,14 +313,12 @@ static const u32 svs_regs_v2[] = {
 >   
-> -static struct svs_platform *svs_platform_probe(struct platform_device *pdev)
-> +static int svs_probe(struct platform_device *pdev)
->   {
->   	struct svs_platform *svsp;
->   	const struct svs_platform_data *svsp_data;
-> -	int ret;
-> +	int ret, svsp_irq;
+>   /**
+>    * struct svs_platform - svs platform control
+> - * @name: svs platform name
+>    * @base: svs platform register base
+>    * @dev: svs platform device
+>    * @main_clk: main clock for svs bank
+>    * @pbank: svs bank pointer needing to be protected by spin_lock section
+>    * @banks: svs banks that svs platform supports
+>    * @rst: svs platform reset control
+> - * @efuse_parsing: svs platform efuse parsing function pointer
+>    * @efuse_max: total number of svs efuse
+>    * @tefuse_max: total number of thermal efuse
+>    * @regs: svs platform registers map
+> @@ -330,14 +328,12 @@ static const u32 svs_regs_v2[] = {
+>    * @clk_cnt: clock count shows the clk enable/disable times by svs driver
+>    */
+>   struct svs_platform {
+> -	char *name;
+>   	void __iomem *base;
+>   	struct device *dev;
+>   	struct clk *main_clk;
+>   	struct svs_bank *pbank;
+>   	struct svs_bank *banks;
+>   	struct reset_control *rst;
+> -	bool (*efuse_parsing)(struct svs_platform *svsp);
+>   	size_t efuse_max;
+>   	size_t tefuse_max;
+>   	const u32 *regs;
+> @@ -2066,7 +2062,7 @@ static bool svs_is_efuse_data_correct(struct svs_platform *svsp)
+>   	svsp->efuse_max /= sizeof(u32);
+>   	nvmem_cell_put(cell);
 >   
->   	svsp_data = of_device_get_match_data(&pdev->dev);
+> -	return svsp->efuse_parsing(svsp);
+> +	return true;
+>   }
 >   
->   	svsp = devm_kzalloc(&pdev->dev, sizeof(*svsp), GFP_KERNEL);
->   	if (!svsp)
-> -		return ERR_PTR(-ENOMEM);
-> +		return -ENOMEM;
+>   static struct device *svs_get_subsys_device(struct svs_platform *svsp,
+> @@ -2400,9 +2396,7 @@ static int svs_probe(struct platform_device *pdev)
+>   		return -ENOMEM;
 >   
 >   	svsp->dev = &pdev->dev;
->   	svsp->name = svsp_data->name;
-> @@ -2408,19 +2408,7 @@ static struct svs_platform *svs_platform_probe(struct platform_device *pdev)
+> -	svsp->name = svsp_data->name;
+>   	svsp->banks = svsp_data->banks;
+> -	svsp->efuse_parsing = svsp_data->efuse_parsing;
+>   	svsp->regs = svsp_data->regs;
+>   	svsp->bank_max = svsp_data->bank_max;
 >   
->   	ret = svsp_data->probe(svsp);
->   	if (ret)
-> -		return ERR_PTR(ret);
-> -
-> -	return svsp;
-> -}
-> -
-> -static int svs_probe(struct platform_device *pdev)
-> -{
-> -	struct svs_platform *svsp;
-> -	int svsp_irq, ret;
-> -
-> -	svsp = svs_platform_probe(pdev);
-> -	if (IS_ERR(svsp))
-> -		return PTR_ERR(svsp);
-> +		return ret;
->   
+> @@ -2413,6 +2407,12 @@ static int svs_probe(struct platform_device *pdev)
 >   	if (!svs_is_efuse_data_correct(svsp)) {
 >   		dev_notice(svsp->dev, "efuse data isn't correct\n");
+>   		ret = -EPERM;
+> +		goto svs_probe_free_efuse;
+> +	}
+> +
+> +	if (!svsp_data->efuse_parsing(svsp)) {
+> +		dev_err(svsp->dev, "efuse data parsing failed\n");
+> +		ret = -EPERM;
+>   		goto svs_probe_free_resource;
+>   	}
+>   
+> @@ -2448,7 +2448,7 @@ static int svs_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> -					IRQF_ONESHOT, svsp->name, svsp);
+> +					IRQF_ONESHOT, svsp_data->name, svsp);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+>   			svsp_irq, ret);
+> @@ -2478,11 +2478,13 @@ static int svs_probe(struct platform_device *pdev)
+>   	svs_clk_disable(svsp);
+>   
+>   svs_probe_free_resource:
+> -	if (!IS_ERR_OR_NULL(svsp->efuse))
+> -		kfree(svsp->efuse);
+>   	if (!IS_ERR_OR_NULL(svsp->tefuse))
+>   		kfree(svsp->tefuse);
+>   
+> +svs_probe_free_efuse:
+> +	if (!IS_ERR_OR_NULL(svsp->efuse))
+> +		kfree(svsp->efuse);
+> +
+>   	return ret;
+>   }
+>   
