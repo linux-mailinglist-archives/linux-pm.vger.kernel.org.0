@@ -2,177 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3DA686C85
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 18:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9859686CA1
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 18:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbjBARNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 12:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S232087AbjBARRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 12:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjBARNC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 12:13:02 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEA85FD7
-        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 09:12:56 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q5so18023899wrv.0
-        for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 09:12:56 -0800 (PST)
+        with ESMTP id S232034AbjBARQ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 12:16:59 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC680977F
+        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 09:16:56 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h12so17977832wrv.10
+        for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 09:16:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=i3v4lvgMJrNqsvAO9VMzJDJpTxWMbyB0Tj1uMZ3edH4=;
-        b=jveV7rE6VkRhavv5UZTPo6oGPvccJ5HfKD92qZWtbyJpxrqdRXX9MEY8T+XIZatBEa
-         Tvl8zhkPJuwdAzyExpZ1cDy7KuOnLUtg/lpOWt67jjBZfpR0tkSCpx+oLyOoIgKywKpN
-         GAb/zREN8Hav3nJAwOTimNAaI3a8s8/9nK0GEUa1pCQbt5uMIskVilVCQJSN887YJ5uJ
-         NqzTzPqmL8LAG5DtlM7klEOyEptCnKFM2/0V3Z3wfM/9t2l4B+3jE+Ofu3hiiDgDSdmk
-         KP3Q4GrbaVgEhXnR5yp9KWXgKP5fbGBk19wrb6VLPH0UCvB7A6j0nCXTFrisjv/rWDDu
-         cOaA==
+        bh=Wr38XRGgvFXUxHBa8d+Ks/KuiYTFOwvWM5h9IiFhLX8=;
+        b=XmrfqOPtuCeetmyqGs/bH/G/sTEkeIo/6JvbD6Jlxn6Efu++VNVbR0GR7G8P6hjegQ
+         128hLlvbYA91b6W7m94mBB+H0eks6nSQXjwXZHE3Jo+rdAxhGdkj4sWBmiMJPoaPyTJ0
+         FcTIMzrcQNtaDK5qfsq/npKCzaIiiaABEpz7f11Zf0JsdZwu92vwt6cBcRqRcwlDCRRS
+         Pl4bHeOsHFhy/KjxeyrlzeRdIrGmj0X6qz5hk57ofSuhWu/XHBEu3nC3IZ48B0WOcIzc
+         1hp9Rpd3qRWZFqB+oNfk1bWiRleGQ2OakPGrRXpkZeMbdt7IlEy56/2Awo770Na/impT
+         XrtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3v4lvgMJrNqsvAO9VMzJDJpTxWMbyB0Tj1uMZ3edH4=;
-        b=BxY8NrYKf+7qcVkrAYRd1CcpT6/1ZEjdC1eX2HMRXpSsz5PSWZV3qfZNCxU8O1csaf
-         3ebsFYrDXeD/WNahlLvuiXZ5h38g8mcHHJYo2pAhryn4f6/v1s7tUseWvF2SzLDPQu0R
-         glg5325KQvUQ2IxCRNljkkmmAHhqVzCE8V4pTI7YDDEZkLsRMVwP5bDooNB7NjNxJAk/
-         +3aGU3vZBMn6G+FIZo2CR0XnYQvzSMeJgR/O8uZfpJIdBeh3oyZ8Vbi2F4w3SxpXDcSQ
-         RHjmMHXmjqIAj7LJAqO4cAKI8ASfo/AWLNjO4R7wW/8lQQ6J3OEFQu2l+5ILFhvoCR0Y
-         Nqbw==
-X-Gm-Message-State: AO0yUKVWxcF1JKrHMS/pzkguikCCrKKv6jOPKnX6MOcRrkSlc+O5nNL3
-        AG1oGmrKTZzhMqwesIMl4PAz7Q==
-X-Google-Smtp-Source: AK7set9vFVx2h/65GJtKCAcoqYhL2uenVpmVGmEzti3KxJGPZTdKkO9JVCu2AFbygJ/RAySdrArmIw==
-X-Received: by 2002:a05:6000:a04:b0:2c3:bc42:2ff9 with SMTP id co4-20020a0560000a0400b002c3bc422ff9mr1145931wrb.25.1675271574640;
-        Wed, 01 Feb 2023 09:12:54 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m2-20020a056000180200b002bfb5618ee7sm17827215wrh.91.2023.02.01.09.12.52
+        bh=Wr38XRGgvFXUxHBa8d+Ks/KuiYTFOwvWM5h9IiFhLX8=;
+        b=cBjnxZXReHoQ4Mc8AC/WIJjYVoGpxY01B7EsgJwlJgPi9NmEkhEgZ1XBqVUJoJP+7i
+         UsWy8AHQClqkRUEGnamkJm2tdbmVcsGRbAkKV6rcZkF3tHlMLeM79A7CdSAbvImC/va5
+         vc8tvDs0Eo7Kb+tSktFr+HquHRvTfXb/zPbiwdK4MRC3uQtAual/Qkdin73aowOebkd9
+         c7wt7OZBDH/YJlq8fAgm7imW7dCBg2I+bFLBD9LkCZrIabJOh8CELb2/uIgoVCkEOBfa
+         nh0/O8VIa1SvQ0TzzH9YDrGiL/O91Llbd/pWvmfflgWlaTy4U/Zct6bt4bfwkg8w/brM
+         RQXA==
+X-Gm-Message-State: AO0yUKWeVe/xxnGY5M3vAhwwQ+Mhuv6l728oyQFK5q4BRyfSnbBd/gyW
+        ovJgkPqTifilkQjKCl5xkS4gbg==
+X-Google-Smtp-Source: AK7set+N2m4euaJ1j3qjryKWqRm5bfdc9maiQA2BzwcJfWWO6xVi6bumDqUizwD0zDYDSblrrEd+mw==
+X-Received: by 2002:a5d:4d84:0:b0:2bf:eb0e:ccb8 with SMTP id b4-20020a5d4d84000000b002bfeb0eccb8mr3197612wru.37.1675271815318;
+        Wed, 01 Feb 2023 09:16:55 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b002be5401ef5fsm18329544wrd.39.2023.02.01.09.16.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 09:12:53 -0800 (PST)
-Message-ID: <8662c6bd-b32d-3d3d-b3b7-7f4aeb028309@linaro.org>
-Date:   Wed, 1 Feb 2023 18:12:51 +0100
+        Wed, 01 Feb 2023 09:16:54 -0800 (PST)
+Message-ID: <8eb9ba9b-dce8-5ece-6c2a-7e7a758c75ab@linaro.org>
+Date:   Wed, 1 Feb 2023 17:16:54 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
- Thermal Sensor driver
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] PM / devfreq: qcom: Introduce CCI devfreq driver
 Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230124131717.128660-5-bchihi@baylibre.com>
- <20230131153816.21709-1-bchihi@baylibre.com>
- <ab1e4822-d5f4-79f6-ea38-47e2342ebe49@linaro.org>
- <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Jun Nie <jun.nie@linaro.org>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230201080227.473547-1-jun.nie@linaro.org>
+ <20230201080227.473547-2-jun.nie@linaro.org>
+ <515f4e9e-2804-e03a-26f5-f2d3ac331109@linaro.org>
+ <71ba0d05-6183-95ef-9e45-cc3dd512475f@linaro.org>
+ <CAA8EJpqyqC5D+O=KJnuZnWN4BwBOKcquN11nJfEp2WMSmJobBg@mail.gmail.com>
+ <58a5e856-3e8b-d660-09ee-7a18b184452f@linaro.org>
+ <1d33eb58-95d1-643d-52cc-2888ff0cea43@linaro.org>
+ <86478fbd-590a-f94f-6cc1-f4d06a96826e@linaro.org>
+ <2a0ce32c-d100-d5c3-ac0c-ccd7100a2c06@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <2a0ce32c-d100-d5c3-ac0c-ccd7100a2c06@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/02/2023 17:46, Balsam CHIHI wrote:
->>> +#ifdef CONFIG_MTK_LVTS_THERMAL_DEBUGFS
->>> +
->>> +static struct dentry *root;
->>
->> How do you handle two instances of driver?
+On 01/02/2023 17:12, Dmitry Baryshkov wrote:
+> On 01/02/2023 17:17, Bryan O'Donoghue wrote:
+>> On 01/02/2023 14:58, Dmitry Baryshkov wrote:
+>>> On 01/02/2023 16:45, Bryan O'Donoghue wrote:
+>>>> On 01/02/2023 13:41, Dmitry Baryshkov wrote:
+>>>>>>                           cci-cpufreq {
+>>>>>>                                   target-dev = <&cci_cache>;
+>>>>>>                                   cpu-to-dev-map-0 =
+>>>>>>                                           <  200000  200000000 >,
+>>>>>>                                           <  345600  200000000 >,
+>>>>>>                                           <  400000  200000000 >,
+>>>>>>                                           <  533330  297600000 >,
+>>>>>>                                           <  800000  297600000 >,
+>>>>>>                                           <  960000  297600000 >,
+>>>>>>                                           < 1113600  297000000 >,
+>>>>>>                                           < 1344000  595200000 >,
+>>>>>>                                           < 1459200  595200000 >,
+>>>>>>                                           < 1497600  595200000 >,
+>>>>>>                                           < 1651200  595200000 >;
+>>>>>>                                   cpu-to-dev-map-4 =
+>>>>>>                                           <  200000 200000000 >,
+>>>>>>                                           <  249600 200000000 >,
+>>>>>>                                           <  499200 297600000 >,
+>>>>>>                                           <  800000 297600000 >,
+>>>>>>                                           <  998400 595200000 >,
+>>>>>>                                           < 1113600 595200000 >;
+>>>>> These should map to existing opp entries.
+>>>>>
+>>>>> I ended up doing the interconnect driver that maps a clock to the
+>>>>> interconnect. Then I can use it in the cpu opp tables.
+>>>>>
+>>>>
+>>>> Can you point us at what it is you are proposing ?
+>>>
+>>> https://patchwork.kernel.org/project/linux-arm-msm/patch/20230120061417.2623751-9-dmitry.baryshkov@linaro.org/
+>>>
+>> Is there no driver code too ?
 > 
-> This root node is the topmost directory for debugfs called 'lvts', the
-> different driver instances are below this. It is a singleton.
-
-Indeed. What about removal? Aren't you remobing entire directory
-structure on first device removal?
-
-(...)
-
->>> +
->>> +     of_property_for_each_string(np, "nvmem-cell-names", prop, cell_name) {
->>> +             size_t len;
->>> +             u8 *efuse;
->>> +
->>> +             cell = of_nvmem_cell_get(np, cell_name);
->>> +             if (IS_ERR(cell)) {
->>> +                     dev_dbg(dev, "Failed to get cell '%s'\n", cell_name);
->>
->> Is this an error? If so, why debug? dbg is not for errors.
+> There are two parts, one is the 'CBF clock' driver, which just provides 
+> a clock, another part actually connects the clock and interconnect. 
+> Initially I implemented it as a part of the CBF driver (see 
+> https://patchwork.kernel.org/project/linux-arm-msm/patch/20230120061417.2623751-5-dmitry.baryshkov@linaro.org/), next revision will move the interconnect part to drivers/interconnect.
 > 
-> AFAIK using dev_dbg does not increase ELF size when DEBUG is disabled.
-> If this is not a good reason for you, then I will change it to dev_err.
 
-But also dev_dbg are not visible in error or warn level logs. If this is
-not an error, then indeed dev_dbg could be fine. But errors should be
-verbose.
+Ah so just to be clear - discussing with Dmitry - CCI has its own set of 
+fuses.
 
-> 
->>
->>> +                     return PTR_ERR(cell);
->>> +             }
->>> +
->>> +             efuse = nvmem_cell_read(cell, &len);
->>> +
->>> +             nvmem_cell_put(cell);
->>> +
->>> +             if (IS_ERR(efuse)) {
->>> +                     dev_dbg(dev, "Failed to read cell '%s'\n", cell_name);
->>> +                     return PTR_ERR(efuse);
->>> +             }
->>> +
->>> +             lvts_td->calib = devm_krealloc(dev, lvts_td->calib,
->>> +                                            lvts_td->calib_len + len, GFP_KERNEL);
->>> +             if (!lvts_td->calib)
->>> +                     return -ENOMEM;
->>> +
->>> +             memcpy(lvts_td->calib + lvts_td->calib_len, efuse, len);
->>> +
->>> +             lvts_td->calib_len += len;
->>> +
->>> +             kfree(efuse);
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static int __init lvts_golden_temp_init(struct device *dev, u32 *value)
->>
->> You did not test it, right? Build with section mismatch analysis...
-> 
-> I'm not sure to fully understand this comment.
-> Would you explain, please?
+We have fusebin settings for clusterX and CCI.
 
-git grep -i "section mismatch" leads to lib/Kconfig.debug and
-DEBUG_SECTION_MISMATCH
+So, I think we agree this means a separate driver for cci is warranted.
 
-(...)
-
->>> +static struct lvts_ctrl_data mt8195_lvts_data_ctrl[] = {
->>
->> Why this cannot be const?
-> 
-> I've got the following warning when I added "const"
-> drivers/thermal/mediatek/lvts_thermal.c:1286:27: warning:
-> initialization discards ‘const’ qualifier from pointer target type
-> [-Wdiscarded-qualifiers]
->  1286 |         .lvts_ctrl      = mt8195_lvts_data_ctrl,
->       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-As with every const... Do you need lvts_ctrl to be non-const? If yes,
-then how do you handle multiple devices (singleton)?
-
-Best regards,
-Krzysztof
-
+---
+bod
