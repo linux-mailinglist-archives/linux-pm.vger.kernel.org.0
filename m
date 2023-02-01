@@ -2,162 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519B0686E5D
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09D6686EB1
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 20:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjBASry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 13:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S230169AbjBATLG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 14:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjBASrx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:47:53 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD346D5E1;
-        Wed,  1 Feb 2023 10:47:52 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id qw12so38270760ejc.2;
-        Wed, 01 Feb 2023 10:47:52 -0800 (PST)
+        with ESMTP id S231717AbjBATLF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 14:11:05 -0500
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D9241F0;
+        Wed,  1 Feb 2023 11:11:04 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id k4so7997208edo.12;
+        Wed, 01 Feb 2023 11:11:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yGTo7AVtqJdUxiTsX5lFWt8LvESDJX0AXENA9PjWJiE=;
-        b=pgSMet6UXIEtHlqZJWQUinO4M/VZ4oMhIG0hyDDILDnzkfuvsmt7BiWoiXrJ7kLLOI
-         Rw/LWu0aXqAbZbwQwhnO9Q66KoZMkPUM4rHZCddeuKJRVz+H604Oi37yodYfkl6BrgaQ
-         TtH3z5d9DPPr3heBpdcmWW3tVXdMPw0jK4ZNJ/neFs5m6zofWuHADftVAKcvsQGb1HHb
-         j14fObQybvnHoUCCBLd9ZO/mtDIEa8WCLxewNNs36s3AZQFF3nD384FxyLY/PU0ZjW1Z
-         x6HhGmEX2u8mM7GSs8vmzFdEuHBa1tnqcxB2xpWR+KvaSTL8BVYUI09AKmNFSPggicbh
-         t+hA==
-X-Gm-Message-State: AO0yUKU1RibYRDS+AaPd8IsQYH1nw+ZA8duC9W5cV1QKuVJ95Whj2d76
-        zyH8ggC2qop3Y9FSAJWKGdpmWtFUBuNgv1hbsio1wyoQYYU=
-X-Google-Smtp-Source: AK7set8+eNNEsGOsRWEd2xvDUwSGka9bTu+PnKmEq/a3DN558+iZ6gZEFlfKh4u7tcJQ+67eITaW2LDI8ctH55scQx4=
-X-Received: by 2002:a17:906:2f88:b0:844:44e0:1c4e with SMTP id
- w8-20020a1709062f8800b0084444e01c4emr1070859eji.291.1675277270877; Wed, 01
- Feb 2023 10:47:50 -0800 (PST)
+        bh=V04PB2qQraGqLXW3H7vr1IQgkIM90PlWPBWoNwDSqz4=;
+        b=F4MjXhSR5lS2B2wS41B+PlsO2g8749h7TDsUzZHyPbJ7D+eF5uK9M7ee12vWRMxpc+
+         rbOTjGMeJapJ3sUlrYC3MoHMQUaaqTj40xp3qxycpE89NEyHdA6FT7Ay0BT+N0EnjR3i
+         FA5Fr06t9CfzDk9DVgGEmE9G9mCGdML8H0yt2lXZukrsRsimipCU3PV0LrkTe8JHLwV5
+         Q+Detnuu8UNKaeKBc4bI6/u00StdaCys29+t0oJgGr2RuEFmk958fPj7nlqvHc/Af6GK
+         4vhlk4LD+BR6urx7xScXatH3SnSuUIGfRizeJiQNGnX8D/VIQ9Jp2b9aDOmovqZTr7hZ
+         SC1A==
+X-Gm-Message-State: AO0yUKWJCebeiqX4PR31qGEnYQNVriF0clce6TDRKScqnVoxkbmkRphM
+        JdJuXbxxi9upXu9PawPzsDMwXacH6Y8CmYJl95enJE9soNk=
+X-Google-Smtp-Source: AK7set/wB3FRHS/1TWs69ajCrdBCVj0QAw3eVlI/3T2FVIFsFsJmMlrry6lCJKVTY+NqNBeZ9++F+SNXVBR48zbxK5o=
+X-Received: by 2002:a05:6402:22ee:b0:4a2:1d19:ca14 with SMTP id
+ dn14-20020a05640222ee00b004a21d19ca14mr1041951edb.68.1675278663095; Wed, 01
+ Feb 2023 11:11:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
- <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org> <CAJZ5v0iOYH4WR5WoH=jL6VWKhB4CMeZv5V3U0Q_c_qdCJvvvBw@mail.gmail.com>
- <fedc35c2-1dc9-48af-f03f-fbb8566284fb@linaro.org>
-In-Reply-To: <fedc35c2-1dc9-48af-f03f-fbb8566284fb@linaro.org>
+References: <20230201180625.2156520-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230201180625.2156520-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Feb 2023 19:47:39 +0100
-Message-ID: <CAJZ5v0h75VH4GQeBStfiAXrFJt1tL=1+nhP9=n_Ok=Txm3e_CA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Amit Kucheria <amitk@kernel.org>
+Date:   Wed, 1 Feb 2023 20:10:51 +0100
+Message-ID: <CAJZ5v0jQn7ON8XRk1zH_wWbwXJdKZFwR_Op=a4AO8kWp2jm8Aw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel_powerclamp: Fix cur_state for multi
+ package system
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 11:42 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Wed, Feb 1, 2023 at 7:06 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On 31/01/2023 20:11, Rafael J. Wysocki wrote:
-> > On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 26/01/2023 15:15, Rafael J. Wysocki wrote:
-> >>> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> The thermal framework gives the possibility to register the trip
-> >>>> points with the thermal zone. When that is done, no get_trip_* ops are
-> >>>> needed and they can be removed.
-> >>>>
-> >>>> Convert ops content logic into generic trip points and register them with the
-> >>>> thermal zone.
-> >>>>
-> >>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >>>> ---
-> >>
-> >> [ ... ]
-> >>
-> >>>> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
-> >>>> -                       QRK_MAX_DTS_TRIPS,
-> >>>> -                       wr_mask,
-> >>>> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
-> >>>> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
-> >>>> +       if (err)
-> >>>> +               goto err_ret;
-> >>>> +
-> >>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
-> >>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-> >>>> +
-> >>>> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
-> >>>> +       if (err)
-> >>>> +               goto err_ret;
-> >>>
-> >>> If I'm not mistaken, this won't even try to register the thermal zone
-> >>> if at least one trip cannot be initialized, but previously it was
-> >>> registered in that case, but the trips that failed to respond were
-> >>> disabled.
-> >>>
-> >>> This is a change in behavior that would at least need to be documented
-> >>> in the changelog, but it isn't.
-> >>>
-> >>> I'm not sure if it is safe to make even, however.
-> >>
-> >> Thanks for catching this.
-> >>
-> >> Two solutions:
-> >>
-> >> 1. Set the temperature to THERMAL_TEMP_INVALID and change
-> >> get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is
-> >> THERMAL_TEMP_INVALID
-> >>
-> >> 2. Register only the valid trip points.
-> >>
-> >> What would be the preferable way ?
-> >
-> > I think that the trip points that are registered currently need to
-> > still be registered after the change.
-> >
-> > Does registering a trip point with the temperature set to
-> > THERMAL_TEMP_INVALID cause it to be effectively disabled?
+> The powerclamp cooling device cur_state shows actual idle observed by
+> package C-state idle counters. But the implementation is not sufficient
+> for multi package or multi die system. The cur_state value is incorrect.
+> On these systems, these counters must be read from each package/die and
+> somehow aggregate them. But there is no good method for aggregation.
 >
-> The initial behavior before the changes is:
+> It was not a problem when explicit CPU model addition was required to
+> enable intel powerclamp. In this way certain CPU models could have
+> been avoided. But with the removal of CPU model check with the
+> availability of Package C-state counters, the driver is loaded on most
+> of the recent systems.
 >
-> The function thermal_zone_device_register() will go through all the trip
-> points and call thermal_zone_get_trip(), resulting in a call to
-> ops->get_trip_temp(). If the call fails, the trip point is tagged as
-> disabled and will stay in this state forever, so discarded in the trip
-> point crossed detection.
+> For multi package/die systems, just show the actual target idle state,
+> the system is trying to achieve. In powerclamp this is the user set
+> state minus one.
 >
-> That does not report an error and the trip point is showed in sysfs but
-> in a inconsistent state as it is actually disabled. Reading the trip
-> point will return an error or not, but it is in any case disabled in the
-> thermal framework. The userspace does not have the information about the
-> trip point being disabled, so showing it up regardless its state is
-> pointless and prone to confusion for the userspace.
->
-> IMO, it would be more sane to register the trip points which are
-> actually valid, so invalid trip points are not showed up and does
-> prevent extra complexity in the thermal core to handle them.
+> Also there is no use of starting a worker thread for polling package
+> C-state counters and applying any compensation.
 
-Except when the trip point can be updated to become a valid one later,
-for example in response to a system configuration change.  That can
-happen to ACPI-provided trip points, for example.
+I think that the last paragraph applies to systems with multiple dies/packages?
 
-I don't think that this is an issue for this particular driver, but
-the core needs to handle that case anyway.
+> Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
 
-Moreover, there is the case when trip points only become relevant when
-their temperatures are set via ops->set_trip_temp() and they are
-THERMAL_TEMP_INVALID initially, which needs to be handled by the core
-either.
 
-When the driver has no way to update trip point temperatures, either
-through a firmware notification or via ops->set_trip_temp(), then I
-agree that registering them is not very useful if their temperatures
-cannot be determined.
+
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org # 4.14+
+> ---
+>  drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index b80e25ec1261..64f082c584b2 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -57,6 +57,7 @@
+>
+>  static unsigned int target_mwait;
+>  static struct dentry *debug_dir;
+> +static bool poll_pkg_cstate_enable;
+>
+>  /* user selected target */
+>  static unsigned int set_target_ratio;
+> @@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
+>  {
+>         unsigned int comp = 0;
+>
+> +       if (!poll_pkg_cstate_enable)
+> +               return 0;
+> +
+>         /* we only use compensation if all adjacent ones are good */
+>         if (ratio == 1 &&
+>                 cal_data[ratio].confidence >= CONFIDENCE_OK &&
+> @@ -519,7 +523,8 @@ static int start_power_clamp(void)
+>         control_cpu = cpumask_first(cpu_online_mask);
+>
+>         clamping = true;
+> -       schedule_delayed_work(&poll_pkg_cstate_work, 0);
+> +       if (poll_pkg_cstate_enable)
+> +               schedule_delayed_work(&poll_pkg_cstate_work, 0);
+>
+>         /* start one kthread worker per online cpu */
+>         for_each_online_cpu(cpu) {
+> @@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+>  static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+>                                  unsigned long *state)
+>  {
+> -       if (true == clamping)
+> -               *state = pkg_cstate_ratio_cur;
+> -       else
+> +       if (true == clamping) {
+
+This really should be
+
+        if (clamping) {
+
+> +               if (poll_pkg_cstate_enable)
+> +                       *state = pkg_cstate_ratio_cur;
+> +               else
+> +                       *state = set_target_ratio;
+> +       } else {
+>                 /* to save power, do not poll idle ratio while not clamping */
+>                 *state = -1; /* indicates invalid state */
+> +       }
+>
+>         return 0;
+>  }
+> @@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
+>                 goto exit_unregister;
+>         }
+>
+> +       if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
+> +               poll_pkg_cstate_enable = true;
+> +
+>         cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
+>                                                 &powerclamp_cooling_ops);
+>         if (IS_ERR(cooling_dev)) {
+> --
+
+This fixes a rather old bug and we are late in the cycle, so I'm a bit
+reluctant to push it for -rc7 or -rc8.  I would prefer to apply it for
+6.3, but let it go before the other powerclamp driver changes from
+you.  This way, if anyone needs to backport it or put it into
+-stable, they will be able to do that without pulling in the more
+intrusive material.
+
+Now, I do realize that this avoids changing the current behavior too
+much, but I think that it is plain confusing to return
+pkg_cstate_ratio_cur from powerclamp_get_cur_state() in any case.  It
+should always return set_target_ratio IMV.
