@@ -2,134 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326366869C2
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 16:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9158B6869BF
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 16:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbjBAPP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 10:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S232165AbjBAPP6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 10:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjBAPPh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 10:15:37 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1295F298FD
-        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 07:15:14 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z11so18032901ede.1
+        with ESMTP id S232266AbjBAPPe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 10:15:34 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD39274B8
+        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 07:15:13 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id bp15so29698963lfb.13
         for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 07:15:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WKcD/zDARR0ET8GDXucrQ586p1EZyc/trnwGgWqi5oM=;
-        b=UNvI8KAlb1PeQQTsF/6w1pZ0C36wdH+yiGj8bP1bem/hCAcaJOM/nE7ucQiIIsRBwY
-         rqtp2QIG/OrrPjr2NX7bTvR2H6DfxHFwlGVO2g/FdDLws8yAfsNiFQpcmQzYByIu32Ed
-         p1wCa4CSnyD3nw6sDu+pewrKZa+8JX184CH99a75W0nzWEHCaau6Ak++1zVUdiqyK3f+
-         t+OxDVJvT6Nb0Ot7ANLlt084gp9wEov6ZGd6D7K37LFWKDmBV4j0hMR2TNmbhhoQsQJP
-         74Vcj6qNZEUT7CDXuBJ9+c521drz49X7juopPmmR9kUeIiOTtqmxFjRoS6jYhnTT1TuS
-         5GwQ==
+        bh=lLX7pM7hqpU4TFyVN86DeJVlh/KarrGEhTFMLvDtTOs=;
+        b=hjwajA05EUmyxHZfZu4qw7wCS12SG2M/0HznMKoVMNYUs7IE2wl44TQOqWT2G820xw
+         YE/KLGqmLVq2VuzSCCu95XoF/b+FKqKtPMgd2GIMuHWuAli975mt+4ULJLj1DQmc20Xz
+         Mbq5uKgwFHJcDKJbrTT/LEaDeNCVRmhXUx+fjIn5z8eQ+gkE3/isLyg5fC6Gdfs6fwRh
+         NOOr4NF1zGGuoBJsZVpaauqKp/TPu9OBiyUyOzIucVWL/egrkdTb4zN9xdsvyMCR/XQF
+         YqQSX+4D6tqpdl+qQ9Y0HMSnTcM4EPGt5P1H6+tk5YynZ/FLtdw8Zg/br2c7bla12+1x
+         UnBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WKcD/zDARR0ET8GDXucrQ586p1EZyc/trnwGgWqi5oM=;
-        b=oIPGRxPU662SrU4eTvQ2UJd0CKbDfXrKdAuWzdYs9U7L+saCgJUhijYt8vzbjnA0d7
-         agCO0EYDKW19/r3JP6NPz+YXl6/Lm19nQvLtBIcc3/riLfl68r0OToGjSfP/EQMN16tC
-         HV4SvSaE+zB+iVbsImtJFJJzNgRVI730xERf7jEJBfsAeMnZ8xplNJbZjf84K/lVgcPg
-         noLbE1yE0o6D4q3hs624Dpfw8HKoExaEG7janFHtkyRlKhugAuptZfEfbdTg4iR/gmbG
-         VOfHBNBsuzeKWKLuv+wGk6BeUtr8Bg4JIlpOqxybtGTuH5yOkoR2eeOOabKZjeMBWtnn
-         bkdQ==
-X-Gm-Message-State: AO0yUKW3C/gz6NQXAxYSqlhEl2ltRkMVokL7Wy92g/GNRg/NIPTHx/od
-        VQ7w+vkHf70K/KPnJN5r0pjB1mzyVfCUqA+yjFR9tQ==
-X-Google-Smtp-Source: AK7set8Sqpf7IQKI8pCxzgiefm4DEzyA6FF6UcZXLNTZNnDOHduTVAL3Dj7gPRjuCIZZHhxAewq7V1amgnQUE4iiCRY=
-X-Received: by 2002:a50:f60f:0:b0:4a2:27c2:aa9a with SMTP id
- c15-20020a50f60f000000b004a227c2aa9amr741605edn.61.1675264512617; Wed, 01 Feb
+        bh=lLX7pM7hqpU4TFyVN86DeJVlh/KarrGEhTFMLvDtTOs=;
+        b=nLuQHAaD1U2gnHuaQ62zIYm9p2I1C4J1hz+XUtS2UizPEYmmj7VDfQ9Hys5OynaT64
+         92zF2H1uNnC7ZerE8yMZE7m2Rsmg4vbreF09V13zmgMiKPUfBTyc0hlUnCLVSNSGgA+K
+         loxpqpDJ3Wdy0kGmZObrHoMGa9S0U7qpS6kDvErcNmpvE9NsmGccJ4b1IkFRoSNyXQIc
+         CXYnbfVBBE3+aRf0rTP+giG2nmCdvYhQg8Al0F+HuI2DR7aWfCX8Rs9y9HfrjZRLfALI
+         CNE8jpd8fg1E7EBeMtKgS05jyHr8fGlvpYrVGsfnv/NnT2VJjfczdsn7aI9oMKIHSoxQ
+         +0mw==
+X-Gm-Message-State: AO0yUKXNaCDSnkEtP1RWjMYY7rsyxUdX+x9mCG61zBzO8m6it+012iJi
+        +eLH62edv+avsYbLdgTytoX+aPEhuJO/ZRTfcXJJ25y75O011Q==
+X-Google-Smtp-Source: AK7set9FlH3YuQTbPCgh8mr0LjPnk5XhZB1nXXLdBvl7PGkvQMWtqwoUMM40I3hsgJ9TvVKQ6Wl7KoC5IoZD0JPcu+Q=
+X-Received: by 2002:ac2:43d0:0:b0:4d2:e530:d53c with SMTP id
+ u16-20020ac243d0000000b004d2e530d53cmr434756lfl.8.1675264512162; Wed, 01 Feb
  2023 07:15:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20230131153816.21709-1-bchihi@baylibre.com> <202302011058.17Vvc1pN-lkp@intel.com>
- <17072296-c1fb-1e82-65fd-26b448167087@linaro.org>
-In-Reply-To: <17072296-c1fb-1e82-65fd-26b448167087@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 1 Feb 2023 16:14:36 +0100
-Message-ID: <CAGuA+opm_oM-BdHgcnj09C_6oT4WSbu8-v2QnzmERUiNQD4rUQ@mail.gmail.com>
-Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
- Thermal Sensor driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, oe-kbuild-all@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
+References: <20230201080227.473547-1-jun.nie@linaro.org> <20230201080227.473547-2-jun.nie@linaro.org>
+ <5ecc68a6-2914-1059-460f-752adc1d3d01@kernel.org>
+In-Reply-To: <5ecc68a6-2914-1059-460f-752adc1d3d01@kernel.org>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Wed, 1 Feb 2023 23:15:08 +0800
+Message-ID: <CABymUCP0sC58vi1nU=0BM9JmwWh2eNTt883_VGwXdoaZ3ZZUJQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM / devfreq: qcom: Introduce CCI devfreq driver
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, bryan.odonoghue@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+> > Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> > ---
+> >  drivers/devfreq/Kconfig    |   9 +++
+> >  drivers/devfreq/Makefile   |   1 +
+> >  drivers/devfreq/qcom-cci.c | 162 +++++++++++++++++++++++++++++++++++++
+>
+> Who is going to maintain this file/driver?
+>
+I will add myself as maintainer of this file.
+All other comments will be addressed in next version. Thanks!
 
-On Wed, Feb 1, 2023 at 8:47 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 01/02/2023 04:09, kernel test robot wrote:
-> > Hi Balsam,
-> >
-> > Thank you for the patch! Yet something to improve:
-> >
-> >
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/UPDATE-20230131-234122/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230124-211910
-> > base:   the 4th patch of https://lore.kernel.org/r/20230124131717.128660-5-bchihi%40baylibre.com
-> > patch link:    https://lore.kernel.org/r/20230131153816.21709-1-bchihi%40baylibre.com
-> > patch subject: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage Thermal Sensor driver
-> > config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230201/202302011058.17Vvc1pN-lkp@intel.com/config)
-> > compiler: s390-linux-gcc (GCC) 12.1.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/5646ebf6f10ff0fc60c04d8c57523f7c44526b41
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review UPDATE-20230131-234122/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230124-211910
-> >         git checkout 5646ebf6f10ff0fc60c04d8c57523f7c44526b41
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >>> drivers/thermal/mediatek/lvts_thermal.c:20:10: fatal error: dt-bindings/thermal/mediatek,lvts-thermal.h: No such file or directory
-> >       20 | #include <dt-bindings/thermal/mediatek,lvts-thermal.h>
-> >          |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> So here is your driver... and you decided not only to make reviewers
-> life more difficult, but also to fail all automated tools.
->
-> No, that's not how patchsets should be sent. You have here clear
-> dependency, you cannot send them separately.
-
-I'm sorry, I'll be careful next time.
-I apologize for breaking the series.
-I will take into account the new change requests in the next full
-v13 the series.
-
->
-> Best regards,
-> Krzysztof
->
-
-Best regards,
-Balsam
+- Jun
