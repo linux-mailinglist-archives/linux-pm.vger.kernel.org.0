@@ -2,243 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4806A686CA6
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 18:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A746686CAE
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 18:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjBARSs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 12:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S232054AbjBARTY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 12:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBARSn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 12:18:43 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE00410AA
-        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 09:18:40 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id mf7so34752846ejc.6
-        for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 09:18:40 -0800 (PST)
+        with ESMTP id S231786AbjBARTX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 12:19:23 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BA54741C
+        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 09:19:21 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ud5so53507435ejc.4
+        for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 09:19:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IJEBduByw0+WeeEW1vYOiskBh5WFkUCHdPpVrGoxGKg=;
-        b=qU0VFwynsZuhNal5A+syKnYrVS4I5WbYMXGx/mXRDHgdsBER/tT4pspStfAyD7bR6B
-         a0xb1Y4IUf++CW3DPeJD87XZsUBKHdUN64EKyxjYgiytqNlvwZ2Ld3jSnbofns1/oYDh
-         IqYDRLqOwcWNfoSANSdtehhWX9cfohGUXeRJh6IvHSznJ2zwmjuHzWnLTzFLdcaP4Xgz
-         13hQtMuObwmglWwNyHiorlyWO94Br+rmtGVQ3pwosomo/y21C9A7yXv0L2q4WZonGIKJ
-         vADtEb91JpWibNi61QQmnCDt/Oq9N0lYWxS5db6T0AyLwJr3f7k6ITZC6OQnt44CMULI
-         Jhig==
+        bh=zaEIeCiOrKHpCOtlR5RrYuYkrDweJDnGW6XjiZXdYqw=;
+        b=S7J3fHKz7eoWsPIozlLaOcfDxUT6CU8eGxhhLcngjMrvGQujfyBhnoTo8zV8YbV7I5
+         XKzpfcXL4/uH6WpTE9gL1It3699RLW3YxA6FwGgC31T8EnzAjWKUn9gikFOhdWYto/zI
+         jH93fTOjKfm8Q9bjhgXEwJkaFraSLye8uhrIeK8oq7hL8HobfGPpr75HP5qjqVzjjeQZ
+         YsHcbDa+3EPi5nl0nfsOQ+jU/FYp45RCyzX8nh51aTm4R2nxbJun3MkZm/1h5uCl39jO
+         +jKnYTe4on6YFPGRimPmzSTeLEsICWEOZvdW666rTLjHPMtbMol9N2ZXzZujUlkBArAW
+         ElRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJEBduByw0+WeeEW1vYOiskBh5WFkUCHdPpVrGoxGKg=;
-        b=cRRzdjhzZxIse+Y8NvaJsU8ozyw6e4fPP6M+cYr/KC7+if7os//Li0Q48YxrR7QutK
-         pJkpdapqcEmJkajt5kiGV2+U7f8zrlw/iieFH9Ut0NxHzq/vOX9k4vGy7UsKJBk7XbuL
-         40M45QtkETUnUClQzShFDEvKPFCc1dA0xHef4kCF9kwPc47tmVyIErqXv5v0ujLKEAFm
-         MtSfrCfaXEz80bDnKycLGL9Ua9ef1UrxIAi9zm4pCiRpVfZz1VMk+N9As8/TaKQ5Ivng
-         PvYDzEurj0ymQz1jX7cGsK+qJCQZ4O0u4c5mGfMN1aCRHPWfYznEmuE/D0jwGNEJm7eF
-         rrYQ==
-X-Gm-Message-State: AO0yUKUJZRWmzba3DvnK+J6rsK2DstNvLgkI2fT7S5zDuXf9OlF3ai8Z
-        1msV4h7mnZw/Do5+T89cmnBS+pyCrKiwgD4J
-X-Google-Smtp-Source: AK7set+gewMdqHo/uilbTwhi9Jr+umQkJA0t+YVmpE9v1p0N1BH0BOEQA4p96R002G12DWbv02IDCg==
-X-Received: by 2002:a17:907:8dcd:b0:878:673f:5492 with SMTP id tg13-20020a1709078dcd00b00878673f5492mr3620104ejc.40.1675271919425;
-        Wed, 01 Feb 2023 09:18:39 -0800 (PST)
+        bh=zaEIeCiOrKHpCOtlR5RrYuYkrDweJDnGW6XjiZXdYqw=;
+        b=Dzw9Ol3bGlGbz6aq0y/CSpLknAhm5HcuE5W+501H+RddzqPuIkjKbOjXxxgOzISZOY
+         rtkkHPWGMsHATQ16F6HfrQQ630FrabjRcMBgJ3xoiHESoxXZ55Aaoz7v+VrEMQVuX/l1
+         RX50QIRv4mKFn9t5gbjgsVPZ5om5vSSXUb4dw7L3ZjPvhL8mHPwrzumV0zfPfhDvTVt2
+         UWbVfZh7CVQ4jZfykNzh6/OdJJF+kAEC9br50yZgOUrQz24jBTJNs6IQl/iAAzIQ+EhY
+         aEFujYn/qUyIn6maepk7tt0+AuOPSR03MsqktDSSpmW4DvM3Bq5XkYOGvyBGf3mLqDeC
+         dJlg==
+X-Gm-Message-State: AO0yUKUN6HabtOQ7g16Twbwt3ssyejYxyqqiCmv6fkYvt+JqlQ8VWrus
+        +50BAhWiY9Z6Vbh6LgXVSYotlw==
+X-Google-Smtp-Source: AK7set8+DE09XcJZzYSicBIUvVpus1QzP6iRGUcYVUuihrlXVmIxky/e9/LE8wo+/+Zt86xjWOPzDQ==
+X-Received: by 2002:a17:907:6d02:b0:877:5dbc:da84 with SMTP id sa2-20020a1709076d0200b008775dbcda84mr4102789ejc.72.1675271960025;
+        Wed, 01 Feb 2023 09:19:20 -0800 (PST)
 Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id jt18-20020a170906ca1200b00889a9444e29sm4543675ejb.14.2023.02.01.09.18.38
+        by smtp.gmail.com with ESMTPSA id qu21-20020a170907111500b00884c611145fsm6644803ejb.62.2023.02.01.09.19.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 09:18:38 -0800 (PST)
-Message-ID: <12cc1148-5fd1-0c34-1bfe-f0f610bb5274@linaro.org>
-Date:   Wed, 1 Feb 2023 19:18:37 +0200
+        Wed, 01 Feb 2023 09:19:19 -0800 (PST)
+Message-ID: <9c86f610-b8f8-a6e5-396a-1f6339c8529f@linaro.org>
+Date:   Wed, 1 Feb 2023 19:19:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
 Subject: Re: [PATCH 2/2] PM / devfreq: qcom: Introduce CCI devfreq driver
 Content-Language: en-GB
-To:     Jun Nie <jun.nie@linaro.org>, Chanwoo Choi <cwchoi00@gmail.com>
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, bryan.odonoghue@linaro.org,
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Jun Nie <jun.nie@linaro.org>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230201080227.473547-1-jun.nie@linaro.org>
  <20230201080227.473547-2-jun.nie@linaro.org>
- <cee1778f-70a0-4bb5-a18f-4dd89cf62a2e@gmail.com>
- <CABymUCMAL-iEOni_xVhDfOi60axr2ujz5kaH1V30ymE3cAjT9w@mail.gmail.com>
+ <515f4e9e-2804-e03a-26f5-f2d3ac331109@linaro.org>
+ <71ba0d05-6183-95ef-9e45-cc3dd512475f@linaro.org>
+ <CAA8EJpqyqC5D+O=KJnuZnWN4BwBOKcquN11nJfEp2WMSmJobBg@mail.gmail.com>
+ <58a5e856-3e8b-d660-09ee-7a18b184452f@linaro.org>
+ <1d33eb58-95d1-643d-52cc-2888ff0cea43@linaro.org>
+ <86478fbd-590a-f94f-6cc1-f4d06a96826e@linaro.org>
+ <2a0ce32c-d100-d5c3-ac0c-ccd7100a2c06@linaro.org>
+ <8eb9ba9b-dce8-5ece-6c2a-7e7a758c75ab@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CABymUCMAL-iEOni_xVhDfOi60axr2ujz5kaH1V30ymE3cAjT9w@mail.gmail.com>
+In-Reply-To: <8eb9ba9b-dce8-5ece-6c2a-7e7a758c75ab@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/02/2023 17:17, Jun Nie wrote:
-> Chanwoo Choi <cwchoi00@gmail.com> 于2023年2月1日周三 19:02写道：
+On 01/02/2023 19:16, Bryan O'Donoghue wrote:
+> On 01/02/2023 17:12, Dmitry Baryshkov wrote:
+>> On 01/02/2023 17:17, Bryan O'Donoghue wrote:
+>>> On 01/02/2023 14:58, Dmitry Baryshkov wrote:
+>>>> On 01/02/2023 16:45, Bryan O'Donoghue wrote:
+>>>>> On 01/02/2023 13:41, Dmitry Baryshkov wrote:
+>>>>>>>                           cci-cpufreq {
+>>>>>>>                                   target-dev = <&cci_cache>;
+>>>>>>>                                   cpu-to-dev-map-0 =
+>>>>>>>                                           <  200000  200000000 >,
+>>>>>>>                                           <  345600  200000000 >,
+>>>>>>>                                           <  400000  200000000 >,
+>>>>>>>                                           <  533330  297600000 >,
+>>>>>>>                                           <  800000  297600000 >,
+>>>>>>>                                           <  960000  297600000 >,
+>>>>>>>                                           < 1113600  297000000 >,
+>>>>>>>                                           < 1344000  595200000 >,
+>>>>>>>                                           < 1459200  595200000 >,
+>>>>>>>                                           < 1497600  595200000 >,
+>>>>>>>                                           < 1651200  595200000 >;
+>>>>>>>                                   cpu-to-dev-map-4 =
+>>>>>>>                                           <  200000 200000000 >,
+>>>>>>>                                           <  249600 200000000 >,
+>>>>>>>                                           <  499200 297600000 >,
+>>>>>>>                                           <  800000 297600000 >,
+>>>>>>>                                           <  998400 595200000 >,
+>>>>>>>                                           < 1113600 595200000 >;
+>>>>>> These should map to existing opp entries.
+>>>>>>
+>>>>>> I ended up doing the interconnect driver that maps a clock to the
+>>>>>> interconnect. Then I can use it in the cpu opp tables.
+>>>>>>
+>>>>>
+>>>>> Can you point us at what it is you are proposing ?
+>>>>
+>>>> https://patchwork.kernel.org/project/linux-arm-msm/patch/20230120061417.2623751-9-dmitry.baryshkov@linaro.org/
+>>>>
+>>> Is there no driver code too ?
 >>
->> Hi,
+>> There are two parts, one is the 'CBF clock' driver, which just 
+>> provides a clock, another part actually connects the clock and 
+>> interconnect. Initially I implemented it as a part of the CBF driver 
+>> (see 
+>> https://patchwork.kernel.org/project/linux-arm-msm/patch/20230120061417.2623751-5-dmitry.baryshkov@linaro.org/), next revision will move the interconnect part to drivers/interconnect.
 >>
->> On 23. 2. 1. 17:02, Jun Nie wrote:
->>> Cache Coherent Interconnect (CCI) is used by some Qualcomm SoCs. This
->>> driver is introduced so that its freqency can be adjusted. And regulator
->>> associated with opp table can be also adjusted accordingly which is
->>> shared with cpu cluster.
->>>
->>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
->>> ---
->>>   drivers/devfreq/Kconfig    |   9 +++
->>>   drivers/devfreq/Makefile   |   1 +
->>>   drivers/devfreq/qcom-cci.c | 162 +++++++++++++++++++++++++++++++++++++
->>>   3 files changed, 172 insertions(+)
->>>   create mode 100644 drivers/devfreq/qcom-cci.c
->>>
->>> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
->>> index 9754d8b31621..6f3f1872f3fb 100644
->>> --- a/drivers/devfreq/Kconfig
->>> +++ b/drivers/devfreq/Kconfig
->>> @@ -130,6 +130,15 @@ config ARM_MEDIATEK_CCI_DEVFREQ
->>>          buck voltages and update a proper CCI frequency. Use the notification
->>>          to get the regulator status.
->>>
->>> +config ARM_QCOM_CCI_DEVFREQ
->>> +     tristate "QUALCOMM CCI DEVFREQ Driver"
->>> +     depends on ARCH_QCOM || COMPILE_TEST
->>> +     select DEVFREQ_GOV_PASSIVE
->>> +     help
->>> +       This adds a devfreq driver for Qualcomm Cache Coherent Interconnect which
->>> +       shares the same regulator with the cpu cluster. This driver can track a
->>> +       proper regulator state while CCI frequency is updated.
->>
->> Maybe, this driver use the passive governor because as this description,
->> the regulator is shared with cpu cluster. But, as I commented below,
->> you use the 'userspace' governor in probe. is it right?
->>
->>> +
->>>   config ARM_RK3399_DMC_DEVFREQ
->>>        tristate "ARM RK3399 DMC DEVFREQ Driver"
->>>        depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
->>> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
->>> index bf40d04928d0..f2526d8c168d 100644
->>> --- a/drivers/devfreq/Makefile
->>> +++ b/drivers/devfreq/Makefile
->>> @@ -12,6 +12,7 @@ obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)        += exynos-bus.o
->>>   obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)    += imx-bus.o
->>>   obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ) += imx8m-ddrc.o
->>>   obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)       += mtk-cci-devfreq.o
->>> +obj-$(CONFIG_ARM_QCOM_CCI_DEVFREQ)   += qcom-cci.o
->>>   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ) += rk3399_dmc.o
->>>   obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)     += sun8i-a33-mbus.o
->>>   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)              += tegra30-devfreq.o
->>> diff --git a/drivers/devfreq/qcom-cci.c b/drivers/devfreq/qcom-cci.c
->>> new file mode 100644
->>> index 000000000000..21b5f133cddc
->>> --- /dev/null
->>> +++ b/drivers/devfreq/qcom-cci.c
->>> @@ -0,0 +1,162 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Copyright 2023 Linaro Ltd.
->>> + */
->>> +
->>> +#include <linux/clk.h>
->>> +#include <linux/devfreq.h>
->>> +#include <linux/device.h>
->>> +#include <linux/module.h>
->>> +#include <linux/nvmem-consumer.h>
->>> +#include <linux/of_device.h>
->>> +#include <linux/pm_opp.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/slab.h>
->>> +
->>> +#define SPEED_PVS(s, p) ((s << 16) | p)
->>
->> What it meaning of PVS? Could you add the comment for 'PVS' and 's', 'p'?
->>
-> This is what I have from Qualcomm code. Maybe others have more info about it.
-> Process Voltage Scaling(PVS) Tables defines the voltage and frequency
-> value based on the msm-id in SMEM and speedbin blown in the efuse
-> combination.
 > 
->>> +
->>> +struct qcom_cci {
->>> +     struct devfreq_dev_profile profile;
->>> +     struct devfreq *devfreq;
->>> +     struct clk *clk;
->>> +};
->>> +
->>> +static int qcom_cci_target(struct device *dev,
->>> +             unsigned long *freq, u32 flags)
->>
->> Actually, this line is not long. You can type it on one line as following:
->>
->> static int qcom_cci_target(struct device *dev, unsigned long *freq, u32 flags)
->>
->>> +{
->>> +     struct dev_pm_opp *new_opp;
->>> +     int ret;
->>
->> As I mentioned belwo, this local variable is not needed
->> if just return PTR_ERR(new_opp).
->>
->>> +
->>> +     new_opp = devfreq_recommended_opp(dev, freq, flags);
->>> +     if (IS_ERR(new_opp)) {
->>> +             ret = PTR_ERR(new_opp);
->>> +             dev_err(dev, "failed to get recommended opp: %d\n", ret);
->>> +             return ret;
->>
->> Better to add 'return PTR_ERR(new_opp)' without 'ret' local variable.
->>
->>> +     }
->>> +     dev_pm_opp_put(new_opp);
->>> +
->>> +     return dev_pm_opp_set_rate(dev, *freq);
->>> +}
->>> +
->>> +static int qcom_cci_get_cur_freq(struct device *dev, unsigned long *freq)
->>> +{
->>> +     struct qcom_cci *priv = dev_get_drvdata(dev);
->>> +
->>> +     *freq = clk_get_rate(priv->clk);
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static int qcom_get_dev_version(struct nvmem_cell *speedbin_nvmem)
->>> +{
->>> +     int speed = 0, pvs = 0;
->>> +     u8 *speedbin;
->>> +     size_t len;
->>> +
->>> +     speedbin = nvmem_cell_read(speedbin_nvmem, &len);
->>> +     if (IS_ERR(speedbin))
->>> +             return PTR_ERR(speedbin);
->>> +
->>> +     speed = (speedbin[0xc] >> 2) & 0x7;
->>> +     pvs = (speedbin[0x3] >> 5 & 0x1) | ((speedbin[0x6] >> 2 & 0x3) << 1);
->>
->> Actually, 0xc, 0x3, 0x7, 0x1 and so on. It is impossible to understand
->> the meaning of this hex value. Plesae add the constant defintion
->> for the readability.
->>
-> Thanks for pointing it. The bit wise manipulation will be converted
-> into nvmem offset and
-> bit position in next version. So driver will read out value directly
-> without bit shift/mask.
-> Other comments will be adopted in next version. Thanks!
+> Ah so just to be clear - discussing with Dmitry - CCI has its own set of 
+> fuses.
+> 
+> We have fusebin settings for clusterX and CCI.
+> 
+> So, I think we agree this means a separate driver for cci is warranted.
 
-Please consider handling everything using the nvmem API. If PVS is split 
-into two regions it might be better to parse them separately and then 
-combine them in the driver(*), rather than performing such parsing in 
-the driver.
-
-(*) while doing the rework of the tsens driver I also faced a similar 
-issue. It might be nice to have 'combined' nvmem cells.
+Yes.
 
 -- 
 With best wishes
