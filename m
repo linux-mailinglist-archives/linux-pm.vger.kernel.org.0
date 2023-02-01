@@ -2,156 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C4A686FC5
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 21:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A039F687021
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 21:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjBAUj5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 15:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S230218AbjBAUxK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 15:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBAUjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 15:39:44 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353FF5CD26;
-        Wed,  1 Feb 2023 12:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675283983; x=1706819983;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CIUf85ECHrLs7jYFIV4Z9a6KYQcONf8mKzLBNRpgQ9w=;
-  b=mc3fxK5iSRAr38qD9jQV66JLSW6zGHw6CuE7EAPfOFxLFAo5RDZ/LSy5
-   3LEgDgM3uJ7Do7KnCWA6xmOg6CwRrmprFwLsZJzg7tW1kOoPRx99/9cdn
-   Z0H+S7H6+p5pYjurtdzoRJfR/flPx/+1dQGzd8H2Dt0H1bXn0GjF0S5fW
-   jQm9fY1u/xMjVXbipiAwELc+RX72csYOJdEiQRfoe5KcLzdm7PoCk26Tn
-   uRftivbrnOmKtigRzztMhPR43Fdx5we5cCW/dLsAgAYw1awq+OWnNxg0W
-   tCA7zMxfRDrqDjUFMNYWDughjL9xp0uifwPfXsmZWqKQKWfnEtTqhb3hD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="329561835"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="329561835"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 12:39:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="614985941"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="614985941"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga003.jf.intel.com with ESMTP; 01 Feb 2023 12:39:42 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2] thermal: intel_powerclamp: Fix cur_state for multi package system
-Date:   Wed,  1 Feb 2023 12:39:41 -0800
-Message-Id: <20230201203941.2166530-1-srinivas.pandruvada@linux.intel.com>
+        with ESMTP id S231624AbjBAUxD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 15:53:03 -0500
+X-Greylist: delayed 428 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 12:52:37 PST
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8650925E10
+        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 12:52:37 -0800 (PST)
+Received: from localhost.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0C6DC20392;
+        Wed,  1 Feb 2023 21:44:59 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Cameron <jic23@kernel.org>, iio@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use generic ADC node name
+Date:   Wed,  1 Feb 2023 21:44:46 +0100
+Message-Id: <20230201204447.542385-3-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230201204447.542385-1-marijn.suijten@somainline.org>
+References: <20230201204447.542385-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The powerclamp cooling device cur_state shows actual idle observed by
-package C-state idle counters. But the implementation is not sufficient
-for multi package or multi die system. The cur_state value is incorrect.
-On these systems, these counters must be read from each package/die and
-somehow aggregate them. But there is no good method for aggregation.
+Update the example to reflect a future requirement for the generic
+adc-chan node name on ADC channel nodes, while conveying the board name
+of the channel in a label instead.
 
-It was not a problem when explicit CPU model addition was required to
-enable intel powerclamp. In this way certain CPU models could have
-been avoided. But with the removal of CPU model check with the
-availability of Package C-state counters, the driver is loaded on most
-of the recent systems.
-
-For multi package/die systems, just show the actual target idle state,
-the system is trying to achieve. In powerclamp this is the user set
-state minus one.
-
-Also there is no use of starting a worker thread for polling package
-C-state counters and applying any compensation for multiple package
-or multiple die systems.
-
-Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org # 4.14+
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
-v2:
-Changed: (true == clamping) to (clamping)
-Updated commit description for the last paragraph
+ .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml   | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
- drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index b80e25ec1261..2f4cbfdf26a0 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -57,6 +57,7 @@
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+index 52ec18cf1eda..885c9e139848 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+@@ -178,10 +178,11 @@ examples:
+             #io-channel-cells = <1>;
  
- static unsigned int target_mwait;
- static struct dentry *debug_dir;
-+static bool poll_pkg_cstate_enable;
+             /* Other properties are omitted */
+-            conn-therm@4f {
++            adc-chan@4f {
+                 reg = <ADC5_AMUX_THM3_100K_PU>;
+                 qcom,ratiometric;
+                 qcom,hw-settle-time = <200>;
++                label = "conn_therm";
+             };
+         };
  
- /* user selected target */
- static unsigned int set_target_ratio;
-@@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
- {
- 	unsigned int comp = 0;
+@@ -217,16 +218,18 @@ examples:
+             #io-channel-cells = <1>;
  
-+	if (!poll_pkg_cstate_enable)
-+		return 0;
-+
- 	/* we only use compensation if all adjacent ones are good */
- 	if (ratio == 1 &&
- 		cal_data[ratio].confidence >= CONFIDENCE_OK &&
-@@ -519,7 +523,8 @@ static int start_power_clamp(void)
- 	control_cpu = cpumask_first(cpu_online_mask);
+             /* Other properties are omitted */
+-            xo-therm@44 {
++            adc-chan@44 {
+                 reg = <PMK8350_ADC7_AMUX_THM1_100K_PU>;
+                 qcom,ratiometric;
+                 qcom,hw-settle-time = <200>;
++                label = "xo_therm";
+             };
  
- 	clamping = true;
--	schedule_delayed_work(&poll_pkg_cstate_work, 0);
-+	if (poll_pkg_cstate_enable)
-+		schedule_delayed_work(&poll_pkg_cstate_work, 0);
+-            conn-therm@147 {
++            adc-chan@147 {
+                 reg = <PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
+                 qcom,ratiometric;
+                 qcom,hw-settle-time = <200>;
++                label = "conn_therm";
+             };
+         };
  
- 	/* start one kthread worker per online cpu */
- 	for_each_online_cpu(cpu) {
-@@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
- static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
- {
--	if (true == clamping)
--		*state = pkg_cstate_ratio_cur;
--	else
-+	if (clamping) {
-+		if (poll_pkg_cstate_enable)
-+			*state = pkg_cstate_ratio_cur;
-+		else
-+			*state = set_target_ratio;
-+	} else {
- 		/* to save power, do not poll idle ratio while not clamping */
- 		*state = -1; /* indicates invalid state */
-+	}
- 
- 	return 0;
- }
-@@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
- 		goto exit_unregister;
- 	}
- 
-+	if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
-+		poll_pkg_cstate_enable = true;
-+
- 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
- 						&powerclamp_cooling_ops);
- 	if (IS_ERR(cooling_dev)) {
 -- 
 2.39.1
 
