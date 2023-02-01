@@ -2,114 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5B5686DB9
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323C8686E0B
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjBASQM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 13:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S231671AbjBASfd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 13:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjBASQJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:16:09 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD677E6E4
-        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 10:16:08 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4P6VTp3jWPz9sjr;
-        Wed,  1 Feb 2023 19:15:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1675275358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JTa13PkDyAD5Fq00WCKRPhtlL382Rc6MKBWbBS0vN8U=;
-        b=anz+I5B7rcrJv6dHk6f+Fs58QbKAObnFuF75K65qNfjem6PEjB+mNYe/dcg68Ja1i+0i7g
-        2Ae2MrMs5rNwhGssVKgAFEn0nDCmc5yOW8CD9ALtr1WsvaA56amvrw6VRPp88At7UvTjZy
-        zfLO0xkxaAmidwXgW2TwbGMCANkM0bKG6SUBeNnS96StLfB2C455j0mD/POXukDKtULvuy
-        h+X5NAQX1uBNKgJ39aCyMKb9vTC7e1bBpBFkL1DPtaJ9CCVivGpciiLzqDL3VkJ2tfd19A
-        dO6S+oUsf/XQhiGKpx9rWfGUy8AZpdM87yJWqL6wzIPyk8p9CP3BLIrSSzZT5g==
-Message-ID: <dfacbc3f-beb3-73f3-7e44-f3d919839d7f@mailbox.org>
-Date:   Wed, 1 Feb 2023 18:15:47 +0000
+        with ESMTP id S231926AbjBASfa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:35:30 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB227F692;
+        Wed,  1 Feb 2023 10:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675276524; x=1706812524;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m8lj5D4ewZeXHvV9EGTjWwSj8HiD530yrHpf7fXqADE=;
+  b=nGYOszuzb9L/fdd4PW0uN/QD4XZga0AnlqlDvD/51S8SfrJjkQOoXWGz
+   ALZqOOD0D0G8A9UpO5NjAi8PS4+483QrGKi7Yja2HQGaP5LWLJOj9+NeY
+   8HmYgdJwrgnmunxarLKMZaXxnsLERvGJb48fSMccDHJeqYxLe2hKuB20b
+   kR4cw2Hb7Uwguk6/JwjmhYl6fuD19Dto4iHcA/+kurjN3hZar1TbWe/LX
+   IUaTD3YnXPxEj2V7fLxcJ6gKECZvV+3ElewSD1Bzv1yvbQIP50KRqLYHg
+   sl8iRIxNBICX9ltTdzWsKw63pOtPyc0Gg1uiFlUXM7vGkBNCTnXlNw0CG
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414440434"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="414440434"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:28:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667014251"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="667014251"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2023 10:28:55 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v5 0/4] Use idle_inject framework for intel_powerclamp
+Date:   Wed,  1 Feb 2023 10:28:50 -0800
+Message-Id: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/6] amd_pstate: Add guided autonomous mode support
-Content-Language: en-US
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        gautham.shenoy@amd.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>, santosh.shukla@amd.com,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@suse.de>
-References: <20230119115017.10188-1-wyes.karny@amd.com>
- <8c09f806-b00d-515b-bd1d-2f433e44b1a4@mailbox.org>
- <20230131053427.cdpg5zaqyxf7ou2f@beas>
-From:   Tor Vic <torvic9@mailbox.org>
-In-Reply-To: <20230131053427.cdpg5zaqyxf7ou2f@beas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: ws53a61rg81hufw5idcjtd9gi7bxwzf5
-X-MBO-RS-ID: 9827835aedd8814a521
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dropped the per core idle injection patch from this series. Hence the
+subject of this series is changed. Now it is just for using
+idle inject framework for intel_powerclamp.
+Add additionl patch for module paramters to set cpumask and max idle percent.
 
+The old cover letter:
+This series introduces per CPU idle injection. In preparation for this
+enhance the existing powercap/idle_inject and modify intel_powerclamp
+to use this. Then add per core idle injection driver.
 
-On 31.01.23 05:34, Wyes Karny wrote:
-> Hi Tor Vic,
-> 
-> On 24 Jan 20:40, Tor Vic wrote:
-> --------------------------------->8-----------------------------
->>
->> The "active" mode seems to be broken here on a Zen2 3900X running Linux 6.1.
->> Frequency remains stuck at minimum which is +-500 MHz.
-> 
-> I've fixed this in v4.
-> 
->>
->> Some queries of the new /sys devices lead to I/O error:
->>
->>    # LANG=C cat /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_*
->>    166
->>    cat:
->> /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_lowest_nonlinear_freq:
->> Input/output error
->>    cat: /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_max_freq:
->> Input/output error
->>
-> This issue I'm not able to reproduce. Is this issue seen with only EPP
-> patches also?
-> Could you please check if this issue still there with v4?
+v5:
+- additionl patch for module paramters to set cpumask and max idle percent
+- One fix for update callback
+- Rebased on top of patch 
+ "thermal: intel_powerclamp: Fix cur_state for multi package system"
 
-No, it's gone. Could have been a mismerge, I'm sorry.
+v4:
+- Dropped the per core idle inject patch
 
-> 
-> Thanks,
-> Wyes
+v3
+- Change callback from per CPU to per device and use in intel_powerclamp
+- Remove unused var in per cpu idle injection module
 
-Thank you!
+v2
+- Update based on feedback from Rafael on patch 2/4
+- Kconfig dependency issue
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
->> The "guided" mode seems to work fine with no stuck frequency, but also
->> produces I/O error on some /sys files.
->>
->> I haven't tested "passive".
->>
->> Cheers,
->>
->> Tor Vic
+Srinivas Pandruvada (4):
+  powercap: idle_inject: Export symbols
+  powercap: idle_inject: Add update callback
+  thermal/drivers/intel_powerclamp: Use powercap idle-inject framework
+  thermal/drivers/intel_powerclamp: Add additional module params
+
+ .../driver-api/thermal/intel_powerclamp.rst   |  22 +
+ drivers/powercap/idle_inject.c                |  57 +-
+ drivers/thermal/intel/Kconfig                 |   2 +
+ drivers/thermal/intel/intel_powerclamp.c      | 512 ++++++++++--------
+ include/linux/idle_inject.h                   |   3 +
+ 5 files changed, 367 insertions(+), 229 deletions(-)
+
+-- 
+2.39.1
+
