@@ -2,1574 +2,448 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BA5685E53
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 05:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E610E685E75
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 05:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjBAETM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Jan 2023 23:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S229992AbjBAE3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Jan 2023 23:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjBAETL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 23:19:11 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F39A58295;
-        Tue, 31 Jan 2023 20:19:07 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3113rgp7025891;
-        Wed, 1 Feb 2023 04:19:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=YNtdeUuWflpp2D6vQh+RHaYl0ZDqeu/4m4NMXx3BwWs=;
- b=PnPl2uaA4xY6KBxLefFsmhPLjYTW7FTri+92l4l1Cg+6SamZ+qIsK3ov7iY1i9dMhRo0
- LQ4cZNDHGwPDtmB6LiHItOZJrZqc/YLDewGaiHKPQlB29FzqtjmZjuW4qHokICLgNwtc
- i/UkYuYn7dYXUaBDeEBq9zKPXxUcQFL54/SYsKb18jzBixYzZanOEeowT+kgFMnBdHSY
- t7dF0wU4occc7OELDZaOUVvx3x0dKLHNABsoYa1JopBpz3kbosN6MzcRovXBx92zxKXJ
- bpsNsae5jpfCt7G1st1+LumKHQ6OgRs+Xn2mXOQfLpdvUbg19D6Z7iXmwKd4NnZsTCLJ Lw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3new3uaxcn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 04:19:01 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3114J0uu004547
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Feb 2023 04:19:00 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 31 Jan 2023 20:18:59 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S229488AbjBAE3p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Jan 2023 23:29:45 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82864FF3F;
+        Tue, 31 Jan 2023 20:29:41 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Ax3eqz6tlj2CwLAA--.23047S3;
+        Wed, 01 Feb 2023 12:29:39 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax+72y6tljsxkmAA--.9381S3;
+        Wed, 01 Feb 2023 12:29:39 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] thermal: loongson-2: add thermal management
+ support
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v4 4/4] power: supply: Introduce Qualcomm PMIC GLINK power supply
-Date:   Tue, 31 Jan 2023 20:18:53 -0800
-Message-ID: <20230201041853.1934355-5-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
-References: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>, lvjianmin@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        zhuyinbo@loongson.cn
+References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <b7847db2-e173-d364-6258-95bde3612e1e@loongson.cn>
+Date:   Wed, 1 Feb 2023 12:29:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AhW9XzkN2C6ViZ4TcMN-LZO0CZbrhSXh
-X-Proofpoint-ORIG-GUID: AhW9XzkN2C6ViZ4TcMN-LZO0CZbrhSXh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 clxscore=1015 suspectscore=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 adultscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302010035
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Ax+72y6tljsxkmAA--.9381S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWfGFW3WFWkGw13try5try7KFg_yoWkKw43pF
+        WUJws3GFZrJFsrZwn8Xr1UZF90vr13tFy3ZFZ7G3s8urZ8t343Wry8GFy8ArWSkrWDGF1U
+        ZFnYkrW5CFWqg3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-The PMIC GLINK service, running on a coprocessor of modern Qualcomm
-platforms, deals with battery charging and fuel gauging, as well as
-reporting status of AC and wireless power supplies.
+Friendly ping ?
 
-As this is just one of the functionalities provided by the PMIC GLINK
-service, this power supply driver is implemented as an auxilirary bus
-driver, spawned by the main "pmic glink" driver when the PMIC GLINK
-service is detected.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org> # SM8350 PDX215
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8550-MTP & SM8450-HDK
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
-
-Changes since v3:
-- None
-
- drivers/power/supply/Kconfig        |    9 +
- drivers/power/supply/Makefile       |    1 +
- drivers/power/supply/qcom_battmgr.c | 1421 +++++++++++++++++++++++++++
- 3 files changed, 1431 insertions(+)
- create mode 100644 drivers/power/supply/qcom_battmgr.c
-
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index e2f8dfcdd2a9..a2292f19d301 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -174,6 +174,15 @@ config BATTERY_PMU
- 	  Say Y here to expose battery information on Apple machines
- 	  through the generic battery class.
- 
-+config BATTERY_QCOM_BATTMGR
-+	tristate "Qualcomm PMIC GLINK battery manager support"
-+	depends on QCOM_PMIC_GLINK
-+	select AUXILIARY_BUS
-+	help
-+	  Say Y here to enable the Qualcomm PMIC GLINK power supply driver,
-+	  which is used on modern Qualcomm platforms to provide battery and
-+	  power supply information.
-+
- config BATTERY_OLPC
- 	tristate "One Laptop Per Child battery"
- 	depends on OLPC_EC
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 8cb3c7f5c111..dc4a3a58a5c0 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_BATTERY_GAUGE_LTC2941)	+= ltc2941-battery-gauge.o
- obj-$(CONFIG_BATTERY_GOLDFISH)	+= goldfish_battery.o
- obj-$(CONFIG_BATTERY_LEGO_EV3)	+= lego_ev3_battery.o
- obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
-+obj-$(CONFIG_BATTERY_QCOM_BATTMGR)	+= qcom_battmgr.o
- obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
- obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+= samsung-sdi-battery.o
- obj-$(CONFIG_BATTERY_COLLIE)	+= collie_battery.o
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-new file mode 100644
-index 000000000000..ed169b47c538
---- /dev/null
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -0,0 +1,1421 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Ltd
-+ */
-+#include <linux/auxiliary_bus.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/soc/qcom/pdr.h>
-+#include <linux/soc/qcom/pmic_glink.h>
-+#include <linux/math.h>
-+#include <linux/units.h>
-+
-+#define BATTMGR_CHEMISTRY_LEN	4
-+#define BATTMGR_STRING_LEN	128
-+
-+enum qcom_battmgr_variant {
-+	QCOM_BATTMGR_SM8350,
-+	QCOM_BATTMGR_SC8280XP,
-+};
-+
-+#define BATTMGR_BAT_STATUS		0x1
-+
-+#define BATTMGR_REQUEST_NOTIFICATION	0x4
-+
-+#define BATTMGR_NOTIFICATION		0x7
-+#define NOTIF_BAT_PROPERTY		0x30
-+#define NOTIF_USB_PROPERTY		0x32
-+#define NOTIF_WLS_PROPERTY		0x34
-+#define NOTIF_BAT_INFO			0x81
-+#define NOTIF_BAT_STATUS		0x80
-+
-+#define BATTMGR_BAT_INFO		0x9
-+
-+#define BATTMGR_BAT_DISCHARGE_TIME	0xc
-+
-+#define BATTMGR_BAT_CHARGE_TIME		0xd
-+
-+#define BATTMGR_BAT_PROPERTY_GET	0x30
-+#define BATTMGR_BAT_PROPERTY_SET	0x31
-+#define BATT_STATUS			0
-+#define BATT_HEALTH			1
-+#define BATT_PRESENT			2
-+#define BATT_CHG_TYPE			3
-+#define BATT_CAPACITY			4
-+#define BATT_SOH			5
-+#define BATT_VOLT_OCV			6
-+#define BATT_VOLT_NOW			7
-+#define BATT_VOLT_MAX			8
-+#define BATT_CURR_NOW			9
-+#define BATT_CHG_CTRL_LIM		10
-+#define BATT_CHG_CTRL_LIM_MAX		11
-+#define BATT_TEMP			12
-+#define BATT_TECHNOLOGY			13
-+#define BATT_CHG_COUNTER		14
-+#define BATT_CYCLE_COUNT		15
-+#define BATT_CHG_FULL_DESIGN		16
-+#define BATT_CHG_FULL			17
-+#define BATT_MODEL_NAME			18
-+#define BATT_TTF_AVG			19
-+#define BATT_TTE_AVG			20
-+#define BATT_RESISTANCE			21
-+#define BATT_POWER_NOW			22
-+#define BATT_POWER_AVG			23
-+
-+#define BATTMGR_USB_PROPERTY_GET	0x32
-+#define BATTMGR_USB_PROPERTY_SET	0x33
-+#define USB_ONLINE			0
-+#define USB_VOLT_NOW			1
-+#define USB_VOLT_MAX			2
-+#define USB_CURR_NOW			3
-+#define USB_CURR_MAX			4
-+#define USB_INPUT_CURR_LIMIT		5
-+#define USB_TYPE			6
-+#define USB_ADAP_TYPE			7
-+#define USB_MOISTURE_DET_EN		8
-+#define USB_MOISTURE_DET_STS		9
-+
-+#define BATTMGR_WLS_PROPERTY_GET	0x34
-+#define BATTMGR_WLS_PROPERTY_SET	0x35
-+#define WLS_ONLINE			0
-+#define WLS_VOLT_NOW			1
-+#define WLS_VOLT_MAX			2
-+#define WLS_CURR_NOW			3
-+#define WLS_CURR_MAX			4
-+#define WLS_TYPE			5
-+#define WLS_BOOST_EN			6
-+
-+struct qcom_battmgr_enable_request {
-+	struct pmic_glink_hdr hdr;
-+	__le32 battery_id;
-+	__le32 power_state;
-+	__le32 low_capacity;
-+	__le32 high_capacity;
-+};
-+
-+struct qcom_battmgr_property_request {
-+	struct pmic_glink_hdr hdr;
-+	__le32 battery;
-+	__le32 property;
-+	__le32 value;
-+};
-+
-+struct qcom_battmgr_update_request {
-+	struct pmic_glink_hdr hdr;
-+	u32 battery_id;
-+};
-+
-+struct qcom_battmgr_charge_time_request {
-+	struct pmic_glink_hdr hdr;
-+	__le32 battery_id;
-+	__le32 percent;
-+	__le32 reserved;
-+};
-+
-+struct qcom_battmgr_discharge_time_request {
-+	struct pmic_glink_hdr hdr;
-+	__le32 battery_id;
-+	__le32 rate; /* 0 for current rate */
-+	__le32 reserved;
-+};
-+
-+struct qcom_battmgr_message {
-+	struct pmic_glink_hdr hdr;
-+	union {
-+		struct {
-+			__le32 property;
-+			__le32 value;
-+			__le32 result;
-+		} intval;
-+		struct {
-+			__le32 property;
-+			char model[BATTMGR_STRING_LEN];
-+		} strval;
-+		struct {
-+			/*
-+			 * 0: mWh
-+			 * 1: mAh
-+			 */
-+			__le32 power_unit;
-+			__le32 design_capacity;
-+			__le32 last_full_capacity;
-+			/*
-+			 * 0 nonrechargable
-+			 * 1 rechargable
-+			 */
-+			__le32 battery_tech;
-+			__le32 design_voltage; /* mV */
-+			__le32 capacity_low;
-+			__le32 capacity_warning;
-+			__le32 cycle_count;
-+			/* thousandth of persent */
-+			__le32 accuracy;
-+			__le32 max_sample_time_ms;
-+			__le32 min_sample_time_ms;
-+			__le32 max_average_interval_ms;
-+			__le32 min_average_interval_ms;
-+			/* granularity between low and warning */
-+			__le32 capacity_granularity1;
-+			/* granularity between warning and full */
-+			__le32 capacity_granularity2;
-+			/*
-+			 * 0: no
-+			 * 1: cold
-+			 * 2: hot
-+			 */
-+			__le32 swappable;
-+			__le32 capabilities;
-+			char model_number[BATTMGR_STRING_LEN];
-+			char serial_number[BATTMGR_STRING_LEN];
-+			char battery_type[BATTMGR_STRING_LEN];
-+			char oem_info[BATTMGR_STRING_LEN];
-+			char battery_chemistry[BATTMGR_CHEMISTRY_LEN];
-+			char uid[BATTMGR_STRING_LEN];
-+			__le32 critical_bias;
-+			u8 day;
-+			u8 month;
-+			__le16 year;
-+			__le32 battery_id;
-+		} info;
-+		struct {
-+			/*
-+			 * BIT(0) discharging
-+			 * BIT(1) charging
-+			 * BIT(2) critical low
-+			 */
-+			__le32 battery_state;
-+			/* mWh or mAh, based on info->power_unit */
-+			__le32 capacity;
-+			__le32 rate;
-+			/* mv */
-+			__le32 battery_voltage;
-+			/*
-+			 * BIT(0) power online
-+			 * BIT(1) discharging
-+			 * BIT(2) charging
-+			 * BIT(3) battery critical
-+			 */
-+			__le32 power_state;
-+			/*
-+			 * 1: AC
-+			 * 2: USB
-+			 * 3: Wireless
-+			 */
-+			__le32 charging_source;
-+			__le32 temperature;
-+		} status;
-+		__le32 time;
-+		__le32 notification;
-+	};
-+};
-+
-+#define BATTMGR_CHARGING_SOURCE_AC	1
-+#define BATTMGR_CHARGING_SOURCE_USB	2
-+#define BATTMGR_CHARGING_SOURCE_WIRELESS 3
-+
-+enum qcom_battmgr_unit {
-+	QCOM_BATTMGR_UNIT_mWh = 0,
-+	QCOM_BATTMGR_UNIT_mAh = 1
-+};
-+
-+struct qcom_battmgr_info {
-+	bool valid;
-+
-+	bool present;
-+	unsigned int charge_type;
-+	unsigned int design_capacity;
-+	unsigned int last_full_capacity;
-+	unsigned int voltage_max_design;
-+	unsigned int voltage_max;
-+	unsigned int capacity_low;
-+	unsigned int capacity_warning;
-+	unsigned int cycle_count;
-+	unsigned int charge_count;
-+	char model_number[BATTMGR_STRING_LEN];
-+	char serial_number[BATTMGR_STRING_LEN];
-+	char oem_info[BATTMGR_STRING_LEN];
-+	unsigned char technology;
-+	unsigned char day;
-+	unsigned char month;
-+	unsigned short year;
-+};
-+
-+struct qcom_battmgr_status {
-+	unsigned int status;
-+	unsigned int health;
-+	unsigned int capacity;
-+	unsigned int percent;
-+	int current_now;
-+	int power_now;
-+	unsigned int voltage_now;
-+	unsigned int voltage_ocv;
-+	unsigned int temperature;
-+
-+	unsigned int discharge_time;
-+	unsigned int charge_time;
-+};
-+
-+struct qcom_battmgr_ac {
-+	bool online;
-+};
-+
-+struct qcom_battmgr_usb {
-+	bool online;
-+	unsigned int voltage_now;
-+	unsigned int voltage_max;
-+	unsigned int current_now;
-+	unsigned int current_max;
-+	unsigned int current_limit;
-+	unsigned int usb_type;
-+};
-+
-+struct qcom_battmgr_wireless {
-+	bool online;
-+	unsigned int voltage_now;
-+	unsigned int voltage_max;
-+	unsigned int current_now;
-+	unsigned int current_max;
-+};
-+
-+struct qcom_battmgr {
-+	struct device *dev;
-+	struct pmic_glink_client *client;
-+
-+	enum qcom_battmgr_variant variant;
-+
-+	struct power_supply *ac_psy;
-+	struct power_supply *bat_psy;
-+	struct power_supply *usb_psy;
-+	struct power_supply *wls_psy;
-+
-+	enum qcom_battmgr_unit unit;
-+
-+	int error;
-+	struct completion ack;
-+
-+	bool service_up;
-+
-+	struct qcom_battmgr_info info;
-+	struct qcom_battmgr_status status;
-+	struct qcom_battmgr_ac ac;
-+	struct qcom_battmgr_usb usb;
-+	struct qcom_battmgr_wireless wireless;
-+
-+	struct work_struct enable_work;
-+
-+	/*
-+	 * @lock is used to prevent concurrent power supply requests to the
-+	 * firmware, as it then stops responding.
-+	 */
-+	struct mutex lock;
-+};
-+
-+static int qcom_battmgr_request(struct qcom_battmgr *battmgr, void *data, size_t len)
-+{
-+	unsigned long left;
-+	int ret;
-+
-+	reinit_completion(&battmgr->ack);
-+
-+	battmgr->error = 0;
-+
-+	ret = pmic_glink_send(battmgr->client, data, len);
-+	if (ret < 0)
-+		return ret;
-+
-+	left = wait_for_completion_timeout(&battmgr->ack, HZ);
-+	if (!left)
-+		return -ETIMEDOUT;
-+
-+	return battmgr->error;
-+}
-+
-+static int qcom_battmgr_request_property(struct qcom_battmgr *battmgr, int opcode,
-+					 int property, u32 value)
-+{
-+	struct qcom_battmgr_property_request request = {
-+		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
-+		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
-+		.hdr.opcode = cpu_to_le32(opcode),
-+		.battery = cpu_to_le32(0),
-+		.property = cpu_to_le32(property),
-+		.value = cpu_to_le32(value),
-+	};
-+
-+	return qcom_battmgr_request(battmgr, &request, sizeof(request));
-+}
-+
-+static int qcom_battmgr_update_status(struct qcom_battmgr *battmgr)
-+{
-+	struct qcom_battmgr_update_request request = {
-+		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
-+		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
-+		.hdr.opcode = cpu_to_le32(BATTMGR_BAT_STATUS),
-+		.battery_id = cpu_to_le32(0),
-+	};
-+
-+	return qcom_battmgr_request(battmgr, &request, sizeof(request));
-+}
-+
-+static int qcom_battmgr_update_info(struct qcom_battmgr *battmgr)
-+{
-+	struct qcom_battmgr_update_request request = {
-+		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
-+		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
-+		.hdr.opcode = cpu_to_le32(BATTMGR_BAT_INFO),
-+		.battery_id = cpu_to_le32(0),
-+	};
-+
-+	return qcom_battmgr_request(battmgr, &request, sizeof(request));
-+}
-+
-+static int qcom_battmgr_update_charge_time(struct qcom_battmgr *battmgr)
-+{
-+	struct qcom_battmgr_charge_time_request request = {
-+		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
-+		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
-+		.hdr.opcode = cpu_to_le32(BATTMGR_BAT_CHARGE_TIME),
-+		.battery_id = cpu_to_le32(0),
-+		.percent = cpu_to_le32(100),
-+	};
-+
-+	return qcom_battmgr_request(battmgr, &request, sizeof(request));
-+}
-+
-+static int qcom_battmgr_update_discharge_time(struct qcom_battmgr *battmgr)
-+{
-+	struct qcom_battmgr_discharge_time_request request = {
-+		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
-+		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
-+		.hdr.opcode = cpu_to_le32(BATTMGR_BAT_DISCHARGE_TIME),
-+		.battery_id = cpu_to_le32(0),
-+		.rate = cpu_to_le32(0),
-+	};
-+
-+	return qcom_battmgr_request(battmgr, &request, sizeof(request));
-+}
-+
-+static const u8 sm8350_bat_prop_map[] = {
-+	[POWER_SUPPLY_PROP_STATUS] = BATT_STATUS,
-+	[POWER_SUPPLY_PROP_HEALTH] = BATT_HEALTH,
-+	[POWER_SUPPLY_PROP_PRESENT] = BATT_PRESENT,
-+	[POWER_SUPPLY_PROP_CHARGE_TYPE] = BATT_CHG_TYPE,
-+	[POWER_SUPPLY_PROP_CAPACITY] = BATT_CAPACITY,
-+	[POWER_SUPPLY_PROP_VOLTAGE_OCV] = BATT_VOLT_OCV,
-+	[POWER_SUPPLY_PROP_VOLTAGE_NOW] = BATT_VOLT_NOW,
-+	[POWER_SUPPLY_PROP_VOLTAGE_MAX] = BATT_VOLT_MAX,
-+	[POWER_SUPPLY_PROP_CURRENT_NOW] = BATT_CURR_NOW,
-+	[POWER_SUPPLY_PROP_TEMP] = BATT_TEMP,
-+	[POWER_SUPPLY_PROP_TECHNOLOGY] = BATT_TECHNOLOGY,
-+	[POWER_SUPPLY_PROP_CHARGE_COUNTER] =  BATT_CHG_COUNTER,
-+	[POWER_SUPPLY_PROP_CYCLE_COUNT] = BATT_CYCLE_COUNT,
-+	[POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN] =  BATT_CHG_FULL_DESIGN,
-+	[POWER_SUPPLY_PROP_CHARGE_FULL] = BATT_CHG_FULL,
-+	[POWER_SUPPLY_PROP_MODEL_NAME] = BATT_MODEL_NAME,
-+	[POWER_SUPPLY_PROP_TIME_TO_FULL_AVG] = BATT_TTF_AVG,
-+	[POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG] = BATT_TTE_AVG,
-+	[POWER_SUPPLY_PROP_POWER_NOW] = BATT_POWER_NOW,
-+};
-+
-+static int qcom_battmgr_bat_sm8350_update(struct qcom_battmgr *battmgr,
-+					  enum power_supply_property psp)
-+{
-+	unsigned int prop;
-+	int ret;
-+
-+	if (psp >= ARRAY_SIZE(sm8350_bat_prop_map))
-+		return -EINVAL;
-+
-+	prop = sm8350_bat_prop_map[psp];
-+
-+	mutex_lock(&battmgr->lock);
-+	ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_GET, prop, 0);
-+	mutex_unlock(&battmgr->lock);
-+
-+	return ret;
-+}
-+
-+static int qcom_battmgr_bat_sc8280xp_update(struct qcom_battmgr *battmgr,
-+					    enum power_supply_property psp)
-+{
-+	int ret;
-+
-+	mutex_lock(&battmgr->lock);
-+
-+	if (!battmgr->info.valid) {
-+		ret = qcom_battmgr_update_info(battmgr);
-+		if (ret < 0)
-+			goto out_unlock;
-+		battmgr->info.valid = true;
-+	}
-+
-+	ret = qcom_battmgr_update_status(battmgr);
-+	if (ret < 0)
-+		goto out_unlock;
-+
-+	if (psp == POWER_SUPPLY_PROP_TIME_TO_FULL_AVG) {
-+		ret = qcom_battmgr_update_charge_time(battmgr);
-+		if (ret < 0) {
-+			ret = -ENODATA;
-+			goto out_unlock;
-+		}
-+	}
-+
-+	if (psp == POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG) {
-+		ret = qcom_battmgr_update_discharge_time(battmgr);
-+		if (ret < 0) {
-+			ret = -ENODATA;
-+			goto out_unlock;
-+		}
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&battmgr->lock);
-+	return ret;
-+}
-+
-+static int qcom_battmgr_bat_get_property(struct power_supply *psy,
-+					 enum power_supply_property psp,
-+					 union power_supply_propval *val)
-+{
-+	struct qcom_battmgr *battmgr = power_supply_get_drvdata(psy);
-+	enum qcom_battmgr_unit unit = battmgr->unit;
-+	int ret;
-+
-+	if (!battmgr->service_up)
-+		return -ENODEV;
-+
-+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
-+		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-+	else
-+		ret = qcom_battmgr_bat_sm8350_update(battmgr, psp);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = battmgr->status.status;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		val->intval = battmgr->info.charge_type;
-+		break;
-+	case POWER_SUPPLY_PROP_HEALTH:
-+		val->intval = battmgr->status.health;
-+		break;
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = battmgr->info.present;
-+		break;
-+	case POWER_SUPPLY_PROP_TECHNOLOGY:
-+		val->intval = battmgr->info.technology;
-+		break;
-+	case POWER_SUPPLY_PROP_CYCLE_COUNT:
-+		val->intval = battmgr->info.cycle_count;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-+		val->intval = battmgr->info.voltage_max_design;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
-+		val->intval = battmgr->info.voltage_max;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval = battmgr->status.voltage_now;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
-+		val->intval = battmgr->status.voltage_ocv;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		val->intval = battmgr->status.current_now;
-+		break;
-+	case POWER_SUPPLY_PROP_POWER_NOW:
-+		val->intval = battmgr->status.power_now;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-+		if (unit != QCOM_BATTMGR_UNIT_mAh)
-+			return -ENODATA;
-+		val->intval = battmgr->info.design_capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_FULL:
-+		if (unit != QCOM_BATTMGR_UNIT_mAh)
-+			return -ENODATA;
-+		val->intval = battmgr->info.last_full_capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_EMPTY:
-+		if (unit != QCOM_BATTMGR_UNIT_mAh)
-+			return -ENODATA;
-+		val->intval = battmgr->info.capacity_low;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		if (unit != QCOM_BATTMGR_UNIT_mAh)
-+			return -ENODATA;
-+		val->intval = battmgr->status.capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
-+		val->intval = battmgr->info.charge_count;
-+		break;
-+	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-+		if (unit != QCOM_BATTMGR_UNIT_mWh)
-+			return -ENODATA;
-+		val->intval = battmgr->info.design_capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_ENERGY_FULL:
-+		if (unit != QCOM_BATTMGR_UNIT_mWh)
-+			return -ENODATA;
-+		val->intval = battmgr->info.last_full_capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_ENERGY_EMPTY:
-+		if (unit != QCOM_BATTMGR_UNIT_mWh)
-+			return -ENODATA;
-+		val->intval = battmgr->info.capacity_low;
-+		break;
-+	case POWER_SUPPLY_PROP_ENERGY_NOW:
-+		if (unit != QCOM_BATTMGR_UNIT_mWh)
-+			return -ENODATA;
-+		val->intval = battmgr->status.capacity;
-+		break;
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		val->intval = battmgr->status.percent;
-+		break;
-+	case POWER_SUPPLY_PROP_TEMP:
-+		val->intval = battmgr->status.temperature;
-+		break;
-+	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG:
-+		val->intval = battmgr->status.discharge_time;
-+		break;
-+	case POWER_SUPPLY_PROP_TIME_TO_FULL_AVG:
-+		val->intval = battmgr->status.charge_time;
-+		break;
-+	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
-+		val->intval = battmgr->info.year;
-+		break;
-+	case POWER_SUPPLY_PROP_MANUFACTURE_MONTH:
-+		val->intval = battmgr->info.month;
-+		break;
-+	case POWER_SUPPLY_PROP_MANUFACTURE_DAY:
-+		val->intval = battmgr->info.day;
-+		break;
-+	case POWER_SUPPLY_PROP_MODEL_NAME:
-+		val->strval = battmgr->info.model_number;
-+		break;
-+	case POWER_SUPPLY_PROP_MANUFACTURER:
-+		val->strval = battmgr->info.oem_info;
-+		break;
-+	case POWER_SUPPLY_PROP_SERIAL_NUMBER:
-+		val->strval = battmgr->info.serial_number;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const enum power_supply_property sc8280xp_bat_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_CYCLE_COUNT,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_POWER_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_CHARGE_EMPTY,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
-+	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_ENERGY_FULL,
-+	POWER_SUPPLY_PROP_ENERGY_EMPTY,
-+	POWER_SUPPLY_PROP_ENERGY_NOW,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
-+	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
-+	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+	POWER_SUPPLY_PROP_SERIAL_NUMBER,
-+};
-+
-+static const struct power_supply_desc sc8280xp_bat_psy_desc = {
-+	.name = "qcom-battmgr-bat",
-+	.type = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties = sc8280xp_bat_props,
-+	.num_properties = ARRAY_SIZE(sc8280xp_bat_props),
-+	.get_property = qcom_battmgr_bat_get_property,
-+};
-+
-+static const enum power_supply_property sm8350_bat_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_VOLTAGE_OCV,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_CHARGE_COUNTER,
-+	POWER_SUPPLY_PROP_CYCLE_COUNT,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
-+	POWER_SUPPLY_PROP_POWER_NOW,
-+};
-+
-+static const struct power_supply_desc sm8350_bat_psy_desc = {
-+	.name = "qcom-battmgr-bat",
-+	.type = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties = sm8350_bat_props,
-+	.num_properties = ARRAY_SIZE(sm8350_bat_props),
-+	.get_property = qcom_battmgr_bat_get_property,
-+};
-+
-+static int qcom_battmgr_ac_get_property(struct power_supply *psy,
-+					enum power_supply_property psp,
-+					union power_supply_propval *val)
-+{
-+	struct qcom_battmgr *battmgr = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	if (!battmgr->service_up)
-+		return -ENODEV;
-+
-+	ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = battmgr->ac.online;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const enum power_supply_property sc8280xp_ac_props[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static const struct power_supply_desc sc8280xp_ac_psy_desc = {
-+	.name = "qcom-battmgr-ac",
-+	.type = POWER_SUPPLY_TYPE_MAINS,
-+	.properties = sc8280xp_ac_props,
-+	.num_properties = ARRAY_SIZE(sc8280xp_ac_props),
-+	.get_property = qcom_battmgr_ac_get_property,
-+};
-+
-+static const u8 sm8350_usb_prop_map[] = {
-+	[POWER_SUPPLY_PROP_ONLINE] = USB_ONLINE,
-+	[POWER_SUPPLY_PROP_VOLTAGE_NOW] = USB_VOLT_NOW,
-+	[POWER_SUPPLY_PROP_VOLTAGE_MAX] = USB_VOLT_MAX,
-+	[POWER_SUPPLY_PROP_CURRENT_NOW] = USB_CURR_NOW,
-+	[POWER_SUPPLY_PROP_CURRENT_MAX] = USB_CURR_MAX,
-+	[POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT] = USB_INPUT_CURR_LIMIT,
-+	[POWER_SUPPLY_PROP_USB_TYPE] = USB_TYPE,
-+};
-+
-+static int qcom_battmgr_usb_sm8350_update(struct qcom_battmgr *battmgr,
-+					  enum power_supply_property psp)
-+{
-+	unsigned int prop;
-+	int ret;
-+
-+	if (psp >= ARRAY_SIZE(sm8350_usb_prop_map))
-+		return -EINVAL;
-+
-+	prop = sm8350_usb_prop_map[psp];
-+
-+	mutex_lock(&battmgr->lock);
-+	ret = qcom_battmgr_request_property(battmgr, BATTMGR_USB_PROPERTY_GET, prop, 0);
-+	mutex_unlock(&battmgr->lock);
-+
-+	return ret;
-+}
-+
-+static int qcom_battmgr_usb_get_property(struct power_supply *psy,
-+					 enum power_supply_property psp,
-+					 union power_supply_propval *val)
-+{
-+	struct qcom_battmgr *battmgr = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	if (!battmgr->service_up)
-+		return -ENODEV;
-+
-+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
-+		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-+	else
-+		ret = qcom_battmgr_usb_sm8350_update(battmgr, psp);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = battmgr->usb.online;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval = battmgr->usb.voltage_now;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
-+		val->intval = battmgr->usb.voltage_max;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		val->intval = battmgr->usb.current_now;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+		val->intval = battmgr->usb.current_max;
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		val->intval = battmgr->usb.current_limit;
-+		break;
-+	case POWER_SUPPLY_PROP_USB_TYPE:
-+		val->intval = battmgr->usb.usb_type;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const enum power_supply_usb_type usb_psy_supported_types[] = {
-+	POWER_SUPPLY_USB_TYPE_UNKNOWN,
-+	POWER_SUPPLY_USB_TYPE_SDP,
-+	POWER_SUPPLY_USB_TYPE_DCP,
-+	POWER_SUPPLY_USB_TYPE_CDP,
-+	POWER_SUPPLY_USB_TYPE_ACA,
-+	POWER_SUPPLY_USB_TYPE_C,
-+	POWER_SUPPLY_USB_TYPE_PD,
-+	POWER_SUPPLY_USB_TYPE_PD_DRP,
-+	POWER_SUPPLY_USB_TYPE_PD_PPS,
-+	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID,
-+};
-+
-+static const enum power_supply_property sc8280xp_usb_props[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static const struct power_supply_desc sc8280xp_usb_psy_desc = {
-+	.name = "qcom-battmgr-usb",
-+	.type = POWER_SUPPLY_TYPE_USB,
-+	.properties = sc8280xp_usb_props,
-+	.num_properties = ARRAY_SIZE(sc8280xp_usb_props),
-+	.get_property = qcom_battmgr_usb_get_property,
-+	.usb_types = usb_psy_supported_types,
-+	.num_usb_types = ARRAY_SIZE(usb_psy_supported_types),
-+};
-+
-+static const enum power_supply_property sm8350_usb_props[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_USB_TYPE,
-+};
-+
-+static const struct power_supply_desc sm8350_usb_psy_desc = {
-+	.name = "qcom-battmgr-usb",
-+	.type = POWER_SUPPLY_TYPE_USB,
-+	.properties = sm8350_usb_props,
-+	.num_properties = ARRAY_SIZE(sm8350_usb_props),
-+	.get_property = qcom_battmgr_usb_get_property,
-+	.usb_types = usb_psy_supported_types,
-+	.num_usb_types = ARRAY_SIZE(usb_psy_supported_types),
-+};
-+
-+static const u8 sm8350_wls_prop_map[] = {
-+	[POWER_SUPPLY_PROP_ONLINE] = WLS_ONLINE,
-+	[POWER_SUPPLY_PROP_VOLTAGE_NOW] = WLS_VOLT_NOW,
-+	[POWER_SUPPLY_PROP_VOLTAGE_MAX] = WLS_VOLT_MAX,
-+	[POWER_SUPPLY_PROP_CURRENT_NOW] = WLS_CURR_NOW,
-+	[POWER_SUPPLY_PROP_CURRENT_MAX] = WLS_CURR_MAX,
-+};
-+
-+static int qcom_battmgr_wls_sm8350_update(struct qcom_battmgr *battmgr,
-+					  enum power_supply_property psp)
-+{
-+	unsigned int prop;
-+	int ret;
-+
-+	if (psp >= ARRAY_SIZE(sm8350_wls_prop_map))
-+		return -EINVAL;
-+
-+	prop = sm8350_wls_prop_map[psp];
-+
-+	mutex_lock(&battmgr->lock);
-+	ret = qcom_battmgr_request_property(battmgr, BATTMGR_WLS_PROPERTY_GET, prop, 0);
-+	mutex_unlock(&battmgr->lock);
-+
-+	return ret;
-+}
-+
-+static int qcom_battmgr_wls_get_property(struct power_supply *psy,
-+					 enum power_supply_property psp,
-+					 union power_supply_propval *val)
-+{
-+	struct qcom_battmgr *battmgr = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	if (!battmgr->service_up)
-+		return -ENODEV;
-+
-+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
-+		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-+	else
-+		ret = qcom_battmgr_wls_sm8350_update(battmgr, psp);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = battmgr->wireless.online;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval = battmgr->wireless.voltage_now;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
-+		val->intval = battmgr->wireless.voltage_max;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		val->intval = battmgr->wireless.current_now;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+		val->intval = battmgr->wireless.current_max;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const enum power_supply_property sc8280xp_wls_props[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static const struct power_supply_desc sc8280xp_wls_psy_desc = {
-+	.name = "qcom-battmgr-wls",
-+	.type = POWER_SUPPLY_TYPE_WIRELESS,
-+	.properties = sc8280xp_wls_props,
-+	.num_properties = ARRAY_SIZE(sc8280xp_wls_props),
-+	.get_property = qcom_battmgr_wls_get_property,
-+};
-+
-+static const enum power_supply_property sm8350_wls_props[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
-+};
-+
-+static const struct power_supply_desc sm8350_wls_psy_desc = {
-+	.name = "qcom-battmgr-wls",
-+	.type = POWER_SUPPLY_TYPE_WIRELESS,
-+	.properties = sm8350_wls_props,
-+	.num_properties = ARRAY_SIZE(sm8350_wls_props),
-+	.get_property = qcom_battmgr_wls_get_property,
-+};
-+
-+static void qcom_battmgr_notification(struct qcom_battmgr *battmgr,
-+				      const struct qcom_battmgr_message *msg,
-+				      int len)
-+{
-+	size_t payload_len = len - sizeof(struct pmic_glink_hdr);
-+	unsigned int notification;
-+
-+	if (payload_len != sizeof(msg->notification)) {
-+		dev_warn(battmgr->dev, "ignoring notification with invalid length\n");
-+		return;
-+	}
-+
-+	notification = le32_to_cpu(msg->notification);
-+	switch (notification) {
-+	case NOTIF_BAT_INFO:
-+		battmgr->info.valid = false;
-+		fallthrough;
-+	case NOTIF_BAT_STATUS:
-+	case NOTIF_BAT_PROPERTY:
-+		power_supply_changed(battmgr->bat_psy);
-+		break;
-+	case NOTIF_USB_PROPERTY:
-+		power_supply_changed(battmgr->usb_psy);
-+		break;
-+	case NOTIF_WLS_PROPERTY:
-+		power_supply_changed(battmgr->wls_psy);
-+		break;
-+	default:
-+		dev_err(battmgr->dev, "unknown notification: %#x\n", notification);
-+		break;
-+	}
-+}
-+
-+static void qcom_battmgr_sc8280xp_strcpy(char *dest, const char *src)
-+{
-+	size_t len = src[0];
-+
-+	/* Some firmware versions return Pascal-style strings */
-+	if (len < BATTMGR_STRING_LEN && len == strnlen(src + 1, BATTMGR_STRING_LEN - 1)) {
-+		memcpy(dest, src + 1, len);
-+		dest[len] = '\0';
-+	} else {
-+		memcpy(dest, src, BATTMGR_STRING_LEN);
-+	}
-+}
-+
-+static unsigned int qcom_battmgr_sc8280xp_parse_technology(const char *chemistry)
-+{
-+	if (!strncmp(chemistry, "LIO", BATTMGR_CHEMISTRY_LEN))
-+		return POWER_SUPPLY_TECHNOLOGY_LION;
-+
-+	pr_err("Unknown battery technology '%s'\n", chemistry);
-+	return POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
-+}
-+
-+static unsigned int qcom_battmgr_sc8280xp_convert_temp(unsigned int temperature)
-+{
-+	return DIV_ROUND_CLOSEST(temperature, 10);
-+}
-+
-+static void qcom_battmgr_sc8280xp_callback(struct qcom_battmgr *battmgr,
-+					   const struct qcom_battmgr_message *resp,
-+					   size_t len)
-+{
-+	unsigned int opcode = le32_to_cpu(resp->hdr.opcode);
-+	unsigned int source;
-+	unsigned int state;
-+	size_t payload_len = len - sizeof(struct pmic_glink_hdr);
-+
-+	if (payload_len < sizeof(__le32)) {
-+		dev_warn(battmgr->dev, "invalid payload length for %#x: %zd\n",
-+			 opcode, len);
-+		return;
-+	}
-+
-+	switch (opcode) {
-+	case BATTMGR_REQUEST_NOTIFICATION:
-+		battmgr->error = 0;
-+		break;
-+	case BATTMGR_BAT_INFO:
-+		if (payload_len != sizeof(resp->info)) {
-+			dev_warn(battmgr->dev,
-+				 "invalid payload length for battery information request: %zd\n",
-+				 payload_len);
-+			battmgr->error = -ENODATA;
-+			return;
-+		}
-+
-+		battmgr->unit = le32_to_cpu(resp->info.power_unit);
-+
-+		battmgr->info.present = true;
-+		battmgr->info.design_capacity = le32_to_cpu(resp->info.design_capacity) * 1000;
-+		battmgr->info.last_full_capacity = le32_to_cpu(resp->info.last_full_capacity) * 1000;
-+		battmgr->info.voltage_max_design = le32_to_cpu(resp->info.design_voltage) * 1000;
-+		battmgr->info.capacity_low = le32_to_cpu(resp->info.capacity_low) * 1000;
-+		battmgr->info.cycle_count = le32_to_cpu(resp->info.cycle_count);
-+		qcom_battmgr_sc8280xp_strcpy(battmgr->info.model_number, resp->info.model_number);
-+		qcom_battmgr_sc8280xp_strcpy(battmgr->info.serial_number, resp->info.serial_number);
-+		battmgr->info.technology = qcom_battmgr_sc8280xp_parse_technology(resp->info.battery_chemistry);
-+		qcom_battmgr_sc8280xp_strcpy(battmgr->info.oem_info, resp->info.oem_info);
-+		battmgr->info.day = resp->info.day;
-+		battmgr->info.month = resp->info.month;
-+		battmgr->info.year = le16_to_cpu(resp->info.year);
-+		break;
-+	case BATTMGR_BAT_STATUS:
-+		if (payload_len != sizeof(resp->status)) {
-+			dev_warn(battmgr->dev,
-+				 "invalid payload length for battery status request: %zd\n",
-+				 payload_len);
-+			battmgr->error = -ENODATA;
-+			return;
-+		}
-+
-+		state = le32_to_cpu(resp->status.battery_state);
-+		if (state & BIT(0))
-+			battmgr->status.status = POWER_SUPPLY_STATUS_DISCHARGING;
-+		else if (state & BIT(1))
-+			battmgr->status.status = POWER_SUPPLY_STATUS_CHARGING;
-+		else
-+			battmgr->status.status = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+
-+		battmgr->status.capacity = le32_to_cpu(resp->status.capacity) * 1000;
-+		battmgr->status.power_now = le32_to_cpu(resp->status.rate) * 1000;
-+		battmgr->status.voltage_now = le32_to_cpu(resp->status.battery_voltage) * 1000;
-+		battmgr->status.temperature = qcom_battmgr_sc8280xp_convert_temp(le32_to_cpu(resp->status.temperature));
-+
-+		source = le32_to_cpu(resp->status.charging_source);
-+		battmgr->ac.online = source == BATTMGR_CHARGING_SOURCE_AC;
-+		battmgr->usb.online = source == BATTMGR_CHARGING_SOURCE_USB;
-+		battmgr->wireless.online = source == BATTMGR_CHARGING_SOURCE_WIRELESS;
-+		break;
-+	case BATTMGR_BAT_DISCHARGE_TIME:
-+		battmgr->status.discharge_time = le32_to_cpu(resp->time);
-+		break;
-+	case BATTMGR_BAT_CHARGE_TIME:
-+		battmgr->status.charge_time = le32_to_cpu(resp->time);
-+		break;
-+	default:
-+		dev_warn(battmgr->dev, "unknown message %#x\n", opcode);
-+		break;
-+	}
-+
-+	complete(&battmgr->ack);
-+}
-+
-+static void qcom_battmgr_sm8350_callback(struct qcom_battmgr *battmgr,
-+					 const struct qcom_battmgr_message *resp,
-+					 size_t len)
-+{
-+	unsigned int property;
-+	unsigned int opcode = le32_to_cpu(resp->hdr.opcode);
-+	size_t payload_len = len - sizeof(struct pmic_glink_hdr);
-+	unsigned int val;
-+
-+	if (payload_len < sizeof(__le32)) {
-+		dev_warn(battmgr->dev, "invalid payload length for %#x: %zd\n",
-+			 opcode, len);
-+		return;
-+	}
-+
-+	switch (opcode) {
-+	case BATTMGR_BAT_PROPERTY_GET:
-+		property = le32_to_cpu(resp->intval.property);
-+		if (property == BATT_MODEL_NAME) {
-+			if (payload_len != sizeof(resp->strval)) {
-+				dev_warn(battmgr->dev,
-+					 "invalid payload length for BATT_MODEL_NAME request: %zd\n",
-+					 payload_len);
-+				battmgr->error = -ENODATA;
-+				return;
-+			}
-+		} else {
-+			if (payload_len != sizeof(resp->intval)) {
-+				dev_warn(battmgr->dev,
-+					 "invalid payload length for %#x request: %zd\n",
-+					 property, payload_len);
-+				battmgr->error = -ENODATA;
-+				return;
-+			}
-+
-+			battmgr->error = le32_to_cpu(resp->intval.result);
-+			if (battmgr->error)
-+				goto out_complete;
-+		}
-+
-+		switch (property) {
-+		case BATT_STATUS:
-+			battmgr->status.status = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_HEALTH:
-+			battmgr->status.health = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_PRESENT:
-+			battmgr->info.present = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CHG_TYPE:
-+			battmgr->info.charge_type = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CAPACITY:
-+			battmgr->status.percent = le32_to_cpu(resp->intval.value);
-+			do_div(battmgr->status.percent, 100);
-+			break;
-+		case BATT_VOLT_OCV:
-+			battmgr->status.voltage_ocv = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_VOLT_NOW:
-+			battmgr->status.voltage_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_VOLT_MAX:
-+			battmgr->info.voltage_max = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CURR_NOW:
-+			battmgr->status.current_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_TEMP:
-+			val = le32_to_cpu(resp->intval.value);
-+			battmgr->status.temperature = DIV_ROUND_CLOSEST(val, 10);
-+			break;
-+		case BATT_TECHNOLOGY:
-+			battmgr->info.technology = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CHG_COUNTER:
-+			battmgr->info.charge_count = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CYCLE_COUNT:
-+			battmgr->info.cycle_count = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CHG_FULL_DESIGN:
-+			battmgr->info.design_capacity = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_CHG_FULL:
-+			battmgr->info.last_full_capacity = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_MODEL_NAME:
-+			strscpy(battmgr->info.model_number, resp->strval.model, BATTMGR_STRING_LEN);
-+			break;
-+		case BATT_TTF_AVG:
-+			battmgr->status.charge_time = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_TTE_AVG:
-+			battmgr->status.discharge_time = le32_to_cpu(resp->intval.value);
-+			break;
-+		case BATT_POWER_NOW:
-+			battmgr->status.power_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		default:
-+			dev_warn(battmgr->dev, "unknown property %#x\n", property);
-+			break;
-+		}
-+		break;
-+	case BATTMGR_USB_PROPERTY_GET:
-+		property = le32_to_cpu(resp->intval.property);
-+		if (payload_len != sizeof(resp->intval)) {
-+			dev_warn(battmgr->dev,
-+				 "invalid payload length for %#x request: %zd\n",
-+				 property, payload_len);
-+			battmgr->error = -ENODATA;
-+			return;
-+		}
-+
-+		battmgr->error = le32_to_cpu(resp->intval.result);
-+		if (battmgr->error)
-+			goto out_complete;
-+
-+		switch (property) {
-+		case USB_ONLINE:
-+			battmgr->usb.online = le32_to_cpu(resp->intval.value);
-+			break;
-+		case USB_VOLT_NOW:
-+			battmgr->usb.voltage_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		case USB_VOLT_MAX:
-+			battmgr->usb.voltage_max = le32_to_cpu(resp->intval.value);
-+			break;
-+		case USB_CURR_NOW:
-+			battmgr->usb.current_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		case USB_CURR_MAX:
-+			battmgr->usb.current_max = le32_to_cpu(resp->intval.value);
-+			break;
-+		case USB_INPUT_CURR_LIMIT:
-+			battmgr->usb.current_limit = le32_to_cpu(resp->intval.value);
-+			break;
-+		case USB_TYPE:
-+			battmgr->usb.usb_type = le32_to_cpu(resp->intval.value);
-+			break;
-+		default:
-+			dev_warn(battmgr->dev, "unknown property %#x\n", property);
-+			break;
-+		}
-+		break;
-+	case BATTMGR_WLS_PROPERTY_GET:
-+		property = le32_to_cpu(resp->intval.property);
-+		if (payload_len != sizeof(resp->intval)) {
-+			dev_warn(battmgr->dev,
-+				 "invalid payload length for %#x request: %zd\n",
-+				 property, payload_len);
-+			battmgr->error = -ENODATA;
-+			return;
-+		}
-+
-+		battmgr->error = le32_to_cpu(resp->intval.result);
-+		if (battmgr->error)
-+			goto out_complete;
-+
-+		switch (property) {
-+		case WLS_ONLINE:
-+			battmgr->wireless.online = le32_to_cpu(resp->intval.value);
-+			break;
-+		case WLS_VOLT_NOW:
-+			battmgr->wireless.voltage_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		case WLS_VOLT_MAX:
-+			battmgr->wireless.voltage_max = le32_to_cpu(resp->intval.value);
-+			break;
-+		case WLS_CURR_NOW:
-+			battmgr->wireless.current_now = le32_to_cpu(resp->intval.value);
-+			break;
-+		case WLS_CURR_MAX:
-+			battmgr->wireless.current_max = le32_to_cpu(resp->intval.value);
-+			break;
-+		default:
-+			dev_warn(battmgr->dev, "unknown property %#x\n", property);
-+			break;
-+		}
-+		break;
-+	case BATTMGR_REQUEST_NOTIFICATION:
-+		battmgr->error = 0;
-+		break;
-+	default:
-+		dev_warn(battmgr->dev, "unknown message %#x\n", opcode);
-+		break;
-+	}
-+
-+out_complete:
-+	complete(&battmgr->ack);
-+}
-+
-+static void qcom_battmgr_callback(const void *data, size_t len, void *priv)
-+{
-+	const struct pmic_glink_hdr *hdr = data;
-+	struct qcom_battmgr *battmgr = priv;
-+	unsigned int opcode = le32_to_cpu(hdr->opcode);
-+
-+	if (opcode == BATTMGR_NOTIFICATION)
-+		qcom_battmgr_notification(battmgr, data, len);
-+	else if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
-+		qcom_battmgr_sc8280xp_callback(battmgr, data, len);
-+	else
-+		qcom_battmgr_sm8350_callback(battmgr, data, len);
-+}
-+
-+static void qcom_battmgr_enable_worker(struct work_struct *work)
-+{
-+	struct qcom_battmgr *battmgr = container_of(work, struct qcom_battmgr, enable_work);
-+	struct qcom_battmgr_enable_request req = {
-+		.hdr.owner = PMIC_GLINK_OWNER_BATTMGR,
-+		.hdr.type = PMIC_GLINK_NOTIFY,
-+		.hdr.opcode = BATTMGR_REQUEST_NOTIFICATION,
-+	};
-+	int ret;
-+
-+	ret = qcom_battmgr_request(battmgr, &req, sizeof(req));
-+	if (ret)
-+		dev_err(battmgr->dev, "failed to request power notifications\n");
-+}
-+
-+static void qcom_battmgr_pdr_notify(void *priv, int state)
-+{
-+	struct qcom_battmgr *battmgr = priv;
-+
-+	if (state == SERVREG_SERVICE_STATE_UP) {
-+		battmgr->service_up = true;
-+		schedule_work(&battmgr->enable_work);
-+	} else {
-+		battmgr->service_up = false;
-+	}
-+}
-+
-+static const struct of_device_id qcom_battmgr_of_variants[] = {
-+	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-+	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-+	/* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
-+	{}
-+};
-+
-+static char *qcom_battmgr_battery[] = { "battery" };
-+
-+static int qcom_battmgr_probe(struct auxiliary_device *adev,
-+			      const struct auxiliary_device_id *id)
-+{
-+	struct power_supply_config psy_cfg_supply = {};
-+	struct power_supply_config psy_cfg = {};
-+	const struct of_device_id *match;
-+	struct qcom_battmgr *battmgr;
-+	struct device *dev = &adev->dev;
-+
-+	battmgr = devm_kzalloc(dev, sizeof(*battmgr), GFP_KERNEL);
-+	if (!battmgr)
-+		return -ENOMEM;
-+
-+	battmgr->dev = dev;
-+
-+	psy_cfg.drv_data = battmgr;
-+	psy_cfg.of_node = adev->dev.of_node;
-+
-+	psy_cfg_supply.drv_data = battmgr;
-+	psy_cfg_supply.of_node = adev->dev.of_node;
-+	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
-+	psy_cfg_supply.num_supplicants = 1;
-+
-+	INIT_WORK(&battmgr->enable_work, qcom_battmgr_enable_worker);
-+	mutex_init(&battmgr->lock);
-+	init_completion(&battmgr->ack);
-+
-+	match = of_match_device(qcom_battmgr_of_variants, dev->parent);
-+	if (match)
-+		battmgr->variant = (unsigned long)match->data;
-+	else
-+		battmgr->variant = QCOM_BATTMGR_SM8350;
-+
-+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
-+		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
-+		if (IS_ERR(battmgr->bat_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-+					     "failed to register battery power supply\n");
-+
-+		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->ac_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->ac_psy),
-+					     "failed to register AC power supply\n");
-+
-+		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->usb_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-+					     "failed to register USB power supply\n");
-+
-+		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->wls_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-+					     "failed to register wireless charing power supply\n");
-+	} else {
-+		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
-+		if (IS_ERR(battmgr->bat_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-+					     "failed to register battery power supply\n");
-+
-+		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->usb_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-+					     "failed to register USB power supply\n");
-+
-+		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->wls_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-+					     "failed to register wireless charing power supply\n");
-+	}
-+
-+	battmgr->client = devm_pmic_glink_register_client(dev,
-+							  PMIC_GLINK_OWNER_BATTMGR,
-+							  qcom_battmgr_callback,
-+							  qcom_battmgr_pdr_notify,
-+							  battmgr);
-+	return PTR_ERR_OR_ZERO(battmgr->client);
-+}
-+
-+static const struct auxiliary_device_id qcom_battmgr_id_table[] = {
-+	{ .name = "pmic_glink.power-supply", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(auxiliary, qcom_battmgr_id_table);
-+
-+static struct auxiliary_driver qcom_battmgr_driver = {
-+	.name = "pmic_glink_power_supply",
-+	.probe = qcom_battmgr_probe,
-+	.id_table = qcom_battmgr_id_table,
-+};
-+
-+static int __init qcom_battmgr_init(void)
-+{
-+	return auxiliary_driver_register(&qcom_battmgr_driver);
-+}
-+module_init(qcom_battmgr_init);
-+
-+static void __exit qcom_battmgr_exit(void)
-+{
-+	auxiliary_driver_unregister(&qcom_battmgr_driver);
-+}
-+module_exit(qcom_battmgr_exit);
-+
-+MODULE_DESCRIPTION("Qualcomm PMIC GLINK battery manager driver");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
+ÔÚ 2022/11/14 ÉÏÎç10:47, Yinbo Zhu Ð´µÀ:
+> This patch adds the support for Loongson-2 thermal sensor controller,
+> which can support maximum 4 sensors.
+>
+> It's based on thermal of framework:
+>   - Trip points defined in device tree.
+>   - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+>   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+>
+> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v12:
+> 		1. Fixup it about min and max.
+> 		2. Use dev_err_probe replace dev_err in devm_request_threaded_irq context.
+> Change in v11:
+> 		1. Add min() and max() to replace related code in function
+> 		   loongson2_thermal_set.
+> 		2. Add dev_err_probe to to replace related code for function
+> 		   return value use devm_thermal_of_zone_register.
+> 		3. Replace thermal_add_hwmon_sysfs with devm_thermal_add_hwmon_sysfs
+> 		   and use dev_warn replace dev_err in this context.
+> Change in v10:
+> 		1. Add all history change log information.
+> Change in v9:
+> 		1. Switch new API that use devm_thermal_of_zone_register
+> 		   to replace previous interfaces.
+> 		2. Add depend on LOONGARCH || COMPILE_TEST.
+> Change in v8:
+>                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
+>                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
+> 		   files.
+> Change in v7:
+> 		1. Split the modification of patch 3 and merge it into this patch.
+> 		2. Remove the unless code annotation to fix the compile warning
+> 		   when compile C code with W=1.
+> Change in v6:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v5:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v4:
+> 		1. Fixup the compatible.
+> Change in v3:
+> 		1. Add a function to gain sensor id an remove dts id.
+> Change in v2:
+> 		1. Remove error msg printing when addr ioremap has error.
+> 		2. Make loongson2 thermal driver was built-in by default.
+> 		3. Replace ls2k with loongson2.
+> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
+> 		   __maybe_unused.
+>
+>   MAINTAINERS                         |   7 +
+>   drivers/thermal/Kconfig             |  10 ++
+>   drivers/thermal/Makefile            |   1 +
+>   drivers/thermal/loongson2_thermal.c | 260 ++++++++++++++++++++++++++++
+>   4 files changed, 278 insertions(+)
+>   create mode 100644 drivers/thermal/loongson2_thermal.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1b391ca7cf91..0d867573fe4c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12013,6 +12013,13 @@ F:	drivers/*/*loongarch*
+>   F:	Documentation/loongarch/
+>   F:	Documentation/translations/zh_CN/loongarch/
+>   
+> +LOONGSON-2 SOC SERIES THERMAL DRIVER
+> +M:	zhanghongchen <zhanghongchen@loongson.cn>
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/thermal/loongson2_thermal.c
+> +
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae614eb..93d84bcb16dd 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config LOONGSON2_THERMAL
+> +	tristate "Loongson-2 SoC series thermal driver"
+> +	depends on LOONGARCH || COMPILE_TEST
+> +	depends on OF
+> +	help
+> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
+> +	  It supports one critical trip point and one passive trip point. The
+> +	  cpufreq and the pwm fan is used as the cooling device to throttle
+> +	  CPUs when the passive trip is crossed.
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 2506c6c8ca83..02f3db809858 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+> new file mode 100644
+> index 000000000000..2d495469e8dd
+> --- /dev/null
+> +++ b/drivers/thermal/loongson2_thermal.c
+> @@ -0,0 +1,260 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
+> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/cpufreq.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io.h>
+> +#include <linux/of_device.h>
+> +#include <linux/thermal.h>
+> +#include "thermal_hwmon.h"
+> +
+> +#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
+> +
+> +#define LOONGSON2_TSENSOR_CTRL_HI			0x0
+> +#define LOONGSON2_TSENSOR_CTRL_LO			0x8
+> +#define LOONGSON2_TSENSOR_STATUS			0x10
+> +#define LOONGSON2_TSENSOR_OUT				0x14
+> +
+> +struct loongson2_thermal_data {
+> +	struct thermal_zone_device *tzd;
+> +	int irq;
+> +	int id;
+> +	void __iomem *regs;
+> +	struct platform_device *pdev;
+> +	u16 ctrl_low_val;
+> +	u16 ctrl_hi_val;
+> +};
+> +
+> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+> +					int low, int high, bool enable)
+> +{
+> +	u64 reg_ctrl = 0;
+> +	int reg_off = data->id * 2;
+> +
+> +	if (low > high)
+> +		return -EINVAL;
+> +
+> +	low = max(low, -100);
+> +	high = min(high, 155);
+> +
+> +	low += 100;
+> +	high += 100;
+> +
+> +	reg_ctrl |= low;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +
+> +	reg_ctrl = 0;
+> +	reg_ctrl |= high;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	u32 reg_val;
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+> +	*temp = ((reg_val & 0xff) - 100) * 1000;
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_sensor_id(void)
+> +{
+> +	int ret, id;
+> +	struct of_phandle_args sensor_specs;
+> +	struct device_node *np, *sensor_np;
+> +
+> +	np = of_find_node_by_name(NULL, "thermal-zones");
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	sensor_np = of_get_next_child(np, NULL);
+> +	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
+> +			"#thermal-sensor-cells",
+> +			0, &sensor_specs);
+> +	if (ret) {
+> +		of_node_put(np);
+> +		of_node_put(sensor_np);
+> +		return ret;
+> +	}
+> +
+> +	if (sensor_specs.args_count >= 1) {
+> +		id = sensor_specs.args[0];
+> +		WARN(sensor_specs.args_count > 1,
+> +				"%s: too many cells in sensor specifier %d\n",
+> +				sensor_specs.np->name, sensor_specs.args_count);
+> +	} else {
+> +		id = 0;
+> +	}
+> +
+> +	of_node_put(np);
+> +	of_node_put(sensor_np);
+> +
+> +	return id;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	/* clear interrupt */
+> +	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	disable_irq_nosync(irq);
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	thermal_zone_device_update(data->tzd,
+> +				   THERMAL_EVENT_UNSPECIFIED);
+> +	enable_irq(data->irq);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+> +{
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	return loongson2_thermal_set(data, low/1000, high/1000, true);
+> +}
+> +
+> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
+> +	.get_temp = loongson2_thermal_get_temp,
+> +	.set_trips = loongson2_thermal_set_trips,
+> +};
+> +
+> +static int loongson2_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	struct loongson2_thermal_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->pdev = pdev;
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(data->regs))
+> +		return PTR_ERR(data->regs);
+> +
+> +	/* get irq */
+> +	data->irq = platform_get_irq(pdev, 0);
+> +	if (data->irq < 0)
+> +		return data->irq;
+> +
+> +	/* get id */
+> +	data->id = loongson2_thermal_get_sensor_id();
+> +	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+> +				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+> +		return -EINVAL;
+> +	}
+> +
+> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	loongson2_thermal_set(data, 0, 0, false);
+> +
+> +	data->tzd = devm_thermal_of_zone_register(&pdev->dev, data->id, data,
+> +			&loongson2_of_thermal_ops);
+> +	if (IS_ERR(data->tzd))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(data->tzd),
+> +				"failed to register");
+> +
+> +	ret = devm_request_threaded_irq(dev, data->irq,
+> +			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+> +			IRQF_ONESHOT, "loongson2_thermal", data);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed to request alarm irq\n");
+> +
+> +	/*
+> +	 * Thermal_zone doesn't enable hwmon as default,
+> +	 * enable it here
+> +	 */
+> +	data->tzd->tzp->no_hwmon = false;
+> +	if (devm_thermal_add_hwmon_sysfs(data->tzd))
+> +		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
+> +	int reg_off = data->id * 2;
+> +
+> +	/* disable interrupt */
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_loongson2_thermal_match[] = {
+> +	{ .compatible = "loongson,ls2k-thermal",},
+> +	{ /* end */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
+> +
+> +static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused loongson2_thermal_resume(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
+> +			 loongson2_thermal_suspend, loongson2_thermal_resume);
+> +
+> +static struct platform_driver loongson2_thermal_driver = {
+> +	.driver = {
+> +		.name		= "loongson2_thermal",
+> +		.pm = &loongson2_thermal_pm_ops,
+> +		.of_match_table = of_loongson2_thermal_match,
+> +	},
+> +	.probe	= loongson2_thermal_probe,
+> +	.remove	= loongson2_thermal_remove,
+> +};
+> +module_platform_driver(loongson2_thermal_driver);
+> +
+> +MODULE_DESCRIPTION("Loongson2 thermal driver");
+> +MODULE_LICENSE("GPL");
 
