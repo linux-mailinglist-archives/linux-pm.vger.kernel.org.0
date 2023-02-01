@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2836861E4
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 09:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51372686203
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 09:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjBAInz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 03:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        id S230138AbjBAItE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 03:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjBAIny (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 03:43:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29B4FCE5;
-        Wed,  1 Feb 2023 00:43:53 -0800 (PST)
+        with ESMTP id S230218AbjBAItB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 03:49:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99C919F26;
+        Wed,  1 Feb 2023 00:48:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7989061703;
-        Wed,  1 Feb 2023 08:43:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4E3C433D2;
-        Wed,  1 Feb 2023 08:43:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFBB8B8214A;
+        Wed,  1 Feb 2023 08:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9320BC433EF;
+        Wed,  1 Feb 2023 08:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675241032;
-        bh=R1VT1TpqN8xjr/SuaSd4KCnH10Pd9NZAXV9LuD/rLvc=;
+        s=k20201202; t=1675241325;
+        bh=Cir3VKUhzPcJXeAeR+y9xNSuX+UtwK3Zfk0ejS8G3Rw=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cUzIfS1iNfrdtB+b3hoVw6f2cUQ5130EbehpQmUK42Oy7powO2fBjeb3PE0wkd0wm
-         QaqjFoFFMOJkDFTGYH5SAEi9SeKpsWNRqWaBc8ZUo45SKiZc/AvV3Zbu4ecMxY/WFa
-         T619jSPmZvd7+tBSEFKsWBN+Dv/gixJM/saaEM79XM2yfpkyut0967JvPq0ttfj5cy
-         Zh6VUPgfeHrlJJrpea/JiAn3NstYgJJHQGTfi07CMPPQPI+bwQGTOdvDB+2w/VrvEq
-         O02UtvfIo7DFHRsjHPPd8W0W7dZ8XHpDlvIMwWYQYMBruOGSlj5UT3U9RDo66ajVP/
-         twYTCqCqezL0A==
-Message-ID: <9ab7383b-f3ed-3e48-d275-3c8933be5f2f@kernel.org>
-Date:   Wed, 1 Feb 2023 09:43:46 +0100
+        b=amHVFbBlgLMs6+bhWvn0nEpAbzz2x1I8JLsRprU0o/lVMkUWPQ82swf5Eu8/m11kE
+         Kj9QApSlE7qUmVkVmbBDy0CH/EY4BehoxryMSDo8fUFnLX2oR5bFJNGa0nBvI2az6w
+         RqYm/sHnyoQuWp8YUqd9NgbGZMsJ/G5r+LVVUfNymI32+NR/0gkfjxfC1LoXR5Jba3
+         WXTLzORbba/ulur2Zp7rjyNcdQqChkTgm2k+JpvZhSYvedVo8az/vDoP8N7W5Q04gP
+         2+KaNjMev+E/ZAJ/6usOohO3vyM+eEGJY6LCxReISvN/7FoK+Y5NVrXh+NtNOjMbpp
+         9H964tr6LD8eQ==
+Message-ID: <5ecc68a6-2914-1059-460f-752adc1d3d01@kernel.org>
+Date:   Wed, 1 Feb 2023 09:48:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm CCI
- dt-bindings
+Subject: Re: [PATCH 2/2] PM / devfreq: qcom: Introduce CCI devfreq driver
+Content-Language: en-US
 To:     Jun Nie <jun.nie@linaro.org>, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com, cw00.choi@samsung.com
 Cc:     bryan.odonoghue@linaro.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 References: <20230201080227.473547-1-jun.nie@linaro.org>
-Content-Language: en-US
+ <20230201080227.473547-2-jun.nie@linaro.org>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230201080227.473547-1-jun.nie@linaro.org>
+In-Reply-To: <20230201080227.473547-2-jun.nie@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,97 +59,134 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 01/02/2023 09:02, Jun Nie wrote:
-> Add devicetree binding of Qualcomm CCI on MSM8939.
+> Cache Coherent Interconnect (CCI) is used by some Qualcomm SoCs. This
+> driver is introduced so that its freqency can be adjusted. And regulator
+> associated with opp table can be also adjusted accordingly which is
+> shared with cpu cluster.
 
 Please use scripts/get_maintainers.pl to get a list of necessary people
 and lists to CC.  It might happen, that command when run on an older
 kernel, gives you outdated entries.  Therefore please be sure you base
 your patches on recent Linux kernel.
 
-Subject: drop second/last, redundant "dt-bindings". The "dt-bindings"
-prefix is already stating that these are bindings.
+You need to Cc Qualcomm subarch maintainers.
 
 > 
 > Signed-off-by: Jun Nie <jun.nie@linaro.org>
 > ---
->  .../bindings/interconnect/qcom,cci.yaml       | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,cci.yaml
+>  drivers/devfreq/Kconfig    |   9 +++
+>  drivers/devfreq/Makefile   |   1 +
+>  drivers/devfreq/qcom-cci.c | 162 +++++++++++++++++++++++++++++++++++++
+
+Who is going to maintain this file/driver?
+
+>  3 files changed, 172 insertions(+)
+>  create mode 100644 drivers/devfreq/qcom-cci.c
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,cci.yaml b/Documentation/devicetree/bindings/interconnect/qcom,cci.yaml
-> new file mode 100644
-> index 000000000000..100c440ba220
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,cci.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/mediatek,cci.yaml#
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Cache Coherent Interconnect (CCI) frequency and voltage scaling
-> +
-> +maintainers:
-> +  - Jun Nie <jun.nie@linaro.org>
-> +
-> +description: |
-> +  Qualcomm Cache Coherent Interconnect (CCI) is a hardware engine used by
-> +  MSM8939. The driver is to scale its frequency and adjust the voltage in
-> +  hardware accordingly. The voltage provider is modeled as power domain on
-> +  MSM8939, so power domain dts node is required.
-
-Don't describe other bindings, but the hardware. Last sentence is not
-really related. What's more - it does not fit what you wrote below.
+(...)
 
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,msm8939-cci
+> +static int qcom_cci_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct qcom_cci *priv;
+> +	const char *gov = DEVFREQ_GOV_USERSPACE;
+> +	struct device_node *np = dev->of_node;
+> +	struct nvmem_cell *speedbin_nvmem;
+> +	int ret;
+> +	u32 version;
 > +
-> +  clocks:
-> +    maxItems: 1
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
 > +
-> +  operating-points-v2: true
-> +  opp-table:
-> +    type: object
+> +	priv->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(priv->clk)) {
+> +		ret = PTR_ERR(priv->clk);
+> +		dev_err(dev, "failed to fetch clk: %d\n", ret);
+> +		return ret;
+
+All these are just return dev_err_probe
+
+
+> +	}
+> +	platform_set_drvdata(pdev, priv);
 > +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - operating-points-v2
-> +  - nvmem-cells
+> +	/* Check whether we have profiled speed version per chip */
+> +	speedbin_nvmem = of_nvmem_cell_get(np, NULL);
+> +	if (IS_ERR(speedbin_nvmem))
+> +		return PTR_ERR(speedbin_nvmem);
+> +
+> +	version = qcom_get_dev_version(speedbin_nvmem);
+> +	dev_info(dev, "%s: set opp table version 0x%x\n", __func__, version);
 
-?? You cannot require properties which are not present.
-
-> +  - power-domains
-
-Same here.
+Drop __func__.
 
 > +
-> +additionalProperties: false
+> +	nvmem_cell_put(speedbin_nvmem);
+> +	ret = dev_pm_opp_set_supported_hw(dev, &version, 1);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to set supported hardware\n");
+
+return dev_err_probe
+
+> +		return ret;
+> +	}
 > +
-> +examples:
-> +  - |
-> +    cci: cci {
-> +        compatible = "qcom,msm8939-cci";
-> +	clocks = <&apcs2>;
+> +	ret = dev_pm_opp_of_add_table(dev);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to get OPP table\n");
+> +		return ret;
 
-Messed indentation.
+return dev_err_probe
 
-Use 4 spaces for example indentation.
 
-> +	operating-points-v2 = <&cci_opp_table>;
-> +	power-domains = <&cpr>;
-> +	nvmem-cells = <&cpr_efuse_speedbin_pvs>;
+> +	}
+> +
+> +	priv->profile.target = qcom_cci_target;
+> +	priv->profile.exit = qcom_cci_exit;
+> +	priv->profile.get_cur_freq = qcom_cci_get_cur_freq;
+> +	priv->profile.initial_freq = clk_get_rate(priv->clk);
+> +
+> +	priv->devfreq = devm_devfreq_add_device(dev, &priv->profile,
+> +						gov, NULL);
+> +	if (IS_ERR(priv->devfreq)) {
+> +		ret = PTR_ERR(priv->devfreq);
+> +		dev_err(dev, "failed to add devfreq device: %d\n", ret);
 
-How does it pass testing?
+
+ret = dev_err_probe
+
+
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+> +
+> +err:
+> +	dev_pm_opp_of_remove_table(dev);
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id qcom_cci_of_match[] = {
+> +	{ .compatible = "qcom,msm8939-cci"},
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, qcom_cci_of_match);
+> +
+> +static struct platform_driver qcom_cci_platdrv = {
+> +	.probe		= qcom_cci_probe,
+> +	.driver = {
+> +		.name	= "qcom-cci-devfreq",
+> +		.of_match_table = qcom_cci_of_match,
+> +	},
+> +};
+> +module_platform_driver(qcom_cci_platdrv);
+> +
+> +MODULE_DESCRIPTION("QCOM cci frequency scaling driver");
+> +MODULE_AUTHOR("Jun Nie <jun.nie@linaro.org>");
+> +MODULE_LICENSE("GPL");
 
 Best regards,
 Krzysztof
