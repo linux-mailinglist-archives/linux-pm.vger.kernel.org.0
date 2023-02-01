@@ -2,363 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6B0686E11
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22077686DFB
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjBASgA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 13:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S230432AbjBASc3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 13:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjBASf6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:35:58 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9B27FA20;
-        Wed,  1 Feb 2023 10:35:30 -0800 (PST)
+        with ESMTP id S231569AbjBASc0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:32:26 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6E62BEF0;
+        Wed,  1 Feb 2023 10:32:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675276530; x=1706812530;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hzXaxXa/12m2UA384itaWVqGMRJpMjv07+6PASO6Ohg=;
-  b=Ht6nJ6UeTQmc+P3rMiglUG3pOy+QOD5KHQq5J1jcKIfXe4HM8bHZ6Ofl
-   INElsBwAOECzDffUyB9hrv9k/O78QV+xMQGtYaKPMIWMK6AFxBuyVyiFl
-   f+cOf9VwXDwVks9N3kjjMPWY74vi8ui/l9hzzy5carxT0laDbBm6hvSMa
-   +JFAwlU/6giWtfmsq8YzfuX7CyldrpREvSkgGwxnzgsiuA7BmSQa5JuIe
-   sw8tMbZYRpQuAdbvK7CM7CsViELo0jyybNeqq5tWDhEJQgQcTWTx3gt8K
-   eyGuBr/kxaMydlg2AUVUXq+rozOCCG7ZwEAXShJR5hVNcXpAg4A7rDtTY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414440448"
+  t=1675276345; x=1706812345;
+  h=from:to:cc:subject:date:message-id:mime-version:reply-to:
+   content-transfer-encoding;
+  bh=UclNVWFvqIPe9hClgldAXJmUDe82JxeqnIRpO7uqdR0=;
+  b=n83o5CEDJKnGoWCI6ttm9CV+a57Tb2wkjJzqqHqBgCfDdmnlJCjS1gIB
+   E5nyIzE4vW0d2YrhsGc75EZl4J+D7JqSWdS/rGaPe9mFqju0w+gbBLsn1
+   AvLtgnfzHqJLSqcsIpGdu8SoGZtK3esEH3Bw88FtralSqE2GgWzZ2pCP6
+   ptzAARW9tHqU2EorQj7pUYHjWunhkMEFgvM+9qYYzxwEuscUt3t5VWZn9
+   QV2Bq7Qucg6FrS2ntDUzHBld4F4/gmgW9z12dpcfSP42xLlMYnxCsoeok
+   WxKtaLcP6/0z4oajIARlnYIwZzMAnbW2dQmV9aPVuDMGdTPtteH/ygS3q
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="390626521"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="414440448"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:28:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667014267"
+   d="scan'208";a="390626521"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:32:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="697374361"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="667014267"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2023 10:28:57 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+   d="scan'208";a="697374361"
+Received: from earamire-mobl1.amr.corp.intel.com (HELO lenb-desk1.amr.corp.intel.com) ([10.212.85.96])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:32:17 -0800
+From:   Len Brown <len.brown@intel.com>
 To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v5 4/4] thermal/drivers/intel_powerclamp: Add additional module params
-Date:   Wed,  1 Feb 2023 10:28:54 -0800
-Message-Id: <20230201182854.2158535-5-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com>
-References: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com>
+Cc:     kvalo@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-wireless@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Carl Huang <cjhuang@codeaurora.org>, stable@vger.kernel.org
+Subject: [PATCH] ath11k: allow system suspend to survive ath11k
+Date:   Wed,  1 Feb 2023 12:32:01 -0600
+Message-Id: <20230201183201.14431-1-len.brown@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In some use cases, it is desirable to only inject idle on certain set
-of CPUs. For example on Alder Lake systems, it is possible that we force
-idle only on P-Cores for thermal reasons. Also the idle percent can be
-more than 50% if we only choose partial set of CPUs in the system.
+When ath11k runs into internal errors upon suspend,
+it returns an error code to pci_pm_suspend, which
+aborts the entire system suspend.
 
-Introduce module parameters for setting cpumask and max_idle. They
-can be only changed when the cooling device is inactive. This module
-already have other module parameters. There is no change done for
-those parameters.
+The driver should not abort system suspend, but should
+keep its internal errors to itself, and allow the system
+to suspend.  Otherwise, a user can suspend a laptop
+by closing the lid and sealing it into a case, assuming
+that is will suspend, rather than heating up and draining
+the battery when in transit.
 
-cpumask (Read/Write): A bit mask of CPUs to inject idle. The format of
-this bitmask is same as used in other subsystems like in
-/proc/irq/*/smp_affinity. The mask is comma separated 32 bit groups.
-Each CPU is one bit. For example for 256 CPU system the full mask is:
-ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-The leftmost mask is for CPU 0-32.
+In practice, the ath11k device seems to have plenty of transient
+errors, and subsequent suspend cycles after this failure
+often succeed.
 
-max_idle (Read/Write): Maximum injected idle time to the total CPU time
-ratio in percent range from 1 to 100. Even if the cooling device max_state
-is always 100 (100%), this parameter allows to add a max idle percent
-limit. The default is 50, to match the current implementation of powerclamp
-driver. Also doesn't allow value more than 75, if the cpumask includes
-every CPU present in the system.
+https://bugzilla.kernel.org/show_bug.cgi?id=216968
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Fixes: d1b0c33850d29 ("ath11k: implement suspend for QCA6390 PCI devices")
+
+Signed-off-by: Len Brown <len.brown@intel.com>
+Cc: Carl Huang <cjhuang@codeaurora.org>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: stable@vger.kernel.org
 ---
-v5
-New patch
+ drivers/net/wireless/ath/ath11k/pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- .../driver-api/thermal/intel_powerclamp.rst   |  22 +++
- drivers/thermal/intel/intel_powerclamp.c      | 169 ++++++++++++++++--
- 2 files changed, 173 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/driver-api/thermal/intel_powerclamp.rst b/Documentation/driver-api/thermal/intel_powerclamp.rst
-index 3f6dfb0b3ea6..d805e28b7a45 100644
---- a/Documentation/driver-api/thermal/intel_powerclamp.rst
-+++ b/Documentation/driver-api/thermal/intel_powerclamp.rst
-@@ -26,6 +26,8 @@ By:
- 	    - Generic Thermal Layer (sysfs)
- 	    - Kernel APIs (TBD)
+diff --git a/drivers/net/wireless/ath/ath11k/pci.c b/drivers/net/wireless/ath/ath11k/pci.c
+index 99cf3357c66e..3c6005ab9a71 100644
+--- a/drivers/net/wireless/ath/ath11k/pci.c
++++ b/drivers/net/wireless/ath/ath11k/pci.c
+@@ -979,7 +979,7 @@ static __maybe_unused int ath11k_pci_pm_suspend(struct device *dev)
+ 	if (ret)
+ 		ath11k_warn(ab, "failed to suspend core: %d\n", ret);
  
-+	(*) Module Parameters
-+
- INTRODUCTION
- ============
- 
-@@ -318,3 +320,23 @@ device, a PID based userspace thermal controller can manage to
- control CPU temperature effectively, when no other thermal influence
- is added. For example, a UltraBook user can compile the kernel under
- certain temperature (below most active trip points).
-+
-+Module Parameters
-+=================
-+
-+``cpumask`` (RW)
-+	A bit mask of CPUs to inject idle. The format of the bitmask is same as
-+	used in other subsystems like in /proc/irq/*/smp_affinity. The mask is
-+	comma separated 32 bit groups. Each CPU is one bit. For example for a 256
-+	CPU system the full mask is:
-+	ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-+
-+	The leftmost mask is for CPU 0-32.
-+
-+``max_idle`` (RW)
-+	Maximum injected idle time to the total CPU time ratio in percent range
-+	from 1 to 100. Even if the cooling device max_state is always 100 (100%),
-+	this parameter allows to add a max idle percent	limit. The default is 50,
-+	to match the current implementation of powerclamp driver. Also doesn't
-+	allow value more than 75, if the cpumask includes every CPU present in
-+	the system.
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 850195ebe5e0..68830b726da2 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -37,7 +37,7 @@
- #include <asm/mwait.h>
- #include <asm/cpu_device_id.h>
- 
--#define MAX_TARGET_RATIO (50U)
-+#define MAX_TARGET_RATIO (100U)
- /* For each undisturbed clamping period (no extra wake ups during idle time),
-  * we increment the confidence counter for the given target ratio.
-  * CONFIDENCE_OK defines the level where runtime calibration results are
-@@ -109,6 +109,135 @@ static const struct kernel_param_ops duration_ops = {
- module_param_cb(duration, &duration_ops, &duration, 0644);
- MODULE_PARM_DESC(duration, "forced idle time for each attempt in msec.");
- 
-+#define DEFAULT_MAX_IDLE	50
-+#define MAX_ALL_CPU_IDLE	75
-+
-+static u8 max_idle = DEFAULT_MAX_IDLE;
-+
-+static cpumask_var_t idle_injection_cpu_mask;
-+
-+static int allocate_idle_injection_mask(void)
-+{
-+	/* This mask is allocated only one time and freed during module exit */
-+	if (!idle_injection_cpu_mask) {
-+		if (!zalloc_cpumask_var(&idle_injection_cpu_mask, GFP_KERNEL))
-+			return -ENOMEM;
-+
-+		cpumask_copy(idle_injection_cpu_mask, cpu_present_mask);
-+	}
-+
+-	return ret;
 +	return 0;
-+}
-+
-+static int cpumask_set(const char *arg, const struct kernel_param *kp)
-+{
-+	int ret;
-+
-+	mutex_lock(&powerclamp_lock);
-+
-+	/* Can't set mask when cooling device is in use */
-+	if (powerclamp_data.clamping) {
-+		ret = -EAGAIN;
-+		goto skip_cpumask_set;
-+	}
-+
-+	/*
-+	 * When module parameters are passed from kernel command line
-+	 * during insmod, the module parameter callback is called
-+	 * before powerclamp_init(), so we can't assume that some
-+	 * cpumask can be allocated before here.
-+	 */
-+	ret = allocate_idle_injection_mask();
-+	if (ret)
-+		goto skip_cpumask_set;
-+
-+	ret = bitmap_parse(arg, strlen(arg), cpumask_bits(idle_injection_cpu_mask),
-+			   nr_cpumask_bits);
-+	if (ret)
-+		goto skip_cpumask_set;
-+
-+	if (cpumask_empty(idle_injection_cpu_mask)) {
-+		ret = -EINVAL;
-+		goto skip_cpumask_set;
-+	}
-+
-+	if (cpumask_equal(cpu_present_mask, idle_injection_cpu_mask) &&
-+			  max_idle > MAX_ALL_CPU_IDLE) {
-+		ret = -EINVAL;
-+		goto skip_cpumask_set;
-+	}
-+
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return 0;
-+
-+skip_cpumask_set:
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return ret;
-+}
-+
-+static int cpumask_get(char *buf, const struct kernel_param *kp)
-+{
-+	if (!idle_injection_cpu_mask)
-+		return -EINVAL;
-+
-+	return bitmap_print_to_pagebuf(false, buf, cpumask_bits(idle_injection_cpu_mask),
-+				       nr_cpumask_bits);
-+}
-+
-+static const struct kernel_param_ops cpumask_ops = {
-+	.set = cpumask_set,
-+	.get = cpumask_get,
-+};
-+
-+module_param_cb(cpumask, &cpumask_ops, NULL, 0644);
-+MODULE_PARM_DESC(cpumask, "Mask of CPUs to use for idle injection.");
-+
-+static int max_idle_set(const char *arg, const struct kernel_param *kp)
-+{
-+	u8 _max_idle;
-+	int ret = 0;
-+
-+	mutex_lock(&powerclamp_lock);
-+
-+	/* Can't set mask when cooling device is in use */
-+	if (powerclamp_data.clamping) {
-+		ret = -EAGAIN;
-+		goto skip_limit_set;
-+	}
-+
-+	ret = kstrtou8(arg, 10, &_max_idle);
-+	if (ret)
-+		goto skip_limit_set;
-+
-+	if (_max_idle > MAX_TARGET_RATIO) {
-+		ret = -EINVAL;
-+		goto skip_limit_set;
-+	}
-+
-+	if (idle_injection_cpu_mask && cpumask_equal(cpu_present_mask, idle_injection_cpu_mask) &&
-+	    _max_idle > MAX_ALL_CPU_IDLE) {
-+		ret = -EINVAL;
-+		goto skip_limit_set;
-+	}
-+
-+	max_idle = _max_idle;
-+
-+skip_limit_set:
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops max_idle_ops = {
-+	.set = max_idle_set,
-+	.get = param_get_int,
-+};
-+
-+module_param_cb(max_idle, &max_idle_ops, &max_idle, 0644);
-+MODULE_PARM_DESC(max_idle, "maximum injected idle time to the total CPU time ratio in percent range:1-100");
-+
- struct powerclamp_calibration_data {
- 	unsigned long confidence;  /* used for calibration, basically a counter
- 				    * gets incremented each time a clamping
-@@ -342,6 +471,10 @@ static unsigned int get_run_time(void)
- 	unsigned int compensated_ratio;
- 	unsigned int runtime;
- 
-+	/* No compensation for non systemwide idle injection */
-+	if (max_idle > MAX_ALL_CPU_IDLE)
-+		return (duration * 100 / powerclamp_data.target_ratio - duration);
-+
- 	/*
- 	 * make sure user selected ratio does not take effect until
- 	 * the next round. adjust target_ratio if user has changed
-@@ -460,21 +593,11 @@ static void trigger_idle_injection(void)
-  */
- static int powerclamp_idle_injection_register(void)
- {
--	/*
--	 * The idle inject core will only inject for online CPUs,
--	 * So we can register for all present CPUs. In this way
--	 * if some CPU goes online/offline while idle inject
--	 * is registered, nothing additional calls are required.
--	 * The same runtime and idle time is applicable for
--	 * newly onlined CPUs if any.
--	 *
--	 * Here cpu_present_mask can be used as is.
--	 * cast to (struct cpumask *) is required as the
--	 * cpu_present_mask is const struct cpumask *, otherwise
--	 * there will be compiler warnings.
--	 */
--	ii_dev = idle_inject_register_full((struct cpumask *)cpu_present_mask,
--					   idle_inject_update);
-+	if (cpumask_equal(cpu_present_mask, idle_injection_cpu_mask))
-+		ii_dev = idle_inject_register_full(idle_injection_cpu_mask, idle_inject_update);
-+	else
-+		ii_dev = idle_inject_register(idle_injection_cpu_mask);
-+
- 	if (!ii_dev) {
- 		pr_err("powerclamp: idle_inject_register failed\n");
- 		return -EAGAIN;
-@@ -510,7 +633,7 @@ static int start_power_clamp(void)
- 	ret = powerclamp_idle_injection_register();
- 	if (!ret) {
- 		trigger_idle_injection();
--		if (poll_pkg_cstate_enable)
-+		if (poll_pkg_cstate_enable && max_idle < MAX_ALL_CPU_IDLE)
- 			schedule_delayed_work(&poll_pkg_cstate_work, 0);
- 	}
- 
-@@ -565,7 +688,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
- 	mutex_lock(&powerclamp_lock);
- 
- 	new_target_ratio = clamp(new_target_ratio, 0UL,
--				(unsigned long) (MAX_TARGET_RATIO - 1));
-+				(unsigned long) (max_idle - 1));
- 	if (!powerclamp_data.target_ratio && new_target_ratio > 0) {
- 		pr_info("Start idle injection to reduce power\n");
- 		powerclamp_data.target_ratio = new_target_ratio;
-@@ -656,6 +779,13 @@ static int __init powerclamp_init(void)
- 
- 	/* probe cpu features and ids here */
- 	retval = powerclamp_probe();
-+	if (retval)
-+		return retval;
-+
-+	mutex_lock(&powerclamp_lock);
-+	retval = allocate_idle_injection_mask();
-+	mutex_unlock(&powerclamp_lock);
-+
- 	if (retval)
- 		return retval;
- 
-@@ -689,6 +819,9 @@ static void __exit powerclamp_exit(void)
- 
- 	cancel_delayed_work_sync(&poll_pkg_cstate_work);
- 	debugfs_remove_recursive(debug_dir);
-+
-+	if (idle_injection_cpu_mask)
-+		free_cpumask_var(idle_injection_cpu_mask);
  }
- module_exit(powerclamp_exit);
  
+ static __maybe_unused int ath11k_pci_pm_resume(struct device *dev)
 -- 
-2.39.1
+2.37.2
 
