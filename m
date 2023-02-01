@@ -2,99 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EA3687057
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 22:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4416870DA
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 23:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjBAVH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 16:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S229916AbjBAWKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 17:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBAVH0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 16:07:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221E6D5C6;
-        Wed,  1 Feb 2023 13:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675285634; x=1706821634;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yL+AMeADaYah1JlX3xyOr7TA/KaBboijzv98KqvU194=;
-  b=BgZoCtx/algIw5eQQ+2yreQshQMMJzkXTRomByz2U+LDCO3uqCt/a7Ri
-   rtWyXORGGrP3GAqsrxr3NOENz1uly3tmFkVQwsoyUVfkuoNbDZBaMuOOH
-   UNxQXnjkEpWUE7hkOl7+lsH+0+iH2kxcL+oKv8/AVkW2sBigWGpuEAY0J
-   8QX6Zel3RUedIRO4zlNK6L0j34YmqZhi1QwZwC3IhlazxsM9f/v6T3Kd5
-   Hs0wN1fe5oJAGaAj1JmgE2rAncT/AJ3EsswBIT9jfXb9oZuPr0ZvsPn56
-   QlpS1p1iua+KXOuQ4t/s8MbjtXLXBOokpeGUGf+2KhWaafCabjdWCRToD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311919614"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="311919614"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:07:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="838931372"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="838931372"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 13:07:13 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
-Date:   Wed,  1 Feb 2023 13:07:12 -0800
-Message-Id: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229616AbjBAWKw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 17:10:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4982873755;
+        Wed,  1 Feb 2023 14:10:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BED0961972;
+        Wed,  1 Feb 2023 22:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7D8C433D2;
+        Wed,  1 Feb 2023 22:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675289451;
+        bh=KFViytPAQpuSOyz4tKk8cFMgRc5dOd10znyuecgbq7M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=A66ArSLQp7MJkX/stLQUAejMgTpL2aoozfwWRLcgyf0MV9WO2xS7BA8i6hlBHEWCq
+         fcagJEIefiLRzehdVFyLRRNWSedKrovJyik0RD5eHXmDVsj84bSQNrL2NwWt3Q+ML8
+         NnLuQGpdbkSzHL/CQw2xA324Om5821CSVYx86+ef4iIgq0pAS1dAl2M6FHE9aRuC15
+         lDyQKwoUp9DMDjLzemLNJ/NliDnk5k/P1hy1W6UNF5CoJfdcFiheTn2K6gvtwOZeOt
+         6G5CrbzYm8FjIEaRA4ctStHfzGw3rkLfe1epV68m8JKR+XlRBk1jUBZqPUP07saJvJ
+         htYxfDTlmJkEg==
+Date:   Wed, 1 Feb 2023 16:10:49 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+Message-ID: <20230201221049.GA1902318@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c0c58ec0-3cb2-5385-eeac-6ca37b6b1509@leemhuis.info>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the user is reading cur_state from the thermal cooling device for
-Intel powerclamp device:
-- It returns the idle ratio from Package C-state counters when
-there is active idle injection session.
-- -1, when there is no active idle injection session.
+On Mon, Jan 30, 2023 at 01:35:16PM +0100, Thorsten Leemhuis wrote:
+> Just wondering: what's the status here? This looks stalled.
+> 
+> I'm asking, as the patches in this thread are supposed to fix this
+> regression:
+> https://bugzilla.kernel.org/show_bug.cgi?id=216884
 
-This information is not very useful as the package C-state counters vary
-a lot from read to read. Instead just return the last requested cur_state.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
-
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 2f4cbfdf26a0..72a45cf2708c 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
- static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
- {
--	if (clamping) {
--		if (poll_pkg_cstate_enable)
--			*state = pkg_cstate_ratio_cur;
--		else
--			*state = set_target_ratio;
--	} else {
--		/* to save power, do not poll idle ratio while not clamping */
--		*state = -1; /* indicates invalid state */
--	}
--
--	return 0;
-+	return set_target_ratio;
- }
- 
- static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
--- 
-2.39.1
-
+#regzbot resolve: [patch 1/2] will fix bz216884, but it is not a regression
