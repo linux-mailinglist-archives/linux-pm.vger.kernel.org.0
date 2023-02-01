@@ -2,112 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A039F687021
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 21:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EA3687057
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 22:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjBAUxK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 15:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S230369AbjBAVH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 16:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbjBAUxD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 15:53:03 -0500
-X-Greylist: delayed 428 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 12:52:37 PST
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8650925E10
-        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 12:52:37 -0800 (PST)
-Received: from localhost.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0C6DC20392;
-        Wed,  1 Feb 2023 21:44:59 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use generic ADC node name
-Date:   Wed,  1 Feb 2023 21:44:46 +0100
-Message-Id: <20230201204447.542385-3-marijn.suijten@somainline.org>
+        with ESMTP id S231185AbjBAVH0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 16:07:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221E6D5C6;
+        Wed,  1 Feb 2023 13:07:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675285634; x=1706821634;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yL+AMeADaYah1JlX3xyOr7TA/KaBboijzv98KqvU194=;
+  b=BgZoCtx/algIw5eQQ+2yreQshQMMJzkXTRomByz2U+LDCO3uqCt/a7Ri
+   rtWyXORGGrP3GAqsrxr3NOENz1uly3tmFkVQwsoyUVfkuoNbDZBaMuOOH
+   UNxQXnjkEpWUE7hkOl7+lsH+0+iH2kxcL+oKv8/AVkW2sBigWGpuEAY0J
+   8QX6Zel3RUedIRO4zlNK6L0j34YmqZhi1QwZwC3IhlazxsM9f/v6T3Kd5
+   Hs0wN1fe5oJAGaAj1JmgE2rAncT/AJ3EsswBIT9jfXb9oZuPr0ZvsPn56
+   QlpS1p1iua+KXOuQ4t/s8MbjtXLXBOokpeGUGf+2KhWaafCabjdWCRToD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311919614"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="311919614"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:07:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="838931372"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="838931372"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 13:07:13 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
+Date:   Wed,  1 Feb 2023 13:07:12 -0800
+Message-Id: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201204447.542385-1-marijn.suijten@somainline.org>
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update the example to reflect a future requirement for the generic
-adc-chan node name on ADC channel nodes, while conveying the board name
-of the channel in a label instead.
+When the user is reading cur_state from the thermal cooling device for
+Intel powerclamp device:
+- It returns the idle ratio from Package C-state counters when
+there is active idle injection session.
+- -1, when there is no active idle injection session.
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+This information is not very useful as the package C-state counters vary
+a lot from read to read. Instead just return the last requested cur_state.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml   | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-index 52ec18cf1eda..885c9e139848 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-@@ -178,10 +178,11 @@ examples:
-             #io-channel-cells = <1>;
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 2f4cbfdf26a0..72a45cf2708c 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+ {
+-	if (clamping) {
+-		if (poll_pkg_cstate_enable)
+-			*state = pkg_cstate_ratio_cur;
+-		else
+-			*state = set_target_ratio;
+-	} else {
+-		/* to save power, do not poll idle ratio while not clamping */
+-		*state = -1; /* indicates invalid state */
+-	}
+-
+-	return 0;
++	return set_target_ratio;
+ }
  
-             /* Other properties are omitted */
--            conn-therm@4f {
-+            adc-chan@4f {
-                 reg = <ADC5_AMUX_THM3_100K_PU>;
-                 qcom,ratiometric;
-                 qcom,hw-settle-time = <200>;
-+                label = "conn_therm";
-             };
-         };
- 
-@@ -217,16 +218,18 @@ examples:
-             #io-channel-cells = <1>;
- 
-             /* Other properties are omitted */
--            xo-therm@44 {
-+            adc-chan@44 {
-                 reg = <PMK8350_ADC7_AMUX_THM1_100K_PU>;
-                 qcom,ratiometric;
-                 qcom,hw-settle-time = <200>;
-+                label = "xo_therm";
-             };
- 
--            conn-therm@147 {
-+            adc-chan@147 {
-                 reg = <PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
-                 qcom,ratiometric;
-                 qcom,hw-settle-time = <200>;
-+                label = "conn_therm";
-             };
-         };
- 
+ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
 -- 
 2.39.1
 
