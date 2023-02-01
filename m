@@ -2,150 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57568686DA0
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7196B686DB2
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 19:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjBASGv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 13:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S231567AbjBASLv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 13:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjBASGs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:06:48 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D597D2A8;
-        Wed,  1 Feb 2023 10:06:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675274807; x=1706810807;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=217n0jzbEqwc1KMujYEh03wa1IX6hmrZDo8bwPhDwWA=;
-  b=Ve0ZUIRrkwq+mIjUZHs9EuTo1IWVHFI2nKxS3LqaKMIKT3dmpGWffElS
-   o6N9YckYzS/OyZP8f15jhVUV4joEdlgwP7eCvqdSKGKdQxhxz5KU0XEZU
-   HGbYyWM+bRs8GGZX0+KLbugpTk4x13zXF/hu6tireik/F0F8rya8LkU53
-   ULKo2vH33QP1ZY7f7lw0/IiZ1Be86fmwRvws0amOKImq0qgFkdLILIG99
-   0v90PqyfAQUVfn7/vnzd0rO4WrXfTAcI/XKbr87OrS3BvB+icy51DUJGQ
-   UuxKHWeNP8igYtTQel53DhDisro3dgaEutHf5ndzrCzus32s0/pkpyZmi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311868002"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="311868002"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:06:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667002139"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="667002139"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2023 10:06:27 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] thermal: intel_powerclamp: Fix cur_state for multi package system
-Date:   Wed,  1 Feb 2023 10:06:25 -0800
-Message-Id: <20230201180625.2156520-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229454AbjBASLv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 13:11:51 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA00CDD1
+        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 10:11:50 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id mi9so8935150pjb.4
+        for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 10:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZcEiLwuGvgZy4WbOe+tVhsK1ysP7K4BzmXVw4JAXzM=;
+        b=RnL1pWmrmdXIcSb/mREIPWPO6cQWyvXMXz/LCi20vjexTD/CheLDEt3eO/J8ToSi+e
+         sdVBCQYhwysSolB9HI1d4Wjka0nXYd1pNufzAy3S1KayYA5F8dlQHxnrdgH4f/09QVbV
+         Crxg4rm0vonkeedZspc2OZBnrDAZdSPnrrsUo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UZcEiLwuGvgZy4WbOe+tVhsK1ysP7K4BzmXVw4JAXzM=;
+        b=7TdFXv+Dn9h2wtxuNI8cAQncBXk4Y/OnFn7wzOzqrKb/xw8vk1LirVr+CueFJI/eI/
+         FG4IxjRHKXsqoul1I+GCqyNjuZ8MxORrnBFfscga6cP2meGxVjc/q4oCiegMX655+RYk
+         EIKZ0BpHAqoM97Co56yRPdCdwleTEXMHzcsYDbW3lky2Ut+YlTs5Q+dph59xxSraQY0Y
+         hAWfIvLoSIOjM/zZX4WYtBAebrCqXFyxGaQoYj4Sz9xXRWBdqkXj4XUvxR60XgCLC2wh
+         GnamAZ/LD5P4+WnsSzhlz/Uo9S9xdLESW9tHThYt0W9ruPpCX3CrZzLieN0BbNiboNIY
+         D+7w==
+X-Gm-Message-State: AO0yUKUaWJ5qXybsCdff1hB3VthH8ExBEnPgdQ2Kkno1bqGd0Y5JUrwg
+        AIHg5hOhU61aI7/MbOMgC9zDEg==
+X-Google-Smtp-Source: AK7set+hJJWR7YXXz5wuO795O6qLa2UbY0jGtxOgBHL3Stl7ViXIyC6O4rw0eaMNdDc8fwCCrlUQdg==
+X-Received: by 2002:a17:902:e2cb:b0:198:68b1:6255 with SMTP id l11-20020a170902e2cb00b0019868b16255mr3149630plc.56.1675275109485;
+        Wed, 01 Feb 2023 10:11:49 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:ba26:efe8:5132:5fcf])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b001968b529c98sm5718969plg.128.2023.02.01.10.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 10:11:49 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     rafael@kernel.org, viresh.kumar@linaro.org, corbet@lwn.net
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] docs: cpufreq: Frequencies are in Hz, not kHz
+Date:   Wed,  1 Feb 2023 10:11:19 -0800
+Message-Id: <20230201101112.1.Ia7bc164622c8bb2dd7720ecd456672ccfd70fc5b@changeid>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The powerclamp cooling device cur_state shows actual idle observed by
-package C-state idle counters. But the implementation is not sufficient
-for multi package or multi die system. The cur_state value is incorrect.
-On these systems, these counters must be read from each package/die and
-somehow aggregate them. But there is no good method for aggregation.
+Though the documentation for the cpufreq files has always specified
+that the frequencies are in kHz, they simply aren't. For as long as I
+can remember looking at these files they've always been in straight
+Hz. Fix the docs.
 
-It was not a problem when explicit CPU model addition was required to
-enable intel powerclamp. In this way certain CPU models could have
-been avoided. But with the removal of CPU model check with the
-availability of Package C-state counters, the driver is loaded on most
-of the recent systems.
-
-For multi package/die systems, just show the actual target idle state,
-the system is trying to achieve. In powerclamp this is the user set
-state minus one.
-
-Also there is no use of starting a worker thread for polling package
-C-state counters and applying any compensation.
-
-Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org # 4.14+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
- drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+NOTE: git blame shows that this has been wrong since before the kernel
+switched to git. I've tagged the first git commit as Fixes, but we
+could easily just drop the Fixes tag if that's a better way to go.
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index b80e25ec1261..64f082c584b2 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -57,6 +57,7 @@
+ Documentation/admin-guide/pm/cpufreq.rst | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+index 6adb7988e0eb..eb46c5983a0a 100644
+--- a/Documentation/admin-guide/pm/cpufreq.rst
++++ b/Documentation/admin-guide/pm/cpufreq.rst
+@@ -242,7 +242,7 @@ are the following:
  
- static unsigned int target_mwait;
- static struct dentry *debug_dir;
-+static bool poll_pkg_cstate_enable;
+ ``cpuinfo_cur_freq``
+ 	Current frequency of the CPUs belonging to this policy as obtained from
+-	the hardware (in KHz).
++	the hardware (in Hz).
  
- /* user selected target */
- static unsigned int set_target_ratio;
-@@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
- {
- 	unsigned int comp = 0;
+ 	This is expected to be the frequency the hardware actually runs at.
+ 	If that frequency cannot be determined, this attribute should not
+@@ -250,11 +250,11 @@ are the following:
  
-+	if (!poll_pkg_cstate_enable)
-+		return 0;
-+
- 	/* we only use compensation if all adjacent ones are good */
- 	if (ratio == 1 &&
- 		cal_data[ratio].confidence >= CONFIDENCE_OK &&
-@@ -519,7 +523,8 @@ static int start_power_clamp(void)
- 	control_cpu = cpumask_first(cpu_online_mask);
+ ``cpuinfo_max_freq``
+ 	Maximum possible operating frequency the CPUs belonging to this policy
+-	can run at (in kHz).
++	can run at (in Hz).
  
- 	clamping = true;
--	schedule_delayed_work(&poll_pkg_cstate_work, 0);
-+	if (poll_pkg_cstate_enable)
-+		schedule_delayed_work(&poll_pkg_cstate_work, 0);
+ ``cpuinfo_min_freq``
+ 	Minimum possible operating frequency the CPUs belonging to this policy
+-	can run at (in kHz).
++	can run at (in Hz).
  
- 	/* start one kthread worker per online cpu */
- 	for_each_online_cpu(cpu) {
-@@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
- static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
- {
--	if (true == clamping)
--		*state = pkg_cstate_ratio_cur;
--	else
-+	if (true == clamping) {
-+		if (poll_pkg_cstate_enable)
-+			*state = pkg_cstate_ratio_cur;
-+		else
-+			*state = set_target_ratio;
-+	} else {
- 		/* to save power, do not poll idle ratio while not clamping */
- 		*state = -1; /* indicates invalid state */
-+	}
+ ``cpuinfo_transition_latency``
+ 	The time it takes to switch the CPUs belonging to this policy from one
+@@ -278,7 +278,7 @@ are the following:
+ 	listed by this attribute.]
  
- 	return 0;
- }
-@@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
- 		goto exit_unregister;
- 	}
+ ``scaling_cur_freq``
+-	Current frequency of all of the CPUs belonging to this policy (in kHz).
++	Current frequency of all of the CPUs belonging to this policy (in Hz).
  
-+	if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
-+		poll_pkg_cstate_enable = true;
-+
- 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
- 						&powerclamp_cooling_ops);
- 	if (IS_ERR(cooling_dev)) {
+ 	In the majority of cases, this is the frequency of the last P-state
+ 	requested by the scaling driver from the hardware using the scaling
+@@ -308,7 +308,7 @@ are the following:
+ 
+ ``scaling_max_freq``
+ 	Maximum frequency the CPUs belonging to this policy are allowed to be
+-	running at (in kHz).
++	running at (in Hz).
+ 
+ 	This attribute is read-write and writing a string representing an
+ 	integer to it will cause a new limit to be set (it must not be lower
+@@ -316,7 +316,7 @@ are the following:
+ 
+ ``scaling_min_freq``
+ 	Minimum frequency the CPUs belonging to this policy are allowed to be
+-	running at (in kHz).
++	running at (in Hz).
+ 
+ 	This attribute is read-write and writing a string representing a
+ 	non-negative integer to it will cause a new limit to be set (it must not
+@@ -326,7 +326,7 @@ are the following:
+ 	This attribute is functional only if the `userspace`_ scaling governor
+ 	is attached to the given policy.
+ 
+-	It returns the last frequency requested by the governor (in kHz) or can
++	It returns the last frequency requested by the governor (in Hz) or can
+ 	be written to in order to set a new frequency for the policy.
+ 
+ 
 -- 
-2.39.1
+2.39.1.456.gfc5497dd1b-goog
 
