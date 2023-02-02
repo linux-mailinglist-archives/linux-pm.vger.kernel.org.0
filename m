@@ -2,201 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CFB6889F9
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 23:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13E9688A8E
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 00:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjBBWpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 17:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
+        id S233036AbjBBXOd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 18:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbjBBWpm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 17:45:42 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074706A32A
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 14:45:36 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id qw12so10480911ejc.2
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 14:45:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yv+EBHuwHRJqAJbrlM2T5g6XZ+NYEb35c1jHq1XFpd8=;
-        b=DdKMwjtuuSPaZBdeG3xXuH/Vf6SecI9XZEr5bt0Spw83Pcj1Owzs7iX7s7BxsTmGMI
-         UZPTM/26GVxWvF202KSMVKHVxikMtw76xWAz+EcqEY648xsII+uwn0fWLtPJsYwF469t
-         BEYQsYcVHAKo57ThA27P8arJkjC8r9XxBZcDQ66TXgNBVS0AEI3K8psL6XBcPV2pIFT+
-         Ym2Z7iWu2jCunXWVN2qNBHMIunlon+8zbPUaSmKgUQOEKpmZR0L3f7U8Ctzc9esEDb/R
-         y5N114iwBcXGscpRLDTwcRH41E7dCdLk/SVfljai0oEw8iBnbOk+FNY0Xx/yLIT/oqSI
-         DHtw==
+        with ESMTP id S232756AbjBBXOc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 18:14:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002B78241F
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 15:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675379627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kXVHvL7Zc9SvpXlyodElHL/El9p9PH7Vp09KDuKNQ7k=;
+        b=UZSsENMhMyiq0vTVZM7cqcrB4nyoqHJi/tkIFKdWIFh38FBUhz4H/xoZ98ObPRjQwNz/KD
+        ur5WN3y4wPiHyavJFKuZxh6kA4DHfc/GvHJEosj1h01G89E+gfy3nR8ipkcfuLeyZgjp0P
+        vX/sjuzFbK/LeS3w3cAbiFrt3uq8/Ko=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-611-r8en24SZNH-SkkecIMCppg-1; Thu, 02 Feb 2023 18:13:46 -0500
+X-MC-Unique: r8en24SZNH-SkkecIMCppg-1
+Received: by mail-il1-f197.google.com with SMTP id i14-20020a056e020d8e00b003034b93bd07so2225064ilj.14
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 15:13:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yv+EBHuwHRJqAJbrlM2T5g6XZ+NYEb35c1jHq1XFpd8=;
-        b=ru/SVbiDuGRu7e14dPNEceg5JF9OxiAb8EH8xGpadhYZWOP8rtDmtciFnky218CbzR
-         TnB3j7qEdf80RyZhsxZeFdRky4/v6aEcjQl0vYWYJwChrRDs1nLNRRPhJmw/nTZyCgVG
-         CeegQjNA1NXLI9JVBf5jGOSBr8lXxu1vT9pxfu/btdKCMQdAcEKCde1SgWSvF39zeoYE
-         ZDO/DTQRZfGUhOqrEMBl60oZFhCiDxUsVmxRPiX8eqmAa5Fb5fpt//ON4bbYHTVpBrmH
-         1POd4RJvxEo0XYvDXhL2izKWXMq/Gql1gPdptW86tzdR3qIkF1FfnvG8/JAYgJtJKs+I
-         muRw==
-X-Gm-Message-State: AO0yUKW5Wds7PYlYqm7vfRBFtZR6MtdYUfaVKuMQD12q1viDwGvZnMJM
-        idm4thrqP+eSCIFJExhUJfvuxci6i8OtwhaJ
-X-Google-Smtp-Source: AK7set/R40EN2B7UrrceJs69WdSfiP2XjBzXCmGzAwIbF5ySDgMVbLqAPHFDkcmqb/TXIIugK9+DOg==
-X-Received: by 2002:a17:906:6a24:b0:86d:7c2d:f65b with SMTP id qw36-20020a1709066a2400b0086d7c2df65bmr10810332ejc.27.1675377935184;
-        Thu, 02 Feb 2023 14:45:35 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170906158700b0088385cd6166sm401506ejd.195.2023.02.02.14.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 14:45:34 -0800 (PST)
-Message-ID: <df4da23b-d589-7353-65b0-bedbd6c31412@linaro.org>
-Date:   Thu, 2 Feb 2023 23:45:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH
- systems
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     swboyd@chromium.org, mka@chromium.org,
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kXVHvL7Zc9SvpXlyodElHL/El9p9PH7Vp09KDuKNQ7k=;
+        b=rY50P9KVudIEEh3KXPcah1SXPZEwzJObq/nH9f9/GCktO8/ESkzOGzm1v3XeNh7+Sp
+         5jb9NzRrWlVD6Cpptkyxo2hGu1Qqu4yfTcVBnwZohkGLuH2kYdyCfoaD+wsYw/ZnSRjH
+         +LOYV8bAbGU56CVrcRX5quhNr82Lv3iE0smH97yFvPin/vejkNi0V7RIYqZWeTJXEXI9
+         5J74fFpJb5HhimE/xZXn5S0WK9PhQ/1u61ECu5W3h2qzlR7G20Kjayj4vvgD+NvD6OGU
+         ErbEQIJ42lZ9SXs1bfJbXGusrBSWeqX8T77ytV0b4YQOjhrqQ2NpgZve8/UghgCPkk1u
+         uymQ==
+X-Gm-Message-State: AO0yUKUPeCQoDFeGgn6J0VGhp+QTzcDGEeT2qCCtVRDjpc01brXUOT1P
+        kocWWK8htEU2LMjClsYyWPqUzn4Zd9GryromaUqBbtgs7C0++KwGLDS82yBCgFxu2HjLQt76KJQ
+        v4YlFKV0twjNNsclErlY=
+X-Received: by 2002:a05:6602:2dc2:b0:707:d9c9:458e with SMTP id l2-20020a0566022dc200b00707d9c9458emr3293877iow.1.1675379625358;
+        Thu, 02 Feb 2023 15:13:45 -0800 (PST)
+X-Google-Smtp-Source: AK7set8MFntk5bjnEw1nbcEwPglzwxtEbs/VR6tLktByEWuRryxfTh9CCM+W/HuYuBK+h7W/qw1aLw==
+X-Received: by 2002:a05:6602:2dc2:b0:707:d9c9:458e with SMTP id l2-20020a0566022dc200b00707d9c9458emr3293860iow.1.1675379625133;
+        Thu, 02 Feb 2023 15:13:45 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id a7-20020a5e8e07000000b007192441e5e6sm274085ion.45.2023.02.02.15.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 15:13:44 -0800 (PST)
+Date:   Thu, 2 Feb 2023 18:13:41 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230202140005.1.I4b30aaa027c73372ec4068cc0f0dc665af8b938d@changeid>
- <7968db3b-8545-0601-4302-301a4006f3bc@linaro.org>
-In-Reply-To: <7968db3b-8545-0601-4302-301a4006f3bc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 11/23] interconnect: qcom: msm8974: fix registration race
+Message-ID: <Y9xDpSxL+3Iny+hF@x1>
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-12-johan+linaro@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201101559.15529-12-johan+linaro@kernel.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Feb 01, 2023 at 11:15:47AM +0100, Johan Hovold wrote:
+> The current interconnect provider registration interface is inherently
+> racy as nodes are not added until the after adding the provider. This
+> can specifically cause racing DT lookups to fail.
+> 
+> Switch to using the new API where the provider is not registered until
+> after it has been fully initialised.
+> 
+> Fixes: 4e60a9568dc6 ("interconnect: qcom: add msm8974 driver")
+> Cc: stable@vger.kernel.org      # 5.5
+> Cc: Brian Masney <bmasney@redhat.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
-On 2.02.2023 23:35, Konrad Dybcio wrote:
-> 
-> 
-> On 2.02.2023 23:00, Douglas Anderson wrote:
->> On a sc7180-based Chromebook, when I go to
->> /sys/devices/system/cpu/cpu0/cpufreq I can see:
->>
->>   cpuinfo_cur_freq:2995200
->>   cpuinfo_max_freq:1804800
->>   scaling_available_frequencies:300000 576000 ... 1708800 1804800
->>   scaling_cur_freq:1804800
->>   scaling_max_freq:1804800
->>
->> As you can see the `cpuinfo_cur_freq` is bogus. It turns out that this
->> bogus info started showing up as of commit 205f5e984d30 ("cpufreq:
->> qcom-hw: Fix the frequency returned by cpufreq_driver->get()"). That
->> commit seems to assume that everyone is on the LMH bandwagon, but
->> sc7180 isn't.
->>
->> Let's go back to the old code in the case where LMH isn't used.
->>
->> Fixes: 205f5e984d30 ("cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()")
->> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->> ---
-> Actually I hit the exact same issue when working on CPRh-aware
-> cpufreq with manual OSM programming.. LMh gets enabled by the firmware
-> on most recent platforms, but it's not the case for some old-timers.
-> 
-Ignore this email, I can't read.
-
-Konrad
-> I figured that adding a bool broken_lmh_freq in driver data would be
-> a good middleground between reverting that patch and ignoring the
-> issue, because it *does* matter what this function reports on LMh-
-> enabled platforms (yes, the subsystems are bluepilled between each
-> other and OSM/EPSS does not know the *real* throttled frequency),
-> but obviously we don't want to report 2.99Ghz otherwise..
-> 
-> I think 7280 had an issue where a SoC-specific compatible was not
-> introduced when the DT part was first merged, same goes for 6115.
-> 6115 does have firmware-enabled LMh, not sure about 7280. In case
-> you wanted to go that route, I think it would be suitable to add
-> a blacklist of retroactively-broken platforms (match-by-machine-
-> compatible; don't scream at me bindings folks, I guess that's the
-> least messy solution) in addition to either matching the SoC-specific
-> compatible to epss_broken_lmh_driver_data.
-> 
-> Or we can forget about old DTs and just bind qcom,sc7180-cpufreq-hw
-> (and 7280, maybe? please check.) to this new driver data without
-> checking the machine compatible.
-> 
-> 
-> 
-> Konrad
->>
->>  drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
->>  1 file changed, 13 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index 9505a812d6a1..957cf6bb8c05 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -143,40 +143,42 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
->>  	return lval * xo_rate;
->>  }
->>  
->> -/* Get the current frequency of the CPU (after throttling) */
->> -static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
->> +/* Get the frequency requested by the cpufreq core for the CPU */
->> +static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
->>  {
->>  	struct qcom_cpufreq_data *data;
->> +	const struct qcom_cpufreq_soc_data *soc_data;
->>  	struct cpufreq_policy *policy;
->> +	unsigned int index;
->>  
->>  	policy = cpufreq_cpu_get_raw(cpu);
->>  	if (!policy)
->>  		return 0;
->>  
->>  	data = policy->driver_data;
->> +	soc_data = qcom_cpufreq.soc_data;
->>  
->> -	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
->> +	index = readl_relaxed(data->base + soc_data->reg_perf_state);
->> +	index = min(index, LUT_MAX_ENTRIES - 1);
->> +
->> +	return policy->freq_table[index].frequency;
->>  }
->>  
->> -/* Get the frequency requested by the cpufreq core for the CPU */
->> -static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
->> +static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
->>  {
->>  	struct qcom_cpufreq_data *data;
->> -	const struct qcom_cpufreq_soc_data *soc_data;
->>  	struct cpufreq_policy *policy;
->> -	unsigned int index;
->>  
->>  	policy = cpufreq_cpu_get_raw(cpu);
->>  	if (!policy)
->>  		return 0;
->>  
->>  	data = policy->driver_data;
->> -	soc_data = qcom_cpufreq.soc_data;
->>  
->> -	index = readl_relaxed(data->base + soc_data->reg_perf_state);
->> -	index = min(index, LUT_MAX_ENTRIES - 1);
->> +	if (data->throttle_irq >= 0)
->> +		return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
->>  
->> -	return policy->freq_table[index].frequency;
->> +	return qcom_cpufreq_get_freq(cpu);
->>  }
->>  
->>  static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
