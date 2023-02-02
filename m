@@ -2,70 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6A2687E01
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F140687DD1
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbjBBM4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 07:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S232145AbjBBMrs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 07:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjBBM4d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:56:33 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F7C457ED;
-        Thu,  2 Feb 2023 04:56:26 -0800 (PST)
-X-UUID: dd01f6cea2f611ed945fc101203acc17-20230202
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=f+xt4bcbFiz4Lh0mpdZVAB1dKu8+XdSuSho8xqSktpI=;
-        b=hddLKCzykIibfzu6QJ0HjLH+JHZbVDAqrbVzxaNfv6gD375T9ccub0QanqinD9tTv/O3zmOD2kAJOZZOojLfPpt2QMN1cw/c/olY5ZYcrix5McmRK66gv2PVGapMBDx3FMpNgJ9WU09gzz274FqEGEMSNvohZWz19DtjcaJzOgo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:a50ac5e0-698f-4714-bcfb-41da3adb4993,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.18,REQID:a50ac5e0-698f-4714-bcfb-41da3adb4993,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:b0f71b56-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:230202204108QDICUXC0,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: dd01f6cea2f611ed945fc101203acc17-20230202
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 451315629; Thu, 02 Feb 2023 20:41:07 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 2 Feb 2023 20:41:06 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 2 Feb 2023 20:41:06 +0800
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        with ESMTP id S231829AbjBBMrq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:47:46 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84658DAC2;
+        Thu,  2 Feb 2023 04:47:12 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so1572017wrb.11;
+        Thu, 02 Feb 2023 04:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C0BrED6HiZlYLEkAtDG9DbtiZG4uzHzIJXFHLE8rceI=;
+        b=XqlhWz7lsb3tcDfLY60BFq3pSD6FZci45LC7s17bbOLKfqq7Rd+os4HlSW7khhk4yA
+         jUsjsHDsOP4owxQtHsRVd4GE9dfOI68Z9kLwdVkqn0q8BHWf+1TIJ1tIWTpInRUPMFLV
+         dtLGkUJc4kUVO7xWN/Ej2eZ7jEfEh/1QpHvSMl7gpAKgHKY0qJKm7mJjUFEundCrPzwk
+         1Mnsjqm34/zmyTxM1kdvlE5w1954IsMwF4YOFNnbbN4v37iHklTv8X5UKRLPaaEJ1ak5
+         jgUc9MhTGwrl6YFpGIgBGRCztYJJlS38BK48UvLYegL/kouyqfp0RBP3npDHSz+4S8oy
+         b3Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0BrED6HiZlYLEkAtDG9DbtiZG4uzHzIJXFHLE8rceI=;
+        b=VVvlidUx6vr5fcns06QL9rG63YKAP3RE2gGGcwgD60v2dJV2eX1gj3Y66NUTY1NA+K
+         DJiw4IRK44OKtYAhYtaZehFNGeP8pgdcBSk2C2A4cxEKSmUz4gSdkgqzk41PrQbxSgre
+         d+ELDv0wo1lCCbvqpSddJvK96UH5Mh6ozJLb+NYU0WVEcSAv+Ae5GdY0cjh83BsYWcN9
+         /AgcJnkHdkZHcsUAkEQq0u4CMV9CmZFYMym1K6KTUFsQJAW6XPZNNB13mWT22oByBsH5
+         HyTqEqbW75Advbg/egB1ajfULs1VrtpJxqSsAe95ZTZ/5hmokukdVH7KY5Pvf3th6ysA
+         WSUg==
+X-Gm-Message-State: AO0yUKVinccFDOCcs9eU4lo3wJKS7nYHse+EwpMvp+O/ve2di+Ok3aYa
+        rKCyzCZ0slHiJvdDXxtQoBIVMsR+I5PP9w==
+X-Google-Smtp-Source: AK7set8M/e7bCmXUmyvdGLd3KGUnk49hegzN9IjldxwFiSSTyQruNH77mmxylrX8iDTx++ADsy4ASw==
+X-Received: by 2002:adf:a202:0:b0:2be:f21:6af6 with SMTP id p2-20020adfa202000000b002be0f216af6mr5420375wra.23.1675341983772;
+        Thu, 02 Feb 2023 04:46:23 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id d3-20020adfe2c3000000b002bc7fcf08ddsm19583769wrj.103.2023.02.02.04.46.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 04:46:23 -0800 (PST)
+Message-ID: <793fb7d0-1497-4051-d8cb-aaac7f0d07fd@gmail.com>
+Date:   Thu, 2 Feb 2023 13:46:21 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 1/3] soc: mediatek: mtk-svs: use svs get efuse common
+ function
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
         Kevin Hilman <khilman@kernel.org>,
         Nicolas Boichat <drinkcat@google.com>
-CC:     Fan Chen <fan.chen@mediatek.com>, Roger Lu <roger.lu@mediatek.com>,
+Cc:     Fan Chen <fan.chen@mediatek.com>,
         Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5 3/3] soc: mediatek: mtk-svs: add thermal voltage compensation if needed
-Date:   Thu, 2 Feb 2023 20:41:04 +0800
-Message-ID: <20230202124104.16504-4-roger.lu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230202124104.16504-1-roger.lu@mediatek.com>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230202124104.16504-1-roger.lu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+ <20230202124104.16504-2-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230202124104.16504-2-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,79 +83,176 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some extreme test environment may keep IC temperature very low or very high
-during system boot stage. For stability concern, we add thermal voltage
-compenstation if needed no matter svs bank phase is in init02 or mon mode.
 
-Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/soc/mediatek/mtk-svs.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 299f580847bd..e104866d1ab5 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -558,7 +558,7 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
- 	}
- 
- 	/* Get thermal effect */
--	if (svsb->phase == SVSB_PHASE_MON) {
-+	if (!IS_ERR_OR_NULL(svsb->tzd)) {
- 		ret = thermal_zone_get_temp(svsb->tzd, &tzone_temp);
- 		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
- 			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
-@@ -573,7 +573,8 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
- 			temp_voffset += svsb->tzone_ltemp_voffset;
- 
- 		/* 2-line bank update all opp volts when running mon mode */
--		if (svsb->type == SVSB_HIGH || svsb->type == SVSB_LOW) {
-+		if (svsb->phase == SVSB_PHASE_MON && (svsb->type == SVSB_HIGH ||
-+						      svsb->type == SVSB_LOW)) {
- 			opp_start = 0;
- 			opp_stop = svsb->opp_count;
- 		}
-@@ -589,11 +590,6 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
- 			/* do nothing */
- 			goto unlock_mutex;
- 		case SVSB_PHASE_INIT02:
--			svsb_volt = max(svsb->volt[i], svsb->vmin);
--			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
--							     svsb->volt_step,
--							     svsb->volt_base);
--			break;
- 		case SVSB_PHASE_MON:
- 			svsb_volt = max(svsb->volt[i] + temp_voffset, svsb->vmin);
- 			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
-@@ -1683,7 +1679,7 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
- 			}
- 		}
- 
--		if (svsb->mode_support & SVSB_MODE_MON) {
-+		if (!IS_ERR_OR_NULL(svsb->tzone_name)) {
- 			svsb->tzd = thermal_zone_get_zone_by_name(svsb->tzone_name);
- 			if (IS_ERR(svsb->tzd)) {
- 				dev_err(svsb->dev, "cannot get \"%s\" thermal zone\n",
-@@ -2127,6 +2123,7 @@ static struct svs_bank svs_mt8192_banks[] = {
- 		.type			= SVSB_LOW,
- 		.set_freq_pct		= svs_set_bank_freq_pct_v3,
- 		.get_volts		= svs_get_bank_volts_v3,
-+		.tzone_name		= "gpu1",
- 		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
- 		.mode_support		= SVSB_MODE_INIT02,
- 		.opp_count		= MAX_OPP_ENTRIES,
-@@ -2144,6 +2141,10 @@ static struct svs_bank svs_mt8192_banks[] = {
- 		.core_sel		= 0x0fff0100,
- 		.int_st			= BIT(0),
- 		.ctl0			= 0x00540003,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 0,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 7,
- 	},
- 	{
- 		.sw_id			= SVSB_GPU,
--- 
-2.18.0
+On 02/02/2023 13:41, Roger Lu wrote:
+> SVS might need to read both svs efuse and thermal efuse on the probe flow.
+> Therefore, add a common efuse read function to remove the superfluous
+> codes.
+> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 
+Queued for the next merge window.
+
+Thanks!
+
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 71 ++++++++++++----------------------
+>   1 file changed, 25 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index f26eb2f637d5..c9899f5df60a 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -1729,26 +1729,28 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
+>   	return 0;
+>   }
+>   
+> -static int svs_thermal_efuse_get_data(struct svs_platform *svsp)
+> +static int svs_get_efuse_data(struct svs_platform *svsp,
+> +			      const char *nvmem_cell_name,
+> +			      u32 **svsp_efuse, size_t *svsp_efuse_max)
+>   {
+>   	struct nvmem_cell *cell;
+>   
+> -	/* Thermal efuse parsing */
+> -	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
+> +	cell = nvmem_cell_get(svsp->dev, nvmem_cell_name);
+>   	if (IS_ERR_OR_NULL(cell)) {
+> -		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n", PTR_ERR(cell));
+> +		dev_err(svsp->dev, "no \"%s\"? %ld\n",
+> +			nvmem_cell_name, PTR_ERR(cell));
+>   		return PTR_ERR(cell);
+>   	}
+>   
+> -	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
+> -	if (IS_ERR(svsp->tefuse)) {
+> -		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
+> -			PTR_ERR(svsp->tefuse));
+> +	*svsp_efuse = nvmem_cell_read(cell, svsp_efuse_max);
+> +	if (IS_ERR(*svsp_efuse)) {
+> +		dev_err(svsp->dev, "cannot read \"%s\" efuse: %ld\n",
+> +			nvmem_cell_name, PTR_ERR(*svsp_efuse));
+>   		nvmem_cell_put(cell);
+> -		return PTR_ERR(svsp->tefuse);
+> +		return PTR_ERR(*svsp_efuse);
+>   	}
+>   
+> -	svsp->tefuse_max /= sizeof(u32);
+> +	*svsp_efuse_max /= sizeof(u32);
+>   	nvmem_cell_put(cell);
+>   
+>   	return 0;
+> @@ -1796,7 +1798,8 @@ static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
+>   		svsb->vmax += svsb->dvt_fixed;
+>   	}
+>   
+> -	ret = svs_thermal_efuse_get_data(svsp);
+> +	ret = svs_get_efuse_data(svsp, "t-calibration-data",
+> +				 &svsp->tefuse, &svsp->tefuse_max);
+>   	if (ret)
+>   		return false;
+>   
+> @@ -1901,7 +1904,8 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
+>   		}
+>   	}
+>   
+> -	ret = svs_thermal_efuse_get_data(svsp);
+> +	ret = svs_get_efuse_data(svsp, "t-calibration-data",
+> +				 &svsp->tefuse, &svsp->tefuse_max);
+>   	if (ret)
+>   		return false;
+>   
+> @@ -2003,32 +2007,6 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
+>   	return true;
+>   }
+>   
+> -static bool svs_is_efuse_data_correct(struct svs_platform *svsp)
+> -{
+> -	struct nvmem_cell *cell;
+> -
+> -	/* Get svs efuse by nvmem */
+> -	cell = nvmem_cell_get(svsp->dev, "svs-calibration-data");
+> -	if (IS_ERR(cell)) {
+> -		dev_err(svsp->dev, "no \"svs-calibration-data\"? %ld\n",
+> -			PTR_ERR(cell));
+> -		return false;
+> -	}
+> -
+> -	svsp->efuse = nvmem_cell_read(cell, &svsp->efuse_max);
+> -	if (IS_ERR(svsp->efuse)) {
+> -		dev_err(svsp->dev, "cannot read svs efuse: %ld\n",
+> -			PTR_ERR(svsp->efuse));
+> -		nvmem_cell_put(cell);
+> -		return false;
+> -	}
+> -
+> -	svsp->efuse_max /= sizeof(u32);
+> -	nvmem_cell_put(cell);
+> -
+> -	return true;
+> -}
+> -
+>   static struct device *svs_get_subsys_device(struct svs_platform *svsp,
+>   					    const char *node_name)
+>   {
+> @@ -2364,8 +2342,9 @@ static int svs_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (!svs_is_efuse_data_correct(svsp)) {
+> -		dev_notice(svsp->dev, "efuse data isn't correct\n");
+> +	ret = svs_get_efuse_data(svsp, "svs-calibration-data",
+> +				 &svsp->efuse, &svsp->efuse_max);
+> +	if (ret) {
+>   		ret = -EPERM;
+>   		goto svs_probe_free_efuse;
+>   	}
+> @@ -2373,19 +2352,19 @@ static int svs_probe(struct platform_device *pdev)
+>   	if (!svsp_data->efuse_parsing(svsp)) {
+>   		dev_err(svsp->dev, "efuse data parsing failed\n");
+>   		ret = -EPERM;
+> -		goto svs_probe_free_resource;
+> +		goto svs_probe_free_tefuse;
+>   	}
+>   
+>   	ret = svs_bank_resource_setup(svsp);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "svs bank resource setup fail: %d\n", ret);
+> -		goto svs_probe_free_resource;
+> +		goto svs_probe_free_tefuse;
+>   	}
+>   
+>   	svsp_irq = platform_get_irq(pdev, 0);
+>   	if (svsp_irq < 0) {
+>   		ret = svsp_irq;
+> -		goto svs_probe_free_resource;
+> +		goto svs_probe_free_tefuse;
+>   	}
+>   
+>   	svsp->main_clk = devm_clk_get(svsp->dev, "main");
+> @@ -2393,13 +2372,13 @@ static int svs_probe(struct platform_device *pdev)
+>   		dev_err(svsp->dev, "failed to get clock: %ld\n",
+>   			PTR_ERR(svsp->main_clk));
+>   		ret = PTR_ERR(svsp->main_clk);
+> -		goto svs_probe_free_resource;
+> +		goto svs_probe_free_tefuse;
+>   	}
+>   
+>   	ret = clk_prepare_enable(svsp->main_clk);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "cannot enable main clk: %d\n", ret);
+> -		goto svs_probe_free_resource;
+> +		goto svs_probe_free_tefuse;
+>   	}
+>   
+>   	svsp->base = of_iomap(svsp->dev->of_node, 0);
+> @@ -2439,7 +2418,7 @@ static int svs_probe(struct platform_device *pdev)
+>   svs_probe_clk_disable:
+>   	clk_disable_unprepare(svsp->main_clk);
+>   
+> -svs_probe_free_resource:
+> +svs_probe_free_tefuse:
+>   	if (!IS_ERR_OR_NULL(svsp->tefuse))
+>   		kfree(svsp->tefuse);
+>   
