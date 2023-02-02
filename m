@@ -2,89 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CD6687D37
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E916687E2A
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjBBMVg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 07:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
+        id S231678AbjBBM7x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 07:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjBBMVf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:21:35 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04B38D407
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 04:21:24 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso1238664wms.3
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 04:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/4U8p8He8nf0F/Q+zKUZ6JAva9Y3IADx+ImOxMwVjs=;
-        b=DZVRTdZJ2TGTimuGoUq+e4aS2CgltVg9zGenQm3Q6L3Qknfq09JAq2Lk3bI3Ep+Xra
-         Y2YuJxGUB2Kj/j3uYg9GzAL0M4YVqii/ci1/1/VWgJA/yCTWEm10VkgqDYP8ZzckDPwx
-         dWYaVTrOnasI9nlHPfhiNudTvvBX6OLMXo1gcGVofXKgBGSPx5s904/ha6KiVkVW/eDn
-         0uZvqYUOxnXOXfj1ObF/PkqJiBf7w5apOEU/BviWew69ZimqYRHHwopcPUojTLBsJp9K
-         KBjoxfKoXTlrIGVRnyfocC5+Xj1BerZ6skEYjfON7I7uM7h3/WlsCnasF+OQojWp3oEv
-         EULA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/4U8p8He8nf0F/Q+zKUZ6JAva9Y3IADx+ImOxMwVjs=;
-        b=OzUwpL0uvhvkX+fZDFIPui326vJZufwU+pcFwbieFl3wP26DmTX8tkAwcJGppCKsUb
-         5PNbr96voaKs3GJFQtXWKWsem0xnG0pYHbWzOtEnZN5PRts3UUYsEe2sAs2GBAfDtAYl
-         /BHX3SJOOqgHLFxt6vlNgdpFK+bO5Dnb3rvj3ZIXviHC9zsiSA4hDHGfPfJY2A5/+hK/
-         K90slXFJfjpV2fASxibxLvHEk2znaEv6sMIkOqikFV4dQdQQArDe1NSncR3PPkRAX8QP
-         96NZACLXZb+Ft1Iw/W8vXu4r39umkWPomL96irgErZZ8NlaacXZ3viDFFusgAboc3Zue
-         iRRQ==
-X-Gm-Message-State: AO0yUKWjFoQGD3xPY1JJpZ9QFBifKzx9fA0xEKIJoIiJ0YsNAeRcK4R5
-        uSJ1FrjufP3mJbGvBoXLO4ewyw==
-X-Google-Smtp-Source: AK7set8gVqTsm/vSxOdXJguhERmSsywifTBAe6FbEDkp0QG4XpfNm6PCN3fFrU/+InV20PS1v4kD7w==
-X-Received: by 2002:a05:600c:19c6:b0:3db:2647:a012 with SMTP id u6-20020a05600c19c600b003db2647a012mr6298917wmq.40.1675340482770;
-        Thu, 02 Feb 2023 04:21:22 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i22-20020a1c5416000000b003dc3f3d77e3sm4824975wmb.7.2023.02.02.04.21.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 04:21:22 -0800 (PST)
-Message-ID: <78155653-62ff-e367-e243-eb546ec285d1@linaro.org>
-Date:   Thu, 2 Feb 2023 13:21:19 +0100
+        with ESMTP id S232145AbjBBM7e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:59:34 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A1C8F271;
+        Thu,  2 Feb 2023 04:59:14 -0800 (PST)
+X-UUID: dd003a96a2f611ed945fc101203acc17-20230202
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=58VVwq5R0SeVWSTuqEd+Zn7+PpfZGMiJHhHOV+5UOXU=;
+        b=GsA7nA++86YWeUqE+Gyy4LLCuolRv0C53a3gQitonVW04ldOQBoaKEyRsc7gG51TslDtCk8zIUkctABETenRRBaC4cfQUC9/fz3prl6X3wOB7KGELo9CH68NxyLpFWXmjOuIL53L8qe5NdQ8fIOTZV9qVEcf9Ud97DmEm2gtqNc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:2aa0d170-7b81-42c9-acc8-a10b94ef6169,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.18,REQID:2aa0d170-7b81-42c9-acc8-a10b94ef6169,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:17ccb68d-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:2302022041080ZUO6MYN,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: dd003a96a2f611ed945fc101203acc17-20230202
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 511999643; Thu, 02 Feb 2023 20:41:07 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 2 Feb 2023 20:41:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 2 Feb 2023 20:41:05 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+CC:     Fan Chen <fan.chen@mediatek.com>, Roger Lu <roger.lu@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5 0/3] Enhance SVS's robustness
+Date:   Thu, 2 Feb 2023 20:41:01 +0800
+Message-ID: <20230202124104.16504-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 20/23] memory: tegra30-emc: fix interconnect registration
- race
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-21-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201101559.15529-21-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,23 +71,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/02/2023 11:15, Johan Hovold wrote:
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to fail.
-> 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
-> 
-> Fixes: d5ef16ba5fbe ("memory: tegra20: Support interconnect framework")
-> Cc: stable@vger.kernel.org      # 5.11
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
+SVS driver got accepted upstream but still has room to be improved.
+Therefore, we add these patches to fix issues and coding style.
 
+Change since v4:
+- Rebase unmerged patches and resend to patchwork
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Tested on:
+MT8183 Platform (kernel v5.10)
+MT8192 Platform (kernel v5.4)
 
-Best regards,
-Krzysztof
+Roger Lu (3):
+  soc: mediatek: mtk-svs: use svs get efuse common function
+  soc: mediatek: mtk-svs: use common function to disable restore
+    voltages
+  soc: mediatek: mtk-svs: add thermal voltage compensation if needed
+
+ drivers/soc/mediatek/mtk-svs.c | 142 +++++++++++++--------------------
+ 1 file changed, 56 insertions(+), 86 deletions(-)
+
 
