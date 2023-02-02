@@ -2,217 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86647687107
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Feb 2023 23:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4672D6872F5
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 02:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjBAWgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Feb 2023 17:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S229781AbjBBBZU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Feb 2023 20:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBAWgn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 17:36:43 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1234C25
-        for <linux-pm@vger.kernel.org>; Wed,  1 Feb 2023 14:36:41 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id m7so137470wru.8
-        for <linux-pm@vger.kernel.org>; Wed, 01 Feb 2023 14:36:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O3cdoduGIOs+WYLZ/KKSQFCR2wNSBYmRF9c/LvnjTJs=;
-        b=yK3EzAi/JrUjXIQ1Cc0UQ5dT8Qgqp9WXd29FN474fjSyYpBNYW9rBrLZToKxvBVh6u
-         ebGKN/7ODrpJpDeGGyJvSycvmjBpsHnIDvRCJLuqSAo8S9C842LzyHeuWXeIlIpVJTF6
-         UfTzo2XzWyNROjVvcsGYpzg475y7E0formPr63RmkShQkdwjp/Nh7LS28wvH/TpCHe4a
-         XEt97BU0Kg7zFdq6IHHTp+RfhoMkVtUK/VIsLKCt71newni06RnQ7cIAfFRLwI8UCQps
-         2Xwxg9rllZCRIQDlmmBcxyYnKaqV8FAXtpfMfWUtZMN9WNmRJgfGwDrsK/7FsjtiUuzk
-         HD0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O3cdoduGIOs+WYLZ/KKSQFCR2wNSBYmRF9c/LvnjTJs=;
-        b=ObWNiQwzGtNbbRueDFfiybOps6M7AWhN8icW//jhxbueeC+EsuzOcji92TYW5UaOpL
-         VkpEwwZrSi33yF1p5ajM00sdcB+pAnT+BypvhU+IYWintILz+hjpdJqKCdcwVFHO3HH4
-         d0lSz+rhKJfQ7nRXyW58YB16T9ZbpbVW77gNjdaHwHw8CeaB5lqo/SEpFYod9mXQFz8V
-         NiIxZkLLjSdQ4nYI7c6CiEccucxNiK/HF04ny74yB79Du6azjzW1DR2IvljaDjrxNAGv
-         7BUeDH6GEPqOsoGcZje76dZRyk3/rnIAQhYq51RfMp3gBXOiujZfKWy6ecZq8kPQ2+Rq
-         TOwQ==
-X-Gm-Message-State: AO0yUKWeXYCjC/coJTBXNcF4w8yKMpKOZJ6GUDO9tclYs30dh8scgF91
-        ZaMBMJii/cbZSa6NQzIyPEW9yw==
-X-Google-Smtp-Source: AK7set8qEA0wvrtW+7mVp1R7TMGSPk2nqUldEup5U1CYdOJ08eb2O9h3axdglAI1EpkplBPlb6uGVA==
-X-Received: by 2002:a5d:5643:0:b0:2c0:227d:ca48 with SMTP id j3-20020a5d5643000000b002c0227dca48mr3466187wrw.63.1675291000267;
-        Wed, 01 Feb 2023 14:36:40 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id z2-20020a5d6542000000b00267bcb1bbe5sm18264819wrv.56.2023.02.01.14.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 14:36:39 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2] thermal/drivers/intel: Use generic trip points for quark_dts
-Date:   Wed,  1 Feb 2023 23:36:16 +0100
-Message-Id: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+        with ESMTP id S229666AbjBBBZT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Feb 2023 20:25:19 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9C869539;
+        Wed,  1 Feb 2023 17:25:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675301118; x=1706837118;
+  h=from:to:cc:subject:date:message-id;
+  bh=VBzWoukx2SS6XrRH71Q5fqpOr6MncyDcf/33oE3P7lI=;
+  b=beF/Lr5C9NVEgO7hduUfx8hk/ilFwbGTmKYHQkRB97wo1xvROWrqek8L
+   ORUZglD3bkgycT1+EtrUsFmM2qocvfYKyLEdvnqmJxslZUPWFmdUSj/yR
+   OH9yOUKOAV+uaZCbiZ2FLi3yz1DYpXwRo7gxfEBSyldra1CSXWgo7pL92
+   twsDpmvp0JorYUeODlr8FW4+qi9mCJcqxRgNo7ttG/uRWXnyUVBcvaRng
+   S+7JZZJLX6FkcvGAV1EVv1FSfiWpC8keAGsvz+HDNv935NnRsYNqMVaLl
+   mp0SCsER+0wLBg49hk9TJs/whrQx6RdjE2wFr827Mohveyr3VU5eWzMkx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328334772"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="328334772"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 17:25:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695579295"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="695579295"
+Received: from power-sh.sh.intel.com ([10.239.183.7])
+  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2023 17:25:16 -0800
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] powercap/intel_rapl: Fix handling for large time window
+Date:   Thu,  2 Feb 2023 09:31:40 +0800
+Message-Id: <20230202013140.30416-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+When setting the power limit time window, software updates the 'y' bits
+and 'f' bits in the power limit register, and the value hardware takes
+follows the formula below
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
+	Time window = 2 ^ y * (1 + f / 4) * Time_Unit
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+When handling large time window input from userspace, using left
+shifting breaks in two cases,
+1. when ilog2(value) is bigger than 31, in expression "1 << y", left
+   shifting by more than 31 bits has undefined behavior. This breaks
+   'y'. For example, on an Alderlake platform, "1 << 32" returns 1.
+2. when ilog2(value) equals 31, "1 << 31" returns negative value
+   because '1' is recognized as signed int. And this breaks 'f'.
+
+Given that 'y' has 5 bits and hardware can never take a value larger
+than 31, fix the first problem by clamp the time window to the maximum
+possible value that the hardware can take.
+
+Fix the second problem by using unsigned bit left shift.
+
+Note that hardware has its own maximum time window limitation, which
+may be lower than the time window value retrieved from the power limit
+register. When this happens, hardware clamps the input to its maximum
+time window limitation. That is why a software clamp is preferred to
+handle the problem on hand.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
+ drivers/powercap/intel_rapl_common.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-This patch applies on top of linux-pm/linux-next
-
- V2:
-   - Changed get_trip_temp() to return THERMAL_TEMP_INVALID
-   - Register unconditonnaly the thermal trips
-   - Fixed thermal_zone_device_register() call replaced by the
-     _with_trips() version
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- .../thermal/intel/intel_quark_dts_thermal.c   | 55 +++++++------------
- 1 file changed, 20 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-index 3eafc6b0e6c3..97b843fa7568 100644
---- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -84,6 +84,7 @@
- #define QRK_DTS_MASK_TP_THRES		0xFF
- #define QRK_DTS_SHIFT_TP		8
- #define QRK_DTS_ID_TP_CRITICAL		0
-+#define QRK_DTS_ID_TP_HOT		1
- #define QRK_DTS_SAFE_TP_THRES		105
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 26d00b1853b4..8b30e5259d3b 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -999,7 +999,12 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
  
- /* Thermal Sensor Register Lock */
-@@ -104,6 +105,7 @@ struct soc_sensor_entry {
- 	u32 store_ptps;
- 	u32 store_dts_enable;
- 	struct thermal_zone_device *tzone;
-+	struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
- };
- 
- static struct soc_sensor_entry *soc_dts;
-@@ -172,9 +174,9 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
- 	return ret;
- }
- 
--static int _get_trip_temp(int trip, int *temp)
-+static int get_trip_temp(int trip)
- {
--	int status;
-+	int status, temp;
- 	u32 out;
- 
- 	mutex_lock(&dts_update_mutex);
-@@ -183,7 +185,7 @@ static int _get_trip_temp(int trip, int *temp)
- 	mutex_unlock(&dts_update_mutex);
- 
- 	if (status)
--		return status;
-+		return THERMAL_TEMP_INVALID;
- 
- 	/*
- 	 * Thermal Sensor Programmable Trip Point Register has 8-bit
-@@ -191,21 +193,10 @@ static int _get_trip_temp(int trip, int *temp)
- 	 * thresholds. The threshold value is always offset by its
- 	 * temperature base (50 degree Celsius).
- 	 */
--	*temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
--	*temp -= QRK_DTS_TEMP_BASE;
-+	temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
-+	temp -= QRK_DTS_TEMP_BASE;
- 
--	return 0;
--}
--
--static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
--				int trip, int *temp)
--{
--	return _get_trip_temp(trip, temp);
--}
--
--static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
--{
--	return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
-+	return temp;
- }
- 
- static int update_trip_temp(struct soc_sensor_entry *aux_entry,
-@@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
- 	return update_trip_temp(tzd->devdata, trip, temp);
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal,
--		int trip, enum thermal_trip_type *type)
--{
--	if (trip)
--		*type = THERMAL_TRIP_HOT;
--	else
--		*type = THERMAL_TRIP_CRITICAL;
--
--	return 0;
--}
--
- static int sys_get_curr_temp(struct thermal_zone_device *tzd,
- 				int *temp)
- {
-@@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
- 
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
--	.get_crit_temp = sys_get_crit_temp,
- 	.change_mode = sys_change_mode,
- };
- 
-@@ -385,10 +362,18 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
- 			goto err_ret;
+ 		do_div(value, rp->time_unit);
+ 		y = ilog2(value);
+-		f = div64_u64(4 * (value - (1 << y)), 1 << y);
++		if (y > 0x1f) {
++			pr_warn("%s: time window too large, clamped\n", rp->name);
++			return 0x7f;
++		}
++
++		f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
+ 		value = (y & 0x1f) | ((f & 0x3) << 5);
  	}
- 
--	aux_entry->tzone = thermal_zone_device_register("quark_dts",
--			QRK_MAX_DTS_TRIPS,
--			wr_mask,
--			aux_entry, &tzone_ops, NULL, 0, polling_delay);
-+	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = get_trip_temp(QRK_DTS_ID_TP_CRITICAL);
-+	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-+
-+	aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
-+	aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
-+
-+	aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
-+								   aux_entry->trips,
-+								   QRK_MAX_DTS_TRIPS,
-+								   wr_mask,
-+								   aux_entry, &tzone_ops,
-+								   NULL, 0, polling_delay);
- 	if (IS_ERR(aux_entry->tzone)) {
- 		err = PTR_ERR(aux_entry->tzone);
- 		goto err_ret;
+ 	return value;
 -- 
-2.34.1
+2.25.1
 
