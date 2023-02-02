@@ -2,75 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CCE687EB6
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 14:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 226B0687F17
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 14:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbjBBNcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 08:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S232001AbjBBNs4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 08:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBBNcE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 08:32:04 -0500
+        with ESMTP id S232297AbjBBNsx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 08:48:53 -0500
 Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA4B7D98
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 05:32:02 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso3724255wms.5
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 05:32:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4726B374
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 05:48:42 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso1437523wms.3
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 05:48:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p8QJM+cDMWDwGnLdY1LGO5+3ANd8IL6QkYM6Adr66uY=;
-        b=E2uSmXmY4dmx866H1u+0MVNnU1IS7WPXRtRsG9r8ILYDjsmv87BaJji0oo/nGEyjMn
-         iTm1/N20f9oNM7YQh/0SE4XzQqjkiS8tg8nSTErWGytM0wxvVKZjSeDZATiyytNni0OF
-         5oR9X0q6f5drJ5jbfbzibc5nCO2zscS87jLlScA/h5H+6C9A4IJwopMo6j1iWz2kQvrT
-         XtGSS/mmQqEE25Kuq/RoKUhxhAlGr3lMSdwNV55AiHrcqaIc6BvKTii3TAxWT87ZbRst
-         QuKIkJVu2Vg1Ez/onQAhfwz8N5L9unF3YFoaMtyyYk+HkPsI/CqtYMOjHT18SMbMuuYf
-         Xf1g==
+        bh=cyL3kkiVp4mLz2Hp6hjic9mBVgDnqyFENCvNL4U+uOw=;
+        b=a3erPWZfy6c6wCP0keZLVHNiuJcUKRL8M45u6fm68U/7S05oURTsDpWuvdD1dae7Lo
+         dMNn4Oe0vMIoCssaewoXDrA2658XFrfu8xAXtHpTKPmys5WBz2K/uDIXdZutr+hesVa8
+         huJPK9JgF1TFUkS/SEBabUrVmc9QU8u/mXJhWl0/qOlc46XCXxRomwdo9U8XYmuc/yYU
+         yPzLrszUldhvaqLdQ0ljgpmycJ/EAptcyZGDkGSrA+NVdQEAeBY0lJwU9FIi1kzruKpt
+         I2kS8f8ScCqiJ+pgGmm2Gpq5iDD0nNaLcipc/Z5Dj0PjwC9XRo+UsnD0LyJjFOy/Td8a
+         js3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p8QJM+cDMWDwGnLdY1LGO5+3ANd8IL6QkYM6Adr66uY=;
-        b=Q+f+E2puUuxi8gF337JU4w0uEiW37Mu0FGyWo0bxB4VSNkVheP1GzzSiv9QAKqxga+
-         sPVSHz52qWWKUPgmFXRfx+UvE1wBogK9trjUvWCIvAjN5CfdTEOZgfFxi6H5+VYwRcLj
-         e4dPDRIG/4t3X/06DX4YQ09pwuXgOk5APpTmF0EfQEyO43428xCRpN3Xr2yzZhr0wSbZ
-         jgPVWcfDD/P97XJWvwiJAvw5J6LSc+PmCcv5FrEjc0Zq/mn9ciZW69jLpVaqzIBkPekm
-         qOevnUdOBhbgubSAR15G90a6QxkTIOjYsp/XvjnR7QQ6kU276u6q85XCiZ+Tf9cd34pk
-         D+Yg==
-X-Gm-Message-State: AO0yUKXoBnNfcIScVLrC0izPYZEcZgaDUOqdWnmdAd/WOT+zAtddghU3
-        6WipTAVIm2HiqHtxkJMIy1C3glXrmGEvcBO/
-X-Google-Smtp-Source: AK7set8wfPW5+yKtg0ak5ruu80kd+dHgySJOEnsHJrFEo1iX7A/CpQPPYwiIzpK5NXzm6KvEaGIykA==
-X-Received: by 2002:a05:600c:2b46:b0:3dc:4aa6:a8a9 with SMTP id e6-20020a05600c2b4600b003dc4aa6a8a9mr5650270wmf.7.1675344721184;
-        Thu, 02 Feb 2023 05:32:01 -0800 (PST)
+        bh=cyL3kkiVp4mLz2Hp6hjic9mBVgDnqyFENCvNL4U+uOw=;
+        b=PiIiA/iwvz2HYqJ8ENNbL/4e4a5REH+Y2cXx69b4tOiWXoP7hBjrZomHFl7jx/GfHK
+         SqwEtwTALx4SWezzi7mlu+AzZo/XEIK2snR6ogDWMwaEjWRP2VBGz2Ko/XnqvA3BR6e+
+         vjyhboxYnJcoSrzlJhNRwI8xz05vkSFd1n2O1AsiMWUiS+B2qUdH9tO0nNC5C1WzAeNg
+         FRR72CjY8dxl7/vfxakUcxUOBEs45ggOY61n7I+lZsD5R753wwXndilDSbrBPzHeHX/y
+         oC001rkZt4hknc2BScwRd8lD0Kul6UjMOuVohpvzpFN6BG+DKJn81N8Wot17yhHeM5Qq
+         X/pw==
+X-Gm-Message-State: AO0yUKWmDjBAH2dnEE6xTbPNQRiVQF0hOIgYsj2fgXOYEvkECmkYOygY
+        Dw3fEH9MpzEdznAcBCwxLCT39WLpj1SQVzGN
+X-Google-Smtp-Source: AK7set8hw1rDy3WxUj4JBGJtDz2ZH5OsTbomKDnSUP4x83gmZ2C5vO+e3kiiVY5jg1hc1N3lf9Ev1g==
+X-Received: by 2002:a05:600c:a07:b0:3df:db2f:66a with SMTP id z7-20020a05600c0a0700b003dfdb2f066amr2154590wmp.31.1675345720666;
+        Thu, 02 Feb 2023 05:48:40 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id y21-20020a05600c341500b003dc522dd25esm4613487wmp.30.2023.02.02.05.32.00
+        by smtp.googlemail.com with ESMTPSA id v32-20020a05600c4da000b003dec22de1b1sm4402482wmp.10.2023.02.02.05.48.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 05:32:00 -0800 (PST)
-Message-ID: <d69f2627-4669-5e30-6535-0a6bb98c365d@linaro.org>
-Date:   Thu, 2 Feb 2023 14:31:59 +0100
+        Thu, 02 Feb 2023 05:48:40 -0800 (PST)
+Message-ID: <db23ece7-0ae1-586b-c4ec-f3ff633118a1@linaro.org>
+Date:   Thu, 2 Feb 2023 14:48:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for
- quark_dts
+Subject: Re: [PATCH v5 1/4] powercap: idle_inject: Export symbols
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Amit Kucheria <amitk@kernel.org>
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
- <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
- <CAJZ5v0iOYH4WR5WoH=jL6VWKhB4CMeZv5V3U0Q_c_qdCJvvvBw@mail.gmail.com>
- <fedc35c2-1dc9-48af-f03f-fbb8566284fb@linaro.org>
- <CAJZ5v0h75VH4GQeBStfiAXrFJt1tL=1+nhP9=n_Ok=Txm3e_CA@mail.gmail.com>
- <e7e9704c-df97-2c27-2955-959d847a8bb8@linaro.org>
- <CAJZ5v0jHkL6Lit-0Cqg42i-vYRaD+zc4=g2XziCLSUPAeCpEcA@mail.gmail.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com
+References: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com>
+ <20230201182854.2158535-2-srinivas.pandruvada@linux.intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jHkL6Lit-0Cqg42i-vYRaD+zc4=g2XziCLSUPAeCpEcA@mail.gmail.com>
+In-Reply-To: <20230201182854.2158535-2-srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,147 +77,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/02/2023 11:32, Rafael J. Wysocki wrote:
-> On Wed, Feb 1, 2023 at 8:27 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 01/02/2023 19:47, Rafael J. Wysocki wrote:
->>> On Wed, Feb 1, 2023 at 11:42 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 31/01/2023 20:11, Rafael J. Wysocki wrote:
->>>>> On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
->>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>
->>>>>> On 26/01/2023 15:15, Rafael J. Wysocki wrote:
->>>>>>> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
->>>>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>>>
->>>>>>>> The thermal framework gives the possibility to register the trip
->>>>>>>> points with the thermal zone. When that is done, no get_trip_* ops are
->>>>>>>> needed and they can be removed.
->>>>>>>>
->>>>>>>> Convert ops content logic into generic trip points and register them with the
->>>>>>>> thermal zone.
->>>>>>>>
->>>>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>>>>>> ---
->>>>>>
->>>>>> [ ... ]
->>>>>>
->>>>>>>> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
->>>>>>>> -                       QRK_MAX_DTS_TRIPS,
->>>>>>>> -                       wr_mask,
->>>>>>>> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
->>>>>>>> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
->>>>>>>> +       if (err)
->>>>>>>> +               goto err_ret;
->>>>>>>> +
->>>>>>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
->>>>>>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
->>>>>>>> +
->>>>>>>> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
->>>>>>>> +       if (err)
->>>>>>>> +               goto err_ret;
->>>>>>>
->>>>>>> If I'm not mistaken, this won't even try to register the thermal zone
->>>>>>> if at least one trip cannot be initialized, but previously it was
->>>>>>> registered in that case, but the trips that failed to respond were
->>>>>>> disabled.
->>>>>>>
->>>>>>> This is a change in behavior that would at least need to be documented
->>>>>>> in the changelog, but it isn't.
->>>>>>>
->>>>>>> I'm not sure if it is safe to make even, however.
->>>>>>
->>>>>> Thanks for catching this.
->>>>>>
->>>>>> Two solutions:
->>>>>>
->>>>>> 1. Set the temperature to THERMAL_TEMP_INVALID and change
->>>>>> get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is
->>>>>> THERMAL_TEMP_INVALID
->>>>>>
->>>>>> 2. Register only the valid trip points.
->>>>>>
->>>>>> What would be the preferable way ?
->>>>>
->>>>> I think that the trip points that are registered currently need to
->>>>> still be registered after the change.
->>>>>
->>>>> Does registering a trip point with the temperature set to
->>>>> THERMAL_TEMP_INVALID cause it to be effectively disabled?
->>>>
->>>> The initial behavior before the changes is:
->>>>
->>>> The function thermal_zone_device_register() will go through all the trip
->>>> points and call thermal_zone_get_trip(), resulting in a call to
->>>> ops->get_trip_temp(). If the call fails, the trip point is tagged as
->>>> disabled and will stay in this state forever, so discarded in the trip
->>>> point crossed detection.
->>>>
->>>> That does not report an error and the trip point is showed in sysfs but
->>>> in a inconsistent state as it is actually disabled. Reading the trip
->>>> point will return an error or not, but it is in any case disabled in the
->>>> thermal framework. The userspace does not have the information about the
->>>> trip point being disabled, so showing it up regardless its state is
->>>> pointless and prone to confusion for the userspace.
->>>>
->>>> IMO, it would be more sane to register the trip points which are
->>>> actually valid, so invalid trip points are not showed up and does
->>>> prevent extra complexity in the thermal core to handle them.
->>>
->>> Except when the trip point can be updated to become a valid one later,
->>> for example in response to a system configuration change.  That can
->>> happen to ACPI-provided trip points, for example.
->>>
->>> I don't think that this is an issue for this particular driver, but
->>> the core needs to handle that case anyway.
->>
->> Yes, but the point is the core code never handled that case.
+On 01/02/2023 19:28, Srinivas Pandruvada wrote:
+> Export symbols for external interfaces, so that they can be used in
+> other loadable modules.
 > 
-> True.
+> Export is done under name space IDLE_INJECT.
 > 
-> What I wanted to say, though, is that the core needs to allow
-> registering trip points with THERMAL_TEMP_INVALID without disabling
-> them automatically, so they can be updated and used later.
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Ok, so it is fine with the current code AFAICT.
+(missing my ack from v3)
 
-The handle_thermal_trip() functions are discarding trips with 
-temperature below zero for hot and critical. The trip crossing detection 
-won't happen with these values.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-However PASSIVE and ACTIVE trip points are going through the throttling 
-governor callback with a -273000 trip temperature. I suppose those very 
-specific trip points initialized to THERMAL_TEMP_INVALID are not 
-associated with a cooling device, right ?
-
-
->> If the trip point fails when registering the thermal zone (and this is
->> not related to our changes), the trip point is added to the disabled
->> trips bitmap and then whatever the action to validate the trip point, it
->> remains disabled for the thermal framework. There is no action to enable
->> it (except I missed something).
->>
->>> Moreover, there is the case when trip points only become relevant when
->>> their temperatures are set via ops->set_trip_temp() and they are
->>> THERMAL_TEMP_INVALID initially, which needs to be handled by the core
->>> either.
->>
->> Ok, then I guess the simplest change is to assign THERMAL_TEMP_INVALID
->> in this driver, if get_trip_temp fails at the initialization time.
->>
->> Later we can add a thermal_zone_device_update_trips() with the needed
->> locking and actions related to the update.
+> ---
+> v2/v3/v4/v5:
+> 	No change
 > 
-> Well, there is thermal_zone_device_update() and one of the events it
-> is supposed to handle is THERMAL_TRIP_CHANGED, so I'm not sure how the
-> new interface would differ from it?
-
-Yes, we may have to investigate if the event should trigger the update 
-or the update should trigger the event.
-
-
+>   drivers/powercap/idle_inject.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index c03b5402c03b..ec02b370ec16 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -162,6 +162,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+>   	if (!run_duration_us)
+>   		pr_debug("CPU is forced to 100 percent idle\n");
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_get_duration - idle and run duration retrieval helper
+> @@ -176,6 +177,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+>   	*run_duration_us = READ_ONCE(ii_dev->run_duration_us);
+>   	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_get_duration, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_set_latency - set the maximum latency allowed
+> @@ -187,6 +189,7 @@ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
+>   {
+>   	WRITE_ONCE(ii_dev->latency_us, latency_us);
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_latency, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_start - start idle injections
+> @@ -218,6 +221,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
+>   
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_start, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_stop - stops idle injections
+> @@ -264,6 +268,7 @@ void idle_inject_stop(struct idle_inject_device *ii_dev)
+>   
+>   	cpu_hotplug_enable();
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_stop, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_setup - prepare the current task for idle injection
+> @@ -339,6 +344,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
+>   
+>   	return NULL;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_unregister - unregister idle injection control device
+> @@ -359,6 +365,7 @@ void idle_inject_unregister(struct idle_inject_device *ii_dev)
+>   
+>   	kfree(ii_dev);
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_unregister, IDLE_INJECT);
+>   
+>   static struct smp_hotplug_thread idle_inject_threads = {
+>   	.store = &idle_inject_thread.tsk,
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
