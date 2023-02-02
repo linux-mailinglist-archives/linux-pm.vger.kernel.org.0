@@ -2,49 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE596884B8
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 17:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2446884D9
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 17:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjBBQoc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 11:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S232103AbjBBQxz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 11:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjBBQoc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 11:44:32 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199254B8B5;
-        Thu,  2 Feb 2023 08:44:31 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id n6so2607407edo.9;
-        Thu, 02 Feb 2023 08:44:31 -0800 (PST)
+        with ESMTP id S232442AbjBBQxt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 11:53:49 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805276F735;
+        Thu,  2 Feb 2023 08:53:47 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id ml19so7905053ejb.0;
+        Thu, 02 Feb 2023 08:53:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Px1xcB23kP4MnnGGoCIIfo3EkxqRE3bJUNzTnkZ3uHA=;
-        b=Ah8n2j73pdE0qNLJQ2I9u5mr5YcI7m+cfiffNlFnUrwiZy5zNSWima8F3/U215l7fy
-         4xProjV97YXHAeVRbe+bxqdDkpiEnH6smQZv8XK2mWwy2zqPdFitZu8ySn0oxp9eRmYx
-         UUYgaDoJ254rC70IeooVvsXe3JDYdjZHYXtD5MhiVjnIDJguMt3lVLXgewa9/P8+P9g0
-         iVpoc1nY81r+N/9ZNVnomkSp+7xfVVsKil2J6WN110WW3FSjQGH/nbdwDNLNmgZhzYw0
-         NbQkeWBUvdxDA937HpQLlGlaP+QlsoWrSvLdpVWg6IAFRvjgGd9cPs4zrzDEzH2fb+RF
-         zJIw==
-X-Gm-Message-State: AO0yUKVEGaazu0RGtAaOSq48l4lhJXTozMMqtHTK0MjtjLg+LhGxAjiX
-        Hrb43zncZWQgpoOngjA6XYorIWYm2TvxPas4YSU=
-X-Google-Smtp-Source: AK7set+jGfvAz09eI0nUDLd85R5enTo+FwH49qmQ0GzuaFTkZ68NhlEqlk632rxiUxb99M/+E3qXdk/UVwVl/IORYJQ=
-X-Received: by 2002:a05:6402:22ee:b0:4a2:1d19:ca14 with SMTP id
- dn14-20020a05640222ee00b004a21d19ca14mr2180460edb.68.1675356269576; Thu, 02
- Feb 2023 08:44:29 -0800 (PST)
+        bh=zkAFVysRmrk4KIVV03lhSp9/r+uaaj15Nxb8wMUj+w4=;
+        b=WkAEC5bC1TI6u0lXl4/53xohtSseufXMwBi+oCgcyEHq0q07a6vrE3gSbcinC+0/Xo
+         9F39hTlT6f7w8i5oOvdb88MkmgqvlTFNfvq9YAVdw54ons/UmxVIj/zZluU2pA3G/HTi
+         uPtZbbeog+riEs4c35lxSIPtT1duzL1DXZGMGzyD/VzxWnltFEZCLC55kSsAsaEmXNdj
+         PWnccUZnCWYmegLVwklNhOOA7WG2uAlnGX+NKSCJcVXGT5PRV4CbYc4lswO/2sXEiCPU
+         kfFs2kpaMkgphFpqgN4UbcSvgaKLFAysUxFvUv/97D9wkRuWZbpat0sSoSrlcP0qIe9k
+         CPUQ==
+X-Gm-Message-State: AO0yUKVyOZelSmkMa8PSKFui0LMrHEQ0/EIpwgl/v3bud6584nYJ59uU
+        pCptNzCEekbn+BGYS6oMRnSOpaAZTYb7NsciKX3+B3AY
+X-Google-Smtp-Source: AK7set9AdALOM3LcUlN3WH7cJYW7DNlfJzBEKbLKBUhyB7UyoyJEbselkHd4QCj19yLeghDijQxInKGg8RGP4kfdSR8=
+X-Received: by 2002:a17:906:9bd4:b0:87f:575a:9b67 with SMTP id
+ de20-20020a1709069bd400b0087f575a9b67mr2214925ejc.274.1675356826032; Thu, 02
+ Feb 2023 08:53:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
+References: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 17:44:18 +0100
-Message-ID: <CAJZ5v0ieQocb2oe1ggDCOos4HtkmypsadMkXCwH2J5XmRUdVyQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
+Date:   Thu, 2 Feb 2023 17:53:34 +0100
+Message-ID: <CAJZ5v0iGf-12iqqkK-JMzzg9CcQ_MtKxapb20zLYZAh1BaUMxQ@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal/drivers/intel: Use generic trip points for quark_dts
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,51 +58,150 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 10:07 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Wed, Feb 1, 2023 at 11:36 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> When the user is reading cur_state from the thermal cooling device for
-> Intel powerclamp device:
-> - It returns the idle ratio from Package C-state counters when
-> there is active idle injection session.
-> - -1, when there is no active idle injection session.
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
 >
-> This information is not very useful as the package C-state counters vary
-> a lot from read to read. Instead just return the last requested cur_state.
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
 >
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 > ---
->  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index 2f4cbfdf26a0..72a45cf2708c 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
->  static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
->                                  unsigned long *state)
->  {
-> -       if (clamping) {
-> -               if (poll_pkg_cstate_enable)
-> -                       *state = pkg_cstate_ratio_cur;
-> -               else
-> -                       *state = set_target_ratio;
-> -       } else {
-> -               /* to save power, do not poll idle ratio while not clamping */
-> -               *state = -1; /* indicates invalid state */
-> -       }
-> -
-> -       return 0;
-> +       return set_target_ratio;
-
-*state = set_target_ratio;
-return 0;
-
+> This patch applies on top of linux-pm/linux-next
+>
+>  V2:
+>    - Changed get_trip_temp() to return THERMAL_TEMP_INVALID
+>    - Register unconditonnaly the thermal trips
+>    - Fixed thermal_zone_device_register() call replaced by the
+>      _with_trips() version
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  .../thermal/intel/intel_quark_dts_thermal.c   | 55 +++++++------------
+>  1 file changed, 20 insertions(+), 35 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> index 3eafc6b0e6c3..97b843fa7568 100644
+> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
+> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> @@ -84,6 +84,7 @@
+>  #define QRK_DTS_MASK_TP_THRES          0xFF
+>  #define QRK_DTS_SHIFT_TP               8
+>  #define QRK_DTS_ID_TP_CRITICAL         0
+> +#define QRK_DTS_ID_TP_HOT              1
+>  #define QRK_DTS_SAFE_TP_THRES          105
+>
+>  /* Thermal Sensor Register Lock */
+> @@ -104,6 +105,7 @@ struct soc_sensor_entry {
+>         u32 store_ptps;
+>         u32 store_dts_enable;
+>         struct thermal_zone_device *tzone;
+> +       struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
+>  };
+>
+>  static struct soc_sensor_entry *soc_dts;
+> @@ -172,9 +174,9 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
+>         return ret;
 >  }
 >
->  static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
+> -static int _get_trip_temp(int trip, int *temp)
+> +static int get_trip_temp(int trip)
+>  {
+> -       int status;
+> +       int status, temp;
+>         u32 out;
+>
+>         mutex_lock(&dts_update_mutex);
+> @@ -183,7 +185,7 @@ static int _get_trip_temp(int trip, int *temp)
+>         mutex_unlock(&dts_update_mutex);
+>
+>         if (status)
+> -               return status;
+> +               return THERMAL_TEMP_INVALID;
+>
+>         /*
+>          * Thermal Sensor Programmable Trip Point Register has 8-bit
+> @@ -191,21 +193,10 @@ static int _get_trip_temp(int trip, int *temp)
+>          * thresholds. The threshold value is always offset by its
+>          * temperature base (50 degree Celsius).
+>          */
+> -       *temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
+> -       *temp -= QRK_DTS_TEMP_BASE;
+> +       temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
+> +       temp -= QRK_DTS_TEMP_BASE;
+>
+> -       return 0;
+> -}
+> -
+> -static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
+> -                               int trip, int *temp)
+> -{
+> -       return _get_trip_temp(trip, temp);
+> -}
+> -
+> -static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
+> -{
+> -       return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
+> +       return temp;
+>  }
+>
+>  static int update_trip_temp(struct soc_sensor_entry *aux_entry,
+> @@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
+>         return update_trip_temp(tzd->devdata, trip, temp);
+>  }
+>
+> -static int sys_get_trip_type(struct thermal_zone_device *thermal,
+> -               int trip, enum thermal_trip_type *type)
+> -{
+> -       if (trip)
+> -               *type = THERMAL_TRIP_HOT;
+> -       else
+> -               *type = THERMAL_TRIP_CRITICAL;
+> -
+> -       return 0;
+> -}
+> -
+>  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+>                                 int *temp)
+>  {
+> @@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
+>
+>  static struct thermal_zone_device_ops tzone_ops = {
+>         .get_temp = sys_get_curr_temp,
+> -       .get_trip_temp = sys_get_trip_temp,
+> -       .get_trip_type = sys_get_trip_type,
+>         .set_trip_temp = sys_set_trip_temp,
+> -       .get_crit_temp = sys_get_crit_temp,
+>         .change_mode = sys_change_mode,
+>  };
+>
+> @@ -385,10 +362,18 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
+>                         goto err_ret;
+>         }
+>
+> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
+> -                       QRK_MAX_DTS_TRIPS,
+> -                       wr_mask,
+> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
+> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = get_trip_temp(QRK_DTS_ID_TP_CRITICAL);
+> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
+> +
+> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
+> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
+> +
+> +       aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
+> +                                                                  aux_entry->trips,
+> +                                                                  QRK_MAX_DTS_TRIPS,
+> +                                                                  wr_mask,
+> +                                                                  aux_entry, &tzone_ops,
+> +                                                                  NULL, 0, polling_delay);
+>         if (IS_ERR(aux_entry->tzone)) {
+>                 err = PTR_ERR(aux_entry->tzone);
+>                 goto err_ret;
 > --
 
-And please rebase it on top of the idle_inject series (which is being
-added to my bleeding-edge branch right now).
+Applied as 6.3 material with edited subject and changelog, thanks!
