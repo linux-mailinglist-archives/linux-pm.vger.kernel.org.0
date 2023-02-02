@@ -2,51 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA45688059
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 15:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CE4688092
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 15:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjBBOrj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 09:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S230259AbjBBOwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 09:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjBBOri (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 09:47:38 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52BA8626E;
-        Thu,  2 Feb 2023 06:47:36 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id eq11so2232273edb.6;
-        Thu, 02 Feb 2023 06:47:36 -0800 (PST)
+        with ESMTP id S231391AbjBBOwd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 09:52:33 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CD49189B;
+        Thu,  2 Feb 2023 06:52:12 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id bk15so6608199ejb.9;
+        Thu, 02 Feb 2023 06:52:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=601oxxxBeinhNLRTJ3S2FQaYaH++QEK37cxFtsi0SZA=;
-        b=JxD2th0z+MoI356p/PtyNwiuLfI0GR2A25TnowogIHFuNQkT4H9v9vOfNqHtm01V6D
-         e4X4xN03nxjQsm9s2OfWYhqi3PsY5ipAy9ZPaDe6NMuOLlOypE/MY1BvwMzz7X8D//OJ
-         RpAe7ZQZR45XZV9nj37u74NKmOBmLtXM/0OvFbF/XkcY1m/l28JBGowuhyZKt6/SDknb
-         qtuyyD6v17vOGrtD4MS53qFz5PeiSpNj7f0dtrKpDsP4S+u9EatN7jvXvCBvPoRGt8ft
-         7RpKwrKqWEa7atpmvFZ/yUxPiunGi7mEEqBQhqaeMN1Dj0siCtoCwxNNhSqG5bpWkvSb
-         5yHw==
-X-Gm-Message-State: AO0yUKUR3x8u5HL12gwgYfYWtK8Ouh1FKQ3Y7UqwBxNlstm5gDqI/QSG
-        7rHpVLRDWQoOSu854cZ6yyEfRMQEl7vJwF7qUms=
-X-Google-Smtp-Source: AK7set9Pc6LVlQ7F/NOwSTllNQZ5pB5l5V9fD4TTaCIKXoclszx/n4UqOo0OnRsUmMad8+YhQV9BsKaJeUcEmO9FVH0=
-X-Received: by 2002:a50:cd8e:0:b0:4a2:480b:e164 with SMTP id
- p14-20020a50cd8e000000b004a2480be164mr1923360edi.50.1675349255307; Thu, 02
- Feb 2023 06:47:35 -0800 (PST)
+        bh=tVkiy6fyJJUhDInSdWKIu6TvOC7zzv+pfj7iyuJ54pw=;
+        b=IpFgN+D3kL7+KjME3WA0ulQviVq9E2haqALso/OUneyoDz4raI0hMDiaCAKgr2RUFO
+         8jxxsEVZ8TO5PI/Gm0h9UIafOspjtOuRdjGe4DVulyL/Uz06PAQmKJ5MOkOHXC4XnFW1
+         siz9Fdn58NG2DxzrdiFSwmvEo+74XW5QvKyUVZmIgJaP/gSe4M2TFj9pqvnNSSCpRCGC
+         /HILpgK4gwpWWcJBTjAynxTxtn53AWDcXnJ2aYtITVAAJ0iEgKfBqhMjPnZ28bE9Zv6R
+         mAH5EEnAYEgOLG2UMRIiEPO7wDO+w8swEnzylbTVbwq3Scq1JFzw+zuw9AJLxQQuzq1h
+         VsSg==
+X-Gm-Message-State: AO0yUKWWyVVt03/b54YSfTyQ6+MNAzqu+BWDQZmApWui6qugCI2NShZ9
+        yibOEBImszXr2dyJ8fMa3CilSLSsriWKAKTOY9s=
+X-Google-Smtp-Source: AK7set+Xeo3VH6AqENA2DUWa329xs2MKj1F6DptSOSs4aJYIWKjbeDoLprtbeYnT8dZpggmhpU34CqORZoTc33ZMDfA=
+X-Received: by 2002:a17:906:85c7:b0:878:581b:63ee with SMTP id
+ i7-20020a17090685c700b00878581b63eemr1733284ejy.244.1675349499550; Thu, 02
+ Feb 2023 06:51:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230130181915.1113313-1-zwisler@google.com> <20230130181915.1113313-6-zwisler@google.com>
-In-Reply-To: <20230130181915.1113313-6-zwisler@google.com>
+References: <20230201203941.2166530-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230201203941.2166530-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 15:47:24 +0100
-Message-ID: <CAJZ5v0hSJGb59rYRN=uJq2-39Rz5pk2yV7jufrWgWMPO397hZw@mail.gmail.com>
-Subject: Re: [PATCH 5/9] tools/power: use canonical ftrace path
-To:     Ross Zwisler <zwisler@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
+Date:   Thu, 2 Feb 2023 15:51:28 +0100
+Message-ID: <CAJZ5v0jGJ_UVGYaEk=guv5q4N7axGAJJyTwtraY9zFaBjs9Ejw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: intel_powerclamp: Fix cur_state for multi
+ package system
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -58,116 +57,101 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 7:20 PM Ross Zwisler <zwisler@chromium.org> wrote:
+On Wed, Feb 1, 2023 at 9:39 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+> The powerclamp cooling device cur_state shows actual idle observed by
+> package C-state idle counters. But the implementation is not sufficient
+> for multi package or multi die system. The cur_state value is incorrect.
+> On these systems, these counters must be read from each package/die and
+> somehow aggregate them. But there is no good method for aggregation.
 >
-> But, from Documentation/trace/ftrace.rst:
+> It was not a problem when explicit CPU model addition was required to
+> enable intel powerclamp. In this way certain CPU models could have
+> been avoided. But with the removal of CPU model check with the
+> availability of Package C-state counters, the driver is loaded on most
+> of the recent systems.
 >
->   Before 4.1, all ftrace tracing control files were within the debugfs
->   file system, which is typically located at /sys/kernel/debug/tracing.
->   For backward compatibility, when mounting the debugfs file system,
->   the tracefs file system will be automatically mounted at:
+> For multi package/die systems, just show the actual target idle state,
+> the system is trying to achieve. In powerclamp this is the user set
+> state minus one.
 >
->   /sys/kernel/debug/tracing
+> Also there is no use of starting a worker thread for polling package
+> C-state counters and applying any compensation for multiple package
+> or multiple die systems.
 >
-> A few scripts in tools/power still refer to this older debugfs path, so
-> let's update them to avoid confusion.
->
-> Signed-off-by: Ross Zwisler <zwisler@google.com>
+> Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org # 4.14+
 > ---
->  tools/power/pm-graph/sleepgraph.py                     |  4 ++--
->  tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py  |  4 ++--
->  .../x86/intel_pstate_tracer/intel_pstate_tracer.py     | 10 +++++-----
->  3 files changed, 9 insertions(+), 9 deletions(-)
+> v2:
+> Changed: (true == clamping) to (clamping)
+> Updated commit description for the last paragraph
 >
-> diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
-> index cfe343306e08..eddf8101ddf6 100755
-> --- a/tools/power/pm-graph/sleepgraph.py
-> +++ b/tools/power/pm-graph/sleepgraph.py
-> @@ -120,9 +120,9 @@ class SystemValues:
->         cgexp = False
->         testdir = ''
->         outdir = ''
-> -       tpath = '/sys/kernel/debug/tracing/'
-> +       tpath = '/sys/kernel/tracing/'
->         fpdtpath = '/sys/firmware/acpi/tables/FPDT'
-> -       epath = '/sys/kernel/debug/tracing/events/power/'
-> +       epath = '/sys/kernel/tracing/events/power/'
->         pmdpath = '/sys/power/pm_debug_messages'
->         s0ixpath = '/sys/module/intel_pmc_core/parameters/warn_on_s0ix_failures'
->         s0ixres = '/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us'
-> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> index 2dea4032ac56..904df0ea0a1e 100755
-> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> @@ -248,7 +248,7 @@ def signal_handler(signal, frame):
->          ipt.free_trace_buffer()
->          sys.exit(0)
+>  drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
 >
-> -trace_file = "/sys/kernel/debug/tracing/events/amd_cpu/enable"
-> +trace_file = "/sys/kernel/tracing/events/amd_cpu/enable"
->  signal.signal(signal.SIGINT, signal_handler)
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index b80e25ec1261..2f4cbfdf26a0 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -57,6 +57,7 @@
 >
->  interval = ""
-> @@ -319,7 +319,7 @@ print(cur_version)
->  cleanup_data_files()
+>  static unsigned int target_mwait;
+>  static struct dentry *debug_dir;
+> +static bool poll_pkg_cstate_enable;
 >
->  if interval:
-> -    file_name = "/sys/kernel/debug/tracing/trace"
-> +    file_name = "/sys/kernel/tracing/trace"
->      ipt.clear_trace_file()
->      ipt.set_trace_buffer_size(memory)
->      ipt.enable_trace(trace_file)
-> diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> index b46e9eb8f5aa..ec3323100e1a 100755
-> --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> @@ -373,7 +373,7 @@ def clear_trace_file():
->      """ Clear trace file """
+>  /* user selected target */
+>  static unsigned int set_target_ratio;
+> @@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
+>  {
+>         unsigned int comp = 0;
 >
->      try:
-> -        f_handle = open('/sys/kernel/debug/tracing/trace', 'w')
-> +        f_handle = open('/sys/kernel/tracing/trace', 'w')
->          f_handle.close()
->      except:
->          print('IO error clearing trace file ')
-> @@ -401,7 +401,7 @@ def set_trace_buffer_size(memory):
->      """ Set trace buffer size """
+> +       if (!poll_pkg_cstate_enable)
+> +               return 0;
+> +
+>         /* we only use compensation if all adjacent ones are good */
+>         if (ratio == 1 &&
+>                 cal_data[ratio].confidence >= CONFIDENCE_OK &&
+> @@ -519,7 +523,8 @@ static int start_power_clamp(void)
+>         control_cpu = cpumask_first(cpu_online_mask);
 >
->      try:
-> -       with open('/sys/kernel/debug/tracing/buffer_size_kb', 'w') as fp:
-> +       with open('/sys/kernel/tracing/buffer_size_kb', 'w') as fp:
->            fp.write(memory)
->      except:
->         print('IO error setting trace buffer size ')
-> @@ -411,7 +411,7 @@ def free_trace_buffer():
->      """ Free the trace buffer memory """
+>         clamping = true;
+> -       schedule_delayed_work(&poll_pkg_cstate_work, 0);
+> +       if (poll_pkg_cstate_enable)
+> +               schedule_delayed_work(&poll_pkg_cstate_work, 0);
 >
->      try:
-> -       open('/sys/kernel/debug/tracing/buffer_size_kb'
-> +       open('/sys/kernel/tracing/buffer_size_kb'
->                   , 'w').write("1")
->      except:
->          print('IO error freeing trace buffer ')
-> @@ -495,7 +495,7 @@ def signal_handler(signal, frame):
->          sys.exit(0)
+>         /* start one kthread worker per online cpu */
+>         for_each_online_cpu(cpu) {
+> @@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+>  static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+>                                  unsigned long *state)
+>  {
+> -       if (true == clamping)
+> -               *state = pkg_cstate_ratio_cur;
+> -       else
+> +       if (clamping) {
+> +               if (poll_pkg_cstate_enable)
+> +                       *state = pkg_cstate_ratio_cur;
+> +               else
+> +                       *state = set_target_ratio;
+> +       } else {
+>                 /* to save power, do not poll idle ratio while not clamping */
+>                 *state = -1; /* indicates invalid state */
+> +       }
 >
->  if __name__ == "__main__":
-> -    trace_file = "/sys/kernel/debug/tracing/events/power/pstate_sample/enable"
-> +    trace_file = "/sys/kernel/tracing/events/power/pstate_sample/enable"
->      signal.signal(signal.SIGINT, signal_handler)
+>         return 0;
+>  }
+> @@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
+>                 goto exit_unregister;
+>         }
 >
->      interval = ""
-> @@ -569,7 +569,7 @@ if __name__ == "__main__":
->      cleanup_data_files()
->
->      if interval:
-> -        filename = "/sys/kernel/debug/tracing/trace"
-> +        filename = "/sys/kernel/tracing/trace"
->          clear_trace_file()
->          set_trace_buffer_size(memory)
->          enable_trace(trace_file)
+> +       if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
+> +               poll_pkg_cstate_enable = true;
+> +
+>         cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
+>                                                 &powerclamp_cooling_ops);
+>         if (IS_ERR(cooling_dev)) {
 > --
 
 Applied as 6.3 material, thanks!
