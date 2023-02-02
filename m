@@ -2,75 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1740D688325
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 16:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45338688389
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 16:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbjBBPzB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 10:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S233350AbjBBP5z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 10:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbjBBPyt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 10:54:49 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C564566EC7
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 07:54:41 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1749840wms.4
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 07:54:41 -0800 (PST)
+        with ESMTP id S233201AbjBBP5k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 10:57:40 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DD272645
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 07:56:43 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so4059575wmb.2
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 07:56:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/oko1AtD/XSyITvqWacNf29ZVg1C2BAcH6xewV2Bxwc=;
-        b=lH8NhXATnGk9E/V8Qfu020E2KAmUSNQdczW9g4CL3jhDacpSB4MIIRHUB5inx0OSIm
-         IKBgIfgv9jmj/oR6dUdkaGsWY9zhVS17mRu6H8s4YRtLWfmS5j6Gxs4Gugm5UoaDIfyd
-         /wXKpYcCc4mGSAQuN5IWxB/IhCa8JneXOybHrWolqjlMn61Rt9H5HkPNKav7Sb9ZC1aK
-         yiEk1Ng5ZAbMI3iO+l9Ndmsxv9JslBaqFVDyV6q33dWYwWS3UhaCtCXCMZQwci1F6Ks0
-         wtECRkbnDLo+3wf4q3Wzd1z1OuLeGvZHG7axNBtmGe+dGcWVQaR6MEvWtwLUwZTpcCan
-         TNBw==
+        bh=99968d0mm1LQlV7FJfw5p+HomojgxRqcNOEkSpDZsMA=;
+        b=ZSZR8w8HbvMhC+h0X2cHqNY6i4ijvCJlfuNuo0/S4yx8vREaSg1T2UGs93u0He6OBB
+         nynGeRShOG1Vr4k2id0z1iYEbN+5+u+G/3v55cQ5pgbVfMoJptbF3HCkrrJFeywSe3ya
+         uHzwZ349AAoQ1tQDY2Sp7Aj1nuDzd5OrXP79M7RIAJKxDdg94BALUO9nkGhA8eVwSag+
+         65G4OwBTGHPKZAIUFbz5l5TY5F5dBXCyirIYGXd1T9/GSKO/S5msjWHVFCcDPjR4TyTU
+         77wFIoObuNK4hkyOOvb4uNzuv+iSFCksKQ+8BecyWhyKAhW2UFEvNrO7x4lGihxJ/tjw
+         j+Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/oko1AtD/XSyITvqWacNf29ZVg1C2BAcH6xewV2Bxwc=;
-        b=7fUZ+dQTJz2mzvaUk86GNbGaaj8HQ17fLhK0hYQq1tTDLvcb031OEEcJaO95dtXu7Y
-         N7ZtslfaimqAGlGD1K4AbqxUDked/FRWG0KmeLZemVF7B2EywlgFIWCWhQjkgvwQq6fY
-         XGa/NptebGtVOSIb+4zo5y955t18UenORP7pprC8+8VgO1ef2Yp027TrRh1SyshXimWe
-         XIeUioKdcaYWDTjVNsQ7ysIfK9xyq5loDNRtSQI/2lAAd19BRNaGGuLCAFlxHRldXrmg
-         yoFdaugUvgj7bhjBzPsRYzLt6BxL5Jt+q8hIO04V4XI4Rj8luGUbxz6eEN4AMAOhYtOX
-         dB6Q==
-X-Gm-Message-State: AO0yUKU9Tsy7OKKeFxCCKTtDz0WZzKRwI7YRfci42gtrT+IlXc1wg6WN
-        DXyD60JrJuYkQnfPXMXxftpAjy2gRyWPrQ9C
-X-Google-Smtp-Source: AK7set9nxuLA4Rl0qj6e0anHvgyTf+KX0bcf8L9UJihEp9Etud61rhMgWmH5ObfVUKPW6EF2891gAA==
-X-Received: by 2002:a05:600c:3d99:b0:3df:6c44:e083 with SMTP id bi25-20020a05600c3d9900b003df6c44e083mr4656044wmb.7.1675353280238;
-        Thu, 02 Feb 2023 07:54:40 -0800 (PST)
+        bh=99968d0mm1LQlV7FJfw5p+HomojgxRqcNOEkSpDZsMA=;
+        b=5XDLTvSgv9TRm+SpYRsK/nJpR4ph+q4HNmCzvtVyhb3KU5G3t+CFhPy/8vTUVqJh8R
+         nKokPsUmB0yrgj14FYFrb067TtrC4W+60kJlB/+vH2d5Rss9tEREo4yZH9biLpHgGOeU
+         eCid7pqkRdnBNN9z1LwpP4z8/ddFyO7IW0AS7Bf5WA8SZPS/yKcDDWGRi7kxNsezy2z5
+         Z8z8yu295E2/bM+aALasKlYTBHYN7hBa8Nqilq7I03MsQjr/gM7+NG+XiwM/cjNqwIlY
+         Bs6BsnuvMp1NcvhLloVTQe31gFzxT84eg2xujUjqYjefvqsOtk83kXZF8Cl1yPw+7cvv
+         cyow==
+X-Gm-Message-State: AO0yUKUQRhBPgFh9Qwulkknu8YLQiooL/h6wHIFtUZ0LbqKb8jD4mvmT
+        zIgVZMumZDZ4wfIynDV3kDWQYXqnnLqWJRXh
+X-Google-Smtp-Source: AK7set9GDnie7nr+qU25Exw6d95n4+U2pBygGp1lhPj89Y/R3QsatB0fZWe/iwttbtA5osEBT1f/xg==
+X-Received: by 2002:a7b:cb07:0:b0:3db:25a0:ca5b with SMTP id u7-20020a7bcb07000000b003db25a0ca5bmr6553235wmj.37.1675353368230;
+        Thu, 02 Feb 2023 07:56:08 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id k19-20020a05600c1c9300b003dc43a10fa5sm156215wms.13.2023.02.02.07.54.39
+        by smtp.googlemail.com with ESMTPSA id c3-20020a05600c0ac300b003db012d49b7sm8598131wmr.2.2023.02.02.07.56.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 07:54:39 -0800 (PST)
-Message-ID: <ce001aa9-c18e-553c-2b09-fed407348e78@linaro.org>
-Date:   Thu, 2 Feb 2023 16:54:38 +0100
+        Thu, 02 Feb 2023 07:56:07 -0800 (PST)
+Message-ID: <2bc6368b-b089-a229-63d6-932930b9b78c@linaro.org>
+Date:   Thu, 2 Feb 2023 16:56:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for
- intel_soc_dts_iosf
+Subject: Re: [PATCH] tools/lib/thermal: fix thermal_sampling_exit()
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <20230118181622.33335-3-daniel.lezcano@linaro.org>
- <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
- <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
- <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
- <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
- <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202102812.453357-1-vincent.guittot@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
+In-Reply-To: <20230202102812.453357-1-vincent.guittot@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,36 +75,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/02/2023 15:43, Rafael J. Wysocki wrote:
-> On Thu, Feb 2, 2023 at 3:36 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Rafael,
->>
->> On 31/01/2023 20:17, Rafael J. Wysocki wrote:
->>
->> [ ... ]
->>
->>>>> Why should temp be overwritten here?
->>>>
->>>> You are correct. This is wrong.
->>>>
->>>> I think we should call get_trip_temp() before calling update_trip_temp()
->>>> instead of passing a zero temperature parameter
->>>
->>> update_trip_temp() is sort of a misnomer, because it is used for
->>> initializing a trip point for example in
->>> intel_soc_dts_iosf_add_read_only_critical_trip() and in this
->>> particular case get_trip_temp() need not be called before it.
->>>
->>> This driver seems to be in need of a cleanup.
->>
->> Will you take care of this cleanup ?
+On 02/02/2023 11:28, Vincent Guittot wrote:
+> thermal_sampling_init() suscribes to THERMAL_GENL_SAMPLING_GROUP_NAME group
+> so thermal_sampling_exit() should unsubscribe from the same group.
 > 
-> I think I can do that, but I'm not sure how much time I will be able
-> to allocate for that.  Let me try though.
+> Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
 
-Great, thanks for your help
+Thanks for the fix, applied
 
 
 -- 
