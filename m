@@ -2,194 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C7C68864B
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 19:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11F66886E7
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 19:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjBBSYT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 13:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S229988AbjBBSm5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 13:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBSYS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 13:24:18 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9B6611F2
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 10:24:17 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id k12so1107466ilv.10
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 10:24:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KEsmcJxef9VraaSjmZ5P/yOda1aam7+tcb0WcmIGD+U=;
-        b=PU5h0yer48rjaHfee+8288jQgBceANhYgi8H1PXRAs83jtgY72r/RgtBmqmLHJOWp6
-         5s8hDpF3xWy0X7NWca3kqIM54lN3NBM20vDPWqJ5T5qcyGl4FWRyzFEHksC7ST+GoDNi
-         RXl0HGI3sn9K6iSjlq2rdhJsGshEQB6KmfmEY=
+        with ESMTP id S232445AbjBBSmz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 13:42:55 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E607E6EB8
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 10:42:32 -0800 (PST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DDE4941AE2
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 18:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675363299;
+        bh=5/sqWycvEAPjqsnTBo2U8a25upaJIykotUumaHLpuvI=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=q1aKcrjtZICuhbi5AOxdMZJFQ4YrB51LM9j0A80jGxpylGJ8+EL+ZGegSukvPKTnC
+         gG6G7+E2LlQQi0wn0JB6StBaYU4lZtMMlkD2NJ3Uv3La0IA2TsLemcDK9EeDq7rESF
+         XdKeKjqsbk9jWU6/SnMt0W5YFnI67lI17q1VAYrg8gO92aoGzytTTGH0LDQDWUlAwY
+         xGwIvlYmIa4jrAiQvGB+xv3egbvEpkpJTjZ69RfcBUVK3p/iRK+w1qFyQ8RSwTBqcS
+         acBM9wLI1wqTWk3ah3vn8M6f/eOpcmbdrI8rzbNGDyIOnVuNExTuR9iWvFMLdrlpNY
+         sKt+/Drfbj5kQ==
+Received: by mail-pf1-f197.google.com with SMTP id z7-20020aa79587000000b00593f19705d5so1382532pfj.10
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 10:41:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KEsmcJxef9VraaSjmZ5P/yOda1aam7+tcb0WcmIGD+U=;
-        b=o62k2hrHBKqOH+HKWRd3pnuhAf6JypYfdcYWu7+jxkjW3tJ2i0uJILBSjsankGSW0F
-         At8DxjK9U5RV8KN4o/Mx5vXIrlb+We2hzu021T3xy2nTtYWOJ64Yl83SxhA7p1569TiU
-         bsj00zw/eGq6SCpGvXswL+HRwYtf2QDyyquEX8J7AFBlfM2z7N0x33uR+lMhhPGhbMtx
-         SiPaythhkTRjBomv9QJG8aAuuwqLJe+z4tCxhek2ALMLpCFLxSFoSK9731z7iTrH1TYy
-         JP54nPJ4rezy8igMSpC99HImyFcCcZJ9fHg6/Jkb/LdxGn/fsIfcf3nWRyHbFQ75zRxi
-         sotA==
-X-Gm-Message-State: AO0yUKUtYhQcDrhxBCJLFwd+G6IdCP5BcgtTx+aRe1EIuHpNSMgWg//h
-        aWI6NGees6ddmy1L/M1aIA8WAw==
-X-Google-Smtp-Source: AK7set/Bt5lPVoYdpAgFbksnowpbSms8I5kGIMJaY607UlltxZIsWVhxOEXhGk1wL1oWEF9mcRK0lQ==
-X-Received: by 2002:a05:6e02:198e:b0:30d:c671:48c5 with SMTP id g14-20020a056e02198e00b0030dc67148c5mr5812112ilf.16.1675362256461;
-        Thu, 02 Feb 2023 10:24:16 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id f15-20020a056e0212af00b0030c2c6f5aa1sm94040ilr.70.2023.02.02.10.24.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 10:24:16 -0800 (PST)
-Date:   Thu, 2 Feb 2023 18:24:15 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Doug Anderson <dianders@chromium.org>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Message-ID: <Y9v/z8CYik3faHh7@google.com>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :comments:references:in-reply-to:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/sqWycvEAPjqsnTBo2U8a25upaJIykotUumaHLpuvI=;
+        b=ZDBK3jO5q3VeaL7WhM72Ssy8fTFiQ/HQCpyJaBSSETPmXJYsK00nkWVNvgdlbjzS2+
+         sQ/monbnxD0P6W4N2yezj/ySc7h/kmIdTSW5rmsyIoMop0lcjvnlQQDia2dNWqSbKIl3
+         +X5nnTIzAZzWEvNvqAW3AeZ96BMPMub+AdQK0pDZ+QtQYzHkmvwEUUxeTO1jQ7ckdR/X
+         317sQv2/rKYtvt7f9jQ65BDuQ2pQIHKm7TLMq8JSRhAMrIDbq54puJuRawPvQ59tynFO
+         XgftzdtCo60x8NeYbjY3NwwLPd8ASP+slp4Wh14ogbpTtQxpBknUyGXXwFCWFr5IJNSk
+         SeRg==
+X-Gm-Message-State: AO0yUKVkscw//31Ng9Uej1CZzdN1Uxu5hhb67SqC5RGqeA3UkinrOqeZ
+        NF1fph3iKKwtY2OiytGBBQlwsaz3Ix6w+T/yuhZFYVFc2YLIpkxxanLX9rNScpBPKtqmCnjjOwe
+        cqwa/LDYJg2SegeTaGwUyzpJ0/eZ/5/PHHVs2
+X-Received: by 2002:a17:90b:1d82:b0:22c:169b:ec44 with SMTP id pf2-20020a17090b1d8200b0022c169bec44mr7704080pjb.31.1675363298641;
+        Thu, 02 Feb 2023 10:41:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set/iID5T6tsp9eWmtXNZbOFdFo2GTi9PEDvqAxvwzPCco64WaniWJlyIzIuuMqZESDriKrnLfQ==
+X-Received: by 2002:a17:90b:1d82:b0:22c:169b:ec44 with SMTP id pf2-20020a17090b1d8200b0022c169bec44mr7704065pjb.31.1675363298369;
+        Thu, 02 Feb 2023 10:41:38 -0800 (PST)
+Received: from famine.localdomain ([50.125.80.253])
+        by smtp.gmail.com with ESMTPSA id b1-20020a17090aa58100b00229d7f2abd4sm163842pjq.54.2023.02.02.10.41.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Feb 2023 10:41:37 -0800 (PST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 6FD985FEAC; Thu,  2 Feb 2023 10:41:37 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 680F29FB5C;
+        Thu,  2 Feb 2023 10:41:37 -0800 (PST)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+cc:     gregkh@linuxfoundation.org, rafael@kernel.org, vfalico@gmail.com,
+        andy@greyhouse.net, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 2/3] bonding: fix error checking in bond_debug_reregister()
+In-reply-to: <20230202093256.32458-3-zhengqi.arch@bytedance.com>
+References: <20230202093256.32458-1-zhengqi.arch@bytedance.com> <20230202093256.32458-3-zhengqi.arch@bytedance.com>
+Comments: In-reply-to Qi Zheng <zhengqi.arch@bytedance.com>
+   message dated "Thu, 02 Feb 2023 17:32:55 +0800."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230127104054.895129-1-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <20120.1675363297.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 02 Feb 2023 10:41:37 -0800
+Message-ID: <20121.1675363297@famine>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Abel,
+Qi Zheng <zhengqi.arch@bytedance.com> wrote:
 
-On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
-> Currently, there are cases when a domain needs to remain enabled until
-> the consumer driver probes. Sometimes such consumer drivers may be built
-> as modules. Since the genpd_power_off_unused is called too early for
-> such consumer driver modules to get a chance to probe, the domain, since
-> it is unused, will get disabled. On the other hand, the best time for
-> an unused domain to be disabled is on the provider's sync_state
-> callback. So, if the provider has registered a sync_state callback,
-> assume the unused domains for that provider will be disabled on its
-> sync_state callback. Also provide a generic sync_state callback which
-> disables all the domains unused for the provider that registers it.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> This approach has been applied for unused clocks as well.
-> With this patch merged in, all the providers that have sync_state
-> callback registered will leave the domains enabled unless the provider's
-> sync_state callback explicitly disables them. So those providers will
-> need to add the disabling part to their sync_state callback. On the
-> other hand, the platforms that have cases where domains need to remain
-> enabled (even if unused) until the consumer driver probes, will be able,
-> with this patch in, to run without the pd_ignore_unused kernel argument,
-> which seems to be the case for most Qualcomm platforms, at this moment.
+>Since commit ff9fb72bc077 ("debugfs: return error values,
+>not NULL") changed return value of debugfs_rename() in
+>error cases from %NULL to %ERR_PTR(-ERROR), we should
+>also check error values instead of NULL.
+>
+>Fixes: ff9fb72bc077 ("debugfs: return error values, not NULL")
+>Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-I recently encountered a related issue on a Qualcomm platform with a
-v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
-highest corner until sync_state"). The issue involves a DT node with a
-rpmhpd, the DT node is enabled, however the corresponding device driver
-is not enabled in the kernel. In such a scenario the sync_state callback
-is never called, because the genpd consumer never probes. As a result
-the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
-system suspend, which results in a substantially higher power consumption
-in S3.
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
 
-I wonder if genpd (and some other frameworks) needs something like
-regulator_init_complete(), which turns off unused regulators 30s after
-system boot. That's conceptually similar to the current
-genpd_power_off_unused(), but would provide time for modules being loaded.
+>---
+> drivers/net/bonding/bond_debugfs.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/net/bonding/bond_debugfs.c b/drivers/net/bonding/bon=
+d_debugfs.c
+>index 4f9b4a18c74c..594094526648 100644
+>--- a/drivers/net/bonding/bond_debugfs.c
+>+++ b/drivers/net/bonding/bond_debugfs.c
+>@@ -76,7 +76,7 @@ void bond_debug_reregister(struct bonding *bond)
+> =
 
-> The v1 is here:
-> https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
-> 
-> Changes since v1:
->  * added a generic sync state callback to be registered by providers in
->    order to disable the unused domains on their sync state. Also
->    mentioned this in the commit message.
-> 
->  drivers/base/power/domain.c | 17 ++++++++++++++++-
->  include/linux/pm_domain.h   |  3 +++
->  2 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 84662d338188..c2a5f77c01f3 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
->  	mutex_lock(&gpd_list_lock);
->  
->  	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> -		genpd_queue_power_off_work(genpd);
-> +		if (!dev_has_sync_state(genpd->provider->dev))
-> +			genpd_queue_power_off_work(genpd);
->  
->  	mutex_unlock(&gpd_list_lock);
->  
-> @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
->  }
->  late_initcall(genpd_power_off_unused);
->  
-> +void genpd_power_off_unused_sync_state(struct device *dev)
-> +{
-> +	struct generic_pm_domain *genpd;
-> +
-> +	mutex_lock(&gpd_list_lock);
-> +
-> +	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> +		if (genpd->provider->dev == dev)
-> +			genpd_queue_power_off_work(genpd);
-> +
-> +	mutex_unlock(&gpd_list_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
-> +
->  #ifdef CONFIG_PM_SLEEP
->  
->  /**
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index f776fb93eaa0..1fd5aa500c81 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
->  					 unsigned int index);
->  struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->  					   const char *name);
-> +void genpd_power_off_unused_sync_state(struct device *dev);
->  #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
->  static inline int of_genpd_add_provider_simple(struct device_node *np,
->  					struct generic_pm_domain *genpd)
-> @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
->  {
->  	return ERR_PTR(-EOPNOTSUPP);
->  }
-> +
-> +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
->  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
->  
->  #ifdef CONFIG_PM
-> -- 
-> 2.34.1
-> 
+> 	d =3D debugfs_rename(bonding_debug_root, bond->debug_dir,
+> 			   bonding_debug_root, bond->dev->name);
+>-	if (d) {
+>+	if (!IS_ERR(d)) {
+> 		bond->debug_dir =3D d;
+> 	} else {
+> 		netdev_warn(bond->dev, "failed to reregister, so just unregister old o=
+ne\n");
+>-- =
+
+>2.20.1
+>
