@@ -2,83 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE7D6887CE
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 20:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB78688972
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 23:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjBBTxt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 14:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S232470AbjBBWBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 17:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjBBTxr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 14:53:47 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2954DBE5
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 11:53:45 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id k4so9253906eje.1
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 11:53:45 -0800 (PST)
+        with ESMTP id S232243AbjBBWBS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 17:01:18 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E90862799
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 14:00:55 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cl23-20020a17090af69700b0022c745bfdc3so3143036pjb.3
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 14:00:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HaDFfxxzuLwN75YKvylnJiXNpCrcwXxrygiD4ELDOQ8=;
-        b=XnDYP7IO5pP3GcYGNn52WSskJ+9C8pMoab6FbCgKr170kOCMuDWUXBcbX7btW0HnQo
-         EZKOEMsrplHxOm1VnWwjwTKunmvW/usk/seSp+huso6WA7eavXC1OKPn/G0Zh+NpOjrf
-         FRkxZSeMg3fOYkM0evBQOQQOw57ODLZi1FqsKgr0eNd1aQbrijkKnPz6Zd041HztH24H
-         8hf/GWL8cyM/R3GUmzJ0JHfUWy+bijeqr+whbQgljM4fZ2iW1UXdVWK8Ou0qravrvRGC
-         tSQ8dw0kFG90dyvw4RlZ2epCBXKnCJpQ1iSqVMR3GhhhAVeFVfgnj8wFfC1U851sD9Dj
-         UZxg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+vrP6x4T9y3LBVQTyEpVLcHcjo3vK9avyGJed9Ro+PY=;
+        b=fDff1QUaUePyrEO4K8PPJaKVKrS67CDWzshdJihkORr3Ui4KtY4IlqYfEDwINOUrgc
+         jcUkc/WY/hV+22kjwpG7NbLjhRLmn6hhUunsDgDto4c42tr1dygTqmITCJav1rljlcNB
+         +vzWl29h+6Euy34nzxUXIXoBhcDrFDyAD+Dd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaDFfxxzuLwN75YKvylnJiXNpCrcwXxrygiD4ELDOQ8=;
-        b=GAE/crKVoG+PM8vPDzCC9B78+AmF2+KYsJle9J/i/tnnp20W42Cwr11jwvHib3uR3V
-         VVO4c0iNdAthB8COM6HLEHzseQrJR47fvixrV1nz3yESR8TAoE++Pn2Zc4wSU+xRxmfX
-         KSAtUiIx1e28/Mbzq0FdDPYPAGoGadby6XxMs/V0YR8rnxgbt11vovxczw31LElaiRBI
-         mZziGwdQz2uncMtqUu+wbc/TxGpqV0KO6006fkNvfCUD8H5rbIO27ULFHKIS2IsHxxYg
-         /wyzMfduS+KW5bYLbIgToa4YQ93pJIA5O6kJz/rSQy8mPyZ4MrEqZWThV+y+kVAxN0cL
-         5QHw==
-X-Gm-Message-State: AO0yUKWJTDfhWaDGN2uy9MrINgljO268hFeVzlKWfsf5vdZCjmNKiPLK
-        vXJjfu55Q70UaAaVfE3vkDsy3g==
-X-Google-Smtp-Source: AK7set8hm8gggwv/GPzDyAxsPPsvhLgacTc1mEed2aWQZaE/x/C55oTALWz/ayjBDYtn8nt5/jY/jA==
-X-Received: by 2002:a17:906:60d2:b0:86f:3dfa:4016 with SMTP id f18-20020a17090660d200b0086f3dfa4016mr8447911ejk.7.1675367623820;
-        Thu, 02 Feb 2023 11:53:43 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id a15-20020a50ff0f000000b004a2067d6ba4sm146536edu.52.2023.02.02.11.53.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 11:53:43 -0800 (PST)
-Message-ID: <3826e0e6-bb2b-409d-d1c3-ed361305bce3@linaro.org>
-Date:   Thu, 2 Feb 2023 21:53:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Content-Language: en-GB
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+vrP6x4T9y3LBVQTyEpVLcHcjo3vK9avyGJed9Ro+PY=;
+        b=QqvRUZN226f3phDgOniYCdFdV7qAROYq8vjlRnJwEXLNdkHEGFK7lxCI9ftV7y/AWF
+         niUMItxjkimkLoNFztNGmJHkXesIEvXIKcBlB2zNzD4aYsEyh7e1wbVtFdMs3gAl0bUL
+         1si4naFqPXLQMkE9q+swg6kwkYE785F68SimsC6TJAHYCFyIOyhM8thr6F2NLZPKZVLG
+         fRD3LdROMTM7PKeDWRxlevGbQ+fJtP733GZlR2x2KpPeSscVjJUtBd5ddN1a4XFLRqPw
+         ypwY7KSYt+aFBg38G0zPsLLZSH9TNiyJgj21eY8jWyLf1affu1PJ0PHEZe/33UWJci3K
+         t8SA==
+X-Gm-Message-State: AO0yUKUel5aV+DEY+B1eu0ADMj2gSPmlL+6hJBRnPR3VYypDYeLy+pED
+        7p8a5awwwdXO+d/Om/8tGarlPQ==
+X-Google-Smtp-Source: AK7set+0gtbk39rHfzSVgEM302zYU0TbkQDgIf0uMcHrg3ewECuj1/fjtP9RbRAbvJ76kTaZkURYyA==
+X-Received: by 2002:a17:902:cf08:b0:194:a6e0:3ba with SMTP id i8-20020a170902cf0800b00194a6e003bamr8169139plg.54.1675375236301;
+        Thu, 02 Feb 2023 14:00:36 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:f71:fcf9:d3e0:e9c0])
+        by smtp.gmail.com with ESMTPSA id jb21-20020a170903259500b00192fc9e8552sm179629plb.0.2023.02.02.14.00.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 14:00:35 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     swboyd@chromium.org, mka@chromium.org,
+        Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Doug Anderson <dianders@chromium.org>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
- <Y9v/z8CYik3faHh7@google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Y9v/z8CYik3faHh7@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH systems
+Date:   Thu,  2 Feb 2023 14:00:23 -0800
+Message-Id: <20230202140005.1.I4b30aaa027c73372ec4068cc0f0dc665af8b938d@changeid>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,130 +72,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/02/2023 20:24, Matthias Kaehlcke wrote:
-> Hi Abel,
-> 
-> On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
->> Currently, there are cases when a domain needs to remain enabled until
->> the consumer driver probes. Sometimes such consumer drivers may be built
->> as modules. Since the genpd_power_off_unused is called too early for
->> such consumer driver modules to get a chance to probe, the domain, since
->> it is unused, will get disabled. On the other hand, the best time for
->> an unused domain to be disabled is on the provider's sync_state
->> callback. So, if the provider has registered a sync_state callback,
->> assume the unused domains for that provider will be disabled on its
->> sync_state callback. Also provide a generic sync_state callback which
->> disables all the domains unused for the provider that registers it.
->>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> ---
->>
->> This approach has been applied for unused clocks as well.
->> With this patch merged in, all the providers that have sync_state
->> callback registered will leave the domains enabled unless the provider's
->> sync_state callback explicitly disables them. So those providers will
->> need to add the disabling part to their sync_state callback. On the
->> other hand, the platforms that have cases where domains need to remain
->> enabled (even if unused) until the consumer driver probes, will be able,
->> with this patch in, to run without the pd_ignore_unused kernel argument,
->> which seems to be the case for most Qualcomm platforms, at this moment.
-> 
-> I recently encountered a related issue on a Qualcomm platform with a
-> v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
-> highest corner until sync_state"). The issue involves a DT node with a
-> rpmhpd, the DT node is enabled, however the corresponding device driver
-> is not enabled in the kernel. In such a scenario the sync_state callback
-> is never called, because the genpd consumer never probes. As a result
-> the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
-> system suspend, which results in a substantially higher power consumption
-> in S3.
-> 
-> I wonder if genpd (and some other frameworks) needs something like
-> regulator_init_complete(), which turns off unused regulators 30s after
-> system boot. That's conceptually similar to the current
-> genpd_power_off_unused(), but would provide time for modules being loaded.
+On a sc7180-based Chromebook, when I go to
+/sys/devices/system/cpu/cpu0/cpufreq I can see:
 
-I think the overall goal is to move away from ad-hoc implementations 
-like clk_disable_unused/genpd_power_off_unused/regulator_init_complete 
-towards the sync_state.
+  cpuinfo_cur_freq:2995200
+  cpuinfo_max_freq:1804800
+  scaling_available_frequencies:300000 576000 ... 1708800 1804800
+  scaling_cur_freq:1804800
+  scaling_max_freq:1804800
 
-So inherently one either has to provide drivers for all devices in 
-question or disable unused devices in DT.
+As you can see the `cpuinfo_cur_freq` is bogus. It turns out that this
+bogus info started showing up as of commit 205f5e984d30 ("cpufreq:
+qcom-hw: Fix the frequency returned by cpufreq_driver->get()"). That
+commit seems to assume that everyone is on the LMH bandwagon, but
+sc7180 isn't.
 
-> 
->> The v1 is here:
->> https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
->>
->> Changes since v1:
->>   * added a generic sync state callback to be registered by providers in
->>     order to disable the unused domains on their sync state. Also
->>     mentioned this in the commit message.
->>
->>   drivers/base/power/domain.c | 17 ++++++++++++++++-
->>   include/linux/pm_domain.h   |  3 +++
->>   2 files changed, 19 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index 84662d338188..c2a5f77c01f3 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
->>   	mutex_lock(&gpd_list_lock);
->>   
->>   	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
->> -		genpd_queue_power_off_work(genpd);
->> +		if (!dev_has_sync_state(genpd->provider->dev))
->> +			genpd_queue_power_off_work(genpd);
->>   
->>   	mutex_unlock(&gpd_list_lock);
->>   
->> @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
->>   }
->>   late_initcall(genpd_power_off_unused);
->>   
->> +void genpd_power_off_unused_sync_state(struct device *dev)
->> +{
->> +	struct generic_pm_domain *genpd;
->> +
->> +	mutex_lock(&gpd_list_lock);
->> +
->> +	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
->> +		if (genpd->provider->dev == dev)
->> +			genpd_queue_power_off_work(genpd);
->> +
->> +	mutex_unlock(&gpd_list_lock);
->> +}
->> +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
->> +
->>   #ifdef CONFIG_PM_SLEEP
->>   
->>   /**
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index f776fb93eaa0..1fd5aa500c81 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
->>   					 unsigned int index);
->>   struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->>   					   const char *name);
->> +void genpd_power_off_unused_sync_state(struct device *dev);
->>   #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
->>   static inline int of_genpd_add_provider_simple(struct device_node *np,
->>   					struct generic_pm_domain *genpd)
->> @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
->>   {
->>   	return ERR_PTR(-EOPNOTSUPP);
->>   }
->> +
->> +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
->>   #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
->>   
->>   #ifdef CONFIG_PM
->> -- 
->> 2.34.1
->>
+Let's go back to the old code in the case where LMH isn't used.
 
+Fixes: 205f5e984d30 ("cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 9505a812d6a1..957cf6bb8c05 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -143,40 +143,42 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+ 	return lval * xo_rate;
+ }
+ 
+-/* Get the current frequency of the CPU (after throttling) */
+-static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
++/* Get the frequency requested by the cpufreq core for the CPU */
++static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
+ {
+ 	struct qcom_cpufreq_data *data;
++	const struct qcom_cpufreq_soc_data *soc_data;
+ 	struct cpufreq_policy *policy;
++	unsigned int index;
+ 
+ 	policy = cpufreq_cpu_get_raw(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+ 	data = policy->driver_data;
++	soc_data = qcom_cpufreq.soc_data;
+ 
+-	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
++	index = readl_relaxed(data->base + soc_data->reg_perf_state);
++	index = min(index, LUT_MAX_ENTRIES - 1);
++
++	return policy->freq_table[index].frequency;
+ }
+ 
+-/* Get the frequency requested by the cpufreq core for the CPU */
+-static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
++static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
+ {
+ 	struct qcom_cpufreq_data *data;
+-	const struct qcom_cpufreq_soc_data *soc_data;
+ 	struct cpufreq_policy *policy;
+-	unsigned int index;
+ 
+ 	policy = cpufreq_cpu_get_raw(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+ 	data = policy->driver_data;
+-	soc_data = qcom_cpufreq.soc_data;
+ 
+-	index = readl_relaxed(data->base + soc_data->reg_perf_state);
+-	index = min(index, LUT_MAX_ENTRIES - 1);
++	if (data->throttle_irq >= 0)
++		return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
+ 
+-	return policy->freq_table[index].frequency;
++	return qcom_cpufreq_get_freq(cpu);
+ }
+ 
+ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
 -- 
-With best wishes
-Dmitry
+2.39.1.519.gcb327c4b5f-goog
 
