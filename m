@@ -2,179 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824DE687E1C
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CCE687EB6
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 14:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbjBBM7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 07:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S232059AbjBBNcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 08:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbjBBM7C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:59:02 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84108DAF7;
-        Thu,  2 Feb 2023 04:58:59 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l8so1319637wms.3;
-        Thu, 02 Feb 2023 04:58:59 -0800 (PST)
+        with ESMTP id S230070AbjBBNcE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 08:32:04 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA4B7D98
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 05:32:02 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso3724255wms.5
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 05:32:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AQZR41yrW5hifouCNZEVZPyRGNsodM8y6hSfE7iNvTo=;
-        b=fF3JCMiX8mkvTkT5ZNo23U6odnQTH86X2nhVU3HUY3oWQqr86PhE/TlYbaW6P9ri56
-         K6HjUDAm9+Ei0geO39jUw6PgUjFUCYuvPb4hXwBQIKrQFGp3bJzK+lbuHnkA+W/k/WP7
-         pNlcOEanFkGyuoMRgnh83tMu49orcHOcSZJNcIwYLkzOmu9ch71tn4ajXq28Ac39hiA7
-         dl6oSyae5PuEig5OIzwmAOWt8REPFMGol4C5AVjfalkY3Y7hRx5TJMmwa/LCAFdR+RF4
-         0Rb6GMSDijlPu3par9bQf7/xAnDXCTkBia5ee87Ctyp+xhttcaBU4kh7nI/bAqPnWLig
-         wC3A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p8QJM+cDMWDwGnLdY1LGO5+3ANd8IL6QkYM6Adr66uY=;
+        b=E2uSmXmY4dmx866H1u+0MVNnU1IS7WPXRtRsG9r8ILYDjsmv87BaJji0oo/nGEyjMn
+         iTm1/N20f9oNM7YQh/0SE4XzQqjkiS8tg8nSTErWGytM0wxvVKZjSeDZATiyytNni0OF
+         5oR9X0q6f5drJ5jbfbzibc5nCO2zscS87jLlScA/h5H+6C9A4IJwopMo6j1iWz2kQvrT
+         XtGSS/mmQqEE25Kuq/RoKUhxhAlGr3lMSdwNV55AiHrcqaIc6BvKTii3TAxWT87ZbRst
+         QuKIkJVu2Vg1Ez/onQAhfwz8N5L9unF3YFoaMtyyYk+HkPsI/CqtYMOjHT18SMbMuuYf
+         Xf1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQZR41yrW5hifouCNZEVZPyRGNsodM8y6hSfE7iNvTo=;
-        b=QssLH+xZf6I0LMh52xkkTTkMAC5lZ4GYkiv45yRPBBVSO+pMO8+kEqGbAfnR331bM8
-         x0zGo8H7/7u3E3uEpspZjL38qjIyhifKEQKJDgDc+s402uWe/iBRsM9UCzycNIL/lRPN
-         q0P+wGkFk6Y3oaR/uT1Ig8nGNrK0w3FYAU39jHy6IaCf5Qn/zMePjyHuCCxsSGfyJI1Q
-         hn+OzHqk8IhZDoXba3QZ0qUUFG74Nn/+NqCWM5SG1SN8WzxjBi8SuaxPkvz/S2I6XN3K
-         49K+W2gRe73ijY/sVd/SEQD05RbnIFJCz6G2R1vSz3Kxp3q4zQtLpKKXxorAbjvep0C7
-         3q7Q==
-X-Gm-Message-State: AO0yUKU7eWrs62Lixlkfh3LGjaPjtIlVeOJr+cCGxQ8uFpfPxXZMxoP3
-        ZdBkiHeCYnc8B+90KFgGti8=
-X-Google-Smtp-Source: AK7set9pYAcqCnIIQvL4N/6JISt2d16d/ib/NhPMpMkq2zH6UbXwe2ClBsTBzQ24W0EeUPf4C0sHkg==
-X-Received: by 2002:a05:600c:1da2:b0:3dc:4313:fd1e with SMTP id p34-20020a05600c1da200b003dc4313fd1emr5743709wms.34.1675342738188;
-        Thu, 02 Feb 2023 04:58:58 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05600c2e0600b003dcc82ce53fsm4530755wmf.38.2023.02.02.04.58.57
+        bh=p8QJM+cDMWDwGnLdY1LGO5+3ANd8IL6QkYM6Adr66uY=;
+        b=Q+f+E2puUuxi8gF337JU4w0uEiW37Mu0FGyWo0bxB4VSNkVheP1GzzSiv9QAKqxga+
+         sPVSHz52qWWKUPgmFXRfx+UvE1wBogK9trjUvWCIvAjN5CfdTEOZgfFxi6H5+VYwRcLj
+         e4dPDRIG/4t3X/06DX4YQ09pwuXgOk5APpTmF0EfQEyO43428xCRpN3Xr2yzZhr0wSbZ
+         jgPVWcfDD/P97XJWvwiJAvw5J6LSc+PmCcv5FrEjc0Zq/mn9ciZW69jLpVaqzIBkPekm
+         qOevnUdOBhbgubSAR15G90a6QxkTIOjYsp/XvjnR7QQ6kU276u6q85XCiZ+Tf9cd34pk
+         D+Yg==
+X-Gm-Message-State: AO0yUKXoBnNfcIScVLrC0izPYZEcZgaDUOqdWnmdAd/WOT+zAtddghU3
+        6WipTAVIm2HiqHtxkJMIy1C3glXrmGEvcBO/
+X-Google-Smtp-Source: AK7set8wfPW5+yKtg0ak5ruu80kd+dHgySJOEnsHJrFEo1iX7A/CpQPPYwiIzpK5NXzm6KvEaGIykA==
+X-Received: by 2002:a05:600c:2b46:b0:3dc:4aa6:a8a9 with SMTP id e6-20020a05600c2b4600b003dc4aa6a8a9mr5650270wmf.7.1675344721184;
+        Thu, 02 Feb 2023 05:32:01 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id y21-20020a05600c341500b003dc522dd25esm4613487wmp.30.2023.02.02.05.32.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 04:58:57 -0800 (PST)
-Message-ID: <26837308-4837-f252-d162-f8af4859b63e@gmail.com>
-Date:   Thu, 2 Feb 2023 13:58:56 +0100
+        Thu, 02 Feb 2023 05:32:00 -0800 (PST)
+Message-ID: <d69f2627-4669-5e30-6535-0a6bb98c365d@linaro.org>
+Date:   Thu, 2 Feb 2023 14:31:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for
+ quark_dts
 Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230202124104.16504-1-roger.lu@mediatek.com>
- <20230202124104.16504-4-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v5 3/3] soc: mediatek: mtk-svs: add thermal voltage
- compensation if needed
-In-Reply-To: <20230202124104.16504-4-roger.lu@mediatek.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Amit Kucheria <amitk@kernel.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
+ <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
+ <CAJZ5v0iOYH4WR5WoH=jL6VWKhB4CMeZv5V3U0Q_c_qdCJvvvBw@mail.gmail.com>
+ <fedc35c2-1dc9-48af-f03f-fbb8566284fb@linaro.org>
+ <CAJZ5v0h75VH4GQeBStfiAXrFJt1tL=1+nhP9=n_Ok=Txm3e_CA@mail.gmail.com>
+ <e7e9704c-df97-2c27-2955-959d847a8bb8@linaro.org>
+ <CAJZ5v0jHkL6Lit-0Cqg42i-vYRaD+zc4=g2XziCLSUPAeCpEcA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0jHkL6Lit-0Cqg42i-vYRaD+zc4=g2XziCLSUPAeCpEcA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Roger,
-
-I have some doubts, please see below.
-
-On 02/02/2023 13:41, Roger Lu wrote:
-> Some extreme test environment may keep IC temperature very low or very high
-> during system boot stage. For stability concern, we add thermal voltage
-> compenstation if needed no matter svs bank phase is in init02 or mon mode.
+On 02/02/2023 11:32, Rafael J. Wysocki wrote:
+> On Wed, Feb 1, 2023 at 8:27 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 01/02/2023 19:47, Rafael J. Wysocki wrote:
+>>> On Wed, Feb 1, 2023 at 11:42 AM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> On 31/01/2023 20:11, Rafael J. Wysocki wrote:
+>>>>> On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
+>>>>> <daniel.lezcano@linaro.org> wrote:
+>>>>>>
+>>>>>> On 26/01/2023 15:15, Rafael J. Wysocki wrote:
+>>>>>>> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
+>>>>>>> <daniel.lezcano@linaro.org> wrote:
+>>>>>>>>
+>>>>>>>> The thermal framework gives the possibility to register the trip
+>>>>>>>> points with the thermal zone. When that is done, no get_trip_* ops are
+>>>>>>>> needed and they can be removed.
+>>>>>>>>
+>>>>>>>> Convert ops content logic into generic trip points and register them with the
+>>>>>>>> thermal zone.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>>>>>> ---
+>>>>>>
+>>>>>> [ ... ]
+>>>>>>
+>>>>>>>> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
+>>>>>>>> -                       QRK_MAX_DTS_TRIPS,
+>>>>>>>> -                       wr_mask,
+>>>>>>>> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
+>>>>>>>> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
+>>>>>>>> +       if (err)
+>>>>>>>> +               goto err_ret;
+>>>>>>>> +
+>>>>>>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
+>>>>>>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
+>>>>>>>> +
+>>>>>>>> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
+>>>>>>>> +       if (err)
+>>>>>>>> +               goto err_ret;
+>>>>>>>
+>>>>>>> If I'm not mistaken, this won't even try to register the thermal zone
+>>>>>>> if at least one trip cannot be initialized, but previously it was
+>>>>>>> registered in that case, but the trips that failed to respond were
+>>>>>>> disabled.
+>>>>>>>
+>>>>>>> This is a change in behavior that would at least need to be documented
+>>>>>>> in the changelog, but it isn't.
+>>>>>>>
+>>>>>>> I'm not sure if it is safe to make even, however.
+>>>>>>
+>>>>>> Thanks for catching this.
+>>>>>>
+>>>>>> Two solutions:
+>>>>>>
+>>>>>> 1. Set the temperature to THERMAL_TEMP_INVALID and change
+>>>>>> get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is
+>>>>>> THERMAL_TEMP_INVALID
+>>>>>>
+>>>>>> 2. Register only the valid trip points.
+>>>>>>
+>>>>>> What would be the preferable way ?
+>>>>>
+>>>>> I think that the trip points that are registered currently need to
+>>>>> still be registered after the change.
+>>>>>
+>>>>> Does registering a trip point with the temperature set to
+>>>>> THERMAL_TEMP_INVALID cause it to be effectively disabled?
+>>>>
+>>>> The initial behavior before the changes is:
+>>>>
+>>>> The function thermal_zone_device_register() will go through all the trip
+>>>> points and call thermal_zone_get_trip(), resulting in a call to
+>>>> ops->get_trip_temp(). If the call fails, the trip point is tagged as
+>>>> disabled and will stay in this state forever, so discarded in the trip
+>>>> point crossed detection.
+>>>>
+>>>> That does not report an error and the trip point is showed in sysfs but
+>>>> in a inconsistent state as it is actually disabled. Reading the trip
+>>>> point will return an error or not, but it is in any case disabled in the
+>>>> thermal framework. The userspace does not have the information about the
+>>>> trip point being disabled, so showing it up regardless its state is
+>>>> pointless and prone to confusion for the userspace.
+>>>>
+>>>> IMO, it would be more sane to register the trip points which are
+>>>> actually valid, so invalid trip points are not showed up and does
+>>>> prevent extra complexity in the thermal core to handle them.
+>>>
+>>> Except when the trip point can be updated to become a valid one later,
+>>> for example in response to a system configuration change.  That can
+>>> happen to ACPI-provided trip points, for example.
+>>>
+>>> I don't think that this is an issue for this particular driver, but
+>>> the core needs to handle that case anyway.
+>>
+>> Yes, but the point is the core code never handled that case.
 > 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 17 +++++++++--------
->   1 file changed, 9 insertions(+), 8 deletions(-)
+> True.
 > 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index 299f580847bd..e104866d1ab5 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -558,7 +558,7 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
->   	}
->   
->   	/* Get thermal effect */
-> -	if (svsb->phase == SVSB_PHASE_MON) {
-> +	if (!IS_ERR_OR_NULL(svsb->tzd)) {
->   		ret = thermal_zone_get_temp(svsb->tzd, &tzone_temp);
->   		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
->   			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
-> @@ -573,7 +573,8 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
->   			temp_voffset += svsb->tzone_ltemp_voffset;
->   
->   		/* 2-line bank update all opp volts when running mon mode */
-> -		if (svsb->type == SVSB_HIGH || svsb->type == SVSB_LOW) {
-> +		if (svsb->phase == SVSB_PHASE_MON && (svsb->type == SVSB_HIGH ||
-> +						      svsb->type == SVSB_LOW)) {
->   			opp_start = 0;
->   			opp_stop = svsb->opp_count;
->   		}
-> @@ -589,11 +590,6 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
->   			/* do nothing */
->   			goto unlock_mutex;
->   		case SVSB_PHASE_INIT02:
-> -			svsb_volt = max(svsb->volt[i], svsb->vmin);
-> -			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
-> -							     svsb->volt_step,
-> -							     svsb->volt_base);
-> -			break;
->   		case SVSB_PHASE_MON:
->   			svsb_volt = max(svsb->volt[i] + temp_voffset, svsb->vmin);
->   			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
-> @@ -1683,7 +1679,7 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
->   			}
->   		}
->   
-> -		if (svsb->mode_support & SVSB_MODE_MON) {
-> +		if (!IS_ERR_OR_NULL(svsb->tzone_name)) {
->   			svsb->tzd = thermal_zone_get_zone_by_name(svsb->tzone_name);
->   			if (IS_ERR(svsb->tzd)) {
->   				dev_err(svsb->dev, "cannot get \"%s\" thermal zone\n",
-> @@ -2127,6 +2123,7 @@ static struct svs_bank svs_mt8192_banks[] = {
->   		.type			= SVSB_LOW,
->   		.set_freq_pct		= svs_set_bank_freq_pct_v3,
->   		.get_volts		= svs_get_bank_volts_v3,
-> +		.tzone_name		= "gpu1",
->   		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
->   		.mode_support		= SVSB_MODE_INIT02,
->   		.opp_count		= MAX_OPP_ENTRIES,
-> @@ -2144,6 +2141,10 @@ static struct svs_bank svs_mt8192_banks[] = {
->   		.core_sel		= 0x0fff0100,
->   		.int_st			= BIT(0),
->   		.ctl0			= 0x00540003,
-> +		.tzone_htemp		= 85000,
-> +		.tzone_htemp_voffset	= 0,
-> +		.tzone_ltemp		= 25000,
-> +		.tzone_ltemp_voffset	= 7,
+> What I wanted to say, though, is that the core needs to allow
+> registering trip points with THERMAL_TEMP_INVALID without disabling
+> them automatically, so they can be updated and used later.
 
-Which is the exact same tzone then in the other bank. Which brings me to a good 
-point:
-Is the tzone bank specific or the same for all banks?
-At least for mt8192 they are not. I suppose with this change to the code mt8183 
-could take advantage of this on all it's banks as well. In that case, can we 
-start to restructure the struct svs_bank to only have the tzone values declared 
-once?
+Ok, so it is fine with the current code AFAICT.
 
-Background is that I'm very unhappy with the svs_bank data strucutre. It seems 
-like a "throw it all in here". It should be structured for functional parts of 
-the banks. Maybe using structs, maybe unions where possible. In any case having 
-a flat struct of over 50 members isn't really what we want.
+The handle_thermal_trip() functions are discarding trips with 
+temperature below zero for hot and critical. The trip crossing detection 
+won't happen with these values.
 
-Regards,
-Matthias
+However PASSIVE and ACTIVE trip points are going through the throttling 
+governor callback with a -273000 trip temperature. I suppose those very 
+specific trip points initialized to THERMAL_TEMP_INVALID are not 
+associated with a cooling device, right ?
 
->   	},
->   	{
->   		.sw_id			= SVSB_GPU,
+
+>> If the trip point fails when registering the thermal zone (and this is
+>> not related to our changes), the trip point is added to the disabled
+>> trips bitmap and then whatever the action to validate the trip point, it
+>> remains disabled for the thermal framework. There is no action to enable
+>> it (except I missed something).
+>>
+>>> Moreover, there is the case when trip points only become relevant when
+>>> their temperatures are set via ops->set_trip_temp() and they are
+>>> THERMAL_TEMP_INVALID initially, which needs to be handled by the core
+>>> either.
+>>
+>> Ok, then I guess the simplest change is to assign THERMAL_TEMP_INVALID
+>> in this driver, if get_trip_temp fails at the initialization time.
+>>
+>> Later we can add a thermal_zone_device_update_trips() with the needed
+>> locking and actions related to the update.
+> 
+> Well, there is thermal_zone_device_update() and one of the events it
+> is supposed to handle is THERMAL_TRIP_CHANGED, so I'm not sure how the
+> new interface would differ from it?
+
+Yes, we may have to investigate if the event should trigger the update 
+or the update should trigger the event.
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
