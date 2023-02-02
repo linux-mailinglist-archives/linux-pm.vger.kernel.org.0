@@ -2,89 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BF468804E
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 15:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28502688052
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 15:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjBBOn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 09:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S232455AbjBBOqK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 09:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBBOn4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 09:43:56 -0500
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1728626E;
-        Thu,  2 Feb 2023 06:43:55 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id be12so2229563edb.4;
-        Thu, 02 Feb 2023 06:43:55 -0800 (PST)
+        with ESMTP id S229662AbjBBOqJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 09:46:09 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE33F8660F
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 06:46:04 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b5so2026067plz.5
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 06:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gvGare09I4V4QCI5X/npMy6Vy+zrhiXQfO2Ggf/2QIQ=;
+        b=OJSVdyEU67KR6Z4IUNjb9xxd9Rez/Hpvl26ubVkHLZQLBODwGJ2BIPov3hbIsLoJAe
+         zVLxY1V/2UCALWWggXLSAW0hQmEYbULgWNVKogiS5i/MNdqwBO/VjiD+UTVR2hopi71o
+         YCnPM9GFi/zoHnXfqDZBIxFfqfsIFc07iJTEcHHeicIMh5Qg5Q5uR0jJRPrcz8DoXBay
+         scV+MVpnh4EkHMBqUqZfIkaUqPdmFFZRynjaWzrqk/w12wHLoRqYawa2OLsqmrjOED0R
+         r3lVgdzDeqKbcL9MFX9fGeo0X+HilreYP2Rk6oZNoNSK2OJUxMpHObsopjzXAR5/41Sq
+         85gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h0Uvs+EgprBTmQ0jVYkQK7pz/LZJDEiugwmDCmQcPKg=;
-        b=d3+SjSDk5udxvdirVlfJh4PTiNubbg90sXvQFTo5R6QaBzmaH00x49aVzqjSwuKSuU
-         4V6+5Ync+362RmNXCQ6TXPuE0nL5FTUybjFnSzWjXSc9nCJXboM1Vc1ZmOog6/VhWjvD
-         nfs7nJ5muSlPPq2wk/GgHz2IMR7zopBgacV8eBwk4FAwRBvcnKTv9L2N7pWqLGZr3uzv
-         4To70VgaHkLJyZ7Zh4YXreDF54hyR7FZZFYBhgO5LkqvguAmZUdJ9ff+mXbrC9ZgYVMh
-         CzWhCdiFyGsLb1L1hwvqyCcEk3nMeXGLqGhh6tuM7LBDTL4mGQLU88xtg/retk+34896
-         NKEA==
-X-Gm-Message-State: AO0yUKUc8LXWn/pMkCKp/6yxwtJi4hoxzVLttkkIF4yIr/CRVW4MEd1M
-        SeiBupKtCaafyi6m097mvWn5hFC5HAii5XpeH5dUFYgG
-X-Google-Smtp-Source: AK7set8zXcku0FdlawfFg+hMPW0Pgx+DcdQPYQmJrlkn5C8kI3sGrRL/zulzapQslpt2wsc31bgjDky7O3Pe43xtOrs=
-X-Received: by 2002:a05:6402:40ce:b0:490:47c3:3d71 with SMTP id
- z14-20020a05640240ce00b0049047c33d71mr2046481edb.31.1675349034088; Thu, 02
- Feb 2023 06:43:54 -0800 (PST)
+        bh=gvGare09I4V4QCI5X/npMy6Vy+zrhiXQfO2Ggf/2QIQ=;
+        b=TZRvf4H1HYdcHMClA8+F3LcQbYbAqrRhjdG66HVgR8KcSJhCwd8R9ii2L10ciV1F/I
+         G/yGm4pGOOcM1QbzE4slunQxu7uiSRGhZeLS/z36htZOTMbm/+M8+aRQfxLOmOXDXDTC
+         J3GGV90ZnWsyU70pDna1sbY3NcRRjQOySrldSckuxAXx5oEYK8c+0jSBHnoR03NPmLlN
+         XsNEUdVLZ37kmY1owzH7/tvw1IXQfUHhjuKWL/96rOTl4XWUYS6QI8olF3aIEJ31cGPS
+         e5XyoCKYSFnInCFeft5hBdwRr7l4zFrVI9Sb7ki6KDdP9zMN4LSC8HpBW7MmGFYW8Uv1
+         MKVg==
+X-Gm-Message-State: AO0yUKVumW42QYqagUW29BXpEMHqz7gqW8zIZjz3/cmMur0XrQ87mFMZ
+        K0lfYyrAFAwiob1ICVoX9p7X2uIjoJX5x0z3I+OS3g==
+X-Google-Smtp-Source: AK7set+nZEC4dDNojajz4bpX0JArLbWo/ibWLgz3iwsLe/PfjICfstwFRNHUq8px4ZzSazS8Ca+zatCtuHtim1ieg+I=
+X-Received: by 2002:a17:90a:f98f:b0:230:5394:6eef with SMTP id
+ cq15-20020a17090af98f00b0023053946eefmr531542pjb.109.1675349164472; Thu, 02
+ Feb 2023 06:46:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
- <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org> <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
- <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
-In-Reply-To: <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 15:43:42 +0100
-Message-ID: <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
+References: <20230202141545.2295679-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230202141545.2295679-1-gregkh@linuxfoundation.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 2 Feb 2023 15:45:28 +0100
+Message-ID: <CAPDyKFq_yAJOSZO7WsPZKV_aGcFAs0kWqpNN-_=ywa8n=8D=-g@mail.gmail.com>
+Subject: Re: [PATCH] drivers: base: power: fix memory leak with using debugfs_lookup()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     rafael@kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:36 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Thu, 2 Feb 2023 at 15:15, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at
+> once.
 >
-> Hi Rafael,
->
-> On 31/01/2023 20:17, Rafael J. Wysocki wrote:
->
-> [ ... ]
->
-> >>> Why should temp be overwritten here?
-> >>
-> >> You are correct. This is wrong.
-> >>
-> >> I think we should call get_trip_temp() before calling update_trip_temp()
-> >> instead of passing a zero temperature parameter
-> >
-> > update_trip_temp() is sort of a misnomer, because it is used for
-> > initializing a trip point for example in
-> > intel_soc_dts_iosf_add_read_only_critical_trip() and in this
-> > particular case get_trip_temp() need not be called before it.
-> >
-> > This driver seems to be in need of a cleanup.
->
-> Will you take care of this cleanup ?
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-I think I can do that, but I'm not sure how much time I will be able
-to allocate for that.  Let me try though.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/base/power/domain.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 967bcf9d415e..6097644ebdc5 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -220,13 +220,10 @@ static void genpd_debug_add(struct generic_pm_domain *genpd);
+>
+>  static void genpd_debug_remove(struct generic_pm_domain *genpd)
+>  {
+> -       struct dentry *d;
+> -
+>         if (!genpd_debugfs_dir)
+>                 return;
+>
+> -       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+> -       debugfs_remove(d);
+> +       debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
+>  }
+>
+>  static void genpd_update_accounting(struct generic_pm_domain *genpd)
+> --
+> 2.39.1
+>
