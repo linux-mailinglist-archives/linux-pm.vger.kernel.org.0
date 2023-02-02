@@ -2,106 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4693687C8A
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 12:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8BD687D0C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjBBLoW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 06:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S229881AbjBBMRK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 07:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjBBLoV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 06:44:21 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C197923D
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 03:44:20 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m7so1429855wru.8
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 03:44:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nCHejXhzVWqFTVZyLcdF4swd6AONbEaaLxACeSyN1HY=;
-        b=uvFhN3rLZVF1afPjrHRSt8+dkrUJgBkkEqLZHWcSDHskFxqWoSRc17t8lWVcsj5TKI
-         bCrJbXhS4C91YlI91ApwQR4mZbInnmc3/mEiwLMTbBS5dSibfFxRD0L8mE8ppELFhvou
-         y9fWBjV9TAlqu7fDSzKMY9KLF8MZvDkBD+Jt/K7fFay54RXA63C8VFH5pewPLEjvlZCW
-         lzQy5VGprXMEjMCvC3LTcfVkwyTO3O+gd8jRsLSHTo4IUdfzI1l1V5NAbfiS3G8QIMaj
-         MVa8D+YEiL10Wd3lFIFlTzPmQtugWuNGJCYr1cX7ihnMgDWdpJg+WWmydESSjnQIsFgm
-         TTCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nCHejXhzVWqFTVZyLcdF4swd6AONbEaaLxACeSyN1HY=;
-        b=fY9s4VO2HkS2FI26jtBvVVemnOzozrfuTxr21j3DMMx1DFNp36K0ZB3QaLhuMGWB7A
-         WV55lPWgrh859BxbNXFc4lT5l9Me/jnsvgsIyqKrvBCa78AWJ194ZIZ55+6GADBdQQz7
-         pgfYA8QHxQ2R1pxzMtsNFt1r/TkRwxkdSVWlU7pxbixNtiTLGZyc+vexGUsxq1hAZqlJ
-         xcIk/tahPBdz8Fo+FA/bNlR9c36Yz2f8zF39GWfzX9BJ0o2gx3jCFn6EbmdkwhcvLqF4
-         dLChjwIC9e0qwA58rXtTWP7gL3TNZZ/l4GdScH+FuyDxSVJGVSew/6LmYoaNVh3yh4mN
-         eVNQ==
-X-Gm-Message-State: AO0yUKXDBQnjbE7Pmdsi8YB1/X7qBzvkm/DT2D3WvrGSWzjMcHRAU4B6
-        eBe5wl/i9OTYeujUlADUgYnyXSPXnvoL/2YS
-X-Google-Smtp-Source: AK7set8UU7ws8XjaNdTE+B4sJRlBCk+opRei+C9yXbDCk4VrtIC1lx5AfEbB+AMDV9VVNKM5XTqiUg==
-X-Received: by 2002:a5d:598a:0:b0:2bf:ae16:98f4 with SMTP id n10-20020a5d598a000000b002bfae1698f4mr1784314wri.30.1675338258757;
-        Thu, 02 Feb 2023 03:44:18 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z12-20020a5d4d0c000000b002bbb2d43f65sm19688663wrt.14.2023.02.02.03.44.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 03:44:18 -0800 (PST)
-Message-ID: <a30c16bc-041d-31c2-dfda-f16b0fa51eca@linaro.org>
-Date:   Thu, 2 Feb 2023 12:44:17 +0100
+        with ESMTP id S229848AbjBBMRJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:17:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B476FD38;
+        Thu,  2 Feb 2023 04:17:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DF461AF9;
+        Thu,  2 Feb 2023 12:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95437C433EF;
+        Thu,  2 Feb 2023 12:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675340227;
+        bh=kXuVYOYprEDAERc9ptWyMD0dUfVOl7wsMQbwhSMi7eU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OEfzBbqOC8Hqklq9IWsxlHAenMXr143GgEE5GC9FLVByvD6w1OGp/BLIRQJPl2zKP
+         RggMPeisymcQZCUneIu57XG3OcHTXx2kc2kK5Ui9PJENo8x0zJxUhniILVKlK1eYKa
+         rZ1nov43rLlcQLG6F5iPV76qXesHS70hea+0Wv2i6C1gDLfDtshPHM2StvWUZzRgSi
+         WTjuJ7xer7xYwz6L954tuYZCRhrXZ0VuZCX+FYEeWHUQTDqXdvbJW7BK166IrAqeUQ
+         FRzV48SorFgR73bQnAmPJE1wUylAP6HohDjXIV+Oqqk25lSkzQCJyrA909aw9CKgSw
+         PW4i3J7MnChhQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pNYWw-0001UF-Bx; Thu, 02 Feb 2023 13:17:31 +0100
+Date:   Thu, 2 Feb 2023 13:17:30 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 15/23] interconnect: exynos: fix registration race
+Message-ID: <Y9up2gKUpZXhI+J8@hovoldconsulting.com>
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-16-johan+linaro@kernel.org>
+ <e706bb89-bb79-33e3-f319-268ec4695015@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] thermal: ACPI: Make helpers retrieve temperature only
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <5641279.DvuYhMxLoT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5641279.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e706bb89-bb79-33e3-f319-268ec4695015@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/01/2023 19:17, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Feb 02, 2023 at 12:04:49PM +0100, Krzysztof Kozlowski wrote:
+> On 01/02/2023 11:15, Johan Hovold wrote:
+
+> > @@ -98,12 +98,13 @@ static int exynos_generic_icc_remove(struct platform_device *pdev)
+> >  	struct exynos_icc_priv *priv = platform_get_drvdata(pdev);
+> >  	struct icc_node *parent_node, *node = priv->node;
+> >  
+> > +	icc_provider_deregister(&priv->provider);
+> > +
+> >  	parent_node = exynos_icc_get_parent(priv->dev->parent->of_node);
+> >  	if (parent_node && !IS_ERR(parent_node))
+> >  		icc_link_destroy(node, parent_node);
+> >  
+> >  	icc_nodes_remove(&priv->provider);
+> > -	icc_provider_del(&priv->provider);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -132,15 +133,11 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
+> >  	provider->inter_set = true;
+> >  	provider->data = priv;
+> >  
+> > -	ret = icc_provider_add(provider);
+> > -	if (ret < 0)
+> > -		return ret;
+> > +	icc_provider_init(provider);
+> >  
+> >  	icc_node = icc_node_create(pdev->id);
+> > -	if (IS_ERR(icc_node)) {
+> > -		ret = PTR_ERR(icc_node);
+> > -		goto err_prov_del;
+> > -	}
+> > +	if (IS_ERR(icc_node))
+> > +		return PTR_ERR(icc_node);
+> >  
+> >  	priv->node = icc_node;
+> >  	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
+> > @@ -171,14 +168,17 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
+> >  			goto err_pmqos_del;
+> >  	}
+> >  
+> > +	ret = icc_provider_register(provider);
+> > +	if (ret < 0)
+> > +		goto err_pmqos_del;
 > 
-> It is slightly better to make the ACPI thermal helper functions retrieve
-> the trip point temperature only instead of doing the full trip point
-> initialization, because they are also used for updating some already
-> registered trip points, in which case initializing a new trip just
-> in order to update the temperature of an existing one is somewhat
-> wasteful.
-> 
-> Modify the ACPI thermal helpers accordingly and update their users.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+> If I understand correctly there is no need for icc_link_destroy() in
+> error path here, right? Even in case of probe retry (defer or whatever
+> reason) - the link will be removed with icc_nodes_remove()?
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Correct, it is no longer needed after the first patch in this series.
 
+The exynos driver was the only driver that bothered to remove links
+explicitly, all the others expected the interconnect framework to do so
+when destroying nodes even if that was not case until now.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Johan
