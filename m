@@ -2,201 +2,272 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7257E687DD4
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 378C3687DF8
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 13:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjBBMr5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 07:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S232283AbjBBMz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 07:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbjBBMrz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:47:55 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262548B7FD;
-        Thu,  2 Feb 2023 04:47:21 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1286828wms.4;
-        Thu, 02 Feb 2023 04:47:21 -0800 (PST)
+        with ESMTP id S231661AbjBBMzV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 07:55:21 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CCE457ED
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 04:55:09 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id br9so2836914lfb.4
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 04:55:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HaQNzpUAjABy/UuXZLlOvvbqix9SotqgoJqkxFf1bDI=;
-        b=Dofe0UtJYuhFHBDhvyTjPY051/tbsKRICVxIYfMj5JzEAyp2XhCRekp3ml+P4V+LS9
-         Z+LnmX3TS4gVgdva0YjNRrc46M5xVZGMEjqsy0kFVia2NTHodf4IpZfgn45bITRnCSSQ
-         OoLQtyJr74R3iS7eaJNIbYaIn9jgZVaog4j7J4yWGR6PuuYbA92juuLjRQNQlFDqqd3V
-         xHyjLlVs1lfaxINC1fy5PtatZqNQdCwCqes92EQ6v+nLOADICuBXGM2JLuglOUbdB+oD
-         OmDkJX0nOY/VOH9Xory0LJQiyYbRxqmoS5LYcqfFQGV9U9gdxD0oXFvo1OhkT6k/JDFB
-         nwcQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p0OggBaEVM084sMCW8HBWOrUa7UEjlo8LtE+1sylal4=;
+        b=wMflCs4LRrR6rx0v5FUohA45XpEpxNpUO82rPsPLRH/jXDhlIwsosRKYSnnLSjfisK
+         fI/DEgEyzseoBqcbf32s22RhlWE8jJAnWYL7dAXc7BvCrm3PouFpS1sS9TQsHE23wpBI
+         BFrG3dVV0Iyo2S1xUHRj6rrjfIVSNHfiQhvYHJURC102lItPydI+18WNfObcViw6zGIr
+         dCcl0osS0YaevOaR/UsGDBbfP5ZWN1ClX3oS7raXmTATGdHvomOR9P+LktGumcknhvvd
+         H33l5FmbJWokijfLdjLWu/B2hXZ3fneak/KwX0OmqgM0OC736TEucbKOESx6S326gHXe
+         6KGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaQNzpUAjABy/UuXZLlOvvbqix9SotqgoJqkxFf1bDI=;
-        b=JFIp225TvSVPWo1M3nTYvg9Cie07nrlBs81INySMwchPabU4/8GBR6nhzvS6RvC6Op
-         hgcf0bD0pZqSDcqdjnFxlc/WOyW5HXjqxXssBRoEcub6zfgsyAm7dS1RKLN+kAvbV7AF
-         PdCSGVxgOa7jOSG5MKS74lpbbYJbDKinZ0P25ZY7TwkmHkdD2X+IXHPqyZvGKPHGXgtU
-         msk4viSwnnycDvk0sr13e6aEINJOk5N5ChKMkSG7guPQk6K2w0D6YqMtkU/7BSgU5AYC
-         h+sMpk8vUT2w3uONgLZNCAhGSEjNTIGe8n9IMgl3p2uwxDV/q0/MMQZ414F7vopzpn6u
-         mqSw==
-X-Gm-Message-State: AO0yUKXTz7qahnkZJ37RT1C6giMeByTQfSD/oIqG62GYqmqMj5Yk7ib/
-        0TfkhuQ4AfFCNqL9dOCRR3w=
-X-Google-Smtp-Source: AK7set+x2AmWIDXdhFrfTy/bx8g3UJH2OP9HnUmuyCSGvsnxLo89d5Ks7yWreZh1w0d4SEIBf2+OWw==
-X-Received: by 2002:a05:600c:3513:b0:3df:b5ae:5289 with SMTP id h19-20020a05600c351300b003dfb5ae5289mr2730154wmq.8.1675341990082;
-        Thu, 02 Feb 2023 04:46:30 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003dafbd859a6sm5105962wmq.43.2023.02.02.04.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 04:46:29 -0800 (PST)
-Message-ID: <2e616aea-0a38-b33e-20d5-0c6254cdd616@gmail.com>
-Date:   Thu, 2 Feb 2023 13:46:28 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p0OggBaEVM084sMCW8HBWOrUa7UEjlo8LtE+1sylal4=;
+        b=uPdBbSK91gj+E6fKfR3LwZNbYzmVkp6JnxvF224E52YHdpzZNxfIvnTs9UodrW4Kd7
+         ZJpnS9TwiBsRiCe4kCzYZpZelu4B1f3smAw/kCG2UotytvfQj7ZZxA0nCz9n1EmPC0qs
+         dLcHxLjJvXF6eCjeMyjvO6tMY5/JgAchv+Ir14Pdpe0QKWRgjt9V7U2qI67SeCdSEaxk
+         nAIUAZq8HByq6s/BKoUrvX/bDZkG3vK75MQv17y5tEsLDlku4sB6zaZz4QjgyHnqNHUd
+         +bWFbkgqDEpcWhpIymkj3M1Jvb4qBIbCiXcKYSF8zQvsOIUM7BkEGHQWZtF5uBC8aWXi
+         eHZw==
+X-Gm-Message-State: AO0yUKXcOtbWSkEtV+mWmsOK/CiyXjDxMXvD5ketvG9zvwlFyq5xPou3
+        MtcVw9iBtIbLAWKrNWiepUYXi8X7rv7LIFKosxK9PXDvgJx/RA==
+X-Google-Smtp-Source: AK7set/mWmeaWd2wkMNBFXbA51O652xW98OUEb1CzsuGrHbl8sBzDY3nLrJoIabdvmMj4YTWwXKt7B5+qymwtAEVesA=
+X-Received: by 2002:a05:6512:3d28:b0:4d8:8ad1:a05c with SMTP id
+ d40-20020a0565123d2800b004d88ad1a05cmr836274lfv.140.1675342508144; Thu, 02
+ Feb 2023 04:55:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 2/3] soc: mediatek: mtk-svs: use common function to
- disable restore voltages
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230202124104.16504-1-roger.lu@mediatek.com>
- <20230202124104.16504-3-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230202124104.16504-3-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230201080227.473547-1-jun.nie@linaro.org> <20230201080227.473547-2-jun.nie@linaro.org>
+ <515f4e9e-2804-e03a-26f5-f2d3ac331109@linaro.org> <71ba0d05-6183-95ef-9e45-cc3dd512475f@linaro.org>
+ <CAA8EJpqyqC5D+O=KJnuZnWN4BwBOKcquN11nJfEp2WMSmJobBg@mail.gmail.com>
+In-Reply-To: <CAA8EJpqyqC5D+O=KJnuZnWN4BwBOKcquN11nJfEp2WMSmJobBg@mail.gmail.com>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Thu, 2 Feb 2023 20:55:04 +0800
+Message-ID: <CABymUCMJdRXG3AcLeS18JFuYmCv1kw=rJNkCv8sL7AjPD4ZR+A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM / devfreq: qcom: Introduce CCI devfreq driver
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org> =E4=BA=8E2023=E5=B9=B42=E6=
+=9C=881=E6=97=A5=E5=91=A8=E4=B8=89 21:41=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, 1 Feb 2023 at 13:46, Bryan O'Donoghue
+> <bryan.odonoghue@linaro.org> wrote:
+> >
+> > On 01/02/2023 11:32, Dmitry Baryshkov wrote:
+> > > On 01/02/2023 10:02, Jun Nie wrote:
+> > >> Cache Coherent Interconnect (CCI) is used by some Qualcomm SoCs. Thi=
+s
+> > >> driver is introduced so that its freqency can be adjusted. And regul=
+ator
+> > >> associated with opp table can be also adjusted accordingly which is
+> > >> shared with cpu cluster.
+> > >>
+> > >> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> > >> ---
+> > >>   drivers/devfreq/Kconfig    |   9 +++
+> > >>   drivers/devfreq/Makefile   |   1 +
+> > >>   drivers/devfreq/qcom-cci.c | 162 +++++++++++++++++++++++++++++++++=
+++++
+> > >>   3 files changed, 172 insertions(+)
+> > >>   create mode 100644 drivers/devfreq/qcom-cci.c
+> > >
+> > > Could you please describe in some additional details what are you try=
+ing
+> > > to achieve? Should the CCI frequency be scaled manually or does it
+> > > follow the cluster frequency? Do clusters vote on the CCI frequency?
+> > >
+> > > I'm inclined to ask if it is possible to shift this to the cpufreq OP=
+P
+> > > tables?
+> > >
+> >
+> > Might not be so easy to just append CCI opps to the cluster frequency o=
+pps
+> >
+> >                  cci_cache: qcom,cci {
+> >                          compatible =3D "qcom,msm8939-cci";
+> >                          clock-names =3D "devfreq_clk";
+> >                          clocks =3D <&apcs2>;
+> >                          governor =3D "cpufreq";
+> >                          operating-points-v2 =3D <&cci_opp_table>;
+> >                          power-domains =3D <&cpr>;
+> >                          power-domain-names =3D "cpr";
+> >                          nvmem-cells =3D <&cpr_efuse_speedbin_pvs>;
+> >                          nvmem-cell-names =3D "cpr_efuse_speedbin_pvs";
+> >                  };
+> >
+> >                  devfreq-cpufreq {
+> >                          cci-cpufreq {
+> >                                  target-dev =3D <&cci_cache>;
+> >                                  cpu-to-dev-map-0 =3D
+> >                                          <  200000  200000000 >,
+> >                                          <  345600  200000000 >,
+> >                                          <  400000  200000000 >,
+> >                                          <  533330  297600000 >,
+> >                                          <  800000  297600000 >,
+> >                                          <  960000  297600000 >,
+> >                                          < 1113600  297000000 >,
+> >                                          < 1344000  595200000 >,
+> >                                          < 1459200  595200000 >,
+> >                                          < 1497600  595200000 >,
+> >                                          < 1651200  595200000 >;
+> >                                  cpu-to-dev-map-4 =3D
+> >                                          <  200000 200000000 >,
+> >                                          <  249600 200000000 >,
+> >                                          <  499200 297600000 >,
+> >                                          <  800000 297600000 >,
+> >                                          <  998400 595200000 >,
+> >                                          < 1113600 595200000 >;
+>
+> These should map to existing opp entries.
+>
+> I ended up doing the interconnect driver that maps a clock to the
+> interconnect. Then I can use it in the cpu opp tables.
+>
+> >                          };
+> >                  };
+> >
+> >          cci_opp_table: cci-opp-table {
+> >                  compatible =3D "operating-points-v2";
+> >
+> >                  opp-200000000 {
+> >                          opp-hz =3D /bits/ 64 <200000000>;
+> >                          opp-supported-hw =3D <0x3f>;
+> >                          required-opps =3D <&cpr_opp3>;
+>
+> And these should probably map to max(cpu's CPR opp, CCI's CPR opp).
 
+The plan is opp framework to handle it when CPU opp requires both cpr
+power domain
+opp and CCI opp. While CCI opp will also requires specific cpr opp. Because=
+ CPU
+have a opp match table per pvs/speed, while CCI has another match
+table, it seems
+ impossible to write the cpr opp requirements in the code statically.
 
-On 02/02/2023 13:41, Roger Lu wrote:
-> The timing of disabling SVS bank and restore default voltage is more
-> than one place. Therefore, add a common function to use for removing
-> the superfluous codes.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Queued for the next merge window.
-
-Thanks!
-
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 54 ++++++++++++++--------------------
->   1 file changed, 22 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index c9899f5df60a..299f580847bd 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -624,6 +624,25 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
->   	return ret;
->   }
->   
-> +static void svs_bank_disable_and_restore_default_volts(struct svs_platform *svsp,
-> +						       struct svs_bank *svsb)
-> +{
-> +	unsigned long flags;
-> +
-> +	if (svsb->mode_support == SVSB_MODE_ALL_DISABLE)
-> +		return;
-> +
-> +	spin_lock_irqsave(&svs_lock, flags);
-> +	svsp->pbank = svsb;
-> +	svs_switch_bank(svsp);
-> +	svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> +	svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> +	spin_unlock_irqrestore(&svs_lock, flags);
-> +
-> +	svsb->phase = SVSB_PHASE_ERROR;
-> +	svs_adjust_pm_opp_volts(svsb);
-> +}
-> +
->   #ifdef CONFIG_DEBUG_FS
->   static int svs_dump_debug_show(struct seq_file *m, void *p)
->   {
-> @@ -700,7 +719,6 @@ static ssize_t svs_enable_debug_write(struct file *filp,
->   {
->   	struct svs_bank *svsb = file_inode(filp)->i_private;
->   	struct svs_platform *svsp = dev_get_drvdata(svsb->dev);
-> -	unsigned long flags;
->   	int enabled, ret;
->   	char *buf = NULL;
->   
-> @@ -716,16 +734,8 @@ static ssize_t svs_enable_debug_write(struct file *filp,
->   		return ret;
->   
->   	if (!enabled) {
-> -		spin_lock_irqsave(&svs_lock, flags);
-> -		svsp->pbank = svsb;
-> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
->   		svsb->mode_support = SVSB_MODE_ALL_DISABLE;
-> -		svs_switch_bank(svsp);
-> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> -		spin_unlock_irqrestore(&svs_lock, flags);
-> -
-> -		svsb->phase = SVSB_PHASE_ERROR;
-> -		svs_adjust_pm_opp_volts(svsb);
->   	}
->   
->   	kfree(buf);
-> @@ -1508,16 +1518,7 @@ static int svs_init02(struct svs_platform *svsp)
->   out_of_init02:
->   	for (idx = 0; idx < svsp->bank_max; idx++) {
->   		svsb = &svsp->banks[idx];
-> -
-> -		spin_lock_irqsave(&svs_lock, flags);
-> -		svsp->pbank = svsb;
-> -		svs_switch_bank(svsp);
-> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> -		spin_unlock_irqrestore(&svs_lock, flags);
-> -
-> -		svsb->phase = SVSB_PHASE_ERROR;
-> -		svs_adjust_pm_opp_volts(svsb);
-> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
->   	}
->   
->   	return ret;
-> @@ -1563,23 +1564,12 @@ static int svs_suspend(struct device *dev)
->   {
->   	struct svs_platform *svsp = dev_get_drvdata(dev);
->   	struct svs_bank *svsb;
-> -	unsigned long flags;
->   	int ret;
->   	u32 idx;
->   
->   	for (idx = 0; idx < svsp->bank_max; idx++) {
->   		svsb = &svsp->banks[idx];
-> -
-> -		/* This might wait for svs_isr() process */
-> -		spin_lock_irqsave(&svs_lock, flags);
-> -		svsp->pbank = svsb;
-> -		svs_switch_bank(svsp);
-> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> -		spin_unlock_irqrestore(&svs_lock, flags);
-> -
-> -		svsb->phase = SVSB_PHASE_ERROR;
-> -		svs_adjust_pm_opp_volts(svsb);
-> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
->   	}
->   
->   	ret = reset_control_assert(svsp->rst);
+>
+> >                  };
+> >
+> >                  opp-297600000 {
+> >                          opp-hz =3D /bits/ 64 <297600000>;
+> >                          opp-supported-hw =3D <0x3f>;
+> >                          required-opps =3D <&cpr_opp12>;
+> >                  };
+> >
+> >                  opp-400000000-cpr14 {
+> >                          opp-hz =3D /bits/ 64 <400000000>;
+> >                          opp-supported-hw =3D <0x1>;
+> >                          required-opps =3D <&cpr_opp14>;
+> >                  };
+> >
+> >                  opp-400000000-cpr15 {
+> >                          opp-hz =3D /bits/ 64 <400000000>;
+> >                          opp-supported-hw =3D <0x3e>;
+> >                          required-opps =3D <&cpr_opp15>;
+> >                  };
+> >
+> >                  opp-595200000 {
+> >                          opp-hz =3D /bits/ 64 <595200000>;
+> >                          opp-supported-hw =3D <0x3f>;
+> >                          required-opps =3D <&cpr_opp17>;
+> >                  };
+> >          };
+> >
+> >
+> >          cpr_opp_table: cpr-opp-table {
+> >                  compatible =3D "operating-points-v2-qcom-level";
+> >
+> >                  cpr_opp1: opp1 {
+> >                          opp-hz =3D /bits/ 64 <200000000>;
+> >                          opp-level =3D <1>;
+> >                          qcom,opp-fuse-level =3D <1>;
+> >                  };
+> >                  cpr_opp2: opp2 {
+> >                          opp-hz =3D /bits/ 64 <345600000>;
+> >                          opp-level =3D <2>;
+> >                          qcom,opp-fuse-level =3D <1>;
+> >                  };
+> >                  cpr_opp3: opp3 {
+> >                          opp-hz =3D /bits/ 64 <400000000>;
+> >                          opp-level =3D <3>;
+> >                          qcom,opp-fuse-level =3D <1>;
+> >                  };
+> >                  cpr_opp4: opp4 {
+> >                          opp-hz =3D /bits/ 64 <422400000>;
+> >                          opp-level =3D <4>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp5: opp5 {
+> >                          opp-hz =3D /bits/ 64 <499200000>;
+> >                          opp-level =3D <5>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp6: opp6 {
+> >                          opp-hz =3D /bits/ 64 <533330000>;
+> >                          opp-level =3D <6>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp7: opp7 {
+> >                          opp-hz =3D /bits/ 64 <652800000>;
+> >                          opp-level =3D <7>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp8: opp8 {
+> >                          opp-hz =3D /bits/ 64 <729600000>;
+> >                          opp-level =3D <8>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp9: opp9 {
+> >                          opp-hz =3D /bits/ 64 <800000000>;
+> >                          opp-level =3D <9>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp10: opp10 {
+> >                          opp-hz =3D /bits/ 64 <806400000>;
+> >                          opp-level =3D <10>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp11: opp11 {
+> >                          opp-hz =3D /bits/ 64 <883200000>;
+> >                          opp-level =3D <11>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >                  cpr_opp12: opp12 {
+> >                          opp-hz =3D /bits/ 64 <960000000>;
+> >                          opp-level =3D <12>;
+> >                          qcom,opp-fuse-level =3D <2>;
+> >                  };
+> >          };
+> >
+> > ---
+> > bod
+>
+>
+>
+> --
+> With best wishes
+> Dmitry
