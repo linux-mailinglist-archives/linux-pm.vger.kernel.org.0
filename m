@@ -2,206 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2446884D9
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 17:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F2F6884E0
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Feb 2023 17:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjBBQxz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 11:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S231463AbjBBQze (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 11:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjBBQxt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 11:53:49 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805276F735;
-        Thu,  2 Feb 2023 08:53:47 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id ml19so7905053ejb.0;
-        Thu, 02 Feb 2023 08:53:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zkAFVysRmrk4KIVV03lhSp9/r+uaaj15Nxb8wMUj+w4=;
-        b=WkAEC5bC1TI6u0lXl4/53xohtSseufXMwBi+oCgcyEHq0q07a6vrE3gSbcinC+0/Xo
-         9F39hTlT6f7w8i5oOvdb88MkmgqvlTFNfvq9YAVdw54ons/UmxVIj/zZluU2pA3G/HTi
-         uPtZbbeog+riEs4c35lxSIPtT1duzL1DXZGMGzyD/VzxWnltFEZCLC55kSsAsaEmXNdj
-         PWnccUZnCWYmegLVwklNhOOA7WG2uAlnGX+NKSCJcVXGT5PRV4CbYc4lswO/2sXEiCPU
-         kfFs2kpaMkgphFpqgN4UbcSvgaKLFAysUxFvUv/97D9wkRuWZbpat0sSoSrlcP0qIe9k
-         CPUQ==
-X-Gm-Message-State: AO0yUKVyOZelSmkMa8PSKFui0LMrHEQ0/EIpwgl/v3bud6584nYJ59uU
-        pCptNzCEekbn+BGYS6oMRnSOpaAZTYb7NsciKX3+B3AY
-X-Google-Smtp-Source: AK7set9AdALOM3LcUlN3WH7cJYW7DNlfJzBEKbLKBUhyB7UyoyJEbselkHd4QCj19yLeghDijQxInKGg8RGP4kfdSR8=
-X-Received: by 2002:a17:906:9bd4:b0:87f:575a:9b67 with SMTP id
- de20-20020a1709069bd400b0087f575a9b67mr2214925ejc.274.1675356826032; Thu, 02
- Feb 2023 08:53:46 -0800 (PST)
+        with ESMTP id S231339AbjBBQzd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 11:55:33 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF336F702
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 08:55:31 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 75AA040009;
+        Thu,  2 Feb 2023 16:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675356929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O+924SEaf3AyIksHyVxEZpIqJJGaLhMJsy0iZfFzFAg=;
+        b=cgwecRRVVGPrE6n9yZWelbknwA/FR4ew7Cpf0NAApoPGDPjLuseq2XyyyI4D6iKCoo4nFk
+        RCJf5VO8oXTbxVGbeQo+JCqlfvuVl7WWJXGv/aKyIXTNIKVAneBRFkDlFPyND7Do2L6SWQ
+        qiAId0T5qSn0KfzlavEpSaDMt6W0XmvcK/iez7FN8vM2tpEh+4iKPRGfO8wsuHzs0qu62W
+        lQvkspYqlrzqVpfpNlfydBJ04epZlNreO8QnjX7qorTTGrSkkobVD45bnw1bDTAvP3mIJc
+        MLrHpxSDKDPYfXtksTB3pH3Wkfd2j30bmPP5TX2nceNx53kFbqx8WdiZwwOYgQ==
+Date:   Thu, 2 Feb 2023 17:55:25 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-pm@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>
+Subject: i.MX8 NULL pointer dereference on interconnect instantiation
+Message-ID: <20230202175525.3dba79a7@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 17:53:34 +0100
-Message-ID: <CAJZ5v0iGf-12iqqkK-JMzzg9CcQ_MtKxapb20zLYZAh1BaUMxQ@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal/drivers/intel: Use generic trip points for quark_dts
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 11:36 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
->
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
-> ---
->
-> This patch applies on top of linux-pm/linux-next
->
->  V2:
->    - Changed get_trip_temp() to return THERMAL_TEMP_INVALID
->    - Register unconditonnaly the thermal trips
->    - Fixed thermal_zone_device_register() call replaced by the
->      _with_trips() version
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  .../thermal/intel/intel_quark_dts_thermal.c   | 55 +++++++------------
->  1 file changed, 20 insertions(+), 35 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-> index 3eafc6b0e6c3..97b843fa7568 100644
-> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-> @@ -84,6 +84,7 @@
->  #define QRK_DTS_MASK_TP_THRES          0xFF
->  #define QRK_DTS_SHIFT_TP               8
->  #define QRK_DTS_ID_TP_CRITICAL         0
-> +#define QRK_DTS_ID_TP_HOT              1
->  #define QRK_DTS_SAFE_TP_THRES          105
->
->  /* Thermal Sensor Register Lock */
-> @@ -104,6 +105,7 @@ struct soc_sensor_entry {
->         u32 store_ptps;
->         u32 store_dts_enable;
->         struct thermal_zone_device *tzone;
-> +       struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
->  };
->
->  static struct soc_sensor_entry *soc_dts;
-> @@ -172,9 +174,9 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
->         return ret;
->  }
->
-> -static int _get_trip_temp(int trip, int *temp)
-> +static int get_trip_temp(int trip)
->  {
-> -       int status;
-> +       int status, temp;
->         u32 out;
->
->         mutex_lock(&dts_update_mutex);
-> @@ -183,7 +185,7 @@ static int _get_trip_temp(int trip, int *temp)
->         mutex_unlock(&dts_update_mutex);
->
->         if (status)
-> -               return status;
-> +               return THERMAL_TEMP_INVALID;
->
->         /*
->          * Thermal Sensor Programmable Trip Point Register has 8-bit
-> @@ -191,21 +193,10 @@ static int _get_trip_temp(int trip, int *temp)
->          * thresholds. The threshold value is always offset by its
->          * temperature base (50 degree Celsius).
->          */
-> -       *temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
-> -       *temp -= QRK_DTS_TEMP_BASE;
-> +       temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
-> +       temp -= QRK_DTS_TEMP_BASE;
->
-> -       return 0;
-> -}
-> -
-> -static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
-> -                               int trip, int *temp)
-> -{
-> -       return _get_trip_temp(trip, temp);
-> -}
-> -
-> -static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
-> -{
-> -       return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
-> +       return temp;
->  }
->
->  static int update_trip_temp(struct soc_sensor_entry *aux_entry,
-> @@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
->         return update_trip_temp(tzd->devdata, trip, temp);
->  }
->
-> -static int sys_get_trip_type(struct thermal_zone_device *thermal,
-> -               int trip, enum thermal_trip_type *type)
-> -{
-> -       if (trip)
-> -               *type = THERMAL_TRIP_HOT;
-> -       else
-> -               *type = THERMAL_TRIP_CRITICAL;
-> -
-> -       return 0;
-> -}
-> -
->  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->                                 int *temp)
->  {
-> @@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
->
->  static struct thermal_zone_device_ops tzone_ops = {
->         .get_temp = sys_get_curr_temp,
-> -       .get_trip_temp = sys_get_trip_temp,
-> -       .get_trip_type = sys_get_trip_type,
->         .set_trip_temp = sys_set_trip_temp,
-> -       .get_crit_temp = sys_get_crit_temp,
->         .change_mode = sys_change_mode,
->  };
->
-> @@ -385,10 +362,18 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
->                         goto err_ret;
->         }
->
-> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
-> -                       QRK_MAX_DTS_TRIPS,
-> -                       wr_mask,
-> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
-> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = get_trip_temp(QRK_DTS_ID_TP_CRITICAL);
-> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-> +
-> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
-> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
-> +
-> +       aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
-> +                                                                  aux_entry->trips,
-> +                                                                  QRK_MAX_DTS_TRIPS,
-> +                                                                  wr_mask,
-> +                                                                  aux_entry, &tzone_ops,
-> +                                                                  NULL, 0, polling_delay);
->         if (IS_ERR(aux_entry->tzone)) {
->                 err = PTR_ERR(aux_entry->tzone);
->                 goto err_ret;
-> --
+Hello,
 
-Applied as 6.3 material with edited subject and changelog, thanks!
+I just met an oops on i.MX8MP that appears sporadically but quite often
+with my current config (~20%). It seems related to the concurrency of
+instantiaton between an interconnect and peripherals using it.
+
+I haven't found any existing similar report.
+
+Kernel: v6.2-rc5-20-g7bf70dbb1882 + the audio patches at
+        https://lore.kernel.org/all/20220625013235.710346-1-marex@denx.de/
+HW: Avnet MSC SM2-MB-EP1 Carrier Board
+
+A log of the relevant section follows. Lines starting with ">>>" were
+added by me and show the relevant code lines being executed and some
+variable values.
+
+------------------------------8<------------------------------
+
+[   15.170236] at24 0-0050: supply vcc not found, using dummy regulator
+[   15.181143] at24 0-0050: 8192 byte 24c64 EEPROM, writable, 32 bytes/write
+[   15.272681] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+[   15.281519] >>> of_icc_get_from_provider:405 RETURN -EPROBE_DEFER
+[   15.296345] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+[   15.305136] >>> of_icc_get_from_provider:405 RETURN -EPROBE_DEFER
+[   15.317576] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+[   15.326715] >>> of_icc_get_from_provider:405 RETURN -EPROBE_DEFER
+[   15.338297] input: 30370000.snvs:snvs-powerkey as /devices/platform/soc@0/30000000.bus/30370000.snvs/30370000.snvs:snvs-powerkey/input/input0
+[   15.359831] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+[   15.368372] >>> of_icc_get_from_provider:405 RETURN -EPROBE_DEFER
+[   15.381942] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+[   15.383139] imx-bus-devfreq 32700000.interconnect: interconnect provider added to topology
+[   15.387956] snvs_rtc 30370000.snvs:snvs-rtc-lp: registered as rtc1
+[   15.390482] >>> of_icc_xlate_onecell:352 START
+[   15.401380] >>> of_icc_xlate_onecell:359 RETURN icc_data->nodes[37] = 0000000000000000
+[   15.409421] >>> of_icc_get_from_provider:416 RETURN data->node 0000000000000000
+[   15.416865] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+[   15.425391] >>> of_icc_xlate_onecell:352 START
+[   15.429996] >>> of_icc_xlate_onecell:359 RETURN icc_data->nodes[36] = ffff000005fe9e00
+[   15.434640] i.mx8mm_thermal 30260000.tmu: No OCOTP nvmem reference found, SoC-specific calibration not loaded. Please update your DT.
+[   15.438012] >>> of_icc_get_from_provider:416 RETURN data->node ffff000005fe9e00
+[   15.457502] >>> path_find:197 src 0000000000000000
+[   15.462430] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[   15.471339] Mem abort info:
+[   15.473249] imx-cpufreq-dt imx-cpufreq-dt: cpu speed grade 7 mkt segment 2 supported-hw 0x80 0x4
+[   15.474253]   ESR = 0x0000000096000004
+[   15.486891]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   15.492315]   SET = 0, FnV = 0
+[   15.495407]   EA = 0, S1PTW = 0
+[   15.498704]   FSC = 0x04: level 0 translation fault
+[   15.503725] Data abort info:
+[   15.506646]   ISV = 0, ISS = 0x00000004
+[   15.510728]   CM = 0, WnR = 0
+[   15.513796] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004611a000
+[   15.520354] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[   15.527450] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[   15.533737] Modules linked in: imx_cpufreq_dt imx8mm_thermal imx8mp_interconnect rtc_snvs imx_interconnect snvs_pwrkey governor_userspace imx_bus at24 fsl_imx8_ddr_perf caam error crct10dif_ce
+[   15.550925] CPU: 2 PID: 68 Comm: kworker/u8:4 Not tainted 6.2.0-rc5-00040-ged7bb521b8fe-dirty #70
+[   15.559809] Hardware name: MSC SM2-MB-EP1 Carrier Board with SM2S-IMX8PLUS-QC6-14N0600E SoM (DT)
+[   15.568602] Workqueue: events_unbound deferred_probe_work_func
+[   15.577666] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   15.584637] pc : path_find+0x94/0x374
+[   15.588314] lr : path_find+0x94/0x374
+[   15.591988] sp : ffff80000a78b730
+[   15.595305] x29: ffff80000a78b730 x28: 0000000000000000 x27: ffff80000a78b7c8
+[   15.602787] x26: ffff800009161988 x25: 0000000000000001 x24: 0000000000000000
+[   15.611498] x23: ffff800008e535c8 x22: ffff800008e53250 x21: ffff000005fe9e00
+[   15.618804] x20: ffff80000a78b7b8 x19: ffff80000a78b7a8 x18: 0000000000000030
+[   15.625956] x17: 3965663530303030 x16: 3066666666206564 x15: ffffffffffffffff
+[   15.633112] x14: 0000000000000000 x13: 3030303030303030 x12: 000000000004034f
+[   15.640265] x11: ffff8000095af930 x10: 000000000000011b x9 : 00000000ffffefff
+[   15.647418] x8 : ffff800009607930 x7 : 0000000000017fe8 x6 : 0000000000000000
+[   15.654571] x5 : 80000000fffff000 x4 : 0000000000000000 x3 : 0000000000000000
+[   15.661726] x2 : 0000000000000000 x1 : ffff000003516100 x0 : 0000000000000026
+[   15.668877] Call trace:
+[   15.671326]  path_find+0x94/0x374
+[   15.674653]  of_icc_get_by_index+0x1b0/0x290
+[   15.678932]  of_icc_get+0x70/0xa0
+[   15.682252]  of_icc_bulk_get+0x54/0xf0
+[   15.686007]  devm_of_icc_bulk_get+0x5c/0xc0
+[   15.690196]  imx8m_blk_ctrl_probe+0x22c/0x540
+[   15.694562]  platform_probe+0x68/0xe0
+[   15.698231]  really_probe+0xc0/0x3e0
+[   15.701820]  __driver_probe_device+0x7c/0x190
+[   15.706182]  driver_probe_device+0x3c/0x110
+[   15.710374]  __device_attach_driver+0xbc/0x160
+[   15.714827]  bus_for_each_drv+0x78/0xd0
+[   15.718670]  __device_attach+0xa8/0x1f0
+[   15.722513]  device_initial_probe+0x14/0x20
+[   15.726705]  bus_probe_device+0x9c/0xb0
+[   15.730549]  deferred_probe_work_func+0xa4/0x100
+[   15.735174]  process_one_work+0x288/0x6b0
+[   15.739193]  worker_thread+0x74/0x450
+[   15.742862]  kthread+0x10c/0x110
+[   15.746095]  ret_from_fork+0x10/0x20
+[   15.749683] Code: 90002480 91250000 f90053fb 97ffc398 (b8438783) 
+[   15.755783] ---[ end trace 0000000000000000 ]---
+[   23.343608] random: crng init done
+
+
+------------------------------8<------------------------------
+
+The relevant line is line "B" in this snippet:
+
+  A [   15.381942] >>> of_icc_get_from_provider:383 START, spec: np </soc@0/interconnect@32700000>
+  B [   15.383139] imx-bus-devfreq 32700000.interconnect: interconnect provider added to topology
+  C [   15.387956] snvs_rtc 30370000.snvs:snvs-rtc-lp: registered as rtc1
+  D [   15.390482] >>> of_icc_xlate_onecell:352 START
+  E [   15.401380] >>> of_icc_xlate_onecell:359 RETURN icc_data->nodes[37] = 0000000000000000
+  F [   15.409421] >>> of_icc_get_from_provider:416 RETURN data->node 0000000000000000
+
+Here 32700000.interconnect is added during the execution of
+of_icc_get_from_provider(), which in turn calls of_icc_xlate_onecell()
+to find the interconnect node, failing and thus returning NULL. This
+NULL pointer is propagated up to of_icc_get_by_index() which passes it
+to path_find() where the pointer is dereferenced and the kernel oopses.
+
+In successful runs, line B always appears outside of the execution of
+of_icc_get_from_provider(), i.e. either before line A or after line F, so
+it seems to me that the interconnect is being looked for while it is
+being added and the state is inconsistent.
+
+That's all on my side at the moment. I haven't looked at how this
+could be fixed but I think the problem is pretty focused now.
+
+I am of course available to provide more details.
+
+Best regards,
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
