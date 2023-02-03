@@ -2,160 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F119868984D
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2550968985C
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjBCMKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 07:10:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S232673AbjBCMQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 07:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjBCMKv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:10:51 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4139DCBE;
-        Fri,  3 Feb 2023 04:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675426219; x=1706962219;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oUlufCSy0q1oH8hxnHPu6Oh0s0KdHEqCnBfy46cJ3as=;
-  b=gRa0sy3MsH04vJVhKpQwpawDcNj83hZeEYSinMzo5NMXpW3jGsz/E+vN
-   wo+liSU/91QnP4A2ZSyZmLLO3gTLXpgS6BxGVUnyO7HK8/4X6FsIWC7Wu
-   8f4jufoBKGnHtfF7k8KuEEhz0//uv1l92gv3hPMH4J/Ibho09QDItqVib
-   gmUy54I3uVO6gWwko4wBeZOOieftd0WZ5N5Cxf4zM/UA7z+gWTsctkEex
-   OuW8C2rL0eUdwEvgFIs3GpIiugDk0qVsi6osT5290hLZ3whSN6oQhHGf8
-   +iq7q8GS84qLJrP0EegDrXyZbbZDptSaEfnWKtbzdETKSIT7Tz+ivnl1R
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="326430258"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="326430258"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:10:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="659078496"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="659078496"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 03 Feb 2023 04:09:58 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNutC-0000T1-0f;
-        Fri, 03 Feb 2023 12:09:58 +0000
-Date:   Fri, 03 Feb 2023 20:09:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- dcb17d36bed40f2ab07d6ffb318a5277b6c3378d
-Message-ID: <63dcf965.BFq6EeNh5tPZEqSO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231748AbjBCMQW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:16:22 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319165F1C;
+        Fri,  3 Feb 2023 04:16:15 -0800 (PST)
+Received: from mercury (unknown [37.81.13.16])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9CC256602F05;
+        Fri,  3 Feb 2023 12:16:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675426573;
+        bh=2/8e0Bi6BlPo7zgoRGtDZYk0iddWrzwTH9yHoEXA9KA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JLqABhzF+OTrBrf+4SIewk47JtIP73R7C7NUuuHKAkgQ5nUyTBZf2k9X/saubaoLU
+         KVUPyIrV27G74q3xOGKXVpXVJKP4ajFeVP9be9oRX8qvHbeR65i5XCpLuUPc/x/81U
+         XiCRum62D7DAh7bAMaccl7sBsoLpQys3E7F8IpY0mfQCZqxVeP0oX65evxMLG+6u3f
+         USNamOesu7vrQH7HYm1jEtwFv0Mj54XPZzTjgyA03JlwGsnTQdpqcPuHX91nn28gIf
+         GguKFGqke2unYNyplO7IBCfclHt/SU0q4yk2FBQV4NBUlcwUIJPvKDZxKPXkiUdKfP
+         whd05nxFI0EpA==
+Received: by mercury (Postfix, from userid 1000)
+        id 953DE1060930; Fri,  3 Feb 2023 13:16:10 +0100 (CET)
+Date:   Fri, 3 Feb 2023 13:16:10 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Message-ID: <20230203121610.zung35qrozvoauz6@mercury.elektranox.org>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20221226114513.4569-1-pali@kernel.org>
+ <20230122112744.vdfho4mzpgm6oucm@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6v3cydzb267bgioz"
+Content-Disposition: inline
+In-Reply-To: <20230122112744.vdfho4mzpgm6oucm@pali>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: dcb17d36bed40f2ab07d6ffb318a5277b6c3378d  Merge branch 'pm-tools' into bleeding-edge
 
-Warning reports:
+--6v3cydzb267bgioz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/oe-kbuild-all/202302031854.dRaSdTg4-lkp@intel.com
+Hi,
 
-Warning: (recently discovered and may have been fixed)
+On Sun, Jan 22, 2023 at 12:27:44PM +0100, Pali Roh=E1r wrote:
+> On Monday 26 December 2022 12:45:11 Pali Roh=E1r wrote:
+> > This new optional priority property allows to specify custom priority l=
+evel
+> > of reset device. Prior this change priority level was hardcoded to 192 =
+and
+> > not possible to specify or change. Specifying other value is needed for
+> > some boards. Default level when not specified stays at 192 as before.
+> >=20
+> > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
+>
+> Reminder: Any plan how to handle these patches?
 
-kismet: WARNING: unmet direct dependencies detected for IDLE_INJECT when selected by INTEL_POWERCLAMP
+Please don't top-post :) Sorry, I'm a bit slow with processing
+patches this cycle. Technically this was also throwing a DT
+warning reported by the bot, so I expected a new version. Anyways,
+I fixed the DT warning myself and applied patches 1-2.
 
-Warning ids grouped by kconfigs:
+Thanks,
 
-gcc_recent_errors
-`-- x86_64-allnoconfig
-    `-- kismet:WARNING:unmet-direct-dependencies-detected-for-IDLE_INJECT-when-selected-by-INTEL_POWERCLAMP
+-- Sebastian
 
-elapsed time: 920m
+--6v3cydzb267bgioz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-configs tested: 67
-configs skipped: 2
+-----BEGIN PGP SIGNATURE-----
 
-gcc tested configs:
-x86_64                            allnoconfig
-powerpc                           allnoconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-x86_64                        randconfig-a006
-x86_64                              defconfig
-alpha                               defconfig
-x86_64                        randconfig-a002
-alpha                             allnoconfig
-i386                              allnoconfig
-arm                               allnoconfig
-arc                               allnoconfig
-x86_64                        randconfig-a004
-s390                                defconfig
-sh                               allmodconfig
-x86_64                               rhel-8.3
-mips                             allyesconfig
-i386                          randconfig-a001
-s390                             allyesconfig
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                           allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-ia64                             allmodconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-arc                  randconfig-r043-20230202
-s390                 randconfig-r044-20230202
-riscv                randconfig-r042-20230202
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a015
-i386                                defconfig
-i386                             allyesconfig
-riscv                             allnoconfig
-powerpc                          allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc+wcACgkQ2O7X88g7
++pqBTQ//Sfo4YthHHkfczLf2+248kA6+HAwFPeSDbAYlSqTKO/HgnhZScAboYVR0
+9EZReLBKQArJsTr/QosEm8J0tLBn0cQMWxhYzwBl7b2nyLLVHtvuTjZSdSigW3+y
+WBd90nGP7O64NPMiHF5dZAkco4vsGehSf3ETEW5kAAQh+tK8M2W3t6sKkR8Qb0CB
+OKdyem/7HyI2YyNJ5O49UpMTUL9h0um/k0h5x6/N6x7f9cxIBdPEkybCPbhR9+m/
+RY6Q5XGaDxvYmA9qD30kUsex0pU+16ImkefnZ1Z0Dl9T4Dnv3slZIRZvJvd1flBA
+FRbWVaPrykZnIW3vEYeb+SxRQbXIU+o4TkNcLLFnAwrJoPcRPwulsH3xHI/EDVva
+6h+Q3qLmPkjC0liZEJE6QJWaSp+eOVReKn/9Y4/4T7K+8fHEusW7ca3jJ7qa90yc
+Gq0X5lOgxzXnhmz11zZzAxhxPyPRSmqe4fOMqsEE3kEfYqLm5SR0OJXSRLI5UStB
+jNIwOsPbV1/v1QMS7TJ8OkQ94lyqpyt+3w1tN0Tjv3kY5vOgXNdfxJU7tCD0MmTe
+WKCPK1QJwHIpfEjdjbsPAQX55zODum918jhklVuYKnvsJfUZPC6OoxJNfcKqJR7f
+8D/WD21618TImkTbCf6hgvtKtdLaJh5AzVOsJBshkxxvuoQG+Og=
+=eZFH
+-----END PGP SIGNATURE-----
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                          rhel-8.3-rust
-arm                  randconfig-r046-20230202
-hexagon              randconfig-r045-20230202
-hexagon              randconfig-r041-20230202
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--6v3cydzb267bgioz--
