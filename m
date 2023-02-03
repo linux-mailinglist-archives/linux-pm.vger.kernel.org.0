@@ -2,54 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5E1689AE7
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 15:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91039689C63
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 15:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjBCOEA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 09:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S233013AbjBCO57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 09:57:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjBCODm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 09:03:42 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7768A945E5;
-        Fri,  3 Feb 2023 06:01:24 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id cw4so5204319edb.13;
-        Fri, 03 Feb 2023 06:01:24 -0800 (PST)
+        with ESMTP id S233758AbjBCO5s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 09:57:48 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41803A58CB
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 06:57:27 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 7so3808598pga.1
+        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 06:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fUFJpcw18eNgBpCFlM5AGN3//6An0pa34T97OZw59OA=;
+        b=LgVVz3RZvsz+OUJgd1wXl4XjBcgjTmb/7A9Bk4QEmS1IAfT7otrWas/RfdPwtXFuwf
+         j1dnG+TQaJrlA7YAqOqq6i+a3xq//e+MK3FdQva9rA9VNCNF1obN+hvtOKDR8M3Pk2eZ
+         m57dLFdTSJ9a3f1OrIRWrQrrEFmLUDPOAm9ReHHMKJ0UNJrM9dJXTZNlhvqeb+5kg9JC
+         8VBitOAryPLCasbTorebZliQkbWT6B2mXtzsIYy7CPM26ptmPOWg0nI4e781130PyIpV
+         kt/dd6v1Pms+R2ZDiBYprG8EIKu2NOblOqmsg530AanmjS2u4mtqYl0LHB08KmeA71yK
+         m3sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DMxOcECTROuojakMPC85g2uiW2fNR65bS9sWaaYjKx0=;
-        b=pysH+jNR1RIsPECfhz0zsLyvvDuLNlBFdVheQ6FlgxyuvfxxkCQAfswneFezsGrSI5
-         7wnQygqm2eIXa0kpdRZ9kPhJQseL3JKpBfYT+3Vo/iNEtaFWQ1YnFQCrcfJWgzitmP6e
-         bSjItThW27LMjcO/GEqASjzgDBm1P5eQ1psiozIha34JfkRijIcQIYt1w48pJdOp9NuF
-         9VdRuCh0BBexkPEKGWW0WuuNX03CITLwGSQyBDWh+AyVPXtTKDq3FDS3pRLcmBUh84B/
-         5Ogglv6Hy9K3TSwwn8X/oWxY1E/4IFxDAQc0iMigUo/hI8hEFREO9KUpfPCRPGYM5nQv
-         Z3qA==
-X-Gm-Message-State: AO0yUKUfPQHbavZPD9wYDVPD4hnVNMA/B2veZ0waKyG+GNsMgb8YWBPa
-        e2bcuLTu7qpSZ6hTvw3ZcOC+cJqELD6JMRf1XDUdx78V
-X-Google-Smtp-Source: AK7set8uq7ebbsSriWJxHjrHMUC6X+0zB2DHHT/wCwhhmPTuZACsbPFqJ8NoROQqePjZsa6D2K4EbGrVsWTgDZ6U/EQ=
-X-Received: by 2002:a05:6402:40ce:b0:490:47c3:3d71 with SMTP id
- z14-20020a05640240ce00b0049047c33d71mr3247056edb.31.1675432767901; Fri, 03
- Feb 2023 05:59:27 -0800 (PST)
+        bh=fUFJpcw18eNgBpCFlM5AGN3//6An0pa34T97OZw59OA=;
+        b=Lejkk6fi+ddGt8Z7V71I2hscwNAkV8tsuwn4ncnsoSwlnLFRHn6Z/cHPbvR+x1WOZi
+         1soIYtcDI1+8yj7GFj4aXpyNYFJRiI0Fc/HdQESmhbQ8GPBxOCQ0A4FaiuJi8bZ6v4+p
+         SuYMWKqgpbPrRQNx6vgX1oQczT1UStvDtC96GeSIdlP8Mh0d+k2Fx5Nq44qcOcxLB5Z0
+         nyCTA73vXUSQbUO4Q++TTvehRIhUeTloiL2fdmm9F9oAVlGnb7T/EGOyYNIn7MDUjK8s
+         L+Ni18fy6on0htY4CMkdAaYv5j6MFS9oqmQBa6RSeBJJ/xfWlG/58xypjnk5O3MO/Ssy
+         wLcw==
+X-Gm-Message-State: AO0yUKXAYLW3QSK83rAzF99urNLXj6O2h5EFgSVD0Bcl1izs3cIdzEaW
+        597jmORgyHgacT+7jWGiwIUP9W9AXijuFPsZrNe6dQ==
+X-Google-Smtp-Source: AK7set857ozdkgZMYaHNxbO26WVVMSeW0puJ1hVTyIGO1e8je77nErlXVTtbMr4pmb4ROehlampXmQ==
+X-Received: by 2002:a62:198d:0:b0:593:d46a:677c with SMTP id 135-20020a62198d000000b00593d46a677cmr3050848pfz.18.1675436246634;
+        Fri, 03 Feb 2023 06:57:26 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 187-20020a6217c4000000b005825b8e0540sm1826573pfx.204.2023.02.03.06.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 06:57:26 -0800 (PST)
+Message-ID: <63dd20d6.620a0220.45205.3721@mx.google.com>
+Date:   Fri, 03 Feb 2023 06:57:26 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0ieQocb2oe1ggDCOos4HtkmypsadMkXCwH2J5XmRUdVyQ@mail.gmail.com> <2eb7f5335241cc9ca2f31761766e8cb34cfaa42d.camel@linux.intel.com>
-In-Reply-To: <2eb7f5335241cc9ca2f31761766e8cb34cfaa42d.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 3 Feb 2023 14:59:16 +0100
-Message-ID: <CAJZ5v0j=Hs9F3UQqV_qCJ+ra6y+Q+HhBrN-tRtfrE47nH_Suxg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.2-rc6-168-ga9dd827a6e77
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.2-rc6-168-ga9dd827a6e77)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,65 +71,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 11:21 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Thu, 2023-02-02 at 17:44 +0100, Rafael J. Wysocki wrote:
-> > On Wed, Feb 1, 2023 at 10:07 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > When the user is reading cur_state from the thermal cooling device
-> > > for
-> > > Intel powerclamp device:
-> > > - It returns the idle ratio from Package C-state counters when
-> > > there is active idle injection session.
-> > > - -1, when there is no active idle injection session.
-> > >
-> > > This information is not very useful as the package C-state counters
-> > > vary
-> > > a lot from read to read. Instead just return the last requested
-> > > cur_state.
-> > >
-> > > Signed-off-by: Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com>
-> > > ---
-> > >  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
-> > >  1 file changed, 1 insertion(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> > > b/drivers/thermal/intel/intel_powerclamp.c
-> > > index 2f4cbfdf26a0..72a45cf2708c 100644
-> > > --- a/drivers/thermal/intel/intel_powerclamp.c
-> > > +++ b/drivers/thermal/intel/intel_powerclamp.c
-> > > @@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct
-> > > thermal_cooling_device *cdev,
-> > >  static int powerclamp_get_cur_state(struct thermal_cooling_device
-> > > *cdev,
-> > >                                  unsigned long *state)
-> > >  {
-> > > -       if (clamping) {
-> > > -               if (poll_pkg_cstate_enable)
-> > > -                       *state = pkg_cstate_ratio_cur;
-> > > -               else
-> > > -                       *state = set_target_ratio;
-> > > -       } else {
-> > > -               /* to save power, do not poll idle ratio while not
-> > > clamping */
-> > > -               *state = -1; /* indicates invalid state */
-> > > -       }
-> > > -
-> > > -       return 0;
-> > > +       return set_target_ratio;
-> >
-> > *state = set_target_ratio;
-> > return 0;
-> >
-> Sorry.
->
-> What a blunder! Sent patch from 37000 ft. Should never do that.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc6-168-ga=
+9dd827a6e77)
 
-No worries.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+2-rc6-168-ga9dd827a6e77/
 
-I didn't realize that you were traveling.
+Tree: pm
+Branch: testing
+Git Describe: v6.2-rc6-168-ga9dd827a6e77
+Git Commit: a9dd827a6e77dec5b861c924206d85b63156df16
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-I can prepare this patch myself just fine if that helps.
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
