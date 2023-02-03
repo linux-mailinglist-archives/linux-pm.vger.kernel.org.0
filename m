@@ -2,142 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E108689951
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 14:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD02689A2E
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 14:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjBCNAv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 08:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S232633AbjBCNvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 08:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjBCNAv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 08:00:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581F513D74;
-        Fri,  3 Feb 2023 05:00:50 -0800 (PST)
-Received: from mercury (unknown [37.81.13.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B2096602F0E;
-        Fri,  3 Feb 2023 13:00:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675429249;
-        bh=A/jn8B8FWdXm620r8Qsxt7XexyyaId56TtoNgW3vcE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UYY1YQWLY23yZ5b8Xp/MWeOTy4/TqV4xhqLqEc7Xof7bK2kYc6ueamWviuYywAIEb
-         BMps1KV9exycBXpRLqa+/Lc6dH/IcBAhMGaMsXJdsDuFFhkimeqIQWESjlRG/uMEAt
-         62wgIZ6Tf0UCOJ/x9+a9BBjEmBVaj2AE0Na4+QbZc6cYYm6LDs/c4wvuQQ4IZgEBcq
-         S1o+p5aXSx421nflsrXkIYfjZoxO7GcI6u7WVj7XM2CNoUW9UKyqH+BmMUrZV/IX7J
-         X7IoBoDpPchGtCtYlO9b1yZlkfOQXaw8x/mQ4wDiSdVDp5pK1JQwm2irjQMlhrNHlc
-         4v1vbd/w5us6g==
-Received: by mercury (Postfix, from userid 1000)
-        id 06D1D1060930; Fri,  3 Feb 2023 14:00:45 +0100 (CET)
-Date:   Fri, 3 Feb 2023 14:00:45 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     cgel.zte@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] power: supply: use strscpy() is more robust and safer
-Message-ID: <20230203130045.shjvwqkopic65wox@mercury.elektranox.org>
-References: <20220919024919.211210-1-chi.minghao@zte.com.cn>
+        with ESMTP id S231775AbjBCNvg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 08:51:36 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D981A0EB7;
+        Fri,  3 Feb 2023 05:51:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A97A1FB;
+        Fri,  3 Feb 2023 05:51:45 -0800 (PST)
+Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 877CE3F71E;
+        Fri,  3 Feb 2023 05:50:59 -0800 (PST)
+From:   James Morse <james.morse@arm.com>
+To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
+Date:   Fri,  3 Feb 2023 13:50:11 +0000
+Message-Id: <20230203135043.409192-1-james.morse@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f2t2axxher2oxzor"
-Content-Disposition: inline
-In-Reply-To: <20220919024919.211210-1-chi.minghao@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello!
 
---f2t2axxher2oxzor
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI out of the arch code by using
+GENERIC_CPU_DEVICES, then into the ACPI processor driver.
 
-Hi,
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
 
-On Mon, Sep 19, 2022 at 02:49:19AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> The implementation of strscpy() is more robust and safer.
->=20
-> That's now the recommended way to copy NUL terminated strings.
->=20
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
 
-Sorry, this fell between the cracks. Applied now, thanks!
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
 
--- Sebastian
+Critically: everything described in the firmware tables must remain present.
 
->  drivers/power/supply/max1721x_battery.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supp=
-ly/max1721x_battery.c
-> index 473e53cd2801..0f948db958d5 100644
-> --- a/drivers/power/supply/max1721x_battery.c
-> +++ b/drivers/power/supply/max1721x_battery.c
-> @@ -384,7 +384,7 @@ static int devm_w1_max1721x_add_device(struct w1_slav=
-e *sl)
->  	}
-> =20
->  	if (!info->ManufacturerName[0])
-> -		strncpy(info->ManufacturerName, DEF_MFG_NAME,
-> +		strscpy(info->ManufacturerName, DEF_MFG_NAME,
->  			2 * MAX1721X_REG_MFG_NUMB);
-> =20
->  	if (get_string(info, MAX1721X_REG_DEV_STR,
-> @@ -403,15 +403,15 @@ static int devm_w1_max1721x_add_device(struct w1_sl=
-ave *sl)
-> =20
->  		switch (dev_name & MAX172XX_DEV_MASK) {
->  		case MAX172X1_DEV:
-> -			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
-> +			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
->  				2 * MAX1721X_REG_DEV_NUMB);
->  			break;
->  		case MAX172X5_DEV:
-> -			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
-> +			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
->  				2 * MAX1721X_REG_DEV_NUMB);
->  			break;
->  		default:
-> -			strncpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
-> +			strscpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
->  				2 * MAX1721X_REG_DEV_NUMB);
->  		}
->  	}
-> --=20
-> 2.25.1
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
 
---f2t2axxher2oxzor
-Content-Type: application/pgp-signature; name="signature.asc"
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
 
------BEGIN PGP SIGNATURE-----
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdBXUACgkQ2O7X88g7
-+prhaw/9HGLScrgq/kceuN/lTUZENnhal350PLcsqUeOOTk63o7LJC2yYWf594WP
-kjEyXvXocvcAyhQPoFHKXi9uhIXWtk85av/d+TyC19gnfP+GMugVGt0N0ndn98h3
-fK7qpMqkvyCxSx3PeWYGP+rxzh8kf9M83k1r2LY0CSVizq4rFN88HIc19Y0nxytq
-Ft4E6lsjsq+ulFMkjR2nhWy/sdJDnCzlVxlWrHzIgYa4EyuaMFqcmBHuWX6WUXlx
-gJyCcwexKUVIXowL4ql4JPR6JTxsNJERtxPuLTVaEQXWh4Z0o2TFxGe0k7xrCrFP
-gnHndUnhhu3vzIWTyxB5q5nl0J1oj7+mspxbmA4SthoRwrHAZj3Fgl+t+q/AZ770
-kRN2Q2oOIHrK86d2dylimr2fsWiqyPB+A2HT1BfVrRUQDjhIYMRfjq6f4zWg2fTy
-JSr2/Wq4g2yOxzSTdb7ln+z0taCVie23ZcHXe8ECjqDO23mfO8bjZz1u+AkmbTGY
-QAAZ7O77VZx9j3OFJ6zmwQyiInutxAvcnhfcafG7Nu4mfQ0ha5inUVe8RJ9G2/vK
-y66CA3HHbsC8Kc6DeR0OhajowuNsMDDkpcZHu2cf9n/KqwfjxpHLUX3BBvPxQCOT
-YGMknFCklRjv5yMvmpbVjM/yKW2W9zn6Xsuv+8OPc+EMP2MEK0Y=
-=+h3N
------END PGP SIGNATURE-----
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
 
---f2t2axxher2oxzor--
+This creates something that looks like cpuhotplug to user-space, as the sysfs
+files appear and disappear, and the udev notifications look the same.
+
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
+
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
+
+This code is unconditionally enabled for all ACPI architectures.
+If there are problems with firmware tables on some devices, the CPUs will
+already be online by the time the acpi_processor_make_enabled() is called.
+A mismatch here causes a firmware-bug message and kernel taint. This should
+only affect people with broken firmware who also boot with maxcpus=1, and
+bring CPUs online later.
+
+I had a go at switching the remaining architectures over to GENERIC_CPU_DEVICES,
+so that the Kconfig symbol can be removed, but I got stuck with powerpc
+and s390.
+
+
+The first patch has already been posted as a fix here:
+https://www.spinics.net/lists/linux-ia64/msg21920.html
+I've only build tested Loongarch and ia64.
+
+
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
+
+You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
+to match your host kernel. Replace your '-smp' argument with something like:
+| -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+
+then feed the following to the Qemu montior;
+| (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+| (qemu) device_del cpu1
+
+
+This series is based on v6.2-rc3, and can be retrieved from:
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+
+
+Thanks,
+
+James Morse (29):
+  ia64: Fix build error due to switch case label appearing next to
+    declaration
+  ACPI: Move ACPI_HOTPLUG_CPU to be enabled per architecture
+  drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
+  drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden
+  drivers: base: Move cpu_dev_init() after node_dev_init()
+  arm64: setup: Switch over to GENERIC_CPU_DEVICES using
+    arch_register_cpu()
+  ia64/topology: Switch over to GENERIC_CPU_DEVICES
+  x86/topology: Switch over to GENERIC_CPU_DEVICES
+  LoongArch: Switch over to GENERIC_CPU_DEVICES
+  arch_topology: Make register_cpu_capacity_sysctl() tolerant to late
+    CPUs
+  ACPI: processor: Add support for processors described as container
+    packages
+  ACPI: processor: Register CPUs that are online, but not described in
+    the DSDT
+  ACPI: processor: Register all CPUs from acpi_processor_get_info()
+  ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
+  ACPI: Move acpi_bus_trim_one() before acpi_scan_hot_remove()
+  ACPI: Rename acpi_processor_hotadd_init and remove pre-processor
+    guards
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  ACPI: Check _STA present bit before making CPUs not present
+  ACPI: Warn when the present bit changes but the feature is not enabled
+  drivers: base: Implement weak arch_unregister_cpu()
+  LoongArch: Use the __weak version of arch_unregister_cpu()
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  ACPICA: Add new MADT GICC flags fields [code first?]
+  arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a
+    helper
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  ACPI: add support to register CPUs based on the _STA enabled bit
+  arm64: document virtual CPU hotplug's expectations
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
+
+Jean-Philippe Brucker (3):
+  arm64: psci: Ignore DENIED CPUs
+  KVM: arm64: Pass hypercalls to userspace
+  KVM: arm64: Pass PSCI calls to userspace
+
+ Documentation/arm64/cpu-hotplug.rst       |  79 ++++++++++++
+ Documentation/arm64/index.rst             |   1 +
+ Documentation/virt/kvm/api.rst            |  31 ++++-
+ Documentation/virt/kvm/arm/hypercalls.rst |   1 +
+ arch/arm64/Kconfig                        |   1 +
+ arch/arm64/include/asm/acpi.h             |  11 ++
+ arch/arm64/include/asm/cpu.h              |   1 -
+ arch/arm64/include/asm/kvm_host.h         |   2 +
+ arch/arm64/kernel/acpi_numa.c             |  11 --
+ arch/arm64/kernel/psci.c                  |   2 +-
+ arch/arm64/kernel/setup.c                 |  13 +-
+ arch/arm64/kernel/smp.c                   |   5 +-
+ arch/arm64/kvm/arm.c                      |  15 ++-
+ arch/arm64/kvm/hypercalls.c               |  28 ++++-
+ arch/arm64/kvm/psci.c                     |  13 ++
+ arch/ia64/Kconfig                         |   2 +
+ arch/ia64/include/asm/acpi.h              |   2 +-
+ arch/ia64/include/asm/cpu.h               |  11 --
+ arch/ia64/kernel/acpi.c                   |   6 +-
+ arch/ia64/kernel/setup.c                  |   2 +-
+ arch/ia64/kernel/sys_ia64.c               |   7 +-
+ arch/ia64/kernel/topology.c               |  35 +-----
+ arch/loongarch/Kconfig                    |   2 +
+ arch/loongarch/kernel/topology.c          |  31 +----
+ arch/x86/Kconfig                          |   2 +
+ arch/x86/include/asm/cpu.h                |   6 -
+ arch/x86/kernel/acpi/boot.c               |   4 +-
+ arch/x86/kernel/topology.c                |  19 +--
+ drivers/acpi/Kconfig                      |   5 +-
+ drivers/acpi/acpi_processor.c             | 146 +++++++++++++++++-----
+ drivers/acpi/processor_core.c             |   2 +-
+ drivers/acpi/scan.c                       | 116 +++++++++++------
+ drivers/base/arch_topology.c              |  38 ++++--
+ drivers/base/cpu.c                        |  31 ++++-
+ drivers/base/init.c                       |   2 +-
+ drivers/firmware/psci/psci.c              |   2 +
+ drivers/irqchip/irq-gic-v3.c              |  38 +++---
+ include/acpi/acpi_bus.h                   |   1 +
+ include/acpi/actbl2.h                     |   1 +
+ include/kvm/arm_hypercalls.h              |   1 +
+ include/kvm/arm_psci.h                    |   4 +
+ include/linux/acpi.h                      |  10 +-
+ include/linux/cpu.h                       |   6 +
+ include/linux/cpumask.h                   |  25 ++++
+ include/uapi/linux/kvm.h                  |   2 +
+ kernel/cpu.c                              |   3 +
+ 46 files changed, 532 insertions(+), 244 deletions(-)
+ create mode 100644 Documentation/arm64/cpu-hotplug.rst
+
+-- 
+2.30.2
+
