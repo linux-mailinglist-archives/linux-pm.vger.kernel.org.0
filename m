@@ -2,98 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F3A68A49F
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 22:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F3F68A4D9
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 22:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjBCVZG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 16:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S229610AbjBCVro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 16:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjBCVZF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 16:25:05 -0500
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D22A4291;
-        Fri,  3 Feb 2023 13:25:04 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1636eae256cso8273451fac.0;
-        Fri, 03 Feb 2023 13:25:04 -0800 (PST)
+        with ESMTP id S233065AbjBCVrn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 16:47:43 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE7F8E48F
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 13:47:42 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id q5so5875284wrv.0
+        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 13:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P8TDshsiDXMdYWnpIvV/GOghPr+ioBHI9cIhZ4cJ9rQ=;
+        b=EJid9QgFYrPQ6OPSPtkgVHICn00FivJrpf36zYBhP2ZizLnsmZ5kjN5Km8QtBdnNcv
+         x8dnKCSwkl6gowRidZ2CtBhwLkAbWAH2bKzzXLoZ57tQIMs9le2cQzz47yab6txger6w
+         X2rIB+hL6fC8DolrghQlP3B7QuYM4Ex2lUj5hmtL/EP/A/npJ9T7PDWk6VTQwFimoutc
+         wXTz16wyPdpAXyZ5k1pysv1Ss6UzUP5uBKURD32ygC2V/dfia2BQdRsMwCZ+jhLOfgEl
+         x5z15I5arCLDc7sdCKJlJqNyEpSaT/Z7DINEfLE+/WKpSudhswZEmds6XDZio4MDS603
+         9uTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l9q582Q7J+RZ7ICFLaBCZmRsM989hpbhHtNukDPvdVY=;
-        b=ITIH2aIzJ0dWi5eS0MOnkBHsx6InnrG5i12Nuq0IQFHYopmn8Y1YNv6XNO8T5TYMAL
-         VWgwRDfxqbqAruX0P93rGx6YxyjqUSvjjoiE6X/m6QYnq90LOL1fmMNAXeOmGzm/BIX0
-         AICyoVmdqzvNCgcKX5XXA3AsutPncQwJvkNs/yod8Bp57pA1V987DG3N6YbhvkS0hJRp
-         2o2H3sKm2rNF5yaVaUIlHuvIrgcGFaVk181Ko1DH7nn1U1kSWIbK6dyjQGq/mUYBzK/q
-         S8orFVjIH8KF5X1cp/1zDhIY93hh/WHxWEVmzQPDtdsGrsGLRyi1DoN9RPYBnx5N5FPN
-         eqHw==
-X-Gm-Message-State: AO0yUKWrYmHDy1HHKvsPj5QwtJHw8rJhoXRBAbeWk99palYcfepZuPI8
-        47f8OlxWfKdw5szKv9ZsRQ==
-X-Google-Smtp-Source: AK7set9UydUr1VjD194OD/VDGNhlPvCkm1waL94AGZJZ3LXVm9gUIP/u+yFUzUSnMSg33M2jhdKaRw==
-X-Received: by 2002:a05:6870:472a:b0:163:595e:3653 with SMTP id b42-20020a056870472a00b00163595e3653mr7354739oaq.16.1675459503665;
-        Fri, 03 Feb 2023 13:25:03 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a4-20020a056870618400b0014fc049fc0asm1210298oah.57.2023.02.03.13.25.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 13:25:03 -0800 (PST)
-Received: (nullmailer pid 912424 invoked by uid 1000);
-        Fri, 03 Feb 2023 21:25:01 -0000
-Date:   Fri, 3 Feb 2023 15:25:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
- generic ADC node name
-Message-ID: <20230203212501.GA908601-robh@kernel.org>
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
- <20230201204447.542385-3-marijn.suijten@somainline.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P8TDshsiDXMdYWnpIvV/GOghPr+ioBHI9cIhZ4cJ9rQ=;
+        b=XMc+iDYL1PuH8tkHtSBZllREOOe7csd/Q5bkuP1pAhoti5MfFABT0C4CeaxVYxWexc
+         xdetXlQPwFOe5DDNx4vWjVEGeiR4wvSTWUVnQR1jy3TFK3NpAAxbgOSX4vgdiPKuvsMd
+         MZei41BkNAexT59SPJG9wWG7MhAEwi/u5Sj6w+lQsO5Xz+k2EhT8W15Dq6AaAZWO36+i
+         Q6afBQQGKLN6t7dKj9Y9fmGJEOcP/PnM/6g1Fc3Okihk8nz6DWvQM0yacHRryFfWpdFk
+         2udvS6WWlKnBACrX7ZNT8J9LK8K7IN09z/xkU2gJKnz3jevvq7MYW1uwPFcdQZYnw8cY
+         9UwQ==
+X-Gm-Message-State: AO0yUKU/kcH7O56zTuaXuOq5kWrx0vGsuYkip0+TUvOJZLaRpq7NzL2D
+        +gMRHAmmkP6AMNG6IlMtAJT+fy+PH7kRkWRC
+X-Google-Smtp-Source: AK7set/MDCSRhyInEFAIPuAWPUJirQWAI4uG90Lz9Rd6GzuaefvjBGS/B8F/a7vBnKAv60t01CLlCw==
+X-Received: by 2002:adf:f006:0:b0:2bf:e778:6500 with SMTP id j6-20020adff006000000b002bfe7786500mr11690683wro.64.1675460860862;
+        Fri, 03 Feb 2023 13:47:40 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id t10-20020adff60a000000b002bbddb89c71sm2891608wrp.67.2023.02.03.13.47.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 13:47:40 -0800 (PST)
+Message-ID: <a4da1cb6-80a5-a3a9-72e6-62e5ad810509@linaro.org>
+Date:   Fri, 3 Feb 2023 22:47:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201204447.542385-3-marijn.suijten@somainline.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 00/11] Generic trip points for ACPI
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20230203173331.3322089-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0gkOfbWZWzsTKLBD9C8TaAp0qmTv0L0X7E3fBSLyMUEcQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gkOfbWZWzsTKLBD9C8TaAp0qmTv0L0X7E3fBSLyMUEcQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:
-> Update the example to reflect a future requirement for the generic
-> adc-chan node name on ADC channel nodes, while conveying the board name
-> of the channel in a label instead.
+On 03/02/2023 19:46, Rafael J. Wysocki wrote:
+> On Fri, Feb 3, 2023 at 6:34 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> This series introduces the generic trip points usage in the thermal ACPI
+>> driver. It provides a step by step changes to move the current code the
+>> generic trip points.
+>>
+>> I don't have an ACPI platform, the code is not tested.
+> 
+> What's the purpose of sending this now, then?  Should it be an RFC?
+> I'm certainly going to treat it this way.
 
-I don't think we've defined 'adc-chan' as THE generic name. Looks like 
-we have:
+I did basic testing on a x86 laptop having critical trip points but 
+nothing else.
 
-adc-chan
-adc-channel
-channel
+I understand it can be treated as RFC.
 
-'channel' is the most common (except for QCom).
+Is there any dummy ACPI tables with thermal available somewhere I can 
+play with in Qemu ?
 
-Rob
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
