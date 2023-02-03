@@ -2,135 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB8E689EC7
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 17:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA48E689F02
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 17:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjBCQC2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 11:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S231261AbjBCQWU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 11:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbjBCQC1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 11:02:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14E92A98E
-        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 08:02:24 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pNyVz-0004Uw-SP; Fri, 03 Feb 2023 17:02:15 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pNyVy-0001d2-2W; Fri, 03 Feb 2023 17:02:14 +0100
-Date:   Fri, 3 Feb 2023 17:02:14 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pegutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH 18/18] dt-bindings: devfreq: event: convert Rockchip DFI
- binding to yaml
-Message-ID: <20230203160214.GZ13319@pengutronix.de>
-References: <20230203125012.3804008-1-s.hauer@pengutronix.de>
- <20230203125012.3804008-19-s.hauer@pengutronix.de>
- <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
+        with ESMTP id S230038AbjBCQWT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 11:22:19 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C48A641F;
+        Fri,  3 Feb 2023 08:22:18 -0800 (PST)
+Received: from mercury (unknown [37.81.76.207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1084D6602F11;
+        Fri,  3 Feb 2023 16:22:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675441337;
+        bh=RuY5iusY+NWNJyjFIpLuOk+R0feDymEetOVTrgygBxM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lb+LKL5cJpzJKtEdiCgkURg63v6dHETpZe0Gj0QFSMzBndU7alMynFq5Vh1+toZsU
+         YZ988LQbNW2N+0fMNdCcYd3rM9z7L2H2/fBSPZPcUCEFAs21ZBVEUhHBRrUPN2kPuW
+         7omBBABfsVOKvPAMHlsrCPXIFdx2uQeTRgrrWZKlC5HW+Z1rkCHy108Q4LgSQlSBSJ
+         VU2gW0Ug/+9levFz/r6aeWG3oMAtAY7SF2GRyusjYpy7LEBc6IMyzfY6rDBFEsS6pM
+         UglA3200xsMe+fWi2IHdlu7aD5h/rlEg1lxamW/UVsi+jGTVDeYympZS+/8r636awq
+         58wfu8mVahf2w==
+Received: by mercury (Postfix, from userid 1000)
+        id 985E81060930; Fri,  3 Feb 2023 17:22:13 +0100 (CET)
+Date:   Fri, 3 Feb 2023 17:22:13 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        chiaen_wu@richtek.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND 0/3] Add Richtek RT9467 5A Battery Charger
+ support
+Message-ID: <20230203162213.7kisugbsza4suds5@mercury.elektranox.org>
+References: <cover.1672730839.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rdxpduh6xl6np7d5"
 Content-Disposition: inline
-In-Reply-To: <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1672730839.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 04:14:56PM +0100, Krzysztof Kozlowski wrote:
-> On 03/02/2023 13:50, Sascha Hauer wrote:
-> > Convert the Rockchip DFI binding to yaml. While at it add the newly
-> > supported rk3568-dfi to the binding.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
 
-That's what I did. I skipped you and Rob because I know you're wathcing
-the list anyway.
+--rdxpduh6xl6np7d5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
-> > new file mode 100644
-> > index 0000000000000..e082a0df7895a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
-> 
-> rockchip,dfi.yaml
+Hi,
 
-ok.
+On Tue, Jan 03, 2023 at 03:29:55PM +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>=20
+> This patch set is to add Richtek RT9467 5A Battery Charger support.
+>=20
+> RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger
+> for portable applications.
+>=20
+> It integrates a synchronous PWM controller, power MOSFETs,
+> input current sensing and regulation, high-accuracy voltage regulation,
+> and charge termination. The charge current is regulated through
+> integrated sensing resistors.
+>=20
+> The RT9467 also features USB On-The-Go (OTG) support. It also integrates
+> D+/D- pin for USB host/charging port detection.
+>=20
+> Thank you,
+> ChiaEn Wu
+> ---
 
-> 
-> > @@ -0,0 +1,38 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/devfreq/event/rockchip-dfi.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Rockchip DFI
-> > +
-> > +maintainers:
-> > +  - Sascha Hauer <s.hauer@pengutronix.de>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - rk3399-dfi
-> > +      - rk3568-dfi
-> 
-> These are not correct compatibles.
+Thanks, queued.
 
-What's wrong with them?
+-- Sebastian
 
-> 
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  rockchip,pmu:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      Phandle to the syscon managing the "PMU general register files".
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> 
-> clocks were required
+--rdxpduh6xl6np7d5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-They are no longer, the RK3568 doesn't have a clock. Do I have to add
-something to make the clock optional on RK3568 only?
+-----BEGIN PGP SIGNATURE-----
 
-Sascha
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdNLIACgkQ2O7X88g7
++poMdRAAkBj9DK3QoW2SJymVljr0kaa3LI2X7whMKaIyIs8uoz8EsRago9/d9Sav
+fytuiTa4/amZ+mUXZOsvRyN0h/KHvutfUwtotRx7z7zsKkZFlnZG/sKgjQuMQqwJ
+ln0U/A9Oh2o275tYm73OeCQDQWUktq768Zf/w0qtfPDqtpbX1bHi9XikiowlMWq/
+7WzfVV1K5LHHqfT4oZZ2vkngx2eGC6pxNU/X+paUjNM9JEBd28UTuOaGBYH755KG
+k1h5cfrhHWaiuAZp6jvlTTgBChcwebUzBXL2MRgV4GQASnr9ucX1hyyIXsDaNCI0
+kFgy80q54pIWuZe3mWA52FD2ASSy8aNSelf6ku4MKW+nvPotJIsdQxS5BiI7NceJ
+4AZmw00NA4yFwYKYOFl6BpPM1i4XLFCPLB++qrRQS/dx9FMp4eyOuNaEdZRIeEFT
+vXppjoHC8wz5diWDU58rFM455qbHeyZgZwrfV0ktCxJKx7nDR5EChwEGfN2qmNLw
+SAx14fTUhVvsmNsgzOY5yc+jQYS5z55ZRHzvqN54myS0wxcx2uemO2bjXgm6K23S
+bAmBMTTk1mGGLJYfATVTX5Fo5egbDOtoZI+2Mam7l7KT0rGJX+7lWXCKh3/DZcfD
+fL/8dKHZ6Birh14zIJmXJnBmFXps/2z3QLAEZBLPozL0WMgI2ZE=
+=cMRA
+-----END PGP SIGNATURE-----
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+--rdxpduh6xl6np7d5--
