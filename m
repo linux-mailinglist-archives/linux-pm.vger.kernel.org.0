@@ -2,484 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D52D68A455
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 22:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD24F68A48C
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 22:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbjBCVL0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 16:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S233149AbjBCVSl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 16:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbjBCVLX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 16:11:23 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5FC71BF5;
-        Fri,  3 Feb 2023 13:11:10 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313KenUI024989;
-        Fri, 3 Feb 2023 21:10:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=ZrXUH0Omg6RzsJR3syi23SBibtjJaDRCIYaiu1onFk0=;
- b=TsbV0n6AKPZDBX9pHKYLr9Madn8vG3vbMLbAm4A+gQ8v/KOg1ZnO7/TQahQjVPOcHgYY
- z/fE29YA0YqUmTv68hyF7t4bTKi4+omTtvdjOjoYeoyzd5yVU1S8TSM0iu8vrtT5KDuR
- 2QQ1mM+JDM8SsHmr8poKHTRRGTfdxXd2vxlW/rfzTF0upDrUM3WIj83wbQLMdwIQdE9h
- xPwMJ1w68OJx2Jkc2izXQGhqwNO96KekmCMSysTZqXQpT6Ri7W16PTw8N1cLax5+1rfh
- z1JZzaaXVJBvx89jutvc2jFYPgMmimgCwXUAIKPuu69EQBWR+t8Y1o28dsJOb43KA9ZN tQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngns2jha8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 21:10:17 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313LAGUp006424
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 21:10:16 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 3 Feb 2023 13:10:15 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
+        with ESMTP id S233412AbjBCVSk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 16:18:40 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB31A58ED
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 13:18:38 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id j17so567447ioa.9
+        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 13:18:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6lF6n2rSIBhhVUG47YWtdkbXsYAaDIW/2eoVceeEZec=;
+        b=Y+GNDwBItscjx4IWNQgrL4rrzHX+NlPRCydRuD87A0o9szzj6m4ayXIy/pwgOM6pQT
+         IRaRYwHQuMWqnuz8ocirIPlyikojM6Rha7bSHO/JrJmvdV21ZsJGbfORJE1qGZwgnBM9
+         pJN+lmKMXV5tTZSbIRkfEJZ3d437LRXG1N26U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6lF6n2rSIBhhVUG47YWtdkbXsYAaDIW/2eoVceeEZec=;
+        b=x8VC+yBOYPVs3IDOc9Sb+EkXOEWjDNv0ghoE0D0ziVDyx+fnnRe4qjSHarlgkmvX+2
+         fJscJe1BCGxidcB1axN7Slmd6J4AOheYSYyxqH1AqxEK4xIUovkDjAP4wyFNwXvdpEpH
+         kL/ppi7tEsoqxVUujKLVgdlkZ1h5y/XMIwwrS3lLugkYDBzKAGq/ce9vIi5402koezGI
+         jgWqy/0tcRqOiQV1cNyOhFoy2EwabzG7O6jbE3neeS0HcjyU5nWrB+ZBgJREbuT1DHL+
+         jtdLZv3UmVQR1PEhkU6PU+rS5C/B51bwQiyf8YVus55OAG2hhXrpETf3W1aRNY+njmWV
+         htrw==
+X-Gm-Message-State: AO0yUKWhLjRPcsoIlVf5Fa3mwznDF1rh+TwpLZNTZMhUeg4bFXXLSuIN
+        UEcLl7cKdTQ+x9WAVXE55CsClw==
+X-Google-Smtp-Source: AK7set/iJDhcp481T1ZocaPxL/r5sQlivK3W+kbQZfyQXwYJ0ByMPDwkxhfb4u9NkdC4Vc5ZfWhVVA==
+X-Received: by 2002:a6b:dc10:0:b0:722:8687:fe37 with SMTP id s16-20020a6bdc10000000b007228687fe37mr7062384ioc.15.1675459117906;
+        Fri, 03 Feb 2023 13:18:37 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id b7-20020a056638150700b00363c4307bb2sm1173084jat.79.2023.02.03.13.18.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 13:18:37 -0800 (PST)
+Date:   Fri, 3 Feb 2023 21:18:37 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Abel Vesa <abel.vesa@linaro.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        "Vikash Garodia" <quic_vgarodia@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <iommu@lists.linux.dev>,
-        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ath10k@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH] firmware: qcom_scm: Move qcom_scm.h to include/linux/firmware/qcom/
-Date:   Fri, 3 Feb 2023 13:09:52 -0800
-Message-ID: <20230203210956.3580811-1-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.39.1
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Doug Anderson <dianders@chromium.org>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+Message-ID: <Y916LZXfwi17uVn5@google.com>
+References: <20230127104054.895129-1-abel.vesa@linaro.org>
+ <Y9v/z8CYik3faHh7@google.com>
+ <3826e0e6-bb2b-409d-d1c3-ed361305bce3@linaro.org>
+ <Y9xhbq/MIOgssslh@google.com>
+ <9b8af6b3-9ab5-12f8-5576-1a93c58a26c1@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZlK216WrMbhK0f96yjsuQBwOakhKfBhG
-X-Proofpoint-ORIG-GUID: ZlK216WrMbhK0f96yjsuQBwOakhKfBhG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_19,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
- spamscore=0 malwarescore=0 priorityscore=1501 suspectscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030190
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9b8af6b3-9ab5-12f8-5576-1a93c58a26c1@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Move include/linux/qcom_scm.h to include/linux/firmware/qcom/qcom_scm.h.
-This removes 1 of a few remaining Qualcomm-specific headers into a more
-approciate subdirectory under include/.
+On Fri, Feb 03, 2023 at 10:00:27PM +0200, Dmitry Baryshkov wrote:
+> On 03/02/2023 03:20, Matthias Kaehlcke wrote:
+> > Hi Dmitry,
+> > 
+> > On Thu, Feb 02, 2023 at 09:53:41PM +0200, Dmitry Baryshkov wrote:
+> > > On 02/02/2023 20:24, Matthias Kaehlcke wrote:
+> > > > Hi Abel,
+> > > > 
+> > > > On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
+> > > > > Currently, there are cases when a domain needs to remain enabled until
+> > > > > the consumer driver probes. Sometimes such consumer drivers may be built
+> > > > > as modules. Since the genpd_power_off_unused is called too early for
+> > > > > such consumer driver modules to get a chance to probe, the domain, since
+> > > > > it is unused, will get disabled. On the other hand, the best time for
+> > > > > an unused domain to be disabled is on the provider's sync_state
+> > > > > callback. So, if the provider has registered a sync_state callback,
+> > > > > assume the unused domains for that provider will be disabled on its
+> > > > > sync_state callback. Also provide a generic sync_state callback which
+> > > > > disables all the domains unused for the provider that registers it.
+> > > > > 
+> > > > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > > > ---
+> > > > > 
+> > > > > This approach has been applied for unused clocks as well.
+> > > > > With this patch merged in, all the providers that have sync_state
+> > > > > callback registered will leave the domains enabled unless the provider's
+> > > > > sync_state callback explicitly disables them. So those providers will
+> > > > > need to add the disabling part to their sync_state callback. On the
+> > > > > other hand, the platforms that have cases where domains need to remain
+> > > > > enabled (even if unused) until the consumer driver probes, will be able,
+> > > > > with this patch in, to run without the pd_ignore_unused kernel argument,
+> > > > > which seems to be the case for most Qualcomm platforms, at this moment.
+> > > > 
+> > > > I recently encountered a related issue on a Qualcomm platform with a
+> > > > v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
+> > > > highest corner until sync_state"). The issue involves a DT node with a
+> > > > rpmhpd, the DT node is enabled, however the corresponding device driver
+> > > > is not enabled in the kernel. In such a scenario the sync_state callback
+> > > > is never called, because the genpd consumer never probes. As a result
+> > > > the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
+> > > > system suspend, which results in a substantially higher power consumption
+> > > > in S3.
+> > > > 
+> > > > I wonder if genpd (and some other frameworks) needs something like
+> > > > regulator_init_complete(), which turns off unused regulators 30s after
+> > > > system boot. That's conceptually similar to the current
+> > > > genpd_power_off_unused(), but would provide time for modules being loaded.
+> > > 
+> > > I think the overall goal is to move away from ad-hoc implementations like
+> > > clk_disable_unused/genpd_power_off_unused/regulator_init_complete towards
+> > > the sync_state.
+> > 
+> > I generally agree with the goal of using common mechanisms whenever possible.
+> > 
+> > > So inherently one either has to provide drivers for all devices in question
+> > > or disable unused devices in DT.
+> > 
+> > I don't think that's a great solution, it essentially hands the issue down to
+> > the users or downstream maintainers of the kernel, who might not be aware that
+> > there is an issue, nor know about the specifics of genpd (or interconnects and
+> > clocks which have similar problems).
+> 
+> The goal is to move the control down to individual drivers. Previously we
+> had issues with clk_disable_unused() disabling mdss/mdp clocks incorrectly,
+> which frequently led to broken display output. Other clock/genpd/regulator
+> drivers might have other internal dependencies. Thus it is not really
+> possible to handle resource shutdown in the common  (framework) code.
+> 
+> > 
+> > In general symptoms are probably subtle, like a (potentially substantially)
+> > increased power consumption during system suspend. The issue might have been
+> > introduced by an update to a newer kernel, which now includes a DT node for a
+> > new SoC feature which wasn't supported by the 'old' kernel. It's common
+> > practice to use the 'old' .config, at least as a starting point, which
+> > obviously doesn't enable the new driver. That happend to me with [1] when
+> > testing v6.1. It took me quite some time to track the 'culprit' commit down
+> > and then some debugging to understand what's going on. Shortly after that I
+> > ran into a related issue involving genpds when testing v6.2-rc, which again
+> > took a non-trivial amount of time to track down (and I'm familiar with the SoC
+> > platform and the general nature of the issue). I don't think it's reasonable
+> > to expect every user/downstream maintainer of an impacted system to go through
+> > this, one person at a time.
+> 
+> I think it would be nice to have some way of 'sync_pending' debug available
+> (compare this to debugfs/devices_deferred).
 
-Suggested-by: Bjorn Andersson <andersson@kernel.org>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- arch/arm/mach-qcom/platsmp.c                     | 2 +-
- drivers/cpuidle/cpuidle-qcom-spm.c               | 2 +-
- drivers/firmware/qcom_scm-legacy.c               | 2 +-
- drivers/firmware/qcom_scm-smc.c                  | 2 +-
- drivers/firmware/qcom_scm.c                      | 2 +-
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c            | 2 +-
- drivers/gpu/drm/msm/adreno/adreno_gpu.c          | 2 +-
- drivers/gpu/drm/msm/hdmi/hdmi_hdcp.c             | 2 +-
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c | 2 +-
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c       | 2 +-
- drivers/iommu/arm/arm-smmu/qcom_iommu.c          | 2 +-
- drivers/media/platform/qcom/venus/firmware.c     | 2 +-
- drivers/misc/fastrpc.c                           | 2 +-
- drivers/mmc/host/sdhci-msm.c                     | 2 +-
- drivers/net/ipa/ipa_main.c                       | 2 +-
- drivers/net/wireless/ath/ath10k/qmi.c            | 2 +-
- drivers/pinctrl/qcom/pinctrl-msm.c               | 2 +-
- drivers/remoteproc/qcom_q6v5_mss.c               | 2 +-
- drivers/remoteproc/qcom_q6v5_pas.c               | 2 +-
- drivers/remoteproc/qcom_wcnss.c                  | 2 +-
- drivers/soc/qcom/mdt_loader.c                    | 2 +-
- drivers/soc/qcom/ocmem.c                         | 2 +-
- drivers/soc/qcom/rmtfs_mem.c                     | 2 +-
- drivers/thermal/qcom/lmh.c                       | 2 +-
- drivers/ufs/host/ufs-qcom-ice.c                  | 2 +-
- include/linux/{ => firmware/qcom}/qcom_scm.h     | 0
- 26 files changed, 25 insertions(+), 25 deletions(-)
- rename include/linux/{ => firmware/qcom}/qcom_scm.h (100%)
+Most folks are probably not even aware that they have a 'sync_state' issue and
+wouldn't look in debugfs, so I think this would have to be something proactive,
+like a warning log that is enabled by default (possibly with the option to
+disable it). Something in debugfs could be a nice complement.
 
-diff --git a/arch/arm/mach-qcom/platsmp.c b/arch/arm/mach-qcom/platsmp.c
-index 5d2f386a46d8..eca2fe0f4314 100644
---- a/arch/arm/mach-qcom/platsmp.c
-+++ b/arch/arm/mach-qcom/platsmp.c
-@@ -14,7 +14,7 @@
- #include <linux/of_address.h>
- #include <linux/smp.h>
- #include <linux/io.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #include <asm/smp_plat.h>
- 
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index beedf22cbe78..4ac83918edf2 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -17,7 +17,7 @@
- #include <linux/platform_device.h>
- #include <linux/cpuidle.h>
- #include <linux/cpu_pm.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <soc/qcom/spm.h>
- 
- #include <asm/proc-fns.h>
-diff --git a/drivers/firmware/qcom_scm-legacy.c b/drivers/firmware/qcom_scm-legacy.c
-index 9f918b9e6f8f..029e6d117cb8 100644
---- a/drivers/firmware/qcom_scm-legacy.c
-+++ b/drivers/firmware/qcom_scm-legacy.c
-@@ -9,7 +9,7 @@
- #include <linux/mutex.h>
- #include <linux/errno.h>
- #include <linux/err.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/arm-smccc.h>
- #include <linux/dma-mapping.h>
- 
-diff --git a/drivers/firmware/qcom_scm-smc.c b/drivers/firmware/qcom_scm-smc.c
-index bb3235a64b8f..16cf88acfa8e 100644
---- a/drivers/firmware/qcom_scm-smc.c
-+++ b/drivers/firmware/qcom_scm-smc.c
-@@ -8,7 +8,7 @@
- #include <linux/mutex.h>
- #include <linux/slab.h>
- #include <linux/types.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/arm-smccc.h>
- #include <linux/dma-mapping.h>
- 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 2000323722bf..468d4d5ab550 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -12,7 +12,7 @@
- #include <linux/interconnect.h>
- #include <linux/module.h>
- #include <linux/types.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
-diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-index 660ba0db8900..d09221f97f71 100644
---- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-@@ -5,7 +5,7 @@
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/cpumask.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/pm_opp.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/slab.h>
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index 57586c794b84..89ff978b81bb 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -8,7 +8,7 @@
- 
- #include <linux/ascii85.h>
- #include <linux/interconnect.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/kernel.h>
- #include <linux/of_address.h>
- #include <linux/pm_opp.h>
-diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_hdcp.c b/drivers/gpu/drm/msm/hdmi/hdmi_hdcp.c
-index e7748461cffc..0752fe373351 100644
---- a/drivers/gpu/drm/msm/hdmi/hdmi_hdcp.c
-+++ b/drivers/gpu/drm/msm/hdmi/hdmi_hdcp.c
-@@ -3,7 +3,7 @@
-  */
- 
- #include "hdmi.h"
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #define HDCP_REG_ENABLE 0x01
- #define HDCP_REG_DISABLE 0x00
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
-index 74e9ef2fd580..b5b14108e086 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
-@@ -4,7 +4,7 @@
-  */
- 
- #include <linux/of_device.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/ratelimit.h>
- 
- #include "arm-smmu.h"
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index 91d404deb115..ef42329e82ce 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -7,7 +7,7 @@
- #include <linux/adreno-smmu-priv.h>
- #include <linux/delay.h>
- #include <linux/of_device.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #include "arm-smmu.h"
- #include "arm-smmu-qcom.h"
-diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index 270c3d9128ba..1e0b7b2e9fbd 100644
---- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-+++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -27,7 +27,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- 
-diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-index 142d4c74017c..e5759d7e9ede 100644
---- a/drivers/media/platform/qcom/venus/firmware.c
-+++ b/drivers/media/platform/qcom/venus/firmware.c
-@@ -12,7 +12,7 @@
- #include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/of_device.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/sizes.h>
- #include <linux/soc/qcom/mdt_loader.h>
- 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index c9902a1dcf5d..04f80e754477 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -18,7 +18,7 @@
- #include <linux/rpmsg.h>
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <uapi/misc/fastrpc.h>
- #include <linux/of_reserved_mem.h>
- 
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index 4ac8651d0b29..8ac81d57a3df 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -13,7 +13,7 @@
- #include <linux/pm_opp.h>
- #include <linux/slab.h>
- #include <linux/iopoll.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/regulator/consumer.h>
- #include <linux/interconnect.h>
- #include <linux/pinctrl/consumer.h>
-diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
-index 4fb92f771974..90baf7a54d9a 100644
---- a/drivers/net/ipa/ipa_main.c
-+++ b/drivers/net/ipa/ipa_main.c
-@@ -16,7 +16,7 @@
- #include <linux/of_device.h>
- #include <linux/of_address.h>
- #include <linux/pm_runtime.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/soc/qcom/mdt_loader.h>
- 
- #include "ipa.h"
-diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
-index 3f94fbf83702..90f457b8e1fe 100644
---- a/drivers/net/wireless/ath/ath10k/qmi.c
-+++ b/drivers/net/wireless/ath/ath10k/qmi.c
-@@ -13,7 +13,7 @@
- #include <linux/module.h>
- #include <linux/net.h>
- #include <linux/platform_device.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/soc/qcom/smem.h>
- #include <linux/string.h>
- #include <net/sock.h>
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-index 47e9a8b0d474..e0128c69bfbf 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.c
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-@@ -14,7 +14,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/reboot.h>
- #include <linux/seq_file.h>
- #include <linux/slab.h>
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index fddb63cffee0..da2513bb6387 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -34,7 +34,7 @@
- #include "qcom_pil_info.h"
- #include "qcom_q6v5.h"
- 
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #define MPSS_CRASH_REASON_SMEM		421
- 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index dc6f07ca8341..d5a049669616 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -18,7 +18,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/regulator/consumer.h>
- #include <linux/remoteproc.h>
- #include <linux/soc/qcom/mdt_loader.h>
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index 68f37296b151..9881443cb8df 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -19,7 +19,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/regulator/consumer.h>
- #include <linux/remoteproc.h>
- #include <linux/soc/qcom/mdt_loader.h>
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 3f11554df2f3..33dd8c315eb7 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -12,7 +12,7 @@
- #include <linux/firmware.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/soc/qcom/mdt_loader.h>
-diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-index c92d26b73e6f..199fe9872035 100644
---- a/drivers/soc/qcom/ocmem.c
-+++ b/drivers/soc/qcom/ocmem.c
-@@ -16,7 +16,7 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
-index 9d59ad509a5c..2d3ee22b9249 100644
---- a/drivers/soc/qcom/rmtfs_mem.c
-+++ b/drivers/soc/qcom/rmtfs_mem.c
-@@ -14,7 +14,7 @@
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- #include <linux/io.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #define QCOM_RMTFS_MEM_DEV_MAX	(MINORMASK + 1)
- #define NUM_MAX_VMIDS		2
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index 4122a51e9874..f6edb12ec004 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -10,7 +10,7 @@
- #include <linux/platform_device.h>
- #include <linux/of_platform.h>
- #include <linux/slab.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #define LMH_NODE_DCVS			0x44435653
- #define LMH_CLUSTER0_NODE_ID		0x6370302D
-diff --git a/drivers/ufs/host/ufs-qcom-ice.c b/drivers/ufs/host/ufs-qcom-ice.c
-index 62387ccd5b30..453978877ae9 100644
---- a/drivers/ufs/host/ufs-qcom-ice.c
-+++ b/drivers/ufs/host/ufs-qcom-ice.c
-@@ -8,7 +8,7 @@
- 
- #include <linux/delay.h>
- #include <linux/platform_device.h>
--#include <linux/qcom_scm.h>
-+#include <linux/firmware/qcom/qcom_scm.h>
- 
- #include "ufs-qcom.h"
- 
-diff --git a/include/linux/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
-similarity index 100%
-rename from include/linux/qcom_scm.h
-rename to include/linux/firmware/qcom/qcom_scm.h
+> Note, we are trying to make sure that all supported drivers are enabled at
+> least as modules (if possible). If we fail, please send a patch fixing the
+> defconfig.
 
-base-commit: 3866989ec2c319341e2cf69ec6116269b634a271
--- 
-2.39.1
+That's great, however not everybody uses the defconfig, it's just a default.
 
+> > Maybe there could be a generic solution for drivers with a 'sync_state'
+> > callback, e.g. a the driver (or framework) could have a 'sync_state_timeout'
+> > callback (or similar), which is called by the driver framework if 'sync_state'
+> > wasn't called (for example) 30s after the device was probed. Then the provider
+> > can power off or throttle unclaimed resources.
+> 
+> I might be missing a point somewhere, but for me it looks like a logical
+> solution. Please send a proposal.
+
+I started working on a patch, I'll probably send it out next week if I don't
+encounter any evident major issues.
