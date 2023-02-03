@@ -2,122 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574726898FD
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784AE689926
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjBCMq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 07:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S232916AbjBCMuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 07:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjBCMq0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:46:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6FF9AFEA;
-        Fri,  3 Feb 2023 04:46:26 -0800 (PST)
-Received: from mercury (unknown [37.81.13.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1AAB6602F0F;
-        Fri,  3 Feb 2023 12:46:24 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675428384;
-        bh=eSr8KydWD2KO8r7TtN+Y+lpNdNVAYRGafaRB2qGXUTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hkYYj+rFFgufgBiKAos8KdwI0MBVQmOCvulW0MQbnQ7azZzSoBzvzeCTcI7foLcHZ
-         Iar22OQOWp3hZh241dgbYQRbpxwtqPdXmDP6ozRPgclv9FWa8+yaRYoQ0XOqJ6CaLR
-         cIKanNrHRlbLvclE9cgOn/Ed2nzJEbnwWXIFSMkFE8RvXgBrzGgwlPoI0noHO6zDbk
-         0gZoAly9b4L+EZQrG7HvM89q44ubC5P8HiFgeSuTTueFu6p/e7VFaucO2/lnDuN8qe
-         kpODFfYBVFSqm2TGIVR52k++yglsrZ2ZD4XLPcAtwcqjSQGEwZ1gwFKOG3inzbzKK1
-         6b5bEumTPk4mA==
-Received: by mercury (Postfix, from userid 1000)
-        id 083561060930; Fri,  3 Feb 2023 13:46:22 +0100 (CET)
-Date:   Fri, 3 Feb 2023 13:46:22 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     yang.yang29@zte.com.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-Subject: Re: [PATCH linux-next] power: supply: test-power: use strscpy() to
- instead of? strncpy()
-Message-ID: <20230203124622.fgvo2udbrto3grwv@mercury.elektranox.org>
-References: <202212231042356202397@zte.com.cn>
+        with ESMTP id S232949AbjBCMuj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:50:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD599D7E
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 04:50:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pNvWE-0000a6-5E; Fri, 03 Feb 2023 13:50:18 +0100
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pNvW9-002OpS-Be; Fri, 03 Feb 2023 13:50:14 +0100
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pNvW9-000Zk9-QM; Fri, 03 Feb 2023 13:50:13 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pegutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH 00/18] Add perf support to the rockchip-dfi driver
+Date:   Fri,  3 Feb 2023 13:49:54 +0100
+Message-Id: <20230203125012.3804008-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zk4n2uiiwvyoynwj"
-Content-Disposition: inline
-In-Reply-To: <202212231042356202397@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This series adds perf support to the Rockchip DFI driver.
 
---zk4n2uiiwvyoynwj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The DFI is a unit for measuring DRAM performance. Its driver is
+currently located under drivers/devfreq/event/ as it serves as an event
+driver for DRAM frequency scaling. With this series it can also be used
+as a perf driver for measuring DRAM throughput. Usage looks like:
 
-Hi,
+perf stat -a -e rockchip_ddr/cycles/,\
+                rockchip_ddr/read-bytes/,\
+                rockchip_ddr/write-bytes/,\
+                rockchip_ddr/bytes/ sleep 1
 
-On Fri, Dec 23, 2022 at 10:42:35AM +0800, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
->=20
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL-terminated strings.
->=20
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> ---
+ Performance counter stats for 'system wide':
 
-Thanks, queued.
+        1582524826      rockchip_ddr/cycles/
+           1802.25 MB   rockchip_ddr/read-bytes/
+           1793.72 MB   rockchip_ddr/write-bytes/
+           3595.90 MB   rockchip_ddr/bytes/
 
--- Sebastian
+       1.014369709 seconds time elapsed
 
->  drivers/power/supply/test_power.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/tes=
-t_power.c
-> index 5f510ddc946d..0d0a77584c5d 100644
-> --- a/drivers/power/supply/test_power.c
-> +++ b/drivers/power/supply/test_power.c
-> @@ -306,8 +306,7 @@ static int map_get_value(struct battery_property_map =
-*map, const char *key,
->  	char buf[MAX_KEYLENGTH];
->  	int cr;
->=20
-> -	strncpy(buf, key, MAX_KEYLENGTH);
-> -	buf[MAX_KEYLENGTH-1] =3D '\0';
-> +	strscpy(buf, key, MAX_KEYLENGTH);
->=20
->  	cr =3D strnlen(buf, MAX_KEYLENGTH) - 1;
->  	if (cr < 0)
-> --=20
-> 2.15.2
+My target SoC is RK3568 which is not yet supported by the driver, so the
+series starts with some cleanups and preparations, then RK3568 support
+is added and finally perf support.
 
---zk4n2uiiwvyoynwj
-Content-Type: application/pgp-signature; name="signature.asc"
+The driver is tested on both a RK3568 board and a RK3399 board, the
+latter with dual channel memory. The measured values look sane,
+read-bytes plus write-bytes is equal to totally transferred bytes, the
+values reported by perf are slightly higher than the values my copy
+from/to RAM test tool reports, as expected.
 
------BEGIN PGP SIGNATURE-----
+Sascha
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdAh0ACgkQ2O7X88g7
-+pq2xhAApLxSAyVBQTFenESoqlz0STQImWJtHJbcuSNHe9u2X3mii4USzEkToPxY
-cTUHwwdrsMsGAxioVXhvjaXf/wNLc0yxVW8qYzxwPJes9BgyCfatVNJBpRwoCBos
-n72VYGJ+F4wirBp4zHGs1MxFOJ4jRKiDnyYVzNi1NlHKkVIX2Z+jxuuEsHWnw5zf
-7aS7bGwJhvYW4KXbWRoaHYu9ZgOxPJkdCko4sYSjs2BIIhpeZtgCAGAZGgFbZOeV
-R8+NlRuHfe6HuVTbXAmBnuzAmEW5JCm1W3HE1equOsWK37mAlgd00KkyRv3G4+7H
-yNlT56rGPDiPJf3MdwNAyMR6KYK0Z8NNbdqnWs1J/lDQMKv+kUFwZ7lUrMrwdYDo
-TPZC7tg4KyFpkh2TF+xXwA++mtcm1dV/gDmfPf2W5mT4g9Pvie6DoDf981xa/tM7
-AmtJXiQtLptriXJjuzVFa8c34O1tgr8J30AylBJXtVZcZzLTLq9/dOea+K7un3y3
-tWoAS4H0zObO4GDqfU6fYCgFltQ2RQ0k4vNaBuVtA43DTFjg2frrT0LfEItRhxPr
-7AF9xz17thDm+Fxdx0C7ABS8xKJFaMrjYMu+8fbQnE/OPDn7N3ZrulG9sAZg+f6T
-aYXyz60p5QlRtSDgeAyAqRuL056yuHBCTYnjH2ieLXPWc9Hf2ZE=
-=1m5F
------END PGP SIGNATURE-----
+Sascha Hauer (18):
+  PM / devfreq: rockchip-dfi: Embed desc into private data struct
+  PM / devfreq: rockchip-dfi: use consistent name for private data
+    struct
+  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+  PM / devfreq: rockchip-dfi: Add SoC specific init function
+  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+  PM / devfreq: rockchip-dfi: Use free running counter
+  PM / devfreq: rockchip-dfi: introduce channel mask
+  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+  PM / devfreq: rockchip-dfi: Add RK3568 support
+  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+  PM / devfreq: rockchip-dfi: Handle LPDDR4X
+  PM / devfreq: rockchip-dfi: Pass private data struct to internal
+    functions
+  PM / devfreq: rockchip-dfi: Prepare for multiple users
+  PM / devfreq: rockchip-dfi: Add perf support
+  arm64: dts: rockchip: rk3399: Enable DFI
+  arm64: dts: rockchip: rk356x: Add DFI
+  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
 
---zk4n2uiiwvyoynwj--
+ .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+ .../bindings/devfreq/event/rockchip-dfi.yaml  |  38 +
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   6 +
+ drivers/devfreq/event/rockchip-dfi.c          | 659 +++++++++++++++---
+ drivers/devfreq/rk3399_dmc.c                  |  10 +-
+ include/soc/rockchip/rk3399_grf.h             |   9 +-
+ include/soc/rockchip/rk3568_grf.h             |  13 +
+ include/soc/rockchip/rockchip_grf.h           |  16 +
+ 9 files changed, 638 insertions(+), 132 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
+
+-- 
+2.30.2
+
