@@ -2,204 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CF7689779
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 12:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA576897B7
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 12:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjBCLHM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 06:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S232439AbjBCL1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 06:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjBCLHL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 06:07:11 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBCC6D070
-        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 03:07:09 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id lu11so14367848ejb.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 03:07:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AkQ8Gz4j/geHcEad/4Eauy1yNTF7OO2D+brLgcLvLOo=;
-        b=bIa1jBCPI5MWhjL0rRPnJN7kCSzLkePkj2byuaF4LkJSK7i059EOqSRIKaq/egcsWn
-         q7lDpxltYyEJ74vGv0hGLN3Mg/jAAfy2proI4RMVLagxNlKuqpkj26dHM8iOgxZDbDKZ
-         9iXmSEeCVr+rLCabe1LR84R4byjKOVC0MXMoZRMuzNkQUH7m8xXQ4LKu78bPKCukoPa0
-         9QIHhRDXiLWV+SB9rLuZCnQauR9A2It/1tHpHiye0ctyhbEFXjMviq1IduUueMEHtflS
-         gUHGiuEFmraZiPPCb5NdjqVDwaAS0NodsgJdjEVK9e3XvireT7bB9yUdonxAfvBUmboS
-         bBjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AkQ8Gz4j/geHcEad/4Eauy1yNTF7OO2D+brLgcLvLOo=;
-        b=wtfOXaX9EsnLGCUAeQmIhE6X8oOFzVYJJ3+BabA3DR9k0owM8DEWXkZ9M9uJs9A5Wo
-         TgKL5grvRRr+nZVC/jurWuwW2A6Tx5CvRgc0KPt1HvKueD+nlVGjtaT0KpCJi5uYiMt3
-         AgWjz3IIBrgDf+g3anoOBN9PYL2qeKG2s/RBkq9qkUhUGIK4Lutqhfby6RzaG8zlhnlH
-         ovTu8gPaF+fu1d1aEYGRnUa0bPner1rjHd2xY9pl6VLvYM0GCwbn0Mr3L6BpzeNmnlzo
-         XZwaJHJlVFPUsF9tH4agfV6p264KbtNRiHR0K2cOWTT/vdxnHk/Ptslcac+acRdcB9W9
-         Gm7A==
-X-Gm-Message-State: AO0yUKVJhuvMflROZ32gLRNGeTfNnQkV052wpTdM8nchsae2+Hq8zdO0
-        W0DFZjaLDvRW2NAdjMSZcTLf0aX7bzRukvzBHyL4xg==
-X-Google-Smtp-Source: AK7set9W9wLn3JZ8MrFzo0VuFe/HAuvajC0zCNwULGTi/uQ9VI1ybXodYpHBrfydldHh9/xqXzDFQFITEAIkXYRU2Zo=
-X-Received: by 2002:a17:906:1803:b0:7c0:f45e:22ff with SMTP id
- v3-20020a170906180300b007c0f45e22ffmr3345979eje.104.1675422428182; Fri, 03
- Feb 2023 03:07:08 -0800 (PST)
+        with ESMTP id S232327AbjBCL13 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 06:27:29 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF8D99D4D;
+        Fri,  3 Feb 2023 03:27:26 -0800 (PST)
+Received: from mercury (unknown [37.81.13.16])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 48E056602E87;
+        Fri,  3 Feb 2023 11:27:25 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675423645;
+        bh=D98rQM+fEax85Ks9+tvSm7CBvWW2ns6/rMUaRFKi5+4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MgigG2yNZAWiShf5dof1jWsDWNeeIjQhAOWVSIQvb0pbGiZydOcYLXfLib799rMOU
+         hjW8Yu7nzK0Cs5NTxqtzsxEWOdgFXXtDWaIo10rbRXq7dSyL/s+afxQEj12U9Vwk0K
+         Sa84VMkpXHiISS1XppOowGfzy2oXaStzzx99sZk6aVKcI0k9et9grM+8kJ4QRgUbAn
+         eeaafo6lrSDpV2uCpHmIVuByoZb4PNwhJid2iwyhrrFhNXQ/wElrZEwgVwOVMGI50R
+         dkkD492/87adSN54cXYeYOuqFKGiw96mFieOppiFEXc8wc+g2N4dKlGyoUhvlaOCxp
+         4EybjSLSjRVHQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 771131060930; Fri,  3 Feb 2023 12:27:20 +0100 (CET)
+Date:   Fri, 3 Feb 2023 12:27:20 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v4 4/4] power: supply: Introduce Qualcomm PMIC GLINK
+ power supply
+Message-ID: <20230203112720.oa7e2psevbazicqo@mercury.elektranox.org>
+References: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
+ <20230201041853.1934355-5-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-References: <20230124131717.128660-5-bchihi@baylibre.com> <20230131153816.21709-1-bchihi@baylibre.com>
- <ab1e4822-d5f4-79f6-ea38-47e2342ebe49@linaro.org> <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
- <8662c6bd-b32d-3d3d-b3b7-7f4aeb028309@linaro.org>
-In-Reply-To: <8662c6bd-b32d-3d3d-b3b7-7f4aeb028309@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 3 Feb 2023 12:06:32 +0100
-Message-ID: <CAGuA+or+rKzZaVO--yhBuOnUrL1+LhJAwxLsNcTif4t9W0TFWA@mail.gmail.com>
-Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
- Thermal Sensor driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ab6rsa56fkougaat"
+Content-Disposition: inline
+In-Reply-To: <20230201041853.1934355-5-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
 
-On Wed, Feb 1, 2023 at 6:12 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 01/02/2023 17:46, Balsam CHIHI wrote:
-> >>> +#ifdef CONFIG_MTK_LVTS_THERMAL_DEBUGFS
-> >>> +
-> >>> +static struct dentry *root;
-> >>
-> >> How do you handle two instances of driver?
-> >
-> > This root node is the topmost directory for debugfs called 'lvts', the
-> > different driver instances are below this. It is a singleton.
->
-> Indeed. What about removal? Aren't you remobing entire directory
-> structure on first device removal?
->
+--ab6rsa56fkougaat
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For now, the driver only supports one instance.
-I will find a way to handle this when the driver supports more instances.
-Is this suggestion OK for you?
+Hi,
 
-> (...)
->
-> >>> +
-> >>> +     of_property_for_each_string(np, "nvmem-cell-names", prop, cell_=
-name) {
-> >>> +             size_t len;
-> >>> +             u8 *efuse;
-> >>> +
-> >>> +             cell =3D of_nvmem_cell_get(np, cell_name);
-> >>> +             if (IS_ERR(cell)) {
-> >>> +                     dev_dbg(dev, "Failed to get cell '%s'\n", cell_=
-name);
-> >>
-> >> Is this an error? If so, why debug? dbg is not for errors.
-> >
-> > AFAIK using dev_dbg does not increase ELF size when DEBUG is disabled.
-> > If this is not a good reason for you, then I will change it to dev_err.
->
-> But also dev_dbg are not visible in error or warn level logs. If this is
-> not an error, then indeed dev_dbg could be fine. But errors should be
-> verbose.
+On Tue, Jan 31, 2023 at 08:18:53PM -0800, Bjorn Andersson wrote:
+=2E..
+> +static const enum power_supply_property sm8350_bat_props[] =3D {
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_HEALTH,
+> +	POWER_SUPPLY_PROP_PRESENT,
+> +	POWER_SUPPLY_PROP_CHARGE_TYPE,
+> +	POWER_SUPPLY_PROP_CAPACITY,
+> +	POWER_SUPPLY_PROP_VOLTAGE_OCV,
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +	POWER_SUPPLY_PROP_VOLTAGE_MAX,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_TEMP,
+> +	POWER_SUPPLY_PROP_TECHNOLOGY,
+> +	POWER_SUPPLY_PROP_CHARGE_COUNTER,
+> +	POWER_SUPPLY_PROP_CYCLE_COUNT,
+> +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_CHARGE_FULL,
 
-OK,
-I will replace all "dev_dbg" with "dev_err" in this function.
+no CHARGE_NOW?
 
->
-> >
-> >>
-> >>> +                     return PTR_ERR(cell);
-> >>> +             }
-> >>> +
-> >>> +             efuse =3D nvmem_cell_read(cell, &len);
-> >>> +
-> >>> +             nvmem_cell_put(cell);
-> >>> +
-> >>> +             if (IS_ERR(efuse)) {
-> >>> +                     dev_dbg(dev, "Failed to read cell '%s'\n", cell=
-_name);
-> >>> +                     return PTR_ERR(efuse);
-> >>> +             }
-> >>> +
-> >>> +             lvts_td->calib =3D devm_krealloc(dev, lvts_td->calib,
-> >>> +                                            lvts_td->calib_len + len=
-, GFP_KERNEL);
-> >>> +             if (!lvts_td->calib)
-> >>> +                     return -ENOMEM;
-> >>> +
-> >>> +             memcpy(lvts_td->calib + lvts_td->calib_len, efuse, len)=
-;
-> >>> +
-> >>> +             lvts_td->calib_len +=3D len;
-> >>> +
-> >>> +             kfree(efuse);
-> >>> +     }
-> >>> +
-> >>> +     return 0;
-> >>> +}
-> >>> +
-> >>> +static int __init lvts_golden_temp_init(struct device *dev, u32 *val=
-ue)
-> >>
-> >> You did not test it, right? Build with section mismatch analysis...
-> >
-> > I'm not sure to fully understand this comment.
-> > Would you explain, please?
->
-> git grep -i "section mismatch" leads to lib/Kconfig.debug and
-> DEBUG_SECTION_MISMATCH
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
+> +	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
+> +	POWER_SUPPLY_PROP_POWER_NOW,
+> +};
 
-__init is removed from all functions.
+=2E..
 
->
-> (...)
->
-> >>> +static struct lvts_ctrl_data mt8195_lvts_data_ctrl[] =3D {
-> >>
-> >> Why this cannot be const?
-> >
-> > I've got the following warning when I added "const"
-> > drivers/thermal/mediatek/lvts_thermal.c:1286:27: warning:
-> > initialization discards =E2=80=98const=E2=80=99 qualifier from pointer =
-target type
-> > [-Wdiscarded-qualifiers]
-> >  1286 |         .lvts_ctrl      =3D mt8195_lvts_data_ctrl,
-> >       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
->
-> As with every const... Do you need lvts_ctrl to be non-const? If yes,
-> then how do you handle multiple devices (singleton)?
->
+> +static struct auxiliary_driver qcom_battmgr_driver =3D {
+> +	.name =3D "pmic_glink_power_supply",
+> +	.probe =3D qcom_battmgr_probe,
+> +	.id_table =3D qcom_battmgr_id_table,
+> +};
+> +
+> +static int __init qcom_battmgr_init(void)
+> +{
+> +	return auxiliary_driver_register(&qcom_battmgr_driver);
+> +}
+> +module_init(qcom_battmgr_init);
+> +
+> +static void __exit qcom_battmgr_exit(void)
+> +{
+> +	auxiliary_driver_unregister(&qcom_battmgr_driver);
+> +}
+> +module_exit(qcom_battmgr_exit);
 
-I found a fix for this it was simple.
-add const here as you suggested
-and in other function parameters every time we use this variable.
+module_auxiliary_driver()
 
-> Best regards,
-> Krzysztof
->
+Otherwise LGTM.
 
-Thank you for the review!
+-- Sebastian=20
 
-Best regards,
-Balsam
+--ab6rsa56fkougaat
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc75UACgkQ2O7X88g7
++pr4fw//Z1DMQADqDkOFF9D967X8R7vHQhf+RCwXgMknxBdCaIw650zcMzdKH+9L
+9PCr4nFXlHIqMUYaTaEFV5BTitoCPdKGCoQ0fKMzeHYvX/LYlZhjD3HYyhhOQaLF
+iZRR5IuX1iW0TG6Kv0GKd8hZxHH2/VdaYZYUESAPJa6qX6/k/zc+D4AYc5PxRzuZ
+D8avHBiwts+3zZnSaAlaNBh51jeHrfMGwZCU93gbySXhatHzQGDFatV1UNr34/j4
+ZWPCn8pgCTBTIfg8qeXEDmteYwkHt61CBZu7j2A1h367g8pbz+KInZlZAMlipEHF
+SK7EHwO30m5AK6Fz+kJKWiNxL80O1WqUwvoUCJ6tivPCFKEB+/FUjWs0GZ5OvZfX
+i9R/dB0FXuACz59pPJkS8rk1q5lZtBgSHV1kgrI/dIgxFSf2y078UiJwX0JTSBhw
+Rqk/VehvCHlXO1Qs3J3EOKiHu7l0VpSfQsRUBbLnichQQurg+/uzaJZ2OYULQ2do
++uQUrp/8gfl/a5lBN2r7P3YaBzEj3YHNEfRhAf9RW96XzUSe5nncv7cIu6ftfAtO
+r6OK4Or2ntCuaTLATnllK+9fIKUPNArPh2ggU98ZBERXR0zsgGHwEZRGOYiYcswx
+dU+1oqzEt3TDZq77KlVjZR6hlOwvOeHM/ExI763HwvolUkkttdQ=
+=PQ0S
+-----END PGP SIGNATURE-----
+
+--ab6rsa56fkougaat--
