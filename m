@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF0C68A0A6
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 18:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B4868A0A4
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 18:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbjBCRpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S233681AbjBCRpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Fri, 3 Feb 2023 12:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbjBCRoy (ORCPT
+        with ESMTP id S233735AbjBCRoy (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 12:44:54 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4DAA6430
-        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 09:44:41 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id q5so5380948wrv.0
-        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 09:44:41 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A5EA642B
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 09:44:43 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id a2so5056477wrd.6
+        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 09:44:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W0WMeqO1vZNLVskDd96ga8DPKCx7MU4pvjHfg5TCNV4=;
-        b=eDdQGU+o+vQBj916o88d/DuKFcRUq1sVlFHxSPl+uAEDmb/AbcpCoUSEbz/4e5P9jg
-         2X9+igApY6B6gHQ4RsKf6WQPYg730TJw9eCrZ5o+ZaJrTLiONzrGZz8U4T4JKFLe0FOY
-         lWEHvR03BaPUo9aa8fRHBLYvgpu9MSPIiWbxakQXKtDR+id+CrCTf1zRdgEi60iAwtP8
-         J2p3oEsCfWg/56/y/5/w/2cg0N9KNDEgNuUgdFpneLcqkM/i1LMBDFcc0l/UMEh4itAD
-         gtsmBZ/InnJundV9aXm5lZAyKjWMWMESV58rhonGg1HvnM1noBVCyWuIOsgGih9NHBNk
-         478A==
+        bh=n5nHHSh5TfhObVB27BdAlj0+jr/HbFgiMaA9A4Ts7wk=;
+        b=q4PvJDbS4h+Vm7gtjuSp5SfPDEZs2aQMuhxNgiB/QpLhxxaioTTfwl0SX91tfglgI9
+         5Sj7bUM0UQV+cRRaX6RrFna0Q+1XQ1pGkTJ2j5Kg3MRAv4bznBi+0zlDbR29UpvPhroq
+         b6A/NQ0gOPa5sY0yBiNZ6Nc9uGsmpWSUhMSuaLQkzWHHX+itsbknRohXFyv5dx4G+MGn
+         E5xGkKQAdQ3fnByhmnvd3WQT+fJBoqUAb+umBwHFvFKgAySCKf4384E15JtZUW9Nw5KL
+         E+ZWsxI5nf1u/RoPyjD996RNc5VjVxapUiHkHgbIUQFL6uI7AKv5PqbE+d4/+7+22RH6
+         bwlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W0WMeqO1vZNLVskDd96ga8DPKCx7MU4pvjHfg5TCNV4=;
-        b=6A+cHcNL5UQYXQeoOTb0kX0KxjwlixWQoa/ryOFJjOzCPtvIQvRVFH90JtBiTYhNxQ
-         0+HTgOm6o6ZuqPr3KFviudtAbIP8+moh3H/CnEHFCjMKOkZt1+RPLpcHDIhfcOsBslKa
-         Y3XReyiXz/oJ+EDUjhZCZsmyscJVeT1jjMbPETnttt6EEkbw6ZqdzCcvhTrIcZBY5TZF
-         Y+U6oPc1h6npR73EOvN59jU+dZa839vu9iI35yhMuEUcPBBekl2cTMhlFRb3fDzN1kNp
-         rqnkcTj4wuhX+pfWdbTTIRPgLiTofNeaqZjtTVSnAsK0kSjDvR4RLd3LZdebgwB/KnDa
-         DFJQ==
-X-Gm-Message-State: AO0yUKXjx/hTCxg9yCPkwRCswjb/RFgfZH2a7qfg7XBK80Xi3/VkcDG8
-        RpOelmUVy0LIRdkEDfoZ4tmo/w==
-X-Google-Smtp-Source: AK7set+0jHFe+Z/yjIND1hVAz99WlzWujvqJ4GcisGqVhzdiy1r15yfrZS6s1smJgRB9NsRvDqEuJg==
-X-Received: by 2002:adf:e9c3:0:b0:2bb:eb3d:8d20 with SMTP id l3-20020adfe9c3000000b002bbeb3d8d20mr8795450wrn.43.1675446280703;
-        Fri, 03 Feb 2023 09:44:40 -0800 (PST)
+        bh=n5nHHSh5TfhObVB27BdAlj0+jr/HbFgiMaA9A4Ts7wk=;
+        b=j3Vn5rnVKR467zszC7od5gVW9rFi5+Pzt4vtC5QUK3HJXUIDr+L7AeVla9o+9F19Q3
+         b08WpcaRKZBkImcL//82VaGpvKknMWmcD+/Ur2nGvC4cUzeprYElHEjsO+3yKE2GZ3JM
+         87sXvGa5Y9d03/cS4+Fo1fyqXJOtFkzmLTpgmU/4aq1mcgi2wPG6KVwkCopSzkkjNTkn
+         pDgh28SImwOVQP4YZj4mAYeyLmajfFPSlAu9Ep18RSua/YqaGE/NSP4Nf+un25yqyd8+
+         Ghnqch1DezYIRGnUKqgpeoPzopNCI29t++mnx3j8KlROOW9sC2gm4Vqlx9Q2OftHXBwx
+         d0pA==
+X-Gm-Message-State: AO0yUKV/VZ1YtH95afXGETPK3H3ujDqe/16axY0kxTFQ4Kx52/J2Ocw3
+        F2Yk1gvJtOoQLH1dIeyE1OuViQ==
+X-Google-Smtp-Source: AK7set/xt1LGFtMdeWadocqdqxfEXyo3P7347SO7zjWlNakaSZxs2ZweMEL/aGiUYQxfjueuupHuPw==
+X-Received: by 2002:a05:6000:1085:b0:2bf:d511:18a9 with SMTP id y5-20020a056000108500b002bfd51118a9mr9559555wrw.29.1675446281872;
+        Fri, 03 Feb 2023 09:44:41 -0800 (PST)
 Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id z1-20020a5d4c81000000b002bdd8f12effsm2443528wrs.30.2023.02.03.09.44.39
+        by smtp.gmail.com with ESMTPSA id z1-20020a5d4c81000000b002bdd8f12effsm2443528wrs.30.2023.02.03.09.44.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:44:40 -0800 (PST)
+        Fri, 03 Feb 2023 09:44:41 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rjw@rjwysocki.net
 Cc:     daniel.lezcano@linaro.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 07/11] thermal/acpi: Simplifify the condition check
-Date:   Fri,  3 Feb 2023 18:44:25 +0100
-Message-Id: <20230203174429.3375691-8-daniel.lezcano@linaro.org>
+Subject: [PATCH v2 08/11] thermal/acpi: Remove active and enabled flags
+Date:   Fri,  3 Feb 2023 18:44:26 +0100
+Message-Id: <20230203174429.3375691-9-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230203174429.3375691-1-daniel.lezcano@linaro.org>
 References: <20230203174429.3375691-1-daniel.lezcano@linaro.org>
@@ -74,82 +74,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The condition:
+The 'active' field in the struct acpi_thermal_state is never used.
 
-if ((flag == ACPI_TRIPS_INIT) || ((flag & ACPI_TRIPS_ACTIVE))
+The 'enabled' field of the structure acpi_thermal_state_flags is
+assigned but never used.
 
-and on the other side: ACPI_TRIPS_INIT (... | ACPI_TRIPS_ACTIVE)
-
-So if the first predicate is true, the second is also true.
-
-The 'valid' flag for the trip point is also checked before, so it is
-pointless to redo the same check again and again as it is unchanged.
+Remove them.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/acpi/thermal.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ drivers/acpi/thermal.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index a3a8130c955f..c7c2b3d63e90 100644
+index c7c2b3d63e90..316a16ac1a09 100644
 --- a/drivers/acpi/thermal.c
 +++ b/drivers/acpi/thermal.c
-@@ -321,6 +321,9 @@ static int acpi_thermal_trips_update_passive(struct acpi_thermal *tz, int flag)
- 	int valid = 0;
+@@ -117,14 +117,12 @@ struct acpi_thermal_state {
+ 	u8 critical:1;
+ 	u8 hot:1;
+ 	u8 passive:1;
+-	u8 active:1;
+ 	u8 reserved:4;
+ 	int active_index;
+ };
  
- 	valid = tz->trips[ACPI_THERMAL_TRIP_PASSIVE].flags.valid;
-+	if (!valid)
-+		return 0;
-+
- 	if (psv == -1) {
- 		status = AE_SUPPORT;
- 	} else if (psv > 0) {
-@@ -398,13 +401,16 @@ static int acpi_thermal_trips_update_active(struct acpi_thermal *tz, int flag)
+ struct acpi_thermal_state_flags {
+ 	u8 valid:1;
+-	u8 enabled:1;
+ 	u8 reserved:6;
+ };
  
+@@ -1138,17 +1136,14 @@ static int acpi_thermal_resume(struct device *dev)
  	for (i = ACPI_THERMAL_TRIP_ACTIVE; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
- 		char name[5] = { '_', 'A', 'C', ('0' + i), '\0' };
+ 		if (!tz->trips[i].flags.valid)
+ 			break;
+-		tz->trips[i].flags.enabled = 1;
 +
- 		valid = tz->trips[i].flags.valid;
- 
- 		if (act == -1)
- 			break; /* disable all active trip points */
- 
--		if (flag == ACPI_TRIPS_INIT || ((flag & ACPI_TRIPS_ACTIVE) &&
--		    tz->trips[i].flags.valid)) {
-+		if (!tz->trips[i].flags.valid)
-+			continue;
-+		
-+		if (flag & ACPI_TRIPS_ACTIVE)  {
- 			status = acpi_evaluate_integer(tz->device->handle,
- 						       name, NULL, &tmp);
- 			if (ACPI_FAILURE(status)) {
-@@ -436,7 +442,7 @@ static int acpi_thermal_trips_update_active(struct acpi_thermal *tz, int flag)
+ 		for (j = 0; j < tz->trips[i].devices.count; j++) {
+ 			result = acpi_bus_update_power(
+ 					tz->trips[i].devices.handles[j],
+ 					&power_state);
+-			if (result || (power_state != ACPI_STATE_D0)) {
+-				tz->trips[i].flags.enabled = 0;
++			if (result || (power_state != ACPI_STATE_D0))
+ 				break;
+-			}
  		}
- 
- 		name[2] = 'L';
--		if ((flag & ACPI_TRIPS_DEVICES) && tz->trips[i].flags.valid ) {
-+		if (flag & ACPI_TRIPS_DEVICES) {
- 			memset(&devices, 0, sizeof(struct acpi_handle_list));
- 			status = acpi_evaluate_reference(tz->device->handle,
- 							 name, NULL, &devices);
-@@ -455,6 +461,7 @@ static int acpi_thermal_trips_update_active(struct acpi_thermal *tz, int flag)
- 				ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
- 			}
- 		}
-+
- 		if ((flag & ACPI_TRIPS_ACTIVE) || (flag & ACPI_TRIPS_DEVICES))
- 			if (valid != tz->trips[i].flags.valid)
- 				ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "state");
-@@ -495,8 +502,7 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
+-		tz->state.active |= tz->trips[i].flags.enabled;
  	}
  
- 	/* Passive (optional) */
--	if (((flag & ACPI_TRIPS_PASSIVE) && tz->trips[ACPI_THERMAL_TRIP_PASSIVE].flags.valid) ||
--		(flag == ACPI_TRIPS_INIT)) {
-+	if (flag & ACPI_TRIPS_PASSIVE) {
- 		acpi_thermal_trips_update_passive(tz, flag);
- 	}
- 
+ 	acpi_queue_thermal_check(tz);
 -- 
 2.34.1
 
