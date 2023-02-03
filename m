@@ -2,50 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3136898F0
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13A26898F5
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjBCMhm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 07:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S231989AbjBCMks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 07:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCMhl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:37:41 -0500
+        with ESMTP id S229782AbjBCMks (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:40:48 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006113C1A;
-        Fri,  3 Feb 2023 04:37:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE79AFE5
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 04:40:46 -0800 (PST)
 Received: from mercury (unknown [37.81.13.16])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A4E126602F05;
-        Fri,  3 Feb 2023 12:37:38 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8404C6602F05;
+        Fri,  3 Feb 2023 12:40:45 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675427858;
-        bh=R9s6ESmW0Hm/K3UO+BncVs9Xz+j5lpVT7/EFb4N15L8=;
+        s=mail; t=1675428045;
+        bh=NF35OAzoOu94ANsvIwcNBk9N9CjMrvdUuejFewIkylo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cyf18UrAigkJdHNrGRUzRxFVXMa4CPOnPHynGJuhhr0rU+POJnPuGzsLPegFV7DB9
-         GRpZakfaj2A7+TGAUmHM9sNJ0fCXl3Rx8leAvkX4teMzLgpesPzhn9sV/n3gykc4wf
-         8rmMEbsuCJ8X6dSLqtSTjiMQ+VkH1Eifro/Pt948lP7KRitcknFKu9dW79sz+O93ef
-         +2B3huv5nOIvsUEzQQ8FhZa+otjuDgDOOWDpyIVikZDFJEMpXDJu2Yo041I8I/sYz5
-         ayqRvBM1VxAiUYJo+TkzIk8oKJsQgkgDH3j8To5hA92ji3DGvhunFe/1YlDd4XD3FU
-         pA2uUrnIlIzng==
+        b=lBg6rMr+tKvUgHgj3nrj7lZbgOSL9TiOOnEQiAU5WQ9uiaSA2OuhiW3jSq/878L8v
+         D9YbOFQpXH/xvszUqOKOiHakkZjjji4zEZJlCKMxJkJOQW4ffL73GqmyuKYYCzDiPs
+         +Ay2LbSgIdwknl6Yffeo+W0ngSMrzrQIIBt33RtQg4TOAD5OjpB9E+1Bwdx8RO8OXw
+         xCHSf1CoSgkL7/pDs2N8YXSP4acLg7/DjkL00ZdO/+fCipYL1V6xQfzrAjRQsmWYYx
+         KzSPmaQg8ZuYMM6EzfkmpjRNXy+UizaOYkvcoHQQ+gFKUPicEj6qjL/0rNr5CJT3zS
+         r+zQuAdV0OYGA==
 Received: by mercury (Postfix, from userid 1000)
-        id 34BBD1060930; Fri,  3 Feb 2023 13:37:35 +0100 (CET)
-Date:   Fri, 3 Feb 2023 13:37:35 +0100
+        id 805731060930; Fri,  3 Feb 2023 13:40:42 +0100 (CET)
+Date:   Fri, 3 Feb 2023 13:40:42 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Cc:     linux-pm@vger.kernel.org, pali@kernel.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] power: supply: bq27xxx: fix reporting critical level
-Message-ID: <20230203123735.g727eokllnqxqxft@mercury.elektranox.org>
-References: <20230102091326.3959978-1-absicsz@gmail.com>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [RFC PATCH] power: supply: fix circular dependency with cooling
+ device
+Message-ID: <20230203124042.2ssz77o4gjppaumi@mercury.elektranox.org>
+References: <20230101174342.58351-1-caleb.connolly@linaro.org>
+ <2266534.ElGaqSPkdT@g550jk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sxu4t5ja4ywc753r"
+        protocol="application/pgp-signature"; boundary="ydamo65kj7uj2td2"
 Content-Disposition: inline
-In-Reply-To: <20230102091326.3959978-1-absicsz@gmail.com>
+In-Reply-To: <2266534.ElGaqSPkdT@g550jk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,89 +60,109 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---sxu4t5ja4ywc753r
-Content-Type: text/plain; charset=us-ascii
+--ydamo65kj7uj2td2
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Jan 02, 2023 at 11:13:26AM +0200, Sicelo A. Mhlongo wrote:
-> The EDV1/SOC1 flag is set when the battery voltage drops below the
-> threshold set in EEPROM. From observing the capacity_level reported by
-> the driver, and reading the datasheet, EDV1 remains set even when
-> EDVF/SOCF gets set. Thus, bq27xxx_battery_capacity_level() never reaches
-> the CAPACITY_LEVEL_CRITICAL code path, since CAPACITY_LEVEL_LOW takes
-> precedence.
+On Thu, Jan 12, 2023 at 10:47:37PM +0100, Luca Weiss wrote:
+> On Sonntag, 1. J=E4nner 2023 18:43:40 CET Caleb Connolly wrote:
+> > A recent change in thermal/core means it now calls the cooling device
+> > ->get_max_state() callback during __thermal_cooling_device_register().
+> > This creates a circular dependency as it attempts to fetch a power
+> > supply property before the psy is initialised. Move this call later to
+> > break the dependency.
+> >=20
+> > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> > Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 >=20
-> This commit fixes the issue by swapping the order in which the flags are
-> tested. It was tested with bq27200 in the Nokia N900.
+> Fixes USB on qcom-apq8026-lg-lenok (with smbb driver)
 >=20
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
-> ---
+> Tested-by: Luca Weiss <luca@z3ntu.xyz>
+>=20
+> Regards
+> Luca
 
-Thanks, queued.
+I queued the following patch instead, which rips out the broken
+cooling support:
+
+https://lore.kernel.org/all/20230121111621.2821558-1-andreas@kemnade.info/
 
 -- Sebastian
 
->  drivers/power/supply/bq27xxx_battery.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
 >=20
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/suppl=
-y/bq27xxx_battery.c
-> index 8bf048fbd36a..5ff6f44fd47b 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1917,10 +1917,10 @@ static int bq27xxx_battery_capacity_level(struct =
-bq27xxx_device_info *di,
->  	if (di->opts & BQ27XXX_O_ZERO) {
->  		if (di->cache.flags & BQ27000_FLAG_FC)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_FULL;
-> -		else if (di->cache.flags & BQ27000_FLAG_EDV1)
-> -			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else if (di->cache.flags & BQ27000_FLAG_EDVF)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-> +		else if (di->cache.flags & BQ27000_FLAG_EDV1)
-> +			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
->  	} else if (di->opts & BQ27Z561_O_BITS) {
-> @@ -1933,10 +1933,10 @@ static int bq27xxx_battery_capacity_level(struct =
-bq27xxx_device_info *di,
->  	} else {
->  		if (di->cache.flags & BQ27XXX_FLAG_FC)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_FULL;
-> -		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
-> -			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else if (di->cache.flags & BQ27XXX_FLAG_SOCF)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-> +		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
-> +			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
->  	}
-> --=20
-> 2.39.0
->=20
+> > ---
+> >  drivers/power/supply/power_supply_core.c | 18 ++++++++++++------
+> >  1 file changed, 12 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/power_supply_core.c
+> > b/drivers/power/supply/power_supply_core.c index 7c790c41e2fe..c921111f=
+f26a
+> > 100644
+> > --- a/drivers/power/supply/power_supply_core.c
+> > +++ b/drivers/power/supply/power_supply_core.c
+> > @@ -1354,10 +1354,6 @@ __power_supply_register(struct device *parent,
+> >  	if (rc)
+> >  		goto register_thermal_failed;
+> >=20
+> > -	rc =3D psy_register_cooler(psy);
+> > -	if (rc)
+> > -		goto register_cooler_failed;
+> > -
+> >  	rc =3D power_supply_create_triggers(psy);
+> >  	if (rc)
+> >  		goto create_triggers_failed;
+> > @@ -1378,17 +1374,27 @@ __power_supply_register(struct device *parent,
+> >  	atomic_inc(&psy->use_cnt);
+> >  	psy->initialized =3D true;
+> >=20
+> > +	/* This has to be done after updating use_cnt and initialized
+> > +	 * otherwise when __thermal_cooling_device_register calls back
+> > +	 * to ->get_max_state() the psy core will return -EAGAIN..
+> > +	 */
+> > +	rc =3D psy_register_cooler(psy);
+> > +	if (rc)
+> > +		goto register_cooler_failed;
+> > +
+> >  	queue_delayed_work(system_power_efficient_wq,
+> >  			   &psy->deferred_register_work,
+> >  			   POWER_SUPPLY_DEFERRED_REGISTER_TIME);
+> >=20
+> >  	return psy;
+> >=20
+> > +register_cooler_failed:
+> > +	power_supply_remove_hwmon_sysfs(psy);
+> > +	psy->initialized =3D false;
+> > +	atomic_dec(&psy->use_cnt);
+> >  add_hwmon_sysfs_failed:
+> >  	power_supply_remove_triggers(psy);
+> >  create_triggers_failed:
+> > -	psy_unregister_cooler(psy);
+> > -register_cooler_failed:
+> >  	psy_unregister_thermal(psy);
+> >  register_thermal_failed:
+> >  wakeup_init_failed:
 
---sxu4t5ja4ywc753r
+--ydamo65kj7uj2td2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdAA4ACgkQ2O7X88g7
-+popZg/7Bss64T/oszZI0vrXMH3RLROTdxaY+8wYzgCDIdLoNCZqY2ujbwgoFCsk
-Hi+UQijNtLY+4wHw3Vo8SHL3BkNO/A2qPkzeMPwbsRzKuOQSFr114zswplup8Bny
-yHwTPEdBOCyZVH3526oSsXoQjwnwPYb+R4nZ6eexbgFO1iNiiGQ5oXGsYS4aFWMB
-u1eu5tPrUkXQjP7/pEeyAr/vSuFJosWnAyA0ndaGosxMADi69zCkrTBhKEneAO/8
-L0LRS8nZmzrv+nmXJil8xK84BrSXtwLZJF71m1J9Ozm7oCYPNhdjpP+4St1tAqm1
-VNcPA3A9Asxw/K4KQ6TATk7gKde8ln7fdRXU8c/T2NBkuDFuEw/nQY/FKGqhxVNs
-1CGDRyt2EcoViTzrpnz6pZvJaxvypA90dQYM6C6/7rZmrfRiYb1QIeXnZ3lOXhbi
-ml0aHhHnFGmAe8QCkZxWkthFyJPi8zzbNPHhAvxqPjlGlEnlNAB+HV4EcY24z5L5
-AvZQx4tEy+BigP/gQHoJ3Xq6i6MAfk92aR1DAEN2+DIaNwfSGBf5VOGqJ4DmjNQF
-ZMFWqRZhb5SCNdiUD8Gegf4Z7gpqfQVjzjVqls8c8yXoeQecFGT7qhHXHIyzVchp
-lvd41E1h9wDxbs9oqiJUnZIsahZtmodTTtAWIRdRnATUWgqPqDs=
-=J924
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdAMoACgkQ2O7X88g7
++pozbBAAjVaAb9gX2UBo9OLbI40S2Sw92j2J1UHuHT+TZ7Voh89AGEEjoa6sMq3o
+En4lX6fYLL+zomZaSOIeT7WT/Kav7ivE5PjUpoNzy0i1jYh8F9LeGO7mXUg3g5LU
+6CAZIdiS0QPQ4b+BlBOKsOuHt+ajpTkZX50OdtGtX7CF6G/aDh8GxTYIQqkSj6qu
+I4j+n4Ii1sK5io/fjgZ7ysufArKranXs451lMNzfTEeZBKBic0QpmjB9VVXewLM5
+rnh60dg7fgMcqann1LeBhgkov3KxxJa9Lbec2gCJ5nCZWIgiX26l3j3FNkdOA/b1
+9FyyPfuDdemYujRfj42ONUGDRWgTkgY+yFU+f7RCCRgCH727cDMWk9/ZMFVsb+iw
+jEsUfWqJ+EYVqyN/hHCpFqYRWEeK0ZMBv/AkZKnD/FRkZc+U0ACxr+ncXF+KG0f6
+MWwpsjq8RS5Sukksg94YOLcywkjiec6XAagYF7AnE2XDN4UToQ3uZiXSP6H2pfOt
+ryYO6pi7SRIX6ykBMc/ooCko8ey1+R6/w2VU3S5yVLl4WCrIkdWmUpzHZUfFriV1
+cyn2dMCzDqTcqGRrTXdy/1Yu4aZpjgP0CfFZZ7W276MOKCGQ22bRBKFZu2scbmYr
+eSW0cyM+0ByW2kk76a61ZlP8Cs7ERblY8hOJH6ggSbkpJnWg5Zg=
+=4yDq
 -----END PGP SIGNATURE-----
 
---sxu4t5ja4ywc753r--
+--ydamo65kj7uj2td2--
