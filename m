@@ -2,77 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2C0688C68
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 02:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31950688D41
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 03:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjBCBUz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 20:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S230343AbjBCCtQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 21:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjBCBUy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 20:20:54 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5646281B2B
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 17:20:48 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id u8so1528159ilq.13
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 17:20:48 -0800 (PST)
+        with ESMTP id S231956AbjBCCtE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 21:49:04 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7D686E9A
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 18:48:52 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id hx15so11635505ejc.11
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 18:48:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UZ5Pmmj2Rt9EqE9bH2n9yjY0zYzZEBj6I5wlxCLCikQ=;
-        b=a1+CLEPHDcSqOk1gT+tPzCPCR984gXXSi1wbq1XcRyXI2CBVoqmeenvZNihOFwSKfl
-         faI8EDXYK5BQ+P5QOpnC1QhK3wnoQ5eoWrxOsuyytmr2DI2TiDsHNK/XWykCjcjoEhfr
-         pTKxqYgbW6CG6VYJVrCJVFr5JbACGc/2yBMsQ=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ssp0tYsGiD2wY3B3DGIo6QkUzze0YWa6hi7rXepDkb4=;
+        b=spkM/U5VoThD/brvY9ju/nMSYtv5QRq/KCCflZYFuQNLBWe3jtI+hjcvxUwoQCByE1
+         VR5eZmIYxtNYeGPKFulbHvnGN/0JFucqiP4uyABqW0n9PZ+tIQzft24GfjPyiL2koXeD
+         U3e9asI4QaAxfFUFXZeN+FgAoK+bvOPBr1Y4JawYJMXKz7/Ip8vFaJob05v7w1a9m1JK
+         KI9yaWTYSnByYpxu2QVQAeEFQxiDWcrCONp+t+HOlVbAtNA36e5fxxTKcWB2Oo0YEBWa
+         V1V3aBMM31BcieD3rdbCToqUWX201WMWj2RlAcoqEaJ72XWJ5pKcltCjtgySFqKOIjbv
+         n+rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UZ5Pmmj2Rt9EqE9bH2n9yjY0zYzZEBj6I5wlxCLCikQ=;
-        b=JwIz3nwdwpSiHj2Uy5DyMZCwoRol0L0PezDtefyrIYWT/BVbayuVmhvxpElUFbfhyy
-         dKxbAfSzMKln5jVz4057BL4yH/gojgntZlZ39dGZxkrGBf6vaEd6JTre08tUbay1Kflw
-         3t1IsU8FmIhjZRZWmBpml7gNbZrC8ZayMXjis6lcjVvqwcmumYE70lgeeZtuBgFKCJ97
-         3wO0cdQgPCXs9ZkypeoU/uTPssh6sH1PBmc54qKJcbDQ7cd63iEUlxJnNM9ev9/tc79a
-         cL0MXsRnA+GX9sPjknYKHBPI3oJMAUQhjgzf6uG1J7qSRqaHLYYP2h/9uKim5jJBxJQT
-         se1A==
-X-Gm-Message-State: AO0yUKUU6iFqkO01sYYr/yjTsxX11gsRDpE2g0IXYMGNWJz8CW4z3O7x
-        3fXYreydArU93RToyF6uG64IBg==
-X-Google-Smtp-Source: AK7set+VQTfLvTi8eurBqtl/XO/hYqsGrhuWRacBe1+EnyMKQdzxz/SGcK/qf1tEbIvusOMBmemOSQ==
-X-Received: by 2002:a05:6e02:1b87:b0:310:dd48:f2 with SMTP id h7-20020a056e021b8700b00310dd4800f2mr6653611ili.16.1675387247564;
-        Thu, 02 Feb 2023 17:20:47 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id x13-20020a056638160d00b003b974c563c6sm399081jas.162.2023.02.02.17.20.47
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ssp0tYsGiD2wY3B3DGIo6QkUzze0YWa6hi7rXepDkb4=;
+        b=VskoWc9b+7aE+TDUXEEo+dWalBXyzzHR9uCaEUZYXZ29v6vUw01+O4s/u+eNRKBx+S
+         QItKcwC8fI4a7+VvTZGB0F5JZbV/m0zlztikYiihApPlikspFl5eTWapLqLd2GLEvckR
+         iyqCYjfPx6IQkwyqJYdWr+vT5Fp0Xu1kngE31kJjgd1WpSeJ8ArQrXgjPXCJUwSdPq4e
+         pR+7eRNUZ2fKbJAL3kU9h0zSfvTYck4Ji79Waj+w4sJv/XizaGkFSf8Eksf+HEcjtYNc
+         sSHmQri1o+CJslXvaYH9vzmLRdlyu7VXK2792YyqwlZ4m/OeH2nos2UsfkOebsQo1adM
+         J1RA==
+X-Gm-Message-State: AO0yUKWB/e8ulac33J3PmNiNGpShUsqIs34EF/xxfRVc0aARlFoscBWg
+        jJPZPPgOr/s2a1QPcuNhuisx1Q==
+X-Google-Smtp-Source: AK7set+whWb0bDbuWGa8nmgHnP15jP1PhF9qSUmyaBXg2Yk7Dw+pIOxVTOaw5W3axnbzV5RnBpnLQw==
+X-Received: by 2002:a17:906:c411:b0:889:14ec:21ae with SMTP id u17-20020a170906c41100b0088914ec21aemr8874834ejz.32.1675392530811;
+        Thu, 02 Feb 2023 18:48:50 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170906c30d00b0088842b00241sm657296ejz.114.2023.02.02.18.48.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 17:20:47 -0800 (PST)
-Date:   Fri, 3 Feb 2023 01:20:46 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Doug Anderson <dianders@chromium.org>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Message-ID: <Y9xhbq/MIOgssslh@google.com>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
- <Y9v/z8CYik3faHh7@google.com>
- <3826e0e6-bb2b-409d-d1c3-ed361305bce3@linaro.org>
+        Thu, 02 Feb 2023 18:48:50 -0800 (PST)
+Message-ID: <b57730e5-e12a-e06e-a82b-9eddc5bdd8c7@linaro.org>
+Date:   Fri, 3 Feb 2023 03:48:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3826e0e6-bb2b-409d-d1c3-ed361305bce3@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 03/23] interconnect: fix provider registration API
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-4-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230201101559.15529-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,158 +91,148 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
 
-On Thu, Feb 02, 2023 at 09:53:41PM +0200, Dmitry Baryshkov wrote:
-> On 02/02/2023 20:24, Matthias Kaehlcke wrote:
-> > Hi Abel,
-> > 
-> > On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
-> > > Currently, there are cases when a domain needs to remain enabled until
-> > > the consumer driver probes. Sometimes such consumer drivers may be built
-> > > as modules. Since the genpd_power_off_unused is called too early for
-> > > such consumer driver modules to get a chance to probe, the domain, since
-> > > it is unused, will get disabled. On the other hand, the best time for
-> > > an unused domain to be disabled is on the provider's sync_state
-> > > callback. So, if the provider has registered a sync_state callback,
-> > > assume the unused domains for that provider will be disabled on its
-> > > sync_state callback. Also provide a generic sync_state callback which
-> > > disables all the domains unused for the provider that registers it.
-> > > 
-> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > ---
-> > > 
-> > > This approach has been applied for unused clocks as well.
-> > > With this patch merged in, all the providers that have sync_state
-> > > callback registered will leave the domains enabled unless the provider's
-> > > sync_state callback explicitly disables them. So those providers will
-> > > need to add the disabling part to their sync_state callback. On the
-> > > other hand, the platforms that have cases where domains need to remain
-> > > enabled (even if unused) until the consumer driver probes, will be able,
-> > > with this patch in, to run without the pd_ignore_unused kernel argument,
-> > > which seems to be the case for most Qualcomm platforms, at this moment.
-> > 
-> > I recently encountered a related issue on a Qualcomm platform with a
-> > v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
-> > highest corner until sync_state"). The issue involves a DT node with a
-> > rpmhpd, the DT node is enabled, however the corresponding device driver
-> > is not enabled in the kernel. In such a scenario the sync_state callback
-> > is never called, because the genpd consumer never probes. As a result
-> > the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
-> > system suspend, which results in a substantially higher power consumption
-> > in S3.
-> > 
-> > I wonder if genpd (and some other frameworks) needs something like
-> > regulator_init_complete(), which turns off unused regulators 30s after
-> > system boot. That's conceptually similar to the current
-> > genpd_power_off_unused(), but would provide time for modules being loaded.
+
+On 1.02.2023 11:15, Johan Hovold wrote:
+> The current interconnect provider interface is inherently racy as
+> providers are expected to be added before being fully initialised.
 > 
-> I think the overall goal is to move away from ad-hoc implementations like
-> clk_disable_unused/genpd_power_off_unused/regulator_init_complete towards
-> the sync_state.
-
-I generally agree with the goal of using common mechanisms whenever possible.
-
-> So inherently one either has to provide drivers for all devices in question
-> or disable unused devices in DT.
-
-I don't think that's a great solution, it essentially hands the issue down to
-the users or downstream maintainers of the kernel, who might not be aware that
-there is an issue, nor know about the specifics of genpd (or interconnects and
-clocks which have similar problems).
-
-In general symptoms are probably subtle, like a (potentially substantially)
-increased power consumption during system suspend. The issue might have been
-introduced by an update to a newer kernel, which now includes a DT node for a
-new SoC feature which wasn't supported by the 'old' kernel. It's common
-practice to use the 'old' .config, at least as a starting point, which
-obviously doesn't enable the new driver. That happend to me with [1] when
-testing v6.1. It took me quite some time to track the 'culprit' commit down
-and then some debugging to understand what's going on. Shortly after that I
-ran into a related issue involving genpds when testing v6.2-rc, which again
-took a non-trivial amount of time to track down (and I'm familiar with the SoC
-platform and the general nature of the issue). I don't think it's reasonable
-to expect every user/downstream maintainer of an impacted system to go through
-this, one person at a time.
-
-Maybe there could be a generic solution for drivers with a 'sync_state'
-callback, e.g. a the driver (or framework) could have a 'sync_state_timeout'
-callback (or similar), which is called by the driver framework if 'sync_state'
-wasn't called (for example) 30s after the device was probed. Then the provider
-can power off or throttle unclaimed resources.
-
-m.
-
-[1] https://lore.kernel.org/lkml/20220902043511.17130-5-quic_rjendra@quicinc.com/
-
-
-> > > The v1 is here:
-> > > https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
-> > > 
-> > > Changes since v1:
-> > >   * added a generic sync state callback to be registered by providers in
-> > >     order to disable the unused domains on their sync state. Also
-> > >     mentioned this in the commit message.
-> > > 
-> > >   drivers/base/power/domain.c | 17 ++++++++++++++++-
-> > >   include/linux/pm_domain.h   |  3 +++
-> > >   2 files changed, 19 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > index 84662d338188..c2a5f77c01f3 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
-> > >   	mutex_lock(&gpd_list_lock);
-> > >   	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> > > -		genpd_queue_power_off_work(genpd);
-> > > +		if (!dev_has_sync_state(genpd->provider->dev))
-> > > +			genpd_queue_power_off_work(genpd);
-> > >   	mutex_unlock(&gpd_list_lock);
-> > > @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
-> > >   }
-> > >   late_initcall(genpd_power_off_unused);
-> > > +void genpd_power_off_unused_sync_state(struct device *dev)
-> > > +{
-> > > +	struct generic_pm_domain *genpd;
-> > > +
-> > > +	mutex_lock(&gpd_list_lock);
-> > > +
-> > > +	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> > > +		if (genpd->provider->dev == dev)
-> > > +			genpd_queue_power_off_work(genpd);
-> > > +
-> > > +	mutex_unlock(&gpd_list_lock);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
-> > > +
-> > >   #ifdef CONFIG_PM_SLEEP
-> > >   /**
-> > > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> > > index f776fb93eaa0..1fd5aa500c81 100644
-> > > --- a/include/linux/pm_domain.h
-> > > +++ b/include/linux/pm_domain.h
-> > > @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
-> > >   					 unsigned int index);
-> > >   struct device *genpd_dev_pm_attach_by_name(struct device *dev,
-> > >   					   const char *name);
-> > > +void genpd_power_off_unused_sync_state(struct device *dev);
-> > >   #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
-> > >   static inline int of_genpd_add_provider_simple(struct device_node *np,
-> > >   					struct generic_pm_domain *genpd)
-> > > @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
-> > >   {
-> > >   	return ERR_PTR(-EOPNOTSUPP);
-> > >   }
-> > > +
-> > > +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
-> > >   #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
-> > >   #ifdef CONFIG_PM
-> > > -- 
-> > > 2.34.1
-> > > 
+> Specifically, nodes are currently not added and the provider data is not
+> initialised until after registering the provider which can cause racing
+> DT lookups to fail.
 > 
-> -- 
-> With best wishes
-> Dmitry
+> Add a new provider API which will be used to fix up the interconnect
+> drivers.
 > 
+> The old API is reimplemented using the new interface and will be removed
+> once all drivers have been fixed.
+> 
+> Fixes: 11f1ceca7031 ("interconnect: Add generic on-chip interconnect API")
+> Fixes: 87e3031b6fbd ("interconnect: Allow endpoints translation via DT")
+> Cc: stable@vger.kernel.org      # 5.1
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/interconnect/core.c           | 52 +++++++++++++++++++--------
+>  include/linux/interconnect-provider.h | 12 +++++++
+>  2 files changed, 50 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 43c5c8503ee8..93d27ff8eef6 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -1030,44 +1030,68 @@ int icc_nodes_remove(struct icc_provider *provider)
+>  EXPORT_SYMBOL_GPL(icc_nodes_remove);
+>  
+>  /**
+> - * icc_provider_add() - add a new interconnect provider
+> - * @provider: the interconnect provider that will be added into topology
+> + * icc_provider_init() - initialize a new interconnect provider
+> + * @provider: the interconnect provider to initialize
+> + *
+> + * Must be called before adding nodes to the provider.
+> + */
+> +void icc_provider_init(struct icc_provider *provider)
+> +{
+> +	WARN_ON(!provider->set);
+> +
+> +	INIT_LIST_HEAD(&provider->nodes);
+> +}
+> +EXPORT_SYMBOL_GPL(icc_provider_init);
+> +
+> +/**
+> + * icc_provider_register() - register a new interconnect provider
+> + * @provider: the interconnect provider to register
+>   *
+>   * Return: 0 on success, or an error code otherwise
+>   */
+> -int icc_provider_add(struct icc_provider *provider)
+> +int icc_provider_register(struct icc_provider *provider)
+>  {
+> -	if (WARN_ON(!provider->set))
+> -		return -EINVAL;
+>  	if (WARN_ON(!provider->xlate && !provider->xlate_extended))
+>  		return -EINVAL;
+>  
+>  	mutex_lock(&icc_lock);
+> -
+> -	INIT_LIST_HEAD(&provider->nodes);
+>  	list_add_tail(&provider->provider_list, &icc_providers);
+> -
+>  	mutex_unlock(&icc_lock);
+>  
+> -	dev_dbg(provider->dev, "interconnect provider added to topology\n");
+> +	dev_dbg(provider->dev, "interconnect provider registered\n");
+>  
+>  	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(icc_provider_add);
+> +EXPORT_SYMBOL_GPL(icc_provider_register);
+>  
+>  /**
+> - * icc_provider_del() - delete previously added interconnect provider
+> - * @provider: the interconnect provider that will be removed from topology
+> + * icc_provider_deregister() - deregister an interconnect provider
+> + * @provider: the interconnect provider to deregister
+>   */
+> -void icc_provider_del(struct icc_provider *provider)
+> +void icc_provider_deregister(struct icc_provider *provider)
+>  {
+>  	mutex_lock(&icc_lock);
+>  	WARN_ON(provider->users);
+> -	WARN_ON(!list_empty(&provider->nodes));
+>  
+>  	list_del(&provider->provider_list);
+>  	mutex_unlock(&icc_lock);
+>  }
+> +EXPORT_SYMBOL_GPL(icc_provider_deregister);
+> +
+> +int icc_provider_add(struct icc_provider *provider)
+> +{
+> +	icc_provider_init(provider);
+> +
+> +	return icc_provider_register(provider);
+> +}
+> +EXPORT_SYMBOL_GPL(icc_provider_add);
+> +
+> +void icc_provider_del(struct icc_provider *provider)
+> +{
+> +	WARN_ON(!list_empty(&provider->nodes));
+> +
+> +	icc_provider_deregister(provider);
+> +}
+>  EXPORT_SYMBOL_GPL(icc_provider_del);
+>  
+>  static const struct of_device_id __maybe_unused ignore_list[] = {
+> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+> index cd5c5a27557f..d12cd18aab3f 100644
+> --- a/include/linux/interconnect-provider.h
+> +++ b/include/linux/interconnect-provider.h
+> @@ -122,6 +122,9 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst);
+>  void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+>  void icc_node_del(struct icc_node *node);
+>  int icc_nodes_remove(struct icc_provider *provider);
+> +void icc_provider_init(struct icc_provider *provider);
+> +int icc_provider_register(struct icc_provider *provider);
+> +void icc_provider_deregister(struct icc_provider *provider);
+>  int icc_provider_add(struct icc_provider *provider);
+>  void icc_provider_del(struct icc_provider *provider);
+>  struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec);
+> @@ -167,6 +170,15 @@ static inline int icc_nodes_remove(struct icc_provider *provider)
+>  	return -ENOTSUPP;
+>  }
+>  
+> +static inline void icc_provider_init(struct icc_provider *provider) { }
+> +
+> +static inline int icc_provider_register(struct icc_provider *provider)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+> +static inline void icc_provider_deregister(struct icc_provider *provider) { }
+> +
+>  static inline int icc_provider_add(struct icc_provider *provider)
+>  {
+>  	return -ENOTSUPP;
