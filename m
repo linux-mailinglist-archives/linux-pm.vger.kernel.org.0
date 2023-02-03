@@ -2,230 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F44689B18
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 15:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FAE689AC6
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 14:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjBCOFX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 09:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S233112AbjBCN6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 08:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjBCOEL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 09:04:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8940CA56CB;
-        Fri,  3 Feb 2023 06:01:59 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B7B641650;
-        Fri,  3 Feb 2023 05:54:54 -0800 (PST)
-Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8CA33F71E;
-        Fri,  3 Feb 2023 05:54:08 -0800 (PST)
-From:   James Morse <james.morse@arm.com>
-To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [RFC PATCH 32/32] cpumask: Add enabled cpumask for present CPUs that can be brought online
-Date:   Fri,  3 Feb 2023 13:50:43 +0000
-Message-Id: <20230203135043.409192-33-james.morse@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
-References: <20230203135043.409192-1-james.morse@arm.com>
+        with ESMTP id S233019AbjBCN52 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 08:57:28 -0500
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE558A2A76;
+        Fri,  3 Feb 2023 05:54:49 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id gr7so15513160ejb.5;
+        Fri, 03 Feb 2023 05:54:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OemsrAqP9x0H9P+t2x9gMccQSvNjPhA2hT8xJ8/gamY=;
+        b=5+eWaA4Xidpr6geqixRPAxVZantVbMncdneumkSjz5Ag1IF14LF09QUceWh7NWtKlM
+         LQY8a0mCm1EcUyh3jKvoh3clQ3mP0+8bPMo5iK9Cwo8Xd9pQ5BFHrOmL1CMomIO50dMG
+         eAOpZ0Ojv6fbZE85laFyBcx+ZAqlXvjsyTo8egGsRZPCv4cSYwx812kqoFUmEWeHAjbc
+         NwvmMZYAIMx2vZ8LVltSasJRiEhc5qkvyZ8B+Ht2qPQQHNcFhPicnR7bvXZ68zmAZjKm
+         4CnWSbX9te/U2cH/2fBRUG6rmEUAeBIplYV9uwG3gyfuMpV/7RzxugdbSDjv8ugKNv47
+         9dug==
+X-Gm-Message-State: AO0yUKVF4xp65P7Mk/QIg14E4CqkTUsFSCcUPmMnaYCgNbDUHW3+OYnf
+        kfVGcVYl3PA3F0/7qqlxiEgxcAQeU88utUVHlkZD8mOZ
+X-Google-Smtp-Source: AK7set873Gbdt3HNkt0rgib8UrCFsds7W4lAbSmGQCoKc2oXUwf7ube+rnmt02kuwORIk+46f2Ckm52gpSGNG/uV+eE=
+X-Received: by 2002:a17:906:9bd4:b0:87f:575a:9b67 with SMTP id
+ de20-20020a1709069bd400b0087f575a9b67mr3244674ejc.274.1675432382946; Fri, 03
+ Feb 2023 05:53:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203123516.2501755-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230203123516.2501755-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Feb 2023 14:52:50 +0100
+Message-ID: <CAJZ5v0gYvjT_=TADaFBHkYP7LGKE-SZVMYFFnCAj539JeJ3G5A@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel_powerclamp: Add dependency on CPU_IDLE
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 'offline' file in sysfs shows all offline CPUs, including those
-that aren't present. User-space is expected to remove not-present CPUs
-from thie list to learn which CPUs could be brought online.
+On Fri, Feb 3, 2023 at 1:35 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Fix error:
+>    WARNING: unmet direct dependencies detected for IDLE_INJECT
+>      Depends on [n]: POWERCAP [=y] && CPU_IDLE [=n]
+>      Selected by [y]:
+>      - INTEL_POWERCLAMP [=y] && THERMAL [=y] && (X86 [=y] ||
+> X86_INTEL_QUARK [=n] || COMPILE_TEST [=y]) && X86 [=y] && CPU_SUP_INTEL [=y]
+>
+> Since IDLE_INJECT depends on CPU_IDLE, add that to INTEL_POWERCLAMP.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-CPUs can be present but not-enabled. These CPUs can't be brought online
-until the firmware policy changes, which comes with an ACPI notification
-that will register the CPUs.
+I have folded this into the original patch that introduced the issue.
 
-With only the offline and present files, user-space is unable to
-determine which CPUs it can try to bring online. Add a new CPU mask
-that shows this based on all the registered CPUs.
-
-Signed-off-by: James Morse <james.morse@arm.com>
----
- drivers/base/cpu.c      | 10 ++++++++++
- include/linux/cpumask.h | 25 +++++++++++++++++++++++++
- kernel/cpu.c            |  3 +++
- 3 files changed, 38 insertions(+)
-
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index bc2ce8c7f383..3cc06f9fd230 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -76,6 +76,7 @@ void unregister_cpu(struct cpu *cpu)
- {
- 	int logical_cpu = cpu->dev.id;
- 
-+	set_cpu_enabled(logical_cpu, false);
- 	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
- 
- 	device_unregister(&cpu->dev);
-@@ -265,6 +266,13 @@ static ssize_t print_cpus_offline(struct device *dev,
- }
- static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
- 
-+static ssize_t print_cpus_enabled(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
-+}
-+static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
-+
- static ssize_t print_cpus_isolated(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
-@@ -384,6 +392,7 @@ int register_cpu(struct cpu *cpu, int num)
- 	register_cpu_under_node(num, cpu_to_node(num));
- 	dev_pm_qos_expose_latency_limit(&cpu->dev,
- 					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-+	set_cpu_enabled(num, true);
- 
- 	return 0;
- }
-@@ -465,6 +474,7 @@ static struct attribute *cpu_root_attrs[] = {
- 	&cpu_attrs[2].attr.attr,
- 	&dev_attr_kernel_max.attr,
- 	&dev_attr_offline.attr,
-+	&dev_attr_enabled.attr,
- 	&dev_attr_isolated.attr,
- #ifdef CONFIG_NO_HZ_FULL
- 	&dev_attr_nohz_full.attr,
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index c2aa0aa26b45..1513bb00dee4 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -59,6 +59,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
-  *
-  *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
-  *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
-+ *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
-  *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
-  *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
-  *
-@@ -91,11 +92,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
- 
- extern struct cpumask __cpu_possible_mask;
- extern struct cpumask __cpu_online_mask;
-+extern struct cpumask __cpu_enabled_mask;
- extern struct cpumask __cpu_present_mask;
- extern struct cpumask __cpu_active_mask;
- extern struct cpumask __cpu_dying_mask;
- #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
- #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
-+#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
- #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
- #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
- #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
-@@ -921,6 +924,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
- #else
- #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
- #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-+#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
- #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
- #endif
- 
-@@ -943,6 +947,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
- 		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
- }
- 
-+static inline void
-+set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
-+{
-+	if (can_be_onlined)
-+		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
-+	else
-+		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
-+}
-+
- static inline void
- set_cpu_present(unsigned int cpu, bool present)
- {
-@@ -1022,6 +1035,7 @@ static inline unsigned int num_online_cpus(void)
- 	return atomic_read(&__num_online_cpus);
- }
- #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
-+#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
- #define num_present_cpus()	cpumask_weight(cpu_present_mask)
- #define num_active_cpus()	cpumask_weight(cpu_active_mask)
- 
-@@ -1030,6 +1044,11 @@ static inline bool cpu_online(unsigned int cpu)
- 	return cpumask_test_cpu(cpu, cpu_online_mask);
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpumask_test_cpu(cpu, cpu_enabled_mask);
-+}
-+
- static inline bool cpu_possible(unsigned int cpu)
- {
- 	return cpumask_test_cpu(cpu, cpu_possible_mask);
-@@ -1054,6 +1073,7 @@ static inline bool cpu_dying(unsigned int cpu)
- 
- #define num_online_cpus()	1U
- #define num_possible_cpus()	1U
-+#define num_enabled_cpus()	1U
- #define num_present_cpus()	1U
- #define num_active_cpus()	1U
- 
-@@ -1067,6 +1087,11 @@ static inline bool cpu_possible(unsigned int cpu)
- 	return cpu == 0;
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpu == 0;
-+}
-+
- static inline bool cpu_present(unsigned int cpu)
- {
- 	return cpu == 0;
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6c0a92ca6bb5..6f4febf0142e 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2639,6 +2639,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
- struct cpumask __cpu_online_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_online_mask);
- 
-+struct cpumask __cpu_enabled_mask __read_mostly;
-+EXPORT_SYMBOL(__cpu_enabled_mask);
-+
- struct cpumask __cpu_present_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_present_mask);
- 
--- 
-2.30.2
-
+> ---
+> This is for kernel
+> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+>
+>  drivers/thermal/intel/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+> index b346a646fffb..b5808f92702d 100644
+> --- a/drivers/thermal/intel/Kconfig
+> +++ b/drivers/thermal/intel/Kconfig
+> @@ -3,6 +3,7 @@ config INTEL_POWERCLAMP
+>         tristate "Intel PowerClamp idle injection driver"
+>         depends on X86
+>         depends on CPU_SUP_INTEL
+> +       depends on CPU_IDLE
+>         select POWERCAP
+>         select IDLE_INJECT
+>         help
+> --
+> 2.39.1
+>
