@@ -2,139 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7623568A133
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 19:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DC068A138
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 19:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjBCSJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 13:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
+        id S232755AbjBCSJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 13:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjBCSJC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 13:09:02 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B771F4B6;
-        Fri,  3 Feb 2023 10:08:59 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id ED5DDFF804;
-        Fri,  3 Feb 2023 18:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675447737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G3mfgEsqRwW7r5t8xzQ+IZQ4s+ZYtKBLc2gjze21Uu0=;
-        b=fxUnC136FHpOrCjYLohtdOEosv7uWKS0rvVgty01f2OjrGwPuidis02eKeNDwx+m2Te6iZ
-        /nD4RyF+zqA0H1WiLlmZ8xlPgRsb5lc4aVFHUoZpt93V/sCTP9y/QdDFo0r4eAwg5G3E35
-        KmuNKT9XzmYMXM98gDvaWwXFgTAEcaA3OtvXkHYUvU+Xpm43TOHiAWTQxxZ3Kj72DQ0dhm
-        OFEgcuJ2msuF2rCVmBworWGh7lx4YMaDSQ56oV2V0LN5rFupfh1e+YnVboAhBhYzn51B51
-        G2OswAl8MmekCdR2friE1YpgPjJxpyf6ay8SvTn9lov5UHd3XHaAYuvs/2xL6g==
-Date:   Fri, 3 Feb 2023 19:08:52 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
-Message-ID: <20230203190852.12396f8a@xps-13>
-In-Reply-To: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
-References: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S233142AbjBCSJ0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 13:09:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3172B1F4B6;
+        Fri,  3 Feb 2023 10:09:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEF87B82B8D;
+        Fri,  3 Feb 2023 18:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BCB7C433D2;
+        Fri,  3 Feb 2023 18:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675447762;
+        bh=2s1p7DQGUh/JxGHm7n98ArCSrVoDk14fhhxGWv9Bbd8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pugFJkzUnGBATC5DZCLkn5BQwwt+uqiyKiGBaUqsRnfC4zVxmqoIbDuAQHUkccyVd
+         FIEx2qvtf+qbfg30A8oAkGPACFrvd7L04metiEKkCxXjYcf9N8eMRXWEuY7Bkih0TC
+         FE7iYRlB/+9GEgHQlMgDbn4oYrL+/Dv5cAiugo9gMUv/13CA8F3qzNiUa7m9WJ3i3B
+         qBywk1wREuzar5+aOAMcXi7f5ngpWXv34bXK8o6FmE3E2TBTPdOfMHmQP24IZ9FT9C
+         dlS2fL2P+yoPIUXLqGdchW6r3lWo+V5rL2IbQKSpQHZhYrQ6z7W+lo0rWlxmOqgurw
+         kXvoBIrzlqcJg==
+Message-ID: <9a4f56f0-0392-c263-98c9-2cf6c5ed3f9d@kernel.org>
+Date:   Fri, 3 Feb 2023 19:09:15 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 18/18] dt-bindings: devfreq: event: convert Rockchip DFI
+ binding to yaml
+Content-Language: en-US
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pegutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>
+References: <20230203125012.3804008-1-s.hauer@pengutronix.de>
+ <20230203125012.3804008-19-s.hauer@pengutronix.de>
+ <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
+ <20230203160214.GZ13319@pengutronix.de>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230203160214.GZ13319@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On 03/02/2023 17:02, Sascha Hauer wrote:
+> On Fri, Feb 03, 2023 at 04:14:56PM +0100, Krzysztof Kozlowski wrote:
+>> On 03/02/2023 13:50, Sascha Hauer wrote:
+>>> Convert the Rockchip DFI binding to yaml. While at it add the newly
+>>> supported rk3568-dfi to the binding.
+>>>
+>>> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+>>
+>> Please use scripts/get_maintainers.pl to get a list of necessary people
+>> and lists to CC.  It might happen, that command when run on an older
+>> kernel, gives you outdated entries.  Therefore please be sure you base
+>> your patches on recent Linux kernel.
+> 
+> That's what I did. I skipped you and Rob because I know you're wathcing
+> the list anyway.
 
-daniel.lezcano@linaro.org wrote on Fri,  3 Feb 2023 18:58:31 +0100:
+Rob is apparently ok with that but I prefer not to be skipped, because:
+1. such emails end up in entirely different mailbox,
+2. I never know whether the submitter skipped other maintainers/mailing
+lists or based the patches on some old tree. Both are happening. There
+is easy way to solve it - just pipe entire patchset via get_maintainers
+(--no-git) and do not de/select manually people, unless CC list grows
+too much.
 
-> Some drivers are declaring a thermal zone without any thermal trip
-> points.
->=20
-> On the other side, we are introducing the function
-> thermal_zone_device_register_with_trips() which provides an array of
-> generic thermal trip points. When all the drivers will be converted to
-> the generic trip points, keeping two functions will be useless.
->=20
-> Most of the drivers are now using
-> thermal_zone_device_register_with_trips() with the generic trip
-> points. As soon as the remaining drivers are merged, the
-> thermal_zone_device_register_with_trips() will be renamed to
-> thermal_zone_device_register().
->=20
-> Obviously this renaming can only happen if there are no more user of
-> the thermal_zone_device_register() function.
->=20
-> This change uses thermal_zone_device_register_with_trips() with a NULL
-> parameter for the trip point array instead of
-> thermal_zone_device_register().
->=20
-> No functional change intended.
->=20
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/power/supply/power_supply_core.c                | 2 +-
->  drivers/thermal/armada_thermal.c                        | 4 ++--
->  drivers/thermal/dove_thermal.c                          | 4 ++--
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
->  drivers/thermal/kirkwood_thermal.c                      | 4 ++--
->  drivers/thermal/spear_thermal.c                         | 5 +++--
->  6 files changed, 13 insertions(+), 12 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 7c790c41e2fe..208a849a71d9 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1166,7 +1166,7 @@ static int psy_register_thermal(struct power_supply=
- *psy)
-> =20
->  	/* Register battery zone device psy reports temperature */
->  	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
-> -		psy->tzd =3D thermal_zone_device_register(psy->desc->name,
-> +		psy->tzd =3D thermal_zone_device_register_with_trips(psy->desc->name, =
-NULL,
->  				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
->  		if (IS_ERR(psy->tzd))
->  			return PTR_ERR(psy->tzd);
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_th=
-ermal.c
-> index 99e86484a55c..83a4080bffc7 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -856,8 +856,8 @@ static int armada_thermal_probe(struct platform_devic=
-e *pdev)
->  		/* Wait the sensors to be valid */
->  		armada_wait_sensor_validity(priv);
-> =20
-> -		tz =3D thermal_zone_device_register(priv->zone_name, 0, 0, priv,
-> -						  &legacy_ops, NULL, 0, 0);
-> +		tz =3D thermal_zone_device_register_with_trips(priv->zone_name, NULL, =
-0, 0, priv,
-> +							     &legacy_ops, NULL, 0, 0);
->  		if (IS_ERR(tz)) {
->  			dev_err(&pdev->dev,
->  				"Failed to register thermal zone device\n");
+> 
+>>> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+>>> new file mode 100644
+>>> index 0000000000000..e082a0df7895a
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+>>
+>> rockchip,dfi.yaml
+> 
+> ok.
+> 
+>>
+>>> @@ -0,0 +1,38 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/devfreq/event/rockchip-dfi.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Rockchip DFI
+>>> +
+>>> +maintainers:
+>>> +  - Sascha Hauer <s.hauer@pengutronix.de>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - rk3399-dfi
+>>> +      - rk3568-dfi
+>>
+>> These are not correct compatibles.
+> 
+> What's wrong with them?
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+They are different than old ones, because they miss vendor prefix.
 
-Thanks,
-Miqu=C3=A8l
+> 
+>>
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  rockchip,pmu:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description:
+>>> +      Phandle to the syscon managing the "PMU general register files".
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>
+>> clocks were required
+> 
+> They are no longer, the RK3568 doesn't have a clock. Do I have to add
+> something to make the clock optional on RK3568 only?
+
+Then it's a change during conversion and not necessarily justified. The
+conversion should not add new compatibles. Some changes are okay if they
+are needed for conversion, but adding new stuff is better to keep in
+separate patch.
+
+You need allOf:if:then: requiring the clocks for older variant.
+
+Best regards,
+Krzysztof
+
