@@ -2,138 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDD3688E20
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 04:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2707688E6B
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 05:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjBCDpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Feb 2023 22:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S231160AbjBCEHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Feb 2023 23:07:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjBCDpg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 22:45:36 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA048721FF
-        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 19:45:35 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id cf42so6084735lfb.1
-        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 19:45:35 -0800 (PST)
+        with ESMTP id S231770AbjBCEHD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Feb 2023 23:07:03 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F9E84B7C
+        for <linux-pm@vger.kernel.org>; Thu,  2 Feb 2023 20:07:01 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id y19so4065362ljq.7
+        for <linux-pm@vger.kernel.org>; Thu, 02 Feb 2023 20:07:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8zrhD271lrTttGluQF+PCnQmCDKl2CENWlcyeC9oezU=;
-        b=EnvtQcOYczYc3Hm8HN1M+u5/bCD8+AZQuZx40gf9LLFJRhaayJZiN7xh9oQ0HbVyv5
-         WlaBYyooZpDvygERB3VBtzkrYmMoRceclFbdlBAjpw6s3BrzcsR9GMuvvHXM2bDqDLx5
-         fiEDoomZEKpQ2lVHcskZkAyOV/HWXozdlOInzcSzGZpCsnZTNVqMgP1U7axh1r7D1ybs
-         N84+JtK8ZIBIGRZSjODPD49Lj0tHIfDl6PCMPbnteNEbCC2uBDrVFrMNxX1u6RcOeMJt
-         4WxLC+55i29BnBlZlD4M/NOLRiFx0LCmRdEqYBB6SB+jV2NwBiuXG3x496+i+NVQrFB5
-         ukNQ==
+        bh=EdXrl6jFXUFLX/Fs8Y8vVeX1SCyz5eISp65do85FsLM=;
+        b=giRO/0Lr8QjY/NuoJqnrqZWr0LmwzOD3jmpWfjm5JbisDUMhfSppPvF2poel/JwAng
+         z4I+JYUG7niuOyibxKh4v/3DLvyOThvU/qNORVgp+KVuoz54UqGmtwi7Phws3zAMdMLT
+         2wtKpfMfkLkWzEntG6phV1GBOsNd1jIgusi5Q9a4MXoBpD5I/ivxHpW0RFF0tZBcadWU
+         5yAfyHKkkwfKmtyGy3xvsOivT7CzvDAxKI6UujeqXBQNYK4w5nf92OBQGRxUwJuQW47o
+         vuQb8gkyWXKJ9ThQKaYAH2nv/31pRGdD1fz3VyK0Py5zaedLNB6D0HYgVCkxL2LMTXat
+         FYxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8zrhD271lrTttGluQF+PCnQmCDKl2CENWlcyeC9oezU=;
-        b=uK7OZHuWhWj8smPTHRPk9PCwRpkAcSxkWrMklupCHhBpCNpODjXsZcpb4+W4d94isy
-         LZmggVc9WROSFizByzNygw+UYQ5a47c7avKxMNHgGZe8jCFQcEcHXnkeSPSBFXHu6kyJ
-         Aq+hgyiUQuF+S4Y2SbrdqQiwmwmBG1sWLog/OyyJDDdhmLtakfWaH8gkTw4HS61iwYQu
-         Z0+yc8/PajCoyz/sZD2RqGVc8/plkjj4RYP4JSOvM2oIICjVvRw2CEg27yc7VeVtRKq+
-         jBEMlr9Po/uEDevJgB8sZ8xRku89hAvAJTXMA5weOTRLheMUAf84uAU0bZ0LM6FovHCY
-         WP7w==
-X-Gm-Message-State: AO0yUKWI0rIURBYsVpcK2OmSM6PJaJ/c7PLq4lfooNCjWcz6CHHuH/4y
-        r10q5HR9pjOYChneT/uCHWDgRLDNoH5Zms+ib4m9HL4H9V01wW7v
-X-Google-Smtp-Source: AK7set9mvhjgLBscCSmB7QGxYq4dFW8q88IFngk26C54TKNXnncufj9MdP1Re09yaxaXAyMUSRPNPzBfHdP7B3ZfrTs=
-X-Received: by 2002:a05:6512:3d28:b0:4d8:8ad1:a05c with SMTP id
- d40-20020a0565123d2800b004d88ad1a05cmr1245389lfv.140.1675395933982; Thu, 02
- Feb 2023 19:45:33 -0800 (PST)
+        bh=EdXrl6jFXUFLX/Fs8Y8vVeX1SCyz5eISp65do85FsLM=;
+        b=fJuQK31Zxxy12iljHNT0JrjV1BY/p/MVe9ZITYJkUfBQq7JSA05KsjG0yDtFsAyWLR
+         RchqNTx/L1HVxy715cmuKmKB5/x7cPyIfwmtNkRK0cmnMPDHM1gpXonb+YQYMi4bHTap
+         R5StWi+3DjK4u/xOLZODrjIABiCXmVXsDNUzFQHGJEJfKTIJYPMJdvvZfPvfyurUaZpG
+         8ZNVtk9OoY//HizCF3/7YVzYpsrQH0t44P+azS7WiIToXuGCmsNe2P3MNHBgQVvg368l
+         bbPBiIlmUIbmFVqa7dY5Nj9u9gs3yD87Kxe8gCOZG9+N4bsPOBFJLZ6jyyYteKug6gxw
+         9n/g==
+X-Gm-Message-State: AO0yUKVRXsRT5KZD66EyocEGrVfgHnIdSF9vXiyKeWcPo3Ua6QAKWWCw
+        +wxup1pqO1rygHe4qSl3lCEaI56FhcuUeFIQRrBD2w==
+X-Google-Smtp-Source: AK7set8ePtCHM1Iq3qNLDJDujeHBggdkNrTSmEo6kURlW1fNmHwpxqtfcCcjPvkRToDgjzFMlniM4/dhmf794eZbSl0=
+X-Received: by 2002:a2e:a4c3:0:b0:28e:92b2:a04a with SMTP id
+ p3-20020a2ea4c3000000b0028e92b2a04amr1366705ljm.34.1675397219676; Thu, 02 Feb
+ 2023 20:06:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20230201080227.473547-1-jun.nie@linaro.org> <9ab7383b-f3ed-3e48-d275-3c8933be5f2f@kernel.org>
- <CABymUCNKvm9+_ascdcWAgA1xGYKPhyO5C97-+rTTK739v+UEew@mail.gmail.com> <957f2bd0-d249-169b-04cc-242b9fcf8c6b@kernel.org>
-In-Reply-To: <957f2bd0-d249-169b-04cc-242b9fcf8c6b@kernel.org>
+References: <20230201101559.15529-1-johan+linaro@kernel.org> <20230201101559.15529-9-johan+linaro@kernel.org>
+In-Reply-To: <20230201101559.15529-9-johan+linaro@kernel.org>
 From:   Jun Nie <jun.nie@linaro.org>
-Date:   Fri, 3 Feb 2023 11:45:31 +0800
-Message-ID: <CABymUCMA9fxGjKAxLhpnSxr92t-oFDfe=mOSiLWb4Jjbzs=n8g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm CCI dt-bindings
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, bryan.odonoghue@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
+Date:   Fri, 3 Feb 2023 12:06:57 +0800
+Message-ID: <CABymUCMgmyLRGo+b4ZiVJacxc=hnfo7iiYBNj2i5UPrq3XL0nQ@mail.gmail.com>
+Subject: Re: [PATCH 08/23] interconnect: qcom: rpm: fix registration race
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Georgi Djakov <georgi.djakov@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Krzysztof Kozlowski <krzk@kernel.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=882=E6=
-=97=A5=E5=91=A8=E5=9B=9B 17:42=E5=86=99=E9=81=93=EF=BC=9A
+Johan Hovold <johan+linaro@kernel.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=881=E6=
+=97=A5=E5=91=A8=E4=B8=89 18:16=E5=86=99=E9=81=93=EF=BC=9A
 >
-> On 02/02/2023 10:29, Jun Nie wrote:
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - qcom,msm8939-cci
-> >>> +
-> >>> +  clocks:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  operating-points-v2: true
-> >>> +  opp-table:
-> >>> +    type: object
-> >>> +
-> >>> +required:
-> >>> +  - compatible
-> >>> +  - clocks
-> >>> +  - operating-points-v2
-> >>> +  - nvmem-cells
-> >>
-> >> ?? You cannot require properties which are not present.
-> >>
-> >>> +  - power-domains
-> >>
-> >> Same here.
-> >>
-> >
-> > So the properties should be added later, after cpr and fuse nodes are
-> > available in mainline, right?
+> The current interconnect provider registration interface is inherently
+> racy as nodes are not added until the after adding the provider. This
+> can specifically cause racing DT lookups to fail.
 >
-> No, binding should be complete, so why would you skip some properties? I
-> don't see here dependency on other bindings. Unless I missed here
-> something and there is a dependency? But then what kind? Do you
-> reference other schema?
+> Switch to using the new API where the provider is not registered until
+> after it has been fully initialised.
 >
-> Best regards,
-> Krzysztof
+> Fixes: 62feb14ee8a3 ("interconnect: qcom: Consolidate interconnect RPM su=
+pport")
+> Fixes: 30c8fa3ec61a ("interconnect: qcom: Add MSM8916 interconnect provid=
+er driver")
+> Cc: stable@vger.kernel.org      # 5.7
+> Cc: Jun Nie <jun.nie@linaro.org>
+> Cc: Georgi Djakov <georgi.djakov@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/interconnect/qcom/icc-rpm.c | 23 ++++++++++++-----------
+>  1 file changed, 12 insertions(+), 11 deletions(-)
 >
-Sorry, it is a copy/modified error with overlooking some added properties.
-
-+        cci_opp3: opp-cpr14-400000000 {
-+            opp-hz =3D /bits/ 64 <400000000>;
-+            opp-supported-hw =3D <0x1>;
-+            required-opps =3D <&cpr_opp14>;
-+        };
-+
-+        cci_opp4: opp-cpr15-400000000 {
-
-Documentation/devicetree/bindings/interconnect/qcom,cci.example.dtb:
-opp-table-cci: Unevaluated properties are not allowed
-('opp-cpr14-400000000', 'opp-cpr15-400000000' were unexpected)
-
-Do you know how to fix this dts check warning?
-The cci_opp3 and cci_opp4 have the same frequency but with different
-requirements to
-power domain. So the name of the 2 opp should be identical or with a
-different tag, but there
-are warnings for both cases for the 2 lines. Thanks!
-
-
-+            opp-hz =3D /bits/ 64 <400000000>;
-+            opp-supported-hw =3D <0x3e>;
-+            required-opps =3D <&cpr_opp15>;
-+        };
+Reviewed-by: Jun Nie <jun.nie@linaro.org>
