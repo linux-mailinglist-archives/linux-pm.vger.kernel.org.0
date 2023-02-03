@@ -2,148 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA576897B7
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 12:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F119868984D
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjBCL1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 06:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S232338AbjBCMKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 07:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbjBCL13 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 06:27:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF8D99D4D;
-        Fri,  3 Feb 2023 03:27:26 -0800 (PST)
-Received: from mercury (unknown [37.81.13.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 48E056602E87;
-        Fri,  3 Feb 2023 11:27:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675423645;
-        bh=D98rQM+fEax85Ks9+tvSm7CBvWW2ns6/rMUaRFKi5+4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MgigG2yNZAWiShf5dof1jWsDWNeeIjQhAOWVSIQvb0pbGiZydOcYLXfLib799rMOU
-         hjW8Yu7nzK0Cs5NTxqtzsxEWOdgFXXtDWaIo10rbRXq7dSyL/s+afxQEj12U9Vwk0K
-         Sa84VMkpXHiISS1XppOowGfzy2oXaStzzx99sZk6aVKcI0k9et9grM+8kJ4QRgUbAn
-         eeaafo6lrSDpV2uCpHmIVuByoZb4PNwhJid2iwyhrrFhNXQ/wElrZEwgVwOVMGI50R
-         dkkD492/87adSN54cXYeYOuqFKGiw96mFieOppiFEXc8wc+g2N4dKlGyoUhvlaOCxp
-         4EybjSLSjRVHQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 771131060930; Fri,  3 Feb 2023 12:27:20 +0100 (CET)
-Date:   Fri, 3 Feb 2023 12:27:20 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 4/4] power: supply: Introduce Qualcomm PMIC GLINK
- power supply
-Message-ID: <20230203112720.oa7e2psevbazicqo@mercury.elektranox.org>
-References: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
- <20230201041853.1934355-5-quic_bjorande@quicinc.com>
+        with ESMTP id S231994AbjBCMKv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:10:51 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4139DCBE;
+        Fri,  3 Feb 2023 04:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675426219; x=1706962219;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oUlufCSy0q1oH8hxnHPu6Oh0s0KdHEqCnBfy46cJ3as=;
+  b=gRa0sy3MsH04vJVhKpQwpawDcNj83hZeEYSinMzo5NMXpW3jGsz/E+vN
+   wo+liSU/91QnP4A2ZSyZmLLO3gTLXpgS6BxGVUnyO7HK8/4X6FsIWC7Wu
+   8f4jufoBKGnHtfF7k8KuEEhz0//uv1l92gv3hPMH4J/Ibho09QDItqVib
+   gmUy54I3uVO6gWwko4wBeZOOieftd0WZ5N5Cxf4zM/UA7z+gWTsctkEex
+   OuW8C2rL0eUdwEvgFIs3GpIiugDk0qVsi6osT5290hLZ3whSN6oQhHGf8
+   +iq7q8GS84qLJrP0EegDrXyZbbZDptSaEfnWKtbzdETKSIT7Tz+ivnl1R
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="326430258"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="326430258"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:10:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="659078496"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="659078496"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Feb 2023 04:09:58 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNutC-0000T1-0f;
+        Fri, 03 Feb 2023 12:09:58 +0000
+Date:   Fri, 03 Feb 2023 20:09:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ dcb17d36bed40f2ab07d6ffb318a5277b6c3378d
+Message-ID: <63dcf965.BFq6EeNh5tPZEqSO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ab6rsa56fkougaat"
-Content-Disposition: inline
-In-Reply-To: <20230201041853.1934355-5-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: dcb17d36bed40f2ab07d6ffb318a5277b6c3378d  Merge branch 'pm-tools' into bleeding-edge
 
---ab6rsa56fkougaat
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Warning reports:
 
-Hi,
+https://lore.kernel.org/oe-kbuild-all/202302031854.dRaSdTg4-lkp@intel.com
 
-On Tue, Jan 31, 2023 at 08:18:53PM -0800, Bjorn Andersson wrote:
-=2E..
-> +static const enum power_supply_property sm8350_bat_props[] =3D {
-> +	POWER_SUPPLY_PROP_STATUS,
-> +	POWER_SUPPLY_PROP_HEALTH,
-> +	POWER_SUPPLY_PROP_PRESENT,
-> +	POWER_SUPPLY_PROP_CHARGE_TYPE,
-> +	POWER_SUPPLY_PROP_CAPACITY,
-> +	POWER_SUPPLY_PROP_VOLTAGE_OCV,
-> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> +	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-> +	POWER_SUPPLY_PROP_CURRENT_NOW,
-> +	POWER_SUPPLY_PROP_TEMP,
-> +	POWER_SUPPLY_PROP_TECHNOLOGY,
-> +	POWER_SUPPLY_PROP_CHARGE_COUNTER,
-> +	POWER_SUPPLY_PROP_CYCLE_COUNT,
-> +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-> +	POWER_SUPPLY_PROP_CHARGE_FULL,
+Warning: (recently discovered and may have been fixed)
 
-no CHARGE_NOW?
+kismet: WARNING: unmet direct dependencies detected for IDLE_INJECT when selected by INTEL_POWERCLAMP
 
-> +	POWER_SUPPLY_PROP_MODEL_NAME,
-> +	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
-> +	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
-> +	POWER_SUPPLY_PROP_POWER_NOW,
-> +};
+Warning ids grouped by kconfigs:
 
-=2E..
+gcc_recent_errors
+`-- x86_64-allnoconfig
+    `-- kismet:WARNING:unmet-direct-dependencies-detected-for-IDLE_INJECT-when-selected-by-INTEL_POWERCLAMP
 
-> +static struct auxiliary_driver qcom_battmgr_driver =3D {
-> +	.name =3D "pmic_glink_power_supply",
-> +	.probe =3D qcom_battmgr_probe,
-> +	.id_table =3D qcom_battmgr_id_table,
-> +};
-> +
-> +static int __init qcom_battmgr_init(void)
-> +{
-> +	return auxiliary_driver_register(&qcom_battmgr_driver);
-> +}
-> +module_init(qcom_battmgr_init);
-> +
-> +static void __exit qcom_battmgr_exit(void)
-> +{
-> +	auxiliary_driver_unregister(&qcom_battmgr_driver);
-> +}
-> +module_exit(qcom_battmgr_exit);
+elapsed time: 920m
 
-module_auxiliary_driver()
+configs tested: 67
+configs skipped: 2
 
-Otherwise LGTM.
+gcc tested configs:
+x86_64                            allnoconfig
+powerpc                           allnoconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+x86_64                        randconfig-a006
+x86_64                              defconfig
+alpha                               defconfig
+x86_64                        randconfig-a002
+alpha                             allnoconfig
+i386                              allnoconfig
+arm                               allnoconfig
+arc                               allnoconfig
+x86_64                        randconfig-a004
+s390                                defconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+mips                             allyesconfig
+i386                          randconfig-a001
+s390                             allyesconfig
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                           allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+ia64                             allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+arc                  randconfig-r043-20230202
+s390                 randconfig-r044-20230202
+riscv                randconfig-r042-20230202
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a015
+i386                                defconfig
+i386                             allyesconfig
+riscv                             allnoconfig
+powerpc                          allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
 
--- Sebastian=20
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                          rhel-8.3-rust
+arm                  randconfig-r046-20230202
+hexagon              randconfig-r045-20230202
+hexagon              randconfig-r041-20230202
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
 
---ab6rsa56fkougaat
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc75UACgkQ2O7X88g7
-+pr4fw//Z1DMQADqDkOFF9D967X8R7vHQhf+RCwXgMknxBdCaIw650zcMzdKH+9L
-9PCr4nFXlHIqMUYaTaEFV5BTitoCPdKGCoQ0fKMzeHYvX/LYlZhjD3HYyhhOQaLF
-iZRR5IuX1iW0TG6Kv0GKd8hZxHH2/VdaYZYUESAPJa6qX6/k/zc+D4AYc5PxRzuZ
-D8avHBiwts+3zZnSaAlaNBh51jeHrfMGwZCU93gbySXhatHzQGDFatV1UNr34/j4
-ZWPCn8pgCTBTIfg8qeXEDmteYwkHt61CBZu7j2A1h367g8pbz+KInZlZAMlipEHF
-SK7EHwO30m5AK6Fz+kJKWiNxL80O1WqUwvoUCJ6tivPCFKEB+/FUjWs0GZ5OvZfX
-i9R/dB0FXuACz59pPJkS8rk1q5lZtBgSHV1kgrI/dIgxFSf2y078UiJwX0JTSBhw
-Rqk/VehvCHlXO1Qs3J3EOKiHu7l0VpSfQsRUBbLnichQQurg+/uzaJZ2OYULQ2do
-+uQUrp/8gfl/a5lBN2r7P3YaBzEj3YHNEfRhAf9RW96XzUSe5nncv7cIu6ftfAtO
-r6OK4Or2ntCuaTLATnllK+9fIKUPNArPh2ggU98ZBERXR0zsgGHwEZRGOYiYcswx
-dU+1oqzEt3TDZq77KlVjZR6hlOwvOeHM/ExI763HwvolUkkttdQ=
-=PQ0S
------END PGP SIGNATURE-----
-
---ab6rsa56fkougaat--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
