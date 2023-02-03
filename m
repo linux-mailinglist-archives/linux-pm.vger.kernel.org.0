@@ -2,135 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5840B6898DB
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A47E6898E8
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjBCMef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 07:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S232611AbjBCMf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 07:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjBCMee (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:34:34 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8769EE37;
-        Fri,  3 Feb 2023 04:33:44 -0800 (PST)
-Received: from mercury (unknown [37.81.13.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 800736602F05;
-        Fri,  3 Feb 2023 12:33:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675427618;
-        bh=FXhmCB/bIqk1+N0Akm0M8iDI1Ss4sOhqHLlhUKQTBUU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=buiGKPxVt3plZFQwScvsDiN7Sk3PJO6XnCQcO+WoN/cb2To82L5QSRBCDAkX+Nz2U
-         2jOSNBD4jHyb84LQ1FIly4aU+IdL+2jyS2gmGhYi9y5zDqO8zS/OMVFuvbZLI3tjSC
-         Chaeuzy4aF8y8K8a33L3pPt0uhCGYNZyhBND4Liufdk6j0Jtke1+ONhjWomGmW/UMg
-         yN3qDX1XaZzv2xc/nycSCcl1ZXJFkvdMiXX4H56ISZRPFOU7umKrBtDWbzyWHxRcPA
-         HrtK+rYHW342gutxKxh+uuxMxSaiWkFycI/GV/b3j2l2daYE3xEnvZiqVdRlPVRhz8
-         DZwWQdXaWQ/Pw==
-Received: by mercury (Postfix, from userid 1000)
-        id 1DD991060930; Fri,  3 Feb 2023 13:33:35 +0100 (CET)
-Date:   Fri, 3 Feb 2023 13:33:35 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hermes Zhang <chenhuiz@axis.com>
-Cc:     kernel@axis.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: bq256xx: Init ichg/vbat value with
- chip default value
-Message-ID: <20230203123335.rhtanjy5rqdyoewc@mercury.elektranox.org>
-References: <20230110024746.2701738-1-chenhuiz@axis.com>
+        with ESMTP id S233113AbjBCMfU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:35:20 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4991316ACF
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 04:35:12 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id bg26so3784022wmb.0
+        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 04:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0fS5h/6A8JqyaZ0AF5IugOshgaAjg1/k1ZgrK3n4WYo=;
+        b=nUBWefrCTlVLguPtGahCXnxqTOLdmiJzegJUWs0kasPrEsNLjwP+xhBI8rwLu62YOz
+         YLJ2lwCeVM3efZlThlK8v3QdFbRv/E/qrPoS+rUPSvxh5pjLUI8p9MKBMMTcZ638RcPI
+         ZnVBxYsnVYQFBcMjg9FbFX6+GAkFL3ZlKHSpIwQKTMW2NmmxyaBTqXQwG0qu7GqUFzbl
+         Ev7kHMaj2z0lbTObcZPnSwMBvl/3YYSOtetdMoLkUl8A2+9v11OskQEtg2ALkmrmRTK0
+         BZtDjBx/HaH5KKFlCVqP+UmJgtyfRM/3qcVZnqVUWC692BmA913f3nLl0FVEXJiY3cGN
+         dd7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0fS5h/6A8JqyaZ0AF5IugOshgaAjg1/k1ZgrK3n4WYo=;
+        b=oINn8SZbdTACO+ziIMctc41Zd1q/Yluf4E7H1p9PE9M56LDXTxwCmNrdS3bGIucNet
+         HBmeRqbCZZo0GtOYecpbMYTKzJt+90AY7SzAohi3dz3S6Gxw54pJOvm1E/Wnte8k/cBq
+         aJR4VqeEJaxM5Phtq4zLnkMNPX8shoVjjUT+QkvXnYOqmnBDWFqq1V5U0/KEw3uPSJJw
+         bKE+jvD1HGpzdsex8zqWSBHBZnowFxo+jL3W7iY6ebTzLZbf6DiKigLJaxinw3Ro7BGS
+         J818GqQb9rfx3XHBGsnZRi78LPtClTMQ0VHO+1Z2sVbuWJ8aDosGJWWuHzM60eZqFYD4
+         gbvA==
+X-Gm-Message-State: AO0yUKWp0gKDjUAbZLiSCjKdQ9A6kKF1IvB8w8VddiFAOfXOn5kv9y8a
+        V0Fd2UGxKnxs8L5wh46KlxGtqA==
+X-Google-Smtp-Source: AK7set9n7hhpjyjI6s+IRKBEa3a9h5wmUDUXkS1L5NWrawy7DRPpdQZxuiMzFiz08oatXJozgCxUDw==
+X-Received: by 2002:a05:600c:1c16:b0:3de:c612:df56 with SMTP id j22-20020a05600c1c1600b003dec612df56mr9134223wms.15.1675427710851;
+        Fri, 03 Feb 2023 04:35:10 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k10-20020a7bc30a000000b003dfee43863fsm265822wmj.26.2023.02.03.04.35.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 04:35:10 -0800 (PST)
+Message-ID: <bcfb143d-1d1b-590b-ac7d-7624f9069708@linaro.org>
+Date:   Fri, 3 Feb 2023 13:35:09 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iolignvmx77gsz3g"
-Content-Disposition: inline
-In-Reply-To: <20230110024746.2701738-1-chenhuiz@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20221226114513.4569-1-pali@kernel.org>
+ <20230122112744.vdfho4mzpgm6oucm@pali>
+ <20230203121610.zung35qrozvoauz6@mercury.elektranox.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230203121610.zung35qrozvoauz6@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 03/02/2023 13:16, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Sun, Jan 22, 2023 at 12:27:44PM +0100, Pali Rohár wrote:
+>> On Monday 26 December 2022 12:45:11 Pali Rohár wrote:
+>>> This new optional priority property allows to specify custom priority level
+>>> of reset device. Prior this change priority level was hardcoded to 192 and
+>>> not possible to specify or change. Specifying other value is needed for
+>>> some boards. Default level when not specified stays at 192 as before.
+>>>
+>>> Signed-off-by: Pali Rohár <pali@kernel.org>
+>>
+>> Reminder: Any plan how to handle these patches?
+> 
+> Please don't top-post :) Sorry, I'm a bit slow with processing
+> patches this cycle. Technically this was also throwing a DT
+> warning reported by the bot, so I expected a new version. Anyways,
+> I fixed the DT warning myself and applied patches 1-2.
 
---iolignvmx77gsz3g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Everyone was expecting new version, so that checks pass. We should not
+take known-broken code, because then the duty to check for other errors
+is on you Sebastian. :)
 
-Hi,
+Best regards,
+Krzysztof
 
-On Tue, Jan 10, 2023 at 10:47:46AM +0800, Hermes Zhang wrote:
-> Init the ichg/vbat reg with chip default value instead of the max value
-> used now. The max value set in driver will result an unsafe case (e.g.
-> battery is over charging when in a hot environment) if no user space
-> update the value later.
->=20
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
-
-Thanks, queued.
-
--- Sebastian
-
->=20
-> Notes:
->     V2
->=20
->  drivers/power/supply/bq256xx_charger.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
-y/bq256xx_charger.c
-> index 01ad84fd147c..6b5435bf2ed4 100644
-> --- a/drivers/power/supply/bq256xx_charger.c
-> +++ b/drivers/power/supply/bq256xx_charger.c
-> @@ -1563,7 +1563,7 @@ static int bq256xx_hw_init(struct bq256xx_device *b=
-q)
->  		return ret;
-> =20
->  	ret =3D bq->chip_info->bq256xx_set_ichg(bq,
-> -				bat_info->constant_charge_current_max_ua);
-> +				bq->chip_info->bq256xx_def_ichg);
->  	if (ret)
->  		return ret;
-> =20
-> @@ -1573,7 +1573,7 @@ static int bq256xx_hw_init(struct bq256xx_device *b=
-q)
->  		return ret;
-> =20
->  	ret =3D bq->chip_info->bq256xx_set_vbatreg(bq,
-> -				bat_info->constant_charge_voltage_max_uv);
-> +				bq->chip_info->bq256xx_def_vbatreg);
->  	if (ret)
->  		return ret;
-> =20
-> --=20
-> 2.30.2
->=20
-
---iolignvmx77gsz3g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc/x4ACgkQ2O7X88g7
-+progw//f45fmq1nosutthvXXaW2A6Fj9IYDo89hAKo2OSVsi8ynMXsu3qVwZk5T
-mFlrcGy8zxyNKQNkDbXNJcZugPvNz6S1STK1KThu3tJsu5u/cDQYC9mVzAX4YgLk
-zCEEemiS1GEtMGtw/GLPHrIQ3svvAn5DaWJEpgw+CtRrM+XPNRehSsy1U11hmv9K
-o/CexVBQCYY5asT5oWO4X1RtXDzSYu/1wFbFQ6Yrm7kagcRxk53Fn5ANRx1sZq+7
-fjzFTD/jMgrrO/uj9yUYdQgxHjjNdExBd7HPnBBg2pI2vZBBk46dmUgSITQWhnlN
-NUeVfkSM4yKgyTN0FIGNbS59uy55hLjAQpbX7AhnUtrAuF2YPyIb2wisJ0JNj/Rw
-CKS1vxlu0/g/7N6dYHxYMJvsOmHi7Va79pAqVLUrHmuLwaooKYHUI/B4ooIBlXrh
-8yFbhs/wqeAZDRek8URvo2D4LyGUTIWXvb9a1zV9d58txyit9VCKbstAiROhIcaF
-SInSsvC2MJKNg4VgOYxVdq40+GE36/q8IGPsjytQszAUjHoN4xraj+lE9Ixkpr60
-INsxDOLMam742prOO6dTcwMvRprYLiBjG2WlVVqfI+LATb99+jST9UcxibeZ2A51
-SH9hkrSQxIRkgCwxICJao2JfwhNdSeiBEbu0Yut3yP4ZAj8KCTA=
-=Slk1
------END PGP SIGNATURE-----
-
---iolignvmx77gsz3g--
