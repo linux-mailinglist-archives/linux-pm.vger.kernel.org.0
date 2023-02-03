@@ -2,156 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E875A689E03
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 16:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E383E689E00
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 16:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbjBCPSr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 10:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S230055AbjBCPSy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 10:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234108AbjBCPSU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 10:18:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1695CD21;
-        Fri,  3 Feb 2023 07:15:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233769AbjBCPSd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 10:18:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0190FA2A4F;
+        Fri,  3 Feb 2023 07:15:47 -0800 (PST)
+Received: from [10.101.1.132] (ip-185-104-137-32.ptr.icomera.net [185.104.137.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4246B82AF1;
-        Fri,  3 Feb 2023 15:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B9FC433D2;
-        Fri,  3 Feb 2023 15:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675437303;
-        bh=x0NLukImJJDpktA+YghswEFtxNLyI5xpCIdNlCmuBO4=;
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 56E726602E87;
+        Fri,  3 Feb 2023 15:14:34 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675437319;
+        bh=3CNbHI7q6Lfu7dssxqhvzLTLrYHpsxuwToLdzclRMnQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NLUBn4h/CKILAGCpjGu0PzQnrUCRnVJbM6dZx7IIfZywK5lylTRd8Avflxpbo09Q9
-         xQh545o7xNOt9qNyT2m5rcTqJgOm9ejCcQrbPVLOdZ8zQirekTYRrPOYoaRELSPbP+
-         MZVsIk2wd94x2Civ0+bm9wZohVR08BZ1C6Mr5TFGnrATDaM5CNhzU77xPG1lGEKKHL
-         34iY8ZdLhmQ7CBUp8sdh/+obu+7giWUNwSMp8JC8C1+Kr3uOeaScfCIbYxSCq2wYfW
-         kde7404ixw4A57qmXhwmIx+yUTCY5PAphPEJlxLrc76ji4EvL8mi0LUtosVWw4LdBp
-         dEynRBEqO5BBw==
-Message-ID: <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
-Date:   Fri, 3 Feb 2023 16:14:56 +0100
+        b=eQVSlNKru3vlHuJ1ptAy2k9l4UzVBFuGai4d5h6wRbCh/IC+c9YEVMsFxdNQTGQMR
+         18Wb7H+U8I3eNzW9c57/pa7Dmmw2Oz/iF2qL7b2iuYRfynE9PGM/jQN/yWs6/B86aC
+         n4jgvOpsx2xLmm33LOWoQCdO9ql43bxNct/eiMO96sJIOOcdgyTykrlDQHCiWxxsHC
+         OwbUxjgWkdZoB1VcwOyMPB4JKpP0FptxelGewbQDDi2cDj8cUw4JHkdZzzCcX9NA6Q
+         sHIHFoX4DtgEUkO7JfKu45ErqqmXd7rsS5BB1GeUwMNknIHQhj0H3xqP4zYz/xkqhj
+         h7aC04yfmwjEw==
+Message-ID: <b18805b0-06ba-2b28-73e5-a1d54425a704@collabora.com>
+Date:   Fri, 3 Feb 2023 16:15:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 18/18] dt-bindings: devfreq: event: convert Rockchip DFI
- binding to yaml
-To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pegutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>
-References: <20230203125012.3804008-1-s.hauer@pengutronix.de>
- <20230203125012.3804008-19-s.hauer@pengutronix.de>
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via
+ Makefile
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230203125012.3804008-19-s.hauer@pengutronix.de>
+To:     Doug Smythies <dsmythies@telus.net>,
+        'Huang Rui' <ray.huang@amd.com>, sedat.dilek@gmail.com,
+        li.meng@amd.com, skhan@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+ <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/02/2023 13:50, Sascha Hauer wrote:
-> Convert the Rockchip DFI binding to yaml. While at it add the newly
-> supported rk3568-dfi to the binding.
+On 21/01/2023 17:41, Doug Smythies wrote:
+> Revert the portion of a recent Makefile change that incorrectly
+> deletes source files when doing "make clean".
 > 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
-
+> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
 > ---
->  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ---------
->  .../bindings/devfreq/event/rockchip-dfi.yaml  | 38 +++++++++++++++++++
->  2 files changed, 38 insertions(+), 18 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
->  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+> v2: fix address list.
+> ---
+>  tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
-> deleted file mode 100644
-> index 148191b0fc158..0000000000000
-> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 5f195ee756d6..5fd1424db37d 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -7,11 +7,6 @@ all:
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+> 
+> -ifeq (x86,$(ARCH))
+> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> -endif
 > -
-> -* Rockchip rk3399 DFI device
-> -
-> -Required properties:
-> -- compatible: Must be "rockchip,rk3399-dfi".
-> -- reg: physical base address of each DFI and length of memory mapped region
-> -- rockchip,pmu: phandle to the syscon managing the "pmu general register files"
-> -- clocks: phandles for clock specified in "clock-names" property
-> -- clock-names : the name of clock used by the DFI, must be "pclk_ddr_mon";
-> -
-> -Example:
-> -	dfi: dfi@ff630000 {
-> -		compatible = "rockchip,rk3399-dfi";
-> -		reg = <0x00 0xff630000 0x00 0x4000>;
-> -		rockchip,pmu = <&pmugrf>;
-> -		clocks = <&cru PCLK_DDR_MON>;
-> -		clock-names = "pclk_ddr_mon";
-> -	};
-> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
-> new file mode 100644
-> index 0000000000000..e082a0df7895a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
 
-rockchip,dfi.yaml
 
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/devfreq/event/rockchip-dfi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip DFI
-> +
-> +maintainers:
-> +  - Sascha Hauer <s.hauer@pengutronix.de>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rk3399-dfi
-> +      - rk3568-dfi
+The two lines above should also be removed as they're only used
+in the condition to include the Python files.
 
-These are not correct compatibles.
+I've also hit this issue and independently came up with an
+alternative solution, let me know if you want me to submit it as
+a patch on top of the previous fix; see below.
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  rockchip,pmu:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to the syscon managing the "PMU general register files".
-> +
-> +required:
-> +  - compatible
-> +  - reg
+The Python scripts appear to be used in gitsource.sh and
+tbench.sh so I guess they are needed for these kselftests
+although I haven't tried to run them or do anything with them.
+This is just to fix make clean.
 
-clocks were required
 
-> +
-> +additionalProperties: false
 
-Best regards,
-Krzysztof
+Author: Guillaume Tucker <guillaume.tucker@collabora.com>
+Date:   Fri Feb 3 11:23:50 2023 +0100
+
+    selftests: amd-pstate: fix TEST_FILES
+    
+    Replace TEST_GEN_FILES with TEST_FILES to avoid having them deleted
+    when doing a clean.  Also fix the way the architecture is being
+    determined as they should also be installed when ARCH=x86_64 is
+    provided explicitly.  Then also append extra files to TEST_FILES and
+    TEST_PROGS with += so they don't get discarded.
+    
+    Fixes: a2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+    Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+
+diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+index 5f195ee756d6..c382f579fe94 100644
+--- a/tools/testing/selftests/amd-pstate/Makefile
++++ b/tools/testing/selftests/amd-pstate/Makefile
+@@ -4,15 +4,15 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
+ 
+-uname_M := $(shell uname -m 2>/dev/null || echo not)
+-ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ ifeq (x86,$(ARCH))
+-TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+-TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++TEST_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
++TEST_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+ endif
+ 
+-TEST_PROGS := run.sh
+-TEST_FILES := basic.sh tbench.sh gitsource.sh
++TEST_PROGS += run.sh
++TEST_FILES += basic.sh tbench.sh gitsource.sh
+ 
+ include ../lib.mk
 
