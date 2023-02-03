@@ -2,99 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0AD689738
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 11:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CF7689779
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 12:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjBCKsA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 05:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
+        id S231546AbjBCLHM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 06:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjBCKr7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 05:47:59 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DD3B443;
-        Fri,  3 Feb 2023 02:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675421278; x=1706957278;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SuTo8l/pXiGzxJcP/Cf8lFBatS3BM1QmwUzE3NjUOZk=;
-  b=B5eSDBNkOvThhGaTrnGeu5mw0uyg3hOh6rosE25OJ70x62+wIwM2LUNh
-   ncwnyVItdIYiTiirQosN0fMfbe+KS1aGo6yqW0g3hZ7lT16L9weYDcPZ2
-   2Mxjj2j1vzm1X8AIavEvsZLLdJf+5oXZAR2P5o9Tcscl7XnS6rn7mzcCf
-   zDWoRuGIS0gBQKclbGe8YmetSG9fnp6EmDS9ThmGL10MNr+Ej55I3eGJ+
-   CzHWjbUXzD3F+aM7hh+TWlOssY7MzM+k91M4Z7RzAW0x/2MalL7G0U1v2
-   F7IFGMDUNkfP33XAF3zNPXD8NQ76wVn5okLFQ79umH/d+17vHpD9YiVHx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="312374036"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="312374036"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 02:47:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="643233563"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="643233563"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Feb 2023 02:47:55 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNtbn-0000PN-0d;
-        Fri, 03 Feb 2023 10:47:55 +0000
-Date:   Fri, 3 Feb 2023 18:47:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: kismet: WARNING: unmet direct dependencies detected for IDLE_INJECT
- when selected by INTEL_POWERCLAMP
-Message-ID: <202302031854.dRaSdTg4-lkp@intel.com>
+        with ESMTP id S231171AbjBCLHL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 06:07:11 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBCC6D070
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 03:07:09 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id lu11so14367848ejb.3
+        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 03:07:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AkQ8Gz4j/geHcEad/4Eauy1yNTF7OO2D+brLgcLvLOo=;
+        b=bIa1jBCPI5MWhjL0rRPnJN7kCSzLkePkj2byuaF4LkJSK7i059EOqSRIKaq/egcsWn
+         q7lDpxltYyEJ74vGv0hGLN3Mg/jAAfy2proI4RMVLagxNlKuqpkj26dHM8iOgxZDbDKZ
+         9iXmSEeCVr+rLCabe1LR84R4byjKOVC0MXMoZRMuzNkQUH7m8xXQ4LKu78bPKCukoPa0
+         9QIHhRDXiLWV+SB9rLuZCnQauR9A2It/1tHpHiye0ctyhbEFXjMviq1IduUueMEHtflS
+         gUHGiuEFmraZiPPCb5NdjqVDwaAS0NodsgJdjEVK9e3XvireT7bB9yUdonxAfvBUmboS
+         bBjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AkQ8Gz4j/geHcEad/4Eauy1yNTF7OO2D+brLgcLvLOo=;
+        b=wtfOXaX9EsnLGCUAeQmIhE6X8oOFzVYJJ3+BabA3DR9k0owM8DEWXkZ9M9uJs9A5Wo
+         TgKL5grvRRr+nZVC/jurWuwW2A6Tx5CvRgc0KPt1HvKueD+nlVGjtaT0KpCJi5uYiMt3
+         AgWjz3IIBrgDf+g3anoOBN9PYL2qeKG2s/RBkq9qkUhUGIK4Lutqhfby6RzaG8zlhnlH
+         ovTu8gPaF+fu1d1aEYGRnUa0bPner1rjHd2xY9pl6VLvYM0GCwbn0Mr3L6BpzeNmnlzo
+         XZwaJHJlVFPUsF9tH4agfV6p264KbtNRiHR0K2cOWTT/vdxnHk/Ptslcac+acRdcB9W9
+         Gm7A==
+X-Gm-Message-State: AO0yUKVJhuvMflROZ32gLRNGeTfNnQkV052wpTdM8nchsae2+Hq8zdO0
+        W0DFZjaLDvRW2NAdjMSZcTLf0aX7bzRukvzBHyL4xg==
+X-Google-Smtp-Source: AK7set9W9wLn3JZ8MrFzo0VuFe/HAuvajC0zCNwULGTi/uQ9VI1ybXodYpHBrfydldHh9/xqXzDFQFITEAIkXYRU2Zo=
+X-Received: by 2002:a17:906:1803:b0:7c0:f45e:22ff with SMTP id
+ v3-20020a170906180300b007c0f45e22ffmr3345979eje.104.1675422428182; Fri, 03
+ Feb 2023 03:07:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124131717.128660-5-bchihi@baylibre.com> <20230131153816.21709-1-bchihi@baylibre.com>
+ <ab1e4822-d5f4-79f6-ea38-47e2342ebe49@linaro.org> <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
+ <8662c6bd-b32d-3d3d-b3b7-7f4aeb028309@linaro.org>
+In-Reply-To: <8662c6bd-b32d-3d3d-b3b7-7f4aeb028309@linaro.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Fri, 3 Feb 2023 12:06:32 +0100
+Message-ID: <CAGuA+or+rKzZaVO--yhBuOnUrL1+LhJAwxLsNcTif4t9W0TFWA@mail.gmail.com>
+Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
+ Thermal Sensor driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   dcb17d36bed40f2ab07d6ffb318a5277b6c3378d
-commit: da0e3490ff71f89e5d3438ae0b2e412d543eab11 thermal: intel: powerclamp: Use powercap idle-inject feature
-date:   19 hours ago
-config: x86_64-kismet-CONFIG_IDLE_INJECT-CONFIG_INTEL_POWERCLAMP-0-0 (https://download.01.org/0day-ci/archive/20230203/202302031854.dRaSdTg4-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=da0e3490ff71f89e5d3438ae0b2e412d543eab11
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout da0e3490ff71f89e5d3438ae0b2e412d543eab11
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_IDLE_INJECT --selectors CONFIG_INTEL_POWERCLAMP -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+Hi Krzysztof,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Feb 1, 2023 at 6:12 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 01/02/2023 17:46, Balsam CHIHI wrote:
+> >>> +#ifdef CONFIG_MTK_LVTS_THERMAL_DEBUGFS
+> >>> +
+> >>> +static struct dentry *root;
+> >>
+> >> How do you handle two instances of driver?
+> >
+> > This root node is the topmost directory for debugfs called 'lvts', the
+> > different driver instances are below this. It is a singleton.
+>
+> Indeed. What about removal? Aren't you remobing entire directory
+> structure on first device removal?
+>
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for IDLE_INJECT when selected by INTEL_POWERCLAMP
-   .config:4831:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
-   .config:5885:warning: symbol value 'ONFIG_ARCH_MMAP_RND_COMPAT_BITS_MI' invalid for ARCH_MMAP_RND_COMPAT_BITS
-   
-   WARNING: unmet direct dependencies detected for IDLE_INJECT
-     Depends on [n]: POWERCAP [=y] && CPU_IDLE [=n]
-     Selected by [y]:
-     - INTEL_POWERCLAMP [=y] && THERMAL [=y] && (X86 [=y] || X86_INTEL_QUARK [=n] || COMPILE_TEST [=y]) && X86 [=y] && CPU_SUP_INTEL [=y]
+For now, the driver only supports one instance.
+I will find a way to handle this when the driver supports more instances.
+Is this suggestion OK for you?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> (...)
+>
+> >>> +
+> >>> +     of_property_for_each_string(np, "nvmem-cell-names", prop, cell_=
+name) {
+> >>> +             size_t len;
+> >>> +             u8 *efuse;
+> >>> +
+> >>> +             cell =3D of_nvmem_cell_get(np, cell_name);
+> >>> +             if (IS_ERR(cell)) {
+> >>> +                     dev_dbg(dev, "Failed to get cell '%s'\n", cell_=
+name);
+> >>
+> >> Is this an error? If so, why debug? dbg is not for errors.
+> >
+> > AFAIK using dev_dbg does not increase ELF size when DEBUG is disabled.
+> > If this is not a good reason for you, then I will change it to dev_err.
+>
+> But also dev_dbg are not visible in error or warn level logs. If this is
+> not an error, then indeed dev_dbg could be fine. But errors should be
+> verbose.
+
+OK,
+I will replace all "dev_dbg" with "dev_err" in this function.
+
+>
+> >
+> >>
+> >>> +                     return PTR_ERR(cell);
+> >>> +             }
+> >>> +
+> >>> +             efuse =3D nvmem_cell_read(cell, &len);
+> >>> +
+> >>> +             nvmem_cell_put(cell);
+> >>> +
+> >>> +             if (IS_ERR(efuse)) {
+> >>> +                     dev_dbg(dev, "Failed to read cell '%s'\n", cell=
+_name);
+> >>> +                     return PTR_ERR(efuse);
+> >>> +             }
+> >>> +
+> >>> +             lvts_td->calib =3D devm_krealloc(dev, lvts_td->calib,
+> >>> +                                            lvts_td->calib_len + len=
+, GFP_KERNEL);
+> >>> +             if (!lvts_td->calib)
+> >>> +                     return -ENOMEM;
+> >>> +
+> >>> +             memcpy(lvts_td->calib + lvts_td->calib_len, efuse, len)=
+;
+> >>> +
+> >>> +             lvts_td->calib_len +=3D len;
+> >>> +
+> >>> +             kfree(efuse);
+> >>> +     }
+> >>> +
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>> +static int __init lvts_golden_temp_init(struct device *dev, u32 *val=
+ue)
+> >>
+> >> You did not test it, right? Build with section mismatch analysis...
+> >
+> > I'm not sure to fully understand this comment.
+> > Would you explain, please?
+>
+> git grep -i "section mismatch" leads to lib/Kconfig.debug and
+> DEBUG_SECTION_MISMATCH
+
+__init is removed from all functions.
+
+>
+> (...)
+>
+> >>> +static struct lvts_ctrl_data mt8195_lvts_data_ctrl[] =3D {
+> >>
+> >> Why this cannot be const?
+> >
+> > I've got the following warning when I added "const"
+> > drivers/thermal/mediatek/lvts_thermal.c:1286:27: warning:
+> > initialization discards =E2=80=98const=E2=80=99 qualifier from pointer =
+target type
+> > [-Wdiscarded-qualifiers]
+> >  1286 |         .lvts_ctrl      =3D mt8195_lvts_data_ctrl,
+> >       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> As with every const... Do you need lvts_ctrl to be non-const? If yes,
+> then how do you handle multiple devices (singleton)?
+>
+
+I found a fix for this it was simple.
+add const here as you suggested
+and in other function parameters every time we use this variable.
+
+> Best regards,
+> Krzysztof
+>
+
+Thank you for the review!
+
+Best regards,
+Balsam
