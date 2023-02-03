@@ -2,107 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F5E689EC0
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 17:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB8E689EC7
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 17:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjBCQBg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 11:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S232439AbjBCQC2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 11:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjBCQBf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 11:01:35 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E369EE2;
-        Fri,  3 Feb 2023 08:01:33 -0800 (PST)
-Received: from booty (unknown [37.161.147.43])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3BEFB20007;
-        Fri,  3 Feb 2023 16:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675440091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GqeUY2vjR4owbFhVMWqoG7ucu+A1MAbmXZFL/6Sqg14=;
-        b=Jm4+ERkEbhZiOGPRq71beJ/tzWo6Iqj308bxlDj8fSmPnNbOy6peySNR03AVqCv50vRbSr
-        JUmdDAgDjynjXjd9tOGE8PpvfPfRbmQMm5o3L8GNhbCsXVXQ7141efCaqiy1BICPnH8hKX
-        O/rJDzgU8LbYXpqI0cyzspnrHctWxd+9jn84cmuuNp2wXEYCCAvAC4j9JeEBvZFYc8O6tW
-        J3mUNloNtXLKjQbKBlkuDeeqgzonx/FUaIaNivaqo1U0YGyHo6s0o6KkBGcbK9lYZj8Jjx
-        lGjLlDrr6I0va7ekmfUKLE3bBx5f1gp433QFlCfQ5il1wTG9+3GpK+8ApFTppQ==
-Date:   Fri, 3 Feb 2023 17:01:21 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonard Crestez <leonard.crestez@nxp.com>,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: Re: [PATCH 04/23] interconnect: imx: fix registration race
-Message-ID: <20230203170121.187108bd@booty>
-In-Reply-To: <20230201101559.15529-5-johan+linaro@kernel.org>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
-        <20230201101559.15529-5-johan+linaro@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S232835AbjBCQC1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 11:02:27 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14E92A98E
+        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 08:02:24 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pNyVz-0004Uw-SP; Fri, 03 Feb 2023 17:02:15 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pNyVy-0001d2-2W; Fri, 03 Feb 2023 17:02:14 +0100
+Date:   Fri, 3 Feb 2023 17:02:14 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pegutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH 18/18] dt-bindings: devfreq: event: convert Rockchip DFI
+ binding to yaml
+Message-ID: <20230203160214.GZ13319@pengutronix.de>
+References: <20230203125012.3804008-1-s.hauer@pengutronix.de>
+ <20230203125012.3804008-19-s.hauer@pengutronix.de>
+ <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Johan,
-
-On Wed,  1 Feb 2023 11:15:40 +0100
-Johan Hovold <johan+linaro@kernel.org> wrote:
-
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to fail.
+On Fri, Feb 03, 2023 at 04:14:56PM +0100, Krzysztof Kozlowski wrote:
+> On 03/02/2023 13:50, Sascha Hauer wrote:
+> > Convert the Rockchip DFI binding to yaml. While at it add the newly
+> > supported rk3568-dfi to the binding.
+> > 
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
+
+That's what I did. I skipped you and Rob because I know you're wathcing
+the list anyway.
+
+> > diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+> > new file mode 100644
+> > index 0000000000000..e082a0df7895a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
 > 
-> Fixes: f0d8048525d7 ("interconnect: Add imx core driver")
-> Cc: stable@vger.kernel.org      # 5.8
-> Cc: Leonard Crestez <leonard.crestez@nxp.com>
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> rockchip,dfi.yaml
 
-Georgi pointed me to this series after I reported a bug yesterday [0],
-that I found on iMX8MP. So I ran some tests with my original, failing
-tree, minus one patch with my debugging code to hunt for the bug, plus
-patches 1-4 of this series.
+ok.
 
-The original code was failing approx 5~10% of the times. With your 4
-patches applied it ran 139 times with zero errors, which looks great! I
-won't be able to do more testing until next Monday to be extra sure.
+> 
+> > @@ -0,0 +1,38 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/devfreq/event/rockchip-dfi.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Rockchip DFI
+> > +
+> > +maintainers:
+> > +  - Sascha Hauer <s.hauer@pengutronix.de>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - rk3399-dfi
+> > +      - rk3568-dfi
+> 
+> These are not correct compatibles.
 
-[0]
-https://lore.kernel.org/linux-arm-kernel/20230202175525.3dba79a7@booty/T/#u
+What's wrong with them?
+
+> 
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  rockchip,pmu:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description:
+> > +      Phandle to the syscon managing the "PMU general register files".
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> 
+> clocks were required
+
+They are no longer, the RK3568 doesn't have a clock. Do I have to add
+something to make the clock optional on RK3568 only?
+
+Sascha
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
