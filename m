@@ -2,68 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91039689C63
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 15:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E875A689E03
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 16:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjBCO57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 09:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S233115AbjBCPSr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 10:18:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbjBCO5s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 09:57:48 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41803A58CB
-        for <linux-pm@vger.kernel.org>; Fri,  3 Feb 2023 06:57:27 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 7so3808598pga.1
-        for <linux-pm@vger.kernel.org>; Fri, 03 Feb 2023 06:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=fUFJpcw18eNgBpCFlM5AGN3//6An0pa34T97OZw59OA=;
-        b=LgVVz3RZvsz+OUJgd1wXl4XjBcgjTmb/7A9Bk4QEmS1IAfT7otrWas/RfdPwtXFuwf
-         j1dnG+TQaJrlA7YAqOqq6i+a3xq//e+MK3FdQva9rA9VNCNF1obN+hvtOKDR8M3Pk2eZ
-         m57dLFdTSJ9a3f1OrIRWrQrrEFmLUDPOAm9ReHHMKJ0UNJrM9dJXTZNlhvqeb+5kg9JC
-         8VBitOAryPLCasbTorebZliQkbWT6B2mXtzsIYy7CPM26ptmPOWg0nI4e781130PyIpV
-         kt/dd6v1Pms+R2ZDiBYprG8EIKu2NOblOqmsg530AanmjS2u4mtqYl0LHB08KmeA71yK
-         m3sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fUFJpcw18eNgBpCFlM5AGN3//6An0pa34T97OZw59OA=;
-        b=Lejkk6fi+ddGt8Z7V71I2hscwNAkV8tsuwn4ncnsoSwlnLFRHn6Z/cHPbvR+x1WOZi
-         1soIYtcDI1+8yj7GFj4aXpyNYFJRiI0Fc/HdQESmhbQ8GPBxOCQ0A4FaiuJi8bZ6v4+p
-         SuYMWKqgpbPrRQNx6vgX1oQczT1UStvDtC96GeSIdlP8Mh0d+k2Fx5Nq44qcOcxLB5Z0
-         nyCTA73vXUSQbUO4Q++TTvehRIhUeTloiL2fdmm9F9oAVlGnb7T/EGOyYNIn7MDUjK8s
-         L+Ni18fy6on0htY4CMkdAaYv5j6MFS9oqmQBa6RSeBJJ/xfWlG/58xypjnk5O3MO/Ssy
-         wLcw==
-X-Gm-Message-State: AO0yUKXAYLW3QSK83rAzF99urNLXj6O2h5EFgSVD0Bcl1izs3cIdzEaW
-        597jmORgyHgacT+7jWGiwIUP9W9AXijuFPsZrNe6dQ==
-X-Google-Smtp-Source: AK7set857ozdkgZMYaHNxbO26WVVMSeW0puJ1hVTyIGO1e8je77nErlXVTtbMr4pmb4ROehlampXmQ==
-X-Received: by 2002:a62:198d:0:b0:593:d46a:677c with SMTP id 135-20020a62198d000000b00593d46a677cmr3050848pfz.18.1675436246634;
-        Fri, 03 Feb 2023 06:57:26 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 187-20020a6217c4000000b005825b8e0540sm1826573pfx.204.2023.02.03.06.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 06:57:26 -0800 (PST)
-Message-ID: <63dd20d6.620a0220.45205.3721@mx.google.com>
-Date:   Fri, 03 Feb 2023 06:57:26 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234108AbjBCPSU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 10:18:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1695CD21;
+        Fri,  3 Feb 2023 07:15:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4246B82AF1;
+        Fri,  3 Feb 2023 15:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B9FC433D2;
+        Fri,  3 Feb 2023 15:14:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675437303;
+        bh=x0NLukImJJDpktA+YghswEFtxNLyI5xpCIdNlCmuBO4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NLUBn4h/CKILAGCpjGu0PzQnrUCRnVJbM6dZx7IIfZywK5lylTRd8Avflxpbo09Q9
+         xQh545o7xNOt9qNyT2m5rcTqJgOm9ejCcQrbPVLOdZ8zQirekTYRrPOYoaRELSPbP+
+         MZVsIk2wd94x2Civ0+bm9wZohVR08BZ1C6Mr5TFGnrATDaM5CNhzU77xPG1lGEKKHL
+         34iY8ZdLhmQ7CBUp8sdh/+obu+7giWUNwSMp8JC8C1+Kr3uOeaScfCIbYxSCq2wYfW
+         kde7404ixw4A57qmXhwmIx+yUTCY5PAphPEJlxLrc76ji4EvL8mi0LUtosVWw4LdBp
+         dEynRBEqO5BBw==
+Message-ID: <ed9c3224-2f1a-c335-3028-6c23f40f57f4@kernel.org>
+Date:   Fri, 3 Feb 2023 16:14:56 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.2-rc6-168-ga9dd827a6e77
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.2-rc6-168-ga9dd827a6e77)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 18/18] dt-bindings: devfreq: event: convert Rockchip DFI
+ binding to yaml
+To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pegutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>
+References: <20230203125012.3804008-1-s.hauer@pengutronix.de>
+ <20230203125012.3804008-19-s.hauer@pengutronix.de>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230203125012.3804008-19-s.hauer@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,109 +64,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc6-168-ga=
-9dd827a6e77)
+On 03/02/2023 13:50, Sascha Hauer wrote:
+> Convert the Rockchip DFI binding to yaml. While at it add the newly
+> supported rk3568-dfi to the binding.
+> 
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-2-rc6-168-ga9dd827a6e77/
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.2-rc6-168-ga9dd827a6e77
-Git Commit: a9dd827a6e77dec5b861c924206d85b63156df16
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+> ---
+>  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ---------
+>  .../bindings/devfreq/event/rockchip-dfi.yaml  | 38 +++++++++++++++++++
+>  2 files changed, 38 insertions(+), 18 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> deleted file mode 100644
+> index 148191b0fc158..0000000000000
+> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -
+> -* Rockchip rk3399 DFI device
+> -
+> -Required properties:
+> -- compatible: Must be "rockchip,rk3399-dfi".
+> -- reg: physical base address of each DFI and length of memory mapped region
+> -- rockchip,pmu: phandle to the syscon managing the "pmu general register files"
+> -- clocks: phandles for clock specified in "clock-names" property
+> -- clock-names : the name of clock used by the DFI, must be "pclk_ddr_mon";
+> -
+> -Example:
+> -	dfi: dfi@ff630000 {
+> -		compatible = "rockchip,rk3399-dfi";
+> -		reg = <0x00 0xff630000 0x00 0x4000>;
+> -		rockchip,pmu = <&pmugrf>;
+> -		clocks = <&cru PCLK_DDR_MON>;
+> -		clock-names = "pclk_ddr_mon";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
+> new file mode 100644
+> index 0000000000000..e082a0df7895a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.yaml
 
-Warnings Detected:
+rockchip,dfi.yaml
 
-arc:
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/devfreq/event/rockchip-dfi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip DFI
+> +
+> +maintainers:
+> +  - Sascha Hauer <s.hauer@pengutronix.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rk3399-dfi
+> +      - rk3568-dfi
 
-arm64:
+These are not correct compatibles.
 
-arm:
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  rockchip,pmu:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the syscon managing the "PMU general register files".
+> +
+> +required:
+> +  - compatible
+> +  - reg
 
-i386:
+clocks were required
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+> +
+> +additionalProperties: false
 
-riscv:
+Best regards,
+Krzysztof
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
