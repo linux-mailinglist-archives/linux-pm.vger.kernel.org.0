@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A091968989C
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBB86898C0
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Feb 2023 13:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjBCM2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 07:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S232960AbjBCMau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 07:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjBCM2c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:28:32 -0500
+        with ESMTP id S232954AbjBCMat (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 07:30:49 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F734589B;
-        Fri,  3 Feb 2023 04:28:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A5A539AC;
+        Fri,  3 Feb 2023 04:30:47 -0800 (PST)
 Received: from mercury (unknown [37.81.13.16])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 551486602F05;
-        Fri,  3 Feb 2023 12:28:28 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2BD306602F10;
+        Fri,  3 Feb 2023 12:30:46 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675427308;
-        bh=ankdsVif0d1fL7mCl4lDLRZ/vP8sTysjLt9IkEZZA68=;
+        s=mail; t=1675427446;
+        bh=tRnEHWrdiPGpL3WlWyqkJA5AZ7qhPuuzCU1KxAH0LDg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gsrM4qTv8muDL6w1MWLad5latEjV4BmBVyb8ohp+2aTrUWOfkMkBcdduSywtxMkOP
-         AjoC6EDldkPJ/v+cMSwE4BAKAXiy6rKwM7jyyG9DpwnbC5zvZIvwqWsYspgbRoHqih
-         Xh8QpD+dZeLHg6tZaoHwc+/Ol1n34U4+zs4ituEXycN1d6Y8dZq0KWAHIasvTf27A6
-         mI8gW0pzwX5ydwufkQCTU5PotXxE6b5R2THzFzG4NAR74rZddQ0/QcKk/HadJLG8nd
-         96HGLCsupa55OmRA45imAeaSPsNB1RUso8ZixLucWCF55PAYJSU7pxBulcS+kr+k7e
-         EFjYSuvKFFtWg==
+        b=jRE9B+AfwgMk8w/vQT8GJOGGTcADYUqCxK+SxN6lGLzr82bYUd5tnbc3hh+HdROtj
+         vR/EkwNgKLVC5qjv2yD3A3Q+1tZgq2yj7dniDvN7Nsyxcbwms7D+9lQBl1qL90NS7E
+         jgFABpCrxH7mYyMlGRvaFjOYGhMxqNDzSEWcv2CfOhgZkuj7StXDGEX6aIu1C74MsQ
+         7qF1UAxWtumoGXK7p1wILU48tanR1+S+zmIkvC2x5Fo+KzXRwNz+EsGaxy8ZglSFFF
+         B4vR1exmnUBuhXfbwm7Q+aQP8eTHDlF/9cocJvqDu57ivsMZcE+IZ8v/rOpjLyc/+n
+         ThonJrSMXY8zg==
 Received: by mercury (Postfix, from userid 1000)
-        id 5DC7F1060930; Fri,  3 Feb 2023 13:28:25 +0100 (CET)
-Date:   Fri, 3 Feb 2023 13:28:25 +0100
+        id 1E7A71060930; Fri,  3 Feb 2023 13:30:43 +0100 (CET)
+Date:   Fri, 3 Feb 2023 13:30:43 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     error27@gmail.com, rafael.j.wysocki@intel.com,
-        anton.vorontsov@linaro.org, ramakrishna.pallala@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hns@goldelico.com
-Subject: Re: [PATCH] power: supply: disable faulty cooling logic
-Message-ID: <20230203122825.c2zlrdgavcn3jpsj@mercury.elektranox.org>
-References: <20230121111621.2821558-1-andreas@kemnade.info>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] power: supply: collie_battery: Convert to GPIO
+ descriptors (part 2)
+Message-ID: <20230203123043.34vekmsil33zjjrw@mercury.elektranox.org>
+References: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdZLAOfJ4YHWhK2qfcfC7unex0fHRHdxsCRWhgHmkhacAw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r7tju7gzfh3z3k6p"
+        protocol="application/pgp-signature"; boundary="nrlfkec655zbocdu"
 Content-Disposition: inline
-In-Reply-To: <20230121111621.2821558-1-andreas@kemnade.info>
+In-Reply-To: <CACRpkdZLAOfJ4YHWhK2qfcfC7unex0fHRHdxsCRWhgHmkhacAw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,216 +58,47 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---r7tju7gzfh3z3k6p
+--nrlfkec655zbocdu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Jan 21, 2023 at 12:16:21PM +0100, Andreas Kemnade wrote:
-> The rn5t618 power driver fails to register
-> a cooling device because POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX
-> is missing but availability is not checked before registering
-> cooling device. After improved error checking in the thermal
-> code, the registration of the power supply fails entirely.
+On Mon, Jan 16, 2023 at 11:33:51AM +0100, Linus Walleij wrote:
+> On Thu, Jan 12, 2023 at 3:02 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 >=20
-> Checking for availability of _MAX before registering cooling device
-> fixes the rn5t618 problem. But the whole logic feels questionable.
+> > Finish the job started by the commit ba940ed83218 ("power: supply:
+> > collie_battery: Convert to GPIO descriptors"), i.e. convert the use
+> > of gpio_to_irq() to gpiod_to_irq(). No functional changes intended.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 >=20
-> First, the logic is inverted here:
-> the code tells: max_current =3D max_cooling but
-> 0 =3D max_cooling, so there needs to be some inversion
-> in the code which cannot be found. Comparing with other
-> cooling devices, it can be found that value for fan speed is not
-> inverted, value for cpufreq cooling is inverted (similar situation
-> as here lowest frequency =3D max cooling)
->=20
-> Second, analyzing usage of _MAX: it is seems that maximum capabilities
-> of charging controller are specified and not of the battery. Probably
-> there is not too much mismatch in the drivers actually implementing
-> that. So nothing has exploded yet.  So there is no easy and safe way
-> to specifify a max cooling value now.
->=20
-> Conclusion for now (as a regression fix) just remove the cooling device
-> registration and do it properly later on.
->=20
-> Fixes: e49a1e1ee078 ("thermal/core: fix error code in __thermal_cooling_d=
-evice_register()")
-> Fixes: 952aeeb3ee28 ("power_supply: Register power supply for thermal coo=
-ling device")
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks, queued to for-next.
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/power_supply_core.c | 93 ------------------------
->  1 file changed, 93 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 7c790c41e2fe..cc5b2e22b42a 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1186,83 +1186,6 @@ static void psy_unregister_thermal(struct power_su=
-pply *psy)
->  	thermal_zone_device_unregister(psy->tzd);
->  }
-> =20
-> -/* thermal cooling device callbacks */
-> -static int ps_get_max_charge_cntl_limit(struct thermal_cooling_device *t=
-cd,
-> -					unsigned long *state)
-> -{
-> -	struct power_supply *psy;
-> -	union power_supply_propval val;
-> -	int ret;
-> -
-> -	psy =3D tcd->devdata;
-> -	ret =3D power_supply_get_property(psy,
-> -			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX, &val);
-> -	if (ret)
-> -		return ret;
-> -
-> -	*state =3D val.intval;
-> -
-> -	return ret;
-> -}
-> -
-> -static int ps_get_cur_charge_cntl_limit(struct thermal_cooling_device *t=
-cd,
-> -					unsigned long *state)
-> -{
-> -	struct power_supply *psy;
-> -	union power_supply_propval val;
-> -	int ret;
-> -
-> -	psy =3D tcd->devdata;
-> -	ret =3D power_supply_get_property(psy,
-> -			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
-> -	if (ret)
-> -		return ret;
-> -
-> -	*state =3D val.intval;
-> -
-> -	return ret;
-> -}
-> -
-> -static int ps_set_cur_charge_cntl_limit(struct thermal_cooling_device *t=
-cd,
-> -					unsigned long state)
-> -{
-> -	struct power_supply *psy;
-> -	union power_supply_propval val;
-> -	int ret;
-> -
-> -	psy =3D tcd->devdata;
-> -	val.intval =3D state;
-> -	ret =3D psy->desc->set_property(psy,
-> -		POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
-> -
-> -	return ret;
-> -}
-> -
-> -static const struct thermal_cooling_device_ops psy_tcd_ops =3D {
-> -	.get_max_state =3D ps_get_max_charge_cntl_limit,
-> -	.get_cur_state =3D ps_get_cur_charge_cntl_limit,
-> -	.set_cur_state =3D ps_set_cur_charge_cntl_limit,
-> -};
-> -
-> -static int psy_register_cooler(struct power_supply *psy)
-> -{
-> -	/* Register for cooling device if psy can control charging */
-> -	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT)=
-) {
-> -		psy->tcd =3D thermal_cooling_device_register(
-> -			(char *)psy->desc->name,
-> -			psy, &psy_tcd_ops);
-> -		return PTR_ERR_OR_ZERO(psy->tcd);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static void psy_unregister_cooler(struct power_supply *psy)
-> -{
-> -	if (IS_ERR_OR_NULL(psy->tcd))
-> -		return;
-> -	thermal_cooling_device_unregister(psy->tcd);
-> -}
->  #else
->  static int psy_register_thermal(struct power_supply *psy)
->  {
-> @@ -1272,15 +1195,6 @@ static int psy_register_thermal(struct power_suppl=
-y *psy)
->  static void psy_unregister_thermal(struct power_supply *psy)
->  {
->  }
-> -
-> -static int psy_register_cooler(struct power_supply *psy)
-> -{
-> -	return 0;
-> -}
-> -
-> -static void psy_unregister_cooler(struct power_supply *psy)
-> -{
-> -}
->  #endif
-> =20
->  static struct power_supply *__must_check
-> @@ -1354,10 +1268,6 @@ __power_supply_register(struct device *parent,
->  	if (rc)
->  		goto register_thermal_failed;
-> =20
-> -	rc =3D psy_register_cooler(psy);
-> -	if (rc)
-> -		goto register_cooler_failed;
-> -
->  	rc =3D power_supply_create_triggers(psy);
->  	if (rc)
->  		goto create_triggers_failed;
-> @@ -1387,8 +1297,6 @@ __power_supply_register(struct device *parent,
->  add_hwmon_sysfs_failed:
->  	power_supply_remove_triggers(psy);
->  create_triggers_failed:
-> -	psy_unregister_cooler(psy);
-> -register_cooler_failed:
->  	psy_unregister_thermal(psy);
->  register_thermal_failed:
->  wakeup_init_failed:
-> @@ -1540,7 +1448,6 @@ void power_supply_unregister(struct power_supply *p=
-sy)
->  	sysfs_remove_link(&psy->dev.kobj, "powers");
->  	power_supply_remove_hwmon_sysfs(psy);
->  	power_supply_remove_triggers(psy);
-> -	psy_unregister_cooler(psy);
->  	psy_unregister_thermal(psy);
->  	device_init_wakeup(&psy->dev, false);
->  	device_unregister(&psy->dev);
-> --=20
-> 2.30.2
->=20
-
---r7tju7gzfh3z3k6p
+--nrlfkec655zbocdu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc/eUACgkQ2O7X88g7
-+pokWw/+KC7J17Uoki3HceBrHKmRAJNf/kqKdD0x0oXN3lBUaiRZaGL32S4eD8qd
-MTOIjmFMWJ/311Cj9961ixWP0beb+faI9GqAriH6nfvdjlZLgMtD1Ms2HQWsqkFQ
-7RPzQbHgrfAsQH+2W8ykoiyqHkR/my+ix5fa0z3MIyRrnLclpDEa7w97uL9mePoH
-hBLDXYeRjJNX/hZBFHLXJo1NfYt69t1HPF01LGsp2p2dTkBBZak+Teskb9/tU1GH
-kvo7Yn8dX5Q8JXc1jWeSdstP31KwbMhbldKWCCPF08Kd4/9lLUraxf/OoMsPvf/2
-qEo/5Z1TdE2QaTF8DKrnnBTUq72tJ8hagaWAUVdSQ1CeIAJ/2HCl9gEK8z8zGbBa
-GzFltmMWbEfFpIeiWutqWL5LrnNjL/QXz2jzB8sgeB3vYJHe468uwrpzYaaL5tlK
-cteW/IlLr9muetdLS8EY8VNpfRip57waAr9glA2BxA57SST8bB6fOHlXfznmTT0+
-NW6HkStF8+YHcsvsDEAeTSAOftulYtJWzW85xym56PWascjkg1lkUE7iUR0AHFz5
-TBIEmgT9Jay+RsURJ9ojFbe48C1Go7tNNViSME8h8zqjdTh3khg49iP0woBSgkJE
-TWRh+HHjwNfE/fvXm7jg4EtLRGuhug5qzTUgdHOsSDQWF4F3Khk=
-=XKPb
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc/nIACgkQ2O7X88g7
++ppqahAAqDLkj0OHLxUeQ/juP6aZle2S1TJiYvvS+g5X5CoaQef+E6WWfJFlTVgg
+T5XrobIXbfW0JMqPH+fybRySbwrKI5E9Dm21rygG3XDUEaP0VBODGiwih6xV0bQJ
+nDBoheMJ6nWfMVqlneeWZTFUkbzr/OquVJddT8aeQob+xvfftnu4fY2K2g+zC/bp
+ucAyn9fD4rxaQ+Z4pGnRR+/6+IKnAeTcdnx9ZLAMdp+6iNH3ex7CAkhLqmeD97K+
+d0oi/YaaXPMQgchi2JTptVU7siCZmYxDp2iB4AEMnA2f+gAlwqyrYK8hC4F4fIME
+UzrSKtdfjq4Xi4h+83StJqKt4XJs5qsstnNMco2FtzLVP93VeFzdwwvq2ToF6QYg
+r6sONUKO6ExF0hNNROkF99uHyNUsxrgAMWejWdbi+rUPkpYebDgGk4W6JqWtTDSs
+pmk8raVeg6xL/8xt1VLspt0dFT77E/2VZ/9dx0K9CweBFDqQHPmWCOls7cAzptBR
+W83tHLBb7osUHQCmlxnit3tbGUpsyiSm0IDUC7B2LkD9vjdlkeCrnlSTBuNkmrYz
+kcMrjiob7JnmSPrl50rU1MR2xxqwiMgL5HP0RPM4i3k7WbIjmXocP/n8rpfkpoWU
+gISu4Hg39ssXn9KzrjH+Ki+enxnnCu9b8DlrQ4Fa24gi9/aUTC4=
+=e4xd
 -----END PGP SIGNATURE-----
 
---r7tju7gzfh3z3k6p--
+--nrlfkec655zbocdu--
