@@ -2,91 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA46368A7F7
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Feb 2023 04:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A8368A82C
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Feb 2023 05:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjBDDaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Feb 2023 22:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S232875AbjBDE3m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Feb 2023 23:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBDDaU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 22:30:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43813CA0E;
-        Fri,  3 Feb 2023 19:30:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD2F62054;
-        Sat,  4 Feb 2023 03:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01D90C4339B;
-        Sat,  4 Feb 2023 03:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675481418;
-        bh=o0yfzoFpD9DIW8/TWpFlHrxS3YLbeDbsVYdfnFZAHo4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=buBMdvylEeoOlfQpWhwcdtL8xyY1jRaHwgQThu0hoLNF6V5YwjdMj7oi4NMl7q96W
-         qxO/iVatsqKdqNuT3awPSiJJHgwCMjZv86UWo8aibbfJdOpo9NBl+8plx6JMcP8OtM
-         lzysFRAefVGfrkWAERaRHVEJ/FxRaKg/lXQqAaIr0iIEKAw6RR5llXCuidd1YwscU1
-         McIlqZWktsDKiUc1xpqOaWqCiyG/1f+AZp9wILT9NGoQgzZPHM4RNvnELSsTwy4v7g
-         nShQ0JDJa1lB8Pd+pP+aXWewLZPcNm3ErMcEttXSgDB9MNpnAR3aE5/nx9etR1uRjT
-         bS+T1sW/nbGqg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D53A4E270C4;
-        Sat,  4 Feb 2023 03:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232463AbjBDE3l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Feb 2023 23:29:41 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7824940C;
+        Fri,  3 Feb 2023 20:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675484980; x=1707020980;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=H3qJvq+FzGAE9XTRUCeAHJMizsLeIwMpWifCW4lw7W4=;
+  b=j09chemjD7BoNzpLU5CqjspeAKl+0MhjRYgLNy+QO3acSukR2QXFMmjf
+   zrCip6CYktbJyztiCrL5XuFgHYlXRzj6mo1L/kdbvl/cRJYs8z5JjWNFa
+   KTozxY+CinGYmUFOLsHdFNQvYpEDsdyanLNj/giQk8fI725oHuIlCqrwu
+   4pjhjKpQWuE1ky8FlHSsdG1m2mxfWlEGE1mBV4T73KYN9bB6tIScW/T/W
+   sk9ItMrHRtlQC0Lybn2auzDR925F/+DJcZv4MH9WFAO8JFowQ595Lu095
+   efvVCzAPk7/7+N10N+i+mu/5Ikt+F8wYWIPjIiaViQ14auswY1+42HtGb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="391310591"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="391310591"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:29:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="734577007"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="734577007"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2023 20:29:28 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2] thermal: intel_powerclamp: Return last requested state as cur_state
+Date:   Fri,  3 Feb 2023 20:29:02 -0800
+Message-Id: <20230204042902.2555347-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/3] some minor fixes of error checking about debugfs_rename()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
-Date:   Sat, 04 Feb 2023 03:30:17 +0000
-References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
-In-Reply-To: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello:
+When the user is reading cur_state from the thermal cooling device for
+Intel powerclamp device:
+- It returns the idle ratio from Package C-state counters when
+there is active idle injection session.
+- -1, when there is no active idle injection session.
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+This information is not very useful as the package C-state counters vary
+a lot from read to read. Instead just return the last requested cur_state.
 
-On Thu,  2 Feb 2023 17:32:53 +0800 you wrote:
-> Since commit ff9fb72bc077 ("debugfs: return error values, not NULL") changed
-> return value of debugfs_rename() in error cases from %NULL to %ERR_PTR(-ERROR).
-> The comments and checks corresponding to debugfs_rename() should also be updated
-> and fixed.
-> 
-> Qi Zheng (3):
->   debugfs: update comment of debugfs_rename()
->   bonding: fix error checking in bond_debug_reregister()
->   PM/OPP: fix error checking in opp_migrate_dentry()
-> 
-> [...]
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+v2:
+Fixed setting of *state
 
-Here is the summary with links:
-  - [1/3] debugfs: update comment of debugfs_rename()
-    (no matching commit)
-  - [2/3] bonding: fix error checking in bond_debug_reregister()
-    https://git.kernel.org/netdev/net/c/cbe83191d40d
-  - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
-    (no matching commit)
+ drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-You are awesome, thank you!
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 5f54c88b1977..0282503ecaaf 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -539,17 +539,7 @@ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+ {
+ 	mutex_lock(&powerclamp_lock);
+-
+-	if (powerclamp_data.clamping) {
+-		if (poll_pkg_cstate_enable)
+-			*state = pkg_cstate_ratio_cur;
+-		else
+-			*state = powerclamp_data.target_ratio;
+-	} else {
+-		/* to save power, do not poll idle ratio while not clamping */
+-		*state = -1; /* indicates invalid state */
+-	}
+-
++	*state = powerclamp_data.target_ratio;
+ 	mutex_unlock(&powerclamp_lock);
+ 
+ 	return 0;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 
