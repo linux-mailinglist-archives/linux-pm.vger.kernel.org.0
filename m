@@ -2,92 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA6268B063
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 15:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C751368B05E
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 15:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjBEOyF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Feb 2023 09:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S229637AbjBEOww (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Feb 2023 09:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjBEOyF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 09:54:05 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A41CC14;
-        Sun,  5 Feb 2023 06:54:04 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id s8so4505112pgg.11;
-        Sun, 05 Feb 2023 06:54:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5E/yBVrmcgMLnFa9p4JTH7UQJDllkHgNerevwocQnYI=;
-        b=Y/sW9RQ6NnmHzLF1nOonVthPkLHSwWX1W/rI0+GMkuIbqApMKAsRqHRASrC2jZdZmL
-         s2BaEGXhqpQz6imGdZkBUa2TXebuQE7FLC+JdRf2AZdqlFyZ5ElZXPq4KktdOtt6XQQm
-         jcleQyVnrdVNb7CBePitrYNFMMuERyokS/IWo1GuyG1eUB/SvPCc7N6CGd97xbcclHbJ
-         Lu45Pyf3R4SyBf2SnpWenMOhfbcuPYB3uJd/g+GnygOpItCQerZbmEqKzje49iBGbALD
-         Iz6+91zzcnLR5zVl9/UXH5752wPHbPJKZJDtb+aXgHhs8k6J+Qmzhx/9EgPH+nsBYuqo
-         PKUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5E/yBVrmcgMLnFa9p4JTH7UQJDllkHgNerevwocQnYI=;
-        b=s/KICevCf8sqkZkLNZXuhmilf3PW8Q9EKHyEu1eZAgS+wgq3nAWbqHeTam7omc/gOd
-         URNg5Q2kBoRsWFZpLs4VcPuE8Q/mwOgbgAIhy7xNMN/q850n0k68GU61v7GjDg06PhZ8
-         7jl5cJ8fNMqY/yQW/4NLIrW6UXZgHzFvUTTK9M6g0H6IyDNCwYoCTJMbQyoBQEQLfW4Q
-         p7norj6lxjGZpMrByy3kcsUGfF3KhlIcp080LvNn8OH5rF05++UMwpZ6D8wegur6oyAj
-         Lhu+fr1fqqD99BFVxtlX5rKvHa33QG2IOlcmIJDJ7/R/oLOzL3fv2pZw0P3izIZgQHdR
-         lDtQ==
-X-Gm-Message-State: AO0yUKUK1Ap7jXjaUGbvt99Rs8C49CSy9G/Gy6d4rSlLqEM8GsHpxjDx
-        OvIhVoWPEWaK9clZYXRcT04C6H4Fz3tjAIM4kO2PpQ==
-X-Google-Smtp-Source: AK7set+YqenHAV22Fxt9ez+uk6TSKJiwvPYdHpU0Z0Gp+tPrGoZvVp3YJgyZPBFwe9bTFPuW4G6+GA==
-X-Received: by 2002:a62:1541:0:b0:590:70e0:c6a9 with SMTP id 62-20020a621541000000b0059070e0c6a9mr15422435pfv.32.1675608843474;
-        Sun, 05 Feb 2023 06:54:03 -0800 (PST)
-Received: from localhost.localdomain ([120.231.220.214])
-        by smtp.gmail.com with ESMTPSA id h21-20020aa796d5000000b0056bb36c047asm5238126pfq.105.2023.02.05.06.54.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 05 Feb 2023 06:54:03 -0800 (PST)
-From:   Jianeng Chen <jianengchencool@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        Jianeng Chen <jianengchencool@gmail.com>
-Subject: [PATCH] thermal/core: associate device tree node to thermal_cooling_device::device
-Date:   Sun,  5 Feb 2023 22:52:25 +0800
-Message-Id: <1675608745-2451-1-git-send-email-jianengchencool@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229511AbjBEOwv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 09:52:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6A4EEC;
+        Sun,  5 Feb 2023 06:52:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CC50B80B51;
+        Sun,  5 Feb 2023 14:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44A7C4339B;
+        Sun,  5 Feb 2023 14:52:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675608767;
+        bh=PhFwMfKmlT94SSccqVeyCs3OQPNSHIjJtZZRpjAbREQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S40unBvphTT2CS0N2ts1IOXCPst1Yf5PmuVdcKhHTOK1G1IyuxryPWJcG3zaAM8Pq
+         Tt7/eWfFn+1hZNeG+E39s7moRRV458dapG3pNBfTkTugtbAKHVcdVXrxIbEw6XsCnH
+         kfaZl9WMiCjGrwgtS4zfSQSw12U6ttXeY8eAo/bujgGzzQhWhzOo0+uuKQu1iRBV4M
+         IWPYcyE1o4w6NsIZU3SKl04RQmPAYE+t63r8XY9bBFMLzSnqC8kv8et52G+lkP9KWE
+         NppbwgUJH1EZ7MiPZLmSiwylRU96u4jYroKLwTiqGldcXayGbVQdbQd2U6fX9Co2Iv
+         ilVIiTCcMk25Q==
+Date:   Sun, 5 Feb 2023 15:06:45 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
+ generic ADC node name
+Message-ID: <20230205150645.549ff062@jic23-huawei>
+In-Reply-To: <20230203212501.GA908601-robh@kernel.org>
+References: <20230201204447.542385-1-marijn.suijten@somainline.org>
+        <20230201204447.542385-3-marijn.suijten@somainline.org>
+        <20230203212501.GA908601-robh@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When adding a gpio property to a cooling device node in device tree, then in
-thermal driver called gpiod_get(struct device *) to request this gpio will
-fail, indicate cannot find gpio in device tree, because the of node do not
-associate to struct device.
+On Fri, 3 Feb 2023 15:25:01 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-Signed-off-by: Jianeng Chen <jianengchencool@gmail.com>
----
- drivers/thermal/thermal_core.c | 1 +
- 1 file changed, 1 insertion(+)
+> On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:
+> > Update the example to reflect a future requirement for the generic
+> > adc-chan node name on ADC channel nodes, while conveying the board name
+> > of the channel in a label instead.  
+> 
+> I don't think we've defined 'adc-chan' as THE generic name. Looks like 
+> we have:
+> 
+> adc-chan
+> adc-channel
+> channel
+> 
+> 'channel' is the most common (except for QCom).
+Good spot.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 0675df5..4d77d8b 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -905,6 +905,7 @@ __thermal_cooling_device_register(struct device_node *np,
- 	cdev->ops = ops;
- 	cdev->updated = false;
- 	cdev->device.class = thermal_class;
-+	cdev->device.of_node = np;
- 	cdev->devdata = devdata;
- 
- 	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
--- 
-2.7.4
+We also have that defined as the channel name in 
+bindings/iio/adc.yaml
+
+Now this particular binding doesn't use anything from that
+generic binding (other than trivial use of reg) but better to be
+consistent with it than not!
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Rob
 
