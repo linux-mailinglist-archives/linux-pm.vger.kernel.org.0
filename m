@@ -2,206 +2,276 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9989968B0CB
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 16:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA04F68B119
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 18:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjBEP5j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Feb 2023 10:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S229488AbjBERaA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Feb 2023 12:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjBEP5i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 10:57:38 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E187ABA;
-        Sun,  5 Feb 2023 07:57:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675612657; x=1707148657;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=qkQDNtPogUHzhTQUErxNAVlNIUtyW4RsYUpd6gZ0d5E=;
-  b=bqPUy/FfAWws2GB65bnFu1iIawLmkFXrC4xt8saSbqFEIeR4WrJvlQ9t
-   zBxbvZcGEB+vLbQIBTgCt3tvPm8jeWQu+F+F6yw7NDIRuxu1lVGroHoRk
-   kSC61w0bvMEz43TadA3F8Jxrt1bpJZiGi/abHLbLmd3IgJql2wa7JnD/D
-   QQR1eZQLSDrhy4kv4myqXOGGHXlaeHO1OAEZW2v/MrpN0JYqVZ0mHKxmn
-   /5IQ7CHbwAzthOKbbM5li+j0vxs4jqgAFKQSBsxgVg8WvBTD+Aqs0qoVe
-   MwvdvZWEIrXccuFFug446POpUVlbY3qovpvS3tBux5geONvlxkh0nkgov
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="326747749"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="326747749"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 07:57:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="616222024"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="616222024"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 05 Feb 2023 07:57:37 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 5 Feb 2023 07:57:36 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 5 Feb 2023 07:57:36 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 5 Feb 2023 07:57:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KoGjAG2xx3tX0odmf8iagGXRDUAfZoq6Cr4E1xe2U54kbVww19HdEL6zBLXAg4EVD4el6dobhjdzIssHfw4XJn8f9JK+tXIXoM76HwH6b6gJBksGVHyri0QBb1MZRGfkczRv02jaHj1ui2kZ+zP2xF/VDnVZOrKsGZavexW4hWc/MUzOJ78b4ssyHKYL7COTFRtWIgDiHupXiZqQudDfzhJprCGJv87n0ryHP37Dxh7ldclUCzr51xhwa0YqiOKWvVakXtxncKLFn5/N9VvyUvpVgWcI6G5UU8LJqTaXtWGGJ2byi6lKEc4Wump9RRS/sale8Ie/AofcM9dKwFHyjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qkQDNtPogUHzhTQUErxNAVlNIUtyW4RsYUpd6gZ0d5E=;
- b=jp6DDjuVsVo/tF9JF0ujOlWbhU2iMKKjUlg/bxy9KleElNiB9wsNFB5/nXU7wkrT4lo4pdZgkK2Dn+aTbvmBm4KB3xO0URXx4z7FU1bBQOzh7hlka7ZNB/dxrws5J0IVIqFR8tur1ma+cIOnCrEQd9VBNopBe05OUAD0OTclXY7h2bZc4+KFg6Ej4Xlm2fNU2UISwVIyKhSWHWgVaUu2KQY2CzHP2gp8+57dc+3nHw9GICi2U7QPfsW9tQ3g6EundVCVNZDlEfVELBpCp3sqX2YGkSFomYo1F6k+9ooeGhUAA+lFnczWiU7g4ctqQ3VAbgW8XoH2DanJUbCDZSS7Aw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ0PR11MB6622.namprd11.prod.outlook.com (2603:10b6:a03:478::6)
- by CH0PR11MB5459.namprd11.prod.outlook.com (2603:10b6:610:d2::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Sun, 5 Feb
- 2023 15:57:34 +0000
-Received: from SJ0PR11MB6622.namprd11.prod.outlook.com
- ([fe80::5b0e:bf7:d908:2837]) by SJ0PR11MB6622.namprd11.prod.outlook.com
- ([fe80::5b0e:bf7:d908:2837%7]) with mapi id 15.20.6064.031; Sun, 5 Feb 2023
- 15:57:34 +0000
-From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Neri, Ricardo" <ricardo.neri@intel.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
-Thread-Topic: [PATCH v2 0/2] intel_powerclamp: New module parameter
-Thread-Index: AQHZOQ3UaWBU+zkoFEWPd2N7/3LBpK7Agv+A
-Date:   Sun, 5 Feb 2023 15:57:34 +0000
-Message-ID: <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
-References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.5-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR11MB6622:EE_|CH0PR11MB5459:EE_
-x-ms-office365-filtering-correlation-id: a37cd0d1-5824-4499-7c7d-08db0791b200
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CD5RKNl5ZkB+vOerojXZgiKMuUxiEgswm26xF3ONePlJpL/RPxKsUsMs1uIO4hC4klPEb/7anEixUp9XlChxJOmlMmvHKqLKUAB00WaCmWHzeAD/V9gpTKNITP08fLrIJqnzftbugHU5yvcrVGfy/R1vxSq41E2bl377a7h8QMJ0s19j57DJHrqiQznAv7UmNF4+gg60g1uxRGOXg2bIh+WQXenTKOOyJvxq3zDtUoQeH1P1pbJgLH09XqdOwIoDVmI2cJHvCwm9HvS3sjW2xT2PCPOUjzBd+ybcq3B440/as8Ra626BP68LseiRKa/GOLFDmgMOcY5y8EsVqRIrgyCjxBg5T2eMx38WUPN8mTN4B/bt+XHfHoc4p7P/2TBaEy9JdNStKmn3PzarVrnD6icJKlVxbTxTpzu75AQd9aActE83chLKTQfhdMX+FAS6gUM+joVFkYD9iRPt5+YPYPVx7V2rU/IdPIT4T+fSi4klnY4SMtCqtWKrPPGEPMpzc0kXKy8HtE5UvAsZBKkPpR3t+UKfI5txghSjkS3XPtK9LI9NjIinulzSgoUwErTPTEUaqW4weisORCb5SN5bNI+mnHJUKIAG0/DkA+mxeXvSFDQJY5OBEAWy6vbbgJ4SfIxoi1TJypGDn1XKAIE9Zp8xUSfcPnErrMHeq6hmsrGIsqebFZZf2OD9iFc0EgkvwyFFM7k6w3ZAEA0eOe0MJg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB6622.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(39860400002)(376002)(396003)(346002)(451199018)(6486002)(6506007)(478600001)(2616005)(26005)(186003)(6512007)(4326008)(91956017)(8676002)(76116006)(66946007)(66476007)(66556008)(64756008)(66446008)(71200400001)(316002)(110136005)(38070700005)(6636002)(54906003)(82960400001)(36756003)(86362001)(38100700002)(122000001)(83380400001)(5660300002)(41300700001)(8936002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZkpmNmhHSnQ1YzlWQVdLalNyUlZoY25oc050bmpjUzRvWHZJNTFTaHp2ekI1?=
- =?utf-8?B?emQ3Y2paa29MbWR0Q3h0azlkTHNYbzhYWlJJL3psd3R5TmZTNFdmVmVsdVY2?=
- =?utf-8?B?c0lPMWUybnMyTjhtRThoUEV0VkY2R2RQQ08rd0JGV3JEVlFueG40ZnRaZU9D?=
- =?utf-8?B?WFJIV2k3ZW1lQ3V0dGpKeS9FcjBiZ2tEellRSklidnArWFBrcjk4ZXZLM0FD?=
- =?utf-8?B?WVQrODdkaWxqVXMvNWt5K1FKMzZFOCtReTV0QU9rV0xtQ0pIN3ZIQWU3RDBF?=
- =?utf-8?B?VWFqVE01WWRkNDUrQTBEWWhEWG02aUZZV1lGcFZWckNpci9waVY2K05UWHdN?=
- =?utf-8?B?UENLbWMrT2JBWlJVV1VHcVZXM3VmelRTeWhOK1FnQ1ZFc3dMMFdPTVJqdTFV?=
- =?utf-8?B?cm5rQUY5SkZxMVdYTHo2bGVCMmNZR2dReHN6TWdHdUkwYnlhOUtsNk03OHZJ?=
- =?utf-8?B?bW9QVmNEUURKMFIyNkJDb2F3TnhaQy9MREpQbGxiWTF5OS9hV2pmMTF0S3Iy?=
- =?utf-8?B?ekZOeDFyWUxXamdMSktRbkk3VGVLcnhNOERaNFpxYVgzUzdxUTJ0aVJzSFM0?=
- =?utf-8?B?bm9oMXdMek9CdU12cHhyaGdnY1JUazlIeU9lcXZrZXFFa0JabngxK2pacFVi?=
- =?utf-8?B?KzRCK3BkdjkrTlBaTlE5VkpkeTFUZG5EMEZjUWVCWWF1OFozMUliUHFERVhj?=
- =?utf-8?B?TmljK2Rod3RnUUNjbmhKZFBPU1ZhMU1VbmcrNVpDcDQ2MzJ4MzNrZFRvMEtS?=
- =?utf-8?B?WXovZ3MyejdqUzNqMWM3TWJXWXZGaGNsbnZmOTZkbHlZQUpqSWlpVDY5WjE3?=
- =?utf-8?B?dkNSQW5Od3Ywd1doVlVTZjk1UXdmRTJUR2M0Vm1Kdnl0M1hCSlNLS0h5TzEz?=
- =?utf-8?B?bTlrQmtvbW1NYWxYOE5EaE83U3owS1lkVEI3Z3NPSDlUT3pJeFBPbjE1dzd2?=
- =?utf-8?B?Q0g5UGlsSHY0YVVKUWFrUCtDUHp2d2lOWHVLRmw4dEdDK3VidTFRTjN2bFlZ?=
- =?utf-8?B?d1dVVzUwU010eCtzS3ZuUWphQnk1VHFJWUdxcW1hYTZxR1pSRVJjTlBLcXFZ?=
- =?utf-8?B?ZHd1bTNaUFJPYmowaGhHM0t4K0QxY012SzdROXJqbGR3OFIwY1AwT1lvWmNz?=
- =?utf-8?B?UFUzRWVoeWRhSkswYml3blIzcXE0VzBLODc3WjZsMk9OQzVBY0dLT0lqWUla?=
- =?utf-8?B?alJBa3lMSnhyQklFOForZFVFU2xSUVVDTFduS1hGaGxtRzd5cHNoTTlxcklG?=
- =?utf-8?B?UWJvUjYrY05oS1d1UVhJQTFhMmVZR0M4a1NNZjd1cE5FNGE5eVFRZ0pIVHNF?=
- =?utf-8?B?cmhPb2NNYytmdVZPRmJiS3ZxR1Z6V21qYWNoOVFwVDROdGxNV2pIcHpGb0dR?=
- =?utf-8?B?TkRCME05Snpva251dHBzdkhYSGJJSFpJQncwc1lGelAvUTc1eDkzMllvK21V?=
- =?utf-8?B?L2RVYUlVVlJlVEs3aEhwaGRWYlM2SlQxbkk5cllwM3dCT2dqekJZTFZpMml6?=
- =?utf-8?B?eW5nTmM0MlJYTTRTYVlzVTZONk0zSU5tVHl4MDhXdk1XK3JSU3BWZ0ovbzc4?=
- =?utf-8?B?U2FKelpuU0hVM2lPOWhIQ3R6V2R1UUJUbnJWSUtZNXhZa3JhTTRDZW4zNlUx?=
- =?utf-8?B?V244UVhzTjA0b2s3SXQxVjdDTWdoYitiTkk5Z056WGlUUm5oczg3Yy9Nc3Ji?=
- =?utf-8?B?MERFRXdtaGd6VnlZUzhXbi82MFFGemszVnJ4Y0hmUnV4cVo1a3JlcHZqWkJV?=
- =?utf-8?B?YWY1T1RKaTVmVWtuSkE1SzIyYW1QbEJpUllYaWF5Wnc0M1ZCMmJZUVE2Qmlx?=
- =?utf-8?B?Qmk3dG52NzNIT2JlOUlBdkRLemk2NEtUNC9URHN0dml0NUZ1enFwYnJubHFv?=
- =?utf-8?B?N282VVpLcVo5UXlNRFRLR0pjdGNTeXlGeEdQV1JHN3RlbXFwQVdsTnEyYktM?=
- =?utf-8?B?SDJUc1hQYlpWU0xYVGtLeTFCcEsxYjZqVzZzRkxOdWNTUGJldDFhWUU4QVl0?=
- =?utf-8?B?aEJjTDFrdWtTNmw1V2tMZVp4d3g3RkZrV096TTh6Ynl6dzMxK280YlVvVVpw?=
- =?utf-8?B?dlVYK0szZ0o2WXEybUlHQndHYzl2Q1lJSWpVOS91MUxUVXM5ZFcvckZKTTVI?=
- =?utf-8?B?K1lRWmdBTWREMmdWZDRDWktRTEdwTUZ0ZHhqdTFZSWRHT3k2c3pOTUord28w?=
- =?utf-8?B?TEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <32202079A881D44C9CC4CD47C2D75E63@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229463AbjBER37 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 12:29:59 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8511CADC
+        for <linux-pm@vger.kernel.org>; Sun,  5 Feb 2023 09:29:58 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id v23so9978355plo.1
+        for <linux-pm@vger.kernel.org>; Sun, 05 Feb 2023 09:29:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fNnzz5KT3mzaOc1TqS1v/TnHm4rcviiItj9G5wod/+w=;
+        b=oB5aBM77EfonHlarLC/GDCZJY/LUxQQN8fwQ3VwA9rRQY7ldsoVo49z0mXNcz0Hmx/
+         5NqvdUKHsv/+UXc79mENTO55I+fC1mRkcoD6w6xa56G/9A41J2AInA8K0/5Ym4sCGvfB
+         VScDltIim7Ag6ixlg+MhTsaIRsuZ2mMLH7Bq+6exFDBY+3rRbZwNIdrC4Yh1ECsryaVQ
+         Zrwpu2vxyUZ1p3R12/wM53nZ3NDb4DoV0jKLo3wJ9IkonTYbTuEi0IVTLPLAO4hMRBtX
+         5gWMu4vwM04z5mttMtxubxL0tfSVoqyo9XcF+pynxskGRaD5YU1xXzwg1QWt0R7JB9Zy
+         fY9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fNnzz5KT3mzaOc1TqS1v/TnHm4rcviiItj9G5wod/+w=;
+        b=nvVNdEJdU6rxZMWq+jq4IuZB+v5dyvtbx0UmntJbfLXj9wcxm19J9VC7S7UFwdw9wN
+         Cu/5KGDfgQYBYsr9wzgCJRE4FtLxxDNiZDC3H2sJ9jRfhEb/l5gOOCFkF0ESQVkL6RKh
+         jTC+JR6xgDS939mPqTSD1kpc31uVlmuGaR4EGKVvHLbfgBQekdgInzvwgLu0GB6ZosSB
+         iMEfWai5y1tqK5DuroDBxxumW6adv7YXTBrwvuncqK/W3usIxySiR3dzz4YjPXSRSQDz
+         PwJah3M5bDfhxM+2nu2z+mdcbCTR8Mjrxh5NVPS6hf9I6WzCfug2lmQFDb3GaKheMKDP
+         E8BA==
+X-Gm-Message-State: AO0yUKVZJaDOAJWftZeBf+wSSM7hk6n18t0O88fp9+8NQc2GfIG8NU2p
+        vP7znbyTB3MGyrPxEhSv5k9LparKArJFmfw29/REgosjsmYPuQDC
+X-Google-Smtp-Source: AK7set/b+jqgwbY14K1WAA7Xdziz3kuF/ITwmfTlHbot/dKQWLTNtCAi/DxAAUs1rvpiJwtgl+7T2rSRotdkmBbziQU=
+X-Received: by 2002:a17:90a:3844:b0:230:7ea2:1a04 with SMTP id
+ l4-20020a17090a384400b002307ea21a04mr1392972pjf.112.1675618197267; Sun, 05
+ Feb 2023 09:29:57 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB6622.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a37cd0d1-5824-4499-7c7d-08db0791b200
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Feb 2023 15:57:34.0929
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2FVB3ynRghJpMuSAYonm10MyVh3MBqaXRdqnhRVbM3lcd+nyrdAt2cui5vqu+HPdibftbnK8gqdEFKFt6Hsa4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5459
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201143628.270912-1-vincent.guittot@linaro.org>
+ <20230201143628.270912-3-vincent.guittot@linaro.org> <20230204184231.zx6oo52r5q2nvij7@airbuntu>
+In-Reply-To: <20230204184231.zx6oo52r5q2nvij7@airbuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Sun, 5 Feb 2023 18:29:46 +0100
+Message-ID: <CAKfTPtAGRY8duSnvafntYJ20H1JGPeuhyLCvVRk0MEUsoTY_Tg@mail.gmail.com>
+Subject: Re: [PATCH 2/2 v5] sched/fair: Remove capacity inversion detection
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kajetan.puchalski@arm.com, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIFNyaW5pdmFzLA0KDQpGaXJzdCBvZiBhbGwsIHRoZSBwcmV2aW91cyBidWlsZCBlcnJvciBp
-cyBnb25lLg0KDQpTZWNvbmQsIEkgZm91bmQgc29tZXRoaW5nIHN0cmFuZ2UsIHdoaWNoIG1heSBi
-ZSByZWxhdGVkIHdpdGggdGhlDQpzY2hlZHVsZXIgYXN5bS1wYWNraW5nLCBzbyBDQyBSaWNhcmRv
-Lg0KDQpUaGUgdGVzdCBpcyBkb25lIHdpdGggcG0gbGludXgtaW50ZWwgYnJhbmNoICsgdGhpcyBw
-YXRjaCBzZXJpZXMgb24gYW4NCkFETCBzeXN0ZW0uIGNwdTB+Y3B1NyBhcmUgUGNvcmUgY3B1cywg
-Y3B1OC1jcHUxNSBhcmUgRWNvcmUgY3B1cywgYW5kDQppbnRlbF9wb3dlcmNsYW1wIGlzIHJlZ2lz
-dGVyIGFzIGNvb2xpbmdfZGV2aWNlMjEuDQoNCjEuIHJ1biBzdHJlc3MgLWMgMTYNCjIuIHVwZGF0
-ZSAvc3lzL21vZHVsZS9pbnRlbF9wb3dlcmNsYW1wL3BhcmFtZXRlcnMvY3B1bWFzaw0KICAgZWNo
-byA5MCA+IC9zeXMvbW9kdWxlL2ludGVsX3Bvd2VyY2xhbXAvcGFyYW1ldGVycy9tYXhfaWRsZQ0K
-My4gZWNobyA5MCA+IC9zeXMvY2xhc3MvdGhlcm1hbC9jb29saW5nX2RldmljZTIxL2N1cl9zdGF0
-ZQ0KNC4gZWNobyAwID4gL3N5cy9jbGFzcy90aGVybWFsL2Nvb2xpbmdfZGV2aWNlMjEvY3VyX3N0
-YXRlDQpJIHVzZSB0dXJib3N0YXQgdG8gbW9uaXRvciB0aGUgQ1BVIEJ1c3klIGluIGFsbCA0IHN0
-ZXBzLg0KDQpJZiAnY3B1bWFzaycgZG9lcyBub3QgaW5jbHVkZSBhbGwgdGhlIEVjb3JlIENQVXMs
-IGFsbCBDUFVzIGJlY29tZXMgMTAwJQ0KYnVzeSBhZnRlciBpZGxlIGluamVjdGlvbiByZW1vdmVk
-IGluIHN0ZXAgNC4NCg0KSWYgJ2NwdW1hc2snIGluY2x1ZGVzIGFsbCB0aGUgRWNvcmUgQ1BVcywg
-aS5lLiBjcHVtYXNrID0gRkZ4eSwgaW4gc29tZQ0KY2FzZXMsIHRoZSBFY29yZSBDUFVzIHdpbGwg
-ZHJvcCB0byBhbiBCdXN5JSBtdWNoIGxvd2VyIHRoYW4gMTAlLCBhbmQNCnRoZW4gdGhleSBkb24n
-dCBjb21lIGJhY2sgdG8gYnVzeSBhZnRlciBpZGxlIGluamVjdGlvbiByZW1vdmVkIGluIHN0ZXAN
-CjQsIGFsdGhvdWdoIHdlIGhhdmUgMTYgc3RyZXNzIHRocmVhZHMuIEFuZCB0aGlzIGFsc28gcmVs
-YXRlcyB3aXRoIGhvdw0KbG9uZyB3ZSBzdGF5IGluIGlkbGUgaW5qZWN0aW9uLg0KDQpTYXksIHdo
-ZW4gY3B1bWFzaz1mZmYzLCB0aGUgcHJvYmxlbSBjYW4gYmUgdHJpZ2dlcmVkIG9jY2FzaW9uYWxs
-eSBpZg0KdGhlcmUgaXMgYSAxMCBzZWNvbmQgdGltZW91dCBiZXR3ZWVuIHN0ZXAgMyBhbmQgc3Rl
-cDQsIGJ1dCBpdCBpcyBtdWNoDQplYXNpZXIgdG8gcmVwcm9kdWNpYmxlIGlmIEkgaW5jcmVhc2Ug
-dGhlIHRpbWVvdXQgdG8gMjAgc2Vjb25kcy4NCg0KSXQgc2VlbXMgdGhhdCBQY29yZSBjYW4gYWx3
-YXlzIHB1bGwgdGFza3MgZnJvbSBFY29yZXMsIGJ1dCBFY29yZSBjYW4NCm5vdCBwdWxsIHRhc2tz
-IGZyb20gUGNvcmUgSFQgc2libGluZ3MuDQoNCnRoYW5rcywNCnJ1aQ0KDQpPbiBTYXQsIDIwMjMt
-MDItMDQgYXQgMTg6NTkgLTA4MDAsIFNyaW5pdmFzIFBhbmRydXZhZGEgd3JvdGU6DQo+IFNwbGl0
-IGZyb20gdGhlIHNlcmllcyBmb3IgcG93ZXJjbGFtcCB1c2VyIG9mIHBvd2VyY2FwIGlkbGUtaW5q
-ZWN0Lg0KPiANCj4gdjINCj4gLSBCdWlsZCB3YXJuaW5ncyByZXBvcnRlZCBieSBSdWkNCj4gLSBN
-b3ZlZCB0aGUgcG93ZXJjbGFtcCBkb2N1bWVudGF0aW9uIHRvIGFkbWluIGd1aWRlIGZvbGRlcg0K
-PiAtIENvbW1pdCBsb2cgdXBkYXRlZCBhcyBzdWdnZXN0ZWQgYnkgUmFmYWVsIGFuZCBvdGhlciBj
-b2RlIHN1Z2dlc3Rpb24NCj4gDQo+IFNyaW5pdmFzIFBhbmRydXZhZGEgKDIpOg0KPiAgIERvY3Vt
-ZW50YXRpb246YWRtaW4tZ3VpZGU6IE1vdmUgaW50ZWxfcG93ZXJjbGFtcCBkb2N1bWVudGF0aW9u
-DQo+ICAgdGhlcm1hbC9kcml2ZXJzL2ludGVsX3Bvd2VyY2xhbXA6IEFkZCB0d28gbW9kdWxlIHBh
-cmFtZXRlcnMNCj4gDQo+ICBEb2N1bWVudGF0aW9uL2FkbWluLWd1aWRlL2luZGV4LnJzdCAgICAg
-ICAgICAgfCAgIDEgKw0KPiAgLi4uL3RoZXJtYWwvaW50ZWxfcG93ZXJjbGFtcC5yc3QgICAgICAg
-ICAgICAgIHwgIDIyICsrKw0KPiAgRG9jdW1lbnRhdGlvbi9kcml2ZXItYXBpL3RoZXJtYWwvaW5k
-ZXgucnN0ICAgIHwgICAxIC0NCj4gIE1BSU5UQUlORVJTICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICB8ICAgMSArDQo+ICBkcml2ZXJzL3RoZXJtYWwvaW50ZWwvaW50ZWxfcG93ZXJj
-bGFtcC5jICAgICAgfCAxNzcgKysrKysrKysrKysrKysrLQ0KPiAtLQ0KPiAgNSBmaWxlcyBjaGFu
-Z2VkLCAxODAgaW5zZXJ0aW9ucygrKSwgMjIgZGVsZXRpb25zKC0pDQo+ICByZW5hbWUgRG9jdW1l
-bnRhdGlvbi97ZHJpdmVyLWFwaSA9PiBhZG1pbi0NCj4gZ3VpZGV9L3RoZXJtYWwvaW50ZWxfcG93
-ZXJjbGFtcC5yc3QgKDkzJSkNCj4gDQo=
+On Sat, 4 Feb 2023 at 19:42, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> On 02/01/23 15:36, Vincent Guittot wrote:
+> > Remove the capacity inversion detection which is now handled by
+> > util_fits_cpu() returning -1 when we need to continue to look for a
+> > potential CPU with better performance.
+> >
+> > This ends up almost reverting patches below except for some comments:
+>
+> nit: I think this comment must be removed/reworeded though
+
+This comment has already been removed. That's why I said almost revert
+except for some comments in the commit message
+
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 691a2f9c4efa..c6c8e7f52935 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4476,10 +4476,6 @@ static inline int util_fits_cpu(unsigned long util,
+>          *
+>          * For uclamp_max, we can tolerate a drop in performance level as the
+>          * goal is to cap the task. So it's okay if it's getting less.
+> -        *
+> -        * In case of capacity inversion, which is not handled yet, we should
+> -        * honour the inverted capacity for both uclamp_min and uclamp_max all
+> -        * the time.
+>          */
+>         capacity_orig = capacity_orig_of(cpu);
+>         capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+>
+> > commit da07d2f9c153 ("sched/fair: Fixes for capacity inversion detection")
+> > commit aa69c36f31aa ("sched/fair: Consider capacity inversion in util_fits_cpu()")
+> > commit 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+>
+> Apart from that, LGTM.
+>
+> Reviewed-by: Qais Yousef <qyousef@layalina.io>
+
+Thanks
+
+>
+>
+> Thanks!
+>
+> --
+> Qais Yousef
+>
+> > ---
+> >  kernel/sched/fair.c  | 84 +++-----------------------------------------
+> >  kernel/sched/sched.h | 19 ----------
+> >  2 files changed, 5 insertions(+), 98 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 074742f107c0..c6c8e7f52935 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4476,17 +4476,9 @@ static inline int util_fits_cpu(unsigned long util,
+> >        *
+> >        * For uclamp_max, we can tolerate a drop in performance level as the
+> >        * goal is to cap the task. So it's okay if it's getting less.
+> > -      *
+> > -      * In case of capacity inversion we should honour the inverted capacity
+> > -      * for both uclamp_min and uclamp_max all the time.
+> >        */
+> > -     capacity_orig = cpu_in_capacity_inversion(cpu);
+> > -     if (capacity_orig) {
+> > -             capacity_orig_thermal = capacity_orig;
+> > -     } else {
+> > -             capacity_orig = capacity_orig_of(cpu);
+> > -             capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+> > -     }
+> > +     capacity_orig = capacity_orig_of(cpu);
+> > +     capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+> >
+> >       /*
+> >        * We want to force a task to fit a cpu as implied by uclamp_max.
+> > @@ -9027,82 +9019,16 @@ static unsigned long scale_rt_capacity(int cpu)
+> >
+> >  static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> >  {
+> > -     unsigned long capacity_orig = arch_scale_cpu_capacity(cpu);
+> >       unsigned long capacity = scale_rt_capacity(cpu);
+> >       struct sched_group *sdg = sd->groups;
+> > -     struct rq *rq = cpu_rq(cpu);
+> >
+> > -     rq->cpu_capacity_orig = capacity_orig;
+> > +     cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
+> >
+> >       if (!capacity)
+> >               capacity = 1;
+> >
+> > -     rq->cpu_capacity = capacity;
+> > -
+> > -     /*
+> > -      * Detect if the performance domain is in capacity inversion state.
+> > -      *
+> > -      * Capacity inversion happens when another perf domain with equal or
+> > -      * lower capacity_orig_of() ends up having higher capacity than this
+> > -      * domain after subtracting thermal pressure.
+> > -      *
+> > -      * We only take into account thermal pressure in this detection as it's
+> > -      * the only metric that actually results in *real* reduction of
+> > -      * capacity due to performance points (OPPs) being dropped/become
+> > -      * unreachable due to thermal throttling.
+> > -      *
+> > -      * We assume:
+> > -      *   * That all cpus in a perf domain have the same capacity_orig
+> > -      *     (same uArch).
+> > -      *   * Thermal pressure will impact all cpus in this perf domain
+> > -      *     equally.
+> > -      */
+> > -     if (sched_energy_enabled()) {
+> > -             unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> > -             struct perf_domain *pd;
+> > -
+> > -             rcu_read_lock();
+> > -
+> > -             pd = rcu_dereference(rq->rd->pd);
+> > -             rq->cpu_capacity_inverted = 0;
+> > -
+> > -             for (; pd; pd = pd->next) {
+> > -                     struct cpumask *pd_span = perf_domain_span(pd);
+> > -                     unsigned long pd_cap_orig, pd_cap;
+> > -
+> > -                     /* We can't be inverted against our own pd */
+> > -                     if (cpumask_test_cpu(cpu_of(rq), pd_span))
+> > -                             continue;
+> > -
+> > -                     cpu = cpumask_any(pd_span);
+> > -                     pd_cap_orig = arch_scale_cpu_capacity(cpu);
+> > -
+> > -                     if (capacity_orig < pd_cap_orig)
+> > -                             continue;
+> > -
+> > -                     /*
+> > -                      * handle the case of multiple perf domains have the
+> > -                      * same capacity_orig but one of them is under higher
+> > -                      * thermal pressure. We record it as capacity
+> > -                      * inversion.
+> > -                      */
+> > -                     if (capacity_orig == pd_cap_orig) {
+> > -                             pd_cap = pd_cap_orig - thermal_load_avg(cpu_rq(cpu));
+> > -
+> > -                             if (pd_cap > inv_cap) {
+> > -                                     rq->cpu_capacity_inverted = inv_cap;
+> > -                                     break;
+> > -                             }
+> > -                     } else if (pd_cap_orig > inv_cap) {
+> > -                             rq->cpu_capacity_inverted = inv_cap;
+> > -                             break;
+> > -                     }
+> > -             }
+> > -
+> > -             rcu_read_unlock();
+> > -     }
+> > -
+> > -     trace_sched_cpu_capacity_tp(rq);
+> > +     cpu_rq(cpu)->cpu_capacity = capacity;
+> > +     trace_sched_cpu_capacity_tp(cpu_rq(cpu));
+> >
+> >       sdg->sgc->capacity = capacity;
+> >       sdg->sgc->min_capacity = capacity;
+> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > index 1072502976df..3e8df6d31c1e 100644
+> > --- a/kernel/sched/sched.h
+> > +++ b/kernel/sched/sched.h
+> > @@ -1044,7 +1044,6 @@ struct rq {
+> >
+> >       unsigned long           cpu_capacity;
+> >       unsigned long           cpu_capacity_orig;
+> > -     unsigned long           cpu_capacity_inverted;
+> >
+> >       struct balance_callback *balance_callback;
+> >
+> > @@ -2899,24 +2898,6 @@ static inline unsigned long capacity_orig_of(int cpu)
+> >       return cpu_rq(cpu)->cpu_capacity_orig;
+> >  }
+> >
+> > -/*
+> > - * Returns inverted capacity if the CPU is in capacity inversion state.
+> > - * 0 otherwise.
+> > - *
+> > - * Capacity inversion detection only considers thermal impact where actual
+> > - * performance points (OPPs) gets dropped.
+> > - *
+> > - * Capacity inversion state happens when another performance domain that has
+> > - * equal or lower capacity_orig_of() becomes effectively larger than the perf
+> > - * domain this CPU belongs to due to thermal pressure throttling it hard.
+> > - *
+> > - * See comment in update_cpu_capacity().
+> > - */
+> > -static inline unsigned long cpu_in_capacity_inversion(int cpu)
+> > -{
+> > -     return cpu_rq(cpu)->cpu_capacity_inverted;
+> > -}
+> > -
+> >  /**
+> >   * enum cpu_util_type - CPU utilization type
+> >   * @FREQUENCY_UTIL:  Utilization used to select frequency
+> > --
+> > 2.34.1
+> >
