@@ -2,108 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C751368B05E
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 15:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54A668B08F
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 16:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjBEOww (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Feb 2023 09:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S229740AbjBEP2O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Feb 2023 10:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjBEOwv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 09:52:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6A4EEC;
-        Sun,  5 Feb 2023 06:52:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CC50B80B51;
-        Sun,  5 Feb 2023 14:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44A7C4339B;
-        Sun,  5 Feb 2023 14:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675608767;
-        bh=PhFwMfKmlT94SSccqVeyCs3OQPNSHIjJtZZRpjAbREQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S40unBvphTT2CS0N2ts1IOXCPst1Yf5PmuVdcKhHTOK1G1IyuxryPWJcG3zaAM8Pq
-         Tt7/eWfFn+1hZNeG+E39s7moRRV458dapG3pNBfTkTugtbAKHVcdVXrxIbEw6XsCnH
-         kfaZl9WMiCjGrwgtS4zfSQSw12U6ttXeY8eAo/bujgGzzQhWhzOo0+uuKQu1iRBV4M
-         IWPYcyE1o4w6NsIZU3SKl04RQmPAYE+t63r8XY9bBFMLzSnqC8kv8et52G+lkP9KWE
-         NppbwgUJH1EZ7MiPZLmSiwylRU96u4jYroKLwTiqGldcXayGbVQdbQd2U6fX9Co2Iv
-         ilVIiTCcMk25Q==
-Date:   Sun, 5 Feb 2023 15:06:45 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        with ESMTP id S229633AbjBEP2N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 10:28:13 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9D31B33F
+        for <linux-pm@vger.kernel.org>; Sun,  5 Feb 2023 07:28:12 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id be12so9410356edb.4
+        for <linux-pm@vger.kernel.org>; Sun, 05 Feb 2023 07:28:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DjFSnrIRGSJkdimIozAXKodrxA7+h1XiQIWKvot1aiY=;
+        b=dJkr2phcC+JFaL2sbVNGXicazgKneu1SGA8XaRtnj1Zku/okz07szSaFJrBOLjpvff
+         nMx7RP3R/7B7GHGauSiDkiJ3ULhjTrTjchfQVPFcmjkjdPgUWzvWvhrsXH3yZsYpR2fZ
+         F/rHQwnv62J5nT4wi24QGOFQhw94V2YAkl52PFQ33NJ+VfVK2dNiIJFamehF8b7gPtUg
+         XqXft35ZwGDPAjcjacdFNxSQbk5WjBakyufDNgcyzRAjaDFCGpJZCtgsk1KGajCpbv8I
+         PQJ+l4473trOgY0gtEtOoyvAgNSHPydqehoNsppcE/pqSklnXOsKtcGp2Ld0BGnUaG7H
+         kogQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DjFSnrIRGSJkdimIozAXKodrxA7+h1XiQIWKvot1aiY=;
+        b=YNsecKmCJD/0dXUM7K+iwAy1hH2lmx2alKGxhk3M2xT/RAjLbraalIhbQOauIh/sEk
+         yEaRB2S1WsrBFxJVQLNSXP3lfEXOSq08sb6KKhRqDJgRRw070aIF5fd55Q2dO5U4W6LZ
+         YEakDvLCGneJsSQJNu7Pxy2NQwykgTDA099I5MTc/xe1/j+HVbV/X8QNgKgPvgg6+/Fw
+         SZJUoeLLZhxH9rpVpFrAO0QJVqCSzfA0FU/kujFuvCbFviLArcJ1kfaI7z/XAOv3DLHn
+         kbUaE405+vKvBZfIEfYgoNgh8GV7+/QFzb9t5sefoYPEpzimkfzTHrGi9+65eE2jxb9H
+         mgLg==
+X-Gm-Message-State: AO0yUKVK3onpvDO/gs1WWt1IRgaLkLjRZ8Qv/gda19rSWbPrN66EOZc8
+        9bSkE9Zg+06OMvy3QSxSNu46pCRqKHFSqVyb
+X-Google-Smtp-Source: AK7set89cD8gkd+UryUNywAwCMwbqHCIrSf+k1vDAVAsY4lWEM30cUrmP49jhGZwL0Bpfg/4wfCzaw==
+X-Received: by 2002:a50:d4dc:0:b0:4aa:a51a:7380 with SMTP id e28-20020a50d4dc000000b004aaa51a7380mr4129188edj.0.1675610890776;
+        Sun, 05 Feb 2023 07:28:10 -0800 (PST)
+Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id fg10-20020a056402548a00b004a23558f01fsm3889178edb.43.2023.02.05.07.28.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 07:28:10 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
- generic ADC node name
-Message-ID: <20230205150645.549ff062@jic23-huawei>
-In-Reply-To: <20230203212501.GA908601-robh@kernel.org>
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
-        <20230201204447.542385-3-marijn.suijten@somainline.org>
-        <20230203212501.GA908601-robh@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 0/3] power: supply: Lenovo Yoga C630 EC
+Date:   Sun,  5 Feb 2023 17:28:06 +0200
+Message-Id: <20230205152809.2233436-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 3 Feb 2023 15:25:01 -0600
-Rob Herring <robh@kernel.org> wrote:
+This adds binding, driver and the DT support for the Lenovo Yoga C630
+Embedded Controller, to provide battery information.
 
-> On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:
-> > Update the example to reflect a future requirement for the generic
-> > adc-chan node name on ADC channel nodes, while conveying the board name
-> > of the channel in a label instead.  
-> 
-> I don't think we've defined 'adc-chan' as THE generic name. Looks like 
-> we have:
-> 
-> adc-chan
-> adc-channel
-> channel
-> 
-> 'channel' is the most common (except for QCom).
-Good spot.
+Support for this EC was implemented by Bjorn, who can no longer work on
+this topic. Thus it was agreed that I'll pick this patchset up and
+update it following the pending review comments.
 
-We also have that defined as the channel name in 
-bindings/iio/adc.yaml
+Changes since v1:
+- Dropped DP support for now, as the bindings are in process of being
+  discussed separately,
+- Merged dt patch into the same patchseries,
+- Removed the fixed serial number battery property,
+- Fixed indentation of dt bindings example,
+- Added property: reg and unevaluatedProperties to the connector
+  bindings.
 
-Now this particular binding doesn't use anything from that
-generic binding (other than trivial use of reg) but better to be
-consistent with it than not!
+Bjorn Andersson (3):
+  dt-bindings: power: supply: Add Lenovo Yoga C630 EC
+  power: supply: Add Lenovo Yoga C630 EC driver
+  arm64: dts: qcom: c630: Add Embedded Controller node
 
-Thanks,
+ .../power/supply/lenovo,yoga-c630-ec.yaml     |  83 +++
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts |  35 ++
+ drivers/power/supply/Kconfig                  |  14 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/yoga-c630-ec.c           | 471 ++++++++++++++++++
+ 5 files changed, 604 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+ create mode 100644 drivers/power/supply/yoga-c630-ec.c
 
-Jonathan
-
-
-> 
-> Rob
+-- 
+2.39.1
 
