@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FCF68C59B
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 19:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A879168C5BE
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 19:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjBFST4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 13:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S229778AbjBFS3S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 13:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjBFSTz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 13:19:55 -0500
+        with ESMTP id S229490AbjBFS3R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 13:29:17 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095E11AF
-        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 10:19:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAB723C4A
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 10:28:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675707547;
+        s=mimecast20190719; t=1675708107;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lhvAU6ZF1LkEANx5C+rlnAPFw6900cnUpZORjf4RmTw=;
-        b=OPWU0u/Kwp+bD8gqeoaJW0L0hskcwCzwZ3UUuyGSYoFGynBv07XZz54xexPrxLgIL72p7A
-        l2Xxx91ALR84wyzKcVBrnA4UgNdo5nld9xEwtHGMQCyEnLYCEJQE/wdvpvM4vIM1kU6cbV
-        Alus1FGKvMbF0ymfCzucWtvdfgQlRKw=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=aE0G6LDX8lXDW0wtXNhk8AO/NAPHw5W1SphgReObSVQ=;
+        b=PazxTeM6XKpoS9NtRwILES6g+hBXlTBxGR9etzZOaBPvgUMDnpsvmWu+hEaCqiBjmG2Yi5
+        gA8VEiQn9p2063V0x2axph/KrFQDqvIipU1X268C0zY40k2rep/pk/sGaT61oEOyP4nKhm
+        LYXWvM7JvvFkUQFAj+BNBJqkzstAqkU=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-124-y6I9Zp0UNc6j4YbrE63suQ-1; Mon, 06 Feb 2023 13:19:05 -0500
-X-MC-Unique: y6I9Zp0UNc6j4YbrE63suQ-1
-Received: by mail-il1-f200.google.com with SMTP id d2-20020a056e021c4200b00313bdffad9aso3034958ilg.1
-        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 10:19:05 -0800 (PST)
+ us-mta-258-setnqh04ODuxJcLZf2arZw-1; Mon, 06 Feb 2023 13:28:26 -0500
+X-MC-Unique: setnqh04ODuxJcLZf2arZw-1
+Received: by mail-io1-f72.google.com with SMTP id z23-20020a6b6517000000b00718172881acso7420665iob.7
+        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 10:28:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lhvAU6ZF1LkEANx5C+rlnAPFw6900cnUpZORjf4RmTw=;
-        b=Y4jyhL/vsb89tpVgWNPV4WEMmnWH0J9lMvYmkFzcm/8anlsw8MoSTHrdTD5dGUSjok
-         JDOMiv0pI/p0y5BFoeB3qMGSrisRc7OdVCLJHQBttWwKTn8kKhuz50Rnm3fazpAv+rSe
-         KroK4t500SoGOttia1D64Hp8hLnxgIo+V4wSt3VzQWLvOR4cO3IuLYgwfW2bfurUnI9W
-         mOOnl6VWzkwo0WO0azp86xybscS4D19SV9Yukb18oW0VQSdS5OwFflFahXiPWRwc4dgG
-         omw6WbKwfa4hPUhCSGKC0jI1W2/K0+YJGF2PzyPlIN1ag5dFv3a2ZSWBuZcVSVQwkhk4
-         C6pg==
-X-Gm-Message-State: AO0yUKXTwNBOMHq9t1i1AcVD1+SxpBlFeAWreM5mqJmMrE7Z7DQtK5Ke
-        uPBSZCrCUAdKRVm8W07WRZAN+p63AMuWoDxoTQX0zICbUujqsr3KKcmONF7gFKJ6AT0Ur0TP1A9
-        R61DGpieo1WN/x8jCigM=
-X-Received: by 2002:a92:9509:0:b0:310:c746:d35d with SMTP id y9-20020a929509000000b00310c746d35dmr114875ilh.25.1675707545227;
-        Mon, 06 Feb 2023 10:19:05 -0800 (PST)
-X-Google-Smtp-Source: AK7set9TfM4R1dtOBwYVl3jyt5Q5tfrV3TDUzJbAC3tAzHDXahYbVOTTf85vkwOrxpIwRDlYEHPrpg==
-X-Received: by 2002:a92:9509:0:b0:310:c746:d35d with SMTP id y9-20020a929509000000b00310c746d35dmr114858ilh.25.1675707544985;
-        Mon, 06 Feb 2023 10:19:04 -0800 (PST)
+        bh=aE0G6LDX8lXDW0wtXNhk8AO/NAPHw5W1SphgReObSVQ=;
+        b=NsFVlgh7s4N3Q8AI0znEJX5V1zeNRd66qMoDUfjrTsrZ1mJzpjbu6fo3dWkextxKG0
+         lRnpIpPL8eVYpE2thPRGCuEOKO0WUpmAEbEyHJ4i9+eFO9MbNAIQ89w9RfEVRlzdNafi
+         jzSrBYSKzeTv6ZzblsQPfzvmFZHK7de+qP8IvR2TNjYA//iZxAAkUY3vjVUT7jl6YbOJ
+         CddowXDF9qxjLQQQ+71OcjTCzLf/vhaqqjyys6v8HOodDV5J/qC/mTVAkjat//V9tlby
+         QdhrZUuJAjHMNsIvwnsRUlBkFmpTnUGOBHdaALLUHMe/BCS86zp1vpZBkgUBdyOWW8OD
+         Uwkw==
+X-Gm-Message-State: AO0yUKVAhxOvFe/njCOwQQPGkzLU6ZNegmvOTXPgaBE24Tv2yx5N3UVT
+        26ZgROGuOEJr6YXx0N1tBOx29vLLcY5q3m+UW5zoKx2liKc4mCFiHCOrOtviL43vEt76/OX7mg6
+        YXTrM1uUIzcbsi2H3+J8=
+X-Received: by 2002:a05:6e02:674:b0:310:9798:a26 with SMTP id l20-20020a056e02067400b0031097980a26mr134558ilt.20.1675708105897;
+        Mon, 06 Feb 2023 10:28:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set/L3GshufTUSqipkhjjiZm+JjTxzP+SJFCkecxkJOuVFkOZ6xWbXOwXxcoTePIVAt8uHmx+4Q==
+X-Received: by 2002:a05:6e02:674:b0:310:9798:a26 with SMTP id l20-20020a056e02067400b0031097980a26mr134550ilt.20.1675708105706;
+        Mon, 06 Feb 2023 10:28:25 -0800 (PST)
 Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056e020bf000b0030dbd1b725asm3378552ilu.80.2023.02.06.10.19.03
+        by smtp.gmail.com with ESMTPSA id i17-20020a056e020d9100b00310ce3dd5b1sm3487877ilj.60.2023.02.06.10.28.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 10:19:04 -0800 (PST)
-Date:   Mon, 6 Feb 2023 13:19:02 -0500
+        Mon, 06 Feb 2023 10:28:25 -0800 (PST)
+Date:   Mon, 6 Feb 2023 13:28:23 -0500
 From:   Brian Masney <bmasney@redhat.com>
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     Sebastian Reichel <sre@kernel.org>,
@@ -64,20 +64,19 @@ Cc:     Sebastian Reichel <sre@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Lenovo Yoga C630
- EC
-Message-ID: <Y+FElkPUkfasI0yU@x1>
+        linux-arm-msm@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
+Subject: Re: [PATCH v2 2/3] power: supply: Add Lenovo Yoga C630 EC driver
+Message-ID: <Y+FGxylqBLRA+Um4@x1>
 References: <20230205152809.2233436-1-dmitry.baryshkov@linaro.org>
- <20230205152809.2233436-2-dmitry.baryshkov@linaro.org>
+ <20230205152809.2233436-3-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230205152809.2233436-2-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230205152809.2233436-3-dmitry.baryshkov@linaro.org>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,38 +84,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 05:28:07PM +0200, Dmitry Baryshkov wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Add binding for the Embedded Controller found in the Qualcomm
-> Snapdragon-based Lenovo Yoga C630.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  .../power/supply/lenovo,yoga-c630-ec.yaml     | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-> new file mode 100644
-> index 000000000000..37977344f157
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/lenovo,yoga-c630-ec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+On Sun, Feb 05, 2023 at 05:28:08PM +0200, Dmitry Baryshkov wrote:
+> +static int yoga_c630_ec_adpt_get_property(struct power_supply *psy,
+> +					  enum power_supply_property psp,
+> +					  union power_supply_propval *val)
+> +{
+> +	struct yoga_c630_ec *ec = power_supply_get_drvdata(psy);
+> +	int rc = 0;
 > +
-> +title: Lenovo Yoga C630 Embedded Controller.
+> +	yoga_c630_ec_update_adapter_status(ec);
 > +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		val->intval = ec->adapter_online;
+> +		break;
+> +	default:
+> +		rc = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return rc;
 
-Since this is new: Should this be updated with Bjorn's kernel.org
-address? Last I checked, this address doesn't exist anymore.
+You can simplify this function by getting rid of the switch statement
+and rc variable:
+
+	if (psp == POWER_SUPPLY_PROP_ONLINE) {
+		val->intval = ec->adapter_online;
+		return 0;
+	}
+
+	return -EINVAL;
 
 Brian
 
