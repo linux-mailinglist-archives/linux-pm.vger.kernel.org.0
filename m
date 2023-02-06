@@ -2,41 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219BA68BCB9
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 13:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1FC68BCCE
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 13:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjBFMUo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 07:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S230096AbjBFMbu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 07:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBFMUm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 07:20:42 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395B222DEC
-        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 04:20:40 -0800 (PST)
-Received: from dggpemm100007.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P9QMC1z2nzfZ49;
-        Mon,  6 Feb 2023 20:20:23 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm100007.china.huawei.com
- (7.185.36.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 6 Feb
- 2023 20:20:38 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-pm@vger.kernel.org>
-CC:     <sre@kernel.org>, <alina_yu@richtek.com>, <cy_huang@richtek.com>,
-        <u0084500@gmail.com>, <yangyingliang@huawei.com>
-Subject: [PATCH -next v2] power: supply: rt9471: fix using wrong ce_gpio in rt9471_probe()
-Date:   Mon, 6 Feb 2023 20:20:18 +0800
-Message-ID: <20230206122018.3601419-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm100007.china.huawei.com (7.185.36.116)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        with ESMTP id S229738AbjBFMbs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 07:31:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CEA12052;
+        Mon,  6 Feb 2023 04:31:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B8EDB80FA3;
+        Mon,  6 Feb 2023 12:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9D6C433EF;
+        Mon,  6 Feb 2023 12:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675686703;
+        bh=SSKnltqyFrUrRR/6DQuBz9zXXdOyQfpcUJPdcNtRCFU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g/GTgn5Zr2vIJt5DlEEdvQeuIMMj6GVrHVTg0gW7msGYEZ2ewNkdZaWKqZzbUfZmn
+         qEpeyC+c7b4H3xQijFuKs2cuxOvAOUxg5ygp7Xrr5LmfFbQXfAWfjtg2yHUDFjTlcv
+         QPGM84IoNDnhvhOaSBp2uSNhf5ICbdUzFsNx+kn7DISAaAp+hjPnB7narguJLOFKp3
+         m7ZwGSK/moPApG+Yv66+cdu974/NI95+nMFCtUHDEIpvJhRW6JeYsFnmqtusPKhVsE
+         B0kCmixpbYxqYmZn0ociftTSOT7vLDSNxMxceEQjR/2SKHUpKesLPIjOIbxOsL/cle
+         fdk1VexLpof8w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pP0er-00800O-6V;
+        Mon, 06 Feb 2023 12:31:41 +0000
+Date:   Mon, 06 Feb 2023 12:31:40 +0000
+Message-ID: <86wn4vynyr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+In-Reply-To: <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+        <20230203135043.409192-30-james.morse@arm.com>
+        <865ycg1kv2.wl-maz@kernel.org>
+        <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: suzuki.poulose@arm.com, james.morse@arm.com, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, tglx@linutronix.de, lpieralisi@kernel.org, mark.rutland@arm.com, sudeep.holla@arm.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mingo@redhat.com, will@kernel.org, catalin.marinas@arm.com, chenhuacai@kernel.org, oliver.upton@linux.dev, lenb@kernel.org, rafael@kernel.org, kernel@xen0n.name, salil.mehta@huawei.com, linux@armlinux.org.uk, jean-philippe@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,40 +86,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Pass the correct 'ce_gpio' to IS_ERR(), and remove the ce_gpio in
-chip data, make it all by SW control only, not to control by HW pin.
+On Mon, 06 Feb 2023 10:10:41 +0000,
+Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+> 
+> Hi,
+> 
+> A few cents from the Realm support point of view.
+> 
+> On 05/02/2023 10:12, Marc Zyngier wrote:
+> > On Fri, 03 Feb 2023 13:50:40 +0000,
+> > James Morse <james.morse@arm.com> wrote:
+> >> 
+> >> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> >> 
+> >> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+> >> request to handle all hypercalls that aren't handled by KVM. With the
+> >> help of another capability, this will allow userspace to handle PSCI
+> >> calls.
+> >> 
+> >> Suggested-by: James Morse <james.morse@arm.com>
+> >> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> >> Signed-off-by: James Morse <james.morse@arm.com>
+> >> 
+> >> ---
+> >> 
+> > 
+> > On top of Oliver's ask not to make this a blanket "steal everything",
+> > but instead to have an actual request for ranges of forwarded
+> > hypercalls:
+> > 
+> >> Notes on this implementation:
+> >> 
+> >> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+> >>    generalizes the idea to all hypercalls, since that was suggested on
+> >>    the list [2, 3].
+> >> 
+> >> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+> >>    kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+> >>    this, because:
+> >>    - Most user handlers will need to write results back into the
+> >>      registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+> >>      go all the way and read them back on return to kernel.
+> >>    - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+> >>      handling the call.
+> 
+> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+> not supported. So using an explicit passing down of the args is
+> preferrable.
 
-Fixes: 4a1a5f6781d8 ("power: supply: rt9471: Add Richtek RT9471 charger driver")
-Reviewed-by: ChiYuan Huang <cy_huang@richtek.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v1 -> v2:
-  Remove the ce_gpio in chip data.
----
- drivers/power/supply/rt9471.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+What is the blocker for CCA to use GET_ONE_REG? The value obviously
+exists and is made available to the host. pKVM is perfectly able to
+use GET_ONE_REG and gets a bunch of zeroes for things that the
+hypervisor has decided to hide from the host.
 
-diff --git a/drivers/power/supply/rt9471.c b/drivers/power/supply/rt9471.c
-index 5d3cf375ad5c..1ea40876494b 100644
---- a/drivers/power/supply/rt9471.c
-+++ b/drivers/power/supply/rt9471.c
-@@ -141,7 +141,6 @@ enum {
- 
- struct rt9471_chip {
- 	struct device *dev;
--	struct gpio_desc *ce_gpio;
- 	struct regmap *regmap;
- 	struct regmap_field *rm_fields[F_MAX_FIELDS];
- 	struct regmap_irq_chip_data *irq_chip_data;
-@@ -851,7 +850,7 @@ static int rt9471_probe(struct i2c_client *i2c)
- 
- 	/* Default pull charge enable gpio to make 'CHG_EN' by SW control only */
- 	ce_gpio = devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_HIGH);
--	if (IS_ERR(chip->ce_gpio))
-+	if (IS_ERR(ce_gpio))
- 		return dev_err_probe(dev, PTR_ERR(ce_gpio),
- 				     "Failed to config charge enable gpio\n");
- 
+Of course, it requires that the hypervisor (the RMM in your case)
+knows about the semantics of the hypercall, but that's obviously
+already a requirement (or you wouldn't be able to use PSCI at all).
+
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
