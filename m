@@ -2,73 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9BE68B714
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 09:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6501168B732
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 09:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjBFIJY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 03:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S229489AbjBFIUw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 03:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBFIJX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 03:09:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8445665A6;
-        Mon,  6 Feb 2023 00:09:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2756460C7C;
-        Mon,  6 Feb 2023 08:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7556AC433D2;
-        Mon,  6 Feb 2023 08:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675670961;
-        bh=7To9ndX5DYRSorrgvB+E9BrgmwiQP7ZmPzgErIA/JBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZOJtPm65eUnxYkUD5jLv1uB5b/01sUtZzEarQIEi7aGVKwKW5sVJzFx4gA5+Fcti5
-         XnJxEGioz4FgaUudU65hpYsgK3r7nmxeshNS+cPH/NqSy9rEJ0BYaNxN8L9tiv7Qhq
-         NyyGeHEdTmj0eZcGJh56PD0t8qEtnMq1rvYHs6E0DSgABHxx2jCy8Pm1evruHzLAxU
-         KPFRyXJfysD4ylCP41hK2gswWzUNFFu5hhVQSiJ7pQkzuLSiFZVGuCQpt6BsYyePD5
-         5/NSMzktrd9WAHwEE+57F/JK0rA7sGck2aKAP5Wot9u5ZDTOjQ8SU8Y/f3DRW6qz1d
-         uXK6K+1CQK4CQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pOwZS-0003cC-Sy; Mon, 06 Feb 2023 09:09:50 +0100
-Date:   Mon, 6 Feb 2023 09:09:50 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonard Crestez <leonard.crestez@nxp.com>,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: Re: [PATCH 04/23] interconnect: imx: fix registration race
-Message-ID: <Y+C1zpn3PvRc+6uf@hovoldconsulting.com>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-5-johan+linaro@kernel.org>
- <20230203170121.187108bd@booty>
+        with ESMTP id S229789AbjBFIUv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 03:20:51 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EB5144BE
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 00:20:49 -0800 (PST)
+Received: from dggpemm100007.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P9K0G5FVbznW2d;
+        Mon,  6 Feb 2023 16:18:38 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm100007.china.huawei.com
+ (7.185.36.116) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 6 Feb
+ 2023 16:20:47 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-pm@vger.kernel.org>
+CC:     <sre@kernel.org>, <alina_yu@richtek.com>, <cy_huang@richtek.com>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH -next] power: supply: rt9471: fix using wrong ce_gpio in rt9471_probe()
+Date:   Mon, 6 Feb 2023 16:20:25 +0800
+Message-ID: <20230206082025.1992331-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203170121.187108bd@booty>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm100007.china.huawei.com (7.185.36.116)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,42 +44,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 05:01:21PM +0100, Luca Ceresoli wrote:
-> Hello Johan,
-> 
-> On Wed,  1 Feb 2023 11:15:40 +0100
-> Johan Hovold <johan+linaro@kernel.org> wrote:
-> 
-> > The current interconnect provider registration interface is inherently
-> > racy as nodes are not added until the after adding the provider. This
-> > can specifically cause racing DT lookups to fail.
-> > 
-> > Switch to using the new API where the provider is not registered until
-> > after it has been fully initialised.
-> > 
-> > Fixes: f0d8048525d7 ("interconnect: Add imx core driver")
-> > Cc: stable@vger.kernel.org      # 5.8
-> > Cc: Leonard Crestez <leonard.crestez@nxp.com>
-> > Cc: Alexandre Bailon <abailon@baylibre.com>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Georgi pointed me to this series after I reported a bug yesterday [0],
-> that I found on iMX8MP. So I ran some tests with my original, failing
-> tree, minus one patch with my debugging code to hunt for the bug, plus
-> patches 1-4 of this series.
-> 
-> The original code was failing approx 5~10% of the times. With your 4
-> patches applied it ran 139 times with zero errors, which looks great! I
-> won't be able to do more testing until next Monday to be extra sure.
+Pass the correct 'ce_gpio' to IS_ERR(), and assign it to
+the 'chip->ce_gpio', if devm_gpiod_get_optional() succeed.
 
-Thanks for testing.
+Fixes: 4a1a5f6781d8 ("power: supply: rt9471: Add Richtek RT9471 charger driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/power/supply/rt9471.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-It indeed looks like you're hitting the same race, and as the imx
-interconnect driver also initialises the provider data num_nodes count
-before adding the nodes it results in that NULL-deref (where the qcom
-driver failed a bit more gracefully).
+diff --git a/drivers/power/supply/rt9471.c b/drivers/power/supply/rt9471.c
+index 5d3cf375ad5c..de0bf484d313 100644
+--- a/drivers/power/supply/rt9471.c
++++ b/drivers/power/supply/rt9471.c
+@@ -851,10 +851,12 @@ static int rt9471_probe(struct i2c_client *i2c)
+ 
+ 	/* Default pull charge enable gpio to make 'CHG_EN' by SW control only */
+ 	ce_gpio = devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_HIGH);
+-	if (IS_ERR(chip->ce_gpio))
++	if (IS_ERR(ce_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(ce_gpio),
+ 				     "Failed to config charge enable gpio\n");
+ 
++	chip->ce_gpio = ce_gpio;
++
+ 	regmap = devm_regmap_init_i2c(i2c, &rt9471_regmap_config);
+ 	if (IS_ERR(regmap))
+ 		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to init regmap\n");
+-- 
+2.25.1
 
-Johan
-
-> [0]
-> https://lore.kernel.org/linux-arm-kernel/20230202175525.3dba79a7@booty/T/#u
