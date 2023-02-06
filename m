@@ -2,205 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0E368BFBC
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 15:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA6068C003
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 15:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjBFOOK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 09:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S229973AbjBFO1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 09:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjBFON4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 09:13:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E4E2B297;
-        Mon,  6 Feb 2023 06:13:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D0BD60EFA;
-        Mon,  6 Feb 2023 14:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D68FC433EF;
-        Mon,  6 Feb 2023 14:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675692785;
-        bh=41eF3avSY5zNeD+zG7bcEF5Wk2RSA9m0ufmBlr18Ssk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VIqk8eZOvLdFgK6TAUtPyBUOMuQo2cBvpTs0zs+rgEfFZyPjLMbe268c2aHtXvuwl
-         JxGHGxpQTu3hbfJ1wl0jm5yvKit2gH0qRyuXY9MOMy7+Kru1ad+o+FU3JPp56UmgkS
-         ChDVllV1jcGvwlZCKExC8Hq9CJYPo/Oaglvdn6DJd2xncae4tAwq/aZeBHB3Lh8IBa
-         4qOOBcozGZ+tbAD25lBzgoBzECai+n5jSI8i7Ih3YNGk1MwvNmateb/0PIKZ+6675R
-         Ej+BF493DwhPUZ9/Yfls5gQXR3mQjFQmD1QtV1E5gPwzF1vIXgA5BWjoJmxc1v5Kz6
-         lthzgSXjS5ZCA==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
+        with ESMTP id S229949AbjBFO1E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 09:27:04 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7240E18B;
+        Mon,  6 Feb 2023 06:27:03 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id v23so12286246plo.1;
+        Mon, 06 Feb 2023 06:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5E/yBVrmcgMLnFa9p4JTH7UQJDllkHgNerevwocQnYI=;
+        b=XlcKu2wj65FASwrngaqudueyAfjPWj8YP+8LNpJkXxQF5jmxxUSrD8U+7kmgTsv6Ov
+         SwlR5mq1qsA23yyOzjI9LnzIOPPwcA9MJXP3/Ek1kxYNdH3Qs1hYo0v+hKjTutX6deDb
+         y4Ww4AdwkOfS7Co4VZRtD+GaR8Yrj2OaNfzM0q+W4P39v70ROdg01pOUk1q4aADQNL4o
+         UWXelqrAscWTKS04I2gMKWrbMy0a3VozbXHtanf3Gr97zVlSf7qspThenM8x1S3Hi4r1
+         nR4gIx8OW/DDAq5rkkfiUfFAEWlCbf2huw1PHrcDbMmY84tliMP8yxDmXeljErhx22Pi
+         OSLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5E/yBVrmcgMLnFa9p4JTH7UQJDllkHgNerevwocQnYI=;
+        b=7OR7RAeV3s1sclnjaBMz+GW2DatCQ34jUpCHWt3Qf95oyI67duVpfQyu4iDj/NeYGa
+         WQzmJCkX0VVBy+vFvbISYo/ITuE1tgQCf/Mc0aaPXDdtKNQoNSaMtzqHgxZnLOqJBPYA
+         ew97gMwBxDLezbjEhT8X1F4wqFVjLi3XNmY6cjmgj/0hkiloycmZl/Bwa4C2iPIbrWxy
+         0HY3TNSqe3BDqx8pwTOi2QdaseZUfi3P7QPUAbLq6hz5mXXIiDHK0asyWUV2vy/MnqO3
+         7n8+151T/RYyY+BwK2tALoyHmL8kW10sjTkIV7vUG68JLY1FkUMXBh4btSF1GD7OyPPi
+         jECg==
+X-Gm-Message-State: AO0yUKXnKQ5cuVbt+qiFpLeFF+RgwkHCt3gsc2NdjBbjnAx9ygjXJu+p
+        9wiKHwGyKVfmUc1ME/4v80w=
+X-Google-Smtp-Source: AK7set9CHU8jc8CVb+IPNa080M3J1zKDmZJZyg+dShe+AvL4pcdK3hlvzGxC5bMEqMOvjKtECc8xGg==
+X-Received: by 2002:a17:90b:3a8e:b0:219:9da5:40d3 with SMTP id om14-20020a17090b3a8e00b002199da540d3mr21173681pjb.1.1675693622988;
+        Mon, 06 Feb 2023 06:27:02 -0800 (PST)
+Received: from localhost.localdomain ([120.231.220.214])
+        by smtp.gmail.com with ESMTPSA id n3-20020a17090a73c300b0022bffc59164sm6375319pjk.17.2023.02.06.06.27.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 Feb 2023 06:27:02 -0800 (PST)
+From:   Jianeng Chen <jianengchencool@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.3
-Date:   Mon,  6 Feb 2023 16:12:00 +0200
-Message-Id: <20230206141200.9789-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Jianeng Chen <jianengchencool@gmail.com>
+Subject: [PATCH] thermal/core: associate device tree node to thermal_cooling_device::device
+Date:   Mon,  6 Feb 2023 22:26:17 +0800
+Message-Id: <1675693577-2575-1-git-send-email-jianengchencool@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+When adding a gpio property to a cooling device node in device tree, then in
+thermal driver called gpiod_get(struct device *) to request this gpio will
+fail, indicate cannot find gpio in device tree, because the of node do not
+associate to struct device.
 
-This is the pull request with interconnect changes for the 6.3-rc1 merge
-window. In contains new drivers and misc tiny updates. Two of the new
-drivers are in immutable branches (qcom tree pulls SM8550 and QDU1000 DT
-header files). The rest of the details are in the signed tag.
+Signed-off-by: Jianeng Chen <jianengchencool@gmail.com>
+---
+ drivers/thermal/thermal_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-All patches have been in linux-next for at least one week. Please pull
-into char-misc-next when possible.
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 0675df5..4d77d8b 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -905,6 +905,7 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	cdev->ops = ops;
+ 	cdev->updated = false;
+ 	cdev->device.class = thermal_class;
++	cdev->device.of_node = np;
+ 	cdev->devdata = devdata;
+ 
+ 	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
+-- 
+2.7.4
 
-Thanks,
-Georgi
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.3-rc1
-
-for you to fetch changes up to 7bf0008a52930e4d11ff1d6083cf13d9879bd2d0:
-
-  Merge branch 'icc-dt' into icc-next (2023-02-06 15:40:42 +0200)
-
-----------------------------------------------------------------
-interconnect changes for 6.3
-
-Here are the interconnect changes for the 6.3-rc1 merge window with the
-significant part being new drivers.
-
-Driver changes:
-- New driver for Qualcomm SM8550
-- New driver for Qualcomm QDU1000/QRU1000
-- New driver for Qualcomm SDM670
-- New driver for Qualcomm SA8775P
-- Drop the IP0 interconnects and migrate them to RPMh clocks instead
-- Misc improvements in the DT schema for some existing drivers
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Abel Vesa (2):
-      dt-bindings: interconnect: Add Qualcomm SM8550
-      interconnect: qcom: Add SM8550 interconnect provider driver
-
-Bartosz Golaszewski (2):
-      dt-bindings: interconnect: qcom: document the interconnects for sa8775p
-      dt-bindings: interconnect: qcom,sa8775p-rpmh: fix a typo
-
-Bryan O'Donoghue (1):
-      dt-bindings: interconnect: Exclude all non msm8939 from snoc-mm
-
-Dmitry Baryshkov (9):
-      interconnect: qcom: sdx55: drop IP0 remnants
-      interconnect: qcom: sc7180: drop IP0 remnants
-      interconnect: move ignore_list out of of_count_icc_providers()
-      interconnect: qcom: sm8150: Drop IP0 interconnects
-      interconnect: qcom: sm8250: Drop IP0 interconnects
-      interconnect: qcom: sc8180x: Drop IP0 interconnects
-      interconnect: qcom: sc8280xp: Drop IP0 interconnects
-      dt-bindings: interconnect: qcom: Remove ipa-virt compatibles
-      dt-bindings: interconnect: qcom: drop IPA_CORE related defines
-
-Georgi Djakov (6):
-      Merge branch 'icc-sm8550-immutable' into icc-next
-      Merge branch 'icc-qdu1000' into icc-next
-      Merge branch 'icc-ip0-migration' into icc-next
-      Merge branch 'icc-sdm670' into icc-next
-      Merge branch 'icc-sa8775p' into icc-next
-      Merge branch 'icc-dt' into icc-next
-
-Konrad Dybcio (1):
-      dt-bindings: interconnect: OSM L3: Add SM6350 OSM L3 compatible
-
-Krzysztof Kozlowski (4):
-      dt-bindings: interconnect: split SC7280 to own schema
-      dt-bindings: interconnect: split SC8280XP to own schema
-      dt-bindings: interconnect: split SM8450 to own schema
-      dt-bindings: interconnect: samsung,exynos-bus: allow opp-table
-
-Melody Olvera (2):
-      dt-bindings: interconnect: Add QDU1000/QRU1000 devices
-      interconnect: qcom: Add QDU1000/QRU1000 interconnect driver
-
-Neil Armstrong (1):
-      dt-bindings: interconnect: qcom-bwmon: document SM8550 compatibles
-
-Richard Acayan (2):
-      dt-bindings: interconnect: add sdm670 interconnects
-      interconnect: qcom: add sdm670 interconnects
-
-Shazad Hussain (1):
-      interconnect: qcom: add a driver for sa8775p
-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   |    2 +
- .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |    1 +
- .../devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml    |   70 +
- Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml   |   73 +-
- Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml  |   46 +-
- .../devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml    |   50 +
- .../devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml     |   71 +
- .../devicetree/bindings/interconnect/qcom,sc8280xp-rpmh.yaml   |   49 +
- .../devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml     |  124 +
- .../devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml     |  139 +
- .../devicetree/bindings/interconnect/samsung,exynos-bus.yaml   |   27 +
- drivers/interconnect/core.c                                    |   14 +-
- drivers/interconnect/qcom/Kconfig                              |   36 +
- drivers/interconnect/qcom/Makefile                             |    8 +
- drivers/interconnect/qcom/qdu1000.c                            | 1067 +++
- drivers/interconnect/qcom/qdu1000.h                            |   95 +
- drivers/interconnect/qcom/sa8775p.c                            | 2541 ++++++++
- drivers/interconnect/qcom/sc7180.h                             |    4 +-
- drivers/interconnect/qcom/sc8180x.c                            |   38 -
- drivers/interconnect/qcom/sc8180x.h                            |    4 +-
- drivers/interconnect/qcom/sc8280xp.c                           |   25 -
- drivers/interconnect/qcom/sc8280xp.h                           |    4 +-
- drivers/interconnect/qcom/sdm670.c                             |  440 ++
- drivers/interconnect/qcom/sdm670.h                             |  128 +
- drivers/interconnect/qcom/sdx55.h                              |    4 +-
- drivers/interconnect/qcom/sm8150.c                             |   21 -
- drivers/interconnect/qcom/sm8150.h                             |    4 +-
- drivers/interconnect/qcom/sm8250.c                             |   21 -
- drivers/interconnect/qcom/sm8250.h                             |    4 +-
- drivers/interconnect/qcom/sm8550.c                             | 2318 +++++++
- drivers/interconnect/qcom/sm8550.h                             |  178 +
- include/dt-bindings/interconnect/qcom,qdu1000-rpmh.h           |   98 +
- include/dt-bindings/interconnect/qcom,sa8775p-rpmh.h           |  231 +
- include/dt-bindings/interconnect/qcom,sc7180.h                 |    3 -
- include/dt-bindings/interconnect/qcom,sc8180x.h                |    3 -
- include/dt-bindings/interconnect/qcom,sc8280xp.h               |    4 +-
- include/dt-bindings/interconnect/qcom,sdm670-rpmh.h            |  136 +
- include/dt-bindings/interconnect/qcom,sdx55.h                  |    2 -
- include/dt-bindings/interconnect/qcom,sm8150.h                 |    3 -
- include/dt-bindings/interconnect/qcom,sm8250.h                 |    3 -
- include/dt-bindings/interconnect/qcom,sm8550-rpmh.h            |  189 +
- 41 files changed, 8071 insertions(+), 207 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc8280xp-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
- create mode 100644 drivers/interconnect/qcom/qdu1000.c
- create mode 100644 drivers/interconnect/qcom/qdu1000.h
- create mode 100644 drivers/interconnect/qcom/sa8775p.c
- create mode 100644 drivers/interconnect/qcom/sdm670.c
- create mode 100644 drivers/interconnect/qcom/sdm670.h
- create mode 100644 drivers/interconnect/qcom/sm8550.c
- create mode 100644 drivers/interconnect/qcom/sm8550.h
- create mode 100644 include/dt-bindings/interconnect/qcom,qdu1000-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sa8775p-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sdm670-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
