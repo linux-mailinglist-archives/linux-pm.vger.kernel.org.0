@@ -2,217 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9B968C64C
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 19:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F91068C6D9
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 20:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjBFS6q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 6 Feb 2023 13:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S229677AbjBFTdQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 14:33:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBFS6p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 13:58:45 -0500
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC42083ED;
-        Mon,  6 Feb 2023 10:58:43 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id gr7so37011907ejb.5;
-        Mon, 06 Feb 2023 10:58:43 -0800 (PST)
+        with ESMTP id S229934AbjBFTdP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 14:33:15 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680F1F498
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 11:33:13 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so16248574pjq.0
+        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 11:33:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ozndrp9afhkdbM3aTvMQSUU+gGGmEw8bXKclZh/YFF8=;
+        b=pUN3O7Lp1aWdzxGMgt32Wj7585LyJFaDLuELuVw/HI5/kW4j9V+ioU7tUeWRPQOIUw
+         vb5/ySpmyFRyY0VBTVKT+98zMphr2JtzVS4fBXJ49LiINlI01C659kUyl2CiGnD27uQz
+         k06uddD2pS/3qNQvpm2nJTSW4uHPIGY2gxbDZdYM//BFYbuZD9vqugGr5Mqrmfo3Y9YD
+         915KjuvAasZ3HHccRzyqmW4j1jffUIL8rGtAK17ztKFvJmkDSIgXgjVzi2yuit2jANYZ
+         XKFmb4Jytr1ySKy1lV8VGppr97tcLtvQ35BASxyXGVkvkEjK3QZHYyTA6ohEHFvbjDyV
+         ujcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XZRKKRT4ZIDV3Cuy+Qfd+p1zTOEBSHwGJp1JZTzG5ok=;
-        b=6CyGVfzdhvdwnORt3O7GXsIeOTpQ3H0ocQuvUqalA/qNjfXe4VZgSnWr7sKXZYxk9N
-         Bs1RaV4QZd6X6B9Pt8tS4jsXWWVh/pyxPlTCDgLMyoDKajBzIrszL1bxjZv6eaZUoTiI
-         jH8TL8GEECTeLrIEjQXZuAaEYo1SaMIkfRSzu2vk8ew3ZBybql4mK0LuZV2IeXmeHnuc
-         qbiDu72rICnMkGr+rBKGLEPgzeV4T4VOIAEh+xT454w2Ddg9k0o/TaDJxsDQaLq+RJ1n
-         4OUHVuVb8BGWsaNd3nVqAjsU9xEhRTUXTEh6ZgDAjlAwgwN6IUje5BpHcmtMPWZYk/0k
-         D7mw==
-X-Gm-Message-State: AO0yUKVXCggotYin+k4zK798GjIHJ2MN8UvY4EKnomtDwQsr/9iwomkz
-        7QGcdexWFKNz13siKGHwGCzuyoZuKU87skyeg9I=
-X-Google-Smtp-Source: AK7set/ak6MZnYdtQTxsAVE+xz5YVi/RCMv1r2gAopn+b4EYawjkQDtLUqkG7w3CwQvvjMKYVVhk4m9t4/2rSFuORBE=
-X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr108593ejb.274.1675709922484; Mon, 06
- Feb 2023 10:58:42 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ozndrp9afhkdbM3aTvMQSUU+gGGmEw8bXKclZh/YFF8=;
+        b=bXKZptio55OXZMO670+mR85lrmIoWW2ysP916kCwk5uO+X+ehYhbu55F1kCHJAQcQo
+         cLTjQ0XR8I9eUBE4NYwJSp/vSi3E4/6Yx+OdNqlJGSUJ3GM0Xjj3T0vyKaAdQAx+JhGB
+         rt03sIcKu9QlpGQyV6ctBQFZHyOFFInSJ+9Clqaxrc+f7D8E0FkGLoQbXK3NEaXz61j9
+         fyUvcxWQWbuD6wFhQVmiYTymfkQF+NRIw/ZTjURBZG9tAUoL4QdOiQOYJFn5KvG68A5B
+         NFCfzDSQN9RkHz+cONMZgAA00cYPMvHBvRY3inSsasyeYvod8UTp34KnaKk1GYkDJxaY
+         EROg==
+X-Gm-Message-State: AO0yUKU6259/i8yw1MQgHluIjnzCB1QqEpGF/Zxyi+Up9lvE6fkJIDb8
+        0arYrOnm4st7rCHBs7QwpwzHWc8xfTk1l1o9XWQORQ==
+X-Google-Smtp-Source: AK7set+KtnKVLwJYDJqYkK8qj3eZxjPmwm8qA9aUuqtozbNylOwcKEu6pFJFWVgPFc4duiSgTJ+lP96Aj9YI/XjHw1I=
+X-Received: by 2002:a17:90b:344c:b0:230:9e2a:ebd8 with SMTP id
+ lj12-20020a17090b344c00b002309e2aebd8mr1457256pjb.48.1675711992252; Mon, 06
+ Feb 2023 11:33:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <20220707125329.378277-2-jaz@semihalf.com>
- <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com>
- <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
- <CAH76GKMw2rAnQOSFqReG1sEC=sdncWOJHNXn-Rp2Gx1oUZR3ZQ@mail.gmail.com>
- <CAH76GKMtMi-Bp9h_49t5TBwF1cT0AQE=4H+4E+a4SK+cJ4JJ6A@mail.gmail.com> <CAH76GKMpnCmrbUfo8oQ1C4ej_iNmSw=xBHb8UZYy5Z8vQwcCzQ@mail.gmail.com>
-In-Reply-To: <CAH76GKMpnCmrbUfo8oQ1C4ej_iNmSw=xBHb8UZYy5Z8vQwcCzQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 6 Feb 2023 19:58:31 +0100
-Message-ID: <CAJZ5v0gov4cnWiF9RsbrEOgZZS=K2_tw5w_2ws2kgi66iXUufA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
+ <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com> <Y+E9Z+/+eCpPK6DE@linaro.org>
+In-Reply-To: <Y+E9Z+/+eCpPK6DE@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 6 Feb 2023 11:32:35 -0800
+Message-ID: <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmytro Maluka <dmy@semihalf.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Doug Anderson <dianders@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 1:25 PM Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
+On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
 >
-> Hi Rafael,
 >
-> Kindly reminder about this topic.
+> CC'ed Saravana
 
-Well, it's been a bit outdated since Mario's changes have been integrated.
+Thanks. Please do cc me for stuff like this from the start. I skimmed
+the series and I think it's doing one of my TODO items. So, thanks for
+the patch!
 
-> BTW I've noticed that in the meantime v. similar patch was merged but
-> aimed for debugging purposes [1] (it uses s/notify/check and invokes
-> the callback a bit earlier just before s2idle_entry).
-> Perhaps combining Mario's [1] with aligned to it patch #2 of this
-> series [2] could be used and accepted as s2idle notifications method?
+I'll take a closer look within a few days -- trying to get through
+some existing fw_devlink stuff.
 
-Maybe it could.
+But long story short, it is the right thing to keep a supplier on
+indefinitely if there's a consumer device (that's not disabled in DT)
+that never gets probed. It's a pretty common scenario -- for example,
+say a display backlight. The default case should be functional
+correctness. And then we can add stuff that allows changing this
+behavior with command line args or something else that can be done
+from userspace.
 
-Please send a new series based on top of the current mainline kernel
-(6.2-rc7 as of yesterday) and we'll see.
++1 to what Doug said elsewhere in this thread too. I'm trying to
+consolidate the "when do we give up" decision at the driver core level
+independent of what framework is being used.
 
-> [1] https://patchwork.kernel.org/project/linux-pm/patch/20220829162953.5947-2-mario.limonciello@amd.com
-> [2] https://patchwork.kernel.org/project/linux-pm/patch/20220707125329.378277-3-jaz@semihalf.com/
+-Saravana
+
 >
-> pon., 12 wrz 2022 o 16:44 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
-> >
-> > Hi Rafael,
-> >
-> > Gentle ping
-> >
-> > Best regards,
-> > Grzegorz
-> >
-> > pon., 22 sie 2022 o 11:26 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
+> On 23-02-06 17:22:23, Matthias Kaehlcke wrote:
+> > On Mon, Feb 06, 2023 at 06:31:21PM +0200, Abel Vesa wrote:
+> > > On 23-02-02 18:24:15, Matthias Kaehlcke wrote:
+> > > > Hi Abel,
+> > > >
+> > > > On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
+> > > > > Currently, there are cases when a domain needs to remain enabled until
+> > > > > the consumer driver probes. Sometimes such consumer drivers may be built
+> > > > > as modules. Since the genpd_power_off_unused is called too early for
+> > > > > such consumer driver modules to get a chance to probe, the domain, since
+> > > > > it is unused, will get disabled. On the other hand, the best time for
+> > > > > an unused domain to be disabled is on the provider's sync_state
+> > > > > callback. So, if the provider has registered a sync_state callback,
+> > > > > assume the unused domains for that provider will be disabled on its
+> > > > > sync_state callback. Also provide a generic sync_state callback which
+> > > > > disables all the domains unused for the provider that registers it.
+> > > > >
+> > > > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > > > ---
+> > > > >
+> > > > > This approach has been applied for unused clocks as well.
+> > > > > With this patch merged in, all the providers that have sync_state
+> > > > > callback registered will leave the domains enabled unless the provider's
+> > > > > sync_state callback explicitly disables them. So those providers will
+> > > > > need to add the disabling part to their sync_state callback. On the
+> > > > > other hand, the platforms that have cases where domains need to remain
+> > > > > enabled (even if unused) until the consumer driver probes, will be able,
+> > > > > with this patch in, to run without the pd_ignore_unused kernel argument,
+> > > > > which seems to be the case for most Qualcomm platforms, at this moment.
+> > > >
+> > > > I recently encountered a related issue on a Qualcomm platform with a
+> > > > v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
+> > > > highest corner until sync_state"). The issue involves a DT node with a
+> > > > rpmhpd, the DT node is enabled, however the corresponding device driver
+> > > > is not enabled in the kernel. In such a scenario the sync_state callback
+> > > > is never called, because the genpd consumer never probes. As a result
+> > > > the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
+> > > > system suspend, which results in a substantially higher power consumption
+> > > > in S3.
 > > >
-> > > Hi Rafael,
+> > > If I get this correctly, one of the providers is missing (doesn't matter
+> > > the reason), in which case, your kernel needs that driver, period. There
+> > > is no reason why you would expect the consumer to work without the
+> > > provider. Or, you could just remove the property in the devicetree node,
+> > > the property that makes the consumer wait for that provider. Anyway, you
+> > > should never end up with a consumer provider relationship in devicetree
+> > > without providing the provider driver.
+> >
+> > I would agree if it was actually a provider that's missing, however it's a
+> > 'missing' consumer that prevents the sync_state() call.
+>
+> Oh, my bad.
+>
+> Still, why would you keep the consumer node enabled in devicetree if you don't
+> intend to allow its driver to ever probe?
+>
+> >
+> > > > I wonder if genpd (and some other frameworks) needs something like
+> > > > regulator_init_complete(), which turns off unused regulators 30s after
+> > > > system boot. That's conceptually similar to the current
+> > > > genpd_power_off_unused(), but would provide time for modules being loaded.
 > > >
-> > > Could you please kindly comment on the above?
-> > >
-> > > Thank you in advance,
-> > > Grzegorz
-> > >
-> > > śr., 20 lip 2022 o 15:15 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
-> > > >
-> > > > wt., 19 lip 2022 o 20:09 Rafael J. Wysocki <rafael@kernel.org> napisał(a):
-> > > > >
-> > > > > On Thu, Jul 7, 2022 at 2:56 PM Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
-> > > > > >
-> > > > > > Currently the LPS0 prepare_late callback is aimed to run as the very
-> > > > > > last thing before entering the S2Idle state from LPS0 perspective,
-> > > > > > nevertheless between this call and the system actually entering the
-> > > > > > S2Idle state there are several places where the suspension process could
-> > > > > > be canceled.
-> > > > >
-> > > > > And why is this a problem?
-> > > > >
-> > > > > The cancellation will occur only if there is a wakeup signal that
-> > > > > would otherwise cause one of the CPUs to exit the idle state.  Such a
-> > > > > wakeup signal can appear after calling the new notifier as well, so
-> > > > > why does it make a difference?
-> > > >
-> > > > It could also occur due to suspend_test. Additionally with new
-> > > > notifier we could get notification when the system wakes up from
-> > > > s2idle_loop and immediately goes to sleep again (due to e.g.
-> > > > acpi_s2idle_wake condition not being met) - in this case relying on
-> > > > prepare_late callback is not possible since it is not called in this
-> > > > path.
-> > > >
-> > > > >
-> > > > > > In order to notify VMM about guest entering suspend, extend the S2Idle
-> > > > > > ops by new notify callback, which will be really invoked as a very last
-> > > > > > thing before guest actually enters S2Idle state.
-> > > > >
-> > > > > It is not guaranteed that "suspend" (defined as all CPUs entering idle
-> > > > > states) will be actually entered even after this "last step".
-> > > >
-> > > > Since this whole patchset is aimed at notifying the host about a guest
-> > > > entering s2idle state, reaching this step can be considered as a
-> > > > suspend "entry point" for VM IMO. It is because we are talking about
-> > > > the vCPU not the real CPU. Therefore it seems to me, that even if some
-> > > > other vCPUs could still get some wakeup signal they will not be able
-> > > > to kick (through s2idle_wake->swake_up_one(&s2idle_wait_head);) the
-> > > > original vCPU which entered s2idle_loop, triggered the new notifier
-> > > > and is halted due to handling vCPU exit (and was about to trigger
-> > > > swait_event_exclusive). So it will prevent the VM's resume process
-> > > > from being started.
-> > > >
-> > > > >
-> > > > > > Additionally extend the acpi_s2idle_dev_ops by notify() callback so
-> > > > > > any driver can hook into it and allow to implement its own notification.
-> > > > > >
-> > > > > > Taking advantage of e.g. existing acpi_s2idle_dev_ops's prepare/restore
-> > > > > > hooks is not an option since it will not allow to prevent race
-> > > > > > conditions:
-> > > > > > - VM0 enters s2idle
-> > > > > > - host notes about VM0 is in s2idle
-> > > > > > - host continues with system suspension but in the meantime VM0 exits
-> > > > > > s2idle and sends notification but it is already too late (VM could not
-> > > > > > even send notification on time).
-> > > > >
-> > > > > Too late for what?
-> > > >
-> > > > Too late to cancel the host suspend process, which thinks that the VM
-> > > > is in s2idle state while it isn't.
-> > > >
-> > > > >
-> > > > > > Introducing notify() as a very last step before the system enters S2Idle
-> > > > > > together with an assumption that the VMM has control over guest
-> > > > > > resumption allows preventing mentioned races.
-> > > > >
-> > > > > How does it do that?
-> > > >
-> > > > At the moment when VM triggers this new notifier we trap on MMIO
-> > > > access and the VMM handles vCPU exit (so the vCPU is "halted").
-> > > > Therefore the VMM could control when it finishes such handling and
-> > > > releases the vCPU again.
-> > > >
-> > > > Maybe adding some more context will be helpful. This patchset was
-> > > > aimed for two different scenarios actually:
-> > > > 1) Host is about to enter the suspend state and needs first to suspend
-> > > > VM with all pass-through devices. In this case the host waits for
-> > > > s2idle notification from the guest and when it receives it, it
-> > > > continues with its own suspend process.
-> > > > 2) Guest could be a "privileged" one (in terms of VMM) and when the
-> > > > guest enters s2idle state it notifies the host, which in turn triggers
-> > > > the suspend process of the host.
-> > > >
-> > > > >
-> > > > > It looks like you want suspend-to-idle to behave like S3 and it won't.
-> > > >
-> > > > In a way, yes, we compensate for the lack of something like PM1_CNT to
-> > > > trap on for detecting that the guest is suspending.
-> > > > We could instead force the guest to use S3 but IMO it is undesirable,
-> > > > since it generally does make a difference which suspend mode is used
-> > > > in the guest, s2idle or S3, e.g some drivers check which suspend type
-> > > > is used and based on that behaves differently during suspend. One of
-> > > > the example is:
-> > > > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c#L2323
-> > > > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c#L1069
-> > > > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c#L583
-> > > >
-> > > > Thank you,
-> > > > Grzegorz
+> > > NACK, timeouts are just another hack in this case, specially when we
+> > > have a pretty reliable mechanism like sync_state.
+> >
+> > It does not work properly unless all consumers are probed successfully. It
+> > makes sense to wait some time for the consumers to probe, but not eternally,
+> > it's perfectly valid that a driver for a (potential) consumer is not enabled.
+>
+> Usually, if you have a consumer devicetree node that you consider it
+> should not probe, you should consider disabling that node in your board
+> dts, specially if you don't intend to provide its driver.
+>
+> Again, timeouts are bad all-around. What happens if rootfs doesn't get
+> mounted in time? Will 30 seconds be enough for every scenario? What
+> happens if I want to load the driver (module) for a consumer a day after boot?
+>
+> IMHO, I think even the regulator_init_complete should be switched to some sync
+> state approach.
