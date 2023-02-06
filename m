@@ -2,341 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697CA68C332
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 17:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F17D68C362
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 17:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjBFQ2e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 11:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
+        id S229701AbjBFQb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 11:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBFQ2d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 11:28:33 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26407CA3E;
-        Mon,  6 Feb 2023 08:28:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J5qsFrHxoW2pjLsk9qiM9/YFEvZ8jiTM8kTlPvrNykI=; b=BAOxXGE+aFkV0YgDmD1FI0nQiT
-        48D0zmDTiKokqjB1LeJHR93tlsQGGgNTC0x2cG2h/L7Am0B/95CtGNPtOInhD+73dvwezG6eQYyH3
-        rA7a7iXsUxdf46SWBs2/tFq3olzRo6TkaLEtAcNW+G2vp+iKRzMd9ooklmMzdmebP+MLEWeJ5JXnA
-        hf9UYirDZq2OJN0hVB2LuETgO/dKleQXaGU7zvEIozLPrNiKkzS0JvTVTzQCi+3E4KUvdeBERS8FU
-        PDVtmkzsjQRLNAEK/+t6EqQE/Kw12aDRLHDK+Fkg+D3vL6XC7ZF92aELPJYKcx5B2uvh2dV3KOT+P
-        J8A+lwlw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pP4Lx-009KBQ-T0; Mon, 06 Feb 2023 16:28:25 +0000
-Date:   Mon, 6 Feb 2023 08:28:25 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>, Allan Day <aday@redhat.com>,
-        Michael Catanzaro <mcatanzaro.kernel@gmail.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        pmladek@suse.com, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-Message-ID: <Y+EqqRddrIZ8yWiT@bombadil.infradead.org>
-References: <20230131130041.629-1-petr.pavlu@suse.com>
+        with ESMTP id S229561AbjBFQb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 11:31:27 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E555274B5
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 08:31:25 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id g6so2957684wrv.1
+        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 08:31:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J5bjcHFpmFVH3KXyAiC17ebDFZXrFoaWMGOWdWjJid8=;
+        b=juATuULNtPkiFSg/8BBW6AN+k06PLQIav/v2MR0xneT3eVbLtakvFqICe5KlRxBwiQ
+         WrmP22Qah2Yu0bplNBqQvjmM1ozth7ybdONprgD+uc1NFohq9p8egsueG8PMGmIFdVYB
+         RBhdRbUptzbR6qVGVJVfYU2xbEOY2FO2ctYwD9wuhnIKAbDpwT6cVI/8OlNp5vxCydY2
+         Olti5REy7CZQjcP9T6uQkt/yk1cu0s0inpSaJbYox/QgYhO4gk1VzbmBRW+86FlGwhLa
+         5XH+1C8SjTmRORjUZz1Si1Sv1ebGqlXf6JNK5+zkLAOwpohZX7RgeClhdIHLqSCehycH
+         W4qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J5bjcHFpmFVH3KXyAiC17ebDFZXrFoaWMGOWdWjJid8=;
+        b=WvZKSu0NhYsV3U0Z2KEVMdgBV3ljMCB9HbFCyCtA59hewISu3RsoP1yd3x5ejBOl6K
+         DNgjhxaRDDGSahv6f6zs/P8yNWeDYvHrYHQcMbVwJ5Zw2p2O23hMudTbAexuYqfsyksu
+         V7MxlK8AiDuxVA50N3O/iZyqRJMbw8yfbULzXl79N7wxd7VKg/60L/bAhIhaY5nQWmtk
+         nmZOkRgmj4CoL153GEAQ6geIxPbeEw/8UcEWNxgOsjtAiaFrHrETL31F+yCBzPhPCj00
+         B+DPDqNtYChsi52PwBBwYFB9NT4vWw0JgUUSHoM5AdXUZrpMv1+0vHW5cme2hQCwLSEX
+         ed0Q==
+X-Gm-Message-State: AO0yUKUnSMorQhOU8LZTIZQMPn6D4sP+AISe9Ex9mg4hbA5puGQ7yvAK
+        ELS0Hzwk5DzdLKEMJtA3ia+a2A==
+X-Google-Smtp-Source: AK7set9FCxgGOIkd4YfSDh4BJEQ7VfKvPjFWkq+zcTrZmBe5u5FZoI+6B1BrRcGLpoRHpMmwrSpIQw==
+X-Received: by 2002:adf:e192:0:b0:2bc:846a:8ead with SMTP id az18-20020adfe192000000b002bc846a8eadmr18992629wrb.37.1675701083988;
+        Mon, 06 Feb 2023 08:31:23 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b002c3efca57e1sm1272703wrt.110.2023.02.06.08.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 08:31:23 -0800 (PST)
+Date:   Mon, 6 Feb 2023 18:31:21 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Doug Anderson <dianders@chromium.org>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+Message-ID: <Y+ErWTyV8CnE3Hl+@linaro.org>
+References: <20230127104054.895129-1-abel.vesa@linaro.org>
+ <Y9v/z8CYik3faHh7@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230131130041.629-1-petr.pavlu@suse.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9v/z8CYik3faHh7@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:00:41PM +0100, Petr Pavlu wrote:
-> The acpi-cpufreq and pcc-cpufreq drivers are loaded through per-CPU
-> module aliases.
-
-It gets me to question, what makes this "per-CPU module aliases" and
-how do we find other similar uses as they are likely incorrect too?
-
-> This can result in many unnecessary load requests during
-> boot if another frequency module, such as intel_pstate, is already
-> active. 
-
-Perhaps you should mention that in the worst case, without the fix in
-commit 0254127ab977e ("module: Don't wait for GOING modules") some of
-these module load requests could fail and prevent boot, and that
-discussion over these duplicate module reqests ended up in us deciding that
-they are not needed, we just need one.
-
-> For instance, on a typical Intel system, one can observe that
-> udev makes 2x#CPUs attempts to insert acpi_cpufreq and 1x#CPUs attempts
-> for pcc_cpufreq. All these tries then fail if another frequency module
-> is already registered.
+On 23-02-02 18:24:15, Matthias Kaehlcke wrote:
+> Hi Abel,
 > 
-> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
-> interface defined by ACPI. Allowed performance states and parameters
-> must be same for each CPU. This makes it possible to model these
-> interfaces as platform devices.
+> On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
+> > Currently, there are cases when a domain needs to remain enabled until
+> > the consumer driver probes. Sometimes such consumer drivers may be built
+> > as modules. Since the genpd_power_off_unused is called too early for
+> > such consumer driver modules to get a chance to probe, the domain, since
+> > it is unused, will get disabled. On the other hand, the best time for
+> > an unused domain to be disabled is on the provider's sync_state
+> > callback. So, if the provider has registered a sync_state callback,
+> > assume the unused domains for that provider will be disabled on its
+> > sync_state callback. Also provide a generic sync_state callback which
+> > disables all the domains unused for the provider that registers it.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> > 
+> > This approach has been applied for unused clocks as well.
+> > With this patch merged in, all the providers that have sync_state
+> > callback registered will leave the domains enabled unless the provider's
+> > sync_state callback explicitly disables them. So those providers will
+> > need to add the disabling part to their sync_state callback. On the
+> > other hand, the platforms that have cases where domains need to remain
+> > enabled (even if unused) until the consumer driver probes, will be able,
+> > with this patch in, to run without the pd_ignore_unused kernel argument,
+> > which seems to be the case for most Qualcomm platforms, at this moment.
 > 
-> The patch extends the ACPI parsing logic to check the ACPI namespace if
-> the PPC or PCC interface is present and creates a virtual platform
-> device for each if it is available. The acpi-cpufreq and pcc-cpufreq
-> drivers are then updated to map to these devices.
-> 
-> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
-> boot and only if a given interface is available in the firmware.
+> I recently encountered a related issue on a Qualcomm platform with a
+> v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
+> highest corner until sync_state"). The issue involves a DT node with a
+> rpmhpd, the DT node is enabled, however the corresponding device driver
+> is not enabled in the kernel. In such a scenario the sync_state callback
+> is never called, because the genpd consumer never probes. As a result
+> the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
+> system suspend, which results in a substantially higher power consumption
+> in S3.
 
-That could cut boot time too? If so how much?
+If I get this correctly, one of the providers is missing (doesn't matter
+the reason), in which case, your kernel needs that driver, period. There
+is no reason why you would expect the consumer to work without the
+provider. Or, you could just remove the property in the devicetree node,
+the property that makes the consumer wait for that provider. Anyway, you
+should never end up with a consumer provider relationship in devicetree
+without providing the provider driver.
 
-  Luis
+> 
+> I wonder if genpd (and some other frameworks) needs something like
+> regulator_init_complete(), which turns off unused regulators 30s after
+> system boot. That's conceptually similar to the current
+> genpd_power_off_unused(), but would provide time for modules being loaded.
 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  drivers/acpi/Makefile          |  1 +
->  drivers/acpi/acpi_cpufreq.c    | 49 ++++++++++++++++++++++++++++++++++
->  drivers/acpi/bus.c             |  1 +
->  drivers/acpi/internal.h        |  2 ++
->  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++++++++------------
->  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++++++++-------
->  6 files changed, 99 insertions(+), 27 deletions(-)
->  create mode 100644 drivers/acpi/acpi_cpufreq.c
+NACK, timeouts are just another hack in this case, specially when we
+have a pretty reliable mechanism like sync_state.
+
 > 
-> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-> index feb36c0b9446..880db1082c3e 100644
-> --- a/drivers/acpi/Makefile
-> +++ b/drivers/acpi/Makefile
-> @@ -57,6 +57,7 @@ acpi-y				+= evged.o
->  acpi-y				+= sysfs.o
->  acpi-y				+= property.o
->  acpi-$(CONFIG_X86)		+= acpi_cmos_rtc.o
-> +acpi-$(CONFIG_X86)		+= acpi_cpufreq.o
->  acpi-$(CONFIG_X86)		+= x86/apple.o
->  acpi-$(CONFIG_X86)		+= x86/utils.o
->  acpi-$(CONFIG_X86)		+= x86/s2idle.o
-> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
-> new file mode 100644
-> index 000000000000..7cf243c67475
-> --- /dev/null
-> +++ b/drivers/acpi/acpi_cpufreq.c
-> @@ -0,0 +1,49 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Registration of platform devices for ACPI Processor Performance Control and
-> + * Processor Clocking Control.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "internal.h"
-> +
-> +static void __init cpufreq_add_device(const char *name)
-> +{
-> +	struct platform_device *pdev;
-> +
-> +	pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
-> +					       0);
-> +	if (IS_ERR(pdev))
-> +		pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
-> +}
-> +
-> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
-> +					 void *context, void **return_value)
-> +{
-> +	bool *pct = context;
-> +
-> +	/* Check if the first CPU has _PCT. The data must be same for all. */
-> +	*pct = acpi_has_method(handle, "_PCT");
-> +	return AE_CTRL_TERMINATE;
-> +}
-> +
-> +void __init acpi_cpufreq_init(void)
-> +{
-> +	acpi_status status;
-> +	acpi_handle handle;
-> +	bool pct = false;
-> +
-> +	status = acpi_get_handle(NULL, "\\_SB", &handle);
-> +	if (ACPI_FAILURE(status))
-> +		return;
-> +
-> +	acpi_walk_namespace(ACPI_TYPE_PROCESSOR, ACPI_ROOT_OBJECT,
-> +			    ACPI_UINT32_MAX, acpi_pct_match, NULL, &pct, NULL);
-> +	if (pct)
-> +		cpufreq_add_device("acpi-cpufreq");
-> +
-> +	if (acpi_has_method(handle, "PCCH"))
-> +		cpufreq_add_device("pcc-cpufreq");
-> +}
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index 0c05ccde1f7a..f1559e26d5ff 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -1428,6 +1428,7 @@ static int __init acpi_init(void)
->  	acpi_viot_init();
->  	acpi_agdi_init();
->  	acpi_apmt_init();
-> +	acpi_cpufreq_init();
->  	return 0;
->  }
->  
-> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> index ec584442fb29..c9b1a5f689fa 100644
-> --- a/drivers/acpi/internal.h
-> +++ b/drivers/acpi/internal.h
-> @@ -157,8 +157,10 @@ static inline void acpi_early_processor_set_pdc(void) {}
->  
->  #ifdef CONFIG_X86
->  void acpi_early_processor_osc(void);
-> +void acpi_cpufreq_init(void);
->  #else
->  static inline void acpi_early_processor_osc(void) {}
-> +static inline void acpi_cpufreq_init(void) {}
->  #endif
->  
->  /* --------------------------------------------------------------------------
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 78adfb2ffff6..e1a5384cf21c 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -965,7 +965,7 @@ static void __init acpi_cpufreq_boost_init(void)
->  	acpi_cpufreq_driver.boost_enabled = boost_state(0);
->  }
->  
-> -static int __init acpi_cpufreq_init(void)
-> +static int __init acpi_cpufreq_probe(struct platform_device *pdev)
->  {
->  	int ret;
->  
-> @@ -1010,13 +1010,32 @@ static int __init acpi_cpufreq_init(void)
->  	return ret;
->  }
->  
-> -static void __exit acpi_cpufreq_exit(void)
-> +static int acpi_cpufreq_remove(struct platform_device *pdev)
->  {
->  	pr_debug("%s\n", __func__);
->  
->  	cpufreq_unregister_driver(&acpi_cpufreq_driver);
->  
->  	free_acpi_perf_data();
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver acpi_cpufreq_platdrv = {
-> +	.driver = {
-> +		.name	= "acpi-cpufreq",
-> +	},
-> +	.remove		= acpi_cpufreq_remove,
-> +};
-> +
-> +static int __init acpi_cpufreq_init(void)
-> +{
-> +	return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cpufreq_probe);
-> +}
-> +
-> +static void __exit acpi_cpufreq_exit(void)
-> +{
-> +	platform_driver_unregister(&acpi_cpufreq_platdrv);
->  }
->  
->  module_param(acpi_pstate_strict, uint, 0644);
-> @@ -1027,18 +1046,4 @@ MODULE_PARM_DESC(acpi_pstate_strict,
->  late_initcall(acpi_cpufreq_init);
->  module_exit(acpi_cpufreq_exit);
->  
-> -static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
-> -	X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
-> -	X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
-> -	{}
-> -};
-> -MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
-> -
-> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
-> -	{ACPI_PROCESSOR_OBJECT_HID, },
-> -	{ACPI_PROCESSOR_DEVICE_HID, },
-> -	{},
-> -};
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> -
-> -MODULE_ALIAS("acpi");
-> +MODULE_ALIAS("platform:acpi-cpufreq");
-> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-> index 9f3fc7a073d0..0c362932ca60 100644
-> --- a/drivers/cpufreq/pcc-cpufreq.c
-> +++ b/drivers/cpufreq/pcc-cpufreq.c
-> @@ -384,7 +384,7 @@ static int __init pcc_cpufreq_do_osc(acpi_handle *handle)
->  	return ret;
->  }
->  
-> -static int __init pcc_cpufreq_probe(void)
-> +static int __init pcc_cpufreq_evaluate(void)
->  {
->  	acpi_status status;
->  	struct acpi_buffer output = {ACPI_ALLOCATE_BUFFER, NULL};
-> @@ -576,7 +576,7 @@ static struct cpufreq_driver pcc_cpufreq_driver = {
->  	.name = "pcc-cpufreq",
->  };
->  
-> -static int __init pcc_cpufreq_init(void)
-> +static int __init pcc_cpufreq_probe(struct platform_device *pdev)
->  {
->  	int ret;
->  
-> @@ -587,9 +587,9 @@ static int __init pcc_cpufreq_init(void)
->  	if (acpi_disabled)
->  		return -ENODEV;
->  
-> -	ret = pcc_cpufreq_probe();
-> +	ret = pcc_cpufreq_evaluate();
->  	if (ret) {
-> -		pr_debug("pcc_cpufreq_init: PCCH evaluation failed\n");
-> +		pr_debug("pcc_cpufreq_probe: PCCH evaluation failed\n");
->  		return ret;
->  	}
->  
-> @@ -607,21 +607,35 @@ static int __init pcc_cpufreq_init(void)
->  	return ret;
->  }
->  
-> -static void __exit pcc_cpufreq_exit(void)
-> +static int pcc_cpufreq_remove(struct platform_device *pdev)
->  {
->  	cpufreq_unregister_driver(&pcc_cpufreq_driver);
->  
->  	pcc_clear_mapping();
->  
->  	free_percpu(pcc_cpu_info);
-> +
-> +	return 0;
->  }
->  
-> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
-> -	{ACPI_PROCESSOR_OBJECT_HID, },
-> -	{ACPI_PROCESSOR_DEVICE_HID, },
-> -	{},
-> +static struct platform_driver pcc_cpufreq_platdrv = {
-> +	.driver = {
-> +		.name	= "pcc-cpufreq",
-> +	},
-> +	.remove		= pcc_cpufreq_remove,
->  };
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> +
-> +static int __init pcc_cpufreq_init(void)
-> +{
-> +	return platform_driver_probe(&pcc_cpufreq_platdrv, pcc_cpufreq_probe);
-> +}
-> +
-> +static void __exit pcc_cpufreq_exit(void)
-> +{
-> +	platform_driver_unregister(&pcc_cpufreq_platdrv);
-> +}
-> +
-> +MODULE_ALIAS("platform:pcc-cpufreq");
->  
->  MODULE_AUTHOR("Matthew Garrett, Naga Chumbalkar");
->  MODULE_VERSION(PCC_VERSION);
-> 
+> > The v1 is here:
+> > https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
+> > 
+> > Changes since v1:
+> >  * added a generic sync state callback to be registered by providers in
+> >    order to disable the unused domains on their sync state. Also
+> >    mentioned this in the commit message.
+> > 
+> >  drivers/base/power/domain.c | 17 ++++++++++++++++-
+> >  include/linux/pm_domain.h   |  3 +++
+> >  2 files changed, 19 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 84662d338188..c2a5f77c01f3 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
+> >  	mutex_lock(&gpd_list_lock);
+> >  
+> >  	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+> > -		genpd_queue_power_off_work(genpd);
+> > +		if (!dev_has_sync_state(genpd->provider->dev))
+> > +			genpd_queue_power_off_work(genpd);
+> >  
+> >  	mutex_unlock(&gpd_list_lock);
+> >  
+> > @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
+> >  }
+> >  late_initcall(genpd_power_off_unused);
+> >  
+> > +void genpd_power_off_unused_sync_state(struct device *dev)
+> > +{
+> > +	struct generic_pm_domain *genpd;
+> > +
+> > +	mutex_lock(&gpd_list_lock);
+> > +
+> > +	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+> > +		if (genpd->provider->dev == dev)
+> > +			genpd_queue_power_off_work(genpd);
+> > +
+> > +	mutex_unlock(&gpd_list_lock);
+> > +}
+> > +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
+> > +
+> >  #ifdef CONFIG_PM_SLEEP
+> >  
+> >  /**
+> > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> > index f776fb93eaa0..1fd5aa500c81 100644
+> > --- a/include/linux/pm_domain.h
+> > +++ b/include/linux/pm_domain.h
+> > @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
+> >  					 unsigned int index);
+> >  struct device *genpd_dev_pm_attach_by_name(struct device *dev,
+> >  					   const char *name);
+> > +void genpd_power_off_unused_sync_state(struct device *dev);
+> >  #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
+> >  static inline int of_genpd_add_provider_simple(struct device_node *np,
+> >  					struct generic_pm_domain *genpd)
+> > @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+> >  {
+> >  	return ERR_PTR(-EOPNOTSUPP);
+> >  }
+> > +
+> > +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
+> >  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
+> >  
+> >  #ifdef CONFIG_PM
+> > -- 
+> > 2.34.1
+> > 
