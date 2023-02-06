@@ -2,93 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF9E68B86C
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 10:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BE268B95B
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 11:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjBFJRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 04:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S230214AbjBFKDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 05:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBFJRq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 04:17:46 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE4EA5D4;
-        Mon,  6 Feb 2023 01:17:44 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id n13so8137568wmr.4;
-        Mon, 06 Feb 2023 01:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRDtIh0HaJd8mkQWqVCqpf70WtwM51nZwFrJJwrV4dA=;
-        b=ndUdeiB+O6ZdDHjxtMacWQ8HHMLPWnds8zHZW8AVMv4ZCLG1Tob68VIjg1XqIx44fR
-         shtT/RIcXwwITOkQRePplPdO7Bwus4sK104Vm+QTyX3l2z7nq1hvaT0CYS2uim0X73tf
-         bpB8DunUz8re3MSbnb0uu998IPRNH/W1GxN5gahsipogoy5EiBeWGEMt5xifMHku2e6L
-         8oGrvUoQ7IE5tp3RSBusWC5LS71QUTBNnyfn4pwsOSXquCfGa36vONXrnb1DHPeYi1EN
-         39V2aPqcu97HUCZbcRvn2FLH6x/tbp++BC8jLZeYYd/vfO0jkxrjQ/JEyQtKneNUQoSj
-         Dz3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rRDtIh0HaJd8mkQWqVCqpf70WtwM51nZwFrJJwrV4dA=;
-        b=eddkYw/crDijBOPLbNcU4AECf+0QM5w1WnpmLucVeZNu3XVTUchgNvzOTigT6+5xbf
-         dVCa9QSYZaSk8dlLnJU9JhJ7b6Q919HA5vlGKakdlDX5ZWsQgvwpuUFZHG7zj8ttX3Nx
-         8/iux1pG2154O7gY63Hu+3SEkrMp/xreAIkyYoYG8/OVBTtvh1DaEg6FKfTnjQNch+Ii
-         xhKLb9WLyCeTWrzLUGWByPRHYRTRHoCvdjc/4L3Twvrmw0kWbhwtMr9TwT37O3SpCp/h
-         Sl/B2pwA+LvIZC6lz3YQLZb+Z3YScIFkvrn2noTmttifdIiQVsJvK7bkVJoHMUgdpuuc
-         YALQ==
-X-Gm-Message-State: AO0yUKViYDF37QtvmRvhyWDa5euyIPFCwcEuHOIT4xYtUmNxFng9WPAN
-        y2GpciMWrMlCC305MVgdsRmE3uOTeXzDbQ==
-X-Google-Smtp-Source: AK7set/INpsz162ODGiy6hJRXrbsruBrgGjW9CjtIusO0qvRff/uLWpJYdt1uGMZ2UeLUlLa6k7+ig==
-X-Received: by 2002:a1c:7c0e:0:b0:3dc:561a:79d8 with SMTP id x14-20020a1c7c0e000000b003dc561a79d8mr28845wmc.35.1675675063184;
-        Mon, 06 Feb 2023 01:17:43 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id y6-20020a7bcd86000000b003dc4480df80sm15566539wmj.34.2023.02.06.01.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 01:17:42 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] power: supply: rt9467: Fix spelling mistake "attache" -> "attach"
-Date:   Mon,  6 Feb 2023 09:17:42 +0000
-Message-Id: <20230206091742.45977-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229635AbjBFKDb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 05:03:31 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922E5206B8;
+        Mon,  6 Feb 2023 02:02:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675677752; x=1707213752;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=l/jB10VfqD0L4qSawHdyiw+glHCPUi3lamewwVD2rIY=;
+  b=CxRpq+X7kE25ISU6epgOyDvE8r45MKnadFMkFabzrzvCJHvFn/5RQgJc
+   CQ0dLGDes64c33MQJBow9h9IMWW34lYp4CasMCnHLL5EZ9T3EoO9WQvwm
+   ViVyNuVQW+Pwol6ab1+++jepQURLytxCXQNkwAx8IytjaLSZHEXr+5XMg
+   BYpP53kYsNsssCjW8fpxLzuYtuuWffT0022ME9J5THqCKWMrZNBwzEgoX
+   GOSU06UiLHXqfxJq+Q+DXhk+5gBd5cNLA5jIZZPupIxm/DG4XJ9p12HWx
+   0ZwSVplpSFHW9+aE44hfhAqxRhHsstfLooeOVcQe2GbQb7xRbdiQWJZTT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="330463128"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="330463128"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 02:02:31 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="775123018"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="775123018"
+Received: from gvenka5x-mobl.gar.corp.intel.com ([10.215.125.12])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 02:02:28 -0800
+Message-ID: <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "Neri, Ricardo" <ricardo.neri@intel.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+Date:   Mon, 06 Feb 2023 02:02:28 -0800
+In-Reply-To: <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
+References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
+         <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
+         <60514763753f572f854f1bbf287c3c16fbbc12c3.camel@linux.intel.com>
+         <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a spelling mistake in a dev_err message. Fix it.
+On Mon, 2023-02-06 at 08:05 +0000, Zhang, Rui wrote:
+> On Sun, 2023-02-05 at 18:45 -0800, srinivas pandruvada wrote:
+> > Hi Rui,
+> >=20
+> > On Sun, 2023-02-05 at 15:57 +0000, Zhang, Rui wrote:
+> > > Hi, Srinivas,
+> > >=20
+> > > First of all, the previous build error is gone.
+> > >=20
+> > > Second, I found something strange, which may be related with the
+> > > scheduler asym-packing, so CC Ricardo.
+> > >=20
+> > I thought you disable ITMT before idle injection and reenebale
+> > after
+> > removal.
+>=20
+> No.
+>=20
+> I can reproduce this by playing with raw intel_powerclamp sysfs knobs
+> and ITMT enabled.
+>=20
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/power/supply/rt9467-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This issue is happening even if ITMT disabled. If the module mask is
+composed of P-cores it works or even on servers as expected.
+Also if you offline all P-cores then select mask among E-cores, it is
+working. Somehow P-core influences E-cores.
 
-diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
-index 96ad0d7d3af4..73f744a3155d 100644
---- a/drivers/power/supply/rt9467-charger.c
-+++ b/drivers/power/supply/rt9467-charger.c
-@@ -970,7 +970,7 @@ static irqreturn_t rt9467_usb_state_handler(int irq, void *priv)
- 
- 	ret = rt9467_report_usb_state(data);
- 	if (ret) {
--		dev_err(data->dev, "Failed to report attache type (%d)\n", ret);
-+		dev_err(data->dev, "Failed to report attach type (%d)\n", ret);
- 		return IRQ_NONE;
- 	}
- 
--- 
-2.30.2
+Since this patch is module mask related, that is functioning correctly.
+We have to debug this interaction with P and E cores separately.
+
+Thanks,
+Srinivas
+
+
+> >=20
+> >=20
+> >=20
+> > > The test is done with pm linux-intel branch
+>=20
+> sorry, I mean linux-next branch.
+>=20
+> > > =C2=A0+ this patch series on an
+> > > ADL system.
+> > Can you do test on bleeding edge branch of Linux-pm?
+> >=20
+> > > =C2=A0cpu0~cpu7 are Pcore cpus, cpu8-cpu15 are Ecore cpus, and
+> > > intel_powerclamp is register as cooling_device21.
+> > >=20
+> > > 1. run stress -c 16
+> > > 2. update /sys/module/intel_powerclamp/parameters/cpumask
+> > > =C2=A0=C2=A0 echo 90 > /sys/module/intel_powerclamp/parameters/max_id=
+le
+> > > 3. echo 90 > /sys/class/thermal/cooling_device21/cur_state
+> > > 4. echo 0 > /sys/class/thermal/cooling_device21/cur_state
+> > > I use turbostat to monitor the CPU Busy% in all 4 steps.
+> > >=20
+> > > If 'cpumask' does not include all the Ecore CPUs, all CPUs
+> > > becomes
+> > > 100%
+> > > busy after idle injection removed in step 4.
+> > >=20
+> > that should be the case.
+> >=20
+> > > If 'cpumask' includes all the Ecore CPUs, i.e. cpumask =3D FFxy, in
+> > > some
+> > > cases, the Ecore CPUs will drop to an Busy% much lower than 10%,
+> > > and
+> > > then they don't come back to busy after idle injection removed in
+> > > step
+> > =C2=A0Do you see that idle injection is removed message in dmesg?
+>=20
+> yes.
+>=20
+> > We can also check powercap idle-inejct, if some CPUs still not wake
+> > from play_idle.
+>=20
+> "ps" command shows the the idle_injection threads time is not
+> increasing any more.
+>=20
+> >=20
+> >=20
+> > > 4, although we have 16 stress threads. And this also relates with
+> > > how
+> > > long we stay in idle injection.
+> > >=20
+> > > Say, when cpumask=3Dfff3, the problem can be triggered occasionally
+> > > if
+> > > there is a 10 second timeout between step 3 and step4, but it is
+> > > much
+> > > easier to reproducible if I increase the timeout to 20 seconds.
+> > >=20
+> > > It seems that Pcore can always pull tasks from Ecores, but Ecore
+> > > can
+> > > not pull tasks from Pcore HT siblings.
+> > >=20
+> > That will be regular load balance threads should do.
+> > Better to try upsteam kernel first.
+>=20
+> I'm already running with linux-pm tree linux-next branch + this patch
+> series.
+>=20
+> thanks,
+> rui
+>=20
+> >=20
+> > Thanks,
+> > Srinivas
+> >=20
+> >=20
+> > > thanks,
+> > > rui
+> > >=20
+> > > On Sat, 2023-02-04 at 18:59 -0800, Srinivas Pandruvada wrote:
+> > > > Split from the series for powerclamp user of powercap idle-
+> > > > inject.
+> > > >=20
+> > > > v2
+> > > > - Build warnings reported by Rui
+> > > > - Moved the powerclamp documentation to admin guide folder
+> > > > - Commit log updated as suggested by Rafael and other code
+> > > > suggestion
+> > > >=20
+> > > > Srinivas Pandruvada (2):
+> > > > =C2=A0 Documentation:admin-guide: Move intel_powerclamp
+> > > > documentation
+> > > > =C2=A0 thermal/drivers/intel_powerclamp: Add two module parameters
+> > > >=20
+> > > > =C2=A0Documentation/admin-guide/index.rst=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> > > > =C2=A0.../thermal/intel_powerclamp.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 22 +++
+> > > > =C2=A0Documentation/driver-api/thermal/index.rst=C2=A0=C2=A0=C2=A0 =
+|=C2=A0=C2=A0 1 -
+> > > > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 |=C2=A0=C2=A0 1 +
+> > > > =C2=A0drivers/thermal/intel/intel_powerclamp.c=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 177
+> > > > +++++++++++++++-
+> > > > --
+> > > > =C2=A05 files changed, 180 insertions(+), 22 deletions(-)
+> > > > =C2=A0rename Documentation/{driver-api =3D> admin-
+> > > > guide}/thermal/intel_powerclamp.rst (93%)
+> > > >=20
 
