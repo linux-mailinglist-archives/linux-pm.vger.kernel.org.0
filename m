@@ -2,360 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C6268C419
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 18:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DAD68C4B1
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 18:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjBFRB3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 12:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S229632AbjBFR2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 12:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBFRB1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 12:01:27 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802562BED0
-        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 09:00:56 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id l14so2426668eds.4
-        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 09:00:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a6q/V+E4w1GCT3UIo80p/1jk/eyzfrAH7kZCB3dF6EI=;
-        b=uCfTnrbkPsLAWL6gOh5JY9TMsdhSIK82e1NiuB7IshsdmrWsM5Hjr6FwUqZDOfVwE5
-         pvNIBn/sDzqqN32lvfDoOmAh45PK1wSUkPZLuoc6AEvpCgbhlvhcegjr+D6AEUDXeYYW
-         crvJhRIWcpDQskPdi0OoQGliNpJBpBY6VIzwBot4iZgUgiUf3fIUlETRkLbLODtr4PhJ
-         3TWSPMBYPdaLTxs1wac12U00iQXUDjiSDIkJN5Elr/OcQAIapmSRlT2ChNGZoaEjoLvI
-         /JAvT3ybEZlwj5jOQ0L0qHFxsB/XJq0OisD0eI8mYh3MtxQWHtEUbqVsfi2Ox0lT3Rd+
-         Q6tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6q/V+E4w1GCT3UIo80p/1jk/eyzfrAH7kZCB3dF6EI=;
-        b=G9qcQkXybe0HB7awIaiLJn+8dbHN5qGsxjCXGXqE9tRTXnUtWPWYVZ1JrQVC8HH5jm
-         EbJ4vfz2RdrIvCjgd0hTPgZY6oG9xL3Ah1/yiIwnpFe4pdkHnpC/DcCm4/c0eX1DRMni
-         lShFVrOcL6bycky8oJJA1I3r4WKwz+959tRmof6ylzL84uTEOSnNcdkjFAYA0xahRRPn
-         HkyYnAAIi1puJB47vQ8r/cEzrwTe/vxr3DajSR7fWU+dS9TIVPQkxcDGgxwMYjhuvBGK
-         4/1zoE2BOak2yxQRk500/zQ4c5Sj1EoKt953pzhwmtX3Nq14yyyzZP0B9anPNffx8KV5
-         xA/g==
-X-Gm-Message-State: AO0yUKWI6SX+5Z2dEKxLFZxSgvk/nwT/Shx4Q2AksIBZvtZAVC6E5ggz
-        RXjkVJ8ImCU23PEAYcnQYnIexQ==
-X-Google-Smtp-Source: AK7set9cQX60hct3CmrqQYLoS0zKl3hJEZ9KOOgC/H19Hq6SMdqrMyY4g16B+aPSjyDEPbDCn8cC1A==
-X-Received: by 2002:a50:9ea9:0:b0:4a0:e323:d59c with SMTP id a38-20020a509ea9000000b004a0e323d59cmr246400edf.20.1675702854925;
-        Mon, 06 Feb 2023 09:00:54 -0800 (PST)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id c5-20020a50d645000000b004aaa656887esm2668878edj.96.2023.02.06.09.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 09:00:54 -0800 (PST)
-Date:   Mon, 6 Feb 2023 18:00:53 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
-        <linux-amlogic@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
-Message-ID: <Y+EyRb9klmwwHGjn@oden.dyn.berto.se>
-References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+        with ESMTP id S230244AbjBFR2K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 12:28:10 -0500
+X-Greylist: delayed 480 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 09:27:40 PST
+Received: from out-196.mta0.migadu.com (out-196.mta0.migadu.com [91.218.175.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B662CC68
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 09:27:40 -0800 (PST)
+Date:   Mon, 6 Feb 2023 17:19:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675703978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HQYDCy4xAq7++DqBp2PrFrzWfoeLMTv7/t3BwVc+5/M=;
+        b=J9ErNIUpPqZIZXdMg30fbXll1h9T0Tvc0m6YwSEjZKdUoEOooQgqWauEEwTKgz5T3W0FTk
+        rki4AZWQsgRfhqb68OZxWvRzYjB94NkQRpb2vk7/ewhW1i4abF/GN+8YazanH4qC5F0Wee
+        Dwv1drNtXNr6gUzp6+ranIztAkcY0no=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+Message-ID: <Y+E2nVnadj1emNs5@google.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com>
+ <865ycg1kv2.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <865ycg1kv2.wl-maz@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Sun, Feb 05, 2023 at 10:12:49AM +0000, Marc Zyngier wrote:
+> On Fri, 03 Feb 2023 13:50:40 +0000,
+> James Morse <james.morse@arm.com> wrote:
+> > 
+> > From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > 
+> > When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+> > request to handle all hypercalls that aren't handled by KVM. With the
+> > help of another capability, this will allow userspace to handle PSCI
+> > calls.
+> > 
+> > Suggested-by: James Morse <james.morse@arm.com>
+> > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > 
+> > ---
+> > 
+> 
+> On top of Oliver's ask not to make this a blanket "steal everything",
+> but instead to have an actual request for ranges of forwarded
+> hypercalls:
+> 
+> > Notes on this implementation:
+> > 
+> > * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+> >   generalizes the idea to all hypercalls, since that was suggested on
+> >   the list [2, 3].
+> > 
+> > * We're reusing kvm_run.hypercall. I copied x0-x5 into
+> >   kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+> >   this, because:
+> >   - Most user handlers will need to write results back into the
+> >     registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+> >     go all the way and read them back on return to kernel.
+> >   - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+> >     handling the call.
+> >   - SMCCC uses x0-x16 for parameters.
+> >   x0 does contain the SMCCC function ID and may be useful for fast
+> >   dispatch, we could keep that plus the immediate number.
+> > 
+> > * Add a flag in the kvm_run.hypercall telling whether this is HVC or
+> >   SMC?  Can be added later in those bottom longmode and pad fields.
+> 
+> We definitely need this. A nested hypervisor can (and does) use SMCs
+> as the conduit. The question is whether they represent two distinct
+> namespaces or not. I *think* we can unify them, but someone should
+> check and maybe get clarification from the owners of the SMCCC spec.
+> 
+> >
+> > * On top of this we could share with userspace which HVC ranges are
+> >   available and which ones are handled by KVM. That can actually be added
+> >   independently, through a vCPU/VM device attribute which doesn't consume
+> >   a new ioctl:
+> >   - userspace issues HAS_ATTR ioctl on the vcpu fd to query whether this
+> >     feature is available.
+> >   - userspace queries the number N of HVC ranges using one GET_ATTR.
+> >   - userspace passes an array of N ranges using another GET_ATTR. The
+> >     array is filled and returned by KVM.
+> 
+> As mentioned above, I think this interface should go both ways.
+> Userspace should request the forwarding of a certain range of
+> hypercalls via a similar SET_ATTR interface.
+> 
+> Another question is how we migrate VMs that have these forwarding
+> requirements. Do we expect the VMM to replay the forwarding as part of
+> the setting up on the other side? Or do we save/restore this via a
+> firmware pseudo-register?
 
-Thanks for your work.
+Personally I'd prefer we left that job to userspace.
 
-On 2023-02-06 16:34:29 +0100, Daniel Lezcano wrote:
-> As the name states "thermal_core.h" is the header file for the core
-> components of the thermal framework.
-> 
-> Too many drivers are including it. Hopefully the recent cleanups
-> helped to self encapsulate the code a bit more and prevented the
-> drivers to need this header.
-> 
-> Remove this inclusion in every place where it is possible.
-> 
-> Some other drivers did a confusion with the core header and the one
-> exported in linux/thermal.h. They include the former instead of the
-> latter. The changes also fix this.
-> 
-> The tegra/soctherm driver still remains as it uses an internal
-> function which need to be replaced.
-> 
-> The Intel HFI driver uses the netlink internal framework core and
-> should be changed to prevent to deal with the internals.
-> 
-> No functional changes
-> 
-> [ Applies to thermal/linux-next or linux-pm/linux-next ]
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/amlogic_thermal.c           | 1 -
->  drivers/thermal/armada_thermal.c            | 2 --
->  drivers/thermal/broadcom/bcm2835_thermal.c  | 1 -
->  drivers/thermal/hisi_thermal.c              | 3 +--
->  drivers/thermal/imx8mm_thermal.c            | 1 -
->  drivers/thermal/imx_sc_thermal.c            | 1 -
->  drivers/thermal/intel/intel_hfi.c           | 3 ++-
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
->  drivers/thermal/qoriq_thermal.c             | 1 -
->  drivers/thermal/rcar_gen3_thermal.c         | 1 -
-
-For R-Car,
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
->  drivers/thermal/samsung/exynos_tmu.c        | 3 +--
->  drivers/thermal/st/stm_thermal.c            | 1 -
->  drivers/thermal/tegra/tegra30-tsensor.c     | 1 -
->  drivers/thermal/uniphier_thermal.c          | 2 --
->  14 files changed, 4 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
-> index d30cb791e63c..9235fda4ec1e 100644
-> --- a/drivers/thermal/amlogic_thermal.c
-> +++ b/drivers/thermal/amlogic_thermal.c
-> @@ -28,7 +28,6 @@
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
->  
-> -#include "thermal_core.h"
->  #include "thermal_hwmon.h"
->  
->  #define TSENSOR_CFG_REG1			0x4
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-> index 83a4080bffc7..36653f692c80 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -19,8 +19,6 @@
->  #include <linux/regmap.h>
->  #include <linux/interrupt.h>
->  
-> -#include "thermal_core.h"
-> -
->  /* Thermal Manager Control and Status Register */
->  #define PMU_TDC0_SW_RST_MASK		(0x1 << 1)
->  #define PMU_TM_DISABLE_OFFS		0
-> diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
-> index 3d0710c6e004..23918bb76ae6 100644
-> --- a/drivers/thermal/broadcom/bcm2835_thermal.c
-> +++ b/drivers/thermal/broadcom/bcm2835_thermal.c
-> @@ -18,7 +18,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/thermal.h>
->  
-> -#include "../thermal_core.h"
->  #include "../thermal_hwmon.h"
->  
->  #define BCM2835_TS_TSENSCTL			0x00
-> diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
-> index 45226cab466e..62c67942293e 100644
-> --- a/drivers/thermal/hisi_thermal.c
-> +++ b/drivers/thermal/hisi_thermal.c
-> @@ -16,8 +16,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/io.h>
->  #include <linux/of_device.h>
-> -
-> -#include "thermal_core.h"
-> +#include <linux/thermal.h>
->  
->  #define HI6220_TEMP0_LAG			(0x0)
->  #define HI6220_TEMP0_TH				(0x4)
-> diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-> index d247b48696cb..72b5d6f319c1 100644
-> --- a/drivers/thermal/imx8mm_thermal.c
-> +++ b/drivers/thermal/imx8mm_thermal.c
-> @@ -17,7 +17,6 @@
->  #include <linux/slab.h>
->  #include <linux/thermal.h>
->  
-> -#include "thermal_core.h"
->  #include "thermal_hwmon.h"
->  
->  #define TER			0x0	/* TMU enable */
-> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-> index 378f574607f7..f32e59e74623 100644
-> --- a/drivers/thermal/imx_sc_thermal.c
-> +++ b/drivers/thermal/imx_sc_thermal.c
-> @@ -13,7 +13,6 @@
->  #include <linux/slab.h>
->  #include <linux/thermal.h>
->  
-> -#include "thermal_core.h"
->  #include "thermal_hwmon.h"
->  
->  #define IMX_SC_MISC_FUNC_GET_TEMP	13
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 6e604bda2b93..c69db6c90869 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -40,10 +40,11 @@
->  
->  #include <asm/msr.h>
->  
-> -#include "../thermal_core.h"
->  #include "intel_hfi.h"
->  #include "thermal_interrupt.h"
->  
-> +#include "../thermal_netlink.h"
-> +
->  /* Hardware Feedback Interface MSR configuration bits */
->  #define HW_FEEDBACK_PTR_VALID_BIT		BIT(0)
->  #define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT	BIT(0)
-> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> index e2429676d0d2..101c75d0e13f 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> @@ -15,7 +15,6 @@
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
->  
-> -#include "../thermal_core.h"
->  #include "../thermal_hwmon.h"
->  
->  #define QPNP_TM_REG_DIG_MAJOR		0x01
-> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-> index d111e218f362..431c29c0898a 100644
-> --- a/drivers/thermal/qoriq_thermal.c
-> +++ b/drivers/thermal/qoriq_thermal.c
-> @@ -13,7 +13,6 @@
->  #include <linux/thermal.h>
->  #include <linux/units.h>
->  
-> -#include "thermal_core.h"
->  #include "thermal_hwmon.h"
->  
->  #define SITES_MAX		16
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 4ef927437842..0fd2fd077638 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -17,7 +17,6 @@
->  #include <linux/sys_soc.h>
->  #include <linux/thermal.h>
->  
-> -#include "thermal_core.h"
->  #include "thermal_hwmon.h"
->  
->  /* Register offsets */
-> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> index 37465af59262..527d1eb0663a 100644
-> --- a/drivers/thermal/samsung/exynos_tmu.c
-> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> @@ -20,11 +20,10 @@
->  #include <linux/of_irq.h>
->  #include <linux/platform_device.h>
->  #include <linux/regulator/consumer.h>
-> +#include <linux/thermal.h>
->  
->  #include <dt-bindings/thermal/thermal_exynos.h>
->  
-> -#include "../thermal_core.h"
-> -
->  /* Exynos generic registers */
->  #define EXYNOS_TMU_REG_TRIMINFO		0x0
->  #define EXYNOS_TMU_REG_CONTROL		0x20
-> diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-> index e7834ccc7976..735401958f01 100644
-> --- a/drivers/thermal/st/stm_thermal.c
-> +++ b/drivers/thermal/st/stm_thermal.c
-> @@ -19,7 +19,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/thermal.h>
->  
-> -#include "../thermal_core.h"
->  #include "../thermal_hwmon.h"
->  
->  /* DTS register offsets */
-> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
-> index 0ffe37ce7df7..b3218b71b6d9 100644
-> --- a/drivers/thermal/tegra/tegra30-tsensor.c
-> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
-> @@ -28,7 +28,6 @@
->  
->  #include <soc/tegra/fuse.h>
->  
-> -#include "../thermal_core.h"
->  #include "../thermal_hwmon.h"
->  
->  #define TSENSOR_SENSOR0_CONFIG0				0x0
-> diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
-> index f8ab2ca76184..47801841b3f5 100644
-> --- a/drivers/thermal/uniphier_thermal.c
-> +++ b/drivers/thermal/uniphier_thermal.c
-> @@ -17,8 +17,6 @@
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
->  
-> -#include "thermal_core.h"
-> -
->  /*
->   * block registers
->   * addresses are the offset from .block_base
-> -- 
-> 2.34.1
-> 
+We could also implement GET_ATTR, in case userspace has forgotten what
+it wrote to the hypercall filter. The firmware pseudo-registers are
+handy for moving KVM state back and forth 'for free', but I don't think
+we need to bend over backwards to migrate state userspace is directly
+responsible for.
 
 -- 
-Kind Regards,
-Niklas Söderlund
+Thanks,
+Oliver
