@@ -2,89 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7415268C95D
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 23:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B0768C980
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 23:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjBFW2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 17:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
+        id S229936AbjBFWfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 17:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjBFW2h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 17:28:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D7F12875;
-        Mon,  6 Feb 2023 14:28:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C43E61050;
-        Mon,  6 Feb 2023 22:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D315C433D2;
-        Mon,  6 Feb 2023 22:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675722507;
-        bh=pk8ds+WOqWCtZmkphDQqfjXHCVD9+oDrqLXduRq0AEs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pILWi1IE1eqNCxZkfGHP9hRqLMM/LbEHTHYwfRUfheKvj5KjPnAxrlu4Susad6Wxp
-         +NNJmy+2WVTummsfGfG1utbpNN2OEOkEHlM74E24X7Oxzay0hSTd5Sb7oOvV2uXZHL
-         9Eq5yQDyk95t7Z6pP5V/WlFHSa5z2B4RfT3B8OzEKluYsuYCMa+5V5mQqmJ99Aq2fa
-         fACnVUJ5zzHEgDNEGzz9/IWI2ywl1oW0RSrz6fgUEw51HxZ5UkIUAVLEorE5zombiZ
-         cCVx6e5VumE8IXujZNfdTGLa47f6Yj0AZUWORvfgrHJJMSFI7ktSl+wSkKl+ZR60Ud
-         bOmgbLEzlayMw==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 0/4] soc: qcom: Introduce PMIC GLINK
-Date:   Mon,  6 Feb 2023 14:30:34 -0800
-Message-Id: <167572263441.3569822.8165959497180624558.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
-References: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
+        with ESMTP id S229741AbjBFWfv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 17:35:51 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAE017155;
+        Mon,  6 Feb 2023 14:35:50 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id x10so7782009qtr.2;
+        Mon, 06 Feb 2023 14:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nmjD169NoXW3IkhaYFwz0SB6QUlkP+qjUZED7C6ZRTc=;
+        b=ckgvtNbLHKE7zGp1hQQH2crONIjnVmrKh4uTLOwFVE59nzmNDXe2hY25Vy/SdS2hxO
+         Dcps1DCCnhUR6uMUpbZAgd3e8d74QAybhTkzqbpGiY5KlAx4PxrkThbrKvdJQ9X6eFLI
+         kYsBUj99TpNEuneLGJ33lau5G8cp9/7SsRvgWGqTGoFXEUGKo5+YBpVCCQROO1xtG8u+
+         IoFe7ysj9JZNW2YtseYYgAOdEL5ZywEYqUMstLjxqHmT9iCp6KwTE5cTR2LZ6ZJxFCca
+         sEIMEsh7SzKMoJb7WcrXJsAGFp3TzRG35VTOXk4ujeNHnd5JE2e3IbbQn8hYhVvvZmss
+         dC1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nmjD169NoXW3IkhaYFwz0SB6QUlkP+qjUZED7C6ZRTc=;
+        b=KaVe6UZfRSXprKunuHah/GXNnF3JKbuMTghzpYrDYdxTaqQGDKB0zKQsksz0En/TI1
+         uzAruNpkhUlyK8Xjp/DDIyeKhxSn+7k/qcfh2DaPLcxfksG2kU6L9Ztx79jJupy8p98l
+         3SI6NfnBCPrfXKfjU59nBjFSXg44w1OCwRe7IlUtiFpvWy9d9dgaHr9bY+oq1Op8k6Wi
+         rmMoZl7dsMpcLs1EWP0wW2UICGHpQDW6Qi0NsXWWj7jccpl7RwcMxEQYtWMgw/k1MC4z
+         qNtTukrqeJiXJa1pvIpdPqzCXq9c4nxoxuBNT1q3Rsvp+VNECy7em4Somk1rjTz8fEQT
+         1rSA==
+X-Gm-Message-State: AO0yUKW/xjQ3YUsdXYB/oSJqNJEEkSLAzxkbiipL6iNW6Qr7z8EGVrzh
+        2hxXT5s5zj8mRc2eVXB9QSgrb8TLsLpxNg==
+X-Google-Smtp-Source: AK7set+ds+mN/qWC4EpstrsfpJCHNe3e6+CXlaF5Nlwbm9/55WoErDc4Bw+yRg3MwF1VPLdJ7uZRmQ==
+X-Received: by 2002:a05:622a:1753:b0:3b6:43ae:d5a3 with SMTP id l19-20020a05622a175300b003b643aed5a3mr1958776qtk.26.1675722949351;
+        Mon, 06 Feb 2023 14:35:49 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 16-20020a05620a041000b007201df7ff47sm8274920qkp.45.2023.02.06.14.35.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 14:35:48 -0800 (PST)
+Message-ID: <6f276332-54fb-b814-1b64-4e8aa7960eb6@gmail.com>
+Date:   Mon, 6 Feb 2023 14:35:24 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rafael.j.wysocki@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 31 Jan 2023 20:18:49 -0800, Bjorn Andersson wrote:
-> This implements the base PMIC GLINK driver, a power_supply driver and a
-> driver for the USB Type-C altmode protocol. This has been tested and
-> shown to provide battery information, USB Type-C switch and mux requests
-> and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
+On 2/6/23 07:34, Daniel Lezcano wrote:
+> As the name states "thermal_core.h" is the header file for the core
+> components of the thermal framework.
 > 
-> Bjorn Andersson (4):
->   dt-bindings: soc: qcom: Introduce PMIC GLINK binding
->   soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
->   soc: qcom: pmic_glink: Introduce altmode support
->   power: supply: Introduce Qualcomm PMIC GLINK power supply
+> Too many drivers are including it. Hopefully the recent cleanups
+> helped to self encapsulate the code a bit more and prevented the
+> drivers to need this header.
 > 
-> [...]
+> Remove this inclusion in every place where it is possible.
+> 
+> Some other drivers did a confusion with the core header and the one
+> exported in linux/thermal.h. They include the former instead of the
+> latter. The changes also fix this.
+> 
+> The tegra/soctherm driver still remains as it uses an internal
+> function which need to be replaced.
+> 
+> The Intel HFI driver uses the netlink internal framework core and
+> should be changed to prevent to deal with the internals.
+> 
+> No functional changes
+> 
+> [ Applies to thermal/linux-next or linux-pm/linux-next ]
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
 
-Applied, thanks!
+>   drivers/thermal/broadcom/bcm2835_thermal.c  | 1 -
 
-[1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK binding
-      commit: 68d868adc121f68edde0f4c0e16923103b868945
-[2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
-      commit: 58ef4ece1e41ac525db3e79529909683325d85df
-[3/4] soc: qcom: pmic_glink: Introduce altmode support
-      commit: 080b4e24852b1d5b66929f69344e6c3eeb963941
-
-Best regards,
+Acked-by: Florian Fainelli <f.fainelli@gmail.com> # bcm2835_thermal.c
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Florian
+
