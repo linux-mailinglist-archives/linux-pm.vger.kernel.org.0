@@ -2,166 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C16568C246
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 16:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A457568C26B
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 17:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjBFPxi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 10:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S230154AbjBFQDo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 11:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjBFPxb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 10:53:31 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325B429E01;
-        Mon,  6 Feb 2023 07:53:21 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 635361C000A;
-        Mon,  6 Feb 2023 15:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675698800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T+B3RCvnN/A9QkWUBTmslla6TsR6i6LzRlnEYAv5F3Q=;
-        b=Qtjb3GZlond/VqhH1wI9WqFkUTwIx6Xv+zssCdcz0vlldDafEWSB06zZ//x0Ak5PkC5s9y
-        ZxfUTza51NQilgjwYbUeD93lWl0YkGanyt4N/HQcJQmS+KroZcFE/xfTkRSM2sxsdcGf1f
-        20SxBUIoivwiZ6s9aJ+ixE2geS9izQBcTC0BtnofMVoclnJKbVIB5QEvwsdQxDRVvnTztn
-        mWfYNVZzBBsywzjxDjc3HnjZoENi2lYxasHSm8kpUEw2am/dKrdmudXoC8BSbNJ5qS4nRi
-        XqyYsA8WsUcyWOY6WGG+PMMJLyhBUYj2TKKx+CBVhWfLPP7d+4gsOsJ9cAGaug==
-Date:   Mon, 6 Feb 2023 16:53:11 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        with ESMTP id S229570AbjBFQDn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 11:03:43 -0500
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDBA173C;
+        Mon,  6 Feb 2023 08:03:42 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1442977d77dso15625731fac.6;
+        Mon, 06 Feb 2023 08:03:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cTOW8V7JT3rpM54x+sIt16Be3bXcZK7WhfxJJqhWNtM=;
+        b=JU2gl/ZpHGbRB0pyqGs5eFXzFqkWrlSrRFyIJv8B/RprXnCULJVVWskUAneZtIwmWR
+         AMurlyXvrJqv/RZrjrNkJr8F7p4JbBL4PTYQ8slNJUDNZYvetY9E6AQM8uVlrxAhIux3
+         FQYjEk4RLpgnFu6IT2rd6tdiIIJzFiGm0z6BRCbfnWGoXrxHpbbmwoh1gvYeG1EcbMxi
+         0LJIK6glbVVpAuLN9zY1Mr1Ik09rnzzSzObRqlASzC/nbmTxylMfH1d9ueD+NVIAG38d
+         Bn0ckmrM6AVqMsO2ibLKIrlnvTGd+ciDLiN1Rf9tFX5WoyolFNu/wtKibzJ/qoQvJLLl
+         6UlQ==
+X-Gm-Message-State: AO0yUKUo/AQbnkutIVEM6PLZVql2X45hznfBOiUj+MhiaWUpBbQbdcdF
+        xW1RsYdhPQDIxVILW4Xu+1wE0z44lg==
+X-Google-Smtp-Source: AK7set+J7NZXn1rlB9bUSExiFFc13ucmtlEJnPhyfTmeLcUPM2hvt6eZcOUTAmG1TBhSVpJNuMVOhw==
+X-Received: by 2002:a05:6870:f114:b0:15f:c2e8:6602 with SMTP id k20-20020a056870f11400b0015fc2e86602mr115020oac.20.1675699421000;
+        Mon, 06 Feb 2023 08:03:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056870880400b0014866eb34cesm4243152oam.48.2023.02.06.08.03.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 08:03:40 -0800 (PST)
+Received: (nullmailer pid 151323 invoked by uid 1000);
+        Mon, 06 Feb 2023 16:03:40 -0000
+Date:   Mon, 6 Feb 2023 10:03:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Niklas =?UTF-8?B?U8O2ZGVybHVuZA==?= 
-        <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        linux-amlogic@lists.infradead.org (open list:THERMAL DRIVER FOR AMLOGIC
-        SOCS),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-renesas-soc@vger.kernel.org (open list:RENESAS R-CAR THERMAL
-        DRIVERS),
-        linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
-        ARCHITECTURE),
-        linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
-Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
-Message-ID: <20230206165311.0777ec69@xps-13>
-In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Lenovo Yoga C630
+ EC
+Message-ID: <20230206160340.GA149179-robh@kernel.org>
+References: <20230205152809.2233436-1-dmitry.baryshkov@linaro.org>
+ <20230205152809.2233436-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230205152809.2233436-2-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
-
-daniel.lezcano@linaro.org wrote on Mon,  6 Feb 2023 16:34:29 +0100:
-
-> As the name states "thermal_core.h" is the header file for the core
-> components of the thermal framework.
->=20
-> Too many drivers are including it. Hopefully the recent cleanups
-> helped to self encapsulate the code a bit more and prevented the
-> drivers to need this header.
->=20
-> Remove this inclusion in every place where it is possible.
->=20
-> Some other drivers did a confusion with the core header and the one
-> exported in linux/thermal.h. They include the former instead of the
-> latter. The changes also fix this.
->=20
-> The tegra/soctherm driver still remains as it uses an internal
-> function which need to be replaced.
->=20
-> The Intel HFI driver uses the netlink internal framework core and
-> should be changed to prevent to deal with the internals.
->=20
-> No functional changes
->=20
-> [ Applies to thermal/linux-next or linux-pm/linux-next ]
->=20
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Sun, Feb 05, 2023 at 05:28:07PM +0200, Dmitry Baryshkov wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Add binding for the Embedded Controller found in the Qualcomm
+> Snapdragon-based Lenovo Yoga C630.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  drivers/thermal/amlogic_thermal.c           | 1 -
->  drivers/thermal/armada_thermal.c            | 2 --
+>  .../power/supply/lenovo,yoga-c630-ec.yaml     | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+> new file mode 100644
+> index 000000000000..37977344f157
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/lenovo,yoga-c630-ec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lenovo Yoga C630 Embedded Controller.
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +description:
+> +  The Qualcomm Snapdragon-based Lenovo Yoga C630 has an Embedded Controller
+> +  (EC) which handles things such as battery and USB Type-C. This binding
+> +  describes the interface, on an I2C bus, to this EC.
+> +
+> +properties:
+> +  compatible:
+> +    const: lenovo,yoga-c630-ec
+> +
+> +  reg:
+> +    const: 0x70
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  '^connector@[01]$':
+> +    $ref: /schemas/connector/usb-connector.yaml#
+> +
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |+
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c1 {
 
-For armada_thermal.c:
+i2c {
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> +        clock-frequency = <400000>;
 
->  drivers/thermal/broadcom/bcm2835_thermal.c  | 1 -
->  drivers/thermal/hisi_thermal.c              | 3 +--
->  drivers/thermal/imx8mm_thermal.c            | 1 -
->  drivers/thermal/imx_sc_thermal.c            | 1 -
->  drivers/thermal/intel/intel_hfi.c           | 3 ++-
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
->  drivers/thermal/qoriq_thermal.c             | 1 -
->  drivers/thermal/rcar_gen3_thermal.c         | 1 -
->  drivers/thermal/samsung/exynos_tmu.c        | 3 +--
->  drivers/thermal/st/stm_thermal.c            | 1 -
->  drivers/thermal/tegra/tegra30-tsensor.c     | 1 -
->  drivers/thermal/uniphier_thermal.c          | 2 --
->  14 files changed, 4 insertions(+), 18 deletions(-)
->=20
-> diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_=
-thermal.c
-> index d30cb791e63c..9235fda4ec1e 100644
-> --- a/drivers/thermal/amlogic_thermal.c
-> +++ b/drivers/thermal/amlogic_thermal.c
-> @@ -28,7 +28,6 @@
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
-> =20
-> -#include "thermal_core.h"
->  #include "thermal_hwmon.h"
-> =20
->  #define TSENSOR_CFG_REG1			0x4
+Not relevant to the example.
 
-Thanks,
-Miqu=C3=A8l
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        embedded-controller@70 {
+> +            compatible = "lenovo,yoga-c630-ec";
+> +            reg = <0x70>;
+> +
+> +            interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            connector@0 {
+> +                compatible = "usb-c-connector";
+> +                reg = <0>;
+> +                power-role = "source";
+> +                data-role = "host";
+> +            };
+> +
+> +            connector@1 {
+> +                compatible = "usb-c-connector";
+> +                reg = <1>;
+> +                power-role = "source";
+> +                data-role = "host";
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.39.1
+> 
