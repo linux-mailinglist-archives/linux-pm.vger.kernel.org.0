@@ -2,50 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FCB68C7BC
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 21:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717C068C7C6
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 21:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjBFUhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 15:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S230076AbjBFUjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 15:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjBFUhx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 15:37:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301A43590;
-        Mon,  6 Feb 2023 12:37:50 -0800 (PST)
+        with ESMTP id S230360AbjBFUju (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 15:39:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7353AA3;
+        Mon,  6 Feb 2023 12:39:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 640F1B815D2;
-        Mon,  6 Feb 2023 20:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A09CC433D2;
-        Mon,  6 Feb 2023 20:37:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0499361003;
+        Mon,  6 Feb 2023 20:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3C4C433EF;
+        Mon,  6 Feb 2023 20:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675715868;
-        bh=anOfBg4e46TnwdEtBw74YoyQGsjAU1epW9mE5iZ0FL8=;
+        s=k20201202; t=1675715988;
+        bh=or1c/qY0q70nvMFTuwULQPzHJ8Ha8hJkCTbJR2BH4Po=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NSqrZP11lgVjfKD4b5SZLJ6f2dMwmCZXBCngtP5JYwybmb55YaAW8qLBP5yBQGryu
-         byvEh5Letc5Y3p2Coug9ZrRTX8EJQO90f9baTsjqkcsibzKzu9MkreTpUCrxmI4ene
-         IxmPggvthTfFdRo62EB8kbE+DNfDykGT+qSBGQyNTCSVP+5yffnV5c5SVtJMnFfIKP
-         QY9ae1FwMYre1v1jUl7z3PzxAfQSDDfH513SDY5o6ExKDTEB0hI5hVUNR1pheKFixF
-         E5QhPkGcxInxrNUJFlk98FbjR16HEbB7ma+c7z674TziCmu5KyWsCWskVjZvuGuvfU
-         OE5gc58XEaPpQ==
-Date:   Mon, 6 Feb 2023 12:40:02 -0800
+        b=QcS1uAxdM+drzjccwX9k2OuceMyYBh30LRHscIpuTEwlrqgUcAAU4np8AGEUEhnB+
+         rWyhRQ7psuRBY/olQ09wF6Z3Ey5x2oBK2HziWpnzO1vytUCm25FiA1uaMK8CaY0I8O
+         3pxUjMIdQsX/Kg1qKclKql6D7Z62XBMlJ+8DvH7P8+Jy+e9rENa9OkJ34+rNUVhsK8
+         9LoVJKTKhYnnfYYqC6MEEOmWgmTUgdlnjhZYEUpM45vTbRQ7F+KrnnBabU/o9oOVDS
+         ENk2qjia5HdvGU9wL+tx1ceASQII+bpaN7FCCIz2j8Pa8ekKTDivdqfDxpgTlsj1D9
+         +yHm6Dr2921Hw==
+Date:   Mon, 6 Feb 2023 12:42:02 -0800
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Robert Marko <robimarko@gmail.com>
 Cc:     ilia.lin@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
         rafael@kernel.org, viresh.kumar@linaro.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 3/4] cpufreq: qcom-nvmem: use SoC ID-s from bindings
-Message-ID: <20230206204002.jafbtxei5upxtb2t@ripper>
+Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
+ return the SoC ID
+Message-ID: <20230206204202.3pqte7ynyybezv5g@ripper>
 References: <20230121112947.53433-1-robimarko@gmail.com>
- <20230121112947.53433-3-robimarko@gmail.com>
+ <20230121112947.53433-4-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230121112947.53433-3-robimarko@gmail.com>
+In-Reply-To: <20230121112947.53433-4-robimarko@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,51 +56,110 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 12:29:46PM +0100, Robert Marko wrote:
-> SMEM SoC ID-s are now stored in DT bindings so lets use those instead of
-> defining them in the driver again.
+On Sat, Jan 21, 2023 at 12:29:47PM +0100, Robert Marko wrote:
+> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
+> after getting it via SMEM call but instead uses an enum to encode the
+> matched SMEM ID to 2 variants of MSM8996 which are then used in
+> qcom_cpufreq_kryo_name_version() to set the supported version.
+> 
+> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
+> more than its name suggests, so lets make it just return the SoC ID
+> directly which allows matching directly on the SoC ID and removes the need
+> for msm8996_version enum which simplifies the driver.
+> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
 > 
 > Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
 > ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
+>  1 file changed, 12 insertions(+), 32 deletions(-)
 > 
 > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index c0a7841a56c1..da55d2e1925a 100644
+> index da55d2e1925a..9deaf9521d6d 100644
 > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
 > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -30,12 +30,7 @@
->  #include <linux/soc/qcom/smem.h>
->  #include <linux/soc/qcom/socinfo.h>
+> @@ -32,12 +32,6 @@
 >  
-> -enum _msm_id {
-> -	MSM8996V3 = 0xF6ul,
-> -	APQ8096V3 = 0x123ul,
-> -	MSM8996SG = 0x131ul,
-> -	APQ8096SG = 0x138ul,
+>  #include <dt-bindings/arm/qcom,ids.h>
+>  
+> -enum _msm8996_version {
+> -	MSM8996_V3,
+> -	MSM8996_SG,
+> -	NUM_OF_MSM8996_VERSIONS,
 > -};
-> +#include <dt-bindings/arm/qcom,ids.h>
+> -
+>  struct qcom_cpufreq_drv;
 >  
->  enum _msm8996_version {
->  	MSM8996_V3,
-> @@ -150,12 +145,12 @@ static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
->  		return NUM_OF_MSM8996_VERSIONS;
+>  struct qcom_cpufreq_match_data {
+> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+>  	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+>  }
 >  
->  	switch (info->id) {
-> -	case MSM8996V3:
-> -	case APQ8096V3:
+> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+> +static int qcom_cpufreq_get_msm_id(void)
+>  {
+>  	size_t len;
+>  	struct socinfo *info;
+> -	enum _msm8996_version version;
+>  
+>  	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
+>  	if (IS_ERR(info))
+> -		return NUM_OF_MSM8996_VERSIONS;
+> +		return PTR_ERR(info);
+>  
+> -	switch (info->id) {
+> -	case QCOM_ID_MSM8996:
+> -	case QCOM_ID_APQ8096:
+> -		version = MSM8996_V3;
+> -		break;
+> -	case QCOM_ID_MSM8996SG:
+> -	case QCOM_ID_APQ8096SG:
+> -		version = MSM8996_SG;
+> -		break;
+> -	default:
+> -		version = NUM_OF_MSM8996_VERSIONS;
+> -	}
+> -
+> -	return version;
+> +	return info->id;
+>  }
+>  
+>  static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+> @@ -166,25 +146,25 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+>  					  struct qcom_cpufreq_drv *drv)
+>  {
+>  	size_t len;
+> +	int msm_id;
+>  	u8 *speedbin;
+> -	enum _msm8996_version msm8996_version;
+>  	*pvs_name = NULL;
+>  
+> -	msm8996_version = qcom_cpufreq_get_msm_id();
+> -	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
+> -		dev_err(cpu_dev, "Not Snapdragon 820/821!");
+> -		return -ENODEV;
+> -	}
+> +	msm_id = qcom_cpufreq_get_msm_id();
+> +	if (msm_id < 0)
+> +		return msm_id;
+>  
+>  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+>  	if (IS_ERR(speedbin))
+>  		return PTR_ERR(speedbin);
+>  
+> -	switch (msm8996_version) {
+> -	case MSM8996_V3:
+> +	switch (msm_id) {
 > +	case QCOM_ID_MSM8996:
 > +	case QCOM_ID_APQ8096:
->  		version = MSM8996_V3;
+>  		drv->versions = 1 << (unsigned int)(*speedbin);
 >  		break;
-> -	case MSM8996SG:
-> -	case APQ8096SG:
+> -	case MSM8996_SG:
 > +	case QCOM_ID_MSM8996SG:
 > +	case QCOM_ID_APQ8096SG:
->  		version = MSM8996_SG;
+>  		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
 >  		break;
 >  	default:
 > -- 
