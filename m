@@ -2,73 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7571268C07F
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 15:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B2568C092
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 15:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjBFOu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 09:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S229992AbjBFO4Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 09:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjBFOu2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 09:50:28 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E799225BAC
-        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 06:50:25 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so10964078wmb.2
-        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 06:50:25 -0800 (PST)
+        with ESMTP id S229863AbjBFO4Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 09:56:16 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17211E1D0
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 06:56:13 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so10977458wmb.2
+        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 06:56:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xj5rghWD9HHvdaDeOxD1ymwL8XZWcK1ZvSHaDd4etb4=;
-        b=OzPSK6luNf4eYVfUJKBlBnZtjGvgbGVjvrk5hXAR7Pd82Qp6uOsyoSgOOAHZtIbF1x
-         uo6Fn2JB5LSEfXZ7u2Idd/yosFnGV5za0Hybhy9W8uzT5st3/rgJCWJ18aBgyv4w7Xsu
-         2bkzgz2ip1mp5uqLEgxlbRg7W8EIZL2NNWwL0B9pHfeaqabD0sX0TwMW6I+Ai+z+ky61
-         uqh2qAQM9aMR1nZEag/1uw9hRmkbTHkQhe2lfQhUTCyPw3gQn5QqR8kkG4hOb59ANhHS
-         LAODPoLih+Hd4gTY6JbsErx9EVkyhKAmxkDcqdLzBBSXDaL+BdAF+Q0/bGB6tJkFd+Ul
-         Le5g==
+        bh=JLXohrLP2hqmIHa8JxNah729Hs2/+AYh5T6dr8eUBo8=;
+        b=CKoxPXKB1qlb2deEofHpnltY/BW5FIvtFHIHVUEERB+OWPQBKrrWDdaRiurBijgwW1
+         IL4vnGOCc3TbuSDYFfCaYTEeaSo02LzhJDoXtNYvm4LpRv1cuhSq+7bo4I1kjD40z+0y
+         NffxUX5Xwu/AdMvdBxEewsXIhmNtVGqhrA9kNX8ONQRP4pFVdrIsCXwSL80NuHHzBOu1
+         jRs0ZVKWflGcLmt8QSxBWW7S2NCevcEtgQowJIFsgjCrBfqWE91YHqnjI2s/l9QmFaYQ
+         OKH0s5k18a0pE+IMFC1CCuV+EXpbvxteCc+H4fkte3L9r1irvEuHcEpo6pVH06RIEN9L
+         7SKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xj5rghWD9HHvdaDeOxD1ymwL8XZWcK1ZvSHaDd4etb4=;
-        b=puQ5+hymygCqkjRRb77UBmwpedu2jj65zTdpIrnmp2g34nrbDxFgHD3YcSCs2PThLx
-         6kO8akQzyV5S9k1S5ObGrLzrFjvhy400r3qMBcapnwh/5rLjG0Jc3GdPIJfK+NOGFCSx
-         BVtZ5PePvwSWgMD/tXyfUYDLszG8IH0Avu75xeHIrQMHBiaSqard9oRrbFxvC/y5LGMN
-         mwTzlSsCMbZcAT0ul4UbS4ID+VE4S5QqVNZHqgrYer3mhYUlcbqwEV2hVrWsJY3pOKaA
-         mX4CbtXzV8LrxFsiYhxxY0J2nLw1TBnRxVB3L5dNzvivUQjCcCUKKmLDOZ8xG0qG2Kq/
-         CmKg==
-X-Gm-Message-State: AO0yUKW9MQaOYP8IxzsB5IMZgU5RG2j7r4SqXbqtcwt4d0zdRnF5XCYA
-        ubWzynQR5rdVhCk2lJALyw+A5w==
-X-Google-Smtp-Source: AK7set+GTdygKvnYzpFQzeoj2zGAMebxHRR3Ax/eELQQ9kpUcI1S38whsNzBhVq47acAQ0IldgXA8g==
-X-Received: by 2002:a05:600c:2143:b0:3df:85d2:c768 with SMTP id v3-20020a05600c214300b003df85d2c768mr17217899wml.26.1675695024478;
-        Mon, 06 Feb 2023 06:50:24 -0800 (PST)
+        bh=JLXohrLP2hqmIHa8JxNah729Hs2/+AYh5T6dr8eUBo8=;
+        b=WywQELGCI1BVjdCaaKIVtX5lmndWaKMH7tWjMvB49Fi+IAunenbNi9NIxdThILVu03
+         1qMMHC631Z/reL2Gm8jROeQEYctI3ZIFpqCkGXLBx5Vu9nIP63jQilBTTNmEWNm3aad0
+         69bt0RFntUPLi5eJVMnWi/CkC1I9f9lIMkHxE9uxlrwOSxGv+AOGol+w4um7acbGrevC
+         6r9pUBPkb+FhAxViFkP+cczBVxMPqpdezwb2clxqxgrZlLzMiuPHRZsnoId2us0NKRdE
+         RRXr6JG8KInfFf4Wk5lub77jrg1VLpzOPE3PUCsX5Esq8tznGg1VGu1Dj0Ia/YbT0eeJ
+         44/Q==
+X-Gm-Message-State: AO0yUKXLeC7Vh3JiP/MQkjFirpv5sP5MbDgdsC1c14fL4PGUN5RyQ8dx
+        RhczJNGE0S8iMl27eT/EKbKwHQ==
+X-Google-Smtp-Source: AK7set/8WRvocO4wfoqX2j9zF/YdHaQLBXhKJE8IdbkJk6s3aAe+JnRBkLYPJgyIb+nkVs7MwisT/w==
+X-Received: by 2002:a05:600c:43c5:b0:3dc:5674:66e6 with SMTP id f5-20020a05600c43c500b003dc567466e6mr19737108wmn.25.1675695372525;
+        Mon, 06 Feb 2023 06:56:12 -0800 (PST)
 Received: from [172.17.59.64] (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
-        by smtp.googlemail.com with ESMTPSA id k24-20020a05600c0b5800b003cfa622a18asm16406813wmr.3.2023.02.06.06.50.23
+        by smtp.googlemail.com with ESMTPSA id he7-20020a05600c540700b003df5be8987esm14331149wmb.20.2023.02.06.06.56.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 06:50:23 -0800 (PST)
-Message-ID: <f626967e-d6e6-817f-abeb-4aed89856c66@linaro.org>
-Date:   Mon, 6 Feb 2023 15:50:22 +0100
+        Mon, 06 Feb 2023 06:56:12 -0800 (PST)
+Message-ID: <0150eab3-8446-aa95-ddf1-e80004d2d262@linaro.org>
+Date:   Mon, 6 Feb 2023 15:56:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
+Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
- <Y9J4WAFyXyV/nqlG@orome>
+To:     rjw@rjwysocki.net
+Cc:     linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y9J4WAFyXyV/nqlG@orome>
+In-Reply-To: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,48 +85,137 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Thierry,
-
-did you have the time to look at the get_thermal_instance() removal ?
-
-
-On 26/01/2023 13:55, Thierry Reding wrote:
-
-> 	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
-> 	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
-> 	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
-> 	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
-> 	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
-> 	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
-> 	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
-> 	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
-> 	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
+On 03/02/2023 18:58, Daniel Lezcano wrote:
+> Some drivers are declaring a thermal zone without any thermal trip
+> points.
 > 
-> and after these changes, it turns into:
+> On the other side, we are introducing the function
+> thermal_zone_device_register_with_trips() which provides an array of
+> generic thermal trip points. When all the drivers will be converted to
+> the generic trip points, keeping two functions will be useless.
 > 
-> 	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
-> 	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
-> 	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
-> 	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
-> 	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
-> 	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
-> 	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
-> 	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
-> 	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttle for pll to 103000
-> 	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when pll reaches 103000 mC
-> 	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
-> 	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttle for mem to 103000
-> 	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when mem reaches 103000 mC
+> Most of the drivers are now using
+> thermal_zone_device_register_with_trips() with the generic trip
+> points. As soon as the remaining drivers are merged, the
+> thermal_zone_device_register_with_trips() will be renamed to
+> thermal_zone_device_register().
 > 
-> The "programming throttle ..." messages are something I've added locally
-> to trace what gets called. So it looks like for "pll" and "mem" thermal
-> zones, we now program trip points whereas we previously didn't.
+> Obviously this renaming can only happen if there are no more user of
+> the thermal_zone_device_register() function.
 > 
-> I'll take a closer look to see if we can replace the calls to
-> get_thermal_instance() by something else.
+> This change uses thermal_zone_device_register_with_trips() with a NULL
+> parameter for the trip point array instead of
+> thermal_zone_device_register().
 > 
-> Thierry
+> No functional change intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/power/supply/power_supply_core.c                | 2 +-
+
+Sebastian,
+
+are ok with this change and if it goes through the thermal tree ?
+
+
+>   drivers/thermal/armada_thermal.c                        | 4 ++--
+>   drivers/thermal/dove_thermal.c                          | 4 ++--
+>   drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
+>   drivers/thermal/kirkwood_thermal.c                      | 4 ++--
+>   drivers/thermal/spear_thermal.c                         | 5 +++--
+>   6 files changed, 13 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index 7c790c41e2fe..208a849a71d9 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -1166,7 +1166,7 @@ static int psy_register_thermal(struct power_supply *psy)
+>   
+>   	/* Register battery zone device psy reports temperature */
+>   	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
+> -		psy->tzd = thermal_zone_device_register(psy->desc->name,
+> +		psy->tzd = thermal_zone_device_register_with_trips(psy->desc->name, NULL,
+>   				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
+>   		if (IS_ERR(psy->tzd))
+>   			return PTR_ERR(psy->tzd);
+> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+> index 99e86484a55c..83a4080bffc7 100644
+> --- a/drivers/thermal/armada_thermal.c
+> +++ b/drivers/thermal/armada_thermal.c
+> @@ -856,8 +856,8 @@ static int armada_thermal_probe(struct platform_device *pdev)
+>   		/* Wait the sensors to be valid */
+>   		armada_wait_sensor_validity(priv);
+>   
+> -		tz = thermal_zone_device_register(priv->zone_name, 0, 0, priv,
+> -						  &legacy_ops, NULL, 0, 0);
+> +		tz = thermal_zone_device_register_with_trips(priv->zone_name, NULL, 0, 0, priv,
+> +							     &legacy_ops, NULL, 0, 0);
+>   		if (IS_ERR(tz)) {
+>   			dev_err(&pdev->dev,
+>   				"Failed to register thermal zone device\n");
+> diff --git a/drivers/thermal/dove_thermal.c b/drivers/thermal/dove_thermal.c
+> index 056622a58d00..fce15af5a7f6 100644
+> --- a/drivers/thermal/dove_thermal.c
+> +++ b/drivers/thermal/dove_thermal.c
+> @@ -142,8 +142,8 @@ static int dove_thermal_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> -	thermal = thermal_zone_device_register("dove_thermal", 0, 0,
+> -					       priv, &ops, NULL, 0, 0);
+> +	thermal = thermal_zone_device_register_with_trips("dove_thermal", NULL, 0, 0,
+> +							  priv, &ops, NULL, 0, 0);
+>   	if (IS_ERR(thermal)) {
+>   		dev_err(&pdev->dev,
+>   			"Failed to register thermal zone device\n");
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index d0295123cc3e..dac60b6a281c 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -609,9 +609,9 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+>   
+>   	evaluate_odvp(priv);
+>   
+> -	priv->thermal = thermal_zone_device_register("INT3400 Thermal", 0, 0,
+> -						priv, &int3400_thermal_ops,
+> -						&int3400_thermal_params, 0, 0);
+> +	priv->thermal = thermal_zone_device_register_with_trips("INT3400 Thermal", NULL, 0, 0,
+> +								priv, &int3400_thermal_ops,
+> +								&int3400_thermal_params, 0, 0);
+>   	if (IS_ERR(priv->thermal)) {
+>   		result = PTR_ERR(priv->thermal);
+>   		goto free_art_trt;
+> diff --git a/drivers/thermal/kirkwood_thermal.c b/drivers/thermal/kirkwood_thermal.c
+> index bec7ec20e79d..4506b7dfb474 100644
+> --- a/drivers/thermal/kirkwood_thermal.c
+> +++ b/drivers/thermal/kirkwood_thermal.c
+> @@ -74,8 +74,8 @@ static int kirkwood_thermal_probe(struct platform_device *pdev)
+>   	if (IS_ERR(priv->sensor))
+>   		return PTR_ERR(priv->sensor);
+>   
+> -	thermal = thermal_zone_device_register("kirkwood_thermal", 0, 0,
+> -					       priv, &ops, NULL, 0, 0);
+> +	thermal = thermal_zone_device_register_with_trips("kirkwood_thermal", NULL, 0, 0,
+> +							  priv, &ops, NULL, 0, 0);
+>   	if (IS_ERR(thermal)) {
+>   		dev_err(&pdev->dev,
+>   			"Failed to register thermal zone device\n");
+> diff --git a/drivers/thermal/spear_thermal.c b/drivers/thermal/spear_thermal.c
+> index 6a722b10d738..0d20bc9c5c0b 100644
+> --- a/drivers/thermal/spear_thermal.c
+> +++ b/drivers/thermal/spear_thermal.c
+> @@ -122,8 +122,9 @@ static int spear_thermal_probe(struct platform_device *pdev)
+>   	stdev->flags = val;
+>   	writel_relaxed(stdev->flags, stdev->thermal_base);
+>   
+> -	spear_thermal = thermal_zone_device_register("spear_thermal", 0, 0,
+> -				stdev, &ops, NULL, 0, 0);
+> +	spear_thermal = thermal_zone_device_register_with_trips("spear_thermal",
+> +								NULL, 0, 0,
+> +								stdev, &ops, NULL, 0, 0);
+>   	if (IS_ERR(spear_thermal)) {
+>   		dev_err(&pdev->dev, "thermal zone device is NULL\n");
+>   		ret = PTR_ERR(spear_thermal);
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
