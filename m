@@ -2,143 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318CF68C550
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 19:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B27368C560
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 19:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjBFSAW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 13:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S230324AbjBFSHq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 13:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjBFSAV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 13:00:21 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2935E2D169
-        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 10:00:17 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id h3so3352395wrp.10
-        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 10:00:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QAzbzHAwMbORwKFGc8I4gB1/HhGTYUVUMIT2p3MVzto=;
-        b=duUAnzGSjSKmhmvXBjIvZ1JQy/33pGphU6VD3fKrWWxkpTSXSv08qtxG2ysiVq8DYh
-         l5yrAn366zu6qlIeEJp/zTFdkIOQzoOzyIF+mIRxSpdaZJakUUjyUUL9FT1OiCUvgQKs
-         6jc4NZidbD6Sg/3X4Awg3R9I29xdb3aA5aN9/0v4bWmn+a1Ncq89QjNGYNAlXPmYov3v
-         NDwKj5jYI4xHZz1kLoLGfLRE25PqdJktTHYTKAO4VhfV9ou9InW8fndaW9JWHbTLo/cl
-         yy0T9gBHWWlWMJJUxLRU+PO4QHE0CA5QGDGPVvww6Dn1RLgJGoewJlSRboajNwHNhIQP
-         VK9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAzbzHAwMbORwKFGc8I4gB1/HhGTYUVUMIT2p3MVzto=;
-        b=dOCnox8gh4Fl4XR0eHS8fLb2ym9NQvelrQjfnDcOWp7hWDxVftzFT7ksZeeUp6VcNq
-         b/Pni1kDIQzoaI9HEp/1NZonBeyTkv6gLhd0/iaU2qO0Mk6px0mGOt9DOwrJqW9C5Pou
-         g7j/f0PAhpRlAWaGD6AFkOkLIt5zg0q++6X+zoqPlVg1ZmJYz5xZdGK1M9zI1Jcmidua
-         lJOF62QJjY3yFqfT/EurGseezr3dzv3Ubn+XEjH0tsb7rfJpAsGmwheTuP2qGxOwoJf2
-         u3dqn48zy30eOaNKikzUT92rNp+5qNvXmOOrSJu2tair/S6XQEtHAiVF0D8LoIszIvao
-         F1cQ==
-X-Gm-Message-State: AO0yUKWRhwqshtrhAtrybjNm/lsNAO473UUHCMMX8ZZqbrC2psA/LdXv
-        cuK/LmyogSUn6kLk5Rtkdg6BBQ==
-X-Google-Smtp-Source: AK7set+gHrNvDG7dTutQV1RwYNQpdPvpEFYOvQc9NHBZvdR9G+YemKmTRrXYosqJpvEDpCO35gZT6Q==
-X-Received: by 2002:adf:fb82:0:b0:2c2:ad22:40ba with SMTP id a2-20020adffb82000000b002c2ad2240bamr16759553wrr.68.1675706415588;
-        Mon, 06 Feb 2023 10:00:15 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id p4-20020a5d68c4000000b002c3e4f2ffdbsm4401533wrw.58.2023.02.06.10.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 10:00:15 -0800 (PST)
-Message-ID: <474338ff-26af-061e-1166-a1bd906ffe00@linaro.org>
-Date:   Mon, 6 Feb 2023 19:00:13 +0100
+        with ESMTP id S229960AbjBFSHp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 13:07:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922223115;
+        Mon,  6 Feb 2023 10:07:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3935B60FCA;
+        Mon,  6 Feb 2023 18:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30173C433EF;
+        Mon,  6 Feb 2023 18:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675706863;
+        bh=2MrwvqBJt7ukrXEsIn0AtBjS1SbvuoI2iFvjfzPvabw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=erlZBriKGEMMwf2V+6z5b/DS1cJ8/4s5A5zPaUZc7n6oqyMC8KSslYW2xjFug/2dB
+         NevIYzm+2tkaWIPwZjY9KBFoXfWG2xLXUq6SIDTPGjaRZ80gyYSiNTkfE/tC60TsGA
+         d71dcR02N7JIQ10GROCpg33BDK2K3Y/38UDGWZpA=
+Date:   Mon, 6 Feb 2023 19:06:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] interconnect changes for 6.3
+Message-ID: <Y+FBqLt45rWccwXT@kroah.com>
+References: <20230206141200.9789-1-djakov@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
- <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206141200.9789-1-djakov@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/02/2023 17:08, Rafael J. Wysocki wrote:
-> On Fri, Feb 3, 2023 at 6:59 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> Some drivers are declaring a thermal zone without any thermal trip
->> points.
->>
->> On the other side, we are introducing the function
->> thermal_zone_device_register_with_trips() which provides an array of
->> generic thermal trip points. When all the drivers will be converted to
->> the generic trip points, keeping two functions will be useless.
->>
->> Most of the drivers are now using
->> thermal_zone_device_register_with_trips() with the generic trip
->> points. As soon as the remaining drivers are merged, the
->> thermal_zone_device_register_with_trips() will be renamed to
->> thermal_zone_device_register().
+On Mon, Feb 06, 2023 at 04:12:00PM +0200, Georgi Djakov wrote:
+> Hello Greg,
 > 
-> So why is this the first time I'm learning about this plan?
-
-Well it is not a plan, it looked purely logical to me that the 
-_with_trips variant was added to support the generic trip points in 
-addition to the specific trips. As soon as all the drivers are 
-converted, there is no need to have these two functions anymore and we 
-can fall back to the previous name (or a shorter one).
-
->> Obviously this renaming can only happen if there are no more user of
->> the thermal_zone_device_register() function.
->>
->> This change uses thermal_zone_device_register_with_trips() with a NULL
->> parameter for the trip point array instead of
->> thermal_zone_device_register().
+> This is the pull request with interconnect changes for the 6.3-rc1 merge
+> window. In contains new drivers and misc tiny updates. Two of the new
+> drivers are in immutable branches (qcom tree pulls SM8550 and QDU1000 DT
+> header files). The rest of the details are in the signed tag.
 > 
-> And later it will be renamed to thermal_zone_device_register() again?
-
-Yes, that was the idea, unify the name and then use a cocci script to 
-rename them all.
-
-> Can we just stop confusing people this way?
+> All patches have been in linux-next for at least one week. Please pull
+> into char-misc-next when possible.
 > 
-> What would be wrong with changing both
-> thermal_zone_device_register_with_trips() and
-> thermal_zone_device_register() together when we are ready?  And why
-> can't the both be replaced with something line thermal_zone_register()
-> doing all of the necessary things in one go?  Why do we have to make
-> confusing and redundant changes?
+> Thanks,
+> Georgi
+> 
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> 
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.3-rc1
 
-For me the result will be the same, if you prefer to wait for all the 
-drivers to be converted then it is fine for me.
+Pulled and pushed out, thanks.
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+greg k-h
