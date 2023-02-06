@@ -2,55 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88F968C955
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 23:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7415268C95D
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 23:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjBFW2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Feb 2023 17:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
+        id S229921AbjBFW2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Feb 2023 17:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjBFW2c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 17:28:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30E511EBB;
-        Mon,  6 Feb 2023 14:28:26 -0800 (PST)
+        with ESMTP id S229897AbjBFW2h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Feb 2023 17:28:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D7F12875;
+        Mon,  6 Feb 2023 14:28:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C31661057;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C43E61050;
+        Mon,  6 Feb 2023 22:28:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D315C433D2;
         Mon,  6 Feb 2023 22:28:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16C4C433A0;
-        Mon,  6 Feb 2023 22:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675722505;
-        bh=19z9W9tEqs9ej+0LkD2U7qqxqXr+U+U4fUJmpaY7s5Q=;
+        s=k20201202; t=1675722507;
+        bh=pk8ds+WOqWCtZmkphDQqfjXHCVD9+oDrqLXduRq0AEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lMI9JETKqF0vNLNbMeVmWeFrX74IP976PXkuQtH4iuVgLOGJVlppR545NCKW8onWr
-         9oEmBQ1ILV3qoCIsHQPPUQf8M/+9DW3B+YrQQlheaMEUbjZOIgf0cQTkt1cB7L3RAQ
-         i25x9ekFkdx2Zi6VzFPvapz+2wOcEl3TDqRNwSnQOZKWdSnrUomU7VVIzvnXxZ6n3N
-         Wu4RyXND4kH8ucgsBsIMpcRT/7ELmCGqR2650y8rYrcgSGrJMZcI8C++/uC5hKhGaf
-         yIpAtgLaJIKFt2IXh8Jlt7f8GvCFr6Uz5zGOWDDbX4dvJhoQPGccMW9vCPEEIVWnLo
-         H898ymLr7XAEw==
+        b=pILWi1IE1eqNCxZkfGHP9hRqLMM/LbEHTHYwfRUfheKvj5KjPnAxrlu4Susad6Wxp
+         +NNJmy+2WVTummsfGfG1utbpNN2OEOkEHlM74E24X7Oxzay0hSTd5Sb7oOvV2uXZHL
+         9Eq5yQDyk95t7Z6pP5V/WlFHSa5z2B4RfT3B8OzEKluYsuYCMa+5V5mQqmJ99Aq2fa
+         fACnVUJ5zzHEgDNEGzz9/IWI2ywl1oW0RSrz6fgUEw51HxZ5UkIUAVLEorE5zombiZ
+         cCVx6e5VumE8IXujZNfdTGLa47f6Yj0AZUWORvfgrHJJMSFI7ktSl+wSkKl+ZR60Ud
+         bOmgbLEzlayMw==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/4] soc: qcom: Introduce PMIC GLINK
-Date:   Mon,  6 Feb 2023 14:30:32 -0800
-Message-Id: <167572263441.3569822.11639506996276775147.b4-ty@kernel.org>
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v4 0/4] soc: qcom: Introduce PMIC GLINK
+Date:   Mon,  6 Feb 2023 14:30:34 -0800
+Message-Id: <167572263441.3569822.8165959497180624558.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20220818031512.319310-1-bjorn.andersson@linaro.org>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
+References: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,11 +62,11 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 17 Aug 2022 20:15:08 -0700, Bjorn Andersson wrote:
-> This implements the base PMIC GLINK driver, a power_supply driver and a driver
-> for the USB Type-C altmode protocol. This has been tested and shown to provide
-> battery information, USB Type-C switch and mux requests and DisplayPort
-> notifications on SC8180X, SC8280XP and SM8350.
+On Tue, 31 Jan 2023 20:18:49 -0800, Bjorn Andersson wrote:
+> This implements the base PMIC GLINK driver, a power_supply driver and a
+> driver for the USB Type-C altmode protocol. This has been tested and
+> shown to provide battery information, USB Type-C switch and mux requests
+> and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
 > 
 > Bjorn Andersson (4):
 >   dt-bindings: soc: qcom: Introduce PMIC GLINK binding
@@ -80,8 +84,6 @@ Applied, thanks!
       commit: 58ef4ece1e41ac525db3e79529909683325d85df
 [3/4] soc: qcom: pmic_glink: Introduce altmode support
       commit: 080b4e24852b1d5b66929f69344e6c3eeb963941
-[4/4] power: supply: Introduce Qualcomm PMIC GLINK power supply
-      (no commit info)
 
 Best regards,
 -- 
