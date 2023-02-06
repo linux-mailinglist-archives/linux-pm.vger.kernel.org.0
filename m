@@ -2,286 +2,330 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AEA668B190
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Feb 2023 21:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E27868B3B8
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Feb 2023 02:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjBEUYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Feb 2023 15:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S229558AbjBFBX4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Feb 2023 20:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjBEUYf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 15:24:35 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA9E10AAF
-        for <linux-pm@vger.kernel.org>; Sun,  5 Feb 2023 12:24:33 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so7401721wms.1
-        for <linux-pm@vger.kernel.org>; Sun, 05 Feb 2023 12:24:33 -0800 (PST)
+        with ESMTP id S229543AbjBFBXz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Feb 2023 20:23:55 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAC617CCA
+        for <linux-pm@vger.kernel.org>; Sun,  5 Feb 2023 17:23:50 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id d14so9011972wrr.9
+        for <linux-pm@vger.kernel.org>; Sun, 05 Feb 2023 17:23:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fPPGc52/qweAR4qOwMEm1FzbAp5khhYNOJIG5EkHPuU=;
-        b=F9/ZRC1cZQCGE9QpvSoYxdHAZ+UNj8RsE1Y4y25ZKtlXo3iyeRqDoI/oaHn7Y7SKs7
-         T1N8Pz4VqYajk4FBzbykEl5s1KvUe5R578IpbaCLmBQ81VD8lJyjnVund5SGc2N4jLsl
-         uG+CGJE7aYaGla4jnM8TS2qlYeaMLeDmQH0x691PDMH1If+oqvn+P6g6FMeCfYyRUoPu
-         oyI6iSQGdmCl4+zqOrX5Y0waD3JWEVQ+LcmjnsDtX5oIX6hkKsX9YFFpFT7bOJWR+giW
-         ecfxFPmQhKQ7w2vpBeGCz7kyNMQTHEE8FqOOLDjqa0jgvy3E3oKwTRq8cenotcaBDVVr
-         GrHA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F6Q7zGxjxxouMJiibwCS6k9cTzHdW3H9g69pcE8FeNw=;
+        b=ZqhPHlBjiFeUubiWgwGul1cEJwom9pxccRdwU0GuJeo7zsCU3tTrYa4NCs7kfWhKob
+         Qd/2EKpge+Et65fZWTlhJAxJF04OG6QNpxg85j2PtHBTvMronhfuTwS0lttLCyu+ztx4
+         g8ZAAyXyCSUFWp2K8XWfWZC/m+oHNrZvzQrVIWQNHjlIKPhT1NYti84REZG0HX8ZIr8s
+         fkqhZ/05RMWrYRx3/PMsRK/k/sgFS608KyIaiFdaM4N/luO2IZiGbUk3BvkF/zoHWy+U
+         IbejX8MVA+ZMAzjajESvjcjfCId89a1VdIycxnHBYJ6lkodOZ9vjOD60vEyj4j5iHxRV
+         F6fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fPPGc52/qweAR4qOwMEm1FzbAp5khhYNOJIG5EkHPuU=;
-        b=BKPqFNf67hfif2wsLqhMoF+A23dpswNryhV87MZ39csRw/ekf80ZhcQbCtN1Zpp32z
-         K8i/uvnSgxgiwS55TAWxSPNutHml2cLmdPmPcupw64juXnK8DE5xX6bXAh6PiX6gkO6I
-         vqWSsN0I4ZxGXUgqpoRRr/PNAPR6GvYYMgrnyuYVutiGeHb94KDbKjVi3MWAsxOhv07u
-         7nMzChVwVN4gbgjR4UeAh3IGSN4Ip1lPHOEx9IHROVSePe2K/QIhHvINB5ZHglVE+m5f
-         6544xa/Ikzrl9tpomjug0zKeR6KyDilZEZUXrkod+Wt+U2K5oNTOeGbkYb+KGrK+ElPF
-         ny3A==
-X-Gm-Message-State: AO0yUKXJhQj6EnXwyg6m7B/0I0DD3sCjug6HhYl3IODKac0FGkhwbAg0
-        21HiueO9YoJ2dhoNRnde2wQJhQ==
-X-Google-Smtp-Source: AK7set9EGNPegv6eYvlujN072lJVFkT313sY3wujkiZmhV5bcg5ijXvjAWahaRv04peSUxZb7QIFlQ==
-X-Received: by 2002:a05:600c:1e24:b0:3da:f665:5b66 with SMTP id ay36-20020a05600c1e2400b003daf6655b66mr21166952wmb.6.1675628671537;
-        Sun, 05 Feb 2023 12:24:31 -0800 (PST)
-Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1cf216000000b003dffe312925sm2134609wmc.15.2023.02.05.12.24.30
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F6Q7zGxjxxouMJiibwCS6k9cTzHdW3H9g69pcE8FeNw=;
+        b=W3dubrHFPao7lEpmRJMYVYRZWubsNQTu5XdZ33g7uihuzPQUtRiqdS5RXZ9MmpteyU
+         tBJcDWwBP5N1l+xyRuZWzvXMdFTV7x+gSz09abvvDNn8Vilxfl+sI9tNQW7krRZ6H3Xm
+         alMOUl8S0Q6ZQ1XvGOx/5CYQkvwkAKzCl+cMYnbqydnEH7R3KnZ40z0pTLqhrd0Bd59G
+         rko01ih0tH+o+4prq8b91BQpBWeUE7Q7JXWBGbnfInU0inl/iBbsh4po+GTC1ETBGJKY
+         j4CGM5cUDIXDjIrHk0lfh2YxxjxXJd9maSJ3jIJQa3DDptWsA464R4g4mG5MqT/4YGh5
+         CetQ==
+X-Gm-Message-State: AO0yUKUbr4gLGoJLkRpRXe+CQiOLKGth3y4fBYUO7yIaZr249VfiTdAt
+        2Edvnf76+PGk7/+hXN/nc0lOSQ==
+X-Google-Smtp-Source: AK7set/WHI1g5mrLMs8oZFHXP+fmKY9RoWw/8Oz1lxN8fYlZ0g5udbdweVINjm+fmJr0L0bnZPa0RA==
+X-Received: by 2002:a5d:5684:0:b0:2c3:e0c9:4bfd with SMTP id f4-20020a5d5684000000b002c3e0c94bfdmr4529487wrv.37.1675646629396;
+        Sun, 05 Feb 2023 17:23:49 -0800 (PST)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id d2-20020a056000186200b002bddd75a83fsm8048027wri.8.2023.02.05.17.23.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 12:24:30 -0800 (PST)
-Date:   Sun, 5 Feb 2023 20:24:29 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kajetan.puchalski@arm.com, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH 2/2 v5] sched/fair: Remove capacity inversion detection
-Message-ID: <20230205202429.dbwr5qz45qgp53gs@airbuntu>
-References: <20230201143628.270912-1-vincent.guittot@linaro.org>
- <20230201143628.270912-3-vincent.guittot@linaro.org>
- <20230204184231.zx6oo52r5q2nvij7@airbuntu>
- <CAKfTPtAGRY8duSnvafntYJ20H1JGPeuhyLCvVRk0MEUsoTY_Tg@mail.gmail.com>
+        Sun, 05 Feb 2023 17:23:48 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     bryan.odonoghue@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, stephan@gerhold.net
+Subject: [PATCH v5 0/5] Add MSM8939 SoC support with two devices
+Date:   Mon,  6 Feb 2023 01:23:31 +0000
+Message-Id: <20230206012336.2130341-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtAGRY8duSnvafntYJ20H1JGPeuhyLCvVRk0MEUsoTY_Tg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/05/23 18:29, Vincent Guittot wrote:
-> On Sat, 4 Feb 2023 at 19:42, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 02/01/23 15:36, Vincent Guittot wrote:
-> > > Remove the capacity inversion detection which is now handled by
-> > > util_fits_cpu() returning -1 when we need to continue to look for a
-> > > potential CPU with better performance.
-> > >
-> > > This ends up almost reverting patches below except for some comments:
-> >
-> > nit: I think this comment must be removed/reworeded though
-> 
-> This comment has already been removed. That's why I said almost revert
-> except for some comments in the commit message
+V5:
+- Adds Square as a vendor - Krzysztof
 
-Oh, my diff cmd had the wrong order then, sorry.
+- typec_pd: usb-pd@38 - Krzysztof
 
-> 
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 691a2f9c4efa..c6c8e7f52935 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4476,10 +4476,6 @@ static inline int util_fits_cpu(unsigned long util,
-> >          *
-> >          * For uclamp_max, we can tolerate a drop in performance level as the
-> >          * goal is to cap the task. So it's okay if it's getting less.
-> > -        *
-> > -        * In case of capacity inversion, which is not handled yet, we should
-> > -        * honour the inverted capacity for both uclamp_min and uclamp_max all
-> > -        * the time.
-> >          */
-> >         capacity_orig = capacity_orig_of(cpu);
-> >         capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
-> >
-> > > commit da07d2f9c153 ("sched/fair: Fixes for capacity inversion detection")
-> > > commit aa69c36f31aa ("sched/fair: Consider capacity inversion in util_fits_cpu()")
-> > > commit 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-> > >
-> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> >
-> > Apart from that, LGTM.
-> >
-> > Reviewed-by: Qais Yousef <qyousef@layalina.io>
-> 
-> Thanks
-> 
-> >
-> >
-> > Thanks!
-> >
-> > --
-> > Qais Yousef
-> >
-> > > ---
-> > >  kernel/sched/fair.c  | 84 +++-----------------------------------------
-> > >  kernel/sched/sched.h | 19 ----------
-> > >  2 files changed, 5 insertions(+), 98 deletions(-)
-> > >
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index 074742f107c0..c6c8e7f52935 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -4476,17 +4476,9 @@ static inline int util_fits_cpu(unsigned long util,
-> > >        *
-> > >        * For uclamp_max, we can tolerate a drop in performance level as the
-> > >        * goal is to cap the task. So it's okay if it's getting less.
-> > > -      *
-> > > -      * In case of capacity inversion we should honour the inverted capacity
-> > > -      * for both uclamp_min and uclamp_max all the time.
-> > >        */
-> > > -     capacity_orig = cpu_in_capacity_inversion(cpu);
-> > > -     if (capacity_orig) {
-> > > -             capacity_orig_thermal = capacity_orig;
-> > > -     } else {
-> > > -             capacity_orig = capacity_orig_of(cpu);
-> > > -             capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
-> > > -     }
-> > > +     capacity_orig = capacity_orig_of(cpu);
-> > > +     capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
-> > >
-> > >       /*
-> > >        * We want to force a task to fit a cpu as implied by uclamp_max.
-> > > @@ -9027,82 +9019,16 @@ static unsigned long scale_rt_capacity(int cpu)
-> > >
-> > >  static void update_cpu_capacity(struct sched_domain *sd, int cpu)
-> > >  {
-> > > -     unsigned long capacity_orig = arch_scale_cpu_capacity(cpu);
-> > >       unsigned long capacity = scale_rt_capacity(cpu);
-> > >       struct sched_group *sdg = sd->groups;
-> > > -     struct rq *rq = cpu_rq(cpu);
-> > >
-> > > -     rq->cpu_capacity_orig = capacity_orig;
-> > > +     cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
-> > >
-> > >       if (!capacity)
-> > >               capacity = 1;
-> > >
-> > > -     rq->cpu_capacity = capacity;
-> > > -
-> > > -     /*
-> > > -      * Detect if the performance domain is in capacity inversion state.
-> > > -      *
-> > > -      * Capacity inversion happens when another perf domain with equal or
-> > > -      * lower capacity_orig_of() ends up having higher capacity than this
-> > > -      * domain after subtracting thermal pressure.
-> > > -      *
-> > > -      * We only take into account thermal pressure in this detection as it's
-> > > -      * the only metric that actually results in *real* reduction of
-> > > -      * capacity due to performance points (OPPs) being dropped/become
-> > > -      * unreachable due to thermal throttling.
-> > > -      *
-> > > -      * We assume:
-> > > -      *   * That all cpus in a perf domain have the same capacity_orig
-> > > -      *     (same uArch).
-> > > -      *   * Thermal pressure will impact all cpus in this perf domain
-> > > -      *     equally.
-> > > -      */
-> > > -     if (sched_energy_enabled()) {
-> > > -             unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-> > > -             struct perf_domain *pd;
-> > > -
-> > > -             rcu_read_lock();
-> > > -
-> > > -             pd = rcu_dereference(rq->rd->pd);
-> > > -             rq->cpu_capacity_inverted = 0;
-> > > -
-> > > -             for (; pd; pd = pd->next) {
-> > > -                     struct cpumask *pd_span = perf_domain_span(pd);
-> > > -                     unsigned long pd_cap_orig, pd_cap;
-> > > -
-> > > -                     /* We can't be inverted against our own pd */
-> > > -                     if (cpumask_test_cpu(cpu_of(rq), pd_span))
-> > > -                             continue;
-> > > -
-> > > -                     cpu = cpumask_any(pd_span);
-> > > -                     pd_cap_orig = arch_scale_cpu_capacity(cpu);
-> > > -
-> > > -                     if (capacity_orig < pd_cap_orig)
-> > > -                             continue;
-> > > -
-> > > -                     /*
-> > > -                      * handle the case of multiple perf domains have the
-> > > -                      * same capacity_orig but one of them is under higher
-> > > -                      * thermal pressure. We record it as capacity
-> > > -                      * inversion.
-> > > -                      */
-> > > -                     if (capacity_orig == pd_cap_orig) {
-> > > -                             pd_cap = pd_cap_orig - thermal_load_avg(cpu_rq(cpu));
-> > > -
-> > > -                             if (pd_cap > inv_cap) {
-> > > -                                     rq->cpu_capacity_inverted = inv_cap;
-> > > -                                     break;
-> > > -                             }
-> > > -                     } else if (pd_cap_orig > inv_cap) {
-> > > -                             rq->cpu_capacity_inverted = inv_cap;
-> > > -                             break;
-> > > -                     }
-> > > -             }
-> > > -
-> > > -             rcu_read_unlock();
-> > > -     }
-> > > -
-> > > -     trace_sched_cpu_capacity_tp(rq);
-> > > +     cpu_rq(cpu)->cpu_capacity = capacity;
-> > > +     trace_sched_cpu_capacity_tp(cpu_rq(cpu));
-> > >
-> > >       sdg->sgc->capacity = capacity;
-> > >       sdg->sgc->min_capacity = capacity;
-> > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > > index 1072502976df..3e8df6d31c1e 100644
-> > > --- a/kernel/sched/sched.h
-> > > +++ b/kernel/sched/sched.h
-> > > @@ -1044,7 +1044,6 @@ struct rq {
-> > >
-> > >       unsigned long           cpu_capacity;
-> > >       unsigned long           cpu_capacity_orig;
-> > > -     unsigned long           cpu_capacity_inverted;
-> > >
-> > >       struct balance_callback *balance_callback;
-> > >
-> > > @@ -2899,24 +2898,6 @@ static inline unsigned long capacity_orig_of(int cpu)
-> > >       return cpu_rq(cpu)->cpu_capacity_orig;
-> > >  }
-> > >
-> > > -/*
-> > > - * Returns inverted capacity if the CPU is in capacity inversion state.
-> > > - * 0 otherwise.
-> > > - *
-> > > - * Capacity inversion detection only considers thermal impact where actual
-> > > - * performance points (OPPs) gets dropped.
-> > > - *
-> > > - * Capacity inversion state happens when another performance domain that has
-> > > - * equal or lower capacity_orig_of() becomes effectively larger than the perf
-> > > - * domain this CPU belongs to due to thermal pressure throttling it hard.
-> > > - *
-> > > - * See comment in update_cpu_capacity().
-> > > - */
-> > > -static inline unsigned long cpu_in_capacity_inversion(int cpu)
-> > > -{
-> > > -     return cpu_rq(cpu)->cpu_capacity_inverted;
-> > > -}
-> > > -
-> > >  /**
-> > >   * enum cpu_util_type - CPU utilization type
-> > >   * @FREQUENCY_UTIL:  Utilization used to select frequency
-> > > --
-> > > 2.34.1
-> > >
+- Drops gcc clock controller extension. It looks like phy0 actually
+  provides a PLL to phy1 for its byte clock. - Bryan, Krzysztof, Stephan
+
+- Adds RB Konrad as indicated - Konrad
+
+- wcnss VDDMX_AO -> VDDMX - Bjorn
+
+- Adds dsi_phy0 as clock-parent to dsi1
+
+- mdss interconnect drops Androidism "register-mem" - Stephan
+
+- cpu power-domain. I've retained the "dummy" cpr reference to
+  satiate dtbs_check [1] but renamed &vreg_cpr_stub to remove any confusion
+  between now and when we finish off CPR on 8939.
+
+Bootable: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/linux-next-23-02-02-msm8939-nocpr
+Previous: https://lore.kernel.org/linux-arm-msm/20230123023127.1186619-1-bryan.odonoghue@linaro.org/
+[1] https://lore.kernel.org/linux-arm-msm/20230126150026.14590-1-ansuelsmth@gmail.com/ 
+
+V4:
+- Adds Krzysztof's RB to snoc-mm
+- Re-orders alphabetically missed nodes in previous iteration - Bjorn
+- Adds LK address/size cells comment - Bjorn
+
+- Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
+- Uses qcom,ids.h and QCOM_ID_SOCNAME for qcom,msm-id - Bjorn
+- Revises comment from "Regulator" to "Power supply" - Bjorn
+- Leaves dummy power-domain reference in cpu defintion as this
+
+- Relabels "cpu" to "CPU" to be more consistent with other dtsi - Bryan
+- Moves msm8939 gcc to its own yaml file to capture 8939 specific form - Bryan
+
+  is a required property and the dt checker complains - Stephan/Bryan
+- Removes CPR entries from qfprom - Stephan
+- Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
+- power-domain in MDSS - dropped its not longer required after
+  commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix power-domain constraint") - Stephan
+- Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
+  Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
+  GCC_BYTE1_CFG_RCGR : SRC_SEL
+  Root Source Select
+  000 : cxo
+  001 : dsi0_phy_pll_out_byteclk
+  010 : GPLL0_OUT_AUX
+  011 : gnd
+  100 : gnd
+  101 : gnd
+  110 : gnd
+  111 : reserved - Stephan/Bryan
+
+- pm8916_l16 -> pm8916_l6 in dsi definition, typo - Konrad
+- Moved regulator_set_load location - Konrad
+
+Previous: https://lore.kernel.org/lkml/20230118050948.bibhq26s6sgzullg@builder.lan/T/
+Bootable: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-23-msm8939-nocpr
+
+V3:
+- Happily I don't currently depend on any other series to be merged.
+  Bjorn and Chanwoo picked up everything I need to unblock this series. ＼(^o^)／
+
+- Moves xo_board to RPM/PMIC clock gated CXO, not including rpmcc: obvs - Konrad/Bjorn
+- qcom,msm-id = <239 0> - left as in V2 valid according to Sony references - bod
+- cpu-release-addr - as stated below we rely on lk2nd to take the second cluster
+  out of reset - bod
+- smem child node update - Konrad
+- Whitespace updates - Konrad
+- gpu no interconnect - Konrad - No bod
+- 19.2 MHz dropped from timer@b020000 - Konrad
+- Added vreg_dummy comment - Konrad
+- sdc_pins grouped - Konrad
+- startup-delay-us = <0> - left as is
+- bias - added no-bias - Konrad
+- :g/msmgpio/s//tlmm/g - Konrad
+- mdss/s//display-controller - Konrad
+- l11 set-load - Korad
+
+- l12 upper voltage raised to 3.3v since this is what the
+  downstream kernel says when I boot and interrogate it - bod
+
+- sdhc@address - Discussed with Krzysztof and implemented as discussed
+- snoc-mm fix - Discussed with Krzysztof implemented if:then:else:not
+- dtc -I dtb -fs apq8039-t2.dtb prodcues
+  /soc@0/i2c@78b5000: duplicate unit-address
+  as does every other component that uses this polymorphic dts node
+- Renamed type-c i2c port manager IC to "typec" - Krzysztof
+
+  /smsm/hexagon@1: Missing #address-cells in interrupt provider
+  Same output as other upstream and recently upstreamed SoCs
+  I left these alone for now
+
+link: https://lore.kernel.org/lkml/20230103010904.3201835-1-bryan.odonoghue@linaro.org/T/
+bootable: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-16-msm8939-nocpr
+
+V2:
+- Sorts core dtsi node list by address followed by alpahbetical sorting
+  within address sorted nodes - Bjorn
+- Drops use of 8916-pins - Bjorn
+- Adds msm8939-pm8916.dtsi - Stephan
+- Fixes every dts splat from previous submission minus non-converted
+  .txt compat strings [1] and one yaml error in Bjorn's tree not in -next yet
+- I haven't applied Dmitry's change for tsens since that's not been
+  picked up yet
+- Picks up a number of suggestions and fixes from Stephan Gerhold and Vincent Knecht
+
+- Depends on
+
+  Applied:
+  [PATCH v4 0/7] remoteproc: qcom_q6v5_mss: Add MSM8909 and MSM8953 
+  https://lore.kernel.org/linux-arm-msm/167216232800.738877.17567287056128563074.b4-ty@kernel.org/
+
+  [PATCH v6 0/5] remoteproc: qcom: Add support for pronto-v3
+  https://lore.kernel.org/linux-arm-msm/167216232801.738877.15895916910585144737.b4-ty@kernel.org/
+
+  [PATCH v6 00/18] mdss-dsi-ctrl binding and dts fixes
+  https://lore.kernel.org/linux-arm-msm/167233461766.1099840.17628700245792986354.b4-ty@kernel.org/
+
+  Awaiting application:
+  https://lore.kernel.org/linux-arm-msm/20221228133058.213886-1-bryan.odonoghue@linaro.org/
+
+- Previous
+  https://lore.kernel.org/linux-arm-msm/20220419010903.3109514-1-bryan.odonoghue@linaro.org/
+
+- Bootable tree
+  https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-03-msm8939-no-cpr
+
+- [1] DTC_CHK arch/arm64/boot/dts/qcom/apq8039-t2.dtb
+
+  Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
+  qcom/apq8039-t2.dtb: idle-states: cpu-sleep-0:compatible:0: 'qcom,idle-state-spc' is not one of ['arm,idle-state', 'riscv,idle-state']
+        From schema: Documentation/devicetree/bindings/cpu/idle-states.yaml
+  qcom/apq8039-t2.dtb: idle-states: cpu-sleep-0:compatible: ['qcom,idle-state-spc', 'arm,idle-state'] is too long
+        From schema: Documentation/devicetree/bindings/cpu/idle-states.yaml
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /cpus/idle-states/cpu-sleep-0: failed to match any schema with compatible: ['qcom,idle-state-spc', 'arm,idle-state']
+
+  Documentation/devicetree/bindings/iommu/qcom,iommu.txt
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1ef0000: failed to match any schema with compatible: ['qcom,msm8916-iommu', 'qcom,msm-iommu-v1']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1ef0000/iommu-ctx@4000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-ns']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1ef0000/iommu-ctx@5000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-sec']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1f08000: failed to match any schema with compatible: ['qcom,msm8916-iommu', 'qcom,msm-iommu-v1']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1f08000/iommu-ctx@1000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-ns']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1f08000/iommu-ctx@2000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-ns']
+
+  arch/arm64/boot/dts/qcom/pm8916.dtsi f5d7bca55425c8
+  qcom/apq8039-t2.dtb: pmic@0: 'extcon@1300' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
+        From schema: Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+
+  Documentation/devicetree/bindings/sound/qcom,msm8916-wcd-analog.txt
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/spmi@200f000/pmic@1/audio-codec@f000: failed to match any schema with compatible: ['qcom,pm8916-wcd-analog-codec']
+
+  yaml documentation error not yet in -next
+  arm64/boot/dts/qcom/apq8039-t2.dtb: remoteproc@4080000: qcom,halt-regs:0: [33] is too short
+        From schema: Documentation/devicetree/bindings/remoteproc/qcom,msm8916-mss-pil.yaml
+
+  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/usb@78d9000: failed to match any schema with compatible: ['qcom,ci-hdrc']
+
+  Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt:            compatible = "qcom,kpss-acc-v2";
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b088000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b098000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b0a8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b0b8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b188000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b198000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b1a8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b1b8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+
+V1:
+This series adds in MSM8939 SoC support with two supported devices.
+
+- CPU
+  MSM8939 is a non-PSCI compliant device. As such in the downstreaming
+  shipped image custom code is used to bring non-boot cores out of reset.
+
+  This drop specifies the boot-method as spin-table instead and is
+  completely standard. To accomplish this, we rely on lk2nd.
+
+  https://github.com/msm8916-mainline/lk2nd/pull/142
+
+- Serial
+- i2c
+- USB
+- eMMC
+- MDP/DSI
+- WiFi
+- Bluetooth
+
+What's not included
+
+- CPR
+  We have CPR working in a 4.19 kernel quite well but for now it feels like
+  putting the cart before the horse to gate the SoC and boards on CPR.
+
+- Venus
+  I've been told this works but I haven't tried it myself and right now
+  consider it maybe working but probably not 100%.
+
+- Sound
+  We have a copy-exactly from the 4.19 kernel here in the DTS.
+  I haven't run the sound through any sort of reasonable test.
+  Vincent Knecht has some PostmarketOS kernels which use a 5.17 version of
+  this DTS to get sound up so, I think sound is in good shape.
+
+- CAMSS
+  There are slight differences between msm8916 and msm8939 for CAMSS. It
+  doesn't feel like tons of work but, right now it is work we haven't even
+  started.
+
+- Devices
+  I've booted on the Square device obviously and this is my regular
+  hardware for upstream development. I've also booted on the Sony Xperia M4
+  Aqua including mutli-core bring-up, WiFi and ADB.
+
+Dependencies for this drop:
+
+qcom-cpufreq-nvmem: Add msm8939 with some fixups
+link: https://lore.kernel.org/linux-arm-msm/20220418162226.2983117-1-bryan.odonoghue@linaro.org/T/#t
+
+Fix apq8016 compat string
+link: https://lore.kernel.org/linux-arm-msm/20220418230956.3059563-1-bryan.odonoghue@linaro.org/T/#t
+
+dt-bindings: soc: qcom: smd-rpm: Fix missing MSM8936 compatible
+link: https://lore.kernel.org/linux-arm-msm/20220418231857.3061053-1-bryan.odonoghue@linaro.org/T/#u
+
+Bootable tree here:
+https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=v5.18-rc2%2bapq8039-without-cpr
+
+Bryan O'Donoghue (4):
+  dt-bindings: vendor-prefixes: Add Square
+  arm64: dts: qcom: Add msm8939 SoC
+  arm64: dts: qcom: Add Square apq8039-t2 board
+  arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+
+Stephan Gerhold (1):
+  arm64: dts: qcom: Add msm8939-pm8916.dtsi include
+
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ arch/arm64/boot/dts/qcom/Makefile             |    2 +
+ arch/arm64/boot/dts/qcom/apq8039-t2.dts       |  546 ++++
+ arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi  |   82 +
+ .../qcom/msm8939-sony-xperia-kanuti-tulip.dts |  453 ++++
+ arch/arm64/boot/dts/qcom/msm8939.dtsi         | 2344 +++++++++++++++++
+ 6 files changed, 3429 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
+
+-- 
+2.39.1
+
