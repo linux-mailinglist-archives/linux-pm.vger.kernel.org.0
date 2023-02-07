@@ -2,52 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2A568DEF6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 18:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2774F68DF0A
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 18:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBGRcZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 12:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S230204AbjBGRfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 12:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjBGRcY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 12:32:24 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70002392B9;
-        Tue,  7 Feb 2023 09:32:23 -0800 (PST)
+        with ESMTP id S229685AbjBGRfj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 12:35:39 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39931EBFC;
+        Tue,  7 Feb 2023 09:35:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675791143; x=1707327143;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LgaM/eL4ZYtuEB6rT3YB4v9Fo0M7Kdytr6RlmkFy/II=;
-  b=DFNrC77SZHK0FThzgQ1tU88jDG8fQmfN2eDnQykJu/wKhM3vNhvoBrdP
-   g6gs9fpz26lqEvkJ73e5G7JD+exwIwPHss0RiQE/IZPMIXhAwy8jN43wU
-   aG1OzhieXPKvLk7O2AN91108sZtiNa0WzeKbIVVmtEKUgpYvR2/9di6Px
-   5HPY7wKbXggzcwSKcteIukliTIH461FWyG0w/0Lh6VwtaCfDHysCeYWYq
-   Xz53hPDcNyTHfHzkVi0KxIQVNc/6kp+4iZvgzyWyC2fKsJr8LSp7+WhH7
-   NL7WfCv+JT2wljRovZpU1AAlDKVCPPIj1BrwD1xZYVQVoVzaeOzL7Uel0
+  t=1675791338; x=1707327338;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CBDnXYMpefoM/KDHRnX5+6Pu5oD1c6FLkpV+Imh/0ZI=;
+  b=ePA3eSDEpmB5VWKpA5eNV99qG0vSgdX9JzwGu+zoaw7hUXaUmpA1d7pR
+   YyIzHAnQI9FXbuS+BCDD9wiOTcRP8daGSjBf5Z39giFeofAC8VubZuBGW
+   gv/9kgNp3T596VdzO3G/0/F2sh7ZMnWJZ4a+QrutVABBcS/ilw809ZKPC
+   XVszfWet6HbUKvy5T2CBpE3XfVy271UJ4syxi2IWAvf0GGbnBTtZi/VDr
+   KESyFL0MlW+hQRlO0mpXO2JT5EhH0fan9W7jD9BQg+FjhOeajgkTQIqWp
+   hih63AOfaSQGNBK1NuBs9gN+YkGZe4VeO4q4Hz82rc5dOXRskIuPDUVRH
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="331702659"
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328220331"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="331702659"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 09:32:21 -0800
+   d="scan'208";a="328220331"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 09:35:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="699325500"
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809606228"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="699325500"
+   d="scan'208";a="809606228"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2023 09:32:21 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2023 09:35:35 -0800
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v3 2/2] thermal/drivers/intel_powerclamp: Add two module parameters
-Date:   Tue,  7 Feb 2023 09:32:19 -0800
-Message-Id: <20230207173219.4190013-3-srinivas.pandruvada@linux.intel.com>
+Subject: [UPDATE][PATCH v3 2/2] thermal/drivers/intel_powerclamp: Add two module parameters
+Date:   Tue,  7 Feb 2023 09:35:34 -0800
+Message-Id: <20230207173534.4190275-1-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230207173219.4190013-1-srinivas.pandruvada@linux.intel.com>
-References: <20230207173219.4190013-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -72,7 +70,7 @@ this bitmask is same as used in other subsystems like in
 /proc/irq/*/smp_affinity. The mask is comma separated 32 bit groups.
 Each CPU is one bit. For example for 256 CPU system the full mask is:
 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-The leftmost mask is for CPU 0-32.
+The rightmost mask is for CPU 0-32.
 
 max_idle (Read/Write): Maximum injected idle time to the total CPU time
 ratio in percent range from 1 to 100. Even if the cooling device max_state
@@ -88,6 +86,9 @@ system in this case.
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
+v3 update:
+change leftmost to rightmost in commit description
+
 v3:
 One word document change from leftmost to rightmost
 
