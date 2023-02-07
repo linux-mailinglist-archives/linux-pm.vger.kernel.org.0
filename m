@@ -2,114 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B292B68D965
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB2A68D9A2
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjBGNdJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 08:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S231782AbjBGNs1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 08:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjBGNdI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:33:08 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA8B1F5C2;
-        Tue,  7 Feb 2023 05:33:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675776780; x=1707312780;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JXEbPFglSuiQr9d7wSUk0H3DKc91xWhi0p9Mc42n5FA=;
-  b=PTWVqzeiZVa8JSHw6vt4+wmYHw9mJ8c6mmINi97695zS7K0A7+MEgOsm
-   S9iVLdQZGRUxWfGpnGbHI2m1C/jGCksrH2mId+86tJzNk6DXP5GtK6HPg
-   wYF6gTeF+Kn/+CuVfPALaqMEFqe+SSZKZFkd3CqXWOuP5XgqCPOUu21PZ
-   /niOUNuoG6SjnyHJc6+/LQIpNLKjjB1woq+bKjblFTMrvJa+W96NdXtwp
-   7BxHOXRTi3ccpVW2CCEGwhWPqI3K1adens4sPx6XAdX24ULgmbjIUc8DK
-   tlXHjk7JU6L/+yu0RFixfItVCySS1fR+RHzHQdCJaqmw9iOkiATEiQ97Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="391899591"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="391899591"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 05:32:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="755628365"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="755628365"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2023 05:32:59 -0800
-Date:   Tue, 7 Feb 2023 05:42:37 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Neri, Ricardo" <ricardo.neri@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
-Message-ID: <20230207134237.GA13076@ranerica-svr.sc.intel.com>
-References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
- <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
- <60514763753f572f854f1bbf287c3c16fbbc12c3.camel@linux.intel.com>
- <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
- <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
+        with ESMTP id S231260AbjBGNs0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:48:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6580683C1
+        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 05:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675777660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XA/I3fzzNYZ//8/vwERAn+P62R3VluePPy0fivL+Wr8=;
+        b=FISClwm9n2lK3nXC1EJXUFPtyGgEYcjLqBDtj/ZfPDxoAT3GJXU4bIqo59efpvohntqtSq
+        wt1zmCfFG4hBABcgPqadv97DTpBcq4Bcq/tF2X50u2Z2u9m8ZOjApoWXDtZ1O21HzRBV0j
+        Q6NDaeBk2jRkpGBpF5wD4k3YIo7tBAo=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-421-FDj_buYhPde_Z-uJ5zsjPQ-1; Tue, 07 Feb 2023 08:47:39 -0500
+X-MC-Unique: FDj_buYhPde_Z-uJ5zsjPQ-1
+Received: by mail-qv1-f70.google.com with SMTP id j19-20020a056214033300b0056c11dfb0ddso181161qvu.19
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 05:47:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XA/I3fzzNYZ//8/vwERAn+P62R3VluePPy0fivL+Wr8=;
+        b=WR7z3qa4Bq5Jg58wzqX3idDy5PXucjNUCtB+snAM/r/Ky6wjTFx6wJCu8FWHYDv7dZ
+         yC0CbDwEeVpQYf63fwP9wVAf1AWhp5kquzgqytxfpH4GvgZoCNOSQ8lUS7LrOULeDyNp
+         nWuiMQ5t093o+RhZcXVv9eNt/HrZ9rvsir6doetEgFwZXqOgNBKsB2yfNd2UOiSzXt/4
+         Utk36rtRLI0VG2g3WObV66LhfSEnRH+MMoi4gBm4hInMvBG/SnkeLBcv082BjlLcCIru
+         WM4XHKGP4DqyNaXvdm0H1yVWUzcax+kZ9wCybQ3Pf7IDHDR4QVZubDw5KYSvqJy/54bk
+         wCyA==
+X-Gm-Message-State: AO0yUKVGAtYZiyngTlllmOtaIyUkazGv2REj+61oxRYl2sEAC3oQfmzT
+        nRCKijCAqcgabO8MKtjY2JDZhIl3nKbxCYtOknga8ibgoOW5EwyYnnG3bPhh1n2QtWiNGTJbX9k
+        WcLMadnzDBBrm/HJT+Y/GS74/
+X-Received: by 2002:a05:622a:508:b0:3b8:6075:5d16 with SMTP id l8-20020a05622a050800b003b860755d16mr5879068qtx.56.1675777658673;
+        Tue, 07 Feb 2023 05:47:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set/ejwgCvHaxLr87VY1OqTrLmCn+q6U4BxbYz736hZ4+blH4zqNep1u4j55SpjNPGPQlVa5mTQ==
+X-Received: by 2002:a05:622a:508:b0:3b8:6075:5d16 with SMTP id l8-20020a05622a050800b003b860755d16mr5879035qtx.56.1675777658395;
+        Tue, 07 Feb 2023 05:47:38 -0800 (PST)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id pe4-20020a05620a850400b0071ada51ab48sm9503353qkn.37.2023.02.07.05.47.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 05:47:37 -0800 (PST)
+Date:   Tue, 7 Feb 2023 08:47:35 -0500
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on
+ PREEMPT_RT
+Message-ID: <Y+JWd6NfhH0sAlim@fedora>
+References: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
+ <Y9L5VFPdDnsiCluu@fedora>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9L5VFPdDnsiCluu@fedora>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 02:02:28AM -0800, srinivas pandruvada wrote:
-> On Mon, 2023-02-06 at 08:05 +0000, Zhang, Rui wrote:
-> > On Sun, 2023-02-05 at 18:45 -0800, srinivas pandruvada wrote:
-> > > Hi Rui,
-> > > 
-> > > On Sun, 2023-02-05 at 15:57 +0000, Zhang, Rui wrote:
-> > > > Hi, Srinivas,
-> > > > 
-> > > > First of all, the previous build error is gone.
-> > > > 
-> > > > Second, I found something strange, which may be related with the
-> > > > scheduler asym-packing, so CC Ricardo.
-> > > > 
-> > > I thought you disable ITMT before idle injection and reenebale
-> > > after
-> > > removal.
-> > 
-> > No.
-> > 
-> > I can reproduce this by playing with raw intel_powerclamp sysfs knobs
-> > and ITMT enabled.
-> > 
-> 
-> This issue is happening even if ITMT disabled. If the module mask is
-> composed of P-cores it works or even on servers as expected.
-> Also if you offline all P-cores then select mask among E-cores, it is
-> working. Somehow P-core influences E-cores.
-> 
-> Since this patch is module mask related, that is functioning correctly.
-> We have to debug this interaction with P and E cores separately.
+Is there still something preventing this patch from being picked up?
 
-Currently, when doing asym_packing, ECores will only pull tasks from a
-PCore only if both SMT siblings are busy. It will only pull from the
-lower-priority sibling. These patches [1] let ECores pull from either
-sibling, if both are busy.
+Best,
 
-I presume that by injecting idle, the scheduler thinks that the CPU is
-idle (i.e., idle_cpu() returns true) and it will not do asym_packing from
-lower-priority CPUs.
+Adrien
 
-However, in your experiment you have 16 threads. If a Pcore is overloaded,
-an ECore should be able to help.
-
-[1]. https://lore.kernel.org/lkml/20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com/
- 
