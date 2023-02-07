@@ -2,149 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5F868DDAE
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 17:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D01568DDB6
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 17:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjBGQNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 11:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S231562AbjBGQOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 11:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbjBGQND (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 11:13:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED98DBEF;
-        Tue,  7 Feb 2023 08:13:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA1060F16;
-        Tue,  7 Feb 2023 16:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A13AC433D2;
-        Tue,  7 Feb 2023 16:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675786380;
-        bh=cC2tkzskefDBrZsRvMNSczr6SitbzsKg7wGCqoUStHs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f6UuGFSLOAa3/jEqTL8xCu752LB/v8U3T4/n7H7TP+DnA7MHVJ5Vo5N6wy95yp83P
-         3RzDdYgxP0osFCxQoOpBVQ6QBH2x9upd1ijSxseNfiXM2jyY23tInRrYN/inEEjIEG
-         GPvz+k1Z1MlR7IVEt67M5aTJrybyZw5jDsUOkUFymVJjX/SlCwn7n24j6Vx5Dctp4F
-         YNCXUtoEGBQ1XJt914hG+MgsBiPcZ5bSnpnmdS6Gtknc5EOYbsBxUAljNC75gS2rh8
-         CMmRnOw9YU/dCZC6ACchSa1JcLgx1HKsBsJwkEtVF8w3aPEVcwndJ12mLguLm7M7wO
-         ZuWqcudZxdoyQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Perry Yuan <perry.yuan@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>, Meng Li <li.meng@amd.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: amd-pstate: avoid uninitialized variable use
-Date:   Tue,  7 Feb 2023 17:12:51 +0100
-Message-Id: <20230207161256.271613-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S232681AbjBGQOV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 11:14:21 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0A865A3;
+        Tue,  7 Feb 2023 08:14:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675786459; x=1707322459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=piPvQsT8sg3M6OXkur43AQOlc9r+x7DRJBGS2pa/A0Q=;
+  b=TVkHyE0N2gjnTw98QxCrdU/4pvxWg4h9L5yY1QlAQvIJo7YQaWJtFi46
+   MdlIxi5YPEyOOEpCv3EX8km0pw7D+UCJ7G+h4mcX617XmOOL5cWN/X2aP
+   rG9/pmQa8OegBsM9nS0b6/rBltbxSolJ8OiWi58MOJoMXzY603cYn2OQy
+   wM9i9UDXCjeL6hPw/po2ibI6pbSk0CygLAS/yqdoQIDhAm0xYMVJHJ1jW
+   kcnxY/zfybEYEf9qTZ5OOkfy4znB7EWUKbAiVgYRMZ5i4kCFULmWpPI9V
+   kpCat1lYlQyMZwJFrzBGDMyLYVcvfiaPGoaWlpPT6U8V0QSDn6w5sGhah
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="309885589"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="309885589"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 08:14:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="699301774"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="699301774"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2023 08:14:10 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPQbh-0003gM-3A;
+        Tue, 07 Feb 2023 16:14:09 +0000
+Date:   Wed, 8 Feb 2023 00:14:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: Re: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to
+ mediatek folder
+Message-ID: <202302080018.wNeWiKqz-lkp@intel.com>
+References: <20230207130958.608305-2-bchihi@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207130958.608305-2-bchihi@baylibre.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-The new epp support causes warnings about three separate
-but related bugs:
+Thank you for the patch! Perhaps something to improve:
 
-1) failing before allocation should just return an error:
+[auto build test WARNING on a2c81dc59d41e92362ab7d41d0c15471ea50637d]
 
-drivers/cpufreq/amd-pstate.c:951:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (!dev)
-            ^~~~
-drivers/cpufreq/amd-pstate.c:1018:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
+url:    https://github.com/intel-lab-lkp/linux/commits/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
+base:   a2c81dc59d41e92362ab7d41d0c15471ea50637d
+patch link:    https://lore.kernel.org/r/20230207130958.608305-2-bchihi%40baylibre.com
+patch subject: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to mediatek folder
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230208/202302080018.wNeWiKqz-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0eb89997925c0d7b47bbeee93016146fc660b259
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
+        git checkout 0eb89997925c0d7b47bbeee93016146fc660b259
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/thermal/mediatek/
 
-2) wrong variable to store return code:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-drivers/cpufreq/amd-pstate.c:963:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (rc)
-            ^~
-drivers/cpufreq/amd-pstate.c:1019:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
-drivers/cpufreq/amd-pstate.c:963:2: note: remove the 'if' if its condition is always false
-        if (rc)
-        ^~~~~~~
+All warnings (new ones prefixed by >>):
 
-3) calling amd_pstate_set_epp() in cleanup path after determining
-that it should not be called:
+>> drivers/thermal/mediatek/auxadc_thermal.c:562: warning: expecting prototype for raw_to_mcelsius(). Prototype was for raw_to_mcelsius_v1() instead
 
-drivers/cpufreq/amd-pstate.c:1055:6: error: variable 'epp' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (cpudata->epp_policy == cpudata->policy)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/cpufreq/amd-pstate.c:1080:30: note: uninitialized use occurs here
-        amd_pstate_set_epp(cpudata, epp);
-                                    ^~~
 
-All three are trivial to fix, but most likely there are additional bugs
-in this function when the error handling was not really tested.
+vim +562 drivers/thermal/mediatek/auxadc_thermal.c
 
-Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/cpufreq/amd-pstate.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+a4ffe6b52d27f4 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  551  
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  552  /**
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  553   * raw_to_mcelsius - convert a raw ADC value to mcelsius
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  554   * @mt:	The thermal controller
+3772bb422072d4 drivers/thermal/mtk_thermal.c Amit Kucheria 2019-11-20  555   * @sensno:	sensor number
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  556   * @raw:	raw ADC value
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  557   *
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  558   * This converts the raw ADC value to mcelsius using the SoC specific
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  559   * calibration constants
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  560   */
+54bf1e5a629dfb drivers/thermal/mtk_thermal.c Henry Yen     2020-04-30  561  static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30 @562  {
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  563  	s32 tmp;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  564  
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  565  	raw &= 0xfff;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  566  
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  567  	tmp = 203450520 << 3;
+f84514766985d3 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  568  	tmp /= mt->conf->cali_val + mt->o_slope;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  569  	tmp /= 10000 + mt->adc_ge;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  570  	tmp *= raw - mt->vts[sensno] - 3350;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  571  	tmp >>= 3;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  572  
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  573  	return mt->degc_cali * 500 - tmp;
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  574  }
+a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  575  
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 168a28bed6ee..847f5f31396d 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -940,7 +940,6 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
- 	struct amd_cpudata *cpudata;
- 	struct device *dev;
--	int rc;
- 	u64 value;
- 
- 	/*
-@@ -950,7 +949,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	amd_perf_ctl_reset(policy->cpu);
- 	dev = get_cpu_device(policy->cpu);
- 	if (!dev)
--		goto free_cpudata1;
-+		return -ENODEV;
- 
- 	cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
- 	if (!cpudata)
-@@ -959,8 +958,8 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	cpudata->cpu = policy->cpu;
- 	cpudata->epp_policy = 0;
- 
--	rc = amd_pstate_init_perf(cpudata);
--	if (rc)
-+	ret = amd_pstate_init_perf(cpudata);
-+	if (ret)
- 		goto free_cpudata1;
- 
- 	min_freq = amd_get_min_freq(cpudata);
-@@ -1076,9 +1075,9 @@ static void amd_pstate_epp_init(unsigned int cpu)
- 		value |= (u64)epp << 24;
- 	}
- 
-+	amd_pstate_set_epp(cpudata, epp);
- skip_epp:
- 	WRITE_ONCE(cpudata->cppc_req_cached, value);
--	amd_pstate_set_epp(cpudata, epp);
- 	cpufreq_cpu_put(policy);
- }
- 
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
