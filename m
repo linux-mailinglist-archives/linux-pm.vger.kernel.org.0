@@ -2,113 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272B568DF5A
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 18:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639B468E006
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 19:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbjBGRv3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 12:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S232065AbjBGSba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 13:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbjBGRvX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 12:51:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B73533E0B6;
-        Tue,  7 Feb 2023 09:51:12 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8343D1042;
-        Tue,  7 Feb 2023 09:51:54 -0800 (PST)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4574E3F71E;
-        Tue,  7 Feb 2023 09:51:08 -0800 (PST)
-Message-ID: <0621bf8e-06f2-70f2-6d2b-f311c5a4ffce@arm.com>
-Date:   Tue, 7 Feb 2023 17:50:59 +0000
+        with ESMTP id S229992AbjBGSb3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 13:31:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C2B1AE;
+        Tue,  7 Feb 2023 10:31:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26827B81A1F;
+        Tue,  7 Feb 2023 18:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362F6C433EF;
+        Tue,  7 Feb 2023 18:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675794685;
+        bh=7D+FGdUcwyW9rKac2iRq0Q6ML2h/GFCkjJcCSB9Tu3E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wn9h8sP7HD80T+q2uhlGOEc56yIl1cTicGx4Bg8WEXvGcisDb1NZ6Bh2TXPOC2fhr
+         7gNRHy9bET+GgfBhyg+Ox6x/xYdNyMF4rdQs/623dpjQvsodx0g11r0qHaTEgiY/xA
+         ouzb3XF5RR6v7yKuSAVKRmYVKDItJOKxUdx+eIKSqGwvmYKFhJv7JjwnRW0G3E5vcz
+         i72VUFScVMzeHnqyjFvDYLAFP9Ju1uZGtjWhob4SANZydDtBwtXQl46DR7rB+EvhoU
+         etnIBKSN5KMubloYUNXXEwq8XEiuaali+kRFVc6VADHBF8sOTXc4e5WiTvCx4Zgn4F
+         fhRt+vq7skNUw==
+Date:   Tue, 7 Feb 2023 10:31:24 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     patchwork-bot+netdevbpf@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rafael@kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
+        andy@greyhouse.net, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/3] some minor fixes of error checking about
+ debugfs_rename()
+Message-ID: <20230207103124.052b5ce1@kernel.org>
+In-Reply-To: <aeae8fb8-b052-0d4a-5d3e-8de81e1b5092@bytedance.com>
+References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
+        <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
+        <aeae8fb8-b052-0d4a-5d3e-8de81e1b5092@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
-Content-Language: en-GB
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-30-james.morse@arm.com> <Y913sIqWxmf4O5oG@google.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <Y913sIqWxmf4O5oG@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Oliver,
-
-On 03/02/2023 21:08, Oliver Upton wrote:
-> On Fri, Feb 03, 2023 at 01:50:40PM +0000, James Morse wrote:
->> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
->>
->> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
->> request to handle all hypercalls that aren't handled by KVM.
-
-> I would very much prefer we not go down this route. This capability
-> effectively constructs an ABI out of what KVM presently does not
-> implement. What would happen if KVM decides to implement a new set
-> of hypercalls later down the road that were previously forwarded to
-> userspace?
-
-The user-space support would never get called. If we have a wild-west allocation of IDs in
-this area we have bigger problems. I'd hope in this example it would be a VMM or an
-in-kernel implementation of the same feature.
-
-When I floated something like this before for supporting SDEI in guests, Christoffer
-didn't like tie-ing KVM to SMC-CC - hence the all or nothing.
-
-Since then we've had things like Spectre, which I don't think the VMM should
-ever be allowed to handle, which makes the whole thing much murkier.
-
-
-> Instead of a catch-all I think we should take the approach of having
-> userspace explicitly request which hypercalls should be forwarded to
-> userspace. I proposed something similar [1], but never got around to
-> respinning it (oops).
-
-> Let me dust those patches off and align with Marc's suggestions.
+On Tue, 7 Feb 2023 18:30:40 +0800 Qi Zheng wrote:
+> > Here is the summary with links:
+> >    - [1/3] debugfs: update comment of debugfs_rename()
+> >      (no matching commit)
+> >    - [2/3] bonding: fix error checking in bond_debug_reregister()
+> >      https://git.kernel.org/netdev/net/c/cbe83191d40d
+> >    - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
+> >      (no matching commit)  
 > 
-> [1]: https://lore.kernel.org/kvmarm/20221110015327.3389351-1-oliver.upton@linux.dev/
+> Does "no matching commit" means that these two patches have not been
+> applied? And I did not see them in the linux-next branch.
 
-I've no problem with doing it like this. This approach was based on Christoffer's previous
-feedback, but the world has changed since then.
+Correct, we took the networking patch to the networking tree.
+You'd be better off not grouping patches from different subsystems
+if there are no dependencies. Maintainers may get confused about
+who's supposed to apply them, err on the side of caution and 
+not apply anything.
 
-Let me know if you want me to re-spin that series - I need to get this into some
-shape next week for Salil to look at the Qemu changes, as I can't test the whole thing
-until that is done.
+> If so, hi Greg, Can you help to review and apply these two patches
+> ([1/3] and [3/3])?
 
-
-
-Thanks,
-
-James
+Or 3/3 should go to Viresh?.. Dunno..
