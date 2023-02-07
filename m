@@ -2,187 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDD468D96E
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50A668D975
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjBGNdf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 08:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S232047AbjBGNfp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 08:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbjBGNdd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:33:33 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DF82C654
-        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 05:33:22 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id j25so10028667wrc.4
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 05:33:22 -0800 (PST)
+        with ESMTP id S231823AbjBGNfo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:35:44 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01F923869
+        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 05:35:42 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso11470146wms.3
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 05:35:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Gnj8mx6BQv+P/VZTc2ZRvZ4cPWBzn/d/g1R6N3t1SY=;
-        b=sywB6VKP5uMO4iMwIfYWNewUXqdyUmfAHNyhyo3OrdI4w9hMA/do0JdT6XDgbayfL+
-         hioKOeqNB9gmBTeOJ+GEqRzkacs91bBLXr18APnsVAUBpOFSSsRR/mPgDw2PAZiSngST
-         GHN3F7C6RRw0zyStZrcDu6HUwZTZEJW9//HKZNnFr8pbdBYO0ZeQTSQ1wJUc9qr39WDw
-         RAZprI560qB9/D7SJ2L2mhHzMzvqn4IkElOgb3RhfyiCRKxMOqVm8can1xTMfSUuQzTl
-         3d/Otz4g9TJG3uwzIfUqVNKE0lVe3mXM4bFnaRqiGH/VF2JhF06rxIQG2kcu+KI3CJbC
-         UTcQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k1ykxnCSPogB0kbxJnMoBL8O048yCl07opBue4WpgaQ=;
+        b=tTuj0/XbFSyS4dn6D7rW1NOCwMHRyzAh+O6FP2x0BBLP/2F0FxstsfvHct8fILSH/K
+         0GllB2iScPYt8V7iN34H0RSFKCruoUivMiSVGCtxTkSnKMZpYaIpKftzuLJyH0leBR0+
+         qSJCq3ldl5dw6okdCiYezdtVaU1jvRex6x4G6R0UYxPklWw1Pn6TtaMyVhomxJuPkWMC
+         FpOPOnGAt3n96q4B+oUkaXxF7ct2JK8etPczii+PuYqtxUsmT2vaQP62U8p/PFz4SLTg
+         W11hImxwMZc1PGSjZR6AGekxCjzEeZzJJIP+OHLZ6Sb10ADbKfHuPKUElUaTxONnUgjE
+         sEjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Gnj8mx6BQv+P/VZTc2ZRvZ4cPWBzn/d/g1R6N3t1SY=;
-        b=hMfJdW2nW9LRM1dBt3BWyE6vJglWj055pXNZ1CitGuiw1TuYP5iFIX/XDRvHksEk3H
-         RD3Uxo/SbSxLCt8ZY98dWX8+6NaCk5sK4pHHQy2DREjLybfghnBG6N/45P57UBbpsXFS
-         wwcBIRqZeTgcTZ6QkfuCBu6RdaL/cCne/2pN1yRahsHQKpl6nIfnQEPVI8HAd5LJnToM
-         jh4KUmB70382l8NAiKvAr/NdY0QliRmi0Y3ADZx7xYZ33o0pwKWbdipDUmJSuDflU7nv
-         VXwvVu7qB6Su7fAzqyn9moRaOVnUurFL71xQtcyAaXW84Xh4gfaXg9fBS4Dy0NTAxwYC
-         RavA==
-X-Gm-Message-State: AO0yUKVoG6KonxEuPnAyXX4nnWvJEYlXPN7PMxctvPDQkFRfroVYv/as
-        +FY67rWhoZRnCM0qIq/ZSKe99Q==
-X-Google-Smtp-Source: AK7set9tflq7m2WGhWzU48ho/FGtJPjdoU4DUvNTQOyFDfwfzYJ/cgrUGOgVxSNmGa0o1E+FD6YRHA==
-X-Received: by 2002:a05:6000:1b0f:b0:2c3:ea4d:3f01 with SMTP id f15-20020a0560001b0f00b002c3ea4d3f01mr2338118wrz.27.1675776801421;
-        Tue, 07 Feb 2023 05:33:21 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:c58c:fc5c:67d6:e5f3? ([2a01:e0a:982:cbb0:c58c:fc5c:67d6:e5f3])
-        by smtp.gmail.com with ESMTPSA id t1-20020a5d4601000000b002bdfe3aca17sm11241983wrq.51.2023.02.07.05.33.19
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k1ykxnCSPogB0kbxJnMoBL8O048yCl07opBue4WpgaQ=;
+        b=DATGbHNNQRxoryQA2r3WaGVTGzj54nHdxyBahCkQP8mA375EN822KTVWMCxyENGhxE
+         RcO+TMugLcGjO4d/Q51N70i2r5j6OVhh++JUYZFdkZ6k71pyqaojmSCSWMoiRBtaIqz8
+         a9NhOO/hQqIFCVrn89MQ93m2HFlVqjAvQcaBDYsi16rpjlw7VEOLYmt6j/3BjYX1lasz
+         3h98kj1voJL37IJ/gsQ+gL6E3ZUgR0Z/+aJDAixQUS/ToPCsZFhIzSKus6Nk6bBP/m1Q
+         7gzOEgr3pbMyAvHt4UKFLRsSrzAFCqooFCUKcVzzo9K1O4mq0jEE8W3yP5LE4PeOIGgi
+         xHog==
+X-Gm-Message-State: AO0yUKUTWlOY7naxCd1KQntKnLtEYm2f+VCtFDTwHY1ZcOzbrgzU8QEQ
+        wdD02tvZbj1q57KzmtsTm72pfQ==
+X-Google-Smtp-Source: AK7set9N2kRdkmfxK++BVbR4XXH+Yw/7DgZyRt1NfDA/eM1SF/QMNr1FLrcIAOqKD1ls1/bhgKNttg==
+X-Received: by 2002:a05:600c:3596:b0:3df:d431:cf64 with SMTP id p22-20020a05600c359600b003dfd431cf64mr3061555wmq.39.1675776941479;
+        Tue, 07 Feb 2023 05:35:41 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f1-20020a1cc901000000b003df14531724sm18521999wmb.21.2023.02.07.05.35.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 05:33:21 -0800 (PST)
-Message-ID: <e8e983a7-5dac-507d-414e-0fdc1082644a@linaro.org>
-Date:   Tue, 7 Feb 2023 14:33:19 +0100
+        Tue, 07 Feb 2023 05:35:41 -0800 (PST)
+Message-ID: <046b3b31-cbf7-674d-f05c-b825d6b46bf6@linaro.org>
+Date:   Tue, 7 Feb 2023 14:35:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+Subject: Re: [PATCH v13 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal
+ controllers
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rafael.j.wysocki@intel.com
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
-        <linux-amlogic@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230207130958.608305-1-bchihi@baylibre.com>
+ <20230207130958.608305-3-bchihi@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230207130958.608305-3-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/02/2023 16:34, Daniel Lezcano wrote:
-> As the name states "thermal_core.h" is the header file for the core
-> components of the thermal framework.
+On 07/02/2023 14:09, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Too many drivers are including it. Hopefully the recent cleanups
-> helped to self encapsulate the code a bit more and prevented the
-> drivers to need this header.
+> Add LVTS thermal controllers dt-binding definition for mt8192 and mt8195.
 > 
-> Remove this inclusion in every place where it is possible.
-> 
-> Some other drivers did a confusion with the core header and the one
-> exported in linux/thermal.h. They include the former instead of the
-> latter. The changes also fix this.
-> 
-> The tegra/soctherm driver still remains as it uses an internal
-> function which need to be replaced.
-> 
-> The Intel HFI driver uses the netlink internal framework core and
-> should be changed to prevent to deal with the internals.
-> 
-> No functional changes
-> 
-> [ Applies to thermal/linux-next or linux-pm/linux-next ]
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/thermal/amlogic_thermal.c           | 1 -
->   drivers/thermal/armada_thermal.c            | 2 --
->   drivers/thermal/broadcom/bcm2835_thermal.c  | 1 -
->   drivers/thermal/hisi_thermal.c              | 3 +--
->   drivers/thermal/imx8mm_thermal.c            | 1 -
->   drivers/thermal/imx_sc_thermal.c            | 1 -
->   drivers/thermal/intel/intel_hfi.c           | 3 ++-
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
->   drivers/thermal/qoriq_thermal.c             | 1 -
->   drivers/thermal/rcar_gen3_thermal.c         | 1 -
->   drivers/thermal/samsung/exynos_tmu.c        | 3 +--
->   drivers/thermal/st/stm_thermal.c            | 1 -
->   drivers/thermal/tegra/tegra30-tsensor.c     | 1 -
->   drivers/thermal/uniphier_thermal.c          | 2 --
->   14 files changed, 4 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
-> index d30cb791e63c..9235fda4ec1e 100644
-> --- a/drivers/thermal/amlogic_thermal.c
-> +++ b/drivers/thermal/amlogic_thermal.c
-> @@ -28,7 +28,6 @@
->   #include <linux/regmap.h>
->   #include <linux/thermal.h>
->   
-> -#include "thermal_core.h"
->   #include "thermal_hwmon.h"
->   
->   #define TSENSOR_CFG_REG1			0x4
 
-For Amlogic:
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> +allOf:
+> +  - $ref: thermal-sensor.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8192-lvts-ap
+> +              - mediatek,mt8192-lvts-mcu
+> +    then:
+> +      properties:
+> +        nvmem-cells:
+> +          maxItems: 1
+> +
+> +        nvmem-cell-names:
+> +          maxItems: 1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8195-lvts-ap
+> +              - mediatek,mt8195-lvts-mcu
+> +    then:
+> +      properties:
+> +        nvmem-cells:
 
-<snip>
+minItems: 2
+
+> +          maxItems: 2
+> +
+> +        nvmem-cell-names:
+
+minItems: 2
+
+> +          maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+
+(...)
+
+> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> new file mode 100644
+> index 000000000000..4f2082065a31
+> --- /dev/null
+> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2023 MediaTek Inc.
+> + * Author: Balsam CHIHI <bchihi@baylibre.com>
+> + */
+> +
+> +#ifndef __MEDIATEK_LVTS_DT_H
+> +#define __MEDIATEK_LVTS_DT_H
+> +
+> +#define MT8195_MCU_BIG_CPU0		0
+> +#define MT8195_MCU_BIG_CPU1		1
+> +#define MT8195_MCU_BIG_CPU2		2
+> +#define MT8195_MCU_BIG_CPU3		3
+> +#define MT8195_MCU_LITTLE_CPU0	4
+
+These changed for some reason. Why? The indentation is now broken
+(although not visible above quote, but visible in diff and code).
+
+Best regards,
+Krzysztof
 
