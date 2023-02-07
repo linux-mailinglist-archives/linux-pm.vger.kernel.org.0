@@ -2,164 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50A668D975
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B292B68D965
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbjBGNfp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 08:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        id S232181AbjBGNdJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 08:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjBGNfo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:35:44 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01F923869
-        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 05:35:42 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso11470146wms.3
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 05:35:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k1ykxnCSPogB0kbxJnMoBL8O048yCl07opBue4WpgaQ=;
-        b=tTuj0/XbFSyS4dn6D7rW1NOCwMHRyzAh+O6FP2x0BBLP/2F0FxstsfvHct8fILSH/K
-         0GllB2iScPYt8V7iN34H0RSFKCruoUivMiSVGCtxTkSnKMZpYaIpKftzuLJyH0leBR0+
-         qSJCq3ldl5dw6okdCiYezdtVaU1jvRex6x4G6R0UYxPklWw1Pn6TtaMyVhomxJuPkWMC
-         FpOPOnGAt3n96q4B+oUkaXxF7ct2JK8etPczii+PuYqtxUsmT2vaQP62U8p/PFz4SLTg
-         W11hImxwMZc1PGSjZR6AGekxCjzEeZzJJIP+OHLZ6Sb10ADbKfHuPKUElUaTxONnUgjE
-         sEjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1ykxnCSPogB0kbxJnMoBL8O048yCl07opBue4WpgaQ=;
-        b=DATGbHNNQRxoryQA2r3WaGVTGzj54nHdxyBahCkQP8mA375EN822KTVWMCxyENGhxE
-         RcO+TMugLcGjO4d/Q51N70i2r5j6OVhh++JUYZFdkZ6k71pyqaojmSCSWMoiRBtaIqz8
-         a9NhOO/hQqIFCVrn89MQ93m2HFlVqjAvQcaBDYsi16rpjlw7VEOLYmt6j/3BjYX1lasz
-         3h98kj1voJL37IJ/gsQ+gL6E3ZUgR0Z/+aJDAixQUS/ToPCsZFhIzSKus6Nk6bBP/m1Q
-         7gzOEgr3pbMyAvHt4UKFLRsSrzAFCqooFCUKcVzzo9K1O4mq0jEE8W3yP5LE4PeOIGgi
-         xHog==
-X-Gm-Message-State: AO0yUKUTWlOY7naxCd1KQntKnLtEYm2f+VCtFDTwHY1ZcOzbrgzU8QEQ
-        wdD02tvZbj1q57KzmtsTm72pfQ==
-X-Google-Smtp-Source: AK7set9N2kRdkmfxK++BVbR4XXH+Yw/7DgZyRt1NfDA/eM1SF/QMNr1FLrcIAOqKD1ls1/bhgKNttg==
-X-Received: by 2002:a05:600c:3596:b0:3df:d431:cf64 with SMTP id p22-20020a05600c359600b003dfd431cf64mr3061555wmq.39.1675776941479;
-        Tue, 07 Feb 2023 05:35:41 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f1-20020a1cc901000000b003df14531724sm18521999wmb.21.2023.02.07.05.35.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 05:35:41 -0800 (PST)
-Message-ID: <046b3b31-cbf7-674d-f05c-b825d6b46bf6@linaro.org>
-Date:   Tue, 7 Feb 2023 14:35:39 +0100
+        with ESMTP id S232008AbjBGNdI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:33:08 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA8B1F5C2;
+        Tue,  7 Feb 2023 05:33:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675776780; x=1707312780;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JXEbPFglSuiQr9d7wSUk0H3DKc91xWhi0p9Mc42n5FA=;
+  b=PTWVqzeiZVa8JSHw6vt4+wmYHw9mJ8c6mmINi97695zS7K0A7+MEgOsm
+   S9iVLdQZGRUxWfGpnGbHI2m1C/jGCksrH2mId+86tJzNk6DXP5GtK6HPg
+   wYF6gTeF+Kn/+CuVfPALaqMEFqe+SSZKZFkd3CqXWOuP5XgqCPOUu21PZ
+   /niOUNuoG6SjnyHJc6+/LQIpNLKjjB1woq+bKjblFTMrvJa+W96NdXtwp
+   7BxHOXRTi3ccpVW2CCEGwhWPqI3K1adens4sPx6XAdX24ULgmbjIUc8DK
+   tlXHjk7JU6L/+yu0RFixfItVCySS1fR+RHzHQdCJaqmw9iOkiATEiQ97Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="391899591"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="391899591"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 05:32:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="755628365"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="755628365"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2023 05:32:59 -0800
+Date:   Tue, 7 Feb 2023 05:42:37 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "Neri, Ricardo" <ricardo.neri@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
+Message-ID: <20230207134237.GA13076@ranerica-svr.sc.intel.com>
+References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
+ <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
+ <60514763753f572f854f1bbf287c3c16fbbc12c3.camel@linux.intel.com>
+ <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
+ <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v13 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal
- controllers
-Content-Language: en-US
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230207130958.608305-1-bchihi@baylibre.com>
- <20230207130958.608305-3-bchihi@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230207130958.608305-3-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/02/2023 14:09, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On Mon, Feb 06, 2023 at 02:02:28AM -0800, srinivas pandruvada wrote:
+> On Mon, 2023-02-06 at 08:05 +0000, Zhang, Rui wrote:
+> > On Sun, 2023-02-05 at 18:45 -0800, srinivas pandruvada wrote:
+> > > Hi Rui,
+> > > 
+> > > On Sun, 2023-02-05 at 15:57 +0000, Zhang, Rui wrote:
+> > > > Hi, Srinivas,
+> > > > 
+> > > > First of all, the previous build error is gone.
+> > > > 
+> > > > Second, I found something strange, which may be related with the
+> > > > scheduler asym-packing, so CC Ricardo.
+> > > > 
+> > > I thought you disable ITMT before idle injection and reenebale
+> > > after
+> > > removal.
+> > 
+> > No.
+> > 
+> > I can reproduce this by playing with raw intel_powerclamp sysfs knobs
+> > and ITMT enabled.
+> > 
 > 
-> Add LVTS thermal controllers dt-binding definition for mt8192 and mt8195.
+> This issue is happening even if ITMT disabled. If the module mask is
+> composed of P-cores it works or even on servers as expected.
+> Also if you offline all P-cores then select mask among E-cores, it is
+> working. Somehow P-core influences E-cores.
 > 
+> Since this patch is module mask related, that is functioning correctly.
+> We have to debug this interaction with P and E cores separately.
 
+Currently, when doing asym_packing, ECores will only pull tasks from a
+PCore only if both SMT siblings are busy. It will only pull from the
+lower-priority sibling. These patches [1] let ECores pull from either
+sibling, if both are busy.
 
-> +allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8192-lvts-ap
-> +              - mediatek,mt8192-lvts-mcu
-> +    then:
-> +      properties:
-> +        nvmem-cells:
-> +          maxItems: 1
-> +
-> +        nvmem-cell-names:
-> +          maxItems: 1
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8195-lvts-ap
-> +              - mediatek,mt8195-lvts-mcu
-> +    then:
-> +      properties:
-> +        nvmem-cells:
+I presume that by injecting idle, the scheduler thinks that the CPU is
+idle (i.e., idle_cpu() returns true) and it will not do asym_packing from
+lower-priority CPUs.
 
-minItems: 2
+However, in your experiment you have 16 threads. If a Pcore is overloaded,
+an ECore should be able to help.
 
-> +          maxItems: 2
-> +
-> +        nvmem-cell-names:
-
-minItems: 2
-
-> +          maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-
-(...)
-
-> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> new file mode 100644
-> index 000000000000..4f2082065a31
-> --- /dev/null
-> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2023 MediaTek Inc.
-> + * Author: Balsam CHIHI <bchihi@baylibre.com>
-> + */
-> +
-> +#ifndef __MEDIATEK_LVTS_DT_H
-> +#define __MEDIATEK_LVTS_DT_H
-> +
-> +#define MT8195_MCU_BIG_CPU0		0
-> +#define MT8195_MCU_BIG_CPU1		1
-> +#define MT8195_MCU_BIG_CPU2		2
-> +#define MT8195_MCU_BIG_CPU3		3
-> +#define MT8195_MCU_LITTLE_CPU0	4
-
-These changed for some reason. Why? The indentation is now broken
-(although not visible above quote, but visible in diff and code).
-
-Best regards,
-Krzysztof
-
+[1]. https://lore.kernel.org/lkml/20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com/
+ 
