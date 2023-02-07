@@ -2,192 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E5B68CFDE
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 07:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12DB68D315
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 10:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjBGG5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 01:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S231693AbjBGJmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 04:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBGG5r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 01:57:47 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521F2222F1;
-        Mon,  6 Feb 2023 22:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675753066; x=1707289066;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v9gdSWkXD/byI0aHL2myY7VyOo9xeNCbyQXYWq1oG1U=;
-  b=HRrGm8BjVFscrnbhnxMiXaHhMHJwjpijgaVcZpThGtxOKdKuPiDO5RXX
-   xAFQobi+Ao0xR5yt6RbbuSUPRiCqGpP8Drxj/0TxxMjdvR3roNwoqWNwP
-   GpHycpqYreczyFdoMJEilJz1gKA2lCVbtHUG+3iAoC5Nb9vy47vvEsLIc
-   9ZmA4vL15RFbVvjvofBbCzTrAMNRtvG2RAA14MOX7/8LdqDeEYYmuIKpU
-   TPlZPH8cRAkoDGaKoEKeJ8rK9d/l9tvt4tx/nGWrrubXJpgmdhBY07x2j
-   Pdgk8EdA2z4btMv42HZIcuSLpezDdCVv0dL3tYq2Lr6YtmMq65iTAufSs
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415645319"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415645319"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:57:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697152313"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="697152313"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 06 Feb 2023 22:57:44 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPHvD-0003EJ-1u;
-        Tue, 07 Feb 2023 06:57:43 +0000
-Date:   Tue, 07 Feb 2023 14:57:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- dcf0f94e28915d8dc7d174be2554edf87c3d655f
-Message-ID: <63e1f659.Z66hIz6D4ZuSnKWP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230149AbjBGJmC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 04:42:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE7CC8A54;
+        Tue,  7 Feb 2023 01:42:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E327911FB;
+        Tue,  7 Feb 2023 01:42:42 -0800 (PST)
+Received: from [10.57.75.57] (unknown [10.57.75.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B7BF3F71E;
+        Tue,  7 Feb 2023 01:41:56 -0800 (PST)
+Message-ID: <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com>
+Date:   Tue, 7 Feb 2023 09:41:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
+ <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com> <86wn4vynyr.wl-maz@kernel.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <86wn4vynyr.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: dcf0f94e28915d8dc7d174be2554edf87c3d655f  Merge branch 'acpi-video' into bleeding-edge
+Hi Marc,
 
-elapsed time: 730m
+On 06/02/2023 12:31, Marc Zyngier wrote:
+> On Mon, 06 Feb 2023 10:10:41 +0000,
+> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>
+>> Hi,
+>>
+>> A few cents from the Realm support point of view.
+>>
+>> On 05/02/2023 10:12, Marc Zyngier wrote:
+>>> On Fri, 03 Feb 2023 13:50:40 +0000,
+>>> James Morse <james.morse@arm.com> wrote:
+>>>>
+>>>> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>>>
+>>>> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+>>>> request to handle all hypercalls that aren't handled by KVM. With the
+>>>> help of another capability, this will allow userspace to handle PSCI
+>>>> calls.
+>>>>
+>>>> Suggested-by: James Morse <james.morse@arm.com>
+>>>> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>>> Signed-off-by: James Morse <james.morse@arm.com>
+>>>>
+>>>> ---
+>>>>
+>>>
+>>> On top of Oliver's ask not to make this a blanket "steal everything",
+>>> but instead to have an actual request for ranges of forwarded
+>>> hypercalls:
+>>>
+>>>> Notes on this implementation:
+>>>>
+>>>> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+>>>>     generalizes the idea to all hypercalls, since that was suggested on
+>>>>     the list [2, 3].
+>>>>
+>>>> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+>>>>     kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+>>>>     this, because:
+>>>>     - Most user handlers will need to write results back into the
+>>>>       registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+>>>>       go all the way and read them back on return to kernel.
+>>>>     - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+>>>>       handling the call.
+>>
+>> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+>> not supported. So using an explicit passing down of the args is
+>> preferrable.
+> 
+> What is the blocker for CCA to use GET_ONE_REG? The value obviously
+> exists and is made available to the host. pKVM is perfectly able to
+> use GET_ONE_REG and gets a bunch of zeroes for things that the
+> hypervisor has decided to hide from the host.
+> 
 
-configs tested: 110
-configs skipped: 4
+It is not impossible. On a "HOST CALL" (explicit calls to the Host from
+Realm), the GPRs are made available to the host and can be stashed into 
+the vcpu reg state and the request can be serviced. However, it is a bit
+odd, to make this exception - "the GET_ONE_REG is valid now", while in 
+almost all other cases it is invalid (exception of MMIO).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Of course we could always return what is stashed in the vcpu state,
+which is may be invalid/ 0. But given the construct of "host doesn't
+have access to the register state", it may be a good idea to say, 
+request always fails, to indicate that the Host is probably doing 
+something wrong, than silently passing on incorrect information.
 
-gcc tested configs:
-um                             i386_defconfig
-x86_64                            allnoconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-mips                         db1xxx_defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-arc                                 defconfig
-sh                          rsk7269_defconfig
-alpha                               defconfig
-i386                                defconfig
-sh                               allmodconfig
-alpha                             allnoconfig
-i386                              allnoconfig
-arc                               allnoconfig
-arm                               allnoconfig
-x86_64                              defconfig
-s390                             allmodconfig
-mips                             allyesconfig
-ia64                             allmodconfig
-x86_64                               rhel-8.3
-powerpc                          allmodconfig
-i386                 randconfig-a011-20230206
-x86_64                           rhel-8.3-syz
-i386                 randconfig-a014-20230206
-x86_64                         rhel-8.3-kunit
-x86_64                           allyesconfig
-i386                 randconfig-a012-20230206
-i386                 randconfig-a016-20230206
-s390                                defconfig
-x86_64                           rhel-8.3-kvm
-x86_64               randconfig-a013-20230206
-x86_64               randconfig-a011-20230206
-x86_64                    rhel-8.3-kselftests
-x86_64               randconfig-a012-20230206
-i386                 randconfig-a013-20230206
-x86_64               randconfig-a014-20230206
-i386                 randconfig-a015-20230206
-x86_64                          rhel-8.3-func
-s390                             allyesconfig
-sh                         ecovec24_defconfig
-x86_64                           rhel-8.3-bpf
-x86_64               randconfig-a015-20230206
-x86_64               randconfig-a016-20230206
-i386                             allyesconfig
-arm                                 defconfig
-riscv                    nommu_k210_defconfig
-mips                           jazz_defconfig
-sh                          r7780mp_defconfig
-um                               alldefconfig
-xtensa                  nommu_kc705_defconfig
-arm64                            allyesconfig
-parisc                           allyesconfig
-arm                           h3600_defconfig
-arm                              allyesconfig
-arc                     nsimosci_hs_defconfig
-sh                                  defconfig
-s390                 randconfig-r044-20230206
-xtensa                              defconfig
-arc                  randconfig-r043-20230205
-arm                            hisi_defconfig
-arm                  randconfig-r046-20230205
-arc                  randconfig-r043-20230206
-riscv                randconfig-r042-20230206
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-c001
-x86_64                        randconfig-a006
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                             allnoconfig
-riscv                    nommu_virt_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-riscv                          rv32_defconfig
 
-clang tested configs:
-mips                       rbtx49xx_defconfig
-arm                         lpc32xx_defconfig
-riscv                            alldefconfig
-arm                           sama7_defconfig
-x86_64               randconfig-a001-20230206
-x86_64               randconfig-a005-20230206
-powerpc                 mpc832x_mds_defconfig
-powerpc                      ppc44x_defconfig
-x86_64               randconfig-a006-20230206
-x86_64               randconfig-a002-20230206
-x86_64               randconfig-a004-20230206
-x86_64               randconfig-a003-20230206
-arm                       aspeed_g4_defconfig
-x86_64                          rhel-8.3-rust
-hexagon                             defconfig
-i386                 randconfig-a005-20230206
-i386                 randconfig-a004-20230206
-i386                 randconfig-a001-20230206
-i386                 randconfig-a002-20230206
-i386                 randconfig-a003-20230206
-i386                 randconfig-a006-20230206
-hexagon              randconfig-r041-20230205
-riscv                randconfig-r042-20230205
-hexagon              randconfig-r045-20230206
-hexagon              randconfig-r041-20230206
-arm                  randconfig-r046-20230206
-s390                 randconfig-r044-20230205
-hexagon              randconfig-r045-20230205
-x86_64                        randconfig-k001
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
+> Of course, it requires that the hypervisor (the RMM in your case)
+> knows about the semantics of the hypercall, but that's obviously
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+RMM doesn't care about the semantics of hypercall, other than
+considering it just like an SMCCC compliant call. The hypercall
+arguments/results are passed down/up by the Realm in a separate structure.
+
+> already a requirement (or you wouldn't be able to use PSCI at all).
+
+Realm PSCI calls are always serviced by the RMM. RMM may request
+the Hyp for specific information in certain cases, but that doesn't
+need to go down to the VMM.
+
+Thanks
+Suzuki
+
+
+> 
+> Thanks,
+> 
+> 	M.
+> 
+
