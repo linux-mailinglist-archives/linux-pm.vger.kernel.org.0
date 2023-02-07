@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118AC68CEA0
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2E468CEA1
 	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 06:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjBGFDZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 00:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S230034AbjBGFD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 00:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjBGFCC (ORCPT
+        with ESMTP id S230137AbjBGFCC (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 00:02:02 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD801E9F5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BAD196BA;
         Mon,  6 Feb 2023 21:02:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675746121; x=1707282121;
+  t=1675746120; x=1707282120;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=goElNzOu/cMaBcsm8/fX9KbVxksjtxFjfuJIL57mdrg=;
-  b=WpC0sW0pWEipNNeTvEKSOjPIUQuuytPxTSJoQTE1NqlGPAH4vgDuToLZ
-   5VYDwr2L5bwivqAu7eXIDwl/llPbnTLCFP1O7rcxdsLdDkg+6sgNnNlXx
-   LbTqYXMp7GZ7AFBpj6kpHFd1woQMrqYW5B4pRtWenUHEcpGNCbhgJzslC
-   OvLCDU5Dn9qoeGWuqMGEhG1rqIt+wvj1rlqkBHnfnyQTBJSgHJFJEVe08
-   Aey3i3l3V11bWCUl7AyGfkqdKmppGHIkjmwjo3l/57BAEGAnQIuh/8/sK
-   L/Vci0tKsojEYaRyr0i+eGjx+jx7K/ay2wheXK4U9k9xRZkwjOS6j9jVl
+  bh=un8n4Xz9yXThF7EWOBFRrgSk/o9VXPxzUfeccAO2+YA=;
+  b=A1K+TFOmKRVUM96AxuUVd4h3fifqUoc5xeYFhTBA5F+eu+psGs+Z+nHv
+   KTqb2ir9HdMKJ8pZOw75N+KgLixp8pfAxpjXDGqcb6OSRjnLIVUvPhkdt
+   Z2obMioz5pNcPZ/icAu87MBHUTCZuU0jRVrJMapqDpKzSsLNjmy+H44nQ
+   OgRLhcOYgOVewXrILdyMssmxxF3ku+hwmS4ZXbepNjk3c+ae8kahRFg9c
+   3xNrHq3qDFSk5AvF5DhiizIhlqsJszoxtwFS+ho0WBH2gbNT2vobQp34W
+   gHcNUaqVj5ROf2WOsNByAgKvYwYkS8xtQiMPt8Qn7G1ZPcV8iQDpOOQuH
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625971"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625995"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415625971"
+   d="scan'208";a="415625995"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:46 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657783"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657794"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668657783"
+   d="scan'208";a="668657794"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:46 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:47 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -59,9 +59,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v3 22/24] x86/cpufeatures: Add feature bit for HRESET
-Date:   Mon,  6 Feb 2023 21:11:03 -0800
-Message-Id: <20230207051105.11575-23-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 24/24] x86/process: Reset hardware history in context switch
+Date:   Mon,  6 Feb 2023 21:11:05 -0800
+Message-Id: <20230207051105.11575-25-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
@@ -74,9 +74,9 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The HRESET instruction prevents the classification of the current task
-from influencing the classification of the next task when running serially
-on the same logical processor.
+Reset the classification history of the current task when switching to the
+next task. Hardware will start the classification of the next task from
+scratch.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -100,57 +100,139 @@ Changes since v2:
  * None
 
 Changes since v1:
- * None
----
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/include/asm/msr-index.h   | 4 +++-
- arch/x86/kernel/cpu/scattered.c    | 1 +
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ * Measurements of the cost of the HRESET instruction
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 8a6261a5dbbf..eb859a82b22a 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -309,6 +309,7 @@
- #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
- #define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
- #define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
-+#define X86_FEATURE_HRESET		(11*32+23) /* Hardware history reset instruction */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 0ea25cc9c621..dc96944d61a6 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -1109,6 +1109,9 @@
- #define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
- #define MSR_IA32_HW_FEEDBACK_CHAR	0x17d2
- 
-+/* Hardware History Reset  */
-+#define MSR_IA32_HW_HRESET_ENABLE	0x17da
+   Methodology:
+   I created a tight loop with interrupts and preemption disabled. I
+   recorded the value of the TSC counter before and after executing
+   HRESET or RDTSC. I repeated the measurement 100,000 times.
+   I performed the experiment using an Alder Lake S system. I set the
+   frequency of the CPUs at a fixed value.
+
+   The table below compares the cost of HRESET with RDTSC (expressed in
+   the elapsed TSC count). The cost of the two instructions is
+   comparable.
+
+                              PCore      ECore
+        Frequency (GHz)        5.0        3.8
+        HRESET (avg)          28.5       44.7
+        HRESET (stdev %)       3.6        2.3
+        RDTSC  (avg)          25.2       35.7
+        RDTSC  (stdev %)       3.9        2.6
+
+ * Used an ALTERNATIVE macro instead of static_cpu_has() to execute HRESET
+   when supported. (PeterZ)
+---
+ arch/x86/include/asm/hreset.h | 30 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/common.c  |  7 +++++++
+ arch/x86/kernel/process_32.c  |  3 +++
+ arch/x86/kernel/process_64.c  |  3 +++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 arch/x86/include/asm/hreset.h
+
+diff --git a/arch/x86/include/asm/hreset.h b/arch/x86/include/asm/hreset.h
+new file mode 100644
+index 000000000000..d68ca2fb8642
+--- /dev/null
++++ b/arch/x86/include/asm/hreset.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_HRESET_H
 +
- /* x2APIC locked status */
- #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
- #define LEGACY_XAPIC_DISABLED		BIT(0) /*
-@@ -1116,5 +1119,4 @@
- 						* disabling x2APIC will cause
- 						* a #GP
- 						*/
--
- #endif /* _ASM_X86_MSR_INDEX_H */
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index 0dad49a09b7a..cb8a0e7a4fdb 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -28,6 +28,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_EPB,		CPUID_ECX,  3, 0x00000006, 0 },
- 	{ X86_FEATURE_INTEL_PPIN,	CPUID_EBX,  0, 0x00000007, 1 },
- 	{ X86_FEATURE_RRSBA_CTRL,	CPUID_EDX,  2, 0x00000007, 2 },
-+	{ X86_FEATURE_HRESET,		CPUID_EAX, 22, 0x00000007, 1 },
- 	{ X86_FEATURE_CQM_LLC,		CPUID_EDX,  1, 0x0000000f, 0 },
- 	{ X86_FEATURE_CQM_OCCUP_LLC,	CPUID_EDX,  0, 0x0000000f, 1 },
- 	{ X86_FEATURE_CQM_MBM_TOTAL,	CPUID_EDX,  1, 0x0000000f, 1 },
++/**
++ * HRESET - History reset. Available since binutils v2.36.
++ *
++ * Request the processor to reset the history of task classification on the
++ * current logical processor. The history components to be
++ * reset are specified in %eax. Only bits specified in CPUID(0x20).EBX
++ * and enabled in the IA32_HRESET_ENABLE MSR can be selected.
++ *
++ * The assembly code looks like:
++ *
++ *	hreset %eax
++ *
++ * The corresponding machine code looks like:
++ *
++ *	F3 0F 3A F0 ModRM Imm
++ *
++ * The value of ModRM is 0xc0 to specify %eax register addressing.
++ * The ignored immediate operand is set to 0.
++ *
++ * The instruction is documented in the Intel SDM.
++ */
++
++#define __ASM_HRESET  ".byte 0xf3, 0xf, 0x3a, 0xf0, 0xc0, 0x0"
++
++void reset_hardware_history(void);
++
++#endif /* _ASM_X86_HRESET_H */
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index f3f936f7de5f..17e2068530b0 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -53,6 +53,7 @@
+ #include <asm/mce.h>
+ #include <asm/msr.h>
+ #include <asm/cacheinfo.h>
++#include <asm/hreset.h>
+ #include <asm/memtype.h>
+ #include <asm/microcode.h>
+ #include <asm/microcode_intel.h>
+@@ -414,6 +415,12 @@ static __always_inline void setup_umip(struct cpuinfo_x86 *c)
+ 
+ static u32 hardware_history_features __ro_after_init;
+ 
++void reset_hardware_history(void)
++{
++	asm_inline volatile (ALTERNATIVE("", __ASM_HRESET, X86_FEATURE_HRESET)
++			     : : "a" (hardware_history_features) : "memory");
++}
++
+ static __always_inline void setup_hreset(struct cpuinfo_x86 *c)
+ {
+ 	if (!cpu_feature_enabled(X86_FEATURE_HRESET))
+diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
+index 470c128759ea..397a6e6f4e61 100644
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -52,6 +52,7 @@
+ #include <asm/switch_to.h>
+ #include <asm/vm86.h>
+ #include <asm/resctrl.h>
++#include <asm/hreset.h>
+ #include <asm/proto.h>
+ 
+ #include "process.h"
+@@ -214,6 +215,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 	/* Load the Intel cache allocation PQR MSR. */
+ 	resctrl_sched_in();
+ 
++	reset_hardware_history();
++
+ 	return prev_p;
+ }
+ 
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 4e34b3b68ebd..6176044ecc16 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -53,6 +53,7 @@
+ #include <asm/xen/hypervisor.h>
+ #include <asm/vdso.h>
+ #include <asm/resctrl.h>
++#include <asm/hreset.h>
+ #include <asm/unistd.h>
+ #include <asm/fsgsbase.h>
+ #ifdef CONFIG_IA32_EMULATION
+@@ -658,6 +659,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 	/* Load the Intel cache allocation PQR MSR. */
+ 	resctrl_sched_in();
+ 
++	reset_hardware_history();
++
+ 	return prev_p;
+ }
+ 
 -- 
 2.25.1
 
