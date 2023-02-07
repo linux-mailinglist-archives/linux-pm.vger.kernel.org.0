@@ -2,136 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D01568DDB6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 17:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C7D68DE86
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 18:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjBGQOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 11:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S231466AbjBGRLP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 12:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbjBGQOV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 11:14:21 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0A865A3;
-        Tue,  7 Feb 2023 08:14:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675786459; x=1707322459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=piPvQsT8sg3M6OXkur43AQOlc9r+x7DRJBGS2pa/A0Q=;
-  b=TVkHyE0N2gjnTw98QxCrdU/4pvxWg4h9L5yY1QlAQvIJo7YQaWJtFi46
-   MdlIxi5YPEyOOEpCv3EX8km0pw7D+UCJ7G+h4mcX617XmOOL5cWN/X2aP
-   rG9/pmQa8OegBsM9nS0b6/rBltbxSolJ8OiWi58MOJoMXzY603cYn2OQy
-   wM9i9UDXCjeL6hPw/po2ibI6pbSk0CygLAS/yqdoQIDhAm0xYMVJHJ1jW
-   kcnxY/zfybEYEf9qTZ5OOkfy4znB7EWUKbAiVgYRMZ5i4kCFULmWpPI9V
-   kpCat1lYlQyMZwJFrzBGDMyLYVcvfiaPGoaWlpPT6U8V0QSDn6w5sGhah
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="309885589"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="309885589"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 08:14:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="699301774"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="699301774"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2023 08:14:10 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPQbh-0003gM-3A;
-        Tue, 07 Feb 2023 16:14:09 +0000
-Date:   Wed, 8 Feb 2023 00:14:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: Re: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to
- mediatek folder
-Message-ID: <202302080018.wNeWiKqz-lkp@intel.com>
-References: <20230207130958.608305-2-bchihi@baylibre.com>
+        with ESMTP id S229984AbjBGRLO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 12:11:14 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326033BDAA
+        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 09:11:12 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id jg8so4750478ejc.6
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 09:11:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbURvTbpReLpP08sYQLDK4S6s064CAuQTu6FOozsWJs=;
+        b=UA3hhxwD3NV+1RoRXhXI4l2FV+68YJvBziXETS3+W3duQdy+23b1JxzShlkO+DQhF1
+         MOUDdPYY/h7LLyvRZ9LEKLYE+XKH+covlirwNg/QerAdxUuNxp0t9M7GWIb6QQ0lO8DT
+         3t7G8rd3l77rXaaJ7wI1y4NWPj/ZXN2MavbTqdnIpsYYGxfnQ+oSgpOM2IuJ9STCGFOA
+         R7LqrpSuiKUhCcTgqVNcSN1YF4fRKU1Yt3ZxpS1YGK3qAdMM4+jNLcn0afmRYvVMr/yo
+         jrTPCRCbd0oe+GZD1Bw/f/bcJB2e1icjQZH+QTY2SgAkIlAMo/3b/4DThIIoTLfWqURk
+         yXRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qbURvTbpReLpP08sYQLDK4S6s064CAuQTu6FOozsWJs=;
+        b=XQmoWodl0BUoRwxj93VvyMZIVPNjL+zum8JHcNAKqDDpcEb4TAxCMfV65h/vnUQodP
+         YHtw5m5SORB91eCRRnWJBUUUJL2rvd+XfLdHW50TE1D0iTwyNq4bEfcKaJsrN3dUFhhn
+         NGLfXZgvBJKkMkLdgl9SdqhDkC9ZFwhOVqAoqRNMdeVGjgSr0nNj8vS/K5ELNRIP5ytd
+         keEtzI9o0Jnrh4Tv30tFx26KVZVVBsdFukoL8SD9XipnANA6L1zfcCGjMFpO+apJ68nG
+         EQFJTfrmP1zlzbQaVj2rypcl4vRlbjj/xHlKsDJOTA5p6SmQyZIxOgvcwQLKHQn8XstE
+         rFqA==
+X-Gm-Message-State: AO0yUKUJocbtko6DKlcv1NQlSKvY9/HjtEnBBSxs+92q7moR9e/zzqgU
+        PCwxaCWbs/M4/1SaRrPx9X7kfw==
+X-Google-Smtp-Source: AK7set8vKizSoQSkZgw64XH+10nDw9CT4gTzW5FC5214KenwCATaPoNZIpZ1T3uYixCv1KwtQpXxgQ==
+X-Received: by 2002:a17:906:71c3:b0:888:4f0e:bb72 with SMTP id i3-20020a17090671c300b008884f0ebb72mr3900759ejk.40.1675789870808;
+        Tue, 07 Feb 2023 09:11:10 -0800 (PST)
+Received: from sleipner.berto.se (p4fca2792.dip0.t-ipconnect.de. [79.202.39.146])
+        by smtp.googlemail.com with ESMTPSA id n23-20020a1709062bd700b007a4e02e32ffsm7132298ejg.60.2023.02.07.09.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 09:11:10 -0800 (PST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 0/2] drivers/thermal/rcar_gen3_thermal: Fix device initialization
+Date:   Tue,  7 Feb 2023 18:10:09 +0100
+Message-Id: <20230207171011.1596127-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207130958.608305-2-bchihi@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hello,
 
-Thank you for the patch! Perhaps something to improve:
+This small series fixes a window where incorrect values can be read from 
+the driver before it is fully initialized. The root cause is that the 
+thermal zone is register too early.
 
-[auto build test WARNING on a2c81dc59d41e92362ab7d41d0c15471ea50637d]
+Patch 1/2 prepares for the change while also fixing a theoretical issue 
+where one thermal node described in DT would describe interrupts and 
+another would not. Resulting in interrupt support being disabled for 
+both of them. I'm not aware of any case where this configuration would 
+be used, either the SoC supports interrupts, or it don't.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
-base:   a2c81dc59d41e92362ab7d41d0c15471ea50637d
-patch link:    https://lore.kernel.org/r/20230207130958.608305-2-bchihi%40baylibre.com
-patch subject: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to mediatek folder
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230208/202302080018.wNeWiKqz-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0eb89997925c0d7b47bbeee93016146fc660b259
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
-        git checkout 0eb89997925c0d7b47bbeee93016146fc660b259
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/thermal/mediatek/
+While patch 2/2 fixes the real issue by fully initializing the device 
+before registering the zone.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Niklas Söderlund (2):
+  drivers/thermal/rcar_gen3_thermal: Create device local ops struct
+  drivers/thermal/rcar_gen3_thermal: Fix device initialization
 
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/mediatek/auxadc_thermal.c:562: warning: expecting prototype for raw_to_mcelsius(). Prototype was for raw_to_mcelsius_v1() instead
-
-
-vim +562 drivers/thermal/mediatek/auxadc_thermal.c
-
-a4ffe6b52d27f4 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  551  
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  552  /**
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  553   * raw_to_mcelsius - convert a raw ADC value to mcelsius
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  554   * @mt:	The thermal controller
-3772bb422072d4 drivers/thermal/mtk_thermal.c Amit Kucheria 2019-11-20  555   * @sensno:	sensor number
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  556   * @raw:	raw ADC value
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  557   *
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  558   * This converts the raw ADC value to mcelsius using the SoC specific
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  559   * calibration constants
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  560   */
-54bf1e5a629dfb drivers/thermal/mtk_thermal.c Henry Yen     2020-04-30  561  static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30 @562  {
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  563  	s32 tmp;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  564  
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  565  	raw &= 0xfff;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  566  
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  567  	tmp = 203450520 << 3;
-f84514766985d3 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  568  	tmp /= mt->conf->cali_val + mt->o_slope;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  569  	tmp /= 10000 + mt->adc_ge;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  570  	tmp *= raw - mt->vts[sensno] - 3350;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  571  	tmp >>= 3;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  572  
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  573  	return mt->degc_cali * 500 - tmp;
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  574  }
-a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  575  
+ drivers/thermal/rcar_gen3_thermal.c | 34 ++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 15 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
