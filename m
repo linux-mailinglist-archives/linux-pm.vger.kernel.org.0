@@ -2,63 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FF468CF2B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 06:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF0968CF8B
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 07:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjBGFyz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 00:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S230150AbjBGGio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 01:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBGFyy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 00:54:54 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCF4DBF6
-        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 21:54:53 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id f15-20020a17090ac28f00b00230a32f0c9eso6223378pjt.4
-        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 21:54:53 -0800 (PST)
+        with ESMTP id S230048AbjBGGin (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 01:38:43 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD14222E7
+        for <linux-pm@vger.kernel.org>; Mon,  6 Feb 2023 22:38:42 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id be8so14663325plb.7
+        for <linux-pm@vger.kernel.org>; Mon, 06 Feb 2023 22:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=l09oKm/qyymSUulZB5ZKboBcXuXF8JnLrqDoDR8Ba/c=;
-        b=imla90iv6FmULbPznCWK2NW/tijsSgyyOupxJtoWBqQ+uqU6BChkKkdHZF2tEY41MY
-         d93un66Ttv24cqiRRPRaHxHuRwXZi9Jf2n5COwwxZ7AAI4vCCC7p/92J/1e/5k8S4zN7
-         YK8A3yWUTwoXS9oldlKSwalRoULa2Z8vVLHNkScTVlJQs6TThVVJSnqQ//MBQDMGm1uB
-         zl9ettnzOYPWaIwwgGuVcBUJ/MCjFQgjvDBXjwrq5jgKssTChP3XAYqkT4xsmKCNa9jb
-         lKEtDLUK10bjPWR/tiN0ulCKCELJ14z0ejdRCe9pNSqc0T0BoG+pwDLA/47F9zfDXiYN
-         89KA==
+        bh=2mu62vG2NllEFCNGEfU/iqgVybeVzb5yzmVTqLaOf5Y=;
+        b=Wdo8++bm/zlvtlCDEXv1yCsX+9wK1r02oRkKUL9t44rc/LJBE+xEU/P4TrhTGsPGi0
+         dtozDodjWK0F3CRaU6/0WFkmUlpYJ2P3GNpoLKOs1drlVWc1upTdB46K74S2gOmmC0k4
+         HfeVIhrqL/sOGAeO+cvQk61qj4mG4IPqu0P7Ht/UHjv9jHETOuQsKwq0m6yp2HC2fatS
+         zenynPixdveVv6rbZtMxSw7YS4pbGILln/JtGSxGxmfWj7I8ZxlryJoOY9wm76zOz53Q
+         +vO5xHmQNkt5dAeNRdKmNkoEC4DKUarehN6IQHBMZfBCTq5Q9NpMxz+rS1Z6QbSt9XRv
+         bYNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l09oKm/qyymSUulZB5ZKboBcXuXF8JnLrqDoDR8Ba/c=;
-        b=2CEXPtK4rW/UTqspZz9OSVT3WNFqEyiJJbSX3UVJBSUPm5T4KZ1BtOOeTiG3t3SM7e
-         HWp2iufJD3ABMpNmtMAdCC5MExzYgxM6cdPEliTtSrEL5esJSUtWcFKuXjS7m38Ux2HM
-         E1Zs+oZR2xHxVZngvd8Uwy6bpXLFFHwdS+GfwxFSGuHZjUvk7DBZ4twIDUbyFTTuIsH4
-         oVW7PrD3vdV7rpPSanXvTNlrQhEVfwTuEPnRyOa86IW+N92Jc6hD8fNU8a5wJXhFKDuI
-         TCcg6cMdt14SX5q7/i1PnjHukB5rJBJ0SMrdZSh0T3UVd2bEjw6VgSWP3MLFb42tZFJZ
-         QIhQ==
-X-Gm-Message-State: AO0yUKXVAcKBpEut8nYYu3UfomLPjHiIO8fU6xqFHSp58s+/8GxvqaFb
-        fsFD0RahbMqU8xC/Yhfjv2ZuMA==
-X-Google-Smtp-Source: AK7set/OBZlUsz++lEEk4vAQ4kJnowvAmR6AjmMIuqh9f3v6URSKv1FE3xh6EEtNC+ugp6prdpYapg==
-X-Received: by 2002:a17:903:138b:b0:196:76ca:fbce with SMTP id jx11-20020a170903138b00b0019676cafbcemr1257423plb.53.1675749292983;
-        Mon, 06 Feb 2023 21:54:52 -0800 (PST)
+        bh=2mu62vG2NllEFCNGEfU/iqgVybeVzb5yzmVTqLaOf5Y=;
+        b=F474n8Kx/AuVUwt+cMvJfyTNo+O+3XSr+3bjbJftpcmAjQA0KgbeHFgKhUA+sV9ISO
+         gI7KYQyNy9QQcA6sjfoeUVL8CoYgrLKzpqM4/XY1FKViuGShGKsRZlPJu6J1UigZSWwb
+         61Ljlk8UtxgA8hMxL/fMffXrHENn2eGAg2CWqiPivf1I7Lv8o/ORZUxoXMVzHVeGHEqn
+         RjZh6PMpgvLiFPVO/HkQ3pdaG/KBBd7iJ/QC4i8AdpQ5Y7WklUiEsipG9Rhh0ulzb8r2
+         gbMlPdKFum8/kaM1Q6OKmJ/M/ML82tcuqOu8v6KAsNPvy5o5nVyoI+bFgP6Hso+mxBHK
+         4o2Q==
+X-Gm-Message-State: AO0yUKXAh0ITI83v07/9pDzLifBpiSnnrXsCBX0A1/2wbPLiMo89OTt5
+        jI3AcfJXxW88p9CTQiZpqSBcBQ==
+X-Google-Smtp-Source: AK7set9c8qjUq+e0QFijC+DSXCIyUE9nKq5K4ct63AeqhtRzqVF5As/EJwTgMkmWlc/3Mc9ObIaCvA==
+X-Received: by 2002:a17:902:e411:b0:196:77c5:8e80 with SMTP id m17-20020a170902e41100b0019677c58e80mr1356025ple.63.1675751921890;
+        Mon, 06 Feb 2023 22:38:41 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i17-20020a170902cf1100b00198a1d5a7cdsm7935084plg.78.2023.02.06.21.54.52
+        by smtp.gmail.com with ESMTPSA id i13-20020a170902eb4d00b00186b7443082sm8006172pli.195.2023.02.06.22.38.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 21:54:52 -0800 (PST)
-Message-ID: <63e1e7ac.170a0220.b9de0.d6a4@mx.google.com>
-Date:   Mon, 06 Feb 2023 21:54:52 -0800 (PST)
+        Mon, 06 Feb 2023 22:38:41 -0800 (PST)
+Message-ID: <63e1f1f1.170a0220.3fca1.d56a@mx.google.com>
+Date:   Mon, 06 Feb 2023 22:38:41 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: testing
 X-Kernelci-Tree: pm
 X-Kernelci-Kernel: v6.2-rc7-179-g929367dbdffe
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.2-rc7-179-g929367dbdffe)
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 46 runs,
+ 1 regressions (v6.2-rc7-179-g929367dbdffe)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -71,109 +71,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc7-179-g9=
-29367dbdffe)
+pm/testing baseline: 46 runs, 1 regressions (v6.2-rc7-179-g929367dbdffe)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-2-rc7-179-g929367dbdffe/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: v6.2-rc7-179-g929367dbdffe
-Git Commit: 929367dbdffe4babaaa4710344c3988dd9e90e51
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
+platform   | arch | lab             | compiler | defconfig          | regre=
+ssions
+-----------+------+-----------------+----------+--------------------+------=
+------
+imx53-qsrb | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig | 1    =
+      =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.2-rc7=
+-179-g929367dbdffe/plan/baseline/
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.2-rc7-179-g929367dbdffe
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      929367dbdffe4babaaa4710344c3988dd9e90e51 =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
+Test Regressions
+---------------- =
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+platform   | arch | lab             | compiler | defconfig          | regre=
+ssions
+-----------+------+-----------------+----------+--------------------+------=
+------
+imx53-qsrb | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig | 1    =
+      =
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+  Details:     https://kernelci.org/test/plan/id/63e1e68814f9a84ff48c8631
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc7-179-g92936=
+7dbdffe/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc7-179-g92936=
+7dbdffe/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
 
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
 
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e1e68814f9a84ff48c863a
+        failing since 10 days (last pass: v6.1-rc8-156-g0a9e32afe717, first=
+ fail: acpi-6.2-rc6-146-g628c61874ffd)
 
----
-For more info write to <info@kernelci.org>
+    2023-02-07T05:49:39.378112  + set +x
+    2023-02-07T05:49:39.378294  [   12.907167] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+899679_1.5.2.3.1>
+    2023-02-07T05:49:39.486524  / # #
+    2023-02-07T05:49:39.588155  export SHELL=3D/bin/sh
+    2023-02-07T05:49:39.588522  #
+    2023-02-07T05:49:39.689704  / # export SHELL=3D/bin/sh. /lava-899679/en=
+vironment
+    2023-02-07T05:49:39.690528  =
+
+    2023-02-07T05:49:39.791976  / # . /lava-899679/environment/lava-899679/=
+bin/lava-test-runner /lava-899679/1
+    2023-02-07T05:49:39.792710  =
+
+    2023-02-07T05:49:39.795996  / # /lava-899679/bin/lava-test-runner /lava=
+-899679/1 =
+
+    ... (12 line(s) more)  =
+
+ =20
