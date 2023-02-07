@@ -2,104 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5041968E18B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 20:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4E968E193
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 20:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjBGTyg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 14:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S232147AbjBGTzg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 14:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbjBGTy3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 14:54:29 -0500
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542E329E3A;
-        Tue,  7 Feb 2023 11:54:23 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id dr8so45454515ejc.12;
-        Tue, 07 Feb 2023 11:54:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R8L+fDqx/TATGXdlDVn7mRHD70aOLHjjh1VpJFWElUY=;
-        b=jPrPwL/UYa5KvOF27gBPGfTyl57yeOswaFseD1yVSkEKS5YtPp7yuorqh0NXOgK2cv
-         nSRU79ddTx3F1KMkT1k28R9u2hBGYY68/R5GF2elzmyv5MAzS96jLPm1TfNufg0jj0Zx
-         GBVz0hgK9n5PnrAlmY3IdperXquaC8yrpbMTbVE8uW/+e/cfj+LhKi+A+/+nw9MzAY6z
-         dAyArs3gkgmtuc6U0UnO0auP9qyxXmbApumdUhA+dGLDrqbjgSikPsS8CkvDk535Bo89
-         aGq7lX0C0j0nsbvD/rWyhKojz36l3R6eqiNZf+bf4MA0ea2G9izAdEhVU+nj9mfYdBZi
-         Ad4w==
-X-Gm-Message-State: AO0yUKVc8fnlvS8J+iKaRj+qPU+iQBhczOmJeYnniVV3zmVuAcjSbhia
-        djygNOP0RJdbVj9zIBC0KL8SU3lKkO8SkHmkqyMD1B1t
-X-Google-Smtp-Source: AK7set+aVzY12H258It3Xpxffy0h28oufgUAgJSwUd57c+FoWyGTsQsfpCo1xNqWlgKouZn+6j0utz/QP0OCJpfykcQ=
-X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr1230384ejb.274.1675799661789; Tue, 07
- Feb 2023 11:54:21 -0800 (PST)
+        with ESMTP id S232154AbjBGTzb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 14:55:31 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06A33E634;
+        Tue,  7 Feb 2023 11:55:30 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1675799728;
+        bh=phkTdwEsx6EtyXDvxa4tKP6b/qMwbSxmjLtikUgTCNA=;
+        h=From:Date:Subject:To:Cc:From;
+        b=J8k8+Sy9q+8KBef5bWvFeXWZBjVNBkpeO/w131sD5cltruNxpq0F9SKUG/Z1oOCnI
+         XC2lAysmY0ARnLnXdhF8amMDwQP+455q5vWoU9fSxCWJmPSBqEsdmBxoVVcK9vEJAu
+         UZHWUHzMs73+575qA/upf36ggQ/PvJr5z5V3eWKI=
+Date:   Tue, 07 Feb 2023 19:55:19 +0000
+Subject: [PATCH] cpuidle: sysfs: make kobj_type structures constant
 MIME-Version: 1.0
-References: <20230204042902.2555347-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230204042902.2555347-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Feb 2023 20:54:10 +0100
-Message-ID: <CAJZ5v0hPV+hhUqC3i2CWU1NT35tBrTAA20mFnhAudS8xCi8MtA@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: intel_powerclamp: Return last requested state
- as cur_state
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230207-kobj_type-cpuidle-v1-1-2ef73398283f@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAKas4mMC/x2NQQqDMBAAvyJ77kKMrWn7lVIkidu6bYghUbGIf
+ +/icQaG2aBQZipwrzbItHDhMQrUpwr8YOObkHth0Eo3SiuD39F9uumXCH2auQ+E16ZW9tyay80
+ 4kM7ZQuiyjX6QMs4hiEyZXrweo8dz3/+0Yc1AeAAAAA==
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675799722; l=1776;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=phkTdwEsx6EtyXDvxa4tKP6b/qMwbSxmjLtikUgTCNA=;
+ b=fmfxqvzsPCrT2ha9FXCthzbYvjOBYLhjQV/qVztPdXluRtSMIcIUddLkmGvesmhwV4dBwlwY9
+ bueFZQuBP9iCHEijexSzFBPSBcToG+6R3qEPJW5oF1hly8Jz9ILTrR5
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 4, 2023 at 5:29 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> When the user is reading cur_state from the thermal cooling device for
-> Intel powerclamp device:
-> - It returns the idle ratio from Package C-state counters when
-> there is active idle injection session.
-> - -1, when there is no active idle injection session.
->
-> This information is not very useful as the package C-state counters vary
-> a lot from read to read. Instead just return the last requested cur_state.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> Fixed setting of *state
->
->  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index 5f54c88b1977..0282503ecaaf 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -539,17 +539,7 @@ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
->                                  unsigned long *state)
->  {
->         mutex_lock(&powerclamp_lock);
-> -
-> -       if (powerclamp_data.clamping) {
-> -               if (poll_pkg_cstate_enable)
-> -                       *state = pkg_cstate_ratio_cur;
-> -               else
-> -                       *state = powerclamp_data.target_ratio;
-> -       } else {
-> -               /* to save power, do not poll idle ratio while not clamping */
-> -               *state = -1; /* indicates invalid state */
-> -       }
-> -
-> +       *state = powerclamp_data.target_ratio;
->         mutex_unlock(&powerclamp_lock);
->
->         return 0;
-> --
+Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+the driver core allows the usage of const struct kobj_type.
 
-Applied as 6.3 material, thanks!
+Take advantage of this to constify the structure definitions to prevent
+modification at runtime.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/cpuidle/sysfs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+index 2b496a53cbca..48948b171749 100644
+--- a/drivers/cpuidle/sysfs.c
++++ b/drivers/cpuidle/sysfs.c
+@@ -200,7 +200,7 @@ static void cpuidle_sysfs_release(struct kobject *kobj)
+ 	complete(&kdev->kobj_unregister);
+ }
+ 
+-static struct kobj_type ktype_cpuidle = {
++static const struct kobj_type ktype_cpuidle = {
+ 	.sysfs_ops = &cpuidle_sysfs_ops,
+ 	.release = cpuidle_sysfs_release,
+ };
+@@ -447,7 +447,7 @@ static void cpuidle_state_sysfs_release(struct kobject *kobj)
+ 	complete(&state_obj->kobj_unregister);
+ }
+ 
+-static struct kobj_type ktype_state_cpuidle = {
++static const struct kobj_type ktype_state_cpuidle = {
+ 	.sysfs_ops = &cpuidle_state_sysfs_ops,
+ 	.default_groups = cpuidle_state_default_groups,
+ 	.release = cpuidle_state_sysfs_release,
+@@ -594,7 +594,7 @@ static struct attribute *cpuidle_driver_default_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(cpuidle_driver_default);
+ 
+-static struct kobj_type ktype_driver_cpuidle = {
++static const struct kobj_type ktype_driver_cpuidle = {
+ 	.sysfs_ops = &cpuidle_driver_sysfs_ops,
+ 	.default_groups = cpuidle_driver_default_groups,
+ 	.release = cpuidle_driver_sysfs_release,
+
+---
+base-commit: 513c1a3d3f1982fb850c910937099525b0d35e24
+change-id: 20230207-kobj_type-cpuidle-8310a467597b
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
