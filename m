@@ -2,145 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978E768E0AB
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 19:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208CA68E173
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 20:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBGS6c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 13:58:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S229640AbjBGTsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 14:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBGS6b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 13:58:31 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3890B1F48F;
-        Tue,  7 Feb 2023 10:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675796310; x=1707332310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dSXSHlEWikcv5Z/BCN//ZPxm4jYckMqyZIAa1x0kq5A=;
-  b=lqgHbWBY8wqNEs5t0bEJDlpE5EyZy/+5zoR2ZaIWzK/v8NoARpp+ta18
-   qOz4lI9+tJjP0UieL6sFvugi6bnslO3QAeNA22c8NWuWcui54hiSz3pFo
-   BZwlu0+7FdK9cuoDw4TwWQP956JtHAL/EAkLefAkGlVuda2GMw2X7Ltt/
-   MQiWXQ+ZL9mVtElJAZkin7JT5bpx3rU77oyjAQzTH6r3QVpCgnfGGyC1U
-   x0WS2e4ifDT8SUUo0htpFLVPFd/HwOjCYlQCCU8LQbuRRuDlOAgxprgGj
-   qt+AJ0CbNRdJfAKJwk2nocHrAvGBDGswz+sVqeS4qzM3qdav1aIUAR4iQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="309938274"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="309938274"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 10:58:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="730562558"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="730562558"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2023 10:58:29 -0800
-Date:   Tue, 7 Feb 2023 11:08:08 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Neri, Ricardo" <ricardo.neri@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
-Message-ID: <20230207190808.GA14018@ranerica-svr.sc.intel.com>
-References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
- <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
- <60514763753f572f854f1bbf287c3c16fbbc12c3.camel@linux.intel.com>
- <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
- <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
- <20230207134237.GA13076@ranerica-svr.sc.intel.com>
- <1395f577409bb7928dc1d9dc954e1af039253111.camel@linux.intel.com>
+        with ESMTP id S231301AbjBGTsc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 14:48:32 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB8C12581;
+        Tue,  7 Feb 2023 11:48:24 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id bx22so13197446pjb.3;
+        Tue, 07 Feb 2023 11:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LiWVu1jgFnS1+P8PNhmhOYa+Kepk/2Rz7b7N9cflsAA=;
+        b=ZYf0UmPAx9R+uq1Zz9jXf1Rm5fhptrN1VmgDJrPBlkbVz4ov63OJ8KC2cftVZ2MU2I
+         y34Q5nwMxEkq0GGgkjFEt9mKVSwAZSFe+6oTRzPS7KC3aImEOAAAUV+TTB6SM4dJSCnD
+         LhPNJr/YtDH7uhNRhDpt+WL7S9oZ1uduBF5cYCqGznaiYFqCzAm7VU9lNaNGkc1RRMdZ
+         OW75NfLDzx+r5Llzz4HxwQObaOKrjb41+NemtsfIRqT+c/4ZJJBp3n4vo84tC4nAG2BQ
+         MyOg/ab71HJPyNAFzUF9cjZsgJ+6zTabX1dG2ZA/VsFSxgLaJu8eQ0zoaCQdVJeCd3lr
+         PS1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LiWVu1jgFnS1+P8PNhmhOYa+Kepk/2Rz7b7N9cflsAA=;
+        b=o8bEbaAxzF5uu9QUNj7cw7+Y4r4xN/Hv0s2/Ib+LQuJdCCSESW5Ddrue0m/K0L8pxC
+         9UGFBoBluOM04mOVBzrHl7h8lElcZQFrpcJkhn6jb4Es0YliTagaLCd4eNMMDzA0A6Qq
+         EhCH4/tqplQ5zGJu5d8ciLxzaOPDsZZdBVJmUy04pPlMkI6ySOwhJcDcXFHnNPPk4oMz
+         QFWxcj/21tiCUNJHFL1b8iZYF10LHyITBWLboy8bSru6ym8Sog2Fu0bU+8fkZZj1L9am
+         gKrfrCFSIjJNGmpwc6oOJYVgwNQ32be3j7KX2m3ZTj1KGSkzBMrUdmzYncxuEo5+iA49
+         iQqQ==
+X-Gm-Message-State: AO0yUKXKb8FCPSEJ1WqEw6+B8buYp6R0btr1s5SFVpnVwWaW6hGwNtk9
+        8osQATQIQHesstFZ1DBb2iE=
+X-Google-Smtp-Source: AK7set+NvM8i3lT33CXtGrDWJAwfckpQzCOBvgqnvLW0qeIC5ORnJqLpqvc4+Sdb01dWUyPk2Yi6fQ==
+X-Received: by 2002:a17:90b:4b4a:b0:22c:9782:e718 with SMTP id mi10-20020a17090b4b4a00b0022c9782e718mr5619830pjb.0.1675799304047;
+        Tue, 07 Feb 2023 11:48:24 -0800 (PST)
+Received: from kazuki-mac ([2400:4051:ea3:5910::19a])
+        by smtp.gmail.com with ESMTPSA id z21-20020a17090a8b9500b00226156cf039sm11897519pjn.44.2023.02.07.11.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 11:48:23 -0800 (PST)
+From:   Kazuki <kazukih0205@gmail.com>
+X-Google-Original-From: Kazuki <kazuki@kazuki-mac>
+Date:   Wed, 8 Feb 2023 04:48:18 +0900
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: s2idle breaks on machines without cpuidle support
+Message-ID: <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1395f577409bb7928dc1d9dc954e1af039253111.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230206101239.dret3fv65cnzpken@bogus>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 05:51:59AM -0800, srinivas pandruvada wrote:
-> On Tue, 2023-02-07 at 05:42 -0800, Ricardo Neri wrote:
-> > On Mon, Feb 06, 2023 at 02:02:28AM -0800, srinivas pandruvada wrote:
-> > > On Mon, 2023-02-06 at 08:05 +0000, Zhang, Rui wrote:
-> > > > On Sun, 2023-02-05 at 18:45 -0800, srinivas pandruvada wrote:
-> > > > > Hi Rui,
-> > > > > 
-> > > > > On Sun, 2023-02-05 at 15:57 +0000, Zhang, Rui wrote:
-> > > > > > Hi, Srinivas,
-> > > > > > 
-> > > > > > First of all, the previous build error is gone.
-> > > > > > 
-> > > > > > Second, I found something strange, which may be related with
-> > > > > > the
-> > > > > > scheduler asym-packing, so CC Ricardo.
-> > > > > > 
-> > > > > I thought you disable ITMT before idle injection and reenebale
-> > > > > after
-> > > > > removal.
-> > > > 
-> > > > No.
-> > > > 
-> > > > I can reproduce this by playing with raw intel_powerclamp sysfs
-> > > > knobs
-> > > > and ITMT enabled.
-> > > > 
-> > > 
-> > > This issue is happening even if ITMT disabled. If the module mask
-> > > is
-> > > composed of P-cores it works or even on servers as expected.
-> > > Also if you offline all P-cores then select mask among E-cores, it
-> > > is
-> > > working. Somehow P-core influences E-cores.
-> > > 
-> > > Since this patch is module mask related, that is functioning
-> > > correctly.
-> > > We have to debug this interaction with P and E cores separately.
+On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+> Hi Kazaki,
+> 
+> On Sun, Feb 05, 2023 at 12:27:47AM +0900, Kazuki wrote:
 > > 
-> > Currently, when doing asym_packing, ECores will only pull tasks from
-> > a
-> > PCore only if both SMT siblings are busy. It will only pull from the
-> > lower-priority sibling. These patches [1] let ECores pull from either
-> > sibling, if both are busy.
+> > Hi everyone,
 > > 
-> > I presume that by injecting idle, the scheduler thinks that the CPU
-> > is
-> > idle (i.e., idle_cpu() returns true) and it will not do asym_packing
-> > from
-> > lower-priority CPUs.
+> > s2idle is blocked on machines without proper cpuidle support here
+> > in kernel/sched/idle.c:
 > > 
-> > However, in your experiment you have 16 threads. If a Pcore is
-> > overloaded,
-> > an ECore should be able to help.
-> This issue happens with or without ITMT and also without any idle
-> injection active.
+> > > if (cpuidle_not_available(drv, dev)) {
+> > > 	tick_nohz_idle_stop_tick();
+> > 
+> > > 	default_idle_call();
+> > > 	goto exit_idle;
+> > > }
+> > 
+> > > /*
+> > >  * Suspend-to-idle ("s2idle") is a system state in which all user space
+> > >  * has been frozen, all I/O devices have been suspended and the only
+> > 
+> > However, there are 2 problems with this approach:
+> > 
+> > 1. The suspend framework does not expect this, and continues to suspend the
+> > machine, which causes machines without proper cpuidle support to break when
+> > suspending
+> 
+> What do you mean by break ? More details on the observation would be helpful.
+For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+these chain of commands don't get called.
 
-I was not able to reproduce this issue on my ADL-S system with ITMT. The
-described bug is exactly what and old patchset of mine was supposed to
-fix [2]. Maybe the CPU priorities in the failing system are such that it
-prevents asym_packing from kicking in.
+call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
 
-I was able to reproduce the issue without ITMT.
+Which in turn causes programs like systemd to crash since it doesn't
+expect this.
+> 
+> > 2. Suspend actually works on ARM64 machines even without proper
+> > cpuidle (PSCI cpuidle) since they support wfi, so the assumption here is wrong
+> > on such machines
+> >
+> 
+> Sorry I am bit confused here. Your point (2) contradicts the $subject.
+drivers/cpuidle/cpuidle.c:
 
-I had found that the scheduler cannot handle load balance between SMT and
-non-SMT cores correctly. My patchset [1] includes fixes for this case. I
-applied it on top of Rafael's linux-next branch and it fixed the issue for
-me in the non-ITMT case. Perhaps patches 5 and 6 are sufficient, but I
-applied the whole series.
+bool cpuidle_not_available(struct cpuidle_driver *drv,
+			   struct cpuidle_device *dev)
+{
+	return off || !initialized || !drv || !dev || !dev->enabled;
+}
 
-Thanks and BR,
-Ricardo
-
-[1]. https://lore.kernel.org/lkml/20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com/
-[2]. https://lore.kernel.org/all/20210911011819.12184-7-ricardo.neri-calderon@linux.intel.com/
+The cpuidle framework reports ARM64 devices without PSCI cpuidle as
+"cpuidle not available" even when they support wfi, which causes suspend
+to fail, which shouldn't be happening since they do support idling.
+> 
+> > I'm not exactly sure how to figure this out, and my attempts have all led to an
+> > unbootable kernel, so I've cc'ed the relevant people and hopefully we can find a
+> > solution to this problem.
+> >
+> 
+> Again, since s2idle is userspace driven, I don't understand what do you
+> mean by unbootable kernel in the context of s2idle.
+Sorry, I meant "attempts to fix this bug have all led to an unbootable
+kernel."
+> 
+> -- 
+> Regards,
+> Sudeep
+Thanks,
+Kazuki
