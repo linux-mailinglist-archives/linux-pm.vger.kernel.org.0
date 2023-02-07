@@ -2,373 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2774F68DF0A
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 18:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F029468DF61
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 18:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjBGRfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 12:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S232484AbjBGRvo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 12:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjBGRfj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 12:35:39 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39931EBFC;
-        Tue,  7 Feb 2023 09:35:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675791338; x=1707327338;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CBDnXYMpefoM/KDHRnX5+6Pu5oD1c6FLkpV+Imh/0ZI=;
-  b=ePA3eSDEpmB5VWKpA5eNV99qG0vSgdX9JzwGu+zoaw7hUXaUmpA1d7pR
-   YyIzHAnQI9FXbuS+BCDD9wiOTcRP8daGSjBf5Z39giFeofAC8VubZuBGW
-   gv/9kgNp3T596VdzO3G/0/F2sh7ZMnWJZ4a+QrutVABBcS/ilw809ZKPC
-   XVszfWet6HbUKvy5T2CBpE3XfVy271UJ4syxi2IWAvf0GGbnBTtZi/VDr
-   KESyFL0MlW+hQRlO0mpXO2JT5EhH0fan9W7jD9BQg+FjhOeajgkTQIqWp
-   hih63AOfaSQGNBK1NuBs9gN+YkGZe4VeO4q4Hz82rc5dOXRskIuPDUVRH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328220331"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="328220331"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 09:35:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809606228"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="809606228"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2023 09:35:35 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [UPDATE][PATCH v3 2/2] thermal/drivers/intel_powerclamp: Add two module parameters
-Date:   Tue,  7 Feb 2023 09:35:34 -0800
-Message-Id: <20230207173534.4190275-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S232267AbjBGRvc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 12:51:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C18573EC48;
+        Tue,  7 Feb 2023 09:51:16 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6F651762;
+        Tue,  7 Feb 2023 09:51:58 -0800 (PST)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDD593FA32;
+        Tue,  7 Feb 2023 09:51:11 -0800 (PST)
+Message-ID: <7462738f-e837-cd99-f441-8e7c29d250cd@arm.com>
+Date:   Tue, 7 Feb 2023 17:50:58 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+Content-Language: en-GB
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <865ycg1kv2.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In some use cases, it is desirable to only inject idle on certain set
-of CPUs. For example on Alder Lake systems, it is possible that we force
-idle only on P-Cores for thermal reasons. Also the idle percent can be
-more than 50% if we only choose partial set of CPUs in the system.
+Hi Marc,
 
-Introduce 2 new module parameters for this purpose. They can be only
-changed when the cooling device is inactive.
+On 05/02/2023 10:12, Marc Zyngier wrote:
+> On Fri, 03 Feb 2023 13:50:40 +0000,
+> James Morse <james.morse@arm.com> wrote:
+>>
+>> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>
+>> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+>> request to handle all hypercalls that aren't handled by KVM. With the
+>> help of another capability, this will allow userspace to handle PSCI
+>> calls.
 
-cpumask (Read/Write): A bit mask of CPUs to inject idle. The format of
-this bitmask is same as used in other subsystems like in
-/proc/irq/*/smp_affinity. The mask is comma separated 32 bit groups.
-Each CPU is one bit. For example for 256 CPU system the full mask is:
-ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-The rightmost mask is for CPU 0-32.
+> On top of Oliver's ask not to make this a blanket "steal everything",
+> but instead to have an actual request for ranges of forwarded
+> hypercalls:
+> 
+>> Notes on this implementation:
+>>
+>> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+>>   generalizes the idea to all hypercalls, since that was suggested on
+>>   the list [2, 3].
+>>
+>> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+>>   kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+>>   this, because:
+>>   - Most user handlers will need to write results back into the
+>>     registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+>>     go all the way and read them back on return to kernel.
+>>   - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+>>     handling the call.
+>>   - SMCCC uses x0-x16 for parameters.
+>>   x0 does contain the SMCCC function ID and may be useful for fast
+>>   dispatch, we could keep that plus the immediate number.
+>>
+>> * Add a flag in the kvm_run.hypercall telling whether this is HVC or
+>>   SMC?  Can be added later in those bottom longmode and pad fields.
 
-max_idle (Read/Write): Maximum injected idle time to the total CPU time
-ratio in percent range from 1 to 100. Even if the cooling device max_state
-is always 100 (100%), this parameter allows to add a max idle percent
-limit. The default is 50, to match the current implementation of powerclamp
-driver. Also doesn't allow value more than 75, if the cpumask includes
-every CPU present in the system.
+> We definitely need this. A nested hypervisor can (and does) use SMCs
+> as the conduit.
 
-Also when the cpumask doesn't include every CPU, there is no use of
-compensation using package C-state idle counters. Hence don't start
-package C-state polling thread even for a single package or a single die
-system in this case.
+Christoffer's comments last time round on this was that EL2 guests get SMC with this,
+and EL1 guests get HVC. The VMM could never get both...
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v3 update:
-change leftmost to rightmost in commit description
 
-v3:
-One word document change from leftmost to rightmost
+> The question is whether they represent two distinct
+> namespaces or not. I *think* we can unify them, but someone should
+> check and maybe get clarification from the owners of the SMCCC spec.
 
-v2:
-Addressed comments from v5 series from Rafael
-Build issue reported by Rui
+i.e. the VMM requests 0xC400_0000:0xC400_001F regardless of SMC/HVC?
 
- .../admin-guide/thermal/intel_powerclamp.rst  |  22 +++
- drivers/thermal/intel/intel_powerclamp.c      | 177 +++++++++++++++---
- 2 files changed, 178 insertions(+), 21 deletions(-)
+I don't yet see how a VMM could get HVC out of a virtual-EL2 guest....
 
-diff --git a/Documentation/admin-guide/thermal/intel_powerclamp.rst b/Documentation/admin-guide/thermal/intel_powerclamp.rst
-index 3f6dfb0b3ea6..2d9d2d739f02 100644
---- a/Documentation/admin-guide/thermal/intel_powerclamp.rst
-+++ b/Documentation/admin-guide/thermal/intel_powerclamp.rst
-@@ -26,6 +26,8 @@ By:
- 	    - Generic Thermal Layer (sysfs)
- 	    - Kernel APIs (TBD)
- 
-+	(*) Module Parameters
-+
- INTRODUCTION
- ============
- 
-@@ -318,3 +320,23 @@ device, a PID based userspace thermal controller can manage to
- control CPU temperature effectively, when no other thermal influence
- is added. For example, a UltraBook user can compile the kernel under
- certain temperature (below most active trip points).
-+
-+Module Parameters
-+=================
-+
-+``cpumask`` (RW)
-+	A bit mask of CPUs to inject idle. The format of the bitmask is same as
-+	used in other subsystems like in /proc/irq/*/smp_affinity. The mask is
-+	comma separated 32 bit groups. Each CPU is one bit. For example for a 256
-+	CPU system the full mask is:
-+	ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-+
-+	The rightmost mask is for CPU 0-32.
-+
-+``max_idle`` (RW)
-+	Maximum injected idle time to the total CPU time ratio in percent range
-+	from 1 to 100. Even if the cooling device max_state is always 100 (100%),
-+	this parameter allows to add a max idle percent limit. The default is 50,
-+	to match the current implementation of powerclamp driver. Also doesn't
-+	allow value more than 75, if the cpumask includes every CPU present in
-+	the system.
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 1390748706a6..6d00ac597b8a 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -37,7 +37,7 @@
- #include <asm/mwait.h>
- #include <asm/cpu_device_id.h>
- 
--#define MAX_TARGET_RATIO (50U)
-+#define MAX_TARGET_RATIO (100U)
- /* For each undisturbed clamping period (no extra wake ups during idle time),
-  * we increment the confidence counter for the given target ratio.
-  * CONFIDENCE_OK defines the level where runtime calibration results are
-@@ -105,10 +105,144 @@ static const struct kernel_param_ops duration_ops = {
- 	.get = param_get_int,
- };
- 
--
- module_param_cb(duration, &duration_ops, &duration, 0644);
- MODULE_PARM_DESC(duration, "forced idle time for each attempt in msec.");
- 
-+#define DEFAULT_MAX_IDLE	50
-+#define MAX_ALL_CPU_IDLE	75
-+
-+static u8 max_idle = DEFAULT_MAX_IDLE;
-+
-+static cpumask_var_t idle_injection_cpu_mask;
-+
-+static int allocate_copy_idle_injection_mask(const struct cpumask *copy_mask)
-+{
-+	if (cpumask_available(idle_injection_cpu_mask))
-+		goto copy_mask;
-+
-+	/* This mask is allocated only one time and freed during module exit */
-+	if (!alloc_cpumask_var(&idle_injection_cpu_mask, GFP_KERNEL))
-+		return -ENOMEM;
-+
-+copy_mask:
-+	cpumask_copy(idle_injection_cpu_mask, copy_mask);
-+
-+	return 0;
-+}
-+
-+/* Return true if the cpumask and idle percent combination is invalid */
-+static bool check_invalid(cpumask_var_t mask, u8 idle)
-+{
-+	if (cpumask_equal(cpu_present_mask, mask) && idle > MAX_ALL_CPU_IDLE)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int cpumask_set(const char *arg, const struct kernel_param *kp)
-+{
-+	cpumask_var_t new_mask;
-+	int ret;
-+
-+	mutex_lock(&powerclamp_lock);
-+
-+	/* Can't set mask when cooling device is in use */
-+	if (powerclamp_data.clamping) {
-+		ret = -EAGAIN;
-+		goto skip_cpumask_set;
-+	}
-+
-+	ret = alloc_cpumask_var(&new_mask, GFP_KERNEL);
-+	if (!ret)
-+		goto skip_cpumask_set;
-+
-+	ret = bitmap_parse(arg, strlen(arg), cpumask_bits(new_mask),
-+			   nr_cpumask_bits);
-+	if (ret)
-+		goto free_cpumask_set;
-+
-+	if (cpumask_empty(new_mask) || check_invalid(new_mask, max_idle)) {
-+		ret = -EINVAL;
-+		goto free_cpumask_set;
-+	}
-+
-+	/*
-+	 * When module parameters are passed from kernel command line
-+	 * during insmod, the module parameter callback is called
-+	 * before powerclamp_init(), so we can't assume that some
-+	 * cpumask can be allocated and copied before here. Also
-+	 * in this case this cpumask is used as the default mask.
-+	 */
-+	ret = allocate_copy_idle_injection_mask(new_mask);
-+
-+free_cpumask_set:
-+	free_cpumask_var(new_mask);
-+skip_cpumask_set:
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return ret;
-+}
-+
-+static int cpumask_get(char *buf, const struct kernel_param *kp)
-+{
-+	if (!cpumask_available(idle_injection_cpu_mask))
-+		return -ENODEV;
-+
-+	return bitmap_print_to_pagebuf(false, buf, cpumask_bits(idle_injection_cpu_mask),
-+				       nr_cpumask_bits);
-+}
-+
-+static const struct kernel_param_ops cpumask_ops = {
-+	.set = cpumask_set,
-+	.get = cpumask_get,
-+};
-+
-+module_param_cb(cpumask, &cpumask_ops, NULL, 0644);
-+MODULE_PARM_DESC(cpumask, "Mask of CPUs to use for idle injection.");
-+
-+static int max_idle_set(const char *arg, const struct kernel_param *kp)
-+{
-+	u8 new_max_idle;
-+	int ret = 0;
-+
-+	mutex_lock(&powerclamp_lock);
-+
-+	/* Can't set mask when cooling device is in use */
-+	if (powerclamp_data.clamping) {
-+		ret = -EAGAIN;
-+		goto skip_limit_set;
-+	}
-+
-+	ret = kstrtou8(arg, 10, &new_max_idle);
-+	if (ret)
-+		goto skip_limit_set;
-+
-+	if (new_max_idle > MAX_TARGET_RATIO) {
-+		ret = -EINVAL;
-+		goto skip_limit_set;
-+	}
-+
-+	if (check_invalid(idle_injection_cpu_mask, new_max_idle)) {
-+		ret = -EINVAL;
-+		goto skip_limit_set;
-+	}
-+
-+	max_idle = new_max_idle;
-+
-+skip_limit_set:
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops max_idle_ops = {
-+	.set = max_idle_set,
-+	.get = param_get_int,
-+};
-+
-+module_param_cb(max_idle, &max_idle_ops, &max_idle, 0644);
-+MODULE_PARM_DESC(max_idle, "maximum injected idle time to the total CPU time ratio in percent range:1-100");
-+
- struct powerclamp_calibration_data {
- 	unsigned long confidence;  /* used for calibration, basically a counter
- 				    * gets incremented each time a clamping
-@@ -460,21 +594,15 @@ static void trigger_idle_injection(void)
-  */
- static int powerclamp_idle_injection_register(void)
- {
--	/*
--	 * The idle inject core will only inject for online CPUs,
--	 * So we can register for all present CPUs. In this way
--	 * if some CPU goes online/offline while idle inject
--	 * is registered, nothing additional calls are required.
--	 * The same runtime and idle time is applicable for
--	 * newly onlined CPUs if any.
--	 *
--	 * Here cpu_present_mask can be used as is.
--	 * cast to (struct cpumask *) is required as the
--	 * cpu_present_mask is const struct cpumask *, otherwise
--	 * there will be compiler warnings.
--	 */
--	ii_dev = idle_inject_register_full((struct cpumask *)cpu_present_mask,
--					   idle_inject_update);
-+	poll_pkg_cstate_enable = false;
-+	if (cpumask_equal(cpu_present_mask, idle_injection_cpu_mask)) {
-+		ii_dev = idle_inject_register_full(idle_injection_cpu_mask, idle_inject_update);
-+		if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
-+			poll_pkg_cstate_enable = true;
-+	} else {
-+		ii_dev = idle_inject_register(idle_injection_cpu_mask);
-+	}
-+
- 	if (!ii_dev) {
- 		pr_err("powerclamp: idle_inject_register failed\n");
- 		return -EAGAIN;
-@@ -555,7 +683,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
- 	mutex_lock(&powerclamp_lock);
- 
- 	new_target_ratio = clamp(new_target_ratio, 0UL,
--				(unsigned long) (MAX_TARGET_RATIO - 1));
-+				(unsigned long) (max_idle - 1));
- 	if (!powerclamp_data.target_ratio && new_target_ratio > 0) {
- 		pr_info("Start idle injection to reduce power\n");
- 		powerclamp_data.target_ratio = new_target_ratio;
-@@ -646,15 +774,19 @@ static int __init powerclamp_init(void)
- 
- 	/* probe cpu features and ids here */
- 	retval = powerclamp_probe();
-+	if (retval)
-+		return retval;
-+
-+	mutex_lock(&powerclamp_lock);
-+	retval = allocate_copy_idle_injection_mask(cpu_present_mask);
-+	mutex_unlock(&powerclamp_lock);
-+
- 	if (retval)
- 		return retval;
- 
- 	/* set default limit, maybe adjusted during runtime based on feedback */
- 	window_size = 2;
- 
--	if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
--		poll_pkg_cstate_enable = true;
--
- 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
- 						      &powerclamp_cooling_ops);
- 	if (IS_ERR(cooling_dev))
-@@ -679,6 +811,9 @@ static void __exit powerclamp_exit(void)
- 
- 	cancel_delayed_work_sync(&poll_pkg_cstate_work);
- 	debugfs_remove_recursive(debug_dir);
-+
-+	if (cpumask_available(idle_injection_cpu_mask))
-+		free_cpumask_var(idle_injection_cpu_mask);
- }
- module_exit(powerclamp_exit);
- 
--- 
-2.39.1
 
+>> * On top of this we could share with userspace which HVC ranges are
+>>   available and which ones are handled by KVM. That can actually be added
+>>   independently, through a vCPU/VM device attribute which doesn't consume
+>>   a new ioctl:
+>>   - userspace issues HAS_ATTR ioctl on the vcpu fd to query whether this
+>>     feature is available.
+>>   - userspace queries the number N of HVC ranges using one GET_ATTR.
+>>   - userspace passes an array of N ranges using another GET_ATTR. The
+>>     array is filled and returned by KVM.
+
+> As mentioned above, I think this interface should go both ways.
+> Userspace should request the forwarding of a certain range of
+> hypercalls via a similar SET_ATTR interface.
+
+Yup, I'll sync up with Oliver about that.
+
+
+> Another question is how we migrate VMs that have these forwarding
+> requirements. Do we expect the VMM to replay the forwarding as part of
+> the setting up on the other side? Or do we save/restore this via a
+> firmware pseudo-register?
+
+Pfff. VMMs problem. Enabling these things means it has its own internal state to migrate.
+(is this vCPU on or off?), I doubt it needs reminding that the state exists.
+
+That said, Salil is looking at making this work with migration in Qemu.
+
+
+Thanks,
+
+James
