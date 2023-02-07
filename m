@@ -2,181 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A5C68E454
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 00:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B0368E4A5
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 00:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjBGXUX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 18:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S229500AbjBGXxw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 18:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBGXUW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 18:20:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6ED4491;
-        Tue,  7 Feb 2023 15:20:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB44BB81B30;
-        Tue,  7 Feb 2023 23:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658EBC433D2;
-        Tue,  7 Feb 2023 23:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675812018;
-        bh=So+Vqa3aMT2QOZxbrMv3Y/x9jBsIPhU5ldo/WI5PlqI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aJoZoX8yV0cVhyXM1ZUzPiMNG7MdXqFyMAiISMmQXzoG+9Ae0Q5p32PxBZIW7v9BK
-         ngL7Wus9AmKYXRgUPIVWak6YL/VM7JteO1qXa7b9kEtJE34SsKgvi4SAFNE4vG3Cfq
-         LXnnF0jRIkEkDvcuRW/htGjyGHftWc3S7i2wsCPq1oEFCg5K0/VBkePsa4eh8ylTbo
-         eAIBm7EQS7O3rGH8GIw8Yb7/G2ZrLfLclJ+zCSms2KTK8/nvOQMWoKdlLsUldRt9uk
-         PsbgFuHU5EcX6IyWFJCdI4DSok5w9EZA2vBepLxuNXzleynU7WhdWG6ziwoJLgUJGb
-         41baGQOWQ36Yg==
-Date:   Wed, 8 Feb 2023 01:20:11 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     William Roberts <bill.c.roberts@gmail.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-Message-ID: <Y+Lcq0u6mUWxxgzd@kernel.org>
-References: <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
- <Y8tcEtr8Kl3p4qtA@kernel.org>
- <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
- <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
- <Y9K2mOsmB1+CFk9l@kernel.org>
- <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
- <Y9LxDYYEp0qTfhqN@kernel.org>
- <CAFftDdoSg-kF6fd2Jyz5UuP1pG_bUe0kYy+G9Y1_nfoUkkpW4g@mail.gmail.com>
+        with ESMTP id S229479AbjBGXxw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 18:53:52 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F2620696
+        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 15:53:50 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so257446wmb.5
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 15:53:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qfqrnLQnGkyM5B5CF5dy5w8PteGopQkGaSXHd5snYE0=;
+        b=nFJSduTKqwmvbZ3xqyy+H3figWon3BTfeTNr+S2Ze/2FE1CvsAuJ+97ns0AOteGJLF
+         I8Z+1U/+3BNTZbQYkg298JCh3jcleVFF8/+A5u9lqwa2wgXfBVVMyuVVsW7w6cv1JutL
+         wt9jyE9B6IeFpu1A4jzcOy6vPRHIbUDIZo2e4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qfqrnLQnGkyM5B5CF5dy5w8PteGopQkGaSXHd5snYE0=;
+        b=NpXkVLRmiwLkee2P6eXCsGjY1jBmApfGt5BDloIJaeXrjnG5jXjGlAYO3Erh5zOc/f
+         0ZJknjuW58uFNbQzkdO4dk+ESy51g4aMzyPXsUS6vjTkZ8Lx4zp8Gl8rEwN9BgkuuSYX
+         72F7bpVnxnhGFHGrqKmlGyIQKjM0tm4aiThjuc5dHhu1nZzsWGUO/1nH5Tnm1ABoU67z
+         euWhmWAsjuSsCU2yFIVgbvEu8xPZIwlbtFspPMgKBAW0mCWzi9Yik5meZJv/qfJeGvZv
+         OQpT3FLD0sAjfMEX5XE2OKsZCMnS58b1g3/2damUrDgfnzyjzocDESLSllbcGnmkNfam
+         a8ag==
+X-Gm-Message-State: AO0yUKWsC3DdKBKMYXh4bYfwnZ8ooVPzz+xs9OjhB4WZtVMahj2hEGNa
+        owndaGiP+tr5WZkdIr+BXxuvEtQSQFfoYtw40j4=
+X-Google-Smtp-Source: AK7set9t3oeFv3xEnH9ZMLQu43HyRiwxx3QhU9oVD6yDcbjrrd/bnMRRZuhG9PF+edlctH2pppgkpw==
+X-Received: by 2002:a05:600c:3411:b0:3dc:545f:e9ce with SMTP id y17-20020a05600c341100b003dc545fe9cemr4847298wmp.24.1675814028986;
+        Tue, 07 Feb 2023 15:53:48 -0800 (PST)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id q11-20020a7bce8b000000b003dd9232f036sm233198wmj.23.2023.02.07.15.53.48
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 15:53:48 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so251006wmb.2
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 15:53:48 -0800 (PST)
+X-Received: by 2002:a05:600c:19d2:b0:3dc:4c79:211a with SMTP id
+ u18-20020a05600c19d200b003dc4c79211amr38074wmq.170.1675813549115; Tue, 07 Feb
+ 2023 15:45:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFftDdoSg-kF6fd2Jyz5UuP1pG_bUe0kYy+G9Y1_nfoUkkpW4g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
+ <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com>
+ <Y+E9Z+/+eCpPK6DE@linaro.org> <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
+ <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com> <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
+In-Reply-To: <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 7 Feb 2023 15:45:35 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
+Message-ID: <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Abel Vesa <abel.vesa@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:01:55PM -0600, William Roberts wrote:
-> On Thu, Jan 26, 2023 at 3:30 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Thu, Jan 26, 2023 at 11:32:22AM -0600, William Roberts wrote:
-> > > On Thu, Jan 26, 2023 at 11:21 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > >
-> > > > On Tue, Jan 24, 2023 at 07:38:04AM -0500, James Bottomley wrote:
-> > > > > On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
-> > > > > > On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > > wrote:
-> > > > > > >
-> > > > > > > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > > > > > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > > > > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > > > > > > <bill.c.roberts@gmail.com> wrote:
-> > > > > > > > >
-> > > > > > > > > > What's the use case of using the creation data and ticket in
-> > > > > > > > > > this context? Who gets the creationData and the ticket?
-> > > > > > > > > > Could a user supplied outsideInfo work? IIRC I saw some
-> > > > > > > > > > patches flying around where the sessions will get encrypted
-> > > > > > > > > > and presumably correctly as well. This would allow the
-> > > > > > > > > > transfer of that outsideInfo, like the NV Index PCR value to
-> > > > > > > > > > be included and integrity protected by the session HMAC.
-> > > > > > > > >
-> > > > > > > > > The goal is to ensure that the key was generated by the kernel.
-> > > > > > > > > In the absence of the creation data, an attacker could generate
-> > > > > > > > > a hibernation image using their own key and trick the kernel
-> > > > > > > > > into resuming arbitrary code. We don't have any way to pass
-> > > > > > > > > secret data from the hibernate kernel to the resume kernel, so
-> > > > > > > > > I don't think there's any easy way to do it with outsideinfo.
-> > > > > > > >
-> > > > > > > > Can we go back again to why you can't use locality?  It's exactly
-> > > > > > > > designed for this since locality is part of creation data.
-> > > > > > > > Currently everything only uses locality 0, so it's impossible for
-> > > > > > > > anyone on Linux to produce a key with anything other than 0 in
-> > > > > > > > the creation data for locality.  However, the dynamic launch
-> > > > > > > > people are proposing that the Kernel should use Locality 2 for
-> > > > > > > > all its operations, which would allow you to distinguish a key
-> > > > > > > > created by the kernel from one created by a user by locality.
-> > > > > > > >
-> > > > > > > > I think the previous objection was that not all TPMs implement
-> > > > > > > > locality, but then not all laptops have TPMs either, so if you
-> > > > > > > > ever come across one which has a TPM but no locality, it's in a
-> > > > > > > > very similar security boat to one which has no TPM.
-> > > > > > >
-> > > > > > > Kernel could try to use locality 2 and use locality 0 as fallback.
-> > > > > >
-> > > > > > I don't think that would work for Matthew, they need something
-> > > > > > reliable to indicate key provenance.
-> > > > >
-> > > > > No, I think it would be good enough: locality 0 means anyone (including
-> > > > > the kernel on a machine which doesn't function correctly) could have
-> > > > > created this key.  Locality 2 would mean only the kernel could have
-> > > > > created this key.
-> > > > >
-> > > > > By the time the kernel boots and before it loads the hibernation image
-> > > > > it will know the answer to the question "does my TPM support locality
-> > > > > 2", so it can use that in its security assessment: if the kernel
-> > > > > supports locality 2 and the key wasn't created in locality 2 then
-> > > > > assume an attack.  Obviously, if the kernel doesn't support locality 2
-> > > > > then the hibernation resume has to accept any old key, but that's the
-> > > > > same as the situation today.
-> > > >
-> > > > This sounds otherwise great to me but why bother even allowing a
-> > > > machine with no-locality TPM to be involved with hibernate? Simply
-> > > > detect locality support during driver initialization and disallow
-> > > > sealed hibernation (or whatever the feature was called) if localities
-> > > > were not detected.
-> > > >
-> > > > I get supporting old hardware with old features but it does not make
-> > > > sense to maintain new features with hardware, which clearly does not
-> > > > scale, right?
-> > > >
-> > > > BR, Jarkko
-> > >
-> > > Here's a thought, what if we had a static/cmd line configurable
-> > > no-auth NV Index and writelocked it with the expected key information,
-> > > name or something. I guess the problem is atomicity with write/lock,
-> > > but can't the kernel lock out all other users?
-> > >
-> > > An attacker would need to issue tpm2_startup, which in this case would DOS
-> > > the kernel in both scenarios. If an attacker already wrote and locked the NV
-> > > index, that would also be a DOS. If they already wrote it, the kernel simply
-> > > writes whatever they want. Is there an attack I am missing?
-> > >
-> > > I guess the issue here would be setup, since creating the NV index requires
-> > > hierarchy auth, does the kernel have platform auth or is that already shut down
-> > > by firmware (I can't recall)? A null hierarchy volatile lockable index would be
-> > > nice for this, too bad that doesn't exist.
-> >
-> > How do you see this would better when compared to finding a way to use
-> > locality, which could potentially be made to somewhat simple to setup
-> > (practically zero config)?
-> >
-> 
-> I never said it was better, I said here is a thought for discussion.
-> If we had to support older hardware (I could care less about things
-> that don't support localities, but some might not), this could be an
-> avenue to support them without walling off a PCR. I pointed out the
-> downsides, and argument could be made that when localities is not
-> supported then walling off PCR23 is the better approach if older
-> hardware is an issue. This all hinges on do we care about things
-> that don't support multiple localities. I don't, im for if you have locality
-> support you get the feature else you don't.
+Hi,
 
-Probably does not make much sense to care for this feature.
+On Mon, Feb 6, 2023 at 1:35 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Feb 6, 2023 at 1:10 PM Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > Hi,
+> >
+> > On Mon, Feb 6, 2023 at 11:33 AM Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
+> > > >
+> > > >
+> > > > CC'ed Saravana
+> > >
+> > > Thanks. Please do cc me for stuff like this from the start. I skimmed
+> > > the series and I think it's doing one of my TODO items. So, thanks for
+> > > the patch!
+> > >
+> > > I'll take a closer look within a few days -- trying to get through
+> > > some existing fw_devlink stuff.
+> > >
+> > > But long story short, it is the right thing to keep a supplier on
+> > > indefinitely if there's a consumer device (that's not disabled in DT)
+> > > that never gets probed. It's a pretty common scenario -- for example,
+> > > say a display backlight. The default case should be functional
+> > > correctness. And then we can add stuff that allows changing this
+> > > behavior with command line args or something else that can be done
+> > > from userspace.
+> > >
+> > > +1 to what Doug said elsewhere in this thread too. I'm trying to
+> > > consolidate the "when do we give up" decision at the driver core level
+> > > independent of what framework is being used.
+> >
+> > I'm not really sure I agree with the above, at least not without lots
+> > of discussion in the community. It really goes against what the kernel
+> > has been doing for years and years in the regulator and clock
+> > frameworks. Those frameworks both eventually give up and power down
+> > resources that no active drivers are using. Either changing the
+> > regulator/clock frameworks or saying that other frameworks should work
+> > in an opposite way seems like a recipe for confusion.
+> >
+> > Now, certainly I won't say that the way that the regulator and clock
+> > frameworks function is perfect nor will I say that they don't cause
+> > any problems. However, going the opposite way where resources are kept
+> > at full power indefinitely will _also_ cause problems.
+> >
+> > Specifically, let's look at the case you mentioned of a display
+> > backlight. I think you're saying that if there is no backlight driver
+> > enabled in the kernel that you'd expect the backlight to just be on at
+> > full brightness.
+>
+> No, I'm not saying that.
+>
+> > Would you expect this even if the firmware didn't
+> > leave the backlight on?
+>
+> sync_state() never turns on anything that wasn't already on at boot.
+> So in your example, if the firmware didn't turn on the backlight, then
+> it'll remain off.
 
-BR, Jarkko
+As per offline discussion, part of the problems are that today this
+_isn't_ true for a few Qualcomm things (like interconnect). The
+interconnect frameway specifically maxes things out for early boot.
+
+
+> > In any case, why do you say it's more correct?
+>
+> Because if you turn off the display, the device is unusable. In other
+> circumstances, it can crash a device because the firmware powered it
+> on left it in a "good enough" state, but we'd go turn it off and crash
+> the system.
+>
+> > I suppose you'd say that the screen is at least usable like this.
+> > ...except that you've broken a different feature: suspend/resume.
+>
+> If the display is off and the laptop is unusable, then we have bigger
+> problems than suspend/resume?
+
+I suspect that here we'll have to agree to disagree. IMO it's a
+non-goal to expect hardware to work for which there is no driver. So
+making the backlight work without a backlight driver isn't really
+something we should strive for.
+
+
+> > Without being able to turn the backlight off at suspend time the
+> > device would drain tons of power. It could also overheat when you
+> > stuffed it in your backpack and damage the battery or start a fire.
+> > Even if you argue that in the case of the display backlight you're
+> > better off, what about a keyboard backlight? It's pretty easy to use a
+> > laptop without the keyboard backlight and if you didn't have a driver
+> > for it you'd be in better shape leaving it off instead of leaving it
+> > on 100% of the time, even when the device is suspended.
+>
+> I think you are again assuming sync_state() will cause stuff to be
+> turned on if the firmware didn't leave it on before booting the
+> kernel. This is not the case.
+>
+> But let's assume you had the same understanding, then I'd argue that
+> between the default kernel configuration crashing some systems vs
+> having power impact on others, I'd prefer the former. The firmware
+> shouldn't have left the keyboard backlight on if it cared about
+> suspend/resume.
+
+The keylight is a bit of a contrived example, of course. ...but not
+that contrived. It's entirely possible that the keyboard backlight is
+controlled by a GPIO and that the default state of that GPIO at bootup
+enables the backlight regulator. That would mean that the firmware
+"left" the keyboard backlight on. The firmware's job is not to init
+all hardware. It's to init whatever hardware was needed to boot the
+kernel and then get out of the way and boot the kernel. Ideally the
+kernel should assume as little about the firmware as possible except
+in cases where the firmware actually needs to hand something off to
+the kernel (serial console, boot splash, etc).
+
+
+> > Overall: if a kernel isn't configured for a given driver we shouldn't
+> > be expecting the hardware controlled by that driver to work. The best
+> > we can hope for is that it's at least in a low power state.
+> >
+> > In general I think that having a well-defined way to know it's time to
+> > give up and power off anything for which a driver didn't probe needs
+> > to be an important part of any designs here.
+>
+> Btw, the current compromise for deferred probes/optional suppliers is
+> "keep extending the timeout by 10 seconds as long as modules are being
+> loaded".
+>
+> As I said in my earlier email, this is just what I think it should be
+> like and there's still stuff to figure out before I send out a patch
+> like that. For example, we could have a sysfs file to write to to
+> release sync_state() for a device. Then you'd just echo to that file
+> in your example and go about your day.
+
+We don't need to get into a centi-thread here, but I'll at least say
+that it's my opinion that we need some way to get the same type of
+behavior that the existing regulator / clock frameworks have. That is:
+if there are resources that no driver has enabled that there should be
+some way to get them to shut off eventually.
+
+-Doug
