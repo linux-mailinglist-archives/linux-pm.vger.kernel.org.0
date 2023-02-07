@@ -2,125 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601D268D443
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 11:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6792368D55D
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 12:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjBGKbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 05:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S230353AbjBGLXu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 06:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjBGKbS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 05:31:18 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC32737F3B
-        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 02:30:48 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id o16-20020a17090ad25000b00230759a8c06so11457673pjw.2
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 02:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VzHx/EVNNfxiZwjE1z86qLF1SOQQivE7PR9SXta9kr0=;
-        b=ANMMbWkQyx9Gf9OpODb/BFj2fKoVDES8+fEH1icYGm+NyzdQ5RBTZ9tMgBWJ06ZlRW
-         UyMY4fSGfEqM7t667xOLFodiQSdk6ydlyRyF3cWo7aRUpgWfc3UZu4JTQOn88RZLwcUd
-         cigpKS8TGsG4IH5FU2HXRaQSyeDPGbcU5afr/r8y55I8KDl99RW1IH1t6TE5+XdLKn7A
-         gllosdZSkmtdLIg469LVEfEkFsdbWe8o07bhSY75x5mdzdtBM0tBSZttjj+sUq7t3TPy
-         3gxfZZE5gUDz8EH4hz2hIhvPiqXTohCIj+7ohzXKAHZ4EVdEQ2S95u1OnVY52zDNPkKF
-         0QAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VzHx/EVNNfxiZwjE1z86qLF1SOQQivE7PR9SXta9kr0=;
-        b=jLeuUWuFIYq6JgfMRAczTSfBlhvfHgkdQlrF+PPZlifMDDc/9NKhi5c3XCH/PQmzjS
-         0NAstKjwNA8vs7jf0bIHABM4Q1Im7+r2wQRlpggVA+kkXkSYTqNn7jMGQdaSbklyF4Co
-         bOpVCQIqVAG4N+q23qmGfTHsuPmzKhCBsNvVtCKC4qF08kU7z2okZ1KsBmWoF1IUT23W
-         Ei0RSAIfV5+oUV/oUq9sXRtkL1vnErU1ca0sdONcG+5NX/g9jJOCEv5kiEs1b5yk9Qq5
-         dSjkOxkGQamp8Eh2wwI7DGNT4YbF5N3Shba2K3GLHfm10qqf5O9nKyMMKgeevWE72+eC
-         XWXw==
-X-Gm-Message-State: AO0yUKVc1X+CpeXPuPRYGSayQc3dblaI8VjpKl6NVxpgDPJ6Z7WB/VSt
-        N0B1VZHL2hRzYkIi66MwXRI0Zg==
-X-Google-Smtp-Source: AK7set/N60throOQx1Uwr0cfZqVgk5GxiYBwfolcBcUYkqbDeyd4MCzoL6mOC8COo51U1qfl7pu75Q==
-X-Received: by 2002:a05:6a20:7f8e:b0:bb:c590:8db1 with SMTP id d14-20020a056a207f8e00b000bbc5908db1mr3028829pzj.0.1675765848286;
-        Tue, 07 Feb 2023 02:30:48 -0800 (PST)
-Received: from [10.200.8.117] ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id b19-20020a056a0002d300b00593c679d405sm8815602pft.78.2023.02.07.02.30.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 02:30:47 -0800 (PST)
-Message-ID: <aeae8fb8-b052-0d4a-5d3e-8de81e1b5092@bytedance.com>
-Date:   Tue, 7 Feb 2023 18:30:40 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 0/3] some minor fixes of error checking about
- debugfs_rename()
-Content-Language: en-US
-To:     patchwork-bot+netdevbpf@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     rafael@kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
-        andy@greyhouse.net, vireshk@kernel.org, nm@ti.com,
-        sboyd@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, netdev@vger.kernel.org
-References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
- <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231577AbjBGLXs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 06:23:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6CECDE4;
+        Tue,  7 Feb 2023 03:23:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A00AB818FF;
+        Tue,  7 Feb 2023 11:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC5D8C433D2;
+        Tue,  7 Feb 2023 11:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675769023;
+        bh=3ODqaHBZp5FJ22eMEpdVmf5CP3x7xF2WSgLTgVHOmlM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iSpHwSAeY4ZzLuVXGHdbTfKlE2wIuw6Pe+OwOVybmGLbecytzJUeBRzZK0hqyG4MR
+         Y5VuFx5KV6yuy6orKAmWmIIBl+5UdbMlzNUvqtG2GsTm7Oto87hB6Fi45Cowvelyj9
+         9IVVLLszQ7gDFSYn3VdXCIYWPxZJIbUmwXwRYLK5POPVSB9alI3mauLkiqJY7FCgRL
+         0wQPRN1V1nAMobXMMsrv2vIxONuHECBC2VVm57o1QZbajZr+hRPuuxvjx4AI/D7Fzb
+         TlsDR08XaeKhYHKpPGPXHEx00C5zXz8tPjppXSkKTapQA6MZXz/emapV1Sjs7mg9Hu
+         Rwccvkc4286NQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pPM4a-008J4O-KK;
+        Tue, 07 Feb 2023 11:23:40 +0000
+Date:   Tue, 07 Feb 2023 11:23:40 +0000
+Message-ID: <86sffhzpkz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+In-Reply-To: <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+        <20230203135043.409192-30-james.morse@arm.com>
+        <865ycg1kv2.wl-maz@kernel.org>
+        <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com>
+        <86wn4vynyr.wl-maz@kernel.org>
+        <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: suzuki.poulose@arm.com, james.morse@arm.com, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, tglx@linutronix.de, lpieralisi@kernel.org, mark.rutland@arm.com, sudeep.holla@arm.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mingo@redhat.com, will@kernel.org, catalin.marinas@arm.com, chenhuacai@kernel.org, oliver.upton@linux.dev, lenb@kernel.org, rafael@kernel.org, kernel@xen0n.name, salil.mehta@huawei.com, linux@armlinux.org.uk, jean-philippe@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 2023/2/4 11:30, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
+On Tue, 07 Feb 2023 09:41:54 +0000,
+Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
 > 
-> This series was applied to netdev/net.git (master)
-> by Jakub Kicinski <kuba@kernel.org>:
+> Hi Marc,
 > 
-> On Thu,  2 Feb 2023 17:32:53 +0800 you wrote:
->> Since commit ff9fb72bc077 ("debugfs: return error values, not NULL") changed
->> return value of debugfs_rename() in error cases from %NULL to %ERR_PTR(-ERROR).
->> The comments and checks corresponding to debugfs_rename() should also be updated
->> and fixed.
->>
->> Qi Zheng (3):
->>    debugfs: update comment of debugfs_rename()
->>    bonding: fix error checking in bond_debug_reregister()
->>    PM/OPP: fix error checking in opp_migrate_dentry()
->>
->> [...]
+> On 06/02/2023 12:31, Marc Zyngier wrote:
+> > On Mon, 06 Feb 2023 10:10:41 +0000,
+> > Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+> >> 
+> >> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+> >> not supported. So using an explicit passing down of the args is
+> >> preferrable.
+> > 
+> > What is the blocker for CCA to use GET_ONE_REG? The value obviously
+> > exists and is made available to the host. pKVM is perfectly able to
+> > use GET_ONE_REG and gets a bunch of zeroes for things that the
+> > hypervisor has decided to hide from the host.
+> > 
 > 
-> Here is the summary with links:
->    - [1/3] debugfs: update comment of debugfs_rename()
->      (no matching commit)
->    - [2/3] bonding: fix error checking in bond_debug_reregister()
->      https://git.kernel.org/netdev/net/c/cbe83191d40d
->    - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
->      (no matching commit)
+> It is not impossible. On a "HOST CALL" (explicit calls to the Host
+> from Realm), the GPRs are made available to the host and can be
+> stashed into the vcpu reg state and the request can be
+> serviced. However, it is a bit odd, to make this exception - "the
+> GET_ONE_REG is valid now", while in almost all other cases it is
+> invalid (exception of MMIO).
 
-Hi all,
+But that's an RMM decision. If the RMM decides to forward the
+hypercall to the host (irrespective of the potential forwarding to
+userspace), it makes the GPRs available.
 
-Does "no matching commit" means that these two patches have not been
-applied? And I did not see them in the linux-next branch.
+If the hypercall is forwarded to userspace, then the host is
+responsible to check with the RMM that it will be willing to provide
+the required information (passed as GPRs or not).
 
-If so, hi Greg, Can you help to review and apply these two patches
-([1/3] and [3/3])?
+> Of course we could always return what is stashed in the vcpu state,
+> which is may be invalid/ 0. But given the construct of "host doesn't
+> have access to the register state", it may be a good idea to say,
+> request always fails, to indicate that the Host is probably doing
+> something wrong, than silently passing on incorrect information.
+
+I disagree. Either you fail at the delegation point, or you don't. On
+getting a hypercall exit to userspace, you are guaranteed that the
+GPRs are valid.
+
+> > Of course, it requires that the hypervisor (the RMM in your case)
+> > knows about the semantics of the hypercall, but that's obviously
+> 
+> RMM doesn't care about the semantics of hypercall, other than
+> considering it just like an SMCCC compliant call. The hypercall
+> arguments/results are passed down/up by the Realm in a separate
+> structure.
+
+That's because the RMM doesn't use registers to pass the data. But at
+the end of the day, this is the same thing. The host gets the data
+from the RMM, stashes it in the GPRs, and exit to userspace.
+
+The important thing here is that GET_ONE_REG is valid in the context
+where it matters. If the VMM tries to use it outside of the context of
+a hypercall, it gets junk. It's not a bug, it's a feature.
 
 Thanks,
-Qi
 
-> 
-> You are awesome, thank you!
+	M.
 
 -- 
-Thanks,
-Qi
+Without deviation from the norm, progress is not possible.
