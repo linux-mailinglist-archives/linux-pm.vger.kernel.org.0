@@ -2,153 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB00D68D71E
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 13:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A3168D889
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Feb 2023 14:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjBGMrE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 07:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S232392AbjBGNKh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 08:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbjBGMrC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 07:47:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5207611E9B;
-        Tue,  7 Feb 2023 04:47:01 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F4C6106F;
-        Tue,  7 Feb 2023 04:47:43 -0800 (PST)
-Received: from [10.57.75.57] (unknown [10.57.75.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4589B3F71E;
-        Tue,  7 Feb 2023 04:46:56 -0800 (PST)
-Message-ID: <7a88cefe-c817-3bca-f3e1-88254a144e3e@arm.com>
-Date:   Tue, 7 Feb 2023 12:46:54 +0000
+        with ESMTP id S232339AbjBGNKd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 08:10:33 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68F75B8F
+        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 05:10:02 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so11428676wms.1
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 05:10:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zHHYbQWTXArEvDpNJJ6Ec38YulVcoF1CmHnyxseWv/o=;
+        b=hrcPy6lygRPAqNPp68oWhIxCSjNXqTBb2jThr91mU4GdhIGg5lgoVAkT2PFKb6fkZy
+         j4Zky8tzxae7gzFiXjCl1drM8rV2Mo68ORaRjdAN9xmPrghlyXq9F8ytzewbZbJLOFuK
+         pkKSlHA+7B537tTMOqrcqqZB4oEdXfqD5HbZo6U8mOFZ/y4hOpuvrg2PXygmle8V4okp
+         jjQS/8aEPPY40umBsIfahaJ4TMmqSIwGQ7QLaaJG/R78l8Kmf4pFaqRYyNQ9UIz9UQIb
+         OtKV5RRPA4hm7Vl/+2M2NAKG548KJHiO42bQ8tcglt46HugQkNRPjPX3uQhj7AENIsl9
+         WnRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zHHYbQWTXArEvDpNJJ6Ec38YulVcoF1CmHnyxseWv/o=;
+        b=nBxMR4YZCUPSPeC2L/c8/JkRubCmb6ODxKjQNiH99kCEtaG2E0Yno4+WVF40+v2qmz
+         u452tnXeGERGaTEb5YdDTEe7rgk7VQYkjMU5TcV6jHASzv5SCoXcmxkp2us0laved+x6
+         zu2NqeEOoavRGcV43xLSklqDm3OXOo2ojg3cKks5vOvrB2HS2G4WnioOk3JxOjcXPqva
+         REZt41l5tbApJ6WhsShzp/c5fYfpA+mkIqkzdRbxxPNDDiKujoNZwW04ViuJVqrvGqmF
+         HlfMk4GZHh1kl2o1FLLnm1frA/9+baplmJsw/DUhZNLhJIKbqZRAG4iki2Omkxx/njnV
+         0vLQ==
+X-Gm-Message-State: AO0yUKV11Q+ML4pHPUMS1pQ80zgsPZzStPZU1sfGFRh960vqnWcx5Eg+
+        2e7fcypMTrIQemmEKi8XdVWyiA==
+X-Google-Smtp-Source: AK7set/NeaJsE2/DeX3qJwmT1gppnlE6SerKN9vJUe16meTPZ2wNwdqPqcVk2AdedAW9/4jQ5iyPrQ==
+X-Received: by 2002:a05:600c:18a0:b0:3df:3bd6:63e5 with SMTP id x32-20020a05600c18a000b003df3bd663e5mr2932315wmp.12.1675775400789;
+        Tue, 07 Feb 2023 05:10:00 -0800 (PST)
+Received: from t480-bl003.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
+        by smtp.gmail.com with ESMTPSA id g24-20020a7bc4d8000000b003df30c94850sm17987385wmk.25.2023.02.07.05.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 05:10:00 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH v13 0/6] Add LVTS Thermal Architecture
+Date:   Tue,  7 Feb 2023 14:09:52 +0100
+Message-Id: <20230207130958.608305-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
- <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com> <86wn4vynyr.wl-maz@kernel.org>
- <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com> <86sffhzpkz.wl-maz@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <86sffhzpkz.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/02/2023 11:23, Marc Zyngier wrote:
-> On Tue, 07 Feb 2023 09:41:54 +0000,
-> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>
->> Hi Marc,
->>
->> On 06/02/2023 12:31, Marc Zyngier wrote:
->>> On Mon, 06 Feb 2023 10:10:41 +0000,
->>> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>>>
->>>> This may not be always possible, e.g., for Realms. GET_ONE_REG is
->>>> not supported. So using an explicit passing down of the args is
->>>> preferrable.
->>>
->>> What is the blocker for CCA to use GET_ONE_REG? The value obviously
->>> exists and is made available to the host. pKVM is perfectly able to
->>> use GET_ONE_REG and gets a bunch of zeroes for things that the
->>> hypervisor has decided to hide from the host.
->>>
->>
->> It is not impossible. On a "HOST CALL" (explicit calls to the Host
->> from Realm), the GPRs are made available to the host and can be
->> stashed into the vcpu reg state and the request can be
->> serviced. However, it is a bit odd, to make this exception - "the
->> GET_ONE_REG is valid now", while in almost all other cases it is
->> invalid (exception of MMIO).
-> 
-> But that's an RMM decision. If the RMM decides to forward the
-> hypercall to the host (irrespective of the potential forwarding to
-> userspace), it makes the GPRs available.
-> 
-> If the hypercall is forwarded to userspace, then the host is
-> responsible to check with the RMM that it will be willing to provide
-> the required information (passed as GPRs or not).
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Just to be clear, on a hypercall, all the arguments are provided to
-the host. And it is always possible for the host to sync the vcpu
-GPR state with those arguments and make them available via the 
-GET_ONE_REG call.
+The LVTS (Low Voltage Thermal Sensor) driver is capable of monitoring
+multiple hot points. For that, it contains 7 thermal control blocks
+dedicated to specific devices on the die. Each control block can handle
+up to 4 sensors. 
 
-> 
->> Of course we could always return what is stashed in the vcpu state,
->> which is may be invalid/ 0. But given the construct of "host doesn't
->> have access to the register state", it may be a good idea to say,
->> request always fails, to indicate that the Host is probably doing
->> something wrong, than silently passing on incorrect information.
-> 
-> I disagree. Either you fail at the delegation point, or you don't. On
-> getting a hypercall exit to userspace, you are guaranteed that the
-> GPRs are valid.
+The thermal controller supports several interrupts. One for the cold
+trip point, the hot trip point, the return to the normal trip point,
+and a specific programmable trip point to monitor the temperature
+dynamically.
 
-This is possible, as I mentioned below, the question is bug vs feature.
+The temperature measurement can be done in two ways, the immediate mode
+where the temperature read is instantaneous and the filtered mode where
+the controller uses, by configuration, an average of a set of values
+removing the minimum and the maximum.
 
-> 
->>> Of course, it requires that the hypervisor (the RMM in your case)
->>> knows about the semantics of the hypercall, but that's obviously
->>
->> RMM doesn't care about the semantics of hypercall, other than
->> considering it just like an SMCCC compliant call. The hypercall
->> arguments/results are passed down/up by the Realm in a separate
->> structure.
-> 
-> That's because the RMM doesn't use registers to pass the data. But at
-> the end of the day, this is the same thing. The host gets the data
-> from the RMM, stashes it in the GPRs, and exit to userspace.
+Finally, it is composed of 2 finite-state machines responsible for
+the state of the temperature (cold, hot, hot 2 normal, hot hot),
+the triggering of the interrupts, and the monitoring of the temperature.
 
-True.
+As requested, the thermal driver has been reworked to reduce
+the complexity of the code. At this time, the 4 little CPUs and
+the 4 big CPUs are supported by the thermal driver.They are described
+in a data structure and more devices can be added later.
+The calibration routine has been simplified also.
 
-> 
-> The important thing here is that GET_ONE_REG is valid in the context
-> where it matters. If the VMM tries to use it outside of the context of
-> a hypercall, it gets junk. It's not a bug, it's a feature.
+The series provide the following changes:
+ - Move the Mediatek drivers inside a dedicated folder as their number
+   is increasing
+ - Add the DT bindings for the controller
+ - Add the efuse node for the mt8195
+ - The LVTS driver
+ - The thermal zones description in the DT
 
-This is what I was concerned about.  As long as this "For any exit
-other than hypercall (at least for now), you get junk values when using
-GET_ONE_REG for confidential guests" is an acceptable feature, that 
-should be alright.
+Changelog:
+  v13:
+     - Rebase on top of "thermal/linux-next" :
+       base-commit: a2c81dc59d41e92362ab7d41d0c15471ea50637d
+     - Fix coding style issues
+       - Remove "__init" from all functions
+       - Remove "lvts_ctrl_enable" and "lvts_ctrl_disable" wrappers
+       - Use "dev_err_probe" instead of "dev_dbg" in "lvts_probe"
+     - Fix subject prefix
+     - Add "mt8192" to dt-binding definition
+     - Change dt-binding license to "GPL-2.0-only OR BSD-2-Clause"
+     - Fix debugfs mutli-instance support
 
-Thanks
-Suzuki
+  v12:
+     - Fix subject prefix
+     - Add dual licenses to dt-binding
+     - Rename "include/dt-bindings/thermal/mediatek-lvts.h"
+       to "include/dt-bindings/thermal/mediatek,lvts-thermal.h"
 
-> 
-> Thanks,
-> 
-> 	M.
-> 
+  v11:
+     - Rebase on top of "thermal/linux-next" :
+       base=0d568e144ead70189e7f16066dcb155b78ff9266
+     - Remove unsupported SoC (mt8192) from dt-binding definition
+     - Fix coding style issues :
+       - Move litterals to define
+       - Add interrupt macros
+       - Remove wildcard : only mt8195 is supported for now
+
+  v10:
+     - Rebase on top of "thermal/linux-next" : thermal-v6.3-rc1
+     - Rework the LVTS driver
+     - Add the thermal trip temperature and cooling devices
+       for the sensors supported by the driver
+
+  v9:
+     - Rebase on top of 6.0.0-rc1
+     - Fix coding style issues
+     - Fix commit titles and commit messages
+     - Update dt-bindings :
+     - Add "allOf:if:then:"
+     - Use mt8192 as example (instead of mt8195)
+     - Fix dt-binding errors
+     - Fix DTS errors
+
+  v8:
+     - Fix coding style issues
+     - Rebase on top of next-20220803
+     - Add multi-instance support :
+       - Rewrite DT-binding and DTS :
+         - Add DT-binding and DTS for LVTS_v4 (MT8192 and MT8195)
+           - One LVTS node for each HW Domain (AP and MCU)
+         - One SW Instance for each HW Domain
+         - Add a Kconfig sub-menu entry for LVTS and LVTS_v4 SoCs
+     - Replace platform_get_resource by platform_get_mem_or_io to get
+       Base Address
+     - Replace platform_get_resource by platform_get_irq to get
+       Interrupt Number
+     - Add "lvts_" prefix to functions and structs
+
+ v7:
+     - Fix coding style issues
+     - Rewrite dt bindings
+       - was not accurate
+       - Use mt8195 for example (instead of mt8192)
+       - Rename mt6873 to mt8192
+       - Remove clock name
+     - Rebased on top of to series:
+       - patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+       - patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+ v6:
+     - Remove temperature aggregation (it will be added in another
+       series)
+     - Update the way to read the temperature (read one sensor
+       instead of all)
+     - Add support of mt8195
+
+  v5:
+     - Use 'git mv' for the relocated file.
+
+  v4:
+     - Rebase to kernel-v5.13-rc1
+
+  v3:
+     - change the expression in the lvts_temp_to_raw to dev_s64.
+
+  v2:
+     - Rebase to kernel-5.11-rc1.
+     - sort headers
+     - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+     - disconstruct the api of lvts_read_tc_msr_raw.
+     - add the initial value max_temp = 0 and compare e.q.
+       in the lvts_read_all_tc_temperature.
+     - add the return with an invalid number in the lvts_init.
+
+Balsam CHIHI (6):
+  thermal: drivers: mediatek: Relocate driver to mediatek folder
+  dt-bindings: thermal: mediatek: Add LVTS thermal controllers
+  arm64: dts: mt8195: Add efuse node to mt8195
+  thermal: drivers: mediatek: Add the Low Voltage Thermal Sensor driver
+  arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
+  arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
+
+ .../thermal/mediatek,lvts-thermal.yaml        |  142 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  272 ++++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   37 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../auxadc_thermal.c}                         |    2 +-
+ drivers/thermal/mediatek/lvts_thermal.c       | 1224 +++++++++++++++++
+ .../thermal/mediatek,lvts-thermal.h           |   19 +
+ 9 files changed, 1702 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
+ create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
+ create mode 100644 include/dt-bindings/thermal/mediatek,lvts-thermal.h
+
+
+base-commit: a2c81dc59d41e92362ab7d41d0c15471ea50637d
+-- 
+2.34.1
 
