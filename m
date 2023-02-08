@@ -2,103 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011A768E762
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 06:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DBA68E8B3
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 08:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjBHFMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 00:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S229483AbjBHHJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 02:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBHFMb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 00:12:31 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB8C4234
-        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 21:12:30 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id g13so13254819ple.10
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 21:12:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ynQKtPREQJX8aXcg8wQwLkU6v0zuOPN0C8VlE9gcTUE=;
-        b=KpIPffhcmH9yMYB9yKh+S880iANL1KEZ0VMvMtBnf1BLEb/Z7E2/aa4vK6MoOLSigI
-         OUydFCpa7/LkAf4VdZayur5uLSmAMhJ6G7953F6JQnUFYDyFgnQhhBUfTcKQ1CR+ljr5
-         YOOyAhs8U+H0LGbixw7NkJR16ZUhvb9CNG23oVYrMrpefTX9bGFsrIy30oyCzLCJp1ij
-         r62lWGlhoTMF0rvON3EgNtjvvzh9tQ42Ez/91mY0+5gLBpOTIyWdWprE+Eu+JZ/1xXdc
-         7MFTRL4njGxOEnykzRvoVMCFrr5qA9imjzJ5pPo01G+uv4UiGFS66KjUGJV/bLpNf5TS
-         G2VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ynQKtPREQJX8aXcg8wQwLkU6v0zuOPN0C8VlE9gcTUE=;
-        b=q+Ya3T9j4R/LJdMaEEy45FrdeL/e/tSQhLCcv2Q1y6PkeYl5qd1DzALgWHiRHgqk9g
-         xWScml0u5dp5QTdPcixI/cDRFIbJjOr5h1O0D8YbKJJZ5MAukScI62hWAnvtSCkXMi1I
-         1b+jXuEwDv2o6wZnQG36LGP4Gfxh8NKgE1y9uyaiYBpIFuHEB05/SLrE8kbdPn/PVSAr
-         4tSOozSHvuLb9D0jx9Nt/85ACrfwSvThQoU3wITkjFuqd+ACKplnONhh1El45oew0Dht
-         tc8RPo/Hb0Sa9MiN6oGAT6KAihjlvgi5IZULovJJVusjuCvlOT/pzVNViAF+FHitLfjJ
-         36ZQ==
-X-Gm-Message-State: AO0yUKVH3shGrJ7RTM33GktlXuMEUz6+4A5g6w4gVCMp/n5t+dm1VglH
-        2ExRVFXp+FkUv9H3muwV9n5jOg==
-X-Google-Smtp-Source: AK7set+9KEkWwJa8xzGCAGXhFRxnb3x48Rg0TiPn2cYSFGv0Cgczz4t0se49tq1Sl8p54cAeBcOwGw==
-X-Received: by 2002:a17:90a:11:b0:230:fac8:d7e7 with SMTP id 17-20020a17090a001100b00230fac8d7e7mr3960827pja.2.1675833149229;
-        Tue, 07 Feb 2023 21:12:29 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id s4-20020a17090a764400b0022941908b80sm465351pjl.47.2023.02.07.21.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 21:12:28 -0800 (PST)
-Date:   Wed, 8 Feb 2023 10:42:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] PM/OPP: fix error checking in opp_migrate_dentry()
-Message-ID: <20230208051226.2lp736c67fem35ex@vireshk-i7>
-References: <20230208040037.60305-1-zhengqi.arch@bytedance.com>
+        with ESMTP id S229450AbjBHHJO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 02:09:14 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E9B19F11;
+        Tue,  7 Feb 2023 23:09:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675840153; x=1707376153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YuHcAmeJD6qZKliGgQx5J9sRN0zTfqdpJlYlq7H4eZE=;
+  b=eLix0cUl8foFTtjKEQLi1nT6T6Ih2WxviXmFHaHvBcEOUoVd4K/EDq0L
+   RmMLSbGNTXuxg+2gXr8NZwy5F39B/P/P+yi3/s9kF5NvV+Hqo+1Sh4tFw
+   DHJanVVL6Op5obKLYr/jwOE+rnvgxVV60Ox/i2VPtarI6NoM6fvjzzt48
+   Lu6xAE3oWc8eFiIxGM5LLRT7bwFjvRgjAyYdnxIm+771VOTi1EdWnuyNv
+   DDQvJv4fQY++fA5TQKajXsiw2jOC4KOsSOepr4DPfnwg/88CdryONIrIv
+   SmXbjlWv4CTB496uMilk2nuR2N5a6NNvWbVF3YDt2KDZKPJGi07vjEF1K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="392126395"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="392126395"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 23:09:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="667144392"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="667144392"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 07 Feb 2023 23:09:10 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal/drivers/intel_powerclamp: Fix module param for duration
+Date:   Tue,  7 Feb 2023 23:09:08 -0800
+Message-Id: <20230208070908.41702-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208040037.60305-1-zhengqi.arch@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-02-23, 12:00, Qi Zheng wrote:
-> Since commit ff9fb72bc077 ("debugfs: return error values,
-> not NULL") changed return value of debugfs_rename() in
-> error cases from %NULL to %ERR_PTR(-ERROR), we should
-> also check error values instead of NULL.
-> 
-> Fixes: ff9fb72bc077 ("debugfs: return error values, not NULL")
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
-> Resend as a separate patch.
-> 
->  drivers/opp/debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 96a30a032c5f..2c7fb683441e 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -235,7 +235,7 @@ static void opp_migrate_dentry(struct opp_device *opp_dev,
->  
->  	dentry = debugfs_rename(rootdir, opp_dev->dentry, rootdir,
->  				opp_table->dentry_name);
-> -	if (!dentry) {
-> +	if (IS_ERR(dentry)) {
->  		dev_err(dev, "%s: Failed to rename link from: %s to %s\n",
->  			__func__, dev_name(opp_dev->dev), dev_name(dev));
->  		return;
+After switch to use powercap/idle-inject framework in the Intel
+powerclamp driver, the idle "duration" is changed to micro seconds.
 
-Applied. Thanks.
+But the module parameter for idle "duration" is in milli seconds. So,
+convert to micro seconds in the set callback and convert back to milli
+seconds by adding a get callback.
 
+While here also use mutex protection for setting and getting "duration".
+The other uses of "duration" is already protected by mutex.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+This patch is for linux-pm bleeding-edge branch. Can be after patch:
+"
+commit 8526eb7fc75abcd09d8bd061610215baf0ca948a
+Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Wed Feb 1 10:28:53 2023 -0800
+
+    thermal: intel: powerclamp: Use powercap idle-inject feature
+"
+Can't add Fixes tag as commit ID will change once merged to mainline.
+Or wait till the above patch is merged to mainline.
+
+ drivers/thermal/intel/intel_powerclamp.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 1390748706a6..038acccc0509 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -74,6 +74,7 @@ static struct thermal_cooling_device *cooling_dev;
+ 
+ static DEFINE_MUTEX(powerclamp_lock);
+ 
++/* This duration is in micro seconds */
+ static unsigned int duration;
+ static unsigned int pkg_cstate_ratio_cur;
+ static unsigned int window_size;
+@@ -90,23 +91,34 @@ static int duration_set(const char *arg, const struct kernel_param *kp)
+ 		pr_err("Out of recommended range %lu, between 6-25ms\n",
+ 			new_duration);
+ 		ret = -EINVAL;
++		goto exit;
+ 	}
+ 
+-	duration = clamp(new_duration, 6ul, 25ul);
+-	smp_mb();
+-
++	mutex_lock(&powerclamp_lock);
++	duration = clamp(new_duration, 6ul, 25ul) * 1000;
++	mutex_unlock(&powerclamp_lock);
+ exit:
+ 
+ 	return ret;
+ }
+ 
++static int duration_get(char *buf, const struct kernel_param *kp)
++{
++	int ret;
++
++	mutex_lock(&powerclamp_lock);
++	ret = sysfs_emit(buf, "%d\n", duration / 1000);
++	mutex_unlock(&powerclamp_lock);
++
++	return ret;
++}
++
+ static const struct kernel_param_ops duration_ops = {
+ 	.set = duration_set,
+-	.get = param_get_int,
++	.get = duration_get,
+ };
+ 
+-
+-module_param_cb(duration, &duration_ops, &duration, 0644);
++module_param_cb(duration, &duration_ops, NULL, 0644);
+ MODULE_PARM_DESC(duration, "forced idle time for each attempt in msec.");
+ 
+ struct powerclamp_calibration_data {
 -- 
-viresh
+2.39.1
+
