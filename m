@@ -2,99 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E96F68F083
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 15:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBA668F08B
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 15:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjBHOOd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 09:14:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S230387AbjBHORO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 09:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjBHOOc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 09:14:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C94B1AF;
-        Wed,  8 Feb 2023 06:14:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D39BD61554;
-        Wed,  8 Feb 2023 14:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3081C433D2;
-        Wed,  8 Feb 2023 14:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675865647;
-        bh=ElDYKyIKxY0GAmVI1DT9edC+TsIyIstrC2dLihEWpeE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IlbL67f7h+FSoYQDHaW9k/Z7Ml6D7r/RxeLtUJMJkDiRVPpkvBY5LR1/XyoWV0EM6
-         iIQqPEyH6yzitBRKQNENOVsMVC8sxm4JMdpG2w9fc9BPXtiQG+5qfv6WFEk6pErAmE
-         DXHj6Np31PU7SO2W6SXLtaYbwL+cMEEVBYipShKPNzdWdlZgXCwkI7ynnGOWFB/ZWm
-         QZsZAid0L2ykz7optptiHR9JaQHlOdWljd8EiXcYTXooz7Ih5iBzAL79t928PhlO2d
-         AwLP7CvLHy52PAPWlWuqBJOvX49A/FgmWxYSP2dGr8AE284O3q2TFdFNd3orvOIctg
-         CRYew3Caq54BQ==
-Date:   Wed, 8 Feb 2023 15:14:04 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 2/2] drivers/thermal/rcar_gen3_thermal: Fix device
- initialization
-Message-ID: <Y+OuLEUcMseeL0oF@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+        with ESMTP id S231431AbjBHORE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 09:17:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C49794617C;
+        Wed,  8 Feb 2023 06:17:02 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F09AA1042;
+        Wed,  8 Feb 2023 06:17:44 -0800 (PST)
+Received: from bogus (unknown [10.57.10.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF1133F8C6;
+        Wed,  8 Feb 2023 06:17:00 -0800 (PST)
+Date:   Wed, 8 Feb 2023 14:16:58 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Kazuki <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20230207171011.1596127-1-niklas.soderlund+renesas@ragnatech.se>
- <20230207171011.1596127-3-niklas.soderlund+renesas@ragnatech.se>
- <Y+NWKZuQm6uLMkTD@ninjato>
- <Y+N1dDVKqUTnHLQj@oden.dyn.berto.se>
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: s2idle breaks on machines without cpuidle support
+Message-ID: <20230208141658.kede5ylqk4zqvrnj@bogus>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+ <20230208103511.w7jzxw6spy6humdn@bogus>
+ <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vvNGnJY5+3JkXuMb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+N1dDVKqUTnHLQj@oden.dyn.berto.se>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Feb 08, 2023 at 08:20:31PM +0900, Kazuki wrote:
+> On Wed, Feb 08, 2023 at 10:35:11AM +0000, Sudeep Holla wrote:
+> > On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
+> > > On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+> > > >
+> > > > What do you mean by break ? More details on the observation would be helpful.
+> > > For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+> > > these chain of commands don't get called.
+> > >
+> > > call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
+> > >
+> > > Which in turn causes programs like systemd to crash since it doesn't
+> > > expect this.
+> >
+> > Yes expected IIUC. The per-cpu timers and counters continue to tick in
+> > WFI and hence CLOCK_MONOTONIC can't stop.
+> Yes, but it shouldn't be the case when suspending[1]. Currently that's what
+> happens when we enter s2idle without a cpuidle driver. This doesn't seem
+> to happen with S3 sleep [2].
+>
 
---vvNGnJY5+3JkXuMb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Correct, but check the requirements to use syscore operations(mainly
+syscore_suspend/resume where only one CPU is online with interrupts
+disabled. In case of s2idle, all CPUs are idling and not offlined as
+required by the syscore operations and hence it can't be used.
 
+I was about ask you earlier as why can't you implement just system
+suspend in PSCI where the last cpu just calls WFI if you are interested
+in system sleep state. Or you can implement CPU_SUSPEND with an additional
+retention state which enters PSCI implementation just to make sure there is
+an active cpuidle driver and the s2idle state machinery works as expected.
+It is built with those requirements and trying to work it out for WFI without
+any idle driver or firmware implementation to back it up is just not going
+to work.
 
-> While not updating a not yet created zone is fine. But this should never=
-=20
-> happen (tm) as the trip points have not been set when this window=20
-> exists, but better safe then sorry.
-
-Full Ack! Thanks for the heads up.
-
-
---vvNGnJY5+3JkXuMb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPjriwACgkQFA3kzBSg
-KbYFGQ//Vzv6bOtpQk0Le8rf1CEIpcCymm3Xzcsta+d1K9WyLJuGecW00HLZhhWn
-VvQrcve6tKXB+LF/WKuQmaz7HiCV+PhSxGIIs3R90YNstPZ0fNZc8L2TvSkvYDbN
-O/ff/mIQUkNNJf2SrICRzwk0RGHA8SbNO6QmRqmLXsYOleEQ3aqvb63SZvVUHtin
-eUWkbzgoWzSOrC3KMg5w9GRsejLVg9mYiBURKKK73qX0osgLXFW/KtByBAv5bXbo
-lQLOhNA66oNQeow9pIF2HKOurWFFc4HUD5maDWlRwlg6v7ak4jpL8uYesH+sbD+T
-CQRlCXjvC0Crdm9gLYr6pWor/zxgbu6gOoTKUEeinLrDz3i1EO+vmvzRVT2wbZh9
-i0bOcPlvY0Bpc41IavUtSzLwibpMWsdXVNAwOxZneK+ZTQpDndp4oxXfl5TSMwsd
-8hFlQkXglyhMn8G1Ox1LxYmBzRh0WL6cueWfVqGAAvjMVz5MEwp2CJz/SEvRKqyw
-XWaadVjEU3GuO9MQ4HQq0/fYuJLUtwIjdjldijODyyNPFNWq2NvJcwqiRELaUQOf
-1LrW1tJyXhkeb2TL4V+6uW7hQg8u/XJOVsE9YQshKm4V3HfLsGIgdYFB3Y7y9Jnd
-x7OWS8nr6qkYjT7tiunMTVecGbCjG7cLf7OeDKUJ6T9nLPlJgeI=
-=f+ED
------END PGP SIGNATURE-----
-
---vvNGnJY5+3JkXuMb--
+--
+Regards,
+Sudeep
