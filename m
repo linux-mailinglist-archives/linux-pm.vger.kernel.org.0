@@ -2,93 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D032F68E984
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 09:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC1268EA0F
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 09:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjBHIEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 03:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        id S230456AbjBHIkU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 03:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjBHIEL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 03:04:11 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943EE3B666
-        for <linux-pm@vger.kernel.org>; Wed,  8 Feb 2023 00:04:09 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bk16so15838523wrb.11
-        for <linux-pm@vger.kernel.org>; Wed, 08 Feb 2023 00:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zPZYKz9kIWG0BV1hKs7mmkywSKpqe4/iI0ZWWNXTejg=;
-        b=JDQ7cEO1o5sk/n06eAakbpT66oZ80BwGfLJ6rQUl/kuVS0pPWBerSI62m/+4k3yuLT
-         9KS5ffgX7iGFD8fSJu1Fy9tsseGZV9CNhY9knoLl8qpMUnZdl9nGOx4rwn/VUh/plBrM
-         VMTsBInoS1ym37pZsfMAOGeRNZURvNN/1FGhk7JlXpD31+DoXQOoUA/FU40Ar2MRA3sM
-         HON0JuwbYyuHh1G2QrTWEox46SWx/KYDWOfVwQ28VsGfX+B5B6atDsNb8MzFD+vufq4w
-         2HG5d/3SAe74owyHXvj3IjuLC8nLaQ9JAn9yIkDtxBYdKnGeFw4i53Um0fHNoYc1i93M
-         qmGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPZYKz9kIWG0BV1hKs7mmkywSKpqe4/iI0ZWWNXTejg=;
-        b=MArSlHNYjU4V5b89fWhBTOBll3R7byAQGLFQT4hRWqmYdzG5JZtvRFS4pVjnrd88Y6
-         FZRn//wwn/5FYDrx6/f+1ScithyjgrpwK5dn+UKfJ6sNMKQ/SvXCGXgdCMBJQlJwqme7
-         41xRNhUo90xf6fzGIfyn0rtALe1BxZW72aZqPKMnph5VulWEtBkCRYPZ4LpZwS/I26hh
-         zySuMkc8N/szYgLAlWf/NsOVsuQAAYIbBb2P0cPqAj8f70jz9ZlVxWHb2RE3AM2tgBwQ
-         hBcMZ8a5aPOMLcekWluo/qwlLrbdfoeCFh0m3PCn+D6sHIa5lF1BMwNfsS5afPgHGCtn
-         wWuw==
-X-Gm-Message-State: AO0yUKVGfg31ngio+uHsXyy0Ncrl5ItQCO1+Grf2y2tfARYIjtC4QPpI
-        8AoUNiKaw6fGdHqf+FrA3L6nDQ==
-X-Google-Smtp-Source: AK7set/9BRPwbInVYGqTZVlD3CNJVkBqMQafTUumpq+/ygBf8ftf4J0AcDgJI1cyDRzks+1vVM1MKg==
-X-Received: by 2002:a5d:6750:0:b0:2be:64bb:1d84 with SMTP id l16-20020a5d6750000000b002be64bb1d84mr5308759wrw.24.1675843448008;
-        Wed, 08 Feb 2023 00:04:08 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s7-20020adfeb07000000b002bff1de8d4bsm12935330wrn.49.2023.02.08.00.04.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 00:04:07 -0800 (PST)
-Message-ID: <9ca854f9-3148-2f56-287a-f898c8226f67@linaro.org>
-Date:   Wed, 8 Feb 2023 09:04:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
- compatible name
-Content-Language: en-US
-To:     ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
-Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peterwu.pub@gmail.com
-References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229500AbjBHIkS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 03:40:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAE4FF1F;
+        Wed,  8 Feb 2023 00:40:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08764B81C69;
+        Wed,  8 Feb 2023 08:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79529C433D2;
+        Wed,  8 Feb 2023 08:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675845614;
+        bh=adWnpp1g9RFqPwQqHmQOvEb/SGvHh6YP0oNFIBMWN5Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iW9MSmpK9cnLE/S4Oe4ja1Gv4lyUkFg5DM+mnVIWe5ssivwI7nGiTYym/18HTYKxV
+         99cd+PNPxkugWHgVsXjRh0QoiuylkSTsQmFcpcse2GeIgDXf/BDkU3msTm4tzlqNZc
+         JyBo+qEmxglrRYYxIY1uc+ciYNo8eBRzV1rwKnTdgznolowEmR+D0226ANjJBROhU7
+         /da85/eUXgBJTJF+4RmqUQs1DKIdeb8p4rYG3jDDxnnt+EohAqdt8sOD4b4/djnppA
+         X8DrOqxWL8UgGEMbCbY4IhDVQ1eL02nlb6gVN16lwQJT4AxQPFf2i9VdxZMFBFy0ul
+         nELH+UI9hsu6w==
+Received: from 82-132-235-19.dab.02.net ([82.132.235.19] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pPfzv-008b9y-Ss;
+        Wed, 08 Feb 2023 08:40:12 +0000
+Date:   Wed, 08 Feb 2023 08:40:09 +0000
+Message-ID: <878rh81rfa.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+In-Reply-To: <7462738f-e837-cd99-f441-8e7c29d250cd@arm.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+        <20230203135043.409192-30-james.morse@arm.com>
+        <865ycg1kv2.wl-maz@kernel.org>
+        <7462738f-e837-cd99-f441-8e7c29d250cd@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.235.19
+X-SA-Exim-Rcpt-To: james.morse@arm.com, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, tglx@linutronix.de, lpieralisi@kernel.org, mark.rutland@arm.com, sudeep.holla@arm.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mingo@redhat.com, will@kernel.org, catalin.marinas@arm.com, chenhuacai@kernel.org, suzuki.poulose@arm.com, oliver.upton@linux.dev, lenb@kernel.org, rafael@kernel.org, kernel@xen0n.name, salil.mehta@huawei.com, linux@armlinux.org.uk, jean-philippe@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/02/2023 04:14, ChiaEn Wu wrote:
-> Revise RT9467 compatible name from "richtek,rt9467-charger" to
-> "richtek,rt9467"
+On Tue, 07 Feb 2023 17:50:58 +0000,
+James Morse <james.morse@arm.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 05/02/2023 10:12, Marc Zyngier wrote:
+> > On Fri, 03 Feb 2023 13:50:40 +0000,
+> > James Morse <james.morse@arm.com> wrote:
+> >>
+> >> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> >>
+> >> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+> >> request to handle all hypercalls that aren't handled by KVM. With the
+> >> help of another capability, this will allow userspace to handle PSCI
+> >> calls.
+> 
+> > On top of Oliver's ask not to make this a blanket "steal everything",
+> > but instead to have an actual request for ranges of forwarded
+> > hypercalls:
+> > 
+> >> Notes on this implementation:
+> >>
+> >> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+> >>   generalizes the idea to all hypercalls, since that was suggested on
+> >>   the list [2, 3].
+> >>
+> >> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+> >>   kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+> >>   this, because:
+> >>   - Most user handlers will need to write results back into the
+> >>     registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+> >>     go all the way and read them back on return to kernel.
+> >>   - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+> >>     handling the call.
+> >>   - SMCCC uses x0-x16 for parameters.
+> >>   x0 does contain the SMCCC function ID and may be useful for fast
+> >>   dispatch, we could keep that plus the immediate number.
+> >>
+> >> * Add a flag in the kvm_run.hypercall telling whether this is HVC or
+> >>   SMC?  Can be added later in those bottom longmode and pad fields.
+> 
+> > We definitely need this. A nested hypervisor can (and does) use SMCs
+> > as the conduit.
+> 
+> Christoffer's comments last time round on this was that EL2 guests
+> get SMC with this, and EL1 guests get HVC. The VMM could never get
+> both...
 
-Missing full stop.
+I agree with the first half of the statement (EL2 guest using SMC),
+but limiting EL1 guests to HVC is annoying. On systems that have a
+secure side, it would make sense to be able to route the guest's SMC
+calls to userspace and allow it to emulate/proxy/deny such calls.
 
-Please explain why.
+This would solve the 10 year old question of "how do we allow a guest
+to call into secure services...
 
 > 
-> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> > The question is whether they represent two distinct
+> > namespaces or not. I *think* we can unify them, but someone should
+> > check and maybe get clarification from the owners of the SMCCC spec.
+> 
+> i.e. the VMM requests 0xC400_0000:0xC400_001F regardless of SMC/HVC?
+> 
+> I don't yet see how a VMM could get HVC out of a virtual-EL2 guest....
 
-Best regards,
-Krzysztof
+My statement was badly formulated, and I conflated the need for SMC in
+EL2 guests with the (separate) need to handle SMC for EL1 guests.
 
+>
+> 
+> >> * On top of this we could share with userspace which HVC ranges are
+> >>   available and which ones are handled by KVM. That can actually be added
+> >>   independently, through a vCPU/VM device attribute which doesn't consume
+> >>   a new ioctl:
+> >>   - userspace issues HAS_ATTR ioctl on the vcpu fd to query whether this
+> >>     feature is available.
+> >>   - userspace queries the number N of HVC ranges using one GET_ATTR.
+> >>   - userspace passes an array of N ranges using another GET_ATTR. The
+> >>     array is filled and returned by KVM.
+> 
+> > As mentioned above, I think this interface should go both ways.
+> > Userspace should request the forwarding of a certain range of
+> > hypercalls via a similar SET_ATTR interface.
+> 
+> Yup, I'll sync up with Oliver about that.
+> 
+> 
+> > Another question is how we migrate VMs that have these forwarding
+> > requirements. Do we expect the VMM to replay the forwarding as part of
+> > the setting up on the other side? Or do we save/restore this via a
+> > firmware pseudo-register?
+> 
+> Pfff. VMMs problem. Enabling these things means it has its own
+> internal state to migrate.  (is this vCPU on or off?), I doubt it
+> needs reminding that the state exists.
+
+I'm perfectly OK with the VMM being in the driving seat here and that
+it'd have to replay its own state. But it needs some level of
+documentation.
+
+> That said, Salil is looking at making this work with migration in Qemu.
+
+Yup, that'd be needed.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
