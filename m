@@ -2,113 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F99E68EF85
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 14:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7332168EF8E
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 14:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjBHNJh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 08:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S230094AbjBHNMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 08:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbjBHNJg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 08:09:36 -0500
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2827D47095;
-        Wed,  8 Feb 2023 05:09:26 -0800 (PST)
-Received: by mail-oo1-f49.google.com with SMTP id c29-20020a4ad21d000000b00517a55a78d4so1710995oos.12;
-        Wed, 08 Feb 2023 05:09:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sKctfRFevEGzylkJxSTY3VRpoj1hZvHSm640h9Em5z4=;
-        b=tqudxdEEH9DTZxcn6SrSB2g5saQjtvlQwvcjSxqIhNctJYHI9V2o6mIYdWt/T1GTTd
-         BVVW0ajMgV4p6KtaMS9UgdiXBJL33jVo8Zr9CHYbQ5mHQhPZvnKYAq/jFKcaci4c6J/I
-         bk4cBOYi2s6zC/VrtnUONEvNlkwIq4tO6wAWSGgvhHS7Xc1caQDWF46s4ktbrMBe6HWQ
-         JSLWsaFDFhGMmihITd1l+cBR9frvAm8ZMQ5zPo4ISUo05VTK6CTdgLdwhVe5wSfAmFzC
-         /4CfCzinIsgQnsTGBXckwjJexwOJukdc3iQgFootFP7tAjvgy67IFmKxOtIi89ihdCe1
-         cSwg==
-X-Gm-Message-State: AO0yUKUDNiWW29c89E2sZsLD12uayLfb7cHUvdeAWlvCKpXAah3rErqm
-        rzjB3HVXDHLwix5kdGjN99/CqZk/Ug==
-X-Google-Smtp-Source: AK7set92nRxfqLhEo6VH3xIGRC1voySix/Y+GAklX6sGfkt1mG8OhseTlmNN7FZBChOHr6TFaCdmIw==
-X-Received: by 2002:a4a:e091:0:b0:51a:4c5d:fd1e with SMTP id w17-20020a4ae091000000b0051a4c5dfd1emr3445841oos.9.1675861765298;
-        Wed, 08 Feb 2023 05:09:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m14-20020a9d6ace000000b0068bce0cd4e1sm8000848otq.9.2023.02.08.05.09.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 05:09:24 -0800 (PST)
-Received: (nullmailer pid 1735857 invoked by uid 1000);
-        Wed, 08 Feb 2023 13:09:24 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229965AbjBHNMQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 08:12:16 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDFE460AF;
+        Wed,  8 Feb 2023 05:12:14 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 670BB660209D;
+        Wed,  8 Feb 2023 13:12:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675861933;
+        bh=UOCZJc3cdFQz7WthuBqxrwG8dtBB60ZKl7NVR8Pqvfo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kyU+9mQdEod0ItgZqYe2WGyoUkGROJ+uKVETSfQgPaNxgTuPD9jNVuf+b/4DU+Xbg
+         isKqJj80vNFveMnyV74RA48dg2zUazykij7yww34rdUwhpTwvuboAzhVdUEaPHa8HM
+         K+se12Gcx4BL5Pebq6kHLh+hBvacCeGvLfnfXZ4hNEk442X/gFWBeLK+nw8Re/PliP
+         /ncMNzw7q9IlUQrFaWIYlrg+3lp8d54W8XbwIDI+ZEo8myUvxDTcIqq8Tt9n0OrcG7
+         1sXaFrD0dy1RHdbgcj8M6bGGAwUJYRhXg9WYCkxSkEKF21c9o/xxxh42ON70sHnkVe
+         9kO9odKEySRkQ==
+Message-ID: <3b421ab5-9b97-4f50-f65e-471a6d09f568@collabora.com>
+Date:   Wed, 8 Feb 2023 14:12:09 +0100
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rockchip@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        Heiko Stuebner <heiko@sntech.de>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Will Deacon <will@kernel.org>
-In-Reply-To: <20230208093830.143284-19-s.hauer@pengutronix.de>
-References: <20230208093830.143284-1-s.hauer@pengutronix.de>
- <20230208093830.143284-19-s.hauer@pengutronix.de>
-Message-Id: <167586156991.1727589.15971216744751237430.robh@kernel.org>
-Subject: Re: [PATCH v2 18/19] dt-bindings: devfreq: event: convert Rockchip
- DFI binding to yaml
-Date:   Wed, 08 Feb 2023 07:09:24 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] cpufreq: Make cpufreq_unregister_driver() return void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        iresh Kumar <viresh.kumar@linaro.org>
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+References: <20230207195909.474953-1-u.kleine-koenig@pengutronix.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230207195909.474953-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Wed, 08 Feb 2023 10:38:29 +0100, Sascha Hauer wrote:
-> Convert the Rockchip DFI binding to yaml.
+Il 07/02/23 20:59, Uwe Kleine-König ha scritto:
+> All but a few drivers ignore the return value of
+> cpufreq_unregister_driver(). Those few that don't only call it after
+> cpufreq_register_driver() succeeded, in which case the call doesn't
+> fail.
 > 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  .../bindings/devfreq/event/rockchip,dfi.yaml  | 61 +++++++++++++++++++
->  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ------
->  2 files changed, 61 insertions(+), 18 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> Make the function return no value and add a WARN_ON for the case that
+> the function is called in an invalid situation (i.e. without a previous
+> successful call to cpufreq_register_driver()).
 > 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+For MTK and generic part:
 
-yamllint warnings/errors:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-dtschema/dtc warnings/errors:
-
-
-doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml: Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230208093830.143284-19-s.hauer@pengutronix.de
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
