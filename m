@@ -2,219 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A9668F2A7
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1904068F2CE
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 17:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjBHQCk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 11:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S231395AbjBHQF3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 11:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBHQCi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 11:02:38 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF8A2B635;
-        Wed,  8 Feb 2023 08:02:37 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id a10so14035016edu.9;
-        Wed, 08 Feb 2023 08:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DKyil8IbId0kexGvkgY1HOtPSwl714eSaF9A1N7I3XI=;
-        b=TAf99v4TaLYlkdOtj0H1I61dJZ3D7krkZ8fFgDshCFTOkK6G/HsPafvr+O3sHFRfz6
-         7qnZvGm3YJxy2rxYUCur4RGk9EeRu3Qqa4WDyn+1fiHXa6YlIoWIvAOvMQui7muyo3/P
-         fTjr+v90xFMPs1y5EHmSpTLBxKtC8+g4r4fLY+KnvIlK3VPGxsMUiMshkq3ia8k3Gint
-         scSwpw87loOnPZGEqbFWbBfsACwsTqBAooXVp6q7e4+wTDj4+Jvq4yjFIvQ6YdaQpw/L
-         nyXpT7SGxRu9evldj0DYTfJ7KUCJXQfBlkp1m4b0wKoRW9mx51/Ah8Rsc4LTMzTJMb6F
-         dpCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DKyil8IbId0kexGvkgY1HOtPSwl714eSaF9A1N7I3XI=;
-        b=25InE+5hj6qoYJSUpnQTLXDm2JxKSFFyGfr2uSYHVO9XfZZyqoFfLBxC3W5q2sJItn
-         YEtgtHUjaj/mPgBQoIQEYlKcCCdlbrgYw0CTrrXgnAblvEsTehgVje8MjNrVjVgTXyww
-         NJ3E8mijSYr+lG3JdeOnLbjUV5yVXDVI6IWQCt7JdxQWhCHV9ACsh4bSw0djHyqLiN9Q
-         1zCjgkt68YVF4lMcrssvY9va0Jmq4PV9Z+Rj2kE7RO6wLn/9IhbmolK6eAp+p4BEx3mU
-         tDfTKJ1cUe85IJ6G2FP4xyyMx5rJuE4eQiYENIzGxjGQNgM5tx5Mq99qrBMyDFpheNhk
-         x+3Q==
-X-Gm-Message-State: AO0yUKXv684MwnEZ0R5DfmGET8jNMUbDXZGvzmYEys6oNP8tRzfCUmiU
-        tuPImqADg+9ggS0ATk7T5Ck=
-X-Google-Smtp-Source: AK7set9ik7jw7lT/vGBewMMSVZ9klDDjd4LcOUdKBag4qpRWRUErjugptHMaNael4Rj5wIRV5tIzHg==
-X-Received: by 2002:a50:d09d:0:b0:4a2:6d1c:fb38 with SMTP id v29-20020a50d09d000000b004a26d1cfb38mr7928629edd.10.1675872155761;
-        Wed, 08 Feb 2023 08:02:35 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id fd8-20020a056402388800b004a245350e0fsm8058786edb.36.2023.02.08.08.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 08:02:35 -0800 (PST)
-Date:   Wed, 8 Feb 2023 17:02:33 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
+        with ESMTP id S230203AbjBHQFX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 11:05:23 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2047.outbound.protection.outlook.com [40.107.212.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89934C0FD;
+        Wed,  8 Feb 2023 08:05:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h+zsKli8gIIhv9EZepNkKBF+jDrKQiPZhoxw8e9K/6nXT3ky2BT4t/FJQOV72AxGzAwcGNhM4fqvZPRS8KqxRc6QuFxZGiipy41ubXCjo7k0e0kgRhPOyDf06rMzRrdApQXyhsbvIAQonq6g4WJABJpG7SCY1r0GPlmSQBV2ycR3jvDky2PUBRPPfxs/9i8v44ViYwEj2yF9wSe2Y6vmbzW3ZxQIEkQQVgnr9NDNSwj4lca8GTMYqyTD99X3w4rFAW/wOtsW++g6VLxvADQiS7ojchQTWH34McQByRZT0h2flNW0zBP+2xljJXT1yzYXxDLVzbJezerynbIgqS6qCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hL8ooqB3FGsWwxnszSNFMg3wodsGaUMHcg3sQe4IaLI=;
+ b=UCUZa4vk8b27zk2Ms1hWK7xuUCvuQ7w/Bd4mEsEQYMd6x7b69oxW6B0cqArtlHSbiqM8gFrvDZiBhruJIpY54Ggc7Qnit6yqvwZ8BY2DlsIinEB8CBRN7XtFL50nbxYpyTxWNYbzHdi6J7+EnJSvBamPbd3sLI/6cS1GlofM5vnnqyXyIXVSGhIMe0A5Var4Z/onmXTo1ZejOixi5wL3woMkhbR8eui2n+3/c+k1m33Dr6MilimFqGBKvLMrEaHnT7bEYT1lftM6NfMUGiEA3h1+9Wug3mgY8B7gJpmd0OD5ak0sDFH6ggY3mYyuMoW5177Jzs8ur6U3O6Ebx70OAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hL8ooqB3FGsWwxnszSNFMg3wodsGaUMHcg3sQe4IaLI=;
+ b=biJKnB4RQrrxPJ9O1eyvg8GITVlYXtw2YnDRwraooqK4IJ51y9urStIICvGRSa9FwU2AtGzvoFi7xpksrBonpUXfyjzhZwozOtg6MAZgWMV6ynZpCicBGKrCtHqsFVxgj/l10H8nm5bVokV2PUjS3PqUrMtFCDP3GM3snZZz+hk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by PH8PR12MB6962.namprd12.prod.outlook.com (2603:10b6:510:1bd::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
+ 2023 16:05:12 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.6064.034; Wed, 8 Feb 2023
+ 16:05:12 +0000
+Date:   Wed, 8 Feb 2023 16:04:57 +0000
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] thermal: tegra-bpmp: Always (re)program trip
- temperatures
-Message-ID: <Y+PHmeQbFLNqlzOj@orome>
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
- <20230207135610.3100865-2-cyndis@kapsi.fi>
- <Y+N8uMO3V5+YNm2E@orome>
- <d6a2a1d5-fc3b-2510-e5e8-e3f36f1652d5@kapsi.fi>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KVkfM7mbh/4l5fR6"
+        iresh Kumar <viresh.kumar@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+Subject: Re: [PATCH] cpufreq: Make cpufreq_unregister_driver() return void
+Message-ID: <20230208160457.ouh2kg36s4kqpahe@beas>
+References: <20230207195909.474953-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <d6a2a1d5-fc3b-2510-e5e8-e3f36f1652d5@kapsi.fi>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230207195909.474953-1-u.kleine-koenig@pengutronix.de>
+X-ClientProxiedBy: PN2PR01CA0017.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::22) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|PH8PR12MB6962:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b138900-e5ec-40b4-0796-08db09ee41f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: o9p/HFmH4NCjM+13sCOuHtPCOcP7ouS4/VeLSbj394MwcVrg5J+/UKNwEgMMjgHTCOLMIjaG9PVizeDQ7WaakFmuB9V2k3ZiFlPAUlTM8eIaQiEKJZ4h1gISW7b/Diqi0vm5aX4h1TUkBLVwYRMqxuDCTY4m4fQ1hM//n8iyQCUIjVmfoPU+5kNm2zjuQbTp5GA4vA24MlDb0UXmMmho9e/joLYxUgqs6/wjZzsdZAoial89q1LfpqVVbTd55gIQYLzkOMzbuI4vy+fv5zcNcIojtPVOz9LG6r8yJ2f2WF+/lQlMBlismX7SsnFJclve6QiIP08JKgFSpn9QzOuVOAoWw39yVmiuoDAmDQCodgvBUmv8EUv0r67ueuph9qMRw/DbZDKb/OdoYYDi0B6WtseZJQeday43wpi+2NFchVvMr2K8FTtqxQ4q6Uvw3nB1bMtnJeM82/stGTgtTtFRiNPcDwLzuQ6majB+/CUgILvCrL7C21kRkfDAQKmwPZHCmXXUvD1Gf0JiNbu+t9xJncHo+NSHFZRXzNjTbc3O7Qx/YqgjWhpHtDnrtvW/cDh91GdijVpQMLFavc45JnKmDHYQmXCL6Y8SfhrAADFLNjrMtgiRvcUILVJa6kT7tznZilY1DyJWPiVJ29igEIqcmCcOrbmwK/Pu5YJSohmgZbM217x8vDGf/T4Ilp8I+f4+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199018)(5660300002)(7416002)(44832011)(2906002)(66574015)(83380400001)(38100700002)(8676002)(33716001)(4326008)(66946007)(54906003)(6916009)(66476007)(8936002)(6666004)(66556008)(41300700001)(6512007)(1076003)(186003)(6506007)(9686003)(26005)(316002)(966005)(86362001)(6486002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?yIKY2yBmGnTJtQr7cZm9HS2oQIB6j2/aVuOyPbkkF3/p9bY5Kj6ETMFulz?=
+ =?iso-8859-1?Q?SAHESfKJhIvcuhbAn3Tcgvj952w9RhrVB4XRpxLf9rfNTq/H8Z2pLyepiT?=
+ =?iso-8859-1?Q?FPcxWaIRU2U1aXQOHCKW9oW/oY7KYtJf4Rau64dHFayBPcyboa92Wcu0S5?=
+ =?iso-8859-1?Q?QQLSBybHclc29k+UdWe/hTJ9CYPeZhBedOaamhuuexSLOd1zWEyAAksMkV?=
+ =?iso-8859-1?Q?Gz/jhYIWj2XkrtE6Ajy5ZT3jTA0TYpYDvPM4RluRaHZtu01PlG/9vTks27?=
+ =?iso-8859-1?Q?EYFvXx7RgaowqboXhqB7EhuB0w2apcrs4GnBG6SFo+dLx7yhEQciNv6Orv?=
+ =?iso-8859-1?Q?fmc7sQMzHoC3YlyFB1FghNznfR2L9jXlQHoolsgn1W6f3A9KTaFWEq6MmA?=
+ =?iso-8859-1?Q?Kfo1C6kkRTQJKv14bKtOB4r+oBJdKPDhvxdOdnLSIFk9x1RmF4d+M1H0qh?=
+ =?iso-8859-1?Q?5VCW0i8/Giq+HbUuvzWKQ1PjcRKpJ7B0fMINmXV7RkHBIgjFA/It8Lfup2?=
+ =?iso-8859-1?Q?e4RafZzipXllUTiq2trh8hIfLTwV4fEadAh77E8nD46TU6utMCtipzirHh?=
+ =?iso-8859-1?Q?9IMjf7Yt8SIAL9AmyoXgEgGx6qKYwFTWtPzAdrZuAojdN3xDjxKXRjXv4K?=
+ =?iso-8859-1?Q?6T8Zi8p6Ih9tb516kiyA4iKvg0Rb6+Nsyr/1zVJIXwlvW7cYRPQA+Q+jgO?=
+ =?iso-8859-1?Q?dubvHsiC9k9XDn276MRdRuCzXeIWDdxrdjjNZQIVIWX59nEC1+iQqHntR/?=
+ =?iso-8859-1?Q?FGOwfX8dbWAQdXHFprgYZjpEtUClUN79yai5huACW2azi4looTnl71fP3r?=
+ =?iso-8859-1?Q?EKQNWqa2yWjklYVvdmerBLvY5lMrRitdKdXu9Pxfp/n6ieS9OqMSQAKWgl?=
+ =?iso-8859-1?Q?vo2NSgyM4jqUC6e+Cwz/Uhra5AQNwGfuXuMY6jMwj/F2JFv01G73YWwem7?=
+ =?iso-8859-1?Q?Xzy54eIfIvtuuzV9XiBfEjE98ul6uaXk9MCJESK/HfuDqBGQ4HG0nLbRxt?=
+ =?iso-8859-1?Q?IYKizyz+FFG0gvleeJZWDJl3J1TxU1LO2+UlpdnREclUcBK18vSpvQqB8q?=
+ =?iso-8859-1?Q?wOL1rVGKjR7V8rvoD9TocgXBiBdop0oiKQR1RwZTt502hXGVHRuQkbHu0u?=
+ =?iso-8859-1?Q?kBXLkXRmr0CVEw+sELf5vp/c3yMuipH7PLnstlav1ww6K4f130onMDtchx?=
+ =?iso-8859-1?Q?xoacFZOcZKpgbafJdERjudNJHcqA/Av9PfxKd0JS7wuiU3l1+Grhnh0sEC?=
+ =?iso-8859-1?Q?7Ob8WRqOaxvsAcTi4Jzvpd2MO6mmdmiRqIEI1eskiIy1Bvej2IXCaPJ2Mn?=
+ =?iso-8859-1?Q?jeLwhfOznA+ZSPOsQJiBN55elVPWTP5yYStzE15R6P/cGn3cCeP+Q0GcA/?=
+ =?iso-8859-1?Q?pQZbwcUcJ0vmqb8iiMmHRekr9Z6iUDCyXwDA29deveCYo9gSWe7pjwT7vH?=
+ =?iso-8859-1?Q?Jo5CJ13sqKARTwGoEZdY1PtNWorSEMomo7OpaHEN8N9gFKgFbdI1OkHiOp?=
+ =?iso-8859-1?Q?HJrUFeczncxLx/jYoc6XRb66VSoUvIkV0BnoeJztc4HCRxvcAXLKpvh+bq?=
+ =?iso-8859-1?Q?zI2IbcU1pfUuy6gxh0CPREWWsitvgly8qgQdOviBFHa6bZCNcb4lkJ7qYH?=
+ =?iso-8859-1?Q?97Yvw8wizjao03fYuUVUukAqa3K6uCyI8K?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b138900-e5ec-40b4-0796-08db09ee41f0
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 16:05:11.9141
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6A+h36ieD7es75BXW3tXSeJz8J6xoTwvnpEKBNHQ8D+hWahR488QVc1Vny5q+vK7rHnX/03g9NTEvtzYo5SKJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6962
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Uwe Kleine-König,
 
---KVkfM7mbh/4l5fR6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 07 Feb 20:59, Uwe Kleine-König wrote:
+> All but a few drivers ignore the return value of
+> cpufreq_unregister_driver(). Those few that don't only call it after
+> cpufreq_register_driver() succeeded, in which case the call doesn't
+> fail.
+> 
+> Make the function return no value and add a WARN_ON for the case that
+> the function is called in an invalid situation (i.e. without a previous
+> successful call to cpufreq_register_driver()).
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/cpufreq/brcmstb-avs-cpufreq.c | 5 +----
+>  drivers/cpufreq/cpufreq.c             | 8 +++-----
+>  drivers/cpufreq/davinci-cpufreq.c     | 4 +++-
+>  drivers/cpufreq/mediatek-cpufreq-hw.c | 4 +++-
+>  drivers/cpufreq/omap-cpufreq.c        | 4 +++-
+>  drivers/cpufreq/qcom-cpufreq-hw.c     | 4 +++-
+>  include/linux/cpufreq.h               | 2 +-
+>  7 files changed, 17 insertions(+), 14 deletions(-)
 
-On Wed, Feb 08, 2023 at 05:35:22PM +0200, Mikko Perttunen wrote:
-> On 2/8/23 12:43, Thierry Reding wrote:
-> > On Tue, Feb 07, 2023 at 03:56:09PM +0200, Mikko Perttunen wrote:
-> > > From: Mikko Perttunen <mperttunen@nvidia.com>
-> > >=20
-> > > In the rare case that calculation of trip temperatures would result
-> > > in the same trip temperatures that were previously programmed, the
-> > > thermal core skips calling .set_trips.
-> >=20
-> > That seems like an appropriate optimization.
-> >=20
-> > > However, presently, if it is not called, we may end up with no trip
-> > > temperatures programmed at all.
-> >=20
-> > I have a hard time understanding when this would happen. prev_low_trip
-> > and prev_high_trip are -INT_MAX and INT_MAX, respectively, so these are
-> > unlikely to be the result of anything we compute at runtime, based on
-> > temperatures specified in DT, for example.
->=20
-> Consider:
->=20
-> Temperature is 45C.
-> set_trips is called with low=3D40C high=3D50C. We program accordingly.
-> Temperature goes to 55C. Trip point triggers.
-> Before execution gets to CPU, temperature returns to 45C.
-> CPU gets the MRQ, calls into thermal core to update.
-> Thermal core notices that temperature is 45C and sets again the same low=
-=3D40C
-> high=3D50C trip points, does not call set_trips.
-> No trip point is programmed to BPMP and we never get trips again.
+> base-commit: 05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
 
-So does this mean that trip points in BPMP are "one-shot". That is, once
-they are triggered, BPMP will automatically delete them? And we actively
-need to reprogram them to trigger again?
+You may have to rebase it on top of this [1].
+Recently this patch series was picked up by Rafael.
+You have to add the below hunk in your patch.
 
-Perhaps a better alternative would be to force the previous temperatures
-to be invalid when the trip point triggers to ensure they always get
-reprogrammed. Or perhaps we could add a flag to the thermal subsystem to
-mark "one-shot" triggers so that the core skips over the temperature
-check and always reprograms.
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 168a28bed6ee..70debd5a9f40 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -831,7 +831,7 @@ static void amd_pstate_driver_cleanup(void)
 
-> The above, of course, is rather unlikely to happen, but theoretically
-> possible nevertheless.
->=20
-> Alternatively, where I discovered the issue originally, was the issue
-> described in the last paragraph of the commit message; see below.
->=20
-> >=20
-> > So I would expect ->set_trips() to get called at least once when the
-> > thermal zones are first registered. Are you saying there are cases where
-> > ->set_trips() doesn't get called at all?
->=20
-> No, not saying that. It will get called when registering the zone initial=
-ly,
-> but see below.
->=20
-> >=20
-> > > To avoid this, make set_trips a no-op and in places where it would be
-> > > called, instead unconditionally program trip temperatures to the last
-> > > specified temperatures.
-> >=20
-> > Again, this seems more like a workaround for an issue that exists
-> > elsewhere. If ->set_trips() doesn't always get called when it should be,
-> > then that's what we should fix.
->=20
-> I think it depends on what the interpretation is with set_trips. If the
-> interpretation is that the the trips configured in the hardware are
-> persistent (not disabled when a trip occurs), then the current
-> implementation and this patch make sense. Otherwise a change in the therm=
-al
-> core would make sense.
->=20
-> >=20
-> > > This also fixes the situation where a trip is triggered between
-> > > registering a thermal zone and registering the trip MRQ handler, in
-> > > which case we would also get stuck.
-> >=20
-> > Could this be fixed by requesting the MRQ prior to registering the
-> > zones? That seems like the more appropriate fix for this issue. It's
-> > similar to how we typically register IRQ handlers before enabling a
-> > device to make sure we don't miss any interrupts.
->=20
-> I considered that -- there are two reasons I didn't go for it:
->=20
-> 1. It doesn't solve the race condition described in the first part of the
-> message
+ static int amd_pstate_update_status(const char *buf, size_t size)
+ {
+-       int ret;
++       int ret = 0;
+        int mode_idx;
 
-These are two different problems, though, so trying to swat them with
-the same fix is not likely the best solution.
+        if (size > 7 || size < 6)
+@@ -844,7 +844,7 @@ static int amd_pstate_update_status(const char *buf,
+size_t size)
+                        return -EINVAL;
+                if (cppc_state == AMD_PSTATE_ACTIVE)
+                        return -EBUSY;
+-               ret = cpufreq_unregister_driver(current_pstate_driver);
++               cpufreq_unregister_driver(current_pstate_driver);
+                amd_pstate_driver_cleanup();
+                break;
+        case AMD_PSTATE_PASSIVE:
 
-> 2. To handle the incoming MRQ, zone->tzd needs to be set. But we only get
-> tzd from the zone registration call, and already before that call returns,
-> set_trips has been called and we might have received an MRQ. I tested usi=
-ng
-> a completion object to block in the MRQ handler until the initialization
-> completes, but that's pretty ugly as well.
 
-Sounds to me like we may need to split the registration and activation
-steps. I recall discussions about similar issues in other subsystems.
+Otherwise the patch looks good to me.
 
-With interrupts this can sometimes be worked around by installing
-handlers and keeping interrupts masked and once unmasked they will
-immediately trigger and cause the handler to run. We probably don't
-want that for BPMP MRQs, though.
+[1]: https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@amd.com/#t
 
-Thierry
-
---KVkfM7mbh/4l5fR6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjx5cACgkQ3SOs138+
-s6GsFhAAtSJMUUImi9We74FEg1E641VIsMpdKUZcFJIM35g6AYVagW8BRYBT+ICR
-Kwa3tz4mP7Jt2CbajkYXqk2weHL2p4f+mO2TJ8kmyy00jUhMuW20yPrSqE3WhmBY
-kr17m6rw0MeAlO4hNpsO5/PYKTk1UsVRJU6fosTxJzx+aLGd8v5LsRxTsvzlcoyD
-VsB+/POapWfFj2ZGQGOPuR2AlBOy9spTTc4lZjUuGGKMISzWrHlS74GNVrnzzSZZ
-ArW/yo7463jeVUVGtk8STFJdaByDm64xDVK1jR40nV4WbPMpF1A4BQNk81MF44+G
-MoXEc2NX3loLKuoTtoK89q8ZMIL17Vvx36iUkAqcvPCzup//5Pl6LuTo4V9dfPH2
-GODb/VmgsLFUbroLL4onU0edKbeuFfJS9c8h7wFU4E8Vtk2SDC3a13ywqNUro6yM
-fObDKsk8hBb5G1haV9QQpQuTxKPO62yX245ttLR0z2qIKh8If2dTZJqXFzNutZI2
-JpKwbOOi4uTw1KsUVNYG1f27Qfjlve8PEsk50QwCqzQctlF2m3F2eHoY3evw96ce
-X/BRYCYW98jqrkCoZEske0RHzgH7cJyz80/x1UYd32no7EXTVg7BWyONDc5fumx4
-NR0bUA2MUVbXVzaXMfXBgDSuSnzXlbK8k64UTodPfhhIyCsbHPU=
-=9isT
------END PGP SIGNATURE-----
-
---KVkfM7mbh/4l5fR6--
+Thanks,
+Wyes
+> -- 
+> 2.39.0
+> 
