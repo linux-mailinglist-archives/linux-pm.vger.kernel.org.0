@@ -2,120 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F99C68E973
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 08:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D032F68E984
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 09:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjBHH6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 02:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S230082AbjBHIEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 03:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBHH6i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 02:58:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C2440FC;
-        Tue,  7 Feb 2023 23:58:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B17EC6153C;
-        Wed,  8 Feb 2023 07:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD1DC433D2;
-        Wed,  8 Feb 2023 07:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675843116;
-        bh=ekCkgDhcpNyTrRI5U/hbOWjhHL/iqJL0wlX8hHfuD04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lymkujf6Tjydq6qfdneiPootbGvCjYiXKslv/Hg1nuijXMQ6kJ3jVQMgzN72PYzRe
-         hxTwqY+uVH0AvgkQtHAGSKUcv6IOQPvbNi836nwCwqnXqipmpmmqAVNELqmw+8SRXR
-         0aj0uqEUZDtDyLtmClbc5W2Pfa3aU/QBbixiXF0K54Y6vqhHnglAc6c+xNDqjCjsy2
-         2oC3DTulpjc/5/OnS4CIZobqgSot6d3DhyPgQNHP3HsIgaVDRq0YtkAJE8+6iPvuPb
-         s5aH3w1layMXYMBRJWH/10PbNw2hYsIANpfv1iP7zdejE4mPKWQ2nhW1wkzx3ugRth
-         dTAoXc4QzLYHA==
-Date:   Wed, 8 Feb 2023 08:58:33 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 2/2] drivers/thermal/rcar_gen3_thermal: Fix device
- initialization
-Message-ID: <Y+NWKZuQm6uLMkTD@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20230207171011.1596127-1-niklas.soderlund+renesas@ragnatech.se>
- <20230207171011.1596127-3-niklas.soderlund+renesas@ragnatech.se>
+        with ESMTP id S230027AbjBHIEL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 03:04:11 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943EE3B666
+        for <linux-pm@vger.kernel.org>; Wed,  8 Feb 2023 00:04:09 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so15838523wrb.11
+        for <linux-pm@vger.kernel.org>; Wed, 08 Feb 2023 00:04:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zPZYKz9kIWG0BV1hKs7mmkywSKpqe4/iI0ZWWNXTejg=;
+        b=JDQ7cEO1o5sk/n06eAakbpT66oZ80BwGfLJ6rQUl/kuVS0pPWBerSI62m/+4k3yuLT
+         9KS5ffgX7iGFD8fSJu1Fy9tsseGZV9CNhY9knoLl8qpMUnZdl9nGOx4rwn/VUh/plBrM
+         VMTsBInoS1ym37pZsfMAOGeRNZURvNN/1FGhk7JlXpD31+DoXQOoUA/FU40Ar2MRA3sM
+         HON0JuwbYyuHh1G2QrTWEox46SWx/KYDWOfVwQ28VsGfX+B5B6atDsNb8MzFD+vufq4w
+         2HG5d/3SAe74owyHXvj3IjuLC8nLaQ9JAn9yIkDtxBYdKnGeFw4i53Um0fHNoYc1i93M
+         qmGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zPZYKz9kIWG0BV1hKs7mmkywSKpqe4/iI0ZWWNXTejg=;
+        b=MArSlHNYjU4V5b89fWhBTOBll3R7byAQGLFQT4hRWqmYdzG5JZtvRFS4pVjnrd88Y6
+         FZRn//wwn/5FYDrx6/f+1ScithyjgrpwK5dn+UKfJ6sNMKQ/SvXCGXgdCMBJQlJwqme7
+         41xRNhUo90xf6fzGIfyn0rtALe1BxZW72aZqPKMnph5VulWEtBkCRYPZ4LpZwS/I26hh
+         zySuMkc8N/szYgLAlWf/NsOVsuQAAYIbBb2P0cPqAj8f70jz9ZlVxWHb2RE3AM2tgBwQ
+         hBcMZ8a5aPOMLcekWluo/qwlLrbdfoeCFh0m3PCn+D6sHIa5lF1BMwNfsS5afPgHGCtn
+         wWuw==
+X-Gm-Message-State: AO0yUKVGfg31ngio+uHsXyy0Ncrl5ItQCO1+Grf2y2tfARYIjtC4QPpI
+        8AoUNiKaw6fGdHqf+FrA3L6nDQ==
+X-Google-Smtp-Source: AK7set/9BRPwbInVYGqTZVlD3CNJVkBqMQafTUumpq+/ygBf8ftf4J0AcDgJI1cyDRzks+1vVM1MKg==
+X-Received: by 2002:a5d:6750:0:b0:2be:64bb:1d84 with SMTP id l16-20020a5d6750000000b002be64bb1d84mr5308759wrw.24.1675843448008;
+        Wed, 08 Feb 2023 00:04:08 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s7-20020adfeb07000000b002bff1de8d4bsm12935330wrn.49.2023.02.08.00.04.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 00:04:07 -0800 (PST)
+Message-ID: <9ca854f9-3148-2f56-287a-f898c8226f67@linaro.org>
+Date:   Wed, 8 Feb 2023 09:04:06 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="arIY7se3Q65hGe11"
-Content-Disposition: inline
-In-Reply-To: <20230207171011.1596127-3-niklas.soderlund+renesas@ragnatech.se>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Content-Language: en-US
+To:     ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
+Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterwu.pub@gmail.com
+References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 08/02/2023 04:14, ChiaEn Wu wrote:
+> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> "richtek,rt9467"
 
---arIY7se3Q65hGe11
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Missing full stop.
 
-On Tue, Feb 07, 2023 at 06:10:11PM +0100, Niklas S=C3=B6derlund wrote:
-> The thermal zone is registered before the device is register and the
-> thermal coefficients are calculated, providing a window for very
-> incorrect readings.
+Please explain why.
 
-While I could never actually be in this race window, the patch makes a
-lot of sense to me.
+> 
+> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-> The reason why the zone was register before the device was fully
-> initialized was that the presence of the set_trips() callback is used to
-> determine if the driver supports interrupt or not, as it is not defined
-> if the device is incapable of interrupts.
->=20
-> Fix this by using the operations structure in the private data instead
-> of the zone to determine if interrupts are available or not, and
-> initialize the device before registering the zone.
->=20
-> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
-se>
+Best regards,
+Krzysztof
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-One minor question:
-
-> -		if (status)
-> +		if (status && priv->tscs[i]->zone)
->  			thermal_zone_device_update(priv->tscs[i]->zone,
->  						   THERMAL_EVENT_UNSPECIFIED);
-
-Isn't this a seperate change?
-
-
---arIY7se3Q65hGe11
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPjVikACgkQFA3kzBSg
-KbbtDBAAmTRKdLM3/GUY7HdnBMctjrIX7Sz3rid4nQcY7eFfvSO6lwzOHfSMQ3WP
-tmtY8eeQFlA3wvsu2loCgg2jHYJ3oMpBqmjoo1ds/kRiG7AncoIaRbqifgYo3TrT
-mNe50Vr4/0BRIvHi3recyUtfrt3nJyMbsE6pPXKXar4z1zt90McalErJu/DS/DHU
-AD7UqNe7orqxXtuRy+i+ayVOdchF7L4gWjmAFEgbpXmKacXY/0jOIQpA/k9zWsp4
-fUwTZJr+sxXAqWwsssDz34kr56cWScHzk/Flj92cpTUyMo47xCamFxIfCOGYkFUh
-UyTkFUbERS35UcPuwcDTk6qdEfM1qZGYZ97uVF+tUU/gC2FSWiuJf30KOPU7fE+c
-qoZUQV/zg70EiyvXqJS50QQOMTS+FDA96FaRVWb5lW9AGiasN0o5otKcS9Q8qhFj
-XUO4VhvPUq+KV10Waq4Mlk86mk4AeQO9yXrEAvYPVEQQqxRv7so6/0UTYYqFQX/a
-oijrgsfez+KvCIc01LMN+lhlSCsvV17P9XWD+VGkkp5LoSFiuxSwZ2gVyPvrgllm
-8b/Q6W1M2Txdj189IHsgL3iJIy4C6nN31wZ6JOwBGWqKWZtQHPsXH1wobo4bEB8I
-srwWFhqueQkwxuU0ie8pamJjfYViPGO1Y32/BcAF5E2sY0B5v20=
-=uYPz
------END PGP SIGNATURE-----
-
---arIY7se3Q65hGe11--
