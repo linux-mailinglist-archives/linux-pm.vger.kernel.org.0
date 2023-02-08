@@ -2,48 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43D268EB5F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 10:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C9668EBBE
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 10:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjBHJaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 04:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S229648AbjBHJi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 04:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjBHJ3k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 04:29:40 -0500
+        with ESMTP id S230465AbjBHJi5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 04:38:57 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1DA26BF
-        for <linux-pm@vger.kernel.org>; Wed,  8 Feb 2023 01:28:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74297131
+        for <linux-pm@vger.kernel.org>; Wed,  8 Feb 2023 01:38:54 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pPgjM-0001Fe-La; Wed, 08 Feb 2023 10:27:08 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pPguW-0003E1-9J; Wed, 08 Feb 2023 10:38:40 +0100
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pPgjK-003U6H-F0; Wed, 08 Feb 2023 10:27:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pPgjK-001oNs-U0; Wed, 08 Feb 2023 10:27:06 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Kevin Hilman <khilman@deeprootsystems.com>,
-        Sekhar Nori <nsekhar@ti.com>, linux-pm@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH] cpufreq: davinci: Fix clk use after free
-Date:   Wed,  8 Feb 2023 10:26:54 +0100
-Message-Id: <20230208092654.551466-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.0
+        (envelope-from <sha@pengutronix.de>)
+        id 1pPguU-003UBI-AT; Wed, 08 Feb 2023 10:38:39 +0100
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pPguQ-000s7c-9u; Wed, 08 Feb 2023 10:38:34 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v2 00/19] Add perf support to the rockchip-dfi driver
+Date:   Wed,  8 Feb 2023 10:38:11 +0100
+Message-Id: <20230208093830.143284-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1183; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=OhtEhe9xB7XLkvnPqNj66+aOQN1cEBGjGLrfZxrmedE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj42rZFo66+5m+S1ki5gtWRhGYgOqY2W1YfGLj6R7K h/7PereJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+Nq2QAKCRDB/BR4rcrsCWimCA CMUJ53334giFhsf4/wvCKvXoecpy7kvTTGJXK1RF9yj6/zZzqzZvwHd+CpeNSQNAN5KBUo5ilqE5a+ vCP6hv1WslFK2oENktm7zf9rJ3uPq8/kTnPEq0CgnOJVWJCpEdkZATvuj3KXJOsXRTOdUcNvR5mGdV NCCBgERur7kLm4E9l5W95qyKTu3oskHjYkPmfxumFiovkKHUF3tNjKp0EMHyeIErYKg3kXGefTGis0 YU6L4hoUqm2E+X1CyoXlKTkwYMd7m15pKLsVAF8bOxaMxGTSaeD5/r9z/wTse/qvPy0jsIWva46iNF govuPc7L1wSrB6ZxGxVcEZONa6C2ij
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Mail-From: sha@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -54,40 +57,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The remove function first frees the clks and only then calls
-cpufreq_unregister_driver(). If one of the cpufreq callbacks is called
-just before cpufreq_unregister_driver() is run, the freed clks might be
-used.
+This series adds perf support to the Rockchip DFI driver.
 
-Fixes: 6601b8030de3 ("davinci: add generic CPUFreq driver for DaVinci")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/cpufreq/davinci-cpufreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The DFI is a unit for measuring DRAM performance. Its driver is
+currently located under drivers/devfreq/event/ as it serves as an event
+driver for DRAM frequency scaling. With this series it can also be used
+as a perf driver for measuring DRAM throughput. Usage looks like:
 
-diff --git a/drivers/cpufreq/davinci-cpufreq.c b/drivers/cpufreq/davinci-cpufreq.c
-index 2d23015e2abd..ebb3a8102681 100644
---- a/drivers/cpufreq/davinci-cpufreq.c
-+++ b/drivers/cpufreq/davinci-cpufreq.c
-@@ -133,13 +133,13 @@ static int __init davinci_cpufreq_probe(struct platform_device *pdev)
- 
- static int __exit davinci_cpufreq_remove(struct platform_device *pdev)
- {
-+	cpufreq_unregister_driver(&davinci_driver);
-+
- 	clk_put(cpufreq.armclk);
- 
- 	if (cpufreq.asyncclk)
- 		clk_put(cpufreq.asyncclk);
- 
--	cpufreq_unregister_driver(&davinci_driver);
--
- 	return 0;
- }
- 
+perf stat -a -e rockchip_ddr/cycles/,\
+                rockchip_ddr/read-bytes/,\
+                rockchip_ddr/write-bytes/,\
+                rockchip_ddr/bytes/ sleep 1
 
-base-commit: 05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
-prerequisite-patch-id: fcb02b20a32d8a3c6f628d8c10bd42173c2df0b7
+ Performance counter stats for 'system wide':
+
+        1582524826      rockchip_ddr/cycles/
+           1802.25 MB   rockchip_ddr/read-bytes/
+           1793.72 MB   rockchip_ddr/write-bytes/
+           3595.90 MB   rockchip_ddr/bytes/
+
+       1.014369709 seconds time elapsed
+
+My target SoC is RK3568 which is not yet supported by the driver, so the
+series starts with some cleanups and preparations, then RK3568 support
+is added and finally perf support.
+
+The driver is tested on both a RK3568 board and a RK3399 board, the
+latter with dual channel memory. The measured values look sane,
+read-bytes plus write-bytes is equal to totally transferred bytes, the
+values reported by perf are slightly higher than the values my copy
+from/to RAM test tool reports, as expected.
+
+Sascha
+
+Changes since v1:
+- Fix example to actually match the binding and fix the warnings resulted thereof
+- Make addition of rockchip,rk3568-dfi an extra patch
+
+Sascha Hauer (19):
+  PM / devfreq: rockchip-dfi: Embed desc into private data struct
+  PM / devfreq: rockchip-dfi: use consistent name for private data
+    struct
+  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+  PM / devfreq: rockchip-dfi: Add SoC specific init function
+  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+  PM / devfreq: rockchip-dfi: Use free running counter
+  PM / devfreq: rockchip-dfi: introduce channel mask
+  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+  PM / devfreq: rockchip-dfi: Add RK3568 support
+  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+  PM / devfreq: rockchip-dfi: Handle LPDDR4X
+  PM / devfreq: rockchip-dfi: Pass private data struct to internal
+    functions
+  PM / devfreq: rockchip-dfi: Prepare for multiple users
+  PM / devfreq: rockchip-dfi: Add perf support
+  arm64: dts: rockchip: rk3399: Enable DFI
+  arm64: dts: rockchip: rk356x: Add DFI
+  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+
+ .../bindings/devfreq/event/rockchip,dfi.yaml  |  72 ++
+ .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
+ drivers/devfreq/event/rockchip-dfi.c          | 659 +++++++++++++++---
+ drivers/devfreq/rk3399_dmc.c                  |  10 +-
+ include/soc/rockchip/rk3399_grf.h             |   9 +-
+ include/soc/rockchip/rk3568_grf.h             |  13 +
+ include/soc/rockchip/rockchip_grf.h           |  16 +
+ 9 files changed, 673 insertions(+), 132 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
+
 -- 
-2.39.0
+2.30.2
 
