@@ -2,75 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0640468F2CA
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 17:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9819468F2EE
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 17:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjBHQFV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 11:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S231302AbjBHQOK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 11:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjBHQFQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 11:05:16 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271484B76F;
-        Wed,  8 Feb 2023 08:05:09 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id rp23so1256217ejb.7;
-        Wed, 08 Feb 2023 08:05:09 -0800 (PST)
+        with ESMTP id S230262AbjBHQOK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 11:14:10 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30FB4A206;
+        Wed,  8 Feb 2023 08:14:08 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id gr7so52403096ejb.5;
+        Wed, 08 Feb 2023 08:14:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Tu8SJf3xEBufgW7POvLQ+bbbs+6bQN1vcLMAaGTCibI=;
-        b=lsANXjT4YYeLKPfekDxuxNvAVgTcR5Cwj2R2gobvoM8V6zflsPzTwdbHamN9j3c+Dp
-         qyufcdOKd4fsFzdyy1e4iQkrHkb0eRBB5wkbDuY6mwpcfSYIy9yPePUUQZRBPkXOoBPY
-         lX3i1gdqwzKVboFYOrI71POx64m6R5gtaYBDZdF8NBfA60b+NwlmN1BO8zuu1XdVJotJ
-         vifemm6G9DJLSHx638omaaoLmmd/ptuFJeFVpxbm/mJ2NCCN2Vxpg6K+20RE47CG9YvV
-         dWKn0W1dPeZ3t5rfZBpPkjHRYtdMkFIOocmdOdS0vkBoS6l2Iy1AslrUdstO9oiRQChS
-         mjCg==
+        bh=rYG5PD7dbKaNKYs/ubsHHBhPjaWtLkpK6btkRG/jkM0=;
+        b=DDMt3dOpyFyyVI2WTGlfQaz9N/WCY+1lI2SHnzeIfeSAiqqYzxl01kZpB5DNCcLseA
+         TisUEkz6tjW7a0g1spZmcZ/EX2/H+UYbf20Is589WqAa9jxVTNeeAVvsrRFHmpmE0v5p
+         R6S0BqRzHQTz9Uc1Q10rUSdDgT9hVJLoCXdWBzAdwibk2mrkWSzNeIwzKwKa/K90qt6n
+         /OTkIzTZigzwU2aTkFfUitHrsqlScuZ86RWaZNWuRHQXiicbDAGjWrAAThi7xMH/IDTN
+         Jud1flYcNi3gGuvnTrb9BvWkrD/EPmYFvPGMCxT+ktCjK9fWhNHVIdCIfDARDR7OON85
+         7RHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Tu8SJf3xEBufgW7POvLQ+bbbs+6bQN1vcLMAaGTCibI=;
-        b=hfZBREPXyMtP9BrB5z12hSLBU6KX8mVC5IqqviNHhOVCnAlAsQMliVxnjn/2m2XV48
-         ZQE8EIVBPSYjAplQz8mCdYL8448eUIO7CwW/404uXRnxwvfLTyp/p232MvNT/LdaOkq2
-         1UJR7lkJu5u9ikTQHsLXRQPwvrIHqS9hgsGQlCFW15ePMBqA9UPLfkoQ9E5f1/0f7RPd
-         zDLCjXRhL3vTcDdeWfkt/Yut5uDLSQYlF+oehg28Wf2/a+PHrq+G7Rnnl0R9ZZV3Vzua
-         DK0qa2ojULWuqqTBNpkW1J7aF9hWipTZzy4G72QsexGyqBV2dfxMCuBHlnUtg+PBIKxv
-         Q0Xw==
-X-Gm-Message-State: AO0yUKVN01FSwrpGSEpX+cC4D/Pbo0ZplIEij5SFIzYR9Mb12ns6z42y
-        jT7w3hnutCyxQNVWxop6xc0=
-X-Google-Smtp-Source: AK7set94qkjdx8w8XK88as/CszW9GjQxMgGq6dqR+wis4aVIcrwdmcJPcXzYWCtcwYo84H/Cr7EwYw==
-X-Received: by 2002:a17:906:7c07:b0:880:2870:7849 with SMTP id t7-20020a1709067c0700b0088028707849mr8704801ejo.74.1675872307593;
-        Wed, 08 Feb 2023 08:05:07 -0800 (PST)
+        bh=rYG5PD7dbKaNKYs/ubsHHBhPjaWtLkpK6btkRG/jkM0=;
+        b=pWhp686Qp2M4KcAtvN8nBRV+4xYxqps6/1FdWN+ooX+hwBaY2sg16msN8ayuXHjebW
+         m25cnDtS28zWqHcO3q5urnTM+5wbCvTHXINwn1I8LJ+sTWkCJoJSmMwg2LHOeT9TA8AS
+         ++c4y3VGjBknVJxamu7aW2G78ly+is5K4gPlWyLYETCFk5OpKmMgkhvC25jx/1rJZZto
+         3VlMszmJ4DBHZcZuf9VGVG7LDKcHqxBhKSzzdHDSV9Qj/M/yX16NStUWmiBp+2Yn4el4
+         C/alIWLxw1KCrsW5rKjONVV0pgzlkIzz6MPkOt1s/iPk0LdPP4bZmh1NDTkQxwsXF/PB
+         +Blg==
+X-Gm-Message-State: AO0yUKXVc7iqL9wc2w1WBiiIb+EKN2F2WgMI+6V1ECHZTlNiwSAZF81r
+        6nz9KNGEpD0cI9PYoJMmXhc=
+X-Google-Smtp-Source: AK7set+401vwRKb0yki0/knYX8QgRvAvUQe8tTdDwJhTuerst/mRXgHfimD/UV/0cGJBD4kB1q9diA==
+X-Received: by 2002:a17:906:ca0f:b0:8a6:93a4:c897 with SMTP id jt15-20020a170906ca0f00b008a693a4c897mr8841126ejb.33.1675872847254;
+        Wed, 08 Feb 2023 08:14:07 -0800 (PST)
 Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b007ae32daf4b9sm8459666ejo.106.2023.02.08.08.05.06
+        by smtp.gmail.com with ESMTPSA id b21-20020a170906195500b008779b5c7db6sm8448605eje.107.2023.02.08.08.14.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 08:05:07 -0800 (PST)
-Date:   Wed, 8 Feb 2023 17:05:05 +0100
+        Wed, 08 Feb 2023 08:14:06 -0800 (PST)
+Date:   Wed, 8 Feb 2023 17:14:04 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: tegra-bpmp: Handle offline zones
-Message-ID: <Y+PIMc8PepsIPXN7@orome>
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
- <Y+N5+w8ePTVaZiIB@orome>
- <706b3e2d-7097-356b-b96e-dd917ce048ea@kapsi.fi>
+To:     Manikanta Maddireddy <mmaddireddy@nvidia.com>
+Cc:     bhelgaas@google.com, petlozup@nvidia.com,
+        rafael.j.wysocki@intel.com, lpieralisi@kernel.org, robh@kernel.org,
+        jeffy.chen@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
+        jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
+        steven.price@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        vidyas@nvidia.com
+Subject: Re: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
+ for C1 controller
+Message-ID: <Y+PKTNEAuPHBdwqX@orome>
+References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
+ <20230208111645.3863534-5-mmaddireddy@nvidia.com>
+ <Y+OJaGY6mcxM0JOF@orome>
+ <1b24e9f5-539a-dd0f-6485-5dbf3757ef27@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3g8zk/YJd0AOEqHX"
+        protocol="application/pgp-signature"; boundary="/k1dyoR/zukO1rxq"
 Content-Disposition: inline
-In-Reply-To: <706b3e2d-7097-356b-b96e-dd917ce048ea@kapsi.fi>
+In-Reply-To: <1b24e9f5-539a-dd0f-6485-5dbf3757ef27@nvidia.com>
 User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -83,56 +85,95 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---3g8zk/YJd0AOEqHX
+--/k1dyoR/zukO1rxq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 08, 2023 at 05:35:48PM +0200, Mikko Perttunen wrote:
-> On 2/8/23 12:31, Thierry Reding wrote:
-> > On Tue, Feb 07, 2023 at 03:56:08PM +0200, Mikko Perttunen wrote:
-> > > From: Mikko Perttunen <mperttunen@nvidia.com>
+On Wed, Feb 08, 2023 at 05:43:35PM +0530, Manikanta Maddireddy wrote:
+>=20
+> On 2/8/2023 5:07 PM, Thierry Reding wrote:
+> > On Wed, Feb 08, 2023 at 04:46:44PM +0530, Manikanta Maddireddy wrote:
+> > > Add PCIe port node under the PCIe controller-1 device tree node to su=
+pport
+> > > PCIe WAKE# interrupt for WiFi.
 > > >=20
-> > > Thermal zones located in power domains may not be accessible when
-> > > the domain is powergated. In this situation, reading the temperature
-> > > will return -BPMP_EFAULT and the temperature is considered to be
-> > > -256C for calculating trips.
-> >=20
-> > Where's that -256C being set? I only see THERMAL_TEMP_INVALID being set
-> > as the default for a zone, but that's not -274C, not -256C. If that's
-> > the temperature that you're referring to, it might be better to state
-> > that we rely on the default temperature rather than any specific number.
+> > > Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > > ---
+> > >=20
+> > > Changes in v14:
+> > > New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX Or=
+in.
+> > >=20
+> > >   .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts     | 11 ++++++++=
++++
+> > >   1 file changed, 11 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-000=
+0.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > index 8a9747855d6b..9c89be263141 100644
+> > > --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > @@ -2147,6 +2147,17 @@ pcie@14100000 {
+> > >   			phys =3D <&p2u_hsio_3>;
+> > >   			phy-names =3D "p2u-0";
+> > > +
+> > > +			pci@0,0 {
+> > > +				reg =3D <0x0000 0 0 0 0>;
+> > > +				#address-cells =3D <3>;
+> > > +				#size-cells =3D <2>;
+> > > +				ranges;
+> > > +
+> > > +				interrupt-parent =3D <&gpio>;
+> > > +				interrupts =3D <TEGRA234_MAIN_GPIO(L, 2) IRQ_TYPE_LEVEL_LOW>;
+> > > +				interrupt-names =3D "wakeup";
+> > > +			};
+> > Don't we need to wire this to the PMC interrupt controller and the wake
+> > event corresponding to the L2 GPIO? Otherwise none of the wake logic in
+> > PMC will get invoked.
 > >=20
 > > Thierry
->=20
-> It is based on BPMP's internal behavior.
+> PCIe wake is gpio based not pmc, only wake support is provided by PMC
+> controller.
+> I verified this patch and able to wake up Tegra from suspend.
+> Petlozu, correct me if my understanding is wrong.
 
-Okay, maybe clarify that part of the sentence then. Could be something
-like:
+The way that this usually works is that you need to use something like
+this:
 
-	... will return -BPMP_EFAULT. When evaluating trips, BPMP will
-	internally use -256C as the temperature for offline zones.
+	interrupt-parent =3D <&pmc>;
+	interrupts =3D <1 IRQ_TYPE_LEVEL_LOW>;
+	interrupt-names =3D "wakeup";
+
+This will then cause the PMC's interrupt chip callbacks to setup all the
+wake-related interrupts and use the internal wake event tables to
+forward the GPIO/IRQ corresponding to the PMC wake event to the GPIO
+controller or GIC, respectively.
+
+If you use &gpio as the interrupt parent, none of the PMC logic will be
+invoked, so unless this is somehow set up correctly by default, the PMC
+wouldn't be able to wake up the system.
 
 Thierry
 
---3g8zk/YJd0AOEqHX
+--/k1dyoR/zukO1rxq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjyDEACgkQ3SOs138+
-s6H5JA//TdfEDY64BG0y7A7/GvZveH2DOXG064mmwvhMJtAZ7Vp0v5ldgbi1lWOE
-TiKuNwOVj5QEqgmNo3cN/+E4rYSg74mB1pl4IPrcdUSPgaHo/uLOmi2VnJscUPac
-MKcBGWDw+AWkCCvOPZYfeakK5xKdgfH0Rtami3EP2PvzSEnulGMERlLr27C5s/rT
-yNgfbNf3WdHEUYY5wfhUq9SGd2VNphr+fCtSEyR1GoBvIJz/1KIBsSwbVFFLlvSq
-ecPnR60yhlZs9cSgb0h0L4xfkj6d225YkZU9AghDKyiYmNpzpwMXpDJDekrDIaNp
-yNOZYOBpU5niMfJ/p/EyebHN89DSEtrsewy3ecDEY8xbcNA5IyMcn6rjQyccvnv/
-Y7Awd98eg5ZPXwqSQTtso3oJPPbPVwsmjgCEsvJ2g/1ZgKZfJZ4aI7zNuky0vDFR
-X1wItyZ8TcM06DjBOuHl4XiAdb2h2oNIIuXe2fEcxGHmipvb/6lbrcXMZO9km5sH
-PP0uI3GZ0LHYexYsrpcXXhOicCWY+ld1EWVX29iHZC8T4XojzMNba2sDI7bPCSA7
-i53aIN7o6pd2zKuoxrVlSRQO76ORuuX/RiV6OxAVTUBplZRdO+nhXxnUox80Zqfb
-Mmc9P7aQSj2x+LHuRGasYr3l5EmvMKX07uJMbTRCMmVQy5YhttY=
-=9WHK
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjykwACgkQ3SOs138+
+s6HZGA//TdSXsFLTgVmkZ6PXU0yOasPm2tuDlJGey7FwCCVqzKyQ/dbdqrnfl/Vj
+JRcbXKKomD+oVLvRepvBSVk5HfDeL60Kf4N4iyectGJ+31UjRLMucnM/YMqgOoi2
+yQPfcd8B9rJ5l1R9nVlLlP8jfLGusaUixSvdC2TaqsNzJmmtPaCgD3UXcHEMMI00
+wrsVdK0TinpV7EqD93j9crNZkGoXl+8qjczoHeMLzf5XRac+ff6Js9120FJAfAbq
+y5BPEYRsIyDDVG/iYz55t8YoS2xR4Hc5gcPR/euxwFk6QrnN0CnuULhWO4Ihfa66
+h/NYwuBt477NY0Za/EbH/X1w3k7TzFUSxch1wkIhMirQYWrwDptcgg5T1C46sw0r
+LHi1F553vy7QIjprEKLzpT9iEyjfzqRsNvXttNONXZK3zA83CMGaatqSK8UYcOxx
+8i7t8E9ZKzOzattJ0X7hXrfGsRfE5hJP7HmQql91RPoOcHxFA2WWWKWYQoE3/Qp5
+qHl0tQQB8qtMmg//kzrxoC2s4557786dRjcATnkOt4NbrniHTdSDTWe+7WjFT+sU
+Mj7FVyIrnrbfj9qSngbZVmzwvaqysxPYfLWXZ/kBSdRiZ2WSWF7dQs32hVn0TsLK
+0i1WObI5YyF/sSl+uxbfXoPea5Pc61EelCRKdeQXzLtU+RYyMj0=
+=P8ai
 -----END PGP SIGNATURE-----
 
---3g8zk/YJd0AOEqHX--
+--/k1dyoR/zukO1rxq--
