@@ -2,79 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51EC68E74B
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 06:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011A768E762
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 06:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjBHFF1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 00:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S229500AbjBHFMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 00:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjBHFF0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 00:05:26 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F1D27495
-        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 21:05:26 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id q9so11919624pgq.5
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 21:05:26 -0800 (PST)
+        with ESMTP id S229479AbjBHFMb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 00:12:31 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB8C4234
+        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 21:12:30 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id g13so13254819ple.10
+        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 21:12:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ya5gJFL+sholpFu2gVvhEQXkb61wVgNoGrsK8xi1Z7M=;
-        b=YjTsp9kdEz13Y1GNS0O5pGEyWSuzSogMDi4e7ZZ7iv+IZANa948+CJPU+/06uYdiuI
-         Gghb9yPK7hJNXzFNQ8ZfboZrNIcDAIhcUwDk3RZYsxZsLFbj9LctlgfufzZINBRdA8Xb
-         SFapInnCj+0ungZBt7qV71G0MxFzBnw4U6krmO22nfdS7qe1F9BjFw3E5IXM7Aiyb3a1
-         VW0Nd6hy1INXQ8Sx3iNmy7sGVZ2LxS8Oq4s+Dudnzi6YcZIab79I78dHNFYysALOEQ/j
-         1sVe9PHlgzBQz1mAJURvaLQ5wJRIrFz6NP/d/9Q+cHPwjZVTkdIhguBLPi3UtOJy/ul1
-         CukQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ynQKtPREQJX8aXcg8wQwLkU6v0zuOPN0C8VlE9gcTUE=;
+        b=KpIPffhcmH9yMYB9yKh+S880iANL1KEZ0VMvMtBnf1BLEb/Z7E2/aa4vK6MoOLSigI
+         OUydFCpa7/LkAf4VdZayur5uLSmAMhJ6G7953F6JQnUFYDyFgnQhhBUfTcKQ1CR+ljr5
+         YOOyAhs8U+H0LGbixw7NkJR16ZUhvb9CNG23oVYrMrpefTX9bGFsrIy30oyCzLCJp1ij
+         r62lWGlhoTMF0rvON3EgNtjvvzh9tQ42Ez/91mY0+5gLBpOTIyWdWprE+Eu+JZ/1xXdc
+         7MFTRL4njGxOEnykzRvoVMCFrr5qA9imjzJ5pPo01G+uv4UiGFS66KjUGJV/bLpNf5TS
+         G2VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ya5gJFL+sholpFu2gVvhEQXkb61wVgNoGrsK8xi1Z7M=;
-        b=6bvpy1Zc34+207p5dCeob/WsVpdtuPdOicjLKnSQgffN8GfLO1jOAVDllUE1QdyOyy
-         AS6kov+RlL1RVGFHVlXRITl9aTWfojDEguBXo9Gh3oRyvsXyyaIKlTRLSs+ipVCcLO1D
-         fWVtLuX+rI2ncHhdV3NHVSuEOpvUW5OdpJRj3z+15TRA1xjVxtk2TqqEaDaXvS45ID3p
-         zLEgjSleaTtecWn1hEThB5RKGYnWFO1I2GAcQwz6/eUUowDP8bSmXbzyxIx5sDVleOh1
-         BsIE2rP9UWZ91cQr2PRjzedz5qfRMu+K4t2p+Mu3sNONAwiKd4IBxu3BgUVFDuMubS45
-         a6DA==
-X-Gm-Message-State: AO0yUKVL5K98RRPizTKSZ9jxpinNXTnox+02JsmXZYULbAQPTconrg35
-        5fEi7JGOWyVn5WcesyIpdYMaGg==
-X-Google-Smtp-Source: AK7set9UuA7k0BjdlRO0q39ZKPIN4H6BAK2nzgdoKHGELVuwsO4MfgZ2/oEHq4b2N3zB9KZnbyJYyQ==
-X-Received: by 2002:a62:1a89:0:b0:594:26a7:cbd2 with SMTP id a131-20020a621a89000000b0059426a7cbd2mr875118pfa.8.1675832725646;
-        Tue, 07 Feb 2023 21:05:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ynQKtPREQJX8aXcg8wQwLkU6v0zuOPN0C8VlE9gcTUE=;
+        b=q+Ya3T9j4R/LJdMaEEy45FrdeL/e/tSQhLCcv2Q1y6PkeYl5qd1DzALgWHiRHgqk9g
+         xWScml0u5dp5QTdPcixI/cDRFIbJjOr5h1O0D8YbKJJZ5MAukScI62hWAnvtSCkXMi1I
+         1b+jXuEwDv2o6wZnQG36LGP4Gfxh8NKgE1y9uyaiYBpIFuHEB05/SLrE8kbdPn/PVSAr
+         4tSOozSHvuLb9D0jx9Nt/85ACrfwSvThQoU3wITkjFuqd+ACKplnONhh1El45oew0Dht
+         tc8RPo/Hb0Sa9MiN6oGAT6KAihjlvgi5IZULovJJVusjuCvlOT/pzVNViAF+FHitLfjJ
+         36ZQ==
+X-Gm-Message-State: AO0yUKVH3shGrJ7RTM33GktlXuMEUz6+4A5g6w4gVCMp/n5t+dm1VglH
+        2ExRVFXp+FkUv9H3muwV9n5jOg==
+X-Google-Smtp-Source: AK7set+9KEkWwJa8xzGCAGXhFRxnb3x48Rg0TiPn2cYSFGv0Cgczz4t0se49tq1Sl8p54cAeBcOwGw==
+X-Received: by 2002:a17:90a:11:b0:230:fac8:d7e7 with SMTP id 17-20020a17090a001100b00230fac8d7e7mr3960827pja.2.1675833149229;
+        Tue, 07 Feb 2023 21:12:29 -0800 (PST)
 Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa793ae000000b005a6cb51f240sm2867924pff.109.2023.02.07.21.05.24
+        by smtp.gmail.com with ESMTPSA id s4-20020a17090a764400b0022941908b80sm465351pjl.47.2023.02.07.21.12.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 21:05:25 -0800 (PST)
-Date:   Wed, 8 Feb 2023 10:35:23 +0530
+        Tue, 07 Feb 2023 21:12:28 -0800 (PST)
+Date:   Wed, 8 Feb 2023 10:42:26 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
-Subject: Re: [PATCH] cpufreq: Make cpufreq_unregister_driver() return void
-Message-ID: <20230208050523.p6437bes6cmpd33k@vireshk-i7>
-References: <20230207195909.474953-1-u.kleine-koenig@pengutronix.de>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] PM/OPP: fix error checking in opp_migrate_dentry()
+Message-ID: <20230208051226.2lp736c67fem35ex@vireshk-i7>
+References: <20230208040037.60305-1-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230207195909.474953-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230208040037.60305-1-zhengqi.arch@bytedance.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -84,28 +70,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-02-23, 20:59, Uwe Kleine-König wrote:
-> All but a few drivers ignore the return value of
-> cpufreq_unregister_driver(). Those few that don't only call it after
-> cpufreq_register_driver() succeeded, in which case the call doesn't
-> fail.
+On 08-02-23, 12:00, Qi Zheng wrote:
+> Since commit ff9fb72bc077 ("debugfs: return error values,
+> not NULL") changed return value of debugfs_rename() in
+> error cases from %NULL to %ERR_PTR(-ERROR), we should
+> also check error values instead of NULL.
 > 
-> Make the function return no value and add a WARN_ON for the case that
-> the function is called in an invalid situation (i.e. without a previous
-> successful call to cpufreq_register_driver()).
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Fixes: ff9fb72bc077 ("debugfs: return error values, not NULL")
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 > ---
->  drivers/cpufreq/brcmstb-avs-cpufreq.c | 5 +----
->  drivers/cpufreq/cpufreq.c             | 8 +++-----
->  drivers/cpufreq/davinci-cpufreq.c     | 4 +++-
->  drivers/cpufreq/mediatek-cpufreq-hw.c | 4 +++-
->  drivers/cpufreq/omap-cpufreq.c        | 4 +++-
->  drivers/cpufreq/qcom-cpufreq-hw.c     | 4 +++-
->  include/linux/cpufreq.h               | 2 +-
->  7 files changed, 17 insertions(+), 14 deletions(-)
+> Resend as a separate patch.
+> 
+>  drivers/opp/debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> index 96a30a032c5f..2c7fb683441e 100644
+> --- a/drivers/opp/debugfs.c
+> +++ b/drivers/opp/debugfs.c
+> @@ -235,7 +235,7 @@ static void opp_migrate_dentry(struct opp_device *opp_dev,
+>  
+>  	dentry = debugfs_rename(rootdir, opp_dev->dentry, rootdir,
+>  				opp_table->dentry_name);
+> -	if (!dentry) {
+> +	if (IS_ERR(dentry)) {
+>  		dev_err(dev, "%s: Failed to rename link from: %s to %s\n",
+>  			__func__, dev_name(opp_dev->dev), dev_name(dev));
+>  		return;
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Applied. Thanks.
 
 -- 
 viresh
