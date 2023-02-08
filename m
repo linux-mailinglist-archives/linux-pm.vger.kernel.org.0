@@ -2,232 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B0368E4A5
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 00:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B666F68E4C7
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 01:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjBGXxw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Feb 2023 18:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S229530AbjBHAKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Feb 2023 19:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBGXxw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 18:53:52 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F2620696
-        for <linux-pm@vger.kernel.org>; Tue,  7 Feb 2023 15:53:50 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so257446wmb.5
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 15:53:50 -0800 (PST)
+        with ESMTP id S229519AbjBHAJ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Feb 2023 19:09:59 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3F123C50;
+        Tue,  7 Feb 2023 16:09:58 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d14so15177975wrr.9;
+        Tue, 07 Feb 2023 16:09:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qfqrnLQnGkyM5B5CF5dy5w8PteGopQkGaSXHd5snYE0=;
-        b=nFJSduTKqwmvbZ3xqyy+H3figWon3BTfeTNr+S2Ze/2FE1CvsAuJ+97ns0AOteGJLF
-         I8Z+1U/+3BNTZbQYkg298JCh3jcleVFF8/+A5u9lqwa2wgXfBVVMyuVVsW7w6cv1JutL
-         wt9jyE9B6IeFpu1A4jzcOy6vPRHIbUDIZo2e4=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fPJJB9qOsh5b2nvBTWu4/nqwjKDoLHCIFCF8FelrcKc=;
+        b=lXnTPrYrZgP4XV/KUqDn8qszQLaPl/EwWxP6SYKBd/IH3Pu9QPo4UWJ8tXTLIHPLoJ
+         0v4zDxS7CLXodZRKWlGuwYu1uWAPk3emZgYndswnX3DJTPD5hS+Nj7Rf8dbJHtwFvU7w
+         wwDaS30YJVwbo3H0iH6V0oe5L5VJenaIvuoGXzmcaDNz0K9leg7NETvwM2QMvwZI9Ozz
+         OuBUL+JBgjXyynfkt3+ljaptycRxbIRIpD+67ai9pGLpKp4j1gq7hKjZoFpyM4Obk7kd
+         Gkvj+nWLMajrytnkh/kBkEVXG2gEeX5sil4cBTlXBcVBe24T6kxDHz/bkpZvXfXjVv/0
+         aVxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qfqrnLQnGkyM5B5CF5dy5w8PteGopQkGaSXHd5snYE0=;
-        b=NpXkVLRmiwLkee2P6eXCsGjY1jBmApfGt5BDloIJaeXrjnG5jXjGlAYO3Erh5zOc/f
-         0ZJknjuW58uFNbQzkdO4dk+ESy51g4aMzyPXsUS6vjTkZ8Lx4zp8Gl8rEwN9BgkuuSYX
-         72F7bpVnxnhGFHGrqKmlGyIQKjM0tm4aiThjuc5dHhu1nZzsWGUO/1nH5Tnm1ABoU67z
-         euWhmWAsjuSsCU2yFIVgbvEu8xPZIwlbtFspPMgKBAW0mCWzi9Yik5meZJv/qfJeGvZv
-         OQpT3FLD0sAjfMEX5XE2OKsZCMnS58b1g3/2damUrDgfnzyjzocDESLSllbcGnmkNfam
-         a8ag==
-X-Gm-Message-State: AO0yUKWsC3DdKBKMYXh4bYfwnZ8ooVPzz+xs9OjhB4WZtVMahj2hEGNa
-        owndaGiP+tr5WZkdIr+BXxuvEtQSQFfoYtw40j4=
-X-Google-Smtp-Source: AK7set9t3oeFv3xEnH9ZMLQu43HyRiwxx3QhU9oVD6yDcbjrrd/bnMRRZuhG9PF+edlctH2pppgkpw==
-X-Received: by 2002:a05:600c:3411:b0:3dc:545f:e9ce with SMTP id y17-20020a05600c341100b003dc545fe9cemr4847298wmp.24.1675814028986;
-        Tue, 07 Feb 2023 15:53:48 -0800 (PST)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id q11-20020a7bce8b000000b003dd9232f036sm233198wmj.23.2023.02.07.15.53.48
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 15:53:48 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so251006wmb.2
-        for <linux-pm@vger.kernel.org>; Tue, 07 Feb 2023 15:53:48 -0800 (PST)
-X-Received: by 2002:a05:600c:19d2:b0:3dc:4c79:211a with SMTP id
- u18-20020a05600c19d200b003dc4c79211amr38074wmq.170.1675813549115; Tue, 07 Feb
- 2023 15:45:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
- <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com>
- <Y+E9Z+/+eCpPK6DE@linaro.org> <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
- <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com> <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
-In-Reply-To: <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 7 Feb 2023 15:45:35 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
-Message-ID: <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fPJJB9qOsh5b2nvBTWu4/nqwjKDoLHCIFCF8FelrcKc=;
+        b=nbJus/BT1XXEcml0kKj4b+0upZQUV5Zb/zBmHrUBkY+zkxXiGmITIqT+PXYO07M521
+         Tez51AEGR4TqdHWxLANNDzoVo/lUueolssV1vmWcEsrJqobxTA9ftzYNt0/Vjqw0YroF
+         mFzHZQDbc1v6DHXHfQmmMsgfGcLAyLzW+sTjQg71H+zQuGjaNzCDQfT4hRSpl53EbnyJ
+         U0FnFd5kIicO7wVQuY7YavMlvxeZtnDR6Pjb+nb/bn69duzZ7nuPqc9VqZkWyieu61Op
+         82PNsajQkyr9s+3YySEsBA4LY1T9KDLk+hqW0fh3Ptea0njAd8TK6oM733RAydqLsdoY
+         Hfbg==
+X-Gm-Message-State: AO0yUKWGqc2oTpGQfqDaM3LGnaaKcDP4qmKbWauKaBKheOJkZNXSSSjF
+        tem1gGdMEyFKWdSvjpPmjGg=
+X-Google-Smtp-Source: AK7set//8J5hzdxAAnhwCEAirPqk23len4DWSMS8W3c77+YJcIXd8X0Abozon2zuH07chhGiKqj1Ig==
+X-Received: by 2002:adf:ea89:0:b0:2bf:b54f:61f0 with SMTP id s9-20020adfea89000000b002bfb54f61f0mr4688900wrm.57.1675814996776;
+        Tue, 07 Feb 2023 16:09:56 -0800 (PST)
+Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.gmail.com with ESMTPSA id q12-20020adfdfcc000000b002c3ec35f360sm4977327wrn.56.2023.02.07.16.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 16:09:56 -0800 (PST)
+Message-ID: <63e2e854.df0a0220.52915.56aa@mx.google.com>
+X-Google-Original-Message-ID: <Y+LoU66HmDdcYfzQ@Ansuel-xps.>
+Date:   Wed, 8 Feb 2023 01:09:55 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make
+ cpr bindings optional
+References: <20230131151819.16612-1-ansuelsmth@gmail.com>
+ <20230131151819.16612-2-ansuelsmth@gmail.com>
+ <1670489b-e4f0-7328-3dbb-d849d1d6bd7e@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1670489b-e4f0-7328-3dbb-d849d1d6bd7e@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Feb 01, 2023 at 09:20:39AM +0100, Krzysztof Kozlowski wrote:
+> On 31/01/2023 16:18, Christian Marangi wrote:
+> > The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+> > - pre-cpr that doesn't have power-domains and base everything on nvmem
+> >   cells and multiple named microvolt bindings.
+> >   Doesn't need required-opp binding in the opp nodes as they are only
+> >   used for genpd based devices.
+> > - cpr-based that require power-domain in the cpu nodes and use various
+> >   source to decide the correct voltage and freq
+> >   Require required-opp binding since they need to be linked to the
+> >   related opp-level.
+> > 
+> > When the schema was introduced, it was wrongly set to always require these
+> > binding but this is not the case for pre-cpr devices.
+> > 
+> > Make the power-domain and the required-opp optional and set them required
+> > only for qcs404 based devices.
+> > 
+> > Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+> 
+> Fixes go as first patches in the series.
+> 
+
 Hi,
+this is problematic. This documentation is a bit special.
 
-On Mon, Feb 6, 2023 at 1:35 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Mon, Feb 6, 2023 at 1:10 PM Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Feb 6, 2023 at 11:33 AM Saravana Kannan <saravanak@google.com> wrote:
-> > >
-> > > On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> > > >
-> > > >
-> > > > CC'ed Saravana
-> > >
-> > > Thanks. Please do cc me for stuff like this from the start. I skimmed
-> > > the series and I think it's doing one of my TODO items. So, thanks for
-> > > the patch!
-> > >
-> > > I'll take a closer look within a few days -- trying to get through
-> > > some existing fw_devlink stuff.
-> > >
-> > > But long story short, it is the right thing to keep a supplier on
-> > > indefinitely if there's a consumer device (that's not disabled in DT)
-> > > that never gets probed. It's a pretty common scenario -- for example,
-> > > say a display backlight. The default case should be functional
-> > > correctness. And then we can add stuff that allows changing this
-> > > behavior with command line args or something else that can be done
-> > > from userspace.
-> > >
-> > > +1 to what Doug said elsewhere in this thread too. I'm trying to
-> > > consolidate the "when do we give up" decision at the driver core level
-> > > independent of what framework is being used.
-> >
-> > I'm not really sure I agree with the above, at least not without lots
-> > of discussion in the community. It really goes against what the kernel
-> > has been doing for years and years in the regulator and clock
-> > frameworks. Those frameworks both eventually give up and power down
-> > resources that no active drivers are using. Either changing the
-> > regulator/clock frameworks or saying that other frameworks should work
-> > in an opposite way seems like a recipe for confusion.
-> >
-> > Now, certainly I won't say that the way that the regulator and clock
-> > frameworks function is perfect nor will I say that they don't cause
-> > any problems. However, going the opposite way where resources are kept
-> > at full power indefinitely will _also_ cause problems.
-> >
-> > Specifically, let's look at the case you mentioned of a display
-> > backlight. I think you're saying that if there is no backlight driver
-> > enabled in the kernel that you'd expect the backlight to just be on at
-> > full brightness.
->
-> No, I'm not saying that.
->
-> > Would you expect this even if the firmware didn't
-> > leave the backlight on?
->
-> sync_state() never turns on anything that wasn't already on at boot.
-> So in your example, if the firmware didn't turn on the backlight, then
-> it'll remain off.
+v4 had this patch as first but this cause error with make
+dt_binding_check as the schema will be effectively empty (as it will
+have only if condition)
 
-As per offline discussion, part of the problems are that today this
-_isn't_ true for a few Qualcomm things (like interconnect). The
-interconnect frameway specifically maxes things out for early boot.
+This is why I pushed v5 that swap this with the second patch and first
+add non conditional stuff to the schema and only with the second patch
+makes them conditional.
 
+Any hint to handle this corner case? I'm having some diffiulties due to
+how special this is but we really need this fix since it's blocking the
+introduction of opp table for ipq806x and ipq807x (as the schema is
+currently flawed)
 
-> > In any case, why do you say it's more correct?
->
-> Because if you turn off the display, the device is unusable. In other
-> circumstances, it can crash a device because the firmware powered it
-> on left it in a "good enough" state, but we'd go turn it off and crash
-> the system.
->
-> > I suppose you'd say that the screen is at least usable like this.
-> > ...except that you've broken a different feature: suspend/resume.
->
-> If the display is off and the laptop is unusable, then we have bigger
-> problems than suspend/resume?
-
-I suspect that here we'll have to agree to disagree. IMO it's a
-non-goal to expect hardware to work for which there is no driver. So
-making the backlight work without a backlight driver isn't really
-something we should strive for.
-
-
-> > Without being able to turn the backlight off at suspend time the
-> > device would drain tons of power. It could also overheat when you
-> > stuffed it in your backpack and damage the battery or start a fire.
-> > Even if you argue that in the case of the display backlight you're
-> > better off, what about a keyboard backlight? It's pretty easy to use a
-> > laptop without the keyboard backlight and if you didn't have a driver
-> > for it you'd be in better shape leaving it off instead of leaving it
-> > on 100% of the time, even when the device is suspended.
->
-> I think you are again assuming sync_state() will cause stuff to be
-> turned on if the firmware didn't leave it on before booting the
-> kernel. This is not the case.
->
-> But let's assume you had the same understanding, then I'd argue that
-> between the default kernel configuration crashing some systems vs
-> having power impact on others, I'd prefer the former. The firmware
-> shouldn't have left the keyboard backlight on if it cared about
-> suspend/resume.
-
-The keylight is a bit of a contrived example, of course. ...but not
-that contrived. It's entirely possible that the keyboard backlight is
-controlled by a GPIO and that the default state of that GPIO at bootup
-enables the backlight regulator. That would mean that the firmware
-"left" the keyboard backlight on. The firmware's job is not to init
-all hardware. It's to init whatever hardware was needed to boot the
-kernel and then get out of the way and boot the kernel. Ideally the
-kernel should assume as little about the firmware as possible except
-in cases where the firmware actually needs to hand something off to
-the kernel (serial console, boot splash, etc).
-
-
-> > Overall: if a kernel isn't configured for a given driver we shouldn't
-> > be expecting the hardware controlled by that driver to work. The best
-> > we can hope for is that it's at least in a low power state.
-> >
-> > In general I think that having a well-defined way to know it's time to
-> > give up and power off anything for which a driver didn't probe needs
-> > to be an important part of any designs here.
->
-> Btw, the current compromise for deferred probes/optional suppliers is
-> "keep extending the timeout by 10 seconds as long as modules are being
-> loaded".
->
-> As I said in my earlier email, this is just what I think it should be
-> like and there's still stuff to figure out before I send out a patch
-> like that. For example, we could have a sysfs file to write to to
-> release sync_state() for a device. Then you'd just echo to that file
-> in your example and go about your day.
-
-We don't need to get into a centi-thread here, but I'll at least say
-that it's my opinion that we need some way to get the same type of
-behavior that the existing regulator / clock frameworks have. That is:
-if there are resources that no driver has enabled that there should be
-some way to get them to shut off eventually.
-
--Doug
+-- 
+	Ansuel
