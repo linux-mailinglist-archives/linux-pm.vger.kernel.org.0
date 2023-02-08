@@ -2,65 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F4968FB74
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 00:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C8868FB9B
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 00:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjBHXqG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 18:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S230064AbjBHXv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 18:51:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjBHXqA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 18:46:00 -0500
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26ED1C5A9;
-        Wed,  8 Feb 2023 15:45:41 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1636eae256cso661173fac.0;
-        Wed, 08 Feb 2023 15:45:41 -0800 (PST)
+        with ESMTP id S230061AbjBHXvx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 18:51:53 -0500
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BADB7EFA;
+        Wed,  8 Feb 2023 15:51:50 -0800 (PST)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-15ff0a1f735so592368fac.5;
+        Wed, 08 Feb 2023 15:51:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qMbsxtsPaDcMRMJxOKC0VFQqMhagFJRucIidW5fqoA4=;
-        b=jdjJnRXvrk7KJcseiSw/mG2NRms5MI1l610/eG/b691fdn1ilihKZfnfqE+ynk9BKg
-         VutXOh06ACs3ioC8D4/3zevKi+m1kN185MjW8cTP7MizNyJI/y1DQdiC+59RUICZIsC7
-         MlKTZu+GfUJmmIMqG0rkcOT/Swbhhw+GIg0Z3+axyyH53/weuM8cHW9Q5vQWfBTv6Wl9
-         /g6TkhohVZQRXtwemaSnZkv6LLrjkq8Uw8FAlfmGEJSkA67skavdcp315RXb2O4cBYlS
-         d7YVNTP197hc7sT0zlkuY3AxLDKoHJJWA+P1XVfFY+DdeTCNLKILwAv70afQ9CajrPJO
-         V8dQ==
-X-Gm-Message-State: AO0yUKUbz21lp7cSqSvCg4Z3+XE0Ei14/qIKEyCktuDcRO60w1N0DOxV
-        ULgLOBNqm3XGPeJR/siYGxcMiKDQMA==
-X-Google-Smtp-Source: AK7set/HiavAQmjdUI295azWy8VOKgmxDX+rzwF0NMVaOP/jJRv88VuTHKrnggACA0Pq2t3dOvrAyw==
-X-Received: by 2002:a05:6870:1c7:b0:160:319a:d1db with SMTP id n7-20020a05687001c700b00160319ad1dbmr5324286oad.3.1675899940841;
-        Wed, 08 Feb 2023 15:45:40 -0800 (PST)
+        bh=SeopQBZWSFT12ftEApLU1dIxhgsa3H+xUNavQnJepUM=;
+        b=MMhqvwpi+HByQx90p4DjmV5ckEKiugFpsEPAaYSKrPWOmtCkvKPJcpQSe712r57EdY
+         uTDQXyvss1jlMdF88ymvaPoRHFXFJi6keXQ5k4W/m07roqyxXtg4ROUofB6LRStkyzdf
+         D7d4mR7GsKeZrCcR+D/Zed6bHNHE0kAilfO5+dt4No9ZNt+LKFAJyUd+ngegEwJyW8qC
+         yG0r8mAvO50xhdyD9og+Zx1V8qWOZZ3a+nciQWc/GKZwdJzhXip6Wblyx0YFxIDpuKVs
+         8m7Bre3vCz/4uk9kHyRyrTlO6rA57z7FrMDpHJG+FRlmDNnOrQWt0kpkaSYGNEgiZ3Kx
+         WE3Q==
+X-Gm-Message-State: AO0yUKVooP3REXz/XcFsrlOk0ErDtgQ/54cN4LaGhO6akTjBo0Is2zuL
+        w2UMkgAe7mOS1m1RCWTY8A==
+X-Google-Smtp-Source: AK7set9R9u8bHSmytawMInx5vWRPC0UiQfX8JT1WvCRVWGTkvNPnP/P9GmuW9K2SjDcnXa28c/2R2w==
+X-Received: by 2002:a05:6870:41d0:b0:163:6bf1:15a with SMTP id z16-20020a05687041d000b001636bf1015amr5231943oac.22.1675900309758;
+        Wed, 08 Feb 2023 15:51:49 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n189-20020acabdc6000000b003645b64d7b3sm52122oif.4.2023.02.08.15.45.40
+        by smtp.gmail.com with ESMTPSA id b3-20020a05687061c300b00163c90c1513sm7401523oah.28.2023.02.08.15.51.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 15:45:40 -0800 (PST)
-Received: (nullmailer pid 2933874 invoked by uid 1000);
-        Wed, 08 Feb 2023 23:45:39 -0000
-Date:   Wed, 8 Feb 2023 17:45:39 -0600
+        Wed, 08 Feb 2023 15:51:49 -0800 (PST)
+Received: (nullmailer pid 2940966 invoked by uid 1000);
+        Wed, 08 Feb 2023 23:51:48 -0000
+Date:   Wed, 8 Feb 2023 17:51:48 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Will Deacon <will@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        kernel@pengutronix.de, Heiko Stuebner <heiko@sntech.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 18/19] dt-bindings: devfreq: event: convert Rockchip
- DFI binding to yaml
-Message-ID: <167589862804.2903789.1604184239861791827.robh@kernel.org>
-References: <20230208093830.143284-1-s.hauer@pengutronix.de>
- <20230208093830.143284-19-s.hauer@pengutronix.de>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
+        cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterwu.pub@gmail.com
+Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Message-ID: <20230208235148.GA2939644-robh@kernel.org>
+References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208093830.143284-19-s.hauer@pengutronix.de>
+In-Reply-To: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -72,20 +65,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Wed, 08 Feb 2023 10:38:29 +0100, Sascha Hauer wrote:
-> Convert the Rockchip DFI binding to yaml.
+On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
+> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> "richtek,rt9467"
 > 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+
+Reported-by: Rob Herring <robh@kernel.org>
+
+> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 > ---
->  .../bindings/devfreq/event/rockchip,dfi.yaml  | 61 +++++++++++++++++++
->  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ------
->  2 files changed, 61 insertions(+), 18 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
-> 
-
-With the reference fixed:
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+>  .../devicetree/bindings/power/supply/richtek,rt9467-charger.yaml      | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
