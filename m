@@ -2,90 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C49468EC17
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 10:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB8D68EC42
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 11:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjBHJti (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 04:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S230440AbjBHKCb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 05:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjBHJth (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 04:49:37 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0834B166C5;
-        Wed,  8 Feb 2023 01:49:33 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 08 Feb 2023 18:49:32 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 8C54E2083D75;
-        Wed,  8 Feb 2023 18:49:32 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 8 Feb 2023 18:49:25 +0900
-Received: from [10.212.242.61] (unknown [10.212.242.61])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 414167361;
-        Wed,  8 Feb 2023 18:49:31 +0900 (JST)
-Message-ID: <e54ea691-f312-5a72-4ac6-defa6945c972@socionext.com>
-Date:   Wed, 8 Feb 2023 18:49:30 +0900
+        with ESMTP id S230510AbjBHKC2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 05:02:28 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0322D3FF2D
+        for <linux-pm@vger.kernel.org>; Wed,  8 Feb 2023 02:02:27 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pPhHU-0000Cx-Hc; Wed, 08 Feb 2023 11:02:24 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pPhHS-003UDp-C9; Wed, 08 Feb 2023 11:02:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pPhHS-001oZD-Sb; Wed, 08 Feb 2023 11:02:22 +0100
+Date:   Wed, 8 Feb 2023 11:02:22 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kevin Hilman <khilman@deeprootsystems.com>,
+        linux-pm@vger.kernel.org, Sekhar Nori <nsekhar@ti.com>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] cpufreq: davinci: Fix clk use after free
+Message-ID: <20230208100222.7fclfhv7oxbojrg6@pengutronix.de>
+References: <20230208092654.551466-1-u.kleine-koenig@pengutronix.de>
+ <20230208094451.wib7on57imsujbaj@vireshk-i7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
-        <linux-amlogic@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6hns4w24y72knflj"
+Content-Disposition: inline
+In-Reply-To: <20230208094451.wib7on57imsujbaj@vireshk-i7>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,43 +54,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
 
-On 2023/02/07 0:34, Daniel Lezcano wrote:
-> As the name states "thermal_core.h" is the header file for the core
-> components of the thermal framework.
-> 
-> Too many drivers are including it. Hopefully the recent cleanups
-> helped to self encapsulate the code a bit more and prevented the
-> drivers to need this header.
-> 
-> Remove this inclusion in every place where it is possible.
-> 
-> Some other drivers did a confusion with the core header and the one
-> exported in linux/thermal.h. They include the former instead of the
-> latter. The changes also fix this.
-> 
-> The tegra/soctherm driver still remains as it uses an internal
-> function which need to be replaced.
-> 
-> The Intel HFI driver uses the netlink internal framework core and
-> should be changed to prevent to deal with the internals.
-> 
-> No functional changes
-> 
-> [ Applies to thermal/linux-next or linux-pm/linux-next ]
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
+--6hns4w24y72knflj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->   drivers/thermal/uniphier_thermal.c          | 2 --
+Hello,
 
-For UniPhier:
+On Wed, Feb 08, 2023 at 03:14:51PM +0530, Viresh Kumar wrote:
+> On 08-02-23, 10:26, Uwe Kleine-K=F6nig wrote:
+> > The remove function first frees the clks and only then calls
+> > cpufreq_unregister_driver(). If one of the cpufreq callbacks is called
+> > just before cpufreq_unregister_driver() is run, the freed clks might be
+> > used.
+> >=20
+> > Fixes: 6601b8030de3 ("davinci: add generic CPUFreq driver for DaVinci")
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/cpufreq/davinci-cpufreq.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/cpufreq/davinci-cpufreq.c b/drivers/cpufreq/davinc=
+i-cpufreq.c
+> > index 2d23015e2abd..ebb3a8102681 100644
+> > --- a/drivers/cpufreq/davinci-cpufreq.c
+> > +++ b/drivers/cpufreq/davinci-cpufreq.c
+> > @@ -133,13 +133,13 @@ static int __init davinci_cpufreq_probe(struct pl=
+atform_device *pdev)
+> > =20
+> >  static int __exit davinci_cpufreq_remove(struct platform_device *pdev)
+> >  {
+> > +	cpufreq_unregister_driver(&davinci_driver);
+> > +
+> >  	clk_put(cpufreq.armclk);
+> > =20
+> >  	if (cpufreq.asyncclk)
+> >  		clk_put(cpufreq.asyncclk);
+> > =20
+> > -	cpufreq_unregister_driver(&davinci_driver);
+> > -
+> >  	return 0;
+> >  }
+>=20
+> Rafael, please take this directly as the dependency patch will go via you=
+r tree
+> too (the one that makes cpufreq_unregister_driver() return void).
+>=20
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Ah, I intended to write a word about the dependency patch. Do we want to
+backport this patch to stable? If so it might make sense to rework it to
+not depend on the "cpufreq_unregister_driver() return void" patch to
+simplify that.
 
-Thank you,
+I can help with reworking, just tell me your preferences.
 
----
-Best Regards
-Kunihiko Hayashi
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--6hns4w24y72knflj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPjcysACgkQwfwUeK3K
+7AnZLAf/d2nUMO69dv9cX45Uxehh892YDimdDuMQ4T+FmJ/m9QBRGr0AiFcehNyD
+Mo0hIsWOX/7iEz5mtUYe75XFayMYjGRxgimpNQ5y23Vabw1/rgHs6rWVFP5WYf6Y
+wHG67h29SxK+CEw6R/J/1FVCm26iNpHrssJge2DqbpG1SGbIoBwqwWJX5lKVsfv8
+oPJAIDAwfoBqXcYWdtDzolYLy/FCZotOwrunRguICf/o0onMViwj87wD6fB+alh3
+QL5NR9xrlv3it+KuJU2oJTEE0qQ9aOcZjZ9uyxyaOJKFenOIqLC+Ud0OmqXdyJgw
+vw4f4c0bQo5JC61emWwcdJSA7Rr4PA==
+=OpNu
+-----END PGP SIGNATURE-----
+
+--6hns4w24y72knflj--
