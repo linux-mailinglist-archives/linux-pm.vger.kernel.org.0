@@ -2,89 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBA668F08B
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 15:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E40C68F0BB
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 15:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjBHORO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 09:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S231339AbjBHO0I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 09:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjBHORE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 09:17:04 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C49794617C;
-        Wed,  8 Feb 2023 06:17:02 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F09AA1042;
-        Wed,  8 Feb 2023 06:17:44 -0800 (PST)
-Received: from bogus (unknown [10.57.10.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF1133F8C6;
-        Wed,  8 Feb 2023 06:17:00 -0800 (PST)
-Date:   Wed, 8 Feb 2023 14:16:58 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Kazuki <kazukih0205@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        with ESMTP id S231280AbjBHOZv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 09:25:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFCB4B1AB;
+        Wed,  8 Feb 2023 06:25:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAAD9B81E3A;
+        Wed,  8 Feb 2023 14:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5819EC433EF;
+        Wed,  8 Feb 2023 14:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675866341;
+        bh=t5jw1fCX4NoFeI2EPmYRhXOtkcVOIpQY0b9/jl5R8zA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QgNyeqlpCi/SBDeCi1TjNEdCqZoJFbgr2WJlBzhmFCZPBDl+FvwZLFuUoEtRHiVbv
+         uS4uK4r0XCkRineIPNNP9oNxBtbjMeBbnPgCgvwNC+24iI018JePzQOYQtTUyIy/Mp
+         /qg/12O4pWuU4Ph2uCYFfSRaCoExuPkTdS6885J4+z8cV91aO0N0MHwBMlJryvG9OZ
+         X0le3Z/bcdQT3Q9bcuXnQc0LtSfZRuA6mh3CZD/9kvJpn4wp9UOAU86Mdp+1pChhIx
+         M/bUit0KIlLfw8FTXVwGO//F6H/bwcRj6WGI2Aj+ovZgdrJEnNUillAjBfdPPc/tmo
+         KNXBaoR+knFdw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pPlOF-008gAy-0C;
+        Wed, 08 Feb 2023 14:25:39 +0000
+Date:   Wed, 08 Feb 2023 14:25:38 +0000
+Message-ID: <86h6vwz125.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: s2idle breaks on machines without cpuidle support
-Message-ID: <20230208141658.kede5ylqk4zqvrnj@bogus>
-References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
- <20230206101239.dret3fv65cnzpken@bogus>
- <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
- <20230208103511.w7jzxw6spy6humdn@bogus>
- <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+In-Reply-To: <878rh81rfa.wl-maz@kernel.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+        <20230203135043.409192-30-james.morse@arm.com>
+        <865ycg1kv2.wl-maz@kernel.org>
+        <7462738f-e837-cd99-f441-8e7c29d250cd@arm.com>
+        <878rh81rfa.wl-maz@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: james.morse@arm.com, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, tglx@linutronix.de, lpieralisi@kernel.org, mark.rutland@arm.com, sudeep.holla@arm.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mingo@redhat.com, will@kernel.org, catalin.marinas@arm.com, chenhuacai@kernel.org, suzuki.poulose@arm.com, oliver.upton@linux.dev, lenb@kernel.org, rafael@kernel.org, kernel@xen0n.name, salil.mehta@huawei.com, linux@armlinux.org.uk, jean-philippe@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:20:31PM +0900, Kazuki wrote:
-> On Wed, Feb 08, 2023 at 10:35:11AM +0000, Sudeep Holla wrote:
-> > On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
-> > > On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
-> > > >
-> > > > What do you mean by break ? More details on the observation would be helpful.
-> > > For example, CLOCK_MONOTONIC doesn't stop even after suspend since
-> > > these chain of commands don't get called.
-> > >
-> > > call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
-> > >
-> > > Which in turn causes programs like systemd to crash since it doesn't
-> > > expect this.
-> >
-> > Yes expected IIUC. The per-cpu timers and counters continue to tick in
-> > WFI and hence CLOCK_MONOTONIC can't stop.
-> Yes, but it shouldn't be the case when suspending[1]. Currently that's what
-> happens when we enter s2idle without a cpuidle driver. This doesn't seem
-> to happen with S3 sleep [2].
->
+On Wed, 08 Feb 2023 08:40:09 +0000,
+Marc Zyngier <maz@kernel.org> wrote:
+> 
+> On Tue, 07 Feb 2023 17:50:58 +0000,
+> James Morse <james.morse@arm.com> wrote:
+> > 
+> > Hi Marc,
+> > 
+> > On 05/02/2023 10:12, Marc Zyngier wrote:
+> > > On Fri, 03 Feb 2023 13:50:40 +0000,
+> > > James Morse <james.morse@arm.com> wrote:
+> > >>
+> > >> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > >>
+> > >> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+> > >> request to handle all hypercalls that aren't handled by KVM. With the
+> > >> help of another capability, this will allow userspace to handle PSCI
+> > >> calls.
+> > 
+> > > On top of Oliver's ask not to make this a blanket "steal everything",
+> > > but instead to have an actual request for ranges of forwarded
+> > > hypercalls:
+> > > 
+> > >> Notes on this implementation:
+> > >>
+> > >> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+> > >>   generalizes the idea to all hypercalls, since that was suggested on
+> > >>   the list [2, 3].
+> > >>
+> > >> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+> > >>   kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+> > >>   this, because:
+> > >>   - Most user handlers will need to write results back into the
+> > >>     registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+> > >>     go all the way and read them back on return to kernel.
+> > >>   - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+> > >>     handling the call.
+> > >>   - SMCCC uses x0-x16 for parameters.
+> > >>   x0 does contain the SMCCC function ID and may be useful for fast
+> > >>   dispatch, we could keep that plus the immediate number.
+> > >>
+> > >> * Add a flag in the kvm_run.hypercall telling whether this is HVC or
+> > >>   SMC?  Can be added later in those bottom longmode and pad fields.
+> > 
+> > > We definitely need this. A nested hypervisor can (and does) use SMCs
+> > > as the conduit.
+> > 
+> > Christoffer's comments last time round on this was that EL2 guests
+> > get SMC with this, and EL1 guests get HVC. The VMM could never get
+> > both...
+> 
+> I agree with the first half of the statement (EL2 guest using SMC),
+> but limiting EL1 guests to HVC is annoying. On systems that have a
+> secure side, it would make sense to be able to route the guest's SMC
+> calls to userspace and allow it to emulate/proxy/deny such calls.
 
-Correct, but check the requirements to use syscore operations(mainly
-syscore_suspend/resume where only one CPU is online with interrupts
-disabled. In case of s2idle, all CPUs are idling and not offlined as
-required by the syscore operations and hence it can't be used.
+You also want to look at the TRNG firmware spec (aka DEN0098), which
+explicitly calls out for the use of SMC when EL2 and EL3 are
+implemented (see 1.5 "Invocation considerations").
 
-I was about ask you earlier as why can't you implement just system
-suspend in PSCI where the last cpu just calls WFI if you are interested
-in system sleep state. Or you can implement CPU_SUSPEND with an additional
-retention state which enters PSCI implementation just to make sure there is
-an active cpuidle driver and the s2idle state machinery works as expected.
-It is built with those requirements and trying to work it out for WFI without
-any idle driver or firmware implementation to back it up is just not going
-to work.
+Is it mad? Yes. But madness seems to be the direction of travel these
+days.
 
---
-Regards,
-Sudeep
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
