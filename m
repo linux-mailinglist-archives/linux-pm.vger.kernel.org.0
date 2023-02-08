@@ -2,167 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B475368ECE9
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 11:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0851F68ED03
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 11:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjBHKb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 05:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S230479AbjBHKgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 05:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjBHKbm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 05:31:42 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB2F46727;
-        Wed,  8 Feb 2023 02:31:26 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id m1so7591405ejx.7;
-        Wed, 08 Feb 2023 02:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Use+lGfhfpGmOf2tR6YStivC2FXu+PHkUKhkubH8k0c=;
-        b=LTjopn4bNg0VNehXGyVt+CplAIedpUPsJwGZXPpWXXyZB8NzU1tTfPAcwojZyudPEJ
-         Nwm7uK3HygyWcJR1a55DO+QQbvdlcHB/K6f8DkaFGEcga4N9nQm6+SHijt2S5TM9L8nc
-         kY3L1CFmcB15Kaf68CSDAFg0Cr0si8FeHgIof500mdrc2GHq6KXWPxbQ/+mw6RxLUtiX
-         mF9Z2zcBLOMdTqN85Z4W3vy3ieXCZi9bh9MfuiczAYBq2pL9sxVBOHpwV1XIdgMfjjhF
-         e/RLosRFk7s95W4FgUa2YkImL1dcfCOXuwgc5jenjeh+n1PJjeh1sRxRQOc87mvZSsme
-         okPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Use+lGfhfpGmOf2tR6YStivC2FXu+PHkUKhkubH8k0c=;
-        b=HjmeJ5su0CtP9lgHfgUQxtDfGJpyvLDcCBZc1qfGbnZC89AVuAu66DPRMvEq3h/MA2
-         jYl2WgNjlbsvl3HORtAheRqQ010x8sl8+voHfJVR31/t1DR10++blk80R9A0upPYn/OC
-         1pvui3X6dxu+kAIW6N2jAEur8mdbyP+dBudsgJ/JF24f38KPSPayJacIrBPubIyBrmQI
-         fc2arRbtbNtqjgVqQhkUTgRjJuOX+IuvWhzOtiDWr3YmnYI3Y7DegE2z8TAnThY4OxD3
-         7tZJOCqG7g0wjT0lvWOA34eCHXUj3VTINSwqJqBMElLEnoAN7X83/5b9YEYB4paUzWrK
-         lrxg==
-X-Gm-Message-State: AO0yUKUka8g3P3SKEZ2Vcv9IrCG/w4J+8cedT0pCEXScIHY2E5cPhHJN
-        eiQfy2o4E7PRN2CsJcSEISSD0nndHJs=
-X-Google-Smtp-Source: AK7set+rGfBLO3JGXPqizthSr8YueecJtUgumHo2sxy+vkBSaeEyLIFMVpXZWR1EEljgar357+WLng==
-X-Received: by 2002:a17:906:3481:b0:868:b2b6:ee71 with SMTP id g1-20020a170906348100b00868b2b6ee71mr6963670ejb.6.1675852285105;
-        Wed, 08 Feb 2023 02:31:25 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ac5-20020a170907344500b0088f92a2639fsm7883875ejc.17.2023.02.08.02.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:31:24 -0800 (PST)
-Date:   Wed, 8 Feb 2023 11:31:23 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S229648AbjBHKgE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 05:36:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DB9D48A2F;
+        Wed,  8 Feb 2023 02:35:43 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 797611042;
+        Wed,  8 Feb 2023 02:35:57 -0800 (PST)
+Received: from bogus (unknown [10.57.10.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 835903F8C6;
+        Wed,  8 Feb 2023 02:35:13 -0800 (PST)
+Date:   Wed, 8 Feb 2023 10:35:11 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Kazuki <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: tegra-bpmp: Handle offline zones
-Message-ID: <Y+N5+w8ePTVaZiIB@orome>
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: s2idle breaks on machines without cpuidle support
+Message-ID: <20230208103511.w7jzxw6spy6humdn@bogus>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HjTx0z3dHhZfFGiY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207135610.3100865-1-cyndis@kapsi.fi>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
+> On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+> >
+> > What do you mean by break ? More details on the observation would be helpful.
+> For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+> these chain of commands don't get called.
+>
+> call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
+>
+> Which in turn causes programs like systemd to crash since it doesn't
+> expect this.
 
---HjTx0z3dHhZfFGiY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes expected IIUC. The per-cpu timers and counters continue to tick in
+WFI and hence CLOCK_MONOTONIC can't stop.
 
-On Tue, Feb 07, 2023 at 03:56:08PM +0200, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
->=20
-> Thermal zones located in power domains may not be accessible when
-> the domain is powergated. In this situation, reading the temperature
-> will return -BPMP_EFAULT and the temperature is considered to be
-> -256C for calculating trips.
+> >
+> > > 2. Suspend actually works on ARM64 machines even without proper
+> > > cpuidle (PSCI cpuidle) since they support wfi, so the assumption here is wrong
+> > > on such machines
+> > >
+> >
+> > Sorry I am bit confused here. Your point (2) contradicts the $subject.
+> drivers/cpuidle/cpuidle.c:
+>
+> bool cpuidle_not_available(struct cpuidle_driver *drv,
+> 			   struct cpuidle_device *dev)
+> {
+> 	return off || !initialized || !drv || !dev || !dev->enabled;
+> }
+>
+> The cpuidle framework reports ARM64 devices without PSCI cpuidle as
+> "cpuidle not available" even when they support wfi, which causes suspend
+> to fail, which shouldn't be happening since they do support idling.
 
-Where's that -256C being set? I only see THERMAL_TEMP_INVALID being set
-as the default for a zone, but that's not -274C, not -256C. If that's
-the temperature that you're referring to, it might be better to state
-that we rely on the default temperature rather than any specific number.
+Yes with just WFI, there will be no active cpuidle driver.
 
-Thierry
+[...]
 
->=20
-> For smooth operation, for offline zones, return -EAGAIN when reading
-> the temperature and allow registration of zones even if they are
-> offline during probe.
->=20
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-> ---
->  drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal=
-/tegra/tegra-bpmp-thermal.c
-> index c76e1ea62c8a..628b18818ae9 100644
-> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
-> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_b=
-pmp_thermal_zone *zone,
->  	err =3D tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->  	if (err)
->  		return err;
-> +	if (msg.rx.ret =3D=3D -BPMP_EFAULT)
-> +		return -EAGAIN;
->  	if (msg.rx.ret)
->  		return -EINVAL;
-> =20
-> @@ -257,7 +259,12 @@ static int tegra_bpmp_thermal_probe(struct platform_=
-device *pdev)
->  		zone->tegra =3D tegra;
-> =20
->  		err =3D __tegra_bpmp_thermal_get_temp(zone, &temp);
-> -		if (err < 0) {
-> +
-> +		/*
-> +		 * Sensors in powergated domains may temporarily fail to be read
-> +		 * (-EAGAIN), but will become accessible when the domain is powered on.
-> +		 */
-> +		if (err < 0 && err !=3D -EAGAIN) {
->  			devm_kfree(&pdev->dev, zone);
->  			continue;
->  		}
-> --=20
-> 2.39.0
->=20
+> > Again, since s2idle is userspace driven, I don't understand what do you
+> > mean by unbootable kernel in the context of s2idle.
+>
+> Sorry, I meant "attempts to fix this bug have all led to an unbootable
+> kernel."
 
---HjTx0z3dHhZfFGiY
-Content-Type: application/pgp-signature; name="signature.asc"
+Again I assume you mean kernel hang or crash and nothing to do with boot.
+Once you enter s2i state with your changes/fix, it hangs or is unresponsive
+as it might have either failed to enter or resume from the state.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjefoACgkQ3SOs138+
-s6HNvQ/8CxmmhYs401NGlAnZEwhKPe+pbajzCVbMB4cJB6yXLKRFrH9awIiSuCDR
-pyYB0Fjk3MEuFazoquATiCt+O2biYJBOqiscEo8DxhNVzY37i9WxvBky6uV1bU1o
-s95qpwPQJJHDJMb76qThUUJkl/5KBnYW2rBaVjSONddLykNkIuQ9bGhVVNDQcIWl
-BuCtJEbA8IbWIvhhmKP49pdrOPjP3DMH2DNTeH4sEqdk6EjCYjpbaKCqDiGqU4gC
-25S52UW8R0JrSkCRHpWP/68MG8TLlwOn373ZWQyVFj+WRHbIb462NaCgv7zNkEGl
-3HMJlAIvTx5sEV9vrjDd6GYqwkXkJtFYq60PzL6BIVS73q8OGWEm2t8sQuZIpL+Y
-WOCIQ4gg3yoUyLmy26lSMakP3csNq8zF5wgOo0MPA48KtK8fkm1uLhHzPdIt7dpT
-XKVD/v0tS6vIY+5xsAho62jTYNGUSue7Y9wlxIv+XxUwEjFcAZuQ8o1MkdqoBXS4
-Wu7tH6Bc8BAf9J0o3eiJvyU+/LZMD92amTKJy6GiTFmMrREhhg54l6ZBDizS6yIv
-35+9I7dvLaWx87bdZM3aboUBsD6FH2cqQCrFHXeoJBQUk0yUJJDIKwAm3bCH/hvE
-7aNXXzMpCu30hR4UQg6URX0x4YxfboYti5+TIJB2n4o1Yx/Nh4g=
-=/bmI
------END PGP SIGNATURE-----
-
---HjTx0z3dHhZfFGiY--
+--
+Regards,
+Sudeep
