@@ -2,150 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3172968ED2D
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 11:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E0D68ED59
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 11:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBHKnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 05:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S231613AbjBHKuI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 05:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBHKnJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 05:43:09 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A56A83C8;
-        Wed,  8 Feb 2023 02:43:08 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id sa10so19726403ejc.9;
-        Wed, 08 Feb 2023 02:43:08 -0800 (PST)
+        with ESMTP id S231366AbjBHKtw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 05:49:52 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33784EEA
+        for <linux-pm@vger.kernel.org>; Wed,  8 Feb 2023 02:49:25 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d14so16283777wrr.9
+        for <linux-pm@vger.kernel.org>; Wed, 08 Feb 2023 02:49:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h/nhJuICxY8mGv3YNhMXvhgUV0x2GvvCMkLyxMnt13A=;
-        b=ndBD4VTFc8oOBSSb3IcmLvP+H4W6gFT97deNp/aHZp21D9ApLweraFdCtWAcZN0UWD
-         05aMdB71pyeAe9dSlHY+DGJVY0DT1Y9OxEzz+JG9KlaBJMMj6d6alQDmA3Yd4lPI33xw
-         DnCmh+ZF34lbkfuedakKC62VNG7T9oTQDbLzqXXQyIFkWqu+MJTCsXi0tAGld2nyMI1D
-         rvwnP15mGMsfsyCLoGywxrXISEKNgkxQ1bNqYQXZXvdi5LOAUkkaRYQWfve2VQ3cnaKg
-         K/8Ogl0RRRUgvQkM93+NI9Ci36piuYlx+wVWaKwJIPQg3F0hRDD5sDimU31K2PsPO678
-         94VQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qNlDFjphkPPgSlyW73HkZzxJj0LeeYigCKsl5DJQD2k=;
+        b=V/wcfAJ+B3ejXiP/uSfD0f3mlhtX/1eKti4YQCnFCRmy5WGaPxZsz0OgkhDFgCY66U
+         aQX6i8F+uZYSeV0e+XsjV3WlV/FCr+ni1kkqGXJQof9zQBMk/oISjjw/ivyMzHqgyQF5
+         GG+xw05IL+S1/ZCVXb4nmZ5+tII/YatsZ5EJp7cTqP4KKdffKSibJBfGz9j112dbv+9+
+         J23e806jFvx0v2YOhyCIUHj4ti1J/gdjQVtGXWqW6hJ8bZMghCH24KmRRNi8yuYQdoGe
+         SbQBGYVMt+eM4ENgjZZINBQBsQjLRt92JeGcPAFsKFhM1NqYoxw/ENqIYifvf7NdfzgO
+         LWNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h/nhJuICxY8mGv3YNhMXvhgUV0x2GvvCMkLyxMnt13A=;
-        b=Y7dr4Jy/1bzazpcFuYZAwRoBhvejUSqCQN2LTXTxYAWr64SA5oPdpak3+v79gquxjA
-         /4RXSvWAlGz+Gg0cmWuBk1xcEXFJJT3gbsTKNrqpCZM6vDJfOHHJlUdb9ecTPNVe++ys
-         p2JMs4w0thNV5Agr1S/WwLd1sQYFbgeZevuRKn2xIFIrmYTInouwxUIb4yuwxbkMo006
-         Hg9trc4qd9R5mFKv05Ex3TPF1qv+OKnt6aRCLTW5dg5y45G5WOOGzGuoaq1qBcFk1Lhe
-         vIkLo8q8QNXMRDCSDLQZVv4Xcnsan5eFhF0RhTcAYxJfdqfij0tidJujGE5gPdQ/XvRq
-         RoMQ==
-X-Gm-Message-State: AO0yUKW2HyIrf5ScZP3pF5v6hkqNwRlVwHHvC8ob+bxNFtiMbRUi3B/h
-        XHauek5dV5X4WRNe7iAFDFk=
-X-Google-Smtp-Source: AK7set/LaV94Iy5zaBGCJ/tTh51AJSshN4vTPcS6KAG3q5J0Bo7rjm9ovISagCNj7wPqErcZnMvxww==
-X-Received: by 2002:a17:906:3792:b0:88d:5081:e9f8 with SMTP id n18-20020a170906379200b0088d5081e9f8mr6869847ejc.15.1675852986987;
-        Wed, 08 Feb 2023 02:43:06 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s19-20020a056402015300b004a0e2fe619esm7659220edu.39.2023.02.08.02.43.06
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qNlDFjphkPPgSlyW73HkZzxJj0LeeYigCKsl5DJQD2k=;
+        b=NHLM1Yb0kVG1+2KaMyLCcfRJWDOtUfEWv+0CRuHxDAW24xTtR6F5pf8n9kgJnY4wXd
+         SE9KSoNp/Nx+naXl3MvwcTgYdrfMzgzVORO2tXjI5cVon7FJyxUMm22qgXM+ly90jybx
+         XZqU+0o/YaQfdq3O+6lxh2HuOutXU11AYvX958BYvRHncmgWWOMG+5qpwOTzj38I92+a
+         UWcKZJrlIMsbqHWpHryuhc1k5C7ncuDS1hZcPwqtNKM2HtC6+YUMHwGZvFUyQFoz1zVe
+         2vnCrgLfDmSkY+o4kGFH1p3kSRv8ngSEEqw+oC5AjiCPF5xmNN99tj0RMUKCtx2R+a7l
+         bPQA==
+X-Gm-Message-State: AO0yUKUwXL6c5suwTa/SA4FgH+T4X4imOZ6rn5JUv8s/PCV1/XMOSSSt
+        53vMzz0KvoMMWrOYVkBrO5bBmw==
+X-Google-Smtp-Source: AK7set/92t5jngcZwgoLslgQdhy/znaaDjZlMsjVjgmpK0+lz/ifvwse2ofVCpN5DNO/mxKPv0asxA==
+X-Received: by 2002:adf:e7ca:0:b0:2c4:489:fe93 with SMTP id e10-20020adfe7ca000000b002c40489fe93mr879939wrn.21.1675853362185;
+        Wed, 08 Feb 2023 02:49:22 -0800 (PST)
+Received: from linaro.org (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
+        by smtp.gmail.com with ESMTPSA id p10-20020adff20a000000b002c4064f087esm23273wro.48.2023.02.08.02.49.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:43:06 -0800 (PST)
-Date:   Wed, 8 Feb 2023 11:43:04 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wed, 08 Feb 2023 02:49:21 -0800 (PST)
+Date:   Wed, 8 Feb 2023 11:49:19 +0100
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] thermal: tegra-bpmp: Always (re)program trip
- temperatures
-Message-ID: <Y+N8uMO3V5+YNm2E@orome>
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
- <20230207135610.3100865-2-cyndis@kapsi.fi>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, lvjianmin@loongson.cn,
+        wanghongliang@loongson.cn
+Subject: Re: [PATCH v12 1/2] thermal: loongson-2: add thermal management
+ support
+Message-ID: <20230208104919.GA120053@linaro.org>
+References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+ <20230206135921.GA15176@linaro.org>
+ <64d9782c-cafd-cdc3-3602-719c386d98cc@loongson.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ew2LPdXyK3eQEa6z"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230207135610.3100865-2-cyndis@kapsi.fi>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <64d9782c-cafd-cdc3-3602-719c386d98cc@loongson.cn>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Feb 08, 2023 at 11:13:33AM +0800, zhuyinbo wrote:
 
---ew2LPdXyK3eQEa6z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ ... ]
 
-On Tue, Feb 07, 2023 at 03:56:09PM +0200, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
->=20
-> In the rare case that calculation of trip temperatures would result
-> in the same trip temperatures that were previously programmed, the
-> thermal core skips calling .set_trips.
+> > > +struct loongson2_thermal_data {
+> > > +	struct thermal_zone_device *tzd;
+> > 'tzd' won't be needed after taking into account the comments
+> 
+> The 'tzd' element is needed,  because the thermal_zone_device_update need
+> pass a data->tzd element.
+> 
+> static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+> {
+>         struct loongson2_thermal_data *data = dev;
+> 
+>         thermal_zone_device_update(data->tzd,
+>                                    THERMAL_EVENT_UNSPECIFIED);
+>         enable_irq(data->irq);
+> 
+>         return IRQ_HANDLED;
+> }
 
-That seems like an appropriate optimization.
+After taking into account all the comments, enabled_irq() won't be
+called, so 'data' won't be needed. 'tzd' will be passed to
+devm_request_threaded_irq() instead of 'data'.
 
-> However, presently, if it is not called, we may end up with no trip
-> temperatures programmed at all.
+As loongson2_thermal_irq_thread() is the only place where 'tzd' is
+needed and 'tzd' being local to the call site of
+thermal_zone_device_register() and devm_request_threaded_irq(), there
+is no need to store the pointer in the 'data' structure.
 
-I have a hard time understanding when this would happen. prev_low_trip
-and prev_high_trip are -INT_MAX and INT_MAX, respectively, so these are
-unlikely to be the result of anything we compute at runtime, based on
-temperatures specified in DT, for example.
+> > 
+> > > +	int irq;
+> > 'irq' won't be needed after taking into account the comments
+> I will drop it.
+> > > +	int id;
+> > > +	void __iomem *regs;
+> > > +	struct platform_device *pdev;
+> > 'pdev' is not needed
+> I will drop it.
+> > 
+> > > +	u16 ctrl_low_val;
+> > > +	u16 ctrl_hi_val;
+> > Those fields won't be needed after taking into account the comments
+> I will drop it.
+> > > +};
+> > > +
+> > > +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+> > > +					int low, int high, bool enable)
+> > > +{
+> > > +	u64 reg_ctrl = 0;
+> > > +	int reg_off = data->id * 2;
+> > > +
+> > > +	if (low > high)
+> > > +		return -EINVAL;
+> > > +
+> > > +	low = max(low, -100);
+> > > +	high = min(high, 155);
 
-So I would expect ->set_trips() to get called at least once when the
-thermal zones are first registered. Are you saying there are cases where
-->set_trips() doesn't get called at all?
+Documentation says -40, 125
 
-> To avoid this, make set_trips a no-op and in places where it would be
-> called, instead unconditionally program trip temperatures to the last
-> specified temperatures.
+> > > +	low += 100;
+> > > +	high += 100;
+> > Why are those values added to the low and high ? Did you mean low += 0x100 ?
+> > 
+> > Mind to describe a bit the register layout?
+> 
+> node(cpu) temp = Thens0_out -100,
+> 
+> low and high is record node temp, so low and high need add '100' as
+> Thens0_out.
 
-Again, this seems more like a workaround for an issue that exists
-elsewhere. If ->set_trips() doesn't always get called when it should be,
-then that's what we should fix.
+If I refer to the documentation it is a raw value converted from
+centigrade. The function has degree.
 
-> This also fixes the situation where a trip is triggered between
-> registering a thermal zone and registering the trip MRQ handler, in
-> which case we would also get stuck.
+So it should be:
 
-Could this be fixed by requesting the MRQ prior to registering the
-zones? That seems like the more appropriate fix for this issue. It's
-similar to how we typically register IRQ handlers before enabling a
-device to make sure we don't miss any interrupts.
+temp_deci = temp_milli / 10
 
-Thierry
+raw = temp_to_raw(temp_deci);
 
---ew2LPdXyK3eQEa6z
-Content-Type: application/pgp-signature; name="signature.asc"
+-> temp_to_raw to be determined from temp = (raw * 731) / 0x4000 - 273
 
------BEGIN PGP SIGNATURE-----
+[ ... ]
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjfLYACgkQ3SOs138+
-s6GPWxAArhyt+iI02V2C3/Gs+VnqJZUWEYdc3hzIshv4suUyn7d8uPbwddC5nSys
-543utlVocIJrGF3YbKVGANp7C01SP7+NXXR/zAMFt7vbNLj8yIg7JYS4AsTr6W/j
-N59Bku7wPiPJuHhv30BFfCSjOFUfN+M9HSYAeIp/rLwgtmZCUb1M7JPXIw0rzhty
-WLoISXdgdmBBJEsReLqPyBFRsPxpSFI4Yc6HURTYHmSTPmIl6/4cmIQlkKcl/EvA
-Id0i+Kd7cx/DWdjIsKOzjRU3ReX1B4pOke2c1Qeq1ZkQ71wurH9m7Q5C4QIYtpG5
-lMZ5m99EQBZmjUOMvkW6TZyk0LOGhi5Bd5SJgzw2w7L1i7YVwGaMq2exM5n/PwAp
-aHO0ij7v/tNRKFNyI6eDgnd1AaZCwvTqQFahvUSj+TsA4mJDMCWMdeDoQmHFxJC7
-WBKjDWD5vp4PSu/Q0leZp3DYcTSlnCm5OHqmQ5kDjdZd20SJU5tXhx44xEgsvSv9
-nFTC78C0P1Gzx2dnj033OvKlsVUViX2o/Mx2mHYuJelUvCMS0xreVDBqKP9NTtG7
-JFBIYgcDiMAV+k2TfK8FwAPcX826ncl/HdqRL1ODD/QXNSAkPhQ8Ed944TlNkj7X
-r5ognsL7VbbzT6KD4ST3MITLj/XSGcdqPr2zXTu/ZPnGN/8xo1g=
-=TdpC
------END PGP SIGNATURE-----
+> > > +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> > > +{
+> > > +	u32 reg_val;
+> > > +	struct loongson2_thermal_data *data = tz->devdata;
+> > > +
+> > > +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+> > > +	*temp = ((reg_val & 0xff) - 100) * 1000;
+> > Why '-100' ?
+> > 
+> > Is the unit returned 'degrees' ?
+> 
+> node(cpu) temp = Thens0_out -100,
+> 
+> Here we need to get a node temp.
 
---ew2LPdXyK3eQEa6z--
+If I refer to the Loongson-3A5000 manual and assuming it is the right
+one, the documentation says:
+
+Temperature = Thens0_out * 731 / 0x4000 - 273
+
+The unit is centigrade.
+
+[ ... ]
+
+> > > +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+> > > +
+> > > +	loongson2_thermal_set(data, 0, 0, false);
+> > It would be nicer to use a reset line if it is available
+> sorry, I don't get your meaning. Please describe more details about 'reset
+> line'.
+
+After a reset, the thermal controller should be in default state and the interrupt
+flag cleared.
+
+One example:
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/nvidia/tegra210.dtsi#n1560
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c#n2169
+
+Then search in the driver for:
+     reset_control_assert(reset);
+     reset_control_deassert(reset);
+
+
+[ ... ]
+
+Thanks
+
+  -- Daniel
+
+-- 
+
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
