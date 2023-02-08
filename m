@@ -2,139 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AF968EDCA
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 12:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D8268EDCE
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 12:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjBHLTz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 06:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S230477AbjBHLVv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 06:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbjBHLTI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 06:19:08 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFC3457FF;
-        Wed,  8 Feb 2023 03:18:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T/4A4ShrUpfegRBhEI9y8NCh1RMGotc2Fu7SaKemmc5kEuPuCSKEZLuzewB+/44I8dHnd5EVESD40LRtKGHNkIW0qXTE6ycEt33SYilkZ8JtOzBFQX7lhARh4THJQGaqjWL6B4AP+uC3PURlEmsgfnNmIs7C1cUQ5tgBZnJu3YWiCM9hhGUwWd4SSP1A32CDylDrGhyf3N9fTBZnqo3y4Zbgr06ACQiTdy6N0bvDA6YqRq7xhVOoRu+1j75MZovxMKi4RoyVFkMbvk2AzfvmwkUQztJpe4qhvs0n4GNf/b2iHZgT3XwdNpBE38fUzUJZku3PrEHSlghelEgyfilUbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gFJuUx+vshbAtE3PcS6oKKtJhnpxHv7OrgQo9Xd4G4g=;
- b=mtiqXVBkKVQmPd+ZGUSzUYUBGpVKJ6xjpqoe9g7mI27Eiyw6TjEVnl7F0VnJhfxMWQK+Nuj4OUw9OkXuzqfwmltWb+Z+gnTwuQksnACpBq+nW/9Qo8/DKBpwloU0w2WHLbHRwKMVB1u3i05DmEGlzUv45ce2ptQ8Tzo/Sd/i6IAG+CPX24S6aTn8BVFAciEyU2mgiOp8aacK6FSHgGiPb/nMWT35XMKr7j+DIWaba18x1kXINpCz2SN00lnpHpH25fma0QsZFWkjI9vZmy6vHop2hfOP71UheW0hcEdxFbHaumRc2e8a0QFjdu4P7Y/13CI4gmd2G99mIGciOLzGkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gFJuUx+vshbAtE3PcS6oKKtJhnpxHv7OrgQo9Xd4G4g=;
- b=SH0Nd86d9XIN6V575zvsZFqQbq6tZBrxXSFMTS8dkGIvKGlP98htR2vh6lHSR6TJgKyE583O2BFK/2hYRrAu+5ukPYfWrFQhqofY8u+PH99tKhB3KIust4jKbkVku+ExflyYWY5C879SumbQNN/kp3VM688VNsMU60je9/l5XozrKBCvE0FeyuULWyBjqKIQzqlKXFJeUn64BUZ0fooVr+ODDciPt9MwgqTobyg2TTCcsXXgerdFznc2sG3JXS9yvr2EFi0v/ic2OBALibyu8o86zAxt0kqyk3GQGLZ403rOgyb3Mak1EncDXtfoiWZ0S5Gfgm+GXfd8x+Nnb9l90Q==
-Received: from BN7PR02CA0018.namprd02.prod.outlook.com (2603:10b6:408:20::31)
- by SJ2PR12MB7942.namprd12.prod.outlook.com (2603:10b6:a03:4d3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
- 2023 11:17:56 +0000
-Received: from BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:20:cafe::65) by BN7PR02CA0018.outlook.office365.com
- (2603:10b6:408:20::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17 via Frontend
- Transport; Wed, 8 Feb 2023 11:17:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT068.mail.protection.outlook.com (10.13.177.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.17 via Frontend Transport; Wed, 8 Feb 2023 11:17:56 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 03:17:44 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 03:17:44 -0800
-Received: from mmaddireddy-ubuntu.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Wed, 8 Feb 2023 03:17:37 -0800
-From:   Manikanta Maddireddy <mmaddireddy@nvidia.com>
-To:     <bhelgaas@google.com>, <thierry.reding@gmail.com>,
-        <petlozup@nvidia.com>, <rafael.j.wysocki@intel.com>,
-        <lpieralisi@kernel.org>, <robh@kernel.org>,
-        <jeffy.chen@rock-chips.com>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <jonathanh@nvidia.com>,
-        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
-        <gregkh@linuxfoundation.org>, <steven.price@arm.com>,
-        <kw@linux.com>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <vidyas@nvidia.com>, Manikanta Maddireddy <mmaddireddy@nvidia.com>
-Subject: [RFC,v14 5/5] soc/tegra: pmc: Add Tegra234 PCIe wake event
-Date:   Wed, 8 Feb 2023 16:46:45 +0530
-Message-ID: <20230208111645.3863534-6-mmaddireddy@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
-References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
+        with ESMTP id S231205AbjBHLV2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 06:21:28 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4A576A7;
+        Wed,  8 Feb 2023 03:20:50 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id d2so14400887pjd.5;
+        Wed, 08 Feb 2023 03:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fso3u+DXawZ5Dg96ItXFwx17vVhh+JjQUrLK3cPFxXA=;
+        b=cQHSMKrLWqQTtCWNcCZz5MRxhBqndzS4nDdsJ1ulEaUQaBlkwz6HvMz8jN6zGB9pVY
+         bFSP28DG8JaIdTfrPvili2beREzVUcGEC5ARfMzRQo0TOzSMbOaCXvQZ2sNCxQjAswmT
+         Pk2jBTi+/QgEmKDhvoE4cjwdl9dzNaqI+Llo4w+eQ6h04on3mQCJq1f8WtQGEHzWX/CF
+         RFCLSla740o5g5GpEmOUJW6NLKDx9pJeXEwk+rClwlPj7PTEz57hz0FAlXDWC6LixXjy
+         11ekGzktunr5VfzsAcXAHrKtkx03PaK7Q/68d64LTtyR1AVxs9OnBhSzasszFYQJBzn2
+         HC4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fso3u+DXawZ5Dg96ItXFwx17vVhh+JjQUrLK3cPFxXA=;
+        b=N/XCGWSNCKyTXS1n/+41/KTXFkt1AkcIz5Wx1IRx6G3x22enqhNn6Ao5Q89RDmQ1G9
+         qne/njFQ586hTJ7o17IgqDPLDb0UppQ66RvEb5XXlgrP9nojs94rupIbasJMnXhKmD4M
+         E/ODSzPAnElDGp5RVmghDcHNrMGFKaZn8dU2KMaAM9l1V6RUUigTor7Dj9/D7n1Ergy/
+         SLmQ7bCd3HCy5GRCFrweKGT4SWIcTO11T2z/yAk+9p2VQwlHw+xw67IWlIVgnfF2rEAt
+         vKRrAlZbOqvabEDdRW3nSSs3nYIdJeTht7vKZMYX6A/aUzlUNKv/dvhpQoVZhm5tMpm+
+         aerQ==
+X-Gm-Message-State: AO0yUKXlvnc5stM/pMaDNFVaIbB3keJUMRDaaQG7JpfPmBFX+eNybT6Y
+        udmIuYmxCs9A21rnjFwfZAw=
+X-Google-Smtp-Source: AK7set9VBHl6MNgHsPHaCu5Y1XOfNohh/XCFSbB9YFhbzntGLB9Ov5WP+YNQXbnBp9rrXE7f2SIGJg==
+X-Received: by 2002:a17:90a:e7c6:b0:230:9106:18ec with SMTP id kb6-20020a17090ae7c600b00230910618ecmr7994156pjb.43.1675855236689;
+        Wed, 08 Feb 2023 03:20:36 -0800 (PST)
+Received: from kazuki-mac ([2400:4051:ea3:5910::19a])
+        by smtp.gmail.com with ESMTPSA id gq17-20020a17090b105100b0020dc318a43esm1305791pjb.25.2023.02.08.03.20.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 03:20:36 -0800 (PST)
+From:   Kazuki <kazukih0205@gmail.com>
+X-Google-Original-From: Kazuki <kazuki@kazuki-mac>
+Date:   Wed, 8 Feb 2023 20:20:31 +0900
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: s2idle breaks on machines without cpuidle support
+Message-ID: <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+ <20230208103511.w7jzxw6spy6humdn@bogus>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT068:EE_|SJ2PR12MB7942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a1fb2df-3a00-4386-98ea-08db09c620d4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FPklJNVKITaQVJc/91Oee5OnaVMnBY1AvrHmXGPF6xkfx/+J8Fa04t2qc8/AGmv/ktq1WnaVznLcWMDbvYqDXkSRwKnDTdwJkO+17Ye7w4jSAoRZO38kKvAVDeWGI8IiebO/FAw/xZWF1ttS64Y8ZBlLjRiZxLAlzV8Iphqsjj9Q5w13Fz6H+I4zqEkhtDyngEPvkTqLpQtQgOLT+46amz7lyvYwfn4fCdiGlO2dQJh5Z7jkx0Os6bnqITcnrqrCGWTie0wUgp+YxNTqiW3M+MrWAqZdvHW0Odby2rahGtmd59JEWkLyDV3cZKpNtkMnxGlRtGNBTyuTYLllEiMKpDaZX98KZZMDTcyRfgNFX5AzdaXjExeGDv8GY7U3vu1frVOJpk8RowelXckZfejvEkq4xHT9/UQXBLlWWQO+uNPAanc3EnVjcDeNTXEjBMggIbqOQAtpMIpgzjhnEutPlFQbPuxrR0F8KUW5JpUe9DvI5fiNpPAVYlcTSpfMDEJpketMO6bZCPc6QuQHZNZVqjiankneIkNxGOonXt8pGUHztvyzu95M06tcbU+3H8M073dRTvJRrtNAQVQmzIFUU6Z1oFOauL7up39A/VkwEFfYXdRkSvJcc+fwdLQWcNOoxUQV7/NA1K8+gkV1udDeZ3LnmGNIQdE7cXFFtmT16AARPTsdKx0ueKN7jVyZpyLIJ2T7NO4Kemk8N7+7BhL3GA==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(4326008)(70206006)(70586007)(8676002)(36860700001)(336012)(40460700003)(316002)(7636003)(110136005)(54906003)(86362001)(426003)(5660300002)(7416002)(478600001)(356005)(1076003)(26005)(186003)(36756003)(107886003)(6666004)(2906002)(47076005)(4744005)(8936002)(82310400005)(41300700001)(82740400003)(2616005)(7696005)(40480700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 11:17:56.0004
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a1fb2df-3a00-4386-98ea-08db09c620d4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7942
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208103511.w7jzxw6spy6humdn@bogus>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable PCIe wake event for the Tegra234 SoC.
+On Wed, Feb 08, 2023 at 10:35:11AM +0000, Sudeep Holla wrote:
+> On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
+> > On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+> > >
+> > > What do you mean by break ? More details on the observation would be helpful.
+> > For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+> > these chain of commands don't get called.
+> >
+> > call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
+> >
+> > Which in turn causes programs like systemd to crash since it doesn't
+> > expect this.
+> 
+> Yes expected IIUC. The per-cpu timers and counters continue to tick in
+> WFI and hence CLOCK_MONOTONIC can't stop.
+Yes, but it shouldn't be the case when suspending[1]. Currently that's what
+happens when we enter s2idle without a cpuidle driver. This doesn't seem
+to happen with S3 sleep [2].
 
-Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
----
+[1]
+Documentation/core-api/timekeeping.rst:
 
-Changes in v14:
-New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX Orin.
+.. c:function:: ktime_t ktime_get( void )
 
- drivers/soc/tegra/pmc.c | 1 +
- 1 file changed, 1 insertion(+)
+	CLOCK_MONOTONIC
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index cf4cfbf9f7c5..139ee853c32b 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -4225,6 +4225,7 @@ static const char * const tegra234_reset_sources[] = {
- };
- 
- static const struct tegra_wake_event tegra234_wake_events[] = {
-+	TEGRA_WAKE_GPIO("pcie", 1, 0, TEGRA234_MAIN_GPIO(L, 2)),
- 	TEGRA_WAKE_GPIO("power", 29, 1, TEGRA234_AON_GPIO(EE, 4)),
- 	TEGRA_WAKE_IRQ("rtc", 73, 10),
- };
--- 
-2.25.1
+	Useful for reliable timestamps and measuring short time intervals
+	accurately. Starts at system boot time but stops during suspend.
 
+[2]
+kernel/time/sched_clock.c:
+
+int sched_clock_suspend(void)
+{
+	struct clock_read_data *rd = &cd.read_data[0];
+
+	update_sched_clock();
+	hrtimer_cancel(&sched_clock_timer);
+	rd->read_sched_clock = suspended_sched_clock_read;
+
+	return 0;
+}
+
+void sched_clock_resume(void)
+{
+	struct clock_read_data *rd = &cd.read_data[0];
+
+	rd->epoch_cyc = cd.actual_read_sched_clock();
+	hrtimer_start(&sched_clock_timer, cd.wrap_kt, HRTIMER_MODE_REL_HARD);
+	rd->read_sched_clock = cd.actual_read_sched_clock;
+}
+
+static struct syscore_ops sched_clock_ops = {
+	.suspend	= sched_clock_suspend,
+	.resume		= sched_clock_resume,
+};
+
+static int __init sched_clock_syscore_init(void)
+{
+	register_syscore_ops(&sched_clock_ops);
+
+	return 0;
+}
+device_initcall(sched_clock_syscore_init);
+> 
+> > >
+> > > > 2. Suspend actually works on ARM64 machines even without proper
+> > > > cpuidle (PSCI cpuidle) since they support wfi, so the assumption here is wrong
+> > > > on such machines
+> > > >
+> > >
+> > > Sorry I am bit confused here. Your point (2) contradicts the $subject.
+> > drivers/cpuidle/cpuidle.c:
+> >
+> > bool cpuidle_not_available(struct cpuidle_driver *drv,
+> > 			   struct cpuidle_device *dev)
+> > {
+> > 	return off || !initialized || !drv || !dev || !dev->enabled;
+> > }
+> >
+> > The cpuidle framework reports ARM64 devices without PSCI cpuidle as
+> > "cpuidle not available" even when they support wfi, which causes suspend
+> > to fail, which shouldn't be happening since they do support idling.
+> 
+> Yes with just WFI, there will be no active cpuidle driver.
+> 
+> [...]
+> 
+> > > Again, since s2idle is userspace driven, I don't understand what do you
+> > > mean by unbootable kernel in the context of s2idle.
+> >
+> > Sorry, I meant "attempts to fix this bug have all led to an unbootable
+> > kernel."
+> 
+> Again I assume you mean kernel hang or crash and nothing to do with boot.
+> Once you enter s2i state with your changes/fix, it hangs or is unresponsive
+> as it might have either failed to enter or resume from the state.
+> 
+> --
+> Regards,
+> Sudeep
+Thanks,
+Kazuki
