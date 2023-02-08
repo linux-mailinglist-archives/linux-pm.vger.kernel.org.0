@@ -2,140 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDEC68F22A
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 16:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5495B68F242
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 16:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjBHPjm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 10:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S230503AbjBHPm3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 10:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjBHPjl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 10:39:41 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A5B48A37;
-        Wed,  8 Feb 2023 07:39:38 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id ba1so13114149wrb.5;
-        Wed, 08 Feb 2023 07:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ai4b+jYyw5cqGgwQurdqHixIHibtkEl/YStppo1UAEw=;
-        b=FQLtuY3Sl7LpxQh76NTsIOLrH8Jq1NNvlE42F4PxFgAKoKKyROk2dBtRd6tKdLq0BQ
-         BYMSYywjJj2IlUrVSD0XT+G/GssyUPR8MNtLNaAg40eoyamc2PVkC8WU0yf6pUTnj8pb
-         oruR8ENHG0Ekl4eLqlkgnVApSAYIfpevNYhNEeFOwL0QEsyxiroNzVBwYP1igR2H0JUZ
-         uIXpBQYKhPJ8BsYPi9b7/OqmAyewEfbfLYg+pZdKQF7nxZQRJhy9bDSYiWnEFBhrkaQB
-         JcazBuRam3ZEZinxwpECR3HA7DuRWQiTByWkbKP8WVsymWG2lpPXnur44brRi+IPbLdQ
-         yh4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ai4b+jYyw5cqGgwQurdqHixIHibtkEl/YStppo1UAEw=;
-        b=xJ4mOPX0fJoI5Q34Y2qWzawf2cQRgfWVnAid6ajtHu33OYMCwufuw35upmydZgGPWi
-         je4PDoIQlkiJWyPJsc9us6H5Vg/XjOmm6FIN8oCPehIFc3Pi5etJm+rkTCNT5oWgUqRm
-         R0jhTmMDUrvP6R1zEt/jXKRy+EpPKU+TCyOpGSS3mHcw8nxkwraJ5Sj8YGUCcBXVRRIF
-         LcBIMQyGBkZU6oJIfV7wlKHDHujDdU2pUGxyv6PQiOS0vI3YF5f2NC4vdosew6xptrTa
-         FfKWrkDjQY7RDXZ89XVgRhabRImzZsNE+fdhM95hxduAZFYARTnc+q18IOt0Y3LUq4AY
-         xBpQ==
-X-Gm-Message-State: AO0yUKVMI2yTNT8pJAUK/SBqW2wcO4iT0Oql68iwoU42PLsox/94nGUl
-        y0Wb1Yb6JnHqQLDi7Oj9kck=
-X-Google-Smtp-Source: AK7set8iBupnOqMns+N8Z1VtP4hCRBwJa7b6c/HuULlhEG/d0GgtpTQfDR6PLen9OhuZm/odPIaZnQ==
-X-Received: by 2002:a05:6000:1141:b0:2bf:e46c:8b9a with SMTP id d1-20020a056000114100b002bfe46c8b9amr7479592wrx.34.1675870777147;
-        Wed, 08 Feb 2023 07:39:37 -0800 (PST)
-Received: from localhost.localdomain (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
-        by smtp.googlemail.com with ESMTPSA id n2-20020a05600c3b8200b003dfe659f9b1sm6755596wms.3.2023.02.08.07.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 07:39:36 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 3/3] dt-bindings: opp: opp-v2-kryo-cpu: enlarge opp-supported-hw maximum
-Date:   Wed,  8 Feb 2023 16:39:13 +0100
-Message-Id: <20230208153913.24436-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230208153913.24436-1-ansuelsmth@gmail.com>
-References: <20230208153913.24436-1-ansuelsmth@gmail.com>
+        with ESMTP id S230352AbjBHPm2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 10:42:28 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6032AA;
+        Wed,  8 Feb 2023 07:42:26 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 56F4B41EA7;
+        Wed,  8 Feb 2023 15:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1675870944; bh=9EEEtXkSzKmNuZPuh2VHDQl9lpD/J0a/AFRac3FFtQo=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=w46pOOne4H8Ry9Vrf1BwQn6dgb11NEULDBl2gQpPNN4a114LEGt56yCxpufMp6k83
+         nBDdN2v647BIdcKSNnVKgU4o1/XxmVhQwjIjMTDsugegQ5e84MvcPAp/v8fZTz4I00
+         EH/Q3AwpWJ2r7X9lq8Jl7iXt/sc1ri8VQg5KZ0SsYu951K4QOQ5niFGyjU6bceEzSj
+         M/ZJv/UMtIHRN93qWkqDtPHfp7mopBRfHFh45Br/bwAn4ilaCePCwLZUtNi5IpYxKo
+         BGW/cqtjZvAV+ncFY8ac9wTf38H61oxQ+ZT22N2Ameqvrc7kuJFeYj2KJaiA2HWmC/
+         J6XsrhiUWPc7w==
+Message-ID: <5f741a4f-f37d-079b-d464-59045ebef1ce@marcan.st>
+Date:   Thu, 9 Feb 2023 00:42:17 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>, Kazuki <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+ <20230208103511.w7jzxw6spy6humdn@bogus>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: s2idle breaks on machines without cpuidle support
+In-Reply-To: <20230208103511.w7jzxw6spy6humdn@bogus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enlarge opp-supported-hw maximum value. In recent SoC we started
-matching more bit and we currently match mask of 112. The old maximum of
-7 was good for old SoC that didn't had complex id, but now this is
-limiting and we need to enlarge it to support more variants.
+On 08/02/2023 19.35, Sudeep Holla wrote:
+> On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
+>> On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+>>>
+>>> What do you mean by break ? More details on the observation would be helpful.
+>> For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+>> these chain of commands don't get called.
+>>
+>> call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
+>>
+>> Which in turn causes programs like systemd to crash since it doesn't
+>> expect this.
+> 
+> Yes expected IIUC. The per-cpu timers and counters continue to tick in
+> WFI and hence CLOCK_MONOTONIC can't stop.
 
-Document all the various mask that can be used and limit them to only
-reasonable values instead of using a generic maximum limit.
+The hardware counters would also keep ticking in "real" s2idle (with
+hypothetical PSCI idle support) and often in full suspend. There is a
+flag for this (CLOCK_SOURCE_SUSPEND_NONSTOP) that is set by default for
+ARM. So this isn't why CLOCK_MONOTONIC isn't stopping; there is
+machinery to make the kernel's view of time stop anyway, it's just not
+being invoked here.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-changes v6:
-- No change
-Changes v5:
-- No change
-Changes v4:
-- Add review tag from Krzysztof
-Changes v3:
-- Fix dt_binding_check for missing 0x5 and 0x6 value
-Changes v2:
-- Document additional bit format
+This is somewhat orthogonal to the issue of PSCI. These machines can't
+physically support PSCI and KVM at the same time (they do not have EL3),
+so PSCI is not an option. We will be starting a conversation about how
+to provide something "like" PSCI over some other sort of transport to
+solve this soon. So that will "fix" this issue once it's all implemented.
 
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+However, these machines aren't the only ones without PSCI (search for
+"spin-table" in arch/arm64/boot/dts, this isn't new and these aren't the
+first). It seems broken that Linux currently implements s2idle in such a
+way that it violates the userspace clock behavior contract on systems
+without a cpuidle driver (and does so silently, to make it worse). So
+that should be fixed regardless of whether we end up coming up with a
+PSCI alternative or not for these platforms. There's no fundamental
+reason why s2idle can't work properly with plain WFI.
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index b4947b326773..bbbad31ae4ca 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -50,12 +50,22 @@ patternProperties:
-       opp-supported-hw:
-         description: |
-           A single 32 bit bitmap value, representing compatible HW.
--          Bitmap:
-+          Bitmap for MSM8996 format:
-           0:  MSM8996, speedbin 0
-           1:  MSM8996, speedbin 1
-           2:  MSM8996, speedbin 2
--          3-31:  unused
--        maximum: 0x7
-+          3:  MSM8996, speedbin 3
-+          4-31:  unused
-+
-+          Bitmap for MSM8996SG format (speedbin shifted of 4 left):
-+          0-3:  unused
-+          4:  MSM8996SG, speedbin 0
-+          5:  MSM8996SG, speedbin 1
-+          6:  MSM8996SG, speedbin 2
-+          7-31:  unused
-+        enum: [0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
-+               0x9, 0xd, 0xe, 0xf,
-+               0x10, 0x20, 0x30, 0x70]
- 
-       clock-latency-ns: true
- 
--- 
-2.38.1
-
+- Hector
