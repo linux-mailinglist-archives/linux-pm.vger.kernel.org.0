@@ -2,129 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAD468F218
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 16:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3A768F228
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Feb 2023 16:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjBHPgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 10:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S231719AbjBHPjj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 10:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjBHPgC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 10:36:02 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA3C402F3;
-        Wed,  8 Feb 2023 07:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Uh03leLsKgN2MDpFdcAW1yHdKgXLcqsQSRml3Fthvko=; b=AQ+4/DNw5QH5YEywk5DN7WMC70
-        Z+/rFYmcpAdxcVcP9vuK/7yW5CeaUOKWN6nMzjKijXyze6u5XRx/FwV8lzE74n3JH3pSG9Vgt9RtK
-        BldvnI8+uABeY5W9+bMYXb3azZjt+5iZhJBTA8GKuj3xveKpK7T0Qe3TH/0G0tD6etxzvnQE+nhdb
-        tz3OlVSmQhzTgtKrlRcOwuNQdC0f5fQtVgMqwNcCyb/0QreF9wwqJayzAmdo7d5wbltN1/V0f7mQB
-        qk2oH22Yx+yDD2Gseh2APhJbzfV64K0F51C9F39tZcFYDqkbdpxsNkIuaTbEfYwiGZo5U5iOL5M1b
-        P7C271tw==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1pPmU9-007ztn-4r; Wed, 08 Feb 2023 17:35:49 +0200
-Message-ID: <706b3e2d-7097-356b-b96e-dd917ce048ea@kapsi.fi>
-Date:   Wed, 8 Feb 2023 17:35:48 +0200
+        with ESMTP id S231588AbjBHPjj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 10:39:39 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8449A4615D;
+        Wed,  8 Feb 2023 07:39:36 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso1759396wmp.3;
+        Wed, 08 Feb 2023 07:39:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZ2CaI/V2FdeNF+FZ2q8IFjrwh7v5x9Z6pVcuoKOE+s=;
+        b=EscWcKO9aDv4lw1VYLc1R8eMRNuuaUZo7ShY+3T4Pw+6EbHsYJoiZdLEYBkMThqH/Q
+         mbfGF/T6Ma9vy9y2YQBmr1M0xAvjXJSW/pk/04o4TChh1j03LFrPGivnrdD31dJ4T+9M
+         em+V5VZNSe4i/opFx/oHCRoIpQkXX4PHQkRe17STrC+p3OpHd7vfFvK0lAv70Mbgh3E1
+         7nvOEO7UB0+JCDpvIuLh91gPvZ0Syr36mFo3WUqsLpRnR92fsafTgC/Ffk7YgX5iai2b
+         cclnEBdJtIQWwGAP+kict8qT+xTarUVs8f96Lp98lRkouoTjmjRiIEFKKPqHuhfraSTQ
+         +5nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IZ2CaI/V2FdeNF+FZ2q8IFjrwh7v5x9Z6pVcuoKOE+s=;
+        b=1bLyam4jALhfVhuZkHMxZxXgHtLt+ciGQERyJB6bvk09YudOUcNsMRZ1aqPPG7IWGj
+         ICE0gnpwIkSqTaaAsv1+X9brO9UbwOVvDBJUbPZHGJShv7Wawzm9L8ZsvEBMmrCWDzwd
+         vazBlgY9FVPuhb4YcEHOGQtOcwUxDP3FTEtG3SZr/3XJZI93YlsW40kTk7N/TinRFpEA
+         xnY9L8kuF9nd554mYNlxjzhSF961Ev/oMfoIvQpNGEJTDuj/s093J14oif+N3H0KJo85
+         8bIg0KtvS+ZFf5ld1GVTK3Ya/rkzLU0vtgrBD2pRLfSoY7QUOBYO7SacNcfZ8NKnvm3m
+         vbxg==
+X-Gm-Message-State: AO0yUKUP9oGRey+5mPskPEMppj6i8bzhMOJsbMVFXA+MkSys4y0taZR7
+        xyPKbEfeLmV6ieJ9Eul1lME=
+X-Google-Smtp-Source: AK7set8qO09YDtSj6g/rsPEetfbuIk6UE1JE0R+tTm2JERmPloHu6672cbPQGMrfz8eZQp1HeBLKZw==
+X-Received: by 2002:a05:600c:920:b0:3dc:5390:6499 with SMTP id m32-20020a05600c092000b003dc53906499mr6992838wmp.1.1675870774900;
+        Wed, 08 Feb 2023 07:39:34 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.googlemail.com with ESMTPSA id n2-20020a05600c3b8200b003dfe659f9b1sm6755596wms.3.2023.02.08.07.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 07:39:34 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v6 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify supported opp tables
+Date:   Wed,  8 Feb 2023 16:39:11 +0100
+Message-Id: <20230208153913.24436-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/2] thermal: tegra-bpmp: Handle offline zones
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
- <Y+N5+w8ePTVaZiIB@orome>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <Y+N5+w8ePTVaZiIB@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/8/23 12:31, Thierry Reding wrote:
-> On Tue, Feb 07, 2023 at 03:56:08PM +0200, Mikko Perttunen wrote:
->> From: Mikko Perttunen <mperttunen@nvidia.com>
->>
->> Thermal zones located in power domains may not be accessible when
->> the domain is powergated. In this situation, reading the temperature
->> will return -BPMP_EFAULT and the temperature is considered to be
->> -256C for calculating trips.
-> 
-> Where's that -256C being set? I only see THERMAL_TEMP_INVALID being set
-> as the default for a zone, but that's not -274C, not -256C. If that's
-> the temperature that you're referring to, it might be better to state
-> that we rely on the default temperature rather than any specific number.
-> 
-> Thierry
+Add additional info on what opp tables the defined devices in this schema
+supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+and reference them.
 
-It is based on BPMP's internal behavior.
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+Changes v6:
+- No change
+Changes v5:
+- Swap patch 1 and patch 2 to fix dt_check_warning on single
+  patch bisecting 
+Changes v4:
+- Add patch split from patch 1
 
-Mikko
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
-> 
->>
->> For smooth operation, for offline zones, return -EAGAIN when reading
->> the temperature and allow registration of zones even if they are
->> offline during probe.
->>
->> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->> ---
->>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->> index c76e1ea62c8a..628b18818ae9 100644
->> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
->> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
->>   	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->>   	if (err)
->>   		return err;
->> +	if (msg.rx.ret == -BPMP_EFAULT)
->> +		return -EAGAIN;
->>   	if (msg.rx.ret)
->>   		return -EINVAL;
->>   
->> @@ -257,7 +259,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
->>   		zone->tegra = tegra;
->>   
->>   		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
->> -		if (err < 0) {
->> +
->> +		/*
->> +		 * Sensors in powergated domains may temporarily fail to be read
->> +		 * (-EAGAIN), but will become accessible when the domain is powered on.
->> +		 */
->> +		if (err < 0 && err != -EAGAIN) {
->>   			devm_kfree(&pdev->dev, zone);
->>   			continue;
->>   		}
->> -- 
->> 2.39.0
->>
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..7c42d9439abd 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -55,15 +55,32 @@ properties:
+ 
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
+-      properties:
+-        compatible:
+-          const: operating-points-v2-kryo-cpu
+-    then:
+-      patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          patternProperties:
++            '^opp-?[0-9]+$':
++              required:
++                - required-opps
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
+ 
+ additionalProperties: true
+ 
+-- 
+2.38.1
 
