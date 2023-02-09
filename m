@@ -2,73 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BB96910DC
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 19:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41BC6910F5
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 20:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBIS7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 13:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S229605AbjBITHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 14:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjBIS7m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 13:59:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECBF5EA0A;
-        Thu,  9 Feb 2023 10:59:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D55D61BA9;
-        Thu,  9 Feb 2023 18:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0DC15C433EF;
-        Thu,  9 Feb 2023 18:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675969177;
-        bh=C421LtBeIdvEx/77405PE58z3WphO4n+gOkSOQRUnok=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=mDlnG3j0aYE+vxEL0Lawh1OKyYct2AzMO9wnp/Bo6nT62XPWpbm547kU5x93bd6HC
-         wcbY9x+bpRbldxLLIAWZJKG1hT1oGlDYou6rC1QAL+PWb+OXQOjmtEZZDzyaPjp717
-         JjcB9h+4gKFw70m2/UtnRrV+hs/5dN/afYG2KNulFDuL4Xr5CWTxaWRHmsvKs9stuj
-         k9vECF6XMW2WpDoyBSFPFiVyq1b2dbm9Y3hbL7vOPAWiSk0MBKsRSFiU4ND1XSfjio
-         8oPd3WQiK4QXqzGrdr9k4vX5x4wAMWpSXATRjvbZ4WhVgpt6p5Qb5TwhlpYNFwBevg
-         iuwvTLCgtnmUA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E85D5E21EC9;
-        Thu,  9 Feb 2023 18:59:36 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fix for v6.2-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0iTBJNNxKs86LjTVfer6aqqPYhOuZP04FC-zcq3CWfv8Q@mail.gmail.com>
-References: <CAJZ5v0iTBJNNxKs86LjTVfer6aqqPYhOuZP04FC-zcq3CWfv8Q@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0iTBJNNxKs86LjTVfer6aqqPYhOuZP04FC-zcq3CWfv8Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.2-rc8
-X-PR-Tracked-Commit-Id: 918c5765a15420ad60730fbe5b5b67beb74ca7b6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e544a07438522ab3688416e6e2e34bf0ee6d8755
-Message-Id: <167596917694.5202.6396809056121171365.pr-tracker-bot@kernel.org>
-Date:   Thu, 09 Feb 2023 18:59:36 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229483AbjBITHb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 14:07:31 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B25CAD15;
+        Thu,  9 Feb 2023 11:07:30 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id bh15so2500924oib.4;
+        Thu, 09 Feb 2023 11:07:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ljNnToeTIL1TFk9BZIDWfKvJLhPyA6JgaKeGR7D+Uy8=;
+        b=Wqua+6pxuFi6oAnYLNUGvVHskErAB164JIuCWrZGLQefpGPMDKOa+wfpIQZlUKd0HM
+         uDoRpCO5OFEAFlaRMlXYEhFKWk0rPnh0FGxnirZ80VrPcvfyYE5+pDqOk+tMK26duLFt
+         3OR4gATIQwB9P+Bgv+6dmLWtibAJmyWYZ0xRmXcLfvwcFsM0cLn+dWkWZAoDFhsNpt4M
+         TU0Cnpq2fFRggGTVcoMwMMtk5H1sRXEMlCQmucyZO4ZOOlI8dDmdR8sT49YmgQreWsD9
+         s7cal84ZoxTlRD4fV0SEYPOiDVuSX5Ju7mq3WifrtX30s+QocBCf9kfc0KV89QFN4HFZ
+         c/Hg==
+X-Gm-Message-State: AO0yUKWUVmUP6bUiZkVXunYY8AaUdEdM558pCrkRpRPMoTQRlpTPhJuk
+        V9NpJ2hh8TmNwjWTnPOw2w==
+X-Google-Smtp-Source: AK7set9kNL5f2SUSoOcy3zcL5Ej8M7/ppJqU+XYT7yBpDlUf9vvh4vTus6vEzRSNOxkw8vmpoD8elw==
+X-Received: by 2002:a05:6808:6292:b0:378:1e37:ff44 with SMTP id du18-20020a056808629200b003781e37ff44mr6380288oib.33.1675969649382;
+        Thu, 09 Feb 2023 11:07:29 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m128-20020acabc86000000b0037880fdb1f6sm1200297oif.24.2023.02.09.11.07.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 11:07:28 -0800 (PST)
+Received: (nullmailer pid 647682 invoked by uid 1000);
+        Thu, 09 Feb 2023 19:07:27 -0000
+Date:   Thu, 9 Feb 2023 13:07:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     bchihi@baylibre.com
+Cc:     linux-arm-kernel@lists.infradead.org, khilman@baylibre.com,
+        rdunlap@infradead.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, p.zabel@pengutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-pm@vger.kernel.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, krzysztof.kozlowski+dt@linaro.org,
+        ye.xingchen@zte.com.cn, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v14 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal
+ controllers
+Message-ID: <167596964747.647630.15058465615417584783.robh@kernel.org>
+References: <20230209105628.50294-1-bchihi@baylibre.com>
+ <20230209105628.50294-3-bchihi@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209105628.50294-3-bchihi@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Thu, 9 Feb 2023 19:49:12 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.2-rc8
+On Thu, 09 Feb 2023 11:56:24 +0100, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
+> 
+> Add LVTS thermal controllers dt-binding definition for mt8192 and mt8195.
+> 
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> ---
+>  .../thermal/mediatek,lvts-thermal.yaml        | 142 ++++++++++++++++++
+>  .../thermal/mediatek,lvts-thermal.h           |  19 +++
+>  2 files changed, 161 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+>  create mode 100644 include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> 
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e544a07438522ab3688416e6e2e34bf0ee6d8755
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
