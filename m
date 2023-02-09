@@ -2,137 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1876690EBE
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 18:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492DB690ED6
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 18:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjBIRAL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 12:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S229665AbjBIRHA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 12:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjBIRAK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 12:00:10 -0500
-Received: from mr85p00im-zteg06011501.me.com (mr85p00im-zteg06011501.me.com [17.58.23.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2633F64D98
-        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 09:00:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1675962007; bh=9SoWufoa6fwEHefnS455/PdhOj3uOv+LruSHJSZAeo0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Y0LVhzxwcxTUXeuOG+WPP808SpDz9YN7KU0OQqehLsJ/IWgraQr6ZBe12MrVaNpXk
-         xDCU8/UvTAA/7UvsuUf51uISmYF3VxhQjK+FQPA5Vp+MkzHnwXmp3gkFP00shTcQ5n
-         TUByWfyEIO51w3D+2eA9Vyp7QpaC7Rhwp1tAPpkUQH3MQeRo4WNKT0+baUPdO2klh0
-         rDrioDKaRw7xtk4MVl93HnPL2PIyDv3zQ9kXVKEwrTh3wO9W0NCPXAQNmhRJZLU0qt
-         qksUqNbX+YBwFgi6yD/HOsx6xZ46Kf3QubMQr78mb7yu750Uuq2fau3RyOsjHMbdvD
-         3ESU6hKU79q2Q==
-Received: from imac101 (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-zteg06011501.me.com (Postfix) with ESMTPSA id 1A9284805C8;
-        Thu,  9 Feb 2023 17:00:01 +0000 (UTC)
-Date:   Thu, 9 Feb 2023 17:59:58 +0100
-From:   Alain Volmat <avolmat@me.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 09/11] dt-bindings: reset: remove stih415/stih416 reset
- bindings
-Message-ID: <Y+Umjs66mx7LCr8y@imac101>
-Mail-Followup-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230209091659.1409-1-avolmat@me.com>
- <20230209091659.1409-10-avolmat@me.com>
- <a7bbc64d-1b16-490a-5424-4a2f08aba111@linaro.org>
+        with ESMTP id S229517AbjBIRHA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 12:07:00 -0500
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7D02943E;
+        Thu,  9 Feb 2023 09:06:57 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id rp23so8339693ejb.7;
+        Thu, 09 Feb 2023 09:06:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A8VHFGKaLeh3cYqrzInF4usbI5I5QnVDbyKaNdVm2lg=;
+        b=NVzHdFCa8wfpZKy7IqlQXZiqRJFB24fQYU7IJUnbFKQIea6RiIozsnm0LvMJS+68U0
+         ++0Z2m8rBHZkDq0bp/ZYw/P9ka5lpwc75VHRgYygQUFtcQkk67ZHp1y/nlRS34CgS/zP
+         ow4pm0X/tc7FzkoN9e0JpkJXhpj2Uo9Dgu8f1oKRA2h1UxcypvTFzJd3HY93vv4EPRvw
+         y1fGVbevFTN1Tfjk6a1wA5qjTBGykP/wOCu+4xpa66JP6QYLVon9gZrHscYKgvDT8PnR
+         D+i6cxep10KjaFP/hhW5Xmu9ZblaoFC1Dlf05RfvIw9N7mncyJfll0FeiU4Mis5MJmWV
+         p8Mw==
+X-Gm-Message-State: AO0yUKXTmFIbLuy/0rpyJgRSRKy56CmnGgF2Jx/YQSnd+tjz5CAt1fGw
+        xIpKaK3nx5ht0LbQk5C2vkLZTnCcpEcCPKJwZnk=
+X-Google-Smtp-Source: AK7set+4StgcSJCsQLbtg4LUf87wPyzX8QRiqSdKMMXxY3XgpMGt/5mW9xQjdq7nMDfhVZsecUgxGq34WDi+9ZtDXIo=
+X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
+ sd14-20020a170906ce2e00b0087f575a9b67mr2846836ejb.274.1675962416181; Thu, 09
+ Feb 2023 09:06:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7bbc64d-1b16-490a-5424-4a2f08aba111@linaro.org>
-X-Proofpoint-GUID: FDo7WBUMFrvgJQVoLgvu_j1-qoz2I80w
-X-Proofpoint-ORIG-GUID: FDo7WBUMFrvgJQVoLgvu_j1-qoz2I80w
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0 bulkscore=0
- adultscore=0 clxscore=1011 spamscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302090161
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230202013140.30416-1-rui.zhang@intel.com>
+In-Reply-To: <20230202013140.30416-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 18:06:44 +0100
+Message-ID: <CAJZ5v0gtCffDTVi-SoQ0KanPiSZUS3gONX7a-ZHAXQRr97H-EA@mail.gmail.com>
+Subject: Re: [PATCH] powercap/intel_rapl: Fix handling for large time window
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 10:32:04AM +0100, Krzysztof Kozlowski wrote:
-> On 09/02/2023 10:16, Alain Volmat wrote:
-> > Remove the stih415 and stih416 reset dt-bindings since those
-> > two platforms are no more supported.
-> 
-> Subject: drop second/last, redundant "bindings". The "dt-bindings"
-> prefix is already stating that these are bindings.
-> 
-> This applies to your other patches as well.
+On Thu, Feb 2, 2023 at 2:25 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> When setting the power limit time window, software updates the 'y' bits
+> and 'f' bits in the power limit register, and the value hardware takes
+> follows the formula below
+>
+>         Time window = 2 ^ y * (1 + f / 4) * Time_Unit
+>
+> When handling large time window input from userspace, using left
+> shifting breaks in two cases,
+> 1. when ilog2(value) is bigger than 31, in expression "1 << y", left
+>    shifting by more than 31 bits has undefined behavior. This breaks
+>    'y'. For example, on an Alderlake platform, "1 << 32" returns 1.
+> 2. when ilog2(value) equals 31, "1 << 31" returns negative value
+>    because '1' is recognized as signed int. And this breaks 'f'.
+>
+> Given that 'y' has 5 bits and hardware can never take a value larger
+> than 31, fix the first problem by clamp the time window to the maximum
+> possible value that the hardware can take.
+>
+> Fix the second problem by using unsigned bit left shift.
+>
+> Note that hardware has its own maximum time window limitation, which
+> may be lower than the time window value retrieved from the power limit
+> register. When this happens, hardware clamps the input to its maximum
+> time window limitation. That is why a software clamp is preferred to
+> handle the problem on hand.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 26d00b1853b4..8b30e5259d3b 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -999,7 +999,12 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
+>
+>                 do_div(value, rp->time_unit);
+>                 y = ilog2(value);
+> -               f = div64_u64(4 * (value - (1 << y)), 1 << y);
+> +               if (y > 0x1f) {
+> +                       pr_warn("%s: time window too large, clamped\n", rp->name);
 
-Thanks for the review.  I corrected that and will push a v2 once
-I got further comments about the overall serie.
+IIUC this happens when user space provides a value that is too large.
+Why do you want to log a kernel warning in that case?
 
-> 
-> > 
-> > Signed-off-by: Alain Volmat <avolmat@me.com>
-> > ---
-> >  include/dt-bindings/reset/stih415-resets.h | 28 ------------
-> >  include/dt-bindings/reset/stih416-resets.h | 52 ----------------------
-> >  2 files changed, 80 deletions(-)
-> >  delete mode 100644 include/dt-bindings/reset/stih415-resets.h
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
+> +                       return 0x7f;
+
+Because the target hardware field has 7 bits, the function will return
+all ones if the exponent is too large.  It would be good to put a
+comment stating this here.
+
+> +               }
+> +
+> +               f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
+>                 value = (y & 0x1f) | ((f & 0x3) << 5);
+>         }
+>         return value;
+> --
