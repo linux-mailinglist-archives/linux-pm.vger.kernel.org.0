@@ -2,211 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE8C690CCD
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 16:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ACA690DCF
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 17:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjBIPVq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 10:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S231584AbjBIQD2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 11:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjBIPVp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 10:21:45 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9038E93
-        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 07:21:43 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bi36so3596461lfb.8
-        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 07:21:43 -0800 (PST)
+        with ESMTP id S230169AbjBIQD0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 11:03:26 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BFA64D83
+        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 08:03:23 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 141so1908615pgc.0
+        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 08:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k2RnjvYdTi1EW+HUEp1YLLp7LpHmutN7MJEWL7l9roU=;
-        b=lVKy0zHGwXGVsGQuqnbkoaoY8z+lSceCvkvf9yTYfdXf6OpcpHPaoJ6ca6wh6ElEUI
-         A0hLu1X3Nbv/rc1uY1S1WjYVItnKKsBzFtbd6wgivVGICoLez29334f1WD6wuvf51ILX
-         +lOCjSMsBc0YOfwe7c4HQGrGdPRoa+Z+OjLl8ch1EedtiSQFZSXcJWcYtOrXQUYbPJnA
-         +34KarEo+QCq9GoOim6l1WnVHAq005jiRWNKYhcJfC/sdY3RQC2n3t3EDD66cjA4/Gaj
-         /3b+eaJX+dik+N77NSx3ht8Pf0qLs6d954PYs10zAshpinuoTVKPSJ3o4QaQgMeZwjsM
-         h1tQ==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8hbNuInS1cAuvAHslG3pc7g8PaYQVebtTQoATf9+UuQ=;
+        b=iiyzKIJAYhUszGR1JVRHlbKwmvsyfSbgpJswysCnUGsz8wK8ko0N0PVy77odFg6LhH
+         vRznyV7rS10R6fVxsFfJaOqs7u+ZTmnTagHkd6uwW2kyRHf8tv0Y6fN8lUVtHE6yRHUA
+         ZPfwdCPE0t7OcO4OVzGMDnyxkvE0c5VtqmPQE+ANNI0AcB7pu33HnbKmzRXXMxmQId2c
+         ZA2TPTbWI9ROd84RxFG5YPUE9WBEX3i7nt5NrpKGb1jRdmoUhz/ls3dgVYEsU9PFSIeO
+         6paXqpDQun4TX5zTB04kIfmzv5vkQVSEnsjaoXf7ExCOgKFKXBHQtAWGdvP/BmdAVMm2
+         XKug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k2RnjvYdTi1EW+HUEp1YLLp7LpHmutN7MJEWL7l9roU=;
-        b=PQxW+Sxn13+zalP3ghc4CsuTxsR58EuxaeffCbowx7WBTf17HlcJSiCjjK9V18gbZ6
-         18LrzS71UeONXC6LEP9tppF6tH3UyM1P4uX50O2ex3HtfWMPrmpGQfsOJrTNg80vahVC
-         gUek6KmxbCabuaHO+f4NFMdnRSKKl8UVVSI2AAw3VAgvyaBsDskXxdeRMysWCU1pgJgt
-         kwCFHxWmMezn4JplGfwQKKDnnnnKPjn2qbITYhSs515zfHHWSOa6nD9foeQ7wtjGu5gC
-         JBGOJScjHSBEk0po1iIPR9pbgd86DG9pIw3nh9br1ezXjMork5OAdC5WAWntuO4M2HtF
-         yKCw==
-X-Gm-Message-State: AO0yUKVuFEG/f5Ld38T5ZgQlFixbYK7pOEaU42kaEK/KfOsYTI3QyCMm
-        ypbKApSekljLLsC9ctbpBWUx6Q==
-X-Google-Smtp-Source: AK7set8Z+Vd1ZrHRCsbzn88fRuvrKws5CVA4obTneVl3zrPjGeRG+3Pq1r7UyPY4M/nTGgfKsQT3Qg==
-X-Received: by 2002:ac2:5d4e:0:b0:4cf:e904:bba5 with SMTP id w14-20020ac25d4e000000b004cfe904bba5mr3258645lfd.29.1675956102296;
-        Thu, 09 Feb 2023 07:21:42 -0800 (PST)
-Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id l7-20020ac25547000000b004d40e22c1eesm145037lfk.252.2023.02.09.07.21.41
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8hbNuInS1cAuvAHslG3pc7g8PaYQVebtTQoATf9+UuQ=;
+        b=AHHbnuedGK4VWgUY0JUL5HTtCG2SXZioEFNkDxU3Bdg+qsMu6AbFqqVeRmIzikhjg5
+         tW/UH1+JKxER8k7iVtmcJ1pFFpV3bK2jOmN/kjHvfFV6i77lPh4xky+92O1MYxSGVw10
+         dI8sD7NFhWEeWMhzt5n9hQJejYoOW/6wwg+JgspZAHWXbNQuzsG72zI2kpy9gOHvf2sP
+         9f/wZpk1dkI0Gh73zyiLyhsqPC/NJX98t+ZCb9QLB9WzVIsPJTVvy5E12O0pMAeeof19
+         E9HW6WkshyHZv942bpKKpHfzeugUukGRRtSZgQFIC7jpCcNHgxGhMalueG94zNvAMKLh
+         kmCg==
+X-Gm-Message-State: AO0yUKUZynYG3MRMqYW+8QqMJMaBibCLW4YuobLQz5cV7I5hjJqjrfTC
+        0XjOFw9oO/g/JErttE6j/a4TRdrOEA8c/BqqvKBFuA==
+X-Google-Smtp-Source: AK7set+ZyT0L84jdxGW3aZ0JR1XPF5UPCqrsU9j8yb4kYCxDTgZtBaKeijv81mYtq4/eV8bGJt6eHQ==
+X-Received: by 2002:aa7:978c:0:b0:5a8:4ba7:5849 with SMTP id o12-20020aa7978c000000b005a84ba75849mr4586952pfp.28.1675958602758;
+        Thu, 09 Feb 2023 08:03:22 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r25-20020a62e419000000b005a845490420sm1616106pfh.119.2023.02.09.08.03.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 07:21:41 -0800 (PST)
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-To:     linux-kernel@vger.kernel.org, rafael@kernel.org
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, hdegoede@redhat.com, markgross@kernel.org,
-        dtor@google.com, mario.limonciello@amd.com,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Grzegorz Jaszczyk <jaz@semihalf.com>
-Subject: [RESEND RFCv2 1/1] platform/x86: Add virtual PMC driver used for S2Idle
-Date:   Thu,  9 Feb 2023 15:21:23 +0000
-Message-Id: <20230209152123.3186930-2-jaz@semihalf.com>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-In-Reply-To: <20230209152123.3186930-1-jaz@semihalf.com>
-References: <20230209152123.3186930-1-jaz@semihalf.com>
+        Thu, 09 Feb 2023 08:03:22 -0800 (PST)
+Message-ID: <63e5194a.620a0220.4b2d0.2a92@mx.google.com>
+Date:   Thu, 09 Feb 2023 08:03:22 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.2-rc7-185-gbe3ba1769837
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 49 runs,
+ 1 regressions (v6.2-rc7-185-gbe3ba1769837)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Virtual PMC driver is meant for the guest VMs for the S2Idle
-notification. Its purpose is to register S2Idle dev ops check handler,
-which will evaluate ACPI _DSM just before the guest enters S2Idle power
-state.
+pm/testing baseline: 49 runs, 1 regressions (v6.2-rc7-185-gbe3ba1769837)
 
-This allows to trap on MMIO access done as a consequence of _DSM
-evaluation and therefore notify the VMM about the guest entering S2Idle
-state.
+Regressions Summary
+-------------------
 
-Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
----
-Changelog v1..v2:
-- Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
----
- drivers/platform/x86/Kconfig    |  7 ++++
- drivers/platform/x86/Makefile   |  3 ++
- drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
- 3 files changed, 83 insertions(+)
- create mode 100644 drivers/platform/x86/virt_pmc.c
+platform   | arch | lab             | compiler | defconfig          | regre=
+ssions
+-----------+------+-----------------+----------+--------------------+------=
+------
+imx53-qsrb | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig | 1    =
+      =
 
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 5692385e2d26..b7c3f98031d7 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
- 	  buttons below the display. This module adds an input device
- 	  that delivers key events when these buttons are pressed.
- 
-+config VIRT_PMC
-+	tristate "Virt PMC"
-+	depends on ACPI && SUSPEND
-+	help
-+	  The Virtual PMC driver is meant for the guest VMs and its main
-+	  purpose is to notify about guest entering s2idle state.
-+
- endif # X86_PLATFORM_DEVICES
- 
- config P2SB
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index 1d3d1b02541b..c4d3056cf4ea 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)		+= intel_scu_wdt.o
- obj-$(CONFIG_INTEL_SCU_IPC_UTIL)	+= intel_scu_ipcutil.o
- obj-$(CONFIG_X86_INTEL_LPSS)		+= pmc_atom.o
- 
-+# Virtual PMC
-+obj-$(CONFIG_VIRT_PMC)			+= virt_pmc.o
-+
- # Siemens Simatic Industrial PCs
- obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
- 
-diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_pmc.c
-new file mode 100644
-index 000000000000..daf9c9ed86e5
---- /dev/null
-+++ b/drivers/platform/x86/virt_pmc.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Virtual Power Management Controller Driver
-+ *
-+ * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/platform_device.h>
-+
-+#define ACPI_VIRT_PMC_DSM_UUID	"9ea49ba3-434a-49a6-be30-37cc55c4d397"
-+#define ACPI_VIRT_PMC_NOTIFY 1
-+
-+static acpi_handle virt_pmc_handle;
-+
-+static void virt_pmc_s2idle_notify(void)
-+{
-+	union acpi_object *out_obj;
-+	static guid_t dsm_guid;
-+
-+	guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
-+
-+	out_obj = acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
-+					0, ACPI_VIRT_PMC_NOTIFY, NULL);
-+
-+	acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %s\n",
-+			  ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : "failed");
-+
-+	ACPI_FREE(out_obj);
-+}
-+
-+static struct acpi_s2idle_dev_ops amd_pmc_s2idle_dev_ops = {
-+	.check = virt_pmc_s2idle_notify,
-+};
-+
-+static int virt_pmc_probe(struct platform_device *pdev)
-+{
-+	int err = 0;
-+
-+	virt_pmc_handle = ACPI_HANDLE(&pdev->dev);
-+
-+	err = acpi_register_lps0_dev(&amd_pmc_s2idle_dev_ops);
-+	if (err)
-+		dev_warn(&pdev->dev, "failed to register LPS0 sleep handler\n");
-+
-+	return err;
-+}
-+
-+static int virt_pmc_remove(struct platform_device *pdev)
-+{
-+	acpi_unregister_lps0_dev(&amd_pmc_s2idle_dev_ops);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id virt_pmc_acpi_ids[] = {
-+	{"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
-+
-+static struct platform_driver virt_pmc_driver = {
-+	.driver = {
-+		.name = "virtual_pmc",
-+		.acpi_match_table = ACPI_PTR(virt_pmc_acpi_ids),
-+	},
-+	.probe = virt_pmc_probe,
-+	.remove = virt_pmc_remove,
-+};
-+
-+module_platform_driver(virt_pmc_driver);
-+
-+MODULE_DESCRIPTION("Virtual PMC Driver");
--- 
-2.39.1.519.gcb327c4b5f-goog
 
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.2-rc7=
+-185-gbe3ba1769837/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.2-rc7-185-gbe3ba1769837
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      be3ba1769837f7763b8d7019498af49f08aca3e1 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform   | arch | lab             | compiler | defconfig          | regre=
+ssions
+-----------+------+-----------------+----------+--------------------+------=
+------
+imx53-qsrb | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig | 1    =
+      =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e50f2f186ccf6ed38c86b1
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc7-185-gbe3ba=
+1769837/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc7-185-gbe3ba=
+1769837/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e50f2f186ccf6ed38c86ba
+        failing since 12 days (last pass: v6.1-rc8-156-g0a9e32afe717, first=
+ fail: acpi-6.2-rc6-146-g628c61874ffd)
+
+    2023-02-09T15:19:53.847378  + set +x
+    2023-02-09T15:19:53.847534  [   12.938108] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+901972_1.5.2.3.1>
+    2023-02-09T15:19:53.955406  / # #
+    2023-02-09T15:19:54.057131  export SHELL=3D/bin/sh
+    2023-02-09T15:19:54.057542  #
+    2023-02-09T15:19:54.158752  / # export SHELL=3D/bin/sh. /lava-901972/en=
+vironment
+    2023-02-09T15:19:54.159203  =
+
+    2023-02-09T15:19:54.260386  / # . /lava-901972/environment/lava-901972/=
+bin/lava-test-runner /lava-901972/1
+    2023-02-09T15:19:54.260988  =
+
+    2023-02-09T15:19:54.264021  / # /lava-901972/bin/lava-test-runner /lava=
+-901972/1 =
+
+    ... (12 line(s) more)  =
+
+ =20
