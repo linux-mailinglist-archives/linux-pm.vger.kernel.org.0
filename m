@@ -2,81 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C68690FE3
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 19:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D7869102D
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 19:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjBISFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 13:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S229635AbjBISQ1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Feb 2023 13:16:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjBISFN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 13:05:13 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B051EC7B;
-        Thu,  9 Feb 2023 10:05:12 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675965910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yitrJTSVgf3Z/6id4va7dmBz3yFsi4rHDr48pn/op6U=;
-        b=Bts66rpHIar8KFiHsLUPQHvL6dzUFcCw+F4qR1ydHK3zArsYEBIoDqUM1q+9eOOIn0GAPU
-        pCV2gzRae0QYI2BDX035MgNcrTwPGJ+6NRywh0/9cAjDaOgjMH6gzpmsiMwD6iskXzYDb1
-        mBhbPI6wTpb66euioTK8VEvUZGUYNuOLOUBljl5sRjkaXrV7cfN60FLga3n5ihdx5WHKU+
-        KR/VlkMy12H1DNTze2KG6PZl4SOcI89/ZE9NJ+RqiBKS2rCgjp+HCjqPk+HGkHysYV01t5
-        OiNM3td95kLqAUESd0/wiePC9mdsE+iRtuoLNEGHN/AOvvCTIFEck0E6BIsYAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675965910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yitrJTSVgf3Z/6id4va7dmBz3yFsi4rHDr48pn/op6U=;
-        b=oCAdkC5e7NfL0Ge92ds3/oJTJiqW37g8YY4ETO+pMJjPkzXnW7y6ri7ULnNCzX94EY4TQV
-        NrqJ4/7NMdegGcCA==
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org,
-        rafael@kernel.org
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, hdegoede@redhat.com, markgross@kernel.org,
-        dtor@google.com, mario.limonciello@amd.com,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Grzegorz Jaszczyk <jaz@semihalf.com>
-Subject: Re: [RESEND RFCv2 1/1] platform/x86: Add virtual PMC driver used
- for S2Idle
-In-Reply-To: <20230209152123.3186930-2-jaz@semihalf.com>
-References: <20230209152123.3186930-1-jaz@semihalf.com>
- <20230209152123.3186930-2-jaz@semihalf.com>
-Date:   Thu, 09 Feb 2023 19:05:09 +0100
-Message-ID: <87ttzu1zqi.ffs@tglx>
+        with ESMTP id S229539AbjBISQ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 13:16:27 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C34F3AB8;
+        Thu,  9 Feb 2023 10:16:26 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="332331807"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="332331807"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 10:16:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="667775885"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="667775885"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2023 10:16:25 -0800
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+        by linux.intel.com (Postfix) with ESMTP id B52365808AB;
+        Thu,  9 Feb 2023 10:16:24 -0800 (PST)
+Message-ID: <33ee67fcdb190ce18159a4bdd3e2d94ea4e1f4fc.camel@gmail.com>
+Subject: Re: [PATCH v1] cpuidle: driver: Update microsecond values of state
+ parameters as needed
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Date:   Thu, 09 Feb 2023 20:16:23 +0200
+In-Reply-To: <2676828.mvXUDI8C0e@kreacher>
+References: <2676828.mvXUDI8C0e@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 09 2023 at 15:21, Grzegorz Jaszczyk wrote:
-> +
-> +static struct acpi_s2idle_dev_ops amd_pmc_s2idle_dev_ops = {
+On Tue, 2023-02-07 at 20:59 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> If the cpuidle driver provides the target residency and exit latency in
+> nanoseconds, the corresponding values in microseconds need to be set to
+> reflect the provided numbers in order for the sysfs interface to show
+> them correctly, so make __cpuidle_driver_init() do that.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-What is AMD specific about this?
+Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-> +	.check = virt_pmc_s2idle_notify,
-> +};
-
-...
-
-> +
-> +MODULE_DESCRIPTION("Virtual PMC Driver");
-
-Lacks MODULE_LICENSE("GPL")
-
-Thanks,
-
-        tglx
+Thanks!
