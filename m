@@ -2,52 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732F0691167
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 20:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71985691170
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 20:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBITer (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 14:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S229836AbjBIThZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 14:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjBITep (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 14:34:45 -0500
+        with ESMTP id S229552AbjBIThX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 14:37:23 -0500
 Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65A410259;
-        Thu,  9 Feb 2023 11:34:44 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id lu11so9650660ejb.3;
-        Thu, 09 Feb 2023 11:34:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A2F2BF36;
+        Thu,  9 Feb 2023 11:37:22 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id gr7so9659096ejb.5;
+        Thu, 09 Feb 2023 11:37:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FQyPKHsnpkMtHTu8wIUgMn7V8u4D4+AVOfDvP1szK50=;
-        b=zr5hyeBKdUpmenmZsXcn9FmLkaOIms+DVYEr63SGk1Nbwb8ZSkrqq3J9rNmSaX7hyJ
-         pAR581h2YRNVG6AA93UdFH2Gkr+SRQI//VXEzfsH8hhohRwVP+7Q5BFEJcyUCKUxZtT1
-         tGyghz6S2QD/9iALq9+pUZBhZMTtcpXgUuOZz2zME8q4bx4oFdv9Y/0/tbo3ktpCfwU4
-         SYbMOC1xS33vFmz5zS4qbWcSSmZfRpF9YZWQjxPY8AHNrXwaEa1vzg+wwb8c8ULyjEkp
-         lRKdXJDjsGKlkMIBPuKGSKCjdib/VPQhnG3WT9rTD+TatYsx4sf+kgCDO9Vjhv5zCd0m
-         PSaQ==
-X-Gm-Message-State: AO0yUKV7rIdmVdL+jnY5iAwCH+kHU/A73OreTXztVR0f83td2in6qNd/
-        9iacKCFkK/jQzmcX/ISWo7799bVr3njBAoj4al0=
-X-Google-Smtp-Source: AK7set+wluxzNyhZvd4jbRFYLJUQ9ghyXw8Cm0oCBDn53ajufkx4Ht18b90WGecWYVh9M9ucqrzSMPx7hO/eypNm2XA=
+        bh=kRQ+AqBQSo8wInSluRM33VrrcRj+TuOF6TCeB8K1fMo=;
+        b=KnhyKhobG8EBoOSqMfpRcFMll7YJSkpMsetK7GzrEDpaOs2PAmAUZPlkHlEAI5Yefn
+         TyGWmeE+x9SGeEZCgRF1Oh9fbctCkkq9tT+zAdBXEpmhbj0ngtrUKfr8FwOSxqNKsAG0
+         +n6uCWrzUNW/P4vgEmlged38fIYCq/4MBXbC5X8gxJLGo2G9AoBTvpgSV8Z3NY6psnY/
+         dt2bo0qy6bDJpyGax9VSCzRWeMJ3AoOzCuK/O+YJ5roNQbwBVYjqTR6QEcawghVTHBrn
+         AiRRgxvE1q0h+E1UprW5WBNN8JSbHBtyeMIBu7iGsMeYLN6OQGSd7oZPWM7fVcm9QD+O
+         XXfQ==
+X-Gm-Message-State: AO0yUKUBqp+MiuDtXcPZgUPqF7/JGRIy+pTbalrKofXfJUZReFApE2kn
+        Vq6Xawi8CVAfkc1Ichh21JSpO8nmXfAiezIdNTg=
+X-Google-Smtp-Source: AK7set8AWc9FjJZ4cJ3vdZgcz5eCuoVCOc66/9AX590nDLt1MYnIqjzdWlX49FxX03GMogMn7OIFSN5xKGGRqYhJqD8=
 X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr2944602ejb.274.1675971283500; Thu, 09
- Feb 2023 11:34:43 -0800 (PST)
+ sd14-20020a170906ce2e00b0087f575a9b67mr2946159ejb.274.1675971441388; Thu, 09
+ Feb 2023 11:37:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20230202141545.2295679-1-gregkh@linuxfoundation.org>
- <CAJZ5v0gMpORi=kB4-PFswmhY2HJggJO+Qh2SMjCuHyn3z+zmTw@mail.gmail.com> <Y9vSQhnCdnInKu/b@kroah.com>
-In-Reply-To: <Y9vSQhnCdnInKu/b@kroah.com>
+References: <20230202151515.2309543-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230202151515.2309543-1-gregkh@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Feb 2023 20:34:32 +0100
-Message-ID: <CAJZ5v0hhCAUVb7RgaKkO9j6g0mKUdOcDNy=7vM9kFkm3NyNp-g@mail.gmail.com>
-Subject: Re: [PATCH] drivers: base: power: fix memory leak with using debugfs_lookup()
+Date:   Thu, 9 Feb 2023 20:37:10 +0100
+Message-ID: <CAJZ5v0ikyjgKfrnEk=yiK-KHas8QEC0-O_mdRCMvkeKS+uoovw@mail.gmail.com>
+Subject: Re: [PATCH] kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,55 +56,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:09 PM Greg Kroah-Hartman
+On Thu, Feb 2, 2023 at 4:15 PM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> On Thu, Feb 02, 2023 at 03:23:46PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Feb 2, 2023 at 3:15 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > When calling debugfs_lookup() the result must have dput() called on it,
-> > > otherwise the memory will leak over time.  To make things simpler, just
-> > > call debugfs_lookup_and_remove() instead which handles all of the logic
-> > > at
-> > > once.
-> > >
-> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > Cc: Kevin Hilman <khilman@kernel.org>
-> > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > Cc: Pavel Machek <pavel@ucw.cz>
-> > > Cc: Len Brown <len.brown@intel.com>
-> > > Cc: linux-pm@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > >  drivers/base/power/domain.c | 5 +----
-> > >  1 file changed, 1 insertion(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > index 967bcf9d415e..6097644ebdc5 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -220,13 +220,10 @@ static void genpd_debug_add(struct generic_pm_domain *genpd);
-> > >
-> > >  static void genpd_debug_remove(struct generic_pm_domain *genpd)
-> > >  {
-> > > -       struct dentry *d;
-> > > -
-> > >         if (!genpd_debugfs_dir)
-> > >                 return;
-> > >
-> > > -       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
-> > > -       debugfs_remove(d);
-> > > +       debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
-> > >  }
-> > >
-> > >  static void genpd_update_accounting(struct generic_pm_domain *genpd)
-> > > --
-> >
-> > Does this depend on anything in your tree, or can I apply it?
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at once.
 >
-> It does not depend on anything in any of my trees, it's made against
-> Linus's tree right now so please take it through yours.
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  kernel/power/energy_model.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index f82111837b8d..7b44f5b89fa1 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -87,10 +87,7 @@ static void em_debug_create_pd(struct device *dev)
+>
+>  static void em_debug_remove_pd(struct device *dev)
+>  {
+> -       struct dentry *debug_dir;
+> -
+> -       debug_dir = debugfs_lookup(dev_name(dev), rootdir);
+> -       debugfs_remove_recursive(debug_dir);
+> +       debugfs_lookup_and_remove(dev_name(dev), rootdir);
+>  }
+>
+>  static int __init em_debug_init(void)
+> --
 
-Applied for 6.3 now, thanks!
+Applied as 6.3 material, thanks!
