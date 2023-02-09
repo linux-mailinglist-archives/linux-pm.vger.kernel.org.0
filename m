@@ -2,52 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C56E68FE8D
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 05:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB6568FEC8
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 05:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjBIEY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Feb 2023 23:24:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S229925AbjBIEaY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Feb 2023 23:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBIEYz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 23:24:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A14C3C23;
-        Wed,  8 Feb 2023 20:24:23 -0800 (PST)
+        with ESMTP id S229722AbjBIEaQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Feb 2023 23:30:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98EB3B64B;
+        Wed,  8 Feb 2023 20:29:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A211461888;
-        Thu,  9 Feb 2023 04:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D806C433D2;
-        Thu,  9 Feb 2023 04:21:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88ECBB8201A;
+        Thu,  9 Feb 2023 04:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1454C433EF;
+        Thu,  9 Feb 2023 04:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675916486;
-        bh=ewl8IV5ttwBvAg3PgKSUvPl5tKVH6XXn0mdz74rZAl4=;
+        s=k20201202; t=1675916532;
+        bh=r896al9/ic3TVzWhQihrH5WWe9yq5i1aPuOB0FJblUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=biMhVQyE+hVHq8EfxU1hIa7sdeDoV6wAQNkEPdAX9rmTezgAPZlkEBUZKHkmlBH2w
-         7wff1LMFQXiEziew7xbBB50jKbPRcHeaqihwJPK8sIUPpaUBF0trhobV4r0X3VlLFN
-         OpjCqToHNqQHJH/FT5XrFyRhZyummwjBdEQlcWqI9J70mH9VrOFMzUSEUdWkVxiOX/
-         amiiS8Mu3vP7+lHtx11EAXdYBS5SU+1hWQiYqOvhWh475TsJfgWQKETuOxlu9F2j1O
-         2HTRuM6lxs9/f6pkupbusmb9vmBgO8EZUQG6A3cN+SaRwbVQuROyTKxDAyVF+UeZ4M
-         uSAVvhxZj+qMA==
+        b=BN/W1fmhyUDYnWQNFRl0yiZAlLtkPZOeM9PRJliT8ril6wiUbcRvBv1HMVz8E0tvT
+         mbyq5LYLXG+Q0iC3FE+j8oPN8wrX8CzcUUbhXZ8fLkv6SW7OFkTdgoSDQ4Z4S7676q
+         ekM+HlbJO6e1a7rJmpHX2uhrjQmq5U7OdTYpCuhnJvE8DoMV488k6BQ9GV5iJQMl+R
+         Z4eAbD3zOtPVRjxwl6mYHQRaDOaj1IjnIDvEt0MNJ02q3yVnhiKjhsmUqY3r16pJbp
+         2l1erYVmeAs/OrQ3L+bCLx5ypvDAgc3kGR5MyqzFDCB3QgSGPs4TzDKRQdWSO0Gb80
+         XNY+n6Qa5PJyg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Rob Clark <robdclark@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alex Elder <elder@kernel.org>, Sean Paul <sean@poorly.run>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Amit Kucheria <amitk@kernel.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, ath10k@lists.infradead.org,
+        freedreno@lists.freedesktop.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH -next] dt-bindings: clock: qcom,sa8775p-gcc: add the power-domains property
-Date:   Wed,  8 Feb 2023 20:22:44 -0800
-Message-Id: <167591660368.1230100.18342647248733584263.b4-ty@kernel.org>
+Subject: Re: [PATCH] firmware: qcom_scm: Move qcom_scm.h to include/linux/firmware/qcom/
+Date:   Wed,  8 Feb 2023 20:23:26 -0800
+Message-Id: <167591660372.1230100.2523010471979974316.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230130145154.195562-1-brgl@bgdev.pl>
-References: <20230130145154.195562-1-brgl@bgdev.pl>
+In-Reply-To: <20230203210956.3580811-1-quic_eberman@quicinc.com>
+References: <20230203210956.3580811-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,18 +93,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 30 Jan 2023 15:51:54 +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> The binding document is missing the power-domains property. Add it and
-> update the example.
+On Fri, 3 Feb 2023 13:09:52 -0800, Elliot Berman wrote:
+> Move include/linux/qcom_scm.h to include/linux/firmware/qcom/qcom_scm.h.
+> This removes 1 of a few remaining Qualcomm-specific headers into a more
+> approciate subdirectory under include/.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] dt-bindings: clock: qcom,sa8775p-gcc: add the power-domains property
-      commit: 1519c0a9ab90a239c52d8a6d3e7ef78537868496
+[1/1] firmware: qcom_scm: Move qcom_scm.h to include/linux/firmware/qcom/
+      commit: 3bf90eca76c98c55c975fa817799789b9176f9f3
 
 Best regards,
 -- 
