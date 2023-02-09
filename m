@@ -2,365 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3096905DA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 11:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF59690602
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 12:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjBIK5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 05:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S230245AbjBILB5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 06:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjBIK4w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 05:56:52 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD0B59B47
-        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 02:56:41 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso3594273wms.0
-        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 02:56:41 -0800 (PST)
+        with ESMTP id S230158AbjBILB3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 06:01:29 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566AB421F
+        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 03:00:47 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id lu11so5201568ejb.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 03:00:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2q8hw26gwJWXtp5r1FRgkbv2qRbakWQ2u6PTXa3lZjY=;
-        b=pBkOx0touhkuyBlg2qnghsZt/3FUPu7IDpVUv/kK+iSBh5RDtfv01cEGnzb1CaHnR4
-         eUl4QIoHA+RHfnlg9Km7NGoqmxJU9cOnVECgKnJm6+buPcalE2dnHcpKnoN3ORrrHkC6
-         cPPLfdjm3Cmp8w7DLTkDQnNHH8tSkYwNKiby0oJihM1NH3RR/Nc7SORmTiDZDtP/r/mH
-         MadwHIZtTfO/3XBPJzBNQZuw0g1xDHLYUrr2j/mMyeVfUZNOtTthR2ao3kiDcWlkKOe7
-         LKWZ2p1Abxj7ZG3/kAuA/0/hMGgGqbYAmT9+HY9yFpE/lmmsQndS1yS1wQY4pzaxcVVR
-         thLQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dEiNvwdsh50/luN7kcdBw0tT4i5v1/6EEunHYjmNZXs=;
+        b=Cc5tn2CKinqZh1y6GDQOh3jtJ28lfw2AwbOsVKLtGeveXXSVLDmwew92x9ux+0z56F
+         OfAYNU/fNb6jcMpYuzPpdqEP+cy1mUVEFyu9uOmyx9g2lYIp4o9FqtnL+bv04Ojl193D
+         BUU/NFJ8GwOYJ8E7P2goc0AceLXUIIbs8jlTxm6w9sRRkXKfV1vviPHYRD543YgiL4Q4
+         pivztwB4TrK7gBRgy5u2ivXhVjbx3SNjI2kr+zn2GO8xZ7oLhCjtviVLKl66WkEaViyu
+         pujsrnKl/l5Z4xl0Dd1Wm+OgAfj7DVpTK6iyBB+gyKK9YmCSR27IIyhsIaAbHQGoTTLm
+         z1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2q8hw26gwJWXtp5r1FRgkbv2qRbakWQ2u6PTXa3lZjY=;
-        b=f/FcIvRWTbIhRmVPNL86XRT/2ukY4iBLsQ6qsSvWCa3RCsNoj/EebBPA5QHujPz3O9
-         HQ6H6/5LOkf8C0UW2I004D0AAdWEb+Z9ZnstXIcDafHYl/ZU2dM6X7dwUe23ULwYnXeO
-         brhtwseBLIcqUshT3LfW4ubXb/rJi0ASbmemeMUX/8716usfLG6HGSBjsbyWyoCi00by
-         Jra33qsXO+ZW67d/Sc+eO3JHTMqEA5Si6epYPdHDhKnajOylfXpE3hOplwGEa5//bklT
-         OkKpeU85pzjTDQvrBq78ryF/ProIvHYH8F3Sj/AEP1Ny3HjKfYfhSCikLoH78ywFIfwG
-         2QEw==
-X-Gm-Message-State: AO0yUKXH/EVWEY96igNwJFuGQP0zrk8j5XNN26E7mTw5QC+TL5aNQE8k
-        egs7HNFB69Hk6TAYITh5U1jDJg==
-X-Google-Smtp-Source: AK7set8sJM+sYYdkMocTL4fw90ZAvRg4fpY02hAKNq8bcpW4Pul93Z1dRtAKSyvd9IWEj0/DFw12EA==
-X-Received: by 2002:a05:600c:35cd:b0:3df:eda1:439c with SMTP id r13-20020a05600c35cd00b003dfeda1439cmr5578177wmq.11.1675940199925;
-        Thu, 09 Feb 2023 02:56:39 -0800 (PST)
-Received: from t480-bl003.. (185.173.185.81.rev.sfr.net. [81.185.173.185])
-        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b003daf6e3bc2fsm9140466wms.1.2023.02.09.02.56.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 02:56:39 -0800 (PST)
-From:   bchihi@baylibre.com
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dEiNvwdsh50/luN7kcdBw0tT4i5v1/6EEunHYjmNZXs=;
+        b=GTBksTWfWP5dzz+MJcQzmAyoxJ4cu7DuNgtLja1NqmHVKhUNi3DyZBYdCBC9DRrqFm
+         Nh1NaNJGtwlVSXsA5+coNYHOQN2/6h9gO6KXnY4eGnQ+PTHIYRrxZFU8NpMF24OgtRH9
+         wLPwSRVNtsW2UsldF8uSEnQVO3dUb5jno9yj0MTZgAlTAWeiAS0NvtnpuXluCuA0NCl7
+         E6/YlaU1D9KNJbsb29DL6YKWg1F2ka4sbXri6iMv3sKVjDYwxNq1Gl7AUqjH0c+H7gc2
+         VXETWP6PVro1hwtILWxausGAypUYENU+YuinyNuxfj07DKbDVZ1viy+nonPlmM5IPAuf
+         CTYQ==
+X-Gm-Message-State: AO0yUKWgMen4Q6yLPecBGGox0WcfEGhnuPDY2RX/aO9+nZEiEy588cqE
+        l5Wp5Sor/v/pUbmrhhq5KK9DIRKvpGbZaSE9VbeGXg==
+X-Google-Smtp-Source: AK7set+RaPbg+SOCzwGndo1Wa91cwrheg38QQCBg99GhoVwyzzAvFtOaofSU6Q5pBzPM0CXKp4JFifhFaFx0rd/k0bs=
+X-Received: by 2002:a17:906:ca04:b0:7c0:f45e:22ff with SMTP id
+ jt4-20020a170906ca0400b007c0f45e22ffmr2702674ejb.104.1675940443471; Thu, 09
+ Feb 2023 03:00:43 -0800 (PST)
+MIME-Version: 1.0
+References: <20230207130958.608305-2-bchihi@baylibre.com> <202302080018.wNeWiKqz-lkp@intel.com>
+In-Reply-To: <202302080018.wNeWiKqz-lkp@intel.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Thu, 9 Feb 2023 12:00:07 +0100
+Message-ID: <CAGuA+ori24xtbHnzYXGVSUOiU-T+V=33DPsHnsruGnP5Y_L7ZA@mail.gmail.com>
+Subject: Re: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to
+ mediatek folder
+To:     kernel test robot <lkp@intel.com>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
         rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
         matthias.bgg@gmail.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
-Subject: [PATCH v14 6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
-Date:   Thu,  9 Feb 2023 11:56:28 +0100
-Message-Id: <20230209105628.50294-7-bchihi@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230209105628.50294-1-bchihi@baylibre.com>
-References: <20230209105628.50294-1-bchihi@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+this warning has been fixed by this patch :
+https://lore.kernel.org/all/20230113064449.15061-1-rdunlap@infradead.org/
 
-The mt8195 SoC has several hotspots around the CPUs. Specify the
-targeted temperature threshold when to apply the mitigation and define
-the associated cooling devices.
-
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 169 ++++++++++++++++++++---
- 1 file changed, 153 insertions(+), 16 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index c7e958f8f1b5a..10c8fb0856bc4 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -14,6 +14,7 @@
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
- #include <dt-bindings/power/mt8195-power.h>
- #include <dt-bindings/reset/mt8195-resets.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include <dt-bindings/thermal/mediatek,lvts-thermal.h>
- 
- / {
-@@ -2413,107 +2414,243 @@ dp_tx: dp-tx@1c600000 {
- 
- 	thermal_zones: thermal-zones {
- 		cpu0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
-+
- 			trips {
-+				cpu0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu0_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU1>;
-+
- 			trips {
-+				cpu1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu1_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu2-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU2>;
-+
- 			trips {
-+				cpu2_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu2_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu2_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu3-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU3>;
-+
- 			trips {
-+				cpu3_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu3_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu3_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu4-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU0>;
-+
- 			trips {
-+				cpu4_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu4_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu4_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu5-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU1>;
-+
- 			trips {
-+				cpu5_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu5_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu5_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu6-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU2>;
-+
- 			trips {
-+				cpu6_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu6_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu6_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu7-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU3>;
-+
- 			trips {
-+				cpu7_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu7_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu7_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 	};
- };
--- 
-2.34.1
-
+On Tue, Feb 7, 2023 at 5:14 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on a2c81dc59d41e92362ab7d41d0c15471ea50637d]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
+> base:   a2c81dc59d41e92362ab7d41d0c15471ea50637d
+> patch link:    https://lore.kernel.org/r/20230207130958.608305-2-bchihi%40baylibre.com
+> patch subject: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to mediatek folder
+> config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230208/202302080018.wNeWiKqz-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/0eb89997925c0d7b47bbeee93016146fc660b259
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
+>         git checkout 0eb89997925c0d7b47bbeee93016146fc660b259
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/thermal/mediatek/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/thermal/mediatek/auxadc_thermal.c:562: warning: expecting prototype for raw_to_mcelsius(). Prototype was for raw_to_mcelsius_v1() instead
+>
+>
+> vim +562 drivers/thermal/mediatek/auxadc_thermal.c
+>
+> a4ffe6b52d27f4 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  551
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  552  /**
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  553   * raw_to_mcelsius - convert a raw ADC value to mcelsius
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  554   * @mt:     The thermal controller
+> 3772bb422072d4 drivers/thermal/mtk_thermal.c Amit Kucheria 2019-11-20  555   * @sensno: sensor number
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  556   * @raw:    raw ADC value
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  557   *
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  558   * This converts the raw ADC value to mcelsius using the SoC specific
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  559   * calibration constants
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  560   */
+> 54bf1e5a629dfb drivers/thermal/mtk_thermal.c Henry Yen     2020-04-30  561  static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30 @562  {
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  563      s32 tmp;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  564
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  565      raw &= 0xfff;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  566
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  567      tmp = 203450520 << 3;
+> f84514766985d3 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  568      tmp /= mt->conf->cali_val + mt->o_slope;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  569      tmp /= 10000 + mt->adc_ge;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  570      tmp *= raw - mt->vts[sensno] - 3350;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  571      tmp >>= 3;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  572
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  573      return mt->degc_cali * 500 - tmp;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  574  }
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  575
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
