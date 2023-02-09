@@ -2,51 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492F36911DA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 21:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E606911EC
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 21:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjBIUGC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Feb 2023 15:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S229759AbjBIUKD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 15:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjBIUFj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 15:05:39 -0500
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBD6BD05;
-        Thu,  9 Feb 2023 12:05:15 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id hx15so9807174ejc.11;
-        Thu, 09 Feb 2023 12:05:14 -0800 (PST)
+        with ESMTP id S229869AbjBIUJv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 15:09:51 -0500
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BE23C0F
+        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 12:09:50 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id m2so9875496ejb.8
+        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 12:09:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3YwKmOC/1iNnr0DmWAffUNXKTx8ePFRW+osHEjGSodU=;
-        b=TMtOVqVIKp4/zkyb7ye0ky/p4LOvLSSpmeESDoyhnMJWK35FIyA9nYlQuAV4DcMnrm
-         J9lLzXkuTqQPIGirridRnfZeOMdB7gK3NL48B2lb+KjVY1GH60bZbTn4zoTWg67HBg+O
-         Vk9L9t8eRa+IODTmRMfTSpMA+IOke+y3KaeHs+JUq06mbVezsAYcwbwdzaOmBdqV/ITs
-         cFPxf4sVjscHEZ+HWOJm/EgAMtYtylzHDr3nepyu/MiPM5uO1WDCFqd5XtIzwS1yZ3ua
-         8YZestcVUDmjjYSRRr686c86V7zqgxtC8Lp8O06IPY7IHFF/iLB/47ifMXDy9TI2uyaX
-         9QJA==
-X-Gm-Message-State: AO0yUKWxlA+f4j3tZy3t5EoBeTF0U+TKGKQoPi9vb80QATmgm/BeO2ze
-        j0mRsy2Hk4JzdhYjxLUL4sV5ejgB8KtffOKedOU=
-X-Google-Smtp-Source: AK7set/8TFoqEzL8RPv/QQq1r9K94XIwITHESNPDV+aNHvkoh00W6tKeUB7AoLVCTUSjJsvxYD+E6iizgARR7zix/TU=
-X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr2962490ejb.274.1675973113416; Thu, 09
- Feb 2023 12:05:13 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DriAKiO49LWsP0QSGmEHl4yPWcd2wrpAz25IZBqaU5U=;
+        b=yEakpZXSwvXxfeixqakdcK9EJpQaG6k5u/VdzfD2pYdwaxXZysiB0acKsWicrnfyyH
+         M3gW7LsLnN2JAwclvaj0mSz/wouS/fdvR4EkUNJvTeaSKYBetOKcVH6uhE0IpbulLk9d
+         xqPSfXiF8LQactWTfZIDMIO1yewmMBUJY2pDGB/t0om4IoSjIurrUZn3/tGak4Y2i7ES
+         uUfrD+EPz8Kd4uvVitSyW5gqgKM29iScKNcg6vj2MIG1Epvr6Q8+GQINQtgzX67vbsKl
+         3RXkRS7eOE1gIqnlBzNcj4lnFYCRFfEAVkyl/YmHk+aUpVdWjxCWyW6flVJ9HcAyZwu/
+         tIqQ==
+X-Gm-Message-State: AO0yUKVs+PVggPXdkXs6PWgw3pL0QiqJmtYWV06LjhDBf//+WZwjjDs+
+        n1XMotmwqKAMck3hQXE+yegPh58sJk+uvW6/ddPy47NH
+X-Google-Smtp-Source: AK7set8lXuE53q5Ok3XlKxgG3QxUMv44nNWiJb+dfo1i3F/vKCDxf1sG1FUfGblg7QbuPz8IEG6XkF1Ouei/+ICzwIM=
+X-Received: by 2002:a17:906:a2d2:b0:8ab:b606:9728 with SMTP id
+ by18-20020a170906a2d200b008abb6069728mr773428ejb.5.1675973389139; Thu, 09 Feb
+ 2023 12:09:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20230207-kobj_type-cpuidle-v1-1-2ef73398283f@weissschuh.net>
-In-Reply-To: <20230207-kobj_type-cpuidle-v1-1-2ef73398283f@weissschuh.net>
+References: <E1pPlqm-0008w6-Ou@mx1.net9.ga>
+In-Reply-To: <E1pPlqm-0008w6-Ou@mx1.net9.ga>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Feb 2023 21:05:02 +0100
-Message-ID: <CAJZ5v0jBXhX-kASfd_rUaCANpeac=ntbFV=_8XLH-L7FN9nGUg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: sysfs: make kobj_type structures constant
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 9 Feb 2023 21:09:38 +0100
+Message-ID: <CAJZ5v0i4WthALOwWPTCW7ESyak6Bq28xWWEzgnDvmFP=WaGtaA@mail.gmail.com>
+Subject: Re: kernel/power/Kconfig: patch, typo a single letter missing at line
+ 32: should have been run-time, not run-tim
+To:     u34@net9.ga
+Cc:     Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -57,51 +55,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 8:55 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+On Wed, Feb 8, 2023 at 4:29 PM <u34@net9.ga> wrote:
 >
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
+> typo at line # 32: a single letter is missing: should have been run-time, not run-tim
 >
-> Take advantage of this to constify the structure definitions to prevent
-> modification at runtime.
+> config SUSPEND_SKIP_SYNC
+> ..
+> --- a/kernel/power/Kconfig      2023-02-05 23:31:11.897067253 +0000
+> +++ b/kernel/power/Kconfig      2023-02-05 23:31:04.410465595 +0000
+> @@ -29,7 +29,7 @@
+>           of suspend, or they are content with invoking sync() from
+>           user-space before invoking suspend.  There's a run-time switch
+>           at '/sys/power/sync_on_suspend' to configure this behaviour.
+> -         This setting changes the default for the run-tim switch. Say Y
+> +         This setting changes the default for the run-time switch. Say Y
+>           to change the default to disable the kernel sys_sync().
 >
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/cpuidle/sysfs.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  config HIBERNATE_CALLBACKS
 >
-> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-> index 2b496a53cbca..48948b171749 100644
-> --- a/drivers/cpuidle/sysfs.c
-> +++ b/drivers/cpuidle/sysfs.c
-> @@ -200,7 +200,7 @@ static void cpuidle_sysfs_release(struct kobject *kobj)
->         complete(&kdev->kobj_unregister);
->  }
->
-> -static struct kobj_type ktype_cpuidle = {
-> +static const struct kobj_type ktype_cpuidle = {
->         .sysfs_ops = &cpuidle_sysfs_ops,
->         .release = cpuidle_sysfs_release,
->  };
-> @@ -447,7 +447,7 @@ static void cpuidle_state_sysfs_release(struct kobject *kobj)
->         complete(&state_obj->kobj_unregister);
->  }
->
-> -static struct kobj_type ktype_state_cpuidle = {
-> +static const struct kobj_type ktype_state_cpuidle = {
->         .sysfs_ops = &cpuidle_state_sysfs_ops,
->         .default_groups = cpuidle_state_default_groups,
->         .release = cpuidle_state_sysfs_release,
-> @@ -594,7 +594,7 @@ static struct attribute *cpuidle_driver_default_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(cpuidle_driver_default);
->
-> -static struct kobj_type ktype_driver_cpuidle = {
-> +static const struct kobj_type ktype_driver_cpuidle = {
->         .sysfs_ops = &cpuidle_driver_sysfs_ops,
->         .default_groups = cpuidle_driver_default_groups,
->         .release = cpuidle_driver_sysfs_release,
->
-> ---
+> --
 
-Applied as 6.3 material, thanks!
+This patch is not applicable due to the missing Signed-off-by tag.  It
+has other problems too, but this one alone is sufficient to block it.
+
+Thanks!
