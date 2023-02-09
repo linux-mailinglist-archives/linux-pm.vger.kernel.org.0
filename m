@@ -2,113 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B6669045A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 10:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756286905B6
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 11:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjBIJ6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 04:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S229759AbjBIKxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 05:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjBIJ6h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 04:58:37 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40D314483;
-        Thu,  9 Feb 2023 01:58:33 -0800 (PST)
+        with ESMTP id S229740AbjBIKxa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 05:53:30 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEC921950;
+        Thu,  9 Feb 2023 02:53:28 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ra7PlIyds8ZNSGZyRQg1yrPdwXAqMc6LG0PKh3SIa+skx9G+Jbt4cpw8FGG97BOvna6zV80/vA5Caffjj9pRKxHKEMHI6W4VITrhEXFukzEWQiQE4EPPrMWTayIkWlpSd3MhkNrQBsX6+fY5Sbsy1hRAOv3bLlCqOfjDNiMVS2Jh/svPb9sXABpHXu9GfF5TnC5/njiJsYmh6ojvNEtpmdnH1TroPCIUViM75zUxyKkjx9gnFAUEM9Vh/XYc1D/7T6VwYPzX8tmXo37bdc85VEKUB9S7rycyEXorcJ9NUxWF5NWffCnV55B1Mnvn7RlEDcIC2RW62wGY61VfBnKTug==
+ b=nYkF0bO3vEOmFPR4IZLtjrDgtQifyXd+w154SkvPcIjhqlY0DT2X4LTSE/GOeRUybgYXWegGeftf2mfR1DMj+7WZZPu/TLRAd7SVES3ZHaSlFuwt3opsHFeQ7LonWspTHPLn2Qm65upbmdVinGyibH4IjbJbabiY10lOI0r8MW8xVNZt9SWKGtM2BOQJhXWIxTjA/sIK5A0zByRWa/VS9932rJ2FZpbCFXkvRr7oOnhXzW6VxSicVgeNHfpt6EGtpeT7BQQjxwiUA56RXrA2U1MfDAN7gPCdPxsDc0j64KN1swx9ROb86TrnMrisV9ekPTMxjfwbYG7LteaHNVRhTA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qIWcvfg8gZIDdZkO1cAcGxchAmCSO/RftGxQDuiVEzM=;
- b=nWmr/liwniADHwWvOTGB/qNck9Q8yG4dRCJpVTpgJzetxtmiIXZkILxexEoULvroiX6z6cgeEVh1K7YwpmYIgpAaxzSZ2fqVhxp+HczqcXVFu06oE0jRtEGiBs3EtnDAiZBokTBWmKECYdGVr+4V1Se/PbyCCMoZf4m5mqFnniVIviexbkVxVnKnXofsKSfvWqJvd5JBj3lBZzVFzfx9K3/zjjAc1Zwon/GjF6txYW1aggek+YwcLQBK7720xZ0KrwH8cEr3U9scGxuk4posw6uRI0WjKecuAOQj7ds+BUZ/zvB76dpfRoPw3i427I5VmAjPMLYG8wVrCL5MFBuHSg==
+ bh=texo4TYrmE29u2JgtGOJgf4ffQ46IxvKjkN+pxQ5s3o=;
+ b=f2BHoVPbqMia3YAMhKqLJzLQtj1BYyb7PsdJiZ2Tuvyf7P0tpy/EhjG5cUsov14EOHBpOU18gBWF9Jyt9ua93QevHILnnNiZV1WpB51G7hSZHmAJGtGgPe22Yuu7MgN+SjK/oWEEgxFszSUC+y+P/pjFuDxM9WZPSgKIVaqaYfQGGp0n5qds1naRrwq126OzTgvaommSzsLCe8/lEoq/aPNUyt0WtrQpYm+98cT9RUEcT6yszq7ga6sBR3+k1bnLJqqcSBEBVwx8jRwbWmi3vDco/Hs75t+qd6ielPbH45JnLH1PMndAHtU7TZCdMCb1vL70wttXGg5yFAvtXX3cEA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qIWcvfg8gZIDdZkO1cAcGxchAmCSO/RftGxQDuiVEzM=;
- b=GvEhLNK5BwWTLcxlzzC0W90jqY3SgEBfYo2L/DmR/PALBTKMMt8n5Ya5PoeXxbxSuIRewA0Mh0WFrT7dPemVji4ekhU8hf+/kwepokc1bsa6ah2wIqejVX6uyb/ZmPkmxsypg/v2e5GsROGcC3k7uap9h25U5pBGe0xbT2M555E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3888.namprd12.prod.outlook.com (2603:10b6:208:162::32)
- by SA3PR12MB8024.namprd12.prod.outlook.com (2603:10b6:806:312::12) with
+ bh=texo4TYrmE29u2JgtGOJgf4ffQ46IxvKjkN+pxQ5s3o=;
+ b=EzwtLAf92jO9lBkZWbkYG5qB1IbnP8Mss4snr17eS71fX1Cf042aYehWOM8LGV4bikdUK7E9cMChlL3USf9599N6zmSwBYV+oQZNKOUfGYP9VBwMY6D0J+czRQzcpkKGw9Px3mbLKHZjEEWoROEGcJeHnq9KNt/Or3gGk/7Zp8fNXBAaQpm08QAMHb/w+OFlLwbNZpDVGLPyN+Wh9p7nFyLrqZ3+SusWKWvODVG1Ugs5JGdKEWXSwYrzTfOSYqpYHsbl5nNTzoHeuGy3zUQ3LnYW2sIv4ytw3NOlSvk2rfInutnf6eIirRfL09REnCWTBNUcVZCX2lmcBSPQLQ9fPg==
+Received: from DM6PR12MB3164.namprd12.prod.outlook.com (2603:10b6:5:188::30)
+ by CH3PR12MB7548.namprd12.prod.outlook.com (2603:10b6:610:144::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Thu, 9 Feb
- 2023 09:58:31 +0000
-Received: from MN2PR12MB3888.namprd12.prod.outlook.com
- ([fe80::c055:9ef3:529f:eb29]) by MN2PR12MB3888.namprd12.prod.outlook.com
- ([fe80::c055:9ef3:529f:eb29%7]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
- 09:58:30 +0000
-Date:   Thu, 9 Feb 2023 09:58:18 +0000
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jinzhou Su <Jinzhou.Su@amd.com>,
-        Meng Li <li.meng@amd.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: amd-pstate: avoid uninitialized variable use
-Message-ID: <Y+TDurLjotH2WWxL@beas>
-References: <20230207161256.271613-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207161256.271613-1-arnd@kernel.org>
-X-ClientProxiedBy: PN3PR01CA0032.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:97::22) To MN2PR12MB3888.namprd12.prod.outlook.com
- (2603:10b6:208:162::32)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
+ 2023 10:53:26 +0000
+Received: from DM6PR12MB3164.namprd12.prod.outlook.com
+ ([fe80::ce1d:8f53:31a7:44db]) by DM6PR12MB3164.namprd12.prod.outlook.com
+ ([fe80::ce1d:8f53:31a7:44db%7]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
+ 10:53:25 +0000
+From:   Petlozu Pravareshwar <petlozup@nvidia.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Manikanta Maddireddy <mmaddireddy@nvidia.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "jeffy.chen@rock-chips.com" <jeffy.chen@rock-chips.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "steven.price@arm.com" <steven.price@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>
+Subject: RE: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
+ for C1 controller
+Thread-Topic: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
+ for C1 controller
+Thread-Index: AQHZO678uN8JYxCqt0W2Vps0E+YCz67E7AAAgAAKKoCAAEMxAIABLSog
+Date:   Thu, 9 Feb 2023 10:53:25 +0000
+Message-ID: <DM6PR12MB316420D07FBB9F8CE9AF5CD3B5D99@DM6PR12MB3164.namprd12.prod.outlook.com>
+References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
+ <20230208111645.3863534-5-mmaddireddy@nvidia.com> <Y+OJaGY6mcxM0JOF@orome>
+ <1b24e9f5-539a-dd0f-6485-5dbf3757ef27@nvidia.com> <Y+PKTNEAuPHBdwqX@orome>
+In-Reply-To: <Y+PKTNEAuPHBdwqX@orome>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR12MB3164:EE_|CH3PR12MB7548:EE_
+x-ms-office365-filtering-correlation-id: 0c6619bb-e79c-4947-30f3-08db0a8bdedb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5BEPwVCa3WJPIWeynlDcPBQRE8k2Atjb/XXo7WKLwzfUYeQ1Cb/4Qs90G5VP0gU0bKFBt5XS5O850yw5tQmeZ0hdXN1r3SIEfrsdl7Vv15asmSywnvuG/tagwRupQsTI8qHp7NlhS28uLgSMkQnUT1OjHrIhm2/NNMsk4ZW3cH1QPaaUCVkPD+vvwsXRMr3TKhjk3u5iIxYxgrqwwdRphrLpEiKwecFTeIXCxOnoss89CR1JAXd2hKHLpPsjaCtOFQhYB/QNmn6Feb53J4x4aV6VMAXQ3SXYAVHoGq/SGnBKN9YO20nJA4vPX8bWpmGd1yb93qHHopZX6YB8BUgThksqj0AFfoeTZs+ipp8DrvGkZ/4DWMJm+ZPNfLhX4LciBx7GUPKHq0UR3ddXSxqW56OFxcdffY4O6AWOslifx9zCOn9K5PYODLaYLkaC/+uguHdxihJPFd8FySFbKiETAGbtbP1Yf8WrQ8hhL6ztYcJBSD2PvlkeWo4Ef4RNUpnKazfUKOQ/gxIsaR12Tt0QEyxmZSbGyKcX5RZXA6b25TmCbzhEMCNCNqo1sacRaQOTGCO3DsZEp7Whiu0BT/kqcpSgX8qQYpzwsYu7i3cqqP6pOVnelLdjEflTaDDDkiALQ72wR0DdlhvSPTBibrqBKIezxgWGJ0js0R1dclve0oYIVy7qHMZHvj7K+1rEU+GoeLu+fhLUkxupTwMYoWmr7SCWRfo5/ZinayAZjWOG5YOyn/FTlQGY/ATeAdZZ/REReVYl8PwIcYHaV5hyumoT1s7kUhwjpRgKxd3mdjsXD8g=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3164.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(376002)(39860400002)(396003)(346002)(451199018)(83380400001)(9686003)(2906002)(33656002)(110136005)(38070700005)(54906003)(6636002)(38100700002)(66446008)(478600001)(66946007)(7696005)(71200400001)(64756008)(66556008)(8676002)(966005)(66476007)(76116006)(4326008)(53546011)(41300700001)(6506007)(186003)(26005)(107886003)(8936002)(122000001)(52536014)(316002)(55016003)(86362001)(5660300002)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JYu0Ww5h8HzTwzVsKyF8uZ1yvyg67jshCYIbLvQYA7YlEoY2Oe6fhV4JarOz?=
+ =?us-ascii?Q?4Vr/WmUzhsbHg3tDND5OCFw8mHJrdItpWgj1/Qoq3KiOjYcuW8LBFZaocntp?=
+ =?us-ascii?Q?R0oMow3LyOks8w8uO0FqYrFEwNE+Fr0eVyGBm+fYVXHpeTb2I3XCRq70WjiG?=
+ =?us-ascii?Q?G56JCf7U2VF81bIRyq18BOrYp4Bt7SMK/jt35KcMDpplGRDdFswDQCtoRQ9l?=
+ =?us-ascii?Q?34NvQwNSoUtZ19CFGfWPBQROVcasS0mM8asUjux+H2/fGPhKWX4cdjI4pIDc?=
+ =?us-ascii?Q?YviXz38kZPCV6I0bF5zokG6vLcpRFCh6hrzW0YCb9ByEhl+7S2FPhgF4EcMA?=
+ =?us-ascii?Q?rEKwP4LQothb+pC0V44f7/V14MU3XDr8sZCVacwFKLsohsZV/c2bA2hUJ/lm?=
+ =?us-ascii?Q?xA0gQ7iqBBXWYRD5QWxX8mUftEmuq32HGDO+YLTcepSsn9yGVVU1TZ5zgZP2?=
+ =?us-ascii?Q?mMTnsCgkxI3qAEM87gJWTe3Ssh9LFzzjQU2mpkeIsUbXPl2DYMCkimDYIXDW?=
+ =?us-ascii?Q?Sr7YmjhXMUsTF1xqKvp58Ntw61bgLvS7138welkFmnLr6KGpFt4BWVe0eTXA?=
+ =?us-ascii?Q?c4PrwuH9QaqbEkTAviN2cJfvr4cXoPSfRkngalvvx8TBuiUwVHmc4vH7/Tt1?=
+ =?us-ascii?Q?/Ar5/pJ6dl9cJM2HBpbv3NA0g8ufm/bR0yfmkpiflxkzcBMmG5wDpbPJzcyk?=
+ =?us-ascii?Q?aqttr/iMHOZKVR7zmbthgcoBta0i5lxUazU9iNzC4PLeZTUR9Of7g8Ci7pj6?=
+ =?us-ascii?Q?A4jGogS0LMIGcbmb/+mOHD/CGzUjX7/u69XB02I7ua1ypc+nNi2MdBvwp6ut?=
+ =?us-ascii?Q?mgJ0nZ1/H9/U9O69lh0Yi7Q7PEnxPvkJeFFYupT+gqig774RDuZgdQHw1MaS?=
+ =?us-ascii?Q?cgpn9d3BFE3AhGVuCtxkBTJJ86OWQ30UM8UeaHkD+D9d6SkMAxS3n77/bB2u?=
+ =?us-ascii?Q?YVEF2VhPoNaWeWuKYhUbDu4uPsCsrnOhalrvdodautnoD+rNmUVd8nBKkZXn?=
+ =?us-ascii?Q?Vbh5nD7fLDEWXGhw+tqJQSy7KGAqpBbmF8+MF9+YM/u3igRDSH+OQz3EVUhB?=
+ =?us-ascii?Q?UBHcGZaqMwKWuJ1OxlI8N8o+aTfj/XK/6BXivbdyhqw7ISUyKDA2yuxB4mvZ?=
+ =?us-ascii?Q?Ru/uy9C8s8DB16XdmqfSbux9mDzh9k3b7HRCiP1E/40zUNhuVidFDqxRd5vD?=
+ =?us-ascii?Q?FKFXJ+dhBBPUvoI4/CSGh7XDTgWA6T7LmBGlf6YhWBmGMqlIsjPY+aS60yO1?=
+ =?us-ascii?Q?k0IE2bY8PKo6RmIojcGzzhCqYTg6PGVo0GYQXkAfsQYi9AYfJsEltuesTGXE?=
+ =?us-ascii?Q?jka8LAWyNQGFhLgw3h7tXSLk6rZwTAzsnH83IqlnOWvISqY8iW0/9y5VOOZI?=
+ =?us-ascii?Q?2xQsEfwudwtgl8Q1ItgwesTmzfegc+UjT43lZw6yHu4LiuoIuA+ixbr+C46Y?=
+ =?us-ascii?Q?upbhVUaKGJlo5RKGhzXRNRoneJRe90KmR5Nf9yJc+YSWmFOWpf0D6P7Gc3ul?=
+ =?us-ascii?Q?mabbiYRetmVcDsxPYJik/QdEKVKgFfmJwhV3IrGJXSM1nxc0u7J9i5Hm3bLR?=
+ =?us-ascii?Q?vD57EacHTEI52JiZVexDzWyHhDSf0mE4guhxoluH?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3888:EE_|SA3PR12MB8024:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2944d416-3a68-4599-da22-08db0a84328d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zcCCmSe+LI3pKqCiQ7bbg7a/s5cEMd6CKFXex/O7MWOs/5rlhJPZEvPWkA86s7yWzRpS4fbGC2BLhpjC2b9OFNVlL9Fgv2SyLJQonlx7S6cDT6HWLSjtkKYqMgkP+Sjnfpvy1po4JHorYVgFEzMy+IbVHgXa+HTTUkAOOI2WIudLfFtaKXDEmjMtTUsBTi+1GQc7zZszXIahZQX6FVpgGdnf4ieHGpi6Zy9rHW0uen5/BOsuCsxPyPS9/0zPK06YDKmfg7IJHjwAJ9inLIZKhqg2Rv5NdfYSYHnFcyo+FtslP0T+x+XxDL/bltNegSyn412KrT90oaQHRyN62MdR5Z0rmfHZX0wPu9RrIFVTsJs/a/H39k/rnduDU0mw6+qLaxC2xiii7p+i6EzRj9oZ5IShoEzOCgg96RrA4wuVTadxL9FRGVQOGRTABFMs6YgDco33rNQ0kNVDhVvrsgUFdGvxcc1bP7S5r4BiU5m72LdyJjQsPctHI2SYKdMXCvojtDZW5DIrMAEf49Wyrkhr2d6SQU19i/hUPwIGUZDRutEkMFaMS0Vziw7ctO38Q9ObgW+O1enIik1OFZnlp+jgDZSV/JSFoInhktq0dftQf7+hbDHvSMDTC7NysTpyTfvaPKs45N/s3S+zP7sSqyL0LfHoOf/7JpP7GnATm0kzhoGqk8ce+vcUxIcksgLHU/zI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3888.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199018)(8936002)(2906002)(8676002)(4326008)(66476007)(66556008)(66946007)(6916009)(5660300002)(44832011)(6506007)(316002)(33716001)(83380400001)(26005)(54906003)(186003)(41300700001)(6666004)(478600001)(6486002)(6512007)(9686003)(38100700002)(86362001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8XmggGjsUXzAfDI9mbMLOdrGnhkS/31/qNI3R7FfKPHQ3YdufwPlylFQAN7R?=
- =?us-ascii?Q?bDnWWxysiu4wchs294YhCJLSpsYsqVwb/4dQ9m8oJ3570B/U+F16Oafxvaex?=
- =?us-ascii?Q?79Vfzh6p0yIvmewbM+yBLGq5w6JsTQaYW8JH1AUwEtWFgRJVdM0mdYEoem4r?=
- =?us-ascii?Q?UYAu/1X1r81WUYW0+sdO458SlvJQvwjc5f4R4xlIqnQUvrkq3cnSXt4QziwE?=
- =?us-ascii?Q?sXbkjCPPOCD5fZ4+zI8DpdBUO70Pa1gmmPWXibAiAYy4W66KbuD5erIuTJt6?=
- =?us-ascii?Q?eoiRrdeorjUm3OSAXEkV3I7PayH6o12ij7kKxrFTr06KkHxvgfE6z+Re+6GB?=
- =?us-ascii?Q?D/t+jLTXIDo4knIu5DifPv6k/xLXX4JJs7RsNlJWs09rAvu1Bj2rjU0OH6Ph?=
- =?us-ascii?Q?M7kooer0rbnNSeMkfJcDSOkQQslTWH8JtxjHLDB2jSMczWtLs77/LmffxlsG?=
- =?us-ascii?Q?mXyIpqbAlxzo4XI1gAiEyLQx2+h+eSrcI7d5jF4NCEyoFB/WPj8gzBDib4Xq?=
- =?us-ascii?Q?nYN4Ekna9+8XoK4etTUWzFCLscyzKtUJQ6ECvGLp6ZfyuO9OwHz4KU/bSfR+?=
- =?us-ascii?Q?afhmspCYdRCZ7COKL0G4cJd+KkrzTI3vTN5SRxPb45q5Oc7t7Y+eNyIhamqj?=
- =?us-ascii?Q?nQkLfRLCBR2R0RbRRrjEn33/tpp35qvfgPGBX/BO+KXop2zD/ZabVVgVxU3Y?=
- =?us-ascii?Q?ig6XmxOeXK1ndh5ECcuOjcN/cS/wbhpTbAle1bTfkRomm2/bBsERVovdsW49?=
- =?us-ascii?Q?n+zN13lat8XMOIOIzbHn7BRiErViDAqjpVBe0wW0+z+IFUy+suhdNXpQh88E?=
- =?us-ascii?Q?C2Fed89ouWIvWZsRYq2TfBNq69rlxusd2kgy1NJWsuPPkWyTpH42+A5LKGq5?=
- =?us-ascii?Q?gP1w+CCj+K1dAgYMcA+jWKcJFaoXDjAG/rJmHqrRwGeV6LVIFaPArsrvI4Es?=
- =?us-ascii?Q?WNHc/GdQ1dJrEkFXRhqiwMpQ3BkEu9SWHH1gfxzUBMu2bjJaDfnIyblvvkz3?=
- =?us-ascii?Q?rN56ttBbiThdVEiDmDOKWEgd0IPjbryXu36tCyGnB6qkU7AzpJVjBz+i2PNk?=
- =?us-ascii?Q?oibj9rGRX4Pf3Iw/zZa5/qhAFO6YGNu5E+3uxh2+3rJwEassi8w+oK4UMz0L?=
- =?us-ascii?Q?fiOqg8rVe7lzOa0KbF0nC+eDsNuftpwhwk67v+7+vpRq2qLPROqRrNLklys4?=
- =?us-ascii?Q?bGyhWgo9mglbsI7a9VM01e4bqBGOmuttAbhGxsP4IbH1yHB421gQt6SjdB+D?=
- =?us-ascii?Q?VZxmS4FA4qUmAvqM4qwLqUwqkYYmosn8czAG51lJg0JTOGzOoUr0PCElDYjc?=
- =?us-ascii?Q?LCtM32iNHC1jqvMEXNP168Ft/o3gwnMFNTFFEroVR0WSvY2YaUiB69LRQ3a0?=
- =?us-ascii?Q?Q5nzmCrBxJpfxQbrC9ZOtjOVcjFCtNR5SRLadq7Qh8IjFGRASuxluD9F0V0w?=
- =?us-ascii?Q?qhIrqf/LXQ2GATXxRFpnKvawiU+xov8qH88MRqvYGzJNWo1jxLBbcG0VchXC?=
- =?us-ascii?Q?pFLcIlA0KmPYa30/ACycWOz4jpXwKJH3RpXWYWZWITiiUe2bHmoCog8/Kksm?=
- =?us-ascii?Q?zmYRbhrXRCeFg4ZMGxpZ8419470cGHPRHR5PXBUu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2944d416-3a68-4599-da22-08db0a84328d
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3888.namprd12.prod.outlook.com
+X-OriginatorOrg: Nvidia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 09:58:30.6456
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3164.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c6619bb-e79c-4947-30f3-08db0a8bdedb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 10:53:25.8227
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 631STAog7TcZkOn9iFTlDz1yas3HtWTyVpz9TT6yTWQyftZPITye1aaXdNuiVxcPWhtRQouDpdv1RksUtFr+Xw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8024
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NnUKH399eaitQhWM8Kzru36cY6A5bRZWhxA2/qGaWO71cGjy1Z3t/lOihBLpWa1Zd4s2KSW3ZyU+IZ7CqySUng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7548
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -117,79 +137,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Arnd, Ray, Perry,
+>=20
+> On Wed, Feb 08, 2023 at 05:43:35PM +0530, Manikanta Maddireddy wrote:
+> >
+> > On 2/8/2023 5:07 PM, Thierry Reding wrote:
+> > > On Wed, Feb 08, 2023 at 04:46:44PM +0530, Manikanta Maddireddy
+> wrote:
+> > > > Add PCIe port node under the PCIe controller-1 device tree node to
+> > > > support PCIe WAKE# interrupt for WiFi.
+> > > >
+> > > > Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > > > ---
+> > > >
+> > > > Changes in v14:
+> > > > New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX
+> Orin.
+> > > >
+> > > >   .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts     | 11
+> +++++++++++
+> > > >   1 file changed, 11 insertions(+)
+> > > >
+> > > > diff --git
+> > > > a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > > b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > > index 8a9747855d6b..9c89be263141 100644
+> > > > ---
+> > > > a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > > +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-
+> 0000.dt
+> > > > +++ s
+> > > > @@ -2147,6 +2147,17 @@ pcie@14100000 {
+> > > >   			phys =3D <&p2u_hsio_3>;
+> > > >   			phy-names =3D "p2u-0";
+> > > > +
+> > > > +			pci@0,0 {
+> > > > +				reg =3D <0x0000 0 0 0 0>;
+> > > > +				#address-cells =3D <3>;
+> > > > +				#size-cells =3D <2>;
+> > > > +				ranges;
+> > > > +
+> > > > +				interrupt-parent =3D <&gpio>;
+> > > > +				interrupts =3D <TEGRA234_MAIN_GPIO(L, 2)
+> IRQ_TYPE_LEVEL_LOW>;
+> > > > +				interrupt-names =3D "wakeup";
+> > > > +			};
+> > > Don't we need to wire this to the PMC interrupt controller and the
+> > > wake event corresponding to the L2 GPIO? Otherwise none of the wake
+> > > logic in PMC will get invoked.
+> > >
+> > > Thierry
+> > PCIe wake is gpio based not pmc, only wake support is provided by PMC
+> > controller.
+> > I verified this patch and able to wake up Tegra from suspend.
+> > Petlozu, correct me if my understanding is wrong.
+>=20
+> The way that this usually works is that you need to use something like
+> this:
+>=20
+> 	interrupt-parent =3D <&pmc>;
+> 	interrupts =3D <1 IRQ_TYPE_LEVEL_LOW>;
+> 	interrupt-names =3D "wakeup";
+>=20
+> This will then cause the PMC's interrupt chip callbacks to setup all the =
+wake-
+> related interrupts and use the internal wake event tables to forward the
+> GPIO/IRQ corresponding to the PMC wake event to the GPIO controller or
+> GIC, respectively.
+>=20
+> If you use &gpio as the interrupt parent, none of the PMC logic will be
+> invoked, so unless this is somehow set up correctly by default, the PMC
+> wouldn't be able to wake up the system.
+>=20
+> Thierry
+Thierry,
+Since PMC's IRQ domain is made as parent of GPIO controller's IRQ domain,
+I think, for GPIO based wakes setting &gpio as the interrupt parent can sti=
+ll
+invoke PMC logic to program the required registers to enable such wakes.
+Related commit in this regard:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/=
+drivers/gpio/gpio-tegra186.c?id=3D2a36550567307b881ce570a81189682ae1c9d08d
 
-On 07 Feb 17:12, Arnd Bergmann wrote:
-> @@ -1076,9 +1075,9 @@ static void amd_pstate_epp_init(unsigned int cpu)
->  		value |= (u64)epp << 24;
->  	}
->  
-> +	amd_pstate_set_epp(cpudata, epp);
->  skip_epp:
->  	WRITE_ONCE(cpudata->cppc_req_cached, value);
-> -	amd_pstate_set_epp(cpudata, epp);
->  	cpufreq_cpu_put(policy);
->  }
-
-I see an issue here with MSR-based systems.
-Here EPP is being set before updating `cppc_req_cached` and for MSR
-based systems while updating EPP value, MIN_PERF and MAX_PERF also
-updated. So, here whatever value MSR_AMD_CPPC_REQ had for min and max
-perf that will be rewritten instead of highest and lowest perf from
-MSR_AMD_CPPC_CAP1.
-
-Can we do something like this:
-
-@@ -1053,32 +1052,34 @@ static void amd_pstate_epp_init(unsigned int
-cpu)
-        value &= ~AMD_CPPC_DES_PERF(~0L);
-        value |= AMD_CPPC_DES_PERF(0);
-
-+       /* No need to set epp again if previous and current policy is same */
-        if (cpudata->epp_policy == cpudata->policy)
-                goto skip_epp;
-
-        cpudata->epp_policy = cpudata->policy;
-
--       if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
--               epp = amd_pstate_get_epp(cpudata, value);
--               if (epp < 0)
--                       goto skip_epp;
--               /* force the epp value to be zero for performance policy */
--               epp = 0;
--       } else {
--               /* Get BIOS pre-defined epp value */
--               epp = amd_pstate_get_epp(cpudata, value);
--               if (epp)
--                       goto skip_epp;
-+       /* Get BIOS pre-defined epp value */
-+       epp = amd_pstate_get_epp(cpudata, value);
-+       if (epp < 0) {
-+               /**
-+                * This return value can only be negative for shared_memory
-+                * systems where EPP register read/write not supported.
-+                */
-+               goto skip_epp;
-        }
-+
-+       if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
-+               epp = 0;
-+
-        /* Set initial EPP value */
-        if (boot_cpu_has(X86_FEATURE_CPPC)) {
-                value &= ~GENMASK_ULL(31, 24);
-                value |= (u64)epp << 24;
-        }
-
--skip_epp:
-        WRITE_ONCE(cpudata->cppc_req_cached, value);
-        amd_pstate_set_epp(cpudata, epp);
-+skip_epp:
-        cpufreq_cpu_put(policy);
- }
-
-
->  
-> -- 
-> 2.39.1
-> 
+Thanks.
