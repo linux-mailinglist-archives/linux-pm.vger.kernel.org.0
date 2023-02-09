@@ -2,215 +2,318 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9D869063A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 12:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C42690ACE
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 14:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjBILM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 06:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
+        id S229826AbjBINro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 08:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjBILMg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 06:12:36 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915537D9B;
-        Thu,  9 Feb 2023 03:12:31 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id l12so1877085edb.0;
-        Thu, 09 Feb 2023 03:12:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b7jADkVcHyEI+ZFTBiWOZYaGwIwnYp4U9ZLL7RuVuyw=;
-        b=W41jSixcZ1F4MtMo5vf0zDFnhgIpXcMZTKJFFYUXhqRNZMlqU6j2xV0fDkxewMtea/
-         I6iVK1i9Q26BIFZjQ0oSr8OyZ29jn6VAhSoSyVyWHhFUJ64+OVl2EZLVQTlrVnAHHW+Z
-         hH6GGOrAwaTNqEBSsoSV+aBYnLjzH8+0S9GGW+RsnQRfP/BPyK0zL3iRMVzMLAO7DN0i
-         JwASqFBIsEjEnyTKdQVajYnlBxpc5imH8g6T7h21rCeA7Kw1Un5cANLEwVLLaDq0rieb
-         gHTs/XovYW7Ry2soqC9biUvmoQtJZh2iQFO+jvo4YkfBw5Wx4C+zrOa8tRBcbZPU75Ga
-         NlKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b7jADkVcHyEI+ZFTBiWOZYaGwIwnYp4U9ZLL7RuVuyw=;
-        b=nEY22SuDrfTv0gUl6RvybsPvrfa6H57SvKqwMKgXdpnTtf3yj4qgajfyE+jR1KkxdE
-         38cEBtmDNHkKB3LYeyRcs9Lt3s0q1nqH8d3JuG57abhLSwFWpLk4r2ySy6BBZsZaJEra
-         0HIPfQsc4LAuO2Z2EfG9Qt2CuPK4HzBszUGvhMKvbFvRwytSlAwYgtkscIFSC5ge7DMF
-         8oKZYR67ijDWDzZSAwPYE9nFWkhbySVGqEnhg0uTCIkR9lKyM9twdXjjVPSPGbsJcCDh
-         jJ2gpxbzIAaFK7GxKjr73UBmNQP81NeVyYA5U/VzxixCvJaYOi7ZXl7fopVvmuPIhjMQ
-         QcLw==
-X-Gm-Message-State: AO0yUKUp48axJiWjYSCx4uCGHRBAIIkw5Nlmic71klwhaaaQc2goUT9r
-        vkSK4MIGh/tnYwID3rnRsCs=
-X-Google-Smtp-Source: AK7set+cBqnu2NjkpbodBt3B7G15qVEMJXnF0ZL5X2yvyD2Q9eCg6ah8fa/f9WQqC4cray235uOhMA==
-X-Received: by 2002:a50:cc9a:0:b0:4aa:b24f:c09b with SMTP id q26-20020a50cc9a000000b004aab24fc09bmr11923980edi.40.1675941149961;
-        Thu, 09 Feb 2023 03:12:29 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id p15-20020a50cd8f000000b0049e19136c22sm597849edi.95.2023.02.09.03.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 03:12:29 -0800 (PST)
-Date:   Thu, 9 Feb 2023 12:12:27 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Petlozu Pravareshwar <petlozup@nvidia.com>
-Cc:     Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "jeffy.chen@rock-chips.com" <jeffy.chen@rock-chips.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "steven.price@arm.com" <steven.price@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Vidya Sagar <vidyas@nvidia.com>
-Subject: Re: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
- for C1 controller
-Message-ID: <Y+TVG4gUbbw5Vehi@orome>
-References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
- <20230208111645.3863534-5-mmaddireddy@nvidia.com>
- <Y+OJaGY6mcxM0JOF@orome>
- <1b24e9f5-539a-dd0f-6485-5dbf3757ef27@nvidia.com>
- <Y+PKTNEAuPHBdwqX@orome>
- <DM6PR12MB316420D07FBB9F8CE9AF5CD3B5D99@DM6PR12MB3164.namprd12.prod.outlook.com>
+        with ESMTP id S229793AbjBINrn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 08:47:43 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDBC19F2F;
+        Thu,  9 Feb 2023 05:47:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675950457; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=dcaDta66ZUyr4xZTMKopwnnbdTVVbGV1apxTvGrXpQKc5CIo6RMlrIrL2GzJffnlRq
+    CQHtlLVr877kBoXyH7Lyr635+Z62OcPiebukMKfZwEkkn/03h3R+ecweSt0lUkzp/2qS
+    wULXIHeKSZ/qf43nkUuiIbZ8N7B9qXVPDziOJsj+WHBMRWowZrg5x30G1zwKEIgcFjKM
+    rh85dcoabvDS8sFY3GNgON6Y76A1mvv8g69eHIaYB7JC8Dtju6Or9pBz7lNwL3XFMNQi
+    k3kqWcXa5DtH4JDgxB00dW9mnQ+81Jx5l+7vjMoeAN32E5aWvFZm0d8WMuZZ4v4HiNPe
+    d4Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675950457;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=IY2gJ2JdUD9X1qj48Ay5XBdVhmse5lzzITzrG+rllWU=;
+    b=MsuatPmmBrx1YjoToipwFFOD84ldbeBiJ4mUECj/tml8RxaUH4oLrz0UduI+DOiq4A
+    kaqaFD2qBezC9XdGvGgWwtA48xpCYDrnkLZwVagvbC3TvHHXMsaCp4wiD3n2hI7F+UCl
+    56WLuFWNHcjcwFnRB4Em8m2nQceOtiEyHgCj20WDUWTyGzXqXYfy90QOaaIZuWYGTtsQ
+    7ik2lwOuuL6wMpsbvxbTFpLRG/t8s6VKDtjL04Deqq0bpAwx/Z8i/NAxJDqqpBlXsVSe
+    jThQbj0qDptUeG/yU7W6Ltq05q2sroaq8Lxxdl3Oltdo369zW/IeCfZm0KOUM5NrPZT/
+    2Lbw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675950457;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=IY2gJ2JdUD9X1qj48Ay5XBdVhmse5lzzITzrG+rllWU=;
+    b=Gb1rPPdlOTsIOJVciDIA8+2tAm9U9tVKgcsgQeLx8ay4Au34l47Wc+xj1jrDiHYCqq
+    O5GqN+Yxd18mMwE6RDbnGKkZ6CnfpXhFXdU08pZ5YuxA93MgitBs22n7fBE46FIWYJSZ
+    3fjrZNwTMW+CdIV9cxk8/YlYfJGXncdpunZ2vxviLhQ4cxOWJwnhWZyrxEbQtgPuBNPK
+    pIEnc6IG9E0bJUsgtF9tObAt3TW5f7O0ZRTZ0pHLbI49hN/qbiiWSHxPLhYZ3oGZPHza
+    P7O+SvYOEDwq8o1tJSzDP8RZ2sJwjx3CB8zj3L8MHvoPdOQNE3EQE0AHj8r3Xjsx42f+
+    TgFg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267EpF+OQRc4obTF5+Uw3E="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
+    with ESMTPSA id K7ac91z19DlbAQz
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 9 Feb 2023 14:47:37 +0100 (CET)
+Date:   Thu, 9 Feb 2023 14:47:28 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+Subject: Re: [PATCH v5 2/5] arm64: dts: qcom: Add msm8939 SoC
+Message-ID: <Y+T5cF4d667RhrJp@gerhold.net>
+References: <20230206012336.2130341-1-bryan.odonoghue@linaro.org>
+ <20230206012336.2130341-3-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oI+597r9ve6kB/tz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR12MB316420D07FBB9F8CE9AF5CD3B5D99@DM6PR12MB3164.namprd12.prod.outlook.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+In-Reply-To: <20230206012336.2130341-3-bryan.odonoghue@linaro.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Feb 06, 2023 at 01:23:33AM +0000, Bryan O'Donoghue wrote:
+> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
+> differences to msm8916.
+> 
+> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
+> - DRAM 1x800 LPDDR3
+> - Camera 4+4 lane CSI
+> - Venus @ 1080p60 HEVC
+> - DSI x 2
+> - Adreno A405
+> - WiFi wcn3660/wcn3680b 802.11ac
+> 
+> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Co-developed-by: Jun Nie <jun.nie@linaro.org>
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> Co-developed-by: Benjamin Li <benl@squareup.com>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
+> Co-developed-by: James Willcox <jwillcox@squareup.com>
+> Signed-off-by: James Willcox <jwillcox@squareup.com>
+> Co-developed-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> Co-developed-by: Joseph Gates <jgates@squareup.com>
+> Signed-off-by: Joseph Gates <jgates@squareup.com>
+> Co-developed-by: Max Chen <mchen@squareup.com>
+> Signed-off-by: Max Chen <mchen@squareup.com>
+> Co-developed-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Zac Crosby <zac@squareup.com>
+> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2344 +++++++++++++++++++++++++
+>  1 file changed, 2344 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> new file mode 100644
+> index 0000000000000..17327513a5698
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> @@ -0,0 +1,2344 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020-2023, Linaro Limited
+> + */
+> +
+> +#include <dt-bindings/clock/qcom,gcc-msm8939.h>
+> +#include <dt-bindings/clock/qcom,rpmcc.h>
+> +#include <dt-bindings/interconnect/qcom,msm8939.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include <dt-bindings/reset/qcom,gcc-msm8939.h>
+> +#include <dt-bindings/thermal/thermal.h>
+> +
+> +/ {
+> +	interrupt-parent = <&intc>;
+> +
+> +	/*
+> +	 * Stock LK wants address-cells/size-cells = 2
+> +	 * A number of our drivers want address/size cells = 1
+> +	 * hence the disparity between top-level and /soc below.
+> +	 */
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	clocks {
+> +		xo_board: xo-board {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <19200000>;
+> +		};
+> +
+> +		sleep_clk: sleep-clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <32768>;
+> +		};
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		CPU0: cpu@100 {
+> +			compatible = "arm,cortex-a53";
+> +			device_type = "cpu";
+> +			enable-method = "spin-table";
+> +			reg = <0x100>;
+> +			next-level-cache = <&L2_1>;
+> +			power-domains = <&vreg_cpr_stub>;
+> +			power-domain-names = "cpr";
 
---oI+597r9ve6kB/tz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IMHO there are still no compelling arguments for adding this dummy stub
+here, aside from fixing a non-critical DT schema warning that is
+obviously wrong and is being fixed in [1]. But I guess I have made my
+point and you have made yours so I'll leave it up to Bjorn to decide.
 
-On Thu, Feb 09, 2023 at 10:53:25AM +0000, Petlozu Pravareshwar wrote:
-> >=20
-> > On Wed, Feb 08, 2023 at 05:43:35PM +0530, Manikanta Maddireddy wrote:
-> > >
-> > > On 2/8/2023 5:07 PM, Thierry Reding wrote:
-> > > > On Wed, Feb 08, 2023 at 04:46:44PM +0530, Manikanta Maddireddy
-> > wrote:
-> > > > > Add PCIe port node under the PCIe controller-1 device tree node to
-> > > > > support PCIe WAKE# interrupt for WiFi.
-> > > > >
-> > > > > Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > > > > ---
-> > > > >
-> > > > > Changes in v14:
-> > > > > New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX
-> > Orin.
-> > > > >
-> > > > >   .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts     | 11
-> > +++++++++++
-> > > > >   1 file changed, 11 insertions(+)
-> > > > >
-> > > > > diff --git
-> > > > > a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> > > > > b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> > > > > index 8a9747855d6b..9c89be263141 100644
-> > > > > ---
-> > > > > a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> > > > > +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-
-> > 0000.dt
-> > > > > +++ s
-> > > > > @@ -2147,6 +2147,17 @@ pcie@14100000 {
-> > > > >   			phys =3D <&p2u_hsio_3>;
-> > > > >   			phy-names =3D "p2u-0";
-> > > > > +
-> > > > > +			pci@0,0 {
-> > > > > +				reg =3D <0x0000 0 0 0 0>;
-> > > > > +				#address-cells =3D <3>;
-> > > > > +				#size-cells =3D <2>;
-> > > > > +				ranges;
-> > > > > +
-> > > > > +				interrupt-parent =3D <&gpio>;
-> > > > > +				interrupts =3D <TEGRA234_MAIN_GPIO(L, 2)
-> > IRQ_TYPE_LEVEL_LOW>;
-> > > > > +				interrupt-names =3D "wakeup";
-> > > > > +			};
-> > > > Don't we need to wire this to the PMC interrupt controller and the
-> > > > wake event corresponding to the L2 GPIO? Otherwise none of the wake
-> > > > logic in PMC will get invoked.
-> > > >
-> > > > Thierry
-> > > PCIe wake is gpio based not pmc, only wake support is provided by PMC
-> > > controller.
-> > > I verified this patch and able to wake up Tegra from suspend.
-> > > Petlozu, correct me if my understanding is wrong.
-> >=20
-> > The way that this usually works is that you need to use something like
-> > this:
-> >=20
-> > 	interrupt-parent =3D <&pmc>;
-> > 	interrupts =3D <1 IRQ_TYPE_LEVEL_LOW>;
-> > 	interrupt-names =3D "wakeup";
-> >=20
-> > This will then cause the PMC's interrupt chip callbacks to setup all th=
-e wake-
-> > related interrupts and use the internal wake event tables to forward the
-> > GPIO/IRQ corresponding to the PMC wake event to the GPIO controller or
-> > GIC, respectively.
-> >=20
-> > If you use &gpio as the interrupt parent, none of the PMC logic will be
-> > invoked, so unless this is somehow set up correctly by default, the PMC
-> > wouldn't be able to wake up the system.
-> >=20
-> > Thierry
-> Thierry,
-> Since PMC's IRQ domain is made as parent of GPIO controller's IRQ domain,
-> I think, for GPIO based wakes setting &gpio as the interrupt parent can s=
-till
-> invoke PMC logic to program the required registers to enable such wakes.
-> Related commit in this regard:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/drivers/gpio/gpio-tegra186.c?id=3D2a36550567307b881ce570a81189682ae1c9d08d
+[1]: https://lore.kernel.org/linux-arm-msm/20230208153913.24436-2-ansuelsmth@gmail.com/
 
-Heh... nicely self-owned =3D). You're right, no need for the detour in DT
-with those, the GPIO driver will hook up the IRQ hierarchy itself. We
-already do this for the "power" key in the various gpio-keys, so it
-should work fine.
+Otherwise I just have some more nitpicks and one critical issue:
+The timer interrupt numbers are still wrong.
 
-Sorry for the noise,
-Thierry
+> + [...]
+> +		tsens: thermal-sensor@4a9000 {
+> +			compatible = "qcom,msm8939-tsens", "qcom,tsens-v0_1";
+> +			reg = <0x004a9000 0x1000>, /* TM */
+> +			      <0x004a8000 0x1000>; /* SROT */
+> +			nvmem-cells = <&tsens_caldata>;
+> +			nvmem-cell-names = "calib";
+> +			#qcom,sensors = <10>;
+> +			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "uplow";
+> +			#thermal-sensor-cells = <1>;
+> +		};
 
---oI+597r9ve6kB/tz
-Content-Type: application/pgp-signature; name="signature.asc"
+"thermal/drivers/tsens: Drop single-cell code for msm8939" [2] is in
+linux-next now so you need to convert this to use multiple nvmem-cells.
 
------BEGIN PGP SIGNATURE-----
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=dfadb4599ab0206935d5f14975b5e8112492b29c
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPk1RsACgkQ3SOs138+
-s6HqwQ//Zpt5GNboNT6FQXO5Dl4h4mISvUB+mcMRdY9LdmHEZs4O8Xp85ftbrubB
-uHR7S0Fvqt1EDlaPg+tzUYMBGtq/QpUy46Pi69fqHLUsTp8HnrKnIXbQ7KwEpR0z
-RDrfO7dhYMo7Zv4KxuC3H8LmRIqJ54HevvW3sAx/mA2G9Et5CGcWCfUpTYnE8M6P
-DFe4aSPVuetKatXz1oRz7NWR4d2S2ZsEfi7tNqhLnnSuPlJm+400Zz46+k/fmjzt
-m+BKqyTjVwzvNfDdzryZiMMaC9tJMRaU9mAM4KtKwTcbQF78aHmizGdLwcegzCaj
-9kCvG5tnaPhrfm6HZ1mQvgW4GgpXLola7Jpm58WoxuAGt9rjVSek1+taji44dGwV
-N1Q5YrAqBzUTE6Pqm8CcaGP2LR02Jf8d2kJ0HMd7L+/OM1qCoepAepprllBW4hjM
-AbHSu3hLBNt3h9IdYOLMyuTp9HqblZXaUcTsO8YNOTWcNjTSU+NT8BHmmrdOWrHj
-emjW6zsMf0s3aZci5lCDa1MA6IjIjZciEPR1R6+NCKWIoccKCsqhNyAQyKblAX6L
-fJFFg4bBGcy665BGBPogy9jH7L8wstPU+CItRuGrLNIfzjOhIYS6uRmP0gMCFBLS
-34r9vuyy0mx7nApzj1XU4Yaoq8Gt5f9afCgxHdD+T0qCvFzuTxM=
-=0MpZ
------END PGP SIGNATURE-----
+> + [...]
+> +		mdss: display-subsystem@1a00000 {
+> +			compatible = "qcom,mdss";
+> +			reg = <0x01a00000 0x1000>,
+> +			      <0x01ac8000 0x3000>;
+> +			reg-names = "mdss_phys", "vbif_phys";
+> +
+> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +
+> +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
+> +				 <&gcc GCC_MDSS_AXI_CLK>,
+> +				 <&gcc GCC_MDSS_VSYNC_CLK>;
+> +			clock-names = "iface",
+> +				      "bus",
+> +				      "vsync";
+> +
+> +			power-domains = <&gcc MDSS_GDSC>;
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			#interrupt-cells = <1>;
+> +			ranges;
 
---oI+597r9ve6kB/tz--
+Please disable this by default similar to 5f36d633c214 ("arm64: dts:
+qcom: Disable MDSS by default for 8916/8016 devices") for consistency
+with MSM8916.
+
+> + [...]
+> +		apps_iommu: iommu@1ef0000 {
+> +			compatible = "qcom,msm8916-iommu", "qcom,msm-iommu-v1";
+> +			reg = <0x01ef0000 0x3000>;
+> +			ranges = <0 0x1e20000 0x40000>;
+
+0x01e20000 (pad to 8 digits)
+
+> + [...]
+> +		usb: usb@78d9000 {
+> +			compatible = "qcom,ci-hdrc";
+> +			reg = <0x078d9000 0x200>,
+> +			      <0x078d9200 0x200>;
+> +			interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&gcc GCC_USB_HS_AHB_CLK>,
+> +				 <&gcc GCC_USB_HS_SYSTEM_CLK>;
+> +			clock-names = "iface", "core";
+> +			assigned-clocks = <&gcc GCC_USB_HS_SYSTEM_CLK>;
+> +			assigned-clock-rates = <80000000>;
+> +			resets = <&gcc GCC_USB_HS_BCR>;
+> +			reset-names = "core";
+> +			#reset-cells = <1>;
+> +			phy_type = "ulpi";
+> +			dr_mode = "otg";
+> +			ahb-burst-config = <0>;
+> +			phy-names = "usb-phy";
+> +			phys = <&usb_hs_phy>;
+> +			status = "disabled";
+> +
+> +			ulpi {
+> +				usb_hs_phy: phy {
+> +					compatible = "qcom,usb-hs-phy-msm8916",
+> +						     "qcom,usb-hs-phy";
+> +					clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
+> +					clock-names = "ref", "sleep";
+> +					resets = <&gcc GCC_USB2A_PHY_BCR>, <&usb 0>;
+> +					reset-names = "phy", "por";
+> +					#phy-cells = <0>;
+> +					qcom,init-seq = /bits/ 8 <0x0 0x44
+> +						0x1 0x6b 0x2 0x24 0x3 0x13>;
+
+Should be formatted in pairs, see commit 640e71aac554c ("arm64: dts:
+qcom: msm8916: improve usb hs node formating").
+
+> + [...]
+> +		timer@b020000 {
+> +			compatible = "arm,armv7-timer-mem";
+> +			reg = <0x0b020000 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			frame@b021000 {
+> +				reg = <0x0b021000 0x1000>,
+> +				      <0x0b022000 0x1000>;
+> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <0>;
+> +			};
+
+These timer interrupts are still wrong like mentioned in v3:
+https://lore.kernel.org/linux-arm-msm/Y8fC%2FGCHfENQmBNC@gerhold.net/
+
+> + [...]
+> +		pronto: remoteproc@a204000 {
+> +			compatible = "qcom,pronto-v2-pil", "qcom,pronto";
+> +			reg = <0x0a204000 0x2000>,
+> +			      <0x0a202000 0x1000>,
+> +			      <0x0a21b000 0x3000>;
+> +			reg-names = "ccu", "dxe", "pmu";
+> +
+> +			interrupts-extended = <&intc 0 149 IRQ_TYPE_EDGE_RISING>,
+
+&intc GIC_SPI 149
+
+Thanks,
+Stephan
