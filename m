@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71985691170
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 20:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C74A691179
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 20:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjBIThZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 14:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S229767AbjBITmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 14:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBIThX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 14:37:23 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A2F2BF36;
-        Thu,  9 Feb 2023 11:37:22 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id gr7so9659096ejb.5;
-        Thu, 09 Feb 2023 11:37:22 -0800 (PST)
+        with ESMTP id S229647AbjBITma (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 14:42:30 -0500
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FBD1B547;
+        Thu,  9 Feb 2023 11:42:29 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id m2so9654926ejb.8;
+        Thu, 09 Feb 2023 11:42:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kRQ+AqBQSo8wInSluRM33VrrcRj+TuOF6TCeB8K1fMo=;
-        b=KnhyKhobG8EBoOSqMfpRcFMll7YJSkpMsetK7GzrEDpaOs2PAmAUZPlkHlEAI5Yefn
-         TyGWmeE+x9SGeEZCgRF1Oh9fbctCkkq9tT+zAdBXEpmhbj0ngtrUKfr8FwOSxqNKsAG0
-         +n6uCWrzUNW/P4vgEmlged38fIYCq/4MBXbC5X8gxJLGo2G9AoBTvpgSV8Z3NY6psnY/
-         dt2bo0qy6bDJpyGax9VSCzRWeMJ3AoOzCuK/O+YJ5roNQbwBVYjqTR6QEcawghVTHBrn
-         AiRRgxvE1q0h+E1UprW5WBNN8JSbHBtyeMIBu7iGsMeYLN6OQGSd7oZPWM7fVcm9QD+O
-         XXfQ==
-X-Gm-Message-State: AO0yUKUBqp+MiuDtXcPZgUPqF7/JGRIy+pTbalrKofXfJUZReFApE2kn
-        Vq6Xawi8CVAfkc1Ichh21JSpO8nmXfAiezIdNTg=
-X-Google-Smtp-Source: AK7set8AWc9FjJZ4cJ3vdZgcz5eCuoVCOc66/9AX590nDLt1MYnIqjzdWlX49FxX03GMogMn7OIFSN5xKGGRqYhJqD8=
+        bh=BIp4RCzsuu35MBgWRTOTjpC9otkcQ5vDTd9A2EAVu3k=;
+        b=YF3u5kT+yNPiebG7pUoqtB/FskZHuK+UbhVDR/s27cnDP2bcBY+UZe6HwuQ0s8OsQ8
+         m3AkCvI3mciNLlmQ86PSe6NF9+ik78uJMsNxf60dl1d6kRrVZAoyyFTsyb4DQnSlMZsh
+         hujgZjyllWkBAwE7iBKC3OuDR95IfahgFloxmATqRURapiZIAUNhzh4EaDIG/ilcxo1g
+         BrpfYVmAqRAvV3UNzEZi/DCMkfA3TsQxYxDzLuCtOq+oe7bw9c6dfpFLzjHF7Q3aj/5U
+         qwuP3RRLClbzDpFrhbvT2NV5nIZAvZWkofQ2GUJmtoDyjWKGn8zvuaR8JvjIi/wVmnvw
+         vy6A==
+X-Gm-Message-State: AO0yUKWkBCzJ9viM0yjBWDchoHzsrBAU/f+U/BUZ+ac53DtU6+rNaq2u
+        dlQPuMbCe+HFmJJyvUu1qsMmWoDZaPWKZ8LCNKU=
+X-Google-Smtp-Source: AK7set/myRyfqM930pQEapD3coaAXFkNN8bumi2nngi2vSDno8HhTBlHrWFKVLkepofAUR+80g7XcLt3CtNVOS37sLQ=
 X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr2946159ejb.274.1675971441388; Thu, 09
- Feb 2023 11:37:21 -0800 (PST)
+ sd14-20020a170906ce2e00b0087f575a9b67mr2949049ejb.274.1675971748184; Thu, 09
+ Feb 2023 11:42:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230202151515.2309543-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230202151515.2309543-1-gregkh@linuxfoundation.org>
+References: <202301171040260804580@zte.com.cn>
+In-Reply-To: <202301171040260804580@zte.com.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Feb 2023 20:37:10 +0100
-Message-ID: <CAJZ5v0ikyjgKfrnEk=yiK-KHas8QEC0-O_mdRCMvkeKS+uoovw@mail.gmail.com>
-Subject: Re: [PATCH] kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+Date:   Thu, 9 Feb 2023 20:42:16 +0100
+Message-ID: <CAJZ5v0j2R0BW+Z9zZSW__7SxSDMuCikk5DUnDfp+VvOQdhjCuw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Convert to use sysfs_emit_at() API
+To:     ye.xingchen@zte.com.cn
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -56,40 +56,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:15 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Jan 17, 2023 at 3:40 AM <ye.xingchen@zte.com.cn> wrote:
 >
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  To make things simpler, just
-> call debugfs_lookup_and_remove() instead which handles all of the logic
-> at once.
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 >
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 > ---
->  kernel/power/energy_model.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  drivers/thermal/thermal_core.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index f82111837b8d..7b44f5b89fa1 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -87,10 +87,7 @@ static void em_debug_create_pd(struct device *dev)
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index d9a3d9566d73..5ffc7006cce4 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -229,10 +229,9 @@ int thermal_build_list_of_policies(char *buf)
+>         mutex_lock(&thermal_governor_lock);
 >
->  static void em_debug_remove_pd(struct device *dev)
->  {
-> -       struct dentry *debug_dir;
-> -
-> -       debug_dir = debugfs_lookup(dev_name(dev), rootdir);
-> -       debugfs_remove_recursive(debug_dir);
-> +       debugfs_lookup_and_remove(dev_name(dev), rootdir);
->  }
+>         list_for_each_entry(pos, &thermal_governor_list, governor_list) {
+> -               count += scnprintf(buf + count, PAGE_SIZE - count, "%s ",
+> -                                  pos->name);
+> +               count += sysfs_emit_at(buf, count, "%s ", pos->name);
+>         }
+> -       count += scnprintf(buf + count, PAGE_SIZE - count, "\n");
+> +       count += sysfs_emit_at(buf, count, "\n");
 >
->  static int __init em_debug_init(void)
+>         mutex_unlock(&thermal_governor_lock);
+>
 > --
 
 Applied as 6.3 material, thanks!
