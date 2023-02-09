@@ -2,113 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824566903CA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 10:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B5D6903FD
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 10:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjBIJcb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 04:32:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S229622AbjBIJkH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 04:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjBIJc1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 04:32:27 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39678627B3
-        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 01:32:26 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so1112583wrd.6
-        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 01:32:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3eL7i9b5wRY0WQmCcwLWaepV6oMtyTPsC0kIIjAbWos=;
-        b=BRQ7FvOa7WzSiV9lkz2IJt8gO7JaWUx8exju0lZChG71KN1KtoPl+nRG2tNFgvNh+Y
-         dNXXQ6b0oEhKK6B/zFwlCax2PavvZxrkry8H5BejD/nVC9fcWi2wlKpkJkwXsrul8qHj
-         eI6IeiZGDUWE9y3z3wx2qE6JOSi8RsUPHLS/P0P97DW0GgSN9izSzHKQVKQMrwaNOVmr
-         EVzu+BlHkixgNObqr177mOh3BOTcp9Cxsg6r5BU84mAf8VvLzQyi7/z6io0bMMIt5/O2
-         WeW7kCJVzjDXho+Dj94lBcWidpEFZ3N0rYVewGdYnOwMQRh3t/ay1L+C2FVI67c9xIoV
-         AKzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eL7i9b5wRY0WQmCcwLWaepV6oMtyTPsC0kIIjAbWos=;
-        b=E0dOu0KDnBbZXRg7vpbwrmjsGVkKsWEpaVMvJauZbfAdsON+NPqRKQaJd3u34IF2g/
-         XJCfMlIkwqvu47+Bs/BDBjQdD2GP7QTqWAGVidXE/5mJ8JuV3dDMHMh23cjNAXc4HhvK
-         T3MXGA8o3jdSAMnCyRRZWRa2h0yu1tYpeZcKYv/2bOzORRYgYw27hE09sPs3jY8MCYaN
-         1m1fImHAuSc4jA4xod3RyjqlBz8bwcmuaOIOFGt5E/Tqsdsj3C2kr1HvTM0yShBlp1Yn
-         HYmjUGRcpfOBOtI2ZEkX7kEDeBI+Kmqd9JaY0A7CVxpFm7d2IcmJ0g7QAydE/Q2Kk/jJ
-         uAaQ==
-X-Gm-Message-State: AO0yUKXWnMPTLb7VLxFkdXcz8v8YBS3WxnAtjgcbWRKneQEoxzg1dd67
-        wMKjzhxAAM7+ftBDJ1UVRtItpA==
-X-Google-Smtp-Source: AK7set8I2xZbbr8G3cp/CpHdQlhfy0CfuBS3MAzNnpmRXGn+oP+zQZcQ4KmZTBzwEZBwmmC6Ow2r0Q==
-X-Received: by 2002:a05:6000:136c:b0:2c3:db87:977c with SMTP id q12-20020a056000136c00b002c3db87977cmr9632412wrz.12.1675935144773;
-        Thu, 09 Feb 2023 01:32:24 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t12-20020adfe44c000000b002c3dd9bb283sm803503wrm.37.2023.02.09.01.32.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 01:32:24 -0800 (PST)
-Message-ID: <9f0a1202-1a98-22e1-873b-2d70ed63de72@linaro.org>
-Date:   Thu, 9 Feb 2023 10:32:20 +0100
+        with ESMTP id S229515AbjBIJkG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 04:40:06 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E843E171A;
+        Thu,  9 Feb 2023 01:40:04 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3199HVrD002242;
+        Thu, 9 Feb 2023 10:38:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Ol2FAil1EFrxD0YCoc4RaKOOMiU4+0QQ6K3rmBBavMY=;
+ b=zS8kOrt2KVewz+s3mnOTmo7LU9Cc3ORYz7IBRYT5OTjObo1pyepsY+qE5HXkKKN66gpG
+ zziMaf9H7EmROzlrcyjB0I/xViLvFeWfY0cF8425FsZYoM9nFJAJX2fEaDPmtS/Gyvvt
+ ygEnpE96nP1nW3A6JaIGJmXFtnNXCmlCuPgLFYG+AYuMX+O4UU0oi0e8PfMtjQHqLffQ
+ 0NFpsXsAIv4nFggJogS6uMTO44x4AaNU8fit5z0y6zKZavsSTVjeqSaHilzCnUWgR/Df
+ V3NqFFGOR/JrE9YP4YSbYw41TTjdH+tR6aDFUumn17mklQS7fkLD1sxaTZSpAwowrWL+ dw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nhdcg18v0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 10:38:23 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1C17210002A;
+        Thu,  9 Feb 2023 10:38:19 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EF17D210F8F;
+        Thu,  9 Feb 2023 10:38:18 +0100 (CET)
+Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 9 Feb
+ 2023 10:38:16 +0100
+Message-ID: <c1d361d1-1599-230c-3609-88cd9f455114@foss.st.com>
+Date:   Thu, 9 Feb 2023 10:38:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 10/11] dt-bindings: clock: remove stih416 bindings
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 02/11] ARM: sti: removal of stih415/stih416 related
+ entries
 Content-Language: en-US
 To:     Alain Volmat <avolmat@me.com>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
         "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        "Eric Dumazet" <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Russell King <linux@armlinux.org.uk>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Jose Abreu <joabreu@synopsys.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        "Zhang Rui" <rui.zhang@intel.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>
 References: <20230209091659.1409-1-avolmat@me.com>
- <20230209091659.1409-11-avolmat@me.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209091659.1409-11-avolmat@me.com>
-Content-Type: text/plain; charset=UTF-8
+ <20230209091659.1409-3-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20230209091659.1409-3-avolmat@me.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.201.21.26]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-09_05,2023-02-08_02,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/02/2023 10:16, Alain Volmat wrote:
-> Remove the stih416 clock dt-bindings since this platform is no
-> more supported.
+
+
+On 2/9/23 10:16, Alain Volmat wrote:
+> ST's STiH415 and STiH416 platforms have already been removed since
+> a while.  Remove some remaining bits within the mach-sti.
 > 
 > Signed-off-by: Alain Volmat <avolmat@me.com>
 > ---
+>  arch/arm/mach-sti/Kconfig    | 20 +-------------------
+>  arch/arm/mach-sti/board-dt.c |  2 --
+>  2 files changed, 1 insertion(+), 21 deletions(-)
+> 
+> diff --git a/arch/arm/mach-sti/Kconfig b/arch/arm/mach-sti/Kconfig
+> index b2d45cf10a3c..609957dead98 100644
+> --- a/arch/arm/mach-sti/Kconfig
+> +++ b/arch/arm/mach-sti/Kconfig
+> @@ -19,31 +19,13 @@ menuconfig ARCH_STI
+>  	select PL310_ERRATA_769419 if CACHE_L2X0
+>  	select RESET_CONTROLLER
+>  	help
+> -	  Include support for STMicroelectronics' STiH415/416, STiH407/10 and
+> +	  Include support for STMicroelectronics' STiH407/10 and
+>  	  STiH418 family SoCs using the Device Tree for discovery.  More
+>  	  information can be found in Documentation/arm/sti/ and
+>  	  Documentation/devicetree.
+>  
+>  if ARCH_STI
+>  
+> -config SOC_STIH415
+> -	bool "STiH415 STMicroelectronics Consumer Electronics family"
+> -	default y
+> -	help
+> -	  This enables support for STMicroelectronics Digital Consumer
+> -	  Electronics family StiH415 parts, primarily targeted at set-top-box
+> -	  and other digital audio/video applications using Flattned Device
+> -	  Trees.
+> -
+> -config SOC_STIH416
+> -	bool "STiH416 STMicroelectronics Consumer Electronics family"
+> -	default y
+> -	help
+> -	  This enables support for STMicroelectronics Digital Consumer
+> -	  Electronics family StiH416 parts, primarily targeted at set-top-box
+> -	  and other digital audio/video applications using Flattened Device
+> -	  Trees.
+> -
+>  config SOC_STIH407
+>  	bool "STiH407 STMicroelectronics Consumer Electronics family"
+>  	default y
+> diff --git a/arch/arm/mach-sti/board-dt.c b/arch/arm/mach-sti/board-dt.c
+> index ffecbf29646f..8c313f07bd02 100644
+> --- a/arch/arm/mach-sti/board-dt.c
+> +++ b/arch/arm/mach-sti/board-dt.c
+> @@ -12,8 +12,6 @@
+>  #include "smp.h"
+>  
+>  static const char *const stih41x_dt_match[] __initconst = {
+> -	"st,stih415",
+> -	"st,stih416",
+>  	"st,stih407",
+>  	"st,stih410",
+>  	"st,stih418",
 
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Thanks
+Patrice
