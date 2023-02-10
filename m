@@ -2,67 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D136920D1
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 15:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D3C6920E6
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 15:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbjBJO2z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Feb 2023 09:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S232348AbjBJOhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Feb 2023 09:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjBJO2z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 09:28:55 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A145B7358A
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 06:28:53 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso4183674wms.4
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 06:28:53 -0800 (PST)
+        with ESMTP id S232322AbjBJOhG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 09:37:06 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2806D8F1
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 06:37:03 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so6442072wma.1
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 06:37:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=guuw8fNr8ek6MKlKjsKHEfRl2wvHYLY1FYFS39aDXmo=;
-        b=wwlzhw00GEnOlY5ru98N3sJZjli9DmVZXQsWhbquo+ZIWztUTytBzwgFgSPccuBvPr
-         7Aj2i4W+zkBnv3C3BRi3W8tmxOqlqvAjLqDrUG7VOY5a6a15fL0Qk6ul0Z8DzvERRosv
-         6UUMKhyjKibE8wB+GV5JczReFz4lfRIdXyfS+REHPv1Pq8cBA47MXsR50z7WAQ1eqTj6
-         lnT6vKSaLL18Wa5LDLGI7eqvS9+oTbwDLl2lAcngvvtQqCTYxHwgKObXI7KTJazFjzyk
-         0lBZf6LuKT47Dg5+X4oYwEBtscnV23aIIAGOJrI4SyFrhjgAdxh3eUuJJZrmOrqeNO9g
-         qM0w==
+        bh=zgDnnay/7/hZu69iuCwtmAHN8teouEyN6y/9rDAhOc4=;
+        b=gV5GjV5Ji6seMM71UMvNBv9Tu67tp99sAn0VEx55h0YBtK+Xmky+fj4N3kTzAxWHWH
+         OOzfSENv3dClm4WBzZ27PFVtWOfGspmhnn8EnWIllyI+ZrgN1rkBmVOAX9gBxefWOr5E
+         3CHpZeHFLEOJFMh62qKWOJyVi9oC5a06yfMojug7eESwXAvpq9nKSbmyp+Y0MCtBj6LN
+         Jhlm4ab+agFwm0Un+sUV11W3BEdQHEougEBQlix+kY7F0HV1J7yuueS0nisvv379xSCJ
+         5SDXtcDI7Xpm2zCURgIuX646Zr4X8tCeVcHeKDQsROlK19Zlp2LtalTeJsiL9nedcRcK
+         iI7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=guuw8fNr8ek6MKlKjsKHEfRl2wvHYLY1FYFS39aDXmo=;
-        b=b4SnqoAXox9sbWVbIotFT8cM0emWoM3ma6e1gWfgbSBMrKuMo0SBiDQ4niDGxRDtwL
-         u2hzl3/Dzq9CTnrnvbb1eD4ueEwfNkPDgvHBvinODhS7SD8SHs5Fk8qKHw+94WEitMnj
-         y2qsuuPt1+we550razFZUiGaMp4xQDqIoHqo5x3Vd+4mpb+UY6WcwaQZ3owliFYIV6AB
-         U4IgttKKm5XSXEvWb66DOZoXVotIaDuUilgrsg7UXnoPBgnsO9OW2mVURRRb9LiLcqQ2
-         4yN0wcVpokswLiYsF6ruPTj5E6gXl7hpkDclKWnRWqWrXuEK9zre3/Sze1+m/11wjSdd
-         6B5w==
-X-Gm-Message-State: AO0yUKWTCW9EAiMsGLXOGtaYxS7jM7m4MjY+XclA5+Ed/nV8h1RoL4ON
-        l1dqcmodZw1c5A0ObYJquTGF/g==
-X-Google-Smtp-Source: AK7set9psfB2CgFVm0ZCdVqPYR3dikKyySJ+OFxHi2O3dgsTxlOvcyYTV7Wv31CppCH/lcwneloMVw==
-X-Received: by 2002:a05:600c:4d92:b0:3df:dea7:8e3 with SMTP id v18-20020a05600c4d9200b003dfdea708e3mr14313259wmp.21.1676039332126;
-        Fri, 10 Feb 2023 06:28:52 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id r14-20020a05600c35ce00b003dc4ecfc4d7sm5694466wmq.29.2023.02.10.06.28.50
+        bh=zgDnnay/7/hZu69iuCwtmAHN8teouEyN6y/9rDAhOc4=;
+        b=iZhc85iTsluZY/6E2/4YuTIq0fG+2Gqc9Pg1oK9f7xWVOzFxphlB4jFmSzVTtYquNw
+         BSEnkH9n2jVzIm3yVaj8UBjarAOW00PNURCMQV8zibWX6L+Fd0cucxhwEBVEq+/3ZJ/q
+         BgO3FlQjtAAYlIg8U0NZg5Y630cNczbpiLCyBrWrVFSxGlAcHFEnPLPCXyHU2ZqgrYVG
+         V6WBy4vTSbUpQZtLTw8WAn6rxe1gTyxm50oDLuEaSwSxI85RoYskNBOfHP+v0zchld7q
+         rXrd/IYXwSpfGB3cccCPY/o0U6hMv3tuLksNUVQlwzQiO/sgcIlz/piR6o0mgbv2U48O
+         QCfw==
+X-Gm-Message-State: AO0yUKX+VueUmkSky1DDp7pNQqZ6JLHdHiLNph0y6pO7MfCfH1Q3jUKQ
+        LTrMIiGZkfPfrX1eF66TQm4wUw==
+X-Google-Smtp-Source: AK7set/KD2hbi+kZvfMCDyvqNEElWuMR7WnvCp8IBXEybr5gi7HRgPd+DpwizQ67bXcuLJXS84VhfA==
+X-Received: by 2002:a05:600c:4a9a:b0:3dc:f24:f2de with SMTP id b26-20020a05600c4a9a00b003dc0f24f2demr13099897wmp.12.1676039821561;
+        Fri, 10 Feb 2023 06:37:01 -0800 (PST)
+Received: from [172.17.49.168] (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
+        by smtp.googlemail.com with ESMTPSA id a1-20020adff7c1000000b002c54a2037d1sm1615338wrq.75.2023.02.10.06.36.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 06:28:51 -0800 (PST)
-Message-ID: <f24e7016-0131-7c42-6b59-c45fcc7873cd@linaro.org>
-Date:   Fri, 10 Feb 2023 15:28:49 +0100
+        Fri, 10 Feb 2023 06:37:00 -0800 (PST)
+Message-ID: <365c469b-22f6-fb26-1872-5e9a5079af5d@linaro.org>
+Date:   Fri, 10 Feb 2023 15:36:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 1/1] thermal/drivers/hisi: Drop second sensor hi3660
+Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
+ usage
 Content-Language: en-US
-To:     Yongqin Liu <yongqin.liu@linaro.org>, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, edubezval@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     keescook@chromium.org, sumit.semwal@linaro.org, jstultz@google.com
-References: <20230210141507.71014-1-yongqin.liu@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Johan Hovold <johan@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+ <Y9J4WAFyXyV/nqlG@orome> <20230210131703.GF175687@linaro.org>
+ <Y+ZQC85TM+O8p8gQ@orome>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230210141507.71014-1-yongqin.liu@linaro.org>
+In-Reply-To: <Y+ZQC85TM+O8p8gQ@orome>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,21 +82,192 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/02/2023 15:15, Yongqin Liu wrote:
-> The commit 74c8e6bffbe1 ("driver core: Add __alloc_size hint to devm
-> allocators") exposes a panic "BRK handler: Fatal exception" on the
-> hi3660_thermal_probe funciton.
-> This is because the function allocates memory for only one
-> sensors array entry, but tries to fill up a second one.
+On 10/02/2023 15:09, Thierry Reding wrote:
+> On Fri, Feb 10, 2023 at 02:17:03PM +0100, Daniel Lezcano wrote:
+>> Hi Thierry,
+>>
+>> On Thu, Jan 26, 2023 at 01:55:52PM +0100, Thierry Reding wrote:
+>>> On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
+>>>>
+>>>> Hi,
+>>>>
+>>>> does anyone know what is the purpose of the get_thermal_instance() usage in
+>>>> this code:
+>>>>
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
+>>>>
+>>>> The driver is using a function which is reserved for the thermal core. It
+>>>> should not.
+>>>>
+>>>> Is the following change ok ?
+>>>>
+>>>> diff --git a/drivers/thermal/tegra/soctherm.c
+>>>> b/drivers/thermal/tegra/soctherm.c
+>>>> index 220873298d77..5f552402d987 100644
+>>>> --- a/drivers/thermal/tegra/soctherm.c
+>>>> +++ b/drivers/thermal/tegra/soctherm.c
+>>>> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
+>>>> thermal_zone_device *tz, int trip
+>>>>   				continue;
+>>>>
+>>>>   			cdev = ts->throt_cfgs[i].cdev;
+>>>> -			if (get_thermal_instance(tz, cdev, trip_id))
+>>>> -				stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>> -			else
+>>>> +			stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>> +			if (!stc)
+>>>>   				continue;
+>>>>
+>>>>   			return throttrip_program(dev, sg, stc, temp);
+>>>> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
+>>>> *dev,
+>>>>   			continue;
+>>>>
+>>>>   		cdev = ts->throt_cfgs[i].cdev;
+>>>> -		if (get_thermal_instance(tz, cdev, trip))
+>>>> -			stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>> -		else
+>>>> +
+>>>> +		stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>> +		if (!stc)
+>>>>   			continue;
+>>>>
+>>>>   		ret = throttrip_program(dev, sg, stc, temperature);
+>>>
+>>> There's a small difference in behavior after applying this patch. Prior
+>>> to this I get (on Tegra210):
+>>>
+>>> 	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
+>>> 	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
+>>> 	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
+>>> 	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
+>>> 	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
+>>> 	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
+>>> 	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
+>>> 	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
+>>> 	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
+>>>
+>>> and after these changes, it turns into:
+>>>
+>>> 	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
+>>> 	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
+>>> 	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
+>>> 	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
+>>> 	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
+>>> 	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
+>>> 	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
+>>> 	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
+>>> 	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttle for pll to 103000
+>>> 	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when pll reaches 103000 mC
+>>> 	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
+>>> 	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttle for mem to 103000
+>>> 	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when mem reaches 103000 mC
+>>>
+>>> The "programming throttle ..." messages are something I've added locally
+>>> to trace what gets called. So it looks like for "pll" and "mem" thermal
+>>> zones, we now program trip points whereas we previously didn't.
+>>
+>> The DT descriptioni (tegra210.dtsi) says one thing and the implementation says
+>> something else.
+>>
+>> If we refer to the PLL description, there is one 'hot' trip point and
+>> one 'critical' trip point. No polling delay at all, so we need the
+>> interrupts.
+>>
+>> Logically, we should set the 'hot' trip point first, when the trip
+>> point is crossed, we setup the next trip point, which is the critical.
+>>
+>> With these two trip points, the first one will send a notification to
+>> the userspace and the second one will force a shutdown of the
+>> system. For both, no cooling device is expected.
 > 
-> Fix this by removing the unneeded second access.
+> I think the intention here is to use the soctherm's built-in throttling
+> mechanism as a last resort measure to try and cool the system down. I
+> suppose that could count as "passive" cooling, so specifying it as the
+> cooling device for the "passive" trip point may be more appropriate.
 > 
-> Fixes: 7d3a2a2bbadb ("thermal/drivers/hisi: Fix number of sensors on hi3660")
-> Signed-off-by: Yongqin Liu <yongqin.liu@linaro.org>
-> Link: https://lore.kernel.org/linux-mm/20221101223321.1326815-5-keescook@chromium.org/
-> ---
+> The throttling that happens here is quite severe, so we don't want it to
+> happen too early. I would expect that our "passive" trip point shouldn't
+> be a lot less than the "hot" temperature. I suspect that's the reason
+> why the "hot" trip point was reused for this.
+> 
+> I'm also beginning to think that we should just not expose the soctherm
+> throttling as a cooling device and instead keep it internal to the
+> soctherm driver entirely.
 
-Applied, thanks
+Yes, and perhaps separate it from the sensor driver.
+
+There is a similar hardware limiter for the qcom platform [1]. The 
+description in the device tree is separated from the sensor and the 
+binding has temperatures to begin the mitigation [2].
+
+There is no trip point associated as those are related to the in-kernel 
+mitigation.
+
+If this mitigation is a heavy mitigation, above what the kernel is able 
+to do with a passive cooling device. It would make sense to just have 
+configured outside of the thermal zone.
+
+So the configuration would be something like:
+
+myperformance_limite {
+	@ = <0x...>
+	temperature_limit = 95000;
+};
+
+thermal_zone {
+
+	cpu : {
+		trips {
+			alert {
+			temperature = 90000;
+			hysteresis = 2000;
+			type = passive;
+			};
+
+			hot {
+			temperature = 97000;
+			type = hot;
+			};
+
+			critical {
+			temperature = 100000;
+			hysteresis = 2000;
+			type = critical;
+			};
+
+			cooling-maps = <&cpu NO_LIMIT NO_LIMIT>;
+		};
+	}
+};
+
+The behavior will be a passive mitigation, if it fails the hardware 
+limiter will take over, if that fails then hot sends a notification to 
+the userspace (giving the opportunity to hotplug a cpu or kill a task or 
+suspend), if that fails then shutdown.
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/qcom/lmh.c?h=thermal/bleeding-edge
+
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845.dtsi?h=thermal/bleeding-edge#n3922
+
+[ ... ]
+
+> On the DT side, I think most of the cooling maps can be cleaned up. We
+> can remove the entries for "critical" and "hot" trip points if the
+> driver unconditionally programs the automated throttling. 
+
+You may want to keep the critical trip points at least. Even if the 
+hardware limiter is certainly very effective, having the critical point 
+is another fail safe allowing to gracefully shutdown the system before a 
+wild hardware reset.
+
+> For EMC we
+> want to reverse the "passive" and "active" trip points and possibly drop
+> the dram-passive cooling map as well, since you mentioned the core would
+> take care of disabling the cooling device automatically.
+
 
 
 -- 
