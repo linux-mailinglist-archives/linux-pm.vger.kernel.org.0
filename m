@@ -2,101 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2882691AEC
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 10:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEB1691AF2
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 10:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjBJJK5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Feb 2023 04:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S231630AbjBJJMg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Feb 2023 04:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjBJJKg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 04:10:36 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBFC55A7
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:10:29 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id v13so4141257eda.11
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:10:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JO1AgozF/Zya9WC0NgRmz45Iqf3MdEInH4N2K136jyM=;
-        b=ZyFniiCCjmt9CvFd63F1Zj3IXNi4mNYXxXKEnzHLxPlFTMzNhXgAL3mcNuX5cYUWEW
-         XLgUon3TpGuOxN5yFBKHZWe5rBLfxrjBjRkVxf8O9KheaOLF+XS9EoTuMNMEfPc1n0bG
-         MDJvJGNT7D3w1/12SrGKArBX/1Vntjt1I19b1FyqOOW2athWYZaaYf/6UDVjWsYb0lTn
-         YGVnI8UiVgl3HmOuryhDtX/pWrRHQJ9cfaT6GEsrsnD029W1HFFHZW9dhw34yvyh0u6u
-         qEbrE6+qN40u0WDcfwsWEk26o50aD4BioUHqSaOaj+Aj7nKGSWgBi/xYTszNMgBq0sv1
-         aJDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JO1AgozF/Zya9WC0NgRmz45Iqf3MdEInH4N2K136jyM=;
-        b=6ltAas77KMrbCybVsv43Futk88xrqVkgMvjROrjnJpgN2kTSt00RAhN14ndOYAPK3T
-         XTx5DgxFZr3nvYgYSlL7Z18YTR18cECe2JjtQRG3Tm5dTOGCgArpKQzWF9wQCzjBWDDU
-         5DEBEEgcerl/4CuVaQQLEN5a4PDB0oYVepnsyEg0xBou/GXZkI+mH/z2xpTs3Dd7b+Ka
-         C432BnSUoMT/rnOPQxjJ9+2ZpsTMk29N78pW05ddESKcgHPSLLnVJOL6R7fldwnXApWC
-         rzZV4h42INmph64K+FeWEpChe0hvpEGHuyhvq4azBYgAaoq+VWDQRZe778UTWDwLt3jF
-         XDZg==
-X-Gm-Message-State: AO0yUKVeEt+cREjZ80Ct2Ul7ADV4i/Z3HLGQRUEDVBm0Eychcwm2zOzy
-        FHV30ZRJESACGugY1itHMf8tnbORNJm8Mg0aJlZvcg==
-X-Google-Smtp-Source: AK7set+IPEknsk8g/iIkwkkIan5htfnLkZaV7RhcstO9zjt8469/p979SjeKGgF3Upg96TNj1/y34dRtZXAYJDOE77o=
-X-Received: by 2002:a50:d7c1:0:b0:4ab:2517:ca8 with SMTP id
- m1-20020a50d7c1000000b004ab25170ca8mr791593edj.7.1676020227744; Fri, 10 Feb
- 2023 01:10:27 -0800 (PST)
+        with ESMTP id S231312AbjBJJMg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 04:12:36 -0500
+Received: from mr85p00im-ztdg06021101.me.com (mr85p00im-ztdg06021101.me.com [17.58.23.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930C43771A
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1676020353; bh=ILKYIIRd6kMS4UnYulq9JOaUkpq0+0KEk+MTEwNILxs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Mi7CnmPz4rSN/7Vqyzsw/sfB06lbDNCPNrRa5O0R1zgwLa3xqCQivZUjBUmM1p8t8
+         +Y2pRd/s0KoSW+udC8jAT0gXAbvHDZ66rKN6yiCU823KaWgy1gJlCRZ9alyEjJVJG8
+         KMudh7LgiwTHtENBUeKjmnS19dSvx5r3oEeEWynv/M6i3Uy7SycvKttiy/Y5CTZDbz
+         svZSYbB0eE86gWv3tW0MFC7RLo+P7DfdxJ1fmUjVZEdryStOANihbuslwIKf3XZifm
+         zgzu5jkIMSVzNSuVpjTa3nEeyuwuN4EMs7++yKvj/HeCuf4p9cCqn9dKiapx2DfNRm
+         X9TEgLlX6hBWw==
+Received: from imac101 (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06021101.me.com (Postfix) with ESMTPSA id B454D80B94;
+        Fri, 10 Feb 2023 09:12:28 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 10:12:25 +0100
+From:   Alain Volmat <avolmat@me.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 00/11] ARM: removal of STiH415/STiH416 remainings bits
+Message-ID: <Y+YKeVoq91/mtlo2@imac101>
+Mail-Followup-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230209091659.1409-1-avolmat@me.com>
+ <20230210090420.GB175687@linaro.org>
 MIME-Version: 1.0
-References: <20230209105628.50294-1-bchihi@baylibre.com> <20230209105628.50294-3-bchihi@baylibre.com>
- <167596964747.647630.15058465615417584783.robh@kernel.org>
-In-Reply-To: <167596964747.647630.15058465615417584783.robh@kernel.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 10 Feb 2023 10:09:52 +0100
-Message-ID: <CAGuA+oqjQPQoJOzXdNxO+831noyGmiLcvzG1sGv6SFkr92XFCg@mail.gmail.com>
-Subject: Re: [PATCH v14 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal controllers
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, khilman@baylibre.com,
-        rdunlap@infradead.org, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, p.zabel@pengutronix.de,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        linux-pm@vger.kernel.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, krzysztof.kozlowski+dt@linaro.org,
-        ye.xingchen@zte.com.cn, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230210090420.GB175687@linaro.org>
+X-Proofpoint-ORIG-GUID: JHGVi_UVrX6scGCC87yDBtTbmYZETUZI
+X-Proofpoint-GUID: JHGVi_UVrX6scGCC87yDBtTbmYZETUZI
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=716 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2302100080
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
+On Fri, Feb 10, 2023 at 10:04:20AM +0100, Daniel Lezcano wrote:
+> On Thu, Feb 09, 2023 at 10:16:48AM +0100, Alain Volmat wrote:
+> > Most of code in order to support STiH415 and STiH416 have already
+> > been removed from the kernel in 2016, however few bits are still
+> > remainings.
+> > This serie removes the last pieces of support for STiH415, STiH416
+> > and STiD127.
+> 
+> How would like to have the patches applied ?
+> 
+> Ack from the different maintainers or each maintainer apply the relevant patches ?
 
-On Thu, Feb 9, 2023 at 8:07 PM Rob Herring <robh@kernel.org> wrote:
->
->
-> On Thu, 09 Feb 2023 11:56:24 +0100, bchihi@baylibre.com wrote:
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > Add LVTS thermal controllers dt-binding definition for mt8192 and mt8195.
-> >
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >  .../thermal/mediatek,lvts-thermal.yaml        | 142 ++++++++++++++++++
-> >  .../thermal/mediatek,lvts-thermal.h           |  19 +++
-> >  2 files changed, 161 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> >  create mode 100644 include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> >
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Having seen situations like that for some other series I was guessing
+that each maintainer would apply the relevant patches on his side.
+Those two platforms being no more used, there is no specific patch
+ordering to keep.
 
-Thank you for the review!
+I've actually been wondering at the beginning how should I post those
+patches.  If another way is preferrable I can post again differently
+if that helps.
 
->
+Thanks
+Alain
 
-Best Regards,
-Balsam
+> 
+> Thanks
+>   -- Daniel
+> 
+> -- 
+> 
+>  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
