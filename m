@@ -2,124 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7B66913B8
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Feb 2023 23:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEB76915B1
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 01:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjBIWtF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Feb 2023 17:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S229940AbjBJAjw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Feb 2023 19:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjBIWs6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 17:48:58 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3329439293
-        for <linux-pm@vger.kernel.org>; Thu,  9 Feb 2023 14:48:50 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id v13so3372413eda.11
-        for <linux-pm@vger.kernel.org>; Thu, 09 Feb 2023 14:48:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XyWo2zO4dvGXWFJtJgoJZZVyO6XKnm2xahOkMMOVXbI=;
-        b=EcK8gFkjOvcbUZ26ixzm9QOa2qF939D8fpnzfkQSvGBx/nyOzSJlCE/1THc0A/7YAE
-         HWfUmwGem6g1e1tufjh56UXbvnjITp54gsyYGHpFmzjpiNjo9LccXpisLXa+S8G9DCZY
-         KKD20EmdT68+qrjTR8HY+IuyuUKDKL2I95fNQNLoPTy/Pi9T99BVEVwlT1e6TauVmglP
-         CzWvWiOuvlmLTQlhcl4PVbGCYnsEEopmYK8ZD/TNYTHtng+zrRzK5L25HvMx+SnZJDS2
-         OhVjMe+dJ9q9QKoQ41TJ6xXqRWBPiYec9ulS2o62DJ6dbTBjBB3qn3aHHv+XLcTt8q+Y
-         UtTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XyWo2zO4dvGXWFJtJgoJZZVyO6XKnm2xahOkMMOVXbI=;
-        b=3mzQp5x0fQ7Rv7gmMCyzCkKd9SAeqlP4ORhZQr3M7tPI/5WhiV6jW/AJ8wfm1IPIrD
-         LMKXyaPHUczI3pX4eeUDXhTlOEQkXyQ+IVuxa3pKuj7mDAl2sqKzbi+sD/oqLXqROfVr
-         vWnucQSAaAIsDQPg+nb0HkjpxKSrpeP0JjtMwkIdrmu/AXS10U7KjBP9/S1Twd9ahr+/
-         H2HquCSp8cq/SrTTwGFEDxaiHPCR61i2LzAaH/Vdt/o8aBcALK/88a0TH/YqDGF5WyXy
-         DgR3g9SZk+JcdMawlQ6IyAlVhCULzdPIhpH+EdTUxjfJo888D/vOM9dPKDseKxocgVFa
-         adhQ==
-X-Gm-Message-State: AO0yUKVvk+7GMdLMEuplRAB2UcrP+/LumZFkMdgetkhKONpDB8QPKuVY
-        iXXEWrntzB3BSTNKU8Dd57mxFA==
-X-Google-Smtp-Source: AK7set9A7Ra/aegx3S43kpP81yyoupcto0SVS0hA9tCaVI+cpBVBi6mYv35KfR3JD8WMB0EnMJDiQA==
-X-Received: by 2002:a50:9eee:0:b0:49d:9ff4:d82b with SMTP id a101-20020a509eee000000b0049d9ff4d82bmr14323132edf.15.1675982928827;
-        Thu, 09 Feb 2023 14:48:48 -0800 (PST)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id k26-20020a50c09a000000b004a21304f5a0sm1379071edf.72.2023.02.09.14.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 14:48:48 -0800 (PST)
-Date:   Thu, 9 Feb 2023 23:48:47 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] thermal/drivers/rcar_gen3: Add support for R-Car V4H
-Message-ID: <Y+V4T0KuX9BTEcW6@oden.dyn.berto.se>
-References: <cover.1675958665.git.geert+renesas@glider.be>
- <852048eb5f4cc001be7a97744f4c5caea912d071.1675958665.git.geert+renesas@glider.be>
+        with ESMTP id S229674AbjBJAjv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Feb 2023 19:39:51 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325AD677A1;
+        Thu,  9 Feb 2023 16:39:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675989565; x=1707525565;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PXyJgNPvZehyPMk+XcL+100g+1+DfTr5lbVyZtp1LCE=;
+  b=OwKZ2s60vWs8F/dath/+Fqt6hQ3Tpxu7FxK2qa8lacLeBAECvKeBbL5Z
+   xqlBd3Bp5+gJrsCn4pPxDuHO9qPgHeR9vVXF12wZv+hiCZdJzguai3lVk
+   Zp17n6VvpKxIQ+ykXJ/kQr9xiZPUChEvDzEcbkdhyzF46Z+2DjeAUNUwQ
+   sfQOznoa3+T+APRiiGxZ+nWM11W9KevAXTLVz6KVlUPMgTStT1u558NWL
+   p79QSKJk0WPsHGblkdgYkxRq2Xpxxqb9HvdaYzgvKuTVhZsWAPFsEVGz3
+   q+HoSoMImOEXKfgZ+JEzdXoavM+OiXPYhsr5oqt6xIPJDjTNt3ffkCyMf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310656960"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="310656960"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 16:37:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="756606662"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="756606662"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Feb 2023 16:37:13 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQHPc-0005PK-1M;
+        Fri, 10 Feb 2023 00:37:12 +0000
+Date:   Fri, 10 Feb 2023 08:36:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 209/212] drivers/cpuidle/driver.c:187:
+ undefined reference to `__divdi3'
+Message-ID: <202302100849.6RI86Ten-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <852048eb5f4cc001be7a97744f4c5caea912d071.1675958665.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Geert,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   ccf0090d0435abab1a8c84e595802e88ad90b357
+commit: de375f9c854a136822d5409a92d4efb57ac65e32 [209/212] cpuidle: driver: Update microsecond values of state parameters as needed
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20230210/202302100849.6RI86Ten-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=de375f9c854a136822d5409a92d4efb57ac65e32
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout de375f9c854a136822d5409a92d4efb57ac65e32
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Thanks for your work.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302100849.6RI86Ten-lkp@intel.com/
 
-On 2023-02-09 17:11:54 +0100, Geert Uytterhoeven wrote:
-> Add support for the Thermal Sensor/Chip Internal Voltage Monitor/Core
-> Voltage Monitor (THS/CIVM/CVM) on the Renesas R-Car V4H (R8A779G0) SoC.
-> 
-> According to the R-Car V4H Hardware User's Manual Rev. 0.70, the
-> (preliminary) conversion formula for the thermal sensor is the same as
-> for most other R-Car Gen3 and Gen4 SoCs, while the (preliminary)
-> conversion formula for the chip internal voltage monitor differs.
-> As the driver only uses the former, no further changes are needed.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+   ld: drivers/cpuidle/driver.o: in function `__cpuidle_driver_init':
+>> drivers/cpuidle/driver.c:187: undefined reference to `__divdi3'
+>> ld: drivers/cpuidle/driver.c:194: undefined reference to `__divdi3'
 
-> ---
->  drivers/thermal/rcar_gen3_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 4ef927437842af74..04245393e78d02c5 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -403,6 +403,10 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
->  		.compatible = "renesas,r8a779f0-thermal",
->  		.data = &rcar_gen3_ths_tj_1,
->  	},
-> +	{
-> +		.compatible = "renesas,r8a779g0-thermal",
-> +		.data = &rcar_gen3_ths_tj_1,
-> +	},
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, rcar_gen3_thermal_dt_ids);
-> -- 
-> 2.34.1
-> 
+
+vim +187 drivers/cpuidle/driver.c
+
+   149	
+   150	/**
+   151	 * __cpuidle_driver_init - initialize the driver's internal data
+   152	 * @drv: a valid pointer to a struct cpuidle_driver
+   153	 */
+   154	static void __cpuidle_driver_init(struct cpuidle_driver *drv)
+   155	{
+   156		int i;
+   157	
+   158		/*
+   159		 * Use all possible CPUs as the default, because if the kernel boots
+   160		 * with some CPUs offline and then we online one of them, the CPU
+   161		 * notifier has to know which driver to assign.
+   162		 */
+   163		if (!drv->cpumask)
+   164			drv->cpumask = (struct cpumask *)cpu_possible_mask;
+   165	
+   166		for (i = 0; i < drv->state_count; i++) {
+   167			struct cpuidle_state *s = &drv->states[i];
+   168	
+   169			/*
+   170			 * Look for the timer stop flag in the different states and if
+   171			 * it is found, indicate that the broadcast timer has to be set
+   172			 * up.
+   173			 */
+   174			if (s->flags & CPUIDLE_FLAG_TIMER_STOP)
+   175				drv->bctimer = 1;
+   176	
+   177			/*
+   178			 * The core will use the target residency and exit latency
+   179			 * values in nanoseconds, but allow drivers to provide them in
+   180			 * microseconds too.
+   181			 */
+   182			if (s->target_residency > 0)
+   183				s->target_residency_ns = s->target_residency * NSEC_PER_USEC;
+   184			else if (s->target_residency_ns < 0)
+   185				s->target_residency_ns = 0;
+   186			else
+ > 187				s->target_residency = s->target_residency_ns / NSEC_PER_USEC;
+   188	
+   189			if (s->exit_latency > 0)
+   190				s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
+   191			else if (s->exit_latency_ns < 0)
+   192				s->exit_latency_ns =  0;
+   193			else
+ > 194				s->exit_latency = s->exit_latency_ns / NSEC_PER_USEC;
+   195		}
+   196	}
+   197	
 
 -- 
-Kind Regards,
-Niklas Söderlund
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
