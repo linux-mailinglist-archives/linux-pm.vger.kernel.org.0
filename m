@@ -2,46 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486F5692518
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 19:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7819E692563
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 19:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbjBJSNZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Feb 2023 13:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S233082AbjBJSeK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Feb 2023 13:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjBJSNY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 13:13:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180433A0AC;
-        Fri, 10 Feb 2023 10:13:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E2D61E7A;
-        Fri, 10 Feb 2023 18:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E21C433EF;
-        Fri, 10 Feb 2023 18:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676052803;
-        bh=6FLDH++aUj095WH9otN0bkobiJlSDQziX4LlJjA4wS4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OBeovfgBitTlBAxZHZpmc5RTctjYTaEPJRtQRt9AvYMQm79B2inSL2GCVqGCNRThH
-         uv6ZV5NIrYKBg1+2+8prF8TmMOpdfezRGuXAkz8fEki6YKNfYEgQsrVy4DcI/tlxqp
-         BjPhcwp6vQgLawKj8Ly+E/Ov7p2zGAok4V94flhRydi9R2Egj6Sf6g/jAVQJW0ZVo5
-         cJoC2H2enzXbF7VRM7BZfUXTIjCQRtMOzFdO1qG+m5YKLLg6dWRjl1YKw05SSM+Ew4
-         JgenQnvyNc+qu3vklc1eq/zqASHpAUXRSN8u5zXM1BZ+wZosIxSXf1FRTcsMOiXuz9
-         xuTk5ILD8DMEg==
-Date:   Fri, 10 Feb 2023 10:13:20 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alain Volmat <avolmat@me.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S233061AbjBJSeJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 13:34:09 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDFD6CC5E
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 10:34:06 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id a2so5929878wrd.6
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 10:34:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=itUHF+gJAOR68gNrNXTOhv2YTwp1LN4BGzGEfAiI2PA=;
+        b=OaHJvANNeMAGzvf2uYI2xzLCi6qVzIoIMRJNUMUHlzvdQB4946tyfjwuc64G0AuREt
+         YuNu/sR7FoiaVytT1wVaU5lS9eCpEu+2qZzqFTXe8g0PKYQ8cn7vuhmv1w2DLp6+rjPA
+         VwOA/5nkkyxSNWkLJwLwBdi4zTMzi2yWNOmuPS3e0bp1oXuv0KGwifRBRdkJDANIcHba
+         R3SJAVIxCBohLDCUmxIZjPJ21/NShmd2frAAkS2VIIGuJGHBcjEwfjIq9x3inxKTiZ9g
+         VG+SmLQxhW1N+uckd3zByXCY+rK10AxGZ+y40dNt15bf8dXcveDzkzi962Xg7HQX+XtT
+         EisA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=itUHF+gJAOR68gNrNXTOhv2YTwp1LN4BGzGEfAiI2PA=;
+        b=TkDJoCtNM4AC7CIFlqOFRu///uqWk5pkBUkU1MWBFhkqFtqNACMdXVPvjm2qG9tlSB
+         nMVJoUt31RL5nFkk7YX20zzWhakl84yfL8drJ5qBoKB7WPgi6mvTmDVEAlcIUCmZ+X/Z
+         WqDPHnbZVQV2vt0SXeEKLORyxkmURqdkxpQnzOhKIsd7zqOykgLIt6lJtFxrszz6GOH0
+         Nc+tljCUSJnXVdtNrSJyMBlyfpUINrNUo7uoaSwP9GMrKFhdTcLlDNS1W4Yf4/q+Qmsq
+         aVjqS1hGf+lUHGG+TM7f1qpGRiYxYf/6HCz8cLxcHTV+o3SYIRpBUmLqVa1a5svczY2s
+         YYCQ==
+X-Gm-Message-State: AO0yUKVI0E/sSfWuSVu6hf41JyZTk0tZ2F8ywvmWAw8QqMqdh4cj6lWT
+        SLmvPafI/tJhqhH+WJnSfjrDkQ==
+X-Google-Smtp-Source: AK7set+sfAI5v+pm+Ta+c+I585wZnYR7ZKSMkHtr+epDPjtPngGn8hHOvj4Pt1bfuGTly/qfkXFNSg==
+X-Received: by 2002:adf:f80c:0:b0:2c3:cdcd:f0b3 with SMTP id s12-20020adff80c000000b002c3cdcdf0b3mr13276955wrp.9.1676054045329;
+        Fri, 10 Feb 2023 10:34:05 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id i12-20020a5d438c000000b002c512f56859sm4135084wrq.70.2023.02.10.10.34.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 10:34:04 -0800 (PST)
+Message-ID: <8f557084-e185-6bf5-ab2b-4e1ebf4fc516@linaro.org>
+Date:   Fri, 10 Feb 2023 19:34:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 06/11] thermal/drivers/st: remove syscfg based driver
+Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, Jonathan Corbet <corbet@lwn.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Russell King <linux@armlinux.org.uk>,
         Patrice Chotard <patrice.chotard@foss.st.com>,
@@ -54,39 +76,44 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: Re: [PATCH 00/11] ARM: removal of STiH415/STiH416 remainings bits
-Message-ID: <20230210101320.331c1d95@kernel.org>
-In-Reply-To: <Y+YKeVoq91/mtlo2@imac101>
 References: <20230209091659.1409-1-avolmat@me.com>
-        <20230210090420.GB175687@linaro.org>
-        <Y+YKeVoq91/mtlo2@imac101>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20230209091659.1409-7-avolmat@me.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230209091659.1409-7-avolmat@me.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 10 Feb 2023 10:12:25 +0100 Alain Volmat wrote:
-> Having seen situations like that for some other series I was guessing
-> that each maintainer would apply the relevant patches on his side.
-> Those two platforms being no more used, there is no specific patch
-> ordering to keep.
+On 09/02/2023 10:16, Alain Volmat wrote:
+> The syscfg based thermal driver is only supporting STiH415
+> STiH416 and STiD127 platforms which are all no more supported.
+> We can thus safely remove this driver since the remaining STi
+> platform STiH407/STiH410 and STiH418 are all using the memmap
+> based thermal driver.
 > 
-> I've actually been wondering at the beginning how should I post those
-> patches.  If another way is preferrable I can post again differently
-> if that helps.
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
 
-You'd have most luck getting the changes accepted for 6.3 if you split
-this up and resend to individual maintainers.
+Applied, thanks
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
