@@ -2,208 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0376920C6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 15:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D136920D1
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 15:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjBJOZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Feb 2023 09:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S232266AbjBJO2z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Feb 2023 09:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjBJOZl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 09:25:41 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD8772DCE;
-        Fri, 10 Feb 2023 06:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676039140; x=1707575140;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H1SqrmLgHpUvGFFELx6jqQvyWcxoiuwisvwOptrdSDQ=;
-  b=VbpJJ/V4aX/4qTKnJAV64XzJtovLhZRJwKwRMygnS6ERnXEB39G0Gbng
-   YFb+yQTJ0/iQwIefSwZ2BXHllOaghLEcIfPRmNwhFpwQhkJ4vIkGgSOHa
-   /4kCrZsoYvezPpcGUBRwGSnermXWntfZRLYV18ISKEC1bWZg8EtZkz6kr
-   R8yY+0n5nuPhr/BRVwL39mnufLG09Ph3RsbxxfQxWj10V1ZcXy0/6hKrp
-   IGsLLLJLepTRywiyMV41NMgF/vmmBd3rwJ937hEdaRuRmvps+EFBAYYPN
-   MnDz96if1hx55tQ2xTtX/pJ2+rnwsh0IoCxccddY91DPHK60EA8AsqA7X
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="332568596"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="332568596"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 06:25:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="617897494"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="617897494"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2023 06:25:37 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQULI-0005q5-2V;
-        Fri, 10 Feb 2023 14:25:36 +0000
-Date:   Fri, 10 Feb 2023 22:25:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
- ccf0090d0435abab1a8c84e595802e88ad90b357
-Message-ID: <63e653cd.T/LKpgkWdE5RDfio%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232272AbjBJO2z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 09:28:55 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A145B7358A
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 06:28:53 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso4183674wms.4
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 06:28:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=guuw8fNr8ek6MKlKjsKHEfRl2wvHYLY1FYFS39aDXmo=;
+        b=wwlzhw00GEnOlY5ru98N3sJZjli9DmVZXQsWhbquo+ZIWztUTytBzwgFgSPccuBvPr
+         7Aj2i4W+zkBnv3C3BRi3W8tmxOqlqvAjLqDrUG7VOY5a6a15fL0Qk6ul0Z8DzvERRosv
+         6UUMKhyjKibE8wB+GV5JczReFz4lfRIdXyfS+REHPv1Pq8cBA47MXsR50z7WAQ1eqTj6
+         lnT6vKSaLL18Wa5LDLGI7eqvS9+oTbwDLl2lAcngvvtQqCTYxHwgKObXI7KTJazFjzyk
+         0lBZf6LuKT47Dg5+X4oYwEBtscnV23aIIAGOJrI4SyFrhjgAdxh3eUuJJZrmOrqeNO9g
+         qM0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=guuw8fNr8ek6MKlKjsKHEfRl2wvHYLY1FYFS39aDXmo=;
+        b=b4SnqoAXox9sbWVbIotFT8cM0emWoM3ma6e1gWfgbSBMrKuMo0SBiDQ4niDGxRDtwL
+         u2hzl3/Dzq9CTnrnvbb1eD4ueEwfNkPDgvHBvinODhS7SD8SHs5Fk8qKHw+94WEitMnj
+         y2qsuuPt1+we550razFZUiGaMp4xQDqIoHqo5x3Vd+4mpb+UY6WcwaQZ3owliFYIV6AB
+         U4IgttKKm5XSXEvWb66DOZoXVotIaDuUilgrsg7UXnoPBgnsO9OW2mVURRRb9LiLcqQ2
+         4yN0wcVpokswLiYsF6ruPTj5E6gXl7hpkDclKWnRWqWrXuEK9zre3/Sze1+m/11wjSdd
+         6B5w==
+X-Gm-Message-State: AO0yUKWTCW9EAiMsGLXOGtaYxS7jM7m4MjY+XclA5+Ed/nV8h1RoL4ON
+        l1dqcmodZw1c5A0ObYJquTGF/g==
+X-Google-Smtp-Source: AK7set9psfB2CgFVm0ZCdVqPYR3dikKyySJ+OFxHi2O3dgsTxlOvcyYTV7Wv31CppCH/lcwneloMVw==
+X-Received: by 2002:a05:600c:4d92:b0:3df:dea7:8e3 with SMTP id v18-20020a05600c4d9200b003dfdea708e3mr14313259wmp.21.1676039332126;
+        Fri, 10 Feb 2023 06:28:52 -0800 (PST)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id r14-20020a05600c35ce00b003dc4ecfc4d7sm5694466wmq.29.2023.02.10.06.28.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 06:28:51 -0800 (PST)
+Message-ID: <f24e7016-0131-7c42-6b59-c45fcc7873cd@linaro.org>
+Date:   Fri, 10 Feb 2023 15:28:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/1] thermal/drivers/hisi: Drop second sensor hi3660
+Content-Language: en-US
+To:     Yongqin Liu <yongqin.liu@linaro.org>, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, edubezval@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     keescook@chromium.org, sumit.semwal@linaro.org, jstultz@google.com
+References: <20230210141507.71014-1-yongqin.liu@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230210141507.71014-1-yongqin.liu@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ccf0090d0435abab1a8c84e595802e88ad90b357  Merge branch 'acpi-cppc' into bleeding-edge
+On 10/02/2023 15:15, Yongqin Liu wrote:
+> The commit 74c8e6bffbe1 ("driver core: Add __alloc_size hint to devm
+> allocators") exposes a panic "BRK handler: Fatal exception" on the
+> hi3660_thermal_probe funciton.
+> This is because the function allocates memory for only one
+> sensors array entry, but tries to fill up a second one.
+> 
+> Fix this by removing the unneeded second access.
+> 
+> Fixes: 7d3a2a2bbadb ("thermal/drivers/hisi: Fix number of sensors on hi3660")
+> Signed-off-by: Yongqin Liu <yongqin.liu@linaro.org>
+> Link: https://lore.kernel.org/linux-mm/20221101223321.1326815-5-keescook@chromium.org/
+> ---
 
-Error/Warning reports:
+Applied, thanks
 
-https://lore.kernel.org/oe-kbuild-all/202302100849.6RI86Ten-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-arm-linux-gnueabi-ld: driver.c:(.text+0x214): undefined reference to `__aeabi_ldivmod'
-arm-linux-gnueabi-ld: driver.c:(.text+0x370): undefined reference to `__aeabi_ldivmod'
-driver.c:(.text+0x11c): undefined reference to `__aeabi_ldivmod'
-driver.c:(.text+0x23a): undefined reference to `__divdi3'
-driver.c:(.text+0x240): undefined reference to `__divdi3'
-driver.c:(.text+0x281): undefined reference to `__divdi3'
-driver.c:(.text+0x2e0): undefined reference to `__aeabi_ldivmod'
-drivers/cpuidle/driver.c:187: undefined reference to `__divdi3'
-ld.lld: error: undefined symbol: __udivdi3
-ld: driver.c:(.text+0x266): undefined reference to `__divdi3'
-ld: driver.c:(.text+0x2ac): undefined reference to `__divdi3'
-ld: drivers/cpuidle/driver.c:194: undefined reference to `__divdi3'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm-allmodconfig
-|   |-- arm-linux-gnueabi-ld:driver.c:(.text):undefined-reference-to-__aeabi_ldivmod
-|   `-- driver.c:(.text):undefined-reference-to-__aeabi_ldivmod
-|-- arm-defconfig
-|   |-- arm-linux-gnueabi-ld:driver.c:(.text):undefined-reference-to-__aeabi_ldivmod
-|   `-- driver.c:(.text):undefined-reference-to-__aeabi_ldivmod
-|-- i386-allyesconfig
-|   |-- driver.c:(.text):undefined-reference-to-__divdi3
-|   `-- ld:driver.c:(.text):undefined-reference-to-__divdi3
-|-- i386-debian-10.3
-|   |-- drivers-cpuidle-driver.c:undefined-reference-to-__divdi3
-|   `-- ld:drivers-cpuidle-driver.c:undefined-reference-to-__divdi3
-|-- i386-defconfig
-|   |-- driver.c:(.text):undefined-reference-to-__divdi3
-|   `-- ld:driver.c:(.text):undefined-reference-to-__divdi3
-|-- i386-randconfig-a001
-|   |-- drivers-cpuidle-driver.c:undefined-reference-to-__divdi3
-|   `-- ld:drivers-cpuidle-driver.c:undefined-reference-to-__divdi3
-|-- i386-randconfig-a014
-|   |-- drivers-cpuidle-driver.c:undefined-reference-to-__divdi3
-|   `-- ld:drivers-cpuidle-driver.c:undefined-reference-to-__divdi3
-`-- riscv-rv32_defconfig
-    `-- driver.c:(.text):undefined-reference-to-__divdi3
-clang_recent_errors
-`-- i386-randconfig-a004
-    `-- ld.lld:error:undefined-symbol:__udivdi3
-
-elapsed time: 1069m
-
-configs tested: 79
-configs skipped: 3
-
-gcc tested configs:
-powerpc                           allnoconfig
-arc                                 defconfig
-um                             i386_defconfig
-alpha                               defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-arc                  randconfig-r043-20230209
-arm                  randconfig-r046-20230209
-x86_64                           rhel-8.3-bpf
-ia64                             allmodconfig
-s390                             allyesconfig
-sh                               allmodconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-m68k                             allyesconfig
-i386                          randconfig-a001
-m68k                             allmodconfig
-i386                          randconfig-a003
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-arc                              allyesconfig
-mips                             allyesconfig
-alpha                             allnoconfig
-i386                          randconfig-a014
-i386                              allnoconfig
-arm                               allnoconfig
-arc                               allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a012
-alpha                            allyesconfig
-i386                          randconfig-a016
-x86_64                           allyesconfig
-i386                          randconfig-a005
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-arm                                 defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-arm                              allyesconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allmodconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-csky                                defconfig
-sparc                               defconfig
-x86_64                                  kexec
-i386                              debian-10.3
-m68k                                defconfig
-ia64                                defconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-loongarch                        allmodconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                               defconfig
-riscv                            allmodconfig
-mips                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20230209
-hexagon              randconfig-r045-20230209
-s390                 randconfig-r044-20230209
-riscv                randconfig-r042-20230209
-i386                          randconfig-a013
-i386                          randconfig-a002
-i386                          randconfig-a011
-i386                          randconfig-a004
-i386                          randconfig-a015
-i386                          randconfig-a006
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
