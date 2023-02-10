@@ -2,95 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7819E692563
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 19:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF36692933
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 22:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjBJSeK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Feb 2023 13:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S233698AbjBJVZs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Feb 2023 16:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbjBJSeJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 13:34:09 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDFD6CC5E
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 10:34:06 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id a2so5929878wrd.6
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 10:34:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=itUHF+gJAOR68gNrNXTOhv2YTwp1LN4BGzGEfAiI2PA=;
-        b=OaHJvANNeMAGzvf2uYI2xzLCi6qVzIoIMRJNUMUHlzvdQB4946tyfjwuc64G0AuREt
-         YuNu/sR7FoiaVytT1wVaU5lS9eCpEu+2qZzqFTXe8g0PKYQ8cn7vuhmv1w2DLp6+rjPA
-         VwOA/5nkkyxSNWkLJwLwBdi4zTMzi2yWNOmuPS3e0bp1oXuv0KGwifRBRdkJDANIcHba
-         R3SJAVIxCBohLDCUmxIZjPJ21/NShmd2frAAkS2VIIGuJGHBcjEwfjIq9x3inxKTiZ9g
-         VG+SmLQxhW1N+uckd3zByXCY+rK10AxGZ+y40dNt15bf8dXcveDzkzi962Xg7HQX+XtT
-         EisA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=itUHF+gJAOR68gNrNXTOhv2YTwp1LN4BGzGEfAiI2PA=;
-        b=TkDJoCtNM4AC7CIFlqOFRu///uqWk5pkBUkU1MWBFhkqFtqNACMdXVPvjm2qG9tlSB
-         nMVJoUt31RL5nFkk7YX20zzWhakl84yfL8drJ5qBoKB7WPgi6mvTmDVEAlcIUCmZ+X/Z
-         WqDPHnbZVQV2vt0SXeEKLORyxkmURqdkxpQnzOhKIsd7zqOykgLIt6lJtFxrszz6GOH0
-         Nc+tljCUSJnXVdtNrSJyMBlyfpUINrNUo7uoaSwP9GMrKFhdTcLlDNS1W4Yf4/q+Qmsq
-         aVjqS1hGf+lUHGG+TM7f1qpGRiYxYf/6HCz8cLxcHTV+o3SYIRpBUmLqVa1a5svczY2s
-         YYCQ==
-X-Gm-Message-State: AO0yUKVI0E/sSfWuSVu6hf41JyZTk0tZ2F8ywvmWAw8QqMqdh4cj6lWT
-        SLmvPafI/tJhqhH+WJnSfjrDkQ==
-X-Google-Smtp-Source: AK7set+sfAI5v+pm+Ta+c+I585wZnYR7ZKSMkHtr+epDPjtPngGn8hHOvj4Pt1bfuGTly/qfkXFNSg==
-X-Received: by 2002:adf:f80c:0:b0:2c3:cdcd:f0b3 with SMTP id s12-20020adff80c000000b002c3cdcdf0b3mr13276955wrp.9.1676054045329;
-        Fri, 10 Feb 2023 10:34:05 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id i12-20020a5d438c000000b002c512f56859sm4135084wrq.70.2023.02.10.10.34.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 10:34:04 -0800 (PST)
-Message-ID: <8f557084-e185-6bf5-ab2b-4e1ebf4fc516@linaro.org>
-Date:   Fri, 10 Feb 2023 19:34:02 +0100
+        with ESMTP id S233416AbjBJVZr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 16:25:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6048E75368
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 13:25:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQatm-00051h-EQ; Fri, 10 Feb 2023 22:25:38 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQatk-0044kf-9R; Fri, 10 Feb 2023 22:25:37 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQatk-002Wu8-NF; Fri, 10 Feb 2023 22:25:36 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] power: supply: max77650: Make max77650_charger_disable() return void
+Date:   Fri, 10 Feb 2023 22:25:28 +0100
+Message-Id: <20230210212528.179627-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 06/11] thermal/drivers/st: remove syscfg based driver
-Content-Language: en-US
-To:     Alain Volmat <avolmat@me.com>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230209091659.1409-1-avolmat@me.com>
- <20230209091659.1409-7-avolmat@me.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230209091659.1409-7-avolmat@me.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1855; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9HU0mBVgWFq+rDTBjOFEA+YWiBjHNDyR6odYSBx4LSg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj5rZE9Ao5hJmCZpIKQalsouTWFAF1UY8SPQLoigyk pg3Hp7SJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+a2RAAKCRDB/BR4rcrsCbQnB/ 9QH4egcBSji0n5A9yEYjpHSQlKKTFbMmmMsRTHKAvKLqTvanprOUoM+SxnSNnUvlrOcGQbDhzmkY92 vDG+/HGX1WRyqYwhh5UngKMHvkNlUchngg9S8CaMcuHNmfn99fpQUHIHfCnJX2/Dr0+RseTqkh+K8Z pO87vRACeQNc2rrBHyXrIEwnUWMTTX63BwmY+a9FXzwM8Qn+fgMDrVRxrappZY3H6J2soASxz/Rmk3 aOC+/rmw2DYsqUBgDdOj7A1qtdhSljwuKrpqHhMrfdSYziw203pizLWW10ddYSezf4RUPYPLlclGnm 6iaXed1veYv4O2HDalN/mqYHh6KHX8
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,22 +54,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/02/2023 10:16, Alain Volmat wrote:
-> The syscfg based thermal driver is only supporting STiH415
-> STiH416 and STiD127 platforms which are all no more supported.
-> We can thus safely remove this driver since the remaining STi
-> platform STiH407/STiH410 and STiH418 are all using the memmap
-> based thermal driver.
-> 
-> Signed-off-by: Alain Volmat <avolmat@me.com>
-> ---
+The return value of max77650_charger_disable() is ignored by all but one
+caller. That one caller propagates the error code in the platform driver's
+remove function. The only effect of that is that the driver core emits
+a generic error message (but still removes the device). As
+max77650_charger_disable() already emits an error message, this can better
+be changed to return zero.
 
-Applied, thanks
+This is a preparation for making struct platform_driver::remove return
+void, too.
 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/power/supply/max77650-charger.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/power/supply/max77650-charger.c b/drivers/power/supply/max77650-charger.c
+index d913428bedc0..e8c25da40ab2 100644
+--- a/drivers/power/supply/max77650-charger.c
++++ b/drivers/power/supply/max77650-charger.c
+@@ -141,7 +141,7 @@ static int max77650_charger_enable(struct max77650_charger_data *chg)
+ 	return rv;
+ }
+ 
+-static int max77650_charger_disable(struct max77650_charger_data *chg)
++static void max77650_charger_disable(struct max77650_charger_data *chg)
+ {
+ 	int rv;
+ 
+@@ -151,8 +151,6 @@ static int max77650_charger_disable(struct max77650_charger_data *chg)
+ 				MAX77650_CHARGER_DISABLED);
+ 	if (rv)
+ 		dev_err(chg->dev, "unable to disable the charger: %d\n", rv);
+-
+-	return rv;
+ }
+ 
+ static irqreturn_t max77650_charger_check_status(int irq, void *data)
+@@ -351,7 +349,9 @@ static int max77650_charger_remove(struct platform_device *pdev)
+ {
+ 	struct max77650_charger_data *chg = platform_get_drvdata(pdev);
+ 
+-	return max77650_charger_disable(chg);
++	max77650_charger_disable(chg);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id max77650_charger_of_match[] = {
+
+base-commit: 4f72a263e162938de26866b862ed6015f5725946
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.39.0
 
