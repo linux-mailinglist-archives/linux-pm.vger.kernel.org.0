@@ -2,140 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4EA691B04
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 10:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA912691BAA
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Feb 2023 10:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjBJJNf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Feb 2023 04:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S231533AbjBJJlH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Feb 2023 04:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjBJJNc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 04:13:32 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834165BA5F
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:13:24 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id ml19so14205984ejb.0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:13:24 -0800 (PST)
+        with ESMTP id S231405AbjBJJlF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Feb 2023 04:41:05 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24B95B75B
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:41:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n13so3349804wmr.4
+        for <linux-pm@vger.kernel.org>; Fri, 10 Feb 2023 01:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8fZFf2yI4NiZ1ohXSbStbdFw0GfjyGPBHrzhVz49z0Y=;
-        b=b2tb5/OmuOTxoKVQ1J47Qg4rdMcs72fXWi2DfegMVNDSgLn/zmioHttGI9DFW+/qzO
-         96+2ePEG/zrjdP3GQl7vtsyP9kRPGLutO27ermYdpR0e4tHx7pko4FrB0tILW41i8pj+
-         lJC2lLEgiqa39+x8zVHZEfRw6ZyQwxKpS73UR37olSz5OGLmHnSbLV3yAGCIkezCx+bZ
-         3YKLECmvyv1A336QZ3mUaN3cQ2YSd2yz6iSe2D+ptr82EpDptxzhcW8pJ+sLw5hn2CGJ
-         yl7czinS3HoNadZ0i7ykVJoirTqSh+11oUPnlCzAIxf1R22L/6/bBQ//MSXFOy7yRTX/
-         5fvA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FXtJIM3du57xUfV949O/wulNn8qW+AxKoWuOnlA8Zs8=;
+        b=Q4I+nSXtzNQtYSSBlK1tnkNWOBobkj//fQnII73nliusIFWbS4CyMXwv790TWVzaIR
+         XeJFKMr09KxD6VEIwh0GADzS0KBeXwSd/Z2PuYcBx5wrwvwYKnpwCDcrhxRlRw1DIemu
+         MShr1vbHI1OaKEdj393Dhbfx1croPFoH/IAHV4O1JI2sVfq1pnRj8CyYMXARz/VHSfkB
+         +G0O6Aj1djeAFoK6kGfSCNq92z0a1Be0RoRQsmFaFkAFFZi/8jacKoA+8TQepXSM+Kfj
+         3xzyBztnswh5ZMW2uGJwfNW1lkjNA2TL5EfxLYmohtuFUIh9ADwLNXuqvunAKu5Ksdr8
+         LJyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8fZFf2yI4NiZ1ohXSbStbdFw0GfjyGPBHrzhVz49z0Y=;
-        b=nfrblzAJQoUIuHBYdZBAYRBELcibbJ+vossUyxDV8Zi5DNfEPaf4zgicejBXfluoE5
-         HhcrEnTek6GwJWltJXBie4K+zbF/ElXWDrAM8rLVvAUf+Bc7+Z+3BRCqHanv8tNmMhai
-         qR6ybbT5wdiZi5vzc8I0Fo+p9+VE7z+Wcp8QrcJp//QjeqB2ZNzFJmizy5isH3w+Iyz8
-         IPYGOMiPRBg9tBcoPq+J/fja+FAGPJNJ3MuuoDfMiMPzz8kXk09ubS2lIWpzohXhtUEb
-         ZLt9IkgPi9dT++oE6FPzEwwgothseQ5rbxNxx/FLgwL8oX7Qy7MQ77q0MiUUkx3s04uc
-         kJgA==
-X-Gm-Message-State: AO0yUKU9thEW5bAJW7Kf/N1CyhHJan5xAHZVva32545Gz33nMVRAuiaH
-        FMAMHJgxb8Gj3vnJMY4oZTmTkc+Ymr80r2dg0FjfXQ==
-X-Google-Smtp-Source: AK7set8z0VVs9Ynm8YK8/sg/s2hoilc5vUf32Iszp/v3ATNK4ku2TS/dWRb+ymTJE6AxLofb6FZhMsS0juAOG5sQLBU=
-X-Received: by 2002:a17:906:ca04:b0:7c0:f45e:22ff with SMTP id
- jt4-20020a170906ca0400b007c0f45e22ffmr3467086ejb.104.1676020403067; Fri, 10
- Feb 2023 01:13:23 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FXtJIM3du57xUfV949O/wulNn8qW+AxKoWuOnlA8Zs8=;
+        b=qKFojl4Get9l1S7oXHu7w932+yiEx8I0f2R0cglv70oXUq1aqCwVQMjf4SMbP8MnaB
+         ee9FVboN8SuhbJZARypTuGnsZOxjkt79IesFIQ9rFvu/biglYFJeVL26r/lYut1wTBz6
+         +Go8GOFmLhQ2D/XyUMI7LWEuXkv9h2K+8KGnjUGwlcQxspUi6HxFLgCkOnCM5bwC7fVI
+         mhSQ/DrJps+whwjTa+R8ee23/3REflw3tljGbU/XpbFQuG4fhxZQDhtFXzXMzOu6VbQg
+         jS2YKLQnNeUk0z3lAf9rH8aXBAgin1XzfKXtqr3jA/17g63pRWM6UtTDqU6qFl5IwDmB
+         i/mQ==
+X-Gm-Message-State: AO0yUKWS04/4Y1mndTWFrqTQxVwpcRWka0K3Nh29r5mHlCVJF8zFbQK/
+        JLATCyE+aXL2mMza/m4BdRPH7Q==
+X-Google-Smtp-Source: AK7set9g8UOPh4E6E2LgZ5q7toZT7ywT9NslTSP9dH/BzqJlUMVqwQWZGYqb6Lx8fO9DrtqztHmmEQ==
+X-Received: by 2002:a05:600c:3317:b0:3e0:111:28a9 with SMTP id q23-20020a05600c331700b003e0011128a9mr12224837wmp.22.1676022063255;
+        Fri, 10 Feb 2023 01:41:03 -0800 (PST)
+Received: from linaro.org (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
+        by smtp.gmail.com with ESMTPSA id f3-20020a056000128300b002c3e600d1a8sm3208693wrx.95.2023.02.10.01.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 01:41:02 -0800 (PST)
+Date:   Fri, 10 Feb 2023 10:40:56 +0100
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael.j.wysocki@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+Message-ID: <20230210094056.GC175687@linaro.org>
+References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-References: <20230209105628.50294-1-bchihi@baylibre.com> <b41930f9-89d9-1b12-b024-05fb12700769@linaro.org>
-In-Reply-To: <b41930f9-89d9-1b12-b024-05fb12700769@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 10 Feb 2023 10:12:47 +0100
-Message-ID: <CAGuA+oo+1tSDhVkrc-2feH9e8wMpBgAa-N1VEOuGN8_c=uo1zw@mail.gmail.com>
-Subject: Re: [PATCH v14 0/6] Add LVTS Thermal Architecture
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Rafael,
 
-On Fri, Feb 10, 2023 at 7:44 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 09/02/2023 11:56, bchihi@baylibre.com wrote:
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > The LVTS (Low Voltage Thermal Sensor) driver is capable of monitoring
-> > multiple hot points. For that, it contains 7 thermal control blocks
-> > dedicated to specific devices on the die. Each control block can handle
-> > up to 4 sensors.
-> >
-> > The thermal controller supports several interrupts. One for the cold
-> > trip point, the hot trip point, the return to the normal trip point,
-> > and a specific programmable trip point to monitor the temperature
-> > dynamically.
-> >
-> > The temperature measurement can be done in two ways, the immediate mode
-> > where the temperature read is instantaneous and the filtered mode where
-> > the controller uses, by configuration, an average of a set of values
-> > removing the minimum and the maximum.
-> >
-> > Finally, it is composed of 2 finite-state machines responsible for
-> > the state of the temperature (cold, hot, hot 2 normal, hot hot),
-> > the triggering of the interrupts, and the monitoring of the temperature=
-.
-> >
-> > As requested, the thermal driver has been reworked to reduce
-> > the complexity of the code. At this time, the 4 little CPUs and
-> > the 4 big CPUs are supported by the thermal driver.They are described
-> > in a data structure and more devices can be added later.
-> > The calibration routine has been simplified also.
-> >
-> > The series provide the following changes:
-> >   - Move the Mediatek drivers inside a dedicated folder as their number
-> >     is increasing
-> >   - Add the DT bindings for the controller
-> >   - Add the efuse node for the mt8195
-> >   - The LVTS driver
-> >   - The thermal zones description in the DT
->
-> Applied patch 1,2 and 4 for v6.3
+On Mon, Feb 06, 2023 at 04:34:29PM +0100, Daniel Lezcano wrote:
+> As the name states "thermal_core.h" is the header file for the core
+> components of the thermal framework.
+> 
+> Too many drivers are including it. Hopefully the recent cleanups
+> helped to self encapsulate the code a bit more and prevented the
+> drivers to need this header.
+> 
+> Remove this inclusion in every place where it is possible.
+> 
+> Some other drivers did a confusion with the core header and the one
+> exported in linux/thermal.h. They include the former instead of the
+> latter. The changes also fix this.
+> 
+> The tegra/soctherm driver still remains as it uses an internal
+> function which need to be replaced.
+> 
+> The Intel HFI driver uses the netlink internal framework core and
+> should be changed to prevent to deal with the internals.
+> 
+> No functional changes
 
-Thank you very much!
+Are you ok if I take this patch ?
 
->
-> Patches 5 and 6 should go through the Mediatek tree.
->
-> Thanks!
->
->    -- Daniel
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+Thanks
 
-Best regards,
-Balsam
+  -- Daniel
+
+
+-- 
+
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
