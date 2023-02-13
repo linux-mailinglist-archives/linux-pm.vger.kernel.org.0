@@ -2,51 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB0F69521C
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 21:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D961695227
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 21:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBMUnx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 15:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S229436AbjBMUtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 15:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjBMUnx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 15:43:53 -0500
+        with ESMTP id S229618AbjBMUtU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 15:49:20 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BFC1DB8E
-        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 12:43:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0561F48B;
+        Mon, 13 Feb 2023 12:49:19 -0800 (PST)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 519826602158;
-        Mon, 13 Feb 2023 20:43:42 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 144686600358;
+        Mon, 13 Feb 2023 20:49:18 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676321022;
-        bh=vTNbl0Ib+pbs1GsWOsUQowsyN4AB6ATgUEMoTLiUBlE=;
+        s=mail; t=1676321358;
+        bh=QYKgYvZ6GSaXguqvtxOuiycRRutWeDESTgJ7qui7vIo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lG5MsCqbUgFBENvY9guO1kPKWISoRZGnWNkwl1ktmwkl3RCwB5hPgjUd/HqNncdPu
-         0AnklTAj/tSRz/FIkLfhXzFMQuCQ0M/cHHYG+6ILpEK11uolFJqNnlhjplrzVySh88
-         FlnA/jVRi9P1SzKbEi3OfAXmFvIQAdu5SLPjr6O3Urs7r2WzwDRrYswYPryLu2SuR3
-         dEIe5V71CUnacwvE48YnzS/DHLFZtDH2p6DZbaPqXYCPsb3YLSf6juIEDwU0RoxioR
-         0gN2HbIe0Bs+FfKbsSI73S/CKnLl/ZzwE1AF6LBBd/GF9+XXmyKoMfIf5PEcqpUIXn
-         5mhvlV5GiXSXg==
+        b=Ihl7zrRyudPiEu0PUyVKqqjUCvCwizFCRh4NJcGhmgklj+bnslWgNHcpYdh9jzlHS
+         hehgG9L6bWBOrSgYkmbQFwSsufTPQeRaY4b8wVLM5UZFib8/Ecfpp0UnYIAid9wdYK
+         q3/ISyBIXGZ7X+SIK7Lm9TfNUwlizl4IL5rcWxXdEIOW+TVbim0s9qswMFHdTwhDzF
+         LzMBRL84vHTYWRwIaj+rHQPWNn+H7FvW5knPnXkbwoh2srfnn85YjvFud/OAGoW0Fs
+         f40SB33aIbf80mb1B7B9wdyQ/0XOALC6180wNOsudIZsidFrdSPtatx9M8T7ILq2OB
+         L/6/CINjvF/sw==
 Received: by mercury (Postfix, from userid 1000)
-        id 335E71060961; Mon, 13 Feb 2023 21:43:40 +0100 (CET)
-Date:   Mon, 13 Feb 2023 21:43:40 +0100
+        id 8C1521060961; Mon, 13 Feb 2023 21:49:15 +0100 (CET)
+Date:   Mon, 13 Feb 2023 21:49:15 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-pm@vger.kernel.org, alina_yu@richtek.com,
-        cy_huang@richtek.com, u0084500@gmail.com
-Subject: Re: [PATCH -next v2] power: supply: rt9471: fix using wrong ce_gpio
- in rt9471_probe()
-Message-ID: <20230213204340.3m6kctgmoxqwdbw5@mercury.elektranox.org>
-References: <20230206122018.3601419-1-yangyingliang@huawei.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
+Message-ID: <20230213204915.an3khdiczinttp2d@mercury.elektranox.org>
+References: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lnqv5cprm2sofsjd"
+        protocol="application/pgp-signature"; boundary="62vjb7bftclszqw3"
 Content-Disposition: inline
-In-Reply-To: <20230206122018.3601419-1-yangyingliang@huawei.com>
+In-Reply-To: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -57,78 +67,84 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---lnqv5cprm2sofsjd
+--62vjb7bftclszqw3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Feb 06, 2023 at 08:20:18PM +0800, Yang Yingliang wrote:
-> Pass the correct 'ce_gpio' to IS_ERR(), and remove the ce_gpio in
-> chip data, make it all by SW control only, not to control by HW pin.
+On Fri, Feb 03, 2023 at 06:58:31PM +0100, Daniel Lezcano wrote:
+> Some drivers are declaring a thermal zone without any thermal trip
+> points.
 >=20
-> Fixes: 4a1a5f6781d8 ("power: supply: rt9471: Add Richtek RT9471 charger d=
-river")
-> Reviewed-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> On the other side, we are introducing the function
+> thermal_zone_device_register_with_trips() which provides an array of
+> generic thermal trip points. When all the drivers will be converted to
+> the generic trip points, keeping two functions will be useless.
+>=20
+> Most of the drivers are now using
+> thermal_zone_device_register_with_trips() with the generic trip
+> points. As soon as the remaining drivers are merged, the
+> thermal_zone_device_register_with_trips() will be renamed to
+> thermal_zone_device_register().
+>=20
+> Obviously this renaming can only happen if there are no more user of
+> the thermal_zone_device_register() function.
+>=20
+> This change uses thermal_zone_device_register_with_trips() with a NULL
+> parameter for the trip point array instead of
+> thermal_zone_device_register().
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
+>  drivers/power/supply/power_supply_core.c                | 2 +-
 
-Thanks, queued.
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+[...]
+
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index 7c790c41e2fe..208a849a71d9 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -1166,7 +1166,7 @@ static int psy_register_thermal(struct power_supply=
+ *psy)
+> =20
+>  	/* Register battery zone device psy reports temperature */
+>  	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
+> -		psy->tzd =3D thermal_zone_device_register(psy->desc->name,
+> +		psy->tzd =3D thermal_zone_device_register_with_trips(psy->desc->name, =
+NULL,
+>  				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
+>  		if (IS_ERR(psy->tzd))
+>  			return PTR_ERR(psy->tzd);
+
+[...]
 
 -- Sebastian
 
-> v1 -> v2:
->   Remove the ce_gpio in chip data.
-> ---
->  drivers/power/supply/rt9471.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/rt9471.c b/drivers/power/supply/rt9471.c
-> index 5d3cf375ad5c..1ea40876494b 100644
-> --- a/drivers/power/supply/rt9471.c
-> +++ b/drivers/power/supply/rt9471.c
-> @@ -141,7 +141,6 @@ enum {
-> =20
->  struct rt9471_chip {
->  	struct device *dev;
-> -	struct gpio_desc *ce_gpio;
->  	struct regmap *regmap;
->  	struct regmap_field *rm_fields[F_MAX_FIELDS];
->  	struct regmap_irq_chip_data *irq_chip_data;
-> @@ -851,7 +850,7 @@ static int rt9471_probe(struct i2c_client *i2c)
-> =20
->  	/* Default pull charge enable gpio to make 'CHG_EN' by SW control only =
-*/
->  	ce_gpio =3D devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_HIG=
-H);
-> -	if (IS_ERR(chip->ce_gpio))
-> +	if (IS_ERR(ce_gpio))
->  		return dev_err_probe(dev, PTR_ERR(ce_gpio),
->  				     "Failed to config charge enable gpio\n");
-> =20
-> --=20
-> 2.25.1
->=20
-
---lnqv5cprm2sofsjd
+--62vjb7bftclszqw3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqoPsACgkQ2O7X88g7
-+pq8nA//QnjAFAovFM3xPQ5LmwU+1OvK4WnMpy8XSezTMMCTMl0VAw/ISxSuk1KI
-+b3xtWQZ7OB4xyZ1jn6F8O4yG9VkpROum4JKtkZn5qckjq516IhfkIO7O9fpR0m/
-mtS31f0m+clNdOfy7BUzCd/MXhfQwl+pAfXSVbrJeg30Jif/QdXTZZAJGI0mTDnN
-9SJ0uOOrcNXOP3iJFy6IE0A9QxHQcbb/9MkdHvKYBB+s58y4/g+Qb0rUeesWb3gD
-fUqAUoQ85nGsXi7c+HeaKd2Jw8EKwMlHatGTwd1oM5epYD5GqC7qu6E3IqObOdJp
-0rEFvqMB20+tZj0SvP1hsABStWi9+ffsbcKDfES13X4Q9veCbcaEWulZrqHjg4uZ
-MYct8mbS6e4W3iHCgLypJ3RNpmVgLHpnQ5usDIdpYXtHM+248/5FDiuKCW5wGN8Q
-5sLEJ/B90+OHwQoryPFjy8ulE8LHqjDD5F2WZDHbGa/JyMM2sHcM18np4b60IfXD
-WeHEBrvUdUk+jJBJy7IqNr/SeEG45ai8WeZZ+XzScPsBcOgEoN6W8bjWfXCOKCcd
-38zxWADJTXOFFzFS+5pikOsjRbDmHhbVEvyam3uUdOaay1SWcm0OsInhoQDXNIzW
-r83jmpBMmfhusBPqS2SjvNgWnrvZxIA7WUSLgHhx6HBef9rOpS8=
-=0Nop
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqoksACgkQ2O7X88g7
++pqTyQ/9EPWvCJEFUJQtyxA+lb41sYuyN98Q+ACy/eXcxsqkzm7uK9tNsg23oFD2
+MP5vTzSOJ1oQHmmfEpKdso5utu7TysAdjF5b+3hr9INf3Xte+kaIpSkSbWli1Htw
+4uNcuewkAH63LA0iuHpid5RLNCTP5eOIvdOmic66mK2nKHbcu6+PmzIS0yVuh8Y1
+d9TsWrjNYLp9uYNuslAGbLh75ploXXfQNI1gSTbwTr4w/Esqq5B75caIEHOJjRuS
+1LSv3rQecPJDqpkCNRvEVJ2kImWAFoyjKbBrzE81Fb/JRjjgtXDscfuLQUWrzWHb
+Ywyps5wICAfHEn3nNMHbMUiS+nA3eIBY9QWTCREsy2QE/7NQ5qOzAOQSsfGQz85Z
+BRVMaMYQZJZym5RTOD+SfmQClnAbG/vmgysCp/qeTVuPnALZNyM1/abD8cHYWJ+c
+oXqlFv+fxbe5dqg/MBn54x2xWbbSi0UgF8vyDlHEx3nSdeQ5RjqXWlTSRjzWQHFD
+0PIBLYERDkAuPb7Tox6TU5DAUUQzldBncOOPPcKljwam8Z0jBARMG9VCpYoCUb9P
++i2L/mRCicvmn98ZJX0OKyjHsiHRklXqyV9KKedE/yJTxNDly5UlF/up+UtzDcHp
+umqHKLUNDOezlX7XnqYXb16shVlc+6scgMl+Cj5L0G68foOokEE=
+=ZFcY
 -----END PGP SIGNATURE-----
 
---lnqv5cprm2sofsjd--
+--62vjb7bftclszqw3--
