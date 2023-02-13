@@ -2,104 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7416942AD
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 11:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1866A6942CA
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 11:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjBMKTe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 05:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S230341AbjBMK0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 05:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjBMKT3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 05:19:29 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294991815B;
-        Mon, 13 Feb 2023 02:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676283556; x=1707819556;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=I9F1qR4NteqwtlKM1//KDqNo9wf1t44txFT2AWm9PnY=;
-  b=n5sBir7JxoNVkhYY5D9X/5wgiGVQ6GNXDc7U7jh5NjjDoIQHiP6qAM6q
-   sFoE9VBofBa2mx3Tv8did1uUs+Mpwrtb3s6sICyP+1p26wKGOQ1rmfh/o
-   FWEqa6y81rUTNh4yGrPDSKxsqpp2dMiabvafFikLiiubytgQbwNkSU8pS
-   rLnOPWqSfl7kWkRt6PRnmkqgNXLXbF5+IKv7occ3RsLllNChs9PYyOfo8
-   UheiDr9RudifqNfrg0WLxEvMW/h/kS2IEY6GA6VKQi3r9Qu0xtg2ZFbK/
-   fzf5hCV/XrzPSxHDctX9bhjw95D2gBWJVF1gXcn68ETzEYDWzFHDJg5wC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332996174"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="332996174"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 02:18:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="662132180"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="662132180"
-Received: from pranavk3-mobl.gar.corp.intel.com ([10.213.82.89])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 02:18:26 -0800
-Message-ID: <f6fc39d2060c964d32b6610956b66e8d3151d926.camel@linux.intel.com>
-Subject: Re: [PATCH 0/3] Documentation fixes for thermal/bleeding-edge
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        oe-kbuild-all@lists.linux.dev
-Date:   Mon, 13 Feb 2023 02:18:23 -0800
-In-Reply-To: <20230213100800.28333-1-bagasdotme@gmail.com>
-References: <20230213100800.28333-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S229630AbjBMK0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 05:26:53 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54A11BEA
+        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 02:26:50 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so10882496wmb.4
+        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 02:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u9XkQcR/ukcuNhbIYv8e/TtemQqGk36qfemF2Jz6RB0=;
+        b=brmbQKVHdRY0TzmN0JVgb5QvPm3gsUqqHKWL9I1NOg/HJQvbNpNKr305fji1pLsOxK
+         1rzNBncXnFoT4GgkPmh5Itr1CpkGnlQ3pNQFN0FAnL4waKDhNYv9lp+BbYo+7ydgpAI3
+         8OfeRvuRTluqGQW/EkXPvjXzn9KBV1lRhkMwZjQGqsyH8HRGRR774rXI0cVwoAYE42xJ
+         mgXLX3r8KVY/XS8jY0Nyb2QVcVK8BehaDxN7UM2f1vNX+zhFuTq40AyIv5JImURNA/4L
+         0Z6s3J0iawU0EdWC9FCdgQpeoymvIEE2PYppCpwV5zPmNxi64HxbtFU1Guis41fBFruR
+         ckZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u9XkQcR/ukcuNhbIYv8e/TtemQqGk36qfemF2Jz6RB0=;
+        b=DATUB9Ih8L26cMj+r5ISfHtYf71szI0a0i/2OB67Y+6niqt3YXRVy0UmFqG1ZidGRe
+         as2Q1yHwbD4OnE62tehmQxakAlJgi/8R6AYHb4/8VZ2YNbvcNGI6v7E8pucvkTbJBk6G
+         aYyqXAu/0wRdwb0Ls525jsJzRl4ge++QWjsgO2ZRBEL8l/LaHlW9sne+PXVPalbQSjo8
+         uB5C5I63OgDSrNQ9oKI/P7nP9/2weyaq4RmhtTo1iYAQ7q9A2tVLGpDvft7rvgyOUL51
+         kkH7Fcyi75Eqb9eusMtRmWdVpwQdq/gdfqIlzlaK10zUVBsVTlIMJZwKH86h52825n/p
+         PMxA==
+X-Gm-Message-State: AO0yUKVZ8isQGNfLKnRWz3buxTfhMyVX3tCNUSxwwLkJjX6EigqXNAL4
+        LE618Y6h4AMYXtHSsPaiK3Fpog==
+X-Google-Smtp-Source: AK7set8+AinicK1vj4dn9W6I9bHT/HGzlVv+F1mSLKjeAex6majHYYwbTi1CSahSak1amq4tbZ4hRA==
+X-Received: by 2002:a05:600c:13ca:b0:3dc:5937:35a2 with SMTP id e10-20020a05600c13ca00b003dc593735a2mr20543204wmg.9.1676284009266;
+        Mon, 13 Feb 2023 02:26:49 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id a1-20020adff7c1000000b002c54a2037d1sm8020782wrq.75.2023.02.13.02.26.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 02:26:48 -0800 (PST)
+Message-ID: <5480ed6a-fd9d-2d98-5f3a-ec1db920b047@linaro.org>
+Date:   Mon, 13 Feb 2023 11:26:47 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify
+ supported opp tables
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230208153913.24436-1-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230208153913.24436-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-02-13 at 17:07 +0700, Bagas Sanjaya wrote:
-> Here are documentation fixes for thermal/bleeding-edge tree. The
-> first two patches are fixes to recently reported kernel test robot
-> reports whereas the third patch is cosmetical (formatting).
->=20
-I am fine picking up this patchset over mine, as this series has  one
-additional fix.
-
-	[thermal-bleeding-edge][PATCH] thermal: intel: powerclamp: Fix
-warnings
-
-Thanks,
-Srinivas
+On 08/02/2023 16:39, Christian Marangi wrote:
+> Add additional info on what opp tables the defined devices in this schema
+> supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+> and reference them.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
 
 
-> Bagas Sanjaya (3):
-> =C2=A0 Documentation: admin-guide: Add toctree entry for thermal docs
-> =C2=A0 Documentation: powerclamp: Escape wildcard in cpumask description
-> =C2=A0 Documentation: powerclamp: Fix numbered lists formatting
->=20
-> =C2=A0Documentation/admin-guide/index.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> =C2=A0Documentation/admin-guide/thermal/index.rst=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0 8 ++++++++
-> =C2=A0.../admin-guide/thermal/intel_powerclamp.rst=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 15 +++++++++----
-> --
-> =C2=A03 files changed, 18 insertions(+), 7 deletions(-)
-> =C2=A0create mode 100644 Documentation/admin-guide/thermal/index.rst
->=20
->=20
-> base-commit: 1c7337f9eef60b8ce8a4b8c96d197e230d60b6b2
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
