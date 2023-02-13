@@ -2,80 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FA26953CB
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 23:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F1569540A
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 23:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjBMWV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 17:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S229670AbjBMWpq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 17:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjBMWVU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 17:21:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84D61EBE5;
-        Mon, 13 Feb 2023 14:21:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229489AbjBMWpp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 17:45:45 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95BB1D91C;
+        Mon, 13 Feb 2023 14:45:44 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65A3EB81990;
-        Mon, 13 Feb 2023 22:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C9BC433A1;
-        Mon, 13 Feb 2023 22:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676326872;
-        bh=8oN0F3hRVKt/dFknr9686lGepBv5AWcCCCg6he0sI24=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BngfERpHsoTxySdPGwJEg6LcJzQfU88P11Ju0IoKXH49lhnKSSfSUEgWH/D3Fj9U+
-         SMDlSnN0/ToOOqgeUYroJ33uiYUqgRkI0nw4NuF3VpAC2j739aI0YSKGk1jto5wA1e
-         h5+5w8GKhEF1VP80FYaK7CWdF8fF1n9akVQwBgZdAtQS9sw6Ek4p5TgZ/u7GBxHp5t
-         HOilochIDfM9S6yYkdtVYmiyt2tvv1dFSVN0W46axsuoE6k7XcjmVBr0ke6CsuPOEb
-         NDfrWlG9G5fATCKS0E0GuwNVXQUfSqZST636j5iqXLh5vzTKZpzXeZVRLZfuNO3s/+
-         r0Iyl+BS+X5Wg==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5] power: supply: Introduce Qualcomm PMIC GLINK power supply
-Date:   Mon, 13 Feb 2023 14:23:08 -0800
-Message-Id: <167632698310.557014.1588583713960967711.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230207144241.1767973-1-quic_bjorande@quicinc.com>
-References: <20230207144241.1767973-1-quic_bjorande@quicinc.com>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B7786602154;
+        Mon, 13 Feb 2023 22:45:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676328343;
+        bh=9ZqLO7u9wSSWylBMnQo4JHT+AC8VOGxAaq9hFglbWFM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IzeZKCYvRlFrs4yVkPEm6idXIx3tSARIcMt/ufUhergxwEaz2ZyIWysC+2kLsveaW
+         8z9Q/nw6zNKgZAaEViw93IzBdu47AaZ48TETC7JsrqYp9/y+aa4gLz6wMaq0YZKKch
+         zw7SO167/TQE86+q2RnXpnQmbxcLbYG3cUHQegJ1nRn/ys2JWHYvxc8Zo3MMCcEQOw
+         mHMQXhBnRcpi/DoedRVO+lE3wbahIooUVGAq0H27aChZiR2sd6x9ylNrYpuZ+F8MJd
+         YVt7irvYZMy3kkw6ekTuVw0JvpBlAkHVqWeLcr2qUkRfV0iLcYb0a6tl6c7MHFyekg
+         lzkzJUmZsxoHA==
+Received: by mercury (Postfix, from userid 1000)
+        id 8E28F10603FE; Mon, 13 Feb 2023 23:45:40 +0100 (CET)
+Date:   Mon, 13 Feb 2023 23:45:40 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: power: supply: pm8941-coincell: Don't
+ require charging properties
+Message-ID: <20230213224540.o4fd554ippzdej7a@mercury.elektranox.org>
+References: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
+ <20230213204950.2100538-2-konrad.dybcio@linaro.org>
+ <20230213212733.rhvuzrshfrvzgo4a@mercury.elektranox.org>
+ <83637cc7-21ae-7778-37b3-4522cc0a06c9@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hvdkk6p6no65upka"
+Content-Disposition: inline
+In-Reply-To: <83637cc7-21ae-7778-37b3-4522cc0a06c9@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 7 Feb 2023 06:42:41 -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> The PMIC GLINK service, running on a coprocessor of modern Qualcomm
-> platforms, deals with battery charging and fuel gauging, as well as
-> reporting status of AC and wireless power supplies.
-> 
-> As this is just one of the functionalities provided by the PMIC GLINK
-> service, this power supply driver is implemented as an auxilirary bus
-> driver, spawned by the main "pmic glink" driver when the PMIC GLINK
-> service is detected.
-> 
-> [...]
 
-Applied, thanks!
+--hvdkk6p6no65upka
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1/1] power: supply: Introduce Qualcomm PMIC GLINK power supply
-      commit: 29e8142b5623b5949587bcc4f591c4e6595c4aca
+Hi,
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+On Mon, Feb 13, 2023 at 10:41:10PM +0100, Konrad Dybcio wrote:
+> On 13.02.2023 22:27, Sebastian Reichel wrote:
+> > On Mon, Feb 13, 2023 at 09:49:49PM +0100, Konrad Dybcio wrote:
+> >> It's fine for these properties to be absent, as the driver doesn't fail
+> >> without them and functions with settings inherited from the reset/prev=
+ious
+> >> stage bootloader state.
+> >>
+> >> Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Con=
+vert to DT schema format")
+> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> ---
+> > Please update the description of these properties to describe the
+> > default behaviour.
+> Not sure if there's any default behavior other than "go with
+> whatever was there previously, no matter how it got there".
+
+I got that from the patch description, but that behaviour should be
+described in the binding.
+
+> Is it okay if I just add:
+>=20
+> "If unspecified, inherit the bootloader configuration"
+
+Technically the bindings are also for bootloaders. I suggest:
+
+If unspecified, inherit the previous configuration (e.g. from
+bootloader or hardware default value).
+
+-- Sebastian
+
+--hvdkk6p6no65upka
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqvZAACgkQ2O7X88g7
++pqK5A/7B+mt+IoHQ+S5V1ix2613TjN9+JjnUr/fmRmVvPNtac+u6oukLqgGngwp
+UwtnP34uerWTYzIQAeNXIa287PbBuDpYwSh+CL9QrRtR+7Bp9olslee+dHz4bv+n
+rXuxQifQ8FroUZhtXfaNBL3g/y+fQKHN3HXrXLjwpM4ZZ+mW8vVpHc4alejCvDQx
+mjAYsRh/TZDgS8bsUoxndVcmO26o3pBV0ockEdj4vTfvwMmTUQncejUyGAJcoWJv
+eC92EgWj5+ldaCx1E0Sgc+3LHtlZljU49FNEkXzppXZxBdoYF/TVggvrLdrGjX/8
+Oh17YsJ2cE0Lyu1nf37jEGqJDZNGICLOrJ0nnC3UlH3CXfGyEB9h/C4BrbVYdtuh
+BWXvZbYTjT5k2PEc8exAyigfGNIZ8plHEyVDP2Ra+yNXGG/3N474iUQV8Z7nQKPu
+jotzhZKxFr8ecOr6B6XCBLV0UljIRqTEUqqWSmQs7J1M/hwW1Ad9mOYTdjeRTU7+
+SucSyhXRNSlB6D5ASFXk9ggiQvOdtGBCyCRMzuXDq8qRfSc1auPSsInat4O2bKQO
+82DdM41izrDX4ZTkxYl7PhZMROl13MKLy1kSOp4YrolXN6pzeLpEvu1gHn3t7XR+
+kxGP+ie/ZL4JluGRmLJ8kKDBpU1DVSCECOhQT2RRvsbmmy2Ct2s=
+=G77K
+-----END PGP SIGNATURE-----
+
+--hvdkk6p6no65upka--
