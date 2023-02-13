@@ -2,191 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B156943E2
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 12:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C11D694627
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 13:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjBMLKK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 06:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S230297AbjBMMp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 07:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjBMLKJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 06:10:09 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2DBD539
-        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 03:10:08 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id z13so8435259wmp.2
-        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 03:10:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ewNdypPpxJtbl5al/d/KElLbd16ba+tKN4mS6vis/6U=;
-        b=tEC8LqOsi41BXem0ZoRD2n4ttQHen8DBJmZX5sGQPiiLN2+It/bQKr+fvssV6W6Z9+
-         H+kWAZ7yzPZihzo7cD8u3JTDZH/ypV8K+HIFcTeKEikVhQ12l/L+tfkgFKScvIiRKF1f
-         nGxa4uM7XJiuNfSu0PNSaSOdjj5zVRFpCNQczfiWSdNDWG7E2cCEcrx9S+sAqwUuYin2
-         zEH9BTnegLP7FJxzlYE+eHniJ6ViEYNgfPWhJS2DtcReU61bW3lYUG8KAR7nktW4JHv1
-         S5tWPSjViHLiNwOKdpGIb+iywIzDupWDEmF+mtmHO1OX75srjumGPewBhI9ErFv+nbh6
-         KZhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ewNdypPpxJtbl5al/d/KElLbd16ba+tKN4mS6vis/6U=;
-        b=eGPDUP5J/BLcQ0vUd59pz2Kt0Cpm//m5gYUxEQKJR7DedHQC/EsUDsQhK4vtaj52W7
-         EULreiNJNBndCthE7yUq59cYcPJMuUXv8FxaSkygiQ2x6SGqrIgiSyXwTpEnSbldiMMy
-         DtdCyR+hFGq4h3B7nDlFHDGqzWJDxDZFzu71UsdqVSjWkOJKlfhLSGwIhMP5m9IaR6bs
-         9ZHEMvG/WR4Dz16YrHAosq1cfHrpPc5wx/mtX0p8lr1ItMF0uXfQehyLwQBbZtiuTtyA
-         WOqnXzPhQa19UUo3QtZcWSdNIFt4qy9lmpKYMJCdhsIZ6q4N+nB9xox6xjU6MIcdGAXA
-         U71w==
-X-Gm-Message-State: AO0yUKVbp2zFp1l0Y+lPPArkBvfpECvKaJO7sqdUzgAmrcCN8bzDfC9S
-        mbQrPKjRqmEr+SWFyvOC8Q0xlg==
-X-Google-Smtp-Source: AK7set+3FrPGhJqYdKr1igcuvqEZtlNXbken5c8kn5I6GBlF9kCgrwzlpVyBrAGRLULA+x/63LrNjA==
-X-Received: by 2002:a05:600c:9a2:b0:3dc:576c:ab07 with SMTP id w34-20020a05600c09a200b003dc576cab07mr18330489wmp.14.1676286606839;
-        Mon, 13 Feb 2023 03:10:06 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id j23-20020a05600c1c1700b003daf681d05dsm14557451wms.26.2023.02.13.03.10.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:10:06 -0800 (PST)
-Message-ID: <76fe1e13-761c-1153-b913-ed2c41c8d807@linaro.org>
-Date:   Mon, 13 Feb 2023 12:10:05 +0100
+        with ESMTP id S229945AbjBMMpv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 07:45:51 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E7B81969D;
+        Mon, 13 Feb 2023 04:45:46 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Dx3tr5MOpjxhYAAA--.459S3;
+        Mon, 13 Feb 2023 20:45:45 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxB732MOpj9EYyAA--.28122S3;
+        Mon, 13 Feb 2023 20:45:42 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] thermal: loongson-2: add thermal management
+ support
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, lvjianmin@loongson.cn,
+        wanghongliang@loongson.cn, zhuyinbo@loongson.cn
+References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+ <20230206135921.GA15176@linaro.org>
+ <64d9782c-cafd-cdc3-3602-719c386d98cc@loongson.cn>
+ <20230208104919.GA120053@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <5abe22ee-77d4-4349-1d88-43e4324177f0@loongson.cn>
+Date:   Mon, 13 Feb 2023 20:45:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        yong qin <yongqin.liu@linaro.org>,
-        Vibhav Pant <vibhavp@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Alain Volmat <avolmat@me.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal material for v6.3, take 2
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230208104919.GA120053@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8BxB732MOpj9EYyAA--.28122S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAw17tw1Dur1xZFy8uw4xtFb_yoWrKFWfpr
+        W8Ga1UtFZ8tr18W3W0gw18Zr9Iyry3t343Wws3GFyrArZ8tryagFyFqFWF9Fs7CrW0kFWj
+        vF15twsruFn8X3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b3kFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20x
+        vY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2Iq
+        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+        1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x
+        07jjpBfUUUUU=
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
 
-The following changes since commit 61b7614c114c817f9f326282c2f7a728bf0051a8:
+在 2023/2/8 下午6:49, Daniel Lezcano 写道:
+> On Wed, Feb 08, 2023 at 11:13:33AM +0800, zhuyinbo wrote:
+>
+> [ ... ]
+>
+>>>> +struct loongson2_thermal_data {
+>>>> +	struct thermal_zone_device *tzd;
+>>> 'tzd' won't be needed after taking into account the comments
+>> The 'tzd' element is needed,  because the thermal_zone_device_update need
+>> pass a data->tzd element.
+>>
+>> static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+>> {
+>>          struct loongson2_thermal_data *data = dev;
+>>
+>>          thermal_zone_device_update(data->tzd,
+>>                                     THERMAL_EVENT_UNSPECIFIED);
+>>          enable_irq(data->irq);
+>>
+>>          return IRQ_HANDLED;
+>> }
+> After taking into account all the comments, enabled_irq() won't be
+> called, so 'data' won't be needed. 'tzd' will be passed to
+> devm_request_threaded_irq() instead of 'data'.
+>
+> As loongson2_thermal_irq_thread() is the only place where 'tzd' is
+> needed and 'tzd' being local to the call site of
+> thermal_zone_device_register() and devm_request_threaded_irq(), there
+> is no need to store the pointer in the 'data' structure.
 
-   Merge branch 'thermal-intel' into linux-next (2023-02-09 19:57:59 +0100)
+okay, I got it. I will remove tzd element in data struct.
 
-are available in the Git repository at:
+>
+>>>> +	int irq;
+>>> 'irq' won't be needed after taking into account the comments
+>> I will drop it.
+>>>> +	int id;
+>>>> +	void __iomem *regs;
+>>>> +	struct platform_device *pdev;
+>>> 'pdev' is not needed
+>> I will drop it.
+>>>> +	u16 ctrl_low_val;
+>>>> +	u16 ctrl_hi_val;
+>>> Those fields won't be needed after taking into account the comments
+>> I will drop it.
+>>>> +};
+>>>> +
+>>>> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+>>>> +					int low, int high, bool enable)
+>>>> +{
+>>>> +	u64 reg_ctrl = 0;
+>>>> +	int reg_off = data->id * 2;
+>>>> +
+>>>> +	if (low > high)
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	low = max(low, -100);
+>>>> +	high = min(high, 155);
+> Documentation says -40, 125
+My previous calculation is to consider that the range of 8bit 
+representation is 0 to 255,
+and node (cpu) temp=Thens0_ out -100, So the temperature range is 0-100 
+~ 255-100, and this
+range includes -40~125.  In fact, the range described in the manual is - 
+40~125, I will
+adop it.
+>
+>>>> +	low += 100;
+>>>> +	high += 100;
+>>> Why are those values added to the low and high ? Did you mean low += 0x100 ?
+>>>
+>>> Mind to describe a bit the register layout?
+>> node(cpu) temp = Thens0_out -100,
+>>
+>> low and high is record node temp, so low and high need add '100' as
+>> Thens0_out.
+> If I refer to the documentation it is a raw value converted from
+> centigrade. The function has degree.
+>
+> So it should be:
+>
+> temp_deci = temp_milli / 10
+>
+> raw = temp_to_raw(temp_deci);
+>
+> -> temp_to_raw to be determined from temp = (raw * 731) / 0x4000 - 273
+>
+> [ ... ]
+I have review the 3a5000 datasheet,  what you said is right about 
+3a5000, but in 2k1000 datasheet,
 
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.3-rc1-2
+the calculation of temperature is follows:
 
-for you to fetch changes up to f8da73d02bfcf6d61513912035150d91c14ea1e9:
+Temperature = Thens0_out - 100
+  
+get_temp return value is (Temperature * 1000) and set_trips is (value /1000) in 2k1000.
+I don't find a caculate about "temp_deci = temp_milli / 10" . Are you talking about "
+temp_deci = temp_milli / 1000" in set_trips?
 
-   thermal/drivers/st: Remove syscfg based driver (2023-02-13 11:42:35 
-+0100)
+>
+>>>> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>>>> +{
+>>>> +	u32 reg_val;
+>>>> +	struct loongson2_thermal_data *data = tz->devdata;
+>>>> +
+>>>> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+>>>> +	*temp = ((reg_val & 0xff) - 100) * 1000;
+>>> Why '-100' ?
+>>>
+>>> Is the unit returned 'degrees' ?
+>> node(cpu) temp = Thens0_out -100,
+>>
+>> Here we need to get a node temp.
+> If I refer to the Loongson-3A5000 manual and assuming it is the right
+> one, the documentation says:
+>
+> Temperature = Thens0_out * 731 / 0x4000 - 273
+>
+> The unit is centigrade.
+>
+> [ ... ]
 
-----------------------------------------------------------------
-- Fix missing thermal_sampling_exit() call when unsubscribing (Vincent
-   Guittot)
+Yes, 3a5000 is what you said, but 2k1000 is calculated as follows:
 
-- Add the LVTS Mediatek driver along with a relocation to the Mediatek 
-folder (Balsam Chihi)
-
-- Add the r8a779g0 RCar support (Geert Uytterhoeven)
-
-- Fix useless call to set_trips() when resuming and add interrupt
-   support detection at init time on RCar gen3 (Niklas Söderlund)
-
-- Fix memory corruption in the hi3660 thermal driver (Yongqin Liu)
-
-- Fix include path for libnl3 in pkg-config file for the libthermal
-   (Vibhav Pant)
-
-- Remove core header inclusion from drivers (Daniel Lezcano)
-
-- Remove syscfg based driver as the platform is removed (Alain Volmat)
-
-----------------------------------------------------------------
-Alain Volmat (1):
-       thermal/drivers/st: Remove syscfg based driver
-
-Balsam CHIHI (3):
-       thermal/drivers/mediatek: Relocate driver to mediatek folder
-       dt-bindings: thermal: mediatek: Add LVTS thermal controllers
-       thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver
-
-Daniel Lezcano (1):
-       thermal: Remove core header inclusion from drivers
-
-Geert Uytterhoeven (2):
-       dt-bindings: thermal: rcar-gen3-thermal: Add r8a779g0 support
-       thermal/drivers/rcar_gen3: Add support for R-Car V4H
-
-Niklas Söderlund (3):
-       thermal/drivers/rcar_gen3_thermal: Do not call set_trips() when 
-resuming
-       thermal/drivers/rcar_gen3_thermal: Create device local ops struct
-       thermal/drivers/rcar_gen3_thermal: Fix device initialization
-
-Vibhav Pant (1):
-       tools/lib/thermal: Fix include path for libnl3 in pkg-config file.
-
-Vincent Guittot (1):
-       tools/lib/thermal: Fix thermal_sampling_exit()
-
-Yongqin Liu (1):
-       thermal/drivers/hisi: Drop second sensor hi3660
-
-  .../bindings/thermal/mediatek,lvts-thermal.yaml    |  142 +++
-  .../bindings/thermal/rcar-gen3-thermal.yaml        |    3 +
-  drivers/thermal/Kconfig                            |   14 +-
-  drivers/thermal/Makefile                           |    2 +-
-  drivers/thermal/amlogic_thermal.c                  |    1 -
-  drivers/thermal/armada_thermal.c                   |    2 -
-  drivers/thermal/broadcom/bcm2835_thermal.c         |    1 -
-  drivers/thermal/hisi_thermal.c                     |    7 +-
-  drivers/thermal/imx8mm_thermal.c                   |    1 -
-  drivers/thermal/imx_sc_thermal.c                   |    1 -
-  drivers/thermal/intel/intel_hfi.c                  |    3 +-
-  drivers/thermal/mediatek/Kconfig                   |   37 +
-  drivers/thermal/mediatek/Makefile                  |    2 +
-  .../{mtk_thermal.c => mediatek/auxadc_thermal.c}   |    2 +-
-  drivers/thermal/mediatek/lvts_thermal.c            | 1224 
-++++++++++++++++++++
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |    1 -
-  drivers/thermal/qoriq_thermal.c                    |    1 -
-  drivers/thermal/rcar_gen3_thermal.c                |   41 +-
-  drivers/thermal/samsung/exynos_tmu.c               |    3 +-
-  drivers/thermal/st/Kconfig                         |    4 -
-  drivers/thermal/st/Makefile                        |    1 -
-  drivers/thermal/st/st_thermal_syscfg.c             |  174 ---
-  drivers/thermal/st/stm_thermal.c                   |    1 -
-  drivers/thermal/tegra/tegra30-tsensor.c            |    1 -
-  drivers/thermal/uniphier_thermal.c                 |    2 -
-  .../dt-bindings/thermal/mediatek,lvts-thermal.h    |   19 +
-  tools/lib/thermal/libthermal.pc.template           |    2 +-
-  tools/lib/thermal/sampling.c                       |    2 +-
-  28 files changed, 1461 insertions(+), 233 deletions(-)
-  create mode 100644 
-Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-  create mode 100644 drivers/thermal/mediatek/Kconfig
-  create mode 100644 drivers/thermal/mediatek/Makefile
-  rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
-  create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
-  delete mode 100644 drivers/thermal/st/st_thermal_syscfg.c
-  create mode 100644 include/dt-bindings/thermal/mediatek,lvts-thermal.h
+Temperature = Thens0_out - 100
+>
+>>>> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+>>>> +
+>>>> +	loongson2_thermal_set(data, 0, 0, false);
+>>> It would be nicer to use a reset line if it is available
+>> sorry, I don't get your meaning. Please describe more details about 'reset
+>> line'.
+> After a reset, the thermal controller should be in default state and the interrupt
+> flag cleared.
+>
+> One example:
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/nvidia/tegra210.dtsi#n1560
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c#n2169
+>
+> Then search in the driver for:
+>       reset_control_assert(reset);
+>       reset_control_deassert(reset);
+>
+>
+> [ ... ]
+>
+> Thanks
+>
+>    -- Daniel
+thanks your explicate!   but our platform doesn't support it.
+>
 
