@@ -2,53 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06652695256
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 21:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841D66952C0
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 22:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBMUx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 15:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S230030AbjBMVLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 16:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBMUx0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 15:53:26 -0500
+        with ESMTP id S229810AbjBMVLW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 16:11:22 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD9A1F936;
-        Mon, 13 Feb 2023 12:53:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178421CADB;
+        Mon, 13 Feb 2023 13:11:21 -0800 (PST)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DEA0B6600358;
-        Mon, 13 Feb 2023 20:53:23 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CC14766015B7;
+        Mon, 13 Feb 2023 21:11:19 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676321604;
-        bh=MU7Up8g4XWnVTRiQOQ2hENRWDzhjov7avNea39+l+Fs=;
+        s=mail; t=1676322679;
+        bh=RkEUPNhLOk8pBPmypH99mFbmtIcOi4Up8+lGHvGYceg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=geEetMYcrIHbpVpbPa9dydMUzw1+ROLFBBuiumfTN1Xap1cRFGbhMhu9VGlXR6vzp
-         InR4bjm6Pj30yFfc4jmpex/JPceOii7RT3gXgOIcYGNICTepjKYW5qd6EjrurTbn8t
-         VU+Dej4qdWUG79hUBzUm2tceeRv9CINGNE9NM5MMp43j78vb88O4gWFWU9o5ZyidVN
-         ZPnINWO2KDamwWA/sjLPfqPUOFgCPj62ZaBZPILLZT94NY5v/SQlZVZMHv7suV2y5d
-         o+iT0AsXYpvLeUWJQZoU/XGSsSUXkjm9yKRa+T8qCIed2VZ9k2uN3MjGgaAvJJr02+
-         eOTFCsP78yehw==
+        b=jDEEi1naQMhZ5lgMROZ7RwY3XoF75H5JPNghguTcBUniawtsDhATUf9ktVaxZZrOm
+         8nlsZit6LTQQXRpyZfccLwBjgbTz+bscQVIgTDtHAZ7SL+YCbmohQKIFtGLpmeTF5i
+         c8bdXsmtC+maNj66fpWUoiU3F2aq0KaKvHzjlvodnM9rVmM2FNbx/FL0knsDunRwgk
+         CVhntBGTAQ2f/gkTnsGIVc+RQ/I38mXpPNy0Gyt/mKQZ5Vj+T7S2OB50wqfhe3E8Lu
+         MATyrddq84VqzylIEDU4HSfCGdupnlGnS2EmLBnmQfdWZ5EBjk7uhGsIn4UBSFadVf
+         pPC8FPqdS0xhQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 724F81060961; Mon, 13 Feb 2023 21:53:21 +0100 (CET)
-Date:   Mon, 13 Feb 2023 21:53:21 +0100
+        id EE08110603FE; Mon, 13 Feb 2023 22:11:16 +0100 (CET)
+Date:   Mon, 13 Feb 2023 22:11:16 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        cy_huang@richtek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peterwu.pub@gmail.com
-Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
- compatible name
-Message-ID: <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
-References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
+Subject: Re: [PATCH v2 2/3] power: supply: Add Lenovo Yoga C630 EC driver
+Message-ID: <20230213211116.jeecwu3m5edkqxy2@mercury.elektranox.org>
+References: <20230205152809.2233436-1-dmitry.baryshkov@linaro.org>
+ <20230205152809.2233436-3-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r3cq4aakiv6m7xrb"
+        protocol="application/pgp-signature"; boundary="uccsrmrntziybdlz"
 Content-Disposition: inline
-In-Reply-To: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+In-Reply-To: <20230205152809.2233436-3-dmitry.baryshkov@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -59,82 +62,95 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---r3cq4aakiv6m7xrb
+--uccsrmrntziybdlz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
-> Revise RT9467 compatible name from "richtek,rt9467-charger" to
-> "richtek,rt9467"
+On Sun, Feb 05, 2023 at 05:28:08PM +0200, Dmitry Baryshkov wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
 >=20
-> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 batt=
-ery charger")
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> The Qualcomm Snapdragon-based Lenovo Yoga C630 has some sort of EC
+> providing AC-adapter and battery status, as well as USB Type-C altmode
+> notifications for Displayport operation.
+>=20
+> The Yoga C630 ships with Windows, where these operations primarily are
+> implemented in ACPI, but due to various issues with the hardware
+> representation therein it's not possible to run Linux on this
+> information. As such this is a best-effort re-implementation of these
+> operations, based on the register map expressed in ACPI and a fair
+> amount of trial and error.
+>=20
+> Tested-by: Steev Klimaszewski <steev@kali.org>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
 
-Is there a new version of this fixing the issues pointed out by Krzysztof?
-Also I think the filename and $id should be changed to richtek,rt9467.yaml
-in addition to the compatible change.
+[...]
 
-Thanks,
+> +static bool yoga_c630_ec_is_charged(struct yoga_c630_ec *ec)
+> +{
+> +	if (ec->bat_status !=3D 0)
+> +		return false;
+> +
+> +	if (ec->full_charge_capacity =3D=3D ec->capacity_now)
+> +		return true;
+> +
+> +	if (ec->design_capacity =3D=3D ec->capacity_now)
+> +		return true;
+
+For other platforms I've seen the current capacity sometimes
+reaching higher values than the full charge capacity, so it's better
+to use <=3D here.
+
+> +	return false;
+> +}
+
+[...]
+
+> +static int yoga_c630_ec_query_usb_event(struct yoga_c630_ec *ec)
+> +{
+> +	struct device *dev =3D &ec->client->dev;
+> +	int event;
+> +
+> +	mutex_lock(&ec->lock);
+> +	event =3D yoga_c630_ec_read8(ec, LENOVO_EC_QUERY_USB_EVENT);
+> +	mutex_unlock(&ec->lock);
+> +	if (event < 0) {
+> +		dev_err(dev, "unable to query USB event\n");
+> +		return event;
+> +	}
+> +
+> +	/* FIXME: handle the returned event to set the Type-C properties */
+
+I guess this is more of a TODO than a FIXME? :)
+
+> +
+> +	return 0;
+> +}
 
 -- Sebastian
 
->  .../devicetree/bindings/power/supply/richtek,rt9467-charger.yaml      | =
-4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt946=
-7-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9=
-467-charger.yaml
-> index 92c5706..9176808 100644
-> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charg=
-er.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charg=
-er.yaml
-> @@ -25,7 +25,7 @@ description: |
-> =20
->  properties:
->    compatible:
-> -    const: richtek,rt9467-charger
-> +    const: richtek,rt9467
-> =20
->    reg:
->      maxItems: 1
-> @@ -65,7 +65,7 @@ examples:
->        #size-cells =3D <0>;
-> =20
->        charger@5b {
-> -        compatible =3D "richtek,rt9467-charger";
-> +        compatible =3D "richtek,rt9467";
->          reg =3D <0x5b>;
->          wakeup-source;
->          interrupts-extended =3D <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
-> --=20
-> 2.7.4
->=20
-
---r3cq4aakiv6m7xrb
+--uccsrmrntziybdlz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqo0EACgkQ2O7X88g7
-+pqQSQ/+OkcfFPZuVrVvDR2ftl8gF8q3d0f9bhdHTcWG7rc3umiDAVn956mOKbMq
-Uitnia+BeovzD1oiGhfF5F7sriXqMGo4Ul7Jr3xXmkXzDZw4l5dlRAwtv8R0tlAN
-/ELRpIMViEFCWOBlAMEQYkhKECNKtSCe/U69iS6ouwoPkVnxWhpG46zCsMR+9pFX
-VSgDyXNf/HPDaTvOhX0p7NMQG8Ov69TzSuwrO21krRCWEcrvdXaXfQ7VrFsYb/2z
-XYntcAqeOawPKCn8Rm0QpDGuczujvIWvrqYJMJf5ItAcfH6ga5UwzHRs2dZmOm9q
-UlhSxpc3/ZtiS0RzY5+cVT7iFlJ2UKxtVVS9YVhg+NXhwebAFdDIKwdsvGf9Qvzz
-hB+FJ8GXVPcUQZr5E7002FDwa/OXum2434AFM0pBrlkxwLXpVthqAUAj3v5DTASW
-Q0+qaDID8J84jDAr+0QWulGKp1HbuhOutJg9f34/5oE8Am73IQLBSYh8gq55s6S6
-p4tfMnvY4n0ZyV9Elvg8cwlT1x869hLIq96jADp8rxaNMl8h+sXNRzsDq6ZYyLBe
-Xs1LLukQSTHV8m8DHJ0BpEjfr+n3K+geisZL1feQSE248scNexm0nSbT8f9oGm+4
-TnPKWjKtblKrkh7TGIr35abxhb5Gzq7lkPp2CtxYppW9WuMusfY=
-=RCkA
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqp2sACgkQ2O7X88g7
++ppzeg//bShc3n3PY56ImQh0MpNymWBp1nCUcY6I6iQIRmNE00ezHD79aAz4NfOF
+pUQ8j5aTksulobZ7JOE9DlNHvmYa3ges+ueMujDnEclae4lBo9YcLQoYORBKanS7
+yQrqxVoL//rWLa8ObYDUYnpAc8rrF0NTwdSazWhqHif3sXcgWFGpfyQwcPnEK2yn
+Oj2YQ5FSA3GZao3ip3fkHke2Grk9nouyS3kWUqU/1muU6YoHb4QAAk9h3kfS/Z/n
+5ZaSx3hPPybcixmHglFAebPAmPtKiAjnSkW+TFCCrWYDLY/ea2+lKSNWZX1lNYVf
+9ye+tewmY0laYYPBEP4DPKys9208lWe22yKkXiXnBtd8Vpuvzo2W5lxH4ZaAMEE+
+om0Gp9pgDsJ7u7LSYuKGq7X/z/HJyi3PcInJeM090+oATyBBZK/zXOA+ZrkLQMmL
+YHh/T+j9/E7I7vq+D8pthjGEqtLPq52KOyWc2GLxJiUGXVn489SsmXwUlMjhCj60
+zO+sGwGJsu9rLr39YTq6D2DDBpp41ypm1cYXyC4v9vfgdINsrO3XlhieMPASufrs
+LJY7WRu4Ijz1Hjr7f0alC+l2LmuRxR9M1t1SpPhBzmc26GpOtHBgtghdCKoMJxgw
+wTywvfvwCuQSwh32H7Bob4qB6EWojIfmgYgI0mqf6DKIYqfFAMs=
+=0Txj
 -----END PGP SIGNATURE-----
 
---r3cq4aakiv6m7xrb--
+--uccsrmrntziybdlz--
