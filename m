@@ -2,49 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ED3694BF6
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 17:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB9F694C1B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 17:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjBMQDL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 11:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S229612AbjBMQN0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 11:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjBMQDL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 11:03:11 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110C81C32E;
-        Mon, 13 Feb 2023 08:03:10 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id jg8so33084295ejc.6;
-        Mon, 13 Feb 2023 08:03:09 -0800 (PST)
+        with ESMTP id S229947AbjBMQN0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 11:13:26 -0500
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6268C15573;
+        Mon, 13 Feb 2023 08:13:24 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id v13so13593691eda.11;
+        Mon, 13 Feb 2023 08:13:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tIYbWRKiVNoa7/EuTrE22y6ppQgPNllhOKadHyKY/90=;
-        b=lsKAlJb5xsO3ioRWwtXmRTD+TU8PnThwqNlMUgL9t5feSPcxbQ2Y6LE/DA0jqYyXAn
-         JYo9rqNQuZ9WMSWADelCx03+I8sqPCcb7zh5ijQbfqOb7AwJax+qFoSkLDABwC92MI1M
-         SB56CrLuQxxDLNxR1vkYQ5IinWBHH0X2rthb1SRzw3epXltOpaYRsBluKqqDfYwPS2xI
-         d7xziETlqwgZ3RmRpgGvhxVJPwwlFOInLTIlCqGIpr0gamORVq8iGxV/goXfayCSe5w5
-         8t/oL+CoRHKNQUSltgMWRxplTw/WWwZ6RnZ4Uhe0Pzs9lBpRQtN32hCJ6vzjMsSs9kag
-         yQww==
-X-Gm-Message-State: AO0yUKVibE8ox63WiX/Nsi/oIGVZcCRtj66tnqzi47T+y3ddQKOsEYyx
-        eGw1EIPEeq9rwtccdmzeSgw4hbXCfBJtOHkA1e6Wjs+Q
-X-Google-Smtp-Source: AK7set92Iou7Ljt6rtlOYRoZOVjTEwOKtb5y9wb2NtJPJlmVkPSs6KeZCqBsBgsflbdwqZvcHEV32IAPqcOws8pLlxU=
-X-Received: by 2002:a17:906:3659:b0:8ae:e92e:eab7 with SMTP id
- r25-20020a170906365900b008aee92eeab7mr4681821ejb.4.1676304188428; Mon, 13 Feb
- 2023 08:03:08 -0800 (PST)
+        bh=HGOKonKYSmEYy24c4Rg+g+Z+58w6/MyCGaceC8x0uAo=;
+        b=mJj0Tjxbbe2DOITA5096MDPUJh2sTkPEtRthinz9r5JpNZte7XHEs9f+w/lLTD2pVv
+         MGRXOXvCMORfy31QdWHFhWjFjCvDiOaGV+dzYLlhf2xWz89GyR9F2S8Eqv3UR6Yh7FN+
+         M19BhOVynUbSl9hVTNdEFNGQepCnSbSw0zlurJV8GTvT22/0CwmvhAqxi4xEPpn+1BDD
+         NrIHHmNwFCO+kkYvsmJK8HpVG9Lcp+XnoZe14rt05YxEF7Kgs3wFF3qiNxxkiP3N/Va/
+         XuydJbHRFhntUIL/TfG9I3TbC1giN5RZRVQ7lsd2P/Jl2te8jZBys1u9j165mROmNgCp
+         fUBA==
+X-Gm-Message-State: AO0yUKUa1APNbDogZQtcv3R4Ib3vRSudkYldtWINYqqJ1zyEVDkLz8h5
+        B4UxDraaMvWdfWIp2ItoZgVIb5UJMFfCpgrIrcVoNrfO
+X-Google-Smtp-Source: AK7set8dpKKGHhBQTz/Weq1u5V8m7oVcIc7DAu1B+XKpoKsZFb13iAO73Wu0vWatwUfNtJT2aTAa+/7/PFZpPxeX7Pw=
+X-Received: by 2002:a50:8ade:0:b0:4ab:4933:225b with SMTP id
+ k30-20020a508ade000000b004ab4933225bmr4305420edk.6.1676304802988; Mon, 13 Feb
+ 2023 08:13:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20230211031710.277459-1-rui.zhang@intel.com>
-In-Reply-To: <20230211031710.277459-1-rui.zhang@intel.com>
+References: <20230210110934.1379482-1-keguang.zhang@gmail.com>
+In-Reply-To: <20230210110934.1379482-1-keguang.zhang@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 17:02:57 +0100
-Message-ID: <CAJZ5v0iXfXVDfxjjA+iy4eThsHFTuv=8RvKCrmtWHrwLmrMy9g@mail.gmail.com>
-Subject: Re: [PATCH V2] powercap/intel_rapl: Fix handling for large time window
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
-        srinivas.pandruvada@intel.com
+Date:   Mon, 13 Feb 2023 17:13:12 +0100
+Message-ID: <CAJZ5v0hroiCx-XVMtL-_R4Ojej__bFPkhLbi7ZHp+wNKiTDWKw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: loongson32: Drop obsolete cpufreq platform device
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,64 +57,111 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 4:17 AM Zhang Rui <rui.zhang@intel.com> wrote:
+On Fri, Feb 10, 2023 at 12:10 PM Keguang Zhang <keguang.zhang@gmail.com> wrote:
 >
-> When setting the power limit time window, software updates the 'y' bits
-> and 'f' bits in the power limit register, and the value hardware takes
-> follows the formula below
->
->         Time window = 2 ^ y * (1 + f / 4) * Time_Unit
->
-> When handling large time window input from userspace, using left
-> shifting breaks in two cases,
-> 1. when ilog2(value) is bigger than 31, in expression "1 << y", left
->    shifting by more than 31 bits has undefined behavior. This breaks
->    'y'. For example, on an Alderlake platform, "1 << 32" returns 1.
-> 2. when ilog2(value) equals 31, "1 << 31" returns negative value
->    because '1' is recognized as signed int. And this breaks 'f'.
->
-> Given that 'y' has 5 bits and hardware can never take a value larger
-> than 31, fix the first problem by clamp the time window to the maximum
-> possible value that the hardware can take.
->
-> Fix the second problem by using unsigned bit left shift.
->
-> Note that hardware has its own maximum time window limitation, which
-> may be lower than the time window value retrieved from the power limit
-> register. When this happens, hardware clamps the input to its maximum
-> time window limitation. That is why a software clamp is preferred to
-> handle the problem on hand.
->
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
-> Change since V1:
-> 1. drop pr_warn message for bogus userspace input.
-> 2. Add a comment when handling the large exponent.
-> ---
->  drivers/powercap/intel_rapl_common.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 26d00b1853b4..69526d21699d 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -999,7 +999,15 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
->
->                 do_div(value, rp->time_unit);
->                 y = ilog2(value);
-> -               f = div64_u64(4 * (value - (1 << y)), 1 << y);
-> +
-> +               /*
-> +                * The target hardware field has 7 bits, return all ones if
-> +                * the exponent is too large.
-> +                */
-> +               if (y > 0x1f)
-> +                       return 0x7f;
-> +
-> +               f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
->                 value = (y & 0x1f) | ((f & 0x3) << 5);
->         }
->         return value;
-> --
+> The obsolete cpufreq driver was removed, drop the platform device
+> and data accordingly.
 
-Applied as 6.3 material with a minor adjustment of the new comment, thanks!
+I'm going to pick up this one as 6.3 material unless there are any
+objections, in which case please let me know.
+
+Thanks!
+
+> Link: https://lore.kernel.org/all/20230112135342.3927338-1-keguang.zhang@gmail.com
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+>  .../mips/include/asm/mach-loongson32/cpufreq.h | 18 ------------------
+>  .../include/asm/mach-loongson32/platform.h     |  1 -
+>  arch/mips/loongson32/common/platform.c         | 16 ----------------
+>  arch/mips/loongson32/ls1b/board.c              |  1 -
+>  4 files changed, 36 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/mach-loongson32/cpufreq.h
+>
+> diff --git a/arch/mips/include/asm/mach-loongson32/cpufreq.h b/arch/mips/include/asm/mach-loongson32/cpufreq.h
+> deleted file mode 100644
+> index e422a32883ae..000000000000
+> --- a/arch/mips/include/asm/mach-loongson32/cpufreq.h
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+> -/*
+> - * Copyright (c) 2014 Zhang, Keguang <keguang.zhang@gmail.com>
+> - *
+> - * Loongson 1 CPUFreq platform support.
+> - */
+> -
+> -#ifndef __ASM_MACH_LOONGSON32_CPUFREQ_H
+> -#define __ASM_MACH_LOONGSON32_CPUFREQ_H
+> -
+> -struct plat_ls1x_cpufreq {
+> -       const char      *clk_name;      /* CPU clk */
+> -       const char      *osc_clk_name;  /* OSC clk */
+> -       unsigned int    max_freq;       /* in kHz */
+> -       unsigned int    min_freq;       /* in kHz */
+> -};
+> -
+> -#endif /* __ASM_MACH_LOONGSON32_CPUFREQ_H */
+> diff --git a/arch/mips/include/asm/mach-loongson32/platform.h b/arch/mips/include/asm/mach-loongson32/platform.h
+> index e3fe93ba1bdb..2cdcfb5f6012 100644
+> --- a/arch/mips/include/asm/mach-loongson32/platform.h
+> +++ b/arch/mips/include/asm/mach-loongson32/platform.h
+> @@ -12,7 +12,6 @@
+>  #include <nand.h>
+>
+>  extern struct platform_device ls1x_uart_pdev;
+> -extern struct platform_device ls1x_cpufreq_pdev;
+>  extern struct platform_device ls1x_eth0_pdev;
+>  extern struct platform_device ls1x_eth1_pdev;
+>  extern struct platform_device ls1x_ehci_pdev;
+> diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
+> index 311dc1580bbd..64d7979394e6 100644
+> --- a/arch/mips/loongson32/common/platform.c
+> +++ b/arch/mips/loongson32/common/platform.c
+> @@ -15,7 +15,6 @@
+>
+>  #include <platform.h>
+>  #include <loongson1.h>
+> -#include <cpufreq.h>
+>  #include <dma.h>
+>  #include <nand.h>
+>
+> @@ -62,21 +61,6 @@ void __init ls1x_serial_set_uartclk(struct platform_device *pdev)
+>                 p->uartclk = clk_get_rate(clk);
+>  }
+>
+> -/* CPUFreq */
+> -static struct plat_ls1x_cpufreq ls1x_cpufreq_pdata = {
+> -       .clk_name       = "cpu_clk",
+> -       .osc_clk_name   = "osc_clk",
+> -       .max_freq       = 266 * 1000,
+> -       .min_freq       = 33 * 1000,
+> -};
+> -
+> -struct platform_device ls1x_cpufreq_pdev = {
+> -       .name           = "ls1x-cpufreq",
+> -       .dev            = {
+> -               .platform_data = &ls1x_cpufreq_pdata,
+> -       },
+> -};
+> -
+>  /* Synopsys Ethernet GMAC */
+>  static struct stmmac_mdio_bus_data ls1x_mdio_bus_data = {
+>         .phy_mask       = 0,
+> diff --git a/arch/mips/loongson32/ls1b/board.c b/arch/mips/loongson32/ls1b/board.c
+> index 727e06718dab..fed8d432ef20 100644
+> --- a/arch/mips/loongson32/ls1b/board.c
+> +++ b/arch/mips/loongson32/ls1b/board.c
+> @@ -35,7 +35,6 @@ static const struct gpio_led_platform_data ls1x_led_pdata __initconst = {
+>
+>  static struct platform_device *ls1b_platform_devices[] __initdata = {
+>         &ls1x_uart_pdev,
+> -       &ls1x_cpufreq_pdev,
+>         &ls1x_eth0_pdev,
+>         &ls1x_eth1_pdev,
+>         &ls1x_ehci_pdev,
+>
+> base-commit: 159c610af8cdf2b3c915e59162fc867b557cbe7e
+> prerequisite-patch-id: a73e24e76a88f519d85fdeb7230e93d53c61434a
+> --
+> 2.34.1
+>
