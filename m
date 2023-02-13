@@ -2,102 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3353693DB3
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 06:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D13693DD7
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 06:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjBMFEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 00:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S229770AbjBMFZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 00:25:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBMFEf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 00:04:35 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ED8C152
-        for <linux-pm@vger.kernel.org>; Sun, 12 Feb 2023 21:04:33 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id v23so12334135plo.1
-        for <linux-pm@vger.kernel.org>; Sun, 12 Feb 2023 21:04:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cq2Mt5IgFuRz+Dg5gGVSgc7JNioKJ+vyevcaRsQ8/Dk=;
-        b=XQFAOmcKsL4NUry+FgCLYWfIbnAckIpsc1e7WWxGHgHqqFqO4P5vKOLnSfjotm6Km1
-         ywVZDGwQQ4OrzN2MD9V1rf9GIgGFB3e0Qfb4ZA8UYdYjUYhrDmVEm5vgiOsKGAJd8+ww
-         m28Mbh/GrkyujfyM4Zh/SQItW4jlfW41cQe7NgcMiUfVullRSuRGmy6TLrYCf4hTkLOG
-         odqFB3BliehB0/1uO70gIdw3DsY+9C0s4AqDQ3wrVxcWFygVg1X1GVZuTnnIeQiLjWja
-         R9zj34VJjCQFspS72+plj00FjepJNId3N1xHUlOvi2NKp6x4dHJvQIfp4TdCKX9MdTpo
-         e+CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cq2Mt5IgFuRz+Dg5gGVSgc7JNioKJ+vyevcaRsQ8/Dk=;
-        b=DWWrjF6Cemvf+HhhgCjxb6JFj+rlIL9kU7bMS4FnGg3dbLGagdqysCQPbo4vNOwZ8k
-         mtuJqkFv8nKHpsJIFKlCysO2P3h9hDbvX0Ajk+WXjfNnp6njILFUxOPbcBnEG/MZ4YaX
-         JfSabT0soiuuGnh66PXSm3kx6oMduvoB6plGYaKgfBKqQIx0SPPZiHSRwHGPMWo2Anq7
-         sd6TJJOkCp8jgeD3I4Xkxs31CtLT8O5dbgls89+aoxTzANmVxN/VqyFvI/nzgo3B+gIc
-         j5/7aKabbbAl7MtGdrn47iSgRQoOGz9cNk/Lvxwdpco8GogVe5m+wTZQf+tdUpqX4mWo
-         UY6g==
-X-Gm-Message-State: AO0yUKXscBRsnvxZphJ1xmMMx0tOCA7ydMtlaFWBgQJOeG22KEwiP/Aa
-        rBuzgy6o+ra80XbaTWT1SX6OJg==
-X-Google-Smtp-Source: AK7set9XiywEdoa+M+ipPblxIE9rdVgmOumuyiq6YmdkUUvHhebrgJDfig+6A2CZ+j9f/fMtfSRVPw==
-X-Received: by 2002:a17:902:e5d2:b0:19a:7f4b:3ed4 with SMTP id u18-20020a170902e5d200b0019a7f4b3ed4mr8883064plf.30.1676264673461;
-        Sun, 12 Feb 2023 21:04:33 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170902be0a00b00199524dc67bsm7149422pls.163.2023.02.12.21.04.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 21:04:32 -0800 (PST)
-Date:   Mon, 13 Feb 2023 10:34:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify
- supported opp tables
-Message-ID: <20230213050430.n3wszmi5kslvhdtl@vireshk-i7>
-References: <20230208153913.24436-1-ansuelsmth@gmail.com>
+        with ESMTP id S229485AbjBMFZZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 00:25:25 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB4BEB60;
+        Sun, 12 Feb 2023 21:25:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676265923; x=1707801923;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hIZhaejz1nsQtgqa1/2qLhleUvBiUD8Jcqdv1d1/SSs=;
+  b=N1DAZtnzSblRhG4NlEpsiBWdNNz2TeQjurxFA5EhKA4EoKSV044UR10m
+   I+zEVr2sOsXBEg/E0Bh5/f/fzmLnP2bh+AVQ9URy8YqkTtEF1EYFexJLD
+   O5mLJQckXgtKPb6jZuAyoo1Hynmp2cW5ICgcg17HrRCrTNz/YMQBZxnb9
+   ugMAyJuI9Gpghitox+DBJbouZgnFpSH5i+Cj4WlomHBSCUS7TSz2+afWk
+   XbJA4mAxrzXqqXJMPS9M2UhAIqku5H6XmcrPENx771GMsFtCP8HJz4vG5
+   fLlg096t5tManWMnxPoq58K0Ok/Dx+ckRZ6uXIrYbcpOceoPeT61IiXUm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="311173382"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="311173382"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 21:25:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="670680365"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="670680365"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Feb 2023 21:25:22 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [thermal-bleeding-edge][PATCH] thermal: intel: powerclamp: Fix warnings
+Date:   Sun, 12 Feb 2023 21:25:19 -0800
+Message-Id: <20230213052519.801458-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208153913.24436-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-02-23, 16:39, Christian Marangi wrote:
-> Add additional info on what opp tables the defined devices in this schema
-> supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
-> and reference them.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> Changes v6:
-> - No change
-> Changes v5:
-> - Swap patch 1 and patch 2 to fix dt_check_warning on single
->   patch bisecting 
-> Changes v4:
-> - Add patch split from patch 1
+Two warnings are reported during make htmldocs:
+1.Documentation/admin-guide/index.rst:62: WARNING: toctree contains
+reference to nonexisting document 'admin-guide/thermal'
+2.Documentation/admin-guide/thermal/intel_powerclamp.rst:328:
+WARNING: Inline emphasis start-string without end-string
 
-Rob / Krzysztof,
+Fix the first warning by adding index.rst in thermal folder and
+for the second issue use \ for *.
 
-I am looking to apply this patchset for next release if it is ready, are you
-comfortable giving your Acks for the entire series yet ?
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ Documentation/admin-guide/index.rst                    |  2 +-
+ Documentation/admin-guide/thermal/index.rst            | 10 ++++++++++
+ Documentation/admin-guide/thermal/intel_powerclamp.rst |  2 +-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/admin-guide/thermal/index.rst
 
+diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
+index c872a8a1ddfa..0571938ecdc8 100644
+--- a/Documentation/admin-guide/index.rst
++++ b/Documentation/admin-guide/index.rst
+@@ -116,7 +116,7 @@ configure specific aspects of kernel behavior to your liking.
+    svga
+    syscall-user-dispatch
+    sysrq
+-   thermal
++   thermal/index
+    thunderbolt
+    ufs
+    unicode
+diff --git a/Documentation/admin-guide/thermal/index.rst b/Documentation/admin-guide/thermal/index.rst
+new file mode 100644
+index 000000000000..6eb3f4da40e6
+--- /dev/null
++++ b/Documentation/admin-guide/thermal/index.rst
+@@ -0,0 +1,10 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++==================
++Thermal Management
++==================
++
++.. toctree::
++   :maxdepth: 1
++
++   intel_powerclamp
+diff --git a/Documentation/admin-guide/thermal/intel_powerclamp.rst b/Documentation/admin-guide/thermal/intel_powerclamp.rst
+index 2d9d2d739f02..f919fbe1cdd9 100644
+--- a/Documentation/admin-guide/thermal/intel_powerclamp.rst
++++ b/Documentation/admin-guide/thermal/intel_powerclamp.rst
+@@ -326,7 +326,7 @@ Module Parameters
+ 
+ ``cpumask`` (RW)
+ 	A bit mask of CPUs to inject idle. The format of the bitmask is same as
+-	used in other subsystems like in /proc/irq/*/smp_affinity. The mask is
++	used in other subsystems like in /proc/irq/\*/smp_affinity. The mask is
+ 	comma separated 32 bit groups. Each CPU is one bit. For example for a 256
+ 	CPU system the full mask is:
+ 	ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
 -- 
-viresh
+2.39.1
+
