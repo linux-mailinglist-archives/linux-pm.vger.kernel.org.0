@@ -2,101 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B70D69523B
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 21:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06652695256
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 21:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjBMUuG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 15:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S229692AbjBMUx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 15:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjBMUuE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 15:50:04 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136EC1F4B4
-        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 12:50:03 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id qb15so32918420ejc.1
-        for <linux-pm@vger.kernel.org>; Mon, 13 Feb 2023 12:50:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P2EKmFD/uLCmdYgJ9rbVqoH0K8+zTnB6m2O8sRKrnrk=;
-        b=G9wokKLe0gYPoQN+jQX38Ml1Pv83XDj7zNvFBv2UJdls8nCd6Vrtg/xTlEp9RB3eCc
-         tQ/ma5pNSvc9H2KdZASNooO4+eVR2oP02VyntFu6S//vePCn5SCHNA/iGoR2mXtJi2vJ
-         LC3PKh6zsDfnWDN4Dr6E0QM+a+b5rpjcwytAf89oRnjRTuQcYd0AvhcXmQaKdzOcePRU
-         g8qOCM2I2n5vBnB3bOzJhDfYyzniaAI5Eg7wGZj0akOFeiSbw8Wkhgri7pxB2rEPlW8S
-         BsPjbf5TrgP/v0rd9OKnO0wei0LHX5850BM3evsSYSnheWFifW0iPZf542lYSYzrh43c
-         OBEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P2EKmFD/uLCmdYgJ9rbVqoH0K8+zTnB6m2O8sRKrnrk=;
-        b=JFZ+qFCU2uTXuRq9H5JfpmrHAZF6JrY1VBxDEphG9gPjeH2wpkZyvpUZAjAD1gRyKT
-         vBIKu/EDG5DMhkImoB2XX3MiEOFOuLZIWUwmFraRMKZXdyizkqM5qEipGH9Q8RTkJ+lx
-         We/p9C+AvmQyRb3t6J9NoYFU9ZJOGUW7b/5+9091+u9tddn4IWZPDjcstQzojZvazkxx
-         PxXvKAqxXEpWUt0ePtDNViaCGwx7EFxBgUlGOHRuQ8jxI9nO5r9Oe8NlJLIf58HOxggt
-         RXGYq7wDwi5kJEaGIYx5fZAmEIx9a2JKJxNDoPvES60AOBjJ1tbkoGasKGLdTrChJvsN
-         4EIg==
-X-Gm-Message-State: AO0yUKUPZoSJgeGhYzyWqZfRJdQb+BLz+u2WLJtGWEIqrebI/2MMb59H
-        gBWImVwf+MyGLb9NbYrKEepMKg==
-X-Google-Smtp-Source: AK7set/f+xxG2O4MMtQXGC+ZfzFTdI8pROMejW7fdrRD9XbtsKprHvnkE8GXtoC2Vfl8GRO0C1Nneg==
-X-Received: by 2002:a17:906:110a:b0:886:9b85:ac5d with SMTP id h10-20020a170906110a00b008869b85ac5dmr275231eja.44.1676321402705;
-        Mon, 13 Feb 2023 12:50:02 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170906739500b008a94f69a1e7sm7303123ejl.163.2023.02.13.12.50.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 12:50:02 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: qcom: pm8998: Add a specific compatible for coincell chg
-Date:   Mon, 13 Feb 2023 21:49:50 +0100
-Message-Id: <20230213204950.2100538-3-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
-References: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
+        with ESMTP id S229539AbjBMUx0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 15:53:26 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD9A1F936;
+        Mon, 13 Feb 2023 12:53:25 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DEA0B6600358;
+        Mon, 13 Feb 2023 20:53:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676321604;
+        bh=MU7Up8g4XWnVTRiQOQ2hENRWDzhjov7avNea39+l+Fs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=geEetMYcrIHbpVpbPa9dydMUzw1+ROLFBBuiumfTN1Xap1cRFGbhMhu9VGlXR6vzp
+         InR4bjm6Pj30yFfc4jmpex/JPceOii7RT3gXgOIcYGNICTepjKYW5qd6EjrurTbn8t
+         VU+Dej4qdWUG79hUBzUm2tceeRv9CINGNE9NM5MMp43j78vb88O4gWFWU9o5ZyidVN
+         ZPnINWO2KDamwWA/sjLPfqPUOFgCPj62ZaBZPILLZT94NY5v/SQlZVZMHv7suV2y5d
+         o+iT0AsXYpvLeUWJQZoU/XGSsSUXkjm9yKRa+T8qCIed2VZ9k2uN3MjGgaAvJJr02+
+         eOTFCsP78yehw==
+Received: by mercury (Postfix, from userid 1000)
+        id 724F81060961; Mon, 13 Feb 2023 21:53:21 +0100 (CET)
+Date:   Mon, 13 Feb 2023 21:53:21 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterwu.pub@gmail.com
+Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Message-ID: <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
+References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r3cq4aakiv6m7xrb"
+Content-Disposition: inline
+In-Reply-To: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a PM8998-specific compatibel to the coincell charger and keep the
-PM8941 one as fallback.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/pm8998.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--r3cq4aakiv6m7xrb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8998.dtsi b/arch/arm64/boot/dts/qcom/pm8998.dtsi
-index adbba9f4089a..340033ac3186 100644
---- a/arch/arm64/boot/dts/qcom/pm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8998.dtsi
-@@ -72,7 +72,7 @@ pm8998_temp: temp-alarm@2400 {
- 		};
- 
- 		pm8998_coincell: charger@2800 {
--			compatible = "qcom,pm8941-coincell";
-+			compatible = "qcom,pm8998-coincell", "qcom,pm8941-coincell";
- 			reg = <0x2800>;
- 
- 			status = "disabled";
--- 
-2.39.1
+Hi,
 
+On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
+> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> "richtek,rt9467"
+>=20
+> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 batt=
+ery charger")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+
+Is there a new version of this fixing the issues pointed out by Krzysztof?
+Also I think the filename and $id should be changed to richtek,rt9467.yaml
+in addition to the compatible change.
+
+Thanks,
+
+-- Sebastian
+
+>  .../devicetree/bindings/power/supply/richtek,rt9467-charger.yaml      | =
+4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt946=
+7-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9=
+467-charger.yaml
+> index 92c5706..9176808 100644
+> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charg=
+er.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charg=
+er.yaml
+> @@ -25,7 +25,7 @@ description: |
+> =20
+>  properties:
+>    compatible:
+> -    const: richtek,rt9467-charger
+> +    const: richtek,rt9467
+> =20
+>    reg:
+>      maxItems: 1
+> @@ -65,7 +65,7 @@ examples:
+>        #size-cells =3D <0>;
+> =20
+>        charger@5b {
+> -        compatible =3D "richtek,rt9467-charger";
+> +        compatible =3D "richtek,rt9467";
+>          reg =3D <0x5b>;
+>          wakeup-source;
+>          interrupts-extended =3D <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
+> --=20
+> 2.7.4
+>=20
+
+--r3cq4aakiv6m7xrb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqo0EACgkQ2O7X88g7
++pqQSQ/+OkcfFPZuVrVvDR2ftl8gF8q3d0f9bhdHTcWG7rc3umiDAVn956mOKbMq
+Uitnia+BeovzD1oiGhfF5F7sriXqMGo4Ul7Jr3xXmkXzDZw4l5dlRAwtv8R0tlAN
+/ELRpIMViEFCWOBlAMEQYkhKECNKtSCe/U69iS6ouwoPkVnxWhpG46zCsMR+9pFX
+VSgDyXNf/HPDaTvOhX0p7NMQG8Ov69TzSuwrO21krRCWEcrvdXaXfQ7VrFsYb/2z
+XYntcAqeOawPKCn8Rm0QpDGuczujvIWvrqYJMJf5ItAcfH6ga5UwzHRs2dZmOm9q
+UlhSxpc3/ZtiS0RzY5+cVT7iFlJ2UKxtVVS9YVhg+NXhwebAFdDIKwdsvGf9Qvzz
+hB+FJ8GXVPcUQZr5E7002FDwa/OXum2434AFM0pBrlkxwLXpVthqAUAj3v5DTASW
+Q0+qaDID8J84jDAr+0QWulGKp1HbuhOutJg9f34/5oE8Am73IQLBSYh8gq55s6S6
+p4tfMnvY4n0ZyV9Elvg8cwlT1x869hLIq96jADp8rxaNMl8h+sXNRzsDq6ZYyLBe
+Xs1LLukQSTHV8m8DHJ0BpEjfr+n3K+geisZL1feQSE248scNexm0nSbT8f9oGm+4
+TnPKWjKtblKrkh7TGIr35abxhb5Gzq7lkPp2CtxYppW9WuMusfY=
+=RCkA
+-----END PGP SIGNATURE-----
+
+--r3cq4aakiv6m7xrb--
