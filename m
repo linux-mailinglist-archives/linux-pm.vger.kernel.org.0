@@ -2,83 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535E2694B4D
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 16:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B283694B58
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Feb 2023 16:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjBMPfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Feb 2023 10:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S230061AbjBMPid (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Feb 2023 10:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjBMPfT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 10:35:19 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66D0193EB;
-        Mon, 13 Feb 2023 07:35:09 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id lu11so32877486ejb.3;
-        Mon, 13 Feb 2023 07:35:09 -0800 (PST)
+        with ESMTP id S229896AbjBMPic (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Feb 2023 10:38:32 -0500
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A5A193EC;
+        Mon, 13 Feb 2023 07:38:30 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id u21so13495240edv.3;
+        Mon, 13 Feb 2023 07:38:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8JhJdlDL6fmbS5q19tX3fu+mCrdjV4k/N8ZhnKBWWqo=;
-        b=uryIt///vhzsubPV6oEXofZhYuq53F6QF3KamMZoT+w9Lt+3jO3qw2vC1vr0Kt+e+3
-         SnlzDfhWqn10JcCH/5haVzHLHu2SM/Oas1kM93XSZMkibJxmVXYRB5Lg3xNPjDwCMvos
-         wbLhGRfrmILcdl2QCVx1MZiCiv5eSnOyLjK7FXLLJ9aPrpcGzlfjkstVY8mLHwyWomlG
-         2lnLitItY3pqmQ7iJbw9H5j0be7B+oj1sdstXJ0betVFtPtJlYAOnB3QsCoeQBlmUCAp
-         a/r/WEUgFbDb0cVGV/IqP3Sk3m4bw4u26zZlitcvUXbX5bwhg759E05xRniVNUTV+tGn
-         hg6g==
-X-Gm-Message-State: AO0yUKUc+0H5nmsxlP1RsfonFqcWJIodLyt6Pbwrcclyv+9lSQnkl6Vx
-        V5hEr6kFTWV5wjMSWE9HNUk7TWqmkV8dCUc4h1b3Mwes
-X-Google-Smtp-Source: AK7set/tr7RnF5ql64ehY94/sYYKISWF6RLnIz0lIwA5Qx9zhJKZhozIHSQ9NiF+2QIYAD0HOdAMZEQ3lo83wQneLHw=
-X-Received: by 2002:a17:906:d9d0:b0:8af:2abd:63ec with SMTP id
- qk16-20020a170906d9d000b008af2abd63ecmr4953094ejb.5.1676302508452; Mon, 13
- Feb 2023 07:35:08 -0800 (PST)
+        bh=/87Mt+OfWS54SLniYHSHhoF1OzMVcQInuz6lOAm1ITI=;
+        b=12PeChOFvadL61YN+kpNPivvcI+AupHwBRLOyFGuRGU9WPRrmJfLbCrUIqvcAtydQn
+         nni504tZApnMh1JEAq16k6PMcJ3OngZPjKAFhbrzA/bmE10YKzHVXAWUlcIkDdQVQi35
+         Jo6cOkyJrvALCSFb2QcZz5r9APvgkV1FSk2IeaeY5hlSWf5O0fHP0J4aR+GsIEfkm06J
+         f1spg7De5BBvXyXKFalB5iDV8XyeaX0snOvq5l9BbqoRVRpiUxzmgQDGVIukIFhbDTDP
+         deEHz9xf+2tk7gJCn7zHasHUomZK7NsNyC+def3Mas1fBYaHF5howDm2R+V3oLUs6MFR
+         Fwig==
+X-Gm-Message-State: AO0yUKXVNIdUt6/RVekPN69YXjtX5DAIYaS2AuDaYKInMI8BgVav5EEv
+        s1hAc3z1ebzj4w5xr+izMy4oNWQvL9no4YUnPtk=
+X-Google-Smtp-Source: AK7set/gPlIC2eOAY2XqGE6GdihDj9jHSedBktD5q34/c7R5wMsZ0nx0m0yQIbiWvGC7F0L1/Il/JyPSJjgkmU9F/oY=
+X-Received: by 2002:a50:baab:0:b0:4ac:cdd9:1c97 with SMTP id
+ x40-20020a50baab000000b004accdd91c97mr1078170ede.6.1676302708989; Mon, 13 Feb
+ 2023 07:38:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230213100800.28333-1-bagasdotme@gmail.com> <f6fc39d2060c964d32b6610956b66e8d3151d926.camel@linux.intel.com>
-In-Reply-To: <f6fc39d2060c964d32b6610956b66e8d3151d926.camel@linux.intel.com>
+References: <20230206153432.1017282-1-daniel.lezcano@linaro.org> <20230210094056.GC175687@linaro.org>
+In-Reply-To: <20230210094056.GC175687@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 16:34:57 +0100
-Message-ID: <CAJZ5v0jhz-x+YU7h=kPM3ECGT6cqkSmbkHVOCavY4cOLaJhugA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Documentation fixes for thermal/bleeding-edge
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+Date:   Mon, 13 Feb 2023 16:38:17 +0100
+Message-ID: <CAJZ5v0iEYtFJAh94w+K-T90PXLRDzyUgvb_OPL9aOvphTH2CGg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        oe-kbuild-all@lists.linux.dev
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:18 AM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Fri, Feb 10, 2023 at 10:41 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Mon, 2023-02-13 at 17:07 +0700, Bagas Sanjaya wrote:
-> > Here are documentation fixes for thermal/bleeding-edge tree. The
-> > first two patches are fixes to recently reported kernel test robot
-> > reports whereas the third patch is cosmetical (formatting).
+> Hi Rafael,
+>
+> On Mon, Feb 06, 2023 at 04:34:29PM +0100, Daniel Lezcano wrote:
+> > As the name states "thermal_core.h" is the header file for the core
+> > components of the thermal framework.
 > >
-> I am fine picking up this patchset over mine, as this series has  one
-> additional fix.
+> > Too many drivers are including it. Hopefully the recent cleanups
+> > helped to self encapsulate the code a bit more and prevented the
+> > drivers to need this header.
+> >
+> > Remove this inclusion in every place where it is possible.
+> >
+> > Some other drivers did a confusion with the core header and the one
+> > exported in linux/thermal.h. They include the former instead of the
+> > latter. The changes also fix this.
+> >
+> > The tegra/soctherm driver still remains as it uses an internal
+> > function which need to be replaced.
+> >
+> > The Intel HFI driver uses the netlink internal framework core and
+> > should be changed to prevent to deal with the internals.
+> >
+> > No functional changes
 >
->         [thermal-bleeding-edge][PATCH] thermal: intel: powerclamp: Fix
-> warnings
+> Are you ok if I take this patch ?
 
-So applied, thanks!
+Well, you've already done that.
