@@ -2,114 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8AA69671E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D85696727
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbjBNOin (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 09:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S232531AbjBNOlx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 09:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbjBNOib (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:38:31 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CD52B624
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:38:16 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id fi26so17674979edb.7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:38:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LJCQPkMo7WAJkj+57CfoI7qkGu8zTyPx4xks1X9yahs=;
-        b=eK1VYaDEis0UR1gAg3Ptuend7jTW3UObknUnXxOM6nz0hNjmg8mttlhnhzenS9CBjV
-         p2WLDq1lqWo7SRzrJJ7an9OQSLAEfcYu5aHpb1L3yGecDDR7jzaq/OSBi4bLeeW/jC63
-         Ae17BuCkT/vIhgPKq7Gn1uiaszE/bgZsyl3pYmpnJCkjaDLI47o22h9l/gifH5JpbzWU
-         zvnQaW6Vl3VP7wHxb6tE2nG/K3NMxG4vKBlS5IAMqJeSCtTbVoznpd3E8T9fJOHOAMdf
-         CR+TdZTqQ0pfv7PHa4w/JY+PRRtHirSHrPLQlQNxpmVcySeX4lA28EqbWG/v2rUgk0FF
-         DpBA==
+        with ESMTP id S232729AbjBNOlw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:41:52 -0500
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B2B21945;
+        Tue, 14 Feb 2023 06:41:51 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id u21so17742400edv.3;
+        Tue, 14 Feb 2023 06:41:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LJCQPkMo7WAJkj+57CfoI7qkGu8zTyPx4xks1X9yahs=;
-        b=JyJaewUiJiqTQuu5ddZbSBk5ii1VxvHshjtaesj4W3VSVSFqM8p9/eUrzOlURk/fxw
-         8XsAzb32MTgRgusBb0VHlPVqcmlWvIEQLhyF4wbiKiYy9apgTI87grTvGvttW+uoqhVF
-         KM0C5KhJKN4XpI2T5SX/M3EbOQmkWFjZX1uFOB1LgApS/+GV9lcuNrv573WAcsCF8u/t
-         hACKZ1NPD8syHIk/xLMM5Ea+fLl4hmjIbC9sUaXI9Q2mFhFsefycrMZbM6052x+9WTk8
-         FmtZSJQfKITIZtTfGh787cFyJwf7q0SBTaGAxgZxcW/5He3qdmUbsa2MAV0zwhyxbu19
-         KYkA==
-X-Gm-Message-State: AO0yUKV4cvl1m6j3uceN//2Sjy9cCMGMubMJEzpX6ie3MgEuvb/ig0WC
-        RfhitDNn0nqRtNaRhVySoU8I8Q==
-X-Google-Smtp-Source: AK7set+mYNNqE0zRpd6FXmlvts0mLH5Fc27sAuhJP17bGBM4zCE+afxTBjL4ls9yotjoq+pW8ca3hg==
-X-Received: by 2002:a50:8ade:0:b0:4ab:4d69:f9e3 with SMTP id k30-20020a508ade000000b004ab4d69f9e3mr2829455edk.20.1676385494659;
-        Tue, 14 Feb 2023 06:38:14 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id eg21-20020a056402289500b004acb6189693sm5378052edb.83.2023.02.14.06.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 06:38:14 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 12/12] interconnect: qcom: icc-rpm: Allow negative QoS offset
-Date:   Tue, 14 Feb 2023 15:37:20 +0100
-Message-Id: <20230214143720.2416762-13-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
-References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CaFJsZLG1yaHAOaVj94M7dknjPMkfjabuH7GLPdGLtw=;
+        b=PiPtjrsWhBpJC66XxDNpvGlHGIaRNjKlV1YUQ74GGkvC4v2xC62dxAsxJKw6TgG+Ye
+         QPxZZfwRKc4E/lzo/xWWe5QNZsTgsFMmdF6HMF4Fy5inUk8Pk//EKgD6Cz3kK14cF795
+         wFGyyShCwbLQlCaJg2w4q9wwxwYBEROcCIriYhfSylJfGYm4hW+rd5c+L8OrRdZ1/550
+         /HTUBwUyEowuyI9AIvHGjKmlwmL+cqzBtj0ezddcwH+HH/nOw9OrJvuzeqyPtu6Luhvf
+         oKx3diUSzZoESipMkynd3EM0bo+Sp03nVlsZ8SBb3rbe87BwPo0ZE71LQQHoBFgUDprl
+         mWlw==
+X-Gm-Message-State: AO0yUKU1DyNNnk0OCcIJ2IcSAkSy0f9trpZyfvEcw9TcFVWhTHyGM2kC
+        WNeqa+lFrIGitweGsJRETySaO+dfCEiCNCqDQ47vFj5V
+X-Google-Smtp-Source: AK7set+liXYYxCabxOryUIc0a0OhOY7VfNtiGWaBEsWMbD2EsukiQxyVWjNBt4a4RunDes+A4nJpYgoYb27/Y8sn7Nk=
+X-Received: by 2002:a50:f691:0:b0:4ac:50e4:1eee with SMTP id
+ d17-20020a50f691000000b004ac50e41eeemr1291725edn.3.1676385710090; Tue, 14 Feb
+ 2023 06:41:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <12138067.O9o76ZdvQC@kreacher> <12124970.O9o76ZdvQC@kreacher>
+ <mafs0sfgybc3q.fsf_-_@amazon.de> <CAJZ5v0hAjKvinPqX2VuCv1jVu50jrnDpECaO=sA2CQZFHZpJdA@mail.gmail.com>
+ <mafs0zga0ds30.fsf_-_@amazon.de> <CAJZ5v0j1CBe7Hjhg7Tzm3HkuinA9zgtPffMtd96ZaOds=US+xQ@mail.gmail.com>
+ <0f74e16d2a1c5005c342d800445c046b8fe248cb.camel@linux.intel.com>
+ <CAJZ5v0g1PiMDFUeVKy3YL4pni6oDDaEVTw-LLYnYMMsF+5uuMQ@mail.gmail.com> <dc9f52c96be1be761177e4d52eae1cd4306abeb4.camel@linux.intel.com>
+In-Reply-To: <dc9f52c96be1be761177e4d52eae1cd4306abeb4.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Feb 2023 15:41:38 +0100
+Message-ID: <CAJZ5v0gVHOw-2oyW-x53Ud6vwNKNQyepBptGunb8SXJL1U_ziw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit"
+ frequency QoS
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pratyush Yadav <ptyadav@amazon.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In some very very very very unfortunate cases, the correct offset of
-the QoS registers will be.. negative. One such case is MSM8998, where
-The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
-take into account with the register calculation, making the actual
-BIMC node start at what-would-be-the-BIMC-base+0x300.
+On Tue, Feb 14, 2023 at 3:25 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Tue, 2023-02-14 at 14:57 +0100, Rafael J. Wysocki wrote:
+> > On Tue, Feb 14, 2023 at 2:40 PM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > > On Mon, 2023-01-30 at 15:58 +0100, Rafael J. Wysocki wrote:
+> > > > On Mon, Jan 30, 2023 at 3:18 PM Pratyush Yadav
+> > > > <ptyadav@amazon.de>
+> > > > wrote:
+> > > > >
+> > > > >
+> > >
+> > > [...]
+> > >
+> > > > > [0]
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
+> > > >
+> > > > It's already in the mainline:
+> > > >
+> > > > e8a0e30b742f cpufreq: intel_pstate: Drop ACPI _PSS states table
+> > > > patching
+> > > > 99387b016022 ACPI: processor: perflib: Avoid updating frequency
+> > > > QoS
+> > > > unnecessarily
+> > > > c02d5feb6e2f ACPI: processor: perflib: Use the "no limit"
+> > > > frequency
+> > > > QoS
+> > >
+> > > I am checking 6.2-rc8.
+> > > I don't see these commits.
+> >
+> > You are right, they are in linux-next only, sorry for the confusion.
+> >
+> > I'm going to push them for 6.3-rc1 this week, though.
+> I don't think they are marked for stable. Can we add that?
 
-In order to keep the calculation code sane, the simplest - however
-ugly it may be - solution is to allow the offset to be negative.
+I'd rather not rebase them for that.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index 77e263b93c27..5e4215f25c2e 100644
---- a/drivers/interconnect/qcom/icc-rpm.h
-+++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -39,7 +39,7 @@ struct qcom_icc_provider {
- 	int num_intf_clks;
- 	enum qcom_icc_type type;
- 	struct regmap *regmap;
--	unsigned int qos_offset;
-+	int qos_offset;
- 	u64 bus_clk_rate[2];
- 	bool keep_alive;
- 	struct clk_bulk_data bus_clks[2];
-@@ -105,7 +105,7 @@ struct qcom_icc_desc {
- 	bool keep_alive;
- 	enum qcom_icc_type type;
- 	const struct regmap_config *regmap_cfg;
--	unsigned int qos_offset;
-+	int qos_offset;
- };
- 
- /* Valid for all bus types */
--- 
-2.39.1
-
+It is still possible to send an inclusion request to -stable when then
+get into the mainline.
