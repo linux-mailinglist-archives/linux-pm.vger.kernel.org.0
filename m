@@ -2,111 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3996F696733
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C19696736
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjBNOn7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 14 Feb 2023 09:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S233249AbjBNOoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 09:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjBNOn7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:43:59 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECAEA271
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:43:58 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id rp23so40646307ejb.7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:43:58 -0800 (PST)
+        with ESMTP id S233032AbjBNOoQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:44:16 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4532D2119
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:44:15 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id fi26so17701562edb.7
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:44:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8XWKsMAMHm9nwcB8DjIvRNSxdBTihQ3x6QCKjjISyso=;
-        b=4WboDN5yTHWs/zGyWBZgKfAH3o6oyinJfRNXL9axNeu513r3hgr6rO62d30AfPKUG7
-         mieOLAX6v/athhXUX1LFOrcNU/SpzoAKNRlKRWHMuGgiDsM2eepCe7llY+mnVeai8L8d
-         QCn3pmjBtqDYRaZ+niuwoMsnlwsO6/hL2XyrB/muW0quCnFk4g1Vq8Uj4UtC9gfa2jeP
-         zcmEaNPCDQgIY0oKGvsHcSI4q07R6KsF0kPt4Ofjf/oSciA8a93i/dPq7mgvR/YvGq/d
-         vzVt7Ncisnjq3B2oWUAY6LQfKYaT2Z03x+w/YenMtkrx5Pj1dxMiOWZHqNNQqL8gQhmJ
-         eFZg==
-X-Gm-Message-State: AO0yUKXPjM05uYGSR+p8M8fHdZvxXyBIrMtOUtbqFgkkPDDlAKfXx8A3
-        75kqhhqy/X3CkuloehV5nottJhMWrIWnDlgPBpLCLd3E
-X-Google-Smtp-Source: AK7set/08ymOiEaoPnprA2XKlk+Zhx5jOEmBXu38SIyw/CxaviJIXGSFkM0zsHju4CK7WKeb/nAKOxUtcFRBbkGV+/I=
-X-Received: by 2002:a17:906:f154:b0:8af:38c9:d52d with SMTP id
- gw20-20020a170906f15400b008af38c9d52dmr1475277ejb.2.1676385836571; Tue, 14
- Feb 2023 06:43:56 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r8DlOof1qKZcOLUpVo4Fr+SwDlEqIiPfD5b+11BU5tE=;
+        b=IBwHh78vuII4d0wn1bcc10x+2YgFGy9SUf0yX0TfyI9++eEmRkZYKsVJgXkR+oseS6
+         IaALWN6PXs2t6SLOwiIhg8ipuqSyQeZymDl4Nmk+k5aqYaDi1BqnIGjajnXZjxIBSkN5
+         ItPwhGNQBVnUqOeiFKaCn7T8d4+GuEsUvFktvdgD5QJ2lbKu20jKmY2kOE0KintklEGV
+         MAhCES3GzGMDCHBJ6Llz9BdLiSvVvTuATaMIaLrVRMyEqOmSnzMzZ/tVT7aeTy8NIXhT
+         ty8szAbCOzQSGNIzGI6hsSfBHoknS2B4NUx+9A1BGRBELuT8fnhqI6xUt/72w3ODAdbO
+         QuAw==
+X-Gm-Message-State: AO0yUKVlgXmWevFJraM0nMBW24zc4JNyku4iRcyTKSjG8LU7U3Y3/Jax
+        dAADJ57E5YiQMO99NTsZPJyUPET0Dx7gZWszyLI=
+X-Google-Smtp-Source: AK7set8iQhw78Gwz4w+L5hxXH9e/6QCPhu67ioGspnWYvg5+OnEhddiUb8SXK74VQUKRLEPiztoRvUD4zA2VvdXSPIs=
+X-Received: by 2002:a50:9f07:0:b0:4ac:20b:96b0 with SMTP id
+ b7-20020a509f07000000b004ac020b96b0mr1307755edf.3.1676385853665; Tue, 14 Feb
+ 2023 06:44:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214053500.ziqfmb3temvetssk@vireshk-i7>
-In-Reply-To: <20230214053500.ziqfmb3temvetssk@vireshk-i7>
+References: <20230214053838.5tyq375sxbrprque@vireshk-i7>
+In-Reply-To: <20230214053838.5tyq375sxbrprque@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 15:43:45 +0100
-Message-ID: <CAJZ5v0juEfSpYALddGvKawd4sYZQKay=3ga2-OaNRib2ju5fEA@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 6.3
+Date:   Tue, 14 Feb 2023 15:44:02 +0100
+Message-ID: <CAJZ5v0iEPY1RJiWJg_eTdrcmJsObTkafs92Bo0ZwwJA+bM9+gA@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 6.3
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 6:35 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Tue, Feb 14, 2023 at 6:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
 > Hi Rafael,
 >
-> The following changes since commit 51be2fffd65d9f9cb427030ab0ee85d791b4437d:
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 >
->   cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH systems (2023-02-06 09:31:38 +0530)
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.3
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.3
 >
-> for you to fetch changes up to ba38f3cbe7db2cec802c6d60e2bef57a3ff095a4:
+> for you to fetch changes up to eca4c0eea53432ec4b711b2a8ad282cbad231b4f:
 >
->   dt-bindings: opp: opp-v2-kryo-cpu: enlarge opp-supported-hw maximum (2023-02-14 10:51:58 +0530)
->
-> ----------------------------------------------------------------
-> Cpufreq arm updates for 6.3
->
-> - Enable thermal cooling for Tegra194 (Yi-Wei Wang).
->
-> - Register module device table and add missing compatibles for
->   cpufreq-qcom-hw (Nícolas F. R. A. Prado, Abel Vesa and Luca Weiss).
->
-> - Various dt binding updates for qcom-cpufreq-nvmem and opp-v2-kryo-cpu
->   (Christian Marangi).
+>   OPP: fix error checking in opp_migrate_dentry() (2023-02-08 10:40:59 +0530)
 >
 > ----------------------------------------------------------------
-> Abel Vesa (1):
->       dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550 compatible
+> OPP updates for 6.3
 >
-> Christian Marangi (3):
->       dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify supported opp tables
->       dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr bindings optional
->       dt-bindings: opp: opp-v2-kryo-cpu: enlarge opp-supported-hw maximum
+> - Add missing 'cache-unified' property in example for kryo OPP bindings
+>   (Rob Herring).
 >
-> Luca Weiss (1):
->       dt-bindings: cpufreq: cpufreq-qcom-hw: Add missing compatibles
+> - Fix error checking in opp_migrate_dentry() (Qi Zheng).
 >
-> Nícolas F. R. A. Prado (1):
->       cpufreq: mediatek-hw: Register to module device table
+> - Remove "select SRCU" (Paul E. McKenney).
 >
-> Yi-Wei Wang (1):
->       cpufreq: tegra194: Enable CPUFREQ thermal cooling
+> - Let qcom,opp-fuse-level be a 2-long array for qcom SoCs (Konrad
+>   Dybcio).
 >
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml    |  5 +++++
->  Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml | 81 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------
->  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml        | 16 +++++++++++++---
->  drivers/cpufreq/mediatek-cpufreq-hw.c                             |  1 +
->  drivers/cpufreq/tegra194-cpufreq.c                                |  3 ++-
->  5 files changed, 77 insertions(+), 29 deletions(-)
+> ----------------------------------------------------------------
+> Konrad Dybcio (1):
+>       dt-bindings: opp: v2-qcom-level: Let qcom,opp-fuse-level be a 2-long array
+>
+> Paul E. McKenney (1):
+>       drivers/opp: Remove "select SRCU"
+>
+> Qi Zheng (1):
+>       OPP: fix error checking in opp_migrate_dentry()
+>
+> Rob Herring (1):
+>       dt-bindings: opp: opp-v2-kryo-cpu: Add missing 'cache-unified' property in example
+>
+>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 2 ++
+>  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 4 +++-
+>  drivers/opp/Kconfig                                          | 1 -
+>  drivers/opp/debugfs.c                                        | 2 +-
+>  4 files changed, 6 insertions(+), 3 deletions(-)
 >
 > --
 
