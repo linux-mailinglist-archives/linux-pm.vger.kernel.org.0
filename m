@@ -2,56 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C505A696584
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 14:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7886965F6
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbjBNN54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 08:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
+        id S233218AbjBNOJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 09:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbjBNN5y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 08:57:54 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA13ABBB7;
-        Tue, 14 Feb 2023 05:57:32 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id sa10so40233600ejc.9;
-        Tue, 14 Feb 2023 05:57:32 -0800 (PST)
+        with ESMTP id S233160AbjBNOJo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:09:44 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6276E2203C;
+        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id dr8so40272796ejc.12;
+        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Nmznzbw1bOIjwDiJ10Y1TrCJXhhnPxVRmXhihKNuSew=;
-        b=JYKP8322sUNLaE9mx2v1oz44Q+ZPldJ+xG/rzylUOR4zjK43BSc9w3ecOViYdzCMpQ
-         tR6kKj4o+F+Aa9QMBXorEqvcKcTxg9qVcqsDHLgY3cz/bBY92W46JWwMWbcVA0Hm7GYP
-         WqGtdcNxq3LbyOShrvK54G9OEGjwD4jYcj3ReUW8F8ZVvnzZWc1JiPgAq3b+p/qeqmQO
-         vrH5swaFugCTTXCNZMIPbal0nLgPGRR5G95BkpmdtN6MjKLf7jqBMvBzL5IkErHqcAJU
-         S6P/wQeF04RdnwmkGGpQ4RKb2P9YVUE3mWkQfdImmVEfQuj9RLAy1P/jtbF/Ht3LGj6+
-         VIFQ==
-X-Gm-Message-State: AO0yUKVozrWqNlrwjSzC1JADsZiAN0c31FgOtC71xxbsxu5Ea6EvGDed
-        FAR4BOQ4Uq618h4mc7Ye+mQk0hAkKJ3kg+5Gapk=
-X-Google-Smtp-Source: AK7set+uH6pcyxWm+CEeJiXxPUp7JSWQ/TgSg6q3J/PDPXX1EWcHvLVs/oUrQCd74L4gVYpt65P1stogFSdSmylmYaM=
-X-Received: by 2002:a17:906:e28a:b0:8b1:3298:c587 with SMTP id
- gg10-20020a170906e28a00b008b13298c587mr770691ejb.2.1676383033916; Tue, 14 Feb
- 2023 05:57:13 -0800 (PST)
+        bh=p7hlSNqIh/Sna2kEiZvGWoB1aXxpevaYTwBOmCsTko4=;
+        b=VQhEXrJCClXlTMVNlCv6k10DCH92MxLpaMSlvWwbjtVae3qS3cNwQgeAVYBviuU7Yn
+         CVrJCkXVIcdcLCGmqRbZkFaQhvVuEr5hxzmM0tZN0sDNKarno1aQs2/9x2Caimp5KZVt
+         62wU+p9URpngfpXIJnTaO5usOM03PsVEyse9ne86RnZCb9ZcEBA0RgmWWR4ROEZYjSH4
+         IyVk/TEIdorq44jWadIQ9iydvdZ1NYndc5VSj1F2IAuaGyyrzy0LaCMtPoyBKy4lPboZ
+         2oFkMEQQcfKw8dqVddV42X2WUXPOEzEvolkkocsynZHRjCK89y/kOghpFRu2eABZ2mwY
+         3TSg==
+X-Gm-Message-State: AO0yUKWM3g51Zo0twbdNTwVK1WD3xqSiM0BEEbeVQgracy+Vt6g7sl0J
+        +s0Hq4jmLZvy77ZspNuBDoE1aFD0abtqatNPCuw=
+X-Google-Smtp-Source: AK7set+1uGQfF1O93l4l2QxjShVpBRHJC5I5JTqL8wOB2fyUeCuafm+Tc+pvZllJxQbEAbLdUrPoB0rt+WbmOkOKcl8=
+X-Received: by 2002:a17:906:b310:b0:8b1:2d36:a58e with SMTP id
+ n16-20020a170906b31000b008b12d36a58emr1154572ejz.2.1676383662806; Tue, 14 Feb
+ 2023 06:07:42 -0800 (PST)
 MIME-Version: 1.0
-References: <12138067.O9o76ZdvQC@kreacher> <12124970.O9o76ZdvQC@kreacher>
- <mafs0sfgybc3q.fsf_-_@amazon.de> <CAJZ5v0hAjKvinPqX2VuCv1jVu50jrnDpECaO=sA2CQZFHZpJdA@mail.gmail.com>
- <mafs0zga0ds30.fsf_-_@amazon.de> <CAJZ5v0j1CBe7Hjhg7Tzm3HkuinA9zgtPffMtd96ZaOds=US+xQ@mail.gmail.com>
- <0f74e16d2a1c5005c342d800445c046b8fe248cb.camel@linux.intel.com>
-In-Reply-To: <0f74e16d2a1c5005c342d800445c046b8fe248cb.camel@linux.intel.com>
+References: <20230214094115.23338-1-manivannan.sadhasivam@linaro.org> <20230214095300.pv3e73r36poth5w4@vireshk-i7>
+In-Reply-To: <20230214095300.pv3e73r36poth5w4@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 14:57:02 +0100
-Message-ID: <CAJZ5v0g1PiMDFUeVKy3YL4pni6oDDaEVTw-LLYnYMMsF+5uuMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit"
- frequency QoS
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pratyush Yadav <ptyadav@amazon.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
+Date:   Tue, 14 Feb 2023 15:07:31 +0100
+Message-ID: <CAJZ5v0ip_OHkSjQwNh5o+p2T2utXozH7DV6DFVp23bw5tzShtQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: qcom-hw: Add missing null pointer check
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rafael@kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -63,32 +58,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 2:40 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Tue, Feb 14, 2023 at 10:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On Mon, 2023-01-30 at 15:58 +0100, Rafael J. Wysocki wrote:
-> > On Mon, Jan 30, 2023 at 3:18 PM Pratyush Yadav <ptyadav@amazon.de>
-> > wrote:
-> > >
-> > >
->
-> [...]
->
-> > > [0]
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
+> On 14-02-23, 15:11, Manivannan Sadhasivam wrote:
+> > of_device_get_match_data() may return NULL, so add a check to prevent
+> > potential null pointer dereference.
 > >
-> > It's already in the mainline:
+> > Issue reported by Qualcomm's internal static analysis tool.
 > >
-> > e8a0e30b742f cpufreq: intel_pstate: Drop ACPI _PSS states table
-> > patching
-> > 99387b016022 ACPI: processor: perflib: Avoid updating frequency QoS
-> > unnecessarily
-> > c02d5feb6e2f ACPI: processor: perflib: Use the "no limit" frequency
-> > QoS
+> > Cc: stable@vger.kernel.org # v6.2
+> > Fixes: 4f7961706c63 ("cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq")
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > index 340fed35e45d..6425c6b6e393 100644
+> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > @@ -689,6 +689,8 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> >               return -ENOMEM;
+> >
+> >       qcom_cpufreq.soc_data = of_device_get_match_data(dev);
+> > +     if (!qcom_cpufreq.soc_data)
+> > +             return -ENODEV;
+> >
+> >       clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
+> >       if (!clk_data)
 >
-> I am checking 6.2-rc8.
-> I don't see these commits.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>
+> Rafael,
+>
+> Can you still send this for 6.2 ?
 
-You are right, they are in linux-next only, sorry for the confusion.
-
-I'm going to push them for 6.3-rc1 this week, though.
+Yes, I can.
