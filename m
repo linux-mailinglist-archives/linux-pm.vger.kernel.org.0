@@ -2,95 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7886965F6
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A9769666F
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbjBNOJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 09:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S231644AbjBNOT4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 09:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjBNOJo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:09:44 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6276E2203C;
-        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id dr8so40272796ejc.12;
-        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
+        with ESMTP id S233370AbjBNOTt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:19:49 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A3DD;
+        Tue, 14 Feb 2023 06:19:46 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id u21so17632269edv.3;
+        Tue, 14 Feb 2023 06:19:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p7hlSNqIh/Sna2kEiZvGWoB1aXxpevaYTwBOmCsTko4=;
-        b=VQhEXrJCClXlTMVNlCv6k10DCH92MxLpaMSlvWwbjtVae3qS3cNwQgeAVYBviuU7Yn
-         CVrJCkXVIcdcLCGmqRbZkFaQhvVuEr5hxzmM0tZN0sDNKarno1aQs2/9x2Caimp5KZVt
-         62wU+p9URpngfpXIJnTaO5usOM03PsVEyse9ne86RnZCb9ZcEBA0RgmWWR4ROEZYjSH4
-         IyVk/TEIdorq44jWadIQ9iydvdZ1NYndc5VSj1F2IAuaGyyrzy0LaCMtPoyBKy4lPboZ
-         2oFkMEQQcfKw8dqVddV42X2WUXPOEzEvolkkocsynZHRjCK89y/kOghpFRu2eABZ2mwY
-         3TSg==
-X-Gm-Message-State: AO0yUKWM3g51Zo0twbdNTwVK1WD3xqSiM0BEEbeVQgracy+Vt6g7sl0J
-        +s0Hq4jmLZvy77ZspNuBDoE1aFD0abtqatNPCuw=
-X-Google-Smtp-Source: AK7set+1uGQfF1O93l4l2QxjShVpBRHJC5I5JTqL8wOB2fyUeCuafm+Tc+pvZllJxQbEAbLdUrPoB0rt+WbmOkOKcl8=
-X-Received: by 2002:a17:906:b310:b0:8b1:2d36:a58e with SMTP id
- n16-20020a170906b31000b008b12d36a58emr1154572ejz.2.1676383662806; Tue, 14 Feb
- 2023 06:07:42 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sPhHywWh4t/1jMzIeFH4cVr3Xwf75pR89Y7MgMRkSis=;
+        b=wbXUg2x1G/f+bgiPLqgnJtqN6zD4XnU1Nhm352GmE0Mluk4GhnsU/nBzfr7BIbQpk3
+         55ugOFz6SxT3OpAMUjZkwV+zb8fahLVz5wtDtZO0unKzdlkIX0Z6HFKytotSXHhemMC0
+         WdcgOV05w2o5J2Y2VTSsJDdL5WCJ1bT7e9fe6JDJHSGmoxiEufyRRy3khPpzcfjtO7Ke
+         HUnWu8Ag0XS10Tuz8ZhbSPudQ2qu6j9lqA7nz6HWtlAbCZmClXh0tx0hfVXZLCjyG/Tz
+         sbnwx/OGrlvQnrsfKy25oarSpmWk8Qe1tJRzY1BXhglsxXmZ7ENjqa+UgUI6Q1tliE45
+         rm5w==
+X-Gm-Message-State: AO0yUKVFkIYM0m4yK22yCI8F8b1IUY8YE1SKlaDTUaqbFD+RUfJIXJGD
+        IaRWQqnDu5DqRr6Af7bc2HbShwYA5f/o6FNAc4y/cTcF6Uw=
+X-Google-Smtp-Source: AK7set/xEIBc+/8n8v7Btu7EUkswYrGl/BnTHRPBRtEX01/TnF4RPf78KpxCRfLWAMfPVrDWNOoonwJo9mPHWLaUlgA=
+X-Received: by 2002:a50:bace:0:b0:4ac:ce81:9c1d with SMTP id
+ x72-20020a50bace000000b004acce819c1dmr1046273ede.0.1676384384773; Tue, 14 Feb
+ 2023 06:19:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214094115.23338-1-manivannan.sadhasivam@linaro.org> <20230214095300.pv3e73r36poth5w4@vireshk-i7>
-In-Reply-To: <20230214095300.pv3e73r36poth5w4@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 15:07:31 +0100
-Message-ID: <CAJZ5v0ip_OHkSjQwNh5o+p2T2utXozH7DV6DFVp23bw5tzShtQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: qcom-hw: Add missing null pointer check
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rafael@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Tue, 14 Feb 2023 15:19:33 +0100
+Message-ID: <CAJZ5v0h6j8mphAxBdCWYVbbaYXO9Et+u82nWhi0hY5sNvkMCzQ@mail.gmail.com>
+Subject: [GIT PULL] Additional power management fix for v6.2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 14-02-23, 15:11, Manivannan Sadhasivam wrote:
-> > of_device_get_match_data() may return NULL, so add a check to prevent
-> > potential null pointer dereference.
-> >
-> > Issue reported by Qualcomm's internal static analysis tool.
-> >
-> > Cc: stable@vger.kernel.org # v6.2
-> > Fixes: 4f7961706c63 ("cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > index 340fed35e45d..6425c6b6e393 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > @@ -689,6 +689,8 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
-> >               return -ENOMEM;
-> >
-> >       qcom_cpufreq.soc_data = of_device_get_match_data(dev);
-> > +     if (!qcom_cpufreq.soc_data)
-> > +             return -ENODEV;
-> >
-> >       clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-> >       if (!clk_data)
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> Rafael,
->
-> Can you still send this for 6.2 ?
+Hi Linus,
 
-Yes, I can.
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.2-rc9
+
+with top-most commit 6f098cde9df2c86d60db727d6270272751943674
+
+ cpufreq: qcom-hw: Add missing null pointer check
+
+on top of commit ceaa837f96adb69c0df0397937cd74991d5d821a
+
+ Linux 6.2-rc8
+
+to receive an additional power management fix for final 6.2.
+
+This adds a missing NULL pointer check to the cpufreq driver for Qualcomm
+platforms (Manivannan Sadhasivam).
+
+Thanks!
+
+
+---------------
+
+Manivannan Sadhasivam (1):
+      cpufreq: qcom-hw: Add missing null pointer check
+
+---------------
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
+ 1 file changed, 2 insertions(+)
