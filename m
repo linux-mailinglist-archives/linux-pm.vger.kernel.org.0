@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7B5695E60
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 10:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A6D695E6F
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 10:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjBNJKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 04:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S232287AbjBNJK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 04:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjBNJKA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 04:10:00 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94022241E0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 01:08:54 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id n10so11452364ejc.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 01:08:54 -0800 (PST)
+        with ESMTP id S232433AbjBNJKE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 04:10:04 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6DB2528A
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 01:08:56 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id sa10so38337453ejc.9
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 01:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWt3LYH3/eszNoBF9DRl58MX49iUtC5j5NaUzoPgKC4=;
-        b=BLKgk2uYVpYd623GhmXngbIem3o5/4Ja7wB5VVqk5/GGO3MIFMhn+cqLX6OGFYNXrp
-         VBUx001ombc1Sz9nqm/BGmlQy6PIrQalqePysVkGDYA26+La3PhmcP3OUcn1NhdDoGGb
-         6c4MeKMCjOOPMF4Tf3EdaBgbhsL4FBek1InjKBBv3IPFDF4XumE4hFj/a/azdWqT9Cop
-         4qJYHV/4Enqd1NlMC5HWvNN3Wh31/uE3M0nRqtKRLNn4nCpYxh3GL45yzAlsHk1BHRMf
-         NRnTgQ7fD5CXmQs6FwSCVbRQr2GGob3mfeEQdWwV30qGDkDVq5KSQuf6k4NfACzoC3Zv
-         SsgQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CQlRVEdqb3xvOh0YbavmZdnZTVv7UAg4IoCftBovVqc=;
+        b=nkpCXQ56BxHkEWs0xM2KwhdQDFBBPyxNWzIisqVASibdi8RmNbz+7S3A//hu0rfqgm
+         NJHubDaNKd906a2/uWCZdR+yvvJNqEixXTtb+LJMweNmXtVOcjWaOMTyTBjKQYecpUsW
+         4YQrlSt3/wkk1g+19rmcSBLkX+ri+AS3CEUsfYc8DbHAQhj5m3064AWI5/ID+VnHXZYh
+         H6VEKdNW7wWpJKajcinMLgs80chXciNoPblQbW6m/p2LhZM1KgXFwkPIzDJir392a/PW
+         2j2WBtaWwv+8ZtKFkC9SFdLoa6jXiJaBPxX7JLGIJ7sJKDv6y5L9BOd1+Q+7K5OrbLoC
+         t28A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rWt3LYH3/eszNoBF9DRl58MX49iUtC5j5NaUzoPgKC4=;
-        b=EGvuEDbvRlqge8UaISxUXnOxxnlUdjNw8/xVcLUkdoklH7gIyxySMFofUE4Pj0Ndrm
-         5WLBU0Guj7LGV/QmklcsD1Jk9k8f0nOKeGmoQ9N5uxw/kOGZIp31N/zBlbYBgHdgQbsK
-         EaDstJJrxr2L2g14XNtsqwx00CcwUCku9DVJRO7YtcXwKeQXPdDj923DFViRbkadsgM7
-         iL2mMq4SUgpoe0+9uDphPwFmAfAqkSKBZf4DihPx0VI+Hj0wkA5Zx/O+0qbenh1RoQs1
-         uRDR2NcA3rS+uUEhAK/DEckwmV/u9xrunxcC58y987gdJT0RWBbWC6Is9WVcSzhy5TQR
-         VXyw==
-X-Gm-Message-State: AO0yUKWFeW7y1vZ6/xLUyuppCX7JMGKdcMGmnXE2bgYkdH2LoeTRmjwB
-        ry1jlMmLN7PUUnoB04zdbbStOA==
-X-Google-Smtp-Source: AK7set9Tp2XWrms9/AHj3EygmaZhp6J5Dtlo4+AuLB/kDv9YuT76Sh6vm1MiOGttQGNwsgdEwlfJeA==
-X-Received: by 2002:a17:906:5fca:b0:8aa:9a03:356a with SMTP id k10-20020a1709065fca00b008aa9a03356amr2277522ejv.49.1676365733194;
-        Tue, 14 Feb 2023 01:08:53 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CQlRVEdqb3xvOh0YbavmZdnZTVv7UAg4IoCftBovVqc=;
+        b=qCxe3FI5O6xXnKQhA0ebU7MuKC+IO0cdM5QKabvcbfgunj52nyHZDNavJFjbM3Ox1I
+         HTjvjfpotVZSb+73NDNyUQ3y7i6DuN2HkKZoZvdf+eq1zlbwJq1G04KLCIt+QahUEawm
+         w49chlzXkR4/TrZNDHCS5u7ruX7Zepj5NmlFGLReTLwEbtC87QbG8+nKTe/b0+f7Yuup
+         Zdb6HzAIKCjkxiWwBKAlWhz4bkIuuQnUJ5GiVicBAgKzYueWiQoGCGnpqMEKfcUZ7l1B
+         Z1l7i0WgjKCsxlhPHsv/KW9EWjao9cDiAeNUKky++oy38e7etWJ2EVUjUXmgszQsZlTY
+         IxWQ==
+X-Gm-Message-State: AO0yUKUoHay1gymEMb3BwkyhO2tz0Ia1VDkD89LX9R2l9iVFxAkHpC1T
+        Ys/JGkjiOM2R1zXzBiXY1WSjSA==
+X-Google-Smtp-Source: AK7set+Fio3/V9C9xU0yVNQs5+EmRzMhhPFr4O3TEgYKhPb6nLL2gLmx8WtclBUSzQsbxVmqi0BxmQ==
+X-Received: by 2002:a17:906:1249:b0:88f:5377:1048 with SMTP id u9-20020a170906124900b0088f53771048mr22128328eja.22.1676365734746;
+        Tue, 14 Feb 2023 01:08:54 -0800 (PST)
 Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170906040600b008838b040454sm7998110eja.95.2023.02.14.01.08.51
+        by smtp.gmail.com with ESMTPSA id d6-20020a170906040600b008838b040454sm7998110eja.95.2023.02.14.01.08.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 01:08:52 -0800 (PST)
+        Tue, 14 Feb 2023 01:08:54 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org
@@ -59,10 +60,12 @@ Cc:     marijn.suijten@somainline.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] dt-bindings: power: supply: pm8941-coincell: Add PM8998 compatible
-Date:   Tue, 14 Feb 2023 10:08:47 +0100
-Message-Id: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
+Subject: [PATCH v2 2/3] dt-bindings: power: supply: pm8941-coincell: Don't require charging properties
+Date:   Tue, 14 Feb 2023 10:08:48 +0100
+Message-Id: <20230214090849.2186370-2-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
+References: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,37 +78,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a specific compatible for the coincell charger present on PM8998.
+It's fine for these properties to be absent, as the driver doesn't fail
+without them and functions with settings inherited from the reset/previous
+stage bootloader state.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Convert to DT schema format")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
 v1 -> v2:
 
-- Pick up ab
+- Describe the behaviour when the properties are absent
 
- .../bindings/power/supply/qcom,pm8941-coincell.yaml       | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ .../bindings/power/supply/qcom,pm8941-coincell.yaml  | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
-index 0450f4dd4e51..b7b58aed3f3c 100644
+index b7b58aed3f3c..1d2405bea109 100644
 --- a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
 +++ b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
-@@ -16,7 +16,13 @@ maintainers:
- 
- properties:
-   compatible:
--    const: qcom,pm8941-coincell
-+    oneOf:
-+      - items:
-+          - enum:
-+              - qcom,pm8998-coincell
-+          - const: qcom,pm8941-coincell
-+
-+      - const: qcom,pm8941-coincell
- 
-   reg:
+@@ -28,12 +28,18 @@ properties:
      maxItems: 1
+ 
+   qcom,rset-ohms:
+-    description: resistance (in ohms) for current-limiting resistor
++    description: |
++      Resistance (in ohms) for current-limiting resistor. If unspecified,
++      inherit the previous configuration (e.g. from bootloader or hardware
++      default value).
+     enum: [ 800, 1200, 1700, 2100 ]
+ 
+   qcom,vset-millivolts:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description: voltage (in millivolts) to apply for charging
++    description: |
++      Voltage (in millivolts) to apply for charging. If unspecified, inherit
++      the previous configuration (e.g. from bootloader or hardware default
++      value).
+     enum: [ 2500, 3000, 3100, 3200 ]
+ 
+   qcom,charger-disable:
+@@ -43,8 +49,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - qcom,rset-ohms
+-  - qcom,vset-millivolts
+ 
+ additionalProperties: false
+ 
 -- 
 2.39.1
 
