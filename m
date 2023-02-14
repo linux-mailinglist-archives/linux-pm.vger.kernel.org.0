@@ -2,108 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17712697066
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 23:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ADB69703C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 22:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbjBNWEo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 17:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S233042AbjBNV75 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 16:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjBNWEm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 17:04:42 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC0B3AAA;
-        Tue, 14 Feb 2023 14:04:39 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d8so17225339plr.10;
-        Tue, 14 Feb 2023 14:04:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oV3VgFBLdqdFf0Ea+vkgthoqfBBbr34vGspqoFBdBuY=;
-        b=ci6jB/L5E5M98Nw7Z5xC1J1e0t9D3ayUJF0Fb03GdIxeHHbkym8/PRcs7av+rDcq1Z
-         osJFuYQ8zwoJKUO+5e2xMLXaT6pfQmtI/3I0a2uX6gOH3ZaxXZNdgOJ6QFMBjaWHw3q7
-         LMeEpIavISB31JJvk35mO0ZCv35C9poV2uiT3Lz92wgCB3GbwXvrmErdjuapg2PLuk0U
-         8n3bV6OteJRnbhggxEMnlylqFr6RB3kQwSBDYgutxYEkVGijTvXdAFNb1cJpk2BPt2L8
-         HRFL1nw32Oz854hiCrt7iUQs1iC0DyKo4p2UzdzHuHnDmvHPcs5LMz7/w1UhAGTfrgqM
-         22NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oV3VgFBLdqdFf0Ea+vkgthoqfBBbr34vGspqoFBdBuY=;
-        b=N/+Nq5KuAAduIjxKjnwSpJZPBwdZqngZ8cAZdwOkOKQQc8uf3xx3r8j8b6dOxL555p
-         tREu3rB29vWw+n2ovw1490fsvBPyLpsDPFEx4+f8yvumh7corJzBG9aJAp9h/oTS1ZIQ
-         zqBbnWnTkmKA4S8xtFfPPnSjLwBVCsnCVFYqwF5h5rhRKGPkZMFjCxk9fK2Zkfg9GRd9
-         EkT1+iKf+U2fqniDQKP9vIoe+ny4MxX3oNWnAjFUzf1VFlmWnQLajNleneJAZLOohz++
-         0wiY879EwR/TRO+VHqXbCcIRY6WXzWlc6gwaEOdBoqFY+dHoxjBaqaKGN3cmM42PCMSY
-         jrow==
-X-Gm-Message-State: AO0yUKVkH8xLAX5vinkfmCBVte+w2L9sdLWuyyGaVP9Alv1RbrcVmPnm
-        vpVYvXpQHFELRRF2yYRP+w9oALKDeQ6Pbg==
-X-Google-Smtp-Source: AK7set+JFYJC70ppqj6wFSZKns7z/qYnwZw5g3Dtklhm0QZPoVE5Foy6hPNHInIp/4cr3C64xgUXWQ==
-X-Received: by 2002:a17:90b:4b0b:b0:233:e940:d3f9 with SMTP id lx11-20020a17090b4b0b00b00233e940d3f9mr347227pjb.34.1676412279094;
-        Tue, 14 Feb 2023 14:04:39 -0800 (PST)
-Received: from kazuki-mac.lan ([2400:4051:ea3:5910::19a])
-        by smtp.gmail.com with ESMTPSA id e17-20020a17090ab39100b00233e8a83853sm23759pjr.34.2023.02.14.14.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 14:04:38 -0800 (PST)
-From:   Kazuki Hashimoto <kazukih0205@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Kazuki Hashimoto <kazukih0205@gmail.com>
-Subject: [PATCH] PM: s2idle: Don't allow s2idle when cpuidle isn't supported
-Date:   Wed, 15 Feb 2023 06:50:03 +0900
-Message-Id: <20230214215003.70683-1-kazukih0205@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S233147AbjBNV7w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 16:59:52 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FC117148;
+        Tue, 14 Feb 2023 13:59:51 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8686660217C;
+        Tue, 14 Feb 2023 21:59:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676411989;
+        bh=umvdnlXK8Q8qXfGxRr+LD6ap94ksE0y9IEQyzzsAy6U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VpkL/3XYODBw1rF2g5Hc+oIqQsICsxE717FhTvFsNxWyBaKfD3HiM9oraLfkqU8Vb
+         52CY+lGFye9YgNI5DunztvaW0oT7U1zMVYddaZQ7I+maLdtPRzsOYhj2Z7McWtAY1v
+         EqJjajMDz0Re/E0GyoPrV2CHMeDSccmkkIO+ZRa/wKvPABvdE3ZKjrg6KVl3RmZEYT
+         oz0X84WPkXsXZ8JkrpbZ4VXmkc5ZeC2T3qtEoy0WpT0F7cKtpwKQ8BUXA1StGW0cwc
+         +xcvc6KDdYCgw+7aGGTF8SpZLKd8T/rxKnuwyK0Yw/YX1j2w4GxaC+PWU6Hm+yF63F
+         CI10EvlmkA8gQ==
+Received: by mercury (Postfix, from userid 1000)
+        id BF2BF10603FE; Tue, 14 Feb 2023 22:59:46 +0100 (CET)
+Date:   Tue, 14 Feb 2023 22:59:46 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] power: supply: fix spelling mistake "charing" ->
+ "charging"
+Message-ID: <20230214215946.m4r73dy5fxds7p3g@mercury.elektranox.org>
+References: <20230214092425.265553-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="64xkbddsvhgi7vvf"
+Content-Disposition: inline
+In-Reply-To: <20230214092425.265553-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-s2idle isn't supported on platforms that don't support cpuidle as of
-31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze()
-too"), so update the suspend framework to reflect this in order to avoid
-breakages.
 
-Link: https://lore.kernel.org/all/20230204152747.drte4uitljzngdt6@kazuki-mac
-Fixes: 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze() too")
-Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
----
- kernel/power/suspend.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+--64xkbddsvhgi7vvf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 3f436282547c..27507ae7c9c9 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -556,6 +556,12 @@ static int enter_state(suspend_state_t state)
- 
- 	trace_suspend_resume(TPS("suspend_enter"), state, true);
- 	if (state == PM_SUSPEND_TO_IDLE) {
-+		struct cpuidle_device *dev = cpuidle_get_device();
-+		struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-+
-+		if (cpuidle_not_available(drv, dev))
-+			return -EINVAL;
-+
- #ifdef CONFIG_PM_DEBUG
- 		if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
- 			pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
--- 
-2.39.1
+Hi,
 
+On Tue, Feb 14, 2023 at 09:24:25AM +0000, Colin Ian King wrote:
+> There are spelling mistakes in dev_err_probe messages. Fix them.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+
+Needs to go through the Qualcomm tree:
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/power/supply/qcom_battmgr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/q=
+com_battmgr.c
+> index ec31f887184f..5c2353241099 100644
+> --- a/drivers/power/supply/qcom_battmgr.c
+> +++ b/drivers/power/supply/qcom_battmgr.c
+> @@ -1367,7 +1367,7 @@ static int qcom_battmgr_probe(struct auxiliary_devi=
+ce *adev,
+>  		battmgr->wls_psy =3D devm_power_supply_register(dev, &sc8280xp_wls_psy=
+_desc, &psy_cfg_supply);
+>  		if (IS_ERR(battmgr->wls_psy))
+>  			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
+> -					     "failed to register wireless charing power supply\n");
+> +					     "failed to register wireless charging power supply\n");
+>  	} else {
+>  		battmgr->bat_psy =3D devm_power_supply_register(dev, &sm8350_bat_psy_d=
+esc, &psy_cfg);
+>  		if (IS_ERR(battmgr->bat_psy))
+> @@ -1382,7 +1382,7 @@ static int qcom_battmgr_probe(struct auxiliary_devi=
+ce *adev,
+>  		battmgr->wls_psy =3D devm_power_supply_register(dev, &sm8350_wls_psy_d=
+esc, &psy_cfg_supply);
+>  		if (IS_ERR(battmgr->wls_psy))
+>  			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
+> -					     "failed to register wireless charing power supply\n");
+> +					     "failed to register wireless charging power supply\n");
+>  	}
+> =20
+>  	battmgr->client =3D devm_pmic_glink_register_client(dev,
+> --=20
+> 2.30.2
+>=20
+
+--64xkbddsvhgi7vvf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPsBE8ACgkQ2O7X88g7
++pp6SQ//Yall0DcVWRKFJsRKGh1EUrBGE3zpYpHcs4eYWIWI4jn4gQIT5uFObKwJ
+tmZVhKeLl0797SN+kLdvbbGoJPxXu5wlDqdQJ91H/BX/1JrsaTxwX/IHZPjfB8WG
+0zA1ZWN4MV5L4ZBpDTWuWG5AD2417Uw2MGaW61lEOQssySadSfT+jFiG/ugKR6qC
+42CU6/J64NrMaKcRIVOt6a/a/LovaZuwmN/hxLIxKB8t0i7ThdUZSYRmBpRFVkaQ
+1JGxrCa8VvYDxdqNX2no2O0hWMTSWMrKdDGIY3BAm051HeSoDrtqVmz0Uecn5Eg5
+moiGGRxHZIX6d+xxMUfgSvDZH4oi39SVXcsX3BdfcWgcI8I+OeDFd4Ow9YIyiCI1
+aE27egTmuRX0a5zgPjB2emNv63/y3FaDwfQFsXZyyjgxCCwo4Qwkzsfukf/yuobq
+G6nOb0q183J8cpoT2HFXP08O0CSH+d4FsV6P5MYzefXU6NbLsP5oNLG51jbarr0z
+cxm5X831lrh1JOy0Rgs6HZ7uhiE9ujMChoCGAmI34Ec6FqgjGw3HHBEHsl88+xMr
+yZJMGP3FrTnU/FWRlogdGLgj4p4p8QxyReDSCX0bWphbCAi7LUUzNYBk+S34BaJ5
+GbsFSQq7dCUz5Y0aESKaO/QBA8ZN5no75jrHO1ZX5RV6/sCzPOc=
+=fExG
+-----END PGP SIGNATURE-----
+
+--64xkbddsvhgi7vvf--
