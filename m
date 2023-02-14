@@ -2,93 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41B3696484
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 14:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516336964CA
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 14:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjBNNVP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 08:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S232105AbjBNNgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 08:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjBNNVP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 08:21:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5EF279B7;
-        Tue, 14 Feb 2023 05:20:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFE1B61637;
-        Tue, 14 Feb 2023 13:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1588DC433D2;
-        Tue, 14 Feb 2023 13:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676380856;
-        bh=9m8ZbKJsD+az2elSMPiB/zCuKKeWwdmecOz4rRFlokw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BM5Iz0iwcVDt6wMsJwSQqIgE769d6X+hnI4PuaEX4j/mDAXprrZJCBYjc49bgctp2
-         5AgbRg2mNfecieyWcPOz7FfuAEJ6jKznh9yFsaCG8fQC7uaGLhh25LTSOEVcu4bnNr
-         Dwo588zvSBn/mojAkTU9P6Vc4OlzY4CSEVQyF4r/Fj3y7Aes9IJa+okDwm0fuCOaeH
-         Eez00iOt94mjXZTDhGcC1QvpSXE+GvU811v+G+B5P2+j/rpt8Tt1Cm9+h8WJ2GXarK
-         hszGdJV/dWlMpc94Au/83/mGc3pX7mAm07FIg6/MJOwQk58h3dH5G13qp+i319IcOi
-         1XHGvdaNI3+8w==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
+        with ESMTP id S231442AbjBNNgI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 08:36:08 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66032596B
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 05:36:06 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id n10so13176534ejc.4
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 05:36:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HnezF+6dY5RMCpZLMpg3LpRY3YS/8k70HwuZjwjxWBw=;
+        b=YXeeb2EBlXOKyCLMfyavAeeLOaKPOvL0JXWaxZ93PgJBHhiGJ7uxj4UZpU8S8yH2Bj
+         UWDfmtXuwmS4n8saTpk2wpkjBZlIFBPJW14Glbgd+nN3W7PR6TznPSdUvPl1mrKRf7YJ
+         SdjBrX56gjVBpUrr7CqvJv8ekmRkFO1g2Wgeg349AYQcopn+A3dC5JCbfLMTkHD6nbGd
+         eBUfcq7K/0JLzL9cCz0LE4ipMODFmeiuk9syybVv4NWCRLXQWa5+we2rPwKjWc0FVUvQ
+         lRd5w1z25BZbBpFjO6W39ZF8nIBKnF0EhH4BRbGwP41qxH9ZsLExgPJBqYLp6QB/nagq
+         Gdyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HnezF+6dY5RMCpZLMpg3LpRY3YS/8k70HwuZjwjxWBw=;
+        b=MHxDIS95GByFGcia/YwjfDGi5y7/cxNsj+pi0l+1/aeel2ZTop+vc6fpAd0tCUoNlV
+         ZlDQqjW5cjY7YC21Gq1/I3c8rTjf49ORt0zlRoOAHqPPUHNwG9IxvzMNUQWWSHxiA21b
+         2r0cKnmFJCarfY2Xl7yYPARtMYtbeBw5Bnjh7R33/XdTaTqRM4jqmGutDsdsJiXAhh8H
+         HqRvc4fIEAqB64bkEsemNFtVEiSIbTfI/lkn0Lp6ZSFBVldAP1pnw8cAeRzQGNQduWYi
+         +yQhVphs8IUYEq7+w3lUL8WtESPyjo7xFqrsVUT2E+6wStC4eWOU3WXGyHAw1aVbyUDe
+         K+4g==
+X-Gm-Message-State: AO0yUKWRlzU0rHznpxgS3Wfk8wK6F+3Of9MRslS6tjglvL97SAkrj4cD
+        hwFTnL3aMEffGKh+nJ+6rzAodw==
+X-Google-Smtp-Source: AK7set8oaU/R8M49JAeX8y10byGT3vQOyc13103jjXAMWA1WN0HcyDdCthQ4SESoCXEuMUmDy4ET0Q==
+X-Received: by 2002:a17:907:10cf:b0:891:a330:c890 with SMTP id rv15-20020a17090710cf00b00891a330c890mr3673738ejb.0.1676381765465;
+        Tue, 14 Feb 2023 05:36:05 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id k7-20020a17090666c700b0088e5f3e1faesm8213819ejp.36.2023.02.14.05.36.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 05:36:05 -0800 (PST)
+Message-ID: <e55c4253-4c55-61cf-a5fd-4284fa164db8@linaro.org>
+Date:   Tue, 14 Feb 2023 14:36:03 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] power: supply: qcom_battmgr: remove bogus do_div()
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: qcom_battmgr: remove bogus do_div()
-Date:   Tue, 14 Feb 2023 14:20:42 +0100
-Message-Id: <20230214132052.1556699-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214132052.1556699-1-arnd@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230214132052.1556699-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-The argument to do_div() is a 32-bit integer, and it was read from a
-32-bit register so there is no point in doing a 64-bit division on it.
 
-On 32-bit arm, do_div() causes a compile-time warning here:
+On 14.02.2023 14:20, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The argument to do_div() is a 32-bit integer, and it was read from a
+> 32-bit register so there is no point in doing a 64-bit division on it.
+> 
+> On 32-bit arm, do_div() causes a compile-time warning here:
+> 
+> include/asm-generic/div64.h:238:22: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>   238 |   __rem = __div64_32(&(n), __base); \
+>       |                      ^~~~
+>       |                      |
+>       |                      unsigned int *
+> drivers/power/supply/qcom_battmgr.c:1130:4: note: in expansion of macro 'do_div'
+>  1130 |    do_div(battmgr->status.percent, 100);
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-include/asm-generic/div64.h:238:22: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-  238 |   __rem = __div64_32(&(n), __base); \
-      |                      ^~~~
-      |                      |
-      |                      unsigned int *
-drivers/power/supply/qcom_battmgr.c:1130:4: note: in expansion of macro 'do_div'
- 1130 |    do_div(battmgr->status.percent, 100);
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/power/supply/qcom_battmgr.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index ec31f887184f..de77df97b3a4 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -1126,8 +1126,7 @@ static void qcom_battmgr_sm8350_callback(struct qcom_battmgr *battmgr,
- 			battmgr->info.charge_type = le32_to_cpu(resp->intval.value);
- 			break;
- 		case BATT_CAPACITY:
--			battmgr->status.percent = le32_to_cpu(resp->intval.value);
--			do_div(battmgr->status.percent, 100);
-+			battmgr->status.percent = le32_to_cpu(resp->intval.value) / 100;
- 			break;
- 		case BATT_VOLT_OCV:
- 			battmgr->status.voltage_ocv = le32_to_cpu(resp->intval.value);
--- 
-2.39.1
-
+Konrad
+>  drivers/power/supply/qcom_battmgr.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+> index ec31f887184f..de77df97b3a4 100644
+> --- a/drivers/power/supply/qcom_battmgr.c
+> +++ b/drivers/power/supply/qcom_battmgr.c
+> @@ -1126,8 +1126,7 @@ static void qcom_battmgr_sm8350_callback(struct qcom_battmgr *battmgr,
+>  			battmgr->info.charge_type = le32_to_cpu(resp->intval.value);
+>  			break;
+>  		case BATT_CAPACITY:
+> -			battmgr->status.percent = le32_to_cpu(resp->intval.value);
+> -			do_div(battmgr->status.percent, 100);
+> +			battmgr->status.percent = le32_to_cpu(resp->intval.value) / 100;
+>  			break;
+>  		case BATT_VOLT_OCV:
+>  			battmgr->status.voltage_ocv = le32_to_cpu(resp->intval.value);
