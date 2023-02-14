@@ -2,109 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C19696736
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 15:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CEB696973
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Feb 2023 17:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjBNOoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 09:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S229635AbjBNQ16 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 11:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbjBNOoQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 09:44:16 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4532D2119
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:44:15 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id fi26so17701562edb.7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 06:44:15 -0800 (PST)
+        with ESMTP id S229685AbjBNQ15 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 11:27:57 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043C3CA2D
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 08:27:54 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id t24so1197677eji.4
+        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 08:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fvNHQRlfXDnwN7/aozLZXMLlUQIZLqbXP/Yn1Rtm2eI=;
+        b=DeEMDg2dlwqcy+oZi20ihpgqzr5qkR8phwgck4GlvbMhS3jOnC9PjN78z6N68T6Tiv
+         WAsKXcfJNYjZdi8IQ9u8QmXHfzWLb1GPforuCOv5D7qYJOJ5s9Qx16HpqNd2Q4HpSLl5
+         ZJszlcznEEKrNTRqV4bmtuw/FeYDh77SmimqvLF1KbA0hH2WN+Fqr5/1q9BJpzj+Wdfb
+         TtAZgufQKkxplCzeBjF/9PAmmu2uoN7qEZ8URZ9Hs66mBJ99t15/VQHEI2BkOOmMpJWj
+         lePNteSv+cOaidUY5xLYxn3swJ7KSQY9Ae6d8JfGqRp3miRAnIpW69Qw8fhpaBOUpKqY
+         eEeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r8DlOof1qKZcOLUpVo4Fr+SwDlEqIiPfD5b+11BU5tE=;
-        b=IBwHh78vuII4d0wn1bcc10x+2YgFGy9SUf0yX0TfyI9++eEmRkZYKsVJgXkR+oseS6
-         IaALWN6PXs2t6SLOwiIhg8ipuqSyQeZymDl4Nmk+k5aqYaDi1BqnIGjajnXZjxIBSkN5
-         ItPwhGNQBVnUqOeiFKaCn7T8d4+GuEsUvFktvdgD5QJ2lbKu20jKmY2kOE0KintklEGV
-         MAhCES3GzGMDCHBJ6Llz9BdLiSvVvTuATaMIaLrVRMyEqOmSnzMzZ/tVT7aeTy8NIXhT
-         ty8szAbCOzQSGNIzGI6hsSfBHoknS2B4NUx+9A1BGRBELuT8fnhqI6xUt/72w3ODAdbO
-         QuAw==
-X-Gm-Message-State: AO0yUKVlgXmWevFJraM0nMBW24zc4JNyku4iRcyTKSjG8LU7U3Y3/Jax
-        dAADJ57E5YiQMO99NTsZPJyUPET0Dx7gZWszyLI=
-X-Google-Smtp-Source: AK7set8iQhw78Gwz4w+L5hxXH9e/6QCPhu67ioGspnWYvg5+OnEhddiUb8SXK74VQUKRLEPiztoRvUD4zA2VvdXSPIs=
-X-Received: by 2002:a50:9f07:0:b0:4ac:20b:96b0 with SMTP id
- b7-20020a509f07000000b004ac020b96b0mr1307755edf.3.1676385853665; Tue, 14 Feb
- 2023 06:44:13 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvNHQRlfXDnwN7/aozLZXMLlUQIZLqbXP/Yn1Rtm2eI=;
+        b=M48hYzy5Il1ufAemCkGtEWLHqmGfHYBLZ9LSWk8L8xu79zwqro8ZGPML3nrDG/5yYO
+         hUXfM1mfJ9bV4rxHL7DZPRV1saQ5B8aaxnJ3wZMybEsHJnkYr2xDJxeH0hFC/dsjTq6+
+         qHuLbZapmanwcpR7W6z6fUO6tHyB7XsDZldh70kUjKj3Go4AYMCw3Nb3iuj6U4jBxBFg
+         XmW4Kegi8yVt8dcGooHcJis77oDMYEE5PXFDf1+VUPSejIpOcdG+EB8PumlZlCl8BopG
+         DY2Qq9fTM+m5KCGkQyBASeDqM939LZpSlfhC60/X6rjzgR/oFYbw6jKYjjiD8egkbZhE
+         +BWQ==
+X-Gm-Message-State: AO0yUKUguXBSVOa8oBsGJbnc8qgW8l3GgUvAKFInSnO9LYM/8Wu4ECRK
+        +bqk6wlY5QvBvaP+2TQLlqPzcw==
+X-Google-Smtp-Source: AK7set/BAV4TZmiXAFRIXk8igD4wwJ7rJ9t/fiQLbdJ8E/KSeSl+5/e4kFNdvIYXEl92r4d745nreA==
+X-Received: by 2002:a17:906:616:b0:878:4a5e:3a56 with SMTP id s22-20020a170906061600b008784a5e3a56mr3387532ejb.15.1676392072613;
+        Tue, 14 Feb 2023 08:27:52 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id p18-20020a170906839200b008b112db78f9sm2725072ejx.51.2023.02.14.08.27.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 08:27:52 -0800 (PST)
+Message-ID: <e4760caa-2904-7645-920d-cbd07daf657e@linaro.org>
+Date:   Tue, 14 Feb 2023 17:27:50 +0100
 MIME-Version: 1.0
-References: <20230214053838.5tyq375sxbrprque@vireshk-i7>
-In-Reply-To: <20230214053838.5tyq375sxbrprque@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 15:44:02 +0100
-Message-ID: <CAJZ5v0iEPY1RJiWJg_eTdrcmJsObTkafs92Bo0ZwwJA+bM9+gA@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 6.3
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 00/12] The great interconnecification fixation
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 6:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
->
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.3
->
-> for you to fetch changes up to eca4c0eea53432ec4b711b2a8ad282cbad231b4f:
->
->   OPP: fix error checking in opp_migrate_dentry() (2023-02-08 10:40:59 +0530)
->
-> ----------------------------------------------------------------
-> OPP updates for 6.3
->
-> - Add missing 'cache-unified' property in example for kryo OPP bindings
->   (Rob Herring).
->
-> - Fix error checking in opp_migrate_dentry() (Qi Zheng).
->
-> - Remove "select SRCU" (Paul E. McKenney).
->
-> - Let qcom,opp-fuse-level be a 2-long array for qcom SoCs (Konrad
->   Dybcio).
->
-> ----------------------------------------------------------------
-> Konrad Dybcio (1):
->       dt-bindings: opp: v2-qcom-level: Let qcom,opp-fuse-level be a 2-long array
->
-> Paul E. McKenney (1):
->       drivers/opp: Remove "select SRCU"
->
-> Qi Zheng (1):
->       OPP: fix error checking in opp_migrate_dentry()
->
-> Rob Herring (1):
->       dt-bindings: opp: opp-v2-kryo-cpu: Add missing 'cache-unified' property in example
->
->  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 2 ++
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 4 +++-
->  drivers/opp/Kconfig                                          | 1 -
->  drivers/opp/debugfs.c                                        | 2 +-
->  4 files changed, 6 insertions(+), 3 deletions(-)
->
-> --
++CC Georgi, linux-pm, linux-kernel (thanks git send-email for not including these)
 
-Pulled and pushed into the linux-next branch in linux-pm.git.
-
-Thanks!
+On 14.02.2023 15:37, Konrad Dybcio wrote:
+> Hi!
+> 
+> v3 -> v4 changelog:
+> - Drop "Always set QoS params on QNoC", it only causes issues.. this
+>   can be investigated another day, as it's not necessary for operation
+> 
+> - Drop "Add a way to always set QoS registers", same as /\
+> 
+> - Add a way (and use it) to have no bus_clocks (the ones we set rate on),
+>   as at least msm8996 has a bus (A0NoC) that doesn't have any and does
+>   all the scaling through RPM requests
+> 
+> - Promote 8996 icc to core_initcall
+> 
+> - Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
+> 
+> - Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
+> 
+> Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
+> 
+> v2 -> v3 changelog:
+> - Drop "Don't set QoS params before non-zero bw is requested"
+> 
+> - Rebase on next
+> 
+> - [1/9] ("..make QoS INVALID default.."): remove unused define for
+>   MODE_INVALID_VAL
+> 
+> - Pick up tags
+> 
+> v1 -> v2 changelog:
+> - reorder "make QoS INVALID default", makes more sense to have it
+>   before "Always set QoS params on QNoC"
+> 
+> - Limit ap_owned-independent QoS setting to QNoC only
+> 
+> - Add new patches for handling the 8996-and-friends clocks situation
+>   and optional BIMC regardless-of-ap_owned QoS programming
+> 
+> 
+> [1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
+> [2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
+> 
+> This series grew quite a bit bigger than the previous [1] attempt, so
+> I decided to also add a cover letter.
+> 
+> Link to v2: [2]
+> 
+> It addresses a few things that were not quite right:
+> 
+> - Setting QoS params before a "real" (non-zero) bandwidth request
+>   makes little sense (since there's no data supposed to flow through
+>   the bus, why would the QoS matter) and (at least newer) downstream
+>   prevents that from happening. Do the same in Patch 1.
+> 
+> - QNoC type buses expect to always have their QoS registers set as long
+>   as there's a non-INVALID QoS mode set; ap_owned is not really a thing
+>   on these anymore, Patch 3 handles that.
+> 
+> - The recent MSM8996 boot fix was done quickly and not quite properly,
+>   leading to possibly setting the aggregate bus rate on "normal"
+>   hardware interface clocks; this series handles that by limiting the
+>   number of bus_clocks to 2 (which is the maximum that makes sense,
+>   anyway) and handling the rest as "intf_clocks", which are required
+>   to access the   hardware at the other end. Patches 5-8 take care of
+>   that and Patch 10 reverts the _optional moniker in clk_get_ to make
+>   sure we always have the bus scaling clocks, as they're well, kind
+>   of important ;)
+> 
+> - Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
+>   by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
+>   always receive QoS programming, whereas BIMC on "older" SoCs cries
+>   like a wild boar and crashes the platform when trying to do so
+>   unconditionally. Patch 9 adds a way to take care of that for newer
+>   SoCs (like SM6375)
+> 
+> - QoS mode INVALID was assumed by developers before to be the default
+>   ("I didn't specify any QoS settings, so the driver can't assume I
+>   did.. right? right!?" - wrong, partial struct initialization led to
+>   0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
+>   that's the logical choice. This allows the "Always set QoS params
+>   on QNoC" patch to work without setting tons of what-should-
+>   -obviously-be-the-default values everywhere, as well as fixes older
+>   drivers that set ap_owned = true but left the QoS mode field unset.
+>   Patch 2 cleans that up.
+> 
+> - Some nodes are physically connected over more than one channel
+>   (usually DDR or other high-throughput paths). Patch 4 allows that
+>   to be reflected in calculations. This will be required for at least
+>   MSM8998 and SM6375 (which will be submitted soon after this lands)
+> 
+> 
+> Konrad Dybcio (12):
+>   interconnect: qcom: rpm: make QoS INVALID default, separate out driver
+>     data
+>   interconnect: qcom: rpm: Add support for specifying channel num
+>   interconnect: qcom: Sort kerneldoc entries
+>   interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+>   interconnect: qcom: rpm: Rename icc provider num_clocks to
+>     num_bus_clocks
+>   interconnect: qcom: rpm: Handle interface clocks
+>   interconnect: qcom: icc-rpm: Allow negative num_bus_clocks
+>   interconnect: qcom: msm8996: Specify no bus clock scaling on A0NoC
+>   interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks
+>     anymore
+>   interconnect: qcom: msm8996: Promote to core_initcall
+>   interconnect: qcom: icc-rpm: Introduce keep_alive
+>   interconnect: qcom: icc-rpm: Allow negative QoS offset
+> 
+>  drivers/interconnect/qcom/icc-rpm.c | 101 ++++++++++++++++++++--------
+>  drivers/interconnect/qcom/icc-rpm.h |  41 +++++++----
+>  drivers/interconnect/qcom/msm8996.c |  35 ++++++----
+>  drivers/interconnect/qcom/sdm660.c  |  16 ++---
+>  4 files changed, 126 insertions(+), 67 deletions(-)
+> 
