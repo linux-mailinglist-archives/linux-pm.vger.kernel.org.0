@@ -2,105 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B64C697CE9
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 14:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0966B697CED
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 14:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbjBONOc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Feb 2023 08:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        id S232749AbjBONPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Feb 2023 08:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234117AbjBONOa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Feb 2023 08:14:30 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ED62528C
-        for <linux-pm@vger.kernel.org>; Wed, 15 Feb 2023 05:14:27 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id dr8so47992313ejc.12
-        for <linux-pm@vger.kernel.org>; Wed, 15 Feb 2023 05:14:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j7pGfC7xDTusd6z5pgWikV3xKmcksuQG65csYT81LO8=;
-        b=HlgkGbMBMm1kpIRDLdzHFSLFy+y4fm6Lbw+ofyJ59QsiyeC1wj6KTzfdboAS6oGMMP
-         K69RRWHkTnGaQG5p+4WO3gn4w3hhDsnzCfDFbRXBc2oK6k6Ar9B+TovSGRu99FgvRutm
-         weDrvg9e80z+khKXBakdjGun+6TBzwjjyFvdErd6+oUOvZ2fOVycZtUdD2cRlYFyuNpm
-         vxGGtoR+OaIofsO6g3zT9Pzv+N7naro9AfdtmOBd2Jm6VDk92kpqvpPjIPPkk7g0R7dy
-         PTgUFzA60YGG/Ea9yzpPRSqc8NASlih2R6mBNl4a1uwX0YOwzwbOroq0GWHbSgk2uWEG
-         S8Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j7pGfC7xDTusd6z5pgWikV3xKmcksuQG65csYT81LO8=;
-        b=pE+JXdgVerlRdYAQ8ReivRS7CC/v/M+1MgnoBuabEPbfUdD03BpVGG9tNX0u/NsRNe
-         rbYL/vT85m1XvuTdHMlCWJ4Ox41/zd5UrGSf7p4VyI2IHnNccCF+xvAJUmUmmxAyKnc5
-         M5OAHno6JFMaz+cgCM8zhyoica+LIrbs9xHLwuiP7g+SvYzek3jsn6zW6h6I5DZWxt1H
-         i5A0JHMNy5o4aDBMPVqGsU/qpD1T3L9XiLFRpbSDlUImYTNrdrszKE23s/keqDoq0lqd
-         hBLWS+TgskgcFcIuFooYAR4ZbQCL00kMjgmP7pey8a2UhhPlitecY/mlCyiXplQ3kTex
-         UNvQ==
-X-Gm-Message-State: AO0yUKXAitwCR6EPZNdQFxBZ3l+APN1F51vqRsH7+QtFSG/doZbZTp7r
-        SjVmH0Y7ur6wmqAUOtIQLceVPSTf/89w3+PGrdfPxg==
-X-Google-Smtp-Source: AK7set9CC24FinuDxUg1COSSewk41cLJdoKkapFGP11oCCpkm+dmPDtDds53b1ZuB9NwFxiqhywCafs5fa1jtix0epY=
-X-Received: by 2002:a17:906:c04:b0:88d:ba79:4315 with SMTP id
- s4-20020a1709060c0400b0088dba794315mr1895992ejf.5.1676466866224; Wed, 15 Feb
- 2023 05:14:26 -0800 (PST)
+        with ESMTP id S232055AbjBONPH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Feb 2023 08:15:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79162411B;
+        Wed, 15 Feb 2023 05:15:06 -0800 (PST)
+Received: from mercury (dyndsl-095-033-159-037.ewe-ip-backbone.de [95.33.159.37])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 81B056602181;
+        Wed, 15 Feb 2023 13:15:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676466905;
+        bh=dwkwEZMUZEbFVvhUviofeDXBcsOqsOaQbrTHdVJ8mAM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f64LgxxoccMfGRd5MY2qsJk0C395jy4CGz+QoQYGn3lNsphKCeI9LzZjmjJcX7hG8
+         r72p7Tq3y503a/zcntpe1rjyp2zMc5wcjZvqqgcezyMr0uO/d3kg2AO2EYTWvspZQ3
+         azBbLr2CsyUtaC5udjzzqmgP+RPCOUppxXpwe1jFU/eCio3yew7SD9nlqIj9VFeGLA
+         lxW2YDpFWFqcZ8P6AitCWIPegkqZV/O/T99iiEGU7rF6txiV0NJxW6IZ5B9RtMRLyw
+         CnN+l6paW/dM9Ql3j93z8A7vij1Oa7EJiJA7KhtVl1fCebkP8c2yi0IK/bNphnz3mS
+         PedPnKeJn/14g==
+Received: by mercury (Postfix, from userid 1000)
+        id B1EF610603FE; Wed, 15 Feb 2023 14:15:03 +0100 (CET)
+Date:   Wed, 15 Feb 2023 14:15:03 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiYuan Huang <cy_huang@richtek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterwu.pub@gmail.com
+Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Message-ID: <20230215131503.lnk7onzpsnxq5atb@mercury.elektranox.org>
+References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+ <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
+ <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
+ <20230215033440.GA6570@linuxcarl2.richtek.com>
 MIME-Version: 1.0
-References: <20230209105628.50294-1-bchihi@baylibre.com> <20230209105628.50294-7-bchihi@baylibre.com>
- <CAGuA+oqOgprdu0dVcmB=qJd5HJjada3d8ZazMpoG-SBPizzuPQ@mail.gmail.com> <80c60f09-56eb-cb84-43f0-7b055ea4b32c@collabora.com>
-In-Reply-To: <80c60f09-56eb-cb84-43f0-7b055ea4b32c@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 15 Feb 2023 14:13:50 +0100
-Message-ID: <CAGuA+oqJVTXE5YHm6rSv4pPWsGxR8nZD-T5EM7LS9gPtdcu4HA@mail.gmail.com>
-Subject: Re: [PATCH v14 6/6] arm64: dts: mediatek: mt8195: Add temperature
- mitigation threshold
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3k3pldcpjihsbnrs"
+Content-Disposition: inline
+In-Reply-To: <20230215033440.GA6570@linuxcarl2.richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Angelo,
 
-On Wed, Feb 15, 2023 at 1:50 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 14/02/23 15:43, Balsam CHIHI ha scritto:
-> > Hi Matthias, Angelo,
-> >
-> > Would you please confirm if this patch can be applied?
-> > and, if it is the case, to which tree it will be applied?
-> >
-> > Best regards,
-> > Balsam
->
-> I think it's fine to apply 5/6 and 6/6, as you're adding pre-Tjunction
-> max temperature - this is not board specific, but rather SoC-specific.
-> In reality it's practically the same for most SoCs, even.
->
-> Each board will define extensions (that are thermal envelope dependant)
-> to these "please-dont-burn-my-device" initial thresholds, but that's a
-> story for another day, and for other people anyway (including me).
->
-> Matthias, over to you!
+--3k3pldcpjihsbnrs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Indeed.
-Thank you for your feedback!
+Hi,
 
-Best regards,
-Balsam
+On Wed, Feb 15, 2023 at 11:34:40AM +0800, ChiYuan Huang wrote:
+> H, Krzysztof/Sebastian:
+> On Tue, Feb 14, 2023 at 09:14:37AM +0100, Krzysztof Kozlowski wrote:
+> > On 13/02/2023 21:53, Sebastian Reichel wrote:
+> > > Hi,
+> > >=20
+> > > On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
+> > >> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> > >> "richtek,rt9467"
+> > >>
+> > >> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467=
+ battery charger")
+> > >> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > >> ---
+> > >=20
+> > > Is there a new version of this fixing the issues pointed out by Krzys=
+ztof?
+> > > Also I think the filename and $id should be changed to richtek,rt9467=
+=2Eyaml
+> > > in addition to the compatible change.
+> >=20
+> > Yes, indeed.
+> >=20
+> From the current discussion, there're things to be fixed.
+> 1. In bindings, change compatible property from 'richtek,rt9467-charger' =
+to 'richtek,rt9467'.
+> 2. Rename 'richtek,rt9467-charger.yaml' to 'richtek,rt9467.yaml'
+>
+> Anything else? like as changing source code filename from from 'rt9467-ch=
+arger.c' to 'rt9467.c"?
+
+No, the source code can remain unchanged. But you also need to change
+the $id line (line 4) in 'richtek,rt9467-charger.yaml' after renaming
+file.
+
+-- Sebastian
+
+--3k3pldcpjihsbnrs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPs2soACgkQ2O7X88g7
++prtfhAAnsfReDwggQ6kbCNeAll0Sfl4BVg8e5HP8cO+f9PcGHrZ2QGRVw2qd53j
+nruU1+a10OYZp7rqCCnXXfR2JdQyXedNCY6KafJ8QhUnkVX4mRi66YziXcPeAdRm
+5hpcA8eOTY0aBsx9CvQA1XdA1MNyjtnaqmkQ2ZtRaTeSQnBHxb+GPbSqXwnn65LE
+TM2Zu8Y9SUYkamywW5bcHOE2QXmOlbDimostnI9R5eaW/jIJ8yP2f1fKbg76BaJz
+i4z4DY2QKdRN3FDsUD2Ukt8PkqokUbLfKeCqZQWUe7vGnu+dlUXPZJ2KtFsvGcyN
+qW15tbqKKpTsFQcLoqRw15Cv7//+g13vTz1tiFO8pPbuPsCgr9Y3pgE9qLJz/ODM
+OmiC57nSG1QEpCWrld+45vA6j4CNYsTwf8wTqU/CLHMQWMTzpsARBRSHX9npXv+b
+qWlF6m2mFZVhFwcdFE2ueI3p9vvDQ5J4A5epPUbXsumCBHVVWh2Y3WMWzLbRxQx5
++1t36bQ9G/s3XjT/i00GYl9KbCNCchySoMhHASlaG0dsB3X5kq1fNuzxlRyQiQcl
+Bwxj3E8yI09zwbJQO19ayMlnVrh2jTDBjrtoSdkll04jFUOdVYDZZv/emX599gzN
+hnCqTKL3pHy0Du+1g6mD+eD0o4yPE7WigBzSl7HGmbEfPHp5yBE=
+=JKHO
+-----END PGP SIGNATURE-----
+
+--3k3pldcpjihsbnrs--
