@@ -2,87 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439F6697509
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 04:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E5969754F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 05:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjBODpw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 22:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S229551AbjBOEU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 23:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBODpv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 22:45:51 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2032311EB;
-        Tue, 14 Feb 2023 19:45:43 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(23460:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Wed, 15 Feb 2023 11:45:32 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 15 Feb
- 2023 11:45:31 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Wed, 15 Feb 2023 11:45:31 +0800
-Date:   Wed, 15 Feb 2023 11:45:31 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <peterwu.pub@gmail.com>
-Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
- compatible name
-Message-ID: <20230215034531.GA7407@linuxcarl2.richtek.com>
-References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
- <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
- <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
+        with ESMTP id S233501AbjBOET7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 23:19:59 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02FC367C1;
+        Tue, 14 Feb 2023 20:18:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676434699; x=1707970699;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2TPdHhw7PdbshXBC0lHZEEtuPUwAjgSLbN3SAQkFhbE=;
+  b=IjBxfsvxaafeODl1SYxJPKuk0YOox12v1MMfHSlGwKv/bwLifwwAPm4u
+   DiM1s8250hUP03c+/sU4Ta0nDgnHgcPWc5Iq2UfThd+t5RH898Rwkq2AL
+   3I9qmqCOJcbuDcPagriQpm7nVZIl0kPIv+5rDBywfzzwWgJfZMNVPizUH
+   OAkPO2nrrPR3M4TO5qyOmOUQXNhhmQjYAlC+jVD6OmHFr8S2DWxHRIHab
+   UHcujARcay0R+V4ukCoem1KFGT1KOGt8JYS9pxyrX6kTxKY6cK9YJMAoR
+   Q3p0d/9WftAq8SDaQxc7Xa3HRxSLoK2x8+ktK9Sn63YsPF3uhslZkxBdl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311707122"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="311707122"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 20:15:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="701884218"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="701884218"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2023 20:15:31 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pS9Cd-00091X-0g;
+        Wed, 15 Feb 2023 04:15:31 +0000
+Date:   Wed, 15 Feb 2023 12:15:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 2f07b45d9824b12c8c30d8ace75d15941926cb19
+Message-ID: <63ec5c4c.iFmZUO/jtCyQnvOf%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Krzysztof/Sebastian:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 2f07b45d9824b12c8c30d8ace75d15941926cb19  Merge branch 'acpi-misc' into bleeding-edge
 
-On Tue, Feb 14, 2023 at 09:14:37AM +0100, Krzysztof Kozlowski wrote:
-> On 13/02/2023 21:53, Sebastian Reichel wrote:
-> > Hi,
-> > 
-> > On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
-> >> Revise RT9467 compatible name from "richtek,rt9467-charger" to
-> >> "richtek,rt9467"
-> >>
-> >> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-> >> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> >> ---
-> > 
-> > Is there a new version of this fixing the issues pointed out by Krzysztof?
-> > Also I think the filename and $id should be changed to richtek,rt9467.yaml
-> > in addition to the compatible change.
-> 
-> Yes, indeed.
-> 
-From the current discussion, there're things to be fixed.
-1. In bindings, change compatible property from 'richtek,rt9467-charger' to 'richtek,rt9467'.
-2. Rename 'richtek,rt9467-charger.yaml' to 'richtek,rt9467.yaml'
+elapsed time: 732m
 
-Anything else? like as changing source code filename from 'rt9467-charger.c' to only 'rt9467.c"?
+configs tested: 91
+configs skipped: 3
 
-And we'll submit a new one to fix it in these two days.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks.
+gcc tested configs:
+alpha                             allnoconfig
+alpha                            allyesconfig
+alpha                               defconfig
+arc                               allnoconfig
+arc                              allyesconfig
+arc                                 defconfig
+arc                  randconfig-r043-20230212
+arc                  randconfig-r043-20230213
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm                            mps2_defconfig
+arm                          pxa910_defconfig
+arm                  randconfig-r046-20230212
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+i386                 randconfig-a011-20230213
+i386                 randconfig-a012-20230213
+i386                 randconfig-a013-20230213
+i386                 randconfig-a014-20230213
+i386                 randconfig-a015-20230213
+i386                 randconfig-a016-20230213
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                       m5275evb_defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                         alldefconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                randconfig-r042-20230213
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+s390                 randconfig-r044-20230213
+sh                               allmodconfig
+sh                ecovec24-romimage_defconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64               randconfig-a011-20230213
+x86_64               randconfig-a012-20230213
+x86_64               randconfig-a013-20230213
+x86_64               randconfig-a014-20230213
+x86_64               randconfig-a015-20230213
+x86_64               randconfig-a016-20230213
+x86_64                               rhel-8.3
 
-> Best regards,
-> Krzysztof
-> 
+clang tested configs:
+arm                          ixp4xx_defconfig
+arm                          moxart_defconfig
+arm                  randconfig-r046-20230213
+hexagon              randconfig-r041-20230212
+hexagon              randconfig-r041-20230213
+hexagon              randconfig-r045-20230212
+hexagon              randconfig-r045-20230213
+i386                 randconfig-a001-20230213
+i386                 randconfig-a002-20230213
+i386                 randconfig-a003-20230213
+i386                 randconfig-a004-20230213
+i386                 randconfig-a005-20230213
+i386                 randconfig-a006-20230213
+mips                          rm200_defconfig
+riscv                randconfig-r042-20230212
+s390                 randconfig-r044-20230212
+x86_64               randconfig-a001-20230213
+x86_64               randconfig-a002-20230213
+x86_64               randconfig-a003-20230213
+x86_64               randconfig-a004-20230213
+x86_64               randconfig-a005-20230213
+x86_64               randconfig-a006-20230213
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
