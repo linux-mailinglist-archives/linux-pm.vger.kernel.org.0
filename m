@@ -2,85 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC38697C29
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 13:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0A5697C3E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 13:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjBOMrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Feb 2023 07:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S233541AbjBOMu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Feb 2023 07:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjBOMrU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Feb 2023 07:47:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F26037F20;
-        Wed, 15 Feb 2023 04:47:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233491AbjBOMu3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Feb 2023 07:50:29 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70317360BD;
+        Wed, 15 Feb 2023 04:50:28 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB6E761BAF;
-        Wed, 15 Feb 2023 12:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98D27C433EF;
-        Wed, 15 Feb 2023 12:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676465237;
-        bh=jFdktRMcQDcTG0Z5a7yd0aX1ExmXHVV5grkvalZHdKw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BBLKAnktoCel8IkPRAHwzDdPDxfvGd1AM29/8NXl6zxgQkihTmKge6VlFT8OPrH14
-         w665bc52qNRgrUs7FCETQHydbUeq1Vq9VjjA1168v94AiP8Ry4igkfp1oxreckLDMt
-         iMFpge9/ZY4O8RFt3fzpojCWiNjK1nKDl5KK91odZMBU7XHxeJvPW7LYKcjBx4Yt9P
-         2iwQJgOlx1kb378LhBSVrML3UlHlqoBksrZFgOMDpFHvVWY5wYuFkI/YEMGrLSB1rI
-         cBBePrxUp3YiDc0mqLe9Z4lgZ3js/JpgsrPsCc/QID7pxd8G8qrh0vDocyfjzyZ+UJ
-         tkzatn+cWcjqw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Asmaa Mnebhi <asmaa@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: reset: odroid-go-ultra: fix I2C dependency
-Date:   Wed, 15 Feb 2023 13:47:08 +0100
-Message-Id: <20230215124714.2872813-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B4B66602181;
+        Wed, 15 Feb 2023 12:50:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676465427;
+        bh=qT7FVzm6XK8tCKeDe2rLup/JS7HhXYm37IBT1713P7Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=n5Sa5yQbLAyZlLdbKM0nuUTpSpAlmcoVgYTN741oN6XhBYAJQCZx5nFBDYoWjlIgN
+         +rke1O1rvOQmxISnqxiIBqZxXPc1sKiTZN7Nau3n2ZWvImrHwvzJwzppGFNRzgAGqb
+         J55j1iKJ431A/YAxH73wHTY4hNJsKiSC1fdqt2fc6pv+3szJ+pwD2fDflU0jwKVdhs
+         ifYqw0aRdbyhjNW9K5ATM7UmUaKWg1OdSlZSqnxgNumB+Z3pKDe8+rPcM8LE/iAUE6
+         2ZU7LbXCGQDc8cV3iGIThLAk8QJHS/zWnKM+qNv1MrYgdEPrHcpliFpNp+yhZw4bH6
+         cuUvGIQ9DXObg==
+Message-ID: <80c60f09-56eb-cb84-43f0-7b055ea4b32c@collabora.com>
+Date:   Wed, 15 Feb 2023 13:50:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v14 6/6] arm64: dts: mediatek: mt8195: Add temperature
+ mitigation threshold
+Content-Language: en-US
+To:     Balsam CHIHI <bchihi@baylibre.com>, daniel.lezcano@linaro.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230209105628.50294-1-bchihi@baylibre.com>
+ <20230209105628.50294-7-bchihi@baylibre.com>
+ <CAGuA+oqOgprdu0dVcmB=qJd5HJjada3d8ZazMpoG-SBPizzuPQ@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGuA+oqOgprdu0dVcmB=qJd5HJjada3d8ZazMpoG-SBPizzuPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Il 14/02/23 15:43, Balsam CHIHI ha scritto:
+> Hi Matthias, Angelo,
+> 
+> Would you please confirm if this patch can be applied?
+> and, if it is the case, to which tree it will be applied?
+> 
+> Best regards,
+> Balsam
 
-Since this driver can only be built-in, it fails to link when
-the I2C layer is in a loadable module:
+I think it's fine to apply 5/6 and 6/6, as you're adding pre-Tjunction
+max temperature - this is not board specific, but rather SoC-specific.
+In reality it's practically the same for most SoCs, even.
 
-x86_64-linux-ld: drivers/power/reset/odroid-go-ultra-poweroff.o: in function `odroid_go_ultra_poweroff_get_pmic_device':
-odroid-go-ultra-poweroff.c:(.text+0x30): undefined reference to `i2c_find_device_by_fwnode'
+Each board will define extensions (that are thermal envelope dependant)
+to these "please-dont-burn-my-device" initial thresholds, but that's a
+story for another day, and for other people anyway (including me).
 
-Tighten the dependency to only allow enabling
-POWER_RESET_ODROID_GO_ULTRA_POWEROFF is I2C is built-in as well.
-
-Fixes: cec3b46b8bda ("power: reset: add Odroid Go Ultra poweroff driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/power/reset/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 7059bd1f2ee7..8c87eeda0fec 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -144,7 +144,7 @@ config POWER_RESET_OCELOT_RESET
- config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
- 	bool "Odroid Go Ultra power-off driver"
- 	depends on ARCH_MESON || COMPILE_TEST
--	depends on I2C && OF
-+	depends on I2C=y && OF
- 	help
- 	  This driver supports Power off for Odroid Go Ultra device.
- 
--- 
-2.39.1
-
+Matthias, over to you!
