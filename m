@@ -2,83 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74E16976A4
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 07:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD80697952
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 10:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbjBOGwO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Feb 2023 01:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S234071AbjBOJxd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Feb 2023 04:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBOGwN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Feb 2023 01:52:13 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D2034C10;
-        Tue, 14 Feb 2023 22:52:12 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PGpfM1bTrz6FK2b;
-        Wed, 15 Feb 2023 14:52:11 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl2.zte.com.cn with SMTP id 31F6q2Ad092025;
-        Wed, 15 Feb 2023 14:52:02 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 15 Feb 2023 14:52:04 +0800 (CST)
-Date:   Wed, 15 Feb 2023 14:52:04 +0800 (CST)
-X-Zmail-TransId: 2af963ec8114ffffffffd39024f4
-X-Mailer: Zmail v1.0
-Message-ID: <202302151452046003226@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <sre@kernel.org>
-Cc:     <f.fainelli@gmail.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBwb3dlcjogcmVzZXQ6IGJyY20ta29uYS1yZXNldDogVXNlwqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31F6q2Ad092025
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63EC811B.000 by FangMail milter!
-X-FangMail-Envelope: 1676443931/4PGpfM1bTrz6FK2b/63EC811B.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63EC811B.000/4PGpfM1bTrz6FK2b
+        with ESMTP id S231750AbjBOJx2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Feb 2023 04:53:28 -0500
+Received: from mx1.net9.ga (mx1.net9.ga [IPv6:2a04:dd00:23:4:b9:6a:78:99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEDC1A975
+        for <linux-pm@vger.kernel.org>; Wed, 15 Feb 2023 01:53:26 -0800 (PST)
+Received: from u34 by mx1.net9.ga with local (@Mail Server)
+        (envelope-from <u34@net9.ga>)
+        id 1pSETS-000Cgx-Ka; Wed, 15 Feb 2023 09:53:14 +0000
+Date:   Wed, 15 Feb 2023 09:53:14 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] kernel/power/Kconfig: typo a single letter missing
+ at line 32: should have been run-time, not run-tim
+In-Reply-To: <CAJZ5v0i4WthALOwWPTCW7ESyak6Bq28xWWEzgnDvmFP=WaGtaA@mail.gmail.com>
+References: <E1pPlqm-0008w6-Ou@mx1.net9.ga>
+ <CAJZ5v0i4WthALOwWPTCW7ESyak6Bq28xWWEzgnDvmFP=WaGtaA@mail.gmail.com>
+User-Agent: s-nail v14.9.22
+Message-Id: <E1pSETS-000Cgx-Ka@mx1.net9.ga>
+From:   u34@net9.ga
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+> On Wed, Feb 8, 2023 at 4:29 PM <u34@net9.ga> wrote:
+> >
+> > typo at line # 32: a single letter is missing: should have been run-time, not run-tim
+> >
+> > config SUSPEND_SKIP_SYNC
+> > ..
+> > --- a/kernel/power/Kconfig      2023-02-05 23:31:11.897067253 +0000
+> > +++ b/kernel/power/Kconfig      2023-02-05 23:31:04.410465595 +0000
+> > @@ -29,7 +29,7 @@
+> >           of suspend, or they are content with invoking sync() from
+> >           user-space before invoking suspend.  There's a run-time switch
+> >           at '/sys/power/sync_on_suspend' to configure this behaviour.
+> > -         This setting changes the default for the run-tim switch. Say Y
+> > +         This setting changes the default for the run-time switch. Say Y
+> >           to change the default to disable the kernel sys_sync().
+> >
+> >  config HIBERNATE_CALLBACKS
+> >
+> > --
+> 
+> This patch is not applicable due to the missing Signed-off-by tag.  It
+> has other problems too, but this one alone is sufficient to block it.
+> 
+> Thanks!
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+from: "urdopz safk" <u34@net9.ga>
+Hello,
+2nd attempt to get it accepted, since reviewers had comments for the 1st  
+attempt:
+
+Typo: run-time, with the letter e. Not run-tim.
+
+Signed-off-by: "urdopz safk" <u34@net9.ga>
 ---
- drivers/power/reset/brcm-kona-reset.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Fix a typo at config SUSPEND_SKIP_SYNC help text. run-time, not run-tim 
+without the letter e.
+diff --git i/kernel/power/Kconfig w/kernel/power/Kconfig
+index 60a1d3051cc7..6ee3345bae64 100644
 
-diff --git a/drivers/power/reset/brcm-kona-reset.c b/drivers/power/reset/brcm-kona-reset.c
-index 3de024e3ceb7..02a056983291 100644
---- a/drivers/power/reset/brcm-kona-reset.c
-+++ b/drivers/power/reset/brcm-kona-reset.c
-@@ -38,9 +38,7 @@ static struct notifier_block kona_reset_nb = {
+--- i/kernel/power/Kconfig
++++ w/kernel/power/Kconfig
+@@ -29,7 +29,7 @@ config SUSPEND_SKIP_SYNC
+ 	  of suspend, or they are content with invoking sync() from
+ 	  user-space before invoking suspend.  There's a run-time switch
+ 	  at '/sys/power/sync_on_suspend' to configure this behaviour.
+-	  This setting changes the default for the run-tim switch. Say Y
++	  This setting changes the default for the run-time switch. Say Y
+ 	  to change the default to disable the kernel sys_sync().
+ 
+ config HIBERNATE_CALLBACKS
 
- static int kona_reset_probe(struct platform_device *pdev)
- {
--	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	kona_reset_base = devm_ioremap_resource(&pdev->dev, res);
-+	kona_reset_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(kona_reset_base))
- 		return PTR_ERR(kona_reset_base);
-
--- 
-2.25.1
