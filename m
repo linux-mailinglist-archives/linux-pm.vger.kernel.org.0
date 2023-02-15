@@ -2,133 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDBE6973A7
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 02:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B62C6974F1
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Feb 2023 04:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbjBOBbW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Feb 2023 20:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S229578AbjBODe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Feb 2023 22:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbjBOBbU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 20:31:20 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCB734326
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 17:31:17 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id lf10so12661177ejc.5
-        for <linux-pm@vger.kernel.org>; Tue, 14 Feb 2023 17:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aI/i5jy/3RaQrerUAILzjzBlGYFwOaVfy4rEAxzIvBw=;
-        b=S49ZflQkLg9ERIdpEIQNGiz/7fet4Zb9lqjgchR4MB/5/G5iaYwX7MEfUs05Hso+Hk
-         qEsZlhe8+ZoE2mcsSeYTAcr+5gBVJF2cU3HPRniC5lVTHOa4v1nRJACalNys5UYw1N8j
-         BKVSWT/UPiY2a9KFD19JvE9xrlQNM63fYvCABmZHJiuoINiMvqekmXVmDRNftEFmoD5E
-         gJpufNyxEJsiRFucmXCT3YLFayLWnIebdhnQrRq6Umckijv0aJf4Fykd/vbyNQYw14oQ
-         6pyipPM8dPZlpwKuJ1cir0uJCVZ3bL8QCl86GbVFvDoYfGHDj0Ek7RZ2esigTdsYbX27
-         QXMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aI/i5jy/3RaQrerUAILzjzBlGYFwOaVfy4rEAxzIvBw=;
-        b=P6nj7QfAXVyiGXdNV3Xua2ZoBKc9t+sxFYlb3hk1RbJm3lF+nWnXtHoCPEYoX8Z5Gj
-         E4oKeOn2f9yuJcBwdPYSpX1TE5iEwwnYICB27gRin9Sg1Eb9h33eURbw+PQQvdaqkV/Q
-         aPJaSfc0si/H4QQETmc3jg8yVtbfl/4oit8z2mImvuiCxonPA660i/vJyAkaQ9mQlPEv
-         SJODFGnHbAFfzjYx3uAt3k3JHLtJrU7VHNPNxIp+JV7MDOC5B4BsNR19Et7GdNAcRa9E
-         lWtTBulC5tHSMHvizrgVY7hs+xNmeWlQEo2S5BR7XX4PDWcFIt7x9Nzt/Zn0C8UQwHda
-         HZcQ==
-X-Gm-Message-State: AO0yUKVJ2oP5RVaM+7TLwk6MaDNh7noPu4u8vgETuBHgWgpE/m5yTVIF
-        AxybUQlcSJP/zf3qIi/UOl8XqQ==
-X-Google-Smtp-Source: AK7set8pRGei2+FRstywE9fQuZ72lLtkEmAf+QHtzKXmanwLQzCyeF5Y+c4I5Yv5fzFKWfUqffXo4Q==
-X-Received: by 2002:a17:906:5a90:b0:8b1:3f5b:af5f with SMTP id l16-20020a1709065a9000b008b13f5baf5fmr392899ejq.73.1676424676077;
-        Tue, 14 Feb 2023 17:31:16 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170907914600b008b138528a53sm880912ejs.224.2023.02.14.17.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 17:31:15 -0800 (PST)
-Message-ID: <585c6e42-bc59-5a6a-b3e8-0a4e1841c5b0@linaro.org>
-Date:   Wed, 15 Feb 2023 02:31:14 +0100
+        with ESMTP id S229496AbjBODe5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Feb 2023 22:34:57 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75E83E06A;
+        Tue, 14 Feb 2023 19:34:54 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(23441:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Wed, 15 Feb 2023 11:34:40 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 15 Feb
+ 2023 11:34:40 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Wed, 15 Feb 2023 11:34:40 +0800
+Date:   Wed, 15 Feb 2023 11:34:40 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <peterwu.pub@gmail.com>
+Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Message-ID: <20230215033440.GA6570@linuxcarl2.richtek.com>
+References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+ <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
+ <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v4 12/12] interconnect: qcom: icc-rpm: Allow negative QoS
- offset
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
- <20230214143720.2416762-13-konrad.dybcio@linaro.org>
- <24167f9e-328c-0201-7eea-de201bed4b6a@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <24167f9e-328c-0201-7eea-de201bed4b6a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 15.02.2023 02:16, Dmitry Baryshkov wrote:
-> On 14/02/2023 16:37, Konrad Dybcio wrote:
->> In some very very very very unfortunate cases, the correct offset of
->> the QoS registers will be.. negative. One such case is MSM8998, where
->> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
->> take into account with the register calculation, making the actual
->> BIMC node start at what-would-be-the-BIMC-base+0x300.
->>
->> In order to keep the calculation code sane, the simplest - however
->> ugly it may be - solution is to allow the offset to be negative.
+H, Krzysztof/Sebastian:
+On Tue, Feb 14, 2023 at 09:14:37AM +0100, Krzysztof Kozlowski wrote:
+> On 13/02/2023 21:53, Sebastian Reichel wrote:
+> > Hi,
+> > 
+> > On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
+> >> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> >> "richtek,rt9467"
+> >>
+> >> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> >> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> >> ---
+> > 
+> > Is there a new version of this fixing the issues pointed out by Krzysztof?
+> > Also I think the filename and $id should be changed to richtek,rt9467.yaml
+> > in addition to the compatible change.
 > 
-> I'm not sure how does this work, as e.g. qcom_icc_set_qnoc_qos() will try to access an address before the first register. Most probably this patch should go together with the rest of msm8998 patches.
-In our case BIMC is the offender and its defines all base on
-M_BKE_REG_BASE(n) (0x300 + (0x4000 * n)), so removing 0x300
-is perfectly ok.
-
+> Yes, indeed.
 > 
-> A slightly better solution to making qos_offset negative might be to make bwmon a child node of the icc.
-That sounds like a lot of complex changes and accounting for old
-/ different DTs who don't have the bwmon as a child of icc :/
+From the current discussion, there're things to be fixed.
+1. In bindings, change compatible property from 'richtek,rt9467-charger' to 'richtek,rt9467'.
+2. Rename 'richtek,rt9467-charger.yaml' to 'richtek,rt9467.yaml'
 
-Konrad
-> 
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/interconnect/qcom/icc-rpm.h | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index 77e263b93c27..5e4215f25c2e 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -39,7 +39,7 @@ struct qcom_icc_provider {
->>       int num_intf_clks;
->>       enum qcom_icc_type type;
->>       struct regmap *regmap;
->> -    unsigned int qos_offset;
->> +    int qos_offset;
->>       u64 bus_clk_rate[2];
->>       bool keep_alive;
->>       struct clk_bulk_data bus_clks[2];
->> @@ -105,7 +105,7 @@ struct qcom_icc_desc {
->>       bool keep_alive;
->>       enum qcom_icc_type type;
->>       const struct regmap_config *regmap_cfg;
->> -    unsigned int qos_offset;
->> +    int qos_offset;
->>   };
->>     /* Valid for all bus types */
+Anything else? like as changing source code filename from from 'rt9467-charger.c' to 'rt9467.c"?
+
+And we'll submit a new patch to fix it days later.
+
+Thanks.
+> Best regards,
+> Krzysztof
 > 
