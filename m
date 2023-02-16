@@ -2,225 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AC2698D4D
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 07:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CBB698D59
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 07:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjBPGom (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Feb 2023 01:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
+        id S229521AbjBPGri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Feb 2023 01:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjBPGol (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 01:44:41 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2042.outbound.protection.outlook.com [40.107.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE071AB;
-        Wed, 15 Feb 2023 22:44:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j6TUR4umE0kc9ChOpg3yc2Gus934xBZIwS0rc2Q6batU6Y8kDJmtliAxoGW66I8D1XeNOeVQppMMYPB48ojSvMkUiGFxzu6A6H3HzHIDRD57VlT2fcojFlmu0fxL1y+4U5JRuIWGPoSKRMMQgFDJTUcZTu5XRbpHu3GWXJfm7kNGHDup0ZR/7POfksatKCaQaIqq3iQ3ykhc9FqsDrNX5aYNjBEb/qkIRbzAG+w/IOAu4nbgPMy+VRn0EAJDru8JRXEkAaNhWgCO6ydvMHGrXoy3KGdCbic03eOVoY15epcFoOg6uM72Virxg9BoRIdYn1y+WNHYwTXKtbrHMrAn5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qIJB3o3/8CCuHw9ZgkpuddZVsdLp7jl1qf+KeBDlDWw=;
- b=hT/GCVFD/p6hzG18MF0wuiUl3xFkzKnHVU4r1iouE1QBcZlzT4n03txsRiAFFgQ1JUO+B5jq0F0AOgWDsP2yGVM1N5pS6itnamaw70/wQiHt75nl8tI1txBZiBj9K42ZIJMftsK48EsHwKlniMD4KJw7hCk2iG8kxqYwCMIRZCqFyoWavPYavkZcEPsLn2bGUqvlYfILV+NS3+6LhI0xltnal14SSWT2PPik/d9gkFjgtaY0SMmb8TBa7tPXn0vqAErFsXgcqCEiGCGusm3sw6EDfBJRCFbtZl4ZJEM4M/+44ciQNFeWh9RYeE+6Hm8c7nvUrLRLBotRaK+K6tHiog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qIJB3o3/8CCuHw9ZgkpuddZVsdLp7jl1qf+KeBDlDWw=;
- b=IiaeLktwedxPrMrX4fARGZoiuYO+hA14xvZxnSkDnWPe2B7U1qsp83g1sAL/Mpg6Ay3HujKRxJHmp0JXdhkTk+LKpc9y4Z/mAET3ciaIvQeW+4wuZtNj/nCRjQntV9xfrcBcNgSA2u6J8FnJbR1sdM32GOxjDhBHD1GjyaV1PfY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by SJ1PR12MB6291.namprd12.prod.outlook.com (2603:10b6:a03:456::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Thu, 16 Feb
- 2023 06:44:36 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.6086.024; Thu, 16 Feb 2023
- 06:44:36 +0000
-Date:   Thu, 16 Feb 2023 06:44:22 +0000
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     Rafael J Wysocki <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Shukla, Santosh" <Santosh.Shukla@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Narayan, Ananth" <Ananth.Narayan@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        Tor Vic <torvic9@mailbox.org>
-Subject: Re: [PATCH v6 4/6] Documentation: amd_pstate: Move amd_pstate param
- to alphabetical order
-Message-ID: <Y+3QxifmInvLA076@beas>
-References: <20230206172157.49887-1-wyes.karny@amd.com>
- <20230206172157.49887-5-wyes.karny@amd.com>
- <Y+3JSn5uVCxMShV/@amd.com>
- <Y+3ON855qAWNcuYE@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+3ON855qAWNcuYE@amd.com>
-X-ClientProxiedBy: PN3PR01CA0039.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::15) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        with ESMTP id S229477AbjBPGrh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 01:47:37 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B829BE2
+        for <linux-pm@vger.kernel.org>; Wed, 15 Feb 2023 22:47:36 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so5247566pjd.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Feb 2023 22:47:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4qpioYTyQtTtjJe3geEn16Jct1xWWb8Il+Kua3hbeGc=;
+        b=GxEiY7Tfjlpz9ExzdjnJ8yKtXehKViyvt+Rk2G6MhK99Ud80Gd1s0DsDs2qNVDSHcz
+         GjNYSq8NaUE0mqwmtN54PoBzyERbBC429po2OYgtui81a9SqPZxYRWs+PyUyxaK8R9q/
+         EuGNEK2Nxr5eQqNVi4CAIA/AfqIIPkccGygZK6HnrBjIUdsZxExk8FS0IpEO4lmlTsqD
+         YAhUykXyiowJBCl75MOTUZbkKTfdV3GBeWSJ+FxNd0ed8uVMbUezFZmdXQruTb+WHQ6E
+         nAGwEvhRtphhen8BK7zLuY6ghmYxInR1Epgn0amxJWRLc34DkXU/VgirIsPSel2UIaMy
+         nZew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4qpioYTyQtTtjJe3geEn16Jct1xWWb8Il+Kua3hbeGc=;
+        b=Daw1aPcHuNu/sDOrr4cayts2Gtudulee+ewyEtvsI1f6koHBndLaJG5GbY9UrPaLGy
+         q0qc+T1ZoLpf6INC3/mQuBktM+9qIMiaLj9fGxV4b+iPMt/eJdJtcAtvRydFhNwYKgDv
+         aSs2pB/QUrTS0ozl3SRMk/rJTD1u9oS8DdN0VQDjp2hyywkNFcb95lqC32+iku07MyRr
+         e0OqlqB3vZxBxW82HICF3INIU5lxhjgpvoCuuyTGZy79WCpNQ4Ie86JlDTHYzBD1tP40
+         /DM3qqL1G73lzL8Wfws8Ot8H/eylITHg3BCUOK9LIDtwpLyxqyjI2Epu1EtnCO7f6Vkt
+         TEWQ==
+X-Gm-Message-State: AO0yUKVTxS45Dcu7jS1T2fMpV9u4bzRV/VdeoBGS8KixVq9M3EWnyrvP
+        7WSKcePMOQlQPhwztpPrwfiP
+X-Google-Smtp-Source: AK7set9/O64pkn5dwSLCBKkisQzKtJcxKk2DnAafwqAfyzzLwryc1GWe4c5jRqNump84swALWKmltg==
+X-Received: by 2002:a17:903:2888:b0:198:b99c:f6ee with SMTP id ku8-20020a170903288800b00198b99cf6eemr4198563plb.65.1676530056201;
+        Wed, 15 Feb 2023 22:47:36 -0800 (PST)
+Received: from thinkpad ([117.217.179.87])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902b70c00b00176b84eb29asm440124pls.301.2023.02.15.22.47.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 22:47:35 -0800 (PST)
+Date:   Thu, 16 Feb 2023 12:17:27 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        robdclark@gmail.com
+Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
+ corresponding clk
+Message-ID: <20230216064727.GA2420@thinkpad>
+References: <cover.1669012140.git.viresh.kumar@linaro.org>
+ <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
+ <Y3snGQet8yc7HnJK@hovoldconsulting.com>
+ <20221121073946.GE11945@thinkpad>
+ <20230125042145.hrjpnskywwqn7b6v@vireshk-i7>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SJ1PR12MB6291:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8fac58e-dc46-4bbb-6abd-08db0fe944a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9QOzWAGa6gLkoMPEtc0BBVJ9SLhSSvFhlrNtmoHXS1cnXt3ipDJmir2KdS8kNsv4YwGo2D2xAybYrGUl65GSGePMkSpWFplNVk11cjbBBHAVwWSu5rdf/NU/1tAnHzZiGgDJDg0+ayukEccg5ZErjJL8wGKN9wejyGkvaLgePSUaN9M4LtNb/J8xQ0RR6racLg63GRbSrBX6AR/fXUgxg3CR0ymXZFz7RmKQnuk/g0Rsv1VewAjXfqZ5p/RYp8K8ZNLRft2Wmyl7yZaTCQ+F5kAQHtPUnMWWORH41RnIgVjowMO2QMZcea5DHWvlTJbcjKk2B9YnZge8FgTevqHv3jhMIxsIP2r8/918bZ7zCmM53u/mJhywrl7WbI+4OpKmXZM8bJbdkUdol/YkYKA9NoEw6iwmymwg83vi/PYlPxgz86Qw/Du/GsNRtgamRAqew6g25h/W/na87w2Iq/x8KGxXJaSEt+mVaw4In0ANmkzQa83bmDLImJQdaM3ilDv9MmQLuduqExT3Lvpxr9p6p/i9NRqgXbJvZkE0krFtPwp6RC6GUpFKveS9XCMGA1wCuEKJwGGOPo0Zlh2eUi8cGUfQHAul16CNc4uRTM1ThdiZi4M6JPKmuVKQT7fjJSm4WAAWastmTy5+pjRIxDuMPAgdscQyJu0u4rK7fJLcjgNSufi3RJUhUhB5ML+4JaSa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(366004)(39860400002)(136003)(396003)(346002)(376002)(451199018)(6636002)(54906003)(316002)(6862004)(8936002)(6506007)(6512007)(9686003)(186003)(86362001)(478600001)(6486002)(38100700002)(33716001)(6666004)(26005)(83380400001)(44832011)(5660300002)(7416002)(2906002)(66476007)(66556008)(66946007)(8676002)(4326008)(41300700001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9tuYcfsSyI0thjeYmGCJoX15ydKPoVUy5AR1FpqqiGk9Kx4B3hKsqTnMqnZW?=
- =?us-ascii?Q?+UKg8QyCxe2OuuHpUVs1VtkwKHAgsCb3Npqo4Or2m1xBCjTxyA975G7hpWTU?=
- =?us-ascii?Q?Jyubpep42d3kj1BOh+2V1s8BkffWQrQRA0RLJVb1m5rZhbs1VSOKxx+MtPy0?=
- =?us-ascii?Q?S0vbR2ykqiLzlXkd6qZox00DNzJcVF1zJ9Q5z6SiZ3gKbgFpPp+KMruVKmye?=
- =?us-ascii?Q?qnQxEH5PX7QxzC1LLlXqCQPW2KMfWZmMEFgacIjVzEv++1r/gtcEpH0TGtnv?=
- =?us-ascii?Q?sMWQvKZWb+BVyt2LJd65OtN5W688arzhKjNiJrmVBTiFNuHFIZXsV5pcftw9?=
- =?us-ascii?Q?zH7hDVH4H2+UCNt5i+4gx7vjaGoICpOfm2xqhB2Db/bAq6rbCAgF2lfowY0Z?=
- =?us-ascii?Q?wCGLFShwSMZmZbQCxezfym4frUGi7MPTczkYof9DuKQGuJBjuLqgDG+38Wrh?=
- =?us-ascii?Q?wSFCvuLtq4mq3v2NWEdG++vO6G5WqPkED9wO7DM5Wb0h1NJoq68bscqeU4zP?=
- =?us-ascii?Q?uGOfZnq/hFKIjXYJCwfrLMaLUQY8ee4k7hoGim8cdlzPts6Jt5qbGsTecnrN?=
- =?us-ascii?Q?KQO5txvPIEz7PyMtuorCuYXhfoDo4RdAZVkOFOq5HtyCrAUFBJ9Zkq+ZZXPW?=
- =?us-ascii?Q?pM/Y5hChVAJ+t6CnBNRGbRCtysdH2rTttXunwdIYjoInj/d1YIdR2MNXGLLB?=
- =?us-ascii?Q?Gret4gNkFl4OYqKm4KI5Su2gCJKCX9d2y1DFInQyU+Lcd4Z51Dc/x2bLa1OW?=
- =?us-ascii?Q?LKCvKdT5ADLSrSLJDSmJSfrW3DXjEWGRYeIskH31hZaWa0CF+rVqOuz6FW9A?=
- =?us-ascii?Q?QDpKJdkba189BudiSl5NfwNI6yCzfmnfF1+F7m9x7paeMDItFASnEqtwOy7W?=
- =?us-ascii?Q?lVh7G0p38t2pkSbIWT8bhCCiLQUxXB5f7yMwA7pJztqKRrZBq/GvskIU2JvW?=
- =?us-ascii?Q?lrYX8095WCKBScVQwRkRHfoo2yZBOXWiSXydGYFo4hmKQHurhfX+fzFq9kzl?=
- =?us-ascii?Q?6YgbsKGoKP+mhQZuTMl/xzJ8Ro+NDHV6IS2+eOsyrhXrTKNpV5Fq93UKbLhG?=
- =?us-ascii?Q?mCT9V3Now/XOlepvCiBFQ3EZvMTOm6vzId9XOdboHSTAcSoPTfWdqXyBnQqU?=
- =?us-ascii?Q?R4MNeLly0jKpnjOTo0TSOmSGd3oa4HEsuY1KJTCIn8rfETQRZo3bgjZ4Ho6M?=
- =?us-ascii?Q?vRcva6o5pQeRnhdCbq70L/2hlBnF+98ikLB7F96+mA2upAiphUHTfi8Trws/?=
- =?us-ascii?Q?RK/qdh9HK0L3xQUogv7EHbNhY17f6zwgomWRgQPqkJXXcCL8XpxN9rH+/eGI?=
- =?us-ascii?Q?WX8fUJtraZsSlyY8CWUH+92EzWrpailZDD4NXSawt6f0ep1ve8oi5TMmGMBe?=
- =?us-ascii?Q?jpLg9Y+NcFxNg2rtwCzYLF/Vbqmfg9YP83IuQJJpWAhuptBLmUz7dn4VGj2M?=
- =?us-ascii?Q?SU0xq51Zu9ExG6G3mghe7AJcCpxvNnuEiJ+xwsJA4uC8bXlXxUpn8XhjFmnK?=
- =?us-ascii?Q?OgEP3Nv56IMdsfkSYuhSNnDpn8QVRv5st86Obro3jYKr8N9D8L35+WXVXG8q?=
- =?us-ascii?Q?WKd1DHpotS2Ziaa1ATuozDmbCnnmmjK61VauEr8Z?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8fac58e-dc46-4bbb-6abd-08db0fe944a6
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 06:44:35.9110
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DOebsvncAuu/pOCatXntR25tb00+DBr/CQFBNc+fqlXxj3bDe+BHdV+xkB5fcQly9iZHlit18rA5K0Peul0Fsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6291
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230125042145.hrjpnskywwqn7b6v@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16 Feb 14:33, Huang Rui wrote:
-> On Thu, Feb 16, 2023 at 02:12:53PM +0800, Huang Rui wrote:
-> > On Tue, Feb 07, 2023 at 01:21:55AM +0800, Karny, Wyes wrote:
-> > > Move amd_pstate command line param description to correct alphabetical
-> > > order.
-> > > 
-> > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > 
-> > Wyes, could you squeeze this minor patch to patch 3? I think we won't need
-> > an additional patch to fix alphabetical order in the documentation.
-> 
-> Alternative, you can move this patch prior patch3, then patch3 (guided
-> autonomous" can add the documentation in correct order.
++ Rob Clark
 
-Sure, will reorder this.
+On Wed, Jan 25, 2023 at 09:51:45AM +0530, Viresh Kumar wrote:
+> On 21-11-22, 13:09, Manivannan Sadhasivam wrote:
+> > That's right. I have proposed to do the similar change to other SoCs as well
+> > once the series was completely merged. I thought of doing so for 6.3.
+> > 
+> > Btw, there seems to be one more candidate:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sm8250.dtsi#n2537
+> > 
+> > Looks like newer SoCs that has the GMU within the GPU block doesn't have clock
+> > property. This is because, GMU is the one supplying clocks to the GPU unlike the
+> > old SoCs where the clocks used to come from GCC itself.
+> > 
+> > But we do have a GMU devicetree node, so it should be a matter of adding the
+> > clock provider support as done for cpufreq and represent it in devicetree.
+> > 
+> > I'll ping Rob Clark and see how to get it done.
+> 
+> Any update on this Mani ? I want to get the hack removed if possible.
+> 
+
+Hi Viresh,
+
+Sorry for the delay. I've submitted the dts changes [1] to handle the CPU clocks
+for the rest of the Qcom SoCs.
+
+For the Qcom GPUs, I've CCed Rob Clark who is the maintainer.
+
+Rob, here is the background on the issue that is being discussed in this
+thread:
+
+Viresh submitted a series [2] back in July to improve the OPP framework, but
+that ended up breaking cpufreq on multiple Qcom SoCs. After investigation, it
+was found that the series was expecting the clocks supplied to the OPP end
+devices like CPUs/GPUs to be modeled in DT. But on Qcom platforms even though
+the clocks for these nodes are supplied by a separate entity, like CPUFreq
+(EPSS/OSM) for CPUs and GMU for GPUs, there was no clock property present in
+the respective nodes. And these nodes are using OPP table to switch frequencies
+dynamically.
+
+While the series was merged with a hack that still allows the OPP nodes without
+clock property in DT, we came to an agreement that the clock hierarchy should
+be modeled properly.
+
+So I submitted a series [3] that added clock provider support to cpufreq driver
+and sourced the clock from cpufreq node to CPU nodes in DT.
+
+Likewise, it should be handled for the adreno GPUs whose clock is managed by
+GMU on newer SoCs. Can you take a look at this?
 
 Thanks,
-Wyes
-> 
-> Thanks,
-> Ray
-> 
-> > 
-> > Thanks,
-> > Ray
-> > 
-> > > ---
-> > >  .../admin-guide/kernel-parameters.txt         | 46 +++++++++----------
-> > >  1 file changed, 23 insertions(+), 23 deletions(-)
-> > > 
-> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > index 56d5c189e458..d7685b4268ba 100644
-> > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > @@ -339,6 +339,29 @@
-> > >  			             This mode requires kvm-amd.avic=1.
-> > >  			             (Default when IOMMU HW support is present.)
-> > >  
-> > > +	amd_pstate=	[X86]
-> > > +			disable
-> > > +			  Do not enable amd_pstate as the default
-> > > +			  scaling driver for the supported processors
-> > > +			passive
-> > > +			  Use amd_pstate with passive mode as a scaling driver.
-> > > +			  In this mode autonomous selection is disabled.
-> > > +			  Driver requests a desired performance level and platform
-> > > +			  tries to match the same performance level if it is
-> > > +			  satisfied by guaranteed performance level.
-> > > +			active
-> > > +			  Use amd_pstate_epp driver instance as the scaling driver,
-> > > +			  driver provides a hint to the hardware if software wants
-> > > +			  to bias toward performance (0x0) or energy efficiency (0xff)
-> > > +			  to the CPPC firmware. then CPPC power algorithm will
-> > > +			  calculate the runtime workload and adjust the realtime cores
-> > > +			  frequency.
-> > > +			guided
-> > > +			  Activate guided autonomous mode. Driver requests minimum and
-> > > +			  maximum performance level and the platform autonomously
-> > > +			  selects a performance level in this range and appropriate
-> > > +			  to the current workload.
-> > > +
-> > >  	amijoy.map=	[HW,JOY] Amiga joystick support
-> > >  			Map of devices attached to JOY0DAT and JOY1DAT
-> > >  			Format: <a>,<b>
-> > > @@ -7009,26 +7032,3 @@
-> > >  				memory, and other data can't be written using
-> > >  				xmon commands.
-> > >  			off	xmon is disabled.
-> > > -
-> > > -	amd_pstate=	[X86]
-> > > -			disable
-> > > -			  Do not enable amd_pstate as the default
-> > > -			  scaling driver for the supported processors
-> > > -			passive
-> > > -			  Use amd_pstate with passive mode as a scaling driver.
-> > > -			  In this mode autonomous selection is disabled.
-> > > -			  Driver requests a desired performance level and platform
-> > > -			  tries to match the same performance level if it is
-> > > -			  satisfied by guaranteed performance level.
-> > > -			active
-> > > -			  Use amd_pstate_epp driver instance as the scaling driver,
-> > > -			  driver provides a hint to the hardware if software wants
-> > > -			  to bias toward performance (0x0) or energy efficiency (0xff)
-> > > -			  to the CPPC firmware. then CPPC power algorithm will
-> > > -			  calculate the runtime workload and adjust the realtime cores
-> > > -			  frequency.
-> > > -			guided
-> > > -			  Activate guided autonomous mode. Driver requests minimum and
-> > > -			  maximum performance level and the platform autonomously
-> > > -			  selects a performance level in this range and appropriate
-> > > -			  to the current workload.
-> > > -- 
-> > > 2.34.1
-> > > 
+Mani
+
+[1] https://lore.kernel.org/linux-arm-msm/20230215070400.5901-1-manivannan.sadhasivam@linaro.org/
+[2] https://lore.kernel.org/lkml/cover.1657003420.git.viresh.kumar@linaro.org/
+[3] https://lore.kernel.org/linux-arm-msm/20221117053145.10409-1-manivannan.sadhasivam@linaro.org/
+
+> -- 
+> viresh
+
+-- 
+மணிவண்ணன் சதாசிவம்
