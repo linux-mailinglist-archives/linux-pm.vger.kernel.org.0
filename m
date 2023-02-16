@@ -2,302 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E09F698EC6
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 09:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB6B69909D
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 11:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjBPIfi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Feb 2023 03:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S229584AbjBPKBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Feb 2023 05:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjBPIfh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 03:35:37 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40E3403E;
-        Thu, 16 Feb 2023 00:35:35 -0800 (PST)
+        with ESMTP id S229523AbjBPKBd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 05:01:33 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813B910EF;
+        Thu, 16 Feb 2023 02:01:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676541692; x=1708077692;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Vaw/xLBCiFgUUfui4ipBxOphabndfS8E2JLsaIRhgD0=;
+  b=xtgArd/HAYzS+hfFYyKjE5t+pWUgVt2Wr9WwEvVORgVCj0po5Q1vqJI1
+   WuPYrafU5EbL8x0ow2V/pOGqFRkWMJdJVL8k6cAQvQ3w2Q1Wr8v73Ydgm
+   FYfKN2JjRwMj3SuLDxBzeNZbJ7ygN2vyWqauSWFHzH0dZfIx4uzxANG19
+   GMhwjJjfKV/t9AXGgV1iU2pnvqZBG2dbWb6blnS8FEA1G0gv/IPFR0WtU
+   KCY9lA9VsIN34VDvPrlsLxAXK7UK4fBswybIVe+q8ohz0l+TkwWEc3knG
+   b/AaHqv3hdL+QkmeQGpmRJEZ+6YYtyagfmc7kZeF39ogbOu7Fzxrhha6R
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,302,1669100400"; 
+   d="scan'208";a="212287077"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Feb 2023 03:01:31 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 16 Feb 2023 03:01:31 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 16 Feb 2023 03:01:31 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QJTkyaYeZKS4P7YJwPChFNdfI7QVQcudHv3mVvWkqszmkgqYBcKXyCcKMHtHs7PAHxeJyPs8lm5NO86I9dE0aM31WmLojpJxdT36ZT5CIUJu4pU1MP00/zDxaFvaDe0ZRZHdeFdh9qclnsU5kAwLW/9SZX0y3+ygXundgI4IvJO0xa6tFCB+Gw+ozevNFFVl7hIqICgrAe8uXhdE3PBb7oKYo9NVzIYQG701gxlJZa83LzA44d9OhJvVPHbE27xp5gGc9Uv42vEoA/4X7okUt0LeYsTKCluLJNDO6Mn1ZYwdbOpFQSrAbkYr2xCmCHzA7Qz2snKMFPNERpwavK5siQ==
+ b=D7XJNl+SXpUrGSV1B0sQ937zpMu5FHDWEvLPuE5EZQVJ3voBbXx8fu1zqjqXyUwshb1W0Ca5GLJHuzScVEKorjDPpafNUDzLI7aduI2rzi08U/0Lc77BWyW5m4QnVm9v/L/FNkQaMcTgcwAcQVASCCGhTO6QLeKkfeI+x/PKAOq04XeV7PEGcg+ZNlLvH7ZRKZz2+hZ/j7qiegvswhl3JRo2jnPALjJsZjuNNY23xM1yRNaHp7sx4CCxbpDajnW7L+oCnt2qO8mcpXgsl0Zw23pf1rb0GL+7tiXsirI/xMI5y/To1KHbx1jJcCd+tkjSGAIeGmgCttkMcaIlE/+p+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NxLPUvThAmp5HXVaRURWlsUEKGrxLYijh1DJCIPoap4=;
- b=asg0QQhbUdGv3KNdw/8515hRKfDNbMpYQ+OJuE1Odv8N2qDxsQWetueXwiRMJ1gG1eV5AMEdh4GAcEBtyua0ozaEfdDHvOt8U5BVvQVn9HzBRs3PKt+VzctVyQAY0fBTIIjPklXqkxXPQxGKp/oHDMoCFaWz2wDHTyahr8HlT1MaESqZcDgVj4Xlk7Iw7pk063vuUlt+6Sz5GC9ZlGJpDqHk6+NNAQ1emxgpP2IMmJZbIkIXC2MBBzG/WL4HjC2TazLreJhcbZqqgZcZ2Qkutw/o352s47jV8mGhvsNjW0EGi41WmGWuRa5YzmjQtcWFIlIojwGdPxqKu06Q/HGQmA==
+ bh=Vaw/xLBCiFgUUfui4ipBxOphabndfS8E2JLsaIRhgD0=;
+ b=nMsT69Whwqj+IEs5sywl/fQDOon62kvbHRWjI4cdj/0AHN3PEQAjG0pc9NmJceeVaCEmtF6ayBCGsBad7jYeK91nFy8gnyrbgFefqlNVTulUCzUQV72qG6Mo+OlOKmgiDTh39RK7MZlR4meaEEW+HLGV8bQxuzflVE34hNoXiqXZNbv49rWbipWNcfxiIs0RrTCWuUZxlxrxhz+ngIheAqgVrC5SUNFbtIDS1nWK1jHYHaJBvQqfdrcUTQhEfr4v59n90J2C553WhESpuwjcefVYejdbEGVVOeAsmTQD8EreaO3eOj2mlTmpFN8qN/gamkd883U5WtyNljmXDqP0rA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NxLPUvThAmp5HXVaRURWlsUEKGrxLYijh1DJCIPoap4=;
- b=Ywo2wbEw/QJxTrYYXUDoCaqovOxXMZnVl+iSTtwWiXitmq04+NK8fOFMGER/hRsMjnsKqiw3I9ONQ8Z+f41vmgvlimt1hnYlH0Pz36dPgW+tj8iqZ2sTAwqYoczPdS2wy3lh56rkMhISFGkTApRuPNk8XmMnpmZJRlDGAvfiTcA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- MN2PR12MB4222.namprd12.prod.outlook.com (2603:10b6:208:19a::21) with
+ bh=Vaw/xLBCiFgUUfui4ipBxOphabndfS8E2JLsaIRhgD0=;
+ b=aIWvy+/hgxvx6FVeB6dmr1LsQp4EG2RmJ7h7HTOUMDcr5yE2P7BdWjfHdhlJoNRDGUegDo05d12W0AiekXCITQSxscyrY4DDkl2A6xh+gqTe534JSwFy3XUaDTUx5Oj0WtR0cFAb4p28oMi+0Vqq7meCFYMFl9drCHwd50MVUaQ=
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
+ by BL1PR11MB5349.namprd11.prod.outlook.com (2603:10b6:208:308::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.28; Thu, 16 Feb
- 2023 08:35:32 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b%7]) with mapi id 15.20.6086.024; Thu, 16 Feb 2023
- 08:35:32 +0000
-Date:   Thu, 16 Feb 2023 16:35:04 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Karny, Wyes" <Wyes.Karny@amd.com>,
-        Rafael J Wysocki <rafael@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Shukla, Santosh" <Santosh.Shukla@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Narayan, Ananth" <Ananth.Narayan@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        Tor Vic <torvic9@mailbox.org>,
-        Russell Haley <yumpusamongus@gmail.com>
-Subject: Re: [PATCH v7 0/6] cpufreq: amd-pstate: Add guided autonomous mode
- support
-Message-ID: <Y+3quFxebDAKLeg5@amd.com>
-References: <20230216081802.38007-1-wyes.karny@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216081802.38007-1-wyes.karny@amd.com>
-X-ClientProxiedBy: SI1PR02CA0006.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::11) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.27; Thu, 16 Feb
+ 2023 10:01:29 +0000
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::6eb8:36cd:3f97:ab32]) by BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::6eb8:36cd:3f97:ab32%5]) with mapi id 15.20.6086.027; Thu, 16 Feb 2023
+ 10:01:29 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <ye.xingchen@zte.com.cn>, <sre@kernel.org>
+CC:     <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?utf-8?B?UmU6IFtQQVRDSF0gcG93ZXI6IHJlc2V0OiBhdDkxLXBvd2Vyb2ZmOiBVc2U=?=
+ =?utf-8?B?wqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Thread-Topic: =?utf-8?B?W1BBVENIXSBwb3dlcjogcmVzZXQ6IGF0OTEtcG93ZXJvZmY6IFVzZcKgZGV2?=
+ =?utf-8?B?bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+Thread-Index: AQHZQe2jHequh57PZ0SPhQIpZy0v5w==
+Date:   Thu, 16 Feb 2023 10:01:29 +0000
+Message-ID: <188f341c-cc4e-16ae-d551-184bb48f09da@microchip.com>
+References: <202302151449285733136@zte.com.cn>
+In-Reply-To: <202302151449285733136@zte.com.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|BL1PR11MB5349:EE_
+x-ms-office365-filtering-correlation-id: e37b0fe1-3b1c-4057-2c0c-08db1004c627
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Jrhq4DWFLnJHnVYXI6TU85amZSsQ+ZSuLfCtq3rI92AbYM1kfj8AP9G/Nu3tFGqoX3G61WXgyCxM4GSo5cIgc2IJ1amc+RqIsqaih9+/lpOsgzQzTs4f6EnyHkyM+AS2zLj+6Jm3sMHehUSMy9F5tv6Utj6sE+H3mjkVO/FzGNcb3Z4Zdc+qxFNXX03KKRGSl8STz3ntc4mAF0yVJSuA0jF3BCq48wihBNG/cjVw4q+ta2RDZyeTzvRicu/6Uxmem/hGbW1IqkfmX/n3VnnxlQBTKfdt1AnNEyagqWsRQAAe5So8X0gkslcQhbBk1EpEdE9qa2QMGEltD4VRTN4hZ5Ud07E36rzNEXVAjlmhzWM302YeTd8wux6yuJf2Dd15D0KQ7vsHsTwix8q3gIUlGvgai+LD1oQhYhSQPsVIid6WmcC1vx2mPdfP8/D21UQhXS2ggfDVZog10baaqWqm3IgSOOIsKHIr+5AFmbF7hUWbcMeExKKNL0v41j0p+dvjluObFRiqjGOs8z7GwsnJncN7U3LMt5RfprT/A65V8RFLYFzgsXsFBMml/OcoUObdWvo3HL/S/fu4u+49gZx5yfGZIv3JvpuExwCOPWH7ksbdFeXf2zKB1mIH+XIgEQmkz7XAXvhEd6nAq3l0cCyTwA7GAEAwE0dR0/+X27O1OrABoboGlEORlCXjgMvcOFA66mzU+inWB0ZMljDun8gIWk4fa6FtN4OLGk5a74Jmfy64gf35IpwMxRZry+VjCLvZQiDRYbQ1DUEcB9n5Js2c2wMR3RGfkzLZMLJtY5Eb2PF/Z6eeY2LmXpjNOvv4q/7v
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199018)(4326008)(66476007)(91956017)(76116006)(66446008)(54906003)(8936002)(110136005)(316002)(2906002)(478600001)(6486002)(41300700001)(66946007)(66556008)(31686004)(53546011)(26005)(186003)(6512007)(2616005)(6506007)(83380400001)(38100700002)(122000001)(31696002)(86362001)(5660300002)(71200400001)(36756003)(38070700005)(64756008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ek0rQ08zNk9RZU5aeUQrYTBONkpOZCt1QnJSV1lEbmgrclFNeWQvTnh4VU5m?=
+ =?utf-8?B?T3ZGTDhOVEZja1gzdGdmWkVyVDNHa2tFaVF2bWw0NmtobGhxUTZpaXZIZHZR?=
+ =?utf-8?B?OUZ5ZjZwRFBKUDhZRFZDNWxKc1FkN081NEM0Y3IxS3R3SWg0YTN3M0tycnZw?=
+ =?utf-8?B?MmJFalNQUGZRbDZIRGU1Vld6V1pPaGREUHpuRkgyM3BSaW5aYStIUWcwdzZK?=
+ =?utf-8?B?dHN2amZCM2ROMGt4b21rdEI3d2dqUnNFNHRUMUtNbmhRYzJsYkF4cXBCRUJO?=
+ =?utf-8?B?K2J6THhrVEFtTWt0eGQ2dmx0T0NZL3ZuS0YvMHJTQy9ja2FrZG9zNERDdGJC?=
+ =?utf-8?B?TlBxWW1BZ3J4MEdMcHJDdFZoNElmNUdYT3B4SVJCejhLa1lWaGVlNmhaeEcy?=
+ =?utf-8?B?YW1iUkwxcFpnZjVrVVJjZ0Q2R2xPVmxWWE1WbnZLeVNET2FtQkhWaG5Dd1JH?=
+ =?utf-8?B?cjMzVjh2MGQxNE1MOW93UkI0NXNHd0ZJenZ4K2JrUGVYcGdYOTh2dEIwRkZh?=
+ =?utf-8?B?T3g1WnV0d1g0aDR2RXpaSFpXTm8yYk45TVEyS1RhOThJL2VBNlpGNklqVVRX?=
+ =?utf-8?B?c3J1aEpNKzVzNXU3L1lGbFZsR1E0RVUrZUpXSlNPcjdnZlY5WW13QlFVczB6?=
+ =?utf-8?B?M3pkQTVCL0pwdWJDRitxdC9CWml1VnNEN056R0pBR3FJc01adzVxVWJSMkFS?=
+ =?utf-8?B?aStkaXd0MEkwNk1ZekMvVTdoY0s2aXdseDRuWk54TG1kNU5XMHp4ODY5cEdV?=
+ =?utf-8?B?cHJmUnM1SjZoQWVTTEI4VC8wRE5lbHd3Uk9OSkdCRkpPNWVLY2VBREtjcWc0?=
+ =?utf-8?B?YjhQbjJlNDFMN3A3RE51QTFoeWNWd3pZNWJTSHVEWVVGdXlqV3RMdk5jeERR?=
+ =?utf-8?B?Tk8zTVpheVNmbkUyV1lyZjVIanRReW1sU3lXRjYzQm9TaEdYY3VrcWFtZ05n?=
+ =?utf-8?B?L2xYNXk4YWpHcGd4a0Q3aFh0UlRiM3RBa2UvcUwrOVdNc1RVUVlxSUN2WElq?=
+ =?utf-8?B?dHFGOENUNS9hR2lEcmNrdllsNGdIZm5YRFJrRVIvdzlTWnczZ1BNeTlsNFJY?=
+ =?utf-8?B?NXRreWxZcFozSExwVkRwK21OaVUvRnRZNEQ5ZGw2L2ZtcE1zYUNYV01Obkxz?=
+ =?utf-8?B?VGRpUTNXSHFpSXFIeGVnbHlNeUtSc1dJTkc3MWhHRVdXcXMxcndpZjJSRGJV?=
+ =?utf-8?B?eWd2V0tOYWVzWkpjTFJ5ZGdxenJGaHdBSmJ5Q21FUFB1d1J1Z0o5UDBMVUw5?=
+ =?utf-8?B?QkxVSzR5V1JGeGJXcVgzZHdUK1pFZ3lRTUZIUmNKVW43MDBlZ0dnVDU5U2VV?=
+ =?utf-8?B?d3Z5ZUtkYWdxYUFVQnR6OGhaOXBReDBocWwrVUdWWXJOenl4YVE2S29sS1BW?=
+ =?utf-8?B?a0dDSVJBVktEZHQrclR2bHdsc00ydWFaY1NUS3VCbFRCRld6MTcxN2pkMGZI?=
+ =?utf-8?B?OXpwS3VLRFNyRjJGZG5tL250c0wzejYwcG5EVVlJdHZnMXZ6Vk1iYUE3aS9F?=
+ =?utf-8?B?Q3F1bFZUTXNxRnlHaFFJZEZ0eHUySXY4Y3IrUUx0c0R6d0lJREVOK0s5ai93?=
+ =?utf-8?B?SWFTWWRDNTR2NmwxQ0MwOCtFSDNtd3RCVy9FVldPZm5WYXFyZFpQY3NKY0pZ?=
+ =?utf-8?B?RDFScWdtR3lnR25iWmQ4amYvcTM3VnVNWEN6YU1CeU5vbStla1Eza0JjRnpi?=
+ =?utf-8?B?L0FRQjloNU8vMTI2Z0xmNVJ3V1d5T1N0dE14NzAwNkMxWlppcHVHa1EyK2E2?=
+ =?utf-8?B?aXRyK29HeDVnZXFNSTVCeHZHQlkyaGFLVjFwQ2pEdkRNMkdTOUxGMTJ2MGwz?=
+ =?utf-8?B?NUQwclp0TWdaeFFhb3BKTE1GL0dWZFRDbS9hK2ZGenlyakRjcUUvS1IwL3g1?=
+ =?utf-8?B?UDUrNWdMdWhMaWczWmVoc0xUdG9zYkdtSTBMTWx0OVB0cXlsemN3dGd5ZFls?=
+ =?utf-8?B?aG5QN0wzRTQwdTF5eTFYejluTVkrbys3cUpsRmhIamF3d3F4T2ROMUMwaWNt?=
+ =?utf-8?B?S3dMT2dJOXhVaFVlL2dSL01RY2tFZ3Z4Um50aER3YmhHQ2tENlRuWHFSNHNz?=
+ =?utf-8?B?ZDYrSXlUdE1JVHpJRWhVemRreVJ5NjhpZlVHZXM0ckhCcmozMnJRQXM0dGJp?=
+ =?utf-8?B?Sk1McnFGMDh1U09UUGlkd0V6eUIrUm5FbnFGakszY045cE50WlBhQ25GRytw?=
+ =?utf-8?B?dEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3B66D9D0C022AA4FAFE5627AF04BBAA3@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|MN2PR12MB4222:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6038e5ba-4321-4b5c-e489-08db0ff8c435
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4hAw4rmZ4V5mqEUDXSIceSZi+HCFyQQ0duuyNgeCn3yO1Cg9VBAGvz/BYGxCTGE8pg5zfoo0UkTAVVIZebDDpDB2G/kGKMFTlRdfQcY2Q5ag+GNVqJOqjLV0OCWCn77VUZL6p/Rp60MZ0Asdh6LScnzfY+Tqe+hNP3MFJcxVEw895wEuA1kxnsFEMYr5hhP0VP01KpXSlWXA2vKq8rh8f7M02D9xh/zlgXeZdqUCNfZZYAJvAQUAi4jaLXifTaV5sKDNr1yS19YSwdsaoMXRrveMAlIHMao3eGFjGPFY2iKqTlR2qyzA8fh8tdV83H1xtXg8k47LVS7zuvbTu99u8gipX2N0MPdp/JlMSK0wHX11i1mnus35fgXPiULEo5107YyZbztrOvCnjdFY5qkxQMm7juwkUVK73TRj1Ls/vaWawU+DofpAL9UCW8xU+z4VyU2k7rQILame2Mjm0A8Qg0A8cpwm/qWQsa8AOsOwA8N83MuytweZW1RZEwVU0vpMJ7ymN9ydvCs+OEHgpoQhgXuFai3rzQpcJ7NApSy5CZc0Ne1vKbAIO2TrQiX2srITyiV9SW4uuYME6IeUFgspUFn8VS3KuVwXD/cg8CZyBmpLAtRQYJDkOEJhpVfTw5ycuMwxm4w1fA2oZdk0fRPF/EOlf6tceuPhNV+mAuZbfQTHS3Bh93S7diBs0M8xswce7MBCyUuNGI4c5nV1z6ZNzLgsXTEuF1JGu7BB8v8Rv84=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(366004)(39860400002)(376002)(346002)(451199018)(478600001)(966005)(6486002)(83380400001)(86362001)(38100700002)(6666004)(36756003)(26005)(186003)(6512007)(6506007)(2616005)(66946007)(316002)(66476007)(66556008)(5660300002)(7416002)(4326008)(8676002)(8936002)(54906003)(110136005)(41300700001)(2906002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qaiNLE7FlfIfyD3ri7zCiR2NJd/BjSbqMLRKA9rqmT3v23GkiZYvsMU0jlF/?=
- =?us-ascii?Q?hWSywpkeseKtCs8HJTSeY55SIbNQ7ecGOnV5eSzszPksMR1I6/n9p7GXetgF?=
- =?us-ascii?Q?U/TPLk379m+iYhEkhmMQNZobC1oB/r6xpZxksmbWr6eWMQbKsWtY0UfR9mnF?=
- =?us-ascii?Q?0A+VKoQgWixFgxy8gimZazB86TslPEweUVXfzlvdRIbuAzNKfqzehDjkQZeG?=
- =?us-ascii?Q?aQo/niH8ijYmA1T3Sau4dnCPFrGXsmrB3iP3zSE8X6ORRWItOm+4435ft4FJ?=
- =?us-ascii?Q?TPU9ZsPtyV2dsYeUMQRpbjbYCiIcXsN7/8KpxR+oCmzmxZ5LqwcCf2KRq8Sy?=
- =?us-ascii?Q?0ll/zZ27u9v2kDkO9HmNYgs0f/pDymkOhWJyppm2BoBul613AzD0LhigvmQo?=
- =?us-ascii?Q?kmflO/mFO5XTEUwzkICmFG1cPttTjPGf7f2n8IR8O84efGxyLFsZCL5NmLRA?=
- =?us-ascii?Q?yh1NlebktdGiOHVQGNCEgGm5zBdbIXONdOIsvXndw3wlNNF73foDVDQfFRf+?=
- =?us-ascii?Q?5Y8q9OHbiF0+3bZ2bmJ3wEaUwBl7o7m4y2vFdaV1PPIfP4LdyIDpSTQyfA90?=
- =?us-ascii?Q?pzkCU3BiPnJMdLSJesZcfbAY5rqIoBtLY+iZggK4Ik2mgwD1CEkLE61X2YuR?=
- =?us-ascii?Q?RIgC1y1dPQLXDw623QGk72ZZLQHHmFBqjs6I8kZ3Oea8zR0bJ2kJjYivqkin?=
- =?us-ascii?Q?NhP6ovsNAhwQg5aVs5IjoFcTgjeZ8KYm8tgGPxwBbJh+LTFQd/rZ4GAKbI2/?=
- =?us-ascii?Q?SOMeYrj9qUg/BLJ4dIWBtwgv2wzNP6eCAUjYZ/UIK2sUsW17myBVJAlXb8Dn?=
- =?us-ascii?Q?8YjJnj/fVJki9toL33CLCPflEz/3z3qLajPqtxiLLhbyfIlPkwCj0sdPf2LS?=
- =?us-ascii?Q?EKL4jdKBH2mFQdwlVA1TAo3prZdZj5Wx06kWo7dUgoILeAb8XBIOSmRDT3+y?=
- =?us-ascii?Q?fVbi+DrAo4WUTh9vdNV5vLRkymKLLm8t4ZFwJ1aTVssq6yWhpz9Ddz+cHs3q?=
- =?us-ascii?Q?9/agDNu137YVu6M7zTFCqt5/zhg7t2xY95ejuQNtGgPn6h3xxwxHAlDhpFCr?=
- =?us-ascii?Q?02cO2ZZic5JHbbMV0oNKcSg2r46U8azxdgcZeBfPBcU4+ygM2YzLtMB36Fpk?=
- =?us-ascii?Q?9G1bdrJBJMkLT+fVAyTslYPD0jD9SkcJJeLdJ5/XJJ4VYnUtrkW2fIZueKdS?=
- =?us-ascii?Q?Jh4dy2GPXrLX3cv6URUXhOSC5GB8Oxg+B6+mi47UZgKIiS6KLHRZQq6pcgSh?=
- =?us-ascii?Q?+YN8ihBmI7lM3Uka0yNLttec8b4OJfmmGKju97LXSRRa6KPazOgjKjJZk/E4?=
- =?us-ascii?Q?7I3vjo5C9l5zIFTp6S8+LyQuhSaKM9c4z2/5rjqHYJn//o3yPYvygG37Jixl?=
- =?us-ascii?Q?052b0na14JCNRsmxVFXV7V/Ukjep2nkkj92DW49ckG1s6nJwnWiQkxRM03KG?=
- =?us-ascii?Q?iel59OFpYt17FFXWBQ/+uUlZeM5adBghprWNIIIXrRLx7b0OQirWBIWwMuKk?=
- =?us-ascii?Q?ZVU57yKTEFhctzZA3tteUKIrlGFX1b84a2upmNdqixbNyLqB3Hrl3npuljB7?=
- =?us-ascii?Q?OMG2VEM8rqQYY3SlAna1XJBF7IIwHcLaZk2rh0Vg?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6038e5ba-4321-4b5c-e489-08db0ff8c435
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 08:35:32.2791
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e37b0fe1-3b1c-4057-2c0c-08db1004c627
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2023 10:01:29.2957
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hRqyoN6f4qbsjCsfI6YHaGSE936kGv1cFA0hgktqyAqvPfiRZvZiC0ZEjl2awZv4zFCyNres7TC31/EukfN+6Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4222
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3q2yGBnjaq8NWpYKYigtyb6nYBl8NYssHlRd14mCfy1SCNV1r6CI+NPzsC0uzmf8ePLg76HGRaRsjG5yJMO6JDxuoAR0dVyzBs+NR//2Dto=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5349
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 04:17:56PM +0800, Karny, Wyes wrote:
-> From ACPI spec[1] below 3 modes for CPPC can be defined:
-> 1. Non autonomous: OS scaling governor specifies operating frequency/
->    performance level through `Desired Performance` register and platform
-> follows that.
-> 2. Guided autonomous: OS scaling governor specifies min and max
->    frequencies/ performance levels through `Minimum Performance` and
-> `Maximum Performance` register, and platform can autonomously select an
-> operating frequency in this range.
-> 3. Fully autonomous: OS only hints (via EPP) to platform for the required
->    energy performance preference for the workload and platform autonomously
-> scales the frequency.
-> 
-> Currently (1) is supported by amd_pstate as passive mode, and (3) is
-> implemented by EPP support[2]. This change is to support (2).
-> 
-> In guided autonomous mode the min_perf is based on the input from the
-> scaling governor. For example, in case of schedutil this value depends
-> on the current utilization. And max_perf is set to max capacity.
-> 
-> To activate guided auto mode ``amd_pstate=guided`` command line
-> parameter has to be passed in the kernel.
-> 
-> Below are the results (normalized) of benchmarks with this patch:
-> System: Genoa 96C 192T
-> Kernel: 6.2.0-rc2 + EPP v12 + patch
-> Scaling governor: schedutil
-> 
-> ================ dbench comparisons ================
-> dbench result comparison:
-> Here results are throughput (MB/s)
-> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->     1	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
->     2	   1.07 (0.00 pct)	   1.06 (-0.93 pct)	   1.07 (0.00 pct)
->     4	   1.68 (0.00 pct)	   1.70 (1.19 pct)	   1.72 (2.38 pct)
->     8	   2.61 (0.00 pct)	   2.68 (2.68 pct)	   2.76 (5.74 pct)
->    16	   4.16 (0.00 pct)	   4.24 (1.92 pct)	   4.53 (8.89 pct)
->    32	   5.98 (0.00 pct)	   6.17 (3.17 pct)	   7.30 (22.07 pct)
->    64	   8.67 (0.00 pct)	   8.99 (3.69 pct)	  10.71 (23.52 pct)
->   128	  11.98 (0.00 pct)	  12.52 (4.50 pct)	  14.67 (22.45 pct)
->   256	  15.73 (0.00 pct)	  16.13 (2.54 pct)	  17.81 (13.22 pct)
->   512	  15.77 (0.00 pct)	  16.32 (3.48 pct)	  16.39 (3.93 pct)
-> dbench power comparison:
-> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->     1	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   1.04 (4.00 pct)
->     2	   0.99 (0.00 pct)	   0.97 (-2.02 pct)	   1.02 (3.03 pct)
->     4	   0.98 (0.00 pct)	   0.98 (0.00 pct)	   1.02 (4.08 pct)
->     8	   0.98 (0.00 pct)	   0.99 (1.02 pct)	   1.02 (4.08 pct)
->    16	   0.99 (0.00 pct)	   1.00 (1.01 pct)	   1.04 (5.05 pct)
->    32	   1.02 (0.00 pct)	   1.02 (0.00 pct)	   1.07 (4.90 pct)
->    64	   1.05 (0.00 pct)	   1.05 (0.00 pct)	   1.11 (5.71 pct)
->   128	   1.08 (0.00 pct)	   1.08 (0.00 pct)	   1.15 (6.48 pct)
->   256	   1.12 (0.00 pct)	   1.12 (0.00 pct)	   1.20 (7.14 pct)
->   512	   1.18 (0.00 pct)	   1.17 (-0.84 pct)	   1.26 (6.77 pct)
-> 
-> ================ git-source comparisons ================
-> git-source result comparison:
-> Here results are throughput (compilations per 1000 sec)
-> Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->   192	   1.00 (0.00 pct)	   0.93 (-7.00 pct)	   1.00 (0.00 pct)
-> git-source power comparison:
-> Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->   192	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.96 (-4.00 pct)
-> 
-> ================ kernbench comparisons ================
-> kernbench result comparison:
-> Here results are throughput (compilations per 1000 sec)
-> Load:	   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> 32	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
-> 48	   1.26 (0.00 pct)	   1.28 (1.58 pct)	   1.25 (-0.79 pct)
-> 64	   1.39 (0.00 pct)	   1.47 (5.75 pct)	   1.43 (2.87 pct)
-> 96	   1.48 (0.00 pct)	   1.50 (1.35 pct)	   1.49 (0.67 pct)
-> 128	   1.29 (0.00 pct)	   1.32 (2.32 pct)	   1.33 (3.10 pct)
-> 192	   1.17 (0.00 pct)	   1.20 (2.56 pct)	   1.21 (3.41 pct)
-> 256	   1.17 (0.00 pct)	   1.18 (0.85 pct)	   1.20 (2.56 pct)
-> 384	   1.16 (0.00 pct)	   1.17 (0.86 pct)	   1.21 (4.31 pct)
-> kernbench power comparison:
-> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->    32	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.00 (0.00 pct)
->    48	   0.87 (0.00 pct)	   0.81 (-6.89 pct)	   0.88 (1.14 pct)
->    64	   0.81 (0.00 pct)	   0.73 (-9.87 pct)	   0.77 (-4.93 pct)
->    96	   0.75 (0.00 pct)	   0.74 (-1.33 pct)	   0.75 (0.00 pct)
->   128	   0.83 (0.00 pct)	   0.79 (-4.81 pct)	   0.83 (0.00 pct)
->   192	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
->   256	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
->   384	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
-> 
-> ================ tbench comparisons ================
-> tbench result comparison:
-> Here results are throughput (MB/s)
-> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->     1	   1.00 (0.00 pct)	   0.70 (-30.00 pct)	   1.37 (37.00 pct)
->     2	   2.64 (0.00 pct)	   1.39 (-47.34 pct)	   2.70 (2.27 pct)
->     4	   4.89 (0.00 pct)	   2.75 (-43.76 pct)	   5.28 (7.97 pct)
->     8	   9.46 (0.00 pct)	   5.42 (-42.70 pct)	  10.22 (8.03 pct)
->    16	  19.05 (0.00 pct)	  10.42 (-45.30 pct)	  19.94 (4.67 pct)
->    32	  37.50 (0.00 pct)	  20.23 (-46.05 pct)	  36.87 (-1.68 pct)
->    64	  61.24 (0.00 pct)	  43.08 (-29.65 pct)	  62.96 (2.80 pct)
->   128	  67.16 (0.00 pct)	  69.08 (2.85 pct)	  67.34 (0.26 pct)
->   256	 154.59 (0.00 pct)	 162.33 (5.00 pct)	 156.78 (1.41 pct)
->   512	 154.02 (0.00 pct)	 156.74 (1.76 pct)	 153.48 (-0.35 pct)
-> tbench power comparison:
-> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
->     1	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.08 (8.00 pct)
->     2	   1.04 (0.00 pct)	   0.97 (-6.73 pct)	   1.11 (6.73 pct)
->     4	   1.12 (0.00 pct)	   0.99 (-11.60 pct)	   1.18 (5.35 pct)
->     8	   1.25 (0.00 pct)	   1.04 (-16.80 pct)	   1.31 (4.80 pct)
->    16	   1.53 (0.00 pct)	   1.13 (-26.14 pct)	   1.58 (3.26 pct)
->    32	   2.01 (0.00 pct)	   1.36 (-32.33 pct)	   2.03 (0.99 pct)
->    64	   2.58 (0.00 pct)	   2.14 (-17.05 pct)	   2.61 (1.16 pct)
->   128	   2.80 (0.00 pct)	   2.81 (0.35 pct)	   2.81 (0.35 pct)
->   256	   3.39 (0.00 pct)	   3.43 (1.17 pct)	   3.42 (0.88 pct)
->   512	   3.44 (0.00 pct)	   3.44 (0.00 pct)	   3.44 (0.00 pct)
-> 
-> Note: this series is based on top of EPP v12 [3] series
-> 
-> Change log:
-> 
-> v6 -> v7:
-> - Addressed comments by Ray
-> - Reorder and rebase patches
-> - Pick up Ack by Ray
-> 
-> v5 -> v6:
-> - Don't return -EBUSY when changing to same mode
-> 
-> v4 -> v5:
-> - Rebased on top of EPP v12 series
-> - Addressed comments form Mario regarding documentation
-> - Picked up RB flags from Mario and Bagas Sanjaya
-> 
-> v3 -> v4:
-> - Fixed active mode low frequency issue reported by Peter Jung and Tor Vic
-> - Documentation modification suggested by Bagas Sanjaya
-> 
-> v2 -> v3:
-> - Addressed review comments form Mario.
-> - Picked up RB tag from Mario.
-> - Rebase on top of EPP v11 [3].
-> 
-> v1 -> v2:
-> - Fix issue with shared mem systems.
-> - Rebase on top of EPP series.
-> 
-> [1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
-> [2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
-> [3]: https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@amd.com/
-> 
-> Wyes Karny (6):
->   acpi: cppc: Add min and max perf reg writing support
->   acpi: cppc: Add auto select register read/write support
->   Documentation: cpufreq: amd-pstate: Move amd_pstate param to
->     alphabetical order
->   cpufreq: amd-pstate: Add guided autonomous mode
->   cpufreq: amd-pstate: Add guided mode control support via sysfs
->   Documentation: cpufreq: amd-pstate: Update amd_pstate status sysfs for
->     guided
-> 
->  .../admin-guide/kernel-parameters.txt         |  40 ++--
->  Documentation/admin-guide/pm/amd-pstate.rst   |  31 ++-
->  drivers/acpi/cppc_acpi.c                      | 121 +++++++++++-
->  drivers/cpufreq/amd-pstate.c                  | 177 +++++++++++++-----
->  include/acpi/cppc_acpi.h                      |  11 ++
->  include/linux/amd-pstate.h                    |   2 +
->  6 files changed, 302 insertions(+), 80 deletions(-)
-> 
-
-Hi Rafael,
-
-Could you please apply these series into 6.3 or please kindly let us know
-if you have any comments?
-
-Thanks,
-Ray
+T24gMTUuMDIuMjAyMyAwODo0OSwgeWUueGluZ2NoZW5AenRlLmNvbS5jbiB3cm90ZToNCj4gRVhU
+RVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVz
+cyB5b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBGcm9tOiBZZSBYaW5nY2hlbiA8
+eWUueGluZ2NoZW5AenRlLmNvbS5jbj4NCj4gDQo+IENvbnZlcnQgcGxhdGZvcm1fZ2V0X3Jlc291
+cmNlKCksIGRldm1faW9yZW1hcF9yZXNvdXJjZSgpIHRvIGEgc2luZ2xlDQo+IGNhbGwgdG8gZGV2
+bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKSwgYXMgdGhpcyBpcyBleGFjdGx5
+DQo+IHdoYXQgdGhpcyBmdW5jdGlvbiBkb2VzLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogWWUgWGlu
+Z2NoZW4gPHllLnhpbmdjaGVuQHp0ZS5jb20uY24+DQoNClJldmlld2VkLWJ5OiBDbGF1ZGl1IEJl
+em5lYSA8Y2xhdWRpdS5iZXpuZWFAbWljcm9jaGlwLmNvbT4NCg0KDQo+IC0tLQ0KPiAgZHJpdmVy
+cy9wb3dlci9yZXNldC9hdDkxLXBvd2Vyb2ZmLmMgfCA0ICstLS0NCj4gIDEgZmlsZSBjaGFuZ2Vk
+LCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2
+ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcG93ZXJvZmYuYyBiL2RyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5
+MS1wb3dlcm9mZi5jDQo+IGluZGV4IDllNzRlMTMxYzY3NS4uYjdlMTdhZmUzMGUyIDEwMDY0NA0K
+PiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcG93ZXJvZmYuYw0KPiArKysgYi9kcml2
+ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcG93ZXJvZmYuYw0KPiBAQCAtMTUxLDEzICsxNTEsMTEgQEAg
+c3RhdGljIHZvaWQgYXQ5MV9wb3dlcm9mZl9kdF9zZXRfd2FrZXVwX21vZGUoc3RydWN0IHBsYXRm
+b3JtX2RldmljZSAqcGRldikNCj4gDQo+ICBzdGF0aWMgaW50IF9faW5pdCBhdDkxX3Bvd2Vyb2Zm
+X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICB7DQo+IC0gICAgICAgc3Ry
+dWN0IHJlc291cmNlICpyZXM7DQo+ICAgICAgICAgc3RydWN0IGRldmljZV9ub2RlICpucDsNCj4g
+ICAgICAgICB1MzIgZGRyX3R5cGU7DQo+ICAgICAgICAgaW50IHJldDsNCj4gDQo+IC0gICAgICAg
+cmVzID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVTT1VSQ0VfTUVNLCAwKTsNCj4g
+LSAgICAgICBhdDkxX3NoZHdjLnNoZHdjX2Jhc2UgPSBkZXZtX2lvcmVtYXBfcmVzb3VyY2UoJnBk
+ZXYtPmRldiwgcmVzKTsNCj4gKyAgICAgICBhdDkxX3NoZHdjLnNoZHdjX2Jhc2UgPSBkZXZtX3Bs
+YXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZShwZGV2LCAwLCBOVUxMKTsNCj4gICAgICAg
+ICBpZiAoSVNfRVJSKGF0OTFfc2hkd2Muc2hkd2NfYmFzZSkpDQo+ICAgICAgICAgICAgICAgICBy
+ZXR1cm4gUFRSX0VSUihhdDkxX3NoZHdjLnNoZHdjX2Jhc2UpOw0KPiANCj4gLS0NCj4gMi4yNS4x
+DQoNCg==
