@@ -2,95 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E976995B8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 14:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38416995EF
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 14:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjBPN0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Feb 2023 08:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S229756AbjBPNg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Feb 2023 08:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBPN0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 08:26:34 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22CD59B56;
-        Thu, 16 Feb 2023 05:25:50 -0800 (PST)
-X-UUID: 6b4a55e6adfd11ed945fc101203acc17-20230216
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=jC/44U9ggSgBJrhBDKLr2l+gbCEuEsIxD9KWU3fY9AI=;
-        b=Grlid5vj+MrP6NoXWfg17r07PKVghwWOEit2u0SzbQ6FQVBtAxFIOYC0wPKMyyOhCqMBqCXF3CRxHNah+NMYbuLNJUsuqG6JBB9vlD1/0TVJwzEWUaCzUi0y8hSKI1uXHBS5thlM/i9HaVBSI3oaDbpkrKnakSscREePQ/caRWg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:a05f40be-50e8-44e1-872e-5cace00ba80d,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:885ddb2,CLOUDID:9745a9b0-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: 6b4a55e6adfd11ed945fc101203acc17-20230216
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 96290796; Thu, 16 Feb 2023 21:25:45 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 16 Feb 2023 21:25:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 16 Feb 2023 21:25:44 +0800
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>
-CC:     Fan Chen <fan.chen@mediatek.com>, Roger Lu <roger.lu@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: soc: mediatek: mtk-svs: fix passing zero to 'PTR_ERR'
-Date:   Thu, 16 Feb 2023 21:25:43 +0800
-Message-ID: <20230216132543.814-1-roger.lu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S229673AbjBPNg6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 08:36:58 -0500
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA1B244A0;
+        Thu, 16 Feb 2023 05:36:56 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id u21so2851978edv.3;
+        Thu, 16 Feb 2023 05:36:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=top6E77JzMmJPl6stZsZdTPwPDBOPdg1AMxmBS2mrQc=;
+        b=kZeU3MRyZyu8tkG8wEu50a/khLpxOoU0oSQldPwgWy+4iYQlGaVZVTnooGTGa7mAt0
+         7wXSEB6F/gexDGknlGF1glBEyMBHaFzCznPas/Scf+yQANt5cf2TjaVzM6E8MlM01RcN
+         aEaNFLcdI3/hHQ6T+I4IC5THKuot9jbFsn+Ca4lQdwZV1nnJm0YTWF+hZz2OOA6hNswa
+         v5sVPJW3R8vaRxbEutnZTqXAU7iulDND+Q7GRpBl0aNEXZXL2wSCtPD2JCfTw56MYL5p
+         PpA7r7CyvkJghIkosKdsYU4UYBd7corH5inL+tAY1DjhQWE3X6MG7kgGX2kWEMBo5Xs9
+         MvnQ==
+X-Gm-Message-State: AO0yUKXovrgIhOiggd4EfinBcyfDw+NOJWl2s6923a+IEJnxSzvB6z/a
+        M4C5Usp9imZdiLUe9OvOWH59YTxCIlr6WWP0aHs=
+X-Google-Smtp-Source: AK7set9c5bVbzqKP2R2hPpn6AWiDzQ5VfveVOSmdQ6J/DIxBWFyR0w1aeKhBzuQJ+qB6DJhh7dc4HMrAeT4koACwIJM=
+X-Received: by 2002:a50:8ac8:0:b0:4ad:6fc8:69c1 with SMTP id
+ k8-20020a508ac8000000b004ad6fc869c1mr499766edk.3.1676554613629; Thu, 16 Feb
+ 2023 05:36:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <76fe1e13-761c-1153-b913-ed2c41c8d807@linaro.org>
+In-Reply-To: <76fe1e13-761c-1153-b913-ed2c41c8d807@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Feb 2023 14:36:42 +0100
+Message-ID: <CAJZ5v0i_8dibpROFgY4woQdAPcYAX-8ttRiy32vRZC1-_FzCZQ@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal material for v6.3, take 2
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        yong qin <yongqin.liu@linaro.org>,
+        Vibhav Pant <vibhavp@gmail.com>, Alain Volmat <avolmat@me.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-nvmem_cell_get() cannot return NULL so checking for NULL is wrong here.
+Hi Daniel,
 
-Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-Fixes: 6c7174fd90a4690 ("soc: mediatek: mtk-svs: use svs get efuse common function")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/202302160720.N64SWT4l-lkp@intel.com/
----
- drivers/soc/mediatek/mtk-svs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Feb 13, 2023 at 12:10 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 61b7614c114c817f9f326282c2f7a728bf0051a8:
+>
+>    Merge branch 'thermal-intel' into linux-next (2023-02-09 19:57:59 +0100)
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index a7eb019b5157..8127fb6d587b 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -1726,7 +1726,7 @@ static int svs_get_efuse_data(struct svs_platform *svsp,
- 	struct nvmem_cell *cell;
- 
- 	cell = nvmem_cell_get(svsp->dev, nvmem_cell_name);
--	if (IS_ERR_OR_NULL(cell)) {
-+	if (IS_ERR(cell)) {
- 		dev_err(svsp->dev, "no \"%s\"? %ld\n",
- 			nvmem_cell_name, PTR_ERR(cell));
- 		return PTR_ERR(cell);
--- 
-2.18.0
+When I was preparing my thermal pull request for 6.3-rc1 which I'm
+going to submit shortly, I noticed that this pull request was based on
+my linux-next branch which wasn't suitable for this purpose at all (it
+contained temporary merges and material that is not sent in thermal
+pull requests, like ACPI and power management commits).
 
+In the future, if I receive a pull request based on my linux-next
+branch, I won't pull.
+
+Please base your pull requests sent to me on mainline commits
+(ideally, on a recent -rc) or, if there are commits that your new
+material depends on in my thermal branch, you can base your pull
+request on it (it is a forward-only branch as a rule, but please see
+below).  If none of the above is applicable, please let me know ahead
+of time, so I can set up a separate forward-only branch as a base for
+your pull request.
+
+This time I had to reset my thermal branch back to commit
+f364beb5b673, merge my thermal-core and thermal-intel branches and
+cherry-pick the new thermal changes from the $subject pull request on
+top of that to remedy the situation (I have verified that this has not
+introduced any code differences).
+
+Thanks,
+Rafael
