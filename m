@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DD8699195
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 11:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216F169919D
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 11:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjBPKhR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Feb 2023 05:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
+        id S230150AbjBPKhU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Feb 2023 05:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjBPKhD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 05:37:03 -0500
+        with ESMTP id S230222AbjBPKhG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 05:37:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C952D4A1C6
-        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 02:36:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA7454557
+        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 02:36:48 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1pSbcs-0003cs-1z; Thu, 16 Feb 2023 11:36:30 +0100
+        id 1pSbcs-0003dw-6u; Thu, 16 Feb 2023 11:36:30 +0100
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1pSbco-005Kmh-ED; Thu, 16 Feb 2023 11:36:27 +0100
+        id 1pSbcq-005KnQ-9y; Thu, 16 Feb 2023 11:36:29 +0100
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1pSbcn-002WiJ-VZ; Thu, 16 Feb 2023 11:36:25 +0100
+        id 1pSbcn-002WiM-WA; Thu, 16 Feb 2023 11:36:26 +0100
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-pm@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -39,9 +39,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
         Michael Riesch <michael.riesch@wolfvision.net>,
         Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v3 07/19] PM / devfreq: rockchip-dfi: introduce channel mask
-Date:   Thu, 16 Feb 2023 11:36:12 +0100
-Message-Id: <20230216103624.591901-8-s.hauer@pengutronix.de>
+Subject: [PATCH v3 08/19] PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+Date:   Thu, 16 Feb 2023 11:36:13 +0100
+Message-Id: <20230216103624.591901-9-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230216103624.591901-1-s.hauer@pengutronix.de>
 References: <20230216103624.591901-1-s.hauer@pengutronix.de>
@@ -59,83 +59,131 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Different Rockchip SoC variants have a different number of channels.
-Introduce a channel mask to make the number of channels configurable
-from SoC initialization code.
+The DDRTYPE defines are named to be RK3399 specific, but they can be
+used for other Rockchip SoCs as well, so replace the RK3399_PMUGRF_
+prefix with ROCKCHIP_. They are defined in a SoC specific header
+file, so when generalizing the prefix also move the new defines to
+a SoC agnostic header file. While at it use GENMASK to define the
+DDRTYPE bitfield and give it a name including the full register name.
 
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 ---
- drivers/devfreq/event/rockchip-dfi.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ drivers/devfreq/event/rockchip-dfi.c | 10 ++++++----
+ drivers/devfreq/rk3399_dmc.c         | 10 +++++-----
+ include/soc/rockchip/rk3399_grf.h    |  7 +------
+ include/soc/rockchip/rockchip_grf.h  | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+), 15 deletions(-)
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
 
 diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 25d64d9166a9a..18d578730fd0c 100644
+index 18d578730fd0c..7896cd8beb143 100644
 --- a/drivers/devfreq/event/rockchip-dfi.c
 +++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -21,7 +21,7 @@
+@@ -18,7 +18,10 @@
+ #include <linux/list.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
  
++#include <soc/rockchip/rockchip_grf.h>
  #include <soc/rockchip/rk3399_grf.h>
  
--#define RK3399_DMC_NUM_CH	2
-+#define DMC_MAX_CHANNELS	2
+ #define DMC_MAX_CHANNELS	2
+@@ -74,9 +77,9 @@ static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
+ 	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
  
- /* DDRMON_CTRL */
- #define DDRMON_CTRL	0x04
-@@ -44,7 +44,7 @@ struct dmc_count_channel {
- };
+ 	/* set ddr type to dfi */
+-	if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR3)
++	if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR3)
+ 		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
+-	else if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR4)
++	else if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR4)
+ 		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
  
- struct dmc_count {
--	struct dmc_count_channel c[RK3399_DMC_NUM_CH];
-+	struct dmc_count_channel c[DMC_MAX_CHANNELS];
- };
+ 	/* enable count, use software mode */
+@@ -191,8 +194,7 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
  
- /*
-@@ -62,6 +62,7 @@ struct rockchip_dfi {
- 	struct regmap *regmap_pmu;
- 	struct clk *clk;
- 	u32 ddr_type;
-+	unsigned int channel_mask;
- };
+ 	/* get ddr type */
+ 	regmap_read(regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+-	dfi->ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
+-			RK3399_PMUGRF_DDRTYPE_MASK;
++	dfi->ddr_type = FIELD_GET(RK3399_PMUGRF_OS_REG2_DDRTYPE, val);
  
- static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
-@@ -96,7 +97,9 @@ static void rockchip_dfi_read_counters(struct devfreq_event_dev *edev, struct dm
- 	u32 i;
- 	void __iomem *dfi_regs = dfi->regs;
+ 	dfi->channel_mask = 3;
  
--	for (i = 0; i < RK3399_DMC_NUM_CH; i++) {
-+	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
-+		if (!(dfi->channel_mask & BIT(i)))
-+			continue;
- 		count->c[i].access = readl_relaxed(dfi_regs +
- 				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
- 		count->c[i].total = readl_relaxed(dfi_regs +
-@@ -146,9 +149,14 @@ static int rockchip_dfi_get_event(struct devfreq_event_dev *edev,
- 	rockchip_dfi_read_counters(edev, &count);
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index daff407026157..fd2c5ffedf41e 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -22,6 +22,7 @@
+ #include <linux/suspend.h>
  
- 	/* We can only report one channel, so find the busiest one */
--	for (i = 0; i < RK3399_DMC_NUM_CH; i++) {
--		u32 a = count.c[i].access - last->c[i].access;
--		u32 t = count.c[i].total - last->c[i].total;
-+	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
-+		u32 a, t;
+ #include <soc/rockchip/pm_domains.h>
++#include <soc/rockchip/rockchip_grf.h>
+ #include <soc/rockchip/rk3399_grf.h>
+ #include <soc/rockchip/rockchip_sip.h>
+ 
+@@ -381,17 +382,16 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	regmap_read(data->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+-	ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
+-		    RK3399_PMUGRF_DDRTYPE_MASK;
++	ddr_type = FIELD_GET(RK3399_PMUGRF_OS_REG2_DDRTYPE, val);
+ 
+ 	switch (ddr_type) {
+-	case RK3399_PMUGRF_DDRTYPE_DDR3:
++	case ROCKCHIP_DDRTYPE_DDR3:
+ 		data->odt_dis_freq = data->ddr3_odt_dis_freq;
+ 		break;
+-	case RK3399_PMUGRF_DDRTYPE_LPDDR3:
++	case ROCKCHIP_DDRTYPE_LPDDR3:
+ 		data->odt_dis_freq = data->lpddr3_odt_dis_freq;
+ 		break;
+-	case RK3399_PMUGRF_DDRTYPE_LPDDR4:
++	case ROCKCHIP_DDRTYPE_LPDDR4:
+ 		data->odt_dis_freq = data->lpddr4_odt_dis_freq;
+ 		break;
+ 	default:
+diff --git a/include/soc/rockchip/rk3399_grf.h b/include/soc/rockchip/rk3399_grf.h
+index 3eebabcb28123..775f8444bea8d 100644
+--- a/include/soc/rockchip/rk3399_grf.h
++++ b/include/soc/rockchip/rk3399_grf.h
+@@ -11,11 +11,6 @@
+ 
+ /* PMU GRF Registers */
+ #define RK3399_PMUGRF_OS_REG2		0x308
+-#define RK3399_PMUGRF_DDRTYPE_SHIFT	13
+-#define RK3399_PMUGRF_DDRTYPE_MASK	7
+-#define RK3399_PMUGRF_DDRTYPE_DDR3	3
+-#define RK3399_PMUGRF_DDRTYPE_LPDDR2	5
+-#define RK3399_PMUGRF_DDRTYPE_LPDDR3	6
+-#define RK3399_PMUGRF_DDRTYPE_LPDDR4	7
++#define RK3399_PMUGRF_OS_REG2_DDRTYPE		GENMASK(15, 13)
+ 
+ #endif
+diff --git a/include/soc/rockchip/rockchip_grf.h b/include/soc/rockchip/rockchip_grf.h
+new file mode 100644
+index 0000000000000..dc77bb762a05a
+--- /dev/null
++++ b/include/soc/rockchip/rockchip_grf.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Rockchip General Register Files definitions
++ */
 +
-+		if (!(dfi->channel_mask & BIT(i)))
-+			continue;
++#ifndef __SOC_ROCKCHIP_GRF_H
++#define __SOC_ROCKCHIP_GRF_H
 +
-+		a = count.c[i].access - last->c[i].access;
-+		t = count.c[i].total - last->c[i].total;
- 
- 		if (a > access) {
- 			access = a;
-@@ -186,6 +194,8 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
- 	dfi->ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
- 			RK3399_PMUGRF_DDRTYPE_MASK;
- 
-+	dfi->channel_mask = 3;
++/* Rockchip DDRTYPE defines */
++#define ROCKCHIP_DDRTYPE_DDR3	3
++#define ROCKCHIP_DDRTYPE_LPDDR2	5
++#define ROCKCHIP_DDRTYPE_LPDDR3	6
++#define ROCKCHIP_DDRTYPE_LPDDR4	7
 +
- 	return 0;
- };
- 
++#endif /* __SOC_ROCKCHIP_GRF_H */
 -- 
 2.30.2
 
