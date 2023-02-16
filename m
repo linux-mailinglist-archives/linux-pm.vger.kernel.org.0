@@ -2,68 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2123699135
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 11:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53706991B5
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Feb 2023 11:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjBPKaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Feb 2023 05:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
+        id S230117AbjBPKhs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Feb 2023 05:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjBPKaV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 05:30:21 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8AC4A1C5
-        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 02:30:01 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id b3so2216271lfv.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 02:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIiSyw9cDcFKGu9JiEWZhqoDuiISHZ5PB5xSHIIzqMI=;
-        b=Y+C1NRwyCeSwP2pWEBIAFBwKnvarVgwxp+NowE9shA8W18j5YmMnMJNmiWltbEBEFb
-         DXYsOb7nWHlVMfRNgNyA1R34RISlYa+77UP0wW/jhdZPnzUC6Dh6jCeZZniMvgh3RSVj
-         L3GyhVZFZlCl5q1+GWpPrC3tzscRcQZ2EhfklETZiyhMuVLBPuIgC5ZtQaweI4f6QnKj
-         66QjY91fT6NB3Fk6/BRf1ZBFE+fH3wZ/3hpf00NxfSwb3rzshX4OstmUkDE1QliJE+LA
-         Oa9UOyABzlm/6xHuC77g0KaX9Y16ahd5RuqomuVFyK8tpxbyfVwlmfjBAQefhxNbsF63
-         8uOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AIiSyw9cDcFKGu9JiEWZhqoDuiISHZ5PB5xSHIIzqMI=;
-        b=NdPB3Yo1QKsK3bbMsAe3WItTgEA4SyFS6Jti6vKq4gQk3cPEg/vvl1aSk6VpA9EYz4
-         fkr5ImsO4usWUZ/EtZoZLyXYBZGGBet8vJvcmK+0ag8RwbdyvOZ0/27liG9tStyPI7fE
-         T+vPE6wy97YmMJNDaA2Mn3g8rAhtnv7vccHjwcrrGLJE1EDIhK00+1OskJ+X2DMGw7DD
-         Ujk1LxEZUBXOm7YKSVt3oXeoPfP/DlZQtmtmJeWl/a4FTBvUlPywcemvEwAJoKz5i/yw
-         ZoM5MDy3KS7FtkqM2+/sB0QENWcumqpDzCMDPC5RHnrNkytlVyaMNnwGuszRulvmSNWd
-         Ie+A==
-X-Gm-Message-State: AO0yUKVjJqJq5J9h6XvRpz8f2Yj8Djg82cCorm2iMGiUm3y1+9sxqHYf
-        GqyHI84qwWLDU5iz6Jodk/mlBA==
-X-Google-Smtp-Source: AK7set+AsBrPxK/iLXBU4CBCQGE5gMYcTd4JVJtj8eimPknD2U5P1kWnppbLIOylyikXZJ6IlAh6eA==
-X-Received: by 2002:ac2:4439:0:b0:4d8:6a30:fbd7 with SMTP id w25-20020ac24439000000b004d86a30fbd7mr1498333lfl.67.1676543399248;
-        Thu, 16 Feb 2023 02:29:59 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id p2-20020a19f002000000b0048a9e899693sm248308lfc.16.2023.02.16.02.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 02:29:58 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: qcom-hw: Simplify counting frequency domains
-Date:   Thu, 16 Feb 2023 11:29:56 +0100
-Message-Id: <20230216102956.3933639-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S230203AbjBPKhc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Feb 2023 05:37:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF40552B1
+        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 02:37:08 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pSbcs-0003dF-21; Thu, 16 Feb 2023 11:36:30 +0100
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pSbcp-005Kn0-Ck; Thu, 16 Feb 2023 11:36:28 +0100
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pSbcn-002Whz-QW; Thu, 16 Feb 2023 11:36:25 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v3 00/19] Add perf support to the rockchip-dfi driver
+Date:   Thu, 16 Feb 2023 11:36:05 +0100
+Message-Id: <20230216103624.591901-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,77 +57,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For quite some time, this driver has been doing performing some
-quite low-level DT operations. Simplify that using
-platform_get_resource.
+This is the third round of patches for adding perf support to the
+rockchip-dfi driver. The binding changes seem to be sorted out now,
+would be great to get some feedback to the driver changes as well.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 28 ++++++----------------------
- 1 file changed, 6 insertions(+), 22 deletions(-)
+Sascha
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 2f581d2d617d..023a18c0886f 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -29,6 +29,8 @@
- 
- #define GT_IRQ_STATUS			BIT(2)
- 
-+#define MAX_FREQ_DOMAINS		3
-+
- struct qcom_cpufreq_soc_data {
- 	u32 reg_enable;
- 	u32 reg_domain_state;
-@@ -651,10 +653,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
--	struct device_node *soc_node;
- 	struct device *cpu_dev;
- 	struct clk *clk;
--	int ret, i, num_domains, reg_sz;
-+	int ret, i, num_domains;
- 
- 	clk = clk_get(dev, "xo");
- 	if (IS_ERR(clk))
-@@ -681,24 +682,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
--	soc_node = of_get_parent(dev->of_node);
--	if (!soc_node)
--		return -EINVAL;
--
--	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
--	if (ret)
--		goto of_exit;
--
--	ret = of_property_read_u32(soc_node, "#size-cells", &i);
--	if (ret)
--		goto of_exit;
--
--	reg_sz += i;
--
--	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
--	if (num_domains <= 0)
--		return num_domains;
-+	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
-+		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
-+			break;
- 
- 	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
- 					 GFP_KERNEL);
-@@ -762,8 +748,6 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	else
- 		dev_dbg(dev, "QCOM CPUFreq HW driver initialized\n");
- 
--of_exit:
--	of_node_put(soc_node);
- 
- 	return ret;
- }
+Changes since v2:
+- Fix broken reference to binding
+- Add Reviewed-by from Rob
+
+Changes since v1:
+- Fix example to actually match the binding and fix the warnings resulted thereof
+- Make addition of rockchip,rk3568-dfi an extra patch
+
+Sascha Hauer (19):
+  PM / devfreq: rockchip-dfi: Embed desc into private data struct
+  PM / devfreq: rockchip-dfi: use consistent name for private data
+    struct
+  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+  PM / devfreq: rockchip-dfi: Add SoC specific init function
+  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+  PM / devfreq: rockchip-dfi: Use free running counter
+  PM / devfreq: rockchip-dfi: introduce channel mask
+  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+  PM / devfreq: rockchip-dfi: Add RK3568 support
+  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+  PM / devfreq: rockchip-dfi: Handle LPDDR4X
+  PM / devfreq: rockchip-dfi: Pass private data struct to internal
+    functions
+  PM / devfreq: rockchip-dfi: Prepare for multiple users
+  PM / devfreq: rockchip-dfi: Add perf support
+  arm64: dts: rockchip: rk3399: Enable DFI
+  arm64: dts: rockchip: rk356x: Add DFI
+  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+
+ .../bindings/devfreq/event/rockchip,dfi.yaml  |  72 ++
+ .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+ .../rockchip,rk3399-dmc.yaml                  |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
+ drivers/devfreq/event/rockchip-dfi.c          | 659 +++++++++++++++---
+ drivers/devfreq/rk3399_dmc.c                  |  10 +-
+ include/soc/rockchip/rk3399_grf.h             |   9 +-
+ include/soc/rockchip/rk3568_grf.h             |  13 +
+ include/soc/rockchip/rockchip_grf.h           |  16 +
+ 10 files changed, 674 insertions(+), 133 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
+
 -- 
-2.39.1
+2.30.2
 
