@@ -2,124 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D1569AE64
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 15:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F6D69B30C
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 20:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBQOwz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 09:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S229737AbjBQT1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Feb 2023 14:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBQOwy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 09:52:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B9A6E670
-        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 06:52:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676645531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3XM0s6Py2s9NABNZsjEwB9EJNT03Us1/96JqO8MWWMA=;
-        b=ArrSbwBqlaUhdN2PM057j4R30hMdBPJ686at8c4w36KZgCkUf3e97nMZuLr9E1O0D5s1Gt
-        hyRdi3DZro7vVizceqoYRcCg0MJydoL7XyA5agoKmAoNNRnFXDFOjeH1cdSJ/hDCOQVtOl
-        iJ4I8qWQ6Y6An5B+cPyzV+FbRcjXDes=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-387-WRto6BekOkmEzLQhYEfrfQ-1; Fri, 17 Feb 2023 09:52:05 -0500
-X-MC-Unique: WRto6BekOkmEzLQhYEfrfQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 456C280280C;
-        Fri, 17 Feb 2023 14:52:05 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.193.199])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A9C5492C3E;
-        Fri, 17 Feb 2023 14:52:04 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 3/3] power: supply: axp288_charger: Use alt usb-id extcon on some x86 android tablets
-Date:   Fri, 17 Feb 2023 15:52:00 +0100
-Message-Id: <20230217145200.31821-4-hdegoede@redhat.com>
-In-Reply-To: <20230217145200.31821-1-hdegoede@redhat.com>
-References: <20230217145200.31821-1-hdegoede@redhat.com>
+        with ESMTP id S229523AbjBQT1e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 14:27:34 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4220653EF8
+        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 11:27:31 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id y29so2640400lfj.12
+        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 11:27:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Uz2NfAEd2XkSCNRQ0Cf2XIdNUS8EOfOGf8nMWffaQ6Q=;
+        b=d8h28w+I6SaFghHGKq+rueegFnR+ak53o/B3WvB2zWmqlH5UWwKKSlZzEbB6UCC9Q8
+         lrz6drQc/xqMILvPXvdkbhCsH/twBoIb+7fthXlkQ7Re+sLWeitp2ElSFBa2fiMMsY9v
+         A/vAdjDrS/aFoMTSF1omukRYs6PzHa9JOyg/lcvNKVcN12Ut2Rnu5S/fIjdXVcn3nuMJ
+         alkkS+dgib4dnF/StRXh0Ben1uhMsJfN/nTWAD7ySGTWRXM2qpiN467ogYm6DCqVC6gh
+         sKA+m77UlB53UFOSHOELKKLZSAjpBANhMzeldJMiCI9Ue78LrH/ZJ5zRv3sGytmAzhHu
+         OjTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uz2NfAEd2XkSCNRQ0Cf2XIdNUS8EOfOGf8nMWffaQ6Q=;
+        b=5VHdS+DLwSefexCRXsXVEBkRbN6vuqE/GwvmA9eIEGaRbg1hBEeH/jGGugV/QhnwJD
+         nrD5vfgQC3qbkvD6NAKRRHKPGWX7RwXet5FoHG4oNjX9CTDHGmhgimqyu4SRUl3KC3RX
+         YwmgYr3EQwym1IELsHp1Q8uLXW4E8izNHw6unEIGvNpWI55/Rp0jZJGanUAPai75pNrN
+         awctbe02qxgmdsNpljaVxvhBYbMK5u1zJS+whVHvWFmmqoWzpgOFSs6/Spu7kps9wGvV
+         WOgQU73p8/jsSv9cOfw8H7Z8L/uuzVnDls5vpZ4n0eBe+AnSIpdGAZGRJrKaI+uTxxMD
+         ACtg==
+X-Gm-Message-State: AO0yUKVK2xB9hTch4LB7e4to9jpm2d6OdlbF6E7DL1XConLs61c0sz+5
+        j8BsvCvp57bwThp6g3RPgP0dqg==
+X-Google-Smtp-Source: AK7set8po41TbrO5+K/Ju564LVcLTspHRQuEEAXux8d9kPVKEbPt65ERSGOUom1RfUxQDA62SFqMtw==
+X-Received: by 2002:ac2:41ca:0:b0:4b4:89a9:6bfd with SMTP id d10-20020ac241ca000000b004b489a96bfdmr74067lfi.7.1676662049482;
+        Fri, 17 Feb 2023 11:27:29 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id q17-20020ac25151000000b004b57bbaef87sm759621lfd.224.2023.02.17.11.27.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 11:27:28 -0800 (PST)
+Message-ID: <8c4f1cc8-c1f8-06b6-53fe-7507d74ca958@linaro.org>
+Date:   Fri, 17 Feb 2023 20:27:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v5 08/10] interconnect: qcom: msm8996: Specify no bus
+ clock scaling on A0NoC
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Jun Nie <jun.nie@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org>
+ <20230217-topic-icc-fixes-v5-v5-8-c9a550f9fdb9@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230217-topic-icc-fixes-v5-v5-8-c9a550f9fdb9@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-x86 ACPI boards which ship with only Android as their factory image may
-have pretty broken ACPI tables. This includes broken _AEI ACPI GPIO event
-handlers, which are normally used to listen to the micro-USB ID pin and:
 
-1. Switch the USB-mux to the host / device USB controllers
-2. Disable Vbus path before enabling the 5V boost (AXP reg 0x30 bit 7)
-3. Turn 5V Vboost on / off
 
-On non broken systems where this is not done through an ACPI GPIO event
-handler, there is an ACPI INT3496 device describing the involved GPIOs
-which are handled by the extcon-intel-int3496 driver; and axp288-charger.ko
-listens to this extcon-device and disables the Vbus path when necessary.
+On 17.02.2023 11:46, Konrad Dybcio wrote:
+> A0NoC only does bus scaling through RPM votes and does not have any
+> ICC clocks. Describe this.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+This is bad, as devm_clk_get_bulk{"", _optional} doesn't
+check if num_clocks makes sense and passes "-1" down the
+devres alloc chain..
 
-On x86 Android boards, with broken ACPI GPIO event handlers, these are
-disabled by acpi_quirk_skip_gpio_event_handlers() and an intel-int3496
-extcon device is manually instantiated by x86-android-tablets.ko .
+I'll rework this for the next revision by simply assigning
+the common "bus", "bus_a" set everywhere instead of relying
+on it being there by default..
 
-Add support to the axp288-charger code for this setup, so that it
-properly disables the Vbus path when necessary. Note this uses
-acpi_quirk_skip_gpio_event_handlers() to identify these systems,
-to avoid the need to add a separate DMI match table for this.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/power/supply/axp288_charger.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 15219ed43ce9..b5903193e2f9 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -836,6 +836,7 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
- 	struct power_supply_config charger_cfg = {};
-+	const char *extcon_name = NULL;
- 	unsigned int val;
- 
- 	/*
-@@ -872,8 +873,18 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 		return PTR_ERR(info->cable.edev);
- 	}
- 
--	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
--		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
-+	/*
-+	 * On devices with broken ACPI GPIO event handlers there also is no ACPI
-+	 * "INT3496" (USB_HOST_EXTCON_HID) device. x86-android-tablets.ko
-+	 * instantiates an "intel-int3496" extcon on these devs as a workaround.
-+	 */
-+	if (acpi_quirk_skip_gpio_event_handlers())
-+		extcon_name = "intel-int3496";
-+	else if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1))
-+		extcon_name = USB_HOST_EXTCON_NAME;
-+
-+	if (extcon_name) {
-+		info->otg.cable = extcon_get_extcon_dev(extcon_name);
- 		if (IS_ERR(info->otg.cable)) {
- 			dev_err_probe(dev, PTR_ERR(info->otg.cable),
- 				      "extcon_get_extcon_dev(%s) failed\n",
--- 
-2.39.1
-
+Konrad
+>  drivers/interconnect/qcom/msm8996.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+> index 1a5e0ad36cc4..45eb8675fb11 100644
+> --- a/drivers/interconnect/qcom/msm8996.c
+> +++ b/drivers/interconnect/qcom/msm8996.c
+> @@ -1817,6 +1817,7 @@ static const struct qcom_icc_desc msm8996_a0noc = {
+>  	.type = QCOM_ICC_NOC,
+>  	.nodes = a0noc_nodes,
+>  	.num_nodes = ARRAY_SIZE(a0noc_nodes),
+> +	.num_bus_clocks = -1, /* No bus clock scaling */
+>  	.intf_clocks = a0noc_intf_clocks,
+>  	.num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
+>  	.has_bus_pd = true,
+> 
