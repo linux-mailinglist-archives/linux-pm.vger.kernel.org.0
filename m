@@ -2,240 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B1869A690
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 09:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4343469A77F
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 09:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjBQIHD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 03:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S229886AbjBQIxM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Feb 2023 03:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjBQIGq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 03:06:46 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 645EC34F77;
-        Fri, 17 Feb 2023 00:06:36 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(23462:0:AUTH_RELAY)
-        (envelope-from <chiaen_wu@richtek.com>); Fri, 17 Feb 2023 16:06:28 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 17 Feb
- 2023 16:06:27 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Fri, 17 Feb 2023 16:06:27 +0800
-From:   ChiaEn Wu <chiaen_wu@richtek.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <sre@kernel.org>
-CC:     <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <peterwu.pub@gmail.com>, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [PATCH v3 2/2][next] dt-bindings: power: supply: Rename the file name of RT9467 charger yaml
-Date:   Fri, 17 Feb 2023 16:06:06 +0800
-Message-ID: <ec1a341d5731977f3188997f3655e777becb881c.1676648773.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1676648773.git.chiaen_wu@richtek.com>
-References: <cover.1676648773.git.chiaen_wu@richtek.com>
+        with ESMTP id S229820AbjBQIxL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 03:53:11 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A245F279
+        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 00:53:09 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id i28so1105790eda.8
+        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 00:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S6GeWOoQx0Ky1cbIHE0Bup9UWifLV+o2sILn8ayeKnY=;
+        b=QxgaQoGzeoZY1F/VZ+Q0W3AjajUVQ+Kt+ZqDiacaMWmzgZVR4LVWDHLoMplo9I4K35
+         Q0ISgIwgomqIfzL5XRKZ47bKjNkZVq6Y4y9wPokVYPVNt3TKgA4DyJMQ8aUwAqR3tYHf
+         hVYuFrCdyGMHMAuIy9hlj3v7kP47Q6AueRLLAISClPoxun2xQhq70sicmmJmVx6xrJZQ
+         kB4hj++qoHKJo4Q5jvJVR5aShCE0ieacmlJsFI3fBKz3NND4ySvBn9xkWu33Vzr2wrD8
+         1t+xvi5oKiFLWtAkEdqN5MjMsA+e7Yn3zAPogTTjCgOs15XKUsFWNqiZDa1I1Xu0pbhc
+         202Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6GeWOoQx0Ky1cbIHE0Bup9UWifLV+o2sILn8ayeKnY=;
+        b=vY0eMXnW+zJ90b4d9wXGpsYH+PwIXxZ7KXzOSlo3Z2wgBe05QqNQYIL0zw84rKOrs8
+         vgsS7/E856m/WtHUCZcADothr/3j67L/F8XNWl5FZ8332VaylO+3ccdsjDEXwL1aO2Ud
+         jS8JJ+tKePwc+NmV5H6wQiXYFCByabZ0sW+tGwvjyVgrXkCFCyTcsHEU3T3QiGBKX/Qc
+         hKm47xvk16dEGYeW7IYwyCGYAqQXyGBkSmb8Q8GG52VuJ+DVzcW/pH4xaRBGivc2yApz
+         wsjwCs3vzeA07xzNqX2gCFz2UUeERFqSQP42EkRYPN8O+WhgtlvrhQ55abhX0N6O1+1Q
+         3l8Q==
+X-Gm-Message-State: AO0yUKURpUk79Ac/o3TblRyubpf2ilU1KGWSLbQJFfwXLuDu6+oN3A1c
+        ymLGGN32DZpKj81rwumL0h6RHQ==
+X-Google-Smtp-Source: AK7set+WAhbJBtRMafW8xY2b4naQQYCG0tcxib1fv6WQdl95gotbpMtuSiWUCqdYZf8aL7y6wyIAYQ==
+X-Received: by 2002:a17:906:4d0f:b0:86f:d0c9:4bdd with SMTP id r15-20020a1709064d0f00b0086fd0c94bddmr8628080eju.27.1676623987631;
+        Fri, 17 Feb 2023 00:53:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id g9-20020a170906348900b008b11ba87bf4sm738070ejb.209.2023.02.17.00.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 00:53:07 -0800 (PST)
+Message-ID: <f2245eb3-f7f6-2591-d3e9-d26f6e153ba7@linaro.org>
+Date:   Fri, 17 Feb 2023 09:53:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 1/2][next] dt-bindings: power: supply: Revise Richtek
+ RT9467 compatible name
+Content-Language: en-US
+To:     ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
+Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterwu.pub@gmail.com
+References: <cover.1676648773.git.chiaen_wu@richtek.com>
+ <d099179cb531a7bee0ade1e8431feb9b967a4de3.1676648773.git.chiaen_wu@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d099179cb531a7bee0ade1e8431feb9b967a4de3.1676648773.git.chiaen_wu@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rename the file name from "richtek,rt9467-charger.yaml" to
-"richtek,rt9467.yaml" to match the "compatible name".
+On 17/02/2023 09:06, ChiaEn Wu wrote:
+> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> "richtek,rt9467" because it has to match the "compatible name" in
+> the source code.
+> 
+> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> Reported-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+> v3:
+> - Roll back the file name.
+> 
+> v2:
+> - Add more description about this change in the commit message.
+> - Rename "richtek,rt9467-charger.yaml" to "richtek,rt9467.yaml".
+> - Rename "$id" as above.
+> ---
+>  .../devicetree/bindings/power/supply/richtek,rt9467-charger.yaml    | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+> index 92c5706..3723717 100644
+> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
 
-Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- .../power/supply/richtek,rt9467-charger.yaml       | 82 ----------------------
- .../bindings/power/supply/richtek,rt9467.yaml      | 82 ++++++++++++++++++++++
- 2 files changed, 82 insertions(+), 82 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+Missing rename... I don't understand this patchset.
 
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
-deleted file mode 100644
-index 3723717..00000000
---- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
-+++ /dev/null
-@@ -1,82 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/power/supply/richtek,rt9467.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Richtek RT9467 Switching Battery Charger with Power Path Management
--
--maintainers:
--  - ChiYuan Huang <cy_huang@richtek.com>
--  - ChiaEn Wu <chiaen_wu@richtek.com>
--
--description: |
--  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
--  portable applications. It integrates a synchronous PWM controller, power
--  MOSFETs, input current sensing and regulation, high-accuracy voltage
--  regulation, and charge termination. The charge current is regulated through
--  integrated sensing resistors.
--
--  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
--  D+/D- pin for USB host/charging port detection.
--
--  Datasheet is available at
--  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
--
--properties:
--  compatible:
--    const: richtek,rt9467
--
--  reg:
--    maxItems: 1
--
--  wakeup-source: true
--
--  interrupts:
--    maxItems: 1
--
--  charge-enable-gpios:
--    description: GPIO is used to turn on and off charging.
--    maxItems: 1
--
--  usb-otg-vbus-regulator:
--    type: object
--    description: OTG boost regulator.
--    unevaluatedProperties: false
--    $ref: /schemas/regulator/regulator.yaml#
--
--    properties:
--      enable-gpios: true
--
--required:
--  - compatible
--  - reg
--  - wakeup-source
--  - interrupts
--
--additionalProperties: false
--
--examples:
--  - |
--    #include <dt-bindings/interrupt-controller/irq.h>
--    #include <dt-bindings/gpio/gpio.h>
--    i2c {
--      #address-cells = <1>;
--      #size-cells = <0>;
--
--      charger@5b {
--        compatible = "richtek,rt9467";
--        reg = <0x5b>;
--        wakeup-source;
--        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
--        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
--
--        rt9467_otg_vbus: usb-otg-vbus-regulator {
--          regulator-name = "rt9467-usb-otg-vbus";
--          regulator-min-microvolt = <4425000>;
--          regulator-max-microvolt = <5825000>;
--          regulator-min-microamp = <500000>;
--          regulator-max-microamp = <3000000>;
--        };
--      };
--    };
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-new file mode 100644
-index 00000000..3723717
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/richtek,rt9467.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT9467 Switching Battery Charger with Power Path Management
-+
-+maintainers:
-+  - ChiYuan Huang <cy_huang@richtek.com>
-+  - ChiaEn Wu <chiaen_wu@richtek.com>
-+
-+description: |
-+  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
-+  portable applications. It integrates a synchronous PWM controller, power
-+  MOSFETs, input current sensing and regulation, high-accuracy voltage
-+  regulation, and charge termination. The charge current is regulated through
-+  integrated sensing resistors.
-+
-+  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
-+  D+/D- pin for USB host/charging port detection.
-+
-+  Datasheet is available at
-+  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
-+
-+properties:
-+  compatible:
-+    const: richtek,rt9467
-+
-+  reg:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  charge-enable-gpios:
-+    description: GPIO is used to turn on and off charging.
-+    maxItems: 1
-+
-+  usb-otg-vbus-regulator:
-+    type: object
-+    description: OTG boost regulator.
-+    unevaluatedProperties: false
-+    $ref: /schemas/regulator/regulator.yaml#
-+
-+    properties:
-+      enable-gpios: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - wakeup-source
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      charger@5b {
-+        compatible = "richtek,rt9467";
-+        reg = <0x5b>;
-+        wakeup-source;
-+        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
-+        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
-+
-+        rt9467_otg_vbus: usb-otg-vbus-regulator {
-+          regulator-name = "rt9467-usb-otg-vbus";
-+          regulator-min-microvolt = <4425000>;
-+          regulator-max-microvolt = <5825000>;
-+          regulator-min-microamp = <500000>;
-+          regulator-max-microamp = <3000000>;
-+        };
-+      };
-+    };
--- 
-2.7.4
+Best regards,
+Krzysztof
 
