@@ -2,114 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD169A575
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 07:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACFC69A5B3
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 07:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBQGDo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 01:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
+        id S229664AbjBQGmG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Feb 2023 01:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBQGDn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 01:03:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15DA211DE
-        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 22:03:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B61861277
-        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 06:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D21C4339C
-        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 06:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676613819;
-        bh=DywB9X931dYpzWP90TjnxeFMkF19ygIrzGTfPMEKafY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YOWJmcnlBsFDL9gNNYM/LYlCXcBMAXyYio/DTkqnrgD0LDHP+VhcKOasO6N7950E/
-         1RvEErPAKvYxjbztWowZ9BaUBJkUv1dbWKeXegZF9vqjECX0gLf7n73zZNUAKZifq5
-         BgG2sddKQHxACiSw2jQOw5/FzxY7DI/b+NMmcy41Gcbi2TeUwbH7sCUTMHk/77/kA1
-         Ft0vZFy73sW7aIbupTxE9tZ/mgTPNE6WmVtdBil55tVEpWHXE47M5j0fIDSsgSw7aG
-         CDNFqMs3X7ChMbDb2xMKvPm+/SLiVAob1cx/I71/2o3wgOymrKJUjRRPZj+xRq/fuB
-         M8j4xMQW7CRTA==
-Received: by mail-vs1-f52.google.com with SMTP id k4so4518351vsc.4
-        for <linux-pm@vger.kernel.org>; Thu, 16 Feb 2023 22:03:39 -0800 (PST)
-X-Gm-Message-State: AO0yUKUjllUTvqrl6Hluq0Z3DAxwH7aqpCcnvoU3UlqUnhop+6NliVBk
-        4Bvmaqv7ibC+F9jx0pzXq1F0AAb9xzpVsbn13SB4rg==
-X-Google-Smtp-Source: AK7set/SNybjJrtBUBvHw30NMjPKdxhhc+qpYd8hMX85jaCVgzzyVI7eteev3ae0hkZtI8pnLd/QNthEqdKeTNaf3yk=
-X-Received: by 2002:a05:6102:209e:b0:3f9:ce06:90ff with SMTP id
- h30-20020a056102209e00b003f9ce0690ffmr1708242vsr.35.1676613818580; Thu, 16
- Feb 2023 22:03:38 -0800 (PST)
+        with ESMTP id S229723AbjBQGmF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 01:42:05 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FCC3A093;
+        Thu, 16 Feb 2023 22:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676616124; x=1708152124;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b4HQYEehuVzVrE5wKs8RK4Pe9AlTRadQdhahD/1LADk=;
+  b=eifcDjhCX4Ye/N6pCEhVNvlhusfR/P+Mph/UZt+vsB6bivtlygZB0Cbn
+   Gui85NmHY2Yc47sOy4H+pD74RMQIoPuBF5SvIaPMq/5pmYlWjKRcTv17i
+   6TJgf712p7O3BV6DEZMLQMCmE0Kv5c9GW/BIirY/LhxDux1TyrE8Sd5D4
+   HhR10yftM37CCI/qq8IKZ8Vws0yTZUS0hKAxvMm2jeoZg+Twx5fKm1YkJ
+   q8Xh57QHEN9Ebl7k29NXWXQsxj9NRuSOVQtupyb/aqW/Z0uQPvk8lJPEV
+   ThY4+hOt951egRKkIjtUnzmdKf/z6izXwh/lnythMISZ98E9cboskx6BZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="311555884"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="311555884"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 22:42:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="700809527"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="700809527"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 16 Feb 2023 22:42:02 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSuRV-000BBR-1P;
+        Fri, 17 Feb 2023 06:42:01 +0000
+Date:   Fri, 17 Feb 2023 14:41:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ ea150b53b1fd250a0c49f9ade353634dd7976fbf
+Message-ID: <63ef218c.ptPU1mp/9qHncFgg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <202302171138053231478@zte.com.cn>
-In-Reply-To: <202302171138053231478@zte.com.cn>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Fri, 17 Feb 2023 11:33:27 +0530
-X-Gmail-Original-Message-ID: <CAHLCerPZ4JfWCNTOmkF9EYsVME2Z_EXY0uG9RchqPR+KOTwccQ@mail.gmail.com>
-Message-ID: <CAHLCerPZ4JfWCNTOmkF9EYsVME2Z_EXY0uG9RchqPR+KOTwccQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/tsens: Use devm_platform_ioremap_resource()
-To:     ye.xingchen@zte.com.cn
-Cc:     daniel.lezcano@linaro.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
-        rafael@kernel.org, rui.zhang@intel.com,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 9:08 AM <ye.xingchen@zte.com.cn> wrote:
->
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to Use devm_platform_ioremap_resource(), as this is exactly
-> what this function does.
->
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: ea150b53b1fd250a0c49f9ade353634dd7976fbf  Merge branch 'thermal' into linux-next
 
-Acked-by: Amit Kucheria <amitk@kernel.org>
+elapsed time: 1010m
 
-> ---
->  drivers/thermal/qcom/tsens.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 8020ead2794e..bfe7e4728cf0 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -876,7 +876,6 @@ int __init init_common(struct tsens_priv *priv)
->         void __iomem *tm_base, *srot_base;
->         struct device *dev = priv->dev;
->         u32 ver_minor;
-> -       struct resource *res;
->         u32 enabled;
->         int ret, i, j;
->         struct platform_device *op = of_find_device_by_node(priv->dev->of_node);
-> @@ -887,8 +886,7 @@ int __init init_common(struct tsens_priv *priv)
->         if (op->num_resources > 1) {
->                 /* DT with separate SROT and TM address space */
->                 priv->tm_offset = 0;
-> -               res = platform_get_resource(op, IORESOURCE_MEM, 1);
-> -               srot_base = devm_ioremap_resource(dev, res);
-> +               srot_base = devm_platform_ioremap_resource(op, 1);
->                 if (IS_ERR(srot_base)) {
->                         ret = PTR_ERR(srot_base);
->                         goto err_put_device;
-> @@ -906,8 +904,7 @@ int __init init_common(struct tsens_priv *priv)
->         }
->
->         if (tsens_version(priv) >= VER_0_1) {
-> -               res = platform_get_resource(op, IORESOURCE_MEM, 0);
-> -               tm_base = devm_ioremap_resource(dev, res);
-> +               tm_base = devm_platform_ioremap_resource(op, 0);
->                 if (IS_ERR(tm_base)) {
->                         ret = PTR_ERR(tm_base);
->                         goto err_put_device;
-> --
-> 2.25.1
+configs tested: 107
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+alpha                             allnoconfig
+alpha                            allyesconfig
+alpha                               defconfig
+arc                               allnoconfig
+arc                              allyesconfig
+arc                                 defconfig
+arc                  randconfig-r043-20230212
+arc                  randconfig-r043-20230213
+arc                  randconfig-r043-20230214
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm                     eseries_pxa_defconfig
+arm                  randconfig-r046-20230212
+arm                  randconfig-r046-20230214
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                         debian-10.3-func
+i386                   debian-10.3-kselftests
+i386                        debian-10.3-kunit
+i386                          debian-10.3-kvm
+i386                                defconfig
+i386                 randconfig-a011-20230213
+i386                 randconfig-a012-20230213
+i386                 randconfig-a013-20230213
+i386                 randconfig-a014-20230213
+i386                 randconfig-a015-20230213
+i386                 randconfig-a016-20230213
+i386                          randconfig-c001
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                            q40_defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+mips                  decstation_64_defconfig
+mips                    maltaup_xpa_defconfig
+mips                        vocore2_defconfig
+nios2                               defconfig
+openrisc                 simple_smp_defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                      ppc6xx_defconfig
+powerpc                  storcenter_defconfig
+powerpc                         wii_defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                randconfig-r042-20230213
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+s390                 randconfig-r044-20230213
+sh                               allmodconfig
+sh                 kfr2r09-romimage_defconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64               randconfig-a011-20230213
+x86_64               randconfig-a012-20230213
+x86_64               randconfig-a013-20230213
+x86_64               randconfig-a014-20230213
+x86_64               randconfig-a015-20230213
+x86_64               randconfig-a016-20230213
+x86_64                               rhel-8.3
+
+clang tested configs:
+arm                  randconfig-r046-20230213
+hexagon              randconfig-r041-20230212
+hexagon              randconfig-r041-20230213
+hexagon              randconfig-r041-20230214
+hexagon              randconfig-r045-20230212
+hexagon              randconfig-r045-20230213
+hexagon              randconfig-r045-20230214
+i386                 randconfig-a001-20230213
+i386                 randconfig-a002-20230213
+i386                 randconfig-a003-20230213
+i386                 randconfig-a004-20230213
+i386                 randconfig-a005-20230213
+i386                 randconfig-a006-20230213
+mips                       rbtx49xx_defconfig
+powerpc                 mpc8313_rdb_defconfig
+powerpc                 mpc836x_rdk_defconfig
+riscv                randconfig-r042-20230212
+riscv                randconfig-r042-20230214
+s390                 randconfig-r044-20230212
+s390                 randconfig-r044-20230214
+x86_64               randconfig-a001-20230213
+x86_64               randconfig-a002-20230213
+x86_64               randconfig-a003-20230213
+x86_64               randconfig-a004-20230213
+x86_64               randconfig-a005-20230213
+x86_64               randconfig-a006-20230213
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
