@@ -2,70 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8024569AC40
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 14:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB2369ACE3
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 14:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjBQNRj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 08:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S229672AbjBQNr6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Feb 2023 08:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjBQNRi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 08:17:38 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0BF53ECB;
-        Fri, 17 Feb 2023 05:17:31 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id u22so1713259lfu.5;
-        Fri, 17 Feb 2023 05:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=67ZjQMFl9MopKMUr8Q8rD3tQTxsScrYHj6lDCLlYReQ=;
-        b=X6qY1lciga9RtfeJ9EC21Br0bqqFiuV70+Fe7la4LL95n3/Z6ZykJEvhueo1ubFUXa
-         FB098R1YjRVpfpWwxC5zQ6pbpPEEFjG5rygG+ABKj9GP1N1Qh76FizmeQDmlYYQ0yQWk
-         T7N7HhGrF3wlcvIyW2SF+ArGp2hORiwnulRFSWqQQP+bXAS3yEaDTOKC3nQ9T8ewW7h/
-         bx0YtE6+VXZhsNbqzQLc9p6vy7TDTBqzw8yfOKBEVvVgDm561o8Gdxci5dhKhI9Q1sRY
-         OHf8p9eThcVp/GsoLsBztAAP1x9RGkHLRy0m/ZPJ1FFmNuF/VxcIzTYKijDraF1XjB5/
-         nDAg==
+        with ESMTP id S229686AbjBQNr4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 08:47:56 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41B314230;
+        Fri, 17 Feb 2023 05:47:08 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1718a459283so828618fac.9;
+        Fri, 17 Feb 2023 05:47:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=67ZjQMFl9MopKMUr8Q8rD3tQTxsScrYHj6lDCLlYReQ=;
-        b=xz1LGtupUb1IID3tX0wKI/V88RG5TkXDtASsBAYvmB9hXQMAusqsJpA7xO7vKJDeYz
-         dT4pajuB1AZ8yLvhQ13LAwwaL02JWcyb1ugV7w8e9Ku4jjYQqLDBKcCSbKcPFOCefjtU
-         GKveKEI876Zr8QRKzlsCujfP0bIyY3i/nQtLRLmosoReOIEj64Fuqwt1nZn7ZPAUoAza
-         WdO5vsWrexvhgJB3w6AtFaLMbVd9nVUMQaHB6Ia/I8NYQRGCsbfo42S00iAs0M+4AQeq
-         ZXbZdlcmyoSFIQ6Whx61p9MSFL9WfWnsRIgfiYTGr4Q3NS4P+YL+Itl1Q+qJ9G6iyFRF
-         M/ig==
-X-Gm-Message-State: AO0yUKVkbJ/YPUVp9htFQ+5UWIBXpwzpnX+tjvEXxy/VotIwj0VusXMB
-        qfQcdo4I0OOAZ6xkNiKF+UU=
-X-Google-Smtp-Source: AK7set8NnpHM5q4xxy7c9GwpwdEJdJZ0GVGKa9VD8sId667fINupwk3xnWdf10GUwtrDpX47Mzfj/A==
-X-Received: by 2002:a05:6512:23a1:b0:4cb:4326:682e with SMTP id c33-20020a05651223a100b004cb4326682emr1904402lfv.21.1676639849136;
-        Fri, 17 Feb 2023 05:17:29 -0800 (PST)
-Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
-        by smtp.googlemail.com with ESMTPSA id j11-20020a19f50b000000b004d85f2acd8esm677580lfb.295.2023.02.17.05.17.28
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Km+RFxsP5v4Z9IaTzXwl9KgfECbJ3qlcSjg9Lj+ejwA=;
+        b=jlXDUDe1T2nJ6OOtgFP09SOvLNC7Ah/4sThrSek8VA2oILe4hIMX8I3uBOssXWeLNd
+         vq35RfBNUqgeeKX0HrHkrvDSJ4Ab4qBY+6ZSYql2/POuf26b9TwY3TSc4q1OrdDl2it6
+         j+8kddJpbFIV5Ny5u7hE6fkcKnw+a2C+AfCZVVK2Mp+F0/2M1/ZVLIuZgE8e1K4dHdB6
+         qQ5hYeE5rznQ4O2HhbA9y0FUfpmr5T+oO82fyOJwAiXEPAoYo2bK2om+UbzI+jRKI4X1
+         SqdwiVk2jurRelQ/c2Xe1kptRnvVJ1Tz/2nG9IWsiPDbyiuXZn3kQeP5q/qmrmTvWouz
+         cVSg==
+X-Gm-Message-State: AO0yUKX7vcHNw7ZaY/p1AKvtPhTsjfdg+QCGAGmY9cWRraXf+slC7vzF
+        GQ/Bkp7vA3VtMrWSMrXITA==
+X-Google-Smtp-Source: AK7set/kFZG1z4NFMAXCrlQ+e7Y3hiYm0oFCx6zA1ae8AtHby3IaG/1Znoh/z8PB4c9vK3cT4OD0IQ==
+X-Received: by 2002:a05:6870:89a4:b0:163:7d08:849d with SMTP id f36-20020a05687089a400b001637d08849dmr211001oaq.31.1676641623146;
+        Fri, 17 Feb 2023 05:47:03 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bf24-20020a0568700a1800b00150aca072e8sm1637396oac.38.2023.02.17.05.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 05:17:28 -0800 (PST)
-From:   Alexander Sapozhnikov <alsp705@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] arch/x86/kernel/acpi/boot: fix buffer overflow on negative index in mp_config_acpi_gsi()
-Date:   Fri, 17 Feb 2023 16:17:26 +0300
-Message-Id: <20230217131726.12666-1-alsp705@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Fri, 17 Feb 2023 05:47:02 -0800 (PST)
+Received: (nullmailer pid 658537 invoked by uid 1000);
+        Fri, 17 Feb 2023 13:47:00 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>, devicetree@vger.kernel.org,
+        Nishanth Menon <nm@ti.com>, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Mark Brown <broonie@kernel.org>
+In-Reply-To: <20230217-topic-cpr3h-v10-3-67aed8fdfa61@linaro.org>
+References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
+ <20230217-topic-cpr3h-v10-3-67aed8fdfa61@linaro.org>
+Message-Id: <167664119785.650200.1249609435784298678.robh@kernel.org>
+Subject: Re: [PATCH v10 3/6] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+Date:   Fri, 17 Feb 2023 07:47:00 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +77,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Variable 'ioapic', which may receive negative value by calling 
-function 'mp_find_ioapic' at boot.c:465, is used at
-io_apic.c:128 by passing as 1st parameter to function 'mpc_ioapic_id' 
-at boot.c:466
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Fri, 17 Feb 2023 12:08:26 +0100, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> 
+> Add the bindings for the CPR3 driver to the documentation.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: Make binding check pass; update AGdR's email]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 299 +++++++++++++++++++++
+>  1 file changed, 299 insertions(+)
+> 
 
-Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
----
- arch/x86/kernel/acpi/boot.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 907cc98b1938..abb78822f164 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -463,8 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
- 	mp_irq.srcbus = number;
- 	mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
- 	ioapic = mp_find_ioapic(gsi);
--	mp_irq.dstapic = mpc_ioapic_id(ioapic);
--	mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
-+	if (ioapic >= 0) {
-+		mp_irq.dstapic = mpc_ioapic_id(ioapic);
-+		mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
-+	}
- 
- 	mp_save_irq(&mp_irq);
- #endif
--- 
-2.34.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-1: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-2: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-3: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-3:qcom,opp-fuse-level:0: [2, 3] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230217-topic-cpr3h-v10-3-67aed8fdfa61@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
