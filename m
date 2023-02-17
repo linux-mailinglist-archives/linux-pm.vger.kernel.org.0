@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F2169AB5E
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 13:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8024569AC40
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 14:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjBQMX0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 07:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S229445AbjBQNRj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Feb 2023 08:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjBQMXZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 07:23:25 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC5F66046;
-        Fri, 17 Feb 2023 04:23:24 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d24so1356873lfs.8;
-        Fri, 17 Feb 2023 04:23:23 -0800 (PST)
+        with ESMTP id S229635AbjBQNRi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 08:17:38 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0BF53ECB;
+        Fri, 17 Feb 2023 05:17:31 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id u22so1713259lfu.5;
+        Fri, 17 Feb 2023 05:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJSfyz5KF1Ot3VlsJvshITzQvDrfzFSnqAesUwer2gU=;
-        b=ntJt6vrD4KEHrdCLW4oOXb0eakY24ItcDskG4ZtZzyd5BCycQK+MGGrqixWtZbHV5h
-         o9zTLysYZuphihYmCrTSe7bNf6Bfl70IscBzCObyQ4mx4UpMzFcpZTexI4HK/mH8UYQv
-         wAXRNc6aw88eHyltyDOkMAnwD1794lXkGHc+t6jatC1neW6pWAsEOsmwzPldHTnPDklG
-         BM30m5KRzqfAVQ4drF8kq4UH6MLEKViGW+A4HAPdCtGVwEd2V19zWc+FSucc94e1ye/f
-         48yiyFNlkj9gdK45jQV5S7fM9llp6oBS0SgIeVo8aws9dxDG+DQAgQ8aE3iX1GMSq3SP
-         SU6Q==
+        bh=67ZjQMFl9MopKMUr8Q8rD3tQTxsScrYHj6lDCLlYReQ=;
+        b=X6qY1lciga9RtfeJ9EC21Br0bqqFiuV70+Fe7la4LL95n3/Z6ZykJEvhueo1ubFUXa
+         FB098R1YjRVpfpWwxC5zQ6pbpPEEFjG5rygG+ABKj9GP1N1Qh76FizmeQDmlYYQ0yQWk
+         T7N7HhGrF3wlcvIyW2SF+ArGp2hORiwnulRFSWqQQP+bXAS3yEaDTOKC3nQ9T8ewW7h/
+         bx0YtE6+VXZhsNbqzQLc9p6vy7TDTBqzw8yfOKBEVvVgDm561o8Gdxci5dhKhI9Q1sRY
+         OHf8p9eThcVp/GsoLsBztAAP1x9RGkHLRy0m/ZPJ1FFmNuF/VxcIzTYKijDraF1XjB5/
+         nDAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IJSfyz5KF1Ot3VlsJvshITzQvDrfzFSnqAesUwer2gU=;
-        b=Mh/xd7WmvRCChOegYS90dNuw9m/Xq0xemjPy1HgkdZuRR5zcPVJc83Fj4b3T/2l1Ew
-         5SCcwjpE8pJJZ9WUCjLXKxNS6GaT/92WVvuyBojXLgKMW1GjtmuyeerO5fLQ6uGzGHhw
-         z7Dl1es8iTOBd1fx4pHcD+RJBLSygOKdHXnaP6gAvHB60pf8FfoChb1BWiw9rkE4/eTP
-         ukuQt0p8cXuHqZIxJc4i/cMu5wclRaPKw0f8kqwSFSdTM51xApGJzKEc8e5TM6IQ5SfN
-         izV3PWvnZODhsmzhrFneyOK3l3ljLQ7+dU/ec6jOgCDYkMfJwB+ldc5acN0scxLDySb7
-         tJew==
-X-Gm-Message-State: AO0yUKXiEC0camv6+ZXd/3/JY5qLPbm83kfiqXA4HaYT6BMEo7u4n0Fd
-        YIYW4PqQYbePbz6w6U9I+8Q=
-X-Google-Smtp-Source: AK7set9CtCkbseU52YhyOb5qjscNZTQpQvMNYeTZ/BD0GuBrtzVD/KUHNMgHdxXroGe+3H1J6GPmog==
-X-Received: by 2002:ac2:41ca:0:b0:4ca:94cc:a288 with SMTP id d10-20020ac241ca000000b004ca94cca288mr2086867lfi.27.1676636602116;
-        Fri, 17 Feb 2023 04:23:22 -0800 (PST)
+        bh=67ZjQMFl9MopKMUr8Q8rD3tQTxsScrYHj6lDCLlYReQ=;
+        b=xz1LGtupUb1IID3tX0wKI/V88RG5TkXDtASsBAYvmB9hXQMAusqsJpA7xO7vKJDeYz
+         dT4pajuB1AZ8yLvhQ13LAwwaL02JWcyb1ugV7w8e9Ku4jjYQqLDBKcCSbKcPFOCefjtU
+         GKveKEI876Zr8QRKzlsCujfP0bIyY3i/nQtLRLmosoReOIEj64Fuqwt1nZn7ZPAUoAza
+         WdO5vsWrexvhgJB3w6AtFaLMbVd9nVUMQaHB6Ia/I8NYQRGCsbfo42S00iAs0M+4AQeq
+         ZXbZdlcmyoSFIQ6Whx61p9MSFL9WfWnsRIgfiYTGr4Q3NS4P+YL+Itl1Q+qJ9G6iyFRF
+         M/ig==
+X-Gm-Message-State: AO0yUKVkbJ/YPUVp9htFQ+5UWIBXpwzpnX+tjvEXxy/VotIwj0VusXMB
+        qfQcdo4I0OOAZ6xkNiKF+UU=
+X-Google-Smtp-Source: AK7set8NnpHM5q4xxy7c9GwpwdEJdJZ0GVGKa9VD8sId667fINupwk3xnWdf10GUwtrDpX47Mzfj/A==
+X-Received: by 2002:a05:6512:23a1:b0:4cb:4326:682e with SMTP id c33-20020a05651223a100b004cb4326682emr1904402lfv.21.1676639849136;
+        Fri, 17 Feb 2023 05:17:29 -0800 (PST)
 Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
-        by smtp.googlemail.com with ESMTPSA id c20-20020ac25314000000b004db3e445f1fsm666961lfh.97.2023.02.17.04.23.21
+        by smtp.googlemail.com with ESMTPSA id j11-20020a19f50b000000b004d85f2acd8esm677580lfb.295.2023.02.17.05.17.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 04:23:21 -0800 (PST)
+        Fri, 17 Feb 2023 05:17:28 -0800 (PST)
 From:   Alexander Sapozhnikov <alsp705@gmail.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
@@ -58,8 +58,8 @@ Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
         "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
 Subject: [PATCH] arch/x86/kernel/acpi/boot: fix buffer overflow on negative index in mp_config_acpi_gsi()
-Date:   Fri, 17 Feb 2023 15:23:12 +0300
-Message-Id: <20230217122314.11689-1-alsp705@gmail.com>
+Date:   Fri, 17 Feb 2023 16:17:26 +0300
+Message-Id: <20230217131726.12666-1-alsp705@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,6 +72,11 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
+
+Variable 'ioapic', which may receive negative value by calling 
+function 'mp_find_ioapic' at boot.c:465, is used at
+io_apic.c:128 by passing as 1st parameter to function 'mpc_ioapic_id' 
+at boot.c:466
 
 Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
