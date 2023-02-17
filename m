@@ -2,185 +2,762 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359BE69AD9F
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 15:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F147369AE0D
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Feb 2023 15:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjBQOOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 09:14:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S229650AbjBQO3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Feb 2023 09:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjBQOOU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 09:14:20 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023054617F;
-        Fri, 17 Feb 2023 06:13:51 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H7hfVh027191;
-        Fri, 17 Feb 2023 14:13:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=Bwc3OOW9WgedNktZ4mRSsYL6iPpgGSM96zdksZDN/ck=;
- b=2y+nhWGLCTWW1QbttzryVyMMy8TiJKp/vBox5sWxl/RY2yp4uqQt72qNmqsbbquWWSoG
- tzqC7i3ALYinhZj0a6O+FMqwtTnNrqJFbM9aLCo/fs6nh1dxpY8QcLCm81kCQ/I0McSf
- xVQ0Ncoox8Gky8QhHlS7OJDvfTz7FmQU0EMiFhzECKeGhCxKPnEjMGMP6K70tiomTN2d
- 80PaULsaBWldrI9rhxz47yfrjIWStPYlzlLVLytp9WdnJnYKLQ+o+Fy9NeklNIwlFBPs
- LJjSEM8xQTNl9iflVoP8urok/eBa55brB8bpYOSYFNx2gh4xcAyJE+4pomCDinMa0/Xx ZQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np32cp0f4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 14:13:06 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31HCutxC020120;
-        Fri, 17 Feb 2023 14:13:05 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1fapppx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 14:13:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WI0A9sj5KUSUC3YU6xCzT7qHAjO6pV5uA6qQEdZnSoh7vCf2KcwAMVI27AARRZ8w+gpyXyDIprAxZZG54lBxPfGHU3sY4flddd3Yn6h+IIu9QTbAEeV9NCcyJDVIA7VspYcOsxC1HZ4y/DLUHLcusG8U9rPMGyNw5m+EwPPucMl0J2QygeJHOLtegu6aZf7rChJkFBxNCl+p4dIDSTmB1yAvNmg5OwUmOV4uigLNCCUSOf2cNdYhjq6Pe0q+bux7heFi6dhH02Dg/hJdRwhCOJYUErC/5Y5nMMDRcPG94z/sRXy9kuXSy9PkajfDH4kay0BREVkEiQ8EdFF2/Z43wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bwc3OOW9WgedNktZ4mRSsYL6iPpgGSM96zdksZDN/ck=;
- b=hDdy6BlsUjWKFapotuQuOXlj89MBvEYQiuKI6YKkrJUO922D6hR4lVZwQWz2kDKcIK8XtGc8mP8gmSJ2YlQy7gzh1mmrpwbjJSG0KAMfkWmgdK7CIGiIilKSMlIRNYk/6X/FZVxsc+6bMq9sbGXczSs9AFrkiAblxZnSxGuqlEwsJ1+GO+MghO0oS9UO5CRGjwKWED5Ws+GAeYb8g8ZSXx5jjuMDksO5omNjardg9fZZuHHsHcu4xc916RvY2uTUSlfIfOSd/ZjzDBEjmBvYd5nSnLi/jdx/DgSTLdZqxQXX7Og+6O1DyBbDwBK0yMU0xZUhYmnzc2oLFmcQD2Uakg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S229823AbjBQO3q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 09:29:46 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBD75DE04
+        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 06:29:41 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d24so1795149lfs.8
+        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 06:29:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bwc3OOW9WgedNktZ4mRSsYL6iPpgGSM96zdksZDN/ck=;
- b=XW6xur4iK6a9JuNKfG0CYKa0yo/aW6c9OcRbZ4ohasAEY99fGw3kbC5J9+z7pSftd9yny8DCEy6aalzOKUKPsejjERXb1iyVa0RQRCHz7S/ht+E+ha+04Y0Fx7BqT1C5z8KCW8DTheFflkbg7ItP+LWMUkcTdhltIdnrbHoCJRE=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by CH3PR10MB7493.namprd10.prod.outlook.com (2603:10b6:610:15d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Fri, 17 Feb
- 2023 14:13:03 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6134.006; Fri, 17 Feb 2023
- 14:13:03 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     mcgrof@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 24/24] kbuild, power: reset: keystone-reset: remove MODULE_LICENSE in non-modules
-Date:   Fri, 17 Feb 2023 14:10:59 +0000
-Message-Id: <20230217141059.392471-25-nick.alcock@oracle.com>
-X-Mailer: git-send-email 2.39.1.268.g9de2f9a303
-In-Reply-To: <20230217141059.392471-1-nick.alcock@oracle.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0207.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a5::14) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uWtVGGG6mathuaQ8Y3R6x0tclUMhT0iKfPjAbuI6x3I=;
+        b=I9xdQoo0rOVzR04lyun2It73g7idxVTpu0nCNwSKy0oSSvKKbX/IxbeGK/PMFp1m2g
+         G8QHVaUKvcc2ywrIkcfwjSdUporZjEbBBLT2LSqbQEKdfmXiTEiXflfSJ9YhvSaAN6jP
+         raxhxMWiZAepSGFU4eP0XJ/ebcpsHqJHqtSwVdGcNIXHyuJBy609qm+a1YUna3uTDhwP
+         0MYx2HnY1gY9JdaUBOW5pozC7LkV/dNXwIX31n9k1bt1Jec/SpXXcjfhoi0zqwMuBKQD
+         HqhTH1lLwA/SN7Yepr+qoHT02TMZmRaYqh6+0FY4mA8UyT1L/5RXO7kJCdqUeq7Zvx29
+         ml4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uWtVGGG6mathuaQ8Y3R6x0tclUMhT0iKfPjAbuI6x3I=;
+        b=vqhBxmZI3eK5jpmMGeLJyu5ABINas/m7AHAPNAR69r8bDvHdBwzPlalBmNyihpRf/c
+         bIhqDLHG9K7uXiGMob6cFm/PGd/TAS1qc/V0QKTKX1JKSTqSMA+amLMJR6n3Kg861oBS
+         rztcdTT2YWyyK7FzslW2ixGkvSkJog4YYTCiU3Yp+JdFrPev7VLbqG1t1YBSOVZ3uv9z
+         tTyu4FT2kx00DIkRqaC+C05hI3ckN6QvTS45cs2j/N37+1eGJ50b91tzuj7UJb4/5hse
+         jZgNcIdbocNLL3YpDirbhqYaBZCk+9bKatJtcwUnnPO2OFzv1Vwt9jLmokgY33H289Uk
+         cMhQ==
+X-Gm-Message-State: AO0yUKXdAKk38d+wvSD+NV5xIS0hmh3U9vWj5e5sCSDtuu1aBe+laOJq
+        w53NVjw/tzwxog9lHWpPttbdbQ==
+X-Google-Smtp-Source: AK7set+b2LmjGRFBQNQ+BXHJifgi4ErY4ounDTJdXx1pyna7eVqd7I29rcIEPcxKUANye9EgKd1Ckw==
+X-Received: by 2002:a19:a416:0:b0:4d8:7f17:d0e9 with SMTP id q22-20020a19a416000000b004d87f17d0e9mr294981lfc.14.1676644179885;
+        Fri, 17 Feb 2023 06:29:39 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id h18-20020ac250d2000000b004d865c781eesm698099lfm.24.2023.02.17.06.29.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 06:29:39 -0800 (PST)
+Message-ID: <7aaed36a-9c31-036d-1374-7c15c2676a3d@linaro.org>
+Date:   Fri, 17 Feb 2023 15:29:37 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|CH3PR10MB7493:EE_
-X-MS-Office365-Filtering-Correlation-Id: adba4090-e34b-4b1b-b9fc-08db10f1151c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5sQv7tqSe8jp3m/SheUK8zZxqcAoWgt1GGpEIBn2WubdBExwuarui9dD4cvXFf7nITKtllbTdjTnDxWQHy22xHyyqj4MYx0G+oxbhN2yvkFchjQ7g9QLQtRsdvs81jUVJBmVpIG5Cn4HvdDyiHeZLgu5hgPZ/Y09Mlrg+9dpeaRvJrzug8Rb3zYd9gTBEfg6AjNvuSNdaAu+vluIkCaKOPWJcrdtUY+HIyqUBJ5DeZ5kp+Q2Us+aajpWF+Xc/jPAubE9jDebNTmwRJ7EPq0FXbJtWAEdUk3RrtcMG5uGFXkLGP7Yizw0fcfgQAdCIPDVA9JCAavIUfK9XMo6fzplqlyxffjx/F2sNViQN75S3uC130/qR8inUbSMDgtEKWGx05PjhpoTb17bCpjoDKbcCJi5z9B39jvy3fu3zoYj4bH/x4afyfnTbLGJ2Ie65W3miyspYpgmesc4YWRsnNAerYeyW73HziZmAHmRuy+4K30oABnBhquRgZYDRo1rEvGQBwLpoHsugHhD4T+mh4ELCp51n3+P9qYm1G+0lgF60gvqLwTpwKtT2acYdGcBZEZDvUrhZgSeIvhGF8z4OVzd3bwPM6hJYY5l0Foe0+eoYX3BXu6XAqOLNfUHbaUE+VCDcBcXcXbqi9IYo3R6i9Widw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199018)(38100700002)(2906002)(36756003)(6512007)(2616005)(478600001)(186003)(86362001)(1076003)(6506007)(6666004)(6486002)(83380400001)(44832011)(41300700001)(8936002)(6916009)(5660300002)(4326008)(66946007)(316002)(66476007)(66556008)(8676002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GEhrusqNS+tmydOZJTgWyp07rDAGD8tMg8de6LXNocN/3XmdINQ7zyRJQssd?=
- =?us-ascii?Q?iviRLpSZs0K4pDgfGShPCLJSqInQd9yjqMD1AZ1UvUupeOieZNB+CL+CrY4a?=
- =?us-ascii?Q?FQaeXRgvnoV1l+kTIdLW13Ky3gA344vOhSpVrAJXtp3sxSWhcQB1gMUE0brm?=
- =?us-ascii?Q?Yw/MXeH8SFFGWhZ2LUknJz8ybT10atRl+jN+DbNLLJ1fSY1WoH8jat2TxlM8?=
- =?us-ascii?Q?qe6SlFPk5drS9zP6avad22TVw+A700iUWXSGpHQ6YohbpGrYDkIw7NX9F7f6?=
- =?us-ascii?Q?WEo4DP5/vv+vVOe8VtqG++ZubfK+uWGWQytMlZLOELKoa4pvZRFMNF9RPsPx?=
- =?us-ascii?Q?V3DgEhxKyFYg+mIlspBJrHg9lwzNom3K9R2F0EVLAIMSCqkcu0OdZ7OUQwl8?=
- =?us-ascii?Q?KwCxHWZdzpU3ClhOzIW38aHnpkfod3v/gy1T76hzWWWrN9BJt5+yIALGBReU?=
- =?us-ascii?Q?KWGXpMWRGkqJAXswABiNpdhI4m+L2NccrGiHXytIiOOgPeH9BsR++547G7Oz?=
- =?us-ascii?Q?zeUkZGjHSqACtj6BEY8jyAKgN/Gacm3JiStEGrT9BXuRLeLpjPqm7Pu39mem?=
- =?us-ascii?Q?6oO7LzAUMluXGNyd990Zb7+sEC9SSCcFYiJgYvFmcspZt0Egom0SO368HchT?=
- =?us-ascii?Q?sA9fcRHvgraqivXIU1z2NPVL88Rof2RMmy8l0YYKrZ/+aFUNQYfWpusTtyPK?=
- =?us-ascii?Q?S9MPjmMVLltLklekadr5gnvidvEEAAlGBVRCTJ0WZJa9IJbfEkPkZl16o3eX?=
- =?us-ascii?Q?WcrUfOsqIqCxZlOw0tc/MVnWxubShOuP7kWgj2I98mywmFuh8u6LPZgXgIkO?=
- =?us-ascii?Q?Gg0aFzbUGv+PDv1V/f4fg3h1w2gQcrFztEiFK6lWgTIJs6hSpGXqpW1V0Aas?=
- =?us-ascii?Q?0yFpuTR/pQCTHRlvRPkFh0WGyVA1i+Le1TILJrv23QI9UcJczW1tfwcR3TUz?=
- =?us-ascii?Q?lwrU7FbcSxtWIKHzADYEJ2Rd8SRHGQVd4aHT2pwiMJbgQx12Uq9AvPUXe1uX?=
- =?us-ascii?Q?a2z2A9M/UYuS8VtlMkoqN7BMWwROQ6QdPFfMexwAcGT66ClDNPY7Cdu+u1zg?=
- =?us-ascii?Q?s2V3X6K6tDZVfaiMobYvnuMOJdF/aCXzhALmr02u+4YSPJ7hah6nVh8qBUl0?=
- =?us-ascii?Q?b8lyolDPPmJUQHmVxoDAWUMwcMqpK0HzFLAWMdNdnpTOgZR1LZH/tdbbIZ38?=
- =?us-ascii?Q?DPCt8lWJTsf39glYbXiRMeTenVaJ1va8eERLJG3wXDknlxMyFcABPUm04iqW?=
- =?us-ascii?Q?55a2cIfVvzQ9PZMAX0WIxn8Eo2duKOBohR/hPcSIxSHE5ur4TXXbhPo8tgCN?=
- =?us-ascii?Q?buzhiJZ2RzNx5OlZb1HCHqdzkbFT1tVVvVHOxJBdpi99qyHo3Pq8drYDkyaB?=
- =?us-ascii?Q?EjIudyamtyQYZomLn0L8OltBUt8NEiGccFp9+YynBClZ7ABV069lwvYjQJRQ?=
- =?us-ascii?Q?9iAVwLmF/cnGeyoWbUj5Ut4dnfOFGuUR4TJsFqwKIcpLYW9P4/mkApP8tNkT?=
- =?us-ascii?Q?/8crIUYetL80CN10nBvH8/aLFGyzU6vS+6P2+1I+oOUFxTNqiHtW4Pg9oVCJ?=
- =?us-ascii?Q?ZMARR2/9eGYAq3jEaTu4YPOzjIlZXsWVz5uXxycBXwTF9yGl3XJemVRSGbyJ?=
- =?us-ascii?Q?dGKYDYLr9OTJwopbnSxnzzk=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ipF/aWseSWCpqbR3rjthUZrMVEpxGOkc64FIbzeUi05JjN44XvsbOjG+PEKcjcx4htfLDA4tWxNQBS16/IUSEAD/8rCpBPMbpPiXZouHMr5dVSV+s/RFQndvblKnOraoTz3PwCsVwBeu3yoeXph+7x+JKo89PrVVekLI3aUL/pdpVJS37PPzR04V8l1550JH21WDOFpgb6aobypIgEGSdSO6fUlJRzmTHkDrXqJsY5ZARGbVnMR9EJ3o62fInZlPa80kbK2+25I8r1FqCDOvpjyQ8onhjlIM1ML1qzNQZ9KYsTzSB/TTRCyE6LavIMiOiM7OWYYzKgHo+fdOFmY5P7QysjcPtS6bPYEnm5XK44eaYelkgeBNyKtVn2I3BHCZCvoCm1c2Im9lSteWPT3uJ8fhToGFUbgo8lcMygGKvEmsHCRnd1MqbpTPOcGHZWDs7ylFgyt6VVgwQVKDZs3CIerZdGcEu07d6ptoNUpkJJrfiyBxVv38tXLSKeNImT2Fc7JNguFvzsFM3A0hiWrK3xRK6ziB3Wbfcc8wTWWUIUQyvflN+gI7c3msuN9buGvoNxXA80I3ohUgX6p0V3Y03Zawn28szFDcEe8ThCBhg6d97rqyJ5qeJ8VHnLL+BaYRLQ2ZGEDo9lumhScb1QgQDaRBr0bl7M382Pemxihn9QIkVnOJGF4HM/F4fqYuGqGuUNtptKeRrjNqwjqOKhMeLmAoddrm9QZwgVvLSq1JJC3un5RcIjcLBr/aJ58HVtibackhphD/0A0UtvD+MlZ+wvD4sKsmHsjX61Twnc1zqcovR48drIX3OiSHDxUrY0Qd
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: adba4090-e34b-4b1b-b9fc-08db10f1151c
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 14:13:03.1830
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gXf6SUpxS7pGRqQD6DnnAuv/WLtJA6gFDh8aG9GvmvFgEqpLtUqpAYk6bJ72eu0ORMsi6tTAKgq4uptMHo6VBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7493
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_08,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
- malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302170128
-X-Proofpoint-GUID: QPX1Kcns9Gu1sSikfw2k9Exel_8-aY53
-X-Proofpoint-ORIG-GUID: QPX1Kcns9Gu1sSikfw2k9Exel_8-aY53
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v10 6/6] arm64: dts: qcom: msm8998: Configure CPRh
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
+ <20230217-topic-cpr3h-v10-6-67aed8fdfa61@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230217-topic-cpr3h-v10-6-67aed8fdfa61@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-are used to identify modules. As a consequence, uses of the macro
-in non-modules will cause modprobe to misidentify their containing
-object file as a module when it is not (false positives), and modprobe
-might succeed rather than failing with a suitable error message.
 
-So remove it in the files in this commit, none of which can be built as
-modules.
 
-Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Cc: Santosh Shilimkar <ssantosh@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
----
- drivers/power/reset/keystone-reset.c | 1 -
- 1 file changed, 1 deletion(-)
+On 17.02.2023 12:08, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> 
+> Now that the CPR v3/v4/Hardened is ready, enable it on MSM8998.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: separate from adding cpufreq, sort nodes and use lowercase hex]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+[...]
+> +	cpu0_opp_table: opp-table-cpu0 {
+> +		compatible = "operating-points-v2";
+> +		opp-shared;
+> +
+> +		opp-1900800000 {
+> +			opp-hz = /bits/ 64 <1900800000>;
+> +			required-opps = <&cprh_opp22>;
+> +			qcom,pll-override = <0x094f004f>;
+> +			qcom,spare-data = <3>;
+This is still not documented, however I only noticed this with my
+eyes, as CHECK_DTBS did not complain..
 
-diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/keystone-reset.c
-index c720112db704..83a4e1c9bf94 100644
---- a/drivers/power/reset/keystone-reset.c
-+++ b/drivers/power/reset/keystone-reset.c
-@@ -169,5 +169,4 @@ module_platform_driver(rsctrl_driver);
- 
- MODULE_AUTHOR("Ivan Khoronzhuk <ivan.khoronzhuk@ti.com>");
- MODULE_DESCRIPTION("Texas Instruments keystone reset driver");
--MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:" KBUILD_MODNAME);
--- 
-2.39.1.268.g9de2f9a303
+Either way, I'll split these additions out, as they're part of
+CPUFREQ and not CPR..
 
+Konrad
+
+> +		};
+> +
+> +		opp-1824000000 {
+> +			opp-hz = /bits/ 64 <1824000000>;
+> +			required-opps = <&cprh_opp21>;
+> +			qcom,pll-override = <0x084c004c>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-1747200000 {
+> +			opp-hz = /bits/ 64 <1747200000>;
+> +			required-opps = <&cprh_opp20>;
+> +			qcom,pll-override = <0x08490049>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1670400000 {
+> +			opp-hz = /bits/ 64 <1670400000>;
+> +			required-opps = <&cprh_opp19>;
+> +			qcom,pll-override = <0x08460046>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1555200000 {
+> +			opp-hz = /bits/ 64 <1555200000>;
+> +			required-opps = <&cprh_opp18>;
+> +			qcom,pll-override = <0x07410041>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1478400000 {
+> +			opp-hz = /bits/ 64 <1478400000>;
+> +			required-opps = <&cprh_opp17>;
+> +			qcom,pll-override = <0x073e003e>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1401600000 {
+> +			opp-hz = /bits/ 64 <1401600000>;
+> +			required-opps = <&cprh_opp16>;
+> +			qcom,pll-override = <0x063a003a>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1324800000 {
+> +			opp-hz = /bits/ 64 <1324800000>;
+> +			required-opps = <&cprh_opp15>;
+> +			qcom,pll-override = <0x06370037>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1248000000 {
+> +			opp-hz = /bits/ 64 <1248000000>;
+> +			required-opps = <&cprh_opp14>;
+> +			qcom,pll-override = <0x05340034>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1171200000 {
+> +			opp-hz = /bits/ 64 <1171200000>;
+> +			required-opps = <&cprh_opp13>;
+> +			qcom,pll-override = <0x05310031>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1094400000 {
+> +			opp-hz = /bits/ 64 <1094400000>;
+> +			required-opps = <&cprh_opp12>;
+> +			qcom,pll-override = <0x052e002e>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1036800000 {
+> +			opp-hz = /bits/ 64 <1036800000>;
+> +			required-opps = <&cprh_opp11>;
+> +			qcom,pll-override = <0x042b002b>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-960000000 {
+> +			opp-hz = /bits/ 64 <960000000>;
+> +			required-opps = <&cprh_opp10>;
+> +			qcom,pll-override = <0x4280028>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-883200000 {
+> +			opp-hz = /bits/ 64 <883200000>;
+> +			required-opps = <&cprh_opp9>;
+> +			qcom,pll-override = <0x4250025>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-825600000 {
+> +			opp-hz = /bits/ 64 <825600000>;
+> +			required-opps = <&cprh_opp8>;
+> +			qcom,pll-override = <0x3200022>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-748800000 {
+> +			opp-hz = /bits/ 64 <748800000>;
+> +			required-opps = <&cprh_opp7>;
+> +			qcom,pll-override = <0x3200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-672000000 {
+> +			opp-hz = /bits/ 64 <672000000>;
+> +			required-opps = <&cprh_opp6>;
+> +			qcom,pll-override = <0x3200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-595200000 {
+> +			opp-hz = /bits/ 64 <595200000>;
+> +			required-opps = <&cprh_opp5>;
+> +			qcom,pll-override = <0x2200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-518400000 {
+> +			opp-hz = /bits/ 64 <518400000>;
+> +			required-opps = <&cprh_opp4>;
+> +			qcom,pll-override = <0x2200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-441600000 {
+> +			opp-hz = /bits/ 64 <441600000>;
+> +			required-opps = <&cprh_opp3>;
+> +			qcom,pll-override = <0x2200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-364800000 {
+> +			opp-hz = /bits/ 64 <364800000>;
+> +			required-opps = <&cprh_opp2>;
+> +			qcom,pll-override = <0x1200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-300000000 {
+> +			opp-hz = /bits/ 64 <300000000>;
+> +			required-opps = <&cprh_opp1>;
+> +			qcom,pll-override = <0x1200020>;
+> +		};
+> +	};
+> +
+> +	cpu4_opp_table: opp-table-cpu4 {
+> +		compatible = "operating-points-v2";
+> +		opp-shared;
+> +
+> +		opp-2361600000 {
+> +			opp-hz = /bits/ 64 <2361600000>;
+> +			required-opps = <&cprh_opp30>;
+> +			qcom,pll-override = <0x0a620062>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-2342400000 {
+> +			opp-hz = /bits/ 64 <2342400000>;
+> +			required-opps = <&cprh_opp29>;
+> +			qcom,pll-override = <0x0a620062>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-2323200000 {
+> +			opp-hz = /bits/ 64 <2323200000>;
+> +			required-opps = <&cprh_opp28>;
+> +			qcom,pll-override = <0x0a610061>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-2265600000 {
+> +			opp-hz = /bits/ 64 <2265600000>;
+> +			required-opps = <&cprh_opp27>;
+> +			qcom,pll-override = <0x0a5e005e>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-2208000000 {
+> +			opp-hz = /bits/ 64 <2208000000>;
+> +			required-opps = <&cprh_opp26>;
+> +			qcom,pll-override = <0x0a5c005c>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-2112000000 {
+> +			opp-hz = /bits/ 64 <2112000000>;
+> +			required-opps = <&cprh_opp25>;
+> +			qcom,pll-override = <0x0a580058>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-2035200000 {
+> +			opp-hz = /bits/ 64 <2035200000>;
+> +			required-opps = <&cprh_opp24>;
+> +			qcom,pll-override = <0x09550055>;
+> +			qcom,spare-data = <3>;
+> +		};
+> +
+> +		opp-1958400000 {
+> +			opp-hz = /bits/ 64 <1958400000>;
+> +			required-opps = <&cprh_opp23>;
+> +			qcom,pll-override = <0x09520052>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1881600000 {
+> +			opp-hz = /bits/ 64 <1881600000>;
+> +			required-opps = <&cprh_opp22>;
+> +			qcom,pll-override = <0x094e004e>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1804800000 {
+> +			opp-hz = /bits/ 64 <1804800000>;
+> +			required-opps = <&cprh_opp21>;
+> +			qcom,pll-override = <0x084b004b>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1728000000 {
+> +			opp-hz = /bits/ 64 <1728000000>;
+> +			required-opps = <&cprh_opp20>;
+> +			qcom,pll-override = <0x08480048>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1651200000 {
+> +			opp-hz = /bits/ 64 <1651200000>;
+> +			required-opps = <&cprh_opp19>;
+> +			qcom,pll-override = <0x07450045>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1574400000 {
+> +			opp-hz = /bits/ 64 <1574400000>;
+> +			required-opps = <&cprh_opp18>;
+> +			qcom,pll-override = <0x07420042>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1497600000 {
+> +			opp-hz = /bits/ 64 <1497600000>;
+> +			required-opps = <&cprh_opp17>;
+> +			qcom,pll-override = <0x073e003e>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1420800000 {
+> +			opp-hz = /bits/ 64 <1420800000>;
+> +			required-opps = <&cprh_opp16>;
+> +			qcom,pll-override = <0x063b003b>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1344000000 {
+> +			opp-hz = /bits/ 64 <1344000000>;
+> +			required-opps = <&cprh_opp15>;
+> +			qcom,pll-override = <0x06380038>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1267200000 {
+> +			opp-hz = /bits/ 64 <1267200000>;
+> +			required-opps = <&cprh_opp14>;
+> +			qcom,pll-override = <0x06350035>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1190400000 {
+> +			opp-hz = /bits/ 64 <1190400000>;
+> +			required-opps = <&cprh_opp13>;
+> +			qcom,pll-override = <0x05320032>;
+> +			qcom,spare-data = <2>;
+> +		};
+> +
+> +		opp-1132800000 {
+> +			opp-hz = /bits/ 64 <1132800000>;
+> +			required-opps = <&cprh_opp12>;
+> +			qcom,pll-override = <0x052f002f>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-1056000000 {
+> +			opp-hz = /bits/ 64 <1056000000>;
+> +			required-opps = <&cprh_opp11>;
+> +			qcom,pll-override = <0x052c002c>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-979200000 {
+> +			opp-hz = /bits/ 64 <979200000>;
+> +			required-opps = <&cprh_opp10>;
+> +			qcom,pll-override = <0x4290029>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-902400000 {
+> +			opp-hz = /bits/ 64 <902400000>;
+> +			required-opps = <&cprh_opp9>;
+> +			qcom,pll-override = <0x4260026>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +
+> +		opp-806400000 {
+> +			opp-hz = /bits/ 64 <806400000>;
+> +			required-opps = <&cprh_opp8>;
+> +			qcom,pll-override = <0x3200022>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-729600000 {
+> +			opp-hz = /bits/ 64 <729600000>;
+> +			required-opps = <&cprh_opp7>;
+> +			qcom,pll-override = <0x3200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-652800000 {
+> +			opp-hz = /bits/ 64 <652800000>;
+> +			required-opps = <&cprh_opp6>;
+> +			qcom,pll-override = <0x3200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-576000000 {
+> +			opp-hz = /bits/ 64 <576000000>;
+> +			required-opps = <&cprh_opp5>;
+> +			qcom,pll-override = <0x2200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-499200000 {
+> +			opp-hz = /bits/ 64 <499200000>;
+> +			required-opps = <&cprh_opp4>;
+> +			qcom,pll-override = <0x2200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-422400000 {
+> +			opp-hz = /bits/ 64 <422400000>;
+> +			required-opps = <&cprh_opp3>;
+> +			qcom,pll-override = <0x2200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-345600000 {
+> +			opp-hz = /bits/ 64 <345600000>;
+> +			required-opps = <&cprh_opp2>;
+> +			qcom,pll-override = <0x1200020>;
+> +			qcom,spare-data = <1>;
+> +			qcom,pll-div = <1>;
+> +		};
+> +
+> +		opp-300000000 {
+> +			opp-hz = /bits/ 64 <300000000>;
+> +			required-opps = <&cprh_opp1>;
+> +			qcom,pll-override = <0x1200020>;
+> +			qcom,spare-data = <1>;
+> +		};
+> +	};
+> +
+>  	psci {
+>  		compatible = "arm,psci-1.0";
+>  		method = "smc";
+> @@ -843,6 +1467,174 @@ qfprom: qfprom@784000 {
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+>  
+> +			cpr_efuse_speedbin: speedbin@133 {
+> +				reg = <0x133 0x8>;
+> +				bits = <5 3>;
+> +			};
+> +
+> +			cpr_fuse_revision: cpr_fusing_rev@13e {
+> +				reg = <0x13e 0x1>;
+> +				bits = <3 3>;
+> +			};
+> +
+> +			/* CPR Ring Oscillator: Power Cluster */
+> +			cpr_ro_sel3_pwrcl: rosel3_pwrcl@218 {
+> +				reg = <0x218 0x1>;
+> +				bits = <0 4>;
+> +			};
+> +
+> +			cpr_ro_sel2_pwrcl: rosel2_pwrcl@218 {
+> +				reg = <0x218 0x1>;
+> +				bits = <4 4>;
+> +			};
+> +
+> +			cpr_ro_sel1_pwrcl: rosel1_pwrcl@219 {
+> +				reg = <0x219 0x1>;
+> +				bits = <0 4>;
+> +			};
+> +
+> +			cpr_ro_sel0_pwrcl: rosel0_pwrcl@219 {
+> +				reg = <0x219 0x1>;
+> +				bits = <4 4>;
+> +			};
+> +
+> +			/* CPR Init Voltage: Power Cluster */
+> +			cpr_init_voltage3_pwrcl: ivolt3_pwrcl@21a {
+> +				reg = <0x21a 0x1>;
+> +				bits = <0 6>;
+> +			};
+> +
+> +			cpr_init_voltage2_pwrcl: ivolt2_pwrcl@21a {
+> +				reg = <0x21a 0x1>;
+> +				bits = <6 6>;
+> +			};
+> +
+> +			cpr_init_voltage1_pwrcl: ivolt1_pwrcl@21b {
+> +				reg = <0x21b 0x1>;
+> +				bits = <4 6>;
+> +			};
+> +
+> +			cpr_init_voltage0_pwrcl: ivolt0_pwrcl@21c {
+> +				reg = <0x21c 0x1>;
+> +				bits = <2 6>;
+> +			};
+> +
+> +			/* CPR Target Quotients: Power Cluster */
+> +			cpr_quot3_pwrcl: quot3_pwrcl@21d {
+> +				reg = <0x21d 0x2>;
+> +				bits = <6 12>;
+> +			};
+> +
+> +			cpr_quot2_pwrcl: quot2_pwrcl@21f {
+> +				reg = <0x21f 0x2>;
+> +				bits = <2 11>;
+> +			};
+> +
+> +			cpr_quot1_pwrcl: quot1_pwrcl@220 {
+> +				reg = <0x220 0x2>;
+> +				bits = <6 12>;
+> +			};
+> +
+> +			cpr_quot0_pwrcl: quot0_pwrcl@222 {
+> +				reg = <0x222 0x2>;
+> +				bits = <2 12>;
+> +			};
+> +
+> +			/* CPR Quotient Offsets: Power Cluster */
+> +			cpr_quot_offset3_pwrcl: qoff3_pwrcl@226 {
+> +				reg = <0x226 0x1>;
+> +				bits = <1 7>;
+> +			};
+> +
+> +			cpr_quot_offset2_pwrcl: qoff2_pwrcl@227 {
+> +				reg = <0x227 0x1>;
+> +				bits = <0 7>;
+> +			};
+> +
+> +			cpr_quot_offset1_pwrcl: qoff1_pwrcl@227 {
+> +				reg = <0x227 0x1>;
+> +				bits = <7 6>;
+> +			};
+> +
+> +			/* CPR Ring Oscillator: Performance Cluster */
+> +			cpr_ro_sel3_perfcl: rosel3_perfcl@229 {
+> +				reg = <0x229 0x1>;
+> +				bits = <6 4>;
+> +			};
+> +
+> +			cpr_ro_sel2_perfcl: rosel2_perfcl@22a {
+> +				reg = <0x22a 0x1>;
+> +				bits = <2 4>;
+> +			};
+> +
+> +			cpr_ro_sel1_perfcl: rosel1_perfcl@22a {
+> +				reg = <0x22a 0x1>;
+> +				bits = <6 4>;
+> +			};
+> +
+> +			cpr_ro_sel0_perfcl: rosel0_perfcl@22b {
+> +				reg = <0x22b 0x1>;
+> +				bits = <2 4>;
+> +			};
+> +
+> +			/* CPR Init Voltage: Performance Cluster */
+> +			cpr_init_voltage3_perfcl: ivolt3_perfcl@22b {
+> +				reg = <0x22b 0x1>;
+> +				bits = <6 6>;
+> +			};
+> +
+> +			cpr_init_voltage2_perfcl: ivolt2_perfcl@22c {
+> +				reg = <0x22c 0x1>;
+> +				bits = <4 6>;
+> +			};
+> +
+> +			cpr_init_voltage1_perfcl: ivolt1_perfcl@22d {
+> +				reg = <0x22d 0x1>;
+> +				bits = <2 6>;
+> +			};
+> +
+> +			cpr_init_voltage0_perfcl: ivolt0_perfcl@22e {
+> +				reg = <0x22e 0x1>;
+> +				bits = <0 6>;
+> +			};
+> +
+> +			/* CPR Target Quotients: Performance Cluster */
+> +			cpr_quot3_perfcl: quot3_perfcl@22f {
+> +				reg = <0x22f 0x2>;
+> +				bits = <4 11>;
+> +			};
+> +
+> +			cpr_quot2_perfcl: quot2_perfcl@231 {
+> +				reg = <0x231 0x2>;
+> +				bits = <0 12>;
+> +			};
+> +
+> +			cpr_quot1_perfcl: quot1_perfcl@232 {
+> +				reg = <0x232 0x2>;
+> +				bits = <4 12>;
+> +			};
+> +
+> +			cpr_quot0_perfcl: quot0_perfcl@234 {
+> +				reg = <0x234 0x2>;
+> +				bits = <0 12>;
+> +			};
+> +
+> +			/* CPR Quotient Offsets: Performance Cluster */
+> +			cpr_quot_offset3_perfcl: qoff3_perfcl@237 {
+> +				reg = <0x237 0x1>;
+> +				bits = <7 6>;
+> +			};
+> +
+> +			cpr_quot_offset2_perfcl: qoff2_perfcl@238 {
+> +				reg = <0x238 0x1>;
+> +				bits = <6 7>;
+> +			};
+> +
+> +			cpr_quot_offset1_perfcl: qoff1_perfcl@239 {
+> +				reg = <0x239 0x1>;
+> +				bits = <5 3>;
+> +			};
+> +
+>  			qusb2_hstx_trim: hstx-trim@23a {
+>  				reg = <0x23a 0x1>;
+>  				bits = <0 4>;
+> @@ -2554,6 +3346,87 @@ frame@17928000 {
+>  			};
+>  		};
+>  
+> +		apc_cprh: power-controller@179c8000 {
+> +			compatible = "qcom,msm8998-cprh", "qcom,cprh";
+> +			reg = <0x179c8000 0x4000>, <0x179c4000 0x4000>;
+> +
+> +			clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
+> +			clock-names = "ref";
+> +
+> +			/* Set the CPR clock here, it needs to match XO */
+> +			assigned-clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
+> +			assigned-clock-rates = <19200000>;
+> +
+> +			operating-points-v2 = <&cprh_opp_table>;
+> +			power-domains = <&rpmpd MSM8998_VDDCX_AO>;
+> +			#power-domain-cells = <1>;
+> +
+> +			nvmem-cells = <&cpr_efuse_speedbin>,
+> +				      <&cpr_fuse_revision>,
+> +				      <&cpr_quot0_pwrcl>,
+> +				      <&cpr_quot1_pwrcl>,
+> +				      <&cpr_quot2_pwrcl>,
+> +				      <&cpr_quot3_pwrcl>,
+> +				      <&cpr_quot_offset1_pwrcl>,
+> +				      <&cpr_quot_offset2_pwrcl>,
+> +				      <&cpr_quot_offset3_pwrcl>,
+> +				      <&cpr_init_voltage0_pwrcl>,
+> +				      <&cpr_init_voltage1_pwrcl>,
+> +				      <&cpr_init_voltage2_pwrcl>,
+> +				      <&cpr_init_voltage3_pwrcl>,
+> +				      <&cpr_ro_sel0_pwrcl>,
+> +				      <&cpr_ro_sel1_pwrcl>,
+> +				      <&cpr_ro_sel2_pwrcl>,
+> +				      <&cpr_ro_sel3_pwrcl>,
+> +				      <&cpr_quot0_perfcl>,
+> +				      <&cpr_quot1_perfcl>,
+> +				      <&cpr_quot2_perfcl>,
+> +				      <&cpr_quot3_perfcl>,
+> +				      <&cpr_quot_offset1_perfcl>,
+> +				      <&cpr_quot_offset2_perfcl>,
+> +				      <&cpr_quot_offset3_perfcl>,
+> +				      <&cpr_init_voltage0_perfcl>,
+> +				      <&cpr_init_voltage1_perfcl>,
+> +				      <&cpr_init_voltage2_perfcl>,
+> +				      <&cpr_init_voltage3_perfcl>,
+> +				      <&cpr_ro_sel0_perfcl>,
+> +				      <&cpr_ro_sel1_perfcl>,
+> +				      <&cpr_ro_sel2_perfcl>,
+> +				      <&cpr_ro_sel3_perfcl>;
+> +			nvmem-cell-names = "cpr_speed_bin",
+> +					   "cpr_fuse_revision",
+> +					   "cpr0_quotient1",
+> +					   "cpr0_quotient2",
+> +					   "cpr0_quotient3",
+> +					   "cpr0_quotient4",
+> +					   "cpr0_quotient_offset2",
+> +					   "cpr0_quotient_offset3",
+> +					   "cpr0_quotient_offset4",
+> +					   "cpr0_init_voltage1",
+> +					   "cpr0_init_voltage2",
+> +					   "cpr0_init_voltage3",
+> +					   "cpr0_init_voltage4",
+> +					   "cpr0_ring_osc1",
+> +					   "cpr0_ring_osc2",
+> +					   "cpr0_ring_osc3",
+> +					   "cpr0_ring_osc4",
+> +					   "cpr1_quotient1",
+> +					   "cpr1_quotient2",
+> +					   "cpr1_quotient3",
+> +					   "cpr1_quotient4",
+> +					   "cpr1_quotient_offset2",
+> +					   "cpr1_quotient_offset3",
+> +					   "cpr1_quotient_offset4",
+> +					   "cpr1_init_voltage1",
+> +					   "cpr1_init_voltage2",
+> +					   "cpr1_init_voltage3",
+> +					   "cpr1_init_voltage4",
+> +					   "cpr1_ring_osc1",
+> +					   "cpr1_ring_osc2",
+> +					   "cpr1_ring_osc3",
+> +					   "cpr1_ring_osc4";
+> +		};
+> +
+>  		intc: interrupt-controller@17a00000 {
+>  			compatible = "arm,gic-v3";
+>  			reg = <0x17a00000 0x10000>,       /* GICD */
+> 
