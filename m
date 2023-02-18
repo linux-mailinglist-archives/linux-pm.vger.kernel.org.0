@@ -2,90 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF30169B9DC
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 12:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F4F69B9E7
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 13:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBRLtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Feb 2023 06:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S229499AbjBRMFb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Feb 2023 07:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRLtT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Feb 2023 06:49:19 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CBD1716E;
-        Sat, 18 Feb 2023 03:49:18 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 15A701C0E0B; Sat, 18 Feb 2023 12:49:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1676720957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MrT/EFdUKIU+QQlz/ufzFcdq3rjNr1BzPWs3Kp+y7A4=;
-        b=orNXhvI09gvhvis+8LFhbtk6jzrig675VbX0ZbGHnaVtQsbOqzjQ7d3f11ovcxUTFiYSjQ
-        guCwjvGFYpoUsQzgH5Fr8L+9A2HBmZiHDj2qtjDLOxDcNv7w1BYCNe1vJJjNqW3YqofvEe
-        T9626V/IGoDJgp99ABxEutYlW/4EhgU=
-Date:   Sat, 18 Feb 2023 12:48:32 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PM: hibernate: don't store zero pages in the image
- file.
-Message-ID: <Y/C7EO5xUHh4p/MS@duo.ucw.cz>
-References: <20230113193006.1320379-1-bgeffon@google.com>
- <20230114001518.1378049-1-bgeffon@google.com>
- <CAJZ5v0geG==MmZfvFBZgkuOuWE17BXYSMEzcYmyz6CALp6w2Fw@mail.gmail.com>
- <CADyq12wAkX+hAzuFgHj7k_Woy=G+3PLwpTc+UUxjp4bPe46_cw@mail.gmail.com>
+        with ESMTP id S229441AbjBRMFa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Feb 2023 07:05:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7729319690;
+        Sat, 18 Feb 2023 04:05:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE7F60B8B;
+        Sat, 18 Feb 2023 12:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4E8C433EF;
+        Sat, 18 Feb 2023 12:05:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676721928;
+        bh=TmAb1GafN4gpzoQhxhlwDTfphssUg/5r9Sqy94z7ifo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=unQDxG2swsiziDdZOR3cHzU1vK66DWAJWytXvML35cY72loxGCGXTOS6lBPpYXUm9
+         UgK1Auf5GxywMv1xtdvTkYR9/w3q6M4hhl5PY8iJLVn7pOOQd8ABW4y2YBnkCvaAu0
+         i3LQkLkwR5K5jn8JyETMX5tqfx7K7+Cbhkfi/yrTimB66aR5OHUxbd9WJde8ki0ubj
+         05Wch5vEKcCOm6VxoL/6msH8MdYvRiJJMRRLE4Y06Os2yY+O37KEsksZL4x4c6U5yh
+         b1sUvuRu0XX8X3D9oJzjBaWrYmGpdMr5JrvwtQvA5eGY52dvf09PdxCZ6wtW19Qw0x
+         iv9ga7MWTUyIw==
+Received: by pali.im (Postfix)
+        id 8754D71F; Sat, 18 Feb 2023 13:05:25 +0100 (CET)
+Date:   Sat, 18 Feb 2023 13:05:25 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v4 3/3] powerpc: dts: turris1x.dts: Set lower priority
+ for CPLD syscon-reboot
+Message-ID: <20230218120525.7zplk5zdg5qmkmaz@pali>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20221226114513.4569-1-pali@kernel.org>
+ <20221226114513.4569-3-pali@kernel.org>
+ <20230209001021.oitnv6x7ilwvy4it@pali>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="jyqNYtISB/UAdYjy"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CADyq12wAkX+hAzuFgHj7k_Woy=G+3PLwpTc+UUxjp4bPe46_cw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230209001021.oitnv6x7ilwvy4it@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thursday 09 February 2023 01:10:21 Pali Rohár wrote:
+> On Monday 26 December 2022 12:45:13 Pali Rohár wrote:
+> > Due to CPLD firmware bugs, set CPLD syscon-reboot priority level to 64
+> > (between rstcr and watchdog) to ensure that rstcr's global-utilities reset
+> > method which is preferred stay as default one, and to ensure that CPLD
+> > syscon-reboot is more preferred than watchdog reset method.
+> > 
+> > Fixes: 0531a4abd1c6 ("powerpc: dts: turris1x.dts: Add CPLD reboot node")
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> 
+> May I ask who can take this 3/3 patch? powersupply or powerpc tree?
 
---jyqNYtISB/UAdYjy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
++ Christophe
 
-Hi!
-
-> > I need some more time to go through this in more detail, so it is
-> > likely to miss 6.3.  Sorry about that.
->=20
-> No problem, consider this more of an RFC, it seems like a
-> low-risk/low-cost way to reduce image sizes so I was just hoping to
-> get feedback. Take your time reviewing.
-
-Seems like special case of compression, really, it might be better to
-leave it to compression algorithm to solve that.
-
-Not sure if lzo is optimal if you want max speed, but things like gzip
-should be "almost free", too.
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---jyqNYtISB/UAdYjy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY/C7EAAKCRAw5/Bqldv6
-8jYYAJ9Jesunbjudh4VRVUkCCIX0APEW7gCfRo3vne1VvjeV9QbgWj4um19wWf0=
-=bp9r
------END PGP SIGNATURE-----
-
---jyqNYtISB/UAdYjy--
+> > ---
+> >  arch/powerpc/boot/dts/turris1x.dts | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> > 
+> > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
+> > index e9cda34a140e..c9b619f6ed5c 100644
+> > --- a/arch/powerpc/boot/dts/turris1x.dts
+> > +++ b/arch/powerpc/boot/dts/turris1x.dts
+> > @@ -367,11 +367,34 @@
+> >  			};
+> >  
+> >  			reboot@d {
+> > +				/*
+> > +				 * CPLD firmware which manages system reset and
+> > +				 * watchdog registers has bugs. It does not
+> > +				 * autoclear system reset register after change
+> > +				 * and watchdog ignores reset line on immediate
+> > +				 * succeeding reset cycle triggered by watchdog.
+> > +				 * These bugs have to be workarounded in U-Boot
+> > +				 * bootloader. So use system reset via syscon as
+> > +				 * a last resort because older U-Boot versions
+> > +				 * do not have workaround for watchdog.
+> > +				 *
+> > +				 * Reset method via rstcr's global-utilities
+> > +				 * (the preferred one) has priority level 128,
+> > +				 * watchdog has priority level 0 and default
+> > +				 * syscon-reboot priority level is 192.
+> > +				 *
+> > +				 * So define syscon-reboot with custom priority
+> > +				 * level 64 (between rstcr and watchdog) because
+> > +				 * rstcr should stay as default preferred reset
+> > +				 * method and reset via watchdog is more broken
+> > +				 * than system reset via syscon.
+> > +				 */
+> >  				compatible = "syscon-reboot";
+> >  				reg = <0x0d 0x01>;
+> >  				offset = <0x0d>;
+> >  				mask = <0x01>;
+> >  				value = <0x01>;
+> > +				priority = <64>;
+> >  			};
+> >  
+> >  			led-controller@13 {
+> > -- 
+> > 2.20.1
+> > 
