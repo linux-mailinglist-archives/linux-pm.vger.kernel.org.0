@@ -2,79 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EAD69B758
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 02:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7490469B96B
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 11:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBRBMr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Feb 2023 20:12:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S229771AbjBRKdb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Feb 2023 05:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBRBMr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Feb 2023 20:12:47 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364F646166
-        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 17:12:46 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id h14so10967088edz.10
-        for <linux-pm@vger.kernel.org>; Fri, 17 Feb 2023 17:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=30mLK80vSZcSwBOrdpYOKvqdrdKJjCkQDSG3S0CWQyQ=;
-        b=PoWoEJhFFohzu/W6uY+o8iNV9+bQIgFwNI8aPQWta8w+RdhKftJ7oJpRRU8n/TUOvk
-         lRkh/grMuygnV4YpseA4wk1XZOd6rMTrWvTTA3zPuA3lGBvGnRLHBHL+XllTNkHNkbQB
-         WrvJGmAWKuOfSExi8UgKp1kJ0QaQiggbXjDbFVKaBMEK2hS3N2KryMwpgDIIfzVDYYEY
-         GzSRxTcqwt32ELW7ktD/wmjIGNRH6P1ltgZXmFflINLYzFF1FByGiBQD+SJphYem4IEb
-         CD3C7cHoTSQyUye/6r7tTwsccTDtrOeOdod5HmRS/R+TNtgN4nEH/UVuR2UOBSZK5eMH
-         IiEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=30mLK80vSZcSwBOrdpYOKvqdrdKJjCkQDSG3S0CWQyQ=;
-        b=TdGZmXofqsm/mYW780Ojko+OlSInQBN+abmBlVXtYMRCEd+0PWEuo2jnLK/mkrTrd2
-         ZlJtZuZfu+ARGuxMmSSRikozZ3s9HUO9xs1rwBOX0P22O2P1ZTu+vJK7HieK/0XkNGHF
-         MoczZrsNXD7rPjl3ACZD5BzSjjEcw1E9aGDbiqdshc6V+5Ro0fd/MiYRVpscUanWrYFy
-         mAVHEvy8C4Nh9kMRQAQ38hlzvRm6LGjPxGQCYw1D2QtzjgekFggPtUizZdlvkkmicTgc
-         /AfwKd+z+7bIE+e9HxB527eLpnYatgAKX3B1PhTENoIBvvHLE8JPeKCW7HEmAQGLVSvw
-         RxkQ==
-X-Gm-Message-State: AO0yUKUZow3pCqLiip9yKZ0IFqztx1KuNZMPagdPcpHv7uPK/9iZfPFa
-        bOCdfxn33b54RJ/zqHEbKcTXbQkb3h830LqD0T0=
-X-Google-Smtp-Source: AK7set+DZz2NqM4bfQ+/fKXu3olGNY2Aiiu7D8kS0IaKCJM/YSbOduA9MrOWCTb9xRL3WmO++cFullvc4FblRTNuYQA=
-X-Received: by 2002:a17:906:869a:b0:879:9c05:f5fb with SMTP id
- g26-20020a170906869a00b008799c05f5fbmr1233629ejx.5.1676682764629; Fri, 17 Feb
- 2023 17:12:44 -0800 (PST)
+        with ESMTP id S229445AbjBRKda (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Feb 2023 05:33:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1E91ADFA
+        for <linux-pm@vger.kernel.org>; Sat, 18 Feb 2023 02:32:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676716362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+trPnWf+vRJ2/iTAVbxTHjHnpzIARmxivvQmHCINeLI=;
+        b=KdPZubhqqBVmCkkrU2PI4ZNdf0uYEHv9W1YD528KTg92L84tEXYDee99vAg7TwtEf0ku9V
+        fwfC0RilI/tNITnmliAW9xZKqb+Q5xWES7feJOkusIi0nMix8VEflHjhU3fnHuWrwJHwYi
+        FHCNssqj2ksnplQxgVuhjikS1XXyLBo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-672-iLrO-an1P6O5kZPaiDdwCg-1; Sat, 18 Feb 2023 05:32:38 -0500
+X-MC-Unique: iLrO-an1P6O5kZPaiDdwCg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE78B1C05EBD;
+        Sat, 18 Feb 2023 10:32:37 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4988B2026D4B;
+        Sat, 18 Feb 2023 10:32:36 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH 0/3] ACPI: x86: Introduce an acpi_quirk_skip_gpio_event_handlers() helper
+Date:   Sat, 18 Feb 2023 11:32:32 +0100
+Message-Id: <20230218103235.6934-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Sender: akondotafa240@gmail.com
-Received: by 2002:a05:7208:8799:b0:62:8acd:8a88 with HTTP; Fri, 17 Feb 2023
- 17:12:44 -0800 (PST)
-From:   Miss Katie <Katiehiggins302@gmail.com>
-Date:   Sat, 18 Feb 2023 01:12:44 +0000
-X-Google-Sender-Auth: TczFV8PGbXzJuzSy0_Fe4Vb_tyo
-Message-ID: <CAM5Ze1tqjiCz6uUmLhi5JebJMPScdmvm_sGDYY0+qbXH4THASw@mail.gmail.com>
-Subject: RE: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hallo,
+<Resend with the gpiolib-acpi.c folks added to the To: list>
 
-Sie haben meine vorherige Nachricht erhalten? Ich habe Sie schon
-einmal kontaktiert, aber die Nachricht ist fehlgeschlagen, also habe
-ich beschlossen, noch einmal zu schreiben. Bitte best=C3=A4tigen Sie, ob
-Sie dies erhalten, damit ich fortfahren kann.
+Hi All,
 
-warte auf deine Antwort.
+x86 ACPI boards which ship with only Android as their factory image usually
+have pretty broken ACPI tables, relying on everything being hardcoded in
+the factory kernel image and often disabling parts of the ACPI enumeration
+kernel code to avoid the broken tables causing issues.
 
-Gr=C3=BC=C3=9Fe,
-Fr=C3=A4ulein Katie
+Part of this broken ACPI code is that sometimes these boards have _AEI
+ACPI GPIO event handlers which are broken.
+
+So far this has been dealt with in the platform/x86/x86-android-tablets.c
+module by it calling acpi_gpiochip_free_interrupts() on gpiochip-s with
+troublesome handlers to disable the handlers.
+
+But this is racy and sometimes too late. This series adds a new
+acpi_quirk_skip_gpio_event_handlers() function to drivers/acpi/x86/utils.c
+using the existing DMI table for this to avoid duplication of DMI matches.
+
+Patch 2 adds a new x86 Android tablet model which needs the new
+SKIP_GPIO_EVENT_HANDLERS quirk.
+
+Patch 3 uses acpi_quirk_skip_gpio_event_handlers() in axp288_charger.c
+to deal with there not being a ACPI event handler to disable charging
+from Vbus before enable 5V boost output on the tablets micro-USB conn.
+
+Sebastian (sre), since patch 3 depends on patch 1, it is probably
+easiest to just merge the entire series through the linux-pm tree.
+May we have your ack for this ?
+
+Regards,
+
+Hans
+
+
+Hans de Goede (3):
+  ACPI: x86: Introduce an acpi_quirk_skip_gpio_event_handlers() helper
+  ACPI: x86: Add skip i2c clients quirk for Acer Iconia One 7 B1-750
+  power: supply: axp288_charger: Use alt usb-id extcon on some x86
+    android tablets
+
+ drivers/acpi/x86/utils.c              | 34 ++++++++++++++++++++++++---
+ drivers/gpio/gpiolib-acpi.c           |  3 +++
+ drivers/power/supply/axp288_charger.c | 15 ++++++++++--
+ include/acpi/acpi_bus.h               |  5 ++++
+ 4 files changed, 52 insertions(+), 5 deletions(-)
+
+-- 
+2.39.1
+
