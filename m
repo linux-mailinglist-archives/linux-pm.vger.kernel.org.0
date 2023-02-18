@@ -2,125 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F4F69B9E7
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 13:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFA169BA75
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 15:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjBRMFb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Feb 2023 07:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S229607AbjBROnN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Feb 2023 09:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRMFa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Feb 2023 07:05:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7729319690;
-        Sat, 18 Feb 2023 04:05:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE7F60B8B;
-        Sat, 18 Feb 2023 12:05:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4E8C433EF;
-        Sat, 18 Feb 2023 12:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676721928;
-        bh=TmAb1GafN4gpzoQhxhlwDTfphssUg/5r9Sqy94z7ifo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=unQDxG2swsiziDdZOR3cHzU1vK66DWAJWytXvML35cY72loxGCGXTOS6lBPpYXUm9
-         UgK1Auf5GxywMv1xtdvTkYR9/w3q6M4hhl5PY8iJLVn7pOOQd8ABW4y2YBnkCvaAu0
-         i3LQkLkwR5K5jn8JyETMX5tqfx7K7+Cbhkfi/yrTimB66aR5OHUxbd9WJde8ki0ubj
-         05Wch5vEKcCOm6VxoL/6msH8MdYvRiJJMRRLE4Y06Os2yY+O37KEsksZL4x4c6U5yh
-         b1sUvuRu0XX8X3D9oJzjBaWrYmGpdMr5JrvwtQvA5eGY52dvf09PdxCZ6wtW19Qw0x
-         iv9ga7MWTUyIw==
-Received: by pali.im (Postfix)
-        id 8754D71F; Sat, 18 Feb 2023 13:05:25 +0100 (CET)
-Date:   Sat, 18 Feb 2023 13:05:25 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4 3/3] powerpc: dts: turris1x.dts: Set lower priority
- for CPLD syscon-reboot
-Message-ID: <20230218120525.7zplk5zdg5qmkmaz@pali>
-References: <20220820102925.29476-1-pali@kernel.org>
- <20221226114513.4569-1-pali@kernel.org>
- <20221226114513.4569-3-pali@kernel.org>
- <20230209001021.oitnv6x7ilwvy4it@pali>
+        with ESMTP id S229585AbjBROnL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Feb 2023 09:43:11 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438FF18AA9
+        for <linux-pm@vger.kernel.org>; Sat, 18 Feb 2023 06:43:09 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id f6so1005469lfs.2
+        for <linux-pm@vger.kernel.org>; Sat, 18 Feb 2023 06:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2JtiIeMM5Qh7iLDivPLXKMhSL89uXXNjq1NEQuV8jk=;
+        b=TL550rJ2WUTkJQApdGZxJYx2k0C2IEqJi18fOaA8Hx8I/EWgP/bxd9nGslORT4S21X
+         /uAnjvrCtWo2KvZCLPFnV9z6nxD0jvP0YN4YWzk7QTGI3bSEIiwbHv5UHxq8ESF2pqzo
+         hHTci8FedD9t1RHPfGG9PQ5vbPpwO8RjzjRW8niogDENiw5Jx/C1SnWY2hrhXboncsAX
+         HzR62k7v9gPaKQTL7kmtI6xIOofGL58xQYpWQUdvqzbq7jdxDaWb1Gzf2+Ui/gdDuC1G
+         DPlQ8QrlZeH7xUXaPxyX5zarJiC/6ZVyttqxoPVZeADotLBv9CZu2da5dvM2HhC8yiP3
+         V0dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j2JtiIeMM5Qh7iLDivPLXKMhSL89uXXNjq1NEQuV8jk=;
+        b=ZmORE1SWO1CXOIqyI34S2kGBY9j6/IPLm4CoBwZNYqWgKXgKuafOEYAZI1ntpDd4Iz
+         5t4b6o1LO1GKYyOTCWUXRGZISXBCBjqWgMmCGAFvziDCu2iyzeMbRhJF+y3+rgNMZ5L3
+         2Q70nQHfVzlQ0g/DHlexJE8Bwaw3iJVGJCQEw5lJ75oBBFdJc+u0xCs56v8UywoClbR+
+         o4zAM0ntABqWuALEYthwmVR1hoeldp+lm9+pnlEbh6qXRDEcs/bQAohP5yvK1kEXSvFY
+         9kYkA7D3cfBXtpsG7pBFm5xuuRLHJR6at51VNL3JjV7k+ABFuuOLmLm5GLiLu8HzFWxH
+         1b9A==
+X-Gm-Message-State: AO0yUKVrbGc8xHTBnfEV0S7IghXDE4/Us+IN635lRjN4X1BK2ecFeYH/
+        kkKF6qfO4E3ySQz/0zI2nMvSBg==
+X-Google-Smtp-Source: AK7set+V1E1rfexjJzv31gH7TIO/LMx7j7Jn+1yQaAAni3f8RJ6w4leZoh0yHDq5ObHKz9IRr3Z6Jg==
+X-Received: by 2002:ac2:5dea:0:b0:4db:56e:427c with SMTP id z10-20020ac25dea000000b004db056e427cmr981242lfq.56.1676731387362;
+        Sat, 18 Feb 2023 06:43:07 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05651204ca00b004b5ab5e904esm998922lfq.306.2023.02.18.06.43.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 06:43:06 -0800 (PST)
+Message-ID: <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org>
+Date:   Sat, 18 Feb 2023 15:43:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230209001021.oitnv6x7ilwvy4it@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
+ return the SoC ID
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        agross@kernel.org, andersson@kernel.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230121112947.53433-1-robimarko@gmail.com>
+ <20230121112947.53433-4-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230121112947.53433-4-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday 09 February 2023 01:10:21 Pali Rohár wrote:
-> On Monday 26 December 2022 12:45:13 Pali Rohár wrote:
-> > Due to CPLD firmware bugs, set CPLD syscon-reboot priority level to 64
-> > (between rstcr and watchdog) to ensure that rstcr's global-utilities reset
-> > method which is preferred stay as default one, and to ensure that CPLD
-> > syscon-reboot is more preferred than watchdog reset method.
-> > 
-> > Fixes: 0531a4abd1c6 ("powerpc: dts: turris1x.dts: Add CPLD reboot node")
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
+
+
+On 21.01.2023 12:29, Robert Marko wrote:
+> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
+> after getting it via SMEM call but instead uses an enum to encode the
+> matched SMEM ID to 2 variants of MSM8996 which are then used in
+> qcom_cpufreq_kryo_name_version() to set the supported version.
 > 
-> May I ask who can take this 3/3 patch? powersupply or powerpc tree?
+> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
+> more than its name suggests, so lets make it just return the SoC ID
+> directly which allows matching directly on the SoC ID and removes the need
+> for msm8996_version enum which simplifies the driver.
+> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
+>  1 file changed, 12 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index da55d2e1925a..9deaf9521d6d 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -32,12 +32,6 @@
+>  
+>  #include <dt-bindings/arm/qcom,ids.h>
+>  
+> -enum _msm8996_version {
+> -	MSM8996_V3,
+> -	MSM8996_SG,
+> -	NUM_OF_MSM8996_VERSIONS,
+> -};
+> -
+>  struct qcom_cpufreq_drv;
+>  
+>  struct qcom_cpufreq_match_data {
+> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+>  	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+>  }
+>  
+> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+> +static int qcom_cpufreq_get_msm_id(void)
+This should be u32 as info->id is __le32
 
-+ Christophe
+And please export this function from socinfo, it'll come in
+useful for other drivers!
 
-> > ---
-> >  arch/powerpc/boot/dts/turris1x.dts | 23 +++++++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> > 
-> > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-> > index e9cda34a140e..c9b619f6ed5c 100644
-> > --- a/arch/powerpc/boot/dts/turris1x.dts
-> > +++ b/arch/powerpc/boot/dts/turris1x.dts
-> > @@ -367,11 +367,34 @@
-> >  			};
-> >  
-> >  			reboot@d {
-> > +				/*
-> > +				 * CPLD firmware which manages system reset and
-> > +				 * watchdog registers has bugs. It does not
-> > +				 * autoclear system reset register after change
-> > +				 * and watchdog ignores reset line on immediate
-> > +				 * succeeding reset cycle triggered by watchdog.
-> > +				 * These bugs have to be workarounded in U-Boot
-> > +				 * bootloader. So use system reset via syscon as
-> > +				 * a last resort because older U-Boot versions
-> > +				 * do not have workaround for watchdog.
-> > +				 *
-> > +				 * Reset method via rstcr's global-utilities
-> > +				 * (the preferred one) has priority level 128,
-> > +				 * watchdog has priority level 0 and default
-> > +				 * syscon-reboot priority level is 192.
-> > +				 *
-> > +				 * So define syscon-reboot with custom priority
-> > +				 * level 64 (between rstcr and watchdog) because
-> > +				 * rstcr should stay as default preferred reset
-> > +				 * method and reset via watchdog is more broken
-> > +				 * than system reset via syscon.
-> > +				 */
-> >  				compatible = "syscon-reboot";
-> >  				reg = <0x0d 0x01>;
-> >  				offset = <0x0d>;
-> >  				mask = <0x01>;
-> >  				value = <0x01>;
-> > +				priority = <64>;
-> >  			};
-> >  
-> >  			led-controller@13 {
-> > -- 
-> > 2.20.1
-> > 
+Konrad
+>  {
+>  	size_t len;
+>  	struct socinfo *info;
+> -	enum _msm8996_version version;
+>  
+>  	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
+>  	if (IS_ERR(info))
+> -		return NUM_OF_MSM8996_VERSIONS;
+> +		return PTR_ERR(info);
+>  
+> -	switch (info->id) {
+> -	case QCOM_ID_MSM8996:
+> -	case QCOM_ID_APQ8096:
+> -		version = MSM8996_V3;
+> -		break;
+> -	case QCOM_ID_MSM8996SG:
+> -	case QCOM_ID_APQ8096SG:
+> -		version = MSM8996_SG;
+> -		break;
+> -	default:
+> -		version = NUM_OF_MSM8996_VERSIONS;
+> -	}
+> -
+> -	return version;
+> +	return info->id;
+>  }
+>  
+>  static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+> @@ -166,25 +146,25 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+>  					  struct qcom_cpufreq_drv *drv)
+>  {
+>  	size_t len;
+> +	int msm_id;
+>  	u8 *speedbin;
+> -	enum _msm8996_version msm8996_version;
+>  	*pvs_name = NULL;
+>  
+> -	msm8996_version = qcom_cpufreq_get_msm_id();
+> -	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
+> -		dev_err(cpu_dev, "Not Snapdragon 820/821!");
+> -		return -ENODEV;
+> -	}
+> +	msm_id = qcom_cpufreq_get_msm_id();
+> +	if (msm_id < 0)
+> +		return msm_id;
+>  
+>  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+>  	if (IS_ERR(speedbin))
+>  		return PTR_ERR(speedbin);
+>  
+> -	switch (msm8996_version) {
+> -	case MSM8996_V3:
+> +	switch (msm_id) {
+> +	case QCOM_ID_MSM8996:
+> +	case QCOM_ID_APQ8096:
+>  		drv->versions = 1 << (unsigned int)(*speedbin);
+>  		break;
+> -	case MSM8996_SG:
+> +	case QCOM_ID_MSM8996SG:
+> +	case QCOM_ID_APQ8096SG:
+>  		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
+>  		break;
+>  	default:
