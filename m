@@ -2,167 +2,280 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3853E69BBF0
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Feb 2023 21:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6FD69C023
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Feb 2023 13:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjBRUuB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Feb 2023 15:50:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S229577AbjBSMII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Feb 2023 07:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjBRUuA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Feb 2023 15:50:00 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4B614EA9;
-        Sat, 18 Feb 2023 12:49:58 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id k14-20020a05600c1c8e00b003e22107b7ccso814639wms.0;
-        Sat, 18 Feb 2023 12:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdCsH2d8zg6wheMJGk9jqr1Puc+kcdg3d/O4BTVakwc=;
-        b=Il5L5cPlhAHrh4Ia3DeD4zTlMK3BeZCon21HTwzfeskwaSTUGEV1jKUzcIAPj0Mj23
-         MCE1Q+aweforLcOWJAobIWXh6UxedaTKYxldG5hlOzSv7T7VsgYPszTdAL2pkqMiV4Fm
-         0KnpmtOq3K+pbMI+5SNUdm2QgKpZuiylL0gFs8h5esoEvfra0Qjyv2p2hkhempxFnCs1
-         TF8wzTcFajRF9pMCZECGPBFt4mUOiIs32rdZyvdmJRnO1MxsoyjOToQeCam1oCg53MNG
-         CpOyqH3XgDnWBG7C65TJ0TvaxWZY9pyJnoVt92ExvkwxfRWhGUskWyHNtmjVXyfjDfiU
-         JfwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sdCsH2d8zg6wheMJGk9jqr1Puc+kcdg3d/O4BTVakwc=;
-        b=rV1CeYr+mTD64ZLKJ3HRq4G5N4jckI0nDCsQ1RtTOU4Y/ixdo4kKZBDriT1772JKVP
-         vxAjY8Zj1a9ShI/mLPwnczKwrjJOS2Ts356opOGeTreUBkEFbNlh/1pOJUJdNb0Rg3qu
-         +J59z8cqWnNrrRz2Dx/LKbR1gTMgHMP+ukFmnhZ5heyEVHH4LhfTsKDHIUMu9mvUt1a7
-         Y9dqRoQbXWrbzxxcx0xC8BujyJbsOztyIOGn4IJu74AxFq4dEBmNRDSgne3URxV3KqDx
-         V7XwXu40Eu/M5y64FpSRKtAfbh81mz7aoWK7aHlo9bf63voeEfSW21dC2aY5RqUzYzCZ
-         YsdQ==
-X-Gm-Message-State: AO0yUKXTMsBnm3G1iKuPGlmr92x5/PXOlaBWS8QJRSWK+cIQ0gcBT/b4
-        qm8lCFiInUz1dGZEBYnZJHXMRBsx3s8=
-X-Google-Smtp-Source: AK7set+mexdiUZcpqfmOs9RlSu3rmMnyr9ejrMNHzIhZEfso0t0zrx7T4QrQ5F4R6w+7HUGfMtpLTA==
-X-Received: by 2002:a05:600c:1695:b0:3e2:6dc:4d6e with SMTP id k21-20020a05600c169500b003e206dc4d6emr9508359wmn.31.1676753397393;
-        Sat, 18 Feb 2023 12:49:57 -0800 (PST)
-Received: from localhost (94.197.47.81.threembb.co.uk. [94.197.47.81])
-        by smtp.gmail.com with ESMTPSA id s10-20020a7bc38a000000b003dc1a525f22sm8866551wmj.25.2023.02.18.12.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 12:49:57 -0800 (PST)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     sre@kernel.org, wens@csie.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] power: supply: axp20x_usb_power: Remove variant IDs from VBUS polling check
-Date:   Sat, 18 Feb 2023 20:49:46 +0000
-Message-Id: <20230218204946.106316-6-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20230218204946.106316-1-aidanmacdonald.0x0@gmail.com>
-References: <20230218204946.106316-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S229506AbjBSMIH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Feb 2023 07:08:07 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C0B45E
+        for <linux-pm@vger.kernel.org>; Sun, 19 Feb 2023 04:08:05 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 7DB121236EF0;
+        Sun, 19 Feb 2023 13:07:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676808479;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k0uQYrDXseOdnKUU40UXg4bhZFZZLcIfSAnfKuTK3PU=;
+        b=EWEPayuOGH7VvY1bL8s4lxiz04TA1iL8Lc6W06Uxpe/fBG/tQaXi4Zqegu7WolFL0/oAMJ
+        Uangk5SKERlGYMnfcKpAO/8Um0/ENyRfBw6V4YgoQAD3eKKw+fnlR8lxtA80Uqw0Ott2do
+        GTSXKrk8PQyf752lWr+kx803t4U39gk=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
+        Wyes Karny <wyes.karny@amd.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ananth Narayan <ananth.narayan@amd.com>,
+        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>,
+        Russell Haley <yumpusamongus@gmail.com>,
+        Wyes Karny <wyes.karny@amd.com>
+Subject: Re: [PATCH v7 0/6] cpufreq: amd-pstate: Add guided autonomous mode support
+Date:   Sun, 19 Feb 2023 13:07:57 +0100
+Message-ID: <5906931.lOV4Wx5bFT@natalenko.name>
+In-Reply-To: <20230216081802.38007-1-wyes.karny@amd.com>
+References: <20230216081802.38007-1-wyes.karny@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use an explicit boolean flag instead of a check based on the
-variant ID. Since this is the last use of variant IDs in the
-driver, also remove the IDs.
+Hello.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/power/supply/axp20x_usb_power.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+On =C4=8Dtvrtek 16. =C3=BAnora 2023 9:17:56 CET Wyes Karny wrote:
+> >From ACPI spec[1] below 3 modes for CPPC can be defined:
+> 1. Non autonomous: OS scaling governor specifies operating frequency/
+>    performance level through `Desired Performance` register and platform
+> follows that.
+> 2. Guided autonomous: OS scaling governor specifies min and max
+>    frequencies/ performance levels through `Minimum Performance` and
+> `Maximum Performance` register, and platform can autonomously select an
+> operating frequency in this range.
+> 3. Fully autonomous: OS only hints (via EPP) to platform for the required
+>    energy performance preference for the workload and platform autonomous=
+ly
+> scales the frequency.
+>=20
+> Currently (1) is supported by amd_pstate as passive mode, and (3) is
+> implemented by EPP support[2]. This change is to support (2).
+>=20
+> In guided autonomous mode the min_perf is based on the input from the
+> scaling governor. For example, in case of schedutil this value depends
+> on the current utilization. And max_perf is set to max capacity.
+>=20
+> To activate guided auto mode ``amd_pstate=3Dguided`` command line
+> parameter has to be passed in the kernel.
+>=20
+> Below are the results (normalized) of benchmarks with this patch:
+> System: Genoa 96C 192T
+> Kernel: 6.2.0-rc2 + EPP v12 + patch
+> Scaling governor: schedutil
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D dbench comparisons =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> dbench result comparison:
+> Here results are throughput (MB/s)
+> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>     1	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
+>     2	   1.07 (0.00 pct)	   1.06 (-0.93 pct)	   1.07 (0.00 pct)
+>     4	   1.68 (0.00 pct)	   1.70 (1.19 pct)	   1.72 (2.38 pct)
+>     8	   2.61 (0.00 pct)	   2.68 (2.68 pct)	   2.76 (5.74 pct)
+>    16	   4.16 (0.00 pct)	   4.24 (1.92 pct)	   4.53 (8.89 pct)
+>    32	   5.98 (0.00 pct)	   6.17 (3.17 pct)	   7.30 (22.07 pct)
+>    64	   8.67 (0.00 pct)	   8.99 (3.69 pct)	  10.71 (23.52 pct)
+>   128	  11.98 (0.00 pct)	  12.52 (4.50 pct)	  14.67 (22.45 pct)
+>   256	  15.73 (0.00 pct)	  16.13 (2.54 pct)	  17.81 (13.22 pct)
+>   512	  15.77 (0.00 pct)	  16.32 (3.48 pct)	  16.39 (3.93 pct)
+> dbench power comparison:
+> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>     1	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   1.04 (4.00 pct)
+>     2	   0.99 (0.00 pct)	   0.97 (-2.02 pct)	   1.02 (3.03 pct)
+>     4	   0.98 (0.00 pct)	   0.98 (0.00 pct)	   1.02 (4.08 pct)
+>     8	   0.98 (0.00 pct)	   0.99 (1.02 pct)	   1.02 (4.08 pct)
+>    16	   0.99 (0.00 pct)	   1.00 (1.01 pct)	   1.04 (5.05 pct)
+>    32	   1.02 (0.00 pct)	   1.02 (0.00 pct)	   1.07 (4.90 pct)
+>    64	   1.05 (0.00 pct)	   1.05 (0.00 pct)	   1.11 (5.71 pct)
+>   128	   1.08 (0.00 pct)	   1.08 (0.00 pct)	   1.15 (6.48 pct)
+>   256	   1.12 (0.00 pct)	   1.12 (0.00 pct)	   1.20 (7.14 pct)
+>   512	   1.18 (0.00 pct)	   1.17 (-0.84 pct)	   1.26 (6.77 pct)
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D git-source comparisons =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> git-source result comparison:
+> Here results are throughput (compilations per 1000 sec)
+> Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>   192	   1.00 (0.00 pct)	   0.93 (-7.00 pct)	   1.00 (0.00 pct)
+> git-source power comparison:
+> Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>   192	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.96 (-4.00 pct)
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kernbench comparisons =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> kernbench result comparison:
+> Here results are throughput (compilations per 1000 sec)
+> Load:	   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> 32	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
+> 48	   1.26 (0.00 pct)	   1.28 (1.58 pct)	   1.25 (-0.79 pct)
+> 64	   1.39 (0.00 pct)	   1.47 (5.75 pct)	   1.43 (2.87 pct)
+> 96	   1.48 (0.00 pct)	   1.50 (1.35 pct)	   1.49 (0.67 pct)
+> 128	   1.29 (0.00 pct)	   1.32 (2.32 pct)	   1.33 (3.10 pct)
+> 192	   1.17 (0.00 pct)	   1.20 (2.56 pct)	   1.21 (3.41 pct)
+> 256	   1.17 (0.00 pct)	   1.18 (0.85 pct)	   1.20 (2.56 pct)
+> 384	   1.16 (0.00 pct)	   1.17 (0.86 pct)	   1.21 (4.31 pct)
+> kernbench power comparison:
+> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>    32	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.00 (0.00 pct)
+>    48	   0.87 (0.00 pct)	   0.81 (-6.89 pct)	   0.88 (1.14 pct)
+>    64	   0.81 (0.00 pct)	   0.73 (-9.87 pct)	   0.77 (-4.93 pct)
+>    96	   0.75 (0.00 pct)	   0.74 (-1.33 pct)	   0.75 (0.00 pct)
+>   128	   0.83 (0.00 pct)	   0.79 (-4.81 pct)	   0.83 (0.00 pct)
+>   192	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+>   256	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+>   384	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D tbench comparisons =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> tbench result comparison:
+> Here results are throughput (MB/s)
+> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>     1	   1.00 (0.00 pct)	   0.70 (-30.00 pct)	   1.37 (37.00 pct)
+>     2	   2.64 (0.00 pct)	   1.39 (-47.34 pct)	   2.70 (2.27 pct)
+>     4	   4.89 (0.00 pct)	   2.75 (-43.76 pct)	   5.28 (7.97 pct)
+>     8	   9.46 (0.00 pct)	   5.42 (-42.70 pct)	  10.22 (8.03 pct)
+>    16	  19.05 (0.00 pct)	  10.42 (-45.30 pct)	  19.94 (4.67 pct)
+>    32	  37.50 (0.00 pct)	  20.23 (-46.05 pct)	  36.87 (-1.68 pct)
+>    64	  61.24 (0.00 pct)	  43.08 (-29.65 pct)	  62.96 (2.80 pct)
+>   128	  67.16 (0.00 pct)	  69.08 (2.85 pct)	  67.34 (0.26 pct)
+>   256	 154.59 (0.00 pct)	 162.33 (5.00 pct)	 156.78 (1.41 pct)
+>   512	 154.02 (0.00 pct)	 156.74 (1.76 pct)	 153.48 (-0.35 pct)
+> tbench power comparison:
+> Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+>     1	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.08 (8.00 pct)
+>     2	   1.04 (0.00 pct)	   0.97 (-6.73 pct)	   1.11 (6.73 pct)
+>     4	   1.12 (0.00 pct)	   0.99 (-11.60 pct)	   1.18 (5.35 pct)
+>     8	   1.25 (0.00 pct)	   1.04 (-16.80 pct)	   1.31 (4.80 pct)
+>    16	   1.53 (0.00 pct)	   1.13 (-26.14 pct)	   1.58 (3.26 pct)
+>    32	   2.01 (0.00 pct)	   1.36 (-32.33 pct)	   2.03 (0.99 pct)
+>    64	   2.58 (0.00 pct)	   2.14 (-17.05 pct)	   2.61 (1.16 pct)
+>   128	   2.80 (0.00 pct)	   2.81 (0.35 pct)	   2.81 (0.35 pct)
+>   256	   3.39 (0.00 pct)	   3.43 (1.17 pct)	   3.42 (0.88 pct)
+>   512	   3.44 (0.00 pct)	   3.44 (0.00 pct)	   3.44 (0.00 pct)
+>=20
+> Note: this series is based on top of EPP v12 [3] series
+>=20
+> Change log:
+>=20
+> v6 -> v7:
+> - Addressed comments by Ray
+> - Reorder and rebase patches
+> - Pick up Ack by Ray
+>=20
+> v5 -> v6:
+> - Don't return -EBUSY when changing to same mode
+>=20
+> v4 -> v5:
+> - Rebased on top of EPP v12 series
+> - Addressed comments form Mario regarding documentation
+> - Picked up RB flags from Mario and Bagas Sanjaya
+>=20
+> v3 -> v4:
+> - Fixed active mode low frequency issue reported by Peter Jung and Tor Vic
+> - Documentation modification suggested by Bagas Sanjaya
+>=20
+> v2 -> v3:
+> - Addressed review comments form Mario.
+> - Picked up RB tag from Mario.
+> - Rebase on top of EPP v11 [3].
+>=20
+> v1 -> v2:
+> - Fix issue with shared mem systems.
+> - Rebase on top of EPP series.
+>=20
+> [1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.=
+pdf
+> [2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd=
+=2Ecom/
+> [3]: https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan=
+@amd.com/
+>=20
+> Wyes Karny (6):
+>   acpi: cppc: Add min and max perf reg writing support
+>   acpi: cppc: Add auto select register read/write support
+>   Documentation: cpufreq: amd-pstate: Move amd_pstate param to
+>     alphabetical order
+>   cpufreq: amd-pstate: Add guided autonomous mode
+>   cpufreq: amd-pstate: Add guided mode control support via sysfs
+>   Documentation: cpufreq: amd-pstate: Update amd_pstate status sysfs for
+>     guided
+>=20
+>  .../admin-guide/kernel-parameters.txt         |  40 ++--
+>  Documentation/admin-guide/pm/amd-pstate.rst   |  31 ++-
+>  drivers/acpi/cppc_acpi.c                      | 121 +++++++++++-
+>  drivers/cpufreq/amd-pstate.c                  | 177 +++++++++++++-----
+>  include/acpi/cppc_acpi.h                      |  11 ++
+>  include/linux/amd-pstate.h                    |   2 +
+>  6 files changed, 302 insertions(+), 80 deletions(-)
 
-diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index 89f076615d2e..089fe837a4b2 100644
---- a/drivers/power/supply/axp20x_usb_power.c
-+++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -48,13 +48,13 @@ struct axp_data {
- 	const struct power_supply_desc	*power_desc;
- 	const char * const		*irq_names;
- 	unsigned int			num_irq_names;
--	enum axp20x_variants		axp20x_id;
- 	const int			*curr_lim_table;
- 	struct reg_field		curr_lim_fld;
- 	struct reg_field		vbus_valid_bit;
- 	struct reg_field		vbus_mon_bit;
- 	struct reg_field		usb_bc_en_bit;
- 	struct reg_field		vbus_disable_bit;
-+	bool				vbus_needs_polling: 1;
- };
- 
- struct axp20x_usb_power {
-@@ -65,7 +65,6 @@ struct axp20x_usb_power {
- 	struct regmap_field *usb_bc_en_bit;
- 	struct regmap_field *vbus_disable_bit;
- 	struct power_supply *supply;
--	enum axp20x_variants axp20x_id;
- 	const struct axp_data *axp_data;
- 	struct iio_channel *vbus_v;
- 	struct iio_channel *vbus_i;
-@@ -83,7 +82,7 @@ static bool axp20x_usb_vbus_needs_polling(struct axp20x_usb_power *power)
- 	 * present->absent transition implies an online->offline transition
- 	 * and will trigger the VBUS_REMOVAL IRQ.
- 	 */
--	if (power->axp20x_id >= AXP221_ID && !power->online)
-+	if (power->axp_data->vbus_needs_polling && !power->online)
- 		return true;
- 
- 	return false;
-@@ -391,7 +390,6 @@ static const struct axp_data axp202_data = {
- 	.power_desc	= &axp20x_usb_power_desc,
- 	.irq_names	= axp20x_irq_names,
- 	.num_irq_names	= ARRAY_SIZE(axp20x_irq_names),
--	.axp20x_id	= AXP202_ID,
- 	.curr_lim_table = axp20x_usb_curr_lim_table,
- 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
- 	.vbus_valid_bit = REG_FIELD(AXP20X_USB_OTG_STATUS, 2, 2),
-@@ -402,29 +400,29 @@ static const struct axp_data axp221_data = {
- 	.power_desc	= &axp22x_usb_power_desc,
- 	.irq_names	= axp22x_irq_names,
- 	.num_irq_names	= ARRAY_SIZE(axp22x_irq_names),
--	.axp20x_id	= AXP221_ID,
- 	.curr_lim_table = axp221_usb_curr_lim_table,
- 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
-+	.vbus_needs_polling = true,
- };
- 
- static const struct axp_data axp223_data = {
- 	.power_desc	= &axp22x_usb_power_desc,
- 	.irq_names	= axp22x_irq_names,
- 	.num_irq_names	= ARRAY_SIZE(axp22x_irq_names),
--	.axp20x_id	= AXP223_ID,
- 	.curr_lim_table = axp20x_usb_curr_lim_table,
- 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
-+	.vbus_needs_polling = true,
- };
- 
- static const struct axp_data axp813_data = {
- 	.power_desc	= &axp22x_usb_power_desc,
- 	.irq_names	= axp22x_irq_names,
- 	.num_irq_names	= ARRAY_SIZE(axp22x_irq_names),
--	.axp20x_id	= AXP813_ID,
- 	.curr_lim_table = axp813_usb_curr_lim_table,
- 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
- 	.usb_bc_en_bit	= REG_FIELD(AXP288_BC_GLOBAL, 0, 0),
- 	.vbus_disable_bit = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 7, 7),
-+	.vbus_needs_polling = true,
- };
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -542,7 +540,6 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, power);
- 
--	power->axp20x_id = axp_data->axp20x_id;
- 	power->axp_data = axp_data;
- 	power->regmap = axp20x->regmap;
- 	power->num_irqs = axp_data->num_irq_names;
--- 
-2.39.2
+```
+$ lscpu | grep 'Model name'
+Model name:                      AMD Ryzen 9 5950X 16-Core Processor
+
+$ cat /proc/cmdline
+root=3D/dev/mapper/system threadirqs io_delay=3Dnone zswap.enabled=3D0 amd_=
+pstate=3Dguided quiet
+
+$ sudo cpupower frequency-info
+analyzing CPU 0:
+driver: amd-pstate
+CPUs which run at the same hardware frequency: 0
+CPUs which need to have their frequency coordinated by software: 0
+maximum transition latency: 20.0 us
+hardware limits: 550 MHz - 5.08 GHz
+available cpufreq governors: conservative ondemand userspace powersave perf=
+ormance schedutil
+current policy: frequency should be within 550 MHz and 5.08 GHz.
+The governor "schedutil" may decide which speed to use
+within this range.
+current CPU frequency: Unable to call hardware
+current CPU frequency: 3.95 GHz (asserted by call to kernel)
+boost state support:
+Supported: yes
+Active: yes
+AMD PSTATE Highest Performance: 166. Maximum Frequency: 5.08 GHz.
+AMD PSTATE Nominal Performance: 111. Nominal Frequency: 3.40 GHz.
+AMD PSTATE Lowest Non-linear Performance: 57. Lowest Non-linear Frequency: =
+1.74 GHz.
+AMD PSTATE Lowest Performance: 19. Lowest Frequency: 550 MHz.
+```
+
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+Thank you.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 
