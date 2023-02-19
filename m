@@ -2,268 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD9669C1D3
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Feb 2023 19:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDC669C1F4
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Feb 2023 19:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbjBSSXg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Feb 2023 13:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S230304AbjBSSiQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Feb 2023 13:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjBSSXe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Feb 2023 13:23:34 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F149EF86
-        for <linux-pm@vger.kernel.org>; Sun, 19 Feb 2023 10:23:24 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id x27so1424369lfu.4
-        for <linux-pm@vger.kernel.org>; Sun, 19 Feb 2023 10:23:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ofJSqx7zRI6EorpfBbQAKk970rJXU8Lshyo67tpjsLQ=;
-        b=xeLeOsLmY3pe81rt3ga3i6n8lIyX45qvBgDtiyY75SxtAK1EKPLEQqXyq1T1gn61Wl
-         SJ+jJyXEslG9XZjq5SVgthjWH+AkiKzov8phzcdx8q8u1wRZD2dSS62mDgcNoDTrJRRD
-         BGXSBGZw4wh0B5bjOFtjGs/lNfSujOK7nRSeBI4eM8qRDyPK0u0ttERgJvfd64NhAQOL
-         +GauQSBtxQusXIDfvDLOsegFBY0WgTEt2z+DzKpl1W3Bv4DRhTSQjKczNAPttxdfVqBM
-         dTEYKt9a7qM1Hh42++i5n3Yf5pFVYUGxLDKZ4ol99hiPHSnPg3ZKrbHR9P3kkfouE6yn
-         kpWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ofJSqx7zRI6EorpfBbQAKk970rJXU8Lshyo67tpjsLQ=;
-        b=mTXHeCLy70yFALoLfvgtQd3o9jlEwJ2cPsKxAb+7lujePfqmZSCTXu1w0OgDBXMouf
-         sVgMwEKyzfbQ4+7j5q5nB/MVsdsdZ2xqLkzqpRhM06sDuToas7ounij6gLsNsCZYYi2S
-         WLFtEjs3Kmtho7la29jaq31ARYgl2+8SKPD7agjLlTKVPY60p/v2DUmAFpX0/irM/Haw
-         0Y/R29lMvxEIkskHIK9gJyvLzeLb/lKedbkxkaFuh6KnpKdkSDIfUUBk1JY189KZw+e9
-         7qVbjLT5UU05135Q2ZyJgpyEA/SToyuGyNNkndnhz7h+PGsDxpdLfbUo6Um+VcHgJ3wA
-         v6NQ==
-X-Gm-Message-State: AO0yUKVbsKKiya1UtCv75XRp2taZ5N3MzMWQ2Uw1af53Ip8pEHMxj91+
-        DDKTqLG7ZGY5Dy4aYVOUkWXxOA==
-X-Google-Smtp-Source: AK7set+YZZSclvxF42ryv90+XULHABPVIVIEdoKcZJbE3Ao4Z3FCGIUuBB+mT3TOxDnV55f/X2PI5w==
-X-Received: by 2002:ac2:4c21:0:b0:4dc:4c1d:eec1 with SMTP id u1-20020ac24c21000000b004dc4c1deec1mr483829lfq.46.1676831003077;
-        Sun, 19 Feb 2023 10:23:23 -0800 (PST)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id b26-20020ac2563a000000b004db51852e6csm56694lff.246.2023.02.19.10.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 10:23:22 -0800 (PST)
-Date:   Sun, 19 Feb 2023 19:23:21 +0100
-From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
- accessor
-Message-ID: <Y/JpGT206/0r/jF5@oden.dyn.berto.se>
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-2-daniel.lezcano@linaro.org>
- <Y/I7KA2Uqqk7ib6L@oden.dyn.berto.se>
- <4d8f1e68-8d2c-b70f-69c7-a1137ac4b05f@linaro.org>
+        with ESMTP id S230254AbjBSSiQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Feb 2023 13:38:16 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29768BDE6;
+        Sun, 19 Feb 2023 10:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:Subject:Cc:From:To:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Z4sHEtYwmB+05SPntW4cUksZ5pR/+iUuongj1UotVXU=; b=Oa0DRbSRWD9RCCf8ksPqEk3deS
+        kfGvoifqiN5BsztSgTprF9cv6UTQ+/Xxg4a8OlkBlqAGGJa83vvcuADrL1t6LBdP52oUm1/hguQO6
+        B0XInu1fUnPUgOqpvhOcnV8wb6DFwwxlG+f2YeWJFutbapTZa807Sl+qO+Se8/NCEsVg4Mx/h0DBQ
+        XLrcuGmUiIuX9YHg3NvykhZttbx6hl+4Zb2Cmc2YcPRJsn8p3SbRsnM2udPqOLffpSwjmhrk15FKZ
+        Gb+Dd6M0hvSAjBrbwTlpRTi9C6ghfzDjKr3Eh0DQ3/u604sXDUVfuXDmscW0Pkofoe4BmySy0ESv9
+        RW9eaSkQ==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pToZf-0027ns-UV; Sun, 19 Feb 2023 18:38:12 +0000
+Message-ID: <0ddf5cc8-8f16-ba7e-7587-3fa37b2a82b8@infradead.org>
+Date:   Sun, 19 Feb 2023 10:38:09 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4d8f1e68-8d2c-b70f-69c7-a1137ac4b05f@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: build warning in power: supply: Qualcomm PMIC GLINK power supply
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2023-02-19 18:07:36 +0100, Daniel Lezcano wrote:
-> On 19/02/2023 16:07, Niklas Söderlund wrote:
-> > Hi Daniel,
-> > 
-> > Thanks for your work.
-> > 
-> > On 2023-02-19 15:36:41 +0100, Daniel Lezcano wrote:
-> > > The thermal zone device structure is exposed to the different drivers
-> > > and obviously they access the internals while that should be
-> > > restricted to the core thermal code.
-> > > 
-> > > In order to self-encapsulate the thermal core code, we need to prevent
-> > > the drivers accessing directly the thermal zone structure and provide
-> > > accessor functions to deal with.
-> > > 
-> > > Provide an accessor to the 'devdata' structure and make use of it in
-> > > the different drivers.
-> > > 
-> > > No functional changes intended.
-> > > 
-> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > ---
-> > 
-> > ...
-> > 
-> > >   drivers/thermal/rcar_gen3_thermal.c              |  4 ++--
-> > >   drivers/thermal/rcar_thermal.c                   |  3 +--
-> > 
-> > For R-Car,
-> > 
-> > Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> > 
-> > ...
-> > 
-> > 
-> > > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > > index 2bb4bf33f4f3..724b95662da9 100644
-> > > --- a/include/linux/thermal.h
-> > > +++ b/include/linux/thermal.h
-> > > @@ -365,6 +365,8 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
-> > >   					void *, struct thermal_zone_device_ops *,
-> > >   					struct thermal_zone_params *, int, int);
-> > > +void *thermal_zone_device_get_data(struct thermal_zone_device *tzd);
-> > > +
-> > 
-> > bikeshedding:
-> > 
-> > Would it make sens to name this thermal_zone_device_get_priv_data(),
-> > thermal_zone_device_get_priv() or something like that? To make it more
-> > explicitly when reading the driver code this fetches the drivers private
-> > data, and not some data belonging to the zone itself.
-> 
-> In the headers files, there are more occurrences with _name_priv():
-> 
-> # _name_priv()
-> git grep priv include/linux/ | grep "priv(" | grep -v get | wc -l
-> 52
-> 
-> # _name_private()
-> git grep priv include/linux/ | grep "private(" | grep -v get | wc -l
-> 33
-> 
-> # _name_get_private()
-> git grep priv include/linux/ | grep "private(" | grep get | wc -l
-> 12
-> 
-> # _name_get_priv()
-> git grep priv include/linux/ | grep "priv(" | grep get | wc -l
-> 4
-> 
-> 
-> What about thermal_zone_device_priv() ?
+Hi Bjorn,
 
-Looks good to me.
+FYI: (seen in passing, I wasn't looking for this.)
 
-> 
-> 
-> 
-> 
-> 
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
+When doing compile tests on MIPS (32-bit):
+
+In file included from ../arch/mips/include/asm/div64.h:89,
+                 from ../include/linux/math.h:6,
+                 from ../include/linux/math64.h:6,
+                 from ../include/linux/time64.h:5,
+                 from ../include/linux/restart_block.h:10,
+                 from ../include/linux/thread_info.h:14,
+                 from ../include/asm-generic/current.h:5,
+                 from ./arch/mips/include/generated/asm/current.h:1,
+                 from ../include/linux/sched.h:12,
+                 from ../include/linux/ratelimit.h:6,
+                 from ../include/linux/dev_printk.h:16,
+                 from ../include/linux/device.h:15,
+                 from ../include/linux/auxiliary_bus.h:11,
+                 from ../drivers/power/supply/qcom_battmgr.c:6:
+../drivers/power/supply/qcom_battmgr.c: In function 'qcom_battmgr_sm8350_callback':
+../include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+  222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+      |                                   ^~
+../drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
+ 1130 |                         do_div(battmgr->status.percent, 100);
+      |                         ^~~~~~
+In file included from ../include/linux/dev_printk.h:14:
+../include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+  234 |         } else if (likely(((n) >> 32) == 0)) {          \
+      |                                ^~
+../include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+   77 | # define likely(x)      __builtin_expect(!!(x), 1)
+      |                                             ^
+../drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
+ 1130 |                         do_div(battmgr->status.percent, 100);
+      |                         ^~~~~~
+
+
+The first argument must be 64-bit. qcom_battmgr_status.percent is 'unsigned int',
+which is not 64-bit (AFAIK; and according to LDD3).
 
 -- 
-Kind Regards,
-Niklas Söderlund
+~Randy
