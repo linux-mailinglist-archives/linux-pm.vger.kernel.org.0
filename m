@@ -2,263 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE2D69C199
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Feb 2023 18:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3219B69C1A9
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Feb 2023 18:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjBSRHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Feb 2023 12:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S231185AbjBSRPr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Feb 2023 12:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjBSRHp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Feb 2023 12:07:45 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCDDDBFC
-        for <linux-pm@vger.kernel.org>; Sun, 19 Feb 2023 09:07:43 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id ay15-20020a05600c1e0f00b003e206711347so670298wmb.0
-        for <linux-pm@vger.kernel.org>; Sun, 19 Feb 2023 09:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6KxNFzRgs/0vUNP2uZncHosd2KHSBPqfvZ7J555gKlI=;
-        b=TqDmxeCqgjX/SCT0zS+PF6AfR/9dCo1FpS5mnG9j01BFC1+VD4Q7ubhlQfXhrmE083
-         0WYN1f0bIbo21XRTWifbJwcYTr2X1HSPBzZM87/35szohbgwJWtwst3ZB/Uyku+BZ1GT
-         fdjOk5jg86fdGhZQivHhMX1dUtyEtd0zEYACMvag1QVVQXdQ7R5c7aIxveMhWwkz75hR
-         8chbsS6v67DndN4W12l84nsUdBhyOjwMW1hwOqBmE6eyqzuIM8WMLxP7V5DN4UAzCAZX
-         vqLCw8gjWfj/gz3br1kNLOjZCJGA+sAEn8LyDTAn692JW1B2MJS3YSi60TU4KXtLsjqR
-         Lx/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KxNFzRgs/0vUNP2uZncHosd2KHSBPqfvZ7J555gKlI=;
-        b=bjfIyoDzALO5s1PoqtqKHyJPB2SWMwU594yyhFXPLROa8gAOX3yxwesPWQxC4hqNNh
-         pztyYF/8sJt8XiaLf015V/Qq3H9iQ08XII3s2RUI8M+P3b4gkMqu8Tbm/afVK08NtnFs
-         EBjU2HpL+7B5lZOxNmG2PaGVU2JLSvEZITdv7401u3cbSkyxNLbhfz3qZafbe8DYr+dW
-         FDA57ULK/0fNSg6u/BSevekVr5iTkTbl9pVqrStWJKRZOm84dcQyFJPduaIPmdLM72au
-         m/5FU/IK88wUzxe5y9U6jfWv7+ZRpCCmH/FYX1dHWowcu+gBo09wD2V7zFhnGzKjs+Bd
-         To9A==
-X-Gm-Message-State: AO0yUKV2bwXTOmAN10QzRK0kBg0WFPXWfwgod9ml8uXGkwgJEF5q309h
-        Obj9l1lAS8GiicErtSmPNx+nHQ==
-X-Google-Smtp-Source: AK7set83h6bWbda4YvPCa+ZBjfPRZ/9UdfQCE1sEN23gN10rONUKibwH121WMa44Jr/M6QZ46vWaSg==
-X-Received: by 2002:a05:600c:198e:b0:3e2:1f00:bff7 with SMTP id t14-20020a05600c198e00b003e21f00bff7mr7646707wmq.12.1676826461464;
-        Sun, 19 Feb 2023 09:07:41 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:6f43:b92:7670:463? ([2a05:6e02:1041:c10:6f43:b92:7670:463])
-        by smtp.googlemail.com with ESMTPSA id n27-20020a05600c3b9b00b003e206cc7237sm15155832wms.24.2023.02.19.09.07.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Feb 2023 09:07:40 -0800 (PST)
-Message-ID: <4d8f1e68-8d2c-b70f-69c7-a1137ac4b05f@linaro.org>
-Date:   Sun, 19 Feb 2023 18:07:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
- accessor
-Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S231165AbjBSRPq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Feb 2023 12:15:46 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50A9126DD;
+        Sun, 19 Feb 2023 09:15:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676826944; x=1708362944;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Mxup+H2pIaZG6RXHGUP7zKupNiYpigp1Qwch7Sph2WE=;
+  b=IEMNbCyJwXbUfYDY7Pas46PxwF2bnBeKZJDT2ovEn15f9tR3GDTbocHj
+   tAhynLNBZVsKNgW4ZBAvRvBFXVO2EWkGZBhQMQK6oa3e1djit5JgfwNmU
+   tMUkabwmkmtXnECTARNNZxKXVYWLvssPKBwWJCIRsdesHkp9957fIe57Z
+   RU4sY/X37/WsWHyCyVavNOjqFXrGZajYcJfeffCCkWNRTBF4fJ//8YmfX
+   /eOrILG0ane5qDJWyo+RlFEBnIywNZubN5EQLo7jr79d3C1kwCjwmQlYD
+   5LWG61O/ryzfRXD5TwW4yEP3jE4JgHQYL5mUO0wuMyxGAflrFxM5/Hxc5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="315979551"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="315979551"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 09:15:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="620918327"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="620918327"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Feb 2023 09:15:41 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTnHo-000DO9-0v;
+        Sun, 19 Feb 2023 17:15:40 +0000
+Date:   Mon, 20 Feb 2023 01:15:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
         Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-2-daniel.lezcano@linaro.org>
- <Y/I7KA2Uqqk7ib6L@oden.dyn.berto.se>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y/I7KA2Uqqk7ib6L@oden.dyn.berto.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v1 09/17] thermal: Add a thermal zone id accessor
+Message-ID: <202302200137.srsrI6dW-lkp@intel.com>
+References: <20230219143657.241542-10-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230219143657.241542-10-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/02/2023 16:07, Niklas Söderlund wrote:
-> Hi Daniel,
-> 
-> Thanks for your work.
-> 
-> On 2023-02-19 15:36:41 +0100, Daniel Lezcano wrote:
->> The thermal zone device structure is exposed to the different drivers
->> and obviously they access the internals while that should be
->> restricted to the core thermal code.
->>
->> In order to self-encapsulate the thermal core code, we need to prevent
->> the drivers accessing directly the thermal zone structure and provide
->> accessor functions to deal with.
->>
->> Provide an accessor to the 'devdata' structure and make use of it in
->> the different drivers.
->>
->> No functional changes intended.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
-> 
-> ...
-> 
->>   drivers/thermal/rcar_gen3_thermal.c              |  4 ++--
->>   drivers/thermal/rcar_thermal.c                   |  3 +--
-> 
-> For R-Car,
-> 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> 
-> ...
-> 
-> 
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index 2bb4bf33f4f3..724b95662da9 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -365,6 +365,8 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
->>   					void *, struct thermal_zone_device_ops *,
->>   					struct thermal_zone_params *, int, int);
->>   
->> +void *thermal_zone_device_get_data(struct thermal_zone_device *tzd);
->> +
-> 
-> bikeshedding:
-> 
-> Would it make sens to name this thermal_zone_device_get_priv_data(),
-> thermal_zone_device_get_priv() or something like that? To make it more
-> explicitly when reading the driver code this fetches the drivers private
-> data, and not some data belonging to the zone itself.
+Hi Daniel,
 
-In the headers files, there are more occurrences with _name_priv():
+I love your patch! Yet something to improve:
 
-# _name_priv()
-git grep priv include/linux/ | grep "priv(" | grep -v get | wc -l
-52
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on next-20230217]
+[cannot apply to groeck-staging/hwmon-next tegra/for-next linus/master v6.2-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-# _name_private()
-git grep priv include/linux/ | grep "private(" | grep -v get | wc -l
-33
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230219-224155
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230219143657.241542-10-daniel.lezcano%40linaro.org
+patch subject: [PATCH v1 09/17] thermal: Add a thermal zone id accessor
+config: csky-randconfig-r005-20230219 (https://download.01.org/0day-ci/archive/20230220/202302200137.srsrI6dW-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/37b2cf4cee949fd910b54e281577cb71b2df8842
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230219-224155
+        git checkout 37b2cf4cee949fd910b54e281577cb71b2df8842
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/hwmon/
 
-# _name_get_private()
-git grep priv include/linux/ | grep "private(" | grep get | wc -l
-12
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302200137.srsrI6dW-lkp@intel.com/
 
-# _name_get_priv()
-git grep priv include/linux/ | grep "priv(" | grep get | wc -l
-4
+All errors (new ones prefixed by >>):
+
+   drivers/hwmon/scmi-hwmon.c: In function 'scmi_hwmon_thermal_get_temp':
+   drivers/hwmon/scmi-hwmon.c:144:49: error: implicit declaration of function 'thermal_zone_device_get_data'; did you mean 'thermal_zone_device_enable'? [-Werror=implicit-function-declaration]
+     144 |         struct scmi_thermal_sensor *th_sensor = thermal_zone_device_get_data(tz);
+         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                 thermal_zone_device_enable
+   drivers/hwmon/scmi-hwmon.c:144:49: warning: initialization of 'struct scmi_thermal_sensor *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   In file included from include/linux/device.h:15,
+                    from include/linux/scmi_protocol.h:12,
+                    from drivers/hwmon/scmi-hwmon.c:11:
+   drivers/hwmon/scmi-hwmon.c: In function 'scmi_thermal_sensor_register':
+>> drivers/hwmon/scmi-hwmon.c:223:39: error: implicit declaration of function 'thermal_zone_device_get_id'; did you mean 'thermal_zone_device_enable'? [-Werror=implicit-function-declaration]
+     223 |                         sensor->name, thermal_zone_device_get_id(tzd));
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:129:48: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                                ^~~~~~~~~~~
+   drivers/hwmon/scmi-hwmon.c:222:17: note: in expansion of macro 'dev_dbg'
+     222 |                 dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
+         |                 ^~~~~~~
+   cc1: some warnings being treated as errors
 
 
-What about thermal_zone_device_priv() ?
+vim +223 drivers/hwmon/scmi-hwmon.c
 
-
-
-
-
+   138	
+   139	static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
+   140					       int *temp)
+   141	{
+   142		int ret;
+   143		long value;
+ > 144		struct scmi_thermal_sensor *th_sensor = thermal_zone_device_get_data(tz);
+   145	
+   146		ret = scmi_hwmon_read_scaled_value(th_sensor->ph, th_sensor->info,
+   147						   &value);
+   148		if (!ret)
+   149			*temp = value;
+   150	
+   151		return ret;
+   152	}
+   153	
+   154	static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
+   155		.get_temp = scmi_hwmon_thermal_get_temp,
+   156	};
+   157	
+   158	static int scmi_hwmon_add_chan_info(struct hwmon_channel_info *scmi_hwmon_chan,
+   159					    struct device *dev, int num,
+   160					    enum hwmon_sensor_types type, u32 config)
+   161	{
+   162		int i;
+   163		u32 *cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
+   164	
+   165		if (!cfg)
+   166			return -ENOMEM;
+   167	
+   168		scmi_hwmon_chan->type = type;
+   169		scmi_hwmon_chan->config = cfg;
+   170		for (i = 0; i < num; i++, cfg++)
+   171			*cfg = config;
+   172	
+   173		return 0;
+   174	}
+   175	
+   176	static enum hwmon_sensor_types scmi_types[] = {
+   177		[TEMPERATURE_C] = hwmon_temp,
+   178		[VOLTAGE] = hwmon_in,
+   179		[CURRENT] = hwmon_curr,
+   180		[POWER] = hwmon_power,
+   181		[ENERGY] = hwmon_energy,
+   182	};
+   183	
+   184	static u32 hwmon_attributes[hwmon_max] = {
+   185		[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
+   186		[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
+   187		[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
+   188		[hwmon_power] = HWMON_P_INPUT | HWMON_P_LABEL,
+   189		[hwmon_energy] = HWMON_E_INPUT | HWMON_E_LABEL,
+   190	};
+   191	
+   192	static int scmi_thermal_sensor_register(struct device *dev,
+   193						const struct scmi_protocol_handle *ph,
+   194						const struct scmi_sensor_info *sensor)
+   195	{
+   196		struct scmi_thermal_sensor *th_sensor;
+   197		struct thermal_zone_device *tzd;
+   198	
+   199		th_sensor = devm_kzalloc(dev, sizeof(*th_sensor), GFP_KERNEL);
+   200		if (!th_sensor)
+   201			return -ENOMEM;
+   202	
+   203		th_sensor->ph = ph;
+   204		th_sensor->info = sensor;
+   205	
+   206		/*
+   207		 * Try to register a temperature sensor with the Thermal Framework:
+   208		 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+   209		 * report any other errors related to misconfigured zones/sensors.
+   210		 */
+   211		tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+   212						    &scmi_hwmon_thermal_ops);
+   213		if (IS_ERR(tzd)) {
+   214			devm_kfree(dev, th_sensor);
+   215	
+   216			if (PTR_ERR(tzd) != -ENODEV)
+   217				return PTR_ERR(tzd);
+   218	
+   219			dev_dbg(dev, "Sensor '%s' not attached to any thermal zone.\n",
+   220				sensor->name);
+   221		} else {
+   222			dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
+ > 223				sensor->name, thermal_zone_device_get_id(tzd));
+   224		}
+   225	
+   226		return 0;
+   227	}
+   228	
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
