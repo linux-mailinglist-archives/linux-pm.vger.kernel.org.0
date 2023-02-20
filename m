@@ -2,208 +2,415 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E211069D1EE
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Feb 2023 18:12:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6663A69D614
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Feb 2023 23:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjBTRMZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Feb 2023 12:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S232502AbjBTWBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Feb 2023 17:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjBTRMY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Feb 2023 12:12:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FA120D07;
-        Mon, 20 Feb 2023 09:12:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D6CF60D2D;
-        Mon, 20 Feb 2023 17:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C379C433EF;
-        Mon, 20 Feb 2023 17:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676913140;
-        bh=K+WQrxm35AL6mxuGen7EEnIB+qmIkik493gpzXp+i6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aIDa4PJkpe8nWW47apxX3M9MuiHHBTgDOLlhz0+Jv2iEyO+0mRyBsb2cjbmDh1aUR
-         ZsS1jHpPiYxGdZrM1jONUER/tIEZYoJ/MeC7nYL+7o4qhbKX1v/s080k+ZxoUsntkc
-         7ssO/LKSYex1liQLrvm39X8RXUjcYZBf30PxL/AvcXyIj/dGeC+ZbyGNvSvCNBzBSF
-         Cdt2wsIbhpcyl9mva97T6mEs68iKtS076CHjbfADbjkIya4MTA/NHpBxQ/aOMlA/3M
-         At/QFAKmmeACLFnq1mPNk78atZ89MJFgsRrreXXsOMtL9lnx9tb+zT8Ikem/MAVE6a
-         VN8l+HCsWyPEg==
-Date:   Mon, 20 Feb 2023 09:15:50 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S232506AbjBTWBc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Feb 2023 17:01:32 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD56115;
+        Mon, 20 Feb 2023 14:01:29 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id w7-20020a056830280700b0068dbf908574so489384otu.8;
+        Mon, 20 Feb 2023 14:01:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gYEMrB66hD4BzXsOvteWpNCRzSSm60RnJUw/8QW1s/M=;
+        b=lOVA4xuKFDE/nA4+XxLRDmD4R7BGwlxyZF8lMZ76MKKWzhF3bMGqTcNORmgIUqo6t5
+         SO+yEQwr7azyAVR3luqI0N9SqKLWKf3H3yt4NkoCHp9y9NUNqNR8VjEv5GTRD7McKuoy
+         v+MbpOnb4REVCDOXV3YXuOWnYNjbu6isFrk5ghj8Wa2UIIJgpPw3kzND/dai3It5Wf+k
+         4aSwydamOKTdF9MZT2ciPlHEPmTMbNxur2IxWN1OK3IuopXNe5MNpVfI/JR7/MF8pES7
+         5Krc+zITWmhFrtVBhyQCa7djWQq/Sl0iq+SX0YlT12vfqkVkR8EfhWrFl9ZaTPYXW4ws
+         8Aqg==
+X-Gm-Message-State: AO0yUKVCybMLh4R8nNP9tUuWtmezfyU1zCOL9rtl1huOAdj0dF+tbOQu
+        byWRMnja9dRdJfSpvlKsdA==
+X-Google-Smtp-Source: AK7set/idW04u+zyWIwDW99FjHPbai96y+ek+DXhbKWo3yv9Wjjaa3uxqP3vboL2f1adNmTsxiAZdg==
+X-Received: by 2002:a9d:3f3:0:b0:68b:caa8:6ef1 with SMTP id f106-20020a9d03f3000000b0068bcaa86ef1mr1288539otf.12.1676930488868;
+        Mon, 20 Feb 2023 14:01:28 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dg7-20020a056830480700b00684a10970adsm5384093otb.16.2023.02.20.14.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 14:01:28 -0800 (PST)
+Received: (nullmailer pid 405998 invoked by uid 1000);
+        Mon, 20 Feb 2023 22:01:27 -0000
+Date:   Mon, 20 Feb 2023 16:01:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Message-ID: <20230220171550.43a3h56gznfc3gec@ripper>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
- <Y9v/z8CYik3faHh7@google.com>
- <Y+ErWTyV8CnE3Hl+@linaro.org>
- <Y+E3T6bozU1K2sFb@google.com>
- <Y+E9Z+/+eCpPK6DE@linaro.org>
- <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
- <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
- <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
- <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v10 3/6] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+Message-ID: <20230220220127.GA398518-robh@kernel.org>
+References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
+ <20230217-topic-cpr3h-v10-3-67aed8fdfa61@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230217-topic-cpr3h-v10-3-67aed8fdfa61@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 03:45:35PM -0800, Doug Anderson wrote:
-> Hi,
+On Fri, Feb 17, 2023 at 12:08:26PM +0100, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> On Mon, Feb 6, 2023 at 1:35 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Mon, Feb 6, 2023 at 1:10 PM Doug Anderson <dianders@chromium.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Mon, Feb 6, 2023 at 11:33 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> > > > >
-> > > > >
-> > > > > CC'ed Saravana
-> > > >
-> > > > Thanks. Please do cc me for stuff like this from the start. I skimmed
-> > > > the series and I think it's doing one of my TODO items. So, thanks for
-> > > > the patch!
-> > > >
-> > > > I'll take a closer look within a few days -- trying to get through
-> > > > some existing fw_devlink stuff.
-> > > >
-> > > > But long story short, it is the right thing to keep a supplier on
-> > > > indefinitely if there's a consumer device (that's not disabled in DT)
-> > > > that never gets probed. It's a pretty common scenario -- for example,
-> > > > say a display backlight. The default case should be functional
-> > > > correctness. And then we can add stuff that allows changing this
-> > > > behavior with command line args or something else that can be done
-> > > > from userspace.
-> > > >
-> > > > +1 to what Doug said elsewhere in this thread too. I'm trying to
-> > > > consolidate the "when do we give up" decision at the driver core level
-> > > > independent of what framework is being used.
-> > >
-> > > I'm not really sure I agree with the above, at least not without lots
-> > > of discussion in the community. It really goes against what the kernel
-> > > has been doing for years and years in the regulator and clock
-> > > frameworks. Those frameworks both eventually give up and power down
-> > > resources that no active drivers are using. Either changing the
-> > > regulator/clock frameworks or saying that other frameworks should work
-> > > in an opposite way seems like a recipe for confusion.
-> > >
-> > > Now, certainly I won't say that the way that the regulator and clock
-> > > frameworks function is perfect nor will I say that they don't cause
-> > > any problems. However, going the opposite way where resources are kept
-> > > at full power indefinitely will _also_ cause problems.
-> > >
-> > > Specifically, let's look at the case you mentioned of a display
-> > > backlight. I think you're saying that if there is no backlight driver
-> > > enabled in the kernel that you'd expect the backlight to just be on at
-> > > full brightness.
-> >
-> > No, I'm not saying that.
-> >
-> > > Would you expect this even if the firmware didn't
-> > > leave the backlight on?
-> >
-> > sync_state() never turns on anything that wasn't already on at boot.
-> > So in your example, if the firmware didn't turn on the backlight, then
-> > it'll remain off.
+> Add the bindings for the CPR3 driver to the documentation.
 > 
-> As per offline discussion, part of the problems are that today this
-> _isn't_ true for a few Qualcomm things (like interconnect). The
-> interconnect frameway specifically maxes things out for early boot.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: Make binding check pass; update AGdR's email]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 299 +++++++++++++++++++++
+>  1 file changed, 299 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> new file mode 100644
+> index 000000000000..18366c1e58b9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> @@ -0,0 +1,299 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
+> +
+> +description: |
 
-The problem being solved here is that the bootloader leaves some vote at
-1GB/s, as needed by hardware related to driver B.
+Don't need '|'
 
-Driver A is loaded first and votes for 1kb/s; what should the kernel do
-now, without knowledge of the needs from the hardware associated with B,
-or the ability to read back the bootloader's votes.
+> +  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
+> +  or other device. Each OPP of a device corresponds to a "corner" that has
+> +  a range of valid voltages for a particular frequency. While the device is
+> +  running at a particular frequency, CPR monitors dynamic factors such as
+> +  temperature, etc. and suggests or, in the CPR-Hardened case performs,
+> +  adjustments to the voltage to save power and meet silicon characteristic
+> +  requirements.
+> +
+> +maintainers:
+> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: CPRv3 controller
+> +        items:
+> +          - const: qcom,cpr3
+> +      - description: CPRv4 controller
+> +        items:
+> +          - const: qcom,cpr4
+> +      - description: CPRv4-Hardened controller
+> +        items:
+> +          - enum:
+> +              - qcom,msm8998-cprh
+> +              - qcom,sdm630-cprh
+> +          - const: qcom,cprh
+> +
+> +  reg:
+> +    description: Base address and size of the CPR controller(s)
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: "ref"
 
-This was the behavior of the initial implementation, and the practical
-implications was seen as the UART would typically come along really
-early, cast a low vote on the various buses and it would take forever to
-get to the probing of the drivers that actually gave us reasonable
-votes.
+Drop quotes. Or perhaps the whole property as you don't need -names when 
+there is only 1.
 
+> +
+> +  clocks:
+> +    items:
+> +      - description: CPR reference clock
+> +
+> +  vdd-supply:
+> +    description: Autonomous Phase Control (APC) or other power supply
+> +
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +  acc-syscon:
 
-Also consider the case where driver A probes, votes for bandwidth, does
-it's initialization and then votes for 0. Without making assumptions
-about the needs of B (or a potential B even), we'd turn off critical
-resources - possible preventing us from ever attempting to probe B.
+qcom,acc
 
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to syscon for writing ACC settings
+> +
+> +  nvmem-cells:
+> +    description: Cells containing the fuse corners and revision data
+> +    minItems: 10
+> +    maxItems: 32
+> +
+> +  nvmem-cell-names:
+> +    minItems: 10
+> +    maxItems: 32
+> +
+> +  operating-points-v2: true
+> +
+> +  power-domains: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - operating-points-v2
+> +  - "#power-domain-cells"
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8998-cprh
+> +    then:
+> +      properties:
+> +        nvmem-cell-names:
+> +          items:
+> +            - const: "cpr_speed_bin"
+> +            - const: "cpr_fuse_revision"
+> +            - const: "cpr0_quotient1"
+> +            - const: "cpr0_quotient2"
+> +            - const: "cpr0_quotient3"
+> +            - const: "cpr0_quotient4"
+> +            - const: "cpr0_quotient_offset2"
+> +            - const: "cpr0_quotient_offset3"
+> +            - const: "cpr0_quotient_offset4"
+> +            - const: "cpr0_init_voltage1"
+> +            - const: "cpr0_init_voltage2"
+> +            - const: "cpr0_init_voltage3"
+> +            - const: "cpr0_init_voltage4"
+> +            - const: "cpr0_ring_osc1"
+> +            - const: "cpr0_ring_osc2"
+> +            - const: "cpr0_ring_osc3"
+> +            - const: "cpr0_ring_osc4"
+> +            - const: "cpr1_quotient1"
+> +            - const: "cpr1_quotient2"
+> +            - const: "cpr1_quotient3"
+> +            - const: "cpr1_quotient4"
+> +            - const: "cpr1_quotient_offset2"
+> +            - const: "cpr1_quotient_offset3"
+> +            - const: "cpr1_quotient_offset4"
+> +            - const: "cpr1_init_voltage1"
+> +            - const: "cpr1_init_voltage2"
+> +            - const: "cpr1_init_voltage3"
+> +            - const: "cpr1_init_voltage4"
+> +            - const: "cpr1_ring_osc1"
+> +            - const: "cpr1_ring_osc2"
+> +            - const: "cpr1_ring_osc3"
+> +            - const: "cpr1_ring_osc4"
 
+Drop quotes.
 
-As such, the only safe solution is to assume that there might be a later
-loaded/probed client that has a large vote and preemptively vote for
-some higher bandwidth until then.
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    cpus {
+> +        #address-cells = <2>;
+> +        #size-cells = <0>;
+> +
+> +        cpu@0 {
+> +            compatible = "qcom,kryo280";
+> +            device_type = "cpu";
+> +            reg = <0x0 0x0>;
+> +            operating-points-v2 = <&cpu_gold_opp_table>;
+> +            power-domains = <&apc_cprh 0>;
+> +            power-domain-names = "cprh";
+> +        };
+> +
+> +        cpu@100 {
+> +            compatible = "qcom,kryo280";
+> +            device_type = "cpu";
+> +            reg = <0x0 0x100>;
+> +            operating-points-v2 = <&cpu_silver_opp_table>;
+> +            power-domains = <&apc_cprh 1>;
+> +            power-domain-names = "cprh";
+> +        };
+> +    };
+> +
+> +    cpu0_opp_table: opp-table-cpu0 {
 
+This label and what cpu@0 point to don't match.
+
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp-1843200000 {
+> +            opp-hz = /bits/ 64 <1843200000>;
+> +            required-opps = <&cprh_opp3>;
+> +        };
+> +
+> +        opp-1094400000 {
+> +            opp-hz = /bits/ 64 <1094400000>;
+> +            required-opps = <&cprh_opp2>;
+> +        };
+> +
+> +        opp-300000000 {
+> +            opp-hz = /bits/ 64 <300000000>;
+> +            required-opps = <&cprh_opp1>;
+> +        };
+> +    };
+> +
+> +    cpu4_opp_table: opp-table-cpu4 {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp-2208000000 {
+> +            opp-hz = /bits/ 64 <2208000000>;
+> +            required-opps = <&cprh_opp3>;
+> +        };
+> +
+> +        opp-1113600000 {
+> +            opp-hz = /bits/ 64 <1113600000>;
+> +            required-opps = <&cprh_opp2>;
+> +        };
+> +
+> +        opp-300000000 {
+> +            opp-hz = /bits/ 64 <300000000>;
+> +            required-opps = <&cprh_opp1>;
+> +        };
+> +    };
+> +
+> +    cprh_opp_table: opp-table-cprh {
+> +        compatible = "operating-points-v2-qcom-level";
+> +
+> +        cprh_opp1: opp-1 {
+> +            opp-level = <1>;
+> +            qcom,opp-fuse-level = <1>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +
+> +        cprh_opp2: opp-2 {
+> +            opp-level = <2>;
+> +            qcom,opp-fuse-level = <2>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +
+> +        cprh_opp3: opp-3 {
+> +            opp-level = <3>;
+> +            qcom,opp-fuse-level = <2 3>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +    };
+> +
+> +    apc_cprh: power-controller@179c8000 {
+> +        compatible = "qcom,msm8998-cprh", "qcom,cprh";
+> +        reg = <0x0179c8000 0x4000>, <0x0179c4000 0x4000>;
+> +        clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
+> +        clock-names = "ref";
+> +
+> +        operating-points-v2 = <&cprh_opp_table>;
+> +        #power-domain-cells = <1>;
+> +
+> +        nvmem-cells = <&cpr_efuse_speedbin>,
+> +                      <&cpr_fuse_revision>,
+> +                      <&cpr_quot0_pwrcl>,
+> +                      <&cpr_quot1_pwrcl>,
+> +                      <&cpr_quot2_pwrcl>,
+> +                      <&cpr_quot3_pwrcl>,
+> +                      <&cpr_quot_offset1_pwrcl>,
+> +                      <&cpr_quot_offset2_pwrcl>,
+> +                      <&cpr_quot_offset3_pwrcl>,
+> +                      <&cpr_init_voltage0_pwrcl>,
+> +                      <&cpr_init_voltage1_pwrcl>,
+> +                      <&cpr_init_voltage2_pwrcl>,
+> +                      <&cpr_init_voltage3_pwrcl>,
+> +                      <&cpr_ro_sel0_pwrcl>,
+> +                      <&cpr_ro_sel1_pwrcl>,
+> +                      <&cpr_ro_sel2_pwrcl>,
+> +                      <&cpr_ro_sel3_pwrcl>,
+> +                      <&cpr_quot0_perfcl>,
+> +                      <&cpr_quot1_perfcl>,
+> +                      <&cpr_quot2_perfcl>,
+> +                      <&cpr_quot3_perfcl>,
+> +                      <&cpr_quot_offset1_perfcl>,
+> +                      <&cpr_quot_offset2_perfcl>,
+> +                      <&cpr_quot_offset3_perfcl>,
+> +                      <&cpr_init_voltage0_perfcl>,
+> +                      <&cpr_init_voltage1_perfcl>,
+> +                      <&cpr_init_voltage2_perfcl>,
+> +                      <&cpr_init_voltage3_perfcl>,
+> +                      <&cpr_ro_sel0_perfcl>,
+> +                      <&cpr_ro_sel1_perfcl>,
+> +                      <&cpr_ro_sel2_perfcl>,
+> +                      <&cpr_ro_sel3_perfcl>;
+> +        nvmem-cell-names = "cpr_speed_bin",
+> +                           "cpr_fuse_revision",
+> +                           "cpr0_quotient1",
+> +                           "cpr0_quotient2",
+> +                           "cpr0_quotient3",
+> +                           "cpr0_quotient4",
+> +                           "cpr0_quotient_offset2",
+> +                           "cpr0_quotient_offset3",
+> +                           "cpr0_quotient_offset4",
+> +                           "cpr0_init_voltage1",
+> +                           "cpr0_init_voltage2",
+> +                           "cpr0_init_voltage3",
+> +                           "cpr0_init_voltage4",
+> +                           "cpr0_ring_osc1",
+> +                           "cpr0_ring_osc2",
+> +                           "cpr0_ring_osc3",
+> +                           "cpr0_ring_osc4",
+> +                           "cpr1_quotient1",
+> +                           "cpr1_quotient2",
+> +                           "cpr1_quotient3",
+> +                           "cpr1_quotient4",
+> +                           "cpr1_quotient_offset2",
+> +                           "cpr1_quotient_offset3",
+> +                           "cpr1_quotient_offset4",
+> +                           "cpr1_init_voltage1",
+> +                           "cpr1_init_voltage2",
+> +                           "cpr1_init_voltage3",
+> +                           "cpr1_init_voltage4",
+> +                           "cpr1_ring_osc1",
+> +                           "cpr1_ring_osc2",
+> +                           "cpr1_ring_osc3",
+> +                           "cpr1_ring_osc4";
+> +    };
+> +...
 > 
-> > > In any case, why do you say it's more correct?
-> >
-> > Because if you turn off the display, the device is unusable. In other
-> > circumstances, it can crash a device because the firmware powered it
-> > on left it in a "good enough" state, but we'd go turn it off and crash
-> > the system.
-> >
-> > > I suppose you'd say that the screen is at least usable like this.
-> > > ...except that you've broken a different feature: suspend/resume.
-> >
-> > If the display is off and the laptop is unusable, then we have bigger
-> > problems than suspend/resume?
+> -- 
+> 2.39.1
 > 
-> I suspect that here we'll have to agree to disagree. IMO it's a
-> non-goal to expect hardware to work for which there is no driver. So
-> making the backlight work without a backlight driver isn't really
-> something we should strive for.
-> 
-
-Without trying to make you agree ;)
-
-How can you differentiate between "the driver wasn't built" and "the
-driver isn't yet available"?
-
-Consider the case where I boot my laptop, I have some set of builtin
-drivers, some set of drivers in the ramdisk and some set of drivers in
-the root filesystem.
-
-In the event that something goes wrong mounting the rootfs, I will now
-be in the ramdisk console. Given the current timer-based disabling of
-regulators, I have ~25 seconds to solve my problem before the backlight
-goes blank.
-
-
-Obviously this isn't a typical scenario in a consumer device, but it
-seems conceivable that your ramdisk would run fsck for some amount of
-time before mounting the rootfs and picking up the last tier of drivers.
-
-Regards,
-Bjorn
