@@ -2,55 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94A369C3C2
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Feb 2023 01:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9D369C61A
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Feb 2023 08:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBTAzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Feb 2023 19:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S229679AbjBTHqR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Feb 2023 02:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBTAzh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Feb 2023 19:55:37 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B92C662;
-        Sun, 19 Feb 2023 16:55:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkVZ0LWxz4x7y;
-        Mon, 20 Feb 2023 11:55:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1676854534;
-        bh=wxqOjIm9/rnhk0pS41BKLly/M/tr+p6ZjiKfnuxgXX4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=hASHGpraEGVm1pbs2YxrgdCHJmBkRxLZE04kXhblwxeU26unJMQrUr/wTLRkDiQE3
-         ar48nDqIlr11/lMClSplUY99AYwMfD8ND/tvgG3+NZepWy7kFQKDt0Et7dM5rhHdbx
-         jh1b4myf3hFibcDyVRnP/eR5fufZoq+lsuCW5Q8wZhnBKtsO1WD2GmZAgDwgs39pY8
-         BnEXJeDHbIZFiZDOS5kHsVBEbqVGeSGud76Zz4k22VzoSxAdeySkCtpcP8xgWK4Muq
-         k6bp51hxRQDLFGfNq4rqLY30bSnr/IaUreM57mVtEaIlA9chO0wlfGw8jDd5LVUuJ6
-         PJPEnRt1CCtEg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4 3/3] powerpc: dts: turris1x.dts: Set lower priority
- for CPLD syscon-reboot
-In-Reply-To: <20230218120525.7zplk5zdg5qmkmaz@pali>
-References: <20220820102925.29476-1-pali@kernel.org>
- <20221226114513.4569-1-pali@kernel.org>
- <20221226114513.4569-3-pali@kernel.org>
- <20230209001021.oitnv6x7ilwvy4it@pali>
- <20230218120525.7zplk5zdg5qmkmaz@pali>
-Date:   Mon, 20 Feb 2023 11:55:33 +1100
-Message-ID: <878rgtyx2y.fsf@mpe.ellerman.id.au>
+        with ESMTP id S229660AbjBTHqR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Feb 2023 02:46:17 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C48C155;
+        Sun, 19 Feb 2023 23:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1676879175;
+  x=1708415175;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5yPWroyn3aNHh9K3OX8yo+biaUW5/hlX8pX089G89tg=;
+  b=VtAOtBOKlFiKbvfzfhjHy+lWcsU1oJQgZAlgGE7VOWgPgtqnflpNT/UX
+   Nbc/EsxcyFFoNjxK+ufVlnHRgbl/Ugqf1TrWpo27xEBAkrsUQS52pxzRj
+   2u9CgvZjYBqsgKslt/o3ijrRGoY7aw7bRBunAIJzOfLEbNDsw5wa9pYY8
+   7rijzzImeLbLglYegY28gkgQzun+MQwEXgMcOy23KG3HTBJPEtIuZZ8lu
+   DsWOZ/cRlr8MUMsgqS3yF7v7u7Bvm+RDwDGwpZDGw9mMgZDaORUo/o/IG
+   Xc9vIM8uByR/x444DvWh/sWmIxI547uNCxfr5vUxZ242J3PIwyhIjy8gR
+   w==;
+From:   Hermes Zhang <chenhuiz@axis.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: bq256xx: Support enter shipping mode
+Date:   Mon, 20 Feb 2023 15:45:30 +0800
+Message-ID: <20230220074531.2092495-1-chenhuiz@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,26 +47,160 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
-> On Thursday 09 February 2023 01:10:21 Pali Roh=C3=A1r wrote:
->> On Monday 26 December 2022 12:45:13 Pali Roh=C3=A1r wrote:
->> > Due to CPLD firmware bugs, set CPLD syscon-reboot priority level to 64
->> > (between rstcr and watchdog) to ensure that rstcr's global-utilities r=
-eset
->> > method which is preferred stay as default one, and to ensure that CPLD
->> > syscon-reboot is more preferred than watchdog reset method.
->> >=20
->> > Fixes: 0531a4abd1c6 ("powerpc: dts: turris1x.dts: Add CPLD reboot node=
-")
->> > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
->>=20
->> May I ask who can take this 3/3 patch? powersupply or powerpc tree?
+Enable shipping mode for bq256xx chip. The shipping mode can be enabled
+by echo 0 > /sys/class/power_supply/bq256xx-charger/online.
 
-I assume the fact that Sebastian applied patches 1 & 2 means he didn't
-want to take this one.
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+---
+ drivers/power/supply/bq256xx_charger.c | 35 ++++++++++++++++++++++++--
+ 1 file changed, 33 insertions(+), 2 deletions(-)
 
-So the best way to get it applied by me is to send a new version with
-just patch 3, with the changelog explaining that commit xxxyyy
-implements the property and this patch is just wiring it up.
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index db13e288e439..c01ef9d26d31 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -115,6 +115,9 @@
+ #define BQ256XX_VBUS_STAT_USB_DCP	(BIT(6) | BIT(5))
+ #define BQ256XX_VBUS_STAT_USB_OTG	(BIT(7) | BIT(6) | BIT(5))
+ 
++#define BQ256XX_BATFET_DISABLE_MASK		BIT(5)
++#define BQ256XX_BATFET_DISABLE_BIT_SHIFT	5
++
+ #define BQ256XX_CHRG_STAT_MASK		GENMASK(4, 3)
+ #define BQ256XX_CHRG_STAT_NOT_CHRGING	0
+ #define BQ256XX_CHRG_STAT_PRECHRGING	BIT(3)
+@@ -290,6 +293,7 @@ struct bq256xx_chip_info {
+ 	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
+ 	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
+ 	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
++	int (*bq256xx_set_online)(struct bq256xx_device *bq, bool online);
+ 
+ 	int bq256xx_def_ichg;
+ 	int bq256xx_def_iindpm;
+@@ -425,6 +429,7 @@ static int bq256xx_get_state(struct bq256xx_device *bq,
+ {
+ 	unsigned int charger_status_0;
+ 	unsigned int charger_status_1;
++	unsigned int charger_control_3;
+ 	int ret;
+ 
+ 	ret = regmap_read(bq->regmap, BQ256XX_CHARGER_STATUS_0,
+@@ -437,9 +442,15 @@ static int bq256xx_get_state(struct bq256xx_device *bq,
+ 	if (ret)
+ 		return ret;
+ 
++	ret = regmap_read(bq->regmap, BQ256XX_CHARGER_CONTROL_3,
++						&charger_control_3);
++	if (ret)
++		return ret;
++
+ 	state->vbus_stat = charger_status_0 & BQ256XX_VBUS_STAT_MASK;
+ 	state->chrg_stat = charger_status_0 & BQ256XX_CHRG_STAT_MASK;
+-	state->online = charger_status_0 & BQ256XX_PG_STAT_MASK;
++	state->online = (charger_status_0 & BQ256XX_PG_STAT_MASK)
++			&& !(charger_control_3 & BQ256XX_BATFET_DISABLE_MASK);
+ 
+ 	state->wdt_fault = charger_status_1 & BQ256XX_WDT_FAULT_MASK;
+ 	state->bat_fault = charger_status_1 & BQ256XX_BAT_FAULT_MASK;
+@@ -702,6 +713,13 @@ static int bq256xx_set_prechrg_curr(struct bq256xx_device *bq, int iprechg)
+ 				BQ256XX_IPRECHG_MASK, iprechg_reg_code);
+ }
+ 
++static int bq256xx_set_online(struct bq256xx_device *bq, bool online)
++{
++	return regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_3,
++				BQ256XX_BATFET_DISABLE_MASK,
++				(online ? 0 : 1) << BQ256XX_BATFET_DISABLE_BIT_SHIFT);
++}
++
+ static int bq25618_619_get_prechrg_curr(struct bq256xx_device *bq)
+ {
+ 	unsigned int prechg_and_term_curr_lim;
+@@ -915,6 +933,11 @@ static int bq256xx_set_charger_property(struct power_supply *psy,
+ 			return ret;
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_ONLINE:
++		ret = bq->chip_info->bq256xx_set_online(bq, val->intval);
++		if (ret)
++			return ret;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -1197,6 +1220,7 @@ static int bq256xx_property_is_writeable(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+ 	case POWER_SUPPLY_PROP_STATUS:
+ 	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
++	case POWER_SUPPLY_PROP_ONLINE:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -1229,7 +1253,7 @@ static bool bq256xx_is_volatile_reg(struct device *dev, unsigned int reg)
+ {
+ 	switch (reg) {
+ 	case BQ256XX_INPUT_CURRENT_LIMIT:
+-	case BQ256XX_CHARGER_STATUS_0...BQ256XX_CHARGER_STATUS_2:
++	case BQ256XX_CHARGER_CONTROL_3...BQ256XX_CHARGER_STATUS_2:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -1286,6 +1310,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1316,6 +1341,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1346,6 +1372,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1376,6 +1403,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1406,6 +1434,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ25611D_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1436,6 +1465,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
+ 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1466,6 +1496,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
+ 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+-- 
+2.30.2
 
-cheers
