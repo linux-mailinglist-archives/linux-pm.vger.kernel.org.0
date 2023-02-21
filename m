@@ -2,175 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014D069DD79
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 10:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A76669DED6
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 12:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbjBUJ5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Feb 2023 04:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S233032AbjBULay (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Feb 2023 06:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234058AbjBUJ5E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Feb 2023 04:57:04 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C0BF1BF4;
-        Tue, 21 Feb 2023 01:57:02 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Bxedm9lPRj4BwDAA--.914S3;
-        Tue, 21 Feb 2023 17:54:05 +0800 (CST)
-Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+SzlPRj96g3AA--.1894S3;
-        Tue, 21 Feb 2023 17:54:03 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v13 2/2] dt-bindings: thermal: add loongson-2 thermal
-Date:   Tue, 21 Feb 2023 17:53:55 +0800
-Message-Id: <20230221095355.9799-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230221095355.9799-1-zhuyinbo@loongson.cn>
-References: <20230221095355.9799-1-zhuyinbo@loongson.cn>
+        with ESMTP id S231806AbjBULaw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Feb 2023 06:30:52 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E911E72B1
+        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 03:30:50 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id l25so3653429wrb.3
+        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 03:30:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=umFJ1tiO/n9hpa+BXnNpOcub/MpmNvLXb5tjzxhk1I4=;
+        b=iluKARp4mfH3fQdm9W69Ps1cg05QmZhN86gN5ILWqI4XwwwAg3qftABcFKmyCQIprS
+         i4rCBVfE2+FxrIXJdFXIPYEEc+VhaNYYbtN8G57qBI0YQ0ulDGFjQT24aNXIN3RPiY5a
+         3avEvXHWgxsq7z1Ww3IfaHEj3RXqpIdGB1nh2b8s4V5Gamp5j0tqG/3hHd2s/VEvRUoX
+         AFiQCvhjHzG/SNQxeepiyE3eQodY6q9gRMPuZgHf4JnOlf5TT/9iXG8COSjR86ubEVMh
+         j073+3pfojCIdhrbGQmfA4GPrGM/FjfPVdu42QMqP5NS6x6RjOTMnFakxDSDNRcAokBC
+         JM4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=umFJ1tiO/n9hpa+BXnNpOcub/MpmNvLXb5tjzxhk1I4=;
+        b=Bsp/mulyEMMFLVylKc1oVxTdhVKKg5mwE/skc8IYNpF9fAWS8UqEXXPvhrshS1BITm
+         r67vfEIpOJ0bnlfmcpEf4yv4vGUGVpxvYCxZ0E1MHpegg3k74poD7o45Uyr9fKjA5d90
+         ppR76+DAf062mWrrJdp/cWms/aqZqGOTMRkz8J+pi7+1UbI8xYPkJTLgzCJo2dqxkO9Z
+         g3MNNL3/rrWfmp9TJ+ckVA/F6MKtlvMpF/5lx/ZRpAd7L/UlRXIi6f0a8jivwwZOwDHe
+         PmNaAdQoSVit/QLAg7JYIdtD5ScgY/eOd0QyII6c8X8GCY7768W2fxiiz5pVEJFy5WrS
+         vGxw==
+X-Gm-Message-State: AO0yUKV4REaPz2ll/MOkpxs5Xtb7h4zCjjM/7VuhKTEhO1YRCtGJs/fW
+        CNqefZso58SeRHcUJW5rUMKU2A==
+X-Google-Smtp-Source: AK7set8peZP+OaNLuYyu+nhdTNuQIOszkrlILHup0MOuP6THXpxlpkTD4002mpeLacklQZcUzjYPpQ==
+X-Received: by 2002:a5d:6a04:0:b0:2c3:db98:3e87 with SMTP id m4-20020a5d6a04000000b002c3db983e87mr4789413wru.20.1676979049235;
+        Tue, 21 Feb 2023 03:30:49 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:1e9:315c:bb40:e382? ([2a05:6e02:1041:c10:1e9:315c:bb40:e382])
+        by smtp.googlemail.com with ESMTPSA id u13-20020a5d434d000000b002c55ec7f661sm3173683wrr.5.2023.02.21.03.30.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 03:30:48 -0800 (PST)
+Message-ID: <b66fca52-d1f9-2761-4117-819c5820308d@linaro.org>
+Date:   Tue, 21 Feb 2023 12:30:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC] thermal/drivers/intel_menlow: Remove
+ add_one_attribute
+Content-Language: en-US
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Thomas, Sujith" <sujith.thomas@intel.com>,
+        "amitk@kernel.org" <amitk@kernel.org>
+References: <20230220162419.1276952-1-daniel.lezcano@linaro.org>
+ <27488f102c917ce1f6d24d30f801b1e1745674e1.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <27488f102c917ce1f6d24d30f801b1e1745674e1.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxX+SzlPRj96g3AA--.1894S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4DGrW5XF45Kw18uFg_yoW5Zry5pF
-        47Cas5GrWvv3W7uanIkFyIyrsYvFnayFZrXr4xKw15tr98W34aqrW7K3WDu393Gr4jgFWU
-        uFySkr4UCF1DArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
-        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07joKZXUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the Loongson-2 thermal binding with DT schema format using
-json-schema.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v13:
-		1. Drop the sensor id.
-Change in v12:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v11:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v10:
-		1. Add all history change log information.
-Change in v9:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v8:
-                1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-Change in v7:
-		1. Split the modification of patch 3 and merge it into this patch.
-Change in v6:
-		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-		   when compile the yaml.
-Change in v5:
-		1. Keep use same quotes "'" in all places. 
-Change in v4:
-		1. Fixup the compatible.
-		2. Update the binding file name.
-		3. Include irq.h to fix compile issue.
-Change in v3:
-		1. Remove the sensor id.
-		2. Remove the interrupt-parent in thermal required property.
-		3. Update the thermal binding file name.
-		4. Fixup the commit log information.
-Change in v2:
-		1. Add description and type about the "id".	
-		2. Make the filename was based on compatible.
+Hi Rui,
 
- .../thermal/loongson,ls2k-thermal.yaml        | 38 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 39 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
 
-diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-new file mode 100644
-index 000000000000..258046383179
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Thermal sensors on Loongson-2 SoCs
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    thermal: thermal-sensor@1fe01500 {
-+        compatible = "loongson,ls2k-thermal";
-+        reg = <0x1fe01500 0x30>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 54e63f51ae6d..91ce05110f04 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12091,6 +12091,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
- F:	drivers/thermal/loongson2_thermal.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+On 21/02/2023 07:22, Zhang, Rui wrote:
+> On Mon, 2023-02-20 at 17:24 +0100, Daniel Lezcano wrote:
+>> The driver hooks the thermal framework sysfs to add some driver
+>> specific information. A debatable approach as that may belong the
+>> device sysfs directory, not the thermal zone directory.
+>>
+>> As the driver is accessing the thermal internals, we should provide
+>> at
+>> least an API to the thermal framework to add an attribute to the
+>> existing sysfs thermal zone entry.
+>>
+>> Before doing that and given the age of the driver (2008) may be it is
+>> worth to double check if these attributes are really needed. So my
+>> first proposal is to remove them if that does not hurt.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> I don't have any device that uses this driver.
+> Let's see what Sujith says.
+
+Thanks for your answer.
+
+I take the opportunity to ask you for the ACPI thermal additional sysfs 
+entries.
+
+The ACPI thermal driver adds a link:
+
+/sys/class/thermal/thermal_zone0/device
+
+which points to:
+
+../../../LNXSYSTM:00/LNXSYBUS:01/LNXTHERM:00
+
+
+And in this directory there is:
+
+/sys/devices/LNXSYSTM:00/LNXSYBUS:01/LNXTHERM:00/thermal_zone
+
+pointing to /sys/class/thermal/thermal_zone0
+
+
+I was wondering if we have to keep it also? It is a cyclic description 
+and we can have the several thermal zones having a device link pointing 
+to the same location. So I'm not sure this is correct.
+
+I can understand adding a link in the thermal zone pointing to the 
+device could make sense, and that could be generalized to all the 
+thermal zone creation, but the back pointer link seems strange.
+
+Would it make sense to remove this second link ?
+
 -- 
-2.31.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
