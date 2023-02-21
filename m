@@ -2,95 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA9569D70A
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 00:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D5669D96F
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 04:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjBTX3A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Feb 2023 18:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S232851AbjBUDpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Feb 2023 22:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBTX27 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Feb 2023 18:28:59 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ECC1ADD6;
-        Mon, 20 Feb 2023 15:28:58 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676935736;
-        bh=StkVh8EYn2M8lSWQkOZpzSnkaM6UG2ix3NA2mU1ujSY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=iAJ6zGNs8mV19KPRE+LcbkGoLi/C3uTrb5mwgwn1mE2ss9N96hiHYx/pQuWHVNiuP
-         xea0JougjV9GDyPqGyYpme8ENRZDkr4mUmvk0hlBUbOfulvlXanoSaSuKjUKf6vgoo
-         TNxwEnXVwfe53qZgTfg92VQMDBZbrPUon15wLjMI=
-Date:   Mon, 20 Feb 2023 23:28:54 +0000
-Subject: [PATCH] cpufreq: schedutil: make kobj_type structure constant
+        with ESMTP id S232718AbjBUDpA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Feb 2023 22:45:00 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6B893CF;
+        Mon, 20 Feb 2023 19:44:58 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 096B13FB17;
+        Tue, 21 Feb 2023 03:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1676951095; bh=z+58+QJcVH0GSU4dfnKJG6sV0atAJpJZM0PmOGOrpCQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Da/coslVKVT6AdPdmAYnct7dZRD12T6oYTiHeIULtD51snXB2Mymh71IWg53mC/cc
+         GRka1nODAzTUYdyDW/a0HsZODL342C+GIxiL+S4CqlDqLQfIkaI2d+jaAJusjiP48p
+         L8eJhtLt5fSDYDIMP4nTCnLBAp52VQ2pseRkCe+b5kaPWjQxBxnlgdLCn4ZXRHOiqV
+         KSGyUMqxA26rP0jpT1vdWINbo9+N9xiVc5m7hHp8vVtp206gT1B0P7yOwSryVvJvTz
+         M8FGKeRqlaTPn75koHA2HJizkLzZXTd1pB+dGs74ADJsI50oKYVWt3NJZcsyNvSZS5
+         CLjwgdqkR1EFA==
+Message-ID: <19938ad0-9dde-560c-2e4f-a697b5323051@marcan.st>
+Date:   Tue, 21 Feb 2023 12:44:50 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230220-kobj_type-cpufreq-schedutil-v1-1-7d1c92293457@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIADUC9GMC/x2NQQ7CIBAAv9Ls2U0oNdX4FWMM0EVWCaVLMZqmf
- 5d4nDnMbFBImApcug2E3lx4Tg36QwcumPQg5KkxaKUHpbXC12yf9/WbCV2uXmjB4gJNdeWIp/P
- gRkuj9/0RWsGaQmjFJBdaI9UYm8xCnj//5fW27z+kgusTggAAAA==
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676935734; l=1114;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=StkVh8EYn2M8lSWQkOZpzSnkaM6UG2ix3NA2mU1ujSY=;
- b=kckNIChEMWfa+1fhtlh3HkKTqDhrOfjAkr8fg1Naezsig+rJQP5STOBUTzSsi5m0NxS8oS79P
- u3bTu15MMNeCvItOKt9O0EAlsBFlmSvr5XsryJnXGd6h4ya0NIEuS2l
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] PM: s2idle: Don't allow s2idle when cpuidle isn't
+ supported
+Content-Language: en-US
+To:     Kazuki Hashimoto <kazukih0205@gmail.com>, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+References: <20230214215003.70683-1-kazukih0205@gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20230214215003.70683-1-kazukih0205@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+On 15/02/2023 06.50, Kazuki Hashimoto wrote:
+> s2idle isn't supported on platforms that don't support cpuidle as of
+> 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze()
+> too"), so update the suspend framework to reflect this in order to avoid
+> breakages.
+> 
+> Link: https://lore.kernel.org/all/20230204152747.drte4uitljzngdt6@kazuki-mac
+> Fixes: 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze() too")
+> Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
+> ---
+>  kernel/power/suspend.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 3f436282547c..27507ae7c9c9 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -556,6 +556,12 @@ static int enter_state(suspend_state_t state)
+>  
+>  	trace_suspend_resume(TPS("suspend_enter"), state, true);
+>  	if (state == PM_SUSPEND_TO_IDLE) {
+> +		struct cpuidle_device *dev = cpuidle_get_device();
+> +		struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
+> +
+> +		if (cpuidle_not_available(drv, dev))
+> +			return -EINVAL;
+> +
+>  #ifdef CONFIG_PM_DEBUG
+>  		if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
+>  			pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+Well... this turns s2idle from "slighly broken" to "fully broken". I'm
+not sure that's a good idea.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- kernel/sched/cpufreq_schedutil.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If this (or something equivalent) goes in, we'll have to carry a revert
+in the Asahi tree until the PSCI-replacement story goes in, because lots
+of people are using the current somewhat broken s2idle. It's a lot
+better than having no sleep modes at all.
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 1207c78f85c1..4c073bd9b001 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -543,7 +543,7 @@ static void sugov_tunables_free(struct kobject *kobj)
- 	kfree(to_sugov_tunables(attr_set));
- }
- 
--static struct kobj_type sugov_tunables_ktype = {
-+static const struct kobj_type sugov_tunables_ktype = {
- 	.default_groups = sugov_groups,
- 	.sysfs_ops = &governor_sysfs_ops,
- 	.release = &sugov_tunables_free,
+Also, if you intend to disable s2idle on these platforms, you have to
+actually stop advertising it. Advertising it and then refusing to enter
+s2idle is not acceptable, it means people will get "sleep" buttons and
+expect sleep to work and then it won't. But then that could also
+introduce race conditions with userspace checking for sleep support
+before the cpuidle driver loads. So there is definitely a can of worms here.
 
----
-base-commit: 5b0ed5964928b0aaf0d644c17c886c7f5ea4bb3f
-change-id: 20230220-kobj_type-cpufreq-schedutil-783c6be6ff14
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+- Hector
