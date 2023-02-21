@@ -2,75 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E639069E43E
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 17:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CF269E62E
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 18:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbjBUQIG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Feb 2023 11:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
+        id S234675AbjBURpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Feb 2023 12:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbjBUQIF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Feb 2023 11:08:05 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DAE1A660
-        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 08:08:03 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c12so5002093wrw.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 08:08:03 -0800 (PST)
+        with ESMTP id S234697AbjBURpE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Feb 2023 12:45:04 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E862798C
+        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 09:44:59 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id e9so5202042ljn.9
+        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 09:44:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VdD9y9rCjIHthGshBW57ufN82DibH/ZpDD247EMOs2o=;
-        b=Q5ZO20HOW0s4nP2ba8lL2IB+A+ZmjM7nMJCunr9g75SvsvdVhNN10vh3ClLcJTCDIx
-         /Np6lFeUzjrQI38wnuf8S9jS3aSUVWkFKhFM/WCr0VXGzPXB79Nichmcl/+9e0EiiCp8
-         ASaT4XtJLM6GLCf9+BeZsrVpVQ70Ggp72j+HHovEw4wmmegiFUDuGf+sYRPWLb+HttiH
-         hLo1fdklqKsj6INdUSbM5VO4N+++aCai6kBH2sJ5Oo2uJMZGJdPNDKHhyBv3b4LXAzjs
-         Tv707/uRFAK5ARy6tixd2GXb4KilFOuXKbjrKmxxHF6GmIGmoav6OBHOqj7T7MEkrDsB
-         yD5g==
+        bh=SbC5sP3V4tvxg8poITPffqeiBSYf5mTki8iUVO0MfTU=;
+        b=YTuHJO/cT2gzfESi8zNm1cF+ovCWeN4ypblfk5i+cUWaymjSHjwTVGENfflTPwgw/T
+         2jCWWzKseuNBuyC/Tk9vhGo1dUvXleGiFQ95CIiy6BnFeEvyWHFAJRycHFVRIr4Y6JsI
+         AHsKo6s8kWq/nYKntu4cod1qq2zjgp+OEW1IJBPaRIycWp1M+iPr7edsvTf5ZYkj8onV
+         eaQK3aMZ+FlgS/E9/ixd/Hn/2fS8tI7Vz4vaHoX9Vl9pVW3XR/WF64sF8YnyJd+TJRHo
+         jSOERGvg8xMKmHWzB+xmBmQJoIAOaC0P92nl51T18x7P0XfK3jsXExOBFmc5Ske5Gt+Y
+         YaEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VdD9y9rCjIHthGshBW57ufN82DibH/ZpDD247EMOs2o=;
-        b=3c1GFwNCAzj3As9UmznAOGuBgMSzvkuEM0f0D3M5mJ5H7kYEfSdbM1u98W63wvx8+J
-         sbcaNh7J8qNLKQAdKzW+WCw8WH42X3cWjnLlayDPhs6uEWk0XUdMPPXBEl5/FXuUNoDs
-         iB4aO8hhijGp9zBZ8BKmVMP8eN/d1BUQdTqPombOLS6HIXH6SjvCnPY6A1hN6ixd1psO
-         iAZDjsScWasl6doEfxyY4hySV3mbj4pPB7eefyKmYSbZnYFAnwUMTZbZ0aUEZLcLtBWM
-         PgWYh5JhSmFAiVa1v/SJTa5IAxBiHs0N3RFIjxpPLo1Q30rrRQeV3tZxzReYmGnau9oM
-         bdGg==
-X-Gm-Message-State: AO0yUKXb0iQ5IZR4L6S+fv79Rm525aNgTis/6jUSimwhh5xLoJilTyuS
-        wuakl91gV/uvmkbjtdHgHfygycHaaCgHBrne
-X-Google-Smtp-Source: AK7set/koM3naKmqPifbC2rfzG55+0RWRlOw0+YfmzFE5+bSPYVQUZweQXTX1WFGi7nd0T3QObWaeA==
-X-Received: by 2002:adf:f390:0:b0:2c5:8353:e0ec with SMTP id m16-20020adff390000000b002c58353e0ecmr4569005wro.10.1676995682121;
-        Tue, 21 Feb 2023 08:08:02 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:1e9:315c:bb40:e382? ([2a05:6e02:1041:c10:1e9:315c:bb40:e382])
-        by smtp.googlemail.com with ESMTPSA id e5-20020adff345000000b002c705058773sm2018262wrp.74.2023.02.21.08.08.01
+        bh=SbC5sP3V4tvxg8poITPffqeiBSYf5mTki8iUVO0MfTU=;
+        b=Ggq8GTJm7JpM0y24mKUG0yzxQaZBSqNWzZB+TQokd3e9h1b/4EVkjIVSzEAu+VCnp7
+         okgG7rDvyv8duK8ac6MmnT6+nN4rAbwhO/RFkfq/6Rce5/M04Kc2UbnYOXLBZhay2A1Y
+         SLJWW239bLqo0ZGzP3Iaj7sImPe+YIMHbr1iwySumsAmpebndTVEs4AsSdkmXs7a+loq
+         VlSYq4jv8Fu+MclpCA+cnmteNdmlzVH/10i6cLaP8onx10FabREGNmcABpNfSU7YeMFt
+         /wmE/foXN9dl7yRFNe8fRVS7Nnkf6S/Tp+aj2geSj4owP59am69bdB5Q4CtJlQLHDB+0
+         QdKQ==
+X-Gm-Message-State: AO0yUKVCAwWDf/IGTyBmknmJhtbm2C4sI0On5l8kqZHVnW69RxgOyrPO
+        eQBerLP5THjNvINjEEUCZbGnzQ==
+X-Google-Smtp-Source: AK7set879K1Vi+y3/+uZVasOTDhk1xxr/cHP8DNMLeLPuEKpxk6lQ/H0S5WhJxZ4r3G8sI0qOtKB7g==
+X-Received: by 2002:a05:651c:b0d:b0:293:7bce:2374 with SMTP id b13-20020a05651c0b0d00b002937bce2374mr2608864ljr.33.1677001497854;
+        Tue, 21 Feb 2023 09:44:57 -0800 (PST)
+Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
+        by smtp.gmail.com with ESMTPSA id k16-20020a05651c10b000b00290517c661asm203301ljn.40.2023.02.21.09.44.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 08:08:01 -0800 (PST)
-Message-ID: <c0333a78-a834-6eed-5c80-7fcd31aa666d@linaro.org>
-Date:   Tue, 21 Feb 2023 17:08:00 +0100
+        Tue, 21 Feb 2023 09:44:57 -0800 (PST)
+Message-ID: <9a3e9c76-ba70-6ccc-3ade-fa08cdff571e@linaro.org>
+Date:   Tue, 21 Feb 2023 18:44:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 07/17] thermal/hwmon: Use the thermal API instead
- tampering the internals
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sa8775p: add cpufreq node
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230221150543.283487-1-brgl@bgdev.pl>
+ <20230221150543.283487-3-brgl@bgdev.pl>
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-8-daniel.lezcano@linaro.org>
- <9ac3a59f-a3b7-4128-87d0-7b3310ce7828@linaro.org>
- <20230220141154.GB4009286@roeck-us.net>
- <1c8efdae-1ef4-ab45-d891-72010d8a4343@linaro.org>
- <20230220171210.GA1606748@roeck-us.net>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230220171210.GA1606748@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230221150543.283487-3-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -81,73 +82,111 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/02/2023 18:12, Guenter Roeck wrote:
-> On Mon, Feb 20, 2023 at 04:39:48PM +0100, Daniel Lezcano wrote:
->> On 20/02/2023 15:11, Guenter Roeck wrote:
->>> On Mon, Feb 20, 2023 at 02:34:08PM +0100, Daniel Lezcano wrote:
->>>> Hi Guenter,
->>>>
->>>> my script should have Cc'ed you but it didn't, so just a heads up this patch
->>>> ;)
->>>>
->>>> On 19/02/2023 15:36, Daniel Lezcano wrote:
->>>>> In this function, there is a guarantee the thermal zone is registered.
->>>>>
->>>>> The sysfs hwmon unregistering will be blocked until we exit the
->>>>> function. The thermal zone is unregistered after the sysfs hwmon is
->>>>> unregistered.
->>>>>
->>>>> When we are in this function, the thermal zone is registered.
->>>>>
->>>>> We can call the thermal_zone_get_crit_temp() function safely and let
->>>>> the function use the lock which is private the thermal core code.
->>>>>
->>>
->>> Hmm, if you say so. That very same call used to cause a crash in
->>> Chromebooks, which is why I had added the locking.
->>
->> Mmh, I see. I guess we can assume thermal_hwmon is part of the core code and
->> remove this change.
->>
+
+
+On 21.02.2023 16:05, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Yes. Anyway, the sequence of events was roughly as follows.
+> Add a node for the cpufreq engine and specify the frequency domains for
+> all CPUs.
 > 
-> - thermal zone is device is registered
-> - hwmon device is registered
->    - userspace is triggered and starts reading device attributes
-> - while userspace has a hwmon attribute open, thermal device is unregistered
-> - hwmon device is unregistered (sysfs attribute is still open)
-> - hwmon device attribute function is called
-> - Since thermal device ops have been released after the thermal device
->    was unregistered, trying to call an ops callback fails.
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> That doesn't normally happen, but the Intel wireless driver has the habit
-> of registering a thermal zone early in its probe function, only to unregister
-> it immediately afterwards if the probe function fails. If some userspace
-> activity is triggered by the hwmon device registration, the thermal and
-> hwmon device removal may be timed such that the hwmon devive is removed
-> while one (or more) of its attribute files are still open. Normally that
-> doesn't matter, but it is fatal here since the ops callbacks are not owned
-> by the hwmon device but by the thermal device.
-> 
-> Essentially every ops callback has this problem.
-> thermal_zone_get_temp() had it as well, also associated with
-> a hwmon sysfs attribute read operation. See commit 1c6b30060777
-> ("thermal/core: Ensure that thermal device is registered in
-> thermal_zone_get_temp").
-> 
-> If you don't want non-thermal code to access ->ops directly, the thermal
-> code would have to provide protected accessor functions, similar to
-> thermal_zone_get_temp().
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index ce5976e36aee..5e2bc67b3178 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -37,6 +37,7 @@ CPU0: cpu@0 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x0>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			next-level-cache = <&L2_0>;
+>  			L2_0: l2-cache {
+>  				compatible = "cache";
+> @@ -52,6 +53,7 @@ CPU1: cpu@100 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x100>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			next-level-cache = <&L2_1>;
+>  			L2_1: l2-cache {
+>  				compatible = "cache";
+> @@ -64,6 +66,7 @@ CPU2: cpu@200 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x200>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			next-level-cache = <&L2_2>;
+>  			L2_2: l2-cache {
+>  				compatible = "cache";
+> @@ -76,6 +79,7 @@ CPU3: cpu@300 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x300>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			next-level-cache = <&L2_3>;
+>  			L2_3: l2-cache {
+>  				compatible = "cache";
+> @@ -88,6 +92,7 @@ CPU4: cpu@10000 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x10000>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			next-level-cache = <&L2_4>;
+>  			L2_4: l2-cache {
+>  				compatible = "cache";
+> @@ -104,6 +109,7 @@ CPU5: cpu@10100 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x10100>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			next-level-cache = <&L2_5>;
+>  			L2_5: l2-cache {
+>  				compatible = "cache";
+> @@ -116,6 +122,7 @@ CPU6: cpu@10200 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x10200>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			next-level-cache = <&L2_6>;
+>  			L2_6: l2-cache {
+>  				compatible = "cache";
+> @@ -128,6 +135,7 @@ CPU7: cpu@10300 {
+>  			compatible = "qcom,kryo";
+>  			reg = <0x0 0x10300>;
+>  			enable-method = "psci";
+> +			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			next-level-cache = <&L2_7>;
+>  			L2_7: l2-cache {
+>  				compatible = "cache";
+> @@ -731,6 +739,19 @@ tcsr_mutex: hwlock@1f40000 {
+>  			#hwlock-cells = <1>;
+>  		};
+>  
+> +		cpufreq_hw: cpufreq@18591000 {
+> +			compatible = "qcom,sa8775p-cpufreq-epss",
+> +				     "qcom,cpufreq-epss";
+That's some very aggressive wrapping! :P
 
-Hopefully we are getting rid of most of the ops soon ... :/
+Nevertheless,
 
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Konrad
+> +			reg = <0x0 0x18591000 0x0 0x1000>,
+> +			      <0x0 0x18593000 0x0 0x1000>;
+> +			reg-names = "freq-domain0", "freq-domain1";
+> +
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+> +			clock-names = "xo", "alternate";
+> +
+> +			#freq-domain-cells = <1>;
+> +		};
+> +
+>  		tlmm: pinctrl@f000000 {
+>  			compatible = "qcom,sa8775p-tlmm";
+>  			reg = <0x0 0xf000000 0x0 0x1000000>;
