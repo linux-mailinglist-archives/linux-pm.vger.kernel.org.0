@@ -2,78 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CF269E62E
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 18:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CD869E6E7
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Feb 2023 19:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbjBURpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Feb 2023 12:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S230084AbjBUSHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Feb 2023 13:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbjBURpE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Feb 2023 12:45:04 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E862798C
-        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 09:44:59 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id e9so5202042ljn.9
-        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 09:44:59 -0800 (PST)
+        with ESMTP id S231386AbjBUSH1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Feb 2023 13:07:27 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA6E3018B
+        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 10:07:19 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p18-20020a05600c359200b003dc57ea0dfeso4306382wmq.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Feb 2023 10:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SbC5sP3V4tvxg8poITPffqeiBSYf5mTki8iUVO0MfTU=;
-        b=YTuHJO/cT2gzfESi8zNm1cF+ovCWeN4ypblfk5i+cUWaymjSHjwTVGENfflTPwgw/T
-         2jCWWzKseuNBuyC/Tk9vhGo1dUvXleGiFQ95CIiy6BnFeEvyWHFAJRycHFVRIr4Y6JsI
-         AHsKo6s8kWq/nYKntu4cod1qq2zjgp+OEW1IJBPaRIycWp1M+iPr7edsvTf5ZYkj8onV
-         eaQK3aMZ+FlgS/E9/ixd/Hn/2fS8tI7Vz4vaHoX9Vl9pVW3XR/WF64sF8YnyJd+TJRHo
-         jSOERGvg8xMKmHWzB+xmBmQJoIAOaC0P92nl51T18x7P0XfK3jsXExOBFmc5Ske5Gt+Y
-         YaEQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lfj1mZi2k757H35m25tyUr6uh3LAZ/RgBwbJZ5o+VDw=;
+        b=u5BJZXUa9F8UucG23kCvceS4gRHYypGZjUrwN+WfE+iqvaVcZj2YVLk7dfg0R6Idx9
+         gflLanjVP35J60jBKfCJ+IyQkz0EaB8ruNLiYhhxs7s3a1U2JKpWnPGy+ZHn/LHCKaL7
+         XE86sPaelerMPxRmSfBtaZJpro0HKrtMQyuleg62C8adFzQPSd1SA4QNugvxeGvLns/+
+         2PopsKjrjUEq1GaqquE/DM0csnoQTtYQzrGOXF5zMIHzE9Fa0B3Z022BpjasHagsBRyG
+         XVta5BLfmxNPPmGEHIsdbbo6t5JCwjrF68GY4JncQiT8kBmNrvNzg0xpFCmBb0MXwCn0
+         Mexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SbC5sP3V4tvxg8poITPffqeiBSYf5mTki8iUVO0MfTU=;
-        b=Ggq8GTJm7JpM0y24mKUG0yzxQaZBSqNWzZB+TQokd3e9h1b/4EVkjIVSzEAu+VCnp7
-         okgG7rDvyv8duK8ac6MmnT6+nN4rAbwhO/RFkfq/6Rce5/M04Kc2UbnYOXLBZhay2A1Y
-         SLJWW239bLqo0ZGzP3Iaj7sImPe+YIMHbr1iwySumsAmpebndTVEs4AsSdkmXs7a+loq
-         VlSYq4jv8Fu+MclpCA+cnmteNdmlzVH/10i6cLaP8onx10FabREGNmcABpNfSU7YeMFt
-         /wmE/foXN9dl7yRFNe8fRVS7Nnkf6S/Tp+aj2geSj4owP59am69bdB5Q4CtJlQLHDB+0
-         QdKQ==
-X-Gm-Message-State: AO0yUKVCAwWDf/IGTyBmknmJhtbm2C4sI0On5l8kqZHVnW69RxgOyrPO
-        eQBerLP5THjNvINjEEUCZbGnzQ==
-X-Google-Smtp-Source: AK7set879K1Vi+y3/+uZVasOTDhk1xxr/cHP8DNMLeLPuEKpxk6lQ/H0S5WhJxZ4r3G8sI0qOtKB7g==
-X-Received: by 2002:a05:651c:b0d:b0:293:7bce:2374 with SMTP id b13-20020a05651c0b0d00b002937bce2374mr2608864ljr.33.1677001497854;
-        Tue, 21 Feb 2023 09:44:57 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id k16-20020a05651c10b000b00290517c661asm203301ljn.40.2023.02.21.09.44.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 09:44:57 -0800 (PST)
-Message-ID: <9a3e9c76-ba70-6ccc-3ade-fa08cdff571e@linaro.org>
-Date:   Tue, 21 Feb 2023 18:44:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sa8775p: add cpufreq node
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lfj1mZi2k757H35m25tyUr6uh3LAZ/RgBwbJZ5o+VDw=;
+        b=C43ZMrG5o1N65bQSajgGJOa1xfIRLT4ffaiQ+oiVMIGmGYjT4B135TLockepKdyWvg
+         VYq3YWSR81PVSlhWyv4uu3kCMf7DRae8+9V0Rf2ysXSWdjD+WNT6ccHKAbMPVf5nIAuZ
+         CYgKglxLjfe7enwpFwnG508rRjoSJGDinNoFYKPCqZKQEt7g2bId2S9cCwro078Bq3FY
+         SBn7gfKhnB+30jVwXoZSRpae4WPHpRCz+oUp32Evz2v2OIBAwLM5czRKsluuUt8HS+3F
+         M1MCaupRLp4XhYyKy2qT1Ja53txriHBU6vsRD3N+xn3+JsJ5eqYHijrWe/nNewZ1pm57
+         OfNA==
+X-Gm-Message-State: AO0yUKXb0yp4blqVwTtkH4cLUZSxGu2UU5c0e1ZbWiqkYiIIjBjtfB7t
+        Hf1ym0D2jD0uvw4fc2BrO3Mfqg==
+X-Google-Smtp-Source: AK7set9nVsW+0EjHlyj57xCxxPjJgG5tNyIrPh2Vj/Jqjxmi2BIZmyS53eT6dY/awl6zI8aZVNVzJQ==
+X-Received: by 2002:a05:600c:1caa:b0:3e1:f8af:963f with SMTP id k42-20020a05600c1caa00b003e1f8af963fmr5047535wms.3.1677002838300;
+        Tue, 21 Feb 2023 10:07:18 -0800 (PST)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:1e9:315c:bb40:e382])
+        by smtp.gmail.com with ESMTPSA id c128-20020a1c3586000000b003e21558ee9dsm5107815wma.2.2023.02.21.10.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 10:07:17 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230221150543.283487-1-brgl@bgdev.pl>
- <20230221150543.283487-3-brgl@bgdev.pl>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230221150543.283487-3-brgl@bgdev.pl>
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-acpi@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 00/17] Self-encapsulate the thermal zone device structure
+Date:   Tue, 21 Feb 2023 19:06:54 +0100
+Message-Id: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,111 +144,214 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The exported thermal headers expose the thermal core structure while those
+should be private to the framework. The initial idea was the thermal sensor
+drivers use the thermal zone device structure pointer to pass it around from
+the ops to the thermal framework API like a handler.
+
+Unfortunately, different drivers are using and abusing the internals of this
+structure to hook the associated struct device, read the internals values, take
+the lock, etc ...
+
+rn order to fix this situation, let's encapsulate the structure leaking the
+more in the different drivers: the thermal_zone_device structure.
+
+This series revisit the existing drivers using the thermal zone private
+structure internals to change the access to something else. For instance, the
+get_temp() ops is using the tz->dev to write a debug trace. Despite the trace
+is not helpful, we can check the return value for the get_temp() ops in the
+call site and show the message in this place.
+
+With this set of changes, the thermal_zone_device is almost self-encapsulated.
+As usual, the acpi driver needs a more complex changes, so that will come in a
+separate series along with the structure moved the private core headers.
+
+Changelog:
+	- V2:
+	   - Collected tags
+	   - Add mising change for ->devdata for the tsens driver
+	   - Renamed thermal_zone_device_get_data() to thermal_zone_priv()
+	   - Added stubs when CONFIG_THERMAL is not set
+	   - Dropped hwmon change where we remove the tz->lock usage
+
+Thank you all for your comments
 
 
-On 21.02.2023 16:05, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add a node for the cpufreq engine and specify the frequency domains for
-> all CPUs.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index ce5976e36aee..5e2bc67b3178 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -37,6 +37,7 @@ CPU0: cpu@0 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x0>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_0>;
->  			L2_0: l2-cache {
->  				compatible = "cache";
-> @@ -52,6 +53,7 @@ CPU1: cpu@100 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x100>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_1>;
->  			L2_1: l2-cache {
->  				compatible = "cache";
-> @@ -64,6 +66,7 @@ CPU2: cpu@200 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x200>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_2>;
->  			L2_2: l2-cache {
->  				compatible = "cache";
-> @@ -76,6 +79,7 @@ CPU3: cpu@300 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x300>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_3>;
->  			L2_3: l2-cache {
->  				compatible = "cache";
-> @@ -88,6 +92,7 @@ CPU4: cpu@10000 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10000>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_4>;
->  			L2_4: l2-cache {
->  				compatible = "cache";
-> @@ -104,6 +109,7 @@ CPU5: cpu@10100 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10100>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_5>;
->  			L2_5: l2-cache {
->  				compatible = "cache";
-> @@ -116,6 +122,7 @@ CPU6: cpu@10200 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10200>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_6>;
->  			L2_6: l2-cache {
->  				compatible = "cache";
-> @@ -128,6 +135,7 @@ CPU7: cpu@10300 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10300>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_7>;
->  			L2_7: l2-cache {
->  				compatible = "cache";
-> @@ -731,6 +739,19 @@ tcsr_mutex: hwlock@1f40000 {
->  			#hwlock-cells = <1>;
->  		};
->  
-> +		cpufreq_hw: cpufreq@18591000 {
-> +			compatible = "qcom,sa8775p-cpufreq-epss",
-> +				     "qcom,cpufreq-epss";
-That's some very aggressive wrapping! :P
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Samuel Holland <samuel@sholland.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Ido Schimmel <idosch@nvidia.com>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: Gregory Greenman <gregory.greenman@intel.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Cc: Support Opensource <support.opensource@diasemi.com>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Vasily Khoruzhick <anarsoul@gmail.com>
+Cc: Yangtao Li <tiny.windzz@gmail.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Talel Shenhar <talel@amazon.com>
+Cc: Eduardo Valentin <edubezval@gmail.com>
+Cc: Keerthy <j-keerthy@ti.com>
+Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: Zheng Yongjun <zhengyongjun3@huawei.com>
+Cc: Yang Li <yang.lee@linux.alibaba.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Daniel Golle <daniel@makrotopia.org>
+Cc: Balsam CHIHI <bchihi@baylibre.com>
+Cc: Mikko Perttunen <mperttunen@nvidia.com>
+Cc: linux-acpi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-sunxi@lists.linux.dev
+Cc: linux-input@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-wireless@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-rpi-kernel@lists.infradead.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-tegra@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
 
-Nevertheless,
+Daniel Lezcano (16):
+  thermal/core: Add a thermal zone 'devdata' accessor
+  thermal/core: Show a debug message when get_temp() fails
+  thermal: Remove debug or error messages in get_temp() ops
+  thermal/hwmon: Do not set no_hwmon before calling
+    thermal_add_hwmon_sysfs()
+  thermal/hwmon: Use the right device for devm_thermal_add_hwmon_sysfs()
+  thermal: Don't use 'device' internal thermal zone structure field
+  thermal/drivers/spear: Don't use tz->device but pdev->dev
+  thermal: Add a thermal zone id accessor
+  thermal: Do not access 'type' field, use the tz id instead
+  thermal/drivers/da9062: Don't access the thermal zone device fields
+  thermal/hwmon: Use the thermal_core.h header
+  thermal/drivers/tegra: Remove unneeded lock when setting a trip point
+  thermal/tegra: Do not enable the thermal zone, it is already enabled
+  thermal/drivers/acerhdf: Make interval setting only at module load
+    time
+  thermal/drivers/acerhdf: Remove pointless governor test
+  thermal/traces: Replace the thermal zone structure parameter with the
+    field value
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+ drivers/acpi/thermal.c                        | 18 +++----
+ drivers/ata/ahci_imx.c                        |  2 +-
+ drivers/hwmon/hwmon.c                         |  4 +-
+ drivers/hwmon/pmbus/pmbus_core.c              |  2 +-
+ drivers/hwmon/scmi-hwmon.c                    |  4 +-
+ drivers/hwmon/scpi-hwmon.c                    |  2 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c             |  2 +-
+ drivers/input/touchscreen/sun4i-ts.c          |  2 +-
+ .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  2 +-
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 18 +++----
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |  4 +-
+ drivers/platform/x86/acerhdf.c                | 19 ++------
+ drivers/power/supply/power_supply_core.c      |  2 +-
+ drivers/regulator/max8973-regulator.c         |  2 +-
+ drivers/thermal/amlogic_thermal.c             |  2 +-
+ drivers/thermal/armada_thermal.c              | 14 ++----
+ drivers/thermal/broadcom/bcm2711_thermal.c    |  3 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c    |  3 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c    |  8 ++--
+ drivers/thermal/broadcom/ns-thermal.c         |  2 +-
+ drivers/thermal/broadcom/sr-thermal.c         |  2 +-
+ drivers/thermal/da9062-thermal.c              | 13 +++--
+ drivers/thermal/dove_thermal.c                |  7 +--
+ drivers/thermal/gov_fair_share.c              |  2 +-
+ drivers/thermal/gov_power_allocator.c         |  4 +-
+ drivers/thermal/gov_step_wise.c               |  2 +-
+ drivers/thermal/hisi_thermal.c                |  5 +-
+ drivers/thermal/imx8mm_thermal.c              |  4 +-
+ drivers/thermal/imx_sc_thermal.c              |  9 ++--
+ drivers/thermal/imx_thermal.c                 | 47 +++++--------------
+ drivers/thermal/intel/intel_pch_thermal.c     |  2 +-
+ drivers/thermal/intel/intel_soc_dts_iosf.c    | 13 ++---
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  4 +-
+ drivers/thermal/k3_bandgap.c                  |  4 +-
+ drivers/thermal/k3_j72xx_bandgap.c            |  2 +-
+ drivers/thermal/kirkwood_thermal.c            |  7 +--
+ drivers/thermal/max77620_thermal.c            |  6 +--
+ drivers/thermal/mediatek/auxadc_thermal.c     |  4 +-
+ drivers/thermal/mediatek/lvts_thermal.c       |  9 ++--
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |  6 +--
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  6 +--
+ drivers/thermal/qcom/tsens.c                  |  2 +-
+ drivers/thermal/qoriq_thermal.c               |  4 +-
+ drivers/thermal/rcar_gen3_thermal.c           |  5 +-
+ drivers/thermal/rcar_thermal.c                |  8 +---
+ drivers/thermal/rockchip_thermal.c            |  8 +---
+ drivers/thermal/rzg2l_thermal.c               |  3 +-
+ drivers/thermal/samsung/exynos_tmu.c          |  4 +-
+ drivers/thermal/spear_thermal.c               | 10 ++--
+ drivers/thermal/sprd_thermal.c                |  2 +-
+ drivers/thermal/st/st_thermal.c               |  2 -
+ drivers/thermal/sun8i_thermal.c               |  4 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c    |  6 ++-
+ drivers/thermal/tegra/tegra30-tsensor.c       | 31 ++++++------
+ drivers/thermal/thermal-generic-adc.c         |  7 ++-
+ drivers/thermal/thermal_core.c                | 17 ++++++-
+ drivers/thermal/thermal_helpers.c             |  3 ++
+ drivers/thermal/thermal_hwmon.c               |  9 ++--
+ drivers/thermal/thermal_hwmon.h               |  4 +-
+ drivers/thermal/thermal_mmio.c                |  2 +-
+ .../ti-soc-thermal/ti-thermal-common.c        | 10 ++--
+ drivers/thermal/uniphier_thermal.c            |  2 +-
+ include/linux/thermal.h                       |  9 ++++
+ include/trace/events/thermal.h                | 24 +++++-----
+ .../trace/events/thermal_power_allocator.h    | 12 ++---
+ 65 files changed, 206 insertions(+), 255 deletions(-)
 
-Konrad
-> +			reg = <0x0 0x18591000 0x0 0x1000>,
-> +			      <0x0 0x18593000 0x0 0x1000>;
-> +			reg-names = "freq-domain0", "freq-domain1";
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-> +			clock-names = "xo", "alternate";
-> +
-> +			#freq-domain-cells = <1>;
-> +		};
-> +
->  		tlmm: pinctrl@f000000 {
->  			compatible = "qcom,sa8775p-tlmm";
->  			reg = <0x0 0xf000000 0x0 0x1000000>;
+-- 
+2.34.1
+
