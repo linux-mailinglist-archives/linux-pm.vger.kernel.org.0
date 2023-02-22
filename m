@@ -2,404 +2,561 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B28569F756
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Feb 2023 16:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA33369F9A2
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Feb 2023 18:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbjBVPEn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Feb 2023 10:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S232577AbjBVRId (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Feb 2023 12:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjBVPEl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 10:04:41 -0500
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A098A40FD;
-        Wed, 22 Feb 2023 07:04:38 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id b12so31562076edd.4;
-        Wed, 22 Feb 2023 07:04:38 -0800 (PST)
+        with ESMTP id S230267AbjBVRIc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 12:08:32 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE451A492
+        for <linux-pm@vger.kernel.org>; Wed, 22 Feb 2023 09:08:30 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id z5so8568224ljc.8
+        for <linux-pm@vger.kernel.org>; Wed, 22 Feb 2023 09:08:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uZb8L4QDDdkYPXU8SkBkrJ6UxbW+D93NO8jg40+5d7s=;
+        b=QRCaO1sUeso18Xtjg133IWSlskZ5TSvlznqwRk0juzcr4mFVM+rtaxODeJFoU8/Y/K
+         FTwbR4bvF7UubYsn3+UrMed39zW1sQstJg2uK8YCScnvNkcYXYBRJZBx9Hlh/UoVXMf7
+         B1gk6RrgosO8DZzo+mr4devZrMGcxoAtZCYqqmu3sD4Fbpx95AvQoxKjaTb4E7bcIwCF
+         kcUaLSu4AiMluEY4yQOaHymRmDZIXzTpimeFDSoZgIgnvKMOfRnMHyCmSEAkiabgZ2cJ
+         CSj9LOf3KumCfmX1ujkV/PqvjAuv/vWMBEg4gp0ZE3VOPcamRYsIysogXqHaH32K/zFR
+         5sig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GDR4v8TjFA5wgCtE/oCu5MNbaltesnH6Ax0WsDRitKg=;
-        b=rkLT4ULvUHRMAIqf372IP0pt5OsCb8iZCLWs9oRu93zD0wLu/m6hEs34ZK5Akc/5q2
-         ESkPQfjP1CtjQ19Anfiq8rmt3G/W+wZchXnpMzkWokw+wTt6TCjYlIOuhtDpbyJOikdM
-         Pkow4AHKr1nLoOXmW9mxuvkbGToGB/anNCPzceKs5N5KOBDV/zhSTr9XHD8ZnxGW9UJv
-         1VC17UfnGdplv7PmujH6H+tggrwAVW1OUjfaoyzPbgDmfL0u1/Q+JtgbCwJmRYd8KslX
-         3y/7iXOIPaY/VcIAFd8WPhcmh18+qtSezKPYyFcoIuR17mWT5LtgauPwIRgWPk0tYj5e
-         E0Bw==
-X-Gm-Message-State: AO0yUKVzitVwCfBYa8NJqQpDbAsATsS8ARoFFI4gHCogGenw+y3K7X1E
-        lwDVM2pWmzFxi0QXN3CJkfkX+EROvNk91m45jkA=
-X-Google-Smtp-Source: AK7set9FCqhtBZkMhiyjHV5GyPeOYhiFVM/ZWQFR3jAjziohLscVI9j4k3qG88r2ggZov5GP/2SOpRdXMSwWRNPM+vQ=
-X-Received: by 2002:a17:907:c004:b0:8e5:1a7b:8ab2 with SMTP id
- ss4-20020a170907c00400b008e51a7b8ab2mr2393230ejc.4.1677078276884; Wed, 22 Feb
- 2023 07:04:36 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZb8L4QDDdkYPXU8SkBkrJ6UxbW+D93NO8jg40+5d7s=;
+        b=tDzF+2bisl8QzuejfR25KjRpcJ10ziCbwPtsFOMCx6wBdl5YzcT7J6Rs7rMhDTmmz7
+         khehd7R+2nKDZOUgyuIf8WnXnrGKUMt/dFCjK3GymUo4d+sGhA/tVcALnysQowr2Us+Q
+         En5E2ahQywL0o49jlO62d9fM6vBt5cpxyYcs38NnFn/5SLvupnnDgIarkcM2a3SyZcpy
+         hXllurFDKNMzfga2xPSFBeK7Qh5Qozr815ARH2NxGW3W3yP0W7wOV6zmiexWxfhq1WzE
+         HaVD4yPD9ZgCCbTwgo5oSj10UwCsZmdOVe66AK7lZJ/Ueuwbq+afIQ+t0Sjy5lHch2v8
+         IeaQ==
+X-Gm-Message-State: AO0yUKXUEp8smk9iI3RopnjuiKITtRpJacvL5zSzBKvMiZmvKqS4FaOc
+        9kRLdbylvnAoo2U5GlmTMikaPA==
+X-Google-Smtp-Source: AK7set8lPGUeg0zgDxPOykEW0LdHZj1RveJyxVsZxemxEUYbtbBzeRtOxtzUy8r4CyXnM0cf77TmNw==
+X-Received: by 2002:a2e:9c43:0:b0:28b:6f21:d929 with SMTP id t3-20020a2e9c43000000b0028b6f21d929mr2935765ljj.32.1677085708249;
+        Wed, 22 Feb 2023 09:08:28 -0800 (PST)
+Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
+        by smtp.gmail.com with ESMTPSA id h23-20020a2ea497000000b0029599744c02sm196635lji.75.2023.02.22.09.08.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 09:08:27 -0800 (PST)
+Message-ID: <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
+Date:   Wed, 22 Feb 2023 18:08:25 +0100
 MIME-Version: 1.0
-References: <20230220143143.3492-1-petr.pavlu@suse.com>
-In-Reply-To: <20230220143143.3492-1-petr.pavlu@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Feb 2023 16:04:25 +0100
-Message-ID: <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        pmladek@suse.com, mcgrof@kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v6 2/5] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        stephan@gerhold.net, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+References: <20230222120411.55197-1-bryan.odonoghue@linaro.org>
+ <20230222120411.55197-3-bryan.odonoghue@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230222120411.55197-3-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 3:32 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
->
-> The acpi-cpufreq and pcc-cpufreq drivers are loaded through per-CPU
-> module aliases. This can result in many unnecessary load requests during
-> boot if another frequency module, such as intel_pstate, is already
-> active. For instance, on a typical Intel system, one can observe that
-> udev makes 2x#CPUs attempts to insert acpi_cpufreq and 1x#CPUs attempts
-> for pcc_cpufreq. All these tries then fail if another frequency module
-> is already registered.
 
-Well, that's not nice.
 
-> In the worst case, without the recent fix in commit 0254127ab977e
-> ("module: Don't wait for GOING modules"), these module loads occupied
-> all udev workers and had their initialization attempts ran sequentially.
-> Resolving all these loads then on some larger machines took too long,
-> prevented other hardware from getting its drivers initialized and
-> resulted in a failed boot. Discussion over these duplicate module
-> requests ended up with a conclusion that only one load attempt should be
-> ideally made.
-
-Fair enough.
-
-> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
-> interface defined by ACPI. Allowed performance states and parameters
-> must be same for each CPU.
-
-This is not a requirement set by the ACPI specification, though, but
-the assumption made by the drivers in question AFAICS.  It would be
-good to clarify this here.
-
-> This makes it possible to model these
-> interfaces as platform devices.
->
-> The patch extends the ACPI parsing logic to check the ACPI namespace if
-> the PPC or PCC interface is present and creates a virtual platform
-> device for each if it is available.
-
-I'm not sure that this is the best approach.
-
-The ACPI subsystem already walks the ACPI namespace twice when
-enumerating devices and CPUs.  In particular, acpi_processor_add() is
-invoked for each of them in the first on these walks, so it might as
-well take care of creating the requisite platform device if _PCT is
-present, can't it?
-
-> The acpi-cpufreq and pcc-cpufreq
-> drivers are then updated to map to these devices.
->
-> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
-> boot and only if a given interface is available in the firmware.
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+On 22.02.2023 13:04, Bryan O'Donoghue wrote:
+> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
+> differences to msm8916.
+> 
+> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
+> - DRAM 1x800 LPDDR3
+> - Camera 4+4 lane CSI
+> - Venus @ 1080p60 HEVC
+> - DSI x 2
+> - Adreno A405
+> - WiFi wcn3660/wcn3680b 802.11ac
+> 
+> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Co-developed-by: Jun Nie <jun.nie@linaro.org>
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> Co-developed-by: Benjamin Li <benl@squareup.com>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
+> Co-developed-by: James Willcox <jwillcox@squareup.com>
+> Signed-off-by: James Willcox <jwillcox@squareup.com>
+> Co-developed-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> Co-developed-by: Joseph Gates <jgates@squareup.com>
+> Signed-off-by: Joseph Gates <jgates@squareup.com>
+> Co-developed-by: Max Chen <mchen@squareup.com>
+> Signed-off-by: Max Chen <mchen@squareup.com>
+> Co-developed-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Zac Crosby <zac@squareup.com>
+> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->
-> Changes since v1 [1]:
-> - Describe the worst case scenario without the recent fix 0254127ab977e
->   ("module: Don't wait for GOING modules") and refer to its discussion
->   in the commit message.
-> - Consider ACPI processor device objects when looking for _PCT, in
->   addition to processor objects.
-> - Add a few more comments explaining the code.
->
-> [1] https://lore.kernel.org/lkml/20230131130041.629-1-petr.pavlu@suse.com/
->
->  drivers/acpi/Makefile          |  1 +
->  drivers/acpi/acpi_cpufreq.c    | 77 ++++++++++++++++++++++++++++++++++
->  drivers/acpi/bus.c             |  1 +
->  drivers/acpi/internal.h        |  2 +
->  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++--------
->  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++-----
->  6 files changed, 127 insertions(+), 27 deletions(-)
->  create mode 100644 drivers/acpi/acpi_cpufreq.c
->
-> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-> index feb36c0b9446..880db1082c3e 100644
-> --- a/drivers/acpi/Makefile
-> +++ b/drivers/acpi/Makefile
-> @@ -57,6 +57,7 @@ acpi-y                                += evged.o
->  acpi-y                         += sysfs.o
->  acpi-y                         += property.o
->  acpi-$(CONFIG_X86)             += acpi_cmos_rtc.o
-> +acpi-$(CONFIG_X86)             += acpi_cpufreq.o
->  acpi-$(CONFIG_X86)             += x86/apple.o
->  acpi-$(CONFIG_X86)             += x86/utils.o
->  acpi-$(CONFIG_X86)             += x86/s2idle.o
-> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
-> new file mode 100644
-> index 000000000000..4e4ceb7cd226
-> --- /dev/null
-> +++ b/drivers/acpi/acpi_cpufreq.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Registration of platform devices for ACPI Processor Performance Control and
-> + * Processor Clocking Control.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <acpi/processor.h>
-> +
-> +#include "internal.h"
-> +
-> +static void __init cpufreq_add_device(const char *name)
-> +{
-> +       struct platform_device *pdev;
-> +
-> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
-> +                                              0);
-> +       if (IS_ERR(pdev))
-> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
-> +}
-> +
-> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
-> +                                        void *context, void **return_value)
-> +{
-> +       bool *pct = context;
-> +       acpi_status status;
-> +       acpi_object_type acpi_type;
-> +       struct acpi_device *acpi_dev;
-> +
-> +       static const struct acpi_device_id processor_device_ids[] = {
-> +               { ACPI_PROCESSOR_OBJECT_HID, 0 },
-> +               { ACPI_PROCESSOR_DEVICE_HID, 0 },
-> +               { "", 0 },
-> +       };
-> +
-> +       /* Skip nodes that cannot be a processor. */
-> +       status = acpi_get_type(handle, &acpi_type);
-> +       if (ACPI_FAILURE(status))
-> +               return status;
-> +       if (acpi_type != ACPI_TYPE_PROCESSOR && acpi_type != ACPI_TYPE_DEVICE)
-> +               return AE_OK;
-> +
-> +       /* Look at the set IDs if it is really a one. */
-> +       acpi_dev = acpi_fetch_acpi_dev(handle);
-> +       if (acpi_dev == NULL ||
-> +           acpi_match_device_ids(acpi_dev, processor_device_ids))
-> +               return AE_OK;
-> +
-> +       /* Check if it has _PCT and stop the walk as all CPUs must be same. */
-> +       *pct = acpi_has_method(handle, "_PCT");
-> +       return AE_CTRL_TERMINATE;
-> +}
-> +
-> +void __init acpi_cpufreq_init(void)
-> +{
-> +       bool pct = false;
-> +       acpi_status status;
-> +       acpi_handle handle;
-> +
-> +       /*
-> +        * Check availability of the PPC by looking at the presence of the _PCT
-> +        * object under the first processor definition.
-> +        */
-> +       acpi_walk_namespace(ACPI_TYPE_ANY, ACPI_ROOT_OBJECT, ACPI_UINT32_MAX,
-> +                           acpi_pct_match, NULL, &pct, NULL);
-> +       if (pct)
-> +               cpufreq_add_device("acpi-cpufreq");
+Couple of nits below
 
-It should be possible to combine this with CPU enumeration as stated above.
+>  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2454 +++++++++++++++++++++++++
+>  1 file changed, 2454 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+[...]
+
+
+> +		mpss: remoteproc@4080000 {
+> +			compatible = "qcom,msm8916-mss-pil";
+> +			reg = <0x04080000 0x100>,
+> +			      <0x04020000 0x040>;
+I see veeery aggressive line wrapping in reg/compatible :P
 
 > +
-> +       /* Check availability of the PCC by searching for \_SB.PCCH. */
-> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
-> +       if (ACPI_FAILURE(status))
-> +               return;
-> +       if (acpi_has_method(handle, "PCCH"))
-> +               cpufreq_add_device("pcc-cpufreq");
-
-And the remaining part can be called acpi_pcc_cpufreq_init().
-
-> +}
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index 0c05ccde1f7a..f1559e26d5ff 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -1428,6 +1428,7 @@ static int __init acpi_init(void)
->         acpi_viot_init();
->         acpi_agdi_init();
->         acpi_apmt_init();
-> +       acpi_cpufreq_init();
->         return 0;
->  }
->
-> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> index ec584442fb29..c9b1a5f689fa 100644
-> --- a/drivers/acpi/internal.h
-> +++ b/drivers/acpi/internal.h
-> @@ -157,8 +157,10 @@ static inline void acpi_early_processor_set_pdc(void) {}
->
->  #ifdef CONFIG_X86
->  void acpi_early_processor_osc(void);
-> +void acpi_cpufreq_init(void);
->  #else
->  static inline void acpi_early_processor_osc(void) {}
-> +static inline void acpi_cpufreq_init(void) {}
->  #endif
->
->  /* --------------------------------------------------------------------------
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 78adfb2ffff6..e1a5384cf21c 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -965,7 +965,7 @@ static void __init acpi_cpufreq_boost_init(void)
->         acpi_cpufreq_driver.boost_enabled = boost_state(0);
->  }
->
-> -static int __init acpi_cpufreq_init(void)
-> +static int __init acpi_cpufreq_probe(struct platform_device *pdev)
->  {
->         int ret;
->
-> @@ -1010,13 +1010,32 @@ static int __init acpi_cpufreq_init(void)
->         return ret;
->  }
->
-> -static void __exit acpi_cpufreq_exit(void)
-> +static int acpi_cpufreq_remove(struct platform_device *pdev)
->  {
->         pr_debug("%s\n", __func__);
->
->         cpufreq_unregister_driver(&acpi_cpufreq_driver);
->
->         free_acpi_perf_data();
+Unnecessary newline
+> +			reg-names = "qdsp6", "rmb";
 > +
-> +       return 0;
-> +}
+> +			interrupts-extended = <&intc GIC_SPI 24 IRQ_TYPE_EDGE_RISING>,
+> +					      <&hexagon_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> +					      <&hexagon_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> +					      <&hexagon_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> +					      <&hexagon_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "wdog", "fatal", "ready",
+> +					  "handover", "stop-ack";
+This should be a vertical list
+
 > +
-> +static struct platform_driver acpi_cpufreq_platdrv = {
-> +       .driver = {
-> +               .name   = "acpi-cpufreq",
-> +       },
-> +       .remove         = acpi_cpufreq_remove,
+> +			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+> +				 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
+> +				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
+> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> +			clock-names = "iface", "bus", "mem", "xo";
+This could also be one
+
+> +
+> +			power-domains = <&rpmpd MSM8939_VDDMDCX>,
+> +					<&rpmpd MSM8939_VDDMX>;
+> +			power-domain-names = "cx", "mx";
+> +
+> +			qcom,smem-states = <&hexagon_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			resets = <&scm 0>;
+> +			reset-names = "mss_restart";
+> +
+> +			qcom,halt-regs = <&tcsr 0x18000 0x19000 0x1a000>;
+> +
+> +			status = "disabled";
+> +
+> +			mba {
+> +				memory-region = <&mba_mem>;
+> +			};
+> +
+> +			mpss {
+> +				memory-region = <&mpss_mem>;
+> +			};
+> +
+> +			smd-edge {
+> +				interrupts = <GIC_SPI 25 IRQ_TYPE_EDGE_RISING>;
+> +
+> +				qcom,smd-edge = <0>;
+> +				mboxes = <&apcs1_mbox 12>;
+> +				qcom,remote-pid = <1>;
+> +
+> +				label = "hexagon";
+> +			};
+> +		};
+> +
+[...]
+
+> +
+> +		blsp1_uart1: serial@78af000 {
+> +			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
+> +			reg = <0x078af000 0x200>;
+> +			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&gcc GCC_BLSP1_UART1_APPS_CLK>, <&gcc GCC_BLSP1_AHB_CLK>;
+> +			clock-names = "core", "iface";
+> +			dmas = <&blsp_dma 0>, <&blsp_dma 1>;
+> +			dma-names = "tx", "rx";
+> +			pinctrl-names = "default", "sleep";
+> +			pinctrl-0 = <&blsp1_uart1_default>;
+> +			pinctrl-1 = <&blsp1_uart1_sleep>;
+property
+property-names
+
+
+> +			status = "disabled";
+> +		};
+> +
+[...]
+
+> +		usb: usb@78d9000 {
+> +			compatible = "qcom,ci-hdrc";
+> +			reg = <0x078d9000 0x200>,
+> +			      <0x078d9200 0x200>;
+> +			interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&gcc GCC_USB_HS_AHB_CLK>,
+> +				 <&gcc GCC_USB_HS_SYSTEM_CLK>;
+> +			clock-names = "iface", "core";
+> +			assigned-clocks = <&gcc GCC_USB_HS_SYSTEM_CLK>;
+> +			assigned-clock-rates = <80000000>;
+> +			resets = <&gcc GCC_USB_HS_BCR>;
+> +			reset-names = "core";
+> +			#reset-cells = <1>;
+> +			phy_type = "ulpi";
+> +			dr_mode = "otg";
+> +			ahb-burst-config = <0>;
+> +			phy-names = "usb-phy";
+> +			phys = <&usb_hs_phy>;
+> +			status = "disabled";
+> +
+> +			ulpi {
+> +				usb_hs_phy: phy {
+> +					compatible = "qcom,usb-hs-phy-msm8916",
+> +						     "qcom,usb-hs-phy";
+> +					clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
+This could be wrapped
+
+> +					clock-names = "ref", "sleep";
+> +					resets = <&gcc GCC_USB2A_PHY_BCR>, <&usb 0>;
+> +					reset-names = "phy", "por";
+> +					#phy-cells = <0>;
+> +					qcom,init-seq = /bits/ 8 <0x0 0x44>,
+> +								 <0x1 0x6b>,
+> +								 <0x2 0x24>,
+> +								 <0x3 0x13>;
+> +				};
+> +			};
+> +		};
+[...]
+
+> +
+> +		pronto: remoteproc@a204000 {
+> +			compatible = "qcom,pronto-v2-pil", "qcom,pronto";
+> +			reg = <0x0a204000 0x2000>,
+> +			      <0x0a202000 0x1000>,
+> +			      <0x0a21b000 0x3000>;
+> +			reg-names = "ccu", "dxe", "pmu";
+> +
+> +			interrupts-extended = <&intc GIC_SPI 149 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
+Long enough to be a vertical list
+
+
+Konrad
+> +
+> +			memory-region = <&wcnss_mem>;
+> +
+> +			power-domains = <&rpmpd MSM8939_VDDCX>,
+> +					<&rpmpd MSM8939_VDDMX>;
+> +			power-domain-names = "cx", "mx";
+> +
+> +			qcom,smem-states = <&wcnss_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&wcnss_pin_a>;
+> +
+> +			status = "disabled";
+> +
+> +			iris {
+> +				compatible = "qcom,wcn3620";
+> +				clocks = <&rpmcc RPM_SMD_RF_CLK2>;
+> +				clock-names = "xo";
+> +			};
+> +
+> +			smd-edge {
+> +				interrupts = <GIC_SPI 142 1>;
+> +				qcom,ipc = <&apcs1_mbox 8 17>;
+> +				qcom,smd-edge = <6>;
+> +				qcom,remote-pid = <4>;
+> +
+> +				label = "pronto";
+> +
+> +				wcnss {
+> +					compatible = "qcom,wcnss";
+> +					qcom,smd-channels = "WCNSS_CTRL";
+> +
+> +					qcom,mmio = <&pronto>;
+> +
+> +					bluetooth {
+> +						compatible = "qcom,wcnss-bt";
+> +					};
+> +
+> +					wifi {
+> +						compatible = "qcom,wcnss-wlan";
+> +
+> +						interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
+> +							     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
+> +						interrupt-names = "tx", "rx";
+> +
+> +						qcom,smem-states = <&apps_smsm 10>,
+> +								   <&apps_smsm 9>;
+> +						qcom,smem-state-names = "tx-enable",
+> +									"tx-rings-empty";
+> +					};
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	thermal_zones: thermal-zones {
+> +		cpu0-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 5>;
+> +
+> +			trips {
+> +				cpu0_alert: trip0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu0_crit: trip1 {
+> +					temperature = <115000>;
+> +					hysteresis = <0>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu0_alert>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu1-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 6>;
+> +
+> +			trips {
+> +				cpu1_alert: trip0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu1_crit: trip1 {
+> +					temperature = <110000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu1_alert>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu2-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 7>;
+> +
+> +			trips {
+> +				cpu2_alert: trip0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu2_crit: trip1 {
+> +					temperature = <110000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu2_alert>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu3-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 8>;
+> +
+> +			trips {
+> +				cpu3_alert: trip0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu3_crit: trip1 {
+> +					temperature = <110000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu3_alert>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu4567-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 9>;
+> +
+> +			trips {
+> +				cpu4567_alert: trip0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu4567_crit: trip1 {
+> +					temperature = <110000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu4567_alert>;
+> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +
+> +		gpu-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 3>;
+> +
+> +			trips {
+> +				gpu_alert0: trip-point0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				gpu_crit: gpu_crit {
+> +					temperature = <95000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		modem1-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 0>;
+> +
+> +			trips {
+> +				modem1_alert0: trip-point0 {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "hot";
+> +				};
+> +			};
+> +		};
+> +
+> +		modem2-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 2>;
+> +
+> +			trips {
+> +				modem2_alert0: trip-point0 {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "hot";
+> +				};
+> +			};
+> +		};
+> +
+> +		camera-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +
+> +			thermal-sensors = <&tsens 1>;
+> +
+> +			trips {
+> +				cam_alert0: trip-point0 {
+> +					temperature = <75000>;
+> +					hysteresis = <2000>;
+> +					type = "hot";
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
+> +	};
 > +};
-> +
-> +static int __init acpi_cpufreq_init(void)
-> +{
-> +       return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cpufreq_probe);
-> +}
-> +
-> +static void __exit acpi_cpufreq_exit(void)
-> +{
-> +       platform_driver_unregister(&acpi_cpufreq_platdrv);
->  }
->
->  module_param(acpi_pstate_strict, uint, 0644);
-> @@ -1027,18 +1046,4 @@ MODULE_PARM_DESC(acpi_pstate_strict,
->  late_initcall(acpi_cpufreq_init);
->  module_exit(acpi_cpufreq_exit);
->
-> -static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
-> -       X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
-> -       X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
-> -       {}
-> -};
-> -MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
-> -
-> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
-> -       {ACPI_PROCESSOR_OBJECT_HID, },
-> -       {ACPI_PROCESSOR_DEVICE_HID, },
-> -       {},
-> -};
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> -
-> -MODULE_ALIAS("acpi");
-> +MODULE_ALIAS("platform:acpi-cpufreq");
-> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-> index 9f3fc7a073d0..0c362932ca60 100644
-> --- a/drivers/cpufreq/pcc-cpufreq.c
-> +++ b/drivers/cpufreq/pcc-cpufreq.c
-> @@ -384,7 +384,7 @@ static int __init pcc_cpufreq_do_osc(acpi_handle *handle)
->         return ret;
->  }
->
-> -static int __init pcc_cpufreq_probe(void)
-> +static int __init pcc_cpufreq_evaluate(void)
->  {
->         acpi_status status;
->         struct acpi_buffer output = {ACPI_ALLOCATE_BUFFER, NULL};
-> @@ -576,7 +576,7 @@ static struct cpufreq_driver pcc_cpufreq_driver = {
->         .name = "pcc-cpufreq",
->  };
->
-> -static int __init pcc_cpufreq_init(void)
-> +static int __init pcc_cpufreq_probe(struct platform_device *pdev)
->  {
->         int ret;
->
-> @@ -587,9 +587,9 @@ static int __init pcc_cpufreq_init(void)
->         if (acpi_disabled)
->                 return -ENODEV;
->
-> -       ret = pcc_cpufreq_probe();
-> +       ret = pcc_cpufreq_evaluate();
->         if (ret) {
-> -               pr_debug("pcc_cpufreq_init: PCCH evaluation failed\n");
-> +               pr_debug("pcc_cpufreq_probe: PCCH evaluation failed\n");
->                 return ret;
->         }
->
-> @@ -607,21 +607,35 @@ static int __init pcc_cpufreq_init(void)
->         return ret;
->  }
->
-> -static void __exit pcc_cpufreq_exit(void)
-> +static int pcc_cpufreq_remove(struct platform_device *pdev)
->  {
->         cpufreq_unregister_driver(&pcc_cpufreq_driver);
->
->         pcc_clear_mapping();
->
->         free_percpu(pcc_cpu_info);
-> +
-> +       return 0;
->  }
->
-> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
-> -       {ACPI_PROCESSOR_OBJECT_HID, },
-> -       {ACPI_PROCESSOR_DEVICE_HID, },
-> -       {},
-> +static struct platform_driver pcc_cpufreq_platdrv = {
-> +       .driver = {
-> +               .name   = "pcc-cpufreq",
-> +       },
-> +       .remove         = pcc_cpufreq_remove,
->  };
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> +
-> +static int __init pcc_cpufreq_init(void)
-> +{
-> +       return platform_driver_probe(&pcc_cpufreq_platdrv, pcc_cpufreq_probe);
-> +}
-> +
-> +static void __exit pcc_cpufreq_exit(void)
-> +{
-> +       platform_driver_unregister(&pcc_cpufreq_platdrv);
-> +}
-> +
-> +MODULE_ALIAS("platform:pcc-cpufreq");
->
->  MODULE_AUTHOR("Matthew Garrett, Naga Chumbalkar");
->  MODULE_VERSION(PCC_VERSION);
-> --
