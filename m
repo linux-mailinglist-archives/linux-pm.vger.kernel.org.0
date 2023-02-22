@@ -2,118 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8286C69FC00
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Feb 2023 20:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6F169FC13
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Feb 2023 20:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbjBVTXz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Feb 2023 14:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S232527AbjBVT0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Feb 2023 14:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjBVTXz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 14:23:55 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A2425BB5;
-        Wed, 22 Feb 2023 11:23:54 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id ky4so11213428plb.3;
-        Wed, 22 Feb 2023 11:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jVtjYpIHV+F/G/ingVBx6jIgdgl5yssi4YLW8OGrNiA=;
-        b=Wt+l673/i3AK1CpL3q4jfsYpc3ydKtCRNrHD2smWCOsHsu5pupRfRz7HJMK0U+Tb3K
-         lgzkSxW+pHPeUSZlRTAP4UV0FNjS0LpoGlhh8rBgyxvEq650mnRvew+w1SywqPvYVWXL
-         m8qpqJ8IWXwYn/v8dwPT//KDjwHBkWsCrrSwT9KkwLM+Pa6FhS5r2feCF990izO8ETx6
-         nN0+w9BqZGQk6jwSyl6Op+beVOSH0Xvu687zcHwKxZBt+cEktTmiaZu8G5K6ICbeG5xf
-         7AVFCKwyQfMy/Gzt0oRFK2PVrPrJTZRqG73OkzzU6wfl1M9udY5yVoQsh3HhJzIG+tWG
-         vMiQ==
+        with ESMTP id S232602AbjBVT0d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 14:26:33 -0500
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347242BE4;
+        Wed, 22 Feb 2023 11:26:03 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id da10so36028786edb.3;
+        Wed, 22 Feb 2023 11:26:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jVtjYpIHV+F/G/ingVBx6jIgdgl5yssi4YLW8OGrNiA=;
-        b=cMjZjr7tY0SCxIaz8+NtqTyuphAiSF71PyQPDv8eF0E0OVCJuxPADEmNOI83VSTjyL
-         ouNJ7u7vVmXCBp6qYLCt/SpyoZGuyKFRD3qWj50gxJXmEbf2qCWTkeFMEXZ/hbH4vF9G
-         fH8ftWm4MPeh2mAFFAFPPsRy5kNJrPdNmg5vwSFTkibLHHFW33hPMSdO+df0ydhwTGx2
-         C8bSEbtDsWD4TWSwd6vfI8YonwEc4177u48CyM+pe3LafISvoByFXKPPj6N5otkjroKE
-         on0W0R2P0lZEpqoPWkxTnKgXpl6kzyJ2KMtZno7lGNwa4JRPQHoi5uRv4nSzNJO+fQQl
-         L/yw==
-X-Gm-Message-State: AO0yUKXaG1uIiPcGWCjbZUzpKWKsEpDvNxicOy9Y3X/E/gtpbApw2v4+
-        AoZmqTDSSdxAYP2N/46dGXc=
-X-Google-Smtp-Source: AK7set++t4HMlPjsHBal6OrZkgceAwcAsao9C0R9qlSCKk167SCs4r8F+dflc7N1eroggJ4F5U/TGw==
-X-Received: by 2002:a17:90b:224b:b0:234:6a1:635d with SMTP id hk11-20020a17090b224b00b0023406a1635dmr12313564pjb.49.1677093833790;
-        Wed, 22 Feb 2023 11:23:53 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y15-20020a17090ad70f00b00233e7f0e7dfsm4771111pju.4.2023.02.22.11.23.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 11:23:53 -0800 (PST)
-Message-ID: <e07d4ef6-881a-bac7-9895-5ec50bcb585d@gmail.com>
-Date:   Wed, 22 Feb 2023 11:23:40 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bz5zQmNEJOPn/0yWwN4USNlcxHE8XLHZBv89fxLsYN8=;
+        b=Nm6f7MLUbi4j1obgWOb9C1+O4PW/tvzrXGpGZXT6RV538BFfNazRe0j8RjcShJZPlx
+         1XIy6LPEMwxjzk7WWTq00/ZF0u4Np6llcQb+ySPb/I4q/6TfU4ln5HYuO833fmj7/HFy
+         9zQp12KKaHzc/rJ6PW4SvBKmYYhujcSLxjYk9bYFRkPe1cjlhP0LuRp2YOLG+s/oYDa3
+         E6Eo3Jgsyv4Ftzei8KVTmVlsoH9Y16KU1ZEIMU51ZzdupmozLdZL7ne2mxkycWbw2ZRT
+         2XRhFHcEyRwEQtiJRJzTjRY0p1gXJDc0+x4GG8wBzNLtQDDfvaHYn0sIYnusFjjWjEti
+         YHPw==
+X-Gm-Message-State: AO0yUKXq1AHYY3ovaj9yhMuvUOwdGOm9ifz/MtIFgRwaSLkm8uyKhA3m
+        5Ou/ieMwJU/B/YGHYtpyAl2JrBb5N/4f128ZmvM=
+X-Google-Smtp-Source: AK7set9gVkZNKE8FvPoiKyd9mGRwCw7KlpgXOBcbuvNaECyMSEiDdMXuJQRALNPSEMoadF9vtnOSrX7/lwVL18jGSnM=
+X-Received: by 2002:a17:906:9251:b0:8ce:cb8f:3747 with SMTP id
+ c17-20020a170906925100b008cecb8f3747mr5467513ejx.5.1677093940107; Wed, 22 Feb
+ 2023 11:25:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 04/16] thermal/hwmon: Do not set no_hwmon before
- calling thermal_add_hwmon_sysfs()
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Mark Brown <broonie@kernel.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
- <20230221180710.2781027-5-daniel.lezcano@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230221180710.2781027-5-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230221180710.2781027-1-daniel.lezcano@linaro.org> <20230221180710.2781027-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20230221180710.2781027-3-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Feb 2023 20:25:29 +0100
+Message-ID: <CAJZ5v0hSfXY3MnShyUdjT7FKot0eiYW1DhCQytTPOazYxSL8Mw@mail.gmail.com>
+Subject: Re: [PATCH v2 02/16] thermal/core: Show a debug message when
+ get_temp() fails
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/21/23 10:06, Daniel Lezcano wrote:
-> The thermal->tzp->no_hwmon parameter is only used when calling
-> thermal_zone_device_register().
-> 
-> Setting it to 'false' before calling thermal_add_hwmon_sysfs() has no
-> effect.
-> 
-> Remove the call and again prevent the drivers to access the thermal
-> internals.
-> 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se> #R-Car
+On Tue, Feb 21, 2023 at 7:07 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The different thermal drivers are showing an error in case the
+> get_temp() fails. Actually no traces should be displayed in the
+> backend ops but in the call site of this ops.
+>
+> Furthermore, the message is often a dev_dbg message where the
+> tz->device is used, thus using the internal of the structure from the
+> driver.
+>
+> Show a debug message if the thermal_zone_get_temp() fails to read the
+> sensor temperature, so code showing the message is factored out and
+> the tz->device accesss is in the scope of the thermal core framework.
+>
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com> #Broadcom
--- 
-Florian
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
+> ---
+>  drivers/thermal/thermal_helpers.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+> index 0f648131b0b5..9558339f5633 100644
+> --- a/drivers/thermal/thermal_helpers.c
+> +++ b/drivers/thermal/thermal_helpers.c
+> @@ -107,6 +107,9 @@ int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+>                         *temp = tz->emul_temperature;
+>         }
+>
+> +       if (ret)
+> +               dev_dbg(&tz->device, "Failed to get temperature: %d\n", ret);
+> +
+>         return ret;
+>  }
+>
+> --
+> 2.34.1
+>
