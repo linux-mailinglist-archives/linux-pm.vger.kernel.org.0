@@ -2,201 +2,358 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B586A1329
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 23:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AFB6A13AD
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Feb 2023 00:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBWW46 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 17:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S229446AbjBWXUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 18:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjBWW44 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 17:56:56 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C875DCE8
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 14:56:51 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c18so5591641wmr.3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 14:56:51 -0800 (PST)
+        with ESMTP id S229379AbjBWXUj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 18:20:39 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867FE580F3
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 15:20:36 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id i12so487403ila.5
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 15:20:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cikNiAl3CsaUVzCtk0AInA3PwE1/TMQnMlzjF1gGdG0=;
-        b=DRN7VfySjUL0rYZq24bKTqYo1a7eMqo07ygSwMFUqHzuTKP65b9sTMEH8VZt0hxwu1
-         dmHGRYaPf3ggH9KZmEyIo+flPWm4zpT9CAN4fb3bb2UwUttx3rmo4vx8zo6F2tPiEUOK
-         kQWqn6QOgf2ZhhgOZ653j1GAMDb6AMca6ljq3tiMi06NSCiMzWp0EPnd6Uvs6JK9LOIe
-         r43kHvJdLLA9VFyPJO6M+KZDTGdMEFaMKztCR+nTATohFgvC9r80+cCMQ12KHZsj+SUY
-         jwwZvlnmtS9kLRvR3sEhulVIN5kRwRQDmQ/AX297OlmgtRWEUsWG1kh7J/OLhfLYqjHy
-         599w==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CcS5jsqzbZbUHIgyk1mZG9EIgGS9uBrAg9XTbvuKrY0=;
+        b=R/8SLHW0bb6bXpEMVBfSN9liyL6huXmLLSp96uzEcLqKoidk5Ry34O5hbLpx8qW3Fa
+         zhttdwQHY4l4nPMRgyO4PCu99BphTUwy9SGJERL1SbKZeC+DDt/W1kcTwCCTEn3P0du/
+         /kBJMycp2nUupXrJ46P+LhCEGPDXilpPNyUzo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cikNiAl3CsaUVzCtk0AInA3PwE1/TMQnMlzjF1gGdG0=;
-        b=wZmGeBb2VJRNlRzihBkIVIicR404cfSOmy1PBUa6tu6vCM1+INEmsA+6RqpJkXCjXR
-         s2txRt1AG7rzZZERGBgum1quT8swKB9/GUbwM80+o+jk4P0P1t+RKEMFyg5LUT9QtbyR
-         PvVAy1iUfTjEb8eucr1crxlVhs5znFO1XSOg5E4wxfH9w6EYdA9se82tO2ea9VZsF0W0
-         u+fScHS5hcArZ5McXxiWFg6gisNmPfVLDmcmksTCC3CoRA0dCR81CbQZX6fI+Md/U9IQ
-         Sb4orYcV7a8oR8yjQnlgL7wMVoKakRBNDlKnr+KY5VeM7qNOoXh17in3N1UXw3wA/pT4
-         nwvQ==
-X-Gm-Message-State: AO0yUKXAn7EbfKlPvZhuo8RXRGxkq2YN6LRMlY4nxrozt9QcePIQIrCP
-        vxwAiwnUXoK0wDGGQS+TUxmQIg==
-X-Google-Smtp-Source: AK7set9Z52yxWv52zRMDow6DF+DTZQX7KbVMepo+DRQCwOeMkXAXaJBNJ2zYwaSnuLVGEj/k1hBdjw==
-X-Received: by 2002:a05:600c:a695:b0:3e2:2f9:b8e2 with SMTP id ip21-20020a05600ca69500b003e202f9b8e2mr10908094wmb.35.1677193009641;
-        Thu, 23 Feb 2023 14:56:49 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:3e6f:e90a:1fc9:3708? ([2a05:6e02:1041:c10:3e6f:e90a:1fc9:3708])
-        by smtp.googlemail.com with ESMTPSA id d21-20020a1c7315000000b003b47b80cec3sm662936wmb.42.2023.02.23.14.56.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CcS5jsqzbZbUHIgyk1mZG9EIgGS9uBrAg9XTbvuKrY0=;
+        b=IkY4UPeEwAqzPA5JJypsuLJIQ3cfbsl1DvoGgbSp5KgQCT1CLuF1STN84j/8D2P24i
+         sIJfCpF4os1itaXI2o+spa7zVMSCRSDNa0zOumy7KJgQMWahHNcmmAX4BuI9YjHVNyXE
+         iwCz/ofN/UuACVeqUOoz7j0rtOj+b1jN2SwQ6QKGSW8XonxtaCoxWf694KuEEISwC9In
+         vd4bgpw1z7OEkvadjcfErp5lH3BYbfSAdAz5gX0nZ8/cYhrVxbw2I7lLZJkx1rfClmiR
+         8ApwniEjJyvuc6UjOFqs+4OssSW+3/Nm6r5qhvCsnzAcSJgUmjfE92jff70wFi6quJhn
+         AJyA==
+X-Gm-Message-State: AO0yUKWpNKgg3PeEG76ZpZTyVvboPEg/+cUfVbrO0eF+QqiGfvcQzkJt
+        A3ECs6zfqk1DJWnwjRmdTnh2kQ==
+X-Google-Smtp-Source: AK7set/A5twPeEpmPIKnFVmcHMaRpfW26OtlE9Bk+U3nYV0O2dw47+8KUO0Bm9FrLrEobp0pT4tKBg==
+X-Received: by 2002:a05:6e02:1a43:b0:317:106c:647f with SMTP id u3-20020a056e021a4300b00317106c647fmr141466ilv.20.1677194435780;
+        Thu, 23 Feb 2023 15:20:35 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id c14-20020a02a40e000000b003a971c488cesm3811916jal.173.2023.02.23.15.20.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 14:56:49 -0800 (PST)
-Message-ID: <37b3b835-e992-0090-56e5-bd4d58e547a7@linaro.org>
-Date:   Thu, 23 Feb 2023 23:56:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/17] Self-encapsulate the thermal zone device
- structure
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
+        Thu, 23 Feb 2023 15:20:35 -0800 (PST)
+Date:   Thu, 23 Feb 2023 23:20:34 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-acpi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230223224844.3491251-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230223224844.3491251-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+Message-ID: <Y/f0wg4WJSc3ag8c@google.com>
+References: <Y+ErWTyV8CnE3Hl+@linaro.org>
+ <Y+E3T6bozU1K2sFb@google.com>
+ <Y+E9Z+/+eCpPK6DE@linaro.org>
+ <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
+ <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
+ <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
+ <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
+ <20230220171550.43a3h56gznfc3gec@ripper>
+ <Y/UOJtyIMEMzuPqN@google.com>
+ <20230222185152.tkculzvabvmjc3n4@ripper>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230222185152.tkculzvabvmjc3n4@ripper>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/02/2023 23:48, Daniel Lezcano wrote:
-> The exported thermal headers expose the thermal core structure while those
-> should be private to the framework. The initial idea was the thermal sensor
-> drivers use the thermal zone device structure pointer to pass it around from
-> the ops to the thermal framework API like a handler.
+On Wed, Feb 22, 2023 at 10:51:52AM -0800, Bjorn Andersson wrote:
+> On Tue, Feb 21, 2023 at 06:32:06PM +0000, Matthias Kaehlcke wrote:
+> > On Mon, Feb 20, 2023 at 09:15:50AM -0800, Bjorn Andersson wrote:
+> > > On Tue, Feb 07, 2023 at 03:45:35PM -0800, Doug Anderson wrote:
+> > > > Hi,
+> > > > 
+> > > > On Mon, Feb 6, 2023 at 1:35 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > > >
+> > > > > On Mon, Feb 6, 2023 at 1:10 PM Doug Anderson <dianders@chromium.org> wrote:
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > On Mon, Feb 6, 2023 at 11:33 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > CC'ed Saravana
+> > > > > > >
+> > > > > > > Thanks. Please do cc me for stuff like this from the start. I skimmed
+> > > > > > > the series and I think it's doing one of my TODO items. So, thanks for
+> > > > > > > the patch!
+> > > > > > >
+> > > > > > > I'll take a closer look within a few days -- trying to get through
+> > > > > > > some existing fw_devlink stuff.
+> > > > > > >
+> > > > > > > But long story short, it is the right thing to keep a supplier on
+> > > > > > > indefinitely if there's a consumer device (that's not disabled in DT)
+> > > > > > > that never gets probed. It's a pretty common scenario -- for example,
+> > > > > > > say a display backlight. The default case should be functional
+> > > > > > > correctness. And then we can add stuff that allows changing this
+> > > > > > > behavior with command line args or something else that can be done
+> > > > > > > from userspace.
+> > > > > > >
+> > > > > > > +1 to what Doug said elsewhere in this thread too. I'm trying to
+> > > > > > > consolidate the "when do we give up" decision at the driver core level
+> > > > > > > independent of what framework is being used.
+> > > > > >
+> > > > > > I'm not really sure I agree with the above, at least not without lots
+> > > > > > of discussion in the community. It really goes against what the kernel
+> > > > > > has been doing for years and years in the regulator and clock
+> > > > > > frameworks. Those frameworks both eventually give up and power down
+> > > > > > resources that no active drivers are using. Either changing the
+> > > > > > regulator/clock frameworks or saying that other frameworks should work
+> > > > > > in an opposite way seems like a recipe for confusion.
+> > > > > >
+> > > > > > Now, certainly I won't say that the way that the regulator and clock
+> > > > > > frameworks function is perfect nor will I say that they don't cause
+> > > > > > any problems. However, going the opposite way where resources are kept
+> > > > > > at full power indefinitely will _also_ cause problems.
+> > > > > >
+> > > > > > Specifically, let's look at the case you mentioned of a display
+> > > > > > backlight. I think you're saying that if there is no backlight driver
+> > > > > > enabled in the kernel that you'd expect the backlight to just be on at
+> > > > > > full brightness.
+> > > > >
+> > > > > No, I'm not saying that.
+> > > > >
+> > > > > > Would you expect this even if the firmware didn't
+> > > > > > leave the backlight on?
+> > > > >
+> > > > > sync_state() never turns on anything that wasn't already on at boot.
+> > > > > So in your example, if the firmware didn't turn on the backlight, then
+> > > > > it'll remain off.
+> > > > 
+> > > > As per offline discussion, part of the problems are that today this
+> > > > _isn't_ true for a few Qualcomm things (like interconnect). The
+> > > > interconnect frameway specifically maxes things out for early boot.
+> > > > 
+> > > 
+> > > The problem being solved here is that the bootloader leaves some vote at
+> > > 1GB/s, as needed by hardware related to driver B.
+> > > 
+> > > Driver A is loaded first and votes for 1kb/s; what should the kernel do
+> > > now, without knowledge of the needs from the hardware associated with B,
+> > > or the ability to read back the bootloader's votes.
+> > > 
+> > > This was the behavior of the initial implementation, and the practical
+> > > implications was seen as the UART would typically come along really
+> > > early, cast a low vote on the various buses and it would take forever to
+> > > get to the probing of the drivers that actually gave us reasonable
+> > > votes.
+> > 
+> > I generally understand this problem and agree that it makes sense to bump
+> > the resources *initially*. Doug and I primarily question the 'wait forever'
+> > part of it.
+> > 
 > 
-> Unfortunately, different drivers are using and abusing the internals of this
-> structure to hook the associated struct device, read the internals values, take
-> the lock, etc ...
-> 
-> rn order to fix this situation, let's encapsulate the structure leaking the
-> more in the different drivers: the thermal_zone_device structure.
-> 
-> This series revisit the existing drivers using the thermal zone private
-> structure internals to change the access to something else. For instance, the
-> get_temp() ops is using the tz->dev to write a debug trace. Despite the trace
-> is not helpful, we can check the return value for the get_temp() ops in the
-> call site and show the message in this place.
-> 
-> With this set of changes, the thermal_zone_device is almost self-encapsulated.
-> As usual, the acpi driver needs a more complex changes, so that will come in a
-> separate series along with the structure moved the private core headers.
-> 
-> Changelog:
-> 	- V3:
-> 	   - Collected more tags
-> 	   - Added missing changes for ->devdata in some drivers
-> 	   - Added a 'type' accessor
-> 	   - Replaced the 'type' to 'id' changes by the 'type' accessor
-> 	   - Used the 'type' accessor in the drivers
-> 	- V2:
-> 	   - Collected tags
-> 	   - Added missing changes for ->devdata for the tsens driver
-> 	   - Renamed thermal_zone_device_get_data() to thermal_zone_priv()
-> 	   - Added stubs when CONFIG_THERMAL is not set
-> 	   - Dropped hwmon change where we remove the tz->lock usage
-> 
-> Thank you all for your comments
+> The question is when "initially" ends.
 
-The series has been blocked by gsmtp because the next patch has too many 
-Cc. I'll sort out this and resend.
+ack
 
+> > > Also consider the case where driver A probes, votes for bandwidth, does
+> > > it's initialization and then votes for 0. Without making assumptions
+> > > about the needs of B (or a potential B even), we'd turn off critical
+> > > resources - possible preventing us from ever attempting to probe B.
+> > 
+> > For the most critical devices that are probed during early boot this
+> > would still work if the resources are initially bumped and then turned
+> > off after some timeout.
+> > 
+> 
+> The resources that needs to be kept on are those which we rely on for
+> the system to reach said driver 'B'.
+> 
+> The obvious ones are those allowing us to execute code (e.g. some form
+> of DDR vote) and things such as earlycon - until the console driver is
+> probed properly and can cast a interconnect vote.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Yes, these were the things that came to my mind and I'd expect the
+corresponding drivers to be either builtin or on the ramdisk, so they
+wouldn't be impacted if the rootfs takes longer to mount.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> But the typical example here is display, which depending on system
+> configuration might rely on the hardware being able to fetch data from
+> DDR until all the relevant display driver components is starting to take
+> care of the voting.
 
+Thanks for the example, it's certainly desirable to keep the display
+working even when the rootf can't be mounted (in time).
+
+> > Could you provide an example for some other type of device that is/would
+> > be probed later? Except for auto-probing buses like USB or PCI the device
+> > should probe regardless of the resources being enabled and then vote
+> > during probe for the required bandwidth, voltage, etc., which should put
+> > the resources into the required state. Am I missing something here?
+> > 
+> 
+> What do you mean with "later"?
+
+I was thinking beyond 'early boot', you are right, there is no clear
+definition.
+
+> We have one consistent definition of "later", and that's
+> late_initcall(). By that definition it's pretty much everything beyond
+> gcc, interconnect and UART is or may probe "later" (because starting
+> userspace without a valid /dev/console is suboptimal)..
+> 
+> 
+> Looking at something specific, if you where to try to boot sc7280 using
+> the upstream defconfig I don't think you have anyone ensuring that the
+> CPU is allowed to reach DDR at this point.
+
+Why is that the case?
+
+> > > As such, the only safe solution is to assume that there might be a later
+> > > loaded/probed client that has a large vote and preemptively vote for
+> > > some higher bandwidth until then.
+> > 
+> > > > > > In any case, why do you say it's more correct?
+> > > > >
+> > > > > Because if you turn off the display, the device is unusable. In other
+> > > > > circumstances, it can crash a device because the firmware powered it
+> > > > > on left it in a "good enough" state, but we'd go turn it off and crash
+> > > > > the system.
+> > > > >
+> > > > > > I suppose you'd say that the screen is at least usable like this.
+> > > > > > ...except that you've broken a different feature: suspend/resume.
+> > > > >
+> > > > > If the display is off and the laptop is unusable, then we have bigger
+> > > > > problems than suspend/resume?
+> > > > 
+> > > > I suspect that here we'll have to agree to disagree. IMO it's a
+> > > > non-goal to expect hardware to work for which there is no driver. So
+> > > > making the backlight work without a backlight driver isn't really
+> > > > something we should strive for.
+> > > > 
+> > > 
+> > > Without trying to make you agree ;)
+> > > 
+> > > How can you differentiate between "the driver wasn't built" and "the
+> > > driver isn't yet available"?
+> > 
+> > Unfortunately you can't AFAIK.
+> > 
+> > > Consider the case where I boot my laptop, I have some set of builtin
+> > > drivers, some set of drivers in the ramdisk and some set of drivers in
+> > > the root filesystem.
+> > > 
+> > > In the event that something goes wrong mounting the rootfs, I will now
+> > > be in the ramdisk console. Given the current timer-based disabling of
+> > > regulators, I have ~25 seconds to solve my problem before the backlight
+> > > goes blank.
+> > > 
+> > > 
+> > > Obviously this isn't a typical scenario in a consumer device, but it
+> > > seems conceivable that your ramdisk would run fsck for some amount of
+> > > time before mounting the rootfs and picking up the last tier of drivers.
+> > 
+> > If the laptop is running a kernel that is tailored for this device I'd
+> > say the most practial solution would be to either build the backlight
+> > driver into the kernel or have it on the ramdisk as a module.
+> > 
+> > However the laptop might be running a distribution like Debian or Red Hat
+> > with (I assume) a single kernel+ramdisk for all systems of a given
+> > architecture (e.g. aarch64). In that case it might not be desirable to
+> > have all possible backlight drivers in the kernel image or ramdisk. For
+> > this kind of system 'wait forever' might be a suitable solution.
+> > 
+> 
+> For most users, most of the time, I don't think "wait forever" is very
+> good either; e.g. if a distro is lacking one .ko the user would see
+> significant worse battery performance...
+> 
+> But at the same time, when your distro asks for your crypto key for your
+> rootfs and the kernel decides that times up, that's pretty bad user
+> experience as well..
+
+Indeed, both options have their significant caveats :(
+
+> > I have the impression we might want both options, a timeout after which
+> > resources are turned off unless they have been voted for, and 'wait
+> > forever', with a Kconfig option to select the desired behavior.
+> > 
+> > For most tailored systems the timout is probably a more suitable solution.
+> > The maintainer of the kernel/system can decide to not enable certain
+> > drivers because they aren't needed and include essential drivers into
+> > the kernel image or ramdisk. The timeout ensures that the system doesn't
+> > burn extra power for reasons that aren't evident for the maintainer (who
+> > might not even be aware of the whole sync_state story).
+> > 
+> > On the other hand general purpose distributions might want to wait
+> > forever, since they have to support a wide range of hardware and enable
+> > most available drivers anyway.
+> > 
+> > If we end up with such an option I think the timeout should be the
+> > default. Why? There are hundreds of maintainers of tailored kernels
+> > who might run into hard to detect/debug power issues with 'wait
+> > forever'. On the other hand there is a limited number of general purpose
+> > distributions, with kernel teams that probably already know about
+> > 'sync_state'. They only have to enable 'wait forever' once and then
+> > carry it forward to future versions.
+> 
+> In your tailored system you test every hardware and driver combinations,
+> so the wait forever seems like a very easy thing to handle.
+
+I disagree
+
+For one you might not want to enable certain drivers, because the system
+doesn't make use of the underlying hardware. In theory (probably not as
+much in practice) the device tree could describe existing hardware which
+isn't supported by the kernel (yet).
+
+More importantly it might not be evident to the maintaner(s) of the system
+that they have an issue impacting power. Think of small companies with a
+single person or very small kernel team and no vendor support. How do
+they even know their system is consuming more power than it would if
+only all these drivers they don't really care about were enabled? Some of
+them will be aware of the problematic and pro-actively look out for
+possible issues, but I expect many aren't. It wouldn't be scalable and
+'user'-friendly to put the burden on them and expect them to sort out the
+issues individually.
+
+> In a general purpose distribution, the distribution doesn't have a way
+> to test every single system. So it's quite likely that they won't enable
+> some optional set of drivers (e.g. camera, venus) and wait forever would
+> be the wrong thing to do. Except when the user needs that backlight, or
+> the framebuffer etc.
+
+True, even a general purpose distribution doesn't necessarily enable
+everything.
+
+> I don't know how to solve this, the global timeout is likely the best
+> way we have for now - at least it works, for all cases except when
+> someone needs to stay in their initramfs for more than 30 seconds...
+
+There is indeed (at least for now) no solution that addresses all the
+issues. A timeout sounds good to me for the time being.
