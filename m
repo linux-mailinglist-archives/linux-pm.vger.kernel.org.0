@@ -2,47 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8046A009B
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 02:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAD86A017F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 04:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjBWBbY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Feb 2023 20:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S231558AbjBWDYI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Feb 2023 22:24:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjBWBbX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 20:31:23 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78983D90D;
-        Wed, 22 Feb 2023 17:31:21 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229461AbjBWDYH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 22:24:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC012A6E6;
+        Wed, 22 Feb 2023 19:24:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 3C56D4214D;
-        Thu, 23 Feb 2023 01:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677115879;
-        bh=d/ifL75wKQnZuQURhIP2TmmZmuFYuchbACzMuBuy/+Y=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=X4A6RT/9QXidUEGAMn6bLMVrt8pEKCkBe/PMtYs7JVaVnSV3HQp3umw5H8/vJbavU
-         B/jsp08QMnfMh65nr1H+RYcEEUwCDyRhzPeOqvb+dSVvFqXXr3vtJKQ4zL4P4/higb
-         VPfKFHO0Jyt4S1CTosWfAycCpdr5BrR0WJXguxTAEg4YOH2C6QDHcywAxFe90OFbOo
-         YlNqxQp8LrARKJGVBAMmTCx4Yp+14smQPf8+4tBWX6kX8ivd9W/3RUjcdsOqXxGGiJ
-         j/hPmovsdJsRdoHVuGaIO1fGyZrwNH3Rp9DO90DGW6R1+w0Ds4Fr8KL1kzySx/38U2
-         DVhd1fd+IS2gg==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     ray.huang@amd.com
-Cc:     mario.limonciello@amd.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86492B81733;
+        Thu, 23 Feb 2023 03:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C19BC433D2;
+        Thu, 23 Feb 2023 03:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677122643;
+        bh=e1QIQuOBVdmi2tiHZ/xai1rSaIqCT7wlBRBcoAQUl/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LYROHYabF4OwV2y+2tpoWXpS++YNKSDKWR/wwgY/5yxwFL99FKYmmhLFr70YilVCQ
+         MjU/ruelGPqs/OPeiAvxjIWDdSDIGNk5Umh8nSjltjErwFkTMHNfjaLoRrlgcsTfkI
+         VslW/fIOc0L5Ls2wRmOrOXr74E2u6uJEBDfI//VpEKEqgrI89oJVhhKn2zqlgIYdgc
+         s9Sc9f/BRSZ+QtjDtIxNmmJ8MCPYu7FJwrvrWogRErmnKsKr6nM0zwvUbWi9Fb5zch
+         ey8HwLL2IDer4ej5TVnYDB6pVVzuzPtj9KMUl9WRXYkEh7oYtC6NP/eG6C/H6mn0wR
+         r9UMIJB5S2mvA==
+Date:   Wed, 22 Feb 2023 19:27:30 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        marijn.suijten@somainline.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: amd-pstate: Let user know amd-pstate is disabled
-Date:   Thu, 23 Feb 2023 09:30:32 +0800
-Message-Id: <20230223013032.2011601-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH v2] cpufreq: qcom-hw: Simplify counting frequency domains
+Message-ID: <20230223032730.fhnxjzfwralkexun@ripper>
+References: <20230216105140.3938749-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216105140.3938749-1-konrad.dybcio@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,31 +55,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 202e683df37c ("cpufreq: amd-pstate: add amd-pstate driver
-parameter for mode selection") changed the driver to be disabled by
-default, and this can suprise users.
+On Thu, Feb 16, 2023 at 11:51:40AM +0100, Konrad Dybcio wrote:
+> For quite some time, this driver has been performing some quite
+> low-level DT operations. Simplify that using platform_get_resource.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Let users know what happened so they can decide what to do next.
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-BugLink: https://bugs.launchpad.net/bugs/2006942
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/cpufreq/amd-pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
+Bjorn
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 45c88894fd8e..305f73f657ed 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1263,7 +1263,7 @@ static int __init amd_pstate_init(void)
- 	 * with amd_pstate=passive or other modes in kernel command line
- 	 */
- 	if (cppc_state == AMD_PSTATE_DISABLE) {
--		pr_debug("driver load is disabled, boot with specific mode to enable this\n");
-+		pr_info("amd_pstate is disabled, boot with specific mode to enable this\n");
- 		return -ENODEV;
- 	}
- 
--- 
-2.34.1
-
+> ---
+> v1 -> v2:
+> - remove stray newline near probe return
+> - s/doing performing/performing/
+> 
+> v1: https://lore.kernel.org/linux-arm-msm/20230216102956.3933639-1-konrad.dybcio@linaro.org/T/#u
+> 
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 29 ++++++-----------------------
+>  1 file changed, 6 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 2f581d2d617d..575a4461c25a 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -29,6 +29,8 @@
+>  
+>  #define GT_IRQ_STATUS			BIT(2)
+>  
+> +#define MAX_FREQ_DOMAINS		3
+> +
+>  struct qcom_cpufreq_soc_data {
+>  	u32 reg_enable;
+>  	u32 reg_domain_state;
+> @@ -651,10 +653,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  {
+>  	struct clk_hw_onecell_data *clk_data;
+>  	struct device *dev = &pdev->dev;
+> -	struct device_node *soc_node;
+>  	struct device *cpu_dev;
+>  	struct clk *clk;
+> -	int ret, i, num_domains, reg_sz;
+> +	int ret, i, num_domains;
+>  
+>  	clk = clk_get(dev, "xo");
+>  	if (IS_ERR(clk))
+> @@ -681,24 +682,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
+> -	soc_node = of_get_parent(dev->of_node);
+> -	if (!soc_node)
+> -		return -EINVAL;
+> -
+> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
+> -	if (ret)
+> -		goto of_exit;
+> -
+> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
+> -	if (ret)
+> -		goto of_exit;
+> -
+> -	reg_sz += i;
+> -
+> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
+> -	if (num_domains <= 0)
+> -		return num_domains;
+> +	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
+> +		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
+> +			break;
+>  
+>  	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
+>  					 GFP_KERNEL);
+> @@ -762,9 +748,6 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	else
+>  		dev_dbg(dev, "QCOM CPUFreq HW driver initialized\n");
+>  
+> -of_exit:
+> -	of_node_put(soc_node);
+> -
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.39.1
+> 
