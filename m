@@ -2,158 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7431B6A0797
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 12:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01DC6A08F2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 13:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbjBWLnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 06:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S234055AbjBWMwD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 07:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjBWLnP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 06:43:15 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19F91027B;
-        Thu, 23 Feb 2023 03:43:13 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id b12so41008894edd.4;
-        Thu, 23 Feb 2023 03:43:13 -0800 (PST)
+        with ESMTP id S233844AbjBWMwA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 07:52:00 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A18743450
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 04:51:58 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id r7so10434105wrz.6
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 04:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=He3/T5rNjZxbvQvsLoh9SavvhiALDTplmrGhWdH6/2E=;
+        b=alxxBCSG2sPNWiZwA17ja0FEz5b1RDxTTs4NGCFVIi8pqg9nexPHIGFFiVv19m7MF7
+         9lQqxzBWsGQfoFuqnSSabuDcCcD9lLoEBQlTsTiTzzXMAhJwzI3msL3PxuEc4lX2LN7N
+         PAUR1w6FHcB0gAgWqzWp+HhtdnvRT8MZq2jpz5WCzdFjfk2IAPyooUwKK4XswJVhkqMo
+         YmIHqfHGLxCxaEf9bKUoaUZe74VVxinp9k1p0nQZyGUHYaZb2DAvdkDy4IcO9owSUaR0
+         3o3gkdcYBcjVQvYgurSYyIazojzvlQ/gje1S+X7QFhPaWhuAI0wP7Yzp6C8UTFqkU/zu
+         c4GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=syapajUQQKPNTLxoBBob0wJRqUEzcQ+Vd9hvk03JOZ0=;
-        b=69OLzTBIZbCWZsBHutrEtEVp08nh2JNsMfOvVXkCM9VxGqjxzU6023wvtqB0lJdyVs
-         1pjoQj0hUm8dcV22kt3xJVytga/11JPiARZgFBXkSefOUYEdkmVRomM0R8fjJqFpz3VO
-         52GoUw7T/8FJlons9IlVPap0femrcAyTvH2PuSumH+QJ+tLWcd7U6D4rZtr4DaVjzMMd
-         /lQ1Zpg8QDGpw+qPaJEZMCnQP4Bw/Xa3nmpqOCwUiAYlcpZECaPe6wDoCW3lZKY/3N9H
-         RFVKbFizQScVO/F/7/KvlsPdYm7oAgX9Q6ao4PXkvoZntSWC6FEnnnVryawFx8boBktj
-         xisQ==
-X-Gm-Message-State: AO0yUKUmuQXfNuvmImVbj0r3/UiiuqKM5kdqLdutLY4b+HJwaGaYS3I/
-        DqNNmmpMMOVyTWbuTP+lx5Z/n81e7XUMNWOKizM=
-X-Google-Smtp-Source: AK7set9CFmlLdErXJwKuzgfcUTyFMTlrdRel7rfmMsQpqyTEmDHe63bLhlD6rNr8FmT9Lzr1jLyJnQQZtkuVdISeGSw=
-X-Received: by 2002:a17:907:7d8d:b0:8ad:d366:54c4 with SMTP id
- oz13-20020a1709077d8d00b008add36654c4mr11083740ejc.4.1677152592060; Thu, 23
- Feb 2023 03:43:12 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=He3/T5rNjZxbvQvsLoh9SavvhiALDTplmrGhWdH6/2E=;
+        b=JOTKXaWZOUMbU+ohR4Nt88/mP/kgYb+t+j+iW869Z1staqsRZ5iYNunrnN65I19LUB
+         9jsTGXrsb9NLfV7t6oa0vpXO8F7swCltlhiNrJfS318ldTWfQgrfoVmyWlmtAz0gv3yU
+         l+FJckGsnCA3XzYUDCOlmTou9o1x0jsBdXgi67dn2KiO6xWpWy7ciSU4s8tcApAKPEsX
+         qYJK5rvHkK4mTBFCz3UrFdHaFbHa9c3i7VimCWuJxZ0xPi3/OgnzwqLOh9t8/EuI0C5D
+         b3QWNIa8b+Hq23W5cQkPQnEe6uQ0X/vLAPReTdcazUDGS2GCe16os2L+/wl2iblMVG9R
+         sl3w==
+X-Gm-Message-State: AO0yUKWRrLX7muKC4j31Mj/MePO5X4xMskUI3IYgzf6/xk9LUFzcSlD5
+        KJlX5qafZm6RyXvVTwrz9t08UA==
+X-Google-Smtp-Source: AK7set9ix212YSCnyGx56kbZG1wFRQMw0z+jnmOA6BkbGPbPtnvuzNhWX3F4lLDb03ZsXuDk0ySpaQ==
+X-Received: by 2002:a05:6000:136a:b0:2c7:f56:28d9 with SMTP id q10-20020a056000136a00b002c70f5628d9mr2470997wrz.54.1677156716880;
+        Thu, 23 Feb 2023 04:51:56 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c214a00b003e209186c07sm11194549wml.19.2023.02.23.04.51.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 04:51:56 -0800 (PST)
+Message-ID: <f852bf35-6f29-a91a-00ab-9f7b2d709328@linaro.org>
+Date:   Thu, 23 Feb 2023 12:51:55 +0000
 MIME-Version: 1.0
-References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
- <20230221180710.2781027-7-daniel.lezcano@linaro.org> <CAJZ5v0gTmi7ZeDDdHWGWju4m3bv2366oVqSP1dGOT+3jLV-jaw@mail.gmail.com>
- <0889767f-d187-0cb4-895e-c149517b6636@linaro.org> <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
- <2b843912-cc9b-f1ac-1f81-28e3ecf8daba@linaro.org>
-In-Reply-To: <2b843912-cc9b-f1ac-1f81-28e3ecf8daba@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Feb 2023 12:43:00 +0100
-Message-ID: <CAJZ5v0g+fkX=ZUJ0MgENy2SmMv98wD0dApVwU352OS4ZXpDDCw@mail.gmail.com>
-Subject: Re: [PATCH v2 06/16] thermal: Don't use 'device' internal thermal
- zone structure field
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Balsam CHIHI <bchihi@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v6 2/5] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        stephan@gerhold.net, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+References: <20230222120411.55197-1-bryan.odonoghue@linaro.org>
+ <20230222120411.55197-3-bryan.odonoghue@linaro.org>
+ <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:56 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 22/02/2023 21:06, Rafael J. Wysocki wrote:
-> > On Wed, Feb 22, 2023 at 9:00 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 22/02/2023 20:43, Rafael J. Wysocki wrote:
-> >>> On Tue, Feb 21, 2023 at 7:07 PM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> Some drivers are directly using the thermal zone's 'device' structure
-> >>>> field.
-> >>>>
-> >>>> Use the driver device pointer instead of the thermal zone device when
-> >>>> it is available.
-> >>>>
-> >>>> Remove the traces when they are duplicate with the traces in the core
-> >>>> code.
-> >>>>
-> >>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >>>> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek LVTS
-> >>>> ---
-> >>
-> >> [ ... ]
-> >>
-> >>>>           thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
-> >>>>
-> >>>> -       dev_dbg(&data->ti_thermal->device, "updated thermal zone %s\n",
-> >>>> +       dev_dbg(data->bgp->dev, "updated thermal zone %s\n",
-> >>>>                   data->ti_thermal->type);
-> >>>
-> >>> The code before the change is more consistent, because it refers to
-> >>> the same object in both instances.
-> >>>
-> >>> It looks like a type field accessor is needed, eg. thermal_zone_device_type()?
-> >>>
-> >>> Or move the debug message to thermal_zone_device_update()?
-> >>
-> >> Actually it is done on purpose because the patch 9 replaces the accesses
-> >> to 'type' by 'id', the thermal_zone_device_type() accessor won't be needed.
-> >
-> > Cool.
-> >
-> > However, this is a change in behavior (albeit small) which doesn't
-> > appear to be necessary.
-> >
-> > What would be wrong with having a tz->type accessor too?
->
-> I can add the 'type' accessor but from my point of view it is not
-> correct because the information belongs to the thermal framework and it
-> is used to export the information in the sysfs which is along with the
-> directory name giving the id of the thermal zone.
+On 22/02/2023 17:08, Konrad Dybcio wrote:
+>> +			interrupt-names = "wdog", "fatal", "ready",
+>> +					  "handover", "stop-ack";
+> This should be a vertical list
+> 
+>> +
+>> +			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+>> +				 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
+>> +				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
+>> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>> +			clock-names = "iface", "bus", "mem", "xo";
+> This could also be one
+> 
 
-I'm not sure what you mean here.
+Sorry what are you asking for here Konrad
 
-Surely, the 'type' is provided by whoever registers the thermal zone,
-so I'm not sure in what way it "belongs" to the framework.
+clock-names = "iface",
+               "bus",
 
-> Actually, the useful information is the id of the thermal zone, not the
-> type. This one can be duplicate, for instance:
->
-> cat /sys/class/thermal/thermal_zone*/type
-> acpitz
-> acpitz
-
-That's correct, but in the particular case of DT-based systems it
-comes from the DT (AFAICT) and so it allows to connect the kernel
-message with the DT contents.  The id could be used for that, but that
-involves an extra sysfs lookup.
-
-> Given there are few places where 'type' is used in the drivers, I prefer
-> to directly change that to 'id' in the next patch instead of creating
-> the accessor for 'type', then send another series removing it.
-
-So you are going to change the behavior of those few places with the
-only reason being aesthetics AFAICS.  Is this really a good enough
-reason to do that?
+if so, why ?
