@@ -2,164 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4849C6A0505
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 10:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AA76A0573
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 10:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjBWJhi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 04:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S233420AbjBWJ4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 04:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbjBWJh3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 04:37:29 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64354515FB;
-        Thu, 23 Feb 2023 01:37:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BvOooXi0wf9JZACdz7bKi4cgnAG1iQ6nS/ZTzdrgf1Qs9QEbRb+OIODzcX3Eq3H9206PuHYnd3bcm/KfNGm4KTRwpq9xn+j9teN7EPXpF887LxuxFWlyoa/znf6xPL7SyAP0/BrFhAwa2N18aInkCdcsxgpSQ1Mhqi/ygNxu+H9T5T3QhIq/pkr+zIaYavDl1356rgBoWWr+heLX6tNEB0i4FMcDn2kh2RfLTEUH7v8R8zu8qKWh1AlSYG76UVwLaRrkJvkDmqpfxyt+AoizUUS/yWp8rvHISqKYBMGwdcWYQob4I99WhY54QSMrajKZH0vg9+in+z8nXakkCIqJUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fRFftHCpj9jXdf/LDmklQhW9elWlSEauDRrd7aZAt4k=;
- b=T8X1ac/jhdcKv93z6icJ9ZSmlBf6mHwkHEtynAxKae4HCXzM6yDCVzNIk9odYmkvtLw7O0N3/JGaPuIsyjCyGuZANzCsZ0KFDeHQn0o0oXR65q023qFgFJn46aOJNOxcgq+2JefOYTUHdMJWIoE27iSLt8+xTpVfsw/S9Rs5ELrylgevQbLPBNcLEO+gHDoPCrXTy952Dq6KikpF1JVJLAbPTfbaSwchIwZVHXBbj6CStL4Ir7bbM4/EqfWbQ4VaAFw2h1W412widAW5ghcFvzMDQ7JypFhC4U9B1YFGze+JCePndXJhLFfJn73dTHWfv7mSrfpo8z+xqNl5AajJBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fRFftHCpj9jXdf/LDmklQhW9elWlSEauDRrd7aZAt4k=;
- b=MRz/7trTtXZMI3heH4KUQwokNV966b53h+9YCOAv/V388BWrrYGkTzKrgv4JEiJ7CmgaYe3FDma+i9l6tnBMX/ZUhde67JsEZvbUsiw9jmenExyJUcv1eWElOhJXMwXgrAfOPvAH+oCoDPBfOOyFHlw8NA94ffo6o5PLXDE53oYtT/YQ8NtbiLCfyPAkssh4qFmcs+d/BXz9AmZwAMcoNifoi5uT0JIKUhjIq4GI+GZWJy4/KMBBbjDZziAr+bsNWS6+hIYWncBEnoOoAjfemLvdvjBiDRoUTOnng69Ft6x9zdO7+01dn2NXGZkdhX1LQXuR3d6BcncRgUSKWg616A==
-Received: from DM6PR11CA0016.namprd11.prod.outlook.com (2603:10b6:5:190::29)
- by CY8PR12MB7145.namprd12.prod.outlook.com (2603:10b6:930:5f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Thu, 23 Feb
- 2023 09:36:48 +0000
-Received: from DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:190:cafe::b3) by DM6PR11CA0016.outlook.office365.com
- (2603:10b6:5:190::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21 via Frontend
- Transport; Thu, 23 Feb 2023 09:36:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT064.mail.protection.outlook.com (10.13.172.234) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.21 via Frontend Transport; Thu, 23 Feb 2023 09:36:48 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 23 Feb
- 2023 01:36:37 -0800
-Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 23 Feb
- 2023 01:36:30 -0800
-Message-ID: <df054fae-5195-1ef8-c72e-e5afe8d901d3@nvidia.com>
-Date:   Thu, 23 Feb 2023 15:06:26 +0530
+        with ESMTP id S233603AbjBWJ4W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 04:56:22 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340F751F9C
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 01:56:06 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id l1so9902457wry.10
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 01:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zqMvyew1VuvLR+5MrHi+CVRR54Ec9Hg3AWm5Uzuvhkk=;
+        b=y7DPYrkGk9xCwkGpaQAeXdWfCjSmojs2x7UvFOZ+JGW+Um8i0jZjaVS/JoDxV3yUZ0
+         r2mzgdIy6vEOoh0l3o6m0w1lKsOZgXuQqbdwACzgM/m1DpSE+5//S4EF3vj81Dbd1bLm
+         O4drKYRElSQ+HYorlA1n5JY9qwn/cNvnG0dTpi7UPGpPhIeDGCGUamJ8HfxuemB1tIsZ
+         5NptNCmJtIF7INhKAxupGcRrEHkhAFbInzl5ei9Zqhy18pNNqLHEl5mIWMHcxWTaF7TL
+         Lpib0IIgJrbiFYLDfpwk8fax+5qTX5rFXQOM1RvNC/rEYzOahY/lMrmWjmfm5Iwh/+xS
+         BCWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zqMvyew1VuvLR+5MrHi+CVRR54Ec9Hg3AWm5Uzuvhkk=;
+        b=PuqjyAqQVY2MNkggb4X9FaYWWlLOvQdmkqZqEj3sHHz3t7TETpBuSXKWgRoALKGP49
+         H8LEONqmTgeZc1OyKPKMUsC9Jci5EBpq3jrJHkzsKM/t0ukMGzgfwopEa3PGRnbxcSOK
+         OT+nj+nGVTle8o5dBsFjhj9S2Kwch1tLjz6Kr+nvlVj67FyA47CI4Rg9XiA91QiFIax6
+         NTWzCtXG3VKE3uaivvE3qURY4TbgXWfSEXByqGImHXYq6F0b03TOVkeX/OI38357TBs1
+         gLodYb1GE79HRlAeRbXJNLthw64pw+9P4ynq6y5iZKtZRmv+3qxz3rSF2GID74/fzSKZ
+         GqEA==
+X-Gm-Message-State: AO0yUKWa9bRpqkw291ulfFaEALlAWzcOWSgNoE9HxxdXB3RojojTudiY
+        +I6TduS51JUQ4w6KkIH7TBProw==
+X-Google-Smtp-Source: AK7set9wKGyiCs4mhXfwoAzjxI0hINeis8DMPCt/2knY34phjllU4IYlzLKUeg8KQ1/3trkYX25LXw==
+X-Received: by 2002:a5d:4806:0:b0:2c5:5a68:958 with SMTP id l6-20020a5d4806000000b002c55a680958mr10075206wrq.33.1677146164810;
+        Thu, 23 Feb 2023 01:56:04 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c265:a8c7:c71d:6e47? ([2a05:6e02:1041:c10:c265:a8c7:c71d:6e47])
+        by smtp.googlemail.com with ESMTPSA id u4-20020adfed44000000b002c706c754fesm6399145wro.32.2023.02.23.01.56.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 01:56:04 -0800 (PST)
+Message-ID: <2b843912-cc9b-f1ac-1f81-28e3ecf8daba@linaro.org>
+Date:   Thu, 23 Feb 2023 10:56:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [Patch v2 7/9] cpufreq: tegra194: add OPP support and set
- bandwidth
+Subject: Re: [PATCH v2 06/16] thermal: Don't use 'device' internal thermal
+ zone structure field
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
-        <dmitry.osipenko@collabora.com>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
-        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
-        <ishah@nvidia.com>, <bbasu@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-References: <20230220140559.28289-1-sumitg@nvidia.com>
- <20230220140559.28289-8-sumitg@nvidia.com>
- <20230222040317.r2p6zlbumazymluc@vireshk-i7>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <20230222040317.r2p6zlbumazymluc@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT064:EE_|CY8PR12MB7145:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c6763b8-7424-4fea-a971-08db15817c50
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vieRK5rQRrMRd9S1aQkI6SY4REc5M5EUPRWgPEqf9HsDgSKnmHX+bgHp330u8MJfeQKJpBQkjQd+vM0EtvDPmCH/YYAQgEq5zSvlO5Ttw+BJxkhtjKf7OboH7EF3duDjNuWdXcfCqm9yrGr3U098Qe1DgCyNrSxMUuTDCsNgc2rWs9+ZyzK3A6NDucox/pTX5zR7GzybIjK74fe7n5ZQXTHpuJ24RKVGHdLtPVBzXWuhhnpv26xohVlv8CJFIe2S3bC8GF1EXVHVn6VKYJHn1gPY/+5iYI/40WLnBZZMvwIn6HWHVjcGeBwdEX8TmbZ71JuZ0uIIa5ml1mHntm+5x/A0p2rIzrs0UfPVa7cvl/BJQ4Jpqtt/gEoHuU5Vp7DRN0swPsLwfXYtafvfj5e1sOy90M0jDfh93tOdDpK+GYn/MKQvKHqAnhNVSxszzvqfd7syuaQPwZyDPU4at3sFyldDUtjapfeqjL7NVxwiJUJx8hUeorcmihR3GTn+SbnYP1op/fAhDoCDusOOmTPFNPxmQdAm/jS7vBIq8MH6QuWsBAnbS6hUfb5EB54blpn97m9RgYx1Le61qdhWIqRSiU8p9F7PGpGhHdCEkrcft8YbSq1s6uFsQp8rAB7sF5Y0b3JZXGlSWG+0kVkdf+wED0qRgHHI352quzScwnHOZJtZ/2Jt310Ms3poAGEpH8Po34PvvDmfgMJwzmTKHQY7egEZAooqzXMkMcYbCnvDQpUIMOhpFGp3E/vWf+EZxvZ0HnGL4QXe8McoKqyatqbTTQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(376002)(346002)(451199018)(46966006)(40470700004)(36840700001)(336012)(16526019)(31696002)(36756003)(186003)(26005)(82310400005)(31686004)(6666004)(2616005)(6916009)(478600001)(86362001)(426003)(47076005)(16576012)(83380400001)(70206006)(8676002)(70586007)(53546011)(107886003)(54906003)(316002)(4326008)(41300700001)(8936002)(7416002)(5660300002)(36860700001)(34020700004)(82740400003)(2906002)(40480700001)(7636003)(40460700003)(356005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 09:36:48.2120
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c6763b8-7424-4fea-a971-08db15817c50
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7145
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
+ <20230221180710.2781027-7-daniel.lezcano@linaro.org>
+ <CAJZ5v0gTmi7ZeDDdHWGWju4m3bv2366oVqSP1dGOT+3jLV-jaw@mail.gmail.com>
+ <0889767f-d187-0cb4-895e-c149517b6636@linaro.org>
+ <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 22/02/2023 21:06, Rafael J. Wysocki wrote:
+> On Wed, Feb 22, 2023 at 9:00 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 22/02/2023 20:43, Rafael J. Wysocki wrote:
+>>> On Tue, Feb 21, 2023 at 7:07 PM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> Some drivers are directly using the thermal zone's 'device' structure
+>>>> field.
+>>>>
+>>>> Use the driver device pointer instead of the thermal zone device when
+>>>> it is available.
+>>>>
+>>>> Remove the traces when they are duplicate with the traces in the core
+>>>> code.
+>>>>
+>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek LVTS
+>>>> ---
+>>
+>> [ ... ]
+>>
+>>>>           thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
+>>>>
+>>>> -       dev_dbg(&data->ti_thermal->device, "updated thermal zone %s\n",
+>>>> +       dev_dbg(data->bgp->dev, "updated thermal zone %s\n",
+>>>>                   data->ti_thermal->type);
+>>>
+>>> The code before the change is more consistent, because it refers to
+>>> the same object in both instances.
+>>>
+>>> It looks like a type field accessor is needed, eg. thermal_zone_device_type()?
+>>>
+>>> Or move the debug message to thermal_zone_device_update()?
+>>
+>> Actually it is done on purpose because the patch 9 replaces the accesses
+>> to 'type' by 'id', the thermal_zone_device_type() accessor won't be needed.
+> 
+> Cool.
+> 
+> However, this is a change in behavior (albeit small) which doesn't
+> appear to be necessary.
+> 
+> What would be wrong with having a tz->type accessor too?
+
+I can add the 'type' accessor but from my point of view it is not 
+correct because the information belongs to the thermal framework and it 
+is used to export the information in the sysfs which is along with the 
+directory name giving the id of the thermal zone.
+
+Actually, the useful information is the id of the thermal zone, not the 
+type. This one can be duplicate, for instance:
+
+cat /sys/class/thermal/thermal_zone*/type
+acpitz
+acpitz
+
+Given there are few places where 'type' is used in the drivers, I prefer 
+to directly change that to 'id' in the next patch instead of creating 
+the accessor for 'type', then send another series removing it.
 
 
-On 22/02/23 09:33, Viresh Kumar wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 20-02-23, 19:35, Sumit Gupta wrote:
->> +static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, unsigned long freq_khz)
->> +{
->> +     struct dev_pm_opp *opp;
->> +     struct device *dev;
->> +     int ret;
->> +
->> +     dev = get_cpu_device(policy->cpu);
->> +     if (!dev)
->> +             return -ENODEV;
->> +
->> +     opp = dev_pm_opp_find_freq_exact(dev, freq_khz * KHZ, true);
->> +     if (IS_ERR(opp))
->> +             return PTR_ERR(opp);
->> +
->> +     ret = dev_pm_opp_set_opp(dev, opp);
->> +     dev_pm_opp_put(opp);
-> 
-> What about dev_pm_opp_set_rate() instead ?
-> 
->> +     return ret;
->> +}
-> 
-> --
-> viresh
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Tried using it and got below crash. It seems to be coming because we 
-don't have clocks property within CPU node for SoC's having BPMP-FW.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-  Unable to handle kernel NULL pointer dereference at virtual address 
-000000000000002e
-  ....
-  Call trace:
-   clk_round_rate+0x38/0xd8
-   dev_pm_opp_set_rate+0xe4/0x1a8
-   tegra194_cpufreq_set_target+0x74/0x88
-   __cpufreq_driver_target+0x154/0x250
-   cpufreq_online+0x7b4/0x9ac
-
-Thanks,
-Sumit
