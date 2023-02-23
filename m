@@ -2,50 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D276A0FD2
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 19:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F686A0FF2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 19:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjBWSy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 13:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S229507AbjBWS6s convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 23 Feb 2023 13:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBWSyZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 13:54:25 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B113C21;
-        Thu, 23 Feb 2023 10:54:24 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id da10so47039737edb.3;
-        Thu, 23 Feb 2023 10:54:24 -0800 (PST)
+        with ESMTP id S229480AbjBWS6r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 13:58:47 -0500
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA74D2735;
+        Thu, 23 Feb 2023 10:58:46 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id d30so4622211eda.4;
+        Thu, 23 Feb 2023 10:58:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iFkkN6SndkOAPbxloVJ2reL3IITekRJdKjzqSG3u/50=;
-        b=vgQSMjhVC718JVnDYDDx+wQnKFUqwFNHZ3d979/fEbBh2B1ELf3sd4DOS5SeLbpYn8
-         1IN9N3mxveya4fe2tTj9N17ARjZy4KKAjqD67QkSEyVNtw5wB7MiFUMMJG2BKZsRGVs/
-         7oHkBkVJbjkMeyg3sJn0yl2huNLdIsDNniZ7cR+ojhmrbicdJnYOwXexQ0NhE0BCZOYR
-         RyU4GrjWmiSi0Sc3uko4r1TJzuxrsxuL+chW8XhbDEwz2w0LMC+Sq2ZYCyptES5kYOVU
-         pHjkx/yzapQzuQxTIwIc/mAxJx17oz50PCXCsTQMAG/jQoGjWDQQMWvVacM5TLa26aK1
-         fG2g==
-X-Gm-Message-State: AO0yUKWhqNl9SDf6TD3pUArT3Ofo2ta6ri7bVymjXx7Ft3QyYz6ZCbEw
-        Z94+8OAIC25r1S1SzcIB6bNILVNgyY8rR2038TFC4aKk
-X-Google-Smtp-Source: AK7set8ikzX9SFwilG92f1+WBqpUO/xB4g5wmby3yK2W/KcDhUg5lcvMCZmJAb+QOVn46ft3349ieMYxptp1QqivG0Q=
-X-Received: by 2002:a17:906:9251:b0:8ce:cb8f:3747 with SMTP id
- c17-20020a170906925100b008cecb8f3747mr6941704ejx.5.1677178462806; Thu, 23 Feb
- 2023 10:54:22 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xwc4X+1F9/TAvKcqjr/9cfQ8o6wUCynxpVaY44cLuWI=;
+        b=ISe2x56PnOGo0L1M81BHy1qFJP0AldtOcIROVPVLngGY5POjj0hjh2VHI7osCga2B6
+         yslJRAtMtk6oxpxn9RPhqgiCdRHzSoB+BH+8CZZLeMQwiYNZDQgN3nRhnyAaENeneTub
+         DNaT+qbRYwVBCFr6f8lXfkPNIjhqKRm5BDTU4mxnBdwdaQ0cY21mzZlmOOYZzS03LnPQ
+         sOBqVqSvFEXgDo+9iF6xK2YarGCN3BBB3o4vnK2t+g/GWKe7ISr2oQJzlowTFvT2GYZm
+         PEtbbYjGZfx9pZaMNLorkBazz/41wiZtuAdoP0jFJuOHsVWSIJ+ewVbUtn4LPrKkX3lr
+         93rw==
+X-Gm-Message-State: AO0yUKWAbhPBXhbFn1QwQt2eeieHDIYgeV8FQ+OnIBmS53+JYlcrtghG
+        cXdahJDwANPiv/6yOn/+8VfPfDU8f6S4fFeCav0=
+X-Google-Smtp-Source: AK7set8hqqCq8CmD2NpTOYT7jGhjE4Fxg0wS54FoNgb3JpQr0kn60zL1pTPJb6BR+1zvEvWivHIbe+GB5r/0/SG808Q=
+X-Received: by 2002:a50:c00a:0:b0:4af:69e2:52f9 with SMTP id
+ r10-20020a50c00a000000b004af69e252f9mr1827055edb.6.1677178725424; Thu, 23 Feb
+ 2023 10:58:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20230222064526.1971688-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230222064526.1971688-1-srinivas.pandruvada@linux.intel.com>
+References: <20230220-kobj_type-cpufreq-schedutil-v1-1-7d1c92293457@weissschuh.net>
+ <20230221043654.6gb454cabnjfg44k@vireshk-i7>
+In-Reply-To: <20230221043654.6gb454cabnjfg44k@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Feb 2023 19:54:11 +0100
-Message-ID: <CAJZ5v0gR9xjycvqYakbr8k2iwQmvwJY=5Rn9htoMD-uu40bQeA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Update Balance performance EPP for
- Sapphire Rapids
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+Date:   Thu, 23 Feb 2023 19:58:34 +0100
+Message-ID: <CAJZ5v0jBMtDq5jkWxxDDGyv=vZMFecD3u5WrGUasTtChpA2QOg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: schedutil: make kobj_type structure constant
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -56,58 +66,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 7:45 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Tue, Feb 21, 2023 at 5:37 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> While majority of server OS distributions are deployed with performance
-> governor as the default, some distributions like Ubuntu uses powersave
-> governor as the default.
+> On 20-02-23, 23:28, Thomas Weißschuh wrote:
+> > Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> > the driver core allows the usage of const struct kobj_type.
+> >
+> > Take advantage of this to constify the structure definition to prevent
+> > modification at runtime.
+> >
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> >  kernel/sched/cpufreq_schedutil.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index 1207c78f85c1..4c073bd9b001 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -543,7 +543,7 @@ static void sugov_tunables_free(struct kobject *kobj)
+> >       kfree(to_sugov_tunables(attr_set));
+> >  }
+> >
+> > -static struct kobj_type sugov_tunables_ktype = {
+> > +static const struct kobj_type sugov_tunables_ktype = {
+> >       .default_groups = sugov_groups,
+> >       .sysfs_ops = &governor_sysfs_ops,
+> >       .release = &sugov_tunables_free,
+> >
+> > ---
+> > base-commit: 5b0ed5964928b0aaf0d644c17c886c7f5ea4bb3f
+> > change-id: 20230220-kobj_type-cpufreq-schedutil-783c6be6ff14
 >
-> While the powersave governor has much lower power, the performance is
-> lower than +25% for several workloads compared to performance governor.
->
-> One report is published by www.Phoronix.com showing difference of 37%.
->
-> The goal here is to keep mean performance delta of powersave governor
-> from performance governor around 10% to 12% by running wide variety
-> of server workloads. For some bursty workload, this delta can be still
-> large, as ramp up of frequency will still lag with powersave governor
-> irrespective of EPP setting. The performance governor always requests
-> maximum frequency.
->
-> Based on experiments, EPP of 0x00, 0x10, 0x20, the performance delta for
-> powersave governor is around 12%. But the EPP 0x20 has 18% lower average
-> power.
->
-> Also experimets are done by raising intel_pstate sysfs min_perf_pct as
-> high as 50%. This didn't bring in any additional improvements compared
-> to just changing EPP.
->
-> From the Alder Lake processor generation, intel_pstate driver has
-> capability to update EPP for the default balance_performance based
-> on the CPU model. Use the same method to update the default
-> balance_performance EPP for the Sapphire Rapids processor to 0x20.
->
-> Link: https://www.phoronix.com/review/centos-clear-spr/6
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index fd73d6d2b808..32a4004d155d 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -3372,6 +3372,7 @@ static const struct x86_cpu_id intel_epp_balance_perf[] = {
->          * AlderLake Mobile CPUs.
->          */
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 102),
-> +       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, 32),
->         {}
->  };
->
-> --
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied as 6.3-rc material with some edits in the subject and changelog.
-
-Thanks!
+Applied as 6.3-rc material, thanks!
