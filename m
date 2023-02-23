@@ -2,47 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF666A0F43
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 19:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D276A0FD2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 19:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjBWSMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 13:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S229633AbjBWSy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 13:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjBWSMG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 13:12:06 -0500
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CC822A24;
-        Thu, 23 Feb 2023 10:12:05 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id x10so44542378edd.13;
-        Thu, 23 Feb 2023 10:12:05 -0800 (PST)
+        with ESMTP id S229512AbjBWSyZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 13:54:25 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B113C21;
+        Thu, 23 Feb 2023 10:54:24 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id da10so47039737edb.3;
+        Thu, 23 Feb 2023 10:54:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rEaarM4/v7i0Lz3hIFlrkMuKcSO1J4oYqrHpx/IZ4/Q=;
-        b=zYr/etDOmn4y9bRvzJaOj2VY7/S3RtK0w4EIZX4QBXDLivotKS7fmJc9mrumaWOArZ
-         LpP7bgmzrt4KOaYyzecLr8Sxhw40M1pmVM93CCOrEpyr52PLofSteesSlE8nYjd4DbLy
-         oJLdfCY0GEEYiyCFOzfOu2zscRZkCJcZ/ZWuZwUBsgVOlrsMof1GYld1a8DNmml0nLwp
-         7Xx2e3NVqwjmWWMCV3hGcdTyKIxFdT4h2b+v5jzqDjb2jqXfO0LNUgPTpMOQJCI1hmLm
-         OjC9kphoNoVNxxeJ9oaUdJ/LeqydiWNVYNx6XAv0rswSbcpjqsx0WivSL38kxazmXnPP
-         sB5w==
-X-Gm-Message-State: AO0yUKUT5CCMBfTC94xTtU5IMC/Wa/EJKQ7NJ4gATCRwLWtqpDjXZyMt
-        EJhu9PqDqQvtBJ7cnI0cBtiNdTqeDrOHRqVHGuCSGpynQLo=
-X-Google-Smtp-Source: AK7set+bwHnQcCisA+iUZl7QFkGD3nyxV+T3/46gXI0+hISWrIpYlVWBV6JDac7BpdVg0qbq1B5yIFZFnGzzoNW3seE=
-X-Received: by 2002:a50:9f6a:0:b0:4ae:e548:1c6 with SMTP id
- b97-20020a509f6a000000b004aee54801c6mr6007111edf.6.1677175923968; Thu, 23 Feb
- 2023 10:12:03 -0800 (PST)
+        bh=iFkkN6SndkOAPbxloVJ2reL3IITekRJdKjzqSG3u/50=;
+        b=vgQSMjhVC718JVnDYDDx+wQnKFUqwFNHZ3d979/fEbBh2B1ELf3sd4DOS5SeLbpYn8
+         1IN9N3mxveya4fe2tTj9N17ARjZy4KKAjqD67QkSEyVNtw5wB7MiFUMMJG2BKZsRGVs/
+         7oHkBkVJbjkMeyg3sJn0yl2huNLdIsDNniZ7cR+ojhmrbicdJnYOwXexQ0NhE0BCZOYR
+         RyU4GrjWmiSi0Sc3uko4r1TJzuxrsxuL+chW8XhbDEwz2w0LMC+Sq2ZYCyptES5kYOVU
+         pHjkx/yzapQzuQxTIwIc/mAxJx17oz50PCXCsTQMAG/jQoGjWDQQMWvVacM5TLa26aK1
+         fG2g==
+X-Gm-Message-State: AO0yUKWhqNl9SDf6TD3pUArT3Ofo2ta6ri7bVymjXx7Ft3QyYz6ZCbEw
+        Z94+8OAIC25r1S1SzcIB6bNILVNgyY8rR2038TFC4aKk
+X-Google-Smtp-Source: AK7set8ikzX9SFwilG92f1+WBqpUO/xB4g5wmby3yK2W/KcDhUg5lcvMCZmJAb+QOVn46ft3349ieMYxptp1QqivG0Q=
+X-Received: by 2002:a17:906:9251:b0:8ce:cb8f:3747 with SMTP id
+ c17-20020a170906925100b008cecb8f3747mr6941704ejx.5.1677178462806; Thu, 23 Feb
+ 2023 10:54:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20230223044550.339811-1-luoxueqin@kylinos.cn>
-In-Reply-To: <20230223044550.339811-1-luoxueqin@kylinos.cn>
+References: <20230222064526.1971688-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230222064526.1971688-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Feb 2023 19:11:52 +0100
-Message-ID: <CAJZ5v0jyz_dpKW1GhWN=yYpR9-7WG33GbZ65aoGv+B+R9vEpEw@mail.gmail.com>
-Subject: Re: [PATCH -next] PM: tools: add "CPU killed" timeline on arm64 platform
-To:     Xueqin Luo <luoxueqin@kylinos.cn>, todd.e.brandt@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 23 Feb 2023 19:54:11 +0100
+Message-ID: <CAJZ5v0gR9xjycvqYakbr8k2iwQmvwJY=5Rn9htoMD-uu40bQeA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Update Balance performance EPP for
+ Sapphire Rapids
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -54,54 +56,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 5:46 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
+On Wed, Feb 22, 2023 at 7:45 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On the arm64 platform, the core log of cpu offline is as follows:
-
-Please spell CPU in capitals.
-
-> [  100.431501] CPU1: shutdown
-> [  100.454820] psci: CPU1 killed (polled 20 ms)
-> [  100.459266] CPU2: shutdown
-> [  100.482575] psci: CPU2 killed (polled 20 ms)
-> [  100.486057] CPU3: shutdown
-> [  100.513974] psci: CPU3 killed (polled 28 ms)
-> [  100.518068] CPU4: shutdown
-> [  100.541481] psci: CPU4 killed (polled 24 ms)
+> While majority of server OS distributions are deployed with performance
+> governor as the default, some distributions like Ubuntu uses powersave
+> governor as the default.
 >
-> 'smpboot: CPU (?P<cpu>[0-9]*) is now offline' cannot be applied
-> to the arm64 platform, which caused the loss of the suspend
-> machine stage in S3.
-
-I'm not exactly sure what you mean by "loss of the suspend machine stage in S3".
-
->  Here I added core code to fix this issue.
+> While the powersave governor has much lower power, the performance is
+> lower than +25% for several workloads compared to performance governor.
 >
-> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+> One report is published by www.Phoronix.com showing difference of 37%.
+>
+> The goal here is to keep mean performance delta of powersave governor
+> from performance governor around 10% to 12% by running wide variety
+> of server workloads. For some bursty workload, this delta can be still
+> large, as ramp up of frequency will still lag with powersave governor
+> irrespective of EPP setting. The performance governor always requests
+> maximum frequency.
+>
+> Based on experiments, EPP of 0x00, 0x10, 0x20, the performance delta for
+> powersave governor is around 12%. But the EPP 0x20 has 18% lower average
+> power.
+>
+> Also experimets are done by raising intel_pstate sysfs min_perf_pct as
+> high as 50%. This didn't bring in any additional improvements compared
+> to just changing EPP.
+>
+> From the Alder Lake processor generation, intel_pstate driver has
+> capability to update EPP for the default balance_performance based
+> on the CPU model. Use the same method to update the default
+> balance_performance EPP for the Sapphire Rapids processor to 0x20.
+>
+> Link: https://www.phoronix.com/review/centos-clear-spr/6
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  tools/power/pm-graph/sleepgraph.py | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  drivers/cpufreq/intel_pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
-> index 82c09cd25cc2..d816970b0a3d 100755
-> --- a/tools/power/pm-graph/sleepgraph.py
-> +++ b/tools/power/pm-graph/sleepgraph.py
-> @@ -4132,9 +4132,12 @@ def parseKernelLog(data):
->                         elif(re.match('Enabling non-boot CPUs .*', msg)):
->                                 # start of first cpu resume
->                                 cpu_start = ktime
-> -                       elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)):
-> +                       elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)) \
-> +                               or re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)):
->                                 # end of a cpu suspend, start of the next
->                                 m = re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)
-> +                               if(not m):
-> +                                       m = re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)
->                                 cpu = 'CPU'+m.group('cpu')
->                                 if(cpu not in actions):
->                                         actions[cpu] = []
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index fd73d6d2b808..32a4004d155d 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -3372,6 +3372,7 @@ static const struct x86_cpu_id intel_epp_balance_perf[] = {
+>          * AlderLake Mobile CPUs.
+>          */
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 102),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, 32),
+>         {}
+>  };
+>
 > --
 
-The changes look reasonable to me, though.
+Applied as 6.3-rc material with some edits in the subject and changelog.
 
-Todd, any comments?
+Thanks!
