@@ -2,159 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7A76A045B
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 10:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4849C6A0505
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 10:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbjBWJCK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 04:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S229461AbjBWJhi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 04:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbjBWJCH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 04:02:07 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7C24E5FF;
-        Thu, 23 Feb 2023 01:02:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677142923; x=1708678923;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=upO3rlHbtjFi/LaiQPKhx3zSBCDuzcGXxn14act7yNY=;
-  b=cLG6ED/AHLk0mSq7HZCPBg9J2zX5oIsPixWWLIbI9SjWIIA+DZPLxGwR
-   YTDnGBR876Q9rjNTyUWJYXa9KGkr9hDLfb5jnpMrtI4iQ90A8hpkMF3lQ
-   iLB9/LaEkE5DSpPJ8EFg6dr+I4vS2/+SA9Wx3xecd3ZtbFJ0LyaUI6/2O
-   DVMqEn5EgDmTIR+19quvyN0bAuPwhn5f9CWlNw0f10qXEY9j8oJsbvgI0
-   GNZGTNUprFuhxI6zt3Aen/KcKuoApoFFFj3JYdSlKmZH8o8CuCUJp8Y3P
-   Jftq5OeZvGx6WZ/WtxfINfFUQ35NSd9vtnyXIsNSeDPHAozTjhfIzX3cn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="316885395"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="316885395"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 01:01:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="702719753"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="702719753"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2023 01:01:54 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pV7U9-0001CM-33;
-        Thu, 23 Feb 2023 09:01:53 +0000
-Date:   Thu, 23 Feb 2023 17:01:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bf516d94c0cda12aef273b0780436c8ab020c479
-Message-ID: <63f72b6e.pN69Xv8uN64Jd4pu%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S233738AbjBWJh3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 04:37:29 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64354515FB;
+        Thu, 23 Feb 2023 01:37:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BvOooXi0wf9JZACdz7bKi4cgnAG1iQ6nS/ZTzdrgf1Qs9QEbRb+OIODzcX3Eq3H9206PuHYnd3bcm/KfNGm4KTRwpq9xn+j9teN7EPXpF887LxuxFWlyoa/znf6xPL7SyAP0/BrFhAwa2N18aInkCdcsxgpSQ1Mhqi/ygNxu+H9T5T3QhIq/pkr+zIaYavDl1356rgBoWWr+heLX6tNEB0i4FMcDn2kh2RfLTEUH7v8R8zu8qKWh1AlSYG76UVwLaRrkJvkDmqpfxyt+AoizUUS/yWp8rvHISqKYBMGwdcWYQob4I99WhY54QSMrajKZH0vg9+in+z8nXakkCIqJUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fRFftHCpj9jXdf/LDmklQhW9elWlSEauDRrd7aZAt4k=;
+ b=T8X1ac/jhdcKv93z6icJ9ZSmlBf6mHwkHEtynAxKae4HCXzM6yDCVzNIk9odYmkvtLw7O0N3/JGaPuIsyjCyGuZANzCsZ0KFDeHQn0o0oXR65q023qFgFJn46aOJNOxcgq+2JefOYTUHdMJWIoE27iSLt8+xTpVfsw/S9Rs5ELrylgevQbLPBNcLEO+gHDoPCrXTy952Dq6KikpF1JVJLAbPTfbaSwchIwZVHXBbj6CStL4Ir7bbM4/EqfWbQ4VaAFw2h1W412widAW5ghcFvzMDQ7JypFhC4U9B1YFGze+JCePndXJhLFfJn73dTHWfv7mSrfpo8z+xqNl5AajJBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fRFftHCpj9jXdf/LDmklQhW9elWlSEauDRrd7aZAt4k=;
+ b=MRz/7trTtXZMI3heH4KUQwokNV966b53h+9YCOAv/V388BWrrYGkTzKrgv4JEiJ7CmgaYe3FDma+i9l6tnBMX/ZUhde67JsEZvbUsiw9jmenExyJUcv1eWElOhJXMwXgrAfOPvAH+oCoDPBfOOyFHlw8NA94ffo6o5PLXDE53oYtT/YQ8NtbiLCfyPAkssh4qFmcs+d/BXz9AmZwAMcoNifoi5uT0JIKUhjIq4GI+GZWJy4/KMBBbjDZziAr+bsNWS6+hIYWncBEnoOoAjfemLvdvjBiDRoUTOnng69Ft6x9zdO7+01dn2NXGZkdhX1LQXuR3d6BcncRgUSKWg616A==
+Received: from DM6PR11CA0016.namprd11.prod.outlook.com (2603:10b6:5:190::29)
+ by CY8PR12MB7145.namprd12.prod.outlook.com (2603:10b6:930:5f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Thu, 23 Feb
+ 2023 09:36:48 +0000
+Received: from DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::b3) by DM6PR11CA0016.outlook.office365.com
+ (2603:10b6:5:190::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21 via Frontend
+ Transport; Thu, 23 Feb 2023 09:36:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT064.mail.protection.outlook.com (10.13.172.234) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.21 via Frontend Transport; Thu, 23 Feb 2023 09:36:48 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 23 Feb
+ 2023 01:36:37 -0800
+Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 23 Feb
+ 2023 01:36:30 -0800
+Message-ID: <df054fae-5195-1ef8-c72e-e5afe8d901d3@nvidia.com>
+Date:   Thu, 23 Feb 2023 15:06:26 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [Patch v2 7/9] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
+        <dmitry.osipenko@collabora.com>, <rafael@kernel.org>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <lpieralisi@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
+        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
+        <ishah@nvidia.com>, <bbasu@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <20230220140559.28289-1-sumitg@nvidia.com>
+ <20230220140559.28289-8-sumitg@nvidia.com>
+ <20230222040317.r2p6zlbumazymluc@vireshk-i7>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20230222040317.r2p6zlbumazymluc@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT064:EE_|CY8PR12MB7145:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c6763b8-7424-4fea-a971-08db15817c50
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vieRK5rQRrMRd9S1aQkI6SY4REc5M5EUPRWgPEqf9HsDgSKnmHX+bgHp330u8MJfeQKJpBQkjQd+vM0EtvDPmCH/YYAQgEq5zSvlO5Ttw+BJxkhtjKf7OboH7EF3duDjNuWdXcfCqm9yrGr3U098Qe1DgCyNrSxMUuTDCsNgc2rWs9+ZyzK3A6NDucox/pTX5zR7GzybIjK74fe7n5ZQXTHpuJ24RKVGHdLtPVBzXWuhhnpv26xohVlv8CJFIe2S3bC8GF1EXVHVn6VKYJHn1gPY/+5iYI/40WLnBZZMvwIn6HWHVjcGeBwdEX8TmbZ71JuZ0uIIa5ml1mHntm+5x/A0p2rIzrs0UfPVa7cvl/BJQ4Jpqtt/gEoHuU5Vp7DRN0swPsLwfXYtafvfj5e1sOy90M0jDfh93tOdDpK+GYn/MKQvKHqAnhNVSxszzvqfd7syuaQPwZyDPU4at3sFyldDUtjapfeqjL7NVxwiJUJx8hUeorcmihR3GTn+SbnYP1op/fAhDoCDusOOmTPFNPxmQdAm/jS7vBIq8MH6QuWsBAnbS6hUfb5EB54blpn97m9RgYx1Le61qdhWIqRSiU8p9F7PGpGhHdCEkrcft8YbSq1s6uFsQp8rAB7sF5Y0b3JZXGlSWG+0kVkdf+wED0qRgHHI352quzScwnHOZJtZ/2Jt310Ms3poAGEpH8Po34PvvDmfgMJwzmTKHQY7egEZAooqzXMkMcYbCnvDQpUIMOhpFGp3E/vWf+EZxvZ0HnGL4QXe8McoKqyatqbTTQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(376002)(346002)(451199018)(46966006)(40470700004)(36840700001)(336012)(16526019)(31696002)(36756003)(186003)(26005)(82310400005)(31686004)(6666004)(2616005)(6916009)(478600001)(86362001)(426003)(47076005)(16576012)(83380400001)(70206006)(8676002)(70586007)(53546011)(107886003)(54906003)(316002)(4326008)(41300700001)(8936002)(7416002)(5660300002)(36860700001)(34020700004)(82740400003)(2906002)(40480700001)(7636003)(40460700003)(356005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 09:36:48.2120
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c6763b8-7424-4fea-a971-08db15817c50
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7145
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bf516d94c0cda12aef273b0780436c8ab020c479  Merge branch 'acpi-resource' into bleeding-edge
 
-elapsed time: 722m
 
-configs tested: 77
-configs skipped: 3
+On 22/02/23 09:33, Viresh Kumar wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 20-02-23, 19:35, Sumit Gupta wrote:
+>> +static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, unsigned long freq_khz)
+>> +{
+>> +     struct dev_pm_opp *opp;
+>> +     struct device *dev;
+>> +     int ret;
+>> +
+>> +     dev = get_cpu_device(policy->cpu);
+>> +     if (!dev)
+>> +             return -ENODEV;
+>> +
+>> +     opp = dev_pm_opp_find_freq_exact(dev, freq_khz * KHZ, true);
+>> +     if (IS_ERR(opp))
+>> +             return PTR_ERR(opp);
+>> +
+>> +     ret = dev_pm_opp_set_opp(dev, opp);
+>> +     dev_pm_opp_put(opp);
+> 
+> What about dev_pm_opp_set_rate() instead ?
+> 
+>> +     return ret;
+>> +}
+> 
+> --
+> viresh
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Tried using it and got below crash. It seems to be coming because we 
+don't have clocks property within CPU node for SoC's having BPMP-FW.
 
-gcc tested configs:
-alpha                             allnoconfig
-alpha                            allyesconfig
-alpha                               defconfig
-arc                               allnoconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230222
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230222
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
+  Unable to handle kernel NULL pointer dereference at virtual address 
+000000000000002e
+  ....
+  Call trace:
+   clk_round_rate+0x38/0xd8
+   dev_pm_opp_set_rate+0xe4/0x1a8
+   tegra194_cpufreq_set_target+0x74/0x88
+   __cpufreq_driver_target+0x154/0x250
+   cpufreq_online+0x7b4/0x9ac
 
-clang tested configs:
-hexagon              randconfig-r041-20230222
-hexagon              randconfig-r045-20230222
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20230222
-s390                 randconfig-r044-20230222
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Sumit
