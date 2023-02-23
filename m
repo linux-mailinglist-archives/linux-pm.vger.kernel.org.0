@@ -2,100 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BAD6A01DB
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 05:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032F76A01FB
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 05:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjBWEWJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Feb 2023 23:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S233373AbjBWEXb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Feb 2023 23:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbjBWEVc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 23:21:32 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103844AFC6
-        for <linux-pm@vger.kernel.org>; Wed, 22 Feb 2023 20:20:32 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so3019344pjn.1
-        for <linux-pm@vger.kernel.org>; Wed, 22 Feb 2023 20:20:32 -0800 (PST)
+        with ESMTP id S233199AbjBWEWp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Feb 2023 23:22:45 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2004988F
+        for <linux-pm@vger.kernel.org>; Wed, 22 Feb 2023 20:21:40 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l1so1108141pjt.2
+        for <linux-pm@vger.kernel.org>; Wed, 22 Feb 2023 20:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVJ32kp9wwWd2a1LXfR/fFS9Yx1xIGlwmV6aBdpxYbw=;
-        b=niMkt0Nf/sESAEVV6rHiAPbk9t5VUNguGk7k3hOVPlunoC176xYjW0lCn4RhhslRFG
-         BiYjBqXlB42RzSHtCkgCiYfdoCX/UAwwUx8mH3yyoOzLbmtiAM42elnSY6s07FGSfLqn
-         cQO9FC1AfK0KDa1fJUqA55dLrftcjIKQI5LdW62pSiVZPQB9u280zPd8dA1ko0LW7jSQ
-         PmkiCQQVkXk8lvEKNgNAawgakzUkBBs9ajHwdZ3gEj5ApM8awmyApYjxay+ATItokJQg
-         rxct4O4/oNOW7y5vN4av40peSHorno14uxggdFScI1EY4rw/tpTYDdmueOTnHs1LfdD2
-         +CTQ==
+        bh=BeIqkvXT8qWDWnWahXlO5BININY8QSy5XMW8WdqWuPM=;
+        b=DhD2exAoC6i/QJooHe0EazMuwjjMaq4JiVz/2h1J0I2AA5gcTLEFq8VEr1p8oItWoO
+         fl9MRWGlgkaZiReHFnEGXH9vJ2uDBUtGKa+zFZq8SGrBKOVsO/7TkSz26ufgfC01n4JI
+         xnyXV7t9XiY9FxbQTFlnJeqHPEY05ex4bCWiHCXcrfhMhkxV4c1euPyF0GBwM4UcCt3+
+         J8NzNSOb/0PiCoaaVrFHa8lObd+r/gV4nr3K+goulQBp+5cyuRKsQlYOvdIubJ8oxl/Q
+         AS/jE7od1nqR43jfoFks+OpO0pPLYDRY9pBcG0JjvdcrZgao+iwylykidzmH4ZWY3hGT
+         rC9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HVJ32kp9wwWd2a1LXfR/fFS9Yx1xIGlwmV6aBdpxYbw=;
-        b=wAaehB+4467RfJ91QXVry5wgSZmctL0A5VKmuruDlVd8yzo2F4PTLUkORxabrp+Nbs
-         mfWDlnhzh/5G/5k7lOK3IC0RUWWArWWCaFuhiZ2as8czzaERPAblATTc1ntt3gcB5wwq
-         P7RNrrVgMvrvG9AhQ3MtU4xgGbeUkwdWZqCkcdnfi9pgHRY4WAolZQBe+CjIESEyQwmI
-         ejPoU1M8Itq1Q5OZdam2jAG3aXcu5GpgxhIVdJ/5IAeg/RmMyl3cLq0aAnvq2hXTNL17
-         xpMnfylDx3Mm2u8ImWEmy5OnrodgdhH3O4OwJBTNsxKow6Y0AUp8CFMfC0YRlN4yUz23
-         i+8g==
-X-Gm-Message-State: AO0yUKWXaLa84wJP6e2j1Rkvsg+QL5dabVns5ablPTmqdVNb1usHVzY8
-        PhCfeZJSL6D2/UEaYHpAKWouyw==
-X-Google-Smtp-Source: AK7set+XPYbkdsqliVlZEGDZP6uurH9OJ7JmVEeq84t2Ty8tjuwXBlT/DuK3y0vZw4Si2apg4diXGw==
-X-Received: by 2002:a17:90b:1e02:b0:233:af77:c075 with SMTP id pg2-20020a17090b1e0200b00233af77c075mr11136794pjb.36.1677126030265;
-        Wed, 22 Feb 2023 20:20:30 -0800 (PST)
+        bh=BeIqkvXT8qWDWnWahXlO5BININY8QSy5XMW8WdqWuPM=;
+        b=Ew+BAZGue/8ZxZvtL//yUZVHRnDOdl5AdpARKr6p7kA1JrhkXlQirfGtipi6kzCcM4
+         2ZMpK7tL9EECPNL8RgvNTuajN5Ojiem42HG+MgsRM4q5xl1FfDuaXRJqCxRMljQ1w/QC
+         15qDpYQYRucUJNrrnuB86LF0bFu8sJxnjKW4RmGIKJBeva9q51+W7wFnRVBDMg+cVrGW
+         ypK1g1wDZMnwxqnmbzKp3Yd8WW/bdqvve9zOubvzZ1BEQAcoL+dIYnkLXFazAe8EeL2b
+         rLFdf5aZqH3z6MVG5CKCQtTCDbisq/Joulj91eg9g5U5+sJUy29toKu5tGHBWS7Auc8R
+         QEuw==
+X-Gm-Message-State: AO0yUKVuVMu0akARE/DJAwn04yCSZY4UsPHuZ19GIALSxKWgXktixwQV
+        l+BA1pTpazPBw5zsevMmWwSRcg==
+X-Google-Smtp-Source: AK7set8ZU+CVB/QGSlqPKrK72sbOFFUsAFkmuMH6fP+3ZO/jOAfYbtKM9wdir3sIC7PHI6xxxXauAw==
+X-Received: by 2002:a05:6a20:cc44:b0:cb:c6f4:62fd with SMTP id hq4-20020a056a20cc4400b000cbc6f462fdmr4383006pzb.18.1677126091633;
+        Wed, 22 Feb 2023 20:21:31 -0800 (PST)
 Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id v3-20020a17090a4ec300b002372106a5casm3441787pjl.44.2023.02.22.20.20.29
+        by smtp.gmail.com with ESMTPSA id c2-20020aa78c02000000b00593adee79efsm4597666pfd.55.2023.02.22.20.21.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 20:20:29 -0800 (PST)
-Date:   Thu, 23 Feb 2023 09:50:27 +0530
+        Wed, 22 Feb 2023 20:21:31 -0800 (PST)
+Date:   Thu, 23 Feb 2023 09:51:29 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 15/27] kbuild, cpufreq: remove MODULE_LICENSE in
- non-modules
-Message-ID: <20230223042027.n2shjf723hjwib6j@vireshk-i7>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-16-nick.alcock@oracle.com>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        marijn.suijten@somainline.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: qcom-hw: Simplify counting frequency domains
+Message-ID: <20230223042129.b2uvykoq4p6uiig2@vireshk-i7>
+References: <20230216105140.3938749-1-konrad.dybcio@linaro.org>
+ <20230223032730.fhnxjzfwralkexun@ripper>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230222121453.91915-16-nick.alcock@oracle.com>
+In-Reply-To: <20230223032730.fhnxjzfwralkexun@ripper>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-02-23, 12:14, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+On 22-02-23, 19:27, Bjorn Andersson wrote:
+> On Thu, Feb 16, 2023 at 11:51:40AM +0100, Konrad Dybcio wrote:
+> > For quite some time, this driver has been performing some quite
+> > low-level DT operations. Simplify that using platform_get_resource.
+> > 
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/cpufreq/freq_table.c | 1 -
->  1 file changed, 1 deletion(-)
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
 Applied. Thanks.
 
