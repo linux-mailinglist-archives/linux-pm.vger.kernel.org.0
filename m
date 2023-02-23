@@ -2,138 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2896A0B3C
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 14:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974E56A0B79
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 15:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbjBWNyE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 08:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S233342AbjBWOEC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 09:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234410AbjBWNyE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 08:54:04 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D827B24485
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 05:54:01 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id h3so4849180lja.12
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 05:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yYFX5pmaSVzGWi42xVOCfGboWlcT7LiUwwnbJTILE1A=;
-        b=nO8vClqZf3GWYNGDQRXrVe5XH4b4AUQTVSoPx4e6OhvKM/t6moUrffd2aXGjK9hDIH
-         lqqm5RUbr7YaI0/s8MMIl9Z89OGPm3iMRgnMjKaPyedLEarIjVS9vebhYPvU6BOjbahx
-         Zpuo6NG4GWkwaiJy/RRjcsoDb83oHsnwQnGk3K9K7YM6jbbSa1eOennFtGFInN9qYEtU
-         H/3oFyR0tdkT8s0B057loJ+Ouk8Zw+nmlGpXkxSlTkDC9YmQS9drfvsEmtlZBpk3ArTv
-         Zc7pb0bBhFwpCbFMcqBIMpeXawKwo96WpgPCahU27IN/6ie9X0esQr3lVBGo0PNNGpqY
-         s97w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yYFX5pmaSVzGWi42xVOCfGboWlcT7LiUwwnbJTILE1A=;
-        b=nfIRY/nFbkkBB9c37lq2Mbta9MrbQ32qo8HykPiBEVu/43AntILFtPolmhuL/qePk3
-         SKRIOz2F5RnWcFWw4Ms5czp4x/eVsLe0EMGGXuXxo1Rg3nd3IiF1/TxYXwvHVLJ9C/6o
-         JOMHzeNGTxSXmAtn8KSIjbbEDgujR/keWA2yQ+nzFnNa/SRR2OXonXbLlV9NeLAsSnGp
-         pf59YQsiXghJCx4nEVptZZVUE2ccNJiZTxHfYE1J7BmFV0rWF5No3BuKP94t5TONPA3e
-         R68PcEDzthjGFZWnjXJ0rsNcDbYxXalNRflk0BsBHas0osu5MiW2njXL+eK1FQYGzx1w
-         siWA==
-X-Gm-Message-State: AO0yUKVQ/VYLRynXhIh2jxdT5H4ilNVGp8oASRgZPmywfn/9e/9RAcaZ
-        PODPrMSHKF9XQ+LDcZGBe6CvIw==
-X-Google-Smtp-Source: AK7set+jSSf60lhvfadRI+N7+BvjSGVGxxbhW7pvTkm9ucF3nEsyiBqltMBSG24sQdrXsPbcTwZyNw==
-X-Received: by 2002:a2e:95d4:0:b0:295:a2cf:b1ca with SMTP id y20-20020a2e95d4000000b00295a2cfb1camr172181ljh.14.1677160440153;
-        Thu, 23 Feb 2023 05:54:00 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id w13-20020a056512098d00b004db26660d86sm1001759lft.95.2023.02.23.05.53.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 05:53:59 -0800 (PST)
-Message-ID: <4e1164cf-2317-776f-54cc-322b277fd4b7@linaro.org>
-Date:   Thu, 23 Feb 2023 14:53:57 +0100
+        with ESMTP id S234303AbjBWODq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 09:03:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEF343450;
+        Thu, 23 Feb 2023 06:03:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68A30616E3;
+        Thu, 23 Feb 2023 14:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73022C433EF;
+        Thu, 23 Feb 2023 14:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677161024;
+        bh=UvqRkk4xih+DRkLjI1MDeXGN+OiFJukTXZcTvgj39Fc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ozvg272CDfsOwANz/sLn9jZnDJtP1t1Qi/0Rk8PSA5L1r1dAoJthKQRqboWFaAHF0
+         Li6gQRzG1HKN3P24fvKgFZdVAZRUaUgpX6r7kP2swp9lto6n1ZRd+89lQUD6A8RnJy
+         H7aX27usN8XRYFQUDxU1syCyOUquVF1BlaUxFQinLc+QjFwj9y5pYKIbqdhqmVLbAr
+         kOPz9qn1DNRvNIOBTxd+DGlr+UYqv6oZsyVKBKhnj0/3veURO9zA9+qa/Dedf5a5q1
+         9LmcR2CwrEWDyUDbuHkIBxqOuL+iVj/1Wav/drAm6ZzF9uZx+RCPh9QmtOA3sSu7Ms
+         9DJB03lLiI7tw==
+Date:   Thu, 23 Feb 2023 06:07:10 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Jun Nie <jun.nie@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 08/10] interconnect: qcom: msm8996: Specify no bus
+ clock scaling on A0NoC
+Message-ID: <20230223140710.72qcxcvyme5npf2v@ripper>
+References: <20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org>
+ <20230217-topic-icc-fixes-v5-v5-8-c9a550f9fdb9@linaro.org>
+ <8c4f1cc8-c1f8-06b6-53fe-7507d74ca958@linaro.org>
+ <3c205131-632a-6592-5dc0-82313b26e5f6@linaro.org>
+ <CAA8EJprJYPAsFZgu-DwjOHm6FsUEJ309zDo=Muh04L4B4oWhmw@mail.gmail.com>
+ <5a2f502a-6530-dc8c-a81e-3d2a33964366@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v6 2/5] arm64: dts: qcom: Add msm8939 SoC
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        stephan@gerhold.net, Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-References: <20230222120411.55197-1-bryan.odonoghue@linaro.org>
- <20230222120411.55197-3-bryan.odonoghue@linaro.org>
- <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
- <f852bf35-6f29-a91a-00ab-9f7b2d709328@linaro.org>
- <78f9f327-283d-c7f9-b54b-a54efd1d264b@linaro.org>
- <a662b604-0bef-6ee4-43d5-0480171539c3@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <a662b604-0bef-6ee4-43d5-0480171539c3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a2f502a-6530-dc8c-a81e-3d2a33964366@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 23.02.2023 14:02, Bryan O'Donoghue wrote:
-> On 23/02/2023 12:53, Konrad Dybcio wrote:
->>
->>
->> On 23.02.2023 13:51, Bryan O'Donoghue wrote:
->>> On 22/02/2023 17:08, Konrad Dybcio wrote:
->>>>> +            interrupt-names = "wdog", "fatal", "ready",
->>>>> +                      "handover", "stop-ack";
->>>> This should be a vertical list
->>>>
->>>>> +
->>>>> +            clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
->>>>> +                 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
->>>>> +                 <&gcc GCC_BOOT_ROM_AHB_CLK>,
->>>>> +                 <&rpmcc RPM_SMD_XO_CLK_SRC>;
->>>>> +            clock-names = "iface", "bus", "mem", "xo";
->>>> This could also be one
->>>>
->>>
->>> Sorry what are you asking for here Konrad
->>>
->>> clock-names = "iface",
->>>                "bus",
->>>
->>> if so, why ?
->> Yep!
->>
->> It's just easier to read.. you don't have to count the
->> nth entry in a single line. Maybe this specific example
->> is still easy for the human brain to quickly cross-reference,
->> longer lists or lists with longer entries than 3 or so are
->> confusing..
->>
->> Konrad
+On Fri, Feb 17, 2023 at 09:28:54PM +0100, Konrad Dybcio wrote:
 > 
-> I'm not necessarily opposed to that, I just don't see much precedent for it.
 > 
-> But... fine.
-Well yeah.. our dt style is still evolving, but this thing is
-certainly useful, I've started asking people to do it in the
-past month or so, as we've been doing that in some places already
-and it seems to be beneficial to coherency and readability..
+> On 17.02.2023 21:26, Dmitry Baryshkov wrote:
+> > On Fri, 17 Feb 2023 at 21:53, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> >>
+> >>
+> >>
+> >> On 17.02.2023 20:27, Konrad Dybcio wrote:
+> >>>
+> >>>
+> >>> On 17.02.2023 11:46, Konrad Dybcio wrote:
+> >>>> A0NoC only does bus scaling through RPM votes and does not have any
+> >>>> ICC clocks. Describe this.
+> >>>>
+> >>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >>>> ---
+> >>> This is bad, as devm_clk_get_bulk{"", _optional} doesn't
+> >>> check if num_clocks makes sense and passes "-1" down the
+> >>> devres alloc chain..
+> >>>
+> >>> I'll rework this for the next revision by simply assigning
+> >>> the common "bus", "bus_a" set everywhere instead of relying
+> >>> on it being there by default..
+> >> Or maybe I shouldn't, as that will require redefining the array
+> >> over and over again.. Perhaps just passing <&xo_board>, <&xo_board>
+> >> to a0noc's "bus", "bus_a", similar to what's been done on SDM630's
+> >> GNoC would be less messy?
+> > 
+> > What about simply skipping a call to devm_clk_get if num_bus_clocks is negative?
+> I tested that locally before reporting the mistake on my side and
+> while it works, I just consider it.. ugly, because:
+> 
+> num_clocks =
+> >0 => use the externally specified num_/clocks (logical)
+> =0 => use the default 2
 
-Konrad
+Why not let go of this "convenience" and have num_clocks actually mean
+number of clocks?
+
+Regards,
+Bjorn
+
+> <0 => consider there's zero
 > 
-> ---
-> bod
+> ..but maybe that's just me.. if you don't find it ugly, I may just
+> go with that.
+> 
+> Konrad
+> > 
+> >>
+> >> Konrad
+> >>>
+> >>> Konrad
+> >>>>  drivers/interconnect/qcom/msm8996.c | 1 +
+> >>>>  1 file changed, 1 insertion(+)
+> >>>>
+> >>>> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+> >>>> index 1a5e0ad36cc4..45eb8675fb11 100644
+> >>>> --- a/drivers/interconnect/qcom/msm8996.c
+> >>>> +++ b/drivers/interconnect/qcom/msm8996.c
+> >>>> @@ -1817,6 +1817,7 @@ static const struct qcom_icc_desc msm8996_a0noc = {
+> >>>>      .type = QCOM_ICC_NOC,
+> >>>>      .nodes = a0noc_nodes,
+> >>>>      .num_nodes = ARRAY_SIZE(a0noc_nodes),
+> >>>> +    .num_bus_clocks = -1, /* No bus clock scaling */
+> >>>>      .intf_clocks = a0noc_intf_clocks,
+> >>>>      .num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
+> >>>>      .has_bus_pd = true,
+> >>>>
+> > 
+> > 
+> > 
