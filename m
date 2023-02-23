@@ -2,172 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC666A0BBD
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 15:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454E06A0BF1
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 15:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbjBWOSW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 09:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S234536AbjBWOgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 09:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbjBWOR6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 09:17:58 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B76458B56
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 06:17:45 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g17so1205221lfv.4
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 06:17:44 -0800 (PST)
+        with ESMTP id S234630AbjBWOgH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 09:36:07 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586EE58B7F
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 06:36:01 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p18-20020a05600c359200b003dc57ea0dfeso10711898wmq.0
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 06:36:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EjpWiXyFsyCrtS44Y9ufyYtxzc3mAZyPt7gCiq2NI9k=;
-        b=sKA2HujbGoWIh+Q49GzD0s61o6Ytvqd2ecyf8Ls5Trm4SY+xAe52q9WN8c/NnX0dfR
-         XQLlZqBcN4Pe7GCeZ0PUnCxNR5iWcJxq/6Kt8TSEXB73FQMjTUxzMU8NZSLnOxwtqDHG
-         TfvMyioKVGwohJc4eUTp3ypAHBFaKsPWbBvXBbG+tiUAVpjzqrMjXpo1SXHyDPiZ101k
-         Ynaw/p8oYVug8S+KAKmIyjWG4PBcJqXnrQ9ss2NoSUhCkiBURP6XhJ4DPwRhos/gu0EG
-         finE1yPU87kZ+nbJe0xRCR2o2n3NPvpv61ZQmMYxBC7jf5DPUDJE8HmQ8CmqqW7/U+Bj
-         iHFg==
+        bh=5A8UeRr2Gc2z9WOFsL/7qhv/YNUuwYHZ6QFgk2PLkf4=;
+        b=G/KnzB+TqsBI8cevd406M1H2uS/axQyn5O3J8LbGgYCVum00LDCUcdsLRO4e+PYdTW
+         U53td03TDwO3oqU/DfyEACJp3u8kqk/fQs1hqFQfHLbFvVaGxAxtxfhj20dVBDn/KocL
+         bRm4dGcQ8RneN0QZZOclkTDXg5Tz49YHzlv2KJwX01gmRldUTxSI9wx6CwNtT7JS4MpX
+         XQc/ceZ/Ksf8XK7DsOO+WaVEgFWi4+WZcf9lLCMAByGprBtrAIY/OBJ06L3/FJ6oVN0s
+         EtSN5c388v7cMmniaxK9MZ4F5hupqKl7pkEC/gfUk5A76nvfNX4TMsgdKEROOksO965j
+         GZ+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjpWiXyFsyCrtS44Y9ufyYtxzc3mAZyPt7gCiq2NI9k=;
-        b=sYKOLe5/meIxZraY/9akn6zA4zJlQrwo7yZVm6SvI8sHyCcUKFwxErn8A9dcDIK3c9
-         QhjwMrWR5n+mtr1z8W+rwFf2D5994dJuL32vl0Oz2b5ZzVkwYFjq75xORPdoxtsdaJjZ
-         MU2UYDamraxp7MZHcN7sBSTZvfBBQnJpL3tR91N/aEIH9ify7Zxq1/PSfVEpeUa2YdNO
-         piYGacv23i+xxmPAy07WrTdXrpZZ7Na15+DS+eYfzo85jiJyDGI67hNy74plPHbwAXNO
-         1qfRbCTvbHiO2O5lDR1UuMyKlTjPCT+jA1JfjNGUOrCP8AIRCtcHmYzYpa9EVFkcUMpl
-         Zqwg==
-X-Gm-Message-State: AO0yUKVm6OsYoaPzgjO9wJpGurX2HVqYO+3gy2tcRMS2HfOqn6YXcM09
-        vuz9OV/VbHUV0atqrBls3U/6Sw==
-X-Google-Smtp-Source: AK7set+nQT9T7mX6awdiWAmd0xuCbbHlb7DjuH8yId5tYvhS+CJcA2ETt4LLmE8AZPPqARFzhWsQ8Q==
-X-Received: by 2002:a19:c502:0:b0:4d8:684e:c94c with SMTP id w2-20020a19c502000000b004d8684ec94cmr5330426lfe.13.1677161863240;
-        Thu, 23 Feb 2023 06:17:43 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id u8-20020ac25188000000b004d86808fd33sm273904lfi.15.2023.02.23.06.17.41
+        bh=5A8UeRr2Gc2z9WOFsL/7qhv/YNUuwYHZ6QFgk2PLkf4=;
+        b=lulJFWqCSKTlpDqm1rDjbNS4umCHwlRFYRQCZ0F0T7xAFv8ULhDvlFNvRf9cn/M4f8
+         munzY4QEc+r/4SNT16XCcph9Mz7DA2Zb32d0/Ts27yo9vXccLzGtk2YdPiAypVpbN1/O
+         +rNiiwiEmjpqxgqbzhxeVusvsXm6lf01omJNVvqCfGBmY+qMmBbDBZ6z+tZKrfSXr6Fe
+         M3Ce+cqCsWhA2R8Yb6Y/2mWHtA1utz5ZZfD5uqSrQZA+HMDZsB9OZbX3ZFFU01PNgfSF
+         +lftfI5U+4D5g10ox6qvY3Td6oJHQS55sx8FOG1WNcypqY49Xelt9y5/GFwL+hIlGKZl
+         0TJw==
+X-Gm-Message-State: AO0yUKXWKsfvzIIjiPRpAYdgpSvwYLR9VCMkJzpSN8mU8KOswuwGbcKq
+        FpDfDatITQlLIhXbFn/OHopssA==
+X-Google-Smtp-Source: AK7set8m6oTFiOFyJ69IZZpXnSY707D1wGVpzvSHc156iH26zK9yl1Et8LQfhfLoNB4CqfmWsB2ihw==
+X-Received: by 2002:a05:600c:43c9:b0:3e1:f8af:7942 with SMTP id f9-20020a05600c43c900b003e1f8af7942mr3008298wmn.22.1677162958724;
+        Thu, 23 Feb 2023 06:35:58 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c265:a8c7:c71d:6e47? ([2a05:6e02:1041:c10:c265:a8c7:c71d:6e47])
+        by smtp.googlemail.com with ESMTPSA id n15-20020a05600c3b8f00b003e224ff61a8sm12388179wms.43.2023.02.23.06.35.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 06:17:42 -0800 (PST)
-Message-ID: <45156f6a-6f18-6d7c-5d4a-e66ea9cca724@linaro.org>
-Date:   Thu, 23 Feb 2023 15:17:41 +0100
+        Thu, 23 Feb 2023 06:35:58 -0800 (PST)
+Message-ID: <abac6405-6a09-4267-a5ec-626e92f08f30@linaro.org>
+Date:   Thu, 23 Feb 2023 15:35:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 08/10] interconnect: qcom: msm8996: Specify no bus
- clock scaling on A0NoC
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 06/16] thermal: Don't use 'device' internal thermal
+ zone structure field
 Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Jun Nie <jun.nie@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org>
- <20230217-topic-icc-fixes-v5-v5-8-c9a550f9fdb9@linaro.org>
- <8c4f1cc8-c1f8-06b6-53fe-7507d74ca958@linaro.org>
- <3c205131-632a-6592-5dc0-82313b26e5f6@linaro.org>
- <CAA8EJprJYPAsFZgu-DwjOHm6FsUEJ309zDo=Muh04L4B4oWhmw@mail.gmail.com>
- <5a2f502a-6530-dc8c-a81e-3d2a33964366@linaro.org>
- <20230223140710.72qcxcvyme5npf2v@ripper>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230223140710.72qcxcvyme5npf2v@ripper>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
+ <20230221180710.2781027-7-daniel.lezcano@linaro.org>
+ <CAJZ5v0gTmi7ZeDDdHWGWju4m3bv2366oVqSP1dGOT+3jLV-jaw@mail.gmail.com>
+ <0889767f-d187-0cb4-895e-c149517b6636@linaro.org>
+ <CAJZ5v0h=UCOyJ88UgEdqch4NZK+DaT8jWnDaguQGNx-KOMhPPA@mail.gmail.com>
+ <2b843912-cc9b-f1ac-1f81-28e3ecf8daba@linaro.org>
+ <CAJZ5v0g+fkX=ZUJ0MgENy2SmMv98wD0dApVwU352OS4ZXpDDCw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0g+fkX=ZUJ0MgENy2SmMv98wD0dApVwU352OS4ZXpDDCw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 23.02.2023 15:07, Bjorn Andersson wrote:
-> On Fri, Feb 17, 2023 at 09:28:54PM +0100, Konrad Dybcio wrote:
+On 23/02/2023 12:43, Rafael J. Wysocki wrote:
+> On Thu, Feb 23, 2023 at 10:56 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
 >>
->>
->> On 17.02.2023 21:26, Dmitry Baryshkov wrote:
->>> On Fri, 17 Feb 2023 at 21:53, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>> On 22/02/2023 21:06, Rafael J. Wysocki wrote:
+>>> On Wed, Feb 22, 2023 at 9:00 PM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
 >>>>
->>>>
->>>>
->>>> On 17.02.2023 20:27, Konrad Dybcio wrote:
->>>>>
->>>>>
->>>>> On 17.02.2023 11:46, Konrad Dybcio wrote:
->>>>>> A0NoC only does bus scaling through RPM votes and does not have any
->>>>>> ICC clocks. Describe this.
+>>>> On 22/02/2023 20:43, Rafael J. Wysocki wrote:
+>>>>> On Tue, Feb 21, 2023 at 7:07 PM Daniel Lezcano
+>>>>> <daniel.lezcano@linaro.org> wrote:
 >>>>>>
->>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>> Some drivers are directly using the thermal zone's 'device' structure
+>>>>>> field.
+>>>>>>
+>>>>>> Use the driver device pointer instead of the thermal zone device when
+>>>>>> it is available.
+>>>>>>
+>>>>>> Remove the traces when they are duplicate with the traces in the core
+>>>>>> code.
+>>>>>>
+>>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>>>> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek LVTS
 >>>>>> ---
->>>>> This is bad, as devm_clk_get_bulk{"", _optional} doesn't
->>>>> check if num_clocks makes sense and passes "-1" down the
->>>>> devres alloc chain..
->>>>>
->>>>> I'll rework this for the next revision by simply assigning
->>>>> the common "bus", "bus_a" set everywhere instead of relying
->>>>> on it being there by default..
->>>> Or maybe I shouldn't, as that will require redefining the array
->>>> over and over again.. Perhaps just passing <&xo_board>, <&xo_board>
->>>> to a0noc's "bus", "bus_a", similar to what's been done on SDM630's
->>>> GNoC would be less messy?
->>>
->>> What about simply skipping a call to devm_clk_get if num_bus_clocks is negative?
->> I tested that locally before reporting the mistake on my side and
->> while it works, I just consider it.. ugly, because:
->>
->> num_clocks =
->>> 0 => use the externally specified num_/clocks (logical)
->> =0 => use the default 2
-> 
-> Why not let go of this "convenience" and have num_clocks actually mean
-> number of clocks?
-Sounds good.. Should I keep the default "bus", "bus_a" on absence of
-.bus_clocks still, to avoid duplicating objects?
-
-Konrad
-
-> 
-> Regards,
-> Bjorn
-> 
->> <0 => consider there's zero
->>
->> ..but maybe that's just me.. if you don't find it ugly, I may just
->> go with that.
->>
->> Konrad
->>>
 >>>>
->>>> Konrad
+>>>> [ ... ]
+>>>>
+>>>>>>            thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
+>>>>>>
+>>>>>> -       dev_dbg(&data->ti_thermal->device, "updated thermal zone %s\n",
+>>>>>> +       dev_dbg(data->bgp->dev, "updated thermal zone %s\n",
+>>>>>>                    data->ti_thermal->type);
 >>>>>
->>>>> Konrad
->>>>>>  drivers/interconnect/qcom/msm8996.c | 1 +
->>>>>>  1 file changed, 1 insertion(+)
->>>>>>
->>>>>> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
->>>>>> index 1a5e0ad36cc4..45eb8675fb11 100644
->>>>>> --- a/drivers/interconnect/qcom/msm8996.c
->>>>>> +++ b/drivers/interconnect/qcom/msm8996.c
->>>>>> @@ -1817,6 +1817,7 @@ static const struct qcom_icc_desc msm8996_a0noc = {
->>>>>>      .type = QCOM_ICC_NOC,
->>>>>>      .nodes = a0noc_nodes,
->>>>>>      .num_nodes = ARRAY_SIZE(a0noc_nodes),
->>>>>> +    .num_bus_clocks = -1, /* No bus clock scaling */
->>>>>>      .intf_clocks = a0noc_intf_clocks,
->>>>>>      .num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
->>>>>>      .has_bus_pd = true,
->>>>>>
+>>>>> The code before the change is more consistent, because it refers to
+>>>>> the same object in both instances.
+>>>>>
+>>>>> It looks like a type field accessor is needed, eg. thermal_zone_device_type()?
+>>>>>
+>>>>> Or move the debug message to thermal_zone_device_update()?
+>>>>
+>>>> Actually it is done on purpose because the patch 9 replaces the accesses
+>>>> to 'type' by 'id', the thermal_zone_device_type() accessor won't be needed.
 >>>
+>>> Cool.
 >>>
+>>> However, this is a change in behavior (albeit small) which doesn't
+>>> appear to be necessary.
 >>>
+>>> What would be wrong with having a tz->type accessor too?
+>>
+>> I can add the 'type' accessor but from my point of view it is not
+>> correct because the information belongs to the thermal framework and it
+>> is used to export the information in the sysfs which is along with the
+>> directory name giving the id of the thermal zone.
+> 
+> I'm not sure what you mean here.
+> 
+> Surely, the 'type' is provided by whoever registers the thermal zone,
+> so I'm not sure in what way it "belongs" to the framework.
+
+I meant the goal of 'type' is to be exported to sysfs, nothing else.
+
+That is the reason why I used the word 'belongs', because it was 
+introduced to stay in the scope of the thermal framework, but then its 
+usage has been diverted to a name.
+
+Anyway, from my POV having traces in the ops is not a good thing, so 
+I'll propose later to remove them and add a single message in the call 
+sites.
+
+Meanwhile, I'll provide the accessor for 'type' and hopefully we do not 
+end up with a plethora of accessors to be used in the core code.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
