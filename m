@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01DC6A08F2
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 13:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F5C6A08FF
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Feb 2023 13:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbjBWMwD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 07:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S233289AbjBWMyF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Feb 2023 07:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbjBWMwA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 07:52:00 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A18743450
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 04:51:58 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id r7so10434105wrz.6
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 04:51:58 -0800 (PST)
+        with ESMTP id S233730AbjBWMyE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 07:54:04 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12215192B
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 04:54:02 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id t14so8001815ljd.5
+        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 04:54:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=He3/T5rNjZxbvQvsLoh9SavvhiALDTplmrGhWdH6/2E=;
-        b=alxxBCSG2sPNWiZwA17ja0FEz5b1RDxTTs4NGCFVIi8pqg9nexPHIGFFiVv19m7MF7
-         9lQqxzBWsGQfoFuqnSSabuDcCcD9lLoEBQlTsTiTzzXMAhJwzI3msL3PxuEc4lX2LN7N
-         PAUR1w6FHcB0gAgWqzWp+HhtdnvRT8MZq2jpz5WCzdFjfk2IAPyooUwKK4XswJVhkqMo
-         YmIHqfHGLxCxaEf9bKUoaUZe74VVxinp9k1p0nQZyGUHYaZb2DAvdkDy4IcO9owSUaR0
-         3o3gkdcYBcjVQvYgurSYyIazojzvlQ/gje1S+X7QFhPaWhuAI0wP7Yzp6C8UTFqkU/zu
-         c4GA==
+        bh=tv7QDdYDPJqXmqjJw8nCe8CHF4VqMek3OCZI+Cd4pb8=;
+        b=mlkSqHje+JjGyigA/7BshOAuVHEMmL8HWy1geye4XeqZG/iSP4yO69uzft6MSr6hcV
+         l6cIhPX8MtVOFGBJB0/HR2OpGVRwLapPHEWanx2+Xz+cHB/k8fwwQwNbZOCcBsTomduF
+         YAhmBI2z+QXb2AY/IbAvT9l6EUVaznyzDP8gnxVlmb9tFS7loc3hwLIIFSViXSRtscIw
+         wFHFsDqCaIhuxECo6A2tPWL+5Zq29FmPqJxpkh3neL68kkR5bV68hJ+XUBNtHdNlTIY5
+         SadMipoGprsa0SnzZDHHphNyOndocFY+beezUFyzYWtXG5zPsKSlvtMm/AWUGkHvY2u0
+         s5CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=He3/T5rNjZxbvQvsLoh9SavvhiALDTplmrGhWdH6/2E=;
-        b=JOTKXaWZOUMbU+ohR4Nt88/mP/kgYb+t+j+iW869Z1staqsRZ5iYNunrnN65I19LUB
-         9jsTGXrsb9NLfV7t6oa0vpXO8F7swCltlhiNrJfS318ldTWfQgrfoVmyWlmtAz0gv3yU
-         l+FJckGsnCA3XzYUDCOlmTou9o1x0jsBdXgi67dn2KiO6xWpWy7ciSU4s8tcApAKPEsX
-         qYJK5rvHkK4mTBFCz3UrFdHaFbHa9c3i7VimCWuJxZ0xPi3/OgnzwqLOh9t8/EuI0C5D
-         b3QWNIa8b+Hq23W5cQkPQnEe6uQ0X/vLAPReTdcazUDGS2GCe16os2L+/wl2iblMVG9R
-         sl3w==
-X-Gm-Message-State: AO0yUKWRrLX7muKC4j31Mj/MePO5X4xMskUI3IYgzf6/xk9LUFzcSlD5
-        KJlX5qafZm6RyXvVTwrz9t08UA==
-X-Google-Smtp-Source: AK7set9ix212YSCnyGx56kbZG1wFRQMw0z+jnmOA6BkbGPbPtnvuzNhWX3F4lLDb03ZsXuDk0ySpaQ==
-X-Received: by 2002:a05:6000:136a:b0:2c7:f56:28d9 with SMTP id q10-20020a056000136a00b002c70f5628d9mr2470997wrz.54.1677156716880;
-        Thu, 23 Feb 2023 04:51:56 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c214a00b003e209186c07sm11194549wml.19.2023.02.23.04.51.55
+        bh=tv7QDdYDPJqXmqjJw8nCe8CHF4VqMek3OCZI+Cd4pb8=;
+        b=YcWoiO9+CuM9GoVlJKM6gnan9qqNiMSGuGNAjFOUUH1DRKHCNeQv+P8yHd0X95BuZB
+         k/uAZnTr5ZJXGC/dD7HhOynHuluKvGGHmXK5sNfijfGpjuEgUMda0M+xXJqXEA4V+oEi
+         dhi4KshmG1klwwM8f2NBPKlw0PDo9kUZV/fsSOcckeR9PDvXHMQiMhxwyIAK8gqoGGCq
+         R0QEysfpzoj56Ix0gYNUrJUbzrY8j08YSPTo+PGBmZNLr1Y9hDRK/Zm890uphBIkLR9C
+         GSowtFN987usF07GKJqYLjwYRPRgpc7xFzWyn98esxtRTrru4qf/4PVTc5mJ+KaYl7yf
+         AaDg==
+X-Gm-Message-State: AO0yUKVzP94wjh3Jiepze8iponAEtRGcJecBz/WB8rlRMO2NGUO9zcNc
+        Hsj52iRiV/RrTgoCngz2IzyCnQ==
+X-Google-Smtp-Source: AK7set9xO2qBcUzUqsQUijeCUxxeEVruJPasKZUluFH6lIi2vW4rnuaTgCabwWZjUD9HCKQiMUCOCw==
+X-Received: by 2002:a2e:509:0:b0:293:4ba1:a78b with SMTP id 9-20020a2e0509000000b002934ba1a78bmr4813449ljf.25.1677156841121;
+        Thu, 23 Feb 2023 04:54:01 -0800 (PST)
+Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
+        by smtp.gmail.com with ESMTPSA id b11-20020a05651c032b00b002934b8d115csm1161213ljp.51.2023.02.23.04.53.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 04:51:56 -0800 (PST)
-Message-ID: <f852bf35-6f29-a91a-00ab-9f7b2d709328@linaro.org>
-Date:   Thu, 23 Feb 2023 12:51:55 +0000
+        Thu, 23 Feb 2023 04:54:00 -0800 (PST)
+Message-ID: <78f9f327-283d-c7f9-b54b-a54efd1d264b@linaro.org>
+Date:   Thu, 23 Feb 2023 13:53:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
+ Thunderbird/102.8.0
 Subject: Re: [PATCH v6 2/5] arm64: dts: qcom: Add msm8939 SoC
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
         andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -71,36 +71,50 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
 References: <20230222120411.55197-1-bryan.odonoghue@linaro.org>
  <20230222120411.55197-3-bryan.odonoghue@linaro.org>
  <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <56ed6a30-9815-002f-8174-95e7e9fc0954@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <f852bf35-6f29-a91a-00ab-9f7b2d709328@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <f852bf35-6f29-a91a-00ab-9f7b2d709328@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/02/2023 17:08, Konrad Dybcio wrote:
->> +			interrupt-names = "wdog", "fatal", "ready",
->> +					  "handover", "stop-ack";
-> This should be a vertical list
+
+
+On 23.02.2023 13:51, Bryan O'Donoghue wrote:
+> On 22/02/2023 17:08, Konrad Dybcio wrote:
+>>> +            interrupt-names = "wdog", "fatal", "ready",
+>>> +                      "handover", "stop-ack";
+>> This should be a vertical list
+>>
+>>> +
+>>> +            clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+>>> +                 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
+>>> +                 <&gcc GCC_BOOT_ROM_AHB_CLK>,
+>>> +                 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>>> +            clock-names = "iface", "bus", "mem", "xo";
+>> This could also be one
+>>
 > 
->> +
->> +			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
->> +				 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
->> +				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
->> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
->> +			clock-names = "iface", "bus", "mem", "xo";
-> This could also be one
+> Sorry what are you asking for here Konrad
 > 
+> clock-names = "iface",
+>               "bus",
+> 
+> if so, why ?
+Yep!
 
-Sorry what are you asking for here Konrad
+It's just easier to read.. you don't have to count the
+nth entry in a single line. Maybe this specific example
+is still easy for the human brain to quickly cross-reference,
+longer lists or lists with longer entries than 3 or so are
+confusing..
 
-clock-names = "iface",
-               "bus",
-
-if so, why ?
+Konrad
