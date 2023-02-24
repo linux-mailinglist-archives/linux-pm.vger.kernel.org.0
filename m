@@ -2,102 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F65B6A14D6
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Feb 2023 03:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F4C6A1700
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Feb 2023 08:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjBXCRT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Feb 2023 21:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S229477AbjBXHSp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Feb 2023 02:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBXCRS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Feb 2023 21:17:18 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ADB515FD
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 18:17:17 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id u10so15016530pjc.5
-        for <linux-pm@vger.kernel.org>; Thu, 23 Feb 2023 18:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XwQM5jDCnisoGK+9lg+DN9mXAFVodSsNBaIsTAFZ/HA=;
-        b=U+6xJp4C4jhOSJawd+VDYS75rVNz161MGfLLnJrgNjnKmt8cBQdIR26gxPBeNPJ6qP
-         m9AHc5m4KsZqNcMuZHDfheCR9byDTZvYiRj2fid6Io03+1lVcPVJfAT5x23GwMKbFBY5
-         pCm+SzTK21aJFfV9MmyCrEU1cauAGOffKM7iN1UW08fUNsf/JRrDNHyedKZpq5scl9lS
-         D61eeBFRipb4kA4c1lYrvE0M+dpq5mCIQQd2pndWwvF+bco0GDqcaPj8wic2IYeRlCgT
-         Rp113bTu8exyqlSchWz4PZ17yx5XbqKGSJeg3WxjPNTq+TMbhfBFR8HpWsOcFO5fYC0K
-         XKvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XwQM5jDCnisoGK+9lg+DN9mXAFVodSsNBaIsTAFZ/HA=;
-        b=IAXb3xwcjJMTw9jSjwHN+rPNkAIwIHp96fs0T5bEev51nZXtoHq/JdU6uENxxI8m6N
-         919flLIuKnjRmMWDFjksuIRM/0OHQSRlh3z61p9wlyrLGyU9ZdwdAUHfON/h6AFzO/WO
-         AADectVVu4YwWyr40KojGFTWkJDMidYrut0ZgZb4CtLEZL/OOq07xFk3cXma2UZmkTqL
-         aqD9KBEuWWHCdBeW2Pwxp69l8GkrTNuLEBSroOt6ywppg+GO1MZEzyXTs66IYYsnKzwR
-         FrN0YBVC9t0lhhu7nDscrZobtXtrtOP0LVvHiBChWvVuCx3KVfe25pBMET7JmjUfbw9y
-         /P8A==
-X-Gm-Message-State: AO0yUKVSVQ/PERY3opO5XBxff74BoIYTPDRPZyTJMq0cr+uMgCiW+z5j
-        yRQIoAmOfpFqYu0HlgDIyb1J2A==
-X-Google-Smtp-Source: AK7set/CzIDjqcs+ex1tt/uuL6og7+c8sKGOmyeRSPakEVadCRP1/lhjq2n1ROS6VFu3TO3FZkeR9g==
-X-Received: by 2002:a17:903:5c4:b0:19a:b9a8:3fbe with SMTP id kf4-20020a17090305c400b0019ab9a83fbemr10522949plb.48.1677205036904;
-        Thu, 23 Feb 2023 18:17:16 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902761100b0019a8468cbedsm4440202pll.226.2023.02.23.18.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 18:17:16 -0800 (PST)
-Date:   Fri, 24 Feb 2023 07:47:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jun Nie <jun.nie@linaro.org>
-Cc:     cw00.choi@samsung.com, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
-Message-ID: <20230224021713.stpcykx2tjkjwyti@vireshk-i7>
-References: <cover.1677063656.git.viresh.kumar@linaro.org>
- <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
+        with ESMTP id S229462AbjBXHSo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Feb 2023 02:18:44 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5721589A;
+        Thu, 23 Feb 2023 23:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677223123; x=1708759123;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zYbshPl/lsCnWUmVhR/K96jzGok99c8lvegV+Z/ET1s=;
+  b=AzuhrLEKdKP5DVfhO1yaQcCxe0HJoIx5hqkWL9lMxmsvKyvh1SokT/0B
+   JkYM7XYbijEkOi7nmnko/lmqLg1Z6VTW2TMBTOpUDWQVn8WAWGtx8qoDB
+   aMEP/kZxGFq70gNpDY4uxdhOBnEaxdYnpBDPHFpzZtgY3NTxWJbk8ToJc
+   3Y/NzWXshRaIh1NnKjCmTzLzpgNIa/dKWZLipETyvTA1psL3cpaQM7Vp0
+   fvVbK++enyhHh3Wk0vc/3Romw18THPvtiH6+m12ayb/ClRFpe4ZXa53mC
+   gQ2egkUN7Zt43TFXaOPkHJoNEx4Sd/KvXQl0R2CVH6vX95UWnZhI9z2Hl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334834613"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="334834613"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 23:18:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="815637525"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="815637525"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2023 23:18:40 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pVSLo-0002E5-0m;
+        Fri, 24 Feb 2023 07:18:40 +0000
+Date:   Fri, 24 Feb 2023 15:18:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 56b49cc1d126d558bb976785deb9eeff3160fb47
+Message-ID: <63f864be.JL6UtBJ/6VvtU055%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-02-23, 17:56, Jun Nie wrote:
-> It looks promising. The function get_target_freq_with_cpufreq() can be wrapped
-> to act as set_required_opps() callback.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 56b49cc1d126d558bb976785deb9eeff3160fb47  Merge branch 'powercap' into bleeding-edge
 
-> But my case is a bit complicated. CPU opp depends on both genpd opp and
-> devfreq opp.
+elapsed time: 720m
 
-I was wondering if we will have such a case soon enough or not :)
- 
-> So the genpd_virt_devs array need
-> to be modified or add another array for devfreq case. While genpd_virt_devs is
-> bounded with genpd directly and coupled with "power-domains" list in
-> device tree.
-> Current required-opp nodes are designed to be aligned with the list. I
-> am considering
-> what's the best way for back compatibility.
+configs tested: 24
+configs skipped: 4
 
-Please look at the top commit here:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/propagate
-
-Will this be enough for your use case ? I will post everything again once we are
-settled on a solution.
+tested configs:
+clang                                   alpha   defconfig
+gcc                                       arc   defconfig
+gcc                                       arm   defconfig
+gcc                                     arm64   defconfig
+gcc                                      csky   defconfig
+gcc                                      i386   defconfig
+gcc                                      ia64   defconfig
+gcc                                 loongarch   defconfig
+gcc                                      m68k   defconfig
+gcc                                      m68k   m5249evb_defconfig
+gcc                                      mips   ip32_defconfig
+gcc                                     nios2   defconfig
+gcc                                    parisc   defconfig
+gcc                                  parisc64   defconfig
+gcc                                     riscv   defconfig
+gcc                                     riscv   rv32_defconfig
+gcc                                      s390   defconfig
+gcc                                        sh   microdev_defconfig
+gcc                                        sh   r7780mp_defconfig
+gcc                                     sparc   defconfig
+gcc                                     sparc   sparc32_defconfig
+gcc                                        um   i386_defconfig
+gcc                                        um   x86_64_defconfig
+gcc                                    x86_64   defconfig
+gcc                                                  
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
