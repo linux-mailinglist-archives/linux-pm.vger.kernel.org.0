@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDC76A31CF
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 16:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA656A322D
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 16:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjBZPG1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 10:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S230335AbjBZP0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 10:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbjBZPFj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 10:05:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E679220552;
-        Sun, 26 Feb 2023 06:56:18 -0800 (PST)
+        with ESMTP id S230353AbjBZPZ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 10:25:57 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2292413B;
+        Sun, 26 Feb 2023 07:19:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4F2A60C74;
-        Sun, 26 Feb 2023 14:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33BBEC433B4;
-        Sun, 26 Feb 2023 14:48:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 00283CE0E88;
+        Sun, 26 Feb 2023 14:50:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55436C433D2;
+        Sun, 26 Feb 2023 14:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677422900;
-        bh=zwmTiw4jNGEI+6WAvCEtRzDSNB+DvOn5KyjyWJ48JgU=;
+        s=k20201202; t=1677423032;
+        bh=Bpnr5Gi/66njPh0yetcuFp1MziLbVdF6OErkWuJpJGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JQdYV6X5LaI0+bKdyID4twOil94hQgzC3oWFh86yOt2KwUEWxuBYvlpDNRGucbOMX
-         bCu2FNXb/TCXDoYOumz6IDImoZ0mvCnYGU+oxh8s2t9GgxZ2QN9blAEcXeOkNeabWE
-         g+WtW/4duAraS/FMs6R4qZBwEuhcJa3nMX1gb7ZInGpQSsB0dEG073d0/mU0bLZdJw
-         OTtaeD9eeLecN6dnHt4HNWKld+7o11NnQmsSpSpI9g/iiKM5rFhMohhf2xqu8+Dqk1
-         R+Y23Srt0DuHyOqQjYVuiTXOPOo8cuMl3G7wgtXN/NrSc5RTuc3Yuwe9Ur84hZrVvy
-         NI/ia46Akg1gA==
+        b=q9V6n5sc7WG6xGGBrAZTLD37FhxYdzGXwmBharpnW4nLe+5rMMDWTIeJVlbUKvK3H
+         7h50mlUxgpRtlDlMBCeh7atVLU/pKMFa3OYTjo4UNri5BtvY4DKUkzEt/GnbiHtBFz
+         WHE1tA/dpCcSjEimeQrdZSc/0PPkB2uDW4RMYM4Lv0TFVlf+667SW7WXXZU+h0/Gbq
+         KlwFAVpvTterNODaFVMvb9oYU6w6mne9JXuXMAsQEg/BuoSyikKwLL+yrP85m/hbrV
+         ej2IZo3j7+e6akmfPC57VUhUFGHtB1N6QPxRdBm04tLvX235P7Es1xuau0/fwZpdXX
+         yXiearifxN5SQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+Cc:     Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        Zhang Rui <rui.zhang@intel.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        khilman@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 39/49] PM: domains: fix memory leak with using debugfs_lookup()
-Date:   Sun, 26 Feb 2023 09:46:39 -0500
-Message-Id: <20230226144650.826470-39-sashal@kernel.org>
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 07/27] thermal: intel: Fix unsigned comparison with less than zero
+Date:   Sun, 26 Feb 2023 09:49:54 -0500
+Message-Id: <20230226145014.828855-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230226144650.826470-1-sashal@kernel.org>
-References: <20230226144650.826470-1-sashal@kernel.org>
+In-Reply-To: <20230226145014.828855-1-sashal@kernel.org>
+References: <20230226145014.828855-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,42 +58,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Yang Li <yang.lee@linux.alibaba.com>
 
-[ Upstream commit 0b6200e1e9f53dabdc30d0f6c51af9a5f664d32b ]
+[ Upstream commit e7fcfe67f9f410736b758969477b17ea285e8e6c ]
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic
-at once.
+The return value from the call to intel_tcc_get_tjmax() is int, which can
+be a negative error code. However, the return value is being assigned to
+an u32 variable 'tj_max', so making 'tj_max' an int.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Eliminate the following warning:
+./drivers/thermal/intel/intel_soc_dts_iosf.c:394:5-11: WARNING: Unsigned expression compared with zero: tj_max < 0
+
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3637
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Acked-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/power/domain.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/thermal/intel/intel_soc_dts_iosf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 6471b559230e9..b411201f75bfb 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -220,13 +220,10 @@ static void genpd_debug_add(struct generic_pm_domain *genpd);
- 
- static void genpd_debug_remove(struct generic_pm_domain *genpd)
+diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+index 4f1a2f7c016cc..8d6707e48d023 100644
+--- a/drivers/thermal/intel/intel_soc_dts_iosf.c
++++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+@@ -404,7 +404,7 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
  {
--	struct dentry *d;
--
- 	if (!genpd_debugfs_dir)
- 		return;
+ 	struct intel_soc_dts_sensors *sensors;
+ 	bool notification;
+-	u32 tj_max;
++	int tj_max;
+ 	int ret;
+ 	int i;
  
--	d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
--	debugfs_remove(d);
-+	debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
- }
- 
- static void genpd_update_accounting(struct generic_pm_domain *genpd)
 -- 
 2.39.0
 
