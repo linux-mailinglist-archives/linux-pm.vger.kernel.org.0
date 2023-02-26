@@ -2,64 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3C26A351D
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 23:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BDC6A3524
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 23:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBZW4a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 17:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
+        id S229847AbjBZW4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 17:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjBZWzy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 17:55:54 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C903D1A944
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:55:34 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q16so4434383wrw.2
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:55:34 -0800 (PST)
+        with ESMTP id S229838AbjBZWz6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 17:55:58 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0601A947
+        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:55:38 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so5956554wms.2
+        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:55:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FS5MMzUrtYY5N2w5QCadh2L/6Lyuv9jfcaqNKoRqTRU=;
-        b=DgprYmeHBjj1QzTvylKGYwPam1q6cXCND0PzN/JHv1fIlxg+oS9gS+MrmgNuKZAI+1
-         O0pEW4qREyxsNftF17Uw8vvkC+iavEQR9LTDHma6fBAAyP36KS2OJNzs/bhwnmNz8TH6
-         3CFZBmKkQA2h6kzBDu5TuqiyoaFEthZxnHPJNj5QLUWeprwFH7S/p8ZP3z9iQceNrZTv
-         E8vzBjUCBo2dogzXpNgzLOy4cJkNhNk8YRP7IG8g3OKyfPto5PBgvwl88Mtkg2D53HP5
-         8mRk5vBC6uc9vttrEFYbzXzvaTZnKXgYxFHXX4P9LEItr7jTuyw3BusYV0zir1MY1pYQ
-         /9iQ==
+        bh=1vHRlE4gW0G0XPdoOjf4Phl247vZu3Xaj6GOQBk8A4E=;
+        b=A6LZOrlAVN+GzHJYwJ06W4bRMQ9VCiWoajvXTzMG6CK2hj1Xi/Vmqc5+jSO91pwHqw
+         0EZY7wMul0fbcveD+eaGXc+qs/kpcSD792PXEEG7SlS3zlwDWuqrQny7lVWrB4LejVdD
+         bCKWWLF8BPcJUf3F2a/XiMK0ehZXd2IXW6/WCtkaOswQ+BG4V1ENuzI1w/iD/zGUmBaj
+         RwhJVijlWaAjzD/IkHStv1kf7kmA8D4En9TshN1wnxnODCUO+7uKzmYYmGDBIIWVQshd
+         SGsA4pF/C1yyuVXZLbE5IoTVaIy6efJFsamL7oC6IhtVW7XqC4n3MTKJrih31HdUlb6h
+         CEIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FS5MMzUrtYY5N2w5QCadh2L/6Lyuv9jfcaqNKoRqTRU=;
-        b=OaJZGq6iLgMSrONCwE65CVbhys0v4noQBv1WJTCod/Ww9a2GVa00/JGaO70qtYIHcL
-         peZBNfmHIkXcYh37gw0nJhegaT5AuKAq+D0S6Gn8xTufCfEUUzBDy56KCJMvENc/m0cY
-         lHRXXeNHXfTd4BOrLiKM1X55NW1Tc3E5M5zGFJT6VldRlJKZafYE/xMM5z5f49+p+EBm
-         gqlvUmNaWD8GWJfY1oFBGsjo8r+z7CyKls1eKYYzMoCwK4y0F56eup4wZ3xbowCwNrNm
-         5mdsbf/1+5qb+H+t4Si9++dvFdUwKCX7+zRQjdm7JxdpMBl63tK/IYhGDVFeCgdYYaOq
-         IloA==
-X-Gm-Message-State: AO0yUKV7x+TYWzZSj6itq9snXDBqkIMgT2Zfwn50l6R9Z87j5TtovIeK
-        g3vTTMkJv91zM/nHjO6srC5XCg==
-X-Google-Smtp-Source: AK7set+h6bH1PS798t0mZMvOJZreT3hJ4B4BCSYDF4mYjx4jbb5JDOxUc4MvsYcrBJcRWeYdU1goCA==
-X-Received: by 2002:a05:6000:1110:b0:2c8:42b5:8030 with SMTP id z16-20020a056000111000b002c842b58030mr6254219wrw.62.1677452123541;
-        Sun, 26 Feb 2023 14:55:23 -0800 (PST)
+        bh=1vHRlE4gW0G0XPdoOjf4Phl247vZu3Xaj6GOQBk8A4E=;
+        b=Hb/NmZYDaCsFvTLF1xL9O2wE3iOyzS0u9qzs9ALzGD0IOfuDu0B2n8JzRgTc4uWAka
+         MkPhpToDSqyPHy/QxJBSn6CQPj2P4v0Nwn7lraFdMGqJfKG+O1J7PZUO+eW31tQH86Kr
+         H6NSicOy0+PHIOyrU0n/DvbH/LX26GIZ3PQOeN9a1DdY2hsb4RHPlpq9fefUIXvCpoeR
+         XWihreYJNeuRkouOKbU/BfaQ6hKemKqeExIDt2yk3t5hTJP6z+NPIgK1rwxHTxLGRNA7
+         sizPMUyouQ0ZZNoM0O1PujkkPLk5I7hbbu1n+5ngEPS7qekRytk+Mq0XpbFNtxE9OjnV
+         +mAw==
+X-Gm-Message-State: AO0yUKWrdmRG9AcH8NBncpnwGOUyGjP5O19YzIjErU0gd/+CeCg2aUgG
+        dyUQ3AuVcufASfc6IVu5lJ0VtatOj2oF/GBdCr8=
+X-Google-Smtp-Source: AK7set+gh98ADYFHHJNmYfkq6fdJ7l360zTjP3VhXEH8nirAfkJhh+dORdFV5tdn1UY5zQFVwwUJkw==
+X-Received: by 2002:a05:600c:1d10:b0:3e7:b17f:9af1 with SMTP id l16-20020a05600c1d1000b003e7b17f9af1mr15546106wms.22.1677452125225;
+        Sun, 26 Feb 2023 14:55:25 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:8baa:6b32:391b:62de])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05600c3aca00b003eb369abd92sm6138074wms.2.2023.02.26.14.55.22
+        by smtp.gmail.com with ESMTPSA id d10-20020a05600c3aca00b003eb369abd92sm6138074wms.2.2023.02.26.14.55.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 14:55:23 -0800 (PST)
+        Sun, 26 Feb 2023 14:55:24 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
-        TEMPERATURE AND FAN DRIVER)
-Subject: [PATCH v3 19/20] thermal/drivers/acerhdf: Remove pointless governor test
-Date:   Sun, 26 Feb 2023 23:54:05 +0100
-Message-Id: <20230226225406.979703-20-daniel.lezcano@linaro.org>
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: [PATCH v3 20/20] thermal/traces: Replace the thermal zone structure parameter with the field value
+Date:   Sun, 26 Feb 2023 23:54:06 +0100
+Message-Id: <20230226225406.979703-21-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230226225406.979703-1-daniel.lezcano@linaro.org>
 References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
@@ -75,38 +77,212 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal zone parameter specifies the bang-bang governor.
+In the work of the thermal zone device self-encapsulation, let's pass
+the field value instead of dereferencing them in the traces which
+force us to export publicly the thermal_zone_device structure.
 
-The Kconfig selects the bang-bang governor. So it is pointless to test
-if the governor was set for the thermal zone assuming it may not have
-been compiled-in.
-
-Remove the test and prevent another access into the thermal internals.
+No fonctionnal change intended.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Peter Kaestle <peter@piie.net>
 ---
- drivers/platform/x86/acerhdf.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/thermal/gov_fair_share.c              |  4 +++-
+ drivers/thermal/gov_power_allocator.c         |  6 +++--
+ drivers/thermal/gov_step_wise.c               |  4 +++-
+ drivers/thermal/thermal_core.c                |  8 +++++--
+ include/trace/events/thermal.h                | 24 +++++++++----------
+ .../trace/events/thermal_power_allocator.h    | 12 +++++-----
+ 6 files changed, 34 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 61f1c3090867..71b9c1f922d9 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -697,13 +697,6 @@ static int __init acerhdf_register_thermal(void)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
+index aad7d5fe3a14..cdddd593021d 100644
+--- a/drivers/thermal/gov_fair_share.c
++++ b/drivers/thermal/gov_fair_share.c
+@@ -35,7 +35,9 @@ static int get_trip_level(struct thermal_zone_device *tz)
+ 	 * point, in which case, trip_point = count - 1
+ 	 */
+ 	if (count > 0)
+-		trace_thermal_zone_trip(tz, count - 1, trip.type);
++		trace_thermal_zone_trip(thermal_zone_device_type(tz),
++					thermal_zone_device_id(tz),
++					count - 1, trip.type);
  
--	if (strcmp(thz_dev->governor->name,
--				acerhdf_zone_params.governor_name)) {
--		pr_err("Didn't get thermal governor %s, perhaps not compiled into thermal subsystem.\n",
--				acerhdf_zone_params.governor_name);
--		return -EINVAL;
--	}
--
- 	return 0;
+ 	return count;
  }
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 0eaf1527d3e3..bebab8b8694b 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -266,7 +266,8 @@ static u32 pid_controller(struct thermal_zone_device *tz,
  
+ 	power_range = clamp(power_range, (s64)0, (s64)max_allocatable_power);
+ 
+-	trace_thermal_power_allocator_pid(tz, frac_to_int(err),
++	trace_thermal_power_allocator_pid(thermal_zone_device_id(tz),
++					  frac_to_int(err),
+ 					  frac_to_int(params->err_integral),
+ 					  frac_to_int(p), frac_to_int(i),
+ 					  frac_to_int(d), power_range);
+@@ -481,7 +482,8 @@ static int allocate_power(struct thermal_zone_device *tz,
+ 		i++;
+ 	}
+ 
+-	trace_thermal_power_allocator(tz, req_power, total_req_power,
++	trace_thermal_power_allocator(thermal_zone_device_id(tz),
++				      req_power, total_req_power,
+ 				      granted_power, total_granted_power,
+ 				      num_actors, power_range,
+ 				      max_allocatable_power, tz->temperature,
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 31235e169c5a..81ef43a40f98 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -109,7 +109,9 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id
+ 
+ 	if (tz->temperature >= trip.temperature) {
+ 		throttle = true;
+-		trace_thermal_zone_trip(tz, trip_id, trip.type);
++		trace_thermal_zone_trip(thermal_zone_device_type(tz),
++					thermal_zone_device_id(tz),
++					trip_id, trip.type);
+ 	}
+ 
+ 	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 46dedfe061df..c856ab911149 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -336,7 +336,9 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+ 	if (trip_temp <= 0 || tz->temperature < trip_temp)
+ 		return;
+ 
+-	trace_thermal_zone_trip(tz, trip, trip_type);
++	trace_thermal_zone_trip(thermal_zone_device_type(tz),
++				thermal_zone_device_id(tz),
++				trip, trip_type);
+ 
+ 	if (trip_type == THERMAL_TRIP_HOT && tz->ops->hot)
+ 		tz->ops->hot(tz);
+@@ -387,7 +389,9 @@ static void update_temperature(struct thermal_zone_device *tz)
+ 	tz->last_temperature = tz->temperature;
+ 	tz->temperature = temp;
+ 
+-	trace_thermal_temperature(tz);
++	trace_thermal_temperature(thermal_zone_device_type(tz),
++				  thermal_zone_device_id(tz),
++				  tz->last_temperature, tz->temperature);
+ 
+ 	thermal_genl_sampling_temp(tz->id, temp);
+ }
+diff --git a/include/trace/events/thermal.h b/include/trace/events/thermal.h
+index e58bf3072f32..50c7d2e1526d 100644
+--- a/include/trace/events/thermal.h
++++ b/include/trace/events/thermal.h
+@@ -23,22 +23,22 @@ TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
+ 
+ TRACE_EVENT(thermal_temperature,
+ 
+-	TP_PROTO(struct thermal_zone_device *tz),
++	TP_PROTO(const char *type, int id, int temp_prev, int temp),
+ 
+-	TP_ARGS(tz),
++	TP_ARGS(type, id, temp_prev, temp),
+ 
+ 	TP_STRUCT__entry(
+-		__string(thermal_zone, tz->type)
++		__string(thermal_zone, type)
+ 		__field(int, id)
+ 		__field(int, temp_prev)
+ 		__field(int, temp)
+ 	),
+ 
+ 	TP_fast_assign(
+-		__assign_str(thermal_zone, tz->type);
+-		__entry->id = tz->id;
+-		__entry->temp_prev = tz->last_temperature;
+-		__entry->temp = tz->temperature;
++		__assign_str(thermal_zone, type);
++		__entry->id = id;
++		__entry->temp_prev = temp_prev;
++		__entry->temp = temp;
+ 	),
+ 
+ 	TP_printk("thermal_zone=%s id=%d temp_prev=%d temp=%d",
+@@ -67,21 +67,21 @@ TRACE_EVENT(cdev_update,
+ 
+ TRACE_EVENT(thermal_zone_trip,
+ 
+-	TP_PROTO(struct thermal_zone_device *tz, int trip,
++	TP_PROTO(const char *type, int id, int trip,
+ 		enum thermal_trip_type trip_type),
+ 
+-	TP_ARGS(tz, trip, trip_type),
++	TP_ARGS(type, id, trip, trip_type),
+ 
+ 	TP_STRUCT__entry(
+-		__string(thermal_zone, tz->type)
++		__string(thermal_zone, type)
+ 		__field(int, id)
+ 		__field(int, trip)
+ 		__field(enum thermal_trip_type, trip_type)
+ 	),
+ 
+ 	TP_fast_assign(
+-		__assign_str(thermal_zone, tz->type);
+-		__entry->id = tz->id;
++		__assign_str(thermal_zone, type);
++		__entry->id = id;
+ 		__entry->trip = trip;
+ 		__entry->trip_type = trip_type;
+ 	),
+diff --git a/include/trace/events/thermal_power_allocator.h b/include/trace/events/thermal_power_allocator.h
+index 1c8fb95544f9..7ac049e7e3cf 100644
+--- a/include/trace/events/thermal_power_allocator.h
++++ b/include/trace/events/thermal_power_allocator.h
+@@ -8,12 +8,12 @@
+ #include <linux/tracepoint.h>
+ 
+ TRACE_EVENT(thermal_power_allocator,
+-	TP_PROTO(struct thermal_zone_device *tz, u32 *req_power,
++	TP_PROTO(int id, u32 *req_power,
+ 		 u32 total_req_power, u32 *granted_power,
+ 		 u32 total_granted_power, size_t num_actors,
+ 		 u32 power_range, u32 max_allocatable_power,
+ 		 int current_temp, s32 delta_temp),
+-	TP_ARGS(tz, req_power, total_req_power, granted_power,
++	TP_ARGS(id, req_power, total_req_power, granted_power,
+ 		total_granted_power, num_actors, power_range,
+ 		max_allocatable_power, current_temp, delta_temp),
+ 	TP_STRUCT__entry(
+@@ -29,7 +29,7 @@ TRACE_EVENT(thermal_power_allocator,
+ 		__field(s32,           delta_temp               )
+ 	),
+ 	TP_fast_assign(
+-		__entry->tz_id = tz->id;
++		__entry->tz_id = id;
+ 		memcpy(__get_dynamic_array(req_power), req_power,
+ 			num_actors * sizeof(*req_power));
+ 		__entry->total_req_power = total_req_power;
+@@ -56,9 +56,9 @@ TRACE_EVENT(thermal_power_allocator,
+ );
+ 
+ TRACE_EVENT(thermal_power_allocator_pid,
+-	TP_PROTO(struct thermal_zone_device *tz, s32 err, s32 err_integral,
++	TP_PROTO(int id, s32 err, s32 err_integral,
+ 		 s64 p, s64 i, s64 d, s32 output),
+-	TP_ARGS(tz, err, err_integral, p, i, d, output),
++	TP_ARGS(id, err, err_integral, p, i, d, output),
+ 	TP_STRUCT__entry(
+ 		__field(int, tz_id       )
+ 		__field(s32, err         )
+@@ -69,7 +69,7 @@ TRACE_EVENT(thermal_power_allocator_pid,
+ 		__field(s32, output      )
+ 	),
+ 	TP_fast_assign(
+-		__entry->tz_id = tz->id;
++		__entry->tz_id = id;
+ 		__entry->err = err;
+ 		__entry->err_integral = err_integral;
+ 		__entry->p = p;
 -- 
 2.34.1
 
