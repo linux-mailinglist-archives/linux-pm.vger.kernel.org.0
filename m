@@ -2,74 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BDC6A3524
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 23:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E846A3576
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 00:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjBZW4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 17:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S229598AbjBZXCY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 18:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjBZWz6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 17:55:58 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0601A947
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:55:38 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so5956554wms.2
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:55:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1vHRlE4gW0G0XPdoOjf4Phl247vZu3Xaj6GOQBk8A4E=;
-        b=A6LZOrlAVN+GzHJYwJ06W4bRMQ9VCiWoajvXTzMG6CK2hj1Xi/Vmqc5+jSO91pwHqw
-         0EZY7wMul0fbcveD+eaGXc+qs/kpcSD792PXEEG7SlS3zlwDWuqrQny7lVWrB4LejVdD
-         bCKWWLF8BPcJUf3F2a/XiMK0ehZXd2IXW6/WCtkaOswQ+BG4V1ENuzI1w/iD/zGUmBaj
-         RwhJVijlWaAjzD/IkHStv1kf7kmA8D4En9TshN1wnxnODCUO+7uKzmYYmGDBIIWVQshd
-         SGsA4pF/C1yyuVXZLbE5IoTVaIy6efJFsamL7oC6IhtVW7XqC4n3MTKJrih31HdUlb6h
-         CEIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1vHRlE4gW0G0XPdoOjf4Phl247vZu3Xaj6GOQBk8A4E=;
-        b=Hb/NmZYDaCsFvTLF1xL9O2wE3iOyzS0u9qzs9ALzGD0IOfuDu0B2n8JzRgTc4uWAka
-         MkPhpToDSqyPHy/QxJBSn6CQPj2P4v0Nwn7lraFdMGqJfKG+O1J7PZUO+eW31tQH86Kr
-         H6NSicOy0+PHIOyrU0n/DvbH/LX26GIZ3PQOeN9a1DdY2hsb4RHPlpq9fefUIXvCpoeR
-         XWihreYJNeuRkouOKbU/BfaQ6hKemKqeExIDt2yk3t5hTJP6z+NPIgK1rwxHTxLGRNA7
-         sizPMUyouQ0ZZNoM0O1PujkkPLk5I7hbbu1n+5ngEPS7qekRytk+Mq0XpbFNtxE9OjnV
-         +mAw==
-X-Gm-Message-State: AO0yUKWrdmRG9AcH8NBncpnwGOUyGjP5O19YzIjErU0gd/+CeCg2aUgG
-        dyUQ3AuVcufASfc6IVu5lJ0VtatOj2oF/GBdCr8=
-X-Google-Smtp-Source: AK7set+gh98ADYFHHJNmYfkq6fdJ7l360zTjP3VhXEH8nirAfkJhh+dORdFV5tdn1UY5zQFVwwUJkw==
-X-Received: by 2002:a05:600c:1d10:b0:3e7:b17f:9af1 with SMTP id l16-20020a05600c1d1000b003e7b17f9af1mr15546106wms.22.1677452125225;
-        Sun, 26 Feb 2023 14:55:25 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:8baa:6b32:391b:62de])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05600c3aca00b003eb369abd92sm6138074wms.2.2023.02.26.14.55.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 14:55:24 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-trace-kernel@vger.kernel.org (open list:TRACING)
-Subject: [PATCH v3 20/20] thermal/traces: Replace the thermal zone structure parameter with the field value
-Date:   Sun, 26 Feb 2023 23:54:06 +0100
-Message-Id: <20230226225406.979703-21-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230226225406.979703-1-daniel.lezcano@linaro.org>
-References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
+        with ESMTP id S229562AbjBZXCX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 18:02:23 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EE11A676
+        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 15:01:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1677452514; x=1708988514;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=J9Xh3CSLaOh0wPb+8qljSocu9qIOGDzuCRuMHEY8zLA=;
+  b=cbxxIrrIZtRWPZEx9UYmqcFsnSjA9xiiwBu5+owBRsYhr1UQYVmiOrjn
+   pqcR/hrG7xYhK4fYOzFvOqbf8cecanuH2CnrCTXqWrGdTPgjwexYkg4G5
+   1biEws9mVcSEdcP8cqzDItPa/s+ozcjDhXxwWyeI7NpjlCL29h+D4UJYB
+   OnLw/wO5OLTnNmNQ+3e2cK/3W0riFo78GMd9Ks8Ue0kz+93y5HjnjL1ye
+   62QQOuAznqe38SdDNn9zFlI0rC+Ctx8jDxZPK3elAsTWNuwd7UQQyb1Pt
+   Kt4LHHS4Vo3oku9N9qZV5fi2wnxcsKMdc4efWhBeaXbea713IMGFk1SAZ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,330,1669046400"; 
+   d="scan'208";a="222554294"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Feb 2023 06:59:15 +0800
+IronPort-SDR: /MQ4wbPfiZNS+FStdYtYfaEzoTz5seBgnNCxXe2iMX870CQhu0lXIGEFP6UkWvEhQ8+zUWnK0J
+ qWw4/zOVJXdsFDSCL7BrK834bSDpJrjLWvSe7nkz9F8PsfJv8G1gM50KJKJ10MTKQQ9U1eufV8
+ eg8GutWbw4bOkTOUPCn19hTiuINkL5s1KfpofqMdPORsZF6XMmY9MTqp0/XAlw2iHtiYhyCQyP
+ ywsYoglx4zyjypyCo6S9SRd/OUXZcNvFJydU2ed8r98hoRyIljDxv/XRpc77yG6ajwuXadGb6h
+ Ynk=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Feb 2023 14:10:24 -0800
+IronPort-SDR: u5+3EODUSdpV5XmXpVfZcTOw1zoHnxJeZOXBSdis3Xs2B2wbgcEluHo5+M3je7ru/PI7kTKQYm
+ 3Wolh5Dno/yERCG+T9KHWRk7k4AESEL7qZbtVMTsw5ZB5QBh3Rubz240zAQ01BbqoVYkdGsMSw
+ wHzoT8RCWTP/AGuQfynepis5k8Oc4n+BWNj8T07gdqf7KC70CcV4m7sbPK8/5c69fiWozIX+YJ
+ j3nk4i309xQxezqVbAhb4udU/arOPBp0Dw1CfYMuBfdpSzSPf0P9GT3tHLuZoCza102dSzmIQZ
+ gBo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Feb 2023 14:59:16 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PPzb75nRYz1RvTp
+        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 14:59:15 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1677452354; x=1680044355; bh=J9Xh3CSLaOh0wPb+8qljSocu9qIOGDzuCRu
+        MHEY8zLA=; b=iAFv7gkoa1pp+0xeoFxAdTchRJcF7b5UmjXwypMYYaMEb+gXnhh
+        i+xBLhRs7ybC6NKcaFw1srFUizSpMJeDj3DQb3u52D15SERUpb3qogMC05ahSV0Y
+        Rfu9IKYjLO8ZUjHo834CD/sYRhYEslbVwDIEgc2ZmU1mFVQU7vxDbCob9DXmC60R
+        A78dZnTzDMksnw3bnTzp+W8BcBYl0KqZEcYY13QB5+bS3Z0Bt7BmxsEweV82kybH
+        cIMGUln2jO0hFnxaRlIQBZpOOvSZTLpgd3fHkasBzpalSwtP1irBSCNzj1UrwHzU
+        e2IJ7N7AouJmgR9knygZsoS8VFPenj4hDWw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ePunNJiK7Xx9 for <linux-pm@vger.kernel.org>;
+        Sun, 26 Feb 2023 14:59:14 -0800 (PST)
+Received: from [10.225.163.40] (unknown [10.225.163.40])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PPzZz6V4Rz1RvLy;
+        Sun, 26 Feb 2023 14:59:07 -0800 (PST)
+Message-ID: <fc0adb2c-8be0-ec89-ba68-032862b700a9@opensource.wdc.com>
+Date:   Mon, 27 Feb 2023 07:59:06 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 04/20] thermal/core: Use the thermal zone 'devdata'
+ accessor in remaining drivers
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Petr Machata <petrm@nvidia.com>, Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
+        <linux-input@vger.kernel.org>,
+        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
+        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
+        <linux-wireless@vger.kernel.org>
+References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
+ <20230226225406.979703-5-daniel.lezcano@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230226225406.979703-5-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,212 +136,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the work of the thermal zone device self-encapsulation, let's pass
-the field value instead of dereferencing them in the traces which
-force us to export publicly the thermal_zone_device structure.
+On 2/27/23 07:53, Daniel Lezcano wrote:
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
+> 
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
+> 
+> Use the devdata accessor introduced in the previous patch.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com> #mlxsw
+> Acked-by: Gregory Greenman <gregory.greenman@intel.com> #iwlwifi
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> #power_supply
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-No fonctionnal change intended.
+For the ahci change:
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/gov_fair_share.c              |  4 +++-
- drivers/thermal/gov_power_allocator.c         |  6 +++--
- drivers/thermal/gov_step_wise.c               |  4 +++-
- drivers/thermal/thermal_core.c                |  8 +++++--
- include/trace/events/thermal.h                | 24 +++++++++----------
- .../trace/events/thermal_power_allocator.h    | 12 +++++-----
- 6 files changed, 34 insertions(+), 24 deletions(-)
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
-index aad7d5fe3a14..cdddd593021d 100644
---- a/drivers/thermal/gov_fair_share.c
-+++ b/drivers/thermal/gov_fair_share.c
-@@ -35,7 +35,9 @@ static int get_trip_level(struct thermal_zone_device *tz)
- 	 * point, in which case, trip_point = count - 1
- 	 */
- 	if (count > 0)
--		trace_thermal_zone_trip(tz, count - 1, trip.type);
-+		trace_thermal_zone_trip(thermal_zone_device_type(tz),
-+					thermal_zone_device_id(tz),
-+					count - 1, trip.type);
- 
- 	return count;
- }
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 0eaf1527d3e3..bebab8b8694b 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -266,7 +266,8 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- 
- 	power_range = clamp(power_range, (s64)0, (s64)max_allocatable_power);
- 
--	trace_thermal_power_allocator_pid(tz, frac_to_int(err),
-+	trace_thermal_power_allocator_pid(thermal_zone_device_id(tz),
-+					  frac_to_int(err),
- 					  frac_to_int(params->err_integral),
- 					  frac_to_int(p), frac_to_int(i),
- 					  frac_to_int(d), power_range);
-@@ -481,7 +482,8 @@ static int allocate_power(struct thermal_zone_device *tz,
- 		i++;
- 	}
- 
--	trace_thermal_power_allocator(tz, req_power, total_req_power,
-+	trace_thermal_power_allocator(thermal_zone_device_id(tz),
-+				      req_power, total_req_power,
- 				      granted_power, total_granted_power,
- 				      num_actors, power_range,
- 				      max_allocatable_power, tz->temperature,
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 31235e169c5a..81ef43a40f98 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -109,7 +109,9 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id
- 
- 	if (tz->temperature >= trip.temperature) {
- 		throttle = true;
--		trace_thermal_zone_trip(tz, trip_id, trip.type);
-+		trace_thermal_zone_trip(thermal_zone_device_type(tz),
-+					thermal_zone_device_id(tz),
-+					trip_id, trip.type);
- 	}
- 
- 	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 46dedfe061df..c856ab911149 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -336,7 +336,9 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
- 	if (trip_temp <= 0 || tz->temperature < trip_temp)
- 		return;
- 
--	trace_thermal_zone_trip(tz, trip, trip_type);
-+	trace_thermal_zone_trip(thermal_zone_device_type(tz),
-+				thermal_zone_device_id(tz),
-+				trip, trip_type);
- 
- 	if (trip_type == THERMAL_TRIP_HOT && tz->ops->hot)
- 		tz->ops->hot(tz);
-@@ -387,7 +389,9 @@ static void update_temperature(struct thermal_zone_device *tz)
- 	tz->last_temperature = tz->temperature;
- 	tz->temperature = temp;
- 
--	trace_thermal_temperature(tz);
-+	trace_thermal_temperature(thermal_zone_device_type(tz),
-+				  thermal_zone_device_id(tz),
-+				  tz->last_temperature, tz->temperature);
- 
- 	thermal_genl_sampling_temp(tz->id, temp);
- }
-diff --git a/include/trace/events/thermal.h b/include/trace/events/thermal.h
-index e58bf3072f32..50c7d2e1526d 100644
---- a/include/trace/events/thermal.h
-+++ b/include/trace/events/thermal.h
-@@ -23,22 +23,22 @@ TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
- 
- TRACE_EVENT(thermal_temperature,
- 
--	TP_PROTO(struct thermal_zone_device *tz),
-+	TP_PROTO(const char *type, int id, int temp_prev, int temp),
- 
--	TP_ARGS(tz),
-+	TP_ARGS(type, id, temp_prev, temp),
- 
- 	TP_STRUCT__entry(
--		__string(thermal_zone, tz->type)
-+		__string(thermal_zone, type)
- 		__field(int, id)
- 		__field(int, temp_prev)
- 		__field(int, temp)
- 	),
- 
- 	TP_fast_assign(
--		__assign_str(thermal_zone, tz->type);
--		__entry->id = tz->id;
--		__entry->temp_prev = tz->last_temperature;
--		__entry->temp = tz->temperature;
-+		__assign_str(thermal_zone, type);
-+		__entry->id = id;
-+		__entry->temp_prev = temp_prev;
-+		__entry->temp = temp;
- 	),
- 
- 	TP_printk("thermal_zone=%s id=%d temp_prev=%d temp=%d",
-@@ -67,21 +67,21 @@ TRACE_EVENT(cdev_update,
- 
- TRACE_EVENT(thermal_zone_trip,
- 
--	TP_PROTO(struct thermal_zone_device *tz, int trip,
-+	TP_PROTO(const char *type, int id, int trip,
- 		enum thermal_trip_type trip_type),
- 
--	TP_ARGS(tz, trip, trip_type),
-+	TP_ARGS(type, id, trip, trip_type),
- 
- 	TP_STRUCT__entry(
--		__string(thermal_zone, tz->type)
-+		__string(thermal_zone, type)
- 		__field(int, id)
- 		__field(int, trip)
- 		__field(enum thermal_trip_type, trip_type)
- 	),
- 
- 	TP_fast_assign(
--		__assign_str(thermal_zone, tz->type);
--		__entry->id = tz->id;
-+		__assign_str(thermal_zone, type);
-+		__entry->id = id;
- 		__entry->trip = trip;
- 		__entry->trip_type = trip_type;
- 	),
-diff --git a/include/trace/events/thermal_power_allocator.h b/include/trace/events/thermal_power_allocator.h
-index 1c8fb95544f9..7ac049e7e3cf 100644
---- a/include/trace/events/thermal_power_allocator.h
-+++ b/include/trace/events/thermal_power_allocator.h
-@@ -8,12 +8,12 @@
- #include <linux/tracepoint.h>
- 
- TRACE_EVENT(thermal_power_allocator,
--	TP_PROTO(struct thermal_zone_device *tz, u32 *req_power,
-+	TP_PROTO(int id, u32 *req_power,
- 		 u32 total_req_power, u32 *granted_power,
- 		 u32 total_granted_power, size_t num_actors,
- 		 u32 power_range, u32 max_allocatable_power,
- 		 int current_temp, s32 delta_temp),
--	TP_ARGS(tz, req_power, total_req_power, granted_power,
-+	TP_ARGS(id, req_power, total_req_power, granted_power,
- 		total_granted_power, num_actors, power_range,
- 		max_allocatable_power, current_temp, delta_temp),
- 	TP_STRUCT__entry(
-@@ -29,7 +29,7 @@ TRACE_EVENT(thermal_power_allocator,
- 		__field(s32,           delta_temp               )
- 	),
- 	TP_fast_assign(
--		__entry->tz_id = tz->id;
-+		__entry->tz_id = id;
- 		memcpy(__get_dynamic_array(req_power), req_power,
- 			num_actors * sizeof(*req_power));
- 		__entry->total_req_power = total_req_power;
-@@ -56,9 +56,9 @@ TRACE_EVENT(thermal_power_allocator,
- );
- 
- TRACE_EVENT(thermal_power_allocator_pid,
--	TP_PROTO(struct thermal_zone_device *tz, s32 err, s32 err_integral,
-+	TP_PROTO(int id, s32 err, s32 err_integral,
- 		 s64 p, s64 i, s64 d, s32 output),
--	TP_ARGS(tz, err, err_integral, p, i, d, output),
-+	TP_ARGS(id, err, err_integral, p, i, d, output),
- 	TP_STRUCT__entry(
- 		__field(int, tz_id       )
- 		__field(s32, err         )
-@@ -69,7 +69,7 @@ TRACE_EVENT(thermal_power_allocator_pid,
- 		__field(s32, output      )
- 	),
- 	TP_fast_assign(
--		__entry->tz_id = tz->id;
-+		__entry->tz_id = id;
- 		__entry->err = err;
- 		__entry->err_integral = err_integral;
- 		__entry->p = p;
 -- 
-2.34.1
+Damien Le Moal
+Western Digital Research
 
