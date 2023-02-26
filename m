@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA656A322D
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 16:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35A16A3204
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Feb 2023 16:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjBZP0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 10:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S229727AbjBZPPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 10:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjBZPZ5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 10:25:57 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2292413B;
-        Sun, 26 Feb 2023 07:19:50 -0800 (PST)
+        with ESMTP id S231859AbjBZPOA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 10:14:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D1F211FB;
+        Sun, 26 Feb 2023 07:04:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 00283CE0E88;
-        Sun, 26 Feb 2023 14:50:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55436C433D2;
-        Sun, 26 Feb 2023 14:50:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B880360C40;
+        Sun, 26 Feb 2023 14:51:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6D9C4339B;
+        Sun, 26 Feb 2023 14:51:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677423032;
-        bh=Bpnr5Gi/66njPh0yetcuFp1MziLbVdF6OErkWuJpJGE=;
+        s=k20201202; t=1677423092;
+        bh=UrYKVhSSOQFbVkK0Z4AvnA6vhoJisr2++OgHjuEfVfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q9V6n5sc7WG6xGGBrAZTLD37FhxYdzGXwmBharpnW4nLe+5rMMDWTIeJVlbUKvK3H
-         7h50mlUxgpRtlDlMBCeh7atVLU/pKMFa3OYTjo4UNri5BtvY4DKUkzEt/GnbiHtBFz
-         WHE1tA/dpCcSjEimeQrdZSc/0PPkB2uDW4RMYM4Lv0TFVlf+667SW7WXXZU+h0/Gbq
-         KlwFAVpvTterNODaFVMvb9oYU6w6mne9JXuXMAsQEg/BuoSyikKwLL+yrP85m/hbrV
-         ej2IZo3j7+e6akmfPC57VUhUFGHtB1N6QPxRdBm04tLvX235P7Es1xuau0/fwZpdXX
-         yXiearifxN5SQ==
+        b=I+pU+59COhwBFibCeuZj6fyqh64fqh2tQizSGfPe6AW6hvo5P0l9RGrTxfwTw6BiJ
+         VQbuWL/C7+WKfxSbkVwN+udUXZlCp0k8Yu4Fx69EyC0fFs9DS+37kppCoChW2jfkr+
+         R1Zr2GsXJnCrP+CS5HpnQsWA1zy1aaMelYbToMB999Oxnxyym5WV2qVYWwT6sni/yG
+         pDm8nc8OKWxcssT63GPP5lkvaEPvHhyQAlpr4FwxtOQaReuetIv0cKyDHx+Vrr35TO
+         LcHEY8FbDlWTvvkGsZERLqvSAK5Luw3mTzS+s6l7zwIkYJI4LKkhTjwEPzWvMXLPN2
+         CpZVaK2bD8Spg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yang Li <yang.lee@linux.alibaba.com>,
@@ -39,18 +39,18 @@ Cc:     Yang Li <yang.lee@linux.alibaba.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 07/27] thermal: intel: Fix unsigned comparison with less than zero
-Date:   Sun, 26 Feb 2023 09:49:54 -0500
-Message-Id: <20230226145014.828855-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 03/19] thermal: intel: Fix unsigned comparison with less than zero
+Date:   Sun, 26 Feb 2023 09:51:05 -0500
+Message-Id: <20230226145123.829229-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230226145014.828855-1-sashal@kernel.org>
-References: <20230226145014.828855-1-sashal@kernel.org>
+In-Reply-To: <20230226145123.829229-1-sashal@kernel.org>
+References: <20230226145123.829229-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-index 4f1a2f7c016cc..8d6707e48d023 100644
+index 5716b62e0f732..410f13f6cba48 100644
 --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
 +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -404,7 +404,7 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
+@@ -396,7 +396,7 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
  {
  	struct intel_soc_dts_sensors *sensors;
  	bool notification;
