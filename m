@@ -2,226 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7026A3945
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 04:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C05D6A3961
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 04:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjB0DJh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 22:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S229633AbjB0DOR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 22:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjB0DJg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 22:09:36 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C65125A2
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 19:09:30 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id f18so6733762lfa.3
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 19:09:30 -0800 (PST)
+        with ESMTP id S230000AbjB0DOQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 22:14:16 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B050712868;
+        Sun, 26 Feb 2023 19:14:15 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so8704716pjh.0;
+        Sun, 26 Feb 2023 19:14:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ARwtmBoWPA0mYm8v1Q76EhykRCJejAkEWfpNQ6zu43c=;
-        b=TSiVzoeyw3I3ld9ftyMRaMMb1P+iJlpgniIXLOlhM4aJCoO4yPR0BiBHXGPdsb2Bq8
-         MXdnGEDPWbn/pFuqZ/vIx/+AX7lFGcSpv9MzkdW6A5xEWtUcxy/xcVc4tMUCNlO4pa0B
-         BUtwUnzw6TShTWQrv5g4IW7ra1tlTbLoyYp6bTK1GvwF2Z3fNfiXHJiljWCibDUpQs9h
-         GRs3zQRpeFT0IK5+LHTBygMdxEFOab1jv/PWWlIy88L2tIi/RuJqV4XFo/3hD64bv4Rh
-         bUAMqTjdhDmEkEpd5v8XMOnqPgvEPnrwIoJMXgDlRPHyg2hFfVnMsXgKiVha5msRyrm6
-         IncQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gR/wbqkWELBvn+JMlhT/1Wwy2lqKc5lu0UUAT54M4Rc=;
+        b=GYQ3Ms8rjd2jErfhgiWiEr/dJxgV5z8L+TIrPo3Ew4DocOtfJADVUoqZ9d4u9a2XTL
+         VWxa0EF3CH5erbyF3v4luEYbX/tkyY7QtKswpwU55z0gtW1rqxC1cN/H54mChZNNM6hY
+         eslkxgj/Tb92yvS2VvKvpkTt+pbFW+UFGrS8iUr6aTxw6Pq1Nm71fxHfI+K93L3j91wD
+         zaFMrPewTRZ3kU/tp587eYeSFMuHyeyiT1QsQXtoVJOQo8w6PB3nKsOrth88Gg5qNXhU
+         YVn5N9trWAnrY3JjixezzmFjnBNaPF/Vt8OBFzFh9ies0e+xRIH5SjlrPVon+5Puah/H
+         tPMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ARwtmBoWPA0mYm8v1Q76EhykRCJejAkEWfpNQ6zu43c=;
-        b=2uJJvvvBbdIrPR24YIfaBNfaDovqDi8KDLEzx9wFP9STob35Da+kuYxUTNP8V5dw6R
-         K/MKAltbY2Or4yvuNNpeZdJC5mizfiyfU+8gnAXKQ8phv5cp/kZ7rKVwaAiQs81LSSrz
-         R0jePpOip9KvIiPNuuPr39Pc5XdFUkumACRPU2cQDW1747QHs5KJh0dSj3abx9yhbOYB
-         H72uS1WZ7PHxFVaUO/3Eq7g1xYmN67AMrostQ9hv6CxN98wd11nL25N9FHD7CfUfYCju
-         KY6WlGYM7LoRmMH3SRDY/A3d5miPKyj0HrscX0J7+y2DFVTUsIuvtIpIOYYKOs4dl+i7
-         LN+g==
-X-Gm-Message-State: AO0yUKXBp4bJyRi53IRy62wJ6mPmDy4fZ/59dA2CUASU79yPiHOpJSQh
-        LIuQPEyaugRf0Dlyu2QxTCXovw==
-X-Google-Smtp-Source: AK7set+kOX9ZVq8UFIZXjwlJxsqmYLOD3l4OBOH0tMaLId1c201sit7u1DbbLAEzzUpkOVDe0gyiug==
-X-Received: by 2002:a05:6512:4c5:b0:4e0:c8ef:42b5 with SMTP id w5-20020a05651204c500b004e0c8ef42b5mr283404lfq.6.1677467368454;
-        Sun, 26 Feb 2023 19:09:28 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac25ff0000000b004cb3e97bff8sm757705lfg.284.2023.02.26.19.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 19:09:28 -0800 (PST)
-Message-ID: <94c18cc3-4b1a-440b-3bd8-3c81ddffc148@linaro.org>
-Date:   Mon, 27 Feb 2023 05:09:27 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gR/wbqkWELBvn+JMlhT/1Wwy2lqKc5lu0UUAT54M4Rc=;
+        b=48jXiEfvZx5a0iT2yQU90+pj6QzQwrNa6exzeAGhmKENBiFBFPTHUPAIS0l5gfMXSI
+         wpoZOP2Frdnoxvnbo67LgejKUiJGTtQ4RUZJSCv/VKu9bCqiXaPFr5CLHPBNDGt+/MZ2
+         qdXMEYXdjqGWtAb3i/YL65vxWPtOwG8Kwj8C1mIkmD8gjU3QDcw3VkRb8U5Mfj+6un8b
+         zmgh+lVdoNyGM5oCBeCm2mBHxn6ayv5Ag028Qe9GB01Yequ3YFDYZkGM8YlvW3hEhlVs
+         evbwOnpnl+HQ9V/v+8eE5QOXjTOZK1rSdHvSL7w3ntz8K69cTg1iZl+Ccw8/EZd4hGUy
+         gn1A==
+X-Gm-Message-State: AO0yUKUX5y/T92QK9siefN8n5skf3YH17Odn+EixlHrXLHqubkGPgING
+        yxWTuO6LO6UTGG7M1l2cOVY=
+X-Google-Smtp-Source: AK7set8cIYQP+miBC0tMU5JIugoMFJN1vsUND7dRn31QdsukPLIUZzlVly0ruAvbjyhrgN9JO/Cp0w==
+X-Received: by 2002:a05:6a20:cf60:b0:cd:363d:b27c with SMTP id hz32-20020a056a20cf6000b000cd363db27cmr2294371pzb.16.1677467655103;
+        Sun, 26 Feb 2023 19:14:15 -0800 (PST)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id d19-20020aa78693000000b005dae7d1b61asm3088362pfo.154.2023.02.26.19.14.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 19:14:14 -0800 (PST)
+From:   void0red <void0red@gmail.com>
+To:     angelogioacchino.delregno@collabora.com
+Cc:     sre@kernel.org, matthias.bgg@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Kang Chen <void0red@gmail.com>
+Subject: [PATCH] power: supply: mt6360: add a check of devm_work_autocancel in mt6360_charger_probe
+Date:   Mon, 27 Feb 2023 11:14:10 +0800
+Message-Id: <20230227031410.893593-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v10 4/6] soc: qcom: cpr: Move common functions to new file
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
- <20230217-topic-cpr3h-v10-4-67aed8fdfa61@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230217-topic-cpr3h-v10-4-67aed8fdfa61@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/02/2023 13:08, Konrad Dybcio wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
-> In preparation for implementing a new driver that will be handling
-> CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
-> file.
-> 
-> Update cpr_get_fuses in preparation for CPR3 implementation, change
-> parameters where necessary to not take cpr.c private data structures.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: rebase, apply review comments, don't break backwards compat, improve msg]
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/soc/qcom/Makefile     |   2 +-
->   drivers/soc/qcom/cpr-common.c | 363 +++++++++++++++++++++++++++++++++++++++
->   drivers/soc/qcom/cpr-common.h | 108 ++++++++++++
->   drivers/soc/qcom/cpr.c        | 386 +++---------------------------------------
->   4 files changed, 494 insertions(+), 365 deletions(-)
-> 
+From: Kang Chen <void0red@gmail.com>
 
-[skipped]
+devm_work_autocancel may fails, add a check and return early.
 
-> diff --git a/drivers/soc/qcom/cpr-common.h b/drivers/soc/qcom/cpr-common.h
-> new file mode 100644
-> index 000000000000..2cd15f7eac90
-> --- /dev/null
-> +++ b/drivers/soc/qcom/cpr-common.h
-> @@ -0,0 +1,108 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +enum voltage_change_dir {
-> +	NO_CHANGE,
-> +	DOWN,
-> +	UP,
-> +};
-> +
-> +struct fuse_corner_data {
-> +	int ref_uV;
-> +	int max_uV;
-> +	int min_uV;
-> +	int range_uV;
-> +	/* fuse volt: closed/open loop */
-> +	int volt_cloop_adjust;
-> +	int volt_oloop_adjust;
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+ drivers/power/supply/mt6360_charger.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-For CPR3 these values are per-fusing-rev.
-(for 8996 tables list per-fusing-rev values for min_uV, 
-volt_cloop_adjust and volt_oloop_adjust)
-
-Another option, of course, might be to have a per-SoC code that uses 
-fusing_rev to update the fuse_corner_data, but it would mean making it 
-non-const.
-
-> +	int max_volt_scale;
-> +	int max_quot_scale;
-
-Any reason for these limitations?
-
-> +	/* fuse quot */
-> +	int quot_offset;
-> +	int quot_scale;
-> +	int quot_adjust;
-
-I see that quot_offset/quot_scale/quot_adjust are set to 0/1/0 for all 
-the platforms I can assess at this moment (8996/8998/sdm660). Can we 
-drop them? If we need them later, we can readd them later.
-
-> +	/* fuse quot_offset */
-> +	int quot_offset_scale;
-> +	int quot_offset_adjust;
-> +};
-> +
-> +struct cpr_fuse {
-> +	char *ring_osc;
-> +	char *init_voltage;
-> +	char *quotient;
-> +	char *quotient_offset;
-> +};
-> +
-> +struct fuse_corner {
-> +	int min_uV;
-> +	int max_uV;
-> +	int uV;
-> +	int quot;
-> +	int step_quot;
-> +	const struct reg_sequence *accs;
-> +	int num_accs;
-> +	unsigned long max_freq;
-> +	u8 ring_osc_idx;
-> +};
-> +
-> +struct corner {
-> +	int min_uV;
-> +	int max_uV;
-> +	int uV;
-> +	int last_uV;
-> +	int quot_adjust;
-> +	u32 save_ctl;
-> +	u32 save_irq;
-> +	unsigned long freq;
-> +	bool is_open_loop;
-> +	struct fuse_corner *fuse_corner;
-> +};
-> +
-> +struct corner_data {
-> +	unsigned int fuse_corner;
-> +	unsigned long freq;
-> +};
-> +
-> +struct acc_desc {
-> +	unsigned int	enable_reg;
-> +	u32		enable_mask;
-> +
-> +	struct reg_sequence	*config;
-> +	struct reg_sequence	*settings;
-> +	int			num_regs_per_fuse;
-> +};
-> +
-> +struct cpr_acc_desc {
-> +	const struct cpr_desc *cpr_desc;
-> +	const struct acc_desc *acc_desc;
-> +};
-> +
-
-[skipped the rest]
-
+diff --git a/drivers/power/supply/mt6360_charger.c b/drivers/power/supply/mt6360_charger.c
+index 92e48e3a4..1305cba61 100644
+--- a/drivers/power/supply/mt6360_charger.c
++++ b/drivers/power/supply/mt6360_charger.c
+@@ -796,7 +796,9 @@ static int mt6360_charger_probe(struct platform_device *pdev)
+ 	mci->vinovp = 6500000;
+ 	mutex_init(&mci->chgdet_lock);
+ 	platform_set_drvdata(pdev, mci);
+-	devm_work_autocancel(&pdev->dev, &mci->chrdet_work, mt6360_chrdet_work);
++	ret = devm_work_autocancel(&pdev->dev, &mci->chrdet_work, mt6360_chrdet_work);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Failed to set delayed work\n");
+ 
+ 	ret = device_property_read_u32(&pdev->dev, "richtek,vinovp-microvolt", &mci->vinovp);
+ 	if (ret)
 -- 
-With best wishes
-Dmitry
+2.34.1
 
