@@ -2,98 +2,249 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62ED96A4089
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 12:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A246E6A4150
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 13:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjB0L0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 06:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S229635AbjB0MB2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 07:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB0L0l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 06:26:41 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2A1E5D1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 03:26:40 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id p26so3989279wmc.4
-        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 03:26:40 -0800 (PST)
+        with ESMTP id S229590AbjB0MBY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 07:01:24 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC13D1C5B8
+        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 04:01:18 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id h3so6131626lja.12
+        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 04:01:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uJkhkcyw+YCo652cbJy90MfhJa/odF41bwjtMLAeNIk=;
-        b=I8DJ4R4mY3qM6LJfuoOc5sWEglN86Bn6qN7fE5U3snRukx66IsbHq0xHzEZhZAz2eh
-         AjHjJmx3SNfdzoX99c35EDO9sIU9CDnP8ltFRn2S4VI459gg7AC6MbE6ThEgrx/TXdge
-         rVEgCvfb3nxIa7zLRHZmy0AlNmoRpK0sv+wErKVmbtPDd28lYcrSGPiZOfoptxX2Vbow
-         E+j4Xzc/9mJPnyn65Km/aaz3XpJSdy2JSd6IqQv+kmiaZoKMGjz955v4BE8fxpoqmAKJ
-         KNztNYTVFuEgWMSuVFJ3dT7JUQvqxYwSW0xrmOVOw0L4rBHDzZQNNKaApOlkU1Ngk7jL
-         Shcg==
+        bh=AfHHQXugEcdy+Rrfa7ItXE3CF7B0+eNK7PBHqmJuXxU=;
+        b=Dsy7zWx53ZriKinglkKi+9u6oZ3iqsWLAjRbLrGEesW8fvW+Mj7MjtyYGMKvMjvcgM
+         8aXWLJ472UQDgdG+KLr2jU4bLdutLwUSMUZk8Rs7OH5Bro1nLhYagdW67JzVJEJP0lsm
+         93+7kXFVHIaM4FvLKol0TMHXxXXIMy61DQCk+53esRfB5HfkUxBJG87ozSUGzgcGS0kh
+         hpsUsbJ0RScu+UEpNzatLURDivBmc/zrmucDLyVAK1WW7NH5JqBuc/YMa9csnwuz7tyn
+         on42/zAbf/Iuy6nwzebfzLvwK6sNDSLwDJc09KQQ7EYPANPWOEy5kRwfTy5cxZh27zgz
+         /EKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJkhkcyw+YCo652cbJy90MfhJa/odF41bwjtMLAeNIk=;
-        b=GZ8w6cxlEWOMPtfsiz3INVq+5p0ZcqWbOd+BTqTJmOIeG8nl4dnyFLJEWjhR8Phi3e
-         k9yCrHJKfkaqaXsQ3tOQStuvj0IA2lv30JKWwHeRDzditVFMu0cUjai0aDeLSiVPX6MC
-         p5PUJmhf/onLiy3zfNYZSpGvenfsKCi88DberzYoUVRRJiLOm3LwtLEAYpYu8oQzciiq
-         RCtY5RUULHjzTKPr2ggG1kkP3EN7Rx4Y+aN8/3P8gKDwAJbDuPWDoHhql/rM4URpFYSV
-         Qd7AP4QqoEupIDRXkcZJNaXSNz49pbDW4ICIHdT1xVFblymyETTIDQ+D+VFevhCJJvO1
-         rJdA==
-X-Gm-Message-State: AO0yUKXUw6TF/n75ziVe+1p2brJt6EdjxiIeYBoDiYOYM+uX3XwSE4c9
-        scACgp7mzJru05TnxV+yuMLUYz26ljN9Dw==
-X-Google-Smtp-Source: AK7set8JaGUU/ejyFbK8vANqItq8nP5VI5XJzamLuDLbt0B8Gg7MjSYEzUbAHgIk13cwKIwS0QjM5Q==
-X-Received: by 2002:a05:600c:3512:b0:3df:9858:c02e with SMTP id h18-20020a05600c351200b003df9858c02emr6311165wmq.3.1677497198575;
-        Mon, 27 Feb 2023 03:26:38 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05600c00c600b003e21dcccf9fsm12084392wmm.16.2023.02.27.03.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 03:26:38 -0800 (PST)
-Date:   Mon, 27 Feb 2023 14:26:33 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     bchihi@baylibre.com
-Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [bug report] thermal/drivers/mediatek: Add the Low Voltage Thermal
- Sensor driver
-Message-ID: <Y/yTacHF8TvAkxdj@kili>
+        bh=AfHHQXugEcdy+Rrfa7ItXE3CF7B0+eNK7PBHqmJuXxU=;
+        b=ve2ui/FViuwXBM745aT+sQRKrLbmI+v/T2+8iWrIiM9FYF4o1eQ5SXc5HidN2khkDc
+         wixoxTblyCjaOEHatlnTvkdT46jB/VtSWrTG1X6ITi88IhV4Gks3l+9RCsY3aswfMlfh
+         KHXCoKrK8XX64qP93iwrKpWoBjSqdUKZ+lk7TrwE2Sp4qV8kLJ67X7DcZJn+LiPtFz1Z
+         taYl9nW8wML7GfsKpnHE+F3Jq/C1aXmXOomducWxmGPLAVG9AyVWp4rGVuZOSI9BEuoZ
+         LtHdbdQOpeePR1/bFSKZfdpFkuX0Ygpfv6m7N5fSazUkYlvyxOR+YjRVoh9cJ/z4a9Rm
+         FUhA==
+X-Gm-Message-State: AO0yUKUSyt020c5wH4U9havSFHBbALNDrzXRD2RNNNc2MPTgdVSuaXu7
+        umEN+mIQnUBMV8nG1f37HfnfWw==
+X-Google-Smtp-Source: AK7set/UawgvhDtrmJxn8Yh7RHXxAMOQGOJYeX5ptFfyG6L5uy29bHmB3YyRjy8Ot9felMvpJ7o6dg==
+X-Received: by 2002:a05:651c:509:b0:293:2b55:3608 with SMTP id o9-20020a05651c050900b002932b553608mr11697674ljp.15.1677499277008;
+        Mon, 27 Feb 2023 04:01:17 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id v3-20020a056512048300b004d869c1861esm880119lfq.192.2023.02.27.04.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 04:01:16 -0800 (PST)
+Message-ID: <d2784517-0f0c-43a5-63a6-57f6aa3e5912@linaro.org>
+Date:   Mon, 27 Feb 2023 14:01:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v10 5/6] soc: qcom: Add support for Core Power Reduction
+ v3, v4 and Hardened
+Content-Language: en-GB
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
+ <20230217-topic-cpr3h-v10-5-67aed8fdfa61@linaro.org>
+ <153ef3e0-9978-d201-44ad-3a5e55eeef4f@linaro.org>
+ <8c105a4f-f450-8fbf-ff0b-5629a47c1463@collabora.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <8c105a4f-f450-8fbf-ff0b-5629a47c1463@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Balsam CHIHI,
+On 27/02/2023 11:13, AngeloGioacchino Del Regno wrote:
+> Il 27/02/23 03:55, Dmitry Baryshkov ha scritto:
+>> On 17/02/2023 13:08, Konrad Dybcio wrote:
+>>> From: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@somainline.org>
+>>>
+>>> This commit introduces a new driver, based on the one for cpr v1,
+>>> to enable support for the newer Qualcomm Core Power Reduction
+>>> hardware, known downstream as CPR3, CPR4 and CPRh, and support
+>>> for MSM8998 and SDM630 CPU power reduction.
+>>>
+>>> In these new versions of the hardware, support for various new
+>>> features was introduced, including voltage reduction for the GPU,
+>>> security hardening and a new way of controlling CPU DVFS,
+>>> consisting in internal communication between microcontrollers,
+>>> specifically the CPR-Hardened and the Operating State Manager.
+>>>
+>>> The CPR v3, v4 and CPRh are present in a broad range of SoCs,
+>>> from the mid-range to the high end ones including, but not limited
+>>> to, MSM8953/8996/8998, SDM630/636/660/845.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@somainline.org>
+>>> [Konrad: rebase, apply review comments]
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>   drivers/soc/qcom/Kconfig      |   22 +
+>>>   drivers/soc/qcom/Makefile     |    4 +-
+>>>   drivers/soc/qcom/cpr-common.h |    2 +
+>>>   drivers/soc/qcom/cpr3.c       | 2923 
+>>> +++++++++++++++++++++++++++++++++++++++++
+>>>   include/soc/qcom/cpr.h        |   17 +
+>>>   5 files changed, 2967 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/soc/qcom/cpr.h b/include/soc/qcom/cpr.h
+>>> new file mode 100644
+>>> index 000000000000..2ba4324d18f6
+>>> --- /dev/null
+>>> +++ b/include/soc/qcom/cpr.h
+>>> @@ -0,0 +1,17 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>>> +/*
+>>> + * Copyright (c) 2013-2020, The Linux Foundation. All rights reserved.
+>>> + * Copyright (c) 2019 Linaro Limited
+>>> + * Copyright (c) 2021, AngeloGioacchino Del Regno
+>>> + *                     <angelogioacchino.delregno@somainline.org>
+>>> + */
+>>> +
+>>> +#ifndef __CPR_H__
+>>> +#define __CPR_H__
+>>> +
+>>> +struct cpr_ext_data {
+>>> +    int mem_acc_threshold_uV;
+>>> +    int apm_threshold_uV;
+>>> +};
+>>
+>> Who is going to use this? Is it the cpufreq driver or some other driver?
+>> We are adding an API without a clean user, can we drop it for now?
+>>
+> 
+> This is mandatory: qcom-cpufreq-hw is supposed to program the OSM before
+> starting.
 
-The patch f5f633b18234: "thermal/drivers/mediatek: Add the Low
-Voltage Thermal Sensor driver" from Feb 9, 2023, leads to the
-following Smatch static checker warning:
+Thanks for the explanation!
 
-	drivers/thermal/mediatek/lvts_thermal.c:562 lvts_calibration_init()
-	warn: not copying enough bytes for '&lvts_ctrl->calibration[i]' (4 vs 2 bytes)
+> 
+>  From SDM845 onwards, the OSM is programmed by the bootloader before 
+> booting
+> Linux;
+> In MSM8996/98, SDM630/636/660, others, the bootloader does not program 
+> the OSM
+> uC, so this has to be done in Linux - specifically, in the CPUFREQ driver
+> (qcom-cpufreq-hw), otherwise this driver is completely pointless to have.
+> 
+> CPU DVFS requires three uC to be correctly programmed in order to work:
+>   - SAW (for sleep states)
 
-drivers/thermal/mediatek/lvts_thermal.c
-    555 static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-    556                                         const struct lvts_ctrl_data *lvts_ctrl_data,
-    557                                         u8 *efuse_calibration)
-    558 {
-    559         int i;
-    560 
-    561         for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
---> 562                 memcpy(&lvts_ctrl->calibration[i],
-    563                        efuse_calibration + lvts_ctrl_data->cal_offset[i], 2);
-                                                                                  ^
-This is copying an array of known ints to a u32 array.  It should copy
-sizeof(int) instead of 2.  It only works because the data you're on
-little endian and the data is small.
+I believe this is handled by the PCSI for all mentioned platforms.
 
-    564 
-    565         return 0;
-    566 }
+>   - CPR-Hardened (voltage control, mandatory for stability)
 
-regards,
-dan carpenter
+This driver (nit: 8996 has cpr3)
+
+>   - OSM (for cpufreq-hw frequency steps [1..N])
+
+I think this is valid only for the CPRh targets. And for OSM programming 
+the driver populates OPP tables with voltage levels (which should then 
+be handled by the cpufreq-hw).
+
+I'd toss another coin into the list: for 8996 we also have to program 
+APM and cluster (kryo) regulators _manually_.
+
+> 
+> Failing to *correctly* program either of the three will render CPU DVFS 
+> unusable.
+> 
+> 
+> That clarified, my opinion is:
+> No, you can't drop this. It's an essential piece for functionality.
+> 
+> I agree in that this commit introduces a header that has only an 
+> internal (as in
+> cpr3.c) user and no external ones, but I think that Konrad didn't want 
+> to include
+> the qcom-cpufreq-hw.c commits in this series because it's already huge 
+> and pretty
+> difficult to review; adding the cpufreq-hw commits would make the 
+> situation worse.
+
+Perhaps we misunderstand each other here. I suggest dropping the header 
+from _this_ patchset only and submit/merge corresponding code together 
+with the cpufreq-hw changes. This might sound like a complication, but 
+in reality it allows one to assess corresponding code separately.
+
+(Moreover, please correct me if I'm wrong, I think this header will be 
+used only with the CPRh, and so this has no use for CPR3/4. Is this 
+correct?)
+
+I took a glance at the 'cpufreq: qcom-hw: Implement CPRh aware OSM 
+programming' patch, it doesn't seem to use the header (maybe I checked 
+the older version of the patch). As for me, this is another signal that 
+cpr_ext_data should come together with the LUT programming rather than 
+with the CPRh itself.
+
+> Konrad, perhaps you can send the cpufreq-hw commits in a separate 
+> series, in
+> which cover letter you mention a dependency on this one?
+> That would *clearly* show the full picture to reviewers.
+
+Yes, that would be great. A small note regarding those patches. I see 
+that you patched the qcom-cpufreq-hw.c. This way first the driver 
+programs the LUT, then it reads it back to setup the OPPs. Would it be 
+easier to split OSM-not-programmed driver?
+
+> 
+> I remember that when I sent the cpufreq-hw series along with this one 
+> (~2 years
+> ago, I think?) that code had positive reviews from Bjorn, so it should 
+> be OK.
+> It wasn't picked just-only-because of the cpr3 dependency.
+> 
+> Regards,
+> Angelo
+> 
+>>> +
+>>> +#endif /* __CPR_H__ */
+>>>
+>>
+> 
+> 
+> 
+
+-- 
+With best wishes
+Dmitry
+
