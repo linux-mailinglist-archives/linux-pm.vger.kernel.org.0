@@ -2,73 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EE56A3F71
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 11:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ED96A4089
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 12:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjB0K12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 05:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S229587AbjB0L0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 06:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjB0K11 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 05:27:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BFB2054E
-        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 02:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677493598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ORysGkdK/Pguqa6KzjHxllcwhbHEv5qK0Wn8PNtiKpA=;
-        b=fq83vbvrGJB3LZ4t98xZfuvnnU/P+zPLqjbm/XBlXjn/vRH9eJgkeo1dF6o8tZxHYoQP2q
-        3Xne85ZRZdX8kO5YiG093/92Famd4KGa8axFcI5eiWBUsh/D/jq98nIeFygiB1nx3EoblD
-        ci4J2PhhtrmY5EhJIcW2rwz0oz9Q+f4=
-Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
- [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-209-bLNi-eTaO9uEhe8gogFsYQ-1; Mon, 27 Feb 2023 05:26:36 -0500
-X-MC-Unique: bLNi-eTaO9uEhe8gogFsYQ-1
-Received: by mail-vs1-f69.google.com with SMTP id v6-20020a056102302600b0042148d6b7baso3233889vsa.12
-        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 02:26:36 -0800 (PST)
+        with ESMTP id S229511AbjB0L0l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 06:26:41 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2A1E5D1
+        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 03:26:40 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id p26so3989279wmc.4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 03:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uJkhkcyw+YCo652cbJy90MfhJa/odF41bwjtMLAeNIk=;
+        b=I8DJ4R4mY3qM6LJfuoOc5sWEglN86Bn6qN7fE5U3snRukx66IsbHq0xHzEZhZAz2eh
+         AjHjJmx3SNfdzoX99c35EDO9sIU9CDnP8ltFRn2S4VI459gg7AC6MbE6ThEgrx/TXdge
+         rVEgCvfb3nxIa7zLRHZmy0AlNmoRpK0sv+wErKVmbtPDd28lYcrSGPiZOfoptxX2Vbow
+         E+j4Xzc/9mJPnyn65Km/aaz3XpJSdy2JSd6IqQv+kmiaZoKMGjz955v4BE8fxpoqmAKJ
+         KNztNYTVFuEgWMSuVFJ3dT7JUQvqxYwSW0xrmOVOw0L4rBHDzZQNNKaApOlkU1Ngk7jL
+         Shcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ORysGkdK/Pguqa6KzjHxllcwhbHEv5qK0Wn8PNtiKpA=;
-        b=zte8IBcOFAkex4jUUpmyqFMZBmxj+xUnTMplsx300Ttgbik98+zZffyy6OPUecBHkg
-         oRqKUm2R40FJSk4reYPqWKOwXukrBaoIqYEHfykwsUI92xkYUltVou7yOqvTd71rLZQj
-         tUHg0PvkvEbCj7Hna85paecINLa0INn0gHFtg3axDm8VkgP0jDJt3ZBZVGVmaUwYt1Dp
-         RFKNcT5eUqG0h5MPlyfSrk21MmAuJMYOsPrp5Kw0+MU/yYk6aWaczMDq4AkDqGGpYB4M
-         L7SfzvLB7hkrnNSCQVotqVkp0rbjgysNIx6A4TR9a1LDncoi67dYLAQwKZeAa3suCWJz
-         craw==
-X-Gm-Message-State: AO0yUKU92SkZp7todrQFr2SXTTWqtAE4qRGCajZstzIHezYj3MZBfcw0
-        VSnKgYqP/U6FJCpUIHP+8twFJXicBdbronhmu+6034V3s27Me4OwinNTG4xuyeh4dH0Shq5p3NE
-        qfjitp0dD975EdWyG+8EnAF/inxVQ5J4Ctag=
-X-Received: by 2002:a1f:bf16:0:b0:413:1498:e843 with SMTP id p22-20020a1fbf16000000b004131498e843mr7165639vkf.0.1677493596352;
-        Mon, 27 Feb 2023 02:26:36 -0800 (PST)
-X-Google-Smtp-Source: AK7set992JZJfczXidh5nXBnsu5o2gkRvL073x6tl2UuRSKy8og8GT5X66IeGe+wctC68z1nH/ku6NujpNQ8OHcKkJ8=
-X-Received: by 2002:a1f:bf16:0:b0:413:1498:e843 with SMTP id
- p22-20020a1fbf16000000b004131498e843mr7165626vkf.0.1677493596036; Mon, 27 Feb
- 2023 02:26:36 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uJkhkcyw+YCo652cbJy90MfhJa/odF41bwjtMLAeNIk=;
+        b=GZ8w6cxlEWOMPtfsiz3INVq+5p0ZcqWbOd+BTqTJmOIeG8nl4dnyFLJEWjhR8Phi3e
+         k9yCrHJKfkaqaXsQ3tOQStuvj0IA2lv30JKWwHeRDzditVFMu0cUjai0aDeLSiVPX6MC
+         p5PUJmhf/onLiy3zfNYZSpGvenfsKCi88DberzYoUVRRJiLOm3LwtLEAYpYu8oQzciiq
+         RCtY5RUULHjzTKPr2ggG1kkP3EN7Rx4Y+aN8/3P8gKDwAJbDuPWDoHhql/rM4URpFYSV
+         Qd7AP4QqoEupIDRXkcZJNaXSNz49pbDW4ICIHdT1xVFblymyETTIDQ+D+VFevhCJJvO1
+         rJdA==
+X-Gm-Message-State: AO0yUKXUw6TF/n75ziVe+1p2brJt6EdjxiIeYBoDiYOYM+uX3XwSE4c9
+        scACgp7mzJru05TnxV+yuMLUYz26ljN9Dw==
+X-Google-Smtp-Source: AK7set8JaGUU/ejyFbK8vANqItq8nP5VI5XJzamLuDLbt0B8Gg7MjSYEzUbAHgIk13cwKIwS0QjM5Q==
+X-Received: by 2002:a05:600c:3512:b0:3df:9858:c02e with SMTP id h18-20020a05600c351200b003df9858c02emr6311165wmq.3.1677497198575;
+        Mon, 27 Feb 2023 03:26:38 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05600c00c600b003e21dcccf9fsm12084392wmm.16.2023.02.27.03.26.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 03:26:38 -0800 (PST)
+Date:   Mon, 27 Feb 2023 14:26:33 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     bchihi@baylibre.com
+Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [bug report] thermal/drivers/mediatek: Add the Low Voltage Thermal
+ Sensor driver
+Message-ID: <Y/yTacHF8TvAkxdj@kili>
 MIME-Version: 1.0
-References: <Y/yAzR6sWvPedLej@kili>
-In-Reply-To: <Y/yAzR6sWvPedLej@kili>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Mon, 27 Feb 2023 10:26:20 +0000
-Message-ID: <CAOgh=FyxFuENe6SgJB7aUwPS-ZB_51q6a=zWEcZSAsGqX034hA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: apple-soc: Fix an IS_ERR() vs NULL check
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, asahi@lists.linux.dev,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +67,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 27 Feb 2023 at 10:16, Dan Carpenter <error27@gmail.com> wrote:
->
-> The of_iomap() function returns NULL if it fails.  It never returns
-> error pointers.  Fix the check accordingly.
->
-> Fixes: 6286bbb40576 ("cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states")
-> Signed-off-by: Dan Carpenter <error27@gmail.com>
-> ---
+Hello Balsam CHIHI,
 
-Nice catch!
+The patch f5f633b18234: "thermal/drivers/mediatek: Add the Low
+Voltage Thermal Sensor driver" from Feb 9, 2023, leads to the
+following Smatch static checker warning:
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+	drivers/thermal/mediatek/lvts_thermal.c:562 lvts_calibration_init()
+	warn: not copying enough bytes for '&lvts_ctrl->calibration[i]' (4 vs 2 bytes)
 
-Is mise le meas/Regards,
+drivers/thermal/mediatek/lvts_thermal.c
+    555 static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
+    556                                         const struct lvts_ctrl_data *lvts_ctrl_data,
+    557                                         u8 *efuse_calibration)
+    558 {
+    559         int i;
+    560 
+    561         for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
+--> 562                 memcpy(&lvts_ctrl->calibration[i],
+    563                        efuse_calibration + lvts_ctrl_data->cal_offset[i], 2);
+                                                                                  ^
+This is copying an array of known ints to a u32 array.  It should copy
+sizeof(int) instead of 2.  It only works because the data you're on
+little endian and the data is small.
 
-Eric Curtin
+    564 
+    565         return 0;
+    566 }
 
->  drivers/cpufreq/apple-soc-cpufreq.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
-> index c11d22fd84c3..021f423705e1 100644
-> --- a/drivers/cpufreq/apple-soc-cpufreq.c
-> +++ b/drivers/cpufreq/apple-soc-cpufreq.c
-> @@ -189,8 +189,8 @@ static int apple_soc_cpufreq_find_cluster(struct cpufreq_policy *policy,
->         *info = match->data;
->
->         *reg_base = of_iomap(args.np, 0);
-> -       if (IS_ERR(*reg_base))
-> -               return PTR_ERR(*reg_base);
-> +       if (!*reg_base)
-> +               return -ENOMEM;
->
->         return 0;
->  }
-> --
-> 2.39.1
->
->
-
+regards,
+dan carpenter
