@@ -2,113 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DD76A3A18
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 05:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83036A3B54
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 07:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjB0EXz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 23:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S229602AbjB0Goh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 01:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjB0EXy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 23:23:54 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC91113E2
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 20:23:53 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id p6so4581877plf.0
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 20:23:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQlnkGbC1NS46yQPlx3GF1Mmqdcawxkv2CKfR4b4ofU=;
-        b=mg1fXSBo+5tXyR+fr5RDmzVtL9b97oxbj5oafuYXmoB2NWHcjfwqPGQnQgJFKLLAFP
-         wlNBx5XW1CMVKs2emjPvYnQufP30xPZaai43ebnaI9TFpiXphIfj3a/sWQrEpYM6xSWP
-         b5+IZnQtLuWPwAeQiYJTMyROT0oumYVKmuqj0MX6jySWKC/UfMv1nLuDgdnp21VTI4u5
-         V1anyd0Fl8iar8KxoNm16mryRmT1juwCcALX7dLRt0uCmzJW/D32wNDyP5p0L7Sax9dn
-         PuMah8m9LQDGIgsa2itbGniLQkaLNQx0EAAeTVe2+PFsRlZ5JttAkAsy/2P7sK9s0aHU
-         AWpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oQlnkGbC1NS46yQPlx3GF1Mmqdcawxkv2CKfR4b4ofU=;
-        b=u4CGUda6YC8IfntRXFZS8QJMTLBbJoFKDufV/2NpXXzAeaV+z5cqka5cfHU1BmPhro
-         JZlXp4IN9SyIHs6OHeOmZ3QRWWaOHVgh1xzj2MqmgyWZE1nMOXDKYByWO+G/7fDMFLAo
-         fLJh8fGVRrn8cLm4igXqOmzdrPItAD6lF4dyEAkvychOS3nLorwcH0k+YbYmoWZTjcoa
-         ZR6C4rsHIokf3c5H/KBYMSKdvF1T6npPKPyqRKh3x0HhCxNLo63AYx4MBzMAswT0efjs
-         zjkbolloutjS5AiitnwyYVUt1O7yDDckDd35k8hiH1HpcTVj79Ta9e0pLsaOZ5NnpQes
-         dg1w==
-X-Gm-Message-State: AO0yUKV0u+qFJbpgCVmqJ5bfDqIx5oM5v4IXTCK5FZRDBcK0GxOMXQKn
-        tzwg+avsYjtyYqHQKg8/wEiLjA==
-X-Google-Smtp-Source: AK7set8Ac55n+05ov9iu10t1ydja691duzF5DrkR5xpmWOLtxk+uLB9pJDst3cyTTsYAl2tP393mZA==
-X-Received: by 2002:a05:6a20:549a:b0:c7:b65:cb3b with SMTP id i26-20020a056a20549a00b000c70b65cb3bmr7897574pzk.10.1677471832690;
-        Sun, 26 Feb 2023 20:23:52 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id q2-20020a656842000000b005026c125d47sm3074844pgt.21.2023.02.26.20.23.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 20:23:52 -0800 (PST)
-Date:   Mon, 27 Feb 2023 09:53:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jun Nie <jun.nie@linaro.org>
-Cc:     cw00.choi@samsung.com, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
-Message-ID: <20230227042349.3p2ijo6s6yyqc267@vireshk-i7>
-References: <cover.1677063656.git.viresh.kumar@linaro.org>
- <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
- <20230224021713.stpcykx2tjkjwyti@vireshk-i7>
- <Y/hyf+/EqEeTu436@niej-dt-7B47>
+        with ESMTP id S229451AbjB0Gog (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 01:44:36 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A89510AB1;
+        Sun, 26 Feb 2023 22:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677480275; x=1709016275;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l7fNlOQJTNMVvMxezJZRa8jk93MTm7z8h1o/L1+XyGw=;
+  b=D6cWj6ahbhDL4C6f6dII5CfR23hqwZqU2W/ejPj09phJZlboMZEYS4j8
+   DPGywoVCQ4727WILjv8rsee6Sp3q1LsCD9xATKSZHFO82mg1Wju+hudZQ
+   SdB0GsUzMsiy2hjb3TjKyKv0Ld241AO3JtTWiBI+ChBmvHz72qIcMl6+S
+   o6CQCQxFJhI9JahuzCmEnl9RTFCPyAm6bKOIVJ7e6wz54AeOnBwaI8nDT
+   FQkRM793RwzolszBM+xeWu1GZS9e7Qn/wgOLPMf1i8GppgVFi8q26bmHw
+   5DrpTd7+AZo5qaUtDbyRP3zfFkhx0zfeyXM08oERnqkajDe6XgM2FpcWw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="332514897"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="332514897"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 22:44:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="651085796"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="651085796"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2023 22:44:27 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWXFK-0004A3-0T;
+        Mon, 27 Feb 2023 06:44:26 +0000
+Date:   Mon, 27 Feb 2023 14:43:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata'
+ accessor in thermal located drivers
+Message-ID: <202302271421.ZjVUJ4DB-lkp@intel.com>
+References: <20230226225406.979703-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/hyf+/EqEeTu436@niej-dt-7B47>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230226225406.979703-3-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-02-23, 16:17, Jun Nie wrote:
-> For the opp lib, this is right direction. We still need to find a method to
-> pass devfreq device node to opp lib, just genpd_virt_devs for power domain.
+Hi Daniel,
 
-I am not really sure I understood it all. What is "device node" ? DT node or
-struct device ? What exactly do you need ?
+I love your patch! Yet something to improve:
 
-> But I am not clear below is the right way yet and this also involves wider
-> changes. Or the opp's owner, devfreq device can be referred via opp lib?
-> If so, we do not need to add devfreq-devs to cpu node at all.
-> 
-> 		cpu1: cpu@101 {
-> 			compatible = "arm,cortex-a53";
-> 			device_type = "cpu";
-> 			power-domains = <&cpr>;
-> 			power-domain-names = "cpr";
-> 			devfreq-devs = <&cci>;
-> 			devfreq-names = "cci";
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on groeck-staging/hwmon-next]
+[cannot apply to v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Why do you need these ?
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230226225406.979703-3-daniel.lezcano%40linaro.org
+patch subject: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata' accessor in thermal located drivers
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230227/202302271421.ZjVUJ4DB-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
+        git checkout c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
-> 			operating-points-v2 = <&cluster1_opp_table>;
-> 		};
-> 
-> 		opp-200000000 {
-> 			opp-hz = /bits/ 64 <200000000>;
-> 			required-opps = <&cpr_opp3>, <&cci_opp1>;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302271421.ZjVUJ4DB-lkp@intel.com/
 
-This looks fine though.
+All errors (new ones prefixed by >>):
 
-> 		};
+   drivers/thermal/db8500_thermal.c: In function 'db8500_thermal_get_temp':
+>> drivers/thermal/db8500_thermal.c:63:42: error: implicit declaration of function 'therma_zone_device_priv'; did you mean 'thermal_zone_device_priv'? [-Werror=implicit-function-declaration]
+      63 |         struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                          thermal_zone_device_priv
+   drivers/thermal/db8500_thermal.c:63:42: warning: initialization of 'struct db8500_thermal_zone *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
+
+
+vim +63 drivers/thermal/db8500_thermal.c
+
+    59	
+    60	/* Callback to get current temperature */
+    61	static int db8500_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+    62	{
+  > 63		struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
+    64	
+    65		/*
+    66		 * TODO: There is no PRCMU interface to get temperature data currently,
+    67		 * so a pseudo temperature is returned , it works for thermal framework
+    68		 * and this will be fixed when the PRCMU interface is available.
+    69		 */
+    70		*temp = th->interpolated_temp;
+    71	
+    72		return 0;
+    73	}
+    74	
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
