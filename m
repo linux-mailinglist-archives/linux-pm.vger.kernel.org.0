@@ -2,122 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705B86A387F
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 03:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7026A3945
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 04:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjB0C1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 21:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S230474AbjB0DJh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 22:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbjB0C1Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 21:27:25 -0500
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC91514F;
-        Sun, 26 Feb 2023 18:24:29 -0800 (PST)
-X-UUID: 85e3b750df9f43209297f653ba2aad9d-20230227
-X-CPASD-INFO: 700016cae62b46399f40cd4f94c963ba@gIBqUF5okZGRVnSug3l-c1mXZGCTkFS
-        1e26DaWRjjoGVhH5xTV5nX1V9gnNXZF5dXFV3dnBQYmBhXVJ3i3-XblBgXoZgUZB3hnJqUGFkkw==
-X-CLOUD-ID: 700016cae62b46399f40cd4f94c963ba
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:145.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:186.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:1,DUF:17006,ACD:245,DCD:245,SL:0,EISP:0,AG:0,CFC:0.638,CFSR:0.102,UAT:0
-        ,RAF:2,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
-        0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 85e3b750df9f43209297f653ba2aad9d-20230227
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 85e3b750df9f43209297f653ba2aad9d-20230227
-X-User: luoxueqin@kylinos.cn
-Received: from [172.20.116.208] [(116.128.244.169)] by mailgw
-        (envelope-from <luoxueqin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1391154859; Mon, 27 Feb 2023 10:22:47 +0800
-Message-ID: <5b22ef4c-d0a6-5f28-7f71-e4de67d97b87@kylinos.cn>
-Date:   Mon, 27 Feb 2023 10:22:39 +0800
+        with ESMTP id S230434AbjB0DJg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 22:09:36 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C65125A2
+        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 19:09:30 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id f18so6733762lfa.3
+        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 19:09:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ARwtmBoWPA0mYm8v1Q76EhykRCJejAkEWfpNQ6zu43c=;
+        b=TSiVzoeyw3I3ld9ftyMRaMMb1P+iJlpgniIXLOlhM4aJCoO4yPR0BiBHXGPdsb2Bq8
+         MXdnGEDPWbn/pFuqZ/vIx/+AX7lFGcSpv9MzkdW6A5xEWtUcxy/xcVc4tMUCNlO4pa0B
+         BUtwUnzw6TShTWQrv5g4IW7ra1tlTbLoyYp6bTK1GvwF2Z3fNfiXHJiljWCibDUpQs9h
+         GRs3zQRpeFT0IK5+LHTBygMdxEFOab1jv/PWWlIy88L2tIi/RuJqV4XFo/3hD64bv4Rh
+         bUAMqTjdhDmEkEpd5v8XMOnqPgvEPnrwIoJMXgDlRPHyg2hFfVnMsXgKiVha5msRyrm6
+         IncQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ARwtmBoWPA0mYm8v1Q76EhykRCJejAkEWfpNQ6zu43c=;
+        b=2uJJvvvBbdIrPR24YIfaBNfaDovqDi8KDLEzx9wFP9STob35Da+kuYxUTNP8V5dw6R
+         K/MKAltbY2Or4yvuNNpeZdJC5mizfiyfU+8gnAXKQ8phv5cp/kZ7rKVwaAiQs81LSSrz
+         R0jePpOip9KvIiPNuuPr39Pc5XdFUkumACRPU2cQDW1747QHs5KJh0dSj3abx9yhbOYB
+         H72uS1WZ7PHxFVaUO/3Eq7g1xYmN67AMrostQ9hv6CxN98wd11nL25N9FHD7CfUfYCju
+         KY6WlGYM7LoRmMH3SRDY/A3d5miPKyj0HrscX0J7+y2DFVTUsIuvtIpIOYYKOs4dl+i7
+         LN+g==
+X-Gm-Message-State: AO0yUKXBp4bJyRi53IRy62wJ6mPmDy4fZ/59dA2CUASU79yPiHOpJSQh
+        LIuQPEyaugRf0Dlyu2QxTCXovw==
+X-Google-Smtp-Source: AK7set+kOX9ZVq8UFIZXjwlJxsqmYLOD3l4OBOH0tMaLId1c201sit7u1DbbLAEzzUpkOVDe0gyiug==
+X-Received: by 2002:a05:6512:4c5:b0:4e0:c8ef:42b5 with SMTP id w5-20020a05651204c500b004e0c8ef42b5mr283404lfq.6.1677467368454;
+        Sun, 26 Feb 2023 19:09:28 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id s16-20020ac25ff0000000b004cb3e97bff8sm757705lfg.284.2023.02.26.19.09.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Feb 2023 19:09:28 -0800 (PST)
+Message-ID: <94c18cc3-4b1a-440b-3bd8-3c81ddffc148@linaro.org>
+Date:   Mon, 27 Feb 2023 05:09:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] PM: tools: add "CPU killed" timeline on arm64
- platform
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        todd.e.brandt@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230223044550.339811-1-luoxueqin@kylinos.cn>
- <CAJZ5v0jyz_dpKW1GhWN=yYpR9-7WG33GbZ65aoGv+B+R9vEpEw@mail.gmail.com>
-From:   luoxueqin <luoxueqin@kylinos.cn>
-In-Reply-To: <CAJZ5v0jyz_dpKW1GhWN=yYpR9-7WG33GbZ65aoGv+B+R9vEpEw@mail.gmail.com>
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v10 4/6] soc: qcom: cpr: Move common functions to new file
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
+ <20230217-topic-cpr3h-v10-4-67aed8fdfa61@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230217-topic-cpr3h-v10-4-67aed8fdfa61@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-在 2023/2/24 02:11, Rafael J. Wysocki 写道:
-> On Thu, Feb 23, 2023 at 5:46 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
->>
->> On the arm64 platform, the core log of cpu offline is as follows:
+On 17/02/2023 13:08, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> Please spell CPU in capitals.
+> In preparation for implementing a new driver that will be handling
+> CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
+> file.
+> 
+> Update cpr_get_fuses in preparation for CPR3 implementation, change
+> parameters where necessary to not take cpr.c private data structures.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: rebase, apply review comments, don't break backwards compat, improve msg]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/soc/qcom/Makefile     |   2 +-
+>   drivers/soc/qcom/cpr-common.c | 363 +++++++++++++++++++++++++++++++++++++++
+>   drivers/soc/qcom/cpr-common.h | 108 ++++++++++++
+>   drivers/soc/qcom/cpr.c        | 386 +++---------------------------------------
+>   4 files changed, 494 insertions(+), 365 deletions(-)
+> 
 
-Thanks for pointing out my mistake.
+[skipped]
 
-> 
->> [  100.431501] CPU1: shutdown
->> [  100.454820] psci: CPU1 killed (polled 20 ms)
->> [  100.459266] CPU2: shutdown
->> [  100.482575] psci: CPU2 killed (polled 20 ms)
->> [  100.486057] CPU3: shutdown
->> [  100.513974] psci: CPU3 killed (polled 28 ms)
->> [  100.518068] CPU4: shutdown
->> [  100.541481] psci: CPU4 killed (polled 24 ms)
->>
->> 'smpboot: CPU (?P<cpu>[0-9]*) is now offline' cannot be applied
->> to the arm64 platform, which caused the loss of the suspend
->> machine stage in S3.
-> 
-> I'm not exactly sure what you mean by "loss of the suspend machine stage in S3".
+> diff --git a/drivers/soc/qcom/cpr-common.h b/drivers/soc/qcom/cpr-common.h
+> new file mode 100644
+> index 000000000000..2cd15f7eac90
+> --- /dev/null
+> +++ b/drivers/soc/qcom/cpr-common.h
+> @@ -0,0 +1,108 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/regulator/consumer.h>
+> +
+> +enum voltage_change_dir {
+> +	NO_CHANGE,
+> +	DOWN,
+> +	UP,
+> +};
+> +
+> +struct fuse_corner_data {
+> +	int ref_uV;
+> +	int max_uV;
+> +	int min_uV;
+> +	int range_uV;
+> +	/* fuse volt: closed/open loop */
+> +	int volt_cloop_adjust;
+> +	int volt_oloop_adjust;
 
-I made a mistake in saying "loss of the suspend machine stage in S3", 
-please allow me to correct it. Because the original program only 
-recognized the "CPU up" action on the arm64 platform, in output.html, 
-"CPU up" was classified as the "suspend machine" stage. Adding this code 
-can put "CPU killed" and "CPU up" in the correct position.
+For CPR3 these values are per-fusing-rev.
+(for 8996 tables list per-fusing-rev values for min_uV, 
+volt_cloop_adjust and volt_oloop_adjust)
 
-> 
->>   Here I added core code to fix this issue.
->>
->> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
->> ---
->>   tools/power/pm-graph/sleepgraph.py | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
->> index 82c09cd25cc2..d816970b0a3d 100755
->> --- a/tools/power/pm-graph/sleepgraph.py
->> +++ b/tools/power/pm-graph/sleepgraph.py
->> @@ -4132,9 +4132,12 @@ def parseKernelLog(data):
->>                          elif(re.match('Enabling non-boot CPUs .*', msg)):
->>                                  # start of first cpu resume
->>                                  cpu_start = ktime
->> -                       elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)):
->> +                       elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)) \
->> +                               or re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)):
->>                                  # end of a cpu suspend, start of the next
->>                                  m = re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)
->> +                               if(not m):
->> +                                       m = re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)
->>                                  cpu = 'CPU'+m.group('cpu')
->>                                  if(cpu not in actions):
->>                                          actions[cpu] = []
->> --
-> 
-> The changes look reasonable to me, though.
-> 
-> Todd, any comments?
+Another option, of course, might be to have a per-SoC code that uses 
+fusing_rev to update the fuse_corner_data, but it would mean making it 
+non-const.
+
+> +	int max_volt_scale;
+> +	int max_quot_scale;
+
+Any reason for these limitations?
+
+> +	/* fuse quot */
+> +	int quot_offset;
+> +	int quot_scale;
+> +	int quot_adjust;
+
+I see that quot_offset/quot_scale/quot_adjust are set to 0/1/0 for all 
+the platforms I can assess at this moment (8996/8998/sdm660). Can we 
+drop them? If we need them later, we can readd them later.
+
+> +	/* fuse quot_offset */
+> +	int quot_offset_scale;
+> +	int quot_offset_adjust;
+> +};
+> +
+> +struct cpr_fuse {
+> +	char *ring_osc;
+> +	char *init_voltage;
+> +	char *quotient;
+> +	char *quotient_offset;
+> +};
+> +
+> +struct fuse_corner {
+> +	int min_uV;
+> +	int max_uV;
+> +	int uV;
+> +	int quot;
+> +	int step_quot;
+> +	const struct reg_sequence *accs;
+> +	int num_accs;
+> +	unsigned long max_freq;
+> +	u8 ring_osc_idx;
+> +};
+> +
+> +struct corner {
+> +	int min_uV;
+> +	int max_uV;
+> +	int uV;
+> +	int last_uV;
+> +	int quot_adjust;
+> +	u32 save_ctl;
+> +	u32 save_irq;
+> +	unsigned long freq;
+> +	bool is_open_loop;
+> +	struct fuse_corner *fuse_corner;
+> +};
+> +
+> +struct corner_data {
+> +	unsigned int fuse_corner;
+> +	unsigned long freq;
+> +};
+> +
+> +struct acc_desc {
+> +	unsigned int	enable_reg;
+> +	u32		enable_mask;
+> +
+> +	struct reg_sequence	*config;
+> +	struct reg_sequence	*settings;
+> +	int			num_regs_per_fuse;
+> +};
+> +
+> +struct cpr_acc_desc {
+> +	const struct cpr_desc *cpr_desc;
+> +	const struct acc_desc *acc_desc;
+> +};
+> +
+
+[skipped the rest]
+
+-- 
+With best wishes
+Dmitry
 
