@@ -2,80 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498E66A469F
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 17:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8806D6A46B7
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 17:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjB0QBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 11:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
+        id S230032AbjB0QHN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 11:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjB0QBo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 11:01:44 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D46D211DA
-        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 08:01:42 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id q16so6783681wrw.2
-        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 08:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BMO+fA1MIl81zKq6OpToM8j6lL3UYLiZJAoDm7QQyIw=;
-        b=cTYNMmkD63U5RpdJ5vRp0vRQb/GAOyyzPu5FYWKiUpsZlqf42UuY8/BhleHQtk0A2a
-         PDCU9S28O+aJfPuFDPLVOwlrccOPcfbfyd1JF/aWIOdKAjSTN/FG688ER+pMlprJKwaL
-         5SB49wCOgqPZ/dcTr1iKNE9e4FOwIZczX1QjG7tIHSgF6PU1obVMB3ri7LsrEs1ug1Yw
-         OjABw2cgL+K2oyYKKILNnK/TYJ8Vy8f1A0cWXkMonWChIAX+xZ8WXn8o6iH01zto8L/H
-         +6T+DzNWfeRaVV+uD8y50WJojdap0NX/gWyTnIXuYVFJyuzN80CJnfhfk9xcLFWCAhi0
-         +xEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BMO+fA1MIl81zKq6OpToM8j6lL3UYLiZJAoDm7QQyIw=;
-        b=uHuzByg783Nrficr+i9L/r3N54ErkJ3Q07jufxEHdx13TrTugdJ2sbNX1VIWOirPmD
-         npHq0MDDQIRJc2JlGsXlrfdnJcVeo4GPJPP4WpjGJ+cSbR9huhRvAQo0oKgX0G3f1dip
-         cH976GJ55wM0VR966fKc31Oe5ApoZJqpcR8MMb8Aa9XvytQ6M6PrQCzFkRoX3HIayVVC
-         VhkrVYZ3cHOi7EXY5ty+u6th2kZz9TjZfU8BPLcihbiHavAInBRPWzihcGH7FTguJH4u
-         adh2eQ0tS8DKaiZNVfHGKMJ3+1pOEwxmIQ3j33bHj4A3zVEOwkc1Y/8skVqGu0Q3T3sf
-         lipg==
-X-Gm-Message-State: AO0yUKXm2CdFsGgS7zw6V5yVCB4mTqzOrCIxH3DDoWv1ZeCGLEBKEcpy
-        212edzJaJRHd+C0QY11rYzHoPA==
-X-Google-Smtp-Source: AK7set8OI0zIVwExIwjpmyxmhAKwEjDQvw3qCiwG/NVjp/4rLL7HN0tK2+VtPdNw1PwJUcztmP1fUA==
-X-Received: by 2002:a05:6000:1703:b0:2c5:4ffb:b5d4 with SMTP id n3-20020a056000170300b002c54ffbb5d4mr6547533wrc.19.1677513700809;
-        Mon, 27 Feb 2023 08:01:40 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:8baa:6b32:391b:62de? ([2a05:6e02:1041:c10:8baa:6b32:391b:62de])
-        by smtp.googlemail.com with ESMTPSA id e9-20020a5d5309000000b002c70d269b4esm7362220wrv.91.2023.02.27.08.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 08:01:40 -0800 (PST)
-Message-ID: <b7b99ec6-5c6f-34a1-05be-a109b4328eab@linaro.org>
-Date:   Mon, 27 Feb 2023 17:01:39 +0100
+        with ESMTP id S230027AbjB0QHM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 11:07:12 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B62F233C8;
+        Mon, 27 Feb 2023 08:07:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=1vz2UEdjmQXWhUlE3HWzfK6c4UyQl3yd4RAPwcSJ89A=; b=ZTBfsGzw1Zz25agNHtP5dojHJj
+        SbvBw4DWjkluj57TGsurxGKn7gq5utVt4Xo3T87VCnghOCjxsyOzwSFD6p9BzQA8dzP6aFzroou/G
+        joiJ2HyB6hVfZie38EcUmBZtP13momINHbb8XT2j4fAjqp3Qy2L7cV8ty1o0CBQL9ZEmrBFPas6B9
+        hCyor6yF7a5nzuuNCJo+8LQbNEfALDGwi0FHT3YgblTzpvR0rVQfzjEzd6ZPJeDq7FdCg+eKyKAY4
+        1TARqq1Vn1SRIuIhwDqKPV3mwmE+gt26RF978mC3zR66Misshi/Y8AiXx1BjQTKxkLcfITK3b0m8i
+        s73G6E1w==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWg1q-00AItm-J2; Mon, 27 Feb 2023 16:07:06 +0000
+Message-ID: <6a95a337-2972-427f-635d-5ef4e91a82fa@infradead.org>
+Date:   Mon, 27 Feb 2023 08:07:04 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 20/20] thermal/traces: Replace the thermal zone
- structure parameter with the field value
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 0/8] drivers: select REGMAP instead of depending on it
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
-References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
- <20230226225406.979703-21-daniel.lezcano@linaro.org>
- <20230227100715.7d896836@gandalf.local.home>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230227100715.7d896836@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Jeffery <andrew@aj.id.au>, Corey Minyard <minyard@acm.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Riku Voipio <riku.voipio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        platform-driver-x86@vger.kernel.org,
+        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
+        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
+References: <20230226053953.4681-1-rdunlap@infradead.org>
+ <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,78 +76,102 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Steven,
 
-
-On 27/02/2023 16:07, Steven Rostedt wrote:
-> On Sun, 26 Feb 2023 23:54:06 +0100
-> Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On 2/27/23 01:31, Hans de Goede wrote:
+> Hi Randy,
 > 
->> In the work of the thermal zone device self-encapsulation, let's pass
->> the field value instead of dereferencing them in the traces which
->> force us to export publicly the thermal_zone_device structure.
+> On 2/26/23 06:39, Randy Dunlap wrote:
+>> REGMAP is a hidden (not user visible) symbol. Users cannot set it
+>> directly thru "make *config", so drivers should select it instead of
+>> depending on it if they need it.
 >>
->> No fonctionnal change intended.
+>> Consistently using "select" or "depends on" can also help reduce
+>> Kconfig circular dependency issues.
 >>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/thermal/gov_fair_share.c              |  4 +++-
->>   drivers/thermal/gov_power_allocator.c         |  6 +++--
->>   drivers/thermal/gov_step_wise.c               |  4 +++-
->>   drivers/thermal/thermal_core.c                |  8 +++++--
->>   include/trace/events/thermal.h                | 24 +++++++++----------
->>   .../trace/events/thermal_power_allocator.h    | 12 +++++-----
->>   6 files changed, 34 insertions(+), 24 deletions(-)
+>> REGMAP is selected 94 times and is depended on 11 times in
+>> current linux-next. Eliminate the uses of "depends on" by
+>> converting them to "select".
+> 
+> Thank you for your work on this. Mixing of depends on vs select
+> is a real problem with many Kconfig symbols.
+> 
+>>  [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead of depending on it
+>>  [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
+>>  [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending on it
+>>  [PATCH 4/8] leds: TI_LMU_COMMON: select REGMAP instead of depending on it
+>>  [PATCH 5/8] platform: mellanox: select REGMAP instead of depending on it
+>>  [PATCH 6/8] platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
+>>  [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
+>>  [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
+> 
+> For patch 5/8 and 6/8, do you want me to merge them through the pdx86
+> (platform-drivers-x86) tree, or do you plan to merge this whole series
+> in one go through some other tree?
+
+Hi Hans,
+Please merge them thru the pdx86 tree.
+
+Thanks.
+
+> If you plan to merge the whole series through some other tree,
+> here is my acked by for doing so for 5/8 and 6/8:
+> 
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
 >>
->> diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
->> index aad7d5fe3a14..cdddd593021d 100644
->> --- a/drivers/thermal/gov_fair_share.c
->> +++ b/drivers/thermal/gov_fair_share.c
->> @@ -35,7 +35,9 @@ static int get_trip_level(struct thermal_zone_device *tz)
->>   	 * point, in which case, trip_point = count - 1
->>   	 */
->>   	if (count > 0)
->> -		trace_thermal_zone_trip(tz, count - 1, trip.type);
->> +		trace_thermal_zone_trip(thermal_zone_device_type(tz),
->> +					thermal_zone_device_id(tz),
->> +					count - 1, trip.type);
+>> diffstat:
+>>  drivers/char/ipmi/Kconfig         |    3 ++-
+>>  drivers/clk/Kconfig               |    2 +-
+>>  drivers/gpio/Kconfig              |    2 +-
+>>  drivers/leds/Kconfig              |    2 +-
+>>  drivers/platform/mellanox/Kconfig |    9 ++++-----
+>>  drivers/platform/x86/Kconfig      |    3 ++-
+>>  drivers/thermal/intel/Kconfig     |    3 ++-
+>>  drivers/tty/serial/8250/Kconfig   |    3 ++-
+>>  8 files changed, 15 insertions(+), 12 deletions(-)
+>>
+>> Cc: Andrew Jeffery <andrew@aj.id.au>
+>> Cc: Corey Minyard <minyard@acm.org>
+>> Cc: openipmi-developer@lists.sourceforge.net
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Riku Voipio <riku.voipio@linaro.org>
+>> Cc: Stephen Boyd <sboyd@kernel.org>
+>> Cc: Michael Turquette <mturquette@baylibre.com>
+>> Cc: linux-clk@vger.kernel.org
+>> Cc: Michael Walle <michael@walle.cc>
+>> Cc: Linus Walleij <linus.walleij@linaro.org>
+>> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+>> Cc: linux-gpio@vger.kernel.org
+>> Cc: Dan Murphy <dmurphy@ti.com>
+>> Cc: Pavel Machek <pavel@ucw.cz>
+>> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+>> Cc: Lee Jones <lee@kernel.org>
+>> Cc: linux-leds@vger.kernel.org
+>> Cc: Darren Hart <dvhart@infradead.org>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Michael Shych <michaelsh@nvidia.com>
+>> Cc: Mark Gross <markgross@kernel.org>
+>> Cc: Vadim Pasternak <vadimp@nvidia.com>
+>> Cc: platform-driver-x86@vger.kernel.org
+>> Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
+>> Cc: Bin Gao <bin.gao@intel.com>
+>> Cc: Zhang Rui <rui.zhang@intel.com>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Cc: Amit Kucheria <amitk@kernel.org>
+>> Cc: linux-pm@vger.kernel.org
+>> Cc: Oskar Senft <osk@google.com>
+>> Cc: linux-serial@vger.kernel.org
+>>
 > 
-> The problem with this approach is that you are moving all the work to
-> dereference the pointers into the hot paths (the code execution), instead
-> of doing it in the slow path (where the tracepoint work is done).
-
-Good point, that is something I did not realize, thanks for pointing it out.
-
-> If you are concerned with exporting a structure then move the trace file
-> from:
->
->    include/trace/events/thermal.h to drivers/thermal/trace.h
-> 
-> like drivers/vfio/pci/trace.h and many other drivers do.
-
-Good idea, I'll do that
-
-> Read
->     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/trace_events/Makefile
-> to see how to use a trace header outside the include/trace/events directory.
-> 
-> also, by removing the pointer, you lose out on BPF and kprobe traces that
-> could dereference the pointer if you needed to trace something that was not
-> exported by the trace point itself.
-
-As the trace will be in the drivers/thermal/trace.h, it will be able to 
-use the thermal_core.h private file and no longer 
-include/linux/thermal.h, so preventing to unexport the thermal zone 
-structure from thermal.h. Consequently, we no longer have to change the 
-prototype of the traces and the pointer will stay in place.
-
-Thanks for your suggestions
-
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+~Randy
