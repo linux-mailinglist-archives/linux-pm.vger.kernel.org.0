@@ -2,160 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83036A3B54
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 07:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343AE6A3B5E
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 07:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjB0Goh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 01:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S229881AbjB0Gt4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 01:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB0Gog (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 01:44:36 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A89510AB1;
-        Sun, 26 Feb 2023 22:44:35 -0800 (PST)
+        with ESMTP id S229880AbjB0Gt4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 01:49:56 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEB0D32D;
+        Sun, 26 Feb 2023 22:49:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677480275; x=1709016275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l7fNlOQJTNMVvMxezJZRa8jk93MTm7z8h1o/L1+XyGw=;
-  b=D6cWj6ahbhDL4C6f6dII5CfR23hqwZqU2W/ejPj09phJZlboMZEYS4j8
-   DPGywoVCQ4727WILjv8rsee6Sp3q1LsCD9xATKSZHFO82mg1Wju+hudZQ
-   SdB0GsUzMsiy2hjb3TjKyKv0Ld241AO3JtTWiBI+ChBmvHz72qIcMl6+S
-   o6CQCQxFJhI9JahuzCmEnl9RTFCPyAm6bKOIVJ7e6wz54AeOnBwaI8nDT
-   FQkRM793RwzolszBM+xeWu1GZS9e7Qn/wgOLPMf1i8GppgVFi8q26bmHw
-   5DrpTd7+AZo5qaUtDbyRP3zfFkhx0zfeyXM08oERnqkajDe6XgM2FpcWw
+  t=1677480594; x=1709016594;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=r4tU+6rUB7sufgstiOuUn7jgiOxa80cctU6rlYqqDZQ=;
+  b=ikQU+jAJXIwr41nUx9XKdav+ftNfMG7OiNhnp6zmFZE7KvVaON2Ptl9S
+   PiJ5RlbhsfdofZ+K2SdWjD4lW8BVCrV2gTHiyd8K3RqNhKxeWUbrrMg43
+   jPaR/mELTpAkG9rV0Jgs9aVb/44S2g1CTMRHZ9laCLAKdu0xigfjLcvYg
+   oHA9/MsCPN2n1Uso6M9dqknkobvItRl65Ow0xAY0gTPYOPHGqMes8wdSK
+   yh1m5agdUAWLOmKYD2ur4o4EtcTPI7dqagKQWc1AHGU0jzxLQKCbxA6u3
+   HkTibPAozIkY1iI8Yj/4Ijs/XflLO7W7UYTkvjy1Hu9MYdfQZv7rQzLkG
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="332514897"
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="361348920"
 X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="332514897"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 22:44:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="651085796"
+   d="scan'208";a="361348920"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 22:49:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="737533014"
 X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="651085796"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2023 22:44:27 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWXFK-0004A3-0T;
-        Mon, 27 Feb 2023 06:44:26 +0000
-Date:   Mon, 27 Feb 2023 14:43:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mark Brown <broonie@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata'
- accessor in thermal located drivers
-Message-ID: <202302271421.ZjVUJ4DB-lkp@intel.com>
-References: <20230226225406.979703-3-daniel.lezcano@linaro.org>
+   d="scan'208";a="737533014"
+Received: from dkumarr-mobl2.gar.corp.intel.com ([10.213.123.7])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 22:49:51 -0800
+Message-ID: <e8862e3c8d73f94484a002cf376942e0863b1fb6.camel@linux.intel.com>
+Subject: Re: [Regression] cached max_state breaks ACPI processor cooling
+ device
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+Cc:     "Wang, Quanxian" <quanxian.wang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Sun, 26 Feb 2023 22:49:47 -0800
+In-Reply-To: <1d21b45a453518cfbabd827d46c14bd7ce9ef9d7.camel@intel.com>
+References: <53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com>
+         <1d21b45a453518cfbabd827d46c14bd7ce9ef9d7.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226225406.979703-3-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Sat, 2023-02-25 at 05:34 +0000, Zhang, Rui wrote:
+> On Sat, 2023-02-25 at 13:29 +0800, Zhang Rui wrote:
+> > Hi, All,
+> >=20
+> > Starting from commit c408b3d1d9bb("thermal: Validate new state in
+> > cur_state_store()") and commit a365105c685c("thermal: sysfs: Reuse
+> > cdev->max_state"), the cdev->get_max_state() is evaluated only once
+> > during cooling device registration.
+> >=20
+> > This is done to fix the below Smatch static checker warning:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drivers/thermal/thermal=
+_sysfs.c:656
+> > thermal_cooling_device_stats_update()
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0warn: potential integer=
+ overflow from user 'stats->state *
+> > stats->max_states + new_state'
+> > reported here https://lore.kernel.org/all/Y0ltRJRjO7AkawvE@kili/.
+> >=20
+> > But this actually breaks cooling devices which could have dynamic
+> > max
+> > cooling state, like ACPI processor cooling device.
+> >=20
+> > acpi_processor_driver_init
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0driver_register(&acpi_p=
+rocessor_driver);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0acpi_processor_start
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+acpi_processor_thermal_init
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0thermal_cooling_device_regi=
+ster
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0processor_get_max_state
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0acpi_processor_cpufreq_=
+init =3D true
+> > The driver doesn't count cpufreq as cooling state until
+> > acpi_processor_cpufreq_init is set later.
+> >=20
+> > As a result, without the commits above,
+> > /sys/class/thermal/cooling_device10/cur_state:0
+> > /sys/class/thermal/cooling_device10/max_state:3
+> > /sys/class/thermal/cooling_device10/type:Processor
+> > after the commits above,=20
+> > /sys/class/thermal/cooling_device10/cur_state:0
+> > /sys/class/thermal/cooling_device10/max_state:0
+> > /sys/class/thermal/cooling_device10/type:Processor
+>=20
+You really need a core API, which updates max_state. When I was trying
+to update max_state for powerclamp driver, I thought of a function to
+do this.
+This basically works under  cdev->lock, something similar to
+__thermal_cdev_update. For each thermal instances if the shallowest
+state is more than the new max_state, fail the request, otherwise set.
 
-I love your patch! Yet something to improve:
 
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on groeck-staging/hwmon-next]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230226225406.979703-3-daniel.lezcano%40linaro.org
-patch subject: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata' accessor in thermal located drivers
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230227/202302271421.ZjVUJ4DB-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
-        git checkout c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302271421.ZjVUJ4DB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/thermal/db8500_thermal.c: In function 'db8500_thermal_get_temp':
->> drivers/thermal/db8500_thermal.c:63:42: error: implicit declaration of function 'therma_zone_device_priv'; did you mean 'thermal_zone_device_priv'? [-Werror=implicit-function-declaration]
-      63 |         struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~
-         |                                          thermal_zone_device_priv
-   drivers/thermal/db8500_thermal.c:63:42: warning: initialization of 'struct db8500_thermal_zone *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   cc1: some warnings being treated as errors
+Thanks,
+Srinivas
 
 
-vim +63 drivers/thermal/db8500_thermal.c
+> Forgot to mention that this problem is
+>=20
+> Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
+>=20
+> thanks,
+> rui
+> >=20
+> > In order to fix this, there are something worth clarification IMO.
+> > 1. should we support dynamic max_state or not?
+> > =C2=A0=C2=A0 ACPI processor cooling state is a combination of processor=
+ p-
+> > states
+> > =C2=A0=C2=A0 and t-states.
+> > =C2=A0=C2=A0 t-states are static, but p-states can vary depends on proc=
+essor=20
+> > =C2=A0=C2=A0 frequency driver loaded or not.
+> > =C2=A0=C2=A0 I'm not sure if there is any other user like this, but sti=
+ll
+> > this
+> > =C2=A0=C2=A0 is a valid use case of dynamic max_state.
+> > 2. how to handle dynamic max_state for cooling device statistics in
+> > =C2=A0=C2=A0 sysfs?
+> > =C2=A0=C2=A0 IMO, when max_state changes, the definition of previous co=
+oling
+> > =C2=A0=C2=A0 device is changed as well, thus we should abandon the prev=
+ious
+> > =C2=A0=C2=A0 statistics and restart counting.
+> > 3. anything else needs to be handled when max_state changes?
+> > =C2=A0=C2=A0 Say, as the definition of each cooling state is changed wh=
+en
+> > =C2=A0=C2=A0 max_state changes, should we invalidate and re-update the
+> > =C2=A0=C2=A0 thermal instances of this cdev in each thermal zone device=
+?
+> > 4. how to detect/handle max cooling states changes?
+> > =C2=A0=C2=A0 Should we do this as before, which invokes .get_max_state(=
+)
+> > =C2=A0=C2=A0 everywhere and do updates when necessary , or
+> > =C2=A0=C2=A0 a. cache max_state like we do today
+> > =C2=A0=C2=A0 b. introduce a new API for max_state change
+> > =C2=A0=C2=A0 c. invoke the new API in the cooling device driver explici=
+tly
+> > when
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 max_state changes
+> > =C2=A0=C2=A0 d. update cached max_state value, statistics sysfs and
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 thermal_instances in the API
+> > =C2=A0=C2=A0 e. remove .get_max_state() callback as we register and upd=
+ate
+> > the
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 max_state with a fixed value each time.
+> >=20
+> > thanks,
+> > rui
+> >=20
+> >=20
+> >=20
 
-    59	
-    60	/* Callback to get current temperature */
-    61	static int db8500_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-    62	{
-  > 63		struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
-    64	
-    65		/*
-    66		 * TODO: There is no PRCMU interface to get temperature data currently,
-    67		 * so a pseudo temperature is returned , it works for thermal framework
-    68		 * and this will be fixed when the PRCMU interface is available.
-    69		 */
-    70		*temp = th->interpolated_temp;
-    71	
-    72		return 0;
-    73	}
-    74	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
