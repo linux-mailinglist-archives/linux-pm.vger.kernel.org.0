@@ -2,79 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C9A6A3600
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 01:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B4E6A3643
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 02:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjB0AwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Feb 2023 19:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S229641AbjB0B50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Feb 2023 20:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjB0AwT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 19:52:19 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AB215150
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 16:52:19 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id x34so4481681pjj.0
-        for <linux-pm@vger.kernel.org>; Sun, 26 Feb 2023 16:52:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=x4N+ipv4Z0ueanE2uVRFnU+7mwUn4iLsJ/UJ4pQlXTs=;
-        b=Ch8RqNy/BXlSvbgs7VPggxxfre1QdO6SNXV/osG20ROx0VWaB8JdUg/ynrMEon3XfK
-         MDfwIMQuvyY3ouRZCvvWm9yVDY/nMMizKxbLPqbYAQHXNIEga3/9wzw2Qpl0OwLDoXPK
-         CYfnkRwpMq4avCew9zE3iCVcZT7+C4EdFzyJKg/yGBdTdVlvYyKkgeVBRcSett7v+XHZ
-         LtwqqyRNqC44wyWk+1M2d/A5jxIY8l7svP4XR2T4bGxTOEGlDwFa59TWaGzPsZY1JSyU
-         zxz41aE+nak5MZTr6sZBw8Kt4UXWjjhmmIjNyEIy0JEh5JjZw37KRYKJAoDld/gh/kfk
-         Lqhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x4N+ipv4Z0ueanE2uVRFnU+7mwUn4iLsJ/UJ4pQlXTs=;
-        b=dTW1c9Fa8JGHjBvZ/NZWxQMyEcMncXJKHakaNQsOfjc7hNr9eS9eZJqNbnWWChuu6K
-         msUhaPJANdi6tAE+A2hLGmg3E5TWvxEj1Lf0bWKaGZIxiY9vKtdKZkSIlUOtTmNYKnSX
-         3+uf7N/B8zbcidGIJZ9siQjXDSfpF1PvrClXHOdQZXqJrgnTn5JX1aSZSZw1MrE4l8IR
-         RZOwA1W1FWjX7AmLxjufg0u9KLi05Rna3uwRyCyL2T2C1EnY+8buM7iJ7o7irMdKnzmI
-         uNOT/yIre1QK8HqfAsItxs+mty3KhvQuNuFrfjM1HnX6TvC1VAafLuKx9ENiEuN/uQUn
-         Tsqw==
-X-Gm-Message-State: AO0yUKUJx7ymWL9CGWDAb3dkS122Teti0juFWBBgHPh1FOoDHI3cSrKv
-        0mBOtYg8cxnbKmJHNh+K+Tyb1dqhKC11lEue/is=
-X-Google-Smtp-Source: AK7set9tbib26ZLo2sv1OIiLXNVwKPLbka5/1n8b2r2D/z0hYC0ETjIGhToKEL5aX+yMJ0NpJPxlbJgxdQygzygxrBI=
-X-Received: by 2002:a17:90b:1211:b0:231:1da0:dfce with SMTP id
- gl17-20020a17090b121100b002311da0dfcemr4069475pjb.3.1677459138353; Sun, 26
- Feb 2023 16:52:18 -0800 (PST)
+        with ESMTP id S229640AbjB0B5Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Feb 2023 20:57:25 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B6126C6;
+        Sun, 26 Feb 2023 17:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677463043; x=1708999043;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oXN9Efov7ltz2ez30CCK5KZv8Cvd5tH27ee1t/EGyw0=;
+  b=NBVcCC6nJHrnYReJQNaiL5bY1vHaEZtZM8yOOceOoVDMicB+WzP+/4lW
+   0Rh3k0QB1V8BDHwN75DdFkGyrS2CFsUghoVzDYMqJfcHKoK+ra79TSzz/
+   fgUESTLbqsAjJJ+p5RPKI2sW6wilFRT2r0vFdQw93gS5CkTxe5YOVJSNF
+   NhCbof4jQYjAzgG5SpIQ8UZqwZh/U11Zv38hBjx7EBt8oi660EjvL1nqP
+   dcm9Wk1KZ2Y0Xo+dJxdBks8ytC1M/BIH0J2vabcCSFne1UM43uvze/eaX
+   Nkd1UtOdNuFEJGjWq9Nfz/LXHRYJGwLoAzNzIUtpp3aWTBfCJCECPQDi2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="317560865"
+X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
+   d="scan'208";a="317560865"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 17:57:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="919111061"
+X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
+   d="scan'208";a="919111061"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Feb 2023 17:57:15 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pWSlP-00040Z-0f;
+        Mon, 27 Feb 2023 01:57:15 +0000
+Date:   Mon, 27 Feb 2023 09:57:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata'
+ accessor in thermal located drivers
+Message-ID: <202302270923.6ETtTcpX-lkp@intel.com>
+References: <20230226225406.979703-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:3255:b0:41f:988f:1328 with HTTP; Sun, 26 Feb 2023
- 16:52:16 -0800 (PST)
-From:   Elisabeth Johanna <elisajoh4992@gmail.com>
-Date:   Sun, 26 Feb 2023 16:52:16 -0800
-Message-ID: <CALjaFX+HSa9ihT0eBtMc9aAbYsQTp6de+dMefXHCu-FG2DW_Eg@mail.gmail.com>
-Subject: We finance viable projects only
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230226225406.979703-3-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attention: Sir
+Hi Daniel,
 
-Our Company is willing, ready to help you grow your network and offer
-you Loan funds to complete and fund your existing Projects. We can
-send you our Company Terms and Condition after review of your project
-plan and executive summary of your project, if you are serious and
-Interested contact us for further Information:
+I love your patch! Perhaps something to improve:
 
-Email: elisajoh4992@gmail.com
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on groeck-staging/hwmon-next]
+[cannot apply to v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230226225406.979703-3-daniel.lezcano%40linaro.org
+patch subject: [PATCH v3 02/20] thermal/core: Use the thermal zone 'devdata' accessor in thermal located drivers
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230227/202302270923.6ETtTcpX-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230227-065829
+        git checkout c12531f9e11ce889a1c6adaa17dfbaa04a5d74a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/thermal/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302270923.6ETtTcpX-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/thermal/db8500_thermal.c: In function 'db8500_thermal_get_temp':
+   drivers/thermal/db8500_thermal.c:63:42: error: implicit declaration of function 'therma_zone_device_priv'; did you mean 'thermal_zone_device_priv'? [-Werror=implicit-function-declaration]
+      63 |         struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                          thermal_zone_device_priv
+>> drivers/thermal/db8500_thermal.c:63:42: warning: initialization of 'struct db8500_thermal_zone *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
 
 
-Best regards,
+vim +63 drivers/thermal/db8500_thermal.c
 
-Elisabeth Johanna
+    59	
+    60	/* Callback to get current temperature */
+    61	static int db8500_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+    62	{
+  > 63		struct db8500_thermal_zone *th = therma_zone_device_priv(tz);
+    64	
+    65		/*
+    66		 * TODO: There is no PRCMU interface to get temperature data currently,
+    67		 * so a pseudo temperature is returned , it works for thermal framework
+    68		 * and this will be fixed when the PRCMU interface is available.
+    69		 */
+    70		*temp = th->interpolated_temp;
+    71	
+    72		return 0;
+    73	}
+    74	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
