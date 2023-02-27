@@ -2,112 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6004D6A4C23
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 21:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6056A4D86
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 22:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjB0URy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 15:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S229711AbjB0VrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 16:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjB0URw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 15:17:52 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2803726B1;
-        Mon, 27 Feb 2023 12:17:51 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id f14so3044824iow.5;
-        Mon, 27 Feb 2023 12:17:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l0/uUKbeUlMXSZoxUa2qhMyrwjpbehtiHXetc7DLyTE=;
-        b=LQDdwcyhlKA8e4El7VCXFQvI81RT0I7RygQKZMLmIqAjqh8CQSVOo/p6gKa8MgjxlT
-         iAVwrcUg9Fo8+rroDhKZdNC41HevQRloYo5s9+ZbMFzXJUxgkv2UxpzsdEqDSNtspKfj
-         0bTvb+XEd/GP6Qyhdgv0z/YAl3bEgRyUucE/yJletywHJh1IeZaxmXzbL+sShaYESWlG
-         s/t7sd2iP+3dqiq+812PD0JqDbitYMgRJJFCs8lpgHDb5LbjIYQjra77o78dNv8GSSWu
-         fRBEaF0mXKceKgW0tOj30lM8S3KNDGqdHPaDesp/x7f4Y95RgO71R4P7ljdzZugO7QJY
-         HH2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l0/uUKbeUlMXSZoxUa2qhMyrwjpbehtiHXetc7DLyTE=;
-        b=Ab8aZgFvKZ/ZacqTeJTe2TuhA+KIWGyNDaxHNNTUtmR1T78wQpossqodTQGgVVnM2Q
-         sn4UUHaWMEHVMr2rzdzLSVdZnqK0goEFS6QlBNii+NTViQzo0JrPVwzaDVftDxwllMis
-         kCErpXJrIK8efk0OWKgm9+32jhdmCwIoyY7q5psNZjeF1+MqEAYnR39YSoWyseSiJobA
-         /g/dgnYonKgM5zjWpe/bd3Dgg+73VzG5OisWA5b9XBFVzioC9XHvOBDalFPs2NgC5u3e
-         EjLLJ8mMP4vYT1kaFt7hhP2AjMnjsbpnR9zb/8uizDgvusZXqkC6Yt4MKloBkHMLDPBc
-         e5Rw==
-X-Gm-Message-State: AO0yUKVztnBlpu7pLkbY7yB1o1EpSKomEFntR9PmAtBXnGAH59I6Tx0z
-        9C+ZtKdpb06br+IfHQ+jaFug5HfZ4UKYfkHMlZr9WBp8
-X-Google-Smtp-Source: AK7set9pYv3iw2j7lNB9A+/BF4u3cKIAYeVUT78U8rpH2iDU2ilsazWqMgK2bIRctsIPkzAYT1GXwLUjLk3vI/zg8cA=
-X-Received: by 2002:a02:290f:0:b0:3c5:1986:699f with SMTP id
- p15-20020a02290f000000b003c51986699fmr205449jap.0.1677529070502; Mon, 27 Feb
- 2023 12:17:50 -0800 (PST)
+        with ESMTP id S229831AbjB0Vq7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 16:46:59 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA061F909;
+        Mon, 27 Feb 2023 13:46:57 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RLIGAr020104;
+        Mon, 27 Feb 2023 21:46:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RMY240oahL23plEikFUklqVHDD5xMLS3GDtXfnEQWn4=;
+ b=jW7BqaCOg/npZmYBkXsBBpVhRWttBo9JBUz7GevpfbU4yuZ0oSA1IEvLz7sh9nfYWp2A
+ CxPcJRoXhu0D35gJDNsDbA1UovgtZPrqDwhHr3AqJMGh6MXOiCEa//8WP47sWjrBelbR
+ pKnaXlmjFz4xOUmH3xwvLjdDWbgxjft+Pe5EDdaF99sD0clNfboNnj7NikRxm0bHmMac
+ 6R48AuTKnDRzTxFq4ND0xJa2hxnVvxQD13EW5VgIPMgO4L/ggSB7qpIpXE0JJluhU7DO
+ Y59jHkya9CqHTf77VgRISGHTaL94sFb+oC23qI8fCPMoj64EIj5M5zm6mNgSo8mtsMX4 bg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny81qeewy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 21:46:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RLkqkk020784
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Feb 2023 21:46:52 GMT
+Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
+ 2023 13:46:52 -0800
+Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
+ probe
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gregkh@google.com>
+References: <20220531183054.6476-1-quic_manafm@quicinc.com>
+ <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
+From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Message-ID: <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
+Date:   Mon, 27 Feb 2023 13:46:52 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <4927895.GXAFRqVoOG@tool> <20230213202542.aqsw6tzspo4nrq7n@mercury.elektranox.org>
- <CABwr4_sd-kzg90VrQQOw91XsTXOcMq6qkj=TNPy6YQDuA6QQuQ@mail.gmail.com> <20230213212200.fgtcfm333aunrxqo@mercury.elektranox.org>
-In-Reply-To: <20230213212200.fgtcfm333aunrxqo@mercury.elektranox.org>
-From:   =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?= <dgcbueu@gmail.com>
-Date:   Mon, 27 Feb 2023 21:17:39 +0100
-Message-ID: <CABwr4_vKxWKJsNDVF9yNeSSk4R3nDov-+qY5=nhp4ggr88EpAw@mail.gmail.com>
-Subject: Re: [PATCH] power: reset: linkstation-poweroff: add LS220D/E
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
+X-Proofpoint-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302270173
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
-
-El lun, 13 feb 2023 a las 22:22, Sebastian Reichel
-(<sebastian.reichel@collabora.com>) escribi=C3=B3:
->
-> [+cc DT binding people]
->
+On 6/9/22 3:12 PM, Sebastian Reichel wrote:
 > Hi,
 >
-> On Mon, Feb 13, 2023 at 09:38:24PM +0100, Daniel Gonz=C3=A1lez Cabanelas =
-wrote:
-> > > >  static const struct of_device_id ls_poweroff_of_match[] =3D {
-> > > > +     { .compatible =3D "buffalo,ls220d",
-> > > > +       .data =3D &linkstation_power_off_cfg,
-> > > > +     },
-> > > > +     { .compatible =3D "buffalo,ls220de",
-> > > > +       .data =3D &linkstation_power_off_cfg,
-> > > > +     },
-> > > >       { .compatible =3D "buffalo,ls421d",
-> > > >         .data =3D &linkstation_power_off_cfg,
-> > > >       },
-> > >
-> > > Where is the patch adding these compatibles to the DT binding
-> > > documentation?
-> >
-> > There is no DT binding at all. So no documentation.
->
-> You are referencing a compatible, so there is supposed to be
-> a DT binding for it. Note, that you also need DT bindings for
-> board level compatible values. See for example:
->
-> Documentation/devicetree/bindings/arm/rockchip.yaml
-> Documentation/devicetree/bindings/arm/fsl.yaml
-
-Since the driver uses the root compatible string, I don't see any
-binding to document at least for the driver itself.  Nor I don't see
-where a reference for this driver should be put if I documented the
-board compatible strings.
-
+> On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+>> Registering the cooling device from the probe can result in the
+>> execution of get_property() function before it gets initialized.
+>>
+>> To avoid this, register the cooling device from a workqueue
+>> instead of registering in the probe.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+>> ---
+> This removes error handling from the psy_register_cooler() call, so
+> it introduces a new potential problem. If power_supply_get_property()
+> is called to early -EAGAIN is returned. So can you elaborate the problem
+> that you are seeing with the current code?
 >
 > -- Sebastian
+
+When the device boots up with all the vendor modules getting loaded,           
+here is what we're seeing when booting up with 6.1.11 recently. First          
+log is printed with adding a pr_err() in __power_supply_register().                 
+                                                                               
+[    7.008938][  T682] power_supply battery: psy_register_cooler failed, rc=-11
+[    7.030941][  T682] qti_battery_charger: probe of qcom,battery_charger failed with error -11
+                                                                               
+Here, our downstream qti_battery_charger driver exposes the following          
+power supply properties POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and             
+POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX under a power supply device.        
+                                                                               
+This is happening because of the following call sequence,                      
+                                                                               
+battery_chg_probe() ->                                                         
+  power_supply_register() ->                                                   
+    psy_register_cooler() ->                                                   
+      thermal_cooling_device_register() ->                                     
+        cdev->ops->get_max_state() ->                                          
+          ps_get_max_charge_cntl_limit() ->                                    
+            power_supply_get_property()                                        
+                                                                               
+ends up calling power_supply_get_property() to read CHARGE_CONTROL_LIMIT       
+property.                                                                      
+                                                                               
+However, it returns -EAGAIN because psy->initialized is set to true            
+later after psy_register_cooler() succeeds. So, this ends up in a              
+driver probe failure forever.
+
+-Subbaraman
+>
+>>  drivers/power/supply/power_supply_core.c | 10 ++++------
+>>  1 file changed, 4 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+>> index 385814a14a0a..74623c4977db 100644
+>> --- a/drivers/power/supply/power_supply_core.c
+>> +++ b/drivers/power/supply/power_supply_core.c
+>> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+>>  }
+>>  EXPORT_SYMBOL_GPL(power_supply_changed);
+>>  
+>> +static int psy_register_cooler(struct power_supply *psy);
+>>  /*
+>>   * Notify that power supply was registered after parent finished the probing.
+>>   *
+>> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+>>   * calling power_supply_changed() directly from power_supply_register()
+>>   * would lead to execution of get_property() function provided by the driver
+>>   * too early - before the probe ends.
+>> + * Also, registering cooling device from the probe will execute the
+>> + * get_property() function. So register the cooling device after the probe.
+>>   *
+>>   * Avoid that by waiting on parent's mutex.
+>>   */
+>> @@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
+>>  	}
+>>  
+>>  	power_supply_changed(psy);
+>> +	psy_register_cooler(psy);
+>>  
+>>  	if (psy->dev.parent)
+>>  		mutex_unlock(&psy->dev.parent->mutex);
+>> @@ -1261,10 +1265,6 @@ __power_supply_register(struct device *parent,
+>>  	if (rc)
+>>  		goto register_thermal_failed;
+>>  
+>> -	rc = psy_register_cooler(psy);
+>> -	if (rc)
+>> -		goto register_cooler_failed;
+>> -
+>>  	rc = power_supply_create_triggers(psy);
+>>  	if (rc)
+>>  		goto create_triggers_failed;
+>> @@ -1294,8 +1294,6 @@ __power_supply_register(struct device *parent,
+>>  add_hwmon_sysfs_failed:
+>>  	power_supply_remove_triggers(psy);
+>>  create_triggers_failed:
+>> -	psy_unregister_cooler(psy);
+>> -register_cooler_failed:
+>>  	psy_unregister_thermal(psy);
+>>  register_thermal_failed:
+>>  	device_del(dev);
+
