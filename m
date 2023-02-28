@@ -2,63 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48066A57E2
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 12:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A3F6A57F0
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 12:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjB1LYa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Feb 2023 06:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S231634AbjB1LYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Feb 2023 06:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjB1LYK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Feb 2023 06:24:10 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872C6CA1A
-        for <linux-pm@vger.kernel.org>; Tue, 28 Feb 2023 03:23:37 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v16so6529057wrn.0
-        for <linux-pm@vger.kernel.org>; Tue, 28 Feb 2023 03:23:37 -0800 (PST)
+        with ESMTP id S230115AbjB1LYM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Feb 2023 06:24:12 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571971E9D0
+        for <linux-pm@vger.kernel.org>; Tue, 28 Feb 2023 03:23:43 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bx12so6178933wrb.11
+        for <linux-pm@vger.kernel.org>; Tue, 28 Feb 2023 03:23:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677583417;
+        d=linaro.org; s=google; t=1677583418;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B+RTeMjiH2Yk42W57PYAK6Mb85gdhTfPcaFRy4giwH0=;
-        b=EmQXnQtsDg+56Wuq6ewQRNDc28TLYzPGy1X89Ssg0MochaT9hmPr0KireBQjSDQ6E7
-         bjvuyvug9z81Yd9EbbXOOxBwJg1i3N1ZuXnZgmm+0Upk0EiUbSe5UZTvyAjiPCCohQTx
-         1EPy2RiGpQVVKptvZtAiTydYryNJwyZR8OcG5veCR1GjT8UnWQ5ba0ialhHB+H/0BqEJ
-         bHdStmGGKz34GeGA2WXBKwEO9HSHUmh8FYElsvfQYZPEweZc9I9E7Gf6lM9m6RZS6uu9
-         dRPJHrbvPaJdQureGjN6HrS9w/znb8n6nZaDYcDiRPipyO6tIE47bRCzCMEymz21NUqI
-         FT8A==
+        bh=tS0guMTDp+HnyAw7+AQL4Z1IASYNHpKANmt65sLAMFo=;
+        b=As5cnEs6KbgFzz64hQ+xg783ZBl8nVKUvbDG3lsn7Xxbsgc+d5VLgBw9h8c2bEVmYD
+         Q0heWRMa2Z0RnelgQzMkmiEu+6pZfz6z6lZNnPeSpSW29d/425F+G7wPhR3AjBALI9Fp
+         LoLvyYA+Ae7tnAxSxdZ8lls8x4a0Vy/y/4AHj/sjTk4H4x5/afakN2wU3/8SsQlR1nQ9
+         75wqnM/NAkWSDsqp89Nr/sYttZBTCYCXLCdnG3OGCk13jiI/uOOBmCCQLTZoy7KlmE40
+         jLrMIP8BAx1wwJfjDna2h+qWZRhY6xh+d1qOA3hNheEgO0PYKNUGGrXcLdz/DQ/hFh8U
+         nmjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677583417;
+        d=1e100.net; s=20210112; t=1677583418;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B+RTeMjiH2Yk42W57PYAK6Mb85gdhTfPcaFRy4giwH0=;
-        b=SwuEHaPqbP+bxukohEmuYnBIjP7RMHxt7+tXLjYgmoPdxdJncm6k+GJ4zK1m6P3ejp
-         eyxhyPyi6UAbkXdLfgUPNBILwosdrSfuWz+Yeh1oBbhczVnCljax66FjGBCM8oWWEfVI
-         9COwHlRWy7xQ/tQC/4ZFe0VUfcn85RbGFR6k5Pj42xwGYWrm1AkgaaNmPjVPmsoFK8vC
-         0ixmpYmjJJ9V79hSFdlQSatFyk3XxI0wG0KdUEOc927qd60jc+e82A4vfa8ChsFYQIzx
-         FUXhGFV0HaiXjXQZwX62CC5ePk60oZ5dR+wUVJzi7RnCV/OVd+vNLJ+ozb3l1gJMy17w
-         EMiQ==
-X-Gm-Message-State: AO0yUKWWLWetxA4hUxh2EfH3kCdD/ZeQWlRONAAXIiHlI6/vGdhTwIkj
-        GA2GQ6HMO9K00lxKaorgTqcv8w==
-X-Google-Smtp-Source: AK7set/Qza96mNPIlieljNjhA7dJUgVD6toVz9gG/9S+f4QAhjyTiZf47zgTvEnBET9YKnow7SAOjQ==
-X-Received: by 2002:a5d:44cf:0:b0:2c7:107c:e172 with SMTP id z15-20020a5d44cf000000b002c7107ce172mr2119658wrr.41.1677583417089;
-        Tue, 28 Feb 2023 03:23:37 -0800 (PST)
+        bh=tS0guMTDp+HnyAw7+AQL4Z1IASYNHpKANmt65sLAMFo=;
+        b=cSq40AVCOfbZd7SM2vhpk03Ycf4xzS5eDlgOdmQeQMSHzhj/cOmJSAKsq2H7ktdLMB
+         UJg+/RQmg70lF7w1fysv3XxgASw6m/47dzVqNbRHSfWPa/PF+EWhWRjuUuuc0EZ0ZBup
+         TyEHepeP71K0ANPbA5sGFn2mVA1RQgjvVhUFVsOxURSWY6I19ktwHz+7M59+FTSNBuZY
+         KHQpnL6Co8ZNNdOtyDl0s3dluvsOxdu3L3Ih2yp381OSNgyughoV0c7K8Js5u99ckFS2
+         C2wFvvhd7ppxpxun+7kjCd/3lhcJE88hbRA+6uzc27LBmVs7NVmKXgnrqlLK1vSQPPX9
+         uGdg==
+X-Gm-Message-State: AO0yUKWlJBXPgwoWFyrw9298uIBpZDEUI8e/2zmlWeQFvlwU7Gq+iEhD
+        t/WKxhQbvIBR8Bj8wSMgrEOtpQ==
+X-Google-Smtp-Source: AK7set939nHNbOmdgT6Wu8HHPjxaaVa2lkIb1WW2vwQOAPYf48dfKkYhJw9q94O+ug1045p75CfkGw==
+X-Received: by 2002:a05:6000:18f:b0:2bd:d34e:5355 with SMTP id p15-20020a056000018f00b002bdd34e5355mr1611428wrx.20.1677583418047;
+        Tue, 28 Feb 2023 03:23:38 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6830:6390:2815:b6a5])
-        by smtp.gmail.com with ESMTPSA id z5-20020a5d6545000000b002c5501a5803sm9598130wrv.65.2023.02.28.03.23.36
+        by smtp.gmail.com with ESMTPSA id z5-20020a5d6545000000b002c5501a5803sm9598130wrv.65.2023.02.28.03.23.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:23:36 -0800 (PST)
+        Tue, 28 Feb 2023 03:23:37 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        Support Opensource <support.opensource@diasemi.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.de>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v4 14/19] thermal/drivers/da9062: Don't access the thermal zone device fields
-Date:   Tue, 28 Feb 2023 12:22:33 +0100
-Message-Id: <20230228112238.2312273-15-daniel.lezcano@linaro.org>
+Subject: [PATCH v4 15/19] thermal/hwmon: Use the thermal_core.h header
+Date:   Tue, 28 Feb 2023 12:22:34 +0100
+Message-Id: <20230228112238.2312273-16-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
 References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
@@ -73,66 +74,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver is reading the passive polling rate in the thermal zone
-structure. We want to prevent the drivers to rummage around in the
-thermal zone structure.
+The thermal_hwmon is playing with the thermal core code
+internals. Changing the code would be too invasive for now.
 
-On the other side, the delay is what the driver passed to the
-thermal_zone_device_register() function, so it has already the
-information.
+We can consider the thermal_hwmon.c is part of the thermal core code
+as it provides a glue to tie the hwmon and the thermal zones.
 
-Reuse the information we have instead of reading the information we
-set.
+Let's include the thermal_core.h header.
 
+No functional change intended.
+
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 ---
- drivers/thermal/da9062-thermal.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/thermal/thermal_hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
-index e7097f354750..2d31b1f73423 100644
---- a/drivers/thermal/da9062-thermal.c
-+++ b/drivers/thermal/da9062-thermal.c
-@@ -41,6 +41,8 @@
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index bc02095b314c..c59db17dddd6 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -17,6 +17,7 @@
+ #include <linux/thermal.h>
  
- #define DA9062_MILLI_CELSIUS(t)			((t) * 1000)
+ #include "thermal_hwmon.h"
++#include "thermal_core.h"
  
-+static unsigned int pp_tmp = DA9062_DEFAULT_POLLING_MS_PERIOD;
-+
- struct da9062_thermal_config {
- 	const char *name;
- };
-@@ -95,7 +97,10 @@ static void da9062_thermal_poll_on(struct work_struct *work)
- 		thermal_zone_device_update(thermal->zone,
- 					   THERMAL_EVENT_UNSPECIFIED);
- 
--		delay = thermal->zone->passive_delay_jiffies;
-+		/*
-+		 * pp_tmp is between 1s and 10s, so we can round the jiffies
-+		 */
-+		delay = round_jiffies(msecs_to_jiffies(pp_tmp));
- 		queue_delayed_work(system_freezable_wq, &thermal->work, delay);
- 		return;
- 	}
-@@ -155,7 +160,6 @@ static int da9062_thermal_probe(struct platform_device *pdev)
- {
- 	struct da9062 *chip = dev_get_drvdata(pdev->dev.parent);
- 	struct da9062_thermal *thermal;
--	unsigned int pp_tmp = DA9062_DEFAULT_POLLING_MS_PERIOD;
- 	const struct of_device_id *match;
- 	int ret = 0;
- 
-@@ -208,8 +212,7 @@ static int da9062_thermal_probe(struct platform_device *pdev)
- 	}
- 
- 	dev_dbg(&pdev->dev,
--		"TJUNC temperature polling period set at %d ms\n",
--		jiffies_to_msecs(thermal->zone->passive_delay_jiffies));
-+		"TJUNC temperature polling period set at %d ms\n", pp_tmp);
- 
- 	ret = platform_get_irq_byname(pdev, "THERMAL");
- 	if (ret < 0)
+ /* hwmon sys I/F */
+ /* thermal zone devices with the same type share one hwmon device */
 -- 
 2.34.1
 
