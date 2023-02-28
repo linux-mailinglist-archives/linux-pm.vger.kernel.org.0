@@ -2,230 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341396A5A57
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 14:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40A26A5F62
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 20:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjB1NuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Feb 2023 08:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S229509AbjB1TNM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Feb 2023 14:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjB1NuU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Feb 2023 08:50:20 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A4B765;
-        Tue, 28 Feb 2023 05:50:18 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id cq23so40363026edb.1;
-        Tue, 28 Feb 2023 05:50:18 -0800 (PST)
+        with ESMTP id S229445AbjB1TNL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Feb 2023 14:13:11 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05D56A55
+        for <linux-pm@vger.kernel.org>; Tue, 28 Feb 2023 11:13:10 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id f13so44384482edz.6
+        for <linux-pm@vger.kernel.org>; Tue, 28 Feb 2023 11:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UK4Nxu8VuNlDMW0oI9hxwlYcdkLqjNPKCstHpYnJQtw=;
+        b=MGy5sEmNu+jh1k+6nJc9DKK9iT1TACwZ56Wx0wM8QyLNIB5Qw6VFdyQiKJFrIVk7Q9
+         MITGDrPGJzLqQbF1oakXWr0xi5R3qPWv7BZZ+ODdqTQSJCSXBIu44nFtnkPnTHz47K+y
+         OXWMB8HZNJEFL+aKtBwbr30doS8nVpzRTtpfNQOftEW9FB3+NX7jE/a7V57lUPshHXMv
+         uBA/2VsfA0LERRc6YjcLvr92aM056thkPTtinQSloOvgPMR2OeNVUYkUoFnMc5yUuL5W
+         zElsu+kmyXr17Q5VN2VU73yQGu1SlKKrPTmUas/bggSjZVPQxSRl3hUzRoIMu5wgMcWK
+         304g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677592217;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tCxnAj+Q7kSfLUaLTs010WnxrZ5KYykWmnNR3WSnBBw=;
-        b=0GjdbvjV6brpNyr01lKd9RSO5ev+FlUQ50swllTlPaDHNeALybv+74eEX0H/+PsqEc
-         bMsGgIobjd3JDUJIujdDKP2N2qDu+pKiOZIpDUqdKKThIqDOsn8l89qxeo8bX/h8BX8O
-         IkgNImpRysfKHTLlxQrZeSQaYHPLXr4IT2R0cqWGF2XKWBLFdXMKvXbvX86Z2tHaQFNW
-         ayW/e3ALMn2kQUTO28RrBGErD/bKJanpBCvNg6TpdUpQuTcRBZm3taxsMygr+p4qcItc
-         Wsi+T+GFkrh5siwBKBkcVczXTQykXsSBV/vBTy53QdiFS0jLHWkmTS2h1xNsFj6HUHzq
-         LYZQ==
-X-Gm-Message-State: AO0yUKWQr6WQyEOhyBiNummfK41XYPIPHoMzoGMTGhuL65kYMg/IEoTL
-        cC5ppoFVtn2T6Dztpq8Ezz3O5HYWDIkmpUr0WGE=
-X-Google-Smtp-Source: AK7set8S5ezEf2wc4QyBDfF9GX0sz25bCIICWeEW9UY6IYdnuV9vR5N4xHqeSBuAbFFoX9z04lWsqtmBSYzEer3mD94=
-X-Received: by 2002:a17:906:4bc8:b0:8ce:cb8f:3747 with SMTP id
- x8-20020a1709064bc800b008cecb8f3747mr1274124ejv.5.1677592216859; Tue, 28 Feb
- 2023 05:50:16 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UK4Nxu8VuNlDMW0oI9hxwlYcdkLqjNPKCstHpYnJQtw=;
+        b=iajzfoF1bLjSVzaajjvPbakYqxvbrvO78DtsxjWmz5dwiANtM8JoxONBQvUhqE4L/R
+         bjt+pjWOih/lHoFUSIv9J8cnYfkIBb93Nay9CgxlaLpesZ5qZSUSXarL1RYg2AHYPZeN
+         TTdJ08Zn2dx8YcVdfVsNDlO9riPoH23DjjksJ8UCpqOdTPaVAnhOjNzP+XRkODFy5iEG
+         RBk5qr/CH0b9cknN4qJd3WOaWqusEQO0NDAPCEj2aP+stlo1hjcZ2Mobb26ecMR7OJ4H
+         kpbnP6PNmJeac2KHwr1VmlSTWlk2512lqRXLShHrPKT9g1+qxsSWbyg6ZlIJi3T+fsoe
+         jVbQ==
+X-Gm-Message-State: AO0yUKVOzVyObCXFzZO4nnOed3lR3N/C95nYQJtaitxgRmOs0f+j5wMu
+        MevaY058j4TYanhK1EWfq/FrMo0T2UsCMua7kFM=
+X-Google-Smtp-Source: AK7set9jOFJayVOI9nSxcyGj8fCokkpvMW/KvKDYvLhwxCEtqf3kSiUkOlfxLjiAsucT3H6mmPrln5z8uOOAzhlDjuk=
+X-Received: by 2002:a50:9f05:0:b0:4ac:cdd8:fbb5 with SMTP id
+ b5-20020a509f05000000b004accdd8fbb5mr2358066edf.3.1677611589021; Tue, 28 Feb
+ 2023 11:13:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20230220143143.3492-1-petr.pavlu@suse.com> <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
- <a75a9e85-5682-1527-2e74-e1f7cf69132e@suse.com>
-In-Reply-To: <a75a9e85-5682-1527-2e74-e1f7cf69132e@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Feb 2023 14:50:05 +0100
-Message-ID: <CAJZ5v0hUh0oEK9DCD7SFWLrW0avfZ5JEgNhO=A1FaBZsOXKC9A@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, lenb@kernel.org,
-        viresh.kumar@linaro.org, pmladek@suse.com, mcgrof@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a17:906:701:b0:8b1:6e81:b190 with HTTP; Tue, 28 Feb 2023
+ 11:13:08 -0800 (PST)
+Reply-To: fiona.hill.2023@outlook.com
+From:   Fiona Hill <thankgod07062@gmail.com>
+Date:   Tue, 28 Feb 2023 11:13:08 -0800
+Message-ID: <CA+wdF_GSaJNXXZvPke2u6jA5obj7O_56C-1QyNR=B=H_dhf30Q@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:536 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5212]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [thankgod07062[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [thankgod07062[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [fiona.hill.2023[at]outlook.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:05 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
->
-> On 2/22/23 16:04, Rafael J. Wysocki wrote:
-> > On Mon, Feb 20, 2023 at 3:32 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
-> >> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
-> >> interface defined by ACPI. Allowed performance states and parameters
-> >> must be same for each CPU.
-> >
-> > This is not a requirement set by the ACPI specification, though, but
-> > the assumption made by the drivers in question AFAICS.  It would be
-> > good to clarify this here.
->
-> I can simplify this paragraph to:
-> Both acpi-cpufreq and pcc-cpufreq drivers use platform firmware controls
-> which are defined by ACPI. It is possible to treat these interfaces as
-> platform devices.
->
-> >> This makes it possible to model these
-> >> interfaces as platform devices.
-> >>
-> >> The patch extends the ACPI parsing logic to check the ACPI namespace if
-> >> the PPC or PCC interface is present and creates a virtual platform
-> >> device for each if it is available.
-> >
-> > I'm not sure that this is the best approach.
-> >
-> > The ACPI subsystem already walks the ACPI namespace twice when
-> > enumerating devices and CPUs.  In particular, acpi_processor_add() is
-> > invoked for each of them in the first on these walks, so it might as
-> > well take care of creating the requisite platform device if _PCT is
-> > present, can't it?
->
-> Makes sense, I see that acpi_processor_get_info() has some logic for handling
-> the first CPU so that looks to me as a good place to hook a check for _PCT.
->
-> >> The acpi-cpufreq and pcc-cpufreq
-> >> drivers are then updated to map to these devices.
-> >>
-> >> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
-> >> boot and only if a given interface is available in the firmware.
-> >>
-> >> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> >> ---
-> >>
-> >> Changes since v1 [1]:
-> >> - Describe the worst case scenario without the recent fix 0254127ab977e
-> >>   ("module: Don't wait for GOING modules") and refer to its discussion
-> >>   in the commit message.
-> >> - Consider ACPI processor device objects when looking for _PCT, in
-> >>   addition to processor objects.
-> >> - Add a few more comments explaining the code.
-> >>
-> >> [1] https://lore.kernel.org/lkml/20230131130041.629-1-petr.pavlu@suse.com/
-> >>
-> >>  drivers/acpi/Makefile          |  1 +
-> >>  drivers/acpi/acpi_cpufreq.c    | 77 ++++++++++++++++++++++++++++++++++
-> >>  drivers/acpi/bus.c             |  1 +
-> >>  drivers/acpi/internal.h        |  2 +
-> >>  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++--------
-> >>  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++-----
-> >>  6 files changed, 127 insertions(+), 27 deletions(-)
-> >>  create mode 100644 drivers/acpi/acpi_cpufreq.c
-> >>
-> >> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-> >> index feb36c0b9446..880db1082c3e 100644
-> >> --- a/drivers/acpi/Makefile
-> >> +++ b/drivers/acpi/Makefile
-> >> @@ -57,6 +57,7 @@ acpi-y                                += evged.o
-> >>  acpi-y                         += sysfs.o
-> >>  acpi-y                         += property.o
-> >>  acpi-$(CONFIG_X86)             += acpi_cmos_rtc.o
-> >> +acpi-$(CONFIG_X86)             += acpi_cpufreq.o
-> >>  acpi-$(CONFIG_X86)             += x86/apple.o
-> >>  acpi-$(CONFIG_X86)             += x86/utils.o
-> >>  acpi-$(CONFIG_X86)             += x86/s2idle.o
-> >> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
-> >> new file mode 100644
-> >> index 000000000000..4e4ceb7cd226
-> >> --- /dev/null
-> >> +++ b/drivers/acpi/acpi_cpufreq.c
-> >> @@ -0,0 +1,77 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * Registration of platform devices for ACPI Processor Performance Control and
-> >> + * Processor Clocking Control.
-> >> + */
-> >> +
-> >> +#include <linux/acpi.h>
-> >> +#include <linux/platform_device.h>
-> >> +
-> >> +#include <acpi/processor.h>
-> >> +
-> >> +#include "internal.h"
-> >> +
-> >> +static void __init cpufreq_add_device(const char *name)
-> >> +{
-> >> +       struct platform_device *pdev;
-> >> +
-> >> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
-> >> +                                              0);
-> >> +       if (IS_ERR(pdev))
-> >> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
-> >> +}
-> >> +
-> >> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
-> >> +                                        void *context, void **return_value)
-> >> +{
-> >> +       bool *pct = context;
-> >> +       acpi_status status;
-> >> +       acpi_object_type acpi_type;
-> >> +       struct acpi_device *acpi_dev;
-> >> +
-> >> +       static const struct acpi_device_id processor_device_ids[] = {
-> >> +               { ACPI_PROCESSOR_OBJECT_HID, 0 },
-> >> +               { ACPI_PROCESSOR_DEVICE_HID, 0 },
-> >> +               { "", 0 },
-> >> +       };
-> >> +
-> >> +       /* Skip nodes that cannot be a processor. */
-> >> +       status = acpi_get_type(handle, &acpi_type);
-> >> +       if (ACPI_FAILURE(status))
-> >> +               return status;
-> >> +       if (acpi_type != ACPI_TYPE_PROCESSOR && acpi_type != ACPI_TYPE_DEVICE)
-> >> +               return AE_OK;
-> >> +
-> >> +       /* Look at the set IDs if it is really a one. */
-> >> +       acpi_dev = acpi_fetch_acpi_dev(handle);
-> >> +       if (acpi_dev == NULL ||
-> >> +           acpi_match_device_ids(acpi_dev, processor_device_ids))
-> >> +               return AE_OK;
-> >> +
-> >> +       /* Check if it has _PCT and stop the walk as all CPUs must be same. */
-> >> +       *pct = acpi_has_method(handle, "_PCT");
-> >> +       return AE_CTRL_TERMINATE;
-> >> +}
-> >> +
-> >> +void __init acpi_cpufreq_init(void)
-> >> +{
-> >> +       bool pct = false;
-> >> +       acpi_status status;
-> >> +       acpi_handle handle;
-> >> +
-> >> +       /*
-> >> +        * Check availability of the PPC by looking at the presence of the _PCT
-> >> +        * object under the first processor definition.
-> >> +        */
-> >> +       acpi_walk_namespace(ACPI_TYPE_ANY, ACPI_ROOT_OBJECT, ACPI_UINT32_MAX,
-> >> +                           acpi_pct_match, NULL, &pct, NULL);
-> >> +       if (pct)
-> >> +               cpufreq_add_device("acpi-cpufreq");
-> >
-> > It should be possible to combine this with CPU enumeration as stated above.
->
-> Ack.
->
-> >> +
-> >> +       /* Check availability of the PCC by searching for \_SB.PCCH. */
-> >> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
-> >> +       if (ACPI_FAILURE(status))
-> >> +               return;
-> >> +       if (acpi_has_method(handle, "PCCH"))
-> >> +               cpufreq_add_device("pcc-cpufreq");
-> >
-> > And the remaining part can be called acpi_pcc_cpufreq_init().
->
-> Ok. I guess it then makes sense to move both PPC and PCC checks to
-> acpi_processor.c instead of adding a new file. Function
-> acpi_pcc_cpufreq_init() can be called from acpi_processor_init().
-
-That's correct.
+-- 
+Hello friend did you receive my message i send to you?please get back to me
