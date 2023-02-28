@@ -2,143 +2,297 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678796A563E
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 11:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB656A5644
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 11:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjB1KEl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Feb 2023 05:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S230090AbjB1KFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Feb 2023 05:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjB1KEk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Feb 2023 05:04:40 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2129.outbound.protection.outlook.com [40.107.114.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8E61E5DE;
-        Tue, 28 Feb 2023 02:04:38 -0800 (PST)
+        with ESMTP id S230175AbjB1KFR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Feb 2023 05:05:17 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2068.outbound.protection.outlook.com [40.107.21.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C92BF2A;
+        Tue, 28 Feb 2023 02:05:05 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W50wo6SVjWqTRql8azTIBSp112yZFYUnwiqBmz5rt3zP+R0xx6i+9/zC8tcoJZVGDB2U49dPh4bb/5ScPza76Cy2UTzbyWRx9FHca2i4Ztg0m/TeFh1FKhSUhzfY/1NLXFkGvxzE217T6VcTGj04kddXO9CUKO9lbP45XKa3y3heEvz2GHmIUX56OtG2ULo2Ga4xJpZfgu/wdO4JrQUpM8p84Zz80eyF21VOpN0NZPGx/NRpY7sSedbm/pJhD01P1iqzSot1hyMVRLurc9CLyaKzMBj7O16s+xxJ9B9NnQGaQhxXR3ucLBNQUyKIiKx2qLWRpG6zRFl5qqhV9rno1g==
+ b=N8p/7ke4O4/t/i6nxL3O9S6bOMYZaBeaK0c3gtRyo5fmZeemAUMStZrve5pMxOkpRkV8WpECgOlNYEXTk8NlpJGi9UZaXU3Tb/vWClEqPAwnlKY9WQ7dfU7okEQ+4U+rYqMVinoFyCVqEFkzq2J37KibWp2FDKaFHgn/zZCpW8jn3wZKDeUURin34mtjmne9i4LIlWRs/wVaw4FvwDMcl4XcT8jTmeApPL+XpHVx3brvULlVPfBHC8kb80TI8tLKPDiCjvyfez8QsPe7EBte7/wV72wUi6hR9Z2WyINBVQQF3jDnOGVStKmPp8jLOAf1xHNWfzNYWtoygLIaB6hhsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+3i70xWXavYZQGl6p7G0iTHoiu3qJDlVbM5xvi5VUMk=;
- b=jffHO6hYc35dKQu/izCcqYa7n8XrTTfsmZWn+xEmDCushH3ufIDLRp8lzH+PctSrGgglasAEh0PfavcWVD2UdUUKezCSfzQRINtWUVF6kUSBeQ7pYh5J/PDDSGSrPryE7PfJwRZWdDO5Xo98OCWb5Tt/s7lxA7jNiIQQ8K0FXhe33iGUGTuZ0YDjD6OzlXx+MynGaW0IgR0z9nybzRAa9WgPrxcMUgeKe5y7Du7JPbdEbTU+Q4cgiftQTsNdcX5DLvm0OQKAqlJWAjqQPJS8mfyclvgFn6PhNtcLG+ZfjeX5xvn0WybQxNZKlfHdDS+S/9wuWSw8IB+nFIWtkWkKpw==
+ bh=iw4bSNQ5NDS9KLa/ealM++5IRRAJsLPDG2uxDCwScMQ=;
+ b=drdg8q1lOSn7thh1Sfb1xmqkDk745RceIbHNnz0SAmempHuCcDqcMsKvZTKlKp9hHz9cHIdesyVfbUEbl03CYIm2v3mSWP46vmi0/ObUxSyeiXPObXK8zFCVYVj+6waz4OMXW/pxI/TrfpWzZrLzkF6WedzGU5gQ+haMhso1uyFMFIW/N1AQ5ooVL9wKmh19E6r4jfCTJ4ZADlW9xwrLvqNg7t5yAgq9fBDBGixOd2haYFDHi0HPn7AlTFhm1Z9d+ZdnsrLGn13B+f2C4mxJeOSUQPwRTfMHYfYiMTiCCAMesyIRuuYSLM44ebnf4N/YdNanSmsUVAErFagpA4O5iw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
- header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
- s=selector1;
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+3i70xWXavYZQGl6p7G0iTHoiu3qJDlVbM5xvi5VUMk=;
- b=QXdh6mXgo3Wzw+n42vmC7O0dNubyDSN6hhALUFFWvfqJCElgq2ApH3XeQXXii+xwgezEOBWp/6gxPJ25+l/NwKAl+YI93lKSrSFvf6BLNdJgp/s+ChaLAdwk8kSjH4MTQZXKffKhgEKoQ7ATlWB+W7aFGteu3IPDG41iObqpBUA=
-Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com (2603:1096:604:197::13)
- by TYCPR01MB5599.jpnprd01.prod.outlook.com (2603:1096:400:41::9) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=iw4bSNQ5NDS9KLa/ealM++5IRRAJsLPDG2uxDCwScMQ=;
+ b=ERVVTEjN7JC1brgtl/biiyxQ374B36957zq3xhCSo1bhgi0E1ZoYADw7cviHbn7OSKNOtpnqupvJs1mFPrhnD642Twqw4MT65317mH4oUQ4wTt+KYQzwOJfGsemLCCT1EyED/G6CeheOVGXmKbuv9WhghCoav7CYOn8nwi0TexPQgAnWTXFsJUX47qpty20hbRjcPZ0FAOeCiKqWIxq+HS4usi8KEKBVMHdn119sRtkJYRhrFvuIIm+UOP39Qb6Yey4qOsTpzemY9kMrCghMBvPbxkcyW/4SW2a85re/h1d0AifkpSJccb2iA2bs/hBfRFsLY+U6EmPEkJdtdCh8wQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by AM7PR04MB6918.eurprd04.prod.outlook.com
+ (2603:10a6:20b:10c::20) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
- 2023 10:04:35 +0000
-Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com
- ([fe80::e332:554a:7:7135]) by OS3PR01MB8460.jpnprd01.prod.outlook.com
- ([fe80::e332:554a:7:7135%3]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
- 10:04:35 +0000
-From:   DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Subject: RE: [PATCH v3 14/20] thermal/drivers/da9062: Don't access the thermal
- zone device fields
-Thread-Topic: [PATCH v3 14/20] thermal/drivers/da9062: Don't access the
- thermal zone device fields
-Thread-Index: AQHZSjVt1CNmStCwSEqbfFuNq8Ar967jGjGAgAEI5AA=
-Date:   Tue, 28 Feb 2023 10:04:35 +0000
-Message-ID: <OS3PR01MB8460E9E5C18126A0A0930E15C2AC9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
-References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
- <20230226225406.979703-15-daniel.lezcano@linaro.org>
- <ff124b19-4a21-f9f8-4249-d72e3b8dbd6a@linaro.org>
-In-Reply-To: <ff124b19-4a21-f9f8-4249-d72e3b8dbd6a@linaro.org>
-Accept-Language: en-US
+ 2023 10:05:01 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::cb43:d6bc:dad3:3dd]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::cb43:d6bc:dad3:3dd%7]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 10:05:01 +0000
+Message-ID: <a75a9e85-5682-1527-2e74-e1f7cf69132e@suse.com>
+Date:   Tue, 28 Feb 2023 11:05:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] ACPI: cpufreq: use a platform device to load ACPI PPC
+ and PCC drivers
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=dm.renesas.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS3PR01MB8460:EE_|TYCPR01MB5599:EE_
-x-ms-office365-filtering-correlation-id: debbf852-07fd-4343-a9d9-08db1973320a
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LqcgVrbuJebznkbTHpMYAoj9+XdkbPXsvQOTqbqjdbQU8sgp6CzcFzlDGK9vfsYgXB+3wUsGjB/7Xz52yTarrNNY0mCsj/febjKBYdlHLDKaD5iR0k42yDAL6FgTWcDl+SVUXkmctYC7MqFFZD7Q+2BRVgT/Yg/s6IEnC9F4oZ+WwuzzHIHzVnVfOdLDpJiQfUGxCD/GjDY1ZEHooldkgwg1cGOb5DxJEHWb5dAi9w9TJdQyYQzbJyAq6PaIbIf8FEKam1TtE9oFbNC7rYAguwVjWv22Vr7XYImuOfhGzYGXW+42LGR6RiG2Ok9bupvLJsKj77X86wuqndRgMRlKRB853JrsfjAYOHEk+1SbMs1dMJMl7SGo15lM9ZRf0OkhGkj54Lh2cbdpIxefaKfzsHcZl16obYffeyW3R2Xcx6ADfqrEn0kdABZOBzCLGuBdQ2H0jb6bICcBQ8lk5BxuMGIyuGEwa5Yc5gfmH6wyvSLUjJoWZeGfi2oxtIxB1JVWULF5iJY+WphUbwWyBTN9mA+m7bVnG37pBpHhWMxFZmQbxRszSr4UalelnSFMqhkm0mzlEB+Rvpey/A3dh4DG8j5zXeLBjevs2H3Y1TM9FnKnmjLulqZerL98MomJIsLW9GY4MO3FIjC1i2nUcFO/kYpj+lmR0QnMOcV3akNofRpedjmclitjLJ9ZwsUFKQgTwgJ9WRRtDdicCv9rn4o2aQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8460.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199018)(110136005)(478600001)(83380400001)(33656002)(122000001)(54906003)(316002)(38070700005)(7696005)(26005)(41300700001)(9686003)(186003)(71200400001)(55236004)(53546011)(6506007)(5660300002)(4744005)(38100700002)(76116006)(52536014)(86362001)(8936002)(2906002)(66946007)(8676002)(66476007)(66556008)(4326008)(66446008)(55016003)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnF5b0RUbkFDMUNLWWRHVTlFb1d1UVk1ckZ0Yk53MGI0VHg3aXBVWDNvbU5N?=
- =?utf-8?B?Vm9ES3oxU0ptOHlFRHlBbW5yOFRZdlN0ZmFra3diK1ZEaVp5dm12U2JXTHhY?=
- =?utf-8?B?UlNrUzc3UU5Vb0RKVE1pemtkMTAvYVA2ZlhkcGYwZUgrUU5rd2tETnZXS0xW?=
- =?utf-8?B?SVNaODNZYXV0Mzg1TysyN1ZDVTZGOXFGVThIdjVVSXF2eHlJNlVGbnRidWJu?=
- =?utf-8?B?bDNHQTlVbWhDbU55SW8zTXR1U01mbU1LMitMd0J3NjU1ekdiYUFuaXJJc2Ji?=
- =?utf-8?B?dWY2TURMRmVPWVQ2VXlYbjVTQnRJL1hJZ3RiRTZ3S0NaT1lTSGw3UHcwVmI1?=
- =?utf-8?B?SkNNUzcwaGc4TUQ4MnM4K2hZOVM5SEdic2loQU1ZV1lCaHRkeUdrRWdKKzVJ?=
- =?utf-8?B?L3hQQUM2OEl6VU50aWpLZlF3bjU3YytueVlYcHJJVWtRTFF0VE9NZ2pTQWwy?=
- =?utf-8?B?a3dwT2dYS21wa1BJc3RMcW1xSDN0WkRqeEJVelBydmtIWXdpVE9ya1oxSG5P?=
- =?utf-8?B?TDladXhiUStUY1ltbFJoL1R0Um1BM1RvRWZxaGc1QTh4V0J0K2xnZ3NIMGVm?=
- =?utf-8?B?ZGtIdThsZkpsUVkzZGJ5TW8wYktjUC9MSk9rMUF5VlhhTC95N254SGlKcmZZ?=
- =?utf-8?B?a0U1MytlbTNMdGpJbmlRVjNQWXJYUHRFRldpMkdMU2crZVlaM3NwbUdXa1NU?=
- =?utf-8?B?VGtpSWlsUGxWZnlKK0o5S292YWpCbTZ3SWM1dms2eHY2RXB1eFlTcGo1Vld6?=
- =?utf-8?B?Qis3eUc4QzFiNnh1SENtWkQ4VEVuMUJ6Um9HVXF5YThSMUJoMDQza1FSS0pp?=
- =?utf-8?B?Rm8rRWhLcis0L0Y2VVRsbFpOMXpyeVF5U1lpUVFta1R5UGtKSlUwUWwvbkY1?=
- =?utf-8?B?aExmOEZoNytEY3lyY253MEREMlNGd21qdUVHNWYvRGR0UHFRcUVNSjBhN1F0?=
- =?utf-8?B?MVlpV3JOcURIejFwMXpuVFRjSmpsK0hmd3cyYmc5K1ducjlBcHgySDd3RnRz?=
- =?utf-8?B?anpZMi9LSUFqL09jR2xIWjkwR1NNR2l1eGJuZHJDc3ZaYXkydnJZUXNKbjF4?=
- =?utf-8?B?MUFidUxiN0s5cWl5TGVnczVQZmpRempGbWY1cjRpbzRxcW5NWm1mWVlrOEZw?=
- =?utf-8?B?OVdqQjY3blNNMG5aSXVvZHBhOEE1eFNvTGxDd0Z5aXYzL3gxUjlOaHN1QytG?=
- =?utf-8?B?blBNZWVlTkhVOTBKcTVhWnNmK05hRkh3amxPWERGNG9PNFVPaVdwT25EbGdr?=
- =?utf-8?B?N2lLYm4zK3FpU29uM1hHQk15eTU5Wk5NMEVtbkhab0Z5YzV6V0UxUTBiQkdL?=
- =?utf-8?B?YjFIaEVaY0JCc2psK1R1b0NDcEZxNFR4dmVKY0dOM3NjZlJJVnFwMDg1dkg2?=
- =?utf-8?B?TG9BZVNCM25Fem5VOUhabEhuU29JVzBOY0tJVFlvcWRhVTZ2Myt2Mzk3QWFX?=
- =?utf-8?B?ZUJaRzVHNUgwU0lsWUgxenRjQ0N4ODdkdUFrSHI3OXgxOFlqeFhGV2JmMHNq?=
- =?utf-8?B?WVFpbGVGN2JDSzNiWE1OVFNqNHVMdk9DU1NkV0RqWWtING5RYnQ0OE44L0tw?=
- =?utf-8?B?TjRUMExmMXc2TEpmSHJJVVErRlBJK0ZVdkRmS3FML1RXOTFpcU9jK2l1WjJ0?=
- =?utf-8?B?dzRiaFp2bmQyVGNWTDVFSzBkMXBHQXJESFByQlM1Q2locVBoa1FvaHBwcFFG?=
- =?utf-8?B?VDZmem5lRTkvWndNT0NwZ1hFaEZjOTM2djZOVHNLWlhMandMYVJ1M0hYd2Mx?=
- =?utf-8?B?QlhvUGhtUGU2MzJXS0J4R0E3elZqQUZsdGtmVUpwaklnbFNPMHVKQmR4WjNN?=
- =?utf-8?B?dmJzZDEwUXJPcnhNdGwrZW9Ma01OS3NKQVU1L3BDdXNrYVgxUFBwWXA1Rzk3?=
- =?utf-8?B?UFpTNU14TE9obzBjN2F2YkJzTTdOdnBrd2JZa3JqcFhOSW1pVjJJckVtZEha?=
- =?utf-8?B?THhDYk1RbXBIaFdEZ0x2Z2hkYmgrZXJrMnV5OXpNMzRWQ2lURVhmZGN6akVK?=
- =?utf-8?B?eS9MbnFJVnBEK3ovUlRzbWNGVkoyeUgrTU1ORk9EWk1JZTJCTnhDSE9URnUr?=
- =?utf-8?B?aGV2U09hS2RzdHlOeU4vbnN3ZGQxWTBOWTNNdnc5cWMyNHh1OFd0WWxMYUxY?=
- =?utf-8?Q?QDJNgDEa2M8mWlcuvZnAU5LTp?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     lenb@kernel.org, viresh.kumar@linaro.org, pmladek@suse.com,
+        mcgrof@kernel.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230220143143.3492-1-petr.pavlu@suse.com>
+ <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CAJZ5v0jng3PDPnTKAov0m2KTYKaQuwOdi+jCVwc5BM5duct2Pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0011.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1d::17) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 MIME-Version: 1.0
-X-OriginatorOrg: dm.renesas.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM7PR04MB6918:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3840a74-30f5-4d3a-4bc8-08db19734176
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fmV7Sgry38HFS3zIwqTizuOqkAWurwbi3NvsndGl/XiM4T6sI7A8feymZTbDx90cQa+TAIuDXxSu9Y+uC1HZO9yzRxSf4qtgzEuFLx48JxAnyW1seTJy838CjFDyUMYRcQ16hvQsf8Zl0vG+DZFhuQrvLbgOjSnXdBSWtaQ3MSQJmKiFY/KL3MV9sLBQt6wGIhCWAeD5xo0cdfbn06sPetGQlIrV4hwgbiFdcwBbpWdNMwYPuOoDeAD5A67/nJQ+25qfzygr4p/BJ+H7y8YppCJW7Z/jkEQ04Vy6k/QhQ0UC10O7bdVi9k/CdpGYc8orE/kJ6/mhwjYNd/rddiIN3AXp68iadJ/4GAZPqkBs/fLEDLSoNk7SBFpKjc0wi6QoFVwj76dBGMmA/dSjzCqRzlJW0HksTFvYhT7Shr/uDftqou5YJpTrThBR2Qy0xwJBuncTBt2UBWCFq4ItFuvmUQF1r+rxF43146xuRAt/R4bpzUTCMRlf/vggol4EabPpNGtvoDGlFmGgqj4CxS5sjEUZMEx21BCKA/3cCgGIWamPNqBk/GC+UqbzbGlTLlXvfK1QEoK6aOfb0yzPgGNFYjUPflXHkdBm3TjeNRCiXkOPULm86BlP5w9SdaK5JrZIuNsJZtAYTorCXvwMLi5RmXNvzWuq2KsIm8bPQhXUcHFw2ZSJpbYKKYehLLH6WbL3rA6fT8y1IWIpfV+OmBhg3yBOLW9svxE6WClUhwCAs9I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(366004)(136003)(396003)(39860400002)(451199018)(38100700002)(4326008)(31696002)(86362001)(36756003)(44832011)(66556008)(41300700001)(66476007)(8676002)(5660300002)(6916009)(8936002)(66946007)(2906002)(55236004)(6506007)(186003)(26005)(6512007)(2616005)(83380400001)(53546011)(478600001)(316002)(966005)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjJWaVdkZnRHTTBzVERlOE0wemxKaG1KTVdrWHRaTktMM3c0NlpacGRWK0Zs?=
+ =?utf-8?B?cVdkMU5YNUJ0VWZuUjhQZ0kvQlRwMUEybEh2T2lNT2o0NzNTM2hReHd6bGdX?=
+ =?utf-8?B?ckNKeDNGL1k5NEhZZzJzMmEybytpeENTU0NUeVZEYjJraFB3QXFpRWhGd1cv?=
+ =?utf-8?B?ZXJsQkVvTjY5ZmFUNnNMZzJBTkdLQytQNXhsT2JMVURBT3dTc3Y4UmVsRWxh?=
+ =?utf-8?B?THlKQmE4UCt4UnlGSkpsRXVEbWt1MVlIOXhKWDZPYWk4RGVBN0FnLzNDTnVs?=
+ =?utf-8?B?a2RVK3g1VkpBcFFBYk9QSU5VOGg4S2gxSlFOSWNwbmlDeUJXd0xiQldSdW9Q?=
+ =?utf-8?B?aDlhOW8wS09idVZnZjY0OU9FYjh1VmNPcEFPWVNPSENkbENNRTMxSmYvd3lp?=
+ =?utf-8?B?MXh1TytQNFA3ZjAzV1BNV2p4YTk1SVZZaGFjeDRzcFV3ZmNjSUlyRzJGVlpO?=
+ =?utf-8?B?RDBKT0ZDZXVReWdZdngwOU9lbm9KNlV1a0IyaW9DZWZLTC9scnlJVWZ4SEdh?=
+ =?utf-8?B?dVFqelM1TzRnV1BPTTlZOG1kYy92Z3dSdXpTcUtoQzR3K3N0aXhUdHpxcnpU?=
+ =?utf-8?B?RDFGMllSMEpnNUZSTzF6TVZZMnJod2M3L0hGU3lOUmdrZDZlOHl3cjZFWmsx?=
+ =?utf-8?B?ZGoxU1FoV1ZodWpWS09FTDBhdTEzeGlDeTNSRHBuRDFuRDdjcnV4Tjg0d1RG?=
+ =?utf-8?B?MCtoMEExUVJuYTd4VFdOM0ZWNDMyekdqQ3dISE8vTkJabmdTZ1lMYkFNcTN3?=
+ =?utf-8?B?VnJWbklURS9SbG44cEIrQlM5OVRDR0xvV0VSSHNqUGZ0bzE3R0x0eWFIU1pL?=
+ =?utf-8?B?VjRHT0ZpRHJUbEZhanFEelRGejk2alVwZmUxSDlrU1ZXQno0UXFrUUJuSWRV?=
+ =?utf-8?B?b3hxdzZkWjM0TnJSN0lWMlVENDF4VDQ0Vk5ZOVkxZ3BreEo5MVMrTjQ4bW8r?=
+ =?utf-8?B?eWpydVF2NUhJVFROWXVqc1V6TENPai9FNlVBYlFaLzNNdzJqR0MwRGlhRURI?=
+ =?utf-8?B?RDc1NkRndFc0OUFUNFJqOUtCTHY4c2RTczIvK0VyMm5pd0JHclI4V1VNWWp0?=
+ =?utf-8?B?NDNJYW5NakluNytZaHdGRnZ2b2pweEoyd2VaYkRjK3FNZkZLNklvKytxZHJO?=
+ =?utf-8?B?RVQzRURoMlN5cmEwWHZmR0JwcHJuU2ZaRXY2MnNOVlJxcjltQlV2eXZvemIv?=
+ =?utf-8?B?cGV4bW5WOW0wRjhzWTU4c3V5ZnlrV1hia2dGTFFFcEpGbjFobGVHclRncmZ0?=
+ =?utf-8?B?V1FUMTdtRExPYjRRa0EyM1ZCRlEvbmVlU0xSbVBMMWFTUllMZW1USUkrazNW?=
+ =?utf-8?B?cjBCMUJTVHhVRnVmREEvQ1BwRGJGNTlEcWhiVEwwZVQybnNRWFdMTkpHeFFn?=
+ =?utf-8?B?UG5VMGtxaVVZODFnUGVLaWNHekJhYkpXTlQ0bHpZaVk3ZVBWOEt2VFl1OGts?=
+ =?utf-8?B?dFZxMFlLeGhwV2EwVy9BdWNjS0NFeXVCOSszVUsvSkx5aktYT0xMazFaV0tv?=
+ =?utf-8?B?ZHJCQStXL3owZGRMTzIyalRJSHpSbXpSeEJaVnpVT0JGeFpuR1VZL3BkN09C?=
+ =?utf-8?B?RFg3NEVzbCtaRUFGUGp3UHNZWDNydEcyQ0J4RGttSm9obG4zTzhzZWwxNlBM?=
+ =?utf-8?B?TkJ4TzBXMVhKVkhKWnk0Sjl0R2ROYThadDF2VUR6R1piL3k4L3RQMXR3dVVM?=
+ =?utf-8?B?UUlkaGFPK2prU3QwSjAyRldHemVqeStnTlNtT3NCZlB1ay92cjNvdmdRdTJh?=
+ =?utf-8?B?YldjM3FQRmVUZWdObVlWVnQ3ZWVWUXRHcVp6TjJBWnIvcUhhZWIyYURxekJS?=
+ =?utf-8?B?N0FpZW8xWElXMWgrZzVwM2FyVnkyWjI3NVZqK2VtcHNZellqVTU1V3J1VDh5?=
+ =?utf-8?B?dU9STmlRaUpDVm9oZ0plZWpqcm1OaWdLU3ZhN0tUaVltM0gxU3BNdjBxVW91?=
+ =?utf-8?B?dmg0UEhpRmtBMDRwY0FITm5mVXNBQnI3aVRTYisxblpxZDIxeUxDRytQYjYr?=
+ =?utf-8?B?dWY5M0g5VUh2S09YaEkzOXhkNkdlb3duZEgvc2RiaFdpRVNZMkZHRVdhMnBn?=
+ =?utf-8?B?NDZ4ZVVad2UvRzl3Tm1vc25uYU5YVmsxY1hldjQweVI1QkhmV0V3TFVNeHlu?=
+ =?utf-8?Q?/NC4vBz/n0tjD7OR7MFV4ftQj?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3840a74-30f5-4d3a-4bc8-08db19734176
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8460.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: debbf852-07fd-4343-a9d9-08db1973320a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 10:04:35.4394
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 10:05:01.4668
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sXpj7jBT0jj3+EXYzWPkucT1WxpdH9KtHUXa0QyclPqe6nM5MQR5rVrA4DeZ2+aJJSpxaRM9umYttdrMtUYQ0+p8O6E3LQ46VX/07obfPJY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5599
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VckzqQuCZR0ZPZP+5hg7fqoyZncDc7yFlhbC6Le06rtltf8/8S3GN0VYSZZnNscpYp3v+o9lKmiYXOgAVqpQKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6918
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gMjcvMDIvMjAyMyAxODoxNCwgRGFuaWVsIExlemNhbm8gd3JvdGU6DQo+SGkgQWRhbSwNCj4N
-Cj5hcmUgeW91IG9rIHdpdGggdGhpcyBwYXRjaCA/DQoNCkhpIERhbmllbCwgDQpZZXAsIGxvb2tz
-IGdvb2QgdG8gbWU6DQoNCk9uIDI2LzAyLzIwMjMgMjM6NTQsIERhbmllbCBMZXpjYW5vIHdyb3Rl
-Og0KPiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwgTGV6Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJv
-Lm9yZz4NCj4gLS0tDQo+ICAgZHJpdmVycy90aGVybWFsL2RhOTA2Mi10aGVybWFsLmMgfCAxMSAr
-KysrKysrLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
-b25zKC0pDQoNClJldmlld2VkLWJ5OiBBZGFtIFdhcmQgPERMRy1BZGFtLldhcmQub3BlbnNvdXJj
-ZUBkbS5yZW5lc2FzLmNvbT4NCg0K
+On 2/22/23 16:04, Rafael J. Wysocki wrote:
+> On Mon, Feb 20, 2023 at 3:32 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
+>> interface defined by ACPI. Allowed performance states and parameters
+>> must be same for each CPU.
+> 
+> This is not a requirement set by the ACPI specification, though, but
+> the assumption made by the drivers in question AFAICS.  It would be
+> good to clarify this here.
+
+I can simplify this paragraph to:
+Both acpi-cpufreq and pcc-cpufreq drivers use platform firmware controls
+which are defined by ACPI. It is possible to treat these interfaces as
+platform devices.
+
+>> This makes it possible to model these
+>> interfaces as platform devices.
+>>
+>> The patch extends the ACPI parsing logic to check the ACPI namespace if
+>> the PPC or PCC interface is present and creates a virtual platform
+>> device for each if it is available.
+> 
+> I'm not sure that this is the best approach.
+> 
+> The ACPI subsystem already walks the ACPI namespace twice when
+> enumerating devices and CPUs.  In particular, acpi_processor_add() is
+> invoked for each of them in the first on these walks, so it might as
+> well take care of creating the requisite platform device if _PCT is
+> present, can't it?
+
+Makes sense, I see that acpi_processor_get_info() has some logic for handling
+the first CPU so that looks to me as a good place to hook a check for _PCT.
+
+>> The acpi-cpufreq and pcc-cpufreq
+>> drivers are then updated to map to these devices.
+>>
+>> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
+>> boot and only if a given interface is available in the firmware.
+>>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+>>
+>> Changes since v1 [1]:
+>> - Describe the worst case scenario without the recent fix 0254127ab977e
+>>   ("module: Don't wait for GOING modules") and refer to its discussion
+>>   in the commit message.
+>> - Consider ACPI processor device objects when looking for _PCT, in
+>>   addition to processor objects.
+>> - Add a few more comments explaining the code.
+>>
+>> [1] https://lore.kernel.org/lkml/20230131130041.629-1-petr.pavlu@suse.com/
+>>
+>>  drivers/acpi/Makefile          |  1 +
+>>  drivers/acpi/acpi_cpufreq.c    | 77 ++++++++++++++++++++++++++++++++++
+>>  drivers/acpi/bus.c             |  1 +
+>>  drivers/acpi/internal.h        |  2 +
+>>  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++--------
+>>  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++-----
+>>  6 files changed, 127 insertions(+), 27 deletions(-)
+>>  create mode 100644 drivers/acpi/acpi_cpufreq.c
+>>
+>> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+>> index feb36c0b9446..880db1082c3e 100644
+>> --- a/drivers/acpi/Makefile
+>> +++ b/drivers/acpi/Makefile
+>> @@ -57,6 +57,7 @@ acpi-y                                += evged.o
+>>  acpi-y                         += sysfs.o
+>>  acpi-y                         += property.o
+>>  acpi-$(CONFIG_X86)             += acpi_cmos_rtc.o
+>> +acpi-$(CONFIG_X86)             += acpi_cpufreq.o
+>>  acpi-$(CONFIG_X86)             += x86/apple.o
+>>  acpi-$(CONFIG_X86)             += x86/utils.o
+>>  acpi-$(CONFIG_X86)             += x86/s2idle.o
+>> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
+>> new file mode 100644
+>> index 000000000000..4e4ceb7cd226
+>> --- /dev/null
+>> +++ b/drivers/acpi/acpi_cpufreq.c
+>> @@ -0,0 +1,77 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Registration of platform devices for ACPI Processor Performance Control and
+>> + * Processor Clocking Control.
+>> + */
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include <acpi/processor.h>
+>> +
+>> +#include "internal.h"
+>> +
+>> +static void __init cpufreq_add_device(const char *name)
+>> +{
+>> +       struct platform_device *pdev;
+>> +
+>> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
+>> +                                              0);
+>> +       if (IS_ERR(pdev))
+>> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
+>> +}
+>> +
+>> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
+>> +                                        void *context, void **return_value)
+>> +{
+>> +       bool *pct = context;
+>> +       acpi_status status;
+>> +       acpi_object_type acpi_type;
+>> +       struct acpi_device *acpi_dev;
+>> +
+>> +       static const struct acpi_device_id processor_device_ids[] = {
+>> +               { ACPI_PROCESSOR_OBJECT_HID, 0 },
+>> +               { ACPI_PROCESSOR_DEVICE_HID, 0 },
+>> +               { "", 0 },
+>> +       };
+>> +
+>> +       /* Skip nodes that cannot be a processor. */
+>> +       status = acpi_get_type(handle, &acpi_type);
+>> +       if (ACPI_FAILURE(status))
+>> +               return status;
+>> +       if (acpi_type != ACPI_TYPE_PROCESSOR && acpi_type != ACPI_TYPE_DEVICE)
+>> +               return AE_OK;
+>> +
+>> +       /* Look at the set IDs if it is really a one. */
+>> +       acpi_dev = acpi_fetch_acpi_dev(handle);
+>> +       if (acpi_dev == NULL ||
+>> +           acpi_match_device_ids(acpi_dev, processor_device_ids))
+>> +               return AE_OK;
+>> +
+>> +       /* Check if it has _PCT and stop the walk as all CPUs must be same. */
+>> +       *pct = acpi_has_method(handle, "_PCT");
+>> +       return AE_CTRL_TERMINATE;
+>> +}
+>> +
+>> +void __init acpi_cpufreq_init(void)
+>> +{
+>> +       bool pct = false;
+>> +       acpi_status status;
+>> +       acpi_handle handle;
+>> +
+>> +       /*
+>> +        * Check availability of the PPC by looking at the presence of the _PCT
+>> +        * object under the first processor definition.
+>> +        */
+>> +       acpi_walk_namespace(ACPI_TYPE_ANY, ACPI_ROOT_OBJECT, ACPI_UINT32_MAX,
+>> +                           acpi_pct_match, NULL, &pct, NULL);
+>> +       if (pct)
+>> +               cpufreq_add_device("acpi-cpufreq");
+> 
+> It should be possible to combine this with CPU enumeration as stated above.
+
+Ack.
+
+>> +
+>> +       /* Check availability of the PCC by searching for \_SB.PCCH. */
+>> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
+>> +       if (ACPI_FAILURE(status))
+>> +               return;
+>> +       if (acpi_has_method(handle, "PCCH"))
+>> +               cpufreq_add_device("pcc-cpufreq");
+> 
+> And the remaining part can be called acpi_pcc_cpufreq_init().
+
+Ok. I guess it then makes sense to move both PPC and PCC checks to
+acpi_processor.c instead of adding a new file. Function
+acpi_pcc_cpufreq_init() can be called from acpi_processor_init().
+
+Thanks,
+Petr
