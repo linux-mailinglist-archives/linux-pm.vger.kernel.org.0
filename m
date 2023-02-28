@@ -2,137 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828716A502F
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 01:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4FD6A5099
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 02:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjB1Afm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 19:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S229542AbjB1BSp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 20:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjB1Afl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 19:35:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0013624115;
-        Mon, 27 Feb 2023 16:35:39 -0800 (PST)
-Received: from mercury (unknown [185.209.196.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5FC726602E18;
-        Tue, 28 Feb 2023 00:35:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677544538;
-        bh=ckKngwgDm1uv8o/2VUrBVKZtDUgdeeUGANto7j4O6RU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gRxvhtrrkkAHy3EyOiiCZLFGHF/ger7GDuKxPPA87MqSJcVkLHoJzuupigQ63AGy8
-         RcuB5ALiuX1bM01VOrqLDxZnd6B34eznt3WYf/x8FSuxrLBbJ60zB0OADdUMZl6FuX
-         iz/BnLeJCdWSAYXTuVfUca+7lKFGx+xUFm9KX41vkxMyUxTk209si2/6fveClr4Y3B
-         ECRHP54xCVT+S9YKxCeT6dZC+vyoL5hhX/emnagJtTHoGzm6lvgMGK6Lx6u90coDNi
-         ogrw5TVvF2quUn9ByzjQPsnZh3UpXOWtyKllTgqMxCLWLU1i516zxMhPIw8ZaeQJHL
-         vu0whEx0Y22cg==
-Received: by mercury (Postfix, from userid 1000)
-        id 0EA331061609; Tue, 28 Feb 2023 01:35:36 +0100 (CET)
-Date:   Tue, 28 Feb 2023 01:35:36 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Daniel =?utf-8?B?R29uesOhbGV6?= Cabanelas <dgcbueu@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] power: reset: linkstation-poweroff: add LS220D/E
-Message-ID: <20230228003536.lbpopfipujwush6c@mercury.elektranox.org>
-References: <4927895.GXAFRqVoOG@tool>
- <20230213202542.aqsw6tzspo4nrq7n@mercury.elektranox.org>
- <CABwr4_sd-kzg90VrQQOw91XsTXOcMq6qkj=TNPy6YQDuA6QQuQ@mail.gmail.com>
- <20230213212200.fgtcfm333aunrxqo@mercury.elektranox.org>
- <CABwr4_vKxWKJsNDVF9yNeSSk4R3nDov-+qY5=nhp4ggr88EpAw@mail.gmail.com>
+        with ESMTP id S229533AbjB1BSi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 20:18:38 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509411A67B
+        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 17:18:36 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id c1so8808782plg.4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Feb 2023 17:18:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=45w/ePZnYI0/2LLjqhHdpOHZZUZkx2HLxk5IVIXVOTY=;
+        b=VksYiCrOuvmy2dWTmHyMVmqEos+eA1XMxT2L2aN3ljFOVVsxuvyZX737HBCHBuzGwU
+         WXbuaQi59qraaKUR2e7KybHK49lyNip4DeuT7isI+1zMex7x/o8Sbv+ghueRcpGz3kUE
+         ThiBxGrAP0LUjOlTeObA6T+BQo5nCQlwvVV1jDL40gEEjo2Tl7Ga9Exi9kyHrUFhYJkW
+         wQvnijgcJvSRZURNTPIDbcUGBqj46uL73qL49SOO2tqpFD2TZEAsgJsneN06H/E86E/u
+         Tj1GrTRFWXbXhd2zQxa4JaFho16/TZXR5JDLtlbs6Zr/qKbTvRW1/uiZTZf/+6L1iwdE
+         Qvng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=45w/ePZnYI0/2LLjqhHdpOHZZUZkx2HLxk5IVIXVOTY=;
+        b=Yf2myEfaFPTAJyaElNZfeAhFp2y1IA0IhguW3GCsxeKuHgkG/LRPOnGvcHGtieDoRv
+         /I5wbuRycWVSrArVawjwbjCj0k7rcqC/pgx9oqNaVZuUSpnOHDmkm+vfNdAfYLfBGcjD
+         eSSlfK6v0WG9Zt7D0jlIOCTAogPeojNpI8AbztNh69c+szUetYISMbf1NAEK02a+1P5j
+         gx1zONiHCqdgAWfO3FXtZ7zCauGlE1gM2SAvqBogyPxrYPrcjz4KGh42OLOjvTD04yoE
+         SkABhOvhMTUO1grahxaeZzH6UNtnekQU+jTqMcbFsIHY7fyQIza4fSVPD3a0z4aKkqhK
+         QGSw==
+X-Gm-Message-State: AO0yUKVOammocvzbvY1E3fIo7CxYtWsBc9yMg0pWGAZ2BEypkkSmpfCz
+        h1KBtsP7QmAaRdDvOg8LAcEPwg==
+X-Google-Smtp-Source: AK7set+5jx3+Ceo66EApE8SUSKzeARSdv7Ab+Hou1uZOcwtSBj41Kn2dD79VgcqMPUmiRkMYFH+5gg==
+X-Received: by 2002:a17:90b:4b10:b0:230:81e9:ebb4 with SMTP id lx16-20020a17090b4b1000b0023081e9ebb4mr1247690pjb.10.1677547115601;
+        Mon, 27 Feb 2023 17:18:35 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id q11-20020a17090a2e0b00b002372107fc3fsm4911667pjd.0.2023.02.27.17.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 17:18:34 -0800 (PST)
+Date:   Tue, 28 Feb 2023 06:48:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Sumit Gupta <sumitg@nvidia.com>, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, rafael@kernel.org,
+        jonathanh@nvidia.com, robh+dt@kernel.org, lpieralisi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v2 7/9] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Message-ID: <20230228011832.2h6rfsju4qnwu5oj@vireshk-i7>
+References: <20230220140559.28289-1-sumitg@nvidia.com>
+ <20230220140559.28289-8-sumitg@nvidia.com>
+ <20230222040317.r2p6zlbumazymluc@vireshk-i7>
+ <df054fae-5195-1ef8-c72e-e5afe8d901d3@nvidia.com>
+ <Y/ylpaJLMOE6zY8C@orome>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mrxfp7tynhnaqyvn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABwr4_vKxWKJsNDVF9yNeSSk4R3nDov-+qY5=nhp4ggr88EpAw@mail.gmail.com>
+In-Reply-To: <Y/ylpaJLMOE6zY8C@orome>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 27-02-23, 13:44, Thierry Reding wrote:
+> On Thu, Feb 23, 2023 at 03:06:26PM +0530, Sumit Gupta wrote:
+> > On 22/02/23 09:33, Viresh Kumar wrote:
+> > Tried using it and got below crash. It seems to be coming because we don't
+> > have clocks property within CPU node for SoC's having BPMP-FW.
+> > 
+> >  Unable to handle kernel NULL pointer dereference at virtual address
+> > 000000000000002e
+> >  ....
+> >  Call trace:
+> >   clk_round_rate+0x38/0xd8
+> >   dev_pm_opp_set_rate+0xe4/0x1a8
+> >   tegra194_cpufreq_set_target+0x74/0x88
+> >   __cpufreq_driver_target+0x154/0x250
+> >   cpufreq_online+0x7b4/0x9ac
+> 
+> Can you try to find out what exactly is happening here? The clock
+> framework should be able to deal with NULL clock pointers just fine.
+> Although, looking at the OPP table code, it seems like we don't use
+> clk_get_optional(), so opp_table->clk may end up being a pointer-
+> encoded error. Perhaps we need something like this:
+> 
+> --- >8 ---
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e87567dbe99f..d7baeb6ac697 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1397,6 +1397,7 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+>  		 * frequency in opp->rates and also parse the entries in DT.
+>  		 */
+>  		opp_table->clk_count = 1;
+> +		opp_table->clk = NULL;
+>  
+>  		dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+>  		return opp_table;
 
---mrxfp7tynhnaqyvn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I didn't reply earlier as I had nothing more to say and Sumit's
+initial approach was correct. Maybe I should have I have clarified
+this then.
 
-Hi,
+The OPP core supports dev_pm_opp_set_rate() only for devices that can
+set the rate, for everything else dev_pm_opp_set_opp() is the right
+choice. I suggested dev_pm_opp_set_rate() earlier as I thought rate is
+supported here.
 
-On Mon, Feb 27, 2023 at 09:17:39PM +0100, Daniel Gonz=E1lez Cabanelas wrote:
-> El lun, 13 feb 2023 a las 22:22, Sebastian Reichel
-> (<sebastian.reichel@collabora.com>) escribi=F3:
-> > [+cc DT binding people]
-> >
-> > Hi,
-> >
-> > On Mon, Feb 13, 2023 at 09:38:24PM +0100, Daniel Gonz=E1lez Cabanelas w=
-rote:
-> > > > >  static const struct of_device_id ls_poweroff_of_match[] =3D {
-> > > > > +     { .compatible =3D "buffalo,ls220d",
-> > > > > +       .data =3D &linkstation_power_off_cfg,
-> > > > > +     },
-> > > > > +     { .compatible =3D "buffalo,ls220de",
-> > > > > +       .data =3D &linkstation_power_off_cfg,
-> > > > > +     },
-> > > > >       { .compatible =3D "buffalo,ls421d",
-> > > > >         .data =3D &linkstation_power_off_cfg,
-> > > > >       },
-> > > >
-> > > > Where is the patch adding these compatibles to the DT binding
-> > > > documentation?
-> > >
-> > > There is no DT binding at all. So no documentation.
-> >
-> > You are referencing a compatible, so there is supposed to be
-> > a DT binding for it. Note, that you also need DT bindings for
-> > board level compatible values. See for example:
-> >
-> > Documentation/devicetree/bindings/arm/rockchip.yaml
-> > Documentation/devicetree/bindings/arm/fsl.yaml
->=20
-> Since the driver uses the root compatible string, I don't see any
-> binding to document at least for the driver itself. Nor I don't see
-> where a reference for this driver should be put if I documented the
-> board compatible strings.
-
-You should document the board compatible string for the board
-(ignoring this driver). Actually that should have happened
-before the board DT has been merged in the first place. Note,
-that the examples I provided above are for boards.
-
-Since you are only referencing the root compatible string, we
-are good to go afterwards from DT perspective.
-
--- Sebastian
-
---mrxfp7tynhnaqyvn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP9TFQACgkQ2O7X88g7
-+ppYXhAAh5sN4p1ltqUgfyhuFRhOplD9tIPF+0B658hrc7xAKWH/k9w0YcxML3kF
-avgcw5R9wE6iWBviWMg8N3StjkJuOIJV8QR1Q3KcigT5gJkl5zy3k3xG40/K2swU
-2G+pAwwawNN+RAWFE6X4grJTxdnu+UDZyVLaE4Pxb5gtozRG59VVHFnwih/FKaUZ
-VyhUz5Q1BUBYP/xqSgCDjtAHxdAS/+ehC/eMCb6uKKT4Py1SgfaK7QDDaCucyZtM
-qWq5DG24BZE8N2G2OdE3/DkwZGSgBKd8VMxpCfQRK4qy72yaJC1vSzIJJVI/DYqB
-KpkKsfatmR8Gkst/6KXeZXzFAGMH2SiWoIo8u2TAY/UV6sf69UqVQvLbnvJEDeGG
-A6c+Oyesap5I1lh+3bnBQ1cAEJdS17v2mcrgibqWUGvPCscky+Nsc8m7bCwQjqTC
-iblJZlOLlb7uYkEqGxpf2yOord4/19lY4FuVNkeSjlip+f4f0Q7WJQAL5OPg44vg
-fqnZM16AwRIYv4Rqq3xN7JggTDExo0CJwuCE4K6NIiLF3hCR6YpncbQqtGkCMdP8
-jgysfJckax2gFDK1UrvGWK8yrwNFTXkqOGyeYBOvIwYAT3ig08N391tl8CkhXg9/
-rBUPAcX2IbPbynRNSGFmhBxBLSPb1jnP545Efj7lfzmNDF8WZ1I=
-=Dly7
------END PGP SIGNATURE-----
-
---mrxfp7tynhnaqyvn--
+-- 
+viresh
