@@ -2,183 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6056A4D86
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Feb 2023 22:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FB86A501C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Feb 2023 01:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjB0VrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Feb 2023 16:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S229671AbjB1AXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Feb 2023 19:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjB0Vq7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 16:46:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA061F909;
-        Mon, 27 Feb 2023 13:46:57 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31RLIGAr020104;
-        Mon, 27 Feb 2023 21:46:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RMY240oahL23plEikFUklqVHDD5xMLS3GDtXfnEQWn4=;
- b=jW7BqaCOg/npZmYBkXsBBpVhRWttBo9JBUz7GevpfbU4yuZ0oSA1IEvLz7sh9nfYWp2A
- CxPcJRoXhu0D35gJDNsDbA1UovgtZPrqDwhHr3AqJMGh6MXOiCEa//8WP47sWjrBelbR
- pKnaXlmjFz4xOUmH3xwvLjdDWbgxjft+Pe5EDdaF99sD0clNfboNnj7NikRxm0bHmMac
- 6R48AuTKnDRzTxFq4ND0xJa2hxnVvxQD13EW5VgIPMgO4L/ggSB7qpIpXE0JJluhU7DO
- Y59jHkya9CqHTf77VgRISGHTaL94sFb+oC23qI8fCPMoj64EIj5M5zm6mNgSo8mtsMX4 bg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ny81qeewy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 21:46:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31RLkqkk020784
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Feb 2023 21:46:52 GMT
-Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Feb
- 2023 13:46:52 -0800
+        with ESMTP id S229632AbjB1AXu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Feb 2023 19:23:50 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AA1E2AB;
+        Mon, 27 Feb 2023 16:23:49 -0800 (PST)
+Received: from mercury (unknown [185.209.196.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 92CB36602E18;
+        Tue, 28 Feb 2023 00:23:47 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677543827;
+        bh=oXEKOn7iMMnzaNsM9g/DYP00/n/Evw8fsCYa7aws5ew=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qi0ckDoYnH2gAEc+stFHGjNuCKUsaKIKcaEkgesjYDcAACjpmluRVnwDC5rlYpWQk
+         Jc6FJySkLPRHVVtS0vkOFXZwPB52UXDH/X3ReTH9FMgov/zAwRurq4naLNAKyoDnxk
+         Zv2eWn4MNV2ZXJWluNm6PeRg7BNlYI0ri71BW5pFqi1UqTC1JPc6hV8+NJM0fUFvo9
+         mXrJoPKLBBMjnLoeLk4Ctry5hOkIkTnVMp0UwJBP7yo1oUUFAXI0e0AawdE/YA0AOo
+         1RFO3OKXWxjJMXJ/gLxe95M127+O99n/3woA/mi3u4A1bbM0CQFXie3TFo9Ky9lLv7
+         +L9fknQQN159g==
+Received: by mercury (Postfix, from userid 1000)
+        id 4625D1061609; Tue, 28 Feb 2023 01:23:45 +0100 (CET)
+Date:   Tue, 28 Feb 2023 01:23:45 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Cc:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@google.com
 Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
  probe
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gregkh@google.com>
+Message-ID: <20230228002345.625uaporcmcf7kfx@mercury.elektranox.org>
 References: <20220531183054.6476-1-quic_manafm@quicinc.com>
  <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
-From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Message-ID: <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
-Date:   Mon, 27 Feb 2023 13:46:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
-X-Proofpoint-GUID: WXwdnArxN6GZC1yqrHdrenMEFOj_TfR4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-27_17,2023-02-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302270173
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xx2ed7bvmhyopstz"
+Content-Disposition: inline
+In-Reply-To: <fd372789-d39e-08f9-ae44-7702733155ae@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/9/22 3:12 PM, Sebastian Reichel wrote:
-> Hi,
->
-> On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
->> Registering the cooling device from the probe can result in the
->> execution of get_property() function before it gets initialized.
->>
->> To avoid this, register the cooling device from a workqueue
->> instead of registering in the probe.
->>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
->> ---
-> This removes error handling from the psy_register_cooler() call, so
-> it introduces a new potential problem. If power_supply_get_property()
-> is called to early -EAGAIN is returned. So can you elaborate the problem
-> that you are seeing with the current code?
->
-> -- Sebastian
 
-When the device boots up with all the vendor modules getting loaded,           
-here is what we're seeing when booting up with 6.1.11 recently. First          
-log is printed with adding a pr_err() in __power_supply_register().                 
-                                                                               
-[    7.008938][  T682] power_supply battery: psy_register_cooler failed, rc=-11
-[    7.030941][  T682] qti_battery_charger: probe of qcom,battery_charger failed with error -11
-                                                                               
-Here, our downstream qti_battery_charger driver exposes the following          
-power supply properties POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and             
-POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX under a power supply device.        
-                                                                               
-This is happening because of the following call sequence,                      
-                                                                               
-battery_chg_probe() ->                                                         
-  power_supply_register() ->                                                   
-    psy_register_cooler() ->                                                   
-      thermal_cooling_device_register() ->                                     
-        cdev->ops->get_max_state() ->                                          
-          ps_get_max_charge_cntl_limit() ->                                    
-            power_supply_get_property()                                        
-                                                                               
-ends up calling power_supply_get_property() to read CHARGE_CONTROL_LIMIT       
-property.                                                                      
-                                                                               
-However, it returns -EAGAIN because psy->initialized is set to true            
-later after psy_register_cooler() succeeds. So, this ends up in a              
-driver probe failure forever.
+--xx2ed7bvmhyopstz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--Subbaraman
->
->>  drivers/power/supply/power_supply_core.c | 10 ++++------
->>  1 file changed, 4 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
->> index 385814a14a0a..74623c4977db 100644
->> --- a/drivers/power/supply/power_supply_core.c
->> +++ b/drivers/power/supply/power_supply_core.c
->> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
->>  }
->>  EXPORT_SYMBOL_GPL(power_supply_changed);
->>  
->> +static int psy_register_cooler(struct power_supply *psy);
->>  /*
->>   * Notify that power supply was registered after parent finished the probing.
->>   *
->> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
->>   * calling power_supply_changed() directly from power_supply_register()
->>   * would lead to execution of get_property() function provided by the driver
->>   * too early - before the probe ends.
->> + * Also, registering cooling device from the probe will execute the
->> + * get_property() function. So register the cooling device after the probe.
->>   *
->>   * Avoid that by waiting on parent's mutex.
->>   */
->> @@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
->>  	}
->>  
->>  	power_supply_changed(psy);
->> +	psy_register_cooler(psy);
->>  
->>  	if (psy->dev.parent)
->>  		mutex_unlock(&psy->dev.parent->mutex);
->> @@ -1261,10 +1265,6 @@ __power_supply_register(struct device *parent,
->>  	if (rc)
->>  		goto register_thermal_failed;
->>  
->> -	rc = psy_register_cooler(psy);
->> -	if (rc)
->> -		goto register_cooler_failed;
->> -
->>  	rc = power_supply_create_triggers(psy);
->>  	if (rc)
->>  		goto create_triggers_failed;
->> @@ -1294,8 +1294,6 @@ __power_supply_register(struct device *parent,
->>  add_hwmon_sysfs_failed:
->>  	power_supply_remove_triggers(psy);
->>  create_triggers_failed:
->> -	psy_unregister_cooler(psy);
->> -register_cooler_failed:
->>  	psy_unregister_thermal(psy);
->>  register_thermal_failed:
->>  	device_del(dev);
+Hi,
 
+On Mon, Feb 27, 2023 at 01:46:52PM -0800, Subbaraman Narayanamurthy wrote:
+> On 6/9/22 3:12 PM, Sebastian Reichel wrote:
+> > Hi,
+> >
+> > On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Palliku=
+nhi wrote:
+> >> Registering the cooling device from the probe can result in the
+> >> execution of get_property() function before it gets initialized.
+> >>
+> >> To avoid this, register the cooling device from a workqueue
+> >> instead of registering in the probe.
+> >>
+> >> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.c=
+om>
+> >> ---
+> > This removes error handling from the psy_register_cooler() call, so
+> > it introduces a new potential problem. If power_supply_get_property()
+> > is called to early -EAGAIN is returned. So can you elaborate the problem
+> > that you are seeing with the current code?
+> >
+> > -- Sebastian
+>=20
+> When the device boots up with all the vendor modules getting loaded,=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> here is what we're seeing when booting up with 6.1.11 recently. First=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> log is printed with adding a pr_err() in __power_supply_register().=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> [=A0=A0=A0 7.008938][=A0 T682] power_supply battery: psy_register_cooler =
+failed, rc=3D-11
+> [=A0=A0=A0 7.030941][=A0 T682] qti_battery_charger: probe of qcom,battery=
+_charger failed with error -11
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> Here, our downstream qti_battery_charger driver exposes the following=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> power supply properties POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX under a power supply device.=
+=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> This is happening because of the following call sequence,=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> battery_chg_probe() ->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0 power_supply_register() ->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0 psy_register_cooler() ->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0 thermal_cooling_device_register() ->=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0 cdev->ops->get_max_state() ->=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0 ps_get_max_charge_cntl_limit() ->=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 power_supply_get_property()=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> ends up calling power_supply_get_property() to read CHARGE_CONTROL_LIMIT=
+=A0=A0=A0=A0=A0=A0=A0
+> property.=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0
+> However, it returns -EAGAIN because psy->initialized is set to true=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> later after psy_register_cooler() succeeds. So, this ends up in a=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0
+> driver probe failure forever.
+
+This should be solved in 6.3:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/d=
+rivers/power/supply/power_supply_core.c?id=3Dc85c191694cb1cf290b11059b3d2de=
+8a2732ffd0
+
+-- Sebastian
+
+--xx2ed7bvmhyopstz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP9SY4ACgkQ2O7X88g7
++poV0w//UsUh2QE6JW/3M0lLBH/6QBcjOvQJ/udor30sabFMNOZ39IeAT5PiuiwS
+QBbu6PvAo67bCgVq6bBGC6T+8wxDm2MIbizC/J/o5Sz9/yFikgElT7uB//Zh8h6n
+hHvEENwQFbzyd9HQXlQnm4jmKDEQJd5btiImMJz9/VnUU3f1pwIXPCr7uOaQZ77z
+1YaySP5CgM1s3QMVW8HnYsCct+9r82es110B/oy6y79qJIUAosKe8/O9YJ+pfrkI
+MBtjNuEnz8DRsysn3MYn6wRDb3xejLsZTSJrAB6q/cSRJtlcBQEnUcs4Bsxpl0mh
+IfB/CBuvCF0SHVbXTH9hnPCixiR0x2FYMtFtrkbpCpNEjOjpnj65Ioy/QaAMNWrD
+QhnNgqIA+ubFCNxvDAINekRZa58AvZjLOld0vVB5l+arAelznpek07L2N04E8Ge2
+L6xY6XEEGinLtGiyeG7LKh5WMayu+WfHwQmwJ4RqlX8iAhfe8R238dp683H+2ySs
+ickGBck62flgscnG9T3vJMCnSLOdENRNKoYEIxfMdMSxNnQJVyjDY3B7XRVb3gXC
+J6uoPF3eblbYKO77M7EDuTyOXVHFDFJ4TaXGfodji5qdRgZ6Q7Ac26GIjQOeEiHL
+se8ZZIZc/cN+AA5/Q28sqqTvg/beAnrRrvHs1uMOMaZxM++EXj4=
+=8kww
+-----END PGP SIGNATURE-----
+
+--xx2ed7bvmhyopstz--
