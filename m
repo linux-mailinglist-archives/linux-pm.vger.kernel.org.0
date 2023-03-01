@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA96C6A6CCD
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 14:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B766A6CD9
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 14:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjCAND7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 08:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S229916AbjCANHB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 08:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjCANDq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 08:03:46 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FC42CC5A
-        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 05:03:41 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 132so7616704pgh.13
-        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 05:03:41 -0800 (PST)
+        with ESMTP id S229922AbjCANHA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 08:07:00 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED4C5266
+        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 05:06:59 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso11887845pjs.3
+        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 05:06:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iKkN3A4Osh2piEOGCkx6fyCR8EN+P86mMCpSI/kyzzM=;
-        b=EQmQxWTOKwHqRHus1aXRnQewm7/Cipj0WZQz7Po6IiqxAiW/mub5DoifHi54nrvrf8
-         hiMolYN0tBtBLhD948M8W99tJW0ou7nbDdedbB4U8Jr/dJIXgfVsxCx+dBG1cRoMEF50
-         mTq20H2qTTNhsan8908we4nNMWkZdVtuQxdjeSuxbJhcU5vLs4p0FNqvCPlRfYob3LfB
-         tPcdbUfdqmwbk0yXDytTSjtTflPRqPACp2TStavR+wk8Fu9kJC/doIGZzpLnxWGgBI8e
-         mqQqIoWnKyTGdLQtLBOFSeJzYYRcmFr/kiN1ubdavI2FxlH+Qknz2hNJ735Pn2zx38Ho
-         4VfA==
+        bh=NF6I37ZMXUZT2UAfhqZz45LoPVH4Elbw4xdIU+68u8Q=;
+        b=UaYDQ4t4JxPnJkgU24ZAhgOpeh4qTF1dQDw+7OwLtO214cMzoEfEWv+eW20tNyhE4L
+         yJSIz0na+KLfg2rEKU28yJHMI9VowIhmPeuDRLEv9t892DVUj+YMjA3sqRW/wVvYOpGM
+         vNobgi5NuvtkqPFzgZb6LnotETc73PAp6Wqze2xSvXhT5QRQq3NtagUzKUS3QUPPTpWc
+         NVz59WXQCW+/xwQEmmU2qWRIMdwmaEOetGaHhkwJRL/q4t3e72u6pHGa/eAaQqjKUOpH
+         Zd7zs99siaMwPKnUOW1I2wTT98wyClaTZkQ4sPKfZWC8d7+58XxnzIeiSqzSaQY6cj11
+         AKWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iKkN3A4Osh2piEOGCkx6fyCR8EN+P86mMCpSI/kyzzM=;
-        b=pXGbsjD8nGHWp2GxKDe/Up2h9Oy9I8hhTCg3T7HPu4+WLoP16C7p7Nf8/LoylBN6UK
-         rMKO6/QGR5yomYMMfQ7QkX99l8QHS+mTvLgNBoRQncxAY4a3WHu35mPxLL1f4+YnLE6/
-         +LG8xs0fsb172HlVpbe1AgPGbNDOAXLvp4H8Fa1rjsN5efhti0kzSQTCmdHacE86jzqY
-         mMCbdtGIlJLD9fVfAFdtKBOiiJwkLroWKzWz9yyl5OXFbQOZYBYMStudbzxRnh8KCcUO
-         ZXVKKLXg8ZXQQTdWHcPq5fZo3TsAcAsG7+2CURn1GHiilj+PsyDaUnPfAd4VEbU9MLqi
-         xEEA==
-X-Gm-Message-State: AO0yUKWZ57gOVTBlcqxZ9pke6Efu/npcxQGkFbKQmTOqEnONF7yTqR2c
-        SSAY1umbjdFDsAoxZi9yU88gzlKkwJg54Ug7uS5C2Q==
-X-Google-Smtp-Source: AK7set9l3A8Q13trFL4jc5C5g/OPP+o5cpBA5yb/8XU8e+NCPo/IhTJiHt2k5ezR6UfWLUYRTV/o/fbvHtLZeQatQnA=
-X-Received: by 2002:aa7:88c8:0:b0:5a9:d579:6902 with SMTP id
- k8-20020aa788c8000000b005a9d5796902mr4266652pff.0.1677675821355; Wed, 01 Mar
- 2023 05:03:41 -0800 (PST)
+        bh=NF6I37ZMXUZT2UAfhqZz45LoPVH4Elbw4xdIU+68u8Q=;
+        b=SixRGcrL0+piIrlVcB472BpgriU2UGe4998r54Ua5XzbP9NcOcU2QTxlgKSwbZA+Sj
+         9gDCAcnSpFed4P+UCWH9dw8KqZ7Cjqu7Y1OyZTyJbopOAgBntiCszNbzXF/HkdZW0Ckd
+         QODT9nJVKlJ1fqBwLERNJqC7W1DDxl7525NBzGxmbjFypwISPQK0xaNmZiCM21oJuGvB
+         bq7HB9JVuiilPGfvPdC21c2BH4KIbf4gLQTzNi8n4R6AEDWp57LnBIPm/n3KaZPkgUni
+         7Ha7/zfB+z11cp6qKWcedX+0j1/2AtzoohdSsScBjp7LWK7P03YMOIABrxd5UWLe4mdK
+         B6vw==
+X-Gm-Message-State: AO0yUKUy7IHtl0owa1MpehHejCcivVapmIlS2vfO4Qp761BOoM4xb6+v
+        euQ0/sAr4R5nFK6jKT0PSFexZkRxli2N21Z5A2tLNQ==
+X-Google-Smtp-Source: AK7set9fZJ/p/mdPhK2VDCagbbzYdCfXTlz/obO2rxZsMgJMxfseSr3uIA3AHHZ2r+FKnSw84J/xGV01Zx8zuUA5vPg=
+X-Received: by 2002:a17:903:1c9:b0:19c:b7da:d41f with SMTP id
+ e9-20020a17090301c900b0019cb7dad41fmr2382739plh.11.1677676018573; Wed, 01 Mar
+ 2023 05:06:58 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1677063656.git.viresh.kumar@linaro.org> <8f9fba47f91ef04fa2cf0c3adba9299a23d5280a.1677063656.git.viresh.kumar@linaro.org>
-In-Reply-To: <8f9fba47f91ef04fa2cf0c3adba9299a23d5280a.1677063656.git.viresh.kumar@linaro.org>
+References: <cover.1677063656.git.viresh.kumar@linaro.org> <56b9926836652e9dbf56ca6b7628e836cddca351.1677063656.git.viresh.kumar@linaro.org>
+In-Reply-To: <56b9926836652e9dbf56ca6b7628e836cddca351.1677063656.git.viresh.kumar@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 1 Mar 2023 14:03:05 +0100
-Message-ID: <CAPDyKFroDPdUq+QT18svWfHShSGkNuOeVmT2oyMO89CzSyY+Yg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] OPP: Handle all genpd cases together in _set_required_opps()
+Date:   Wed, 1 Mar 2023 14:06:22 +0100
+Message-ID: <CAPDyKFoQu1=XVCueOaUDgke3xdDy3bt9VRHPo2xdqkLbSbP8CA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] OPP: Move required opps configuration to specialized callback
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Jun Nie <jun.nie@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
         Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
@@ -72,47 +72,198 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Wed, 22 Feb 2023 at 12:07, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> There is no real need of keeping separate code for single genpd case, it
-> can be made to work with a simple change.
+> The required-opps configuration is closely tied to genpd and performance
+> states at the moment and it is not very obvious that required-opps can
+> live without genpds. Though we don't support configuring required-opps
+> for non-genpd cases currently.
+>
+> This commit aims at separating these parts, where configuring genpds
+> would be a special case of configuring the required-opps.
+>
+> Add a specialized callback, set_required_opps(), to the opp table and
+> set it to different callbacks accordingly.
+>
+> This shouldn't result in any functional changes for now.
 >
 > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
+This looks reasonable to me, but I guess it also depends on whether
+you will land patch3 or not?
+
+Nevertheless, feel free to add:
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
 
 > ---
->  drivers/opp/core.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
+>  drivers/opp/core.c | 69 ++++++++++++++++++++++++++++------------------
+>  drivers/opp/of.c   |  3 ++
+>  drivers/opp/opp.h  |  4 +++
+>  3 files changed, 49 insertions(+), 27 deletions(-)
 >
 > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index e87567dbe99f..6d7016ce8c53 100644
+> index 6d7016ce8c53..954c94865cf5 100644
 > --- a/drivers/opp/core.c
 > +++ b/drivers/opp/core.c
-> @@ -959,7 +959,8 @@ static int _set_required_opps(struct device *dev,
->                               struct dev_pm_opp *opp, bool up)
+> @@ -935,8 +935,8 @@ static int _set_opp_bw(const struct opp_table *opp_table,
+>         return 0;
+>  }
+>
+> -static int _set_required_opp(struct device *dev, struct device *pd_dev,
+> -                            struct dev_pm_opp *opp, int i)
+> +static int _set_performance_state(struct device *dev, struct device *pd_dev,
+> +                                 struct dev_pm_opp *opp, int i)
 >  {
->         struct opp_table **required_opp_tables = opp_table->required_opp_tables;
-> -       struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
-> +       struct device **genpd_virt_devs =
-> +               opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
+>         unsigned int pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
+>         int ret;
+> @@ -953,33 +953,20 @@ static int _set_required_opp(struct device *dev, struct device *pd_dev,
+>         return ret;
+>  }
+>
+> -/* This is only called for PM domain for now */
+> -static int _set_required_opps(struct device *dev,
+> -                             struct opp_table *opp_table,
+> -                             struct dev_pm_opp *opp, bool up)
+> +static int _opp_set_required_opps_generic(struct device *dev,
+> +       struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
+> +{
+> +       dev_err(dev, "setting required-opps isn't supported for non-genpd devices\n");
+> +       return -ENOENT;
+> +}
+> +
+> +static int _opp_set_required_opps_genpd(struct device *dev,
+> +       struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
+>  {
+> -       struct opp_table **required_opp_tables = opp_table->required_opp_tables;
+>         struct device **genpd_virt_devs =
+>                 opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
 >         int i, ret = 0;
 >
->         if (!required_opp_tables)
-> @@ -979,12 +980,6 @@ static int _set_required_opps(struct device *dev,
->                 return -ENOENT;
->         }
->
-> -       /* Single genpd case */
-> -       if (!genpd_virt_devs)
-> -               return _set_required_opp(dev, dev, opp, 0);
+> -       if (!required_opp_tables)
+> -               return 0;
 > -
-> -       /* Multiple genpd case */
+> -       /* required-opps not fully initialized yet */
+> -       if (lazy_linking_pending(opp_table))
+> -               return -EBUSY;
+> -
+> -       /*
+> -        * We only support genpd's OPPs in the "required-opps" for now, as we
+> -        * don't know much about other use cases. Error out if the required OPP
+> -        * doesn't belong to a genpd.
+> -        */
+> -       if (unlikely(!required_opp_tables[0]->is_genpd)) {
+> -               dev_err(dev, "required-opps don't belong to a genpd\n");
+> -               return -ENOENT;
+> -       }
 > -
 >         /*
 >          * Acquire genpd_virt_dev_lock to make sure we don't use a genpd_dev
 >          * after it is freed from another thread.
+> @@ -987,15 +974,15 @@ static int _set_required_opps(struct device *dev,
+>         mutex_lock(&opp_table->genpd_virt_dev_lock);
+>
+>         /* Scaling up? Set required OPPs in normal order, else reverse */
+> -       if (up) {
+> +       if (!scaling_down) {
+>                 for (i = 0; i < opp_table->required_opp_count; i++) {
+> -                       ret = _set_required_opp(dev, genpd_virt_devs[i], opp, i);
+> +                       ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
+>                         if (ret)
+>                                 break;
+>                 }
+>         } else {
+>                 for (i = opp_table->required_opp_count - 1; i >= 0; i--) {
+> -                       ret = _set_required_opp(dev, genpd_virt_devs[i], opp, i);
+> +                       ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
+>                         if (ret)
+>                                 break;
+>                 }
+> @@ -1006,6 +993,34 @@ static int _set_required_opps(struct device *dev,
+>         return ret;
+>  }
+>
+> +/* This is only called for PM domain for now */
+> +static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+> +                             struct dev_pm_opp *opp, bool up)
+> +{
+> +       /* required-opps not fully initialized yet */
+> +       if (lazy_linking_pending(opp_table))
+> +               return -EBUSY;
+> +
+> +       if (opp_table->set_required_opps)
+> +               return opp_table->set_required_opps(dev, opp_table, opp, up);
+> +
+> +       return 0;
+> +}
+> +
+> +/* Update set_required_opps handler */
+> +void _update_set_required_opps(struct opp_table *opp_table)
+> +{
+> +       /* Already set */
+> +       if (opp_table->set_required_opps)
+> +               return;
+> +
+> +       /* All required OPPs will belong to genpd or none */
+> +       if (opp_table->required_opp_tables[0]->is_genpd)
+> +               opp_table->set_required_opps = _opp_set_required_opps_genpd;
+> +       else
+> +               opp_table->set_required_opps = _opp_set_required_opps_generic;
+> +}
+> +
+>  static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+>  {
+>         struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index e55c6095adf0..93da3c797afc 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -196,6 +196,8 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+>         /* Let's do the linking later on */
+>         if (lazy)
+>                 list_add(&opp_table->lazy, &lazy_opp_tables);
+> +       else
+> +               _update_set_required_opps(opp_table);
+>
+>         goto put_np;
+>
+> @@ -411,6 +413,7 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
+>
+>                 /* All required opp-tables found, remove from lazy list */
+>                 if (!lazy) {
+> +                       _update_set_required_opps(opp_table);
+>                         list_del_init(&opp_table->lazy);
+>
+>                         list_for_each_entry(opp, &opp_table->opp_list, node)
+> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+> index 3a6e077df386..2a057c42ddf4 100644
+> --- a/drivers/opp/opp.h
+> +++ b/drivers/opp/opp.h
+> @@ -184,6 +184,7 @@ enum opp_table_access {
+>   * @enabled: Set to true if the device's resources are enabled/configured.
+>   * @genpd_performance_state: Device's power domain support performance state.
+>   * @is_genpd: Marks if the OPP table belongs to a genpd.
+> + * @set_required_opps: Helper responsible to set required OPPs.
+>   * @dentry:    debugfs dentry pointer of the real device directory (not links).
+>   * @dentry_name: Name of the real dentry.
+>   *
+> @@ -234,6 +235,8 @@ struct opp_table {
+>         bool enabled;
+>         bool genpd_performance_state;
+>         bool is_genpd;
+> +       int (*set_required_opps)(struct device *dev,
+> +               struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
+>
+>  #ifdef CONFIG_DEBUG_FS
+>         struct dentry *dentry;
+> @@ -257,6 +260,7 @@ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cp
+>  struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
+>  void _put_opp_list_kref(struct opp_table *opp_table);
+>  void _required_opps_available(struct dev_pm_opp *opp, int count);
+> +void _update_set_required_opps(struct opp_table *opp_table);
+>
+>  static inline bool lazy_linking_pending(struct opp_table *opp_table)
+>  {
 > --
 > 2.31.1.272.g89b43f80a514
 >
