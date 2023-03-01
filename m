@@ -2,110 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D0E6A733E
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 19:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6056A7372
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 19:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjCASQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 13:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S229553AbjCASaf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 13:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjCASQm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 13:16:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6630457F1;
-        Wed,  1 Mar 2023 10:16:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5274061460;
-        Wed,  1 Mar 2023 18:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3A3C433D2;
-        Wed,  1 Mar 2023 18:16:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677694596;
-        bh=MbNmv1qlx44l2UReHXBKDyqdtXbH1552C0xoBvoenxY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aE/Z3aMl+W2YJ0hmOSa7j3h51QCSpwmZG197Kjaahd4LbjVZAc12oMw9E2t1r89OE
-         3F8g0VXfkBKu7V8L7hZNwHnHX2LuPR/gy+x3JWHD0bur+zSJGbot0vHZnlZLJZDrS3
-         VZrkDyE2NMrPM1zn9mtbXF8IjBT+96OGfOl0bXIVRqqm3qncEe8EaP2WoeQ2WgETLA
-         A/uaV80sKgznSw1ZjI2mK5Hb7XpYPw8VjFHVbHn/p2ysBzvHs352kh93+BU6c9C4pX
-         D18mk2f3R9srsxdNLOvLZFMOYrtqeDha8DY5+u4dGGKmHgJdL+6I+g9GhQc/u3W5Gx
-         vHlarjEXvDCew==
-Date:   Wed, 1 Mar 2023 11:16:34 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: qcom_battmgr: remove bogus do_div()
-Message-ID: <Y/+WghSbz3l6uipn@dev-arch.thelio-3990X>
-References: <20230214132052.1556699-1-arnd@kernel.org>
+        with ESMTP id S229527AbjCASaf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 13:30:35 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AB032503;
+        Wed,  1 Mar 2023 10:30:34 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id eg37so57515118edb.12;
+        Wed, 01 Mar 2023 10:30:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677695432;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HtYgXoCwtUuhPXmHs5pHvu8QCWRq+j3buBks+eQBQac=;
+        b=ftp7Jq5Q54F4SAmVLxDi6UbI8b92eEVqwDwsmt/ytlSLX6KJLN9W82VpBnUVVl8awh
+         lOg5B+D2DECmphh7Q2Kfg7wJukiIRBrwZZVNh6rEjQZ1UNzw/fja8MaCkmHbyxot9hUi
+         +2PIruKedT6E1uoklo0+Orj3/sY8H5Py695ItqzaQbtEwB+5oke8vUZd0LvD32m16Y/a
+         RGViYxk+nGkcUMLj/xmqnXwe6G7sE+UJkqtoF0DqIlOkTl8hbtITM7sP97KCy8KDg52D
+         TXGfChmDRP+Ma6PTpCJx1uuFZbpVMMTr71f4y3jvMjw6wqpjvHXGx98yWAllIbcC5PYH
+         hY4Q==
+X-Gm-Message-State: AO0yUKU/fq32/tC0FsZRKk75nzxhhfGbWvxsdbtMgVNxxjgAPoZraaRk
+        FbaVusPd7P6nL9e7TlTPslrbhsP1TJE0nM/3+4M=
+X-Google-Smtp-Source: AK7set+EyCePVrgZG0Rf4nKfGO8kKAJEBVSZkOMRs2FEBANMdM5uILSfp92588QSCdddTe/6Cs/I80dA3gHasUDqfKE=
+X-Received: by 2002:a17:906:2358:b0:877:747d:1108 with SMTP id
+ m24-20020a170906235800b00877747d1108mr3522847eja.5.1677695432557; Wed, 01 Mar
+ 2023 10:30:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214132052.1556699-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/yAusqpje3MqS1N@kili>
+In-Reply-To: <Y/yAusqpje3MqS1N@kili>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 1 Mar 2023 19:30:21 +0100
+Message-ID: <CAJZ5v0gt1NiW76jsz_FU8c4CfNBv0ojN-Aq7Ds0WxDqO2-SVsg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: quark_dts: fix error pointer dereference
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Boon Leong <boon.leong.ong@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Bryan O'Donoghue" <pure.logic@nexus-software.ie>,
+        "Kweh, Hock Leong" <hock.leong.kweh@intel.com>,
+        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
-
-On Tue, Feb 14, 2023 at 02:20:42PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The argument to do_div() is a 32-bit integer, and it was read from a
-> 32-bit register so there is no point in doing a 64-bit division on it.
-> 
-> On 32-bit arm, do_div() causes a compile-time warning here:
-> 
-> include/asm-generic/div64.h:238:22: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
->   238 |   __rem = __div64_32(&(n), __base); \
->       |                      ^~~~
->       |                      |
->       |                      unsigned int *
-> drivers/power/supply/qcom_battmgr.c:1130:4: note: in expansion of macro 'do_div'
->  1130 |    do_div(battmgr->status.percent, 100);
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Mon, Feb 27, 2023 at 11:06 AM Dan Carpenter <error27@gmail.com> wrote:
+>
+> If alloc_soc_dts() fails, then we can just return.  Trying to free
+> "soc_dts" will lead to an Oops.
+>
+> Fixes: 8c1876939663 ("thermal: intel Quark SoC X1000 DTS thermal driver")
+> Signed-off-by: Dan Carpenter <error27@gmail.com>
 > ---
->  drivers/power/supply/qcom_battmgr.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-> index ec31f887184f..de77df97b3a4 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -1126,8 +1126,7 @@ static void qcom_battmgr_sm8350_callback(struct qcom_battmgr *battmgr,
->  			battmgr->info.charge_type = le32_to_cpu(resp->intval.value);
->  			break;
->  		case BATT_CAPACITY:
-> -			battmgr->status.percent = le32_to_cpu(resp->intval.value);
-> -			do_div(battmgr->status.percent, 100);
-> +			battmgr->status.percent = le32_to_cpu(resp->intval.value) / 100;
->  			break;
->  		case BATT_VOLT_OCV:
->  			battmgr->status.voltage_ocv = le32_to_cpu(resp->intval.value);
-> -- 
-> 2.39.1
-> 
+>  drivers/thermal/intel/intel_quark_dts_thermal.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> index 97b843fa7568..ffdc95047838 100644
+> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
+> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> @@ -400,22 +400,14 @@ MODULE_DEVICE_TABLE(x86cpu, qrk_thermal_ids);
+>
+>  static int __init intel_quark_thermal_init(void)
+>  {
+> -       int err = 0;
+> -
+>         if (!x86_match_cpu(qrk_thermal_ids) || !iosf_mbi_available())
+>                 return -ENODEV;
+>
+>         soc_dts = alloc_soc_dts();
+> -       if (IS_ERR(soc_dts)) {
+> -               err = PTR_ERR(soc_dts);
+> -               goto err_free;
+> -       }
+> +       if (IS_ERR(soc_dts))
+> +               return PTR_ERR(soc_dts);
+>
+>         return 0;
+> -
+> -err_free:
+> -       free_soc_dts(soc_dts);
+> -       return err;
+>  }
+>
+>  static void __exit intel_quark_thermal_exit(void)
+> --
 
-Would you be able to take this patch directly? It seems obviously
-correctTM, has an ack from Sebastian [1], and without it, 32-bit
-allmodconfig builds are broken [2] (the other warning in that log has a
-fix on the way to you soon).
-
-[1]: https://lore.kernel.org/20230214220210.cpviycsmcppylkgj@mercury.elektranox.org/
-[2]: https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2MPmxwvmQ7FdpiMhdQN2ZJhcoUP/build.log
-
-Cheers,
-Nathan
+Applied as 6.3-rc material, thanks!
