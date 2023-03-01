@@ -2,268 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B766A6CD9
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 14:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A916A6E31
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 15:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjCANHB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 08:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S230055AbjCAOS0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 09:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjCANHA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 08:07:00 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED4C5266
-        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 05:06:59 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso11887845pjs.3
-        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 05:06:59 -0800 (PST)
+        with ESMTP id S230095AbjCAOSU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 09:18:20 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25213346D;
+        Wed,  1 Mar 2023 06:18:14 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id d30so54425489eda.4;
+        Wed, 01 Mar 2023 06:18:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NF6I37ZMXUZT2UAfhqZz45LoPVH4Elbw4xdIU+68u8Q=;
-        b=UaYDQ4t4JxPnJkgU24ZAhgOpeh4qTF1dQDw+7OwLtO214cMzoEfEWv+eW20tNyhE4L
-         yJSIz0na+KLfg2rEKU28yJHMI9VowIhmPeuDRLEv9t892DVUj+YMjA3sqRW/wVvYOpGM
-         vNobgi5NuvtkqPFzgZb6LnotETc73PAp6Wqze2xSvXhT5QRQq3NtagUzKUS3QUPPTpWc
-         NVz59WXQCW+/xwQEmmU2qWRIMdwmaEOetGaHhkwJRL/q4t3e72u6pHGa/eAaQqjKUOpH
-         Zd7zs99siaMwPKnUOW1I2wTT98wyClaTZkQ4sPKfZWC8d7+58XxnzIeiSqzSaQY6cj11
-         AKWg==
+        d=gmail.com; s=20210112; t=1677680293;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=osWzCrA1KWuD286SrbwwIFwklmVl9dNUWwjdidpvypk=;
+        b=o+KGLZ9YXvF0VPzo66uI1UCU9uqh0rHczVTjbvXESHldGtXVlr0jCE8WuyCREbNVPZ
+         tGauEn9RXqlZhCRcADaJmSuwclV3EHcgECcy+7yVPcvoxSwFxCLlGBdmX74YYse4/43t
+         TFzapW2TqvX2AQbt4xMEchoig3r/GLaLIZHswMQRYyOvJ2fxUBrGA++vXwUqfi+Dk57U
+         c4YtV1Okw0m7coiaY1fmPYlQymlFG8E/52gGcSGXfFn2z8B3cURPyFCtOJbqW2VdaFsu
+         rFwpSbcaIJ2eNgecPBiiTNxe+/615igx1M2zE2R0I514CwvpA55ZY9/gxey66jm4sLAY
+         Y2Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NF6I37ZMXUZT2UAfhqZz45LoPVH4Elbw4xdIU+68u8Q=;
-        b=SixRGcrL0+piIrlVcB472BpgriU2UGe4998r54Ua5XzbP9NcOcU2QTxlgKSwbZA+Sj
-         9gDCAcnSpFed4P+UCWH9dw8KqZ7Cjqu7Y1OyZTyJbopOAgBntiCszNbzXF/HkdZW0Ckd
-         QODT9nJVKlJ1fqBwLERNJqC7W1DDxl7525NBzGxmbjFypwISPQK0xaNmZiCM21oJuGvB
-         bq7HB9JVuiilPGfvPdC21c2BH4KIbf4gLQTzNi8n4R6AEDWp57LnBIPm/n3KaZPkgUni
-         7Ha7/zfB+z11cp6qKWcedX+0j1/2AtzoohdSsScBjp7LWK7P03YMOIABrxd5UWLe4mdK
-         B6vw==
-X-Gm-Message-State: AO0yUKUy7IHtl0owa1MpehHejCcivVapmIlS2vfO4Qp761BOoM4xb6+v
-        euQ0/sAr4R5nFK6jKT0PSFexZkRxli2N21Z5A2tLNQ==
-X-Google-Smtp-Source: AK7set9fZJ/p/mdPhK2VDCagbbzYdCfXTlz/obO2rxZsMgJMxfseSr3uIA3AHHZ2r+FKnSw84J/xGV01Zx8zuUA5vPg=
-X-Received: by 2002:a17:903:1c9:b0:19c:b7da:d41f with SMTP id
- e9-20020a17090301c900b0019cb7dad41fmr2382739plh.11.1677676018573; Wed, 01 Mar
- 2023 05:06:58 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677680293;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=osWzCrA1KWuD286SrbwwIFwklmVl9dNUWwjdidpvypk=;
+        b=yiPzEqOj+i9earAFzIWqsPAoAbuuELCl2SCkrMxd69ozsiziATeho0JrCWhRmP1IeL
+         JD1hGH4wnrJqocRdBIc2IGzNxf2FMYyzcWs4VevGgCAumUmUeZMluRavUzPsTTw/OzfS
+         pxhuENbddQRmc04GtKJd/rbEIb6ABZoi6GOAqO19B1dtH6B1NDASeksWvnPOqz+A2swk
+         zQf4xwydBvB6atJfNOgq2goZrpGWkQBHzbNk7OadzK/E2sJ/OiNOHyq6pVfZR510tCNt
+         aOBXJHjseua7ZmYVV3z3f0E2oFs+4eoq1SZknAlycF3WBIZyWWCxdsi5DDvWdLUbQSXx
+         4q8g==
+X-Gm-Message-State: AO0yUKX1sGQQxXPs7R6ICInVC9cg8JZTjUzBh+0jXfni+np0ahnaZy0N
+        oRt0V4IfY/6BdqAMl8kSvFI=
+X-Google-Smtp-Source: AK7set/b5p8SvU9l81mJVbZCXeCoIqUxIPYWnJffshQ/3CzydN3SxRK0ruoaZBK1MGTbI39x/luxAA==
+X-Received: by 2002:a05:6402:189:b0:4a0:e31a:434 with SMTP id r9-20020a056402018900b004a0e31a0434mr6244835edv.27.1677680292893;
+        Wed, 01 Mar 2023 06:18:12 -0800 (PST)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u20-20020a170906655400b008f2b0c6052csm5791286ejn.89.2023.03.01.06.18.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 06:18:12 -0800 (PST)
+Date:   Wed, 1 Mar 2023 15:18:10 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v4 16/19] thermal/drivers/tegra: Remove unneeded lock
+ when setting a trip point
+Message-ID: <Y/9eohV9h26hPuFn@orome>
+References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
+ <20230228112238.2312273-17-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-References: <cover.1677063656.git.viresh.kumar@linaro.org> <56b9926836652e9dbf56ca6b7628e836cddca351.1677063656.git.viresh.kumar@linaro.org>
-In-Reply-To: <56b9926836652e9dbf56ca6b7628e836cddca351.1677063656.git.viresh.kumar@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 1 Mar 2023 14:06:22 +0100
-Message-ID: <CAPDyKFoQu1=XVCueOaUDgke3xdDy3bt9VRHPo2xdqkLbSbP8CA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] OPP: Move required opps configuration to specialized callback
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jun Nie <jun.nie@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Oz2Iy2f0YGfChAS0"
+Content-Disposition: inline
+In-Reply-To: <20230228112238.2312273-17-daniel.lezcano@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 22 Feb 2023 at 12:07, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> The required-opps configuration is closely tied to genpd and performance
-> states at the moment and it is not very obvious that required-opps can
-> live without genpds. Though we don't support configuring required-opps
-> for non-genpd cases currently.
->
-> This commit aims at separating these parts, where configuring genpds
-> would be a special case of configuring the required-opps.
->
-> Add a specialized callback, set_required_opps(), to the opp table and
-> set it to different callbacks accordingly.
->
-> This shouldn't result in any functional changes for now.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-This looks reasonable to me, but I guess it also depends on whether
-you will land patch3 or not?
+--Oz2Iy2f0YGfChAS0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Nevertheless, feel free to add:
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
+On Tue, Feb 28, 2023 at 12:22:35PM +0100, Daniel Lezcano wrote:
+> The function tegra_tsensor_enable_hw_channel() takes the thermal zone
+> lock to prevent "a potential" race with a call to set_trips()
+> callback.
+>=20
+> The driver must not play with the thermal framework core code
+> internals.
+>=20
+> The tegra_tsensor_enable_hw_channel() is called by:
+>=20
+>  - the suspend / resume callbacks
+>  - the probe function after the thermal zones are registered
+>=20
+> The thermal zone lock taken in this function is supposed to protect
+> from a call to the set_trips() callback which writes in the same
+> register.
+>=20
+> The potential race is when suspend / resume are called at the same
+> time as set_trips. This one is called only in
+> thermal_zone_device_update().
+>=20
+>  - At suspend time, the 'in_suspend' is set, thus the
+>    thermal_zone_device_update() bails out immediately and set_trips is
+>    not called during this moment.
+>=20
+>  - At resume time, the thermal zone is updated at PM_POST_SUSPEND,
+>    thus the driver has already set the TH2 temperature.
+>=20
+>  - At probe time, we register the thermal zone and then we set the
+>    TH2. The only scenario I can see so far is the interrupt fires, the
+>    thermal_zone_update() is called exactly at the moment
+>    tegra_tsensor_enable_hw_channel() a few lines after registering it.
+>=20
+> Disable the interrupt before setting up the hw channels and then
+> enable it. We close the potential race window without using the
+> thermal zone's lock.
+>=20
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/opp/core.c | 69 ++++++++++++++++++++++++++++------------------
->  drivers/opp/of.c   |  3 ++
->  drivers/opp/opp.h  |  4 +++
->  3 files changed, 49 insertions(+), 27 deletions(-)
->
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 6d7016ce8c53..954c94865cf5 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -935,8 +935,8 @@ static int _set_opp_bw(const struct opp_table *opp_table,
->         return 0;
->  }
->
-> -static int _set_required_opp(struct device *dev, struct device *pd_dev,
-> -                            struct dev_pm_opp *opp, int i)
-> +static int _set_performance_state(struct device *dev, struct device *pd_dev,
-> +                                 struct dev_pm_opp *opp, int i)
->  {
->         unsigned int pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
->         int ret;
-> @@ -953,33 +953,20 @@ static int _set_required_opp(struct device *dev, struct device *pd_dev,
->         return ret;
->  }
->
-> -/* This is only called for PM domain for now */
-> -static int _set_required_opps(struct device *dev,
-> -                             struct opp_table *opp_table,
-> -                             struct dev_pm_opp *opp, bool up)
-> +static int _opp_set_required_opps_generic(struct device *dev,
-> +       struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
-> +{
-> +       dev_err(dev, "setting required-opps isn't supported for non-genpd devices\n");
-> +       return -ENOENT;
-> +}
-> +
-> +static int _opp_set_required_opps_genpd(struct device *dev,
-> +       struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
->  {
-> -       struct opp_table **required_opp_tables = opp_table->required_opp_tables;
->         struct device **genpd_virt_devs =
->                 opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
->         int i, ret = 0;
->
-> -       if (!required_opp_tables)
-> -               return 0;
+>  drivers/thermal/tegra/tegra30-tsensor.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/te=
+gra/tegra30-tsensor.c
+> index 4b2ea17910cd..3506c3f3c474 100644
+> --- a/drivers/thermal/tegra/tegra30-tsensor.c
+> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
+> @@ -359,9 +359,6 @@ static int tegra_tsensor_enable_hw_channel(const stru=
+ct tegra_tsensor *ts,
+> =20
+>  	tegra_tsensor_get_hw_channel_trips(tzd, &hot_trip, &crit_trip);
+> =20
+> -	/* prevent potential racing with tegra_tsensor_set_trips() */
+> -	mutex_lock(&tzd->lock);
 > -
-> -       /* required-opps not fully initialized yet */
-> -       if (lazy_linking_pending(opp_table))
-> -               return -EBUSY;
+>  	dev_info_once(ts->dev, "ch%u: PMC emergency shutdown trip set to %dC\n",
+>  		      id, DIV_ROUND_CLOSEST(crit_trip, 1000));
+> =20
+> @@ -404,8 +401,6 @@ static int tegra_tsensor_enable_hw_channel(const stru=
+ct tegra_tsensor *ts,
+>  	val |=3D FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN, 1);
+>  	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
+> =20
+> -	mutex_unlock(&tzd->lock);
 > -
-> -       /*
-> -        * We only support genpd's OPPs in the "required-opps" for now, as we
-> -        * don't know much about other use cases. Error out if the required OPP
-> -        * doesn't belong to a genpd.
-> -        */
-> -       if (unlikely(!required_opp_tables[0]->is_genpd)) {
-> -               dev_err(dev, "required-opps don't belong to a genpd\n");
-> -               return -ENOENT;
-> -       }
-> -
->         /*
->          * Acquire genpd_virt_dev_lock to make sure we don't use a genpd_dev
->          * after it is freed from another thread.
-> @@ -987,15 +974,15 @@ static int _set_required_opps(struct device *dev,
->         mutex_lock(&opp_table->genpd_virt_dev_lock);
->
->         /* Scaling up? Set required OPPs in normal order, else reverse */
-> -       if (up) {
-> +       if (!scaling_down) {
->                 for (i = 0; i < opp_table->required_opp_count; i++) {
-> -                       ret = _set_required_opp(dev, genpd_virt_devs[i], opp, i);
-> +                       ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
->                         if (ret)
->                                 break;
->                 }
->         } else {
->                 for (i = opp_table->required_opp_count - 1; i >= 0; i--) {
-> -                       ret = _set_required_opp(dev, genpd_virt_devs[i], opp, i);
-> +                       ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
->                         if (ret)
->                                 break;
->                 }
-> @@ -1006,6 +993,34 @@ static int _set_required_opps(struct device *dev,
->         return ret;
->  }
->
-> +/* This is only called for PM domain for now */
-> +static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
-> +                             struct dev_pm_opp *opp, bool up)
-> +{
-> +       /* required-opps not fully initialized yet */
-> +       if (lazy_linking_pending(opp_table))
-> +               return -EBUSY;
+>  	err =3D thermal_zone_device_enable(tzd);
+>  	if (err) {
+>  		dev_err(ts->dev, "ch%u: failed to enable zone: %d\n", id, err);
+> @@ -592,12 +587,24 @@ static int tegra_tsensor_probe(struct platform_devi=
+ce *pdev)
+>  		return dev_err_probe(&pdev->dev, err,
+>  				     "failed to request interrupt\n");
+> =20
+> +	/*
+> +	 * Disable the interrupt so set_trips() can not be called
+> +	 * while we are setting up the register
+> +	 * TSENSOR_SENSOR0_CONFIG1. With this we close a potential
+> +	 * race window where we are setting up the TH2 and the
+> +	 * temperature hits TH1 resulting to an update of the
+> +	 * TSENSOR_SENSOR0_CONFIG1 register in the ISR.
+> +	 */
+> +	disable_irq(irq);
 > +
-> +       if (opp_table->set_required_opps)
-> +               return opp_table->set_required_opps(dev, opp_table, opp, up);
-> +
-> +       return 0;
-> +}
-> +
-> +/* Update set_required_opps handler */
-> +void _update_set_required_opps(struct opp_table *opp_table)
-> +{
-> +       /* Already set */
-> +       if (opp_table->set_required_opps)
-> +               return;
-> +
-> +       /* All required OPPs will belong to genpd or none */
-> +       if (opp_table->required_opp_tables[0]->is_genpd)
-> +               opp_table->set_required_opps = _opp_set_required_opps_genpd;
-> +       else
-> +               opp_table->set_required_opps = _opp_set_required_opps_generic;
-> +}
-> +
->  static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
->  {
->         struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index e55c6095adf0..93da3c797afc 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -196,6 +196,8 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
->         /* Let's do the linking later on */
->         if (lazy)
->                 list_add(&opp_table->lazy, &lazy_opp_tables);
-> +       else
-> +               _update_set_required_opps(opp_table);
->
->         goto put_np;
->
-> @@ -411,6 +413,7 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
->
->                 /* All required opp-tables found, remove from lazy list */
->                 if (!lazy) {
-> +                       _update_set_required_opps(opp_table);
->                         list_del_init(&opp_table->lazy);
->
->                         list_for_each_entry(opp, &opp_table->opp_list, node)
-> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-> index 3a6e077df386..2a057c42ddf4 100644
-> --- a/drivers/opp/opp.h
-> +++ b/drivers/opp/opp.h
-> @@ -184,6 +184,7 @@ enum opp_table_access {
->   * @enabled: Set to true if the device's resources are enabled/configured.
->   * @genpd_performance_state: Device's power domain support performance state.
->   * @is_genpd: Marks if the OPP table belongs to a genpd.
-> + * @set_required_opps: Helper responsible to set required OPPs.
->   * @dentry:    debugfs dentry pointer of the real device directory (not links).
->   * @dentry_name: Name of the real dentry.
->   *
-> @@ -234,6 +235,8 @@ struct opp_table {
->         bool enabled;
->         bool genpd_performance_state;
->         bool is_genpd;
-> +       int (*set_required_opps)(struct device *dev,
-> +               struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
->
->  #ifdef CONFIG_DEBUG_FS
->         struct dentry *dentry;
-> @@ -257,6 +260,7 @@ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cp
->  struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
->  void _put_opp_list_kref(struct opp_table *opp_table);
->  void _required_opps_available(struct dev_pm_opp *opp, int count);
-> +void _update_set_required_opps(struct opp_table *opp_table);
->
->  static inline bool lazy_linking_pending(struct opp_table *opp_table)
->  {
-> --
-> 2.31.1.272.g89b43f80a514
->
+>  	for (i =3D 0; i < ARRAY_SIZE(ts->ch); i++) {
+>  		err =3D tegra_tsensor_enable_hw_channel(ts, i);
+>  		if (err)
+>  			return err;
+>  	}
+> =20
+> +	enable_irq(irq);
+
+Instead of disabling and reenabling the interrupt, could we simply move
+the channel enabling code a couple of lines above, before the IRQ
+request call? If enabling the channels were to trigger an interrupt, it
+should get triggered right after requesting the IRQ.
+
+Thierry
+
+--Oz2Iy2f0YGfChAS0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/XqIACgkQ3SOs138+
+s6EHzg/+LaKObM7XgPPaPoY5q+ysmHSQcIRHMxssUaekCxLbpDECR24adyRLcaJG
+65KIHqtorgjPRYW2z6jIpC3xUjCokMZhbkwL5tbaoywsbm5xiajiJXiHIXc8kWQX
+Hm6DJZi0J4V0aqsk1c1IAKFAjSdiN3NY3qky+2/SQSQqmveD4Ojkd/3fdUL1NkuD
+txRaKkNQYshjQxqhP5I5U5Di33YRS3J1OtJDBR+Nk49mNVTH11MyOmqoYmRCBu7N
+YwOSUB5gu0XlzxRz2awyb2/y6B+dQ5WudhTUD1DFIi0tUD1WlilyCwDhdrBITyUJ
+b27iHxBuWq2D2gIEh8TNydbK5kH2NDhFWhXqVJnpdFe8O4C2DSM24B8Px/J6+f0K
+kTTxBRDjT2+6IVRpYLGnzWx1PPYQ6bhj7txzvHL717ZPrOJPb1CjilhLtFIYe/PU
+5/XHZoHIr9tPpZYVz9WMlFpMVKj7PmKnNygh/4jWH+n4sj3PpiWv4N7OBVJ4D6e2
+LNxxxDTraEK1QGwANEs6abt5MFrtwb27qrhxA5b4Kexosx/hh4pKSU3XSsYZW++d
+QGm3B2qqXdkM3YIgdH+8BLDsa/P7rcIvJt7A2Tc1r6G65oOhCiwcFml50exlXv18
+VES1C9HrS75Y/j8UBgW6km1xlM4nMfaMIurUNcuOVkRp91JbIyQ=
+=W4bx
+-----END PGP SIGNATURE-----
+
+--Oz2Iy2f0YGfChAS0--
