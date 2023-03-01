@@ -2,220 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E48F6A6B30
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 11:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71446A6C96
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 13:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCAK6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 05:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
+        id S229819AbjCAMsD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 07:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjCAK6S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 05:58:18 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE6199DD;
-        Wed,  1 Mar 2023 02:58:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677668296; x=1709204296;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mUQT0lCw3o7DsJGEc0FuMpCukS+bnk0PTEmCUUh2KDc=;
-  b=m8MNDGNb3D922yW2iCGbUy/h+q8U1cN0l051sQo2l3dGVcIcPa8uJAJU
-   L/o6ByCO4wtCM4BqkzBPdGTclZQa/T2rq2uNKyKnfL4tBnZwX8bKbZmdy
-   KN9w83kspMr5KX+rA8toeDLD/GhfazbH/+++EO5AXwGjiyr+jTftJgUsi
-   NiYXJ8DMENHtjlt/8XFPH3yxvxlASzmfEOQKmK48FaQF/eJ9GYjLxzNm/
-   jVvcSfUrSZ7a4M3mzBgQKzlUrZ0R3DtvVUbnwAjSDqtL8n7ZO2e95CoZV
-   WtJ8/EkbNtGf44RZ+/XanSacYtOZPU5QbWO1LTulhSi7uiEaM7Gls+3Qf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="336672391"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="336672391"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 02:58:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="817517698"
-X-IronPort-AV: E=Sophos;i="5.98,224,1673942400"; 
-   d="scan'208";a="817517698"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Mar 2023 02:58:14 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXKA2-000669-0y;
-        Wed, 01 Mar 2023 10:58:14 +0000
-Date:   Wed, 01 Mar 2023 18:57:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 020c69c7d16fa3fafeaf05b78967e71baf96154a
-Message-ID: <63ff2f8c.r+g/ChcFCDwBVDZw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229635AbjCAMsA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 07:48:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C63F3BDB2
+        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 04:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677674831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PrHWi0O3bp5TW073HxIoo2GqwQh60ydUW1vLbyoS8FU=;
+        b=TCDHMqCmqHOxRM5QtpqYDPa+29+jQWl3x4nbuRHyIqBT/jY9yYGiViECo1cLHP6WbPZiuP
+        f5vkgiw/54KEixCIcXlpsnmcPfS4ZAqnX0J3uFW4LuUwnwLk49EM8jC+Hm/O/5n4AY6FRX
+        XZQ1pyQFsGoEjAFzngV2rjHCqL9QVBw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-578-qdZfpqwJPQG72k4UTnJeRA-1; Wed, 01 Mar 2023 07:47:10 -0500
+X-MC-Unique: qdZfpqwJPQG72k4UTnJeRA-1
+Received: by mail-ed1-f72.google.com with SMTP id cz22-20020a0564021cb600b004a245f58006so19285710edb.12
+        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 04:47:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrHWi0O3bp5TW073HxIoo2GqwQh60ydUW1vLbyoS8FU=;
+        b=gLMfuXF/0GpbXOuS9w9ounClozJpWmndzqyFJS5LXFfEzax9aDul7qw2pcQqb9ZY7h
+         CPx4VGlJ2nNLd4Zx3PBaQ+Hd9uOgXepPJzezRfMbro8GYJz+IQDvOZjlhBzHr9pgE2ph
+         ozzpCE7WCjLo1HLtvtdANIdw4ulTGLDyDpLcGMfGSccHQxmoY6UFzW69oRPAJApsKVhW
+         BIcVCvjXfCCIJNBdmJ8MbdB9MeP+EKVfsoUzbGaIh3973MAnZTL8YVSUjgi64gYyIRuZ
+         NGWAJbDlpDMxDKEMnY+F5eudUPKTmAni/RWR8qLB2o5yZIKA09dx9+mF4CqpyRR+yJYA
+         CMfw==
+X-Gm-Message-State: AO0yUKVHzq6qUikP37PmaqDBGZN0RdbYVf7jGhZDN73Qx4Kckzp7sFKh
+        MjOQ7urDOfP7Jzl7pGyyA+lLV+VoT+GQ3/6TL/QBYGV6P7FIUjc7VKG7WpIlhBnniSsw4Q/memT
+        QwgyfqyqOICdMyuQvFdM=
+X-Received: by 2002:aa7:d6c4:0:b0:4af:59c0:744a with SMTP id x4-20020aa7d6c4000000b004af59c0744amr7757579edr.24.1677674829575;
+        Wed, 01 Mar 2023 04:47:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set/gegt3wNPFIA5UaAFSkM0H/Cu2JETEa5VzADkRpzuOeLZLY8c4YHH4dVV9FidRJQJWbeU9sQ==
+X-Received: by 2002:aa7:d6c4:0:b0:4af:59c0:744a with SMTP id x4-20020aa7d6c4000000b004af59c0744amr7757547edr.24.1677674829268;
+        Wed, 01 Mar 2023 04:47:09 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id b18-20020a50b412000000b004bda465da32sm374934edh.1.2023.03.01.04.47.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 04:47:08 -0800 (PST)
+Message-ID: <5bb49015-0a9c-5b9d-b22c-38011439c984@redhat.com>
+Date:   Wed, 1 Mar 2023 13:47:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/8] drivers: select REGMAP instead of depending on it
+Content-Language: en-US, nl
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Andrew Jeffery <andrew@aj.id.au>, Corey Minyard <minyard@acm.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Riku Voipio <riku.voipio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        platform-driver-x86@vger.kernel.org,
+        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
+        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
+References: <20230226053953.4681-1-rdunlap@infradead.org>
+ <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
+ <6a95a337-2972-427f-635d-5ef4e91a82fa@infradead.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <6a95a337-2972-427f-635d-5ef4e91a82fa@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 020c69c7d16fa3fafeaf05b78967e71baf96154a  Merge branch 'powercap' into bleeding-edge
+Hi,
 
-elapsed time: 832m
+On 2/27/23 17:07, Randy Dunlap wrote:
+> 
+> 
+> On 2/27/23 01:31, Hans de Goede wrote:
+>> Hi Randy,
+>>
+>> On 2/26/23 06:39, Randy Dunlap wrote:
+>>> REGMAP is a hidden (not user visible) symbol. Users cannot set it
+>>> directly thru "make *config", so drivers should select it instead of
+>>> depending on it if they need it.
+>>>
+>>> Consistently using "select" or "depends on" can also help reduce
+>>> Kconfig circular dependency issues.
+>>>
+>>> REGMAP is selected 94 times and is depended on 11 times in
+>>> current linux-next. Eliminate the uses of "depends on" by
+>>> converting them to "select".
+>>
+>> Thank you for your work on this. Mixing of depends on vs select
+>> is a real problem with many Kconfig symbols.
+>>
+>>>  [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead of depending on it
+>>>  [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
+>>>  [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending on it
+>>>  [PATCH 4/8] leds: TI_LMU_COMMON: select REGMAP instead of depending on it
+>>>  [PATCH 5/8] platform: mellanox: select REGMAP instead of depending on it
+>>>  [PATCH 6/8] platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
+>>>  [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
+>>>  [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
+>>
+>> For patch 5/8 and 6/8, do you want me to merge them through the pdx86
+>> (platform-drivers-x86) tree, or do you plan to merge this whole series
+>> in one go through some other tree?
+> 
+> Hi Hans,
+> Please merge them thru the pdx86 tree.
 
-configs tested: 140
-configs skipped: 12
+Ok, I've applied patch 5/8 + 6/8 to my review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I'll rebase that branch once 6.3-rc1 is out and then push the rebased
+patch to the fixes branch and include it in my next 6.3 fixes pull-req
+to Linus.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r004-20230227   gcc  
-alpha        buildonly-randconfig-r006-20230227   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r025-20230228   gcc  
-alpha                randconfig-r032-20230226   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230227   gcc  
-arc                  randconfig-r034-20230226   gcc  
-arc                  randconfig-r043-20230226   gcc  
-arc                  randconfig-r043-20230227   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r026-20230226   gcc  
-arm                  randconfig-r046-20230226   gcc  
-arm                  randconfig-r046-20230227   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230227   gcc  
-csky                 randconfig-r016-20230227   gcc  
-csky                 randconfig-r022-20230228   gcc  
-csky                 randconfig-r023-20230227   gcc  
-csky                 randconfig-r031-20230227   gcc  
-csky                 randconfig-r035-20230227   gcc  
-hexagon      buildonly-randconfig-r006-20230226   clang
-hexagon              randconfig-r041-20230226   clang
-hexagon              randconfig-r041-20230227   clang
-hexagon              randconfig-r045-20230226   clang
-hexagon              randconfig-r045-20230227   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r002-20230227   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230227   clang
-i386                 randconfig-a002-20230227   clang
-i386                 randconfig-a003-20230227   clang
-i386                 randconfig-a004-20230227   clang
-i386                 randconfig-a005-20230227   clang
-i386                 randconfig-a006-20230227   clang
-i386                 randconfig-a011-20230227   gcc  
-i386                 randconfig-a012-20230227   gcc  
-i386                 randconfig-a013-20230227   gcc  
-i386                 randconfig-a014-20230227   gcc  
-i386                 randconfig-a015-20230227   gcc  
-i386                 randconfig-a016-20230227   gcc  
-i386                 randconfig-r022-20230227   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r002-20230226   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r014-20230226   gcc  
-loongarch            randconfig-r034-20230227   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230226   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r012-20230226   gcc  
-m68k                 randconfig-r014-20230227   gcc  
-m68k                 randconfig-r024-20230227   gcc  
-m68k                 randconfig-r036-20230226   gcc  
-microblaze           randconfig-r036-20230227   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230226   clang
-mips                 randconfig-r005-20230226   clang
-mips                 randconfig-r021-20230226   gcc  
-mips                 randconfig-r023-20230228   gcc  
-mips                 randconfig-r025-20230227   clang
-mips                 randconfig-r035-20230226   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r025-20230226   gcc  
-openrisc     buildonly-randconfig-r003-20230226   gcc  
-openrisc             randconfig-r004-20230226   gcc  
-openrisc             randconfig-r011-20230226   gcc  
-parisc       buildonly-randconfig-r003-20230227   gcc  
-parisc       buildonly-randconfig-r004-20230226   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230227   gcc  
-parisc               randconfig-r015-20230226   gcc  
-parisc               randconfig-r024-20230226   gcc  
-parisc               randconfig-r026-20230228   gcc  
-parisc               randconfig-r031-20230226   gcc  
-parisc               randconfig-r033-20230227   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r021-20230227   gcc  
-powerpc              randconfig-r021-20230228   clang
-powerpc              randconfig-r032-20230227   clang
-powerpc              randconfig-r033-20230226   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230226   clang
-riscv                randconfig-r042-20230227   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r024-20230228   clang
-s390                 randconfig-r026-20230227   gcc  
-s390                 randconfig-r044-20230226   clang
-s390                 randconfig-r044-20230227   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r003-20230227   gcc  
-sh                   randconfig-r012-20230227   gcc  
-sh                   randconfig-r013-20230227   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r023-20230226   gcc  
-sparc64              randconfig-r003-20230226   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230227   clang
-x86_64               randconfig-a002-20230227   clang
-x86_64               randconfig-a003-20230227   clang
-x86_64               randconfig-a004-20230227   clang
-x86_64               randconfig-a005-20230227   clang
-x86_64               randconfig-a006-20230227   clang
-x86_64               randconfig-a011-20230227   gcc  
-x86_64               randconfig-a012-20230227   gcc  
-x86_64               randconfig-a013-20230227   gcc  
-x86_64               randconfig-a014-20230227   gcc  
-x86_64               randconfig-a015-20230227   gcc  
-x86_64               randconfig-a016-20230227   gcc  
-x86_64               randconfig-r015-20230227   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r002-20230226   gcc  
-xtensa               randconfig-r016-20230226   gcc  
+Regards,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Hans
+
+
+
+
+
+>>>
+>>> diffstat:
+>>>  drivers/char/ipmi/Kconfig         |    3 ++-
+>>>  drivers/clk/Kconfig               |    2 +-
+>>>  drivers/gpio/Kconfig              |    2 +-
+>>>  drivers/leds/Kconfig              |    2 +-
+>>>  drivers/platform/mellanox/Kconfig |    9 ++++-----
+>>>  drivers/platform/x86/Kconfig      |    3 ++-
+>>>  drivers/thermal/intel/Kconfig     |    3 ++-
+>>>  drivers/tty/serial/8250/Kconfig   |    3 ++-
+>>>  8 files changed, 15 insertions(+), 12 deletions(-)
+>>>
+>>> Cc: Andrew Jeffery <andrew@aj.id.au>
+>>> Cc: Corey Minyard <minyard@acm.org>
+>>> Cc: openipmi-developer@lists.sourceforge.net
+>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> Cc: Riku Voipio <riku.voipio@linaro.org>
+>>> Cc: Stephen Boyd <sboyd@kernel.org>
+>>> Cc: Michael Turquette <mturquette@baylibre.com>
+>>> Cc: linux-clk@vger.kernel.org
+>>> Cc: Michael Walle <michael@walle.cc>
+>>> Cc: Linus Walleij <linus.walleij@linaro.org>
+>>> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+>>> Cc: linux-gpio@vger.kernel.org
+>>> Cc: Dan Murphy <dmurphy@ti.com>
+>>> Cc: Pavel Machek <pavel@ucw.cz>
+>>> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+>>> Cc: Lee Jones <lee@kernel.org>
+>>> Cc: linux-leds@vger.kernel.org
+>>> Cc: Darren Hart <dvhart@infradead.org>
+>>> Cc: Hans de Goede <hdegoede@redhat.com>
+>>> Cc: Michael Shych <michaelsh@nvidia.com>
+>>> Cc: Mark Gross <markgross@kernel.org>
+>>> Cc: Vadim Pasternak <vadimp@nvidia.com>
+>>> Cc: platform-driver-x86@vger.kernel.org
+>>> Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
+>>> Cc: Bin Gao <bin.gao@intel.com>
+>>> Cc: Zhang Rui <rui.zhang@intel.com>
+>>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> Cc: Amit Kucheria <amitk@kernel.org>
+>>> Cc: linux-pm@vger.kernel.org
+>>> Cc: Oskar Senft <osk@google.com>
+>>> Cc: linux-serial@vger.kernel.org
+>>>
+>>
+> 
+
