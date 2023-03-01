@@ -2,53 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E226A737E
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 19:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875D66A7385
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 19:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCASeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 13:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S229700AbjCASgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 13:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjCASeT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 13:34:19 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6819EEF;
-        Wed,  1 Mar 2023 10:34:18 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id g3so2259464eda.1;
-        Wed, 01 Mar 2023 10:34:18 -0800 (PST)
+        with ESMTP id S229471AbjCASge (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 13:36:34 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC32A3C7BC;
+        Wed,  1 Mar 2023 10:36:33 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id u9so8254563edd.2;
+        Wed, 01 Mar 2023 10:36:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677695657;
+        d=1e100.net; s=20210112; t=1677695792;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pfnaqfos6P+GQrTAkeilyREZz9zpOhjnnfyuK1BArdw=;
-        b=CKhgsS3ilqZdiuccQ2BdGu/JArutnjm8hXxIcxHrFVYfqe//YSLr8s4ZwsTv4CnMhN
-         +6HFudnaPMNxp8EPj9lEedHhlTRicZ5duHvHE5O694L+ynNh2hgu45dfUiYeLsrUKI9r
-         RMia+yEpSUNVSlieAxljxa3urQy2lklPG2ETWBG9t1m7xFK2T0zVve0iH8j5Rp2QXMjd
-         +t6yIAKOuVEzFMldE4KBVhnv3UgkjDjv69xB5+GQOb+SBOBzJRTV8QXpPj37Yj1bvCVu
-         8Di0526GgLOBatVp6mPztSZldZymX6t3EXV3sfserL33oUHoHEL4CTpPAiaSXan9Pup7
-         +WTg==
-X-Gm-Message-State: AO0yUKWM3RmvGGNklyybNCbMq/ZRAICzbqiRascvVodEXMrqoCWGLLzn
-        pp3RIWjEgoHcsM4CQ3UV0mZgjzxKqlBaN8AhnAk=
-X-Google-Smtp-Source: AK7set9KrbCLyVwTTarnOiFnevmYrn0rDMHnu4hmXUstv0WQl5bkfrds9q30Vj+R7GaPIZGYkVXVx/ZUTwAKQrykg3g=
-X-Received: by 2002:a50:c007:0:b0:4ab:4933:225b with SMTP id
- r7-20020a50c007000000b004ab4933225bmr4313824edb.6.1677695657192; Wed, 01 Mar
- 2023 10:34:17 -0800 (PST)
+        bh=ZT/OJ9n++mt401vNDY8xHJSNHWuHKsSIBHt696WINAU=;
+        b=5MBBrJq1Bji07QoFQ9ng1b49+xgI7OUWqKoObdwNC8vwRu2GM6DjB4/3tGQ51xB6bL
+         fVL9vVLDSM5qONSgIKSTnpnWqHw6nw1I+McWImO5DDRsZjqs9k39n8EDdfUjf15DmpLj
+         Y4041nHsqi06g8RhPcFaLMF+waaBrjkx2znl0T9eci3TVvWu35/PwgVoAX9dpOS6QunN
+         H4I+41ynzYEN//jBvIgwK1yDjTqozglLUxdMb1jz+ZFkGnkRaOCGSJPhlQ6tfMCglXDY
+         d4b6+ticuIvz9sU3y7VXQJtf2cJ3x96/Cn9cFJP4mIpoDrdd8Hop1Vva6J904ChNuxJb
+         H4jQ==
+X-Gm-Message-State: AO0yUKVqndX3iXIXCHVczSbX4bscEMU78bLdphdeZ8wcJbylzyBmr2AJ
+        ReSj9zi7Yel0BPIU2aFkyrglnBF51STenAP7D+MHvsKM
+X-Google-Smtp-Source: AK7set/H2etJvYe1d1itJBx6hspBD30RZmx5cJZgLeGAW0PK9sgtTvz5euwqOQWEzRFywRWOoz9kl56jMNflDNjzbOs=
+X-Received: by 2002:a17:906:7687:b0:8ad:731:592d with SMTP id
+ o7-20020a170906768700b008ad0731592dmr3628118ejm.5.1677695792428; Wed, 01 Mar
+ 2023 10:36:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20230226053953.4681-1-rdunlap@infradead.org> <20230226053953.4681-8-rdunlap@infradead.org>
-In-Reply-To: <20230226053953.4681-8-rdunlap@infradead.org>
+References: <Y/yAzR6sWvPedLej@kili> <CAOgh=FyxFuENe6SgJB7aUwPS-ZB_51q6a=zWEcZSAsGqX034hA@mail.gmail.com>
+In-Reply-To: <CAOgh=FyxFuENe6SgJB7aUwPS-ZB_51q6a=zWEcZSAsGqX034hA@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Mar 2023 19:34:06 +0100
-Message-ID: <CAJZ5v0j2rao56aVegCPj=ZM+SJSGyXbbnwyuXz=WPZ9y+7BBMA@mail.gmail.com>
-Subject: Re: [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of
- depending on it
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
-        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org
+Date:   Wed, 1 Mar 2023 19:36:21 +0100
+Message-ID: <CAJZ5v0jMm25S2M2g2oB9fE+U1SJO8w5Y87ENwOQ4JpPTAH6XEQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: apple-soc: Fix an IS_ERR() vs NULL check
+To:     Eric Curtin <ecurtin@redhat.com>, Dan Carpenter <error27@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, asahi@lists.linux.dev,
+        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,42 +59,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 6:40 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Mon, Feb 27, 2023 at 11:26 AM Eric Curtin <ecurtin@redhat.com> wrote:
 >
-> REGMAP is a hidden (not user visible) symbol. Users cannot set it
-> directly thru "make *config", so drivers should select it instead of
-> depending on it if they need it.
+> On Mon, 27 Feb 2023 at 10:16, Dan Carpenter <error27@gmail.com> wrote:
+> >
+> > The of_iomap() function returns NULL if it fails.  It never returns
+> > error pointers.  Fix the check accordingly.
+> >
+> > Fixes: 6286bbb40576 ("cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states")
+> > Signed-off-by: Dan Carpenter <error27@gmail.com>
+> > ---
 >
-> Consistently using "select" or "depends on" can also help reduce
-> Kconfig circular dependency issues.
+> Nice catch!
 >
-> Therefore, change the use of "depends on REGMAP" to "select REGMAP".
->
-> Fixes: b474303ffd57 ("thermal: add Intel BXT WhiskeyCove PMIC thermal driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
-> Cc: Bin Gao <bin.gao@intel.com>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/thermal/intel/Kconfig |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff -- a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-> --- a/drivers/thermal/intel/Kconfig
-> +++ b/drivers/thermal/intel/Kconfig
-> @@ -73,7 +73,8 @@ endmenu
->
->  config INTEL_BXT_PMIC_THERMAL
->         tristate "Intel Broxton PMIC thermal driver"
-> -       depends on X86 && INTEL_SOC_PMIC_BXTWC && REGMAP
-> +       depends on X86 && INTEL_SOC_PMIC_BXTWC
-> +       select REGMAP
->         help
->           Select this driver for Intel Broxton PMIC with ADC channels monitoring
->           system temperature measurements and alerts.
+> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
 Applied as 6.3-rc material, thanks!
