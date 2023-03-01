@@ -2,71 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE956A751C
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 21:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BEC6A76EB
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 23:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjCAURA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 15:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S229754AbjCAWkW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 17:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjCAUQU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 15:16:20 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765B551F84
-        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 12:15:57 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id p16so9366575wmq.5
-        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 12:15:57 -0800 (PST)
+        with ESMTP id S229453AbjCAWkV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 17:40:21 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2A54FA8B
+        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 14:40:19 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id o8so9327685ilt.13
+        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 14:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677701757;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FS5MMzUrtYY5N2w5QCadh2L/6Lyuv9jfcaqNKoRqTRU=;
-        b=OePQtLOGe7LDEC9FRQ7V9NVHHpJaS6nf3PuVfwUJDUS7IiBldmApsOZaHqqQCwCxXg
-         QlNTNnxk3BjgSzbPhIksEuI6IXQmlfigT05KUDIUi77jL+mdq4OXGTO1jc/oRehRdFWD
-         1V5jTlEIfV45SPZE1nMmCKWE7PjZ/4J8jYkA+bKzuA//LRY9CtLMhzZbeB2bb3sieGaY
-         AKGEBgvstFbgJI8VNqtqNh2LL9EtvGklrwrX/h2PmHSFSkbinhgUypa70/PUTTwUhAEm
-         yKT3e6Mun+cowZXLiMHAqU+cHD1uN+BDHEZWDY0NQ0g5VECQSmxG6bR+qO5e1y4+x8Pm
-         yIXQ==
+        bh=6P9KlPRdN24U2nZifrh47RGztoR1RSBxdmlJs02laf8=;
+        b=d4/myq9vduzzfqGKUrqatHviSOUeyfGXpmI1wLVtbkU4eLFrheTw9Jay/aWkkAqcIQ
+         lrVJ1ygEX23dReHZKRse+tyC0N0jsJPrhKg+ZPVMerXand+RXspxh0OSYNmmhGbSaoRU
+         jDGcG8u2dBXbZc7ICYCAadTkuohw55nv0o54s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677701757;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FS5MMzUrtYY5N2w5QCadh2L/6Lyuv9jfcaqNKoRqTRU=;
-        b=2DgG5IiYBi2Q3kcKBB5z/cbsHr4XT0vxMv9kX65Gu7H/BD6vdACguXLcz4PdXvXa5Y
-         cUz0Xtogra2uehA5+nABNPiNkWNc3+uDxgrhJRL7Cm2ryPsHX5D6kbapg105shzOf/dl
-         TKWiSaWgpYqr6JbWIYf4wEOIx4n5F7rvdEE8YsOjga5u8TeKtDkU32kpbmhgaJ+kJmiT
-         oCmZRkJP0cjjvFCDcgnZWWps5IZ7LJXCy8XR15SV4mtOcE5sEMZCKhVkx6LulMsefY7/
-         +qw4rmQkkbt0bfCQYtMHQIz9SGjqidC5PUxjxm8v32ZCEckC2uYEqJTeEY/0uqFsIllV
-         Gn/Q==
-X-Gm-Message-State: AO0yUKXbe71rOSaYusPS7SGThrgU3Juo8T8q8xU+mTgzTq0U2/ZsK8e6
-        g0745wdeoLeBuKTRNsGqEG/QBw==
-X-Google-Smtp-Source: AK7set9/48B3UkJzRbD9ghUuPOZUq417aVxqF4bZ/zrpzF6PhFApIvpjoxt3GWWtJuYzeCOE4ikdug==
-X-Received: by 2002:a05:600c:1716:b0:3eb:2e66:9 with SMTP id c22-20020a05600c171600b003eb2e660009mr6538243wmn.30.1677701752097;
-        Wed, 01 Mar 2023 12:15:52 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6ffe:ce4f:bd31:1e6d])
-        by smtp.gmail.com with ESMTPSA id x16-20020a1c7c10000000b003e70a7c1b73sm576546wmc.16.2023.03.01.12.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 12:15:51 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
-        TEMPERATURE AND FAN DRIVER)
-Subject: [PATCH v5 18/18] thermal/drivers/acerhdf: Remove pointless governor test
-Date:   Wed,  1 Mar 2023 21:14:46 +0100
-Message-Id: <20230301201446.3713334-19-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
-References: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
+        bh=6P9KlPRdN24U2nZifrh47RGztoR1RSBxdmlJs02laf8=;
+        b=udI75c93XOow5DFsNdhTrDKjE0pL2aOoy8ofSabNIgYLAa2FB61hz8XwYp700R+DxG
+         NIeyGgHGQvf99htT3fXElbJHL03tYX1eUVSdq5jU1jG2Et6JQfY6NVMGGGW0nj/hgEMt
+         ekwgQtS6GBWtJ8yl8DHUx53iZE0IbkRrLNirk52spIQsEXSYWujO0kI8dBtV9I2EsBqI
+         OA4JEVVb6ax7E4xeCHMqKbqq4FahVW6Bvi+EzldMoR707VcxRhjNAcBkPxYuMs8yhlXr
+         RnMlMmYKPlDw5L2mYvE5vUP4f/ncS/VHnt2pZwLZHyCAFyysawNd6RnddL/y6bTWaK+x
+         aaww==
+X-Gm-Message-State: AO0yUKXr1xPsXLLgoXZLTiRhApkUg/4VBew5CSFmyOR5sLkRYZyy8dAm
+        7DFx/R/z6A0EIpaM5ZkMUyE74aTJ49kmfPYn
+X-Google-Smtp-Source: AK7set+emvRdJRUNLFepEJ2xLUJJi+tLpzPrYtVx5jx54+M4erHqvKxGL9JPaUZqBdjkZRwKZ2l/CQ==
+X-Received: by 2002:a05:6e02:1ba8:b0:316:ed77:df8f with SMTP id n8-20020a056e021ba800b00316ed77df8fmr7335830ili.7.1677710418398;
+        Wed, 01 Mar 2023 14:40:18 -0800 (PST)
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com. [209.85.166.43])
+        by smtp.gmail.com with ESMTPSA id p3-20020a056e02104300b003157696c04esm3971954ilj.46.2023.03.01.14.40.17
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 14:40:17 -0800 (PST)
+Received: by mail-io1-f43.google.com with SMTP id g6so6015467iov.13
+        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 14:40:17 -0800 (PST)
+X-Received: by 2002:a5d:8919:0:b0:74a:f35:ca88 with SMTP id
+ b25-20020a5d8919000000b0074a0f35ca88mr3594955ion.2.1677710416683; Wed, 01 Mar
+ 2023 14:40:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
+ <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com>
+ <Y+E9Z+/+eCpPK6DE@linaro.org> <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
+ <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
+ <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
+ <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com> <20230220171550.43a3h56gznfc3gec@ripper>
+In-Reply-To: <20230220171550.43a3h56gznfc3gec@ripper>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 1 Mar 2023 14:40:04 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UmbBOPAg6d-G=XpEyf0Sk=dmrp7wuthn1Cx+DmB1gvGQ@mail.gmail.com>
+Message-ID: <CAD=FV=UmbBOPAg6d-G=XpEyf0Sk=dmrp7wuthn1Cx+DmB1gvGQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,38 +93,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal zone parameter specifies the bang-bang governor.
+Hi,
 
-The Kconfig selects the bang-bang governor. So it is pointless to test
-if the governor was set for the thermal zone assuming it may not have
-been compiled-in.
+On Mon, Feb 20, 2023 at 9:12=E2=80=AFAM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
+>
+> > I suspect that here we'll have to agree to disagree. IMO it's a
+> > non-goal to expect hardware to work for which there is no driver. So
+> > making the backlight work without a backlight driver isn't really
+> > something we should strive for.
+> >
+>
+> Without trying to make you agree ;)
+>
+> How can you differentiate between "the driver wasn't built" and "the
+> driver isn't yet available"?
 
-Remove the test and prevent another access into the thermal internals.
+BTW, when I was responding to Saravana's series [1], I realized that
+you _can_ differentiate between these two cases, at least from a
+practical point of view. Specifically, when the
+"deferred_probe_timeout" expires then you should assume that "the
+driver wasn't built". Said another way, once the
+"deferred_probe_timeout" expires then you should assume that the
+driver won't be available in the future. While you still could try
+loading it, in general once that timeout has expired the kernel has
+made decisions (like making -EPROBE_DEFER non-retriable) that make it
+very awkward to load new drivers.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Peter Kaestle <peter@piie.net>
----
- drivers/platform/x86/acerhdf.c | 7 -------
- 1 file changed, 7 deletions(-)
+Of course, one could say "hey, let's get rid of the
+deferred_probe_timeout". That might be a tough sell unless you can
+come up with an equivalent solution for those currently using this
+feature.
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 61f1c3090867..71b9c1f922d9 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -697,13 +697,6 @@ static int __init acerhdf_register_thermal(void)
- 	if (ret)
- 		return ret;
- 
--	if (strcmp(thz_dev->governor->name,
--				acerhdf_zone_params.governor_name)) {
--		pr_err("Didn't get thermal governor %s, perhaps not compiled into thermal subsystem.\n",
--				acerhdf_zone_params.governor_name);
--		return -EINVAL;
--	}
--
- 	return 0;
- }
- 
--- 
-2.34.1
+[1] https://lore.kernel.org/r/CAD=3DFV=3DXQnLpD1P8sRBcizTMjCQyHTjaiNvjcPdgy=
+Zc5JCzvOtw@mail.gmail.com
 
+
+> Consider the case where I boot my laptop, I have some set of builtin
+> drivers, some set of drivers in the ramdisk and some set of drivers in
+> the root filesystem.
+>
+> In the event that something goes wrong mounting the rootfs, I will now
+> be in the ramdisk console. Given the current timer-based disabling of
+> regulators, I have ~25 seconds to solve my problem before the backlight
+> goes blank.
+
+I personally don't love the timeout. It feels like the kind of thing
+that userspace knows and should be able to tell the kernel. I know we
+don't like to put impositions on userspace, but userspace is pretty
+definitely involved in things like loading modules. It just makes
+sense (in my mind) for userspace to say when it's done and all modules
+for cold-plugged devices have been loaded...
+
+-Doug
