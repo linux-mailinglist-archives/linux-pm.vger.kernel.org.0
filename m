@@ -2,209 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71446A6C96
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 13:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA96C6A6CCD
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 14:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCAMsD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 07:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
+        id S230036AbjCAND7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 08:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCAMsA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 07:48:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C63F3BDB2
-        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 04:47:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677674831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PrHWi0O3bp5TW073HxIoo2GqwQh60ydUW1vLbyoS8FU=;
-        b=TCDHMqCmqHOxRM5QtpqYDPa+29+jQWl3x4nbuRHyIqBT/jY9yYGiViECo1cLHP6WbPZiuP
-        f5vkgiw/54KEixCIcXlpsnmcPfS4ZAqnX0J3uFW4LuUwnwLk49EM8jC+Hm/O/5n4AY6FRX
-        XZQ1pyQFsGoEjAFzngV2rjHCqL9QVBw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-578-qdZfpqwJPQG72k4UTnJeRA-1; Wed, 01 Mar 2023 07:47:10 -0500
-X-MC-Unique: qdZfpqwJPQG72k4UTnJeRA-1
-Received: by mail-ed1-f72.google.com with SMTP id cz22-20020a0564021cb600b004a245f58006so19285710edb.12
-        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 04:47:10 -0800 (PST)
+        with ESMTP id S230053AbjCANDq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 08:03:46 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FC42CC5A
+        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 05:03:41 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 132so7616704pgh.13
+        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 05:03:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKkN3A4Osh2piEOGCkx6fyCR8EN+P86mMCpSI/kyzzM=;
+        b=EQmQxWTOKwHqRHus1aXRnQewm7/Cipj0WZQz7Po6IiqxAiW/mub5DoifHi54nrvrf8
+         hiMolYN0tBtBLhD948M8W99tJW0ou7nbDdedbB4U8Jr/dJIXgfVsxCx+dBG1cRoMEF50
+         mTq20H2qTTNhsan8908we4nNMWkZdVtuQxdjeSuxbJhcU5vLs4p0FNqvCPlRfYob3LfB
+         tPcdbUfdqmwbk0yXDytTSjtTflPRqPACp2TStavR+wk8Fu9kJC/doIGZzpLnxWGgBI8e
+         mqQqIoWnKyTGdLQtLBOFSeJzYYRcmFr/kiN1ubdavI2FxlH+Qknz2hNJ735Pn2zx38Ho
+         4VfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PrHWi0O3bp5TW073HxIoo2GqwQh60ydUW1vLbyoS8FU=;
-        b=gLMfuXF/0GpbXOuS9w9ounClozJpWmndzqyFJS5LXFfEzax9aDul7qw2pcQqb9ZY7h
-         CPx4VGlJ2nNLd4Zx3PBaQ+Hd9uOgXepPJzezRfMbro8GYJz+IQDvOZjlhBzHr9pgE2ph
-         ozzpCE7WCjLo1HLtvtdANIdw4ulTGLDyDpLcGMfGSccHQxmoY6UFzW69oRPAJApsKVhW
-         BIcVCvjXfCCIJNBdmJ8MbdB9MeP+EKVfsoUzbGaIh3973MAnZTL8YVSUjgi64gYyIRuZ
-         NGWAJbDlpDMxDKEMnY+F5eudUPKTmAni/RWR8qLB2o5yZIKA09dx9+mF4CqpyRR+yJYA
-         CMfw==
-X-Gm-Message-State: AO0yUKVHzq6qUikP37PmaqDBGZN0RdbYVf7jGhZDN73Qx4Kckzp7sFKh
-        MjOQ7urDOfP7Jzl7pGyyA+lLV+VoT+GQ3/6TL/QBYGV6P7FIUjc7VKG7WpIlhBnniSsw4Q/memT
-        QwgyfqyqOICdMyuQvFdM=
-X-Received: by 2002:aa7:d6c4:0:b0:4af:59c0:744a with SMTP id x4-20020aa7d6c4000000b004af59c0744amr7757579edr.24.1677674829575;
-        Wed, 01 Mar 2023 04:47:09 -0800 (PST)
-X-Google-Smtp-Source: AK7set/gegt3wNPFIA5UaAFSkM0H/Cu2JETEa5VzADkRpzuOeLZLY8c4YHH4dVV9FidRJQJWbeU9sQ==
-X-Received: by 2002:aa7:d6c4:0:b0:4af:59c0:744a with SMTP id x4-20020aa7d6c4000000b004af59c0744amr7757547edr.24.1677674829268;
-        Wed, 01 Mar 2023 04:47:09 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id b18-20020a50b412000000b004bda465da32sm374934edh.1.2023.03.01.04.47.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 04:47:08 -0800 (PST)
-Message-ID: <5bb49015-0a9c-5b9d-b22c-38011439c984@redhat.com>
-Date:   Wed, 1 Mar 2023 13:47:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iKkN3A4Osh2piEOGCkx6fyCR8EN+P86mMCpSI/kyzzM=;
+        b=pXGbsjD8nGHWp2GxKDe/Up2h9Oy9I8hhTCg3T7HPu4+WLoP16C7p7Nf8/LoylBN6UK
+         rMKO6/QGR5yomYMMfQ7QkX99l8QHS+mTvLgNBoRQncxAY4a3WHu35mPxLL1f4+YnLE6/
+         +LG8xs0fsb172HlVpbe1AgPGbNDOAXLvp4H8Fa1rjsN5efhti0kzSQTCmdHacE86jzqY
+         mMCbdtGIlJLD9fVfAFdtKBOiiJwkLroWKzWz9yyl5OXFbQOZYBYMStudbzxRnh8KCcUO
+         ZXVKKLXg8ZXQQTdWHcPq5fZo3TsAcAsG7+2CURn1GHiilj+PsyDaUnPfAd4VEbU9MLqi
+         xEEA==
+X-Gm-Message-State: AO0yUKWZ57gOVTBlcqxZ9pke6Efu/npcxQGkFbKQmTOqEnONF7yTqR2c
+        SSAY1umbjdFDsAoxZi9yU88gzlKkwJg54Ug7uS5C2Q==
+X-Google-Smtp-Source: AK7set9l3A8Q13trFL4jc5C5g/OPP+o5cpBA5yb/8XU8e+NCPo/IhTJiHt2k5ezR6UfWLUYRTV/o/fbvHtLZeQatQnA=
+X-Received: by 2002:aa7:88c8:0:b0:5a9:d579:6902 with SMTP id
+ k8-20020aa788c8000000b005a9d5796902mr4266652pff.0.1677675821355; Wed, 01 Mar
+ 2023 05:03:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/8] drivers: select REGMAP instead of depending on it
-Content-Language: en-US, nl
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Corey Minyard <minyard@acm.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Riku Voipio <riku.voipio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Michael Shych <michaelsh@nvidia.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        platform-driver-x86@vger.kernel.org,
-        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
-        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
+References: <cover.1677063656.git.viresh.kumar@linaro.org> <8f9fba47f91ef04fa2cf0c3adba9299a23d5280a.1677063656.git.viresh.kumar@linaro.org>
+In-Reply-To: <8f9fba47f91ef04fa2cf0c3adba9299a23d5280a.1677063656.git.viresh.kumar@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 1 Mar 2023 14:03:05 +0100
+Message-ID: <CAPDyKFroDPdUq+QT18svWfHShSGkNuOeVmT2oyMO89CzSyY+Yg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] OPP: Handle all genpd cases together in _set_required_opps()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jun Nie <jun.nie@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
-References: <20230226053953.4681-1-rdunlap@infradead.org>
- <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
- <6a95a337-2972-427f-635d-5ef4e91a82fa@infradead.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <6a95a337-2972-427f-635d-5ef4e91a82fa@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Wed, 22 Feb 2023 at 12:07, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> There is no real need of keeping separate code for single genpd case, it
+> can be made to work with a simple change.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-On 2/27/23 17:07, Randy Dunlap wrote:
-> 
-> 
-> On 2/27/23 01:31, Hans de Goede wrote:
->> Hi Randy,
->>
->> On 2/26/23 06:39, Randy Dunlap wrote:
->>> REGMAP is a hidden (not user visible) symbol. Users cannot set it
->>> directly thru "make *config", so drivers should select it instead of
->>> depending on it if they need it.
->>>
->>> Consistently using "select" or "depends on" can also help reduce
->>> Kconfig circular dependency issues.
->>>
->>> REGMAP is selected 94 times and is depended on 11 times in
->>> current linux-next. Eliminate the uses of "depends on" by
->>> converting them to "select".
->>
->> Thank you for your work on this. Mixing of depends on vs select
->> is a real problem with many Kconfig symbols.
->>
->>>  [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead of depending on it
->>>  [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
->>>  [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending on it
->>>  [PATCH 4/8] leds: TI_LMU_COMMON: select REGMAP instead of depending on it
->>>  [PATCH 5/8] platform: mellanox: select REGMAP instead of depending on it
->>>  [PATCH 6/8] platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
->>>  [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
->>>  [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
->>
->> For patch 5/8 and 6/8, do you want me to merge them through the pdx86
->> (platform-drivers-x86) tree, or do you plan to merge this whole series
->> in one go through some other tree?
-> 
-> Hi Hans,
-> Please merge them thru the pdx86 tree.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Ok, I've applied patch 5/8 + 6/8 to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Kind regards
+Uffe
 
-I'll rebase that branch once 6.3-rc1 is out and then push the rebased
-patch to the fixes branch and include it in my next 6.3 fixes pull-req
-to Linus.
-
-Regards,
-
-Hans
-
-
-
-
-
->>>
->>> diffstat:
->>>  drivers/char/ipmi/Kconfig         |    3 ++-
->>>  drivers/clk/Kconfig               |    2 +-
->>>  drivers/gpio/Kconfig              |    2 +-
->>>  drivers/leds/Kconfig              |    2 +-
->>>  drivers/platform/mellanox/Kconfig |    9 ++++-----
->>>  drivers/platform/x86/Kconfig      |    3 ++-
->>>  drivers/thermal/intel/Kconfig     |    3 ++-
->>>  drivers/tty/serial/8250/Kconfig   |    3 ++-
->>>  8 files changed, 15 insertions(+), 12 deletions(-)
->>>
->>> Cc: Andrew Jeffery <andrew@aj.id.au>
->>> Cc: Corey Minyard <minyard@acm.org>
->>> Cc: openipmi-developer@lists.sourceforge.net
->>> Cc: Arnd Bergmann <arnd@arndb.de>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: Riku Voipio <riku.voipio@linaro.org>
->>> Cc: Stephen Boyd <sboyd@kernel.org>
->>> Cc: Michael Turquette <mturquette@baylibre.com>
->>> Cc: linux-clk@vger.kernel.org
->>> Cc: Michael Walle <michael@walle.cc>
->>> Cc: Linus Walleij <linus.walleij@linaro.org>
->>> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
->>> Cc: linux-gpio@vger.kernel.org
->>> Cc: Dan Murphy <dmurphy@ti.com>
->>> Cc: Pavel Machek <pavel@ucw.cz>
->>> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
->>> Cc: Lee Jones <lee@kernel.org>
->>> Cc: linux-leds@vger.kernel.org
->>> Cc: Darren Hart <dvhart@infradead.org>
->>> Cc: Hans de Goede <hdegoede@redhat.com>
->>> Cc: Michael Shych <michaelsh@nvidia.com>
->>> Cc: Mark Gross <markgross@kernel.org>
->>> Cc: Vadim Pasternak <vadimp@nvidia.com>
->>> Cc: platform-driver-x86@vger.kernel.org
->>> Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
->>> Cc: Bin Gao <bin.gao@intel.com>
->>> Cc: Zhang Rui <rui.zhang@intel.com>
->>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> Cc: Amit Kucheria <amitk@kernel.org>
->>> Cc: linux-pm@vger.kernel.org
->>> Cc: Oskar Senft <osk@google.com>
->>> Cc: linux-serial@vger.kernel.org
->>>
->>
-> 
-
+> ---
+>  drivers/opp/core.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e87567dbe99f..6d7016ce8c53 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -959,7 +959,8 @@ static int _set_required_opps(struct device *dev,
+>                               struct dev_pm_opp *opp, bool up)
+>  {
+>         struct opp_table **required_opp_tables = opp_table->required_opp_tables;
+> -       struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
+> +       struct device **genpd_virt_devs =
+> +               opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
+>         int i, ret = 0;
+>
+>         if (!required_opp_tables)
+> @@ -979,12 +980,6 @@ static int _set_required_opps(struct device *dev,
+>                 return -ENOENT;
+>         }
+>
+> -       /* Single genpd case */
+> -       if (!genpd_virt_devs)
+> -               return _set_required_opp(dev, dev, opp, 0);
+> -
+> -       /* Multiple genpd case */
+> -
+>         /*
+>          * Acquire genpd_virt_dev_lock to make sure we don't use a genpd_dev
+>          * after it is freed from another thread.
+> --
+> 2.31.1.272.g89b43f80a514
+>
