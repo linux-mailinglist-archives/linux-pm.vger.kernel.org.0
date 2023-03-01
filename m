@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929F56A7504
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 21:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2F56A7509
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Mar 2023 21:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCAUQY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 15:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S230055AbjCAUQg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 15:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjCAUQR (ORCPT
+        with ESMTP id S229876AbjCAUQR (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 15:16:17 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295C9497F6
-        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 12:15:41 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so259414wmi.3
-        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 12:15:41 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1C2497D3
+        for <linux-pm@vger.kernel.org>; Wed,  1 Mar 2023 12:15:43 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id az36so9395192wmb.1
+        for <linux-pm@vger.kernel.org>; Wed, 01 Mar 2023 12:15:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677701739;
+        d=linaro.org; s=google; t=1677701740;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/h75YgLAzThWP+FOpMQKnxnohte85PKa1jrYzQU01Og=;
-        b=WKe6cSzLuNxCWv5cfrvDiwJDrEwzeE/mWN6+yWAMx5REI02vy8GlFV5xvHGvGMfBs3
-         5oph0BkZOkO/2zlT8/IWB4nbf/wSpjP88FxwKjQdmIBiHGS/KPvr2AldgPLHj1AiE8Pe
-         zZ6dCR2gHILz+CzYBlIWgGzoPAhIt1vvNeGFQ9a6XwUSDv8vxoICjInjw1rA4wyZmFp7
-         ITCts9r2XErCRLRG4va+oiBfNHJo7G2Pyhg3nv+V+zkiTZj7S9lZCh30ACJsJOl7jo+R
-         /mMU2bpwXmXEDOaNNmBW+IRqrHJWRIMmB+DFKyxVsbAg/XHxnMYoZJudTh9n9SkLucyH
-         uqJQ==
+        bh=MVdgWpAFCojRfEmtrK5jCjMCpct5NgUpVAZqrr++Uhs=;
+        b=S2RD3t39aOcAjADtvbfn2VOvpvaTF/lJry2CokRv1cbcRY9sR8q2wa0e6ifexfGhVP
+         6qDOnbMxuegflcU5lSO2YwYpN5dpXp/qjdWxsHaGVCmw6mJXVvWRnaAuEWvPjPrhLVYy
+         g3l984PPao4CAPL7k2m068EP0zrDricnkqPUQ8x6IiHtFFsxICFggHpQTctZKtkK3hgq
+         xygC8Q4ak+4aXJHv/W3Q2uKRzysV1hORN6vzHFSoR0klSVjYbxUGEgWgjlIpAj964NNE
+         pDTKWfRnBgN4S1d2vRCtB04R5xHGlGbRhQiJNNc15ddBm81kD8Au9fnEIvaokSS/yHxR
+         runw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677701739;
+        d=1e100.net; s=20210112; t=1677701740;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/h75YgLAzThWP+FOpMQKnxnohte85PKa1jrYzQU01Og=;
-        b=hpS3lLQGDjJex/B6pVoudggMO3/1bTnNG/+t8W0Cyzbv/uPVIiI8UPFvAr+f5mwDnY
-         gR+dFSuzH5vBV0E56r4arcbj4Oj16eiolna1D/xm8Y3YWxV1mbRypmFkZGKOPfKI0YXt
-         CDk7dcHCpdnxlu2UvAa1DMA2MK9cxdwuNmspXO9kjYhWeTYiTkrrnkR1JkQ3ZrdpjktK
-         ogtqX3fRYp6zaB0Wo2128ac6vJJScajrmYnXBdtWrHOLYs2MZWyMJNxrsLP/JOLyC07z
-         0/VtZ4XniWC91PPAXe92MCfLqmsP3X08PlcEUhp4Gl96csWzarncptysx1+KU4yRgw5S
-         LwsA==
-X-Gm-Message-State: AO0yUKX7GjJgul82HW4SCrUslzy2cJBMrk5Jgx8GuxKpJB6KDws4cxTj
-        kXweaNLQ8hgJWKrOYQYu/27F6hQeqARHQtGJL7M=
-X-Google-Smtp-Source: AK7set98qZ9E/L3QjFj0q/InIIObqL00S5rF2lAu6706tefYT4w4YWcBpnM4Xdrc4MEy5viAbU4Kug==
-X-Received: by 2002:a05:600c:3506:b0:3ea:e5fc:a5a4 with SMTP id h6-20020a05600c350600b003eae5fca5a4mr6201164wmq.1.1677701739489;
-        Wed, 01 Mar 2023 12:15:39 -0800 (PST)
+        bh=MVdgWpAFCojRfEmtrK5jCjMCpct5NgUpVAZqrr++Uhs=;
+        b=FYEKnVD02s12RjSPrAvepMS6ZY7M+LX39nLoVp37h2x7zrgkR5Ve6Ixxc75urMTnOp
+         ZljMb87gcQar6HwA9A6eXhXpca3B9gCueFWdcL+cQeJrFGXbNvNugHx4lwJJM8DEGXgd
+         pnlITPhPZyz0Ef0zbiIee1N5gQW+wfnZAWTPvbDJzvUwkSoxZmUvbuoUSOzB8n/1z2zE
+         TlciraW06Jblt1ki/AQ+goDTu39mx/sOpENDQeC+rmXPAg06C+0lU1GlIBxVlKXBccho
+         Goo+Uo2I3j4nAjQ2ktspvYR7gv+8hco9NZR5GPyMHTUtaLBvo2kALiJxwyC+0AhcpCRP
+         YKUA==
+X-Gm-Message-State: AO0yUKWSCxgAixirST8vp7Y9AeBmv8P90mt+KFV/DHguZLouC9Hfy5uR
+        gM9zD7/6MAhe8q1B3GZWna4Xmg==
+X-Google-Smtp-Source: AK7set9Z1MVQyYdm9AeVnKhEPeO6y7ydvQ4G3I3+bUnrRbQlbWRAA2vhkypDegGjRCb7Ey5Kj+Idcw==
+X-Received: by 2002:a05:600c:4fcc:b0:3ea:9530:22a6 with SMTP id o12-20020a05600c4fcc00b003ea953022a6mr12712060wmq.1.1677701740585;
+        Wed, 01 Mar 2023 12:15:40 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6ffe:ce4f:bd31:1e6d])
-        by smtp.gmail.com with ESMTPSA id x16-20020a1c7c10000000b003e70a7c1b73sm576546wmc.16.2023.03.01.12.15.38
+        by smtp.gmail.com with ESMTPSA id x16-20020a1c7c10000000b003e70a7c1b73sm576546wmc.16.2023.03.01.12.15.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 12:15:39 -0800 (PST)
+        Wed, 01 Mar 2023 12:15:40 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v5 10/18] thermal/core: Add thermal_zone_device structure 'type' accessor
-Date:   Wed,  1 Mar 2023 21:14:38 +0100
-Message-Id: <20230301201446.3713334-11-daniel.lezcano@linaro.org>
+Subject: [PATCH v5 11/18] thermal/drivers/spear: Don't use tz->device but pdev->dev
+Date:   Wed,  1 Mar 2023 21:14:39 +0100
+Message-Id: <20230301201446.3713334-12-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
 References: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
@@ -72,58 +72,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal zone device structure is exposed via the exported
-thermal.h header. This structure should stay private the thermal core
-code. In order to encapsulate the structure, let's add an accessor to
-get the 'type' of the thermal zone.
+Use the spear associated device instead of the thermal zone device
+which belongs to the thermal framework internals.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_core.c | 6 ++++++
- include/linux/thermal.h        | 6 ++++++
- 2 files changed, 12 insertions(+)
+ drivers/thermal/spear_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 9fa12147fead..913ba9ca9792 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1384,6 +1384,12 @@ void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_priv);
+diff --git a/drivers/thermal/spear_thermal.c b/drivers/thermal/spear_thermal.c
+index 653439b965c8..6e78616a576e 100644
+--- a/drivers/thermal/spear_thermal.c
++++ b/drivers/thermal/spear_thermal.c
+@@ -137,7 +137,7 @@ static int spear_thermal_probe(struct platform_device *pdev)
  
-+const char *thermal_zone_device_type(struct thermal_zone_device *tzd)
-+{
-+	return tzd->type;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device_type);
-+
- /**
-  * thermal_zone_device_unregister - removes the registered thermal zone device
-  * @tz: the thermal zone device to remove
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 7dbb5712434c..21686e676b3d 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -366,6 +366,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
- 					struct thermal_zone_params *, int, int);
+ 	platform_set_drvdata(pdev, spear_thermal);
  
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
-+const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+-	dev_info(&spear_thermal->device, "Thermal Sensor Loaded at: 0x%p.\n",
++	dev_info(&pdev->dev, "Thermal Sensor Loaded at: 0x%p.\n",
+ 			stdev->thermal_base);
  
- int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
- 				     struct thermal_cooling_device *,
-@@ -443,6 +444,11 @@ static inline void *thermal_zone_device_priv(struct thermal_zone_device *tz)
- 	return NULL;
- }
- 
-+static inline const char *thermal_zone_device_type(struct thermal_zone_device *tzd)
-+{
-+	return NULL;
-+}
-+
- static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
- { return -ENODEV; }
- 
+ 	return 0;
 -- 
 2.34.1
 
