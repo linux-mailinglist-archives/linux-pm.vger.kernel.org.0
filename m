@@ -2,79 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5B36A77EC
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 00:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80386A77F9
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 00:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjCAXp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 18:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S229688AbjCAXsz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Mar 2023 18:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjCAXp0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 18:45:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ECB2333A;
-        Wed,  1 Mar 2023 15:44:57 -0800 (PST)
-Received: from mercury (unknown [185.254.75.29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 011E566023A1;
-        Wed,  1 Mar 2023 23:43:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677714233;
-        bh=F+cZ+xDuekZhvpQI6VN6wkOdiaibL0XhB6hG3ryOj8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dzCs/Tm9RSF8obSF20Si7kicthqzvDNKc0LEyZ/LT3XbIHWQZIVgfzN4ExOkzO8NJ
-         lWUfgMqSTjI9TkKkd040M1hY1jQDw4TxO6favlO1RPjGjfCPWRRLqk6aOslCKf6e3o
-         i2+/FqlsKmBk8NuTMrgB4hdqMg33alpN0gwEz7wtzNDNAFKJpjmnTvhJyVSnpSKzuu
-         hu4bn5l4fnOEMFIDMpShkAoNaJjXy1lU+1fV6CpYhB896ljnVwaJD69yd3bwEmZgek
-         kaBy3VsggBld0JJRhg8GtDkJJpjlysSQxCTVEJqJJXotG5InA+EG6D1sq97Kf2wxxz
-         gsB3GMOtnNeLQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 30A9D1061E59; Thu,  2 Mar 2023 00:43:50 +0100 (CET)
-Date:   Thu, 2 Mar 2023 00:43:50 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <4c4b6904-69b8-4e33-9c35-a5a6a855528d@mercury.local>
-References: <20230228215433.3944508-1-robh@kernel.org>
+        with ESMTP id S229813AbjCAXsx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 18:48:53 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FFD4EEA;
+        Wed,  1 Mar 2023 15:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677714523; x=1709250523;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=438mUqu27Pg/8R7tElJ2t97iI5443sfkue+J0vJ5gNg=;
+  b=QHr2xfOXiqxXREcERzwCmn5qwmAlVMwFBKWmyBUlFgsyMRrL+nDSHMrH
+   ddluhJ2+i5+ch/jW5BGc0FGec+1WZdb6J8nt70Al13rVmBa1DxKa3zwwh
+   w48jvOoz73PEvzqu/4TI4vnLZ70LzDgrdVIhNdLSg26bqO6hBugT2TUix
+   +yP0Oa/ucyBB35aXLWG8bH8oKpsDxUZ8DgeG2eidunD73dfrMCwjRH3dA
+   X5uBLJlwvZKy7hFE2MMKE7yy+1z0WjZ1ktLDvnC6Idulu0tc9FEr+k8Mk
+   PdLpZ46/11V6p42Y3R8OgwI8n2qHqJNtFPzeOVLbyiltManmV68NN6hDn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322831141"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="322831141"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 15:48:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="798604515"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="798604515"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 15:48:39 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXWBa-0006Vf-2d;
+        Wed, 01 Mar 2023 23:48:38 +0000
+Date:   Thu, 2 Mar 2023 07:48:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>, rafael@kernel.org,
+        lenb@kernel.org, viresh.kumar@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, pmladek@suse.com, mcgrof@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
+Subject: Re: [PATCH v3] ACPI: cpufreq: use a platform device to load ACPI PPC
+ and PCC drivers
+Message-ID: <202303020759.pwVPib0p-lkp@intel.com>
+References: <20230301085717.10411-1-petr.pavlu@suse.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iicycb2qvy4rthvm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230301085717.10411-1-petr.pavlu@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,319 +67,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Petr,
 
---iicycb2qvy4rthvm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch! Perhaps something to improve:
 
-Hi,
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.2 next-20230301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Tue, Feb 28, 2023 at 03:54:33PM -0600, Rob Herring wrote:
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
->=20
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/spi[0-9] {/spi {/'
->=20
-> With this, a few errors in examples were exposed and fixed.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Pavlu/ACPI-cpufreq-use-a-platform-device-to-load-ACPI-PPC-and-PCC-drivers/20230301-165927
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230301085717.10411-1-petr.pavlu%40suse.com
+patch subject: [PATCH v3] ACPI: cpufreq: use a platform device to load ACPI PPC and PCC drivers
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020759.pwVPib0p-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/59eb26f9b02165cc5c5fb6514ff4d2a8d7a91356
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Petr-Pavlu/ACPI-cpufreq-use-a-platform-device-to-load-ACPI-PPC-and-PCC-drivers/20230301-165927
+        git checkout 59eb26f9b02165cc5c5fb6514ff4d2a8d7a91356
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-s=
-upply
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020759.pwVPib0p-lkp@intel.com/
 
--- Sebastian
+All warnings (new ones prefixed by >>):
 
-=2E..
+>> drivers/acpi/acpi_processor.c:177:13: warning: no previous prototype for 'acpi_pcc_cpufreq_init' [-Wmissing-prototypes]
+     177 | void __init acpi_pcc_cpufreq_init(void) {}
+         |             ^~~~~~~~~~~~~~~~~~~~~
 
->  .../devicetree/bindings/power/supply/bq2415x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24190.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24257.yaml |  4 ++--
->  .../devicetree/bindings/power/supply/bq24735.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq2515x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25890.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25980.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq27xxx.yaml | 15 ++++++++-------
->  .../bindings/power/supply/lltc,ltc294x.yaml       |  2 +-
->  .../bindings/power/supply/ltc4162-l.yaml          |  2 +-
->  .../bindings/power/supply/maxim,max14656.yaml     |  2 +-
->  .../bindings/power/supply/maxim,max17040.yaml     |  4 ++--
->  .../bindings/power/supply/maxim,max17042.yaml     |  2 +-
->  .../bindings/power/supply/richtek,rt9455.yaml     |  2 +-
->  .../bindings/power/supply/ti,lp8727.yaml          |  2 +-
 
-=2E..
+vim +/acpi_pcc_cpufreq_init +177 drivers/acpi/acpi_processor.c
 
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
-> index f7287ffd4b12..13822346e708 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
-> @@ -77,7 +77,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> index 001c0ffb408d..d3ebc9de8c0b 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> @@ -75,7 +75,7 @@ examples:
->        charge-term-current-microamp =3D <128000>;
->      };
-> =20
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24257.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24257.yaml
-> index cc45939d385b..eb064bbf876c 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24257.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24257.yaml
-> @@ -84,7 +84,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> @@ -104,7 +104,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> index 388ee16f8a1e..af41e7ccd784 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> @@ -77,7 +77,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> =20
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> index 1a1b240034ef..845822c87f2a 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> @@ -73,7 +73,7 @@ examples:
->        constant-charge-voltage-max-microvolt =3D <4000000>;
->      };
->      #include <dt-bindings/gpio/gpio.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-> index dae27e93af09..0ad302ab2bcc 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-> @@ -102,7 +102,7 @@ unevaluatedProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> index b687b8bcd705..b70ce8d7f86c 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> @@ -95,7 +95,7 @@ examples:
->      };
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-> index 347d4433adc5..309ea33b5b25 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-> @@ -75,15 +75,16 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    bat: battery {
-> +      compatible =3D "simple-battery";
-> +      voltage-min-design-microvolt =3D <3200000>;
-> +      energy-full-design-microwatt-hours =3D <5290000>;
-> +      charge-full-design-microamp-hours =3D <1430000>;
-> +    };
-> +
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> -      bat: battery {
-> -        compatible =3D "simple-battery";
-> -        voltage-min-design-microvolt =3D <3200000>;
-> -        energy-full-design-microwatt-hours =3D <5290000>;
-> -        charge-full-design-microamp-hours =3D <1430000>;
-> -      };
-> =20
->        bq27510g3: fuel-gauge@55 {
->          compatible =3D "ti,bq27510g3";
-> diff --git a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.=
-yaml b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
-> index 774582cd3a2c..e68a97cb49fe 100644
-> --- a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
-> @@ -54,7 +54,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
->        battery@64 {
-> diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yam=
-l b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> index cfffaeef8b09..29d536541152 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> @@ -54,7 +54,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
->        charger: battery-charger@68 {
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1465=
-6.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
-> index 711066b8cdb9..b444b799848e 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
-> @@ -32,7 +32,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
-0.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
-> index 3a529326ecbd..2627cd3eed83 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
-> @@ -68,7 +68,7 @@ unevaluatedProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> @@ -82,7 +82,7 @@ examples:
->      };
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
-2.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> index 64a0edb7bc47..085e2504d0dc 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-> @@ -69,7 +69,7 @@ additionalProperties: false
-> =20
->  examples:
->    - |
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt945=
-5.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
-> index 27bebc1757ba..07e38be39f1b 100644
-> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
-> @@ -68,7 +68,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
-> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yam=
-l b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> index ce6fbdba8f6b..3a9e4310b433 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> @@ -61,7 +61,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c0 {
-> +    i2c {
->        #address-cells =3D <1>;
->        #size-cells =3D <0>;
-> =20
+   162	
+   163	#ifdef CONFIG_X86
+   164	/* Check presence of Processor Clocking Control by searching for \_SB.PCCH. */
+   165	void __init acpi_pcc_cpufreq_init(void)
+   166	{
+   167		acpi_status status;
+   168		acpi_handle handle;
+   169	
+   170		status = acpi_get_handle(NULL, "\\_SB", &handle);
+   171		if (ACPI_FAILURE(status))
+   172			return;
+   173		if (acpi_has_method(handle, "PCCH"))
+   174			cpufreq_add_device("pcc-cpufreq");
+   175	}
+   176	#else
+ > 177	void __init acpi_pcc_cpufreq_init(void) {}
+   178	#endif /* CONFIG_X86 */
+   179	
 
-=2E..
-
---iicycb2qvy4rthvm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP/4zIACgkQ2O7X88g7
-+pqxgBAAj3F4gb6RlI0Z6x4ZQhCWN+DLukelA2aUhkYhJyBC2UXCy5KWL1cNzB6P
-Y/hjl2FRmX0zNrcfRZ8kPynFwBHGbqcob8mgiAmOxCCFjczYKEIBMDbV3dZ6RDPA
-gz2uAVm2ioYkgXNjee6TC9knDQ34wmmkR1MwV2u7V4YVH/Xvxu164dQE1ZAeMs8I
-dXJByJltLKNqRQtOQabhGSP3+6//tZ3Cu/b+Zmdk+f+r+VTvvsWH+rJlxLKJbiE3
-znCN7kp3Ty1yvzd8PgM+MDt0o4mXlnfcfX5Vb+PtVTwMMJVtHvCFDYZL2Z71mwQr
-8R49nVhm4pkHMpI5nZz/eYXmrsU/hpRBSVbLhd+oSNI76YqPpm/+xGWKF5JZgMIm
-YAxRZjxs45EP2ST8nMa7/SYXygYCp9qekwcN39+IV2LSgRkjo1Iz+qJn5sOXvYMb
-dJ/q0IGA8cWQ4lG3LNzwAVkfQMzfw8OFFxbTVxDFDVBM/mAHr06M86TGcLyGEYxa
-r5YDSv8596Ep4y67xHrdzXCLASbYgQANlOBoNkX/ZMm3YcCGXsHSl/DQdGw5KSEr
-4zeoAsdANn6jGsLJurLrMFXTXcKMUEk9vHjE+N+bEjBxrMFQ9QyIk9d5MlCdp1Tn
-ptHuPPrunQ82d7+YC/fRCc28y/rDpEOlrFfdXej3Z3IJIkLQusE=
-=cMEP
------END PGP SIGNATURE-----
-
---iicycb2qvy4rthvm--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
