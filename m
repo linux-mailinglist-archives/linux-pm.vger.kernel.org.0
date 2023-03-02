@@ -2,64 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9646A8417
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 15:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE98A6A84F2
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 16:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjCBOYQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Mar 2023 09:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S229505AbjCBPJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Mar 2023 10:09:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCBOYQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 09:24:16 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38E0193FE
-        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 06:24:14 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s26so68114073edw.11
-        for <linux-pm@vger.kernel.org>; Thu, 02 Mar 2023 06:24:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1677767053;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n+FX2bRnFYB4pwUNOT+bxicT/CBSQOm6gc2j2xz3BnQ=;
-        b=mySt6yKzU0MPpjsIOQSpdfsaJYaU4vwgigGhMgO0Rlq0/92t/YM9DmRkeNxagirRcp
-         iT+nNZ2RewxnwPpll7uIfD6P5B1zOssp9LmcMs4g9hesKKVuvRlvIXxvp7mPeyrBHkh2
-         zMiAh6N95NMozIK5wOmbbL6jJ6ZP5vpWM46hfoUzm/BUsikUpF+CZD4wz6UQXNcj/M4b
-         rRziW8AWrS7yO3/jNVSbn8uP9Un/sqQO4L1Sq0Vjux/C9Jtpq5Y+4Vr3eBPd7xtNCuV8
-         b7+WCuW2Qk9anZswOk/fSpxBWrSEvuHPbBPBpieju5ccRVDFbxx71gdn32t3t8s2LSjR
-         knZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677767053;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n+FX2bRnFYB4pwUNOT+bxicT/CBSQOm6gc2j2xz3BnQ=;
-        b=WHC0i/mIFkbaf9ZisPxtDUnVKFq/EzLMIZwYDiMVRGtpaqjtHfNW+I2MCVkx4CGe4c
-         3FD06Y+MXw/sorO2qBcd6tevnKrLipmT8RhH99ukkVLqSdn55UsjakensbTA1Hs3vAzC
-         3SMhcGZ2Z3NNusfbIBmAGuyFtqU53stnuwNxVzmBgOC3Ja0DbA/vbENRn06Lm5CTMXFP
-         yaWy+EK1qtlZQLAU2ucfEV6QcG5w9/D5zOFZV4Y3EreANP1zoLpf3p9KOgXYCeLVRxau
-         w6aceXoe7RhJ4qFSjmRKRxA7+N5D83phLWmQ2GaUtv6I52dldnx4VZxnetaFQgOETgoY
-         gL7w==
-X-Gm-Message-State: AO0yUKXlLKj35Ov2Ey8FFIH1srLUYTt2rQdE1QtVbHYzU+qW0VMAg4R5
-        u/+yZmSkhOY4cb0uKBllB2LLDiv5dZAUevliSSpm3A==
-X-Google-Smtp-Source: AK7set8r4j0tq4rowbbxxo8fIvmc+CPTtwUYa80qViAhpkPD9kvq8gLfk9uOHpWXWuK70y+1jlhXp7wFwtrfjeU2zns=
-X-Received: by 2002:a17:906:6d55:b0:8f3:9ee9:f1e2 with SMTP id
- a21-20020a1709066d5500b008f39ee9f1e2mr1255982ejt.5.1677767053169; Thu, 02 Mar
- 2023 06:24:13 -0800 (PST)
+        with ESMTP id S229471AbjCBPJ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 10:09:57 -0500
+X-Greylist: delayed 870 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 07:09:55 PST
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FBC206BB
+        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 07:09:55 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl [83.9.32.99])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AFBE83F8F4;
+        Thu,  2 Mar 2023 15:46:29 +0100 (CET)
+Message-ID: <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
+Date:   Thu, 2 Mar 2023 15:46:28 +0100
 MIME-Version: 1.0
-References: <Y/yTacHF8TvAkxdj@kili>
-In-Reply-To: <Y/yTacHF8TvAkxdj@kili>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Thu, 2 Mar 2023 15:23:37 +0100
-Message-ID: <CAGuA+ooJXL9f5P8ToCyOwYoYA2TG7H4x_H5FMDhAOwqf51FfQg@mail.gmail.com>
-Subject: Re: [bug report] thermal/drivers/mediatek: Add the Low Voltage
- Thermal Sensor driver
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] cpuidle: psci: Iterate backwards over list in
+ psci_pd_remove()
+Content-Language: en-US
+To:     Shawn Guo <shawn.guo@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220308082931.3385902-1-shawn.guo@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220308082931.3385902-1-shawn.guo@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,50 +49,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 12:26=E2=80=AFPM Dan Carpenter <error27@gmail.com> =
-wrote:
->
-> Hello Balsam CHIHI,
->
-> The patch f5f633b18234: "thermal/drivers/mediatek: Add the Low
-> Voltage Thermal Sensor driver" from Feb 9, 2023, leads to the
-> following Smatch static checker warning:
->
->         drivers/thermal/mediatek/lvts_thermal.c:562 lvts_calibration_init=
-()
->         warn: not copying enough bytes for '&lvts_ctrl->calibration[i]' (=
-4 vs 2 bytes)
->
-> drivers/thermal/mediatek/lvts_thermal.c
->     555 static int lvts_calibration_init(struct device *dev, struct lvts_=
-ctrl *lvts_ctrl,
->     556                                         const struct lvts_ctrl_da=
-ta *lvts_ctrl_data,
->     557                                         u8 *efuse_calibration)
->     558 {
->     559         int i;
->     560
->     561         for (i =3D 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
-> --> 562                 memcpy(&lvts_ctrl->calibration[i],
->     563                        efuse_calibration + lvts_ctrl_data->cal_of=
-fset[i], 2);
->                                                                          =
-         ^
-> This is copying an array of known ints to a u32 array.  It should copy
-> sizeof(int) instead of 2.  It only works because the data you're on
-> little endian and the data is small.
->
->     564
->     565         return 0;
->     566 }
->
-> regards,
-> dan carpenter
 
-Hello Dan Carpenter,
 
-Thank you for reporting this bug.
-I will create a patch to fix it ASAP.
+On 8.03.2022 09:29, Shawn Guo wrote:
+> In case that psci_pd_init_topology() fails for some reason,
+> psci_pd_remove() will be responsible for deleting provider and removing
+> genpd from psci_pd_providers list.  There will be a failure when removing
+> the cluster PD, because the cpu (child) PDs haven't been removed.
+> 
+> [    0.050232] CPUidle PSCI: init PM domain cpu0
+> [    0.050278] CPUidle PSCI: init PM domain cpu1
+> [    0.050329] CPUidle PSCI: init PM domain cpu2
+> [    0.050370] CPUidle PSCI: init PM domain cpu3
+> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+> [    0.051412] PM: genpd_remove: removed cpu3
+> [    0.051449] PM: genpd_remove: removed cpu2
+> [    0.051499] PM: genpd_remove: removed cpu1
+> [    0.051546] PM: genpd_remove: removed cpu0
+> 
+> Fix the problem by iterating the provider list reversely, so that parent
+> PD gets removed after child's PDs like below.
+> 
+> [    0.029052] CPUidle PSCI: init PM domain cpu0
+> [    0.029076] CPUidle PSCI: init PM domain cpu1
+> [    0.029103] CPUidle PSCI: init PM domain cpu2
+> [    0.029124] CPUidle PSCI: init PM domain cpu3
+> [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.029647] PM: genpd_remove: removed cpu0
+> [    0.029666] PM: genpd_remove: removed cpu1
+> [    0.029690] PM: genpd_remove: removed cpu2
+> [    0.029714] PM: genpd_remove: removed cpu3
+> [    0.029738] PM: genpd_remove: removed cpu-cluster0
+> 
+> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> ---
+Looks like this was never picked up or followed up on?
 
-Best regards,
-Balsam
+Konrad
+> Changes since v1:
+> - Fix commit log
+> - Pick up Reviewed-by tag from Sudeep and Ulf (Thanks!)
+> - Add Fixes tag as suggested by Ulf
+> 
+>  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index ff2c3f8e4668..ce5c415fb04d 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -182,7 +182,8 @@ static void psci_pd_remove(void)
+>  	struct psci_pd_provider *pd_provider, *it;
+>  	struct generic_pm_domain *genpd;
+>  
+> -	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
+> +	list_for_each_entry_safe_reverse(pd_provider, it,
+> +					 &psci_pd_providers, link) {
+>  		of_genpd_del_provider(pd_provider->node);
+>  
+>  		genpd = of_genpd_remove_last(pd_provider->node);
+> 
