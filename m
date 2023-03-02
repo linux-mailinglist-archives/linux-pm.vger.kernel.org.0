@@ -2,134 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27C46A7FB9
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 11:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9646A8417
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 15:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjCBKLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Mar 2023 05:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S229487AbjCBOYQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Mar 2023 09:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjCBKLb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 05:11:31 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A7724129
-        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 02:11:29 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h14so15959535wru.4
-        for <linux-pm@vger.kernel.org>; Thu, 02 Mar 2023 02:11:29 -0800 (PST)
+        with ESMTP id S229468AbjCBOYQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 09:24:16 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38E0193FE
+        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 06:24:14 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id s26so68114073edw.11
+        for <linux-pm@vger.kernel.org>; Thu, 02 Mar 2023 06:24:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677751888;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=94soxuvv9weTj14EUenx4LGqDvReRutwCU3Hh0oH1RU=;
-        b=wTSzRGaMzs2MJ8NdB54pig9Z7LYrG7AED2xx7sCab+Ktsh3ppzWX1E1QhLE2MmEHtw
-         FqSP04+i3a0DBkwO6D7fd6xh8+NODsZwV6E3QmH9Vj1oKhpoxIplP0um9y3WXQpoaqYa
-         Ler2y114ZBIYaAkj3du4Bxmr1/pza/1J5+QHCz8BCqgsfFMrphPYAa5bo/sfDvdQY5Dz
-         C69F/vCEdISUO0Csr2dh2/I0H+VqXMmB0Rp+VeE2/z8UgLWnUh3PsAhymuSfFjkjpMsw
-         DK9vYuljCM18N2jGnI+tYsloor+92Vn6A19+C9lmlnwRppkYpS/oZD7/8IUQlabg35jb
-         JcLA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1677767053;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+FX2bRnFYB4pwUNOT+bxicT/CBSQOm6gc2j2xz3BnQ=;
+        b=mySt6yKzU0MPpjsIOQSpdfsaJYaU4vwgigGhMgO0Rlq0/92t/YM9DmRkeNxagirRcp
+         iT+nNZ2RewxnwPpll7uIfD6P5B1zOssp9LmcMs4g9hesKKVuvRlvIXxvp7mPeyrBHkh2
+         zMiAh6N95NMozIK5wOmbbL6jJ6ZP5vpWM46hfoUzm/BUsikUpF+CZD4wz6UQXNcj/M4b
+         rRziW8AWrS7yO3/jNVSbn8uP9Un/sqQO4L1Sq0Vjux/C9Jtpq5Y+4Vr3eBPd7xtNCuV8
+         b7+WCuW2Qk9anZswOk/fSpxBWrSEvuHPbBPBpieju5ccRVDFbxx71gdn32t3t8s2LSjR
+         knZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677751888;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=94soxuvv9weTj14EUenx4LGqDvReRutwCU3Hh0oH1RU=;
-        b=OZxN3MEqmQ/hw1sz2wpHEBdo7xa61mqd7mNevdJ5O4myecfXkngxR/L5/yeSyGSXuq
-         +/FVed476y8i63CceUyPVxYZJmUZEd9IWgMuxylic/9rv5IYOJ86erCLCWjmV/4OQZ51
-         m09j9nzen0eyNCTFmUb56jIgdc3lEEn99XHzBEr17JPQgBS65q2dsh12nHg1bPAJHwnA
-         /poOUUnOMNFiJRPxP5L8aZOBSuR757XP3WQZODtBu91x7qP4i5J6t4PR5nf43QXQWuRX
-         jr0dwuV2NSqoo2+BK3MAVkeYY0sPKWHPDBjoihJsMAlSxg8marKNxuGecJqdO1CpD/Ti
-         xQnA==
-X-Gm-Message-State: AO0yUKViXpG+Krs45VuUoJk7C8nPtvcQmgktIjjvSKYoAYge7pUSa96X
-        UMQVUNRPimrSMAG3YKcCuwS+Gw==
-X-Google-Smtp-Source: AK7set/f6DaunEW+qsu0USPsRajcEqVogfO5w8Xw2rlafpKuhapTBM1EKBnJBGGQGK1pzbCzwxUE+A==
-X-Received: by 2002:a5d:4292:0:b0:2cd:f2c6:5d31 with SMTP id k18-20020a5d4292000000b002cdf2c65d31mr823851wrq.11.1677751888033;
-        Thu, 02 Mar 2023 02:11:28 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:9a21:3c01:c6c8:757f? ([2a05:6e02:1041:c10:9a21:3c01:c6c8:757f])
-        by smtp.googlemail.com with ESMTPSA id p1-20020a056000018100b002c54fb024b2sm15073479wrx.61.2023.03.02.02.11.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 02:11:27 -0800 (PST)
-Message-ID: <9c4d092c-6291-e9fc-6288-c9e365f30f29@linaro.org>
-Date:   Thu, 2 Mar 2023 11:11:26 +0100
+        d=1e100.net; s=20210112; t=1677767053;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n+FX2bRnFYB4pwUNOT+bxicT/CBSQOm6gc2j2xz3BnQ=;
+        b=WHC0i/mIFkbaf9ZisPxtDUnVKFq/EzLMIZwYDiMVRGtpaqjtHfNW+I2MCVkx4CGe4c
+         3FD06Y+MXw/sorO2qBcd6tevnKrLipmT8RhH99ukkVLqSdn55UsjakensbTA1Hs3vAzC
+         3SMhcGZ2Z3NNusfbIBmAGuyFtqU53stnuwNxVzmBgOC3Ja0DbA/vbENRn06Lm5CTMXFP
+         yaWy+EK1qtlZQLAU2ucfEV6QcG5w9/D5zOFZV4Y3EreANP1zoLpf3p9KOgXYCeLVRxau
+         w6aceXoe7RhJ4qFSjmRKRxA7+N5D83phLWmQ2GaUtv6I52dldnx4VZxnetaFQgOETgoY
+         gL7w==
+X-Gm-Message-State: AO0yUKXlLKj35Ov2Ey8FFIH1srLUYTt2rQdE1QtVbHYzU+qW0VMAg4R5
+        u/+yZmSkhOY4cb0uKBllB2LLDiv5dZAUevliSSpm3A==
+X-Google-Smtp-Source: AK7set8r4j0tq4rowbbxxo8fIvmc+CPTtwUYa80qViAhpkPD9kvq8gLfk9uOHpWXWuK70y+1jlhXp7wFwtrfjeU2zns=
+X-Received: by 2002:a17:906:6d55:b0:8f3:9ee9:f1e2 with SMTP id
+ a21-20020a1709066d5500b008f39ee9f1e2mr1255982ejt.5.1677767053169; Thu, 02 Mar
+ 2023 06:24:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 16/19] thermal/drivers/tegra: Remove unneeded lock when
- setting a trip point
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
- <20230228112238.2312273-17-daniel.lezcano@linaro.org>
- <Y/9eohV9h26hPuFn@orome> <e5a4aaf1-af0a-aac4-6f77-94c3c9bfcc67@linaro.org>
- <ZABwJdBk/Z1NHc12@orome>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZABwJdBk/Z1NHc12@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/yTacHF8TvAkxdj@kili>
+In-Reply-To: <Y/yTacHF8TvAkxdj@kili>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Thu, 2 Mar 2023 15:23:37 +0100
+Message-ID: <CAGuA+ooJXL9f5P8ToCyOwYoYA2TG7H4x_H5FMDhAOwqf51FfQg@mail.gmail.com>
+Subject: Re: [bug report] thermal/drivers/mediatek: Add the Low Voltage
+ Thermal Sensor driver
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/03/2023 10:45, Thierry Reding wrote:
+On Mon, Feb 27, 2023 at 12:26=E2=80=AFPM Dan Carpenter <error27@gmail.com> =
+wrote:
+>
+> Hello Balsam CHIHI,
+>
+> The patch f5f633b18234: "thermal/drivers/mediatek: Add the Low
+> Voltage Thermal Sensor driver" from Feb 9, 2023, leads to the
+> following Smatch static checker warning:
+>
+>         drivers/thermal/mediatek/lvts_thermal.c:562 lvts_calibration_init=
+()
+>         warn: not copying enough bytes for '&lvts_ctrl->calibration[i]' (=
+4 vs 2 bytes)
+>
+> drivers/thermal/mediatek/lvts_thermal.c
+>     555 static int lvts_calibration_init(struct device *dev, struct lvts_=
+ctrl *lvts_ctrl,
+>     556                                         const struct lvts_ctrl_da=
+ta *lvts_ctrl_data,
+>     557                                         u8 *efuse_calibration)
+>     558 {
+>     559         int i;
+>     560
+>     561         for (i =3D 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
+> --> 562                 memcpy(&lvts_ctrl->calibration[i],
+>     563                        efuse_calibration + lvts_ctrl_data->cal_of=
+fset[i], 2);
+>                                                                          =
+         ^
+> This is copying an array of known ints to a u32 array.  It should copy
+> sizeof(int) instead of 2.  It only works because the data you're on
+> little endian and the data is small.
+>
+>     564
+>     565         return 0;
+>     566 }
+>
+> regards,
+> dan carpenter
 
-[ ... ]
+Hello Dan Carpenter,
 
->>>> +	/*
->>>> +	 * Disable the interrupt so set_trips() can not be called
->>>> +	 * while we are setting up the register
->>>> +	 * TSENSOR_SENSOR0_CONFIG1. With this we close a potential
->>>> +	 * race window where we are setting up the TH2 and the
->>>> +	 * temperature hits TH1 resulting to an update of the
->>>> +	 * TSENSOR_SENSOR0_CONFIG1 register in the ISR.
->>>> +	 */
->>>> +	disable_irq(irq);
->>>> +
->>>>    	for (i = 0; i < ARRAY_SIZE(ts->ch); i++) {
->>>>    		err = tegra_tsensor_enable_hw_channel(ts, i);
->>>>    		if (err)
->>>>    			return err;
->>>>    	}
->>>> +	enable_irq(irq);
->>>
->>> Instead of disabling and reenabling the interrupt, could we simply move
->>> the channel enabling code a couple of lines above, before the IRQ
->>> request call? If enabling the channels were to trigger an interrupt, it
->>> should get triggered right after requesting the IRQ.
->>
->> Won't we have a spurious interrupt if that situation happen ?
-> 
-> It wouldn't be a spurious interrupt, but rather something that we want
-> to react to. It's ultimately the same result as your patch. In your
-> variant we basically request the IRQ (which automatically enables it),
-> then immediately disable it, enable the HW channels and then reenable
-> the interrupt. If enabling the HW channels were to trigger an interrupt,
-> that interrupt would be raised immediately after enable_irq() as well,
-> as far as I can tell.
+Thank you for reporting this bug.
+I will create a patch to fix it ASAP.
 
-I see, thanks for the clarification
-
-   -- Daniel
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Best regards,
+Balsam
