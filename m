@@ -2,131 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80386A77F9
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 00:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B966A7B27
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 07:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCAXsz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Mar 2023 18:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S229866AbjCBGCl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Mar 2023 01:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCAXsx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Mar 2023 18:48:53 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FFD4EEA;
-        Wed,  1 Mar 2023 15:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677714523; x=1709250523;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=438mUqu27Pg/8R7tElJ2t97iI5443sfkue+J0vJ5gNg=;
-  b=QHr2xfOXiqxXREcERzwCmn5qwmAlVMwFBKWmyBUlFgsyMRrL+nDSHMrH
-   ddluhJ2+i5+ch/jW5BGc0FGec+1WZdb6J8nt70Al13rVmBa1DxKa3zwwh
-   w48jvOoz73PEvzqu/4TI4vnLZ70LzDgrdVIhNdLSg26bqO6hBugT2TUix
-   +yP0Oa/ucyBB35aXLWG8bH8oKpsDxUZ8DgeG2eidunD73dfrMCwjRH3dA
-   X5uBLJlwvZKy7hFE2MMKE7yy+1z0WjZ1ktLDvnC6Idulu0tc9FEr+k8Mk
-   PdLpZ46/11V6p42Y3R8OgwI8n2qHqJNtFPzeOVLbyiltManmV68NN6hDn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="322831141"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="322831141"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 15:48:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="798604515"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="798604515"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Mar 2023 15:48:39 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXWBa-0006Vf-2d;
-        Wed, 01 Mar 2023 23:48:38 +0000
-Date:   Thu, 2 Mar 2023 07:48:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>, rafael@kernel.org,
-        lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev, pmladek@suse.com, mcgrof@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
-Subject: Re: [PATCH v3] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-Message-ID: <202303020759.pwVPib0p-lkp@intel.com>
-References: <20230301085717.10411-1-petr.pavlu@suse.com>
+        with ESMTP id S229862AbjCBGCk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 01:02:40 -0500
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A3A4E5D7;
+        Wed,  1 Mar 2023 22:02:02 -0800 (PST)
+Received: by mail-pj1-f65.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso1728091pjr.5;
+        Wed, 01 Mar 2023 22:02:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677736845;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O5BLwdsqWMRN1wSNrlTvWmfWTgDeULT8guf1qcXNMsg=;
+        b=Ok2Mt8WQQQU2YkCj6RmmQh2xWe2LfMW9T5N12jhJuhJDZWz8sYiM8Smo+IgvN8ZC85
+         gjMhYJD/pK1rEhWpgRZMR1ge3aZodwSoP6sedHJ+gGO7mcVWi0QvRlrhkXkc0ILSWSru
+         ymzCuDjVnJ6H/Li5WpXUy1MR4swNaqVgyf2KRR7CeqyhzFoyXZb7+4wMzDu2FXPMX7LK
+         TdOq5VWEySRHmGdsP2E6i7qe/8d8Pttv8vuyYytK/3rYEuwNICGBAH8SyaTRLB2f31P5
+         +2VDWLqOP9LYoAcIll9lt2yxxgFZ/VKOwPUWtUaDM9B6IpBjln1HCu8ucZeJEbvnsQNT
+         UsRw==
+X-Gm-Message-State: AO0yUKWcbQFl7/whbLKAyU2bgRvOkJ3ZuqIxCClgENmK0mH1QRjL7pnb
+        Eaoak4/58189i2P9U0RBuKY=
+X-Google-Smtp-Source: AK7set9PDUqkLyYeVnh9ARO3hoVUbldEgTdTHpzuL261aQXyO8rkxEDyTnZSyXTNGTMuwleG3jSj8Q==
+X-Received: by 2002:a05:6a20:918c:b0:bf:65dd:94fd with SMTP id v12-20020a056a20918c00b000bf65dd94fdmr8485155pzd.59.1677736845004;
+        Wed, 01 Mar 2023 22:00:45 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id b11-20020aa7810b000000b005d72e54a7e1sm8787023pfi.215.2023.03.01.22.00.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 22:00:44 -0800 (PST)
+From:   Xueqin Luo <luoxueqin@kylinos.cn>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin@kylinos.cn, xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH] PM/hibernation: set the default image size for large memory
+Date:   Thu,  2 Mar 2023 14:00:33 +0800
+Message-Id: <20230302060033.15661-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301085717.10411-1-petr.pavlu@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Petr,
+From: xueqin Luo <luoxueqin@kylinos.cn>
 
-Thank you for the patch! Perhaps something to improve:
+We found that the larger the memory, the larger the image saved by the
+S4, so that the S4 took longer and longer. However, through observation,
+we found that the image size is generally more than 900,000 pages, so
+we changed the image_size of a computer with 16GB or more memory to 1
+million pages. Let it release more unnecessary pages to reduce S4 run
+time.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.2 next-20230301]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
+---
+ kernel/power/snapshot.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Pavlu/ACPI-cpufreq-use-a-platform-device-to-load-ACPI-PPC-and-PCC-drivers/20230301-165927
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230301085717.10411-1-petr.pavlu%40suse.com
-patch subject: [PATCH v3] ACPI: cpufreq: use a platform device to load ACPI PPC and PCC drivers
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020759.pwVPib0p-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/59eb26f9b02165cc5c5fb6514ff4d2a8d7a91356
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Petr-Pavlu/ACPI-cpufreq-use-a-platform-device-to-load-ACPI-PPC-and-PCC-drivers/20230301-165927
-        git checkout 59eb26f9b02165cc5c5fb6514ff4d2a8d7a91356
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303020759.pwVPib0p-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/acpi_processor.c:177:13: warning: no previous prototype for 'acpi_pcc_cpufreq_init' [-Wmissing-prototypes]
-     177 | void __init acpi_pcc_cpufreq_init(void) {}
-         |             ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/acpi_pcc_cpufreq_init +177 drivers/acpi/acpi_processor.c
-
-   162	
-   163	#ifdef CONFIG_X86
-   164	/* Check presence of Processor Clocking Control by searching for \_SB.PCCH. */
-   165	void __init acpi_pcc_cpufreq_init(void)
-   166	{
-   167		acpi_status status;
-   168		acpi_handle handle;
-   169	
-   170		status = acpi_get_handle(NULL, "\\_SB", &handle);
-   171		if (ACPI_FAILURE(status))
-   172			return;
-   173		if (acpi_has_method(handle, "PCCH"))
-   174			cpufreq_add_device("pcc-cpufreq");
-   175	}
-   176	#else
- > 177	void __init acpi_pcc_cpufreq_init(void) {}
-   178	#endif /* CONFIG_X86 */
-   179	
-
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..de91d6916359 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -136,7 +136,14 @@ unsigned long image_size;
+ 
+ void __init hibernate_image_size_init(void)
+ {
+-	image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
++	/* The totalram pages() for a computer of 16 memory size is
++	 * equal to 4032990 pages. And according to our observation,
++	 * the average image size is 1000000 pages.
++	 */
++	if (totalram_pages() < 4032990)
++		image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
++	else
++		image_size = 1000000 * PAGE_SIZE;
+ }
+ 
+ /*
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
