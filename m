@@ -2,114 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE98A6A84F2
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 16:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688F36A8720
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 17:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjCBPJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Mar 2023 10:09:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S230015AbjCBQpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Mar 2023 11:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCBPJ5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 10:09:57 -0500
-X-Greylist: delayed 870 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 07:09:55 PST
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FBC206BB
-        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 07:09:55 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl [83.9.32.99])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AFBE83F8F4;
-        Thu,  2 Mar 2023 15:46:29 +0100 (CET)
-Message-ID: <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
-Date:   Thu, 2 Mar 2023 15:46:28 +0100
+        with ESMTP id S230020AbjCBQpL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 11:45:11 -0500
+Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13241EFCC
+        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 08:45:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=sAIc9DICHOwHXe3hoL0M1Cz46v91ph++acz6kjkneyk=;
+        b=kDFUay36skYmps2/wdqt4fAH3ooPZbYWVp4pqBqM961wiZduj7P0xLgJw2P+NpMGf7kg1DoicLT6s
+         g6l09K8HwL4RYQ8zGGoaFGn4km6zQYbAroP+EN+9HlyJrhV1W8t5cDqTAwscYUwdLDpYbIiHboO9rZ
+         aMzoAa0S/vUdoj1kf/OGdJTZUpW+MrjaNGUTQavNWIRuYfGMKTi7Tl3hROfbZVtoTWtbKeUCJQ2L0I
+         vgAjzdLxgJIXjLXCeRFb3ZpkshGAWy49N0muwOqA6SWUqwPx0aPY3DSGC5+6RFk99RSbDSFXHj01s6
+         xLMWjzebL84uGzeen8v31LzBEjuhwEg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=sAIc9DICHOwHXe3hoL0M1Cz46v91ph++acz6kjkneyk=;
+        b=dTZtzyqF/jIMi0Zr3bfFJbyk3/PAmHQdX/XPn81EeMGXIgD+hYOJ9q2VlxqlJBJy6Rr6S2UsHglzv
+         pur80rgBQ==
+X-HalOne-ID: 943971d9-b919-11ed-babc-11abd97b9443
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay1 (Halon) with ESMTPSA
+        id 943971d9-b919-11ed-babc-11abd97b9443;
+        Thu, 02 Mar 2023 16:45:06 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 17:45:04 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+Message-ID: <ZADSkGa6dK4H9p75@ravnborg.org>
+References: <20230228215433.3944508-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] cpuidle: psci: Iterate backwards over list in
- psci_pd_remove()
-Content-Language: en-US
-To:     Shawn Guo <shawn.guo@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220308082931.3385902-1-shawn.guo@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220308082931.3385902-1-shawn.guo@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rob.
+
+>  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
+>  .../bindings/display/bridge/anx6345.yaml          |  2 +-
+>  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
+>  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
+>  .../bindings/display/bridge/ps8640.yaml           |  2 +-
+>  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
+>  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
+>  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
 
-On 8.03.2022 09:29, Shawn Guo wrote:
-> In case that psci_pd_init_topology() fails for some reason,
-> psci_pd_remove() will be responsible for deleting provider and removing
-> genpd from psci_pd_providers list.  There will be a failure when removing
-> the cluster PD, because the cpu (child) PDs haven't been removed.
-> 
-> [    0.050232] CPUidle PSCI: init PM domain cpu0
-> [    0.050278] CPUidle PSCI: init PM domain cpu1
-> [    0.050329] CPUidle PSCI: init PM domain cpu2
-> [    0.050370] CPUidle PSCI: init PM domain cpu3
-> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
-> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
-> [    0.051412] PM: genpd_remove: removed cpu3
-> [    0.051449] PM: genpd_remove: removed cpu2
-> [    0.051499] PM: genpd_remove: removed cpu1
-> [    0.051546] PM: genpd_remove: removed cpu0
-> 
-> Fix the problem by iterating the provider list reversely, so that parent
-> PD gets removed after child's PDs like below.
-> 
-> [    0.029052] CPUidle PSCI: init PM domain cpu0
-> [    0.029076] CPUidle PSCI: init PM domain cpu1
-> [    0.029103] CPUidle PSCI: init PM domain cpu2
-> [    0.029124] CPUidle PSCI: init PM domain cpu3
-> [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
-> [    0.029647] PM: genpd_remove: removed cpu0
-> [    0.029666] PM: genpd_remove: removed cpu1
-> [    0.029690] PM: genpd_remove: removed cpu2
-> [    0.029714] PM: genpd_remove: removed cpu3
-> [    0.029738] PM: genpd_remove: removed cpu-cluster0
-> 
-> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
-Looks like this was never picked up or followed up on?
 
-Konrad
-> Changes since v1:
-> - Fix commit log
-> - Pick up Reviewed-by tag from Sudeep and Ulf (Thanks!)
-> - Add Fixes tag as suggested by Ulf
-> 
->  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> index ff2c3f8e4668..ce5c415fb04d 100644
-> --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -182,7 +182,8 @@ static void psci_pd_remove(void)
->  	struct psci_pd_provider *pd_provider, *it;
->  	struct generic_pm_domain *genpd;
+> index 669f70b1b4c4..8bd58913804a 100644
+> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> @@ -226,7 +226,7 @@ unevaluatedProperties: false
 >  
-> -	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
-> +	list_for_each_entry_safe_reverse(pd_provider, it,
-> +					 &psci_pd_providers, link) {
->  		of_genpd_del_provider(pd_provider->node);
+>  examples:
+>    - |
+> -    i2c1 {
+> +    i2c {
+>              #address-cells = <1>;
+>              #size-cells = <0>;
 >  
->  		genpd = of_genpd_remove_last(pd_provider->node);
-> 
+> @@ -239,7 +239,7 @@ examples:
+>  
+>              ssd1306_i2c: oled@3d {
+>                      compatible = "solomon,ssd1306";
+> -                    reg = <0x3c>;
+> +                    reg = <0x3d>;
+>                      pwms = <&pwm 4 3000>;
+>                      reset-gpios = <&gpio2 7>;
+>                      solomon,com-lrremap;
+
+I can see this align the example with i2c-mux-gpio.yaml so the change
+should be fine. I am just positive surprised the tooling caught it.
+
+The change is
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+
+the above was just me thinking loud.
+
+	Sam
