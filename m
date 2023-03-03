@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E706AA289
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 22:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F056AA343
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 22:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbjCCVsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 16:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S231689AbjCCVzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 16:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbjCCVsB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 16:48:01 -0500
+        with ESMTP id S233087AbjCCVyG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 16:54:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9591D66D12;
-        Fri,  3 Mar 2023 13:45:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205AD66D0D;
+        Fri,  3 Mar 2023 13:48:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4DA161956;
-        Fri,  3 Mar 2023 21:45:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD732C433A1;
-        Fri,  3 Mar 2023 21:45:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5904A61957;
+        Fri,  3 Mar 2023 21:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C247C433A0;
+        Fri,  3 Mar 2023 21:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677879904;
-        bh=xp9FXqujjwu2ZzrM0tPwlrfBuZ8IpUHdD1atRn/3w/0=;
+        s=k20201202; t=1677880024;
+        bh=XHXaJL1i0FkVjKGw8UFe95MsqmnTD8jHzWw6U0fKQ/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cwXEPgk00XdsFNKkMAOJunGgsmGRRUGi+quG7zZQXTxS9dpPCQ9yqk+kpff0wuaLO
-         mtFqlO1ZTxIPBM4F3uYiMZ2XEf5y0HCU7JgoMUNdfR4XWIWzaiqIUnCtdS5rVTtqeB
-         9d47zh5u/sYFEwG1JjzzQueKWRGiFqBQj+fP05ec6EcBmmgf3iPz+djjCP/9MXsc8o
-         HE6Ak+n3wwuGJq4Mga9EwqdJJYSxu0lpM3bcoFHQD/BfIPnb+jkRIKar9ggiFr3fiT
-         63+35AfvGSN2pRysylWvsCu5OVYcQrlfOGTOiHy/eEybo/1aN1EWxBEa9EoJ3KW7Ob
-         XQQRTCScWrJSQ==
+        b=TTvpkV1DQ8Ce0c35T24ZXRx+TS44k9tpS3wyk2CQS4k3GdQKOKNAfJN+WQL3pdq7/
+         NH6oZqcORsiFGl/dBAq9PFXU6jb4NgLKD35kghmb62bdSh6HydmN3jmEnvzMPEoTJi
+         CCBYcZLvV2Dd6lvuYu79zDWzkFkM+E8AuDqn8drc0xdiSd5zxxNhYqHsbDM4nfLqQL
+         zwtpabnJrDEUmS7VKryi6uj9+3uYwfE3926Y/1GmQML+Z+phq9mq+Eb4RSIzzXQVFI
+         zBs0z09Y9cAMnoV3hhxqXjkIlzp71A9jctAB2W1CZladON1UaUV4VZyb94sxTPFhmp
+         +psvjx/d2x7eg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 51/60] kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
-Date:   Fri,  3 Mar 2023 16:43:05 -0500
-Message-Id: <20230303214315.1447666-51-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 44/50] kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
+Date:   Fri,  3 Mar 2023 16:45:25 -0500
+Message-Id: <20230303214531.1450154-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
-References: <20230303214315.1447666-1-sashal@kernel.org>
+In-Reply-To: <20230303214531.1450154-1-sashal@kernel.org>
+References: <20230303214531.1450154-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,10 +76,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index f82111837b8d1..7b44f5b89fa15 100644
+index 97e62469a6b32..1b902f986f91c 100644
 --- a/kernel/power/energy_model.c
 +++ b/kernel/power/energy_model.c
-@@ -87,10 +87,7 @@ static void em_debug_create_pd(struct device *dev)
+@@ -85,10 +85,7 @@ static void em_debug_create_pd(struct device *dev)
  
  static void em_debug_remove_pd(struct device *dev)
  {
