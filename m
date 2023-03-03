@@ -2,149 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C76D6AA414
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 23:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A066AA54C
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 00:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjCCWUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 17:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S232024AbjCCXDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 18:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjCCWTs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 17:19:48 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFD879B2F
-        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 14:11:17 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id ay14so12258374edb.11
-        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 14:11:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677881417;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N1o/g/RY/F8tw5gI99MfNC1MgutCzKG48oc2MA5z/Ao=;
-        b=mJFchvIlZ8QMjvsvvVeIyM99Nl+hgG4fS+KnaF06ZdktegLxkN+p0lV7yigxmSG8c8
-         KQ1/lkBBjVkgoowCe2TdFPjP9EpNVoyt2OrgCefnlFJ/zjAa/xYE/cB/h3qKwxKCpjMU
-         l2tQdDzJlfnkYyHI1N/Sl6k8wY6xYorkXL+FMbac1DohRdViiW8fF7kwZxy2YgiQGYsa
-         cO8q/AMC9v04rn72osdRcgak0AeT5OKmIYbaKbJXiw9AKzBmAaKg0V1vCDiwR2es8+AJ
-         ID30jqY35CAmsdIGdOaO/09Fd+s19BhCA9H8XStlXl8MnK9RyD4TgNZ1rKTYXciFD5O9
-         n9ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677881417;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1o/g/RY/F8tw5gI99MfNC1MgutCzKG48oc2MA5z/Ao=;
-        b=hR/4xvyrSEpdSH1WmeqikW9JBrMN5Tcs55vmzxtNrIwhvKiwuSLTDGYTTPd2z+S8SV
-         LcMjOT1QCdysuaJaEWnyeaIAdJu95Az+CjR41CdrpSVNQIn4Eqh3yLEKC115FGR37puW
-         pK71pTWymb3rkSRaiXWUf+4DeSrOBFurAfZCufx2OBe9+d9T3M1PFRFF1AOTFYIvhQ/w
-         17hGRZpiLpsO6tIUDxiy6vppXTG9fXgMkDnAzIong2HZk6pFD5LFOC2ufMsT5zsD5kkk
-         6AzhG1ABs5A1DD3r6FhsnkEKF3AaRCyyZ5OYy/5qqL48JeOQZLACqmiIwhPYNhCr3CXi
-         WsKQ==
-X-Gm-Message-State: AO0yUKUaDkhHLKhWIrfqAf+qoJ211aIEz2sequadtU37VznM7hzKq2U3
-        sig6PXC+WNDxJKOblYPyaYpz/WKh5eg7PrrAtnw=
-X-Google-Smtp-Source: AK7set8HY/ZWvMDmsFszJ46x+D2bfFXOLEt62IWqldbD7EeuilM2sEPe1aGzehsz3IInfUfazDl8uQ==
-X-Received: by 2002:a2e:8e8c:0:b0:295:9f20:bf16 with SMTP id z12-20020a2e8e8c000000b002959f20bf16mr834883ljk.51.1677880713790;
-        Fri, 03 Mar 2023 13:58:33 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id e27-20020ac2547b000000b004cafa01ebbfsm552670lfn.101.2023.03.03.13.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 13:58:33 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 03 Mar 2023 22:58:15 +0100
-Subject: [PATCH 15/15] arm64: dts: qcom: sm6375-pdx225: Add volume down
- GPIO key
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-sm6375_features0_dts-v1-15-8c8d94fba6f0@linaro.org>
-References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
-In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        with ESMTP id S231938AbjCCXDo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 18:03:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364BD4FA94;
+        Fri,  3 Mar 2023 15:03:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0D2DB81A3F;
+        Fri,  3 Mar 2023 21:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF67C43446;
+        Fri,  3 Mar 2023 21:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677880076;
+        bh=L0GDlOFJh1U+yOBJ5nphKgt60E01OaTI0l1WVeilfBg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fLjQBXwRRMdk3ZmaSt5J4D/fASyLVT+3fysLDdjsfjhtovN3gMpBbO0cZDWjJEu57
+         Nf6LyhVW+Mkd09go5OSgL6j3K+98MJctn/PaCRE14h2kcxiyJRrlv5Ju6RsuzCHQh7
+         +B2z+bnfgNTAzPCPr4EjmnLXInJKEMwRNnfZPYCRMkYID7XMQHPpDJgP1OpNBj3scQ
+         O0glO/Taz30tdECVKmdUwl8kHB0lmoSd2h0HeynQcS/3e5KK5iYijqHRMNHpXXhDTe
+         NAvUQlrixGztyNbarQ2x5KMN+ezp0MaFHLtaLsIshYbPRGNY38QRcH/5kldRryv8b/
+         t7qIiHu7kj1Tw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677880689; l=1409;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=lUoSxwe6wDxHMv1iTDzFHuYZxKLyt1OMfELUkCo9Rp0=;
- b=2D1FYt5g9zW3UaMoHWv3uq5a3I+XMRqi4xOdzwph644K+Ge2XkqIHBvdS5lQ6HhN8VB5CAELrLkC
- Mc12VKGIBVJrmmDYy3Plyso23gn9bU4RYdv5EBTyg4dMyi2kUOIU
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 24/30] kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
+Date:   Fri,  3 Mar 2023 16:47:09 -0500
+Message-Id: <20230303214715.1452256-24-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303214715.1452256-1-sashal@kernel.org>
+References: <20230303214715.1452256-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the required nodes to enable the volume down key on the Sony
-Xperia 10 IV.
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+[ Upstream commit a0bc3f78d0fffa8be1a73bf945a43bfe1c2871c1 ]
+
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  To make things simpler, just
+call debugfs_lookup_and_remove() instead which handles all of the logic
+at once.
+
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
+Link: https://lore.kernel.org/r/20230202151515.2309543-1-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../dts/qcom/sm6375-sony-xperia-murray-pdx225.dts  | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ kernel/power/energy_model.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-index b691c3834b6b..8220e6f44117 100644
---- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-+++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-@@ -46,6 +46,23 @@ framebuffer: framebuffer@85200000 {
- 		};
- 	};
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 119b929dcff0f..334173fe6940e 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -72,10 +72,7 @@ static void em_debug_create_pd(struct device *dev)
  
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		label = "gpio-keys";
-+
-+		pinctrl-0 = <&vol_down_n>;
-+		pinctrl-names = "default";
-+
-+		key-volume-down {
-+			label = "Volume Down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&pmr735a_gpios 1 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			wakeup-source;
-+		};
-+	};
-+
- 	reserved-memory {
- 		cont_splash_mem: memory@85200000 {
- 			reg = <0 0x85200000 0 0xc00000>;
-@@ -133,6 +150,16 @@ &pmk8350_rtc {
- 	status = "okay";
- };
+ static void em_debug_remove_pd(struct device *dev)
+ {
+-	struct dentry *debug_dir;
+-
+-	debug_dir = debugfs_lookup(dev_name(dev), rootdir);
+-	debugfs_remove_recursive(debug_dir);
++	debugfs_lookup_and_remove(dev_name(dev), rootdir);
+ }
  
-+&pmr735a_gpios {
-+	vol_down_n: vol-down-n-state {
-+		pins = "gpio1";
-+		function = "normal";
-+		power-source = <1>;
-+		bias-pull-up;
-+		input-enable;
-+	};
-+};
-+
- &pon_pwrkey {
- 	status = "okay";
- };
-
+ static int __init em_debug_init(void)
 -- 
 2.39.2
 
