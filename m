@@ -2,192 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3786A9750
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 13:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10996A9B09
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 16:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCCMfQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 07:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S231382AbjCCPsS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 3 Mar 2023 10:48:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjCCMfO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 07:35:14 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D065ADF6
-        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 04:35:11 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id g18so2180436ljl.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 04:35:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677846910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+y3VNDk/Z06nKlKiA/oJNMccwlA5HSiiicdHD4hUxtk=;
-        b=eoou53ujfDFeNBKfwQs8VVNFXjSRp0KdvSXc1ScCXY5tuFHB/O/XmLiMzF3eVinlAR
-         YNw8vKjtc2lhcA7swj0zGSmHdWAZUoAChS0exCtCSIdQ3D6J9qZ8L4xwbLiHaKg6Flvg
-         983uVGHYKYkaYpt6MznbjEDlecLkjfN3wPzxa7N7BLciL+YA22dT0vGgn/SAWaebJAe9
-         9kJ25he5N3LIKfYF+rsdNgi8Gw4Q+j0PUbh6CgxYuvtUFJsx5x93hcWXAwyhNdPm+jHX
-         A/5aODBTyDYfPgVCzZCSK7nhJSYcdClo2xHlhtfQPg9Dcw68iI5MFOaYencDMUNFSPQC
-         KD0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677846910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+y3VNDk/Z06nKlKiA/oJNMccwlA5HSiiicdHD4hUxtk=;
-        b=gCxlgLAmFCbjOL4yS5nGNF4KduI+zXZnOBygbisUaGIuDCRbAwBg8Go1AxUqeKnaT6
-         oN6np5IDnb7wFBLd64xwS+Wn5ee6CKT9ixRKAyQHQ5b675dnl4o5pS2xKyv05utgajtn
-         LyEjBS3lDeskSDArOHW7dE5MOh7b+Kn+iwM5ojPw+x+z4PIuvKzg9ngeEbGI4spL7KoS
-         +ppgKHjrCT+J3GWCkcLcrVkq+mRLxxYnafRG2DIh2wSgkmAvqpnu1p6TfLqeKxxvpLZb
-         B79pWrrYh8WfFfy9rkaUbYxyGjyG+ztpJcg0p3gSUlTNk2ZOOG8qyYuTjbs55HtZdQLP
-         EZKw==
-X-Gm-Message-State: AO0yUKWlWGPxdpbCIhNiVuNDgeeAlSGVlp/S+OP09Sb5GvaiVKXhfruH
-        QBgoXJ74+RS+jNmknP18v1zbkdx9M7cnQn/5
-X-Google-Smtp-Source: AK7set+RMg3rfF+NeQcqLED3fXSnKmpz8e9ZYADW6XQ6nBAztzuOF9bj0Mia3LIYKxPL4sC6t5L5Og==
-X-Received: by 2002:a05:651c:2125:b0:295:aefd:eb13 with SMTP id a37-20020a05651c212500b00295aefdeb13mr652378ljq.30.1677846909788;
-        Fri, 03 Mar 2023 04:35:09 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id e30-20020a05651c039e00b002958c4e96fasm294978ljp.3.2023.03.03.04.35.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 04:35:09 -0800 (PST)
-Message-ID: <11fce8ad-46a4-305c-cc8f-c7530c13ecbd@linaro.org>
-Date:   Fri, 3 Mar 2023 13:35:08 +0100
+        with ESMTP id S230436AbjCCPsR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 10:48:17 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D83ACA0C;
+        Fri,  3 Mar 2023 07:48:14 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pY7cn-0005si-GH; Fri, 03 Mar 2023 16:47:13 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Tim Zimmermann <tim@linux4.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM TSENS THERMAL DRIVER" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v5 02/18] thermal/core: Use the thermal zone 'devdata' accessor in
+ thermal located drivers
+Date:   Fri, 03 Mar 2023 16:47:15 +0100
+Message-ID: <3152081.5fSG56mABF@diego>
+In-Reply-To: <20230301201446.3713334-3-daniel.lezcano@linaro.org>
+References: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
+ <20230301201446.3713334-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
- __qcom_icc_set twice on the same node
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
- <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
- <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
- <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
- <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
- <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
- <2cfba291-656f-9a43-fdd5-7601a6fe6ef5@linaro.org>
- <0b1fafe6-0814-f1a6-ae19-7bd273751102@linaro.org>
- <133be267-1aab-350f-f3ba-142cf4dee4d4@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <133be267-1aab-350f-f3ba-142cf4dee4d4@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Am Mittwoch, 1. M�rz 2023, 21:14:30 CET schrieb Daniel Lezcano:
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
+> 
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
+> 
+> Use the devdata accessor introduced in the previous patch.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Niklas S�derlund <niklas.soderlund+renesas@ragnatech.se> #R-Car
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> #MediaTek auxadc and lvts
+> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek lvts
+> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com> #da9062
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>  #spread
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> #sun8i_thermal
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com> #Broadcom
+> Reviewed-by: Dhruva Gole <d-gole@ti.com> # K3 bandgap
+
+Acked-by: Heiko Stuebner <heiko@sntech.de> #rockchip
 
 
-On 3.03.2023 12:50, Bryan O'Donoghue wrote:
-> On 03/03/2023 11:42, Konrad Dybcio wrote:
->>
->>
->> On 3.03.2023 12:40, Bryan O'Donoghue wrote:
->>> On 03/03/2023 11:39, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 3.03.2023 12:36, Bryan O'Donoghue wrote:
->>>>> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
->>>>>> On 03/03/2023 11:33, Konrad Dybcio wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
->>>>>>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
->>>>>>>>> Currently, when sync_state calls set(n, n) all the paths for setting
->>>>>>>>> parameters on an icc node are called twice. Avoid that.
->>>>>>>>>
->>>>>>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
->>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>>>>> ---
->>>>>>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
->>>>>>>>> not entirely sure about it..
->>>>>>>>>
->>>>>>>>>
->>>>>>>>>      drivers/interconnect/qcom/icc-rpm.c | 2 +-
->>>>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>>> index a6e0de03f46b..d35db1af9b08 100644
->>>>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>>>>>>>>          ret = __qcom_icc_set(src, src_qn, sum_bw);
->>>>>>>>>          if (ret)
->>>>>>>>>              return ret;
->>>>>>>>> -    if (dst_qn) {
->>>>>>>>> +    if (dst_qn && src_qn != dst_qn) {
->>>>>>>>>              ret = __qcom_icc_set(dst, dst_qn, sum_bw);
->>>>>>>>>              if (ret)
->>>>>>>>>                  return ret;
->>>>>>>>
->>>>>>>> Is it possible for src_qn == dst_qn ?
->>>>>>> As the commit message says, sync_state calls set(n, n) in
->>>>>>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
->>>>>>
->>>>>> So you've _seen_ that happen ?
->>>>>>
->>>>>
->>>>> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
->>>> I believe that there's simply no other way of updating every single node
->>>> on its own with the icc api, without taking any links into play. But I
->>>> see exynos and i.mx also effectively calling it twice on each node.
->>>>
->>>> Konrad
->>>
->>> I mean. I'm fine for you to retain my RB on this qcom specific patch since this seems like a real bug to me but... it seems like a generic bug across arches that should probably be resolved @ the higher level.
->>>
->>> ?
->> I suppose we could change the set(n, n) in sync_state to be set(n, NULL)
->> and enforce parameter null-checking on all provider->set functions. Do
->> I understand this correctly?
->>
->> Konrad
->>>
->>> ---
->>> bod
-> 
-> void icc_sync_state(struct device *dev)
-> {
->         struct icc_provider *p;
->         struct icc_node *n;
->         static int count;
-> 
->         count++;
-> 
->         if (count < providers_count)
->                 return;
-> 
->         mutex_lock(&icc_lock);
->         synced_state = true;
->         list_for_each_entry(p, &icc_providers, provider_list) {
->                 dev_dbg(p->dev, "interconnect provider is in synced state\n");
->                 list_for_each_entry(n, &p->nodes, node_list) {
->                         if (n->init_avg || n->init_peak) {
->                                 n->init_avg = 0;
->                                 n->init_peak = 0;
->                                 aggregate_requests(n);
->                                 p->set(n, n);
->                         }
->                 }
->         }
->         mutex_unlock(&icc_lock);
-> }
-> EXPORT_SYMBOL_GPL(icc_sync_state);
-> 
-> I mean p->set(n,n); is done like this since forever. Now that you draw attention to it, it doesn't make much sense to me..
-Yeah, but we're doing the same thing twice.. So maybe this is not
-so much a bug fix as it's an optimization..
-
-Thinking about it again, this could use a likely() too, as this
-seems to be the only occurence of set(n, n)
-
-Konrad
