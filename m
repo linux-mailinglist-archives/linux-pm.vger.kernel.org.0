@@ -2,132 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340F56A897E
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Mar 2023 20:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A651F6A8E35
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 01:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjCBT3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Mar 2023 14:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S229509AbjCCAif (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Mar 2023 19:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBT3W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 14:29:22 -0500
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A612822D;
-        Thu,  2 Mar 2023 11:29:21 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id f13so1342109edz.6;
-        Thu, 02 Mar 2023 11:29:21 -0800 (PST)
+        with ESMTP id S229551AbjCCAia (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 19:38:30 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1AF136E9
+        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 16:38:06 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so697616pja.5
+        for <linux-pm@vger.kernel.org>; Thu, 02 Mar 2023 16:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcfZDvVm4xgknbuklXsXdSD5ZB0R1wix+vFAsYNfIKE=;
+        b=VjOkE0C9+fP5g1P2e7Sq1Toy1510b9r3NQNzwUd4lceJfWdS5oHAr4FTQYk2wQpmJX
+         WAGJ0bsVdBkqMR30Y7NVGNEccohrbagIJdacG/n/lbRLpncp7k6CTU9kq07t/OEONU/V
+         1uOMwqPmE2qV3Y1evrIukWhElTZYMAWR8nZN8LdgLFyEVfY+RPfOwZgIh2vfCfNlFGqN
+         g9Z48xjg1W+FiXo9Y60fC6uyXBrnzOP6Pere8ZPXuhBaZSh4IhdcdALgfQANeYSb6MPs
+         OL+I5Y8NEem3JPW14MEtsMBixvQphfB6tW+aGe6ZfMxzd+9Ft1P1aVuH1wIi5OC/lp1c
+         EmTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677785360;
+        d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SzNXwDIp4k4ggsPIp85maMqW+jQ4SxcHrsy0lA0clAc=;
-        b=o6hvPh8TeHu+vJyoWjpX24fnmlWWaqFTNP16fW4dcXd/K7fvCWQhM9saP8XkDn2XNW
-         sSpMm9u0sZoasMqYJTKhLr4eDSk+OXClputZdY0jyBsMd7FEuFCW876LfFs5v8o11+OB
-         el0UlpB8p9zgsDEhpW7dO7hnTNwAxGhVITeKwk4ZXjLhx1ToTS5Da/9YxLQMZqMbEosR
-         EP49Mc/679wEn2fqY2DS/jhsE3zWfy99tljZo2t8WlzALaIKzdRvAcjdFcvrryFeGrvt
-         p5uZwg5Rb2q45f7SZoaLgcVPAwmJIeGXCcZBdLDRQXnzIRFPj9iWfR/oEI4b+wy97Fl8
-         yq7w==
-X-Gm-Message-State: AO0yUKVQfliBK6ccIOV+Zxyz01TUDZ3DktfS7WsO4IqAUgGITHJAsPgb
-        0eoTJQvZPz4VGrD3WzGXFF0r/NAp2vdR/jfNqpzwAc05
-X-Google-Smtp-Source: AK7set8IbZQKevSi0064SjOEgjyHdLcBI7RyWN7U4jQvfvoc/HkanTJ0UrmuCXhGCxjJBXnRHeh7IvQtJHOuH87reyI=
-X-Received: by 2002:a50:cc88:0:b0:4ae:e548:1c6 with SMTP id
- q8-20020a50cc88000000b004aee54801c6mr6726660edi.6.1677785359892; Thu, 02 Mar
- 2023 11:29:19 -0800 (PST)
+        bh=VcfZDvVm4xgknbuklXsXdSD5ZB0R1wix+vFAsYNfIKE=;
+        b=rebPLpwGWsP9lVH097ydDpoEY/A/BS0nhJILwK1D7VmqAsOq3tLS3dzeYcYur09xxp
+         +LbyWyOL2E6G2P3ATiZShD2vKOX/ccj5wKvEXHooWWMpk49JiNUasU48nPlfSC9IXCmE
+         pjT/MUagV05Bpy1N7Z6/VTyW7YAAl5t6mJUyC5UKantdZb/l+3jk5KiaJdBu1u7puC3q
+         WYNzB1eyIP1BHs/pNnIjTXwxOQIaBgdg3WN9TNoduEm0XLdT2Gia8JX6RGd67CCjKSKj
+         EWFOj9UIiup7F+MBHpRZCvZjyYrIsWm+PVJ0mvjaIMN+Sn2f8p1l3F/qJ1ed78udXmiU
+         klOQ==
+X-Gm-Message-State: AO0yUKWTam2MZnSNItmvJm/QNmwVBP3Pkt7naUs4xESL2zkibCX3QKi0
+        LE57BRf6tbD0IqrW1tbgURm+STOoHa4onSeql4QBSA==
+X-Google-Smtp-Source: AK7set8ZUETB8jon+NG3TT4zjf+OHnbjSKQeNij98F5TbHRO3Z2PnxCwIWmzrTuqLH0qvVSX83WPP0SJ5h+C+to4bsg=
+X-Received: by 2002:a17:902:bd81:b0:19a:b98f:46a0 with SMTP id
+ q1-20020a170902bd8100b0019ab98f46a0mr1798311pls.0.1677803886051; Thu, 02 Mar
+ 2023 16:38:06 -0800 (PST)
 MIME-Version: 1.0
-References: <53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com>
-In-Reply-To: <53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Mar 2023 20:29:08 +0100
-Message-ID: <CAJZ5v0gwusznVACJ6etnDCNBPLFuq9r-wroq5JARfoTzgQZAfQ@mail.gmail.com>
-Subject: Re: [Regression] cached max_state breaks ACPI processor cooling device
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220308082931.3385902-1-shawn.guo@linaro.org> <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
+In-Reply-To: <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
+From:   Shawn Guo <shawn.guo@linaro.org>
+Date:   Fri, 3 Mar 2023 08:37:52 +0800
+Message-ID: <CAAQ0ZWTx9HpWHwrOryCTtXWAwktkAtSANCk6iVVzas8116=ZYg@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 6:30 AM Zhang, Rui <rui.zhang@intel.com> wrote:
+On Thu, Mar 2, 2023 at 10:46 PM Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
 >
-> Hi, All,
 >
-> Starting from commit c408b3d1d9bb("thermal: Validate new state in
-> cur_state_store()") and commit a365105c685c("thermal: sysfs: Reuse
-> cdev->max_state"), the cdev->get_max_state() is evaluated only once
-> during cooling device registration.
 >
-> This is done to fix the below Smatch static checker warning:
->         drivers/thermal/thermal_sysfs.c:656 thermal_cooling_device_stats_update()
->         warn: potential integer overflow from user 'stats->state *
-> stats->max_states + new_state'
-> reported here https://lore.kernel.org/all/Y0ltRJRjO7AkawvE@kili/.
->
-> But this actually breaks cooling devices which could have dynamic max
-> cooling state, like ACPI processor cooling device.
->
-> acpi_processor_driver_init
->         driver_register(&acpi_processor_driver);
->                 acpi_processor_start
->                         acpi_processor_thermal_init
->                                 thermal_cooling_device_register
->                                         processor_get_max_state
->         acpi_processor_cpufreq_init = true
-> The driver doesn't count cpufreq as cooling state until
-> acpi_processor_cpufreq_init is set later.
->
-> As a result, without the commits above,
-> /sys/class/thermal/cooling_device10/cur_state:0
-> /sys/class/thermal/cooling_device10/max_state:3
-> /sys/class/thermal/cooling_device10/type:Processor
-> after the commits above,
-> /sys/class/thermal/cooling_device10/cur_state:0
-> /sys/class/thermal/cooling_device10/max_state:0
-> /sys/class/thermal/cooling_device10/type:Processor
->
-> In order to fix this, there are something worth clarification IMO.
-> 1. should we support dynamic max_state or not?
->    ACPI processor cooling state is a combination of processor p-states
->    and t-states.
->    t-states are static, but p-states can vary depends on processor
->    frequency driver loaded or not.
->    I'm not sure if there is any other user like this, but still this
->    is a valid use case of dynamic max_state.
-> 2. how to handle dynamic max_state for cooling device statistics in
->    sysfs?
->    IMO, when max_state changes, the definition of previous cooling
->    device is changed as well, thus we should abandon the previous
->    statistics and restart counting.
-> 3. anything else needs to be handled when max_state changes?
->    Say, as the definition of each cooling state is changed when
->    max_state changes, should we invalidate and re-update the
->    thermal instances of this cdev in each thermal zone device?
-> 4. how to detect/handle max cooling states changes?
->    Should we do this as before, which invokes .get_max_state()
->    everywhere and do updates when necessary ,
+> On 8.03.2022 09:29, Shawn Guo wrote:
+> > In case that psci_pd_init_topology() fails for some reason,
+> > psci_pd_remove() will be responsible for deleting provider and removing
+> > genpd from psci_pd_providers list.  There will be a failure when removing
+> > the cluster PD, because the cpu (child) PDs haven't been removed.
+> >
+> > [    0.050232] CPUidle PSCI: init PM domain cpu0
+> > [    0.050278] CPUidle PSCI: init PM domain cpu1
+> > [    0.050329] CPUidle PSCI: init PM domain cpu2
+> > [    0.050370] CPUidle PSCI: init PM domain cpu3
+> > [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+> > [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+> > [    0.051412] PM: genpd_remove: removed cpu3
+> > [    0.051449] PM: genpd_remove: removed cpu2
+> > [    0.051499] PM: genpd_remove: removed cpu1
+> > [    0.051546] PM: genpd_remove: removed cpu0
+> >
+> > Fix the problem by iterating the provider list reversely, so that parent
+> > PD gets removed after child's PDs like below.
+> >
+> > [    0.029052] CPUidle PSCI: init PM domain cpu0
+> > [    0.029076] CPUidle PSCI: init PM domain cpu1
+> > [    0.029103] CPUidle PSCI: init PM domain cpu2
+> > [    0.029124] CPUidle PSCI: init PM domain cpu3
+> > [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
+> > [    0.029647] PM: genpd_remove: removed cpu0
+> > [    0.029666] PM: genpd_remove: removed cpu1
+> > [    0.029690] PM: genpd_remove: removed cpu2
+> > [    0.029714] PM: genpd_remove: removed cpu3
+> > [    0.029738] PM: genpd_remove: removed cpu-cluster0
+> >
+> > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > ---
+> Looks like this was never picked up or followed up on?
 
-No.
+Oops!  I thought it was already applied.  I will ping Rafael with a resend.
 
->  or
->    a. cache max_state like we do today
->    b. introduce a new API for max_state change
->    c. invoke the new API in the cooling device driver explicitly when
->       max_state changes
->    d. update cached max_state value, statistics sysfs and
->       thermal_instances in the API
->    e. remove .get_max_state() callback as we register and update the
->       max_state with a fixed value each time.
-
-Yes, IMO.
+Shawn
