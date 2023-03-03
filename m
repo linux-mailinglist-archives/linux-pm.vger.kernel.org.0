@@ -2,80 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21FC6A96B3
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 12:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E806A96C6
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 12:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjCCLuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 06:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S231243AbjCCLzq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 06:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjCCLuU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 06:50:20 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7B05C134
-        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 03:50:18 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id l1so1943586wry.12
-        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 03:50:18 -0800 (PST)
+        with ESMTP id S231224AbjCCLzp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 06:55:45 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849305D776
+        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 03:55:43 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536c2a1cc07so38552747b3.5
+        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 03:55:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677844217;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t/ZsxXPLv5WWAqzh9cKOoefVqP5zaXz8g40Y9JGNMY0=;
-        b=D5ywEX9PlvxD43n3LDPEAu6JFj+/srayQAmdt2U1SL6KYPds5k6sfQFL1SaPdZDQRk
-         9qM6ylzmdxdxUuj2IVlWlNTKg7iQw78qtwV7lU3MGLQYPTB9AzSg0hdPS9vzZZfH1yP5
-         qn82sBwr2s1aKtdtUhWsPntolHjVNqLeAsM1KhDlA1XO3A325lEbhhRs8lUioJjZvMsm
-         7GHJNWGEKqsQjutfHIfHifVfxRwQUIXdZVJJK0hacApsBYid5qhQmVKnrrTQqF6dYuWV
-         LBB2jf0LSuUoG7F5nRn0uhNb6mDGD08roZbHTdmT0ZS4QhM19RInDyQFm3NTWTdDqtlo
-         fRIg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9bnT5dHrb3iP7rA2GmhVzWGZn0Tzpt5CCED7hunNFB0=;
+        b=DRqakUUKFXRGm69WVxx9NWOsatykkvfkKUlzMq2OnyDSxa+HuTapR3hpbLFjBMU1Ch
+         oO+smsduZUXVdTLTmfAPXLG2PV+/pD5wkOJUFXRjP45c2nKCPPFURmJHPArjevLQnbC7
+         M2wu8VkpS73v/BuFvHXgJn7hEmaRYyzBsn00BfR/OWNvHOan3OsiAfd48cUjUsxcYDjD
+         pQwV+rgMw6+vW4Vbmg5eD3vUBOWTIqXIitDhHzhusgo/C6u4I2yVSfpD/6kzCaw7wfwy
+         qxYDi91GmTBUwD/olzh+a1uc2W+b+dBH77AYn4ERUY8Wi+MF2WaMmWLuGS8qMBw2JGDm
+         zbJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677844217;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t/ZsxXPLv5WWAqzh9cKOoefVqP5zaXz8g40Y9JGNMY0=;
-        b=VoMA7F25exDHxTHGOXKV+vx8nsWmtHk+bBLm+5V738+R3JT+yyzq7/Z9lhWeTrcp34
-         lz1qENQCAnwPu26tXV44ZcbLsXqcXIhxpzEjok4VQRFO5WOihdklqg2WO4SdShU28EV4
-         0sT+UBtnGnsNFwc9HFfFvPDt812+kPS1wiyasm2csBsaOi0OSMID3ZpCFApRg55XV2iL
-         mdR1BGbpns8848JeCyePDA/weVEZ4qAt+u++02GfziiHtV7J47Rd0hCI4WN63DRUKuSQ
-         iWuyvOD40m+aOyOr4qv4nsPyYBxbozxb7EB4/CWaRPU3f2Jzjotjidr+pMYt63v0BuV1
-         93Mg==
-X-Gm-Message-State: AO0yUKXnWTDF1OEt0CerXE9rdBZsSVReMxzGG8uA5+TjRbWTBtnn5ZEI
-        RsGkn8ghjGmpLzL77LkpnCrcgg==
-X-Google-Smtp-Source: AK7set9Qhbng7b9eRG+YENkvTyUcS/e0GYh6eHfCfaEObvNz5iDLzWeSWKPGpKvjWGGNe1AUAf0K/Q==
-X-Received: by 2002:adf:edc4:0:b0:2cc:4d03:54cb with SMTP id v4-20020adfedc4000000b002cc4d0354cbmr1072721wro.28.1677844217064;
-        Fri, 03 Mar 2023 03:50:17 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v2-20020adfe282000000b002c7066a6f77sm2000989wri.31.2023.03.03.03.50.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 03:50:16 -0800 (PST)
-Message-ID: <133be267-1aab-350f-f3ba-142cf4dee4d4@linaro.org>
-Date:   Fri, 3 Mar 2023 11:50:15 +0000
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9bnT5dHrb3iP7rA2GmhVzWGZn0Tzpt5CCED7hunNFB0=;
+        b=Dq1rYGJd5mXJhrhpahnwuZIcw7pBc9lQUAWaY1I02vOoM0vTkQdtKu0RqJ6/Vv+WbI
+         HakkT/9nrO19WMhXwi70THMPnQgMyhOt6396jc/QWpWWem7da3Xtg0605xpi70GPME+K
+         tk6j0OhwK1R2WgHhnoqp6GSkU7l5dVYKEPwRhZMaAmwx9Iul/+a6buo/jSBUyWQPYdWh
+         vw3PjPOAidw+BMdpfBTr4CaQQeExEwhh3avcJmprDfqlSlHOxE57flZGe+vtc4uSuQmi
+         5meaoVw0Ej7jodaAQktsh+Z2EsnW6xsNxV1nF4b2eeYGZUIdhDz0YAAw+BEHp4tV6kQv
+         0mGA==
+X-Gm-Message-State: AO0yUKVgOwfNld309xlkmVjIuP9luipjISAiWbeln3p4GTgcxt1hRLuO
+        QYw750OPtCmVFIcdcIjt032O0mNjClV8MMeD1D6A1Q==
+X-Google-Smtp-Source: AK7set9+g7CaZKhwb6dcWYW6BTUUJXUyZuISsu0waCwptFPvO2UJ6I2OocVeB/84RPaT8roh5mWcunV6iyn3UJDp/FU=
+X-Received: by 2002:a81:a783:0:b0:533:9b80:a30e with SMTP id
+ e125-20020a81a783000000b005339b80a30emr736607ywh.10.1677844542703; Fri, 03
+ Mar 2023 03:55:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
- __qcom_icc_set twice on the same node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
- <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
- <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
- <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
- <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
- <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
- <2cfba291-656f-9a43-fdd5-7601a6fe6ef5@linaro.org>
- <0b1fafe6-0814-f1a6-ae19-7bd273751102@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <0b1fafe6-0814-f1a6-ae19-7bd273751102@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230301201446.3713334-1-daniel.lezcano@linaro.org> <20230301201446.3713334-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20230301201446.3713334-3-daniel.lezcano@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 3 Mar 2023 12:55:31 +0100
+Message-ID: <CACRpkdYG59p5o0Te6LWmo3KBf7=v8ARRpb4kKgtm8Khv8Yfw1Q@mail.gmail.com>
+Subject: Re: [PATCH v5 02/18] thermal/core: Use the thermal zone 'devdata'
+ accessor in thermal located drivers
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Tim Zimmermann <tim@linux4.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM TSENS THERMAL DRIVER" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,101 +161,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/03/2023 11:42, Konrad Dybcio wrote:
-> 
-> 
-> On 3.03.2023 12:40, Bryan O'Donoghue wrote:
->> On 03/03/2023 11:39, Konrad Dybcio wrote:
->>>
->>>
->>> On 3.03.2023 12:36, Bryan O'Donoghue wrote:
->>>> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
->>>>> On 03/03/2023 11:33, Konrad Dybcio wrote:
->>>>>>
->>>>>>
->>>>>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
->>>>>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
->>>>>>>> Currently, when sync_state calls set(n, n) all the paths for setting
->>>>>>>> parameters on an icc node are called twice. Avoid that.
->>>>>>>>
->>>>>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
->>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>>>> ---
->>>>>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
->>>>>>>> not entirely sure about it..
->>>>>>>>
->>>>>>>>
->>>>>>>>      drivers/interconnect/qcom/icc-rpm.c | 2 +-
->>>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>> index a6e0de03f46b..d35db1af9b08 100644
->>>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>>>>>>>          ret = __qcom_icc_set(src, src_qn, sum_bw);
->>>>>>>>          if (ret)
->>>>>>>>              return ret;
->>>>>>>> -    if (dst_qn) {
->>>>>>>> +    if (dst_qn && src_qn != dst_qn) {
->>>>>>>>              ret = __qcom_icc_set(dst, dst_qn, sum_bw);
->>>>>>>>              if (ret)
->>>>>>>>                  return ret;
->>>>>>>
->>>>>>> Is it possible for src_qn == dst_qn ?
->>>>>> As the commit message says, sync_state calls set(n, n) in
->>>>>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
->>>>>
->>>>> So you've _seen_ that happen ?
->>>>>
->>>>
->>>> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
->>> I believe that there's simply no other way of updating every single node
->>> on its own with the icc api, without taking any links into play. But I
->>> see exynos and i.mx also effectively calling it twice on each node.
->>>
->>> Konrad
->>
->> I mean. I'm fine for you to retain my RB on this qcom specific patch since this seems like a real bug to me but... it seems like a generic bug across arches that should probably be resolved @ the higher level.
->>
->> ?
-> I suppose we could change the set(n, n) in sync_state to be set(n, NULL)
-> and enforce parameter null-checking on all provider->set functions. Do
-> I understand this correctly?
-> 
-> Konrad
->>
->> ---
->> bod
+On Wed, Mar 1, 2023 at 9:15 PM Daniel Lezcano <daniel.lezcano@linaro.org> w=
+rote:
 
-void icc_sync_state(struct device *dev)
-{
-         struct icc_provider *p;
-         struct icc_node *n;
-         static int count;
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
+>
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
+>
+> Use the devdata accessor introduced in the previous patch.
+>
+> No functional changes intended.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se=
+> #R-Car
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com> #MediaTek auxadc and lvts
+> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek lvts
+> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com> #da9062
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>  #spread
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> #sun8i_thermal
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com> #Broadcom
+> Reviewed-by: Dhruva Gole <d-gole@ti.com> # K3 bandgap
 
-         count++;
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-         if (count < providers_count)
-                 return;
-
-         mutex_lock(&icc_lock);
-         synced_state = true;
-         list_for_each_entry(p, &icc_providers, provider_list) {
-                 dev_dbg(p->dev, "interconnect provider is in synced 
-state\n");
-                 list_for_each_entry(n, &p->nodes, node_list) {
-                         if (n->init_avg || n->init_peak) {
-                                 n->init_avg = 0;
-                                 n->init_peak = 0;
-                                 aggregate_requests(n);
-                                 p->set(n, n);
-                         }
-                 }
-         }
-         mutex_unlock(&icc_lock);
-}
-EXPORT_SYMBOL_GPL(icc_sync_state);
-
-I mean p->set(n,n); is done like this since forever. Now that you draw 
-attention to it, it doesn't make much sense to me..
+Yours,
+Linus Walleij
