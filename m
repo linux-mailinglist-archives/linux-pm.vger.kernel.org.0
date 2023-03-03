@@ -2,84 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459C76A9B13
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 16:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA656A9B86
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 17:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjCCPst convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 3 Mar 2023 10:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S231196AbjCCQTf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 11:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCCPsq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 10:48:46 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3A965BA;
-        Fri,  3 Mar 2023 07:48:44 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pY7e6-0005wL-Hm; Fri, 03 Mar 2023 16:48:34 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+        with ESMTP id S231290AbjCCQTa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 11:19:30 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84F323679;
+        Fri,  3 Mar 2023 08:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677860355; x=1709396355;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ek6XqKRjAwHSqFxYlwA0ot0sijMnK5XWyd+WPWb4jEI=;
+  b=a9qjSxGbbAcYO710Lon2yPUdH9349k+XLd5B9E+VTThmfPWktSN39wUn
+   67dWczqj7r8DDveqYxC7JXwodf7V/hH+Il1QJfcuErKz/IOAFNMGQelXV
+   Gy5JVXav2O/s8PDzR7JJVutj93LqCBKefIYBmTZipu5S/cSOKf3iKBlJa
+   906bcQiZEpNzTkr6c2V1D+O5zkPzs+Rx5b/xF9gJjPfe0yPvEZus+veR+
+   TfhQF4gEJC+Tb24fLQqaKIx3CbbbhGwy9pkGGwWR/mK0lV9l1Jshu43dc
+   GT3ujsrHsbXb/jTSoGX4YwguPw3kgRUFfMbyZxDzumbCCB7i/+JPUri7E
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="397667308"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="397667308"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 08:19:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="675425096"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="675425096"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 03 Mar 2023 08:19:14 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Mark Brown <broonie@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-Subject: Re: [PATCH v5 07/18] thermal/hwmon: Do not set no_hwmon before calling
- thermal_add_hwmon_sysfs()
-Date:   Fri, 03 Mar 2023 16:48:38 +0100
-Message-ID: <1943849.usQuhbGJ8B@diego>
-In-Reply-To: <20230301201446.3713334-8-daniel.lezcano@linaro.org>
-References: <20230301201446.3713334-1-daniel.lezcano@linaro.org>
- <20230301201446.3713334-8-daniel.lezcano@linaro.org>
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] thermal: int340x: processor_thermal: Fix deadlock
+Date:   Fri,  3 Mar 2023 08:19:09 -0800
+Message-Id: <20230303161910.3195805-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Mittwoch, 1. März 2023, 21:14:35 CET schrieb Daniel Lezcano:
-> The thermal->tzp->no_hwmon parameter is only used when calling
-> thermal_zone_device_register().
-> 
-> Setting it to 'false' before calling thermal_add_hwmon_sysfs() has no
-> effect.
-> 
-> Remove the call and again prevent the drivers to access the thermal
-> internals.
-> 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se> #R-Car
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com> #Broadcom
+From: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
 
-Acked-by: Heiko Stuebner <heiko@sntech.de> #rockchip
+When user space updates the trip point there is a deadlock, which results
+in caller gets blocked forever.
 
+Commit 05eeee2b51b4 ("thermal/core: Protect sysfs accesses to thermal
+operations with thermal zone mutex"), added a mutex for tz->lock in the
+function trip_point_temp_store(). Hence, trip set callback() can't
+call any thermal zone API as they are protected with the same mutex lock.
+
+The callback here calling thermal_zone_device_enable(), which will result
+in deadlock.
+
+Move the thermal_zone_device_enable() to proc_thermal_pci_probe() to
+avoid this deadlock.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Cc: stable@vger.kernel.org
+---
+The commit which caused this issue was added during v6.2 cycle.
+
+ .../intel/int340x_thermal/processor_thermal_device_pci.c     | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index bf1b1cdfade4..acc11ad56975 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -194,7 +194,6 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp
+ 	proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_THRES_0, _temp);
+ 	proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 1);
+ 
+-	thermal_zone_device_enable(tzd);
+ 	pci_info->stored_thres = temp;
+ 
+ 	return 0;
+@@ -277,6 +276,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
+ 		goto err_free_vectors;
+ 	}
+ 
++	ret = thermal_zone_device_enable(pci_info->tzone);
++	if (ret)
++		goto err_free_vectors;
++
+ 	return 0;
+ 
+ err_free_vectors:
+-- 
+2.34.1
 
