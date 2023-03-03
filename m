@@ -2,63 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A651F6A8E35
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 01:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F016A8F46
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 03:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCCAif (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Mar 2023 19:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S229595AbjCCCfJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Mar 2023 21:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCCAia (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 19:38:30 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1AF136E9
-        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 16:38:06 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so697616pja.5
-        for <linux-pm@vger.kernel.org>; Thu, 02 Mar 2023 16:38:06 -0800 (PST)
+        with ESMTP id S229534AbjCCCfJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Mar 2023 21:35:09 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1A73B3F0
+        for <linux-pm@vger.kernel.org>; Thu,  2 Mar 2023 18:35:07 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id i9so1829740lfc.6
+        for <linux-pm@vger.kernel.org>; Thu, 02 Mar 2023 18:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VcfZDvVm4xgknbuklXsXdSD5ZB0R1wix+vFAsYNfIKE=;
-        b=VjOkE0C9+fP5g1P2e7Sq1Toy1510b9r3NQNzwUd4lceJfWdS5oHAr4FTQYk2wQpmJX
-         WAGJ0bsVdBkqMR30Y7NVGNEccohrbagIJdacG/n/lbRLpncp7k6CTU9kq07t/OEONU/V
-         1uOMwqPmE2qV3Y1evrIukWhElTZYMAWR8nZN8LdgLFyEVfY+RPfOwZgIh2vfCfNlFGqN
-         g9Z48xjg1W+FiXo9Y60fC6uyXBrnzOP6Pere8ZPXuhBaZSh4IhdcdALgfQANeYSb6MPs
-         OL+I5Y8NEem3JPW14MEtsMBixvQphfB6tW+aGe6ZfMxzd+9Ft1P1aVuH1wIi5OC/lp1c
-         EmTQ==
+        d=linaro.org; s=google; t=1677810905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLRvX/I7uLgP1lL5sZgRZ4/1Xfsiyoty5CreDeDfcFQ=;
+        b=CCG58myAHYYt0rheTGVmmZ8w/u/CvaQKetINiA1lSjLDfe62iXWW/PF+3AV6/qysQL
+         meP02uIifxyypHpn4IwUeasomdIoWov5Zr82Cz0DUA8VabXsFrPTnPh6HxzKQ1cg2Cq0
+         b6oEXfBso/ZIHt0ckSs260XR2pZbjDpA0TkCONxi7cGePpRyE83pqn+k68bMPvaEXgDS
+         RG07N04jYizbe+I/2lJLvMpim69cCvPblH4NgwkN5bFySG/MrTff/Wj2rR3W8PJqAA/h
+         bpD6yW2uKHrsMNKYZvo4IXjBvdJnhWmW/30IDrr2ysOsf5vRWLdSq0imNsR8GxHkUJuB
+         Motw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1677810905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VcfZDvVm4xgknbuklXsXdSD5ZB0R1wix+vFAsYNfIKE=;
-        b=rebPLpwGWsP9lVH097ydDpoEY/A/BS0nhJILwK1D7VmqAsOq3tLS3dzeYcYur09xxp
-         +LbyWyOL2E6G2P3ATiZShD2vKOX/ccj5wKvEXHooWWMpk49JiNUasU48nPlfSC9IXCmE
-         pjT/MUagV05Bpy1N7Z6/VTyW7YAAl5t6mJUyC5UKantdZb/l+3jk5KiaJdBu1u7puC3q
-         WYNzB1eyIP1BHs/pNnIjTXwxOQIaBgdg3WN9TNoduEm0XLdT2Gia8JX6RGd67CCjKSKj
-         EWFOj9UIiup7F+MBHpRZCvZjyYrIsWm+PVJ0mvjaIMN+Sn2f8p1l3F/qJ1ed78udXmiU
-         klOQ==
-X-Gm-Message-State: AO0yUKWTam2MZnSNItmvJm/QNmwVBP3Pkt7naUs4xESL2zkibCX3QKi0
-        LE57BRf6tbD0IqrW1tbgURm+STOoHa4onSeql4QBSA==
-X-Google-Smtp-Source: AK7set8ZUETB8jon+NG3TT4zjf+OHnbjSKQeNij98F5TbHRO3Z2PnxCwIWmzrTuqLH0qvVSX83WPP0SJ5h+C+to4bsg=
-X-Received: by 2002:a17:902:bd81:b0:19a:b98f:46a0 with SMTP id
- q1-20020a170902bd8100b0019ab98f46a0mr1798311pls.0.1677803886051; Thu, 02 Mar
- 2023 16:38:06 -0800 (PST)
+        bh=jLRvX/I7uLgP1lL5sZgRZ4/1Xfsiyoty5CreDeDfcFQ=;
+        b=FvLm/olspzpV4KPixsjdvKGadvDZ+B9ExZ4RbSoDP3OYlb4cOY5sq2pL0Y2ibcL825
+         d4UOjNoer483lzpo6ZGTSBxNmrWqtU54bLUKjDdE5fum4yW19MMYtRL4Ih1UnbncCItL
+         VTRtxzvudw1kyJTLJE5NBj9DnzoKkky4Rg7BKEc7Gw9jCPEHgIMM4P5TXxKjVOo/FK1B
+         zsr/tuJA9U/GDuotjIdGw4QutKTPDJsNDaYn2i41fhJgGobS53BgQVuShp/vpF0sh2p9
+         vXqHmGqKQ8TLTFrAO9jlkeUsDjlxAQIzzLdS+MZ1VJ8VPWFlE4GGOZCmpLVyBmJew1HA
+         HdFg==
+X-Gm-Message-State: AO0yUKUdkrZN++9qBxvqvbKGrqyNsURlEUaasZCXY4MN95NhiTJ8OaDD
+        lukXZVdJ1D9WFtVT+8xW25tr3Q==
+X-Google-Smtp-Source: AK7set+oWAL6rgxFSwGFJyVSYXvBQK1354nZaYISAHAEPq3wJIWfZHpZZLgIdZ7j34TkAur//5ifFg==
+X-Received: by 2002:ac2:508f:0:b0:4dd:a5aa:accb with SMTP id f15-20020ac2508f000000b004dda5aaaccbmr98125lfm.44.1677810905658;
+        Thu, 02 Mar 2023 18:35:05 -0800 (PST)
+Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id d20-20020ac241d4000000b004d856fe5121sm180218lfi.194.2023.03.02.18.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 18:35:05 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call __qcom_icc_set twice on the same node
+Date:   Fri,  3 Mar 2023 03:35:00 +0100
+Message-Id: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20220308082931.3385902-1-shawn.guo@linaro.org> <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
-In-Reply-To: <7da47edd-60ba-d8fc-9d30-4dc0e5969bb2@somainline.org>
-From:   Shawn Guo <shawn.guo@linaro.org>
-Date:   Fri, 3 Mar 2023 08:37:52 +0800
-Message-ID: <CAAQ0ZWTx9HpWHwrOryCTtXWAwktkAtSANCk6iVVzas8116=ZYg@mail.gmail.com>
-Subject: Re: [PATCH v2] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,49 +71,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 10:46 PM Konrad Dybcio
-<konrad.dybcio@somainline.org> wrote:
->
->
->
-> On 8.03.2022 09:29, Shawn Guo wrote:
-> > In case that psci_pd_init_topology() fails for some reason,
-> > psci_pd_remove() will be responsible for deleting provider and removing
-> > genpd from psci_pd_providers list.  There will be a failure when removing
-> > the cluster PD, because the cpu (child) PDs haven't been removed.
-> >
-> > [    0.050232] CPUidle PSCI: init PM domain cpu0
-> > [    0.050278] CPUidle PSCI: init PM domain cpu1
-> > [    0.050329] CPUidle PSCI: init PM domain cpu2
-> > [    0.050370] CPUidle PSCI: init PM domain cpu3
-> > [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
-> > [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
-> > [    0.051412] PM: genpd_remove: removed cpu3
-> > [    0.051449] PM: genpd_remove: removed cpu2
-> > [    0.051499] PM: genpd_remove: removed cpu1
-> > [    0.051546] PM: genpd_remove: removed cpu0
-> >
-> > Fix the problem by iterating the provider list reversely, so that parent
-> > PD gets removed after child's PDs like below.
-> >
-> > [    0.029052] CPUidle PSCI: init PM domain cpu0
-> > [    0.029076] CPUidle PSCI: init PM domain cpu1
-> > [    0.029103] CPUidle PSCI: init PM domain cpu2
-> > [    0.029124] CPUidle PSCI: init PM domain cpu3
-> > [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
-> > [    0.029647] PM: genpd_remove: removed cpu0
-> > [    0.029666] PM: genpd_remove: removed cpu1
-> > [    0.029690] PM: genpd_remove: removed cpu2
-> > [    0.029714] PM: genpd_remove: removed cpu3
-> > [    0.029738] PM: genpd_remove: removed cpu-cluster0
-> >
-> > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > ---
-> Looks like this was never picked up or followed up on?
+Currently, when sync_state calls set(n, n) all the paths for setting
+parameters on an icc node are called twice. Avoid that.
 
-Oops!  I thought it was already applied.  I will ping Rafael with a resend.
+Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+RFC comes from the fact that I *believe* this should be correct, but I'm
+not entirely sure about it..
 
-Shawn
+
+ drivers/interconnect/qcom/icc-rpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index a6e0de03f46b..d35db1af9b08 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 	ret = __qcom_icc_set(src, src_qn, sum_bw);
+ 	if (ret)
+ 		return ret;
+-	if (dst_qn) {
++	if (dst_qn && src_qn != dst_qn) {
+ 		ret = __qcom_icc_set(dst, dst_qn, sum_bw);
+ 		if (ret)
+ 			return ret;
+-- 
+2.39.2
+
