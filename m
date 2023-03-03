@@ -2,138 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBA36AA55A
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 00:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8486AA5DE
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 00:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjCCXGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 18:06:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
+        id S229810AbjCCXw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 18:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbjCCXGS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 18:06:18 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A89C637FB;
-        Fri,  3 Mar 2023 15:05:55 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so2128839wmq.1;
-        Fri, 03 Mar 2023 15:05:55 -0800 (PST)
+        with ESMTP id S229801AbjCCXwy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 18:52:54 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F681BD4
+        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 15:52:51 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id a25so16909997edb.0
+        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 15:52:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677884753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8EgrFgSn2L/JjbV7et1DCImmFgyou2xEIGwrP4KBZQI=;
-        b=JvFe2nmGs6AQpBJTZ5nE8aRF+7NYcyZKIQU0iQZaTdvcvsu8ErPscEr49Y9qqnMv9m
-         9OhhgDCrQsBvL0WgpMe4mcWVWjNZDtuzM+/h+7yw8fhS9sTj88g1K8GKsjy7axa42J2t
-         ByGfOj+vEXXjDPDvb7cy1ANfPrssIQ8rXb3OIox3SCZ6Ea6jJh7Zq6B3n7jGBGG1ncos
-         SoFVTCL21K52PnvtjTV9hBoRTx1OkiouHpyH+RCEvdQy0WfeCATuUf6OmvRrjkH5Lmq6
-         BRpCcINgK9I1ncRE0B+cXFiTpY14CA4ux+6TVcLAbaPNZYDXAoWhkEUBK09MRyxKErC1
-         vxeQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ds56s+08kdYvDMmH+33NMO0RlnG4QzULUhWsLzSvP4Q=;
+        b=aT9YjIUpnXvrBXw15F7ekj0rJ1qxLOitv11dwxC+CTR2Np2hl4g+NviFNczwSDUbb3
+         2PeAAOKONtU2ZzEW4x9EOCvPkGyDe5b7C9ibJQPXBJZvTs6cITfhLiPqoUFPBIX7AUxX
+         LPWlXNpDebS7Y8cA/dEKg+bajpJWsyVX8i82XymLa6g8ohgpdyb/GCLsbojVOSbIFXi3
+         ebGu6WEAnMYRLJh4UHMD5WAGfK2MJKP9wKkSU58iDkaSzSCHW78mEU0BGWqg+VU+i2u3
+         qqtWU8VnJfNeCQRjADXYBHlIp2TmUUfKGK9k5QpHPgx7HwFhnN+KIM5ebtI+YSVMiio7
+         9HrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677884753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8EgrFgSn2L/JjbV7et1DCImmFgyou2xEIGwrP4KBZQI=;
-        b=TQyRx8OuJoAkJ1HdGmrvYBlHeankblkcgaGtPgk2AvN3IE0i0SDbR+VwDoPLB1aW71
-         aCT52MEO0OYU3zhg8xNiS5ZeBjaCx0olUVKvDcdnq2BGT6V1UvMnjT27IRdXLMiFngnw
-         //xVXn6zh57yHXkQKz3xLaDQLrnBTSOoiDrRTCZ7NgiN1UuxSpK9pr27O7Q1pkYghHMg
-         zk1Ytj76ARWUZ5ZQkGbQmkRfRNYBxA0Z4S9mRKQkkUIvHzx/dzECnIcf6XSwDve0C9P5
-         F8Kx6IisgPUtLYLDisgkkTdafegF/2s76Tw/qjR9DrN5YrYlYbK9DhAaBq1Mt4STxFb8
-         WmZQ==
-X-Gm-Message-State: AO0yUKXYMZ5WzQ2D+xkMnR7mTay+Rcq8Pvd1/jYoCVFjA+662kmX6qeC
-        eZAwwoozIPo7MzwsNsY6AeH/RPptIJOTZz+Ssa/YGxdE
-X-Google-Smtp-Source: AK7set9PD8SwH94TEmLPar8J3KVJzkr2ezpBsiid4INLCp6rgd+TdszEsBWiy4UoBJBZKEYlAO7bLZm+wqlhEK13EBA=
-X-Received: by 2002:a05:600c:a39a:b0:3e1:eddc:e3ae with SMTP id
- hn26-20020a05600ca39a00b003e1eddce3aemr778840wmb.0.1677884752702; Fri, 03 Mar
- 2023 15:05:52 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ds56s+08kdYvDMmH+33NMO0RlnG4QzULUhWsLzSvP4Q=;
+        b=INzf2E4UFF7uEYMqvEfZPFxSRzIvA859oHrIU5kpy5Jg08ZyOWh89DCVRfpU5jK8l2
+         CKWtFk7q4EVSkGqBISQsssGUSOPx2gaets5D/3XU6+ZzyWj7brf5cfTVie42QFhuG7BP
+         BiV/nw8VA4iDRKoqecqw6xKwD84K8ahYmfeOY3Kmr752yei088W2FDojO+lPEoB3ZWX3
+         qpZ5TQ6jZPoocd+fBP+8RT4FNXAvqBe6jhvPhlsFA4whtq18GHPBlHAqWt6/gazjkt7I
+         B3R/oRXVgpBR3OWMUwlgR2aQBNRY4G4x+botPkcqB5cdH5MFhtzxeWfGb3gtr2X4B73i
+         4+Yw==
+X-Gm-Message-State: AO0yUKXZCC2rKcaDS+wgb/PkkTIf5OwZyeg4IbpnpMlUpiIct215m6U2
+        VHrOGKJblBOIVTPNyYxuUQA7q32jsG8HE+LApsBAEg==
+X-Google-Smtp-Source: AK7set8Csku+IygSuZ94X43z6Yl9CT+uKiMOenYBeJySofzD5UzJFd3hGZHsrLwydnh1U+fiFp1coA==
+X-Received: by 2002:a17:907:1905:b0:8a6:e075:e364 with SMTP id ll5-20020a170907190500b008a6e075e364mr3286199ejc.26.1677887569559;
+        Fri, 03 Mar 2023 15:52:49 -0800 (PST)
+Received: from [10.203.3.194] ([185.202.34.81])
+        by smtp.gmail.com with ESMTPSA id ch10-20020a170906c2ca00b008cf8c6f5c43sm1454194ejb.83.2023.03.03.15.52.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 15:52:49 -0800 (PST)
+Message-ID: <a9ae3a90-7712-54d1-fa8f-ca98b8c3093e@linaro.org>
+Date:   Sat, 4 Mar 2023 01:52:48 +0200
 MIME-Version: 1.0
-References: <MN0PR12MB6101F4408960BDB9CF63DD53E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB6101F4408960BDB9CF63DD53E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Fri, 3 Mar 2023 15:05:41 -0800
-Message-ID: <CANRwn3Tb1JgLpCiYFZBO1+PDHWLT-yxEPQ0TQ19xGDWZR9pmoA@mail.gmail.com>
-Subject: Re: "proximity" attribute for input devices
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        "ping.cheng@wacom.com" <ping.cheng@wacom.com>,
-        "jason.gerecke@wacom.com" <jason.gerecke@wacom.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
+ return the SoC ID
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Robert Marko <robimarko@gmail.com>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230121112947.53433-1-robimarko@gmail.com>
+ <20230121112947.53433-4-robimarko@gmail.com>
+ <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org>
+ <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
+ <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org>
+ <CAOX2RU6vociXPTQE4tegQE8YXjHgQAHgdQWm3N9PPekgaw3ung@mail.gmail.com>
+ <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Apologies for the delay in replying.
+On 03/03/2023 22:46, Konrad Dybcio wrote:
+> 
+> 
+> On 3.03.2023 19:38, Robert Marko wrote:
+>> On Sat, 18 Feb 2023 at 21:40, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>
+>>>
+>>>
+>>> On 18.02.2023 21:36, Dmitry Baryshkov wrote:
+>>>> On Sat, 18 Feb 2023 at 16:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 21.01.2023 12:29, Robert Marko wrote:
+>>>>>> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
+>>>>>> after getting it via SMEM call but instead uses an enum to encode the
+>>>>>> matched SMEM ID to 2 variants of MSM8996 which are then used in
+>>>>>> qcom_cpufreq_kryo_name_version() to set the supported version.
+>>>>>>
+>>>>>> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
+>>>>>> more than its name suggests, so lets make it just return the SoC ID
+>>>>>> directly which allows matching directly on the SoC ID and removes the need
+>>>>>> for msm8996_version enum which simplifies the driver.
+>>>>>> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
+>>>>>>
+>>>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>>>>> ---
+>>>>>>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
+>>>>>>   1 file changed, 12 insertions(+), 32 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>>>> index da55d2e1925a..9deaf9521d6d 100644
+>>>>>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>>>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>>>> @@ -32,12 +32,6 @@
+>>>>>>
+>>>>>>   #include <dt-bindings/arm/qcom,ids.h>
+>>>>>>
+>>>>>> -enum _msm8996_version {
+>>>>>> -     MSM8996_V3,
+>>>>>> -     MSM8996_SG,
+>>>>>> -     NUM_OF_MSM8996_VERSIONS,
+>>>>>> -};
+>>>>>> -
+>>>>>>   struct qcom_cpufreq_drv;
+>>>>>>
+>>>>>>   struct qcom_cpufreq_match_data {
+>>>>>> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+>>>>>>        dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+>>>>>>   }
+>>>>>>
+>>>>>> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+>>>>>> +static int qcom_cpufreq_get_msm_id(void)
+>>>>> This should be u32 as info->id is __le32
+>>
+>> Nice catch.
+>>
+>>
+>>>>>
+>>>>> And please export this function from socinfo, it'll come in
+>>>>> useful for other drivers!
+>>
+>> I intentionally did not do that as socinfo is currently fully optional
+>> and I dont really like
+>> the idea of making it required for anything using SMEM.
+> "anything using SMEM"? As in the drivers, or SoCs?
+> If the former, I don't see how exporting a function from within
+> socid and using it here would make it required for other drivers.
+> If the latter, we're talking non-qcom SoCs. SMEM has been with
+> us forever.
+> 
+> 
+> I'm planning to reuse this for Adreno speedbin matching. It's one
+> of those blocks that don't have a revision and/or bin reigster
+> within themselves.
 
-First off: as an immediate action, I'm thinking of changing the Wacom
-driver to do lazy creation of the power_supply device. This would mean
-that rather than creating it at the same time as the input device, we
-would wait until we receive some kind of affirmative indication of a
-battery being present. Most Wacom peripherals report battery status in
-a "heartbeat" report that is sent every few seconds, so there wouldn't
-be much change for the typical user (just a few-second delay between
-connecting the hardware and a power_supply device being created). In
-the case of the "component" devices that are built into laptops and
-other computers, however, the battery status is only reported while
-the pen is actually in proximity. For users like you who don't own (or
-never use) a pen, this means that our driver would never create a
-power_supply device -- preventing GNOME from showing a battery that
-isn't relevant. I'm working on a patch set that does this but need a
-bit more time to finish it.
-
-That's only a partial solution, however. If a component user were to
-bring a pen into prox even just briefly, then a power_supply device
-would be created and not go away until the user reboots. The pen's
-battery status will become stale at some point in time though --
-self-discharge, use of the pen on another device, and even just simple
-irrelevance if the user hasn't used the pen in a while (do I care that
-the pen which I left at home is at 50% battery?). I agree that it
-makes sense for userspace to hide the battery after a while due to
-things like this. Are there new signals that the kernel should be
-providing to userspace (e.g. an attribute that indicates if we're in
-communication with power_supply? an attribute signaling that data
-might be stale)? Or are the signals that are already provided
-sufficient (e.g. should GNOME just hide power_supply devices that are
-in an "Unknown" state? or maybe hide power_supplies which haven't been
-updated in more than 1 hour?)
-
-I've added the power_supply list and maintainer for some additional
-viewpoints on the second paragraph... If there are questions about how
-the Wacom hardware and its battery reporting works, I'm happy to
-provide answers...
-
-Jason
----
-Now instead of four in the eights place /
-you=E2=80=99ve got three, =E2=80=98Cause you added one  /
-(That is to say, eight) to the two,     /
-But you can=E2=80=99t take seven from three,    /
-So you look at the sixty-fours....
+I have mixed feelings towards this. And anyway it might be better to add 
+get_msm_id() function to SCM driver, rather than parsing the data here.
 
 
+-- 
+With best wishes
+Dmitry
 
-On Thu, Feb 23, 2023 at 7:39=E2=80=AFAM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
-> Hello,
->
-> A problem was found that a Wacom device's stylus battery showed up in GNO=
-ME even though the stylus wasn't near by.
-> As part of discussing how to handle it Bastien proposes a new sysfs attri=
-bute "proximity" to let userspace know this.
->
-> He asked[1] to start the discussion on Linux-input ML.
->
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217062#c7
->
-> Thanks,
