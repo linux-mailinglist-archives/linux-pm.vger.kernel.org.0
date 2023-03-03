@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC136AA400
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 23:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18366AA4C7
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 23:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjCCWRU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 17:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S232127AbjCCWtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 17:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbjCCWQ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 17:16:59 -0500
+        with ESMTP id S232529AbjCCWtL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 17:49:11 -0500
 Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0FF1EFEF
-        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 14:07:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x3so15786299edb.10
-        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 14:07:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E53315883
+        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 14:48:39 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id o15so16062960edr.13
+        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 14:48:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677881183;
+        d=linaro.org; s=google; t=1677883646;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jhGUt/9ikay0wTYED+3dM9XZOHe6xmGcq8vv+hJG3wQ=;
-        b=lQfgjm7UnUtCKFyX36pUpqDVWiQlBCtVht/gEkuh2d6IVYpl95+Wil4bfElT/2ZQtI
-         KcPSQWdl9kEkiOh2yzi9k0/qhrf3Q82rn8Q/e7aPy62KRh0brvlmF32RfF/UOYvf5ccB
-         Qi/mMHTmw9dfQCaF930fF+rUfNu6h2SBJYc4muiPgHod/TuxDEDv02/VHh3LOP6RjXw5
-         60vuAhE5nDqEqYWH1VshcGr3nobd2lOu1N2GIpMINOrOJiHRrSi2kle3b5VdDGNeK++9
-         6QUqzmdlIsehcOqNBJo5t1AwHCM2g6GJq0KqLcLLJD5HJ6oRear+DCPIFak7qlO3BYir
-         E/9g==
+        bh=abXDj5NltbKSeLRsh9EY7sfm/FxwFg1uajo52uEDqME=;
+        b=O9mo4ZGhoI+GTHVUQqX1pKJAONEVzLRx7IbLFCx1ln4xFuR7DvsiZpfZt527mcqe3k
+         4ANptEsIySkDljltwhXer/D6EwYIFXUO1BrKf4tBxJ9KVdhdKcGjhWWCczLOdccY2pzU
+         oJesbqAq9eS9KADBtOeSbckB2ImqZQ34S2yujcpLiRgPWXll5hygivhBIiv7F+rkEdCC
+         swUc7rJYenSp/RZkxWi67+buRLpVvI1Mi6Ep7f9q/cFQJZiEr1XqZPfDbiSoKVsxqPFq
+         6L5asV2dGiatvYd9/T5B+4pq8oW+ZbhDrIau6JRn793XgvtsllXm2cWhKE8pK/ebTTFV
+         22WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677881183;
+        d=1e100.net; s=20210112; t=1677883646;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jhGUt/9ikay0wTYED+3dM9XZOHe6xmGcq8vv+hJG3wQ=;
-        b=rRFfWkrRhIqntqoS8VctvxOcX6kq/a+r5NhGq89kw40MZRsIQAcOOIN51Xxd4mx0G/
-         WUKd2FLarCsyNs/NKL43WwF603jeIFfubAlyczUAZUTyxm9KUZjYIkP0U8gEPbtDRtDf
-         p2crK1KB06UkhC/3Zy4aK2jLWkk7UHUNbNkwWwjLANlAc+4I335sS9Uc9iin9gEW+9WT
-         aUVbg//jRS38AKpVozT06HVgDQ1ScRTcnacaNUT+DdYnom0WXbiZF15unZlv/MnFmCvO
-         G8/Fy7CxzuijOOWzkrex3GSEVdwvzZEQqB5K04bmZERockkNfazjcgpGaImuRBk9SbN2
-         tVjw==
-X-Gm-Message-State: AO0yUKUndVAVwoJRn9M1VmttNU1VIlKKAvw92FWbPY2ZnQmw6e6u2Yl/
-        I6ai8zBjd7kjfOqUWH2PdL8P8T5WxhXRZ49bVfM=
-X-Google-Smtp-Source: AK7set8pPjvldoS8xXTKdDcigJ9ekZ/v6oJanh8BYj0ZKLtRmyIkKc1mwDwannJBT4gGPqDdYCaXpw==
-X-Received: by 2002:ac2:5582:0:b0:4db:2876:f9aa with SMTP id v2-20020ac25582000000b004db2876f9aamr1003092lfg.68.1677880694430;
-        Fri, 03 Mar 2023 13:58:14 -0800 (PST)
+        bh=abXDj5NltbKSeLRsh9EY7sfm/FxwFg1uajo52uEDqME=;
+        b=bVbd+LSXz5FNEm8q0GbjdVjozbKnZRo9SLfYgergY6NPfE1kno4TTcL0BEDCAhXcaB
+         fmkXW7i6gB1vnvmrF1AzXXy6Z016BZyvJzOsimqmKxobpQvXTZ7B8K9/0AxcaAKhw5PJ
+         fD5w5NC5AKLJ2lbdW8XbvUXHg1LWne7umFMdLWM9+QsYkbEVlicLXJ5uXtcFjIPFfoPo
+         VnSUcbv+UZfzBWCTuSszJyK/y3FjBKkQ8DuBc0GOTwzJ8exfX/6EC5HLmrtKW7eiJnyX
+         Yp8xj0T3Ul930P07NQASIzkDigBV3IqFsUxoDiRKM8UAXvh8mrJ68UCazYe5a0MvPFAW
+         ROFw==
+X-Gm-Message-State: AO0yUKXuAKKYF8JhvDT/CpQ1oo4TunBItGucA4PrUBYl+j5I5z++w61S
+        VJ3XtTdFeYfUbQjEM9BDHXjhOZq/OO6Y97xQXIw=
+X-Google-Smtp-Source: AK7set/An1BtrKhxkQaFksrUZJVWeIWfp/ojIAxF8lGpYfv7ksIWNVqKkcwoLr35zkveVmQvfKKuFQ==
+X-Received: by 2002:a05:6512:4da:b0:4dd:a053:3ba1 with SMTP id w26-20020a05651204da00b004dda0533ba1mr808661lfq.28.1677880695801;
+        Fri, 03 Mar 2023 13:58:15 -0800 (PST)
 Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id e27-20020ac2547b000000b004cafa01ebbfsm552670lfn.101.2023.03.03.13.58.13
+        by smtp.gmail.com with ESMTPSA id e27-20020ac2547b000000b004cafa01ebbfsm552670lfn.101.2023.03.03.13.58.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 13:58:14 -0800 (PST)
+        Fri, 03 Mar 2023 13:58:15 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 03 Mar 2023 22:58:02 +0100
-Subject: [PATCH 02/15] dt-bindings: interconnect: OSM L3: Add SM6375 CPUCP
- compatible
+Date:   Fri, 03 Mar 2023 22:58:03 +0100
+Subject: [PATCH 03/15] dt-bindings: sram: qcom,imem: document SM6375 IMEM
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-sm6375_features0_dts-v1-2-8c8d94fba6f0@linaro.org>
+Message-Id: <20230303-topic-sm6375_features0_dts-v1-3-8c8d94fba6f0@linaro.org>
 References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
 In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
 To:     Amit Kucheria <amitk@kernel.org>,
@@ -74,42 +73,42 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677880689; l=926;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677880689; l=734;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=3kDftpNu/Ozls1NqMhqLW9oX8DcWVaXf4fhj5FEZN3g=;
- b=X36jcdTP0r3fGsHBtrklmVLjJUipWiwhCrV1ouBP4WX74fvOr6l46fLr0hR9NdVHr1Z0tc8K9pEO
- iPI5qPGDB1C/WTTNfpN/J94euo176d2KctXe7SL56uAW+gk9GQd2
+ bh=fRR9bII2e5KK6+z/KcGqOf0XJiIuf0AqBHHO+8le6ck=;
+ b=Rg7LgOLNnWhrT917vsmIUzlmNQW7hw5lDELRGk2JR0SaCt5j3pwKUb3IsmWA0sW7HuBq61SJ34eE
+ QreEuo27CZV9TdAz4vUqOY4t4LWr36VBhZ7nXEw7wHJ+Y4YUPuOa
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SM6375 has a CPUCP block (which for all Linux can tell is really rebadged
-EPSS) responsible for scaling L3. Add a compatible for it.
+Add a compatible for SM6375 IMEM.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+ Documentation/devicetree/bindings/sram/qcom,imem.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-index 576992a6dc5a..9d0a98d77ae9 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-@@ -29,6 +29,7 @@ properties:
-           - enum:
-               - qcom,sc7280-epss-l3
-               - qcom,sc8280xp-epss-l3
-+              - qcom,sm6375-cpucp-l3
-               - qcom,sm8250-epss-l3
-               - qcom,sm8350-epss-l3
-           - const: qcom,epss-l3
+diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+index ba694ce4a037..0548e8e0d30b 100644
+--- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
++++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+@@ -26,6 +26,7 @@ properties:
+           - qcom,sdm845-imem
+           - qcom,sdx55-imem
+           - qcom,sdx65-imem
++          - qcom,sm6375-imem
+           - qcom,sm8450-imem
+       - const: syscon
+       - const: simple-mfd
 
 -- 
 2.39.2
