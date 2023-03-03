@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5CA6A9E41
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 19:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297966A9E4F
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Mar 2023 19:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbjCCSQd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 13:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S231607AbjCCSRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 13:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCCSQc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 13:16:32 -0500
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B8C11146;
-        Fri,  3 Mar 2023 10:16:31 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id da10so13856184edb.3;
-        Fri, 03 Mar 2023 10:16:31 -0800 (PST)
+        with ESMTP id S231610AbjCCSRr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 13:17:47 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A80428220;
+        Fri,  3 Mar 2023 10:17:44 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id ay14so10113493edb.11;
+        Fri, 03 Mar 2023 10:17:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677867389;
+        d=1e100.net; s=20210112; t=1677867463;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VMX1t05T7QSbYg8k7aZKELcNeVeqU+8hDYgRPVnIUM8=;
-        b=vBgj5rAARjLgRwc3fevhIpYhTmOQR/iDkDE7ETCnTEDxhDZJJqQ0wbrvyJXLOMR+ym
-         nMVjix8KqtruwG+qdjCV70QB0rX6Biy0ul9yGgDVwjOCZ7MNfdtgHpxyz6V6Js5p16z7
-         2fxFercN1rWmvsjStOwz66di1pGqJi2k7Lt5Kw9+wELbbpU9f8JamCf7KvOcDNp0U3Zv
-         PAt/m+3FaRsTwcfxDqrEhKSRDW7FRokAMmEXG7XLz7R24nqGclJp13NxOOC3c/yP+agj
-         IQkFGxXNNpd6V6yV401V/QRmtiM2FLXboRK6sCbmResalS9pyHFa4WS/0icpPuh3w6J7
-         TX9w==
-X-Gm-Message-State: AO0yUKVpBb3B25ZmDF5eCaflrmOYCCukjRVp/zr3kJrx5MFKv3056l0a
-        xtkBdk3ikyHVUQP23y32uSh2TNPl9yu71gsq/CKqw0tPc9s=
-X-Google-Smtp-Source: AK7set8xKLjlEoqACTsPVfVhpc7x6npRrpqzgKZ4vpEajmCtWNfJ40R6hrT1lFbbaZFuX5TWjnSz5ebtNBlVaVFG/Z0=
-X-Received: by 2002:a17:906:618:b0:8a6:91d9:c7ac with SMTP id
- s24-20020a170906061800b008a691d9c7acmr1338676ejb.5.1677867389474; Fri, 03 Mar
- 2023 10:16:29 -0800 (PST)
+        bh=m4nA4C+gRuMTVvdcG+3PWDPw/zIFM2JIlWdsATL8TAA=;
+        b=a7AXt5rd2/pVqXk2LgdLDMG6Lbvfa0uVNNJzfPcXbAPYI233hyOWDJRqxwOD5IqZco
+         IQ+6A4e8JyMH1TYvb7vJMP26Ojev2Kswlu9zBNEe8TFfIBiFjIOZfT1ljOuOZgbp0gGI
+         T2/thMUgAfV1IftEpU7rj2YxeEKnuu6He0dSpIKvvaQdt9CWFRQH142ynrJBc0pvr91v
+         RSFdALyGSF44ek2zFweRsSXZtlpT5/jPrgNUfBM83sKta2kGYTz+52UNwDSTz65b1RB4
+         1vPD1449Io+wMvkxXUYNapkb9jcYk6DezmiZezJq9e0xbkC4mRlnkubqGFppl4Hm6t+n
+         pcXQ==
+X-Gm-Message-State: AO0yUKWZ8oNVlMv1OQqbSj+78RFe/9aosRspz+QRTWK5N8zb9XQepj9g
+        UvfpYiUtcVY/JQVRHuydDQRQpD6I2CN9yFfJQshsDhSip8U=
+X-Google-Smtp-Source: AK7set+CgIek+NWNj5GW0WpxVH6kyB7q+vk6lZ51O3BOnyF/0nOxIRblRW0gB9wL5uZsJkB8WskmXWbgImEQ1b8XKFY=
+X-Received: by 2002:a17:906:a4b:b0:879:9c05:f5fb with SMTP id
+ x11-20020a1709060a4b00b008799c05f5fbmr1329358ejf.5.1677867462935; Fri, 03 Mar
+ 2023 10:17:42 -0800 (PST)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 3 Mar 2023 19:16:18 +0100
-Message-ID: <CAJZ5v0jwa5wpitjs+wf--ndk4k5zpM4iuXV6gzxAoB4UmnKUfQ@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v6.3-rc1
+Date:   Fri, 3 Mar 2023 19:17:32 +0100
+Message-ID: <CAJZ5v0jaLbB5Ems_SNY_Q8nnkMw7__68_J7=mXJUj6acmYmEEg@mail.gmail.com>
+Subject: [GIT PULL] More thermal control updates for v6.3-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -58,48 +58,42 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.3-rc1-2
+ thermal-6.3-rc1-2
 
-with top-most commit 57b76324c2a03b7b75d2d93f5c83f4340fd9b621
+with top-most commit 1467fb960349dfa5e300658f1a409dde2cfb0c51
 
- Merge branches 'acpi-pm' and 'acpi-x86'
+ thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
 
-on top of commit 88af9b164c7a25a71b1a1a699872b869e2e84c77
+on top of commit 1b72607d7321e66829e11148712b3a2ba1dc83e7
 
- Merge tag 'acpi-6.3-rc1' of
+ Merge tag 'thermal-6.3-rc1' of
 git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
-to receive more ACPI updates for 6.3-rc1.
+to receive more thermal control updates for 6.3-rc1.
 
-These update ACPI quirks for some x86 platforms and add an IRQ override
-quirk for one more system.
+These fix two issues in the Intel thermal control drivers.
 
 Specifics:
 
- - Add an ACPI IRQ override quirk for Asus Expertbook B2402FBA (Vojtech
-   Hejsek).
+ - Fix an error pointer dereference in the quark_dts Intel thermal
+   driver (Dan Carpenter).
 
- - Drop a suspend-to-idle quirk for HP Elitebook G9 that is not needed
-   any more after a firmware update (Mario Limonciello).
-
- - Add all Cezanne systems to the list for forcing StorageD3Enable,
-   because they all need the same quirk (Mario Limonciello).
+ - Fix the intel_bxt_pmic_thermal driver Kconfig entry to select REGMAP
+   which is not user-visible instead of depending on it (Randy Dunlap).
 
 Thanks!
 
 
 ---------------
 
-Mario Limonciello (2):
-      ACPI: x86: Drop quirk for HP Elitebook
-      ACPI: x86: utils: Add Cezanne to the list for forcing StorageD3Enable
+Dan Carpenter (1):
+      thermal: intel: quark_dts: fix error pointer dereference
 
-Vojtech Hejsek (1):
-      ACPI: resource: Skip IRQ override on Asus Expertbook B2402FBA
+Randy Dunlap (1):
+      thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
 
 ---------------
 
- drivers/acpi/resource.c   |  7 +++++++
- drivers/acpi/x86/s2idle.c | 24 ------------------------
- drivers/acpi/x86/utils.c  | 37 +++++++++++++------------------------
- 3 files changed, 20 insertions(+), 48 deletions(-)
+ drivers/thermal/intel/Kconfig                   |  3 ++-
+ drivers/thermal/intel/intel_quark_dts_thermal.c | 12 ++----------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
