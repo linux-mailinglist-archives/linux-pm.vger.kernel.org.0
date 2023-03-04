@@ -2,49 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11AE6AA61A
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 01:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139EA6AA693
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 01:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCDAMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 19:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S229809AbjCDAjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 19:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjCDAMQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 19:12:16 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0699C1A498;
-        Fri,  3 Mar 2023 16:12:15 -0800 (PST)
+        with ESMTP id S229836AbjCDAjM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 19:39:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B0315C93;
+        Fri,  3 Mar 2023 16:39:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 75D02CE21C2;
-        Sat,  4 Mar 2023 00:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D4BC433D2;
-        Sat,  4 Mar 2023 00:12:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49C94B819FF;
+        Sat,  4 Mar 2023 00:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 15BECC433D2;
+        Sat,  4 Mar 2023 00:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677888731;
-        bh=/D+MeNZVhWO+HFCeoeJd/kEM4MK8zlGqnelldAKh9jY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=b5uGotXO3Tx4NpatEau4Rd5/SZg6GTqcYlFwGycRSqClbgvMYLoCY5Mtsg7pJrWU8
-         EA7AkFwU9jZ/VvmAh4XC0vZs8Y1jADjbQuq5HyogD9pJKWpXboIdLYn3bQF6UfBD69
-         gI9azPPzTm4evRhh4bpXoUr1/Y6HJrUbcbynEN1WRjKV6CZeNJmDzdPRpi7IxvPPFS
-         Hv6oUIDv8JU+8ADXHomC47EO38OQvG0hAuQHZJpjh//U0jBsBsvFFw6NAwaCGIaWXD
-         GToeiB6ErU1S+LF7Yga/UcHIHrIEqQQr9a5xSOerjzZT6DjQ6R5wQuK3Y0W0PGIt4Y
-         l1Aha7zNvpGyQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 015DE10609DD; Sat,  4 Mar 2023 01:12:08 +0100 (CET)
-Date:   Sat, 4 Mar 2023 01:12:08 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 6.3 (part 2)
-Message-ID: <cfde34bf-c229-4a5d-b2c4-b76b5ba55dfb@mercury.local>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5m2g76thvtzrjhda"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        s=k20201202; t=1677890349;
+        bh=gQoRGJg8eC/8vAzZBr4ucd61pBfq/yUjgFUSbnQajgY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=U+gU168QWtvgc3d1kG2+iV+iUV9kD9N0484/cjq7AaYSwR9lcAwLSqNWBF/m+8Oiu
+         HwpkroBFnEBRWyyDXzCI3tQ2yGlfHNP3bTsQl83Rwhuj7V6tdK9LZBG0DaYgVSlrkM
+         u3nO/jCFItNXGuEy6jWlJuu6sj3uwqkLJTt9f+O/3J5lsh3CdGVhgC6BAfTktVjwaa
+         s06H+K2sHSp2fmWAb7ChsGXBWbQX5JkPETMydMO13sE6VO1CTJOH480Fq/asynRLaz
+         kBlAyMmBtb1IqMuzAnYVNgOX1RSChugEY64fIZT0Rj4Vn92VjfIo/dh4MazKx4te1n
+         0tr35aTJHhv3g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EDEBCC41679;
+        Sat,  4 Mar 2023 00:39:08 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 6.3 (part 2)
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <cfde34bf-c229-4a5d-b2c4-b76b5ba55dfb@mercury.local>
+References: <cfde34bf-c229-4a5d-b2c4-b76b5ba55dfb@mercury.local>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <cfde34bf-c229-4a5d-b2c4-b76b5ba55dfb@mercury.local>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.3-part2
+X-PR-Tracked-Commit-Id: 13af134bdc6a9dacec4687e57b2ea8d3e08ff04f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0988a0ea791999ebbf95693f2676381825b05033
+Message-Id: <167789034896.14111.16972376753788283240.pr-tracker-bot@kernel.org>
+Date:   Sat, 04 Mar 2023 00:39:08 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,70 +59,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Sat, 4 Mar 2023 01:12:08 +0100:
 
---5m2g76thvtzrjhda
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.3-part2
 
-Hi Linus,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0988a0ea791999ebbf95693f2676381825b05033
 
-I have some more patches for the v6.3 cycle. They have been in
-linux-next for a week without any issues. Please find the details
-below.
+Thank you!
 
-The following changes since commit c142872ea40a99258e2a86bf5c471bcc81752f56:
-
-  power: reset: odroid-go-ultra: fix I2C dependency (2023-02-15 23:49:40 +0100)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.3-part2
-
-for you to fetch changes up to 13af134bdc6a9dacec4687e57b2ea8d3e08ff04f:
-
-  dt-bindings: power: supply: Revise Richtek RT9467 compatible name (2023-02-25 01:17:24 +0100)
-
-----------------------------------------------------------------
-power supply changes for the v6.3 series (part 2)
-
-- Fix DT binding for Richtek RT9467
-- Fix a NULL pointer check in the power-supply core
-- Document meaning of absent "present" property
-
-----------------------------------------------------------------
-Bastien Nocera (1):
-      ABI: testing: sysfs-class-power: Document absence of "present" property
-
-ChiaEn Wu (1):
-      dt-bindings: power: supply: Revise Richtek RT9467 compatible name
-
-qinyu (1):
-      power: supply: fix null pointer check order in __power_supply_register
-
- Documentation/ABI/testing/sysfs-class-power                         | 3 ++-
- .../supply/{richtek,rt9467-charger.yaml => richtek,rt9467.yaml}     | 6 +++---
- drivers/power/supply/power_supply_core.c                            | 6 +++---
- 3 files changed, 8 insertions(+), 7 deletions(-)
- rename Documentation/devicetree/bindings/power/supply/{richtek,rt9467-charger.yaml => richtek,rt9467.yaml} (92%)
-
---5m2g76thvtzrjhda
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQCjNgACgkQ2O7X88g7
-+ppMsBAAlKiViJ2nemJ6fwH1SIV/bTQmOklkjZQQrpJd/Q5d+tUgcYay2nD9FWUF
-40tYGoDM8HMXx6ldn/aSds5vEx7QRA9vNQcJdOiyqx/bI3Ti2s2TBhGwGnLVrst3
-YmI8Ex/NECM28kZ1S/H+FfjZEUHo49AzO2SSQ7aziZA1Rp9xcGVkaF0DrNkBQJzo
-HrJDYR095sKGhc1sYt70BvN8Y6HiWzkjxjWqxwHyZzwyAELaTzwty0MN6OrivoYu
-MpbVjrN+CNi/yz7Db+WSCiLVtm91EyE+0ohjIJYyvUBe3fxTbnUvaJpg/u3mnRsi
-OzB34GjDZYrYh1uyI+p/dn84rdzl11NVkiP/OCkPCEJS8+A/U4cChHMGF4fyAQcg
-RzsjDzjAl+9eCAT4ITcD0GtqyPUCEjjNJUJXplyy3Uw8++hrgP7xvgrdMM+2HK8e
-IhJw+OKptdgSpd+EznPrihW7ZJP/01elgO3YSImhNl96lEX41oQynaGain+UWpO6
-nJj8HLscXvS4icntGKMHcy71VM/UqXLGYDh7VUZYf6+lazxu/Gjxp987Svs8PhFS
-sVB48Rq1uFIlOWn3k4F8egfYNnMnZ9w8toLjob1FOeMHcCWyz2dP6R3QDYfSCbLI
-JErj5BIX+jCiz+YphvIlUe0ApwG+qM+Fb82ZwPeTbbuMLBbDZ8U=
-=burO
------END PGP SIGNATURE-----
-
---5m2g76thvtzrjhda--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
