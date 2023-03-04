@@ -2,80 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8486AA5DE
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 00:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11AE6AA61A
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 01:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCCXw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Mar 2023 18:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S229725AbjCDAMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Mar 2023 19:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjCCXwy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 18:52:54 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F681BD4
-        for <linux-pm@vger.kernel.org>; Fri,  3 Mar 2023 15:52:51 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id a25so16909997edb.0
-        for <linux-pm@vger.kernel.org>; Fri, 03 Mar 2023 15:52:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ds56s+08kdYvDMmH+33NMO0RlnG4QzULUhWsLzSvP4Q=;
-        b=aT9YjIUpnXvrBXw15F7ekj0rJ1qxLOitv11dwxC+CTR2Np2hl4g+NviFNczwSDUbb3
-         2PeAAOKONtU2ZzEW4x9EOCvPkGyDe5b7C9ibJQPXBJZvTs6cITfhLiPqoUFPBIX7AUxX
-         LPWlXNpDebS7Y8cA/dEKg+bajpJWsyVX8i82XymLa6g8ohgpdyb/GCLsbojVOSbIFXi3
-         ebGu6WEAnMYRLJh4UHMD5WAGfK2MJKP9wKkSU58iDkaSzSCHW78mEU0BGWqg+VU+i2u3
-         qqtWU8VnJfNeCQRjADXYBHlIp2TmUUfKGK9k5QpHPgx7HwFhnN+KIM5ebtI+YSVMiio7
-         9HrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ds56s+08kdYvDMmH+33NMO0RlnG4QzULUhWsLzSvP4Q=;
-        b=INzf2E4UFF7uEYMqvEfZPFxSRzIvA859oHrIU5kpy5Jg08ZyOWh89DCVRfpU5jK8l2
-         CKWtFk7q4EVSkGqBISQsssGUSOPx2gaets5D/3XU6+ZzyWj7brf5cfTVie42QFhuG7BP
-         BiV/nw8VA4iDRKoqecqw6xKwD84K8ahYmfeOY3Kmr752yei088W2FDojO+lPEoB3ZWX3
-         qpZ5TQ6jZPoocd+fBP+8RT4FNXAvqBe6jhvPhlsFA4whtq18GHPBlHAqWt6/gazjkt7I
-         B3R/oRXVgpBR3OWMUwlgR2aQBNRY4G4x+botPkcqB5cdH5MFhtzxeWfGb3gtr2X4B73i
-         4+Yw==
-X-Gm-Message-State: AO0yUKXZCC2rKcaDS+wgb/PkkTIf5OwZyeg4IbpnpMlUpiIct215m6U2
-        VHrOGKJblBOIVTPNyYxuUQA7q32jsG8HE+LApsBAEg==
-X-Google-Smtp-Source: AK7set8Csku+IygSuZ94X43z6Yl9CT+uKiMOenYBeJySofzD5UzJFd3hGZHsrLwydnh1U+fiFp1coA==
-X-Received: by 2002:a17:907:1905:b0:8a6:e075:e364 with SMTP id ll5-20020a170907190500b008a6e075e364mr3286199ejc.26.1677887569559;
-        Fri, 03 Mar 2023 15:52:49 -0800 (PST)
-Received: from [10.203.3.194] ([185.202.34.81])
-        by smtp.gmail.com with ESMTPSA id ch10-20020a170906c2ca00b008cf8c6f5c43sm1454194ejb.83.2023.03.03.15.52.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 15:52:49 -0800 (PST)
-Message-ID: <a9ae3a90-7712-54d1-fa8f-ca98b8c3093e@linaro.org>
-Date:   Sat, 4 Mar 2023 01:52:48 +0200
+        with ESMTP id S229532AbjCDAMQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Mar 2023 19:12:16 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0699C1A498;
+        Fri,  3 Mar 2023 16:12:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 75D02CE21C2;
+        Sat,  4 Mar 2023 00:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D4BC433D2;
+        Sat,  4 Mar 2023 00:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677888731;
+        bh=/D+MeNZVhWO+HFCeoeJd/kEM4MK8zlGqnelldAKh9jY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b5uGotXO3Tx4NpatEau4Rd5/SZg6GTqcYlFwGycRSqClbgvMYLoCY5Mtsg7pJrWU8
+         EA7AkFwU9jZ/VvmAh4XC0vZs8Y1jADjbQuq5HyogD9pJKWpXboIdLYn3bQF6UfBD69
+         gI9azPPzTm4evRhh4bpXoUr1/Y6HJrUbcbynEN1WRjKV6CZeNJmDzdPRpi7IxvPPFS
+         Hv6oUIDv8JU+8ADXHomC47EO38OQvG0hAuQHZJpjh//U0jBsBsvFFw6NAwaCGIaWXD
+         GToeiB6ErU1S+LF7Yga/UcHIHrIEqQQr9a5xSOerjzZT6DjQ6R5wQuK3Y0W0PGIt4Y
+         l1Aha7zNvpGyQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 015DE10609DD; Sat,  4 Mar 2023 01:12:08 +0100 (CET)
+Date:   Sat, 4 Mar 2023 01:12:08 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.3 (part 2)
+Message-ID: <cfde34bf-c229-4a5d-b2c4-b76b5ba55dfb@mercury.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
- return the SoC ID
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Robert Marko <robimarko@gmail.com>
-Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230121112947.53433-1-robimarko@gmail.com>
- <20230121112947.53433-4-robimarko@gmail.com>
- <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org>
- <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
- <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org>
- <CAOX2RU6vociXPTQE4tegQE8YXjHgQAHgdQWm3N9PPekgaw3ung@mail.gmail.com>
- <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5m2g76thvtzrjhda"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,87 +52,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/03/2023 22:46, Konrad Dybcio wrote:
-> 
-> 
-> On 3.03.2023 19:38, Robert Marko wrote:
->> On Sat, 18 Feb 2023 at 21:40, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>
->>>
->>>
->>> On 18.02.2023 21:36, Dmitry Baryshkov wrote:
->>>> On Sat, 18 Feb 2023 at 16:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>>
->>>>>
->>>>>
->>>>> On 21.01.2023 12:29, Robert Marko wrote:
->>>>>> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
->>>>>> after getting it via SMEM call but instead uses an enum to encode the
->>>>>> matched SMEM ID to 2 variants of MSM8996 which are then used in
->>>>>> qcom_cpufreq_kryo_name_version() to set the supported version.
->>>>>>
->>>>>> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
->>>>>> more than its name suggests, so lets make it just return the SoC ID
->>>>>> directly which allows matching directly on the SoC ID and removes the need
->>>>>> for msm8996_version enum which simplifies the driver.
->>>>>> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
->>>>>>
->>>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>>>>> ---
->>>>>>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
->>>>>>   1 file changed, 12 insertions(+), 32 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> index da55d2e1925a..9deaf9521d6d 100644
->>>>>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> @@ -32,12 +32,6 @@
->>>>>>
->>>>>>   #include <dt-bindings/arm/qcom,ids.h>
->>>>>>
->>>>>> -enum _msm8996_version {
->>>>>> -     MSM8996_V3,
->>>>>> -     MSM8996_SG,
->>>>>> -     NUM_OF_MSM8996_VERSIONS,
->>>>>> -};
->>>>>> -
->>>>>>   struct qcom_cpufreq_drv;
->>>>>>
->>>>>>   struct qcom_cpufreq_match_data {
->>>>>> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
->>>>>>        dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
->>>>>>   }
->>>>>>
->>>>>> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
->>>>>> +static int qcom_cpufreq_get_msm_id(void)
->>>>> This should be u32 as info->id is __le32
->>
->> Nice catch.
->>
->>
->>>>>
->>>>> And please export this function from socinfo, it'll come in
->>>>> useful for other drivers!
->>
->> I intentionally did not do that as socinfo is currently fully optional
->> and I dont really like
->> the idea of making it required for anything using SMEM.
-> "anything using SMEM"? As in the drivers, or SoCs?
-> If the former, I don't see how exporting a function from within
-> socid and using it here would make it required for other drivers.
-> If the latter, we're talking non-qcom SoCs. SMEM has been with
-> us forever.
-> 
-> 
-> I'm planning to reuse this for Adreno speedbin matching. It's one
-> of those blocks that don't have a revision and/or bin reigster
-> within themselves.
 
-I have mixed feelings towards this. And anyway it might be better to add 
-get_msm_id() function to SCM driver, rather than parsing the data here.
+--5m2g76thvtzrjhda
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Linus,
 
--- 
-With best wishes
-Dmitry
+I have some more patches for the v6.3 cycle. They have been in
+linux-next for a week without any issues. Please find the details
+below.
 
+The following changes since commit c142872ea40a99258e2a86bf5c471bcc81752f56:
+
+  power: reset: odroid-go-ultra: fix I2C dependency (2023-02-15 23:49:40 +0100)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.3-part2
+
+for you to fetch changes up to 13af134bdc6a9dacec4687e57b2ea8d3e08ff04f:
+
+  dt-bindings: power: supply: Revise Richtek RT9467 compatible name (2023-02-25 01:17:24 +0100)
+
+----------------------------------------------------------------
+power supply changes for the v6.3 series (part 2)
+
+- Fix DT binding for Richtek RT9467
+- Fix a NULL pointer check in the power-supply core
+- Document meaning of absent "present" property
+
+----------------------------------------------------------------
+Bastien Nocera (1):
+      ABI: testing: sysfs-class-power: Document absence of "present" property
+
+ChiaEn Wu (1):
+      dt-bindings: power: supply: Revise Richtek RT9467 compatible name
+
+qinyu (1):
+      power: supply: fix null pointer check order in __power_supply_register
+
+ Documentation/ABI/testing/sysfs-class-power                         | 3 ++-
+ .../supply/{richtek,rt9467-charger.yaml => richtek,rt9467.yaml}     | 6 +++---
+ drivers/power/supply/power_supply_core.c                            | 6 +++---
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+ rename Documentation/devicetree/bindings/power/supply/{richtek,rt9467-charger.yaml => richtek,rt9467.yaml} (92%)
+
+--5m2g76thvtzrjhda
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQCjNgACgkQ2O7X88g7
++ppMsBAAlKiViJ2nemJ6fwH1SIV/bTQmOklkjZQQrpJd/Q5d+tUgcYay2nD9FWUF
+40tYGoDM8HMXx6ldn/aSds5vEx7QRA9vNQcJdOiyqx/bI3Ti2s2TBhGwGnLVrst3
+YmI8Ex/NECM28kZ1S/H+FfjZEUHo49AzO2SSQ7aziZA1Rp9xcGVkaF0DrNkBQJzo
+HrJDYR095sKGhc1sYt70BvN8Y6HiWzkjxjWqxwHyZzwyAELaTzwty0MN6OrivoYu
+MpbVjrN+CNi/yz7Db+WSCiLVtm91EyE+0ohjIJYyvUBe3fxTbnUvaJpg/u3mnRsi
+OzB34GjDZYrYh1uyI+p/dn84rdzl11NVkiP/OCkPCEJS8+A/U4cChHMGF4fyAQcg
+RzsjDzjAl+9eCAT4ITcD0GtqyPUCEjjNJUJXplyy3Uw8++hrgP7xvgrdMM+2HK8e
+IhJw+OKptdgSpd+EznPrihW7ZJP/01elgO3YSImhNl96lEX41oQynaGain+UWpO6
+nJj8HLscXvS4icntGKMHcy71VM/UqXLGYDh7VUZYf6+lazxu/Gjxp987Svs8PhFS
+sVB48Rq1uFIlOWn3k4F8egfYNnMnZ9w8toLjob1FOeMHcCWyz2dP6R3QDYfSCbLI
+JErj5BIX+jCiz+YphvIlUe0ApwG+qM+Fb82ZwPeTbbuMLBbDZ8U=
+=burO
+-----END PGP SIGNATURE-----
+
+--5m2g76thvtzrjhda--
