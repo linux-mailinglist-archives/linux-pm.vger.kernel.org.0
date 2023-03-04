@@ -2,191 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEA56AA95E
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 12:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F066AAACF
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 16:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbjCDL64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Mar 2023 06:58:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229679AbjCDPjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Mar 2023 10:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDL6z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Mar 2023 06:58:55 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704FB12BF7;
-        Sat,  4 Mar 2023 03:58:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677931134; x=1709467134;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ako5J9CYepDw5EwS9NbT0VXZwW1xRcZ6y7ksICdAAEc=;
-  b=RFrXghSETiQX65mahoyeAaJ5tBHd9mKDs26JqiNgCDAkFREH9PZpTWS/
-   9cT5BRh+tJ1wxAbUaF2GQvyzEOKt41ZnZ7CkZ4tC0izf1/lYbYpyJxC47
-   BFtRl+hU+oEJMdMCVRH7YT1LmdZ4J51PG90kEs3POX9kKCQFCZc11emc7
-   uU0mUg0UV5qJvSLNjpmoAjPwfsOwWrpbny6GmTsxyn8MUnNsdCMJQ6CA9
-   k56MlJgHFvk1MxWu+Nxlx52+aMt1vfsaVEtybJxvXIG82uPvBALHRHRaJ
-   ygtmoFQdyzl74hfMW+57toZeuuRabk3005wFpDcCXnw1O60D9oNLF66Yk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="323558299"
-X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="323558299"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 03:58:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="744528169"
-X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="744528169"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Mar 2023 03:58:52 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYQXL-00027w-1Y;
-        Sat, 04 Mar 2023 11:58:51 +0000
-Date:   Sat, 04 Mar 2023 19:57:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 1362ac91d50346341026f84ff352f4b5504d07f9
-Message-ID: <64033241.LbK0oUX3IXw8/o21%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229651AbjCDPja (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Mar 2023 10:39:30 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1CCDDA
+        for <linux-pm@vger.kernel.org>; Sat,  4 Mar 2023 07:39:28 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id g17so7311513lfv.4
+        for <linux-pm@vger.kernel.org>; Sat, 04 Mar 2023 07:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677944366;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9paeHp+07qtpfuYo/tQXtDjNkaBqslOTssto+pQozeo=;
+        b=CuS1rbmeyF9jWQnBlPitLbL8VaTcKqsbyS/ObvHmoHemsLv0X/4deI63Z1MFKXQzS1
+         zsbP3yW8kroFZIlmyHOgY+80/zHheHwJ/My0IRM2RfDGQwp9hItbWJPH6FUSn+1Nn98w
+         48HbpiT6DY/7QUEXZiAybJD+F7XHukJFXtjrDlG0JrDXRdDFkkJdnNgIKh4iSgri3iI4
+         x7FWPEy8HN8721gkkFqxCzm5m/45q1imdyYU40q/BJBAZCJLToXPouzfY8pa5xCywN8V
+         Ct4GO+NXd9anikiKiym5lZbKBNciHEmTYJ9A2DTlY67X7otmp5fXExuctd6ivaVExEca
+         Y7yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677944366;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9paeHp+07qtpfuYo/tQXtDjNkaBqslOTssto+pQozeo=;
+        b=n6HzrHRodPvwIU1ny+2P3VwRyJcsgfSdnC39XJwqmKKAG3H/4czm/OJGiSbCLxezHC
+         1BC0Jb6IoX/SjSk7D+3gBg2ubwJ6l/8HK6eglcF3qHZILiCir7kA6omU7Ix3iaLksidK
+         /qh9+eCRjX4PZ2LvSQitKIlUQfnMW+AflGGcv3y9FN2K6YvR2yDz1Sl+y6wh2PFk65y8
+         sl6I2u8JtGAuBY3befp7ODGTrWlPosgN0EYycPrizgG/6/GSNSLQ5wYgsEQMxwT1fZls
+         6B+c79141X5igWOdey3L+KackuL9murb6ah97bscv+xcDgcLQ44MTmpmNWuCW0ekm2NK
+         k9Wg==
+X-Gm-Message-State: AO0yUKXwhdu2vYOmGUinSbEU3wYHp3ngdQH/AXcnPCH4DqpmqvBunT/6
+        sU9nEIzc/u13TEu5HpLn88vBvQ==
+X-Google-Smtp-Source: AK7set8sr+Xp7qat1I3ccKEdugetU6vb3agdy2j/9e6AYxb0X0dCgZeKcsTs2TLXKv+nuhC48oCRDg==
+X-Received: by 2002:a19:c208:0:b0:4bc:af5:b8d9 with SMTP id l8-20020a19c208000000b004bc0af5b8d9mr1289964lfc.6.1677944366490;
+        Sat, 04 Mar 2023 07:39:26 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id f14-20020ac2532e000000b004ab52b0bcf9sm855065lfh.207.2023.03.04.07.39.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Mar 2023 07:39:26 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/3] Fix BWMONv4 for <SDM845
+Date:   Sat, 04 Mar 2023 16:39:18 +0100
+Message-Id: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIACZmA2QC/x2NWwrCQAwAr1LybWDdbQW9iojsI9pAzZZs1ULp3
+ Q1+zsAwGzRSpgaXbgOlDzeuYnA8dJDHKE9CLsbgnQ8uuB6XOnPGUvSevq8qeHJn530uA4UBrEq
+ xESaNkkfr5D1NJmelB6//zfW27z/tl1ykdgAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677944365; l=2383;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=fwdbbzi8OngqlWoVwF8HJxscMkiKpnd+ydCW2XQ3Bb4=;
+ b=Ywxdv2lXbMrvAoH/8qjB+lGNe2qfxuooyV4dR+6Bkp7KO0Z4YC+d4Z9Zo9CnPA3P1/RwlT8SZIaK
+ NrrcInHwB+MTJP1zEJSgXYwsJlfJtRwfX4xe9PmC3fa4uVXmJHRn
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1362ac91d50346341026f84ff352f4b5504d07f9  Merge branch 'thermal-core' into bleeding-edge
+BWMONv4 (the one used for DDR scaling on all SoCs from msm8998 to sm8550)
+features two register regions: "monitor" and "global" with the first one
+containing registers specific to the throughput monitor itself and the
+second one containing some sort of a head switch.
 
-elapsed time: 962m
+The register layout on all BWMON versions an implementations up to that
+looked like this:
 
-configs tested: 110
-configs skipped: 6
+|..........[GLOBAL].........[MONITOR]........|
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+however with SDM845 somebody thought it would be a good idea to turn it
+into this:
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r003-20230302   gcc  
-alpha        buildonly-randconfig-r006-20230302   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r015-20230302   gcc  
-alpha                randconfig-r015-20230303   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230302   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r001-20230302   clang
-arm                  randconfig-r013-20230303   clang
-arm                  randconfig-r036-20230302   clang
-arm                  randconfig-r046-20230302   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r021-20230302   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r014-20230302   gcc  
-hexagon              randconfig-r041-20230302   clang
-hexagon              randconfig-r045-20230302   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r004-20230302   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r023-20230302   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r016-20230303   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r011-20230303   gcc  
-m68k                 randconfig-r016-20230302   gcc  
-microblaze           randconfig-r032-20230302   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r034-20230302   gcc  
-openrisc     buildonly-randconfig-r001-20230302   gcc  
-openrisc             randconfig-r012-20230302   gcc  
-openrisc             randconfig-r013-20230302   gcc  
-openrisc             randconfig-r014-20230303   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r004-20230302   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r005-20230302   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r002-20230302   gcc  
-riscv                randconfig-r022-20230302   clang
-riscv                randconfig-r042-20230302   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r024-20230302   clang
-s390                 randconfig-r031-20230302   gcc  
-s390                 randconfig-r044-20230302   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r035-20230302   gcc  
-sparc        buildonly-randconfig-r002-20230302   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230302   gcc  
-sparc                randconfig-r011-20230302   gcc  
-sparc                randconfig-r025-20230302   gcc  
-sparc64              randconfig-r005-20230302   gcc  
-sparc64              randconfig-r033-20230302   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
+|................[GLOBAL]....................|
+|....................[MONITOR]...............|
 
+Sadly, the existing upstream driver was architected with SDM845 in mind,
+which means it doesn't support the global registers being somewhere else
+than near the beginning of the monitor space. This series tries to address
+that in the hopefully least painful way. Tested on msm8998 (the count unit
+seems to be wrong, should probably be 1MiB and not 64 KiB but the point is
+that this series makes it work at all, as without it the headswitch is
+never turned on) and SM6375 (with the "combined" layout introduced in
+SDM845). Equally sadly, everybody uses the qcom,msm8998-bwmon compatible
+(which frankly should have been just qcom,bwmon-v4) that never actually
+worked on MSM8998 , which prevents us from handling it in a simpler way..
+
+While at it, an unused struct member is removed.
+
+One suboptimal feature of this patchset is that it introduces an "invalid
+resource" print from within devres. This could be solved with an
+introduction of devm_ioremap_resource_optional or by dropping devres
+functions in place of manual handling, which also doesn't sound great..
+I'll leave it up to the reviewers to decide.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (3):
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Add global registers
+      soc: qcom: icc-bwmon: Handle global registers correctly
+      soc: qcom: icc-bwmon: Remove unused struct member
+
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |  28 ++++-
+ drivers/soc/qcom/icc-bwmon.c                       | 137 ++++++++++++++++++---
+ 2 files changed, 142 insertions(+), 23 deletions(-)
+---
+base-commit: 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1
+change-id: 20230304-topic-ddr_bwmon-609022cd5e35
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
