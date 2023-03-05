@@ -2,88 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B086D6AB302
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Mar 2023 23:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6948A6AB31A
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 00:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCEWj1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Mar 2023 17:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S229788AbjCEW7v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Mar 2023 17:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjCEWj0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 17:39:26 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6BC7EC2;
-        Sun,  5 Mar 2023 14:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678055966; x=1709591966;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8aH9LN6EcDisO/WKoB71wVQn6jQCx2m26xFmJ2O3Fn8=;
-  b=m4J6seSAjUiLa5MBRfoo8aCm1bauvI4YpNz31JUVNYyWv95rmb6OJGZq
-   JFt0ltWTxrk0FSP7KnlJDhx4xoX2YpiCt05J3UA2H57uXeQL6saOjJkDM
-   zWu6Qvmak7+BkpZ9Agh+SIZgOwCefJJlgRniQG672SNB1Zp6LEZQ5f3oa
-   S2oSx0FAbfW2ueH+J0cNOCmtzhVDwzQl7B7upwIa3F3L7Z0YfYOL497tH
-   E4zFMDQm/nbJBHUxRgTrcWY3UmIcHZSVKowrqmWk/ZyrkJQLcmMWQhElp
-   uDxkLSqYPgIQ1qJrw/0pdIV6KDdPDnUZiAt1rG1Qy2NDXwS7k7tZSGBxi
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="337747973"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="337747973"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 14:39:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="740114660"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="740114660"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Mar 2023 14:39:24 -0800
-Date:   Sun, 5 Mar 2023 14:49:27 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] sched: Introduce classes of tasks for load
- balance
-Message-ID: <20230305224927.GA10505@ranerica-svr.sc.intel.com>
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
+        with ESMTP id S229536AbjCEW7u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 17:59:50 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CEFEB60;
+        Sun,  5 Mar 2023 14:59:48 -0800 (PST)
+Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MxDck-1qWX1g1Nxw-00xYl3; Sun, 05 Mar 2023 23:59:32 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     linux-imx@nxp.com, Marek Vasut <marex@denx.de>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH 0/6] ARM: dts: imx6ull: Fix dtbs_check warnings
+Date:   Sun,  5 Mar 2023 23:58:54 +0100
+Message-Id: <20230305225901.7119-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:GtTkE+FMcT/7qlg82VO3GhRcLNmmlxmwJQK+2DM18tSNhjOmjYz
+ RlUh+VZL4CPuN28s4E6qAUuLcqdmfkWU/nZfI2h3xnkJIzwPYjVs1cyRGvnnJadOqoePamQ
+ FZWoZTdPwatw1ElBSrfkRDGPzKNW8LATW4ouumCI2YKei6whGk29YaAK16ghLKQhqi9paXv
+ qGKy0EHKzd1eQynMqj5fw==
+UI-OutboundReport: notjunk:1;M01:P0:l/oqCQQqwGk=;RwNmjQeUrI3DPhcnyjvnVAicZig
+ rNey9t+9w8tBz6UXDR7pODhMt8v3/BHAuSk6iXcAuR/uq888HvwgH9c6uIbAx7FzZWIxYjuYB
+ 6LszfmnULPBh69PchfYyDz30o7WUom+Nv+A2ugrvtetO/JEeNm/lBzpiaRcLl1pHqGtV9qB0a
+ 3kW6VwTxGCMYhsVigkTHdDVwA/ZaMtsoMWo0O1ma1PzB9be5B5va5AfLlb1w/AxytilX8rt1U
+ pfs9v/iz3DufNRRuo1Bv2moibiyEgMvc+jgP2HrM6lYaYFQsMqdivG0gnfjw4UvhVUHkAkNlJ
+ 2HGwgN++FY0+UBp1eE73LTI5mibVXlFZpWbIuAcem1/1/iV9RrAQCu3A92l2agaPs1MTlMTiD
+ kfTgCIz1zORvKCWjH6RU+V+AvgNLiQN96s9HiHIN8UrMxUtkaT+O0/6WwsAT+qYZwcf568YRH
+ MMrrpBEZAeCjrF6eyFC7lq56ZOqEqT9cc+uM66W4UPxeKSp/dvNn4a8Un6g8CHDO6NTFnb97I
+ vgYwPK+ev025EBh0nOntdzSlmRhuS7CQRblUTJk7ePl31TpeSRSXP1oLTZO86s2/R68O3/O40
+ cP//T70a5QX64p+OO41bLLd/tXi1JS8KkW41/4Ym/0TYwRecASCTbLxpNQo1C/nxtnoVZ53m1
+ AQ/MEEkKLEwEBXIHH2qm1vxe2FbJYmlsSDIs7Imjqw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 09:10:41PM -0800, Ricardo Neri wrote:
-> Hi,
-> 
-> This is third version of this patchset. Previous versions can be found
-> here [1] and here [2]. For brevity, I did not include the cover letter
-> from the original posting. You can read it here [1].
+This series tries to address some dtbs_check warnings on i.MX6ULL.
 
-Hello! Is there any feedback for this patchset?
+Stefan Wahren (6):
+  dt-bindings: crypto: fsl-dcp: add imx6sl and imx6ull compatible
+  dt-bindings: imx-thermal: add imx6sll and imx6ul compatible
+  dt-bindings: imxgpt: add imx6ul compatible
+  ARM: dts: imx6ul: Fix second GPT compatible
+  ARM: dts: imx: Adjust dma-apbh node name
+  ARM: dts: imx6ul: Add clock and PGC node to GDC
 
-Thanks and BR,
-Ricardo
+ .../devicetree/bindings/crypto/fsl-dcp.yaml    | 11 ++++++++---
+ .../bindings/thermal/imx-thermal.yaml          | 13 +++++++++----
+ .../devicetree/bindings/timer/fsl,imxgpt.yaml  |  1 +
+ arch/arm/boot/dts/imx23.dtsi                   |  2 +-
+ arch/arm/boot/dts/imx28.dtsi                   |  2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                 |  2 +-
+ arch/arm/boot/dts/imx6sx.dtsi                  |  2 +-
+ arch/arm/boot/dts/imx6ul.dtsi                  | 18 +++++++++++++++---
+ arch/arm/boot/dts/imx7s.dtsi                   |  2 +-
+ 9 files changed, 38 insertions(+), 15 deletions(-)
+
+-- 
+2.34.1
+
