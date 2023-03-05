@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698226AB327
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 00:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82016AB325
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 00:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjCEXAF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Mar 2023 18:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S229831AbjCEXAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Mar 2023 18:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjCEW7w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 17:59:52 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D331041E;
+        with ESMTP id S229854AbjCEW7v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 17:59:51 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2901026B;
         Sun,  5 Mar 2023 14:59:50 -0800 (PST)
 Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
  (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MNso2-1pxCH814Ho-00OE0T; Sun, 05 Mar 2023 23:59:34 +0100
+ 1N5VLY-1qfuhA35Ss-016wh5; Sun, 05 Mar 2023 23:59:34 +0100
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -28,29 +28,29 @@ Cc:     linux-imx@nxp.com, Marek Vasut <marex@denx.de>,
         linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 4/6] ARM: dts: imx6ul: Fix second GPT compatible
-Date:   Sun,  5 Mar 2023 23:58:58 +0100
-Message-Id: <20230305225901.7119-5-stefan.wahren@i2se.com>
+Subject: [PATCH 5/6] ARM: dts: imx: Adjust dma-apbh node name
+Date:   Sun,  5 Mar 2023 23:58:59 +0100
+Message-Id: <20230305225901.7119-6-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230305225901.7119-1-stefan.wahren@i2se.com>
 References: <20230305225901.7119-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:FwwLBpPoq3keAJK7WAOh6jpSlvAluVqG3UFyirkwDd53+H+PmXN
- Fi1u5k61sMFrLcb3p1rD3WiyMyWjWW6sQjLqUDiFkBz3OjgE6/VY3rGgFsjPfZmw80Gjcgs
- M9HCLXahtOBnCBndgJO7Bv1rz3x0oYmUuorHR/qasleejZMpBUIIp0MHjwvb206NZ0ElE0D
- YHC8xEngkR3kP2GU/vQ+A==
-UI-OutboundReport: notjunk:1;M01:P0:OslH39Jbv78=;QurxNe/i0wIVF3L+aUmAHTHAzBK
- vhS31PA8tO+D/+FZjurTcOpdLYvqzTzLmHvRSv/YsXhWprT3koR0lEI1xd4YV7/tC0UrEwPsP
- 2/ULHGLkLR7gL/Zxs1X+FfBOMmZYSxCkqZ6I9LY9Id7GFPcMMpVX1FxuoCT2Z6EVBMwrgZm37
- ZoiAzV0MGqTxSUNDg9B6i58aMWblDm6N7zZKc/NFuEhz7rGEAYI1ml5BZAksYBeomWwGxGam8
- ONyeAz1UhgpEXIyyYBSpkPrsiX+fUsUYUlyTdUs9tecMCwZ1+Qfqi8rhhokdGH1ana25NCxXV
- Ce5wDWmZvNFNFiA8lxyE8U4tDQ4hzMYuVwu+LZaT5P9yq3Kk09v4LIpaDQdx22r7Pj0L1ljw3
- byv79I6i9O/RcHLQOQRUKd8oVPlVa7sYgYHb4NxwTSNKDpai1rVqs1vPOcW6PqWKN8DMpmSM6
- d2Z43pPaZW8abLw7ulVoTjdCe+PDSKCpFucONjRBC4i4RYdUOPCBe/5lKQvEsFJrnK0BpSMT2
- g4BDGVNC+JFsOqsnv+f59JKPJSOx774D1Tz7/7uVxHuL0hIB5eVWFRdFmbNdct/duhQliFqHN
- ah0PYXMjuXKshP3aGxF9nKbPrBk3ntM3nitDO8CvZzdSJCFS9DV4BrfJYHrOOan1CHRQiMR1G
- 7ZeYAHc2eFFRAv48AYRJN8rQCrM2EdJSDxIO/T+YBg==
+X-Provags-ID: V03:K1:2tkDkoVdpQ2dbABoVseCev+gvSjbPMEFYqrQjMuRrlEMLJ2JVhz
+ P8Q+og2gUjvwxCFzyIgbtge3FE+xt3GgzlFSYGy0MCLJsJIWtzvQwSNC+HpD9D2zgXE2Mbu
+ AEzj/NxzNULSJ2tiWVEv+mzN4rsmCNeIBIfkwUFJznoXQah+RhZ0/1zJA96R6Pjn4rkzKWo
+ Z6vpO761FIKtmpLvOUc6w==
+UI-OutboundReport: notjunk:1;M01:P0:ZLZnfpDLOcY=;19d3uOH504br4uTwjMeVOuyWOOB
+ pu5q5OyGEdyyp2qrMKLqzsmNM3pjqOu0JZhSAvf0jtalW8kuQ7geDpN+yiYkRexEF9vRGDDWK
+ L8KWW7Hu0RlfVTJNFChPtLVZbz/xWpVtTGxwKwxmbcLPs+RyWxZH9I4Gw2tUzWPekDD5bqMof
+ pzZ42s1xP/LbgY8VytVt6OUG7dZ5NR+4cASMqf1ihHNWFU0WoaPo8xUs1ZqK+AOb39dW8N/YP
+ V9562UY9yjpyMrpvQQOXKRvqz3v1eJrvGhmBocLnlA7DGNb+fziXMG2o7a5W7bZIiPIro/nlC
+ G1WPS/X1o0NMaqrNkcUsiRHbaou5IkccPMbvlvYkO7bTRKUZ3ki59QhdxZFn1lOUENuxG/wh1
+ IBTp47ynRPD+2YsOfP4dR0wM5kx95ztKAL0HN/WYOgn2vYyOn8h9WEI4WRI4bf9IXdbSqFdcG
+ /j2WQbFLlJXcuJdhONrdWz95FRLwTwnYZvc7Iq9jJAAH5rSzEHUvVys7ZADB744zH1jm2WqIE
+ sNwbDkWZEFr73iPZZesU1JT72Gi0+suD0XSu/M6VmvdScl9BKw5ceIc4CZN55pjbWWxdfomVT
+ lvMXfFLGpWie+Imz8kuKspO1Ha3Oo+yfuaQJgB5Ru4mc5fn988sMf4q21QQiIT7SMg8IMaERt
+ c4Z1P9cdzJM5oB3tR67SAoGM0HV2LcOtxv5mqg2uew==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -60,37 +60,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-According to the imxgpt DT schema all i.MX6 GPT IP is
-derived from imx6dl. So fix the imx6ul DTS accordingly
-and avoid dtbs_check warnings.
+Currently the dtbs_check generates warnings like this:
+
+$nodename:0: 'dma-apbh@110000' does not match '^dma-controller(@.*)?$'
+
+So fix all affected dma-apbh node names.
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- arch/arm/boot/dts/imx6ul.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx23.dtsi   | 2 +-
+ arch/arm/boot/dts/imx28.dtsi   | 2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi | 2 +-
+ arch/arm/boot/dts/imx6sx.dtsi  | 2 +-
+ arch/arm/boot/dts/imx6ul.dtsi  | 2 +-
+ arch/arm/boot/dts/imx7s.dtsi   | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/arch/arm/boot/dts/imx23.dtsi b/arch/arm/boot/dts/imx23.dtsi
+index d19508c8f9ed..a3668a0827fc 100644
+--- a/arch/arm/boot/dts/imx23.dtsi
++++ b/arch/arm/boot/dts/imx23.dtsi
+@@ -59,7 +59,7 @@ icoll: interrupt-controller@80000000 {
+ 				reg = <0x80000000 0x2000>;
+ 			};
+ 
+-			dma_apbh: dma-apbh@80004000 {
++			dma_apbh: dma-controller@80004000 {
+ 				compatible = "fsl,imx23-dma-apbh";
+ 				reg = <0x80004000 0x2000>;
+ 				interrupts = <0 14 20 0
+diff --git a/arch/arm/boot/dts/imx28.dtsi b/arch/arm/boot/dts/imx28.dtsi
+index a8d3c3113e0f..29e37b1fae66 100644
+--- a/arch/arm/boot/dts/imx28.dtsi
++++ b/arch/arm/boot/dts/imx28.dtsi
+@@ -78,7 +78,7 @@ hsadc: hsadc@80002000 {
+ 				status = "disabled";
+ 			};
+ 
+-			dma_apbh: dma-apbh@80004000 {
++			dma_apbh: dma-controller@80004000 {
+ 				compatible = "fsl,imx28-dma-apbh";
+ 				reg = <0x80004000 0x2000>;
+ 				interrupts = <82 83 84 85
+diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+index 41e08fa23cce..6571f8a1553d 100644
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -150,7 +150,7 @@ soc: soc {
+ 		interrupt-parent = <&gpc>;
+ 		ranges;
+ 
+-		dma_apbh: dma-apbh@110000 {
++		dma_apbh: dma-controller@110000 {
+ 			compatible = "fsl,imx6q-dma-apbh", "fsl,imx28-dma-apbh";
+ 			reg = <0x00110000 0x2000>;
+ 			interrupts = <0 13 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm/boot/dts/imx6sx.dtsi b/arch/arm/boot/dts/imx6sx.dtsi
+index 93ac2380ca1e..4233943a1cca 100644
+--- a/arch/arm/boot/dts/imx6sx.dtsi
++++ b/arch/arm/boot/dts/imx6sx.dtsi
+@@ -209,7 +209,7 @@ gpu: gpu@1800000 {
+ 			power-domains = <&pd_pu>;
+ 		};
+ 
+-		dma_apbh: dma-apbh@1804000 {
++		dma_apbh: dma-controller@1804000 {
+ 			compatible = "fsl,imx6sx-dma-apbh", "fsl,imx28-dma-apbh";
+ 			reg = <0x01804000 0x2000>;
+ 			interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
 diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-index f0a9139748b8..65b2c6c131b3 100644
+index 65b2c6c131b3..412baa848837 100644
 --- a/arch/arm/boot/dts/imx6ul.dtsi
 +++ b/arch/arm/boot/dts/imx6ul.dtsi
-@@ -448,7 +448,7 @@ can2: can@2094000 {
- 			};
+@@ -164,7 +164,7 @@ intc: interrupt-controller@a01000 {
+ 			      <0x00a06000 0x2000>;
+ 		};
  
- 			gpt1: timer@2098000 {
--				compatible = "fsl,imx6ul-gpt", "fsl,imx6sx-gpt";
-+				compatible = "fsl,imx6ul-gpt", "fsl,imx6dl-gpt";
- 				reg = <0x02098000 0x4000>;
- 				interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&clks IMX6UL_CLK_GPT1_BUS>,
-@@ -734,7 +734,7 @@ gpr: iomuxc-gpr@20e4000 {
+-		dma_apbh: dma-apbh@1804000 {
++		dma_apbh: dma-controller@1804000 {
+ 			compatible = "fsl,imx6q-dma-apbh", "fsl,imx28-dma-apbh";
+ 			reg = <0x01804000 0x2000>;
+ 			interrupts = <0 13 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
+index efe2525b62fa..54026c2c93fa 100644
+--- a/arch/arm/boot/dts/imx7s.dtsi
++++ b/arch/arm/boot/dts/imx7s.dtsi
+@@ -1257,7 +1257,7 @@ fec1: ethernet@30be0000 {
  			};
+ 		};
  
- 			gpt2: timer@20e8000 {
--				compatible = "fsl,imx6ul-gpt", "fsl,imx6sx-gpt";
-+				compatible = "fsl,imx6ul-gpt", "fsl,imx6dl-gpt";
- 				reg = <0x020e8000 0x4000>;
- 				interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&clks IMX6UL_CLK_GPT2_BUS>,
+-		dma_apbh: dma-apbh@33000000 {
++		dma_apbh: dma-controller@33000000 {
+ 			compatible = "fsl,imx7d-dma-apbh", "fsl,imx28-dma-apbh";
+ 			reg = <0x33000000 0x2000>;
+ 			interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 
