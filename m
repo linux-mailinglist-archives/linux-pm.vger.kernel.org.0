@@ -2,112 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AD36AAADB
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Mar 2023 16:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DC96AAF26
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Mar 2023 11:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCDPji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Mar 2023 10:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S229564AbjCEKrO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Mar 2023 05:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjCDPjd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Mar 2023 10:39:33 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052D81E2B0
-        for <linux-pm@vger.kernel.org>; Sat,  4 Mar 2023 07:39:31 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id r27so7273420lfe.10
-        for <linux-pm@vger.kernel.org>; Sat, 04 Mar 2023 07:39:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677944370;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wXa/TCpVNEWyWlP7s5FovRg6HG2GrupX5kByuFYwqVw=;
-        b=boDbMYdVX6/Y8u0jawoTUBOLG5gjvRu8THsESIJEc6NOjpPXtJ9FNhYOnwJEUwVMVS
-         9jt/f/c0IKfYEIAoY/sthuXAedtCvqHDweCseQKvf9sK3Devq414jrmEA3d/TErIuODZ
-         7TCBZEPIZxEbJs9lH4/lYsTE9+xAciG2QXV+RQf3nCLut4Ei+orI83DyJ8VDmcmcQnSj
-         zltHBNanX12FyYqGSA/SaGlqIfUTgTE/FT/Hj6o7oQpDsmMGMZ6nB+gI8/Ns3D/D0nX1
-         Nar6cJO41hk0HSINJVhmJjg/O/tpsqgTLJO+VWIPpnteiJqbzNpz+XyVcf7BL+5osG9+
-         GsbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677944370;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wXa/TCpVNEWyWlP7s5FovRg6HG2GrupX5kByuFYwqVw=;
-        b=7YEWtM6UQn0XKh4Tun5l78QYAOa4KCMqp8DdpMsQaJ+oxvK1i9jnHLteHWmT3nQvge
-         A5p2/z/gScaaowTkN2eWJpclgmXkw1HBW9L0DekUXCGGRP3hfAlVRZhjgfA1D9AN6YfB
-         JJrCBvk3vyDn8l1DndRpspHXIxsZII1IbUkqw79q0cB6lKEi5joGziJ5lQoZD02ZfTmm
-         M2qq3PnWlpQeqHHlEdHQKbiH7N/Tf8btw22paWrOb19lODStPsAnUxfxof+zXjPGggi0
-         9EnjgSRdH9mZFahxph099cDaO049CJHVJxbpQxvwWL0O4eQPKeRtmbeFu4B2hiyfRnbe
-         1Qxg==
-X-Gm-Message-State: AO0yUKUAO6Ae3j+n8hUt92g9PiJrf0i8i/h7k77dac0roTeIWXtrfgT/
-        jDRtuGcIiYRJRruhhW+TMaSvRA==
-X-Google-Smtp-Source: AK7set/sBMjzA4I+wi326/+Td/U5LnpEQA4QFfR9NgGBlMZNWl0tdWa5FiQiXUZ4t9njtghrh6OhfA==
-X-Received: by 2002:a19:5203:0:b0:4e8:28f:82fc with SMTP id m3-20020a195203000000b004e8028f82fcmr26120lfb.27.1677944370368;
-        Sat, 04 Mar 2023 07:39:30 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id f14-20020ac2532e000000b004ab52b0bcf9sm855065lfh.207.2023.03.04.07.39.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 07:39:30 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 04 Mar 2023 16:39:21 +0100
-Subject: [PATCH 3/3] soc: qcom: icc-bwmon: Remove unused struct member
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230304-topic-ddr_bwmon-v1-3-e563837dc7d1@linaro.org>
-References: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
-In-Reply-To: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
+        with ESMTP id S229509AbjCEKrN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 05:47:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DA410248;
+        Sun,  5 Mar 2023 02:47:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F07B560AED;
+        Sun,  5 Mar 2023 10:47:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0986C433EF;
+        Sun,  5 Mar 2023 10:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678013231;
+        bh=/c07qRM2x9b8dlpY7RT/f76aF+pTlnxCftn2bjFKDKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OqIaf5Gp7UnM3q+l2vSIqVugZQ1uytBzC51mpClyyp2f8RX4XUhpBK74vubf7PsZ9
+         4fKktH2eCXXqVSHEzqaVz4gO3/ESsv7P0oi02HmrcUC2yRC+I/arye0isYvgRMX/4+
+         VImIa7qhSIlkv1SRY+UbfSVYDwqKeUKC+CZDLXt1RKsMddaUP0PuGnMwZ7RVS8pOkq
+         7ddVxqkyaROoRx9xsd1mAIHhn3egegNyjVUKCrchRUg3R6V1Qy4PMhI1NTuVEyleSd
+         D1MurtSpGMsAouqNRivX6NPVkiF1GNCRcSvoHtfwkK1WzmPe1i0e2DaadLMbUpMGFU
+         G6byNQhDx5h2w==
+Date:   Sun, 5 Mar 2023 10:47:04 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677944365; l=784;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=qWo6zMTpy3xe0wyRSkH90VHxKiqh5/knTMsgd/eEzYU=;
- b=BB0zfXIufSgOmbYVaimXXk2UXPtwIjqh1tUplrVjqTKNuJEYIjVY+3Iwr9xtelTbkp5r/tnwgSqy
- 0rLjhymCBgpCo0G/gDG7YDGM1V3JGGXplngv+6wU+5UMjMUQVzVV
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 02/10] mfd: rt5033: Fix chip revision readout
+Message-ID: <20230305104704.GG2574592@google.com>
+References: <cover.1677620677.git.jahau@rocketmail.com>
+ <a667a64d0cbeef00baed2d4b117ba9f50eaf3988.1677620677.git.jahau@rocketmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a667a64d0cbeef00baed2d4b117ba9f50eaf3988.1677620677.git.jahau@rocketmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-bwmon->regmap was never used, as the regmap for bwmon is registered
-through devres and accessed through bwmon's regmap_field members.
-Remove it
+On Tue, 28 Feb 2023, Jakob Hauser wrote:
 
-Fixes: ec63dcd3c863 ("soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/soc/qcom/icc-bwmon.c | 1 -
- 1 file changed, 1 deletion(-)
+> After reading the data from the DEVICE_ID register, mask 0x0f needs to be
+> applied to extract the revision of the chip [1].
+> 
+> The other part of the DEVICE_ID register, mask 0xf0, is a vendor identification
+> code. That's how it is set up at similar products of Richtek, e.g. RT9455 [2]
+> page 21 top.
+> 
+> [1] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/mfd/rt5033_core.c#L484
+> [2] https://www.richtek.com/assets/product_file/RT9455/DS9455-00.pdf
+> 
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> ---
+>  drivers/mfd/rt5033.c               | 8 +++++---
+>  include/linux/mfd/rt5033-private.h | 4 ++++
+>  2 files changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/mfd/rt5033.c b/drivers/mfd/rt5033.c
+> index 8029d444b794..d32467174cb5 100644
+> --- a/drivers/mfd/rt5033.c
+> +++ b/drivers/mfd/rt5033.c
+> @@ -55,7 +55,8 @@ static const struct regmap_config rt5033_regmap_config = {
+>  static int rt5033_i2c_probe(struct i2c_client *i2c)
+>  {
+>  	struct rt5033_dev *rt5033;
+> -	unsigned int dev_id;
+> +	unsigned int data;
 
-diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
-index 9ef632d80ee3..3f88ccedde60 100644
---- a/drivers/soc/qcom/icc-bwmon.c
-+++ b/drivers/soc/qcom/icc-bwmon.c
-@@ -189,7 +189,6 @@ struct icc_bwmon {
- 	const struct icc_bwmon_data *data;
- 	int irq;
- 
--	struct regmap *regmap;
- 	struct regmap_field *regs[F_NUM_FIELDS];
- 	struct regmap_field *global_regs[F_NUM_FIELDS];
- 
+In terms of nomenclature, this is a regression.
+
+'data' is a terrible variable name.  Why not keep it as-is?
+
+> +	unsigned int chip_rev;
+>  	int ret;
+>  
+>  	rt5033 = devm_kzalloc(&i2c->dev, sizeof(*rt5033), GFP_KERNEL);
+> @@ -73,12 +74,13 @@ static int rt5033_i2c_probe(struct i2c_client *i2c)
+>  		return PTR_ERR(rt5033->regmap);
+>  	}
+>  
+> -	ret = regmap_read(rt5033->regmap, RT5033_REG_DEVICE_ID, &dev_id);
+> +	ret = regmap_read(rt5033->regmap, RT5033_REG_DEVICE_ID, &data);
+>  	if (ret) {
+>  		dev_err(&i2c->dev, "Device not found\n");
+>  		return -ENODEV;
+>  	}
+> -	dev_info(&i2c->dev, "Device found Device ID: %04x\n", dev_id);
+> +	chip_rev = data & RT5033_CHIP_REV_MASK;
+> +	dev_info(&i2c->dev, "Device found (rev. %d)\n", chip_rev);
+
+Why not print both?
+
+>  	ret = regmap_add_irq_chip(rt5033->regmap, rt5033->irq,
+>  			IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+> diff --git a/include/linux/mfd/rt5033-private.h b/include/linux/mfd/rt5033-private.h
+> index 2d1895c3efbf..d18cd4572208 100644
+> --- a/include/linux/mfd/rt5033-private.h
+> +++ b/include/linux/mfd/rt5033-private.h
+> @@ -71,6 +71,10 @@ enum rt5033_reg {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+g
+>  /* RT5033 CHGCTRL2 register */
+>  #define RT5033_CHGCTRL2_CV_MASK		0xfc
+>  
+> +/* RT5033 DEVICE_ID register */
+> +#define RT5033_VENDOR_ID_MASK		0xf0
+> +#define RT5033_CHIP_REV_MASK		0x0f
+> +
+>  /* RT5033 CHGCTRL3 register */
+>  #define RT5033_CHGCTRL3_CFO_EN_MASK	0x40
+>  #define RT5033_CHGCTRL3_TIMER_MASK	0x38
+> -- 
+> 2.39.1
+> 
 
 -- 
-2.39.2
-
+Lee Jones [李琼斯]
