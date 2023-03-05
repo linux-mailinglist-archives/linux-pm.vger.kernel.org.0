@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135BF6AB154
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Mar 2023 17:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9E46AB158
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Mar 2023 17:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjCEQL6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Mar 2023 11:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S229564AbjCEQO2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Mar 2023 11:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCEQL6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 11:11:58 -0500
-Received: from sonic302-20.consmr.mail.ir2.yahoo.com (sonic302-20.consmr.mail.ir2.yahoo.com [87.248.110.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FB6E07D
-        for <linux-pm@vger.kernel.org>; Sun,  5 Mar 2023 08:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1678032713; bh=dtE96raQEZ6w5exNSJbbcUM91YX2n33Si0WhgJpBGaA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=i+8dyBUd50xYd2u7KB+yMhNos+hT8Yg8E3riix03CwFrw7v7gHK5lF8UOgn3hySfpCUebm8zWfRsbta+7UBSrFRsVHzfkzlL+raqbEWO1rLj217+RP2u5a7S2okBNqLx/Wb50aPxHlHqaSfPh53xucmb0qp0qi8HHFOc4l2f0gKrLv5/SJZJtYkGAo4Q2zQQGDJ20x9nhTudk3LYObnWpGfhbL+GXg03wVA8ti1amg7Kg+ooXEMm2Xb1Ag+eDBplMYF44UAEK5jseEH+lA7NX/S8MGlk0bgX1RPWqPxFKsW9ygDQ1IMmR726dcAXSOH5M+qc8VmdN3pWByuiww9C8g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678032713; bh=fEz+obwPgao3G0KzqNq7I+Wzuo1yqnpUd1aM7oCmBDd=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=bXBGMvScHEzT/vMxFCmOmwPQ74Zzzjpt+xd6H2D+1fChFUbG4CDm8GQ0sHn358YxLlU0K373KZFpOR/8EC8gSPjJX4ojemMKcNjK7sGJAR32ysUwbkt5ydoHItO/1Nc350yCEMshF6HjWasMJZrMmqRYmj3yfmbJh11wgci7VQD5ksqiyTDSgfuBGcXAzSj2b77IlqUvbV1BLTZOVvbKpzUxak0BMasx5EUHiOYLCvzj/kxZm2ioeNC/OQC6tR5LZPUrBHvKKw/3kHkowRgJKXrkKIH9zWWT4DN/+X5LVO/lKbQTcgHwPCj6CULkYGW2x2g1QTVoU8hAMPYSj8Lciw==
-X-YMail-OSG: zWBfk3IVM1lG7WsuEOsTPMu026yqIiSId1BbX4pYT6Gx4B_DawfgIYiOefxFFmO
- 2NA8Dv06umF4ieG_nDstQVaAz3GfH4DvF20WZmzxENJaqL0e_EhioS6Wok4eUn.2uC2vshAV91n5
- _VpsHVgwzC0ufM.raz3BMtImvvLAP7MClslvdBQaMLf1UgzS07Cvx291Uq076mFgqiz8CuzP.C3U
- j412Mn51vVWieg.3MhvAl6Y5SQcP7RrpqxFI3Rh0lDMmA7FXbhRUK2bputGQwwTEeTCqyfDVgDEl
- 0Zo27iOQl86dNzd2ScpKTG9.4WlJjt4EN9vx8DsO1XAZmXG9ndAGIVF_BCoHQOnzpzNvo3aBpdnY
- FfJ1tr3AJC43II_Kg6Ykn8MJrBEpt315zxodLNBrWWUTfZxh.76Jx5AEibLHUN6guYf9qBjNXtjF
- Ab4KE6RnxYnFdEaprGQC_S1QcQmW4CPdkFE7Hb7EDo34RBZzEYDvPjfR8ZExt.3eruvq2.3XG5zt
- 5FI_UtEucSLi3D4sAZyhYJpRIPxBD5V1AwiWlGi3rik3XxXtZxgrdujeCwhzztJgxIRL6cTAN_P_
- 0.UmEDBEmbcvprO2JAnO0HMGJCb4WjmSumBEMouNQNE4pLC5c_1zc3wprl.tSaKIqdLY6X5ypMl8
- .nMimvUTthpH8hARcCZAPFzPziXLuSDRn5Rux15U8YARZ1J8v.y2wSsmUtwmYloVjb_4Qp2nFKb8
- iTZ2D04mRhxnbwpCTA1VBBzfHNaaV2az2LO.fQHdozM0B0mlUmBrXHUh5.ouucwWl_JMYsVG7a.t
- 273wvNc0n7mTBt8uXvxi7_rNW8PzY0RPsDpXC.vuo0EqrTYjKI_LQON7X8DA8ZREruLBGnSn9Dz5
- zUXvvwheCdLcsBfrL92hvmI6s2dg5nx0sNfVV4.NkNtMv028fHIcxAjSI87MNgNLuUcF.xDuEp6d
- j6hiwQNU6R6dUQ4qP0XouAa.9AG_Jd7QMfWUPnlwjM47XLfUZUDCVF3pkDF4V7Esn0LiEIXz93DW
- Qtpr6Jk4OhYC6f89fwzdChupHs5sV05lyGYjIQdXmQVRGt9MGaQ7jzm2WORoKDg.niopaPLsuPf6
- 9MKd9CceoDSli_adS_55rP2uMsSS2ec0ceHWwwXwGfv6acYTmLge2UudQ0vOxHZBi6lZccuZOmtJ
- mb56kn8bZz.GCq7VySAsD4.Txm2YyPDakG3SsUvRolRcoXvR92wEtRciHpW2UWiPH89X1m2hqniI
- ZJbPwelmvCQpLC79UvvMDb8Rs4auevBdQXBirlBHniNabVMHbV_Kroz0O1xnovKzEyt.LdKPwP02
- i8863OD945UFVQIm8sPPU.Uvq7W1i77TDg7Gg9HoNETTZdq3f0mutB5o34RmrdXMgchrI9wF_mzN
- GEA5M6bzG1Oa69dpY31GjTsXKcmPrMGiFt8c1syPNZHkthS_NQObf7EZMnBYHRrIt8NR5A3l.nGS
- eXzKAjxgfaIhb5JUTBM3B_79rGpxs3L.YXMFfoksRKkH2_7jhAHj1eHibFjOK7TNRaG8TI2xRmCK
- _mwN.8rbmu5iErSMN0.wwKkAJK_nCTujsXEDYMeL6IP4RBm8AbOSP9dp1zOXPk_p3HAmKj9zTf1p
- ruLGdKKnvNSdsZ9HvyCiXCMCRYuKKerOB1YYYeWiuTDrTm3oNtT_sA0p5G7TX4Lzm3sbp0JABO6_
- Gxd3OkcEqijM1nFtI7kg_pCHjEYvgyi_9UmpoLeYNbjONd9969kZtPOPiuKsJ0lhiqKSun1GoPxK
- LgsDkaB7xbgGuLqA0pbRrcXIpi2fAHs4CTT2WTo4m9PrxAlexUkfm0gB3jLVzpHgo2lnfhkNVJcz
- zImeljxqpaX6i8twT33_UE9WhiYL20a4iehqPl1mTKtTkOeCH9nA76RPkY944Ty9w_kyw2ByTDJy
- BxaZ6XlEHK9ReTYkfEf45P3Adi7lgk359hRia_Z51NdbGmqeaVLIabsAC2qyJ.w8snrhljz2Wm6M
- Hs09I1gV92ZaZqKvxMPuzE_hpQTzQ_c47sa2CdHFl6OaTpuZDC9.XTBzWJALUk5BlmgU_Iv3AsDB
- 5hMhnSak788abwtWvnEXusJPWaUB6OnDcsqTkpYyBaNswu0zjuels_EpS0xEcjB2MFcmUqOzmYAe
- KgSaS.v1vDOtfgVr.vV.PeDTv09HbnWgjXayvnQZI01Z98YdrdMmuFPTcYtiFpd0sZFct_6p8k7E
- R3J.MJzSsH4l32DAvVuViyrEDEafY4vW.ouz6GYAUxMBRLrtMZf3Bcd6zpyKU_JroXQ0XCU.X7R.
- glmNZ7BF_EL56RMamOeGfe_q6Xx.g.g--
+        with ESMTP id S229510AbjCEQO1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 11:14:27 -0500
+Received: from sonic301-22.consmr.mail.ir2.yahoo.com (sonic301-22.consmr.mail.ir2.yahoo.com [77.238.176.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E1313D72
+        for <linux-pm@vger.kernel.org>; Sun,  5 Mar 2023 08:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1678032864; bh=p75KKh6R36Q0Knz+CmsNst/5CA5AvrTLTrRrW2802z4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=fKo40SdJ0CWtI9+7DUBgrCZOKrjdNDM0CRAFivVuF03ccA79S5N6bVNEbqY5DJ+tTqVKQUNjrunbu5YmYruzC2a9uJal2jzVJ+EgBIqO5pY3HKNl7PXr5+NumBZThZ5mJwa/zD3yCo6TQSV9qAEXD1I1/974e1CRQn9vDTN4nMJ2vtkBDwqNa5r9lRV+WoP78rEKfkNxpjgB5KNVVGKhKpS4Hb/97ckl73jPO09RnKuYOb7emb96cjj4hGNcRAlXlp//AkLNiof2LznE5Y0cv5iwzOn+9QNGUYdJgh8m1Q48nfPxin10WL475DpgpysnxTnAnyoZInpzG+/kj5kIMw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678032864; bh=WEIEOMeVEHLPFzSKXhg3TnZhlBOh2mPkaMU9HLFa63j=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=MdDp3lXmXIx3Gfcob3y9pTYYA3JOJUF1gaeIzIDt7eEaDGh1kFmTAdSLYvZPnbku63QCdxSmkuCq+1cCCd1RZBkmvsJzR0yhbbIYddFPLuDQ0JlGxyFJ5dXyNDP/QuWNBv5aV7SPTyzbsOm3Xa5o/fNCOHXk5AYkfy8OQXCDxg1BOFq/jChEj+kJCiIAWt+7yAawD4wxs4Kukys6X1EtFcCebOZKeC70BAVEsahabgZ9BBqB7sJQslSd/1Gjy5q+HLFry3pHRAOEESGo3yQ8WO7lp0IOPA6bKfUJ6Mqs2KlE++VnG+QyXa2F5V5qL2W1PPZNKGM4kVN2MyhEtqkqnA==
+X-YMail-OSG: jXpvQLYVM1lldrKWCdTkj9gZXbIeCnjhff_uXlK9uPT9yp0muabLm6NjFMPqdPh
+ 2r4FziHYmv_7_ybZCQrnXy1EqJsBFOlfg0ClZMd8ePnI7S3Y3081kB_oIdA0D8kuER6GNR5cf6ja
+ sC96iCfFZ6VOumhNhAucSAlOSNT3KcXVPjy3C2mKwm0Lz4PJDmvuLW0cc2gCSZwGQ5BWuFs1RQM0
+ wLbdfFifKQ1qYeHU7807FybDVS4l6pqDsixDYTH1WiIp8k5Hhzf1ZL4wp4vuaprGcYPWk1miu2G7
+ CqJnPQcIaxdaezTySHctW_WMSXSEcTmpZTbTfy8y4kVwN9c.Jbw39GHWLVsQ.ov0vC7W6FKwp5xG
+ 1noEdUcXye0lxgQ3bZU7BPGt5YYeEvapbe5lFpLfyzodbkdfF6ZB5yjw32X81jE0Eu0b5xN8Mg05
+ j.DMnG8R3jSoM3VG54Rl8u8W3kCG50fNZVeK0khPbnGXMxXJC30xHOfWAB2qi9I7v8fCnVklbNcf
+ 7aSDv_WpArK9fBJlLdGVtxhjnm4VENNUI40TYVZUlrPvTyUKGS2C6KlIedCnqRyzkFh2YevipK.D
+ 1NH7LdYCAKFVLZNvezOiTV8s05dVF4Gk1K.IGgnY3NcvU1FX5QkOazvkuxFNgpUetiLoKaJJGLJ5
+ akI6vdsjdLNhYBfshg.5Y1H8laKOfTHSKZTR26H2BsqLgd6zWRiopiivVnkKifl5H35_7NEzL.yI
+ tW.AsrFLP4R3Q8qn67fZCbZTOlmBobvF4q_4fCTgnHHgyVru6GoiWA9Tf5kPjeKegUtoctlVCdIS
+ 9eaMJ6GqoS4G9i971YoOGHGr7kxqyW_Xb5nDX1RrmIy.QVTpqHqHEeazT760eQWMpwOkcz.KNpQF
+ 1Pv7gaNFMSu785MSEBsMOf06QmfD4BEz.H1MTQVN3UMOCuL3a2C7oFcieD2AN2mTyTHeKJR3RFpo
+ WNbYIzH99pjs3YGYXIQ0J58FEpzPmPiWRR.41sss4bpfPRKC6vYpp.6w68fq7B2fUrcNJqlJGU00
+ 6_YfRjCoFs91aAkNm.iRc_N99zdVD8owLHNMWcmvT.h_oylhzyUeNFFqCpYgmiO0yPcftzfsI9Jj
+ Gn4zm4hJI3LjbXlG1PEtZytohoRhbGIKmteJKjqD8GQMrGHINMmnmwH4I3qVB3I7JBGvvRJUZski
+ DFFaLjtAJm9C7C33kdqLdH3EiTToSzeu.6XhIs2Flu2fmU8kt2.iHepQrhinCWsDgpecryS_gk9n
+ qeU089vNJ.PGfhPkZ1rQo1fws553w8LZH194ivqjUQyDGhZ.J77O.nFDxmRK32_xWfQwCD7wdqs5
+ nm7l2ttBqdVdDFp2Cp1kLsHCiRe__9Pp1hjj5iKLkJnLQJn5jS5Wkj6QM0wV1b48ja14kXoO6gGH
+ IwNVkAA8151WDy6uMKOtJEEijfVu6sAH7.xL7HZQXiHC0_Vi.xXWV98DAcDyMW7ikTch0JwFQVce
+ BhWUL5VBo4Osl0o2UnwD8FaIPVL60P7_QT4W3kg1FUKi6_KPFk4OTE5kjpP7EVaHARWEwJ2_znHU
+ HY.XGcw7TqKxPb6sOTCgEJN2zZ7QymV3PLHUfHVd9JKtFhku_s_L3YpE9YEH7UiFPAPVDNXttpt5
+ a5zqf0vcvd08HnWsue5mM8OkESFOqNlJXUe.noD9uezdTdrEGdaUmp7r1ktGwoL5uV.TlKUCIUDm
+ e24_W7Ho8qHObMaN8X4TM42KV9debODgeQo9zl51vGYNMKRTvyFPK1zBCBAmbZy2QngQ_y8WVtQQ
+ .lZYT220UbZ4NiBiffpD11V11J6LfVHGItF6W_xiLaM3eLj8NX3ksqyrH.h_8eZyyYGVe_g7aFCG
+ 9jdHAvlyn5IUsxmEj6IEJV8ucDQ2fgPb3ADi6CJT6uUAFe1Yr.y8bXfYXyxAzyGVmjGrDfEiSF29
+ Dt.xym8BjueYPrXrAxlmvIQamd4XfwGA7Ff4lXy7H.hlW1_tlLmxuUxvFaQxHVp6AkmovVBx_sna
+ bEv8UPeTZlhM2_lrguTZUirGIUM9CNAaDW8Uc8uuGjMPT0qbwMg3xF0wbikTxUF64IHvMuTu3nIp
+ Az4AcnEK7CFJddovC6wxG2JgT6BjxT.7NjyJMPKg5HECtzAcR_h4ZSacBc0alVNPoEymUOKKcJ4Z
+ JDv6uM09N4EN6yzPFO5supCRw5E5w7.wBU.ZDSrSsOGphnQyqBzDCMXGHjSPdGkK1y4upldp4yxP
+ IQj64OEt.QNc.RTCmtA4AoFOjB.BVlWeOZ2gNeEDT.0k6Yt5I6RzfwnHsmUIf7fcQFKZkgBnSzyF
+ 2A5vcA.Wrg7SnMx7SmN3irW.w7mtf
 X-Sonic-MF: <jahau@rocketmail.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ir2.yahoo.com with HTTP; Sun, 5 Mar 2023 16:11:53 +0000
-Received: by hermes--production-ir2-5b7d458747-z6qxt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 7767db3293682666276cd8f39107f1c9;
-          Sun, 05 Mar 2023 16:11:52 +0000 (UTC)
-Message-ID: <1c110bcc-7e65-fc01-44ec-1a79cfe49795@rocketmail.com>
-Date:   Sun, 5 Mar 2023 17:11:50 +0100
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Sun, 5 Mar 2023 16:14:24 +0000
+Received: by hermes--production-ir2-5b7d458747-grn8r (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1d2fddbecdb94da144c4d8cdf4e4ee4b;
+          Sun, 05 Mar 2023 16:14:21 +0000 (UTC)
+Message-ID: <9ce4110c-eaff-3f8b-65da-8407e05af493@rocketmail.com>
+Date:   Sun, 5 Mar 2023 17:14:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.2
-Subject: Re: [PATCH 03/10] mfd: rt5033: Fix comments and style in includes
+Subject: Re: [PATCH 05/10] mfd: rt5033: Apply preparatory changes before
+ adding rt5033-charger driver
 To:     Lee Jones <lee@kernel.org>
 Cc:     Sebastian Reichel <sre@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -71,17 +72,17 @@ Cc:     Sebastian Reichel <sre@kernel.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
 References: <cover.1677620677.git.jahau@rocketmail.com>
- <606950da6f4b36f5a124ff13756c78644fc89804.1677620677.git.jahau@rocketmail.com>
- <20230305104835.GH2574592@google.com>
+ <4edfef7fdf129185355d4dd2d3928d63c04bac73.1677620677.git.jahau@rocketmail.com>
+ <20230305105551.GJ2574592@google.com>
 Content-Language: en-US
 From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <20230305104835.GH2574592@google.com>
+In-Reply-To: <20230305105551.GJ2574592@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.21221 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,25 +92,52 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Lee,
 
-On 05.03.23 11:48, Lee Jones wrote:
+On 05.03.23 11:55, Lee Jones wrote:
 > On Tue, 28 Feb 2023, Jakob Hauser wrote:
 > 
->> Fix comments and remove some empty lines in rt5033-private.h. Align struct
->> rt5033_charger in rt5033.h.
+>> Order the register blocks to have the masks in descending manner.
+>>
+>> Add new defines for constant voltage shift (RT5033_CHGCTRL2_CV_SHIFT),
+>> MIVR mask (RT5033_CHGCTRL4_MIVR_MASK), pre-charge current shift
+>> (RT5033_CHGCTRL4_IPREC_SHIFT), internal timer disable
+>> (RT5033_INT_TIMER_DISABLE), termination disable (RT5033_TE_DISABLE),
+>> CFO disable (RT5033_CFO_DISABLE), UUG disable (RT5033_CHARGER_UUG_DISABLE).
+>>
+>> The fast charge timer type needs to be written on mask 0x38
+>> (RT5033_CHGCTRL3_TIMER_MASK). To avoid a bit shift on application, change the
+>> values of the timer types to fit the mask. Added the timout duration as a
+>> comment. And the timer between TIMER8 and TIMER12 is most likely TIMER10, see
+>> e.g. RT5036 [1] page 28 bottom.
+>>
+>> Add value options for MIVR (Minimum Input Voltage Regulation).
+>>
+>> Move RT5033_TE_ENABLE_MASK to the block "RT5033 CHGCTRL1 register", in order
+>> to have the masks of the register collected there. To fit the naming scheme,
+>> rename it to RT5033_CHGCTRL1_TE_EN_MASK.
+>>
+>> Move RT5033_CHG_MAX_CURRENT to the block "RT5033 charger fast-charge current".
+>>
+>> Add new defines RT5033_CV_MAX_VOLTAGE and RT5033_CHG_MAX_PRE_CURRENT to the
+>> blocks "RT5033 charger constant charge voltage" and "RT5033 charger pre-charge
+>> current limits".
+>>
+>> In include/linux/mfd/rt5033.h, turn power_supply "psy" into a pointer in order
+>> to use it in devm_power_supply_register().
+> 
+> Are there no present users to account for?
+
+At least none I'm aware of. Within the upstream kernel the 
+rt5033_charger power_supply didn't exist so far, the patchset is about 
+to implement it.
+
+>> [1] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
 >>
 >> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 >> ---
->>   include/linux/mfd/rt5033-private.h | 17 +++++++----------
->>   include/linux/mfd/rt5033.h         |  7 +++----
->>   2 files changed, 10 insertions(+), 14 deletions(-)
+>>   include/linux/mfd/rt5033-private.h | 53 ++++++++++++++++++++----------
+>>   include/linux/mfd/rt5033.h         |  2 +-
+>>   2 files changed, 36 insertions(+),` 19 deletions(-)
 > 
-> Applied, thanks
-> 
-
-Thanks! Does this mean I should skip this patch in the next versions of 
-the patchset? Or should I just add the Acked-for-MFD-by tag of yours? In 
-the first case I'm not sure what base to use for the next versions of 
-the patchset. Sorry, I'm not so much familiar with the procedures.
 
 Kind regards,
 Jakob
