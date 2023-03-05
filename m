@@ -2,108 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CEE6AAF34
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Mar 2023 11:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D72A6AB11C
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Mar 2023 15:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjCEK4D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Mar 2023 05:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S229478AbjCEOwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Mar 2023 09:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCEK4C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 05:56:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6E713D68;
-        Sun,  5 Mar 2023 02:56:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8464FCE0025;
-        Sun,  5 Mar 2023 10:55:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41984C433D2;
-        Sun,  5 Mar 2023 10:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678013757;
-        bh=ghe9m3Sb2ZozwkfUR3J/OZxMt72CJ2dDXwhL30J9Tgo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LOZT9OJBJihI6tMu2QfcwPJPPtN6tTDGw3Q54Ffxpw2/uV+mb3v7Hno20+REVOYZ+
-         h9Mzi1KgMLER8Si5Z63Nh2pkrOKm6XP/69GhEb7C2ACURXP8bwIBL2guem7Ez19Efo
-         wSBY/nGx7Lk6cs88HdidRV7a9b+vDOejoLKMtJQMTQ8e8/9jOohHnOgF05SMNPqvEB
-         /pjVU6yiAkySo7wTZsh3dJMEN1/MLNkLuMWSO/rVS2G9STsPH6ogIikHsQzx7fk0pP
-         bB0KWKNKQFtwKwuLw9JSW39dSi78dHHqFka0qdNZ9syXSkajAT/sbJ1ACryr4ikovx
-         60F5s0lLB/bUA==
-Date:   Sun, 5 Mar 2023 10:55:51 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 05/10] mfd: rt5033: Apply preparatory changes before
- adding rt5033-charger driver
-Message-ID: <20230305105551.GJ2574592@google.com>
-References: <cover.1677620677.git.jahau@rocketmail.com>
- <4edfef7fdf129185355d4dd2d3928d63c04bac73.1677620677.git.jahau@rocketmail.com>
+        with ESMTP id S229520AbjCEOwH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Mar 2023 09:52:07 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ED0E066
+        for <linux-pm@vger.kernel.org>; Sun,  5 Mar 2023 06:52:05 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so28514001edb.10
+        for <linux-pm@vger.kernel.org>; Sun, 05 Mar 2023 06:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678027923;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nBZSdN0DyHSO54HE9hS1dDLmyIrE4P9z0Pt6ulnNjQg=;
+        b=UJsE7qIVwTaD8wsBWGkcvFux/apLI9B2J7s1V02XolGy2yvqrpwKbl8mmKSi4CLI8a
+         PCjDQYEPRlDwboQ4P/ms0X8+9zCN9uUT+ik6FFoyGmAzn/zYRaxeDZtva1J2zt+ZwARa
+         TYI7FH5a0WYD5ggbvcS4SpIQX2cPEF/uFG5udi9hHxIeVvF69S8MnyhDIKmRAB8YjsWD
+         0/Jtt6lotbRgENoYJWdm4IyVslnRdZmiuWOQk42mKIFvhz0Qs1sE8NShTN1Lu3HDrYiN
+         GkEYb3hKoi69QRXmnR8i+a7tSW3VlO1dyJ7tTlo/MtZhRZoh5GbIFJdf/bbP8VSROpbj
+         h/dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678027923;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nBZSdN0DyHSO54HE9hS1dDLmyIrE4P9z0Pt6ulnNjQg=;
+        b=aQ3c7/MagmSxZO4/6YIuEqu514EP4OyBVGW9LceGJ5cWBHMJlVJchul+Ta/S+uLdzp
+         UzTvKyixFfTC6uAH8PUWlTJWLdHmfG4ASRZP+nH1KnKdIK2OnFTm+x/gpkQf3bBQeUMT
+         SsF7lE1nz8e7YcK6wrIukI24HnaM9z91wKqMjpgTx1yaoLMRZT7uSddF+h8EwA84wBhO
+         tWCTckG8/Lu0g+n9FbNX0cv/56uLmxm5l3nJFhWKrxevPV5YykinN0pveCm7RwocQQWg
+         qLSD89f9aKPG6Q8e3XN8Bjb3nDKJP0KIEyZasEDGkeCPCUQwPTmzd7LKxwAsKz4fFDpH
+         TrXg==
+X-Gm-Message-State: AO0yUKWMtA/vgwK6Ym3toQH8WSnvqWrhXYB5VbmA9ICWEWm6kKcpLokV
+        NfJl+lSSzQpcXQm3zGv8taal/g==
+X-Google-Smtp-Source: AK7set/F+sXy8LkpD8XCOmy+yyZa+HkKpCcFPKUsnRhHZqgS2BvgLkz6K9jC7HKFnuxsXl0H1EjGHA==
+X-Received: by 2002:aa7:df93:0:b0:4ab:5ce9:9f83 with SMTP id b19-20020aa7df93000000b004ab5ce99f83mr7850828edy.23.1678027923659;
+        Sun, 05 Mar 2023 06:52:03 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:71e7:13d:1c29:505f? ([2a02:810d:15c0:828:71e7:13d:1c29:505f])
+        by smtp.gmail.com with ESMTPSA id hy3-20020a1709068a6300b008e57b5e0ce9sm3302506ejc.108.2023.03.05.06.52.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 06:52:03 -0800 (PST)
+Message-ID: <0e74ad9a-2333-ea9e-b569-1bf8c965b217@linaro.org>
+Date:   Sun, 5 Mar 2023 15:52:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4edfef7fdf129185355d4dd2d3928d63c04bac73.1677620677.git.jahau@rocketmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ global registers
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
+ <20230304-topic-ddr_bwmon-v1-1-e563837dc7d1@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230304-topic-ddr_bwmon-v1-1-e563837dc7d1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 28 Feb 2023, Jakob Hauser wrote:
-
-> Order the register blocks to have the masks in descending manner.
+On 04/03/2023 16:39, Konrad Dybcio wrote:
+> The BWMON has two sets of registers: one for handling the monitor itself
+> and one called "global", which we didn't care about before, as on newer
+> SoCs it was made contiguous with (but not the same as) the monitor's
+> register range. Describe it.
 > 
-> Add new defines for constant voltage shift (RT5033_CHGCTRL2_CV_SHIFT),
-> MIVR mask (RT5033_CHGCTRL4_MIVR_MASK), pre-charge current shift
-> (RT5033_CHGCTRL4_IPREC_SHIFT), internal timer disable
-> (RT5033_INT_TIMER_DISABLE), termination disable (RT5033_TE_DISABLE),
-> CFO disable (RT5033_CFO_DISABLE), UUG disable (RT5033_CHARGER_UUG_DISABLE).
-> 
-> The fast charge timer type needs to be written on mask 0x38
-> (RT5033_CHGCTRL3_TIMER_MASK). To avoid a bit shift on application, change the
-> values of the timer types to fit the mask. Added the timout duration as a
-> comment. And the timer between TIMER8 and TIMER12 is most likely TIMER10, see
-> e.g. RT5036 [1] page 28 bottom.
-> 
-> Add value options for MIVR (Minimum Input Voltage Regulation).
-> 
-> Move RT5033_TE_ENABLE_MASK to the block "RT5033 CHGCTRL1 register", in order
-> to have the masks of the register collected there. To fit the naming scheme,
-> rename it to RT5033_CHGCTRL1_TE_EN_MASK.
-> 
-> Move RT5033_CHG_MAX_CURRENT to the block "RT5033 charger fast-charge current".
-> 
-> Add new defines RT5033_CV_MAX_VOLTAGE and RT5033_CHG_MAX_PRE_CURRENT to the
-> blocks "RT5033 charger constant charge voltage" and "RT5033 charger pre-charge
-> current limits".
-> 
-> In include/linux/mfd/rt5033.h, turn power_supply "psy" into a pointer in order
-> to use it in devm_power_supply_register().
-
-Are there no present users to account for?
-
-> [1] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
-> 
-> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  include/linux/mfd/rt5033-private.h | 53 ++++++++++++++++++++----------
->  include/linux/mfd/rt5033.h         |  2 +-
->  2 files changed, 36 insertions(+),` 19 deletions(-)
+>  .../bindings/interconnect/qcom,msm8998-bwmon.yaml  | 28 ++++++++++++++++++----
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> index 12a0d3ecbabb..6dd0cb0a1f43 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> @@ -49,9 +49,13 @@ properties:
+>      type: object
+>  
+>    reg:
+> -    # BWMON v4 (currently described) and BWMON v5 use one register address
+> -    # space.  BWMON v2 uses two register spaces - not yet described.
+> -    maxItems: 1
+> +    # BWMON v5 uses one register address space, v1-v4 use one or two.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    minItems: 1
+> +    maxItems: 2
+>  
+>  required:
+>    - compatible
+> @@ -63,6 +67,21 @@ required:
+>  
+>  additionalProperties: false
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: qcom,msm8998-bwmon
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +
+> +        reg-names:
+> +          items:
+> +            - const: monitor
+> +            - const: global
 
--- 
-Lee Jones [李琼斯]
+else:
+  reg:
+    maxItems: 1
+
+and either disallow reg-names or move it to the top-level.
+
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interconnect/qcom,sdm845.h>
+> @@ -70,7 +89,8 @@ examples:
+>  
+>      pmu@1436400 {
+>          compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
+> -        reg = <0x01436400 0x600>;
+> +        reg = <0x01436400 0x600>, <0x01436300 0x200>;
+
+That's not correct for sdm845. It's only one address space for sdm845.
+
+
+Best regards,
+Krzysztof
+
