@@ -2,111 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5836AB66C
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 07:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5DC6AB75D
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 08:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCFGkN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Mar 2023 01:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S229810AbjCFH5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Mar 2023 02:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCFGkM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 01:40:12 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56887CDDC
-        for <linux-pm@vger.kernel.org>; Sun,  5 Mar 2023 22:40:10 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so33963368edb.12
-        for <linux-pm@vger.kernel.org>; Sun, 05 Mar 2023 22:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678084809;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g0uHF9zbKg9xgGKwpWcbugNvxA7barkTYqPCS14uJCo=;
-        b=VbE4JMgrkkl1MBtWejm+B80EuU0h9oiIsNHafwLTvSN6MDfwod2pHIbSFlOhkxSq5Z
-         InHrMN7yCJvx+qXa0zoSe16OEzVamDvSbfeohWZHc9QRx/rFJ8JAvK9ceYSYasN2t1Sf
-         PlZdn566afyWm6RvagBWWBCUDxPld3nUGPzdk6rVC0ez2Tc5LuADp14mJVt4lRF8hgIH
-         mYMwUI1N7Voe+9VKEKwfgyWkH7AnmRGc5iuLsq22KaEe65km2y3oCe4+kCp3PPJGjCRl
-         kRTpB/Tt6WcHWGH0AF+JGFyvEh4N1gwPaYeZf1BX5HH7nPIuiQIfOwLGtPP48+vv2gVa
-         VrFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678084809;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g0uHF9zbKg9xgGKwpWcbugNvxA7barkTYqPCS14uJCo=;
-        b=rCxL7Q5MkklDXcFPz2HavMDDzFgby/rCLOe/+I45apiSb6uxyqCJPqmyBVaZz34WGE
-         C26jvvXxSc9Te8hiYWK6zGlSVruY7AzyWUI/s6M/zlf3qJZsywSLpDMHD8mJUtH8T8qS
-         jjJ32Na7WG++8sKvBB+FD3XY8EvTDYdmZb9g/WrLQlJWrBnZ0rKc1eX4y4Rl5FkSYjRx
-         2ZwIlLm3bWMA3mev95ErnNgqc2gNmL0jNwB+fq8hlvuPm3nKbndVYPeb6t11wHqMjqs1
-         7ekFDUt6Zn0WiMauXA4vVtHhxpWwy7RoGVSukwqHlhOb7xUvFYiOmO7j4nrcubL/AoUe
-         fMlg==
-X-Gm-Message-State: AO0yUKWizCOIyr0EZMqAUr7iTAIVLRYIKR2zBkpZ+fA4iu0TVNvI9OwK
-        QEKicOda9Hp6FB4dyNU1dn6Dsg==
-X-Google-Smtp-Source: AK7set+6bC7/gAUXyQTO7c8DnH6zWltFHUoEf51GIWHyj5fNPnCguigPLn4YgHzvAa/+o6mgAp4Lzw==
-X-Received: by 2002:a17:906:9451:b0:8e1:d996:dca2 with SMTP id z17-20020a170906945100b008e1d996dca2mr8961058ejx.64.1678084808873;
-        Sun, 05 Mar 2023 22:40:08 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id f3-20020a170906738300b008cf377e8795sm4125659ejl.199.2023.03.05.22.40.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 22:40:08 -0800 (PST)
-Message-ID: <a5db2529-6f45-1267-bc08-019059cf29d2@linaro.org>
-Date:   Mon, 6 Mar 2023 07:40:07 +0100
+        with ESMTP id S229723AbjCFH5j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 02:57:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A281B54F;
+        Sun,  5 Mar 2023 23:57:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9124960C27;
+        Mon,  6 Mar 2023 07:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53437C433AA;
+        Mon,  6 Mar 2023 07:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678089456;
+        bh=K26aMBWxlHn/kqrsAOXmsd/Ax8lLFUacKHubBz29pvM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Efw6f3Kh0QPT+wsdf45HNRQCHIpsbD+hBozYkazPWAwjdiGi57Eqyf2PlKmDY4pWd
+         8XYxmeMHJLIjYpjJ6VijeWe2kAGeq6TRazi2S9OqAnR85Pi9odMMBlzxEnFaHVhpHp
+         Lwm7IL49t06WcfqK5O32KhdpcKjNHdAYrHeJnZaxA8VV73xHfQgI9RRJLINNhURMHR
+         e0PvAO4HWvgN4UNgszNaitLEqbXfZrQQflD5xdV+X0nKsS5I40yqO12MURfZxSB5q3
+         P8WdS6SKYHHs8BIFgkSbcEnTuSA5EAgPPEPlULkEDa+SdV9z9cpYAgNN/Tsl80wEq7
+         LWpJT6uYRRauw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pZ5ja-0000hr-WB; Mon, 06 Mar 2023 08:58:15 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Dan Carpenter <error27@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 00/23] interconnect: fix racy provider registration
+Date:   Mon,  6 Mar 2023 08:56:28 +0100
+Message-Id: <20230306075651.2449-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4/6] ARM: dts: imx6ul: Fix second GPT compatible
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     linux-imx@nxp.com, Marek Vasut <marex@denx.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230305225901.7119-1-stefan.wahren@i2se.com>
- <20230305225901.7119-5-stefan.wahren@i2se.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230305225901.7119-5-stefan.wahren@i2se.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/03/2023 23:58, Stefan Wahren wrote:
-> According to the imxgpt DT schema all i.MX6 GPT IP is
+The current interconnect provider interface is inherently racy as
+providers are expected to be registered before being fully initialised.
 
-That's not true... you just changed the bindings to say that.
+This can specifically cause racing DT lookups to fail as I recently
+noticed when the Qualcomm cpufreq driver failed to probe:
 
-> derived from imx6dl. So fix the imx6ul DTS accordingly
-> and avoid dtbs_check warnings.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->  arch/arm/boot/dts/imx6ul.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-> index f0a9139748b8..65b2c6c131b3 100644
-> --- a/arch/arm/boot/dts/imx6ul.dtsi
-> +++ b/arch/arm/boot/dts/imx6ul.dtsi
-> @@ -448,7 +448,7 @@ can2: can@2094000 {
->  			};
->  
->  			gpt1: timer@2098000 {
-> -				compatible = "fsl,imx6ul-gpt", "fsl,imx6sx-gpt";
-> +				compatible = "fsl,imx6ul-gpt", "fsl,imx6dl-gpt";
+	of_icc_xlate_onecell: invalid index 0
+        cpu cpu0: error -EINVAL: error finding src node
+        cpu cpu0: dev_pm_opp_of_find_icc_paths: Unable to get path0: -22
+        qcom-cpufreq-hw: probe of 18591000.cpufreq failed with error -22
+
+This only happens very rarely, but the bug is easily reproduced by
+increasing the race window by adding an msleep() after registering
+osm-l3 interconnect provider.
+
+Note that the Qualcomm cpufreq driver is especially susceptible to this
+race as the interconnect path is looked up from the CPU nodes so that
+driver core does not guarantee the probe order even when device links
+are enabled (which they not always are).
+
+This series adds a new interconnect provider registration API which is
+used to fix up the interconnect drivers before removing the old racy
+API.
+
+Included are also a number of fixes for other bugs found while preparing
+the series.
+
+Johan
 
 
-Best regards,
-Krzysztof
+Changes in v2
+ - icc_node_destroy() can be called with an arbitrary node id so add the
+   missing sanity check to handle potential attempts to destroy a
+   non-existing node (patch 01/23). Reported by Dan Carpenter and the
+   kernel test robot:
+
+   https://lore.kernel.org/oe-kbuild/202302222118.nGz1F0oJ-lkp@intel.com/
+
+
+Johan Hovold (23):
+  interconnect: fix mem leak when freeing nodes
+  interconnect: fix icc_provider_del() error handling
+  interconnect: fix provider registration API
+  interconnect: imx: fix registration race
+  interconnect: qcom: osm-l3: fix registration race
+  interconnect: qcom: rpm: fix probe child-node error handling
+  interconnect: qcom: rpm: fix probe PM domain error handling
+  interconnect: qcom: rpm: fix registration race
+  interconnect: qcom: rpmh: fix probe child-node error handling
+  interconnect: qcom: rpmh: fix registration race
+  interconnect: qcom: msm8974: fix registration race
+  interconnect: qcom: sm8450: fix registration race
+  interconnect: qcom: sm8550: fix registration race
+  interconnect: exynos: fix node leak in probe PM QoS error path
+  interconnect: exynos: fix registration race
+  interconnect: exynos: drop redundant link destroy
+  memory: tegra: fix interconnect registration race
+  memory: tegra124-emc: fix interconnect registration race
+  memory: tegra20-emc: fix interconnect registration race
+  memory: tegra30-emc: fix interconnect registration race
+  interconnect: drop racy registration API
+  interconnect: drop unused icc_get() interface
+  interconnect: drop unused icc_link_destroy() interface
+
+ drivers/interconnect/core.c           | 152 +++++---------------------
+ drivers/interconnect/imx/imx.c        |  20 ++--
+ drivers/interconnect/qcom/icc-rpm.c   |  33 +++---
+ drivers/interconnect/qcom/icc-rpmh.c  |  30 +++--
+ drivers/interconnect/qcom/msm8974.c   |  20 ++--
+ drivers/interconnect/qcom/osm-l3.c    |  14 +--
+ drivers/interconnect/qcom/sm8450.c    |  22 ++--
+ drivers/interconnect/qcom/sm8550.c    |  22 ++--
+ drivers/interconnect/samsung/exynos.c |  30 ++---
+ drivers/memory/tegra/mc.c             |  16 ++-
+ drivers/memory/tegra/tegra124-emc.c   |  12 +-
+ drivers/memory/tegra/tegra20-emc.c    |  12 +-
+ drivers/memory/tegra/tegra30-emc.c    |  12 +-
+ include/linux/interconnect-provider.h |  19 ++--
+ include/linux/interconnect.h          |   8 --
+ 15 files changed, 157 insertions(+), 265 deletions(-)
+
+-- 
+2.39.2
 
