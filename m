@@ -2,205 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438CB6AB989
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 10:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AB46AB9CA
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 10:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjCFJTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Mar 2023 04:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S229982AbjCFJ1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Mar 2023 04:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjCFJTA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 04:19:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85159ED7;
-        Mon,  6 Mar 2023 01:18:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85BB4B80D11;
-        Mon,  6 Mar 2023 09:18:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0D9C433D2;
-        Mon,  6 Mar 2023 09:18:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678094329;
-        bh=e7DGMlyFuT+Xr9OW9k1dxZOnlGNZRMNJeB3ZVMN6oOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SMbSvP2qCbz7V6Je/+xoXoEb8fFTTErzI0eOeN+qo4rlvVQZPcokuOycud03oIt44
-         eHlNjNuF1GsFPGU4371sCaIJ+yeJzRTrhUh+6FF1MgiE1Nljs0WSmX2TpjhtDUpsJR
-         1R4b5v38swtVFVrkrLKI3D/x66X1DPStxH9QM6k8IA6hgrksJSTHmndUDEOeIxhCLz
-         0Sc0GJ3LpV5/095jW0z4qAAu6Rq2yw3aWEu/irt/vc2y2X/zSdsxN8gBAs0sfGGeHj
-         GDUvRX2hJq1rVSOthLdyKh8gddj6itI+bJSdjbjiRqYesWFPf5ikVRQJ+t8SGMIAIY
-         +1BWsiJOZhiLA==
-Date:   Mon, 6 Mar 2023 09:18:43 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 02/10] mfd: rt5033: Fix chip revision readout
-Message-ID: <20230306091843.GE9667@google.com>
-References: <cover.1677620677.git.jahau@rocketmail.com>
- <a667a64d0cbeef00baed2d4b117ba9f50eaf3988.1677620677.git.jahau@rocketmail.com>
- <20230305104704.GG2574592@google.com>
- <96c54beb-228c-d606-5b9c-613ee2bc5e70@rocketmail.com>
+        with ESMTP id S229813AbjCFJ1K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 04:27:10 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE7D22DFF
+        for <linux-pm@vger.kernel.org>; Mon,  6 Mar 2023 01:27:07 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id s23so5958593uae.5
+        for <linux-pm@vger.kernel.org>; Mon, 06 Mar 2023 01:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678094826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zhS37jgP1oSKDQocHToehtxxyITsXcT+owYbmJ0INPU=;
+        b=4t56tDC/G+oovfdiW5rxFZCyYsIfw/WmqyS1QgC9FKLy44l3wGWvPNPrKaEI6mAvIe
+         ELD4XcqhLxDYPapof54et2VAMu4KrZDT7kUwAj9Hrs6wS7u5XxJjEWAUEaYcKiG/Zn39
+         LbYGMfhwfIZ4JLhat+2hMudxk6CM3YJdkOXGSLSfaulwOvc6XpKpqL1F+6VUjzq55xQy
+         y2JSmDTTT0sTDy7JHDzT8MfLrGyiRKAqCmO15rXFhnzLrphpS2zddGj0+LqedgxxL0hV
+         0N2PQS1jMZSutIFgUay8tQ8K/XSrnWtb4nxvfgnG2GPyXj9/IYPjvJKK9fj6DB19DqZ2
+         l4GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678094826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zhS37jgP1oSKDQocHToehtxxyITsXcT+owYbmJ0INPU=;
+        b=OIX3DeZ1h47U9voBkcr5OmsZ70YIuHvZVyienKmlNdx1DoncQDHaaRMj8m1pWdtyNs
+         HQUmDI5GekZCnsj53v/YtadmOHc619ZCP08dZx2EOJvWRLHLeQ6g/T6baFG1no2YolAx
+         NOIfX0C88aSAdskButOcWolxcEjHz5yKOktyxrWYVpOT1d4qzoQFQy4JvFp9MgoRvxpm
+         H7ig+sjm0ryV7giPNRBkTm2lElpFysY9ms03issUywhVQPMXLP4l3+RlWLgdla6exaKL
+         3lq9hzG6VNLHyY4dEymv+F4j1PsMwq0dRFyG1ck+0C4FNSftYGfS9uQN6Qx99g7BO1vx
+         ijYg==
+X-Gm-Message-State: AO0yUKVFdu92dCayxz979Vz6M91HPOLk264cUq2xHq2W9aCMobqwAP0M
+        kJhgILLggRL28b24qW5cvFbihhIb7XF36zXZiVjUwQ==
+X-Google-Smtp-Source: AK7set+CHskqiSsm+6Cmi6WHgSSwP4myqJ1YcVc2LU1gm2fnO90Xr69irT8NxRARr/yjxDC8cjTLGID26SceOFHbVxE=
+X-Received: by 2002:a9f:3104:0:b0:687:afc8:ffb9 with SMTP id
+ m4-20020a9f3104000000b00687afc8ffb9mr6636458uab.2.1678094826467; Mon, 06 Mar
+ 2023 01:27:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <96c54beb-228c-d606-5b9c-613ee2bc5e70@rocketmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230228215433.3944508-1-robh@kernel.org>
+In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 10:26:55 +0100
+Message-ID: <CAMRc=Mfouay5Z6M6VYnBX7Pe+ahTVfvfQsJ+kToWAwZJxZWJZg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 05 Mar 2023, Jakob Hauser wrote:
+On Tue, Feb 28, 2023 at 10:54=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+>
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
+/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
+/spi[0-9] {/spi {/'
+>
+> With this, a few errors in examples were exposed and fixed.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
+>  .../bindings/chrome/google,cros-ec-typec.yaml     |  2 +-
+>  .../chrome/google,cros-kbd-led-backlight.yaml     |  2 +-
+>  .../devicetree/bindings/clock/ti,lmk04832.yaml    |  2 +-
+>  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
+>  .../bindings/display/bridge/anx6345.yaml          |  2 +-
+>  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
+>  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
+>  .../bindings/display/bridge/ps8640.yaml           |  2 +-
+>  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
+>  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
+>  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
+>  .../bindings/display/solomon,ssd1307fb.yaml       |  4 ++--
+>  .../devicetree/bindings/eeprom/at25.yaml          |  2 +-
+>  .../bindings/extcon/extcon-usbc-cros-ec.yaml      |  2 +-
+>  .../bindings/extcon/extcon-usbc-tusb320.yaml      |  2 +-
+>  .../devicetree/bindings/gpio/gpio-pca9570.yaml    |  2 +-
+>  .../devicetree/bindings/gpio/gpio-pca95xx.yaml    |  8 ++++----
 
-> Hi Lee,
-> 
-> On 05.03.23 11:47, Lee Jones wrote:
-> > On Tue, 28 Feb 2023, Jakob Hauser wrote:
-> > 
-> > > After reading the data from the DEVICE_ID register, mask 0x0f needs to be
-> > > applied to extract the revision of the chip [1].
-> > > 
-> > > The other part of the DEVICE_ID register, mask 0xf0, is a vendor identification
-> > > code. That's how it is set up at similar products of Richtek, e.g. RT9455 [2]
-> > > page 21 top.
-> > > 
-> > > [1] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/mfd/rt5033_core.c#L484
-> > > [2] https://www.richtek.com/assets/product_file/RT9455/DS9455-00.pdf
-> > > 
-> > > Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> > > ---
-> > >   drivers/mfd/rt5033.c               | 8 +++++---
-> > >   include/linux/mfd/rt5033-private.h | 4 ++++
-> > >   2 files changed, 9 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/mfd/rt5033.c b/drivers/mfd/rt5033.c
-> > > index 8029d444b794..d32467174cb5 100644
-> > > --- a/drivers/mfd/rt5033.c
-> > > +++ b/drivers/mfd/rt5033.c
-> > > @@ -55,7 +55,8 @@ static const struct regmap_config rt5033_regmap_config = {
-> > >   static int rt5033_i2c_probe(struct i2c_client *i2c)
-> > >   {
-> > >   	struct rt5033_dev *rt5033;
-> > > -	unsigned int dev_id;
-> > > +	unsigned int data;
-> > 
-> > In terms of nomenclature, this is a regression.
-> > 
-> > 'data' is a terrible variable name.  Why not keep it as-is?
-> 
-> While not having a datasheet for RT5033 available, in similar products like
-> RT9455 the register is called "Device ID", the first part of that is
-> "VENDOR_ID" and the second part "CHIP_REV", [1] page 23 top. Or in RT5036
-> preliminary data sheet the register is called "ID", the first part
-> "VENDOR_ID" and the second part "CHIP_REV_ID", [2] page 27 top.
-> 
-> I wanted to avoid confusion between "dev_id" and "chip_rev". Therefore in
-> the patch it's written as getting some "data" from the register and extract
-> "chip_rev" from that data.
-> 
-> I could change it to "reg_data"? Or something in that direction? I still
-> think that getting "chip_rev" out of "dev_id" would be confusing.
-
-You're reading from a register called RT5033_REG_DEVICE_ID.  I don't see
-any reason why the variable you read into can't reflect that.
-
-> [1] https://www.richtek.com/assets/product_file/RT9455/DS9455-00.pdf
-> [2] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
-> 
-> > 
-> > > +	unsigned int chip_rev;
-> > >   	int ret;
-> > >   	rt5033 = devm_kzalloc(&i2c->dev, sizeof(*rt5033), GFP_KERNEL);
-> > > @@ -73,12 +74,13 @@ static int rt5033_i2c_probe(struct i2c_client *i2c)
-> > >   		return PTR_ERR(rt5033->regmap);
-> > >   	}
-> > > -	ret = regmap_read(rt5033->regmap, RT5033_REG_DEVICE_ID, &dev_id);
-> > > +	ret = regmap_read(rt5033->regmap, RT5033_REG_DEVICE_ID, &data);
-> > >   	if (ret) {
-> > >   		dev_err(&i2c->dev, "Device not found\n");
-> > >   		return -ENODEV;
-> > >   	}
-> > > -	dev_info(&i2c->dev, "Device found Device ID: %04x\n", dev_id);
-> > > +	chip_rev = data & RT5033_CHIP_REV_MASK;
-> > > +	dev_info(&i2c->dev, "Device found (rev. %d)\n", chip_rev);
-> > 
-> > Why not print both?
-> 
-> As described above, the data "dev_id" consists of a first part which is a
-> vendor ID and a second part which is the chip revision.
-> 
-> The vendor ID is of no interest here. These bits[7:4] contain binary value
-> 1000 (decimal value 8) and I'd expect that to be the same on all RT5033
-> devices.
-> 
-> Contrary to this, the chip revision is an important information. The
-> downstream Android driver applies some quirks depending on the chip
-> revision. This seemed not yet necessary in the upstream driver. So far I've
-> seen chip rev. 6 on samsung-serranove & samsung-e7 and chip rev. 5 on
-> samsung-grandmax & samsung-fortuna, the behavior of the chip revisions are
-> slightly different.
-> 
-> Accordingly, the downstream Android driver as well reads [3] and prints [4]
-> the chip revision only – confusingly calling it "rev id".
-> [3] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/mfd/rt5033_core.c#L484
-> [4] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/mfd/rt5033_core.c#L486
-> 
-> > >   	ret = regmap_add_irq_chip(rt5033->regmap, rt5033->irq,
-> > >   			IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> > > diff --git a/include/linux/mfd/rt5033-private.h b/include/linux/mfd/rt5033-private.h
-> > > index 2d1895c3efbf..d18cd4572208 100644
-> > > --- a/include/linux/mfd/rt5033-private.h
-> > > +++ b/include/linux/mfd/rt5033-private.h
-> > > @@ -71,6 +71,10 @@ enum rt5033_reg {
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > g
-> 
-> What does the "g" mean, was this on purpose? I didn't get the meaning of it.
-> 
-> > >   /* RT5033 CHGCTRL2 register */
-> > >   #define RT5033_CHGCTRL2_CV_MASK		0xfc
-> > > +/* RT5033 DEVICE_ID register */
-> > > +#define RT5033_VENDOR_ID_MASK		0xf0
-> > > +#define RT5033_CHIP_REV_MASK		0x0f
-> > > +
-> > >   /* RT5033 CHGCTRL3 register */
-> > >   #define RT5033_CHGCTRL3_CFO_EN_MASK	0x40
-> > >   #define RT5033_CHGCTRL3_TIMER_MASK	0x38
-> > > -- 
-> > > 2.39.1
-> > > 
-> > 
-> 
-> Kind regards,
-> Jakob
-
--- 
-Lee Jones [李琼斯]
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
