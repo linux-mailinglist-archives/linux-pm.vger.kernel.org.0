@@ -2,174 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AB46AB9CA
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 10:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148656AB9EC
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 10:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjCFJ1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Mar 2023 04:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S230024AbjCFJeA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Mar 2023 04:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCFJ1K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 04:27:10 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE7D22DFF
-        for <linux-pm@vger.kernel.org>; Mon,  6 Mar 2023 01:27:07 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id s23so5958593uae.5
-        for <linux-pm@vger.kernel.org>; Mon, 06 Mar 2023 01:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678094826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zhS37jgP1oSKDQocHToehtxxyITsXcT+owYbmJ0INPU=;
-        b=4t56tDC/G+oovfdiW5rxFZCyYsIfw/WmqyS1QgC9FKLy44l3wGWvPNPrKaEI6mAvIe
-         ELD4XcqhLxDYPapof54et2VAMu4KrZDT7kUwAj9Hrs6wS7u5XxJjEWAUEaYcKiG/Zn39
-         LbYGMfhwfIZ4JLhat+2hMudxk6CM3YJdkOXGSLSfaulwOvc6XpKpqL1F+6VUjzq55xQy
-         y2JSmDTTT0sTDy7JHDzT8MfLrGyiRKAqCmO15rXFhnzLrphpS2zddGj0+LqedgxxL0hV
-         0N2PQS1jMZSutIFgUay8tQ8K/XSrnWtb4nxvfgnG2GPyXj9/IYPjvJKK9fj6DB19DqZ2
-         l4GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678094826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zhS37jgP1oSKDQocHToehtxxyITsXcT+owYbmJ0INPU=;
-        b=OIX3DeZ1h47U9voBkcr5OmsZ70YIuHvZVyienKmlNdx1DoncQDHaaRMj8m1pWdtyNs
-         HQUmDI5GekZCnsj53v/YtadmOHc619ZCP08dZx2EOJvWRLHLeQ6g/T6baFG1no2YolAx
-         NOIfX0C88aSAdskButOcWolxcEjHz5yKOktyxrWYVpOT1d4qzoQFQy4JvFp9MgoRvxpm
-         H7ig+sjm0ryV7giPNRBkTm2lElpFysY9ms03issUywhVQPMXLP4l3+RlWLgdla6exaKL
-         3lq9hzG6VNLHyY4dEymv+F4j1PsMwq0dRFyG1ck+0C4FNSftYGfS9uQN6Qx99g7BO1vx
-         ijYg==
-X-Gm-Message-State: AO0yUKVFdu92dCayxz979Vz6M91HPOLk264cUq2xHq2W9aCMobqwAP0M
-        kJhgILLggRL28b24qW5cvFbihhIb7XF36zXZiVjUwQ==
-X-Google-Smtp-Source: AK7set+CHskqiSsm+6Cmi6WHgSSwP4myqJ1YcVc2LU1gm2fnO90Xr69irT8NxRARr/yjxDC8cjTLGID26SceOFHbVxE=
-X-Received: by 2002:a9f:3104:0:b0:687:afc8:ffb9 with SMTP id
- m4-20020a9f3104000000b00687afc8ffb9mr6636458uab.2.1678094826467; Mon, 06 Mar
- 2023 01:27:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20230228215433.3944508-1-robh@kernel.org>
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 10:26:55 +0100
-Message-ID: <CAMRc=Mfouay5Z6M6VYnBX7Pe+ahTVfvfQsJ+kToWAwZJxZWJZg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
+        with ESMTP id S230022AbjCFJd7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 04:33:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF46AB44F;
+        Mon,  6 Mar 2023 01:33:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BBF360C24;
+        Mon,  6 Mar 2023 09:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7037C433EF;
+        Mon,  6 Mar 2023 09:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678095234;
+        bh=rSbVlDvA0jl2+1DdaAOATpB+OkCH45l4wsx5jB/wzTY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fAi/3R+QQgtVZ8tI+kiUfYNfcLV+HA9q6LUDYpqvhhMtP8mbasNUF0eKSDF8AmiUy
+         DOKGbmAoESXz7sYqeVmrbpa6o/fP3ziYt29zZFt4xXPJp/bD+Sbi1emB64/U48nGKp
+         i1BDPW6iZHlIpnHry6dVwpp9VjCr3ixaezuIs+pmf5fSCgsB/7aci5dKRoO2rKxwVN
+         AxsbTCfPDmNeCACZpQ/xmsm6A7Wx7f8OoV5DIPtqrmXOEhdlSe9E9p7wHlh/J2lv6d
+         yUr9laRp93UNN3PGd/cLp40htMU55q20PUw/pjAs6clh0Xc/pVY90pC+iElgCVGxNs
+         cjC8SyuqRN/tA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pZ7Eo-0003jw-Bk; Mon, 06 Mar 2023 10:34:34 +0100
+Date:   Mon, 6 Mar 2023 10:34:34 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/23] interconnect: qcom: sm8550: fix registration
+ race
+Message-ID: <ZAWzqtWt5yBlYpQU@hovoldconsulting.com>
+References: <20230306075651.2449-1-johan+linaro@kernel.org>
+ <20230306075651.2449-14-johan+linaro@kernel.org>
+ <ZAWsUrlrOfmmNBy3@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAWsUrlrOfmmNBy3@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:54=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
-e:
->
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
->
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/spi[0-9] {/spi {/'
->
-> With this, a few errors in examples were exposed and fixed.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> ---
->  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
->  .../bindings/chrome/google,cros-ec-typec.yaml     |  2 +-
->  .../chrome/google,cros-kbd-led-backlight.yaml     |  2 +-
->  .../devicetree/bindings/clock/ti,lmk04832.yaml    |  2 +-
->  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
->  .../bindings/display/bridge/anx6345.yaml          |  2 +-
->  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
->  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
->  .../bindings/display/bridge/ps8640.yaml           |  2 +-
->  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
->  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
->  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
->  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
->  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
->  .../bindings/display/solomon,ssd1307fb.yaml       |  4 ++--
->  .../devicetree/bindings/eeprom/at25.yaml          |  2 +-
->  .../bindings/extcon/extcon-usbc-cros-ec.yaml      |  2 +-
->  .../bindings/extcon/extcon-usbc-tusb320.yaml      |  2 +-
->  .../devicetree/bindings/gpio/gpio-pca9570.yaml    |  2 +-
->  .../devicetree/bindings/gpio/gpio-pca95xx.yaml    |  8 ++++----
+On Mon, Mar 06, 2023 at 11:03:14AM +0200, Abel Vesa wrote:
+> On 23-03-06 08:56:41, Johan Hovold wrote:
+> > The current interconnect provider registration interface is inherently
+> > racy as nodes are not added until the after adding the provider. This
+> > can specifically cause racing DT lookups to fail.
+> > 
+> > Switch to using the new API where the provider is not registered until
+> > after it has been fully initialised.
+> > 
+> > Fixes: e6f0d6a30f73 ("interconnect: qcom: Add SM8550 interconnect provider driver")
+> > Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> 
+> Any changes since v1 or is it just a resend? 
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Please see the cover letter:
+
+	https://lore.kernel.org/lkml/20230306075651.2449-1-johan+linaro@kernel.org/
+
+Only the first patch of the series was updated in v2.
+
+Johan
