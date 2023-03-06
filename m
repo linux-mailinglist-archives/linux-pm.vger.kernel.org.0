@@ -2,166 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5986AB78D
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 08:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99DD6AB866
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 09:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjCFH5w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Mar 2023 02:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S229998AbjCFIdp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Mar 2023 03:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCFH5l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 02:57:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A52B1F903;
-        Sun,  5 Mar 2023 23:57:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7764460C6F;
-        Mon,  6 Mar 2023 07:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78246C4FF06;
-        Mon,  6 Mar 2023 07:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678089457;
-        bh=a3kuHjgYNyulLZAsEDFoN+UatIjlAmI+HwT51CVFQPY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nCrGJEX21WXgcEsGAk4UFHACAs4RlkJw1HpncMmUmsbc89kHB6gA8p6ve9V+R0SXS
-         nbdYLPsPtWWVHGRD4xMXnWkddnVD+GefeSJhWh0kjvLhV7igS0oaOZTJUsADKQnizE
-         JBLjdwMO/QSJHMvlMa9qFuOP6amlCqLPtcCsaj7o7e50+kVjErPAkW7UMgfWfiiiJ9
-         Hbb0EiHc/vLTvOkb5U2bp95rGC7vOYP2gB51Ps+M9zjbWXeVXeJzsCYoH+Y5Gubmes
-         8AC4buwsCi7bUG7Xw0Hj5pkhdo4JXVwLB6SRUmNmsmvnIucW3oQSvJafugKh+FmNTP
-         xvmzLcbitTCLg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pZ5jd-0000iy-PL; Mon, 06 Mar 2023 08:58:17 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Jonathan Hunter" <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 23/23] interconnect: drop unused icc_link_destroy() interface
-Date:   Mon,  6 Mar 2023 08:56:51 +0100
-Message-Id: <20230306075651.2449-24-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306075651.2449-1-johan+linaro@kernel.org>
-References: <20230306075651.2449-1-johan+linaro@kernel.org>
+        with ESMTP id S229963AbjCFIdn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 03:33:43 -0500
+X-Greylist: delayed 966 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 00:33:03 PST
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3ED1E2A2
+        for <linux-pm@vger.kernel.org>; Mon,  6 Mar 2023 00:33:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
+         content-transfer-encoding:content-type:mime-version:from;
+        bh=iGJBerep9CUnwc0kKc070FLg5wgjahdY5flMGzZYQMs=;
+        b=oDYibHiF3QQbdSnLfVFRXWqS6z3NQmb6kugL8YV+AzvXesLHyr5JzoQv36TlUtoc6W5KCotN1l9wN
+         9LSOB4Bu9Yfgb0XpMplMCVfXibebalo7a5aESxI1lFy0L3DA6RZo6UFgR79W8gl98jQrxQ/tLvd2T2
+         0xEQnuRgzH1ORWF+wpRq+raboR/TqFqi3nosbBYytoNMkARO5GE2FASMRvbgozacXT968pNevzID08
+         kd2Bb6hh7pzuv819gTpRFHFjwmhc4+RnlmqnZW8aNjXY3z24ty79Y1uQG7spYocRbf484LhNNLEwf4
+         6CAVA7hl0v6jQA7FXN1mdH2h85/uHYw==
+X-MSG-ID: 412d5329-bbf7-11ed-829c-0050569d2c73
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 06 Mar 2023 09:16:54 +0100
+From:   Robin van der Gracht <robin@protonic.nl>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+Organization: Protonic Holland
+Reply-To: robin@protonic.nl
+Mail-Reply-To: robin@protonic.nl
+In-Reply-To: <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
+References: <20230228215433.3944508-1-robh@kernel.org>
+ <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
+Message-ID: <61190cb766083d73ef3b1455dcf3ff61@protonic.nl>
+X-Sender: robin@protonic.nl
+User-Agent: Roundcube Webmail/1.3.1 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that the link array is deallocated when destroying nodes and the
-explicit link removal has been dropped from the exynos driver there are
-no further users of and no need for the icc_link_destroy() interface.
+> From: Rob Herring <robh@kernel.org>
+> Date: Tue, Feb 28, 2023 at 10:54 PM
+> Subject: [PATCH] dt-bindings: Fix SPI and I2C bus node names in 
+> examples
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: <devicetree@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+> Benson Leung <bleung@chromium.org>, Guenter Roeck
+> <groeck@chromium.org>, Stephen Boyd <sboyd@kernel.org>, Andrzej Hajda
+> <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>,
+> Robert Foss <rfoss@kernel.org>, Thierry Reding
+> <thierry.reding@gmail.com>, Sam Ravnborg <sam@ravnborg.org>, MyungJoo
+> Ham <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+> Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+> <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+> <lee@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, David S.
+> Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+> Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+> Wolfgang Grandegger <wg@grandegger.com>, Kalle Valo
+> <kvalo@kernel.org>, Sebastian Reichel <sre@kernel.org>, Mark Brown
+> <broonie@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+> <linux-clk@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+> <linux-gpio@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+> <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+> <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+> <linux-wireless@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+> <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>
+> 
+> 
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+> 
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e
+> 's/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e
+> 's/spi[0-9] {/spi {/'
+> 
+> With this, a few errors in examples were exposed and fixed.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/interconnect/core.c           | 46 ---------------------------
- include/linux/interconnect-provider.h |  6 ----
- 2 files changed, 52 deletions(-)
+....
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index fd12f109c05e..6315d4256ac1 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -862,52 +862,6 @@ int icc_link_create(struct icc_node *node, const int dst_id)
- }
- EXPORT_SYMBOL_GPL(icc_link_create);
- 
--/**
-- * icc_link_destroy() - destroy a link between two nodes
-- * @src: pointer to source node
-- * @dst: pointer to destination node
-- *
-- * Return: 0 on success, or an error code otherwise
-- */
--int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
--{
--	struct icc_node **new;
--	size_t slot;
--	int ret = 0;
--
--	if (IS_ERR_OR_NULL(src))
--		return -EINVAL;
--
--	if (IS_ERR_OR_NULL(dst))
--		return -EINVAL;
--
--	mutex_lock(&icc_lock);
--
--	for (slot = 0; slot < src->num_links; slot++)
--		if (src->links[slot] == dst)
--			break;
--
--	if (WARN_ON(slot == src->num_links)) {
--		ret = -ENXIO;
--		goto out;
--	}
--
--	src->links[slot] = src->links[--src->num_links];
--
--	new = krealloc(src->links, src->num_links * sizeof(*src->links),
--		       GFP_KERNEL);
--	if (new)
--		src->links = new;
--	else
--		ret = -ENOMEM;
--
--out:
--	mutex_unlock(&icc_lock);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(icc_link_destroy);
--
- /**
-  * icc_node_add() - add interconnect node to interconnect provider
-  * @node: pointer to the interconnect node
-diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-index b9af9016a95e..e6d8aca6886d 100644
---- a/include/linux/interconnect-provider.h
-+++ b/include/linux/interconnect-provider.h
-@@ -118,7 +118,6 @@ int icc_std_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- struct icc_node *icc_node_create(int id);
- void icc_node_destroy(int id);
- int icc_link_create(struct icc_node *node, const int dst_id);
--int icc_link_destroy(struct icc_node *src, struct icc_node *dst);
- void icc_node_add(struct icc_node *node, struct icc_provider *provider);
- void icc_node_del(struct icc_node *node);
- int icc_nodes_remove(struct icc_provider *provider);
-@@ -150,11 +149,6 @@ static inline int icc_link_create(struct icc_node *node, const int dst_id)
- 	return -ENOTSUPP;
- }
- 
--static inline int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
--{
--	return -ENOTSUPP;
--}
--
- static inline void icc_node_add(struct icc_node *node, struct icc_provider *provider)
- {
- }
--- 
-2.39.2
+>  86 files changed, 110 insertions(+), 103 deletions(-)
+> 
+> diff --git 
+> a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> index fc4873deb76f..286e726cd052 100644
+> --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> @@ -72,7 +72,7 @@ examples:
+>      #include <dt-bindings/interrupt-controller/irq.h>
+>      #include <dt-bindings/input/input.h>
+>      #include <dt-bindings/leds/common.h>
+> -    i2c1 {
+> +    i2c {
+>              #address-cells = <1>;
+>              #size-cells = <0>;
 
+Acked-by: Robin van der Gracht <robin@protonic.nl>
