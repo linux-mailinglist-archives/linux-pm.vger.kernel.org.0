@@ -2,109 +2,419 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDAA6ABAA6
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 11:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD756ABACA
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 11:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjCFKEF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Mar 2023 05:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        id S230211AbjCFKGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Mar 2023 05:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjCFKEC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 05:04:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8527412844;
-        Mon,  6 Mar 2023 02:04:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BA6560D36;
-        Mon,  6 Mar 2023 10:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77831C433EF;
-        Mon,  6 Mar 2023 10:03:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678097039;
-        bh=NqMbYyvssKAx59ycEdKMFhaWpef5XSN1pFTGQ0DPAQ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KDfIzHRqSbIPRxQ5kEQXWQNFgsmQ/3ugZts1z8YigEBSh4faCn+rLeqBU6w2tFriP
-         BNIu+8YydqPo4riorBbgxOS7CtqVCqLa6wD9kBbSsh10BujzmsaKnO9x5rtfEEB5ZP
-         CrjBgY61IiuUQIyOL7tTJ8wwjay4MuazLBK/8lIjUw1v5rTby3vl6CMMhl9CV315FM
-         ugCoVWCZAf3kgg1y9ZrCdpSVrR/yFzmlRd4GGXoezELkFnR8jeZcGIeQBDMoxgdlTo
-         hc4aTM3O+wUqG2rTJguyh0O/y219zleqkiBzP4gP+USDs8yUueXwlNh2AzJzEVyu+M
-         yG3K63UQfyD7Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pZ7hv-0007OS-4q; Mon, 06 Mar 2023 11:04:39 +0100
-Date:   Mon, 6 Mar 2023 11:04:39 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        with ESMTP id S230247AbjCFKGs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 05:06:48 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E9023861
+        for <linux-pm@vger.kernel.org>; Mon,  6 Mar 2023 02:06:42 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id f16so8983818ljq.10
+        for <linux-pm@vger.kernel.org>; Mon, 06 Mar 2023 02:06:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678097201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vSHdaKculyGdk9TWc/g0WOgJhrthVQ0b0D1tfsFsnV8=;
+        b=J1qvRfJnFDYp+T8WLdeNzkJjOAJ+LhMZXMKPi5kcFjG8wNhotY8j+zR9PyctsX1L7n
+         oLuGcPjjZLQInf+oBercrVWKsZBH4vI8w9X0DLVClFQqTx/mEm3DxoFtGUHOFeeuJwl5
+         uQ2AqIJGoEfRPvB9G8ng6l3aUcQCYnTo5JxTefh9FU2+kHaWnbbro50C+NHwa+AMmU3Q
+         9gEYd+FbSyhUQfY8ca5dngpkeTLRnC9qFkT5nM8jYIAlbNp9FYcVwFTsykqKsC3vIE0Z
+         7lBOOAGo7gs7bvqkAIlViqKcF03bdrMkudG8a4iSTJcGmW4K7LQyPTXgn8KLZSl2hSt/
+         eIug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678097201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vSHdaKculyGdk9TWc/g0WOgJhrthVQ0b0D1tfsFsnV8=;
+        b=pRhp7X8oodkvtsnVsP5UD7ktKHjiwCA4Fr8K1Wi9sHZkQMa1XmKa8SxlajwVNYOJX/
+         ZLwQW5/SHToaA+bOThww4UAMUKtD39k+wVT0v4UC+VaK51NA35fdDhlmHWd/bovsvzAh
+         q8kb/P3L6Pdyuw0eOfnT9XHrA6mA7uOgvTVuTYGzCWNtqG6JkdEe8RdJB1b+aDjxb6u4
+         4ZinjkU/Tmr6/995SMtLWF/LdLOr4C7fgYAYgHrTncA4JGtaooWml6HPeTIdR2TOyh4r
+         a2f+NqfoxJiDbxBB4hKu9a+N12SRlSswd7OSwImZ1xhq8Q1BmOE9T0BHUM6v5fOUwQ98
+         hXXg==
+X-Gm-Message-State: AO0yUKVOIa+O3NUeRNL53oUGlmScB/Se4IfQxYRogHbbe8fmSs99dJIf
+        Em4D5rc+uB2zZzZ/VeGc3IalR1+mnI+OwxTJPgs=
+X-Google-Smtp-Source: AK7set+XgTlwmo0mNTH8nMtktBeSIi+a+1Z0kW5x39YYCqZw5ywrOk00IvzFKJLjE9Y/MLMYL3DwFg==
+X-Received: by 2002:a2e:97cc:0:b0:293:153c:dc9f with SMTP id m12-20020a2e97cc000000b00293153cdc9fmr2672145ljj.2.1678097201138;
+        Mon, 06 Mar 2023 02:06:41 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id m8-20020a2e8708000000b00295d62f0a0fsm1621055lji.122.2023.03.06.02.06.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:06:40 -0800 (PST)
+Message-ID: <56b5e7ff-2dbe-74da-c325-5e5cf546b1ff@linaro.org>
+Date:   Mon, 6 Mar 2023 11:06:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/3] soc: qcom: icc-bwmon: Handle global registers
+ correctly
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 13/23] interconnect: qcom: sm8550: fix registration
- race
-Message-ID: <ZAW6t7LKCBubfnx/@hovoldconsulting.com>
-References: <20230306075651.2449-1-johan+linaro@kernel.org>
- <20230306075651.2449-14-johan+linaro@kernel.org>
- <ZAWsUrlrOfmmNBy3@linaro.org>
- <ZAWzqtWt5yBlYpQU@hovoldconsulting.com>
- <ZAW01RH/gLwlueoT@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAW01RH/gLwlueoT@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
+ <20230304-topic-ddr_bwmon-v1-2-e563837dc7d1@linaro.org>
+ <a85c9c5d-b57d-9212-0e24-1991b5b580b3@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <a85c9c5d-b57d-9212-0e24-1991b5b580b3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 11:39:33AM +0200, Abel Vesa wrote:
-> On 23-03-06 10:34:34, Johan Hovold wrote:
-> > On Mon, Mar 06, 2023 at 11:03:14AM +0200, Abel Vesa wrote:
-> > > On 23-03-06 08:56:41, Johan Hovold wrote:
-> > > > The current interconnect provider registration interface is inherently
-> > > > racy as nodes are not added until the after adding the provider. This
-> > > > can specifically cause racing DT lookups to fail.
-> > > > 
-> > > > Switch to using the new API where the provider is not registered until
-> > > > after it has been fully initialised.
-> > > > 
-> > > > Fixes: e6f0d6a30f73 ("interconnect: qcom: Add SM8550 interconnect provider driver")
-> > > > Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-> > > > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > > ---
-> > > 
-> > > Any changes since v1 or is it just a resend? 
-> > 
-> > Please see the cover letter:
-> > 
-> > 	https://lore.kernel.org/lkml/20230306075651.2449-1-johan+linaro@kernel.org/
-> > 
-> > Only the first patch of the series was updated in v2.
+
+
+On 5.03.2023 16:06, Krzysztof Kozlowski wrote:
+> On 04/03/2023 16:39, Konrad Dybcio wrote:
+>> The BWMON hardware has two sets of registers: one for the monitor itself
+>> and one called "global". It has what seems to be some kind of a head
+>> switch and an interrupt control register. It's usually 0x200 in size.
+>>
+>> On fairly recent SoCs (with the starting point seemingly being moving
+>> the OSM programming to the firmware) these two register sets are
+>> contiguous and overlapping, like this (on sm8450):
+>>
+>> /* notice how base.start == global_base.start+0x100 */
+>> reg = <0x90b6400 0x300>, <0x90b6300 0x200>;
+>> reg-names = "base", "global_base";
+>>
+>> Which led to some confusion and the assumption that since the
+>> "interesting" global registers begin right after global_base+0x100,
+>> there's no need to map two separate regions and one can simply subtract
+>> 0x100 from the offsets.
+>>
+>> This is however not the case for anything older than SDM845, as the
+>> global region can appear in seemingly random spots on the register map.
+>>
+>> Add support for it to let bwmon function on older SoCs like MSM8998 and
+>> allow operation with just one set of registers for newer platforms.
+>>
+>> Fixes: b9c2ae6cac40 ("soc: qcom: icc-bwmon: Add bandwidth monitoring driver")
 > 
-> Right, my bad. Though I wasn't CC'ed on that as well.
+> You did not describe any bug to be fixed. Adding support for different
+> devices with different memory layour is a feature, not bugfix. If this
+> is a bugfix, please share what exactly is broken on sdm845?
+The driver was completely broken for MSM8998, even though it
+had a compatible specifically for that SoC.
 
-Yeah, sorry about that. I copied the CC list from v1 and forgot to make
-sure that all reviewers were copied on the cover letter.
+> 
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/soc/qcom/icc-bwmon.c | 136 +++++++++++++++++++++++++++++++++++++------
+>>  1 file changed, 118 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+>> index d07be3700db6..9ef632d80ee3 100644
+>> --- a/drivers/soc/qcom/icc-bwmon.c
+>> +++ b/drivers/soc/qcom/icc-bwmon.c
+>> @@ -34,14 +34,27 @@
+>>  /* Internal sampling clock frequency */
+>>  #define HW_TIMER_HZ				19200000
+>>  
+>> -#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x008
+>> -#define BWMON_V4_GLOBAL_IRQ_ENABLE		0x00c
+>> +#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x108
+>> +#define BWMON_V4_GLOBAL_IRQ_ENABLE		0x10c
+>>  /*
+>>   * All values here and further are matching regmap fields, so without absolute
+>>   * register offsets.
+>>   */
+>>  #define BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE	BIT(0)
+>>  
+>> +/*
+>> + * Starting with SDM845, the BWMON4 register space has changed a bit:
+>> + * the global registers were jammed into the beginning of the monitor region.
+>> + * To keep the proper offsets, one would have to map <GLOBAL_BASE 0x200> and
+>> + * <GLOBAL_BASE+0x100 0x300>, which is straight up wrong.
+>> + * To facilitate for that, while allowing the older, arguably more proper
+>> + * implementations to work, offset the global registers by -0x100 to avoid
+>> + * having to map half of the global registers twice.
+>> + */
+>> +#define BWMON_V4_845_OFFSET			0x100
+> 
+> MSM8998? It's a bit confusing to keep calling it 845 while it is for
+> MSM8998 variant... or it's not anymore for MSM8998?
+No, it's for 845 and up.
 
-Johan
+> 
+> 
+>> +#define BWMON_V4_GLOBAL_IRQ_CLEAR_845		(BWMON_V4_GLOBAL_IRQ_CLEAR - BWMON_V4_845_OFFSET)
+>> +#define BWMON_V4_GLOBAL_IRQ_ENABLE_845		(BWMON_V4_GLOBAL_IRQ_ENABLE - BWMON_V4_845_OFFSET)
+>> +
+>>  #define BWMON_V4_IRQ_STATUS			0x100
+>>  #define BWMON_V4_IRQ_CLEAR			0x108
+>>  
+>> @@ -118,8 +131,10 @@
+>>  #define BWMON_NEEDS_FORCE_CLEAR			BIT(1)
+>>  
+>>  enum bwmon_fields {
+>> -	F_GLOBAL_IRQ_CLEAR,
+>> -	F_GLOBAL_IRQ_ENABLE,
+>> +	/* Fields used only on >=SDM845 with BWMON_HAS_GLOBAL_IRQ */
+>> +	F_GLB_IRQ_CLEAR,
+>> +	F_GLB_IRQ_ENABLE,
+> 
+> I am not sure what's the benefit of this rename.
+I need to somehow differentiate the members of enum bwmon_fields
+and enum bwmon_global_fields, keeping the "_GLOBAL" in global_fields
+seems to make the most sense, imo.
+
+> 
+>> +
+>>  	F_IRQ_STATUS,
+>>  	F_IRQ_CLEAR,
+>>  	F_IRQ_ENABLE,
+>> @@ -145,6 +160,13 @@ enum bwmon_fields {
+>>  	F_NUM_FIELDS
+>>  };
+>>  
+>> +enum bwmon_global_fields {
+>> +	F_GLOBAL_IRQ_CLEAR,
+>> +	F_GLOBAL_IRQ_ENABLE,
+>> +
+>> +	F_NUM_GLOBAL_FIELDS
+>> +};
+>> +
+>>  struct icc_bwmon_data {
+>>  	unsigned int sample_ms;
+>>  	unsigned int count_unit_kb; /* kbytes */
+>> @@ -157,6 +179,9 @@ struct icc_bwmon_data {
+>>  
+>>  	const struct regmap_config *regmap_cfg;
+>>  	const struct reg_field *regmap_fields;
+>> +
+>> +	const struct regmap_config *global_regmap_cfg;
+>> +	const struct reg_field *global_regmap_fields;
+>>  };
+>>  
+>>  struct icc_bwmon {
+>> @@ -166,6 +191,7 @@ struct icc_bwmon {
+>>  
+>>  	struct regmap *regmap;
+>>  	struct regmap_field *regs[F_NUM_FIELDS];
+>> +	struct regmap_field *global_regs[F_NUM_FIELDS];
+>>  
+>>  	unsigned int max_bw_kbps;
+>>  	unsigned int min_bw_kbps;
+>> @@ -175,8 +201,8 @@ struct icc_bwmon {
+>>  
+>>  /* BWMON v4 */
+>>  static const struct reg_field msm8998_bwmon_reg_fields[] = {
+>> -	[F_GLOBAL_IRQ_CLEAR]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_CLEAR, 0, 0),
+>> -	[F_GLOBAL_IRQ_ENABLE]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_ENABLE, 0, 0),
+>> +	[F_GLB_IRQ_CLEAR]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_CLEAR_845, 0, 0),
+>> +	[F_GLB_IRQ_ENABLE]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_ENABLE_845, 0, 0),
+>>  	[F_IRQ_STATUS]		= REG_FIELD(BWMON_V4_IRQ_STATUS, 4, 7),
+>>  	[F_IRQ_CLEAR]		= REG_FIELD(BWMON_V4_IRQ_CLEAR, 4, 7),
+>>  	[F_IRQ_ENABLE]		= REG_FIELD(BWMON_V4_IRQ_ENABLE, 4, 7),
+>> @@ -202,7 +228,7 @@ static const struct reg_field msm8998_bwmon_reg_fields[] = {
+>>  };
+>>  
+>>  static const struct regmap_range msm8998_bwmon_reg_noread_ranges[] = {
+>> -	regmap_reg_range(BWMON_V4_GLOBAL_IRQ_CLEAR, BWMON_V4_GLOBAL_IRQ_CLEAR),
+>> +	regmap_reg_range(BWMON_V4_GLOBAL_IRQ_CLEAR_845, BWMON_V4_GLOBAL_IRQ_CLEAR_845),
+>>  	regmap_reg_range(BWMON_V4_IRQ_CLEAR, BWMON_V4_IRQ_CLEAR),
+>>  	regmap_reg_range(BWMON_V4_CLEAR, BWMON_V4_CLEAR),
+>>  };
+>> @@ -222,16 +248,34 @@ static const struct regmap_access_table msm8998_bwmon_reg_volatile_table = {
+>>  	.n_yes_ranges	= ARRAY_SIZE(msm8998_bwmon_reg_volatile_ranges),
+>>  };
+>>  
+>> +static const struct reg_field msm8998_bwmon_global_reg_fields[] = {
+>> +	[F_GLOBAL_IRQ_CLEAR]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_CLEAR, 0, 0),
+>> +	[F_GLOBAL_IRQ_ENABLE]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_ENABLE, 0, 0),
+>> +};
+>> +
+>> +static const struct regmap_range msm8998_bwmon_global_reg_noread_ranges[] = {
+>> +	regmap_reg_range(BWMON_V4_GLOBAL_IRQ_CLEAR, BWMON_V4_GLOBAL_IRQ_CLEAR),
+>> +};
+>> +
+>> +static const struct regmap_access_table msm8998_bwmon_global_reg_read_table = {
+>> +	.no_ranges	= msm8998_bwmon_global_reg_noread_ranges,
+>> +	.n_no_ranges	= ARRAY_SIZE(msm8998_bwmon_global_reg_noread_ranges),
+>> +};
+>> +
+>>  /*
+>>   * Fill the cache for non-readable registers only as rest does not really
+>>   * matter and can be read from the device.
+>>   */
+>>  static const struct reg_default msm8998_bwmon_reg_defaults[] = {
+>> -	{ BWMON_V4_GLOBAL_IRQ_CLEAR, 0x0 },
+>> +	{ BWMON_V4_GLOBAL_IRQ_CLEAR_845, 0x0 },
+>>  	{ BWMON_V4_IRQ_CLEAR, 0x0 },
+>>  	{ BWMON_V4_CLEAR, 0x0 },
+>>  };
+>>  
+>> +static const struct reg_default msm8998_bwmon_global_reg_defaults[] = {
+>> +	{ BWMON_V4_GLOBAL_IRQ_CLEAR, 0x0 },
+>> +};
+>> +
+>>  static const struct regmap_config msm8998_bwmon_regmap_cfg = {
+>>  	.reg_bits		= 32,
+>>  	.reg_stride		= 4,
+>> @@ -252,10 +296,27 @@ static const struct regmap_config msm8998_bwmon_regmap_cfg = {
+>>  	.cache_type		= REGCACHE_RBTREE,
+>>  };
+>>  
+>> +static const struct regmap_config msm8998_bwmon_global_regmap_cfg = {
+>> +	.reg_bits		= 32,
+>> +	.reg_stride		= 4,
+>> +	.val_bits		= 32,
+>> +	/*
+>> +	 * No concurrent access expected - driver has one interrupt handler,
+>> +	 * regmap is not shared, no driver or user-space API.
+>> +	 */
+>> +	.disable_locking	= true,
+>> +	.rd_table		= &msm8998_bwmon_global_reg_read_table,
+>> +	.reg_defaults		= msm8998_bwmon_global_reg_defaults,
+>> +	.num_reg_defaults	= ARRAY_SIZE(msm8998_bwmon_global_reg_defaults),
+>> +	/*
+>> +	 * Cache is necessary for using regmap fields with non-readable
+>> +	 * registers.
+>> +	 */
+>> +	.cache_type		= REGCACHE_RBTREE,
+>> +};
+>> +
+>>  /* BWMON v5 */
+>>  static const struct reg_field sdm845_llcc_bwmon_reg_fields[] = {
+>> -	[F_GLOBAL_IRQ_CLEAR]	= {},
+>> -	[F_GLOBAL_IRQ_ENABLE]	= {},
+>>  	[F_IRQ_STATUS]		= REG_FIELD(BWMON_V5_IRQ_STATUS, 0, 3),
+>>  	[F_IRQ_CLEAR]		= REG_FIELD(BWMON_V5_IRQ_CLEAR, 0, 3),
+>>  	[F_IRQ_ENABLE]		= REG_FIELD(BWMON_V5_IRQ_ENABLE, 0, 3),
+>> @@ -369,16 +430,21 @@ static void bwmon_clear_irq(struct icc_bwmon *bwmon)
+>>  	regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], BWMON_IRQ_ENABLE_MASK);
+>>  	if (bwmon->data->quirks & BWMON_NEEDS_FORCE_CLEAR)
+>>  		regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], 0);
+>> -	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+>> -		regmap_field_force_write(bwmon->regs[F_GLOBAL_IRQ_CLEAR],
+>> +	if (bwmon->global_regs[0])
+>> +		regmap_field_force_write(bwmon->global_regs[F_GLOBAL_IRQ_CLEAR],
+>> +					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+>> +	else
+>> +		regmap_field_force_write(bwmon->regs[F_GLB_IRQ_CLEAR],
+>>  					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+>>  }
+>>  
+>>  static void bwmon_disable(struct icc_bwmon *bwmon)
+>>  {
+>>  	/* Disable interrupts. Strict ordering, see bwmon_clear_irq(). */
+>> -	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+>> -		regmap_field_write(bwmon->regs[F_GLOBAL_IRQ_ENABLE], 0x0);
+>> +	if (bwmon->global_regs[0])
+>> +		regmap_field_write(bwmon->global_regs[F_GLOBAL_IRQ_ENABLE], 0x0);
+>> +	else
+>> +		regmap_field_write(bwmon->regs[F_GLB_IRQ_ENABLE], 0x0);
+>>  	regmap_field_write(bwmon->regs[F_IRQ_ENABLE], 0x0);
+>>  
+>>  	/*
+>> @@ -391,9 +457,13 @@ static void bwmon_disable(struct icc_bwmon *bwmon)
+>>  static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
+>>  {
+>>  	/* Enable interrupts */
+>> -	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+>> -		regmap_field_write(bwmon->regs[F_GLOBAL_IRQ_ENABLE],
+>> -				   BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+>> +	if (bwmon->global_regs[0])
+>> +		regmap_field_write(bwmon->global_regs[F_GLOBAL_IRQ_ENABLE],
+>> +					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+>> +	else
+>> +		regmap_field_write(bwmon->regs[F_GLB_IRQ_ENABLE],
+>> +					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+> 
+> Probably this would be more readable if regmap_field_write() is called
+> only once and you parametrize the first argument (field) from the
+> 'struct bwmon'.
+Sounds good
+
+> 
+>> +
+>>  	regmap_field_write(bwmon->regs[F_IRQ_ENABLE], irq_enable);
+>>  
+>>  	/* Enable bwmon */
+>> @@ -556,7 +626,9 @@ static int bwmon_init_regmap(struct platform_device *pdev,
+>>  	struct device *dev = &pdev->dev;
+>>  	void __iomem *base;
+>>  	struct regmap *map;
+>> +	int ret;
+>>  
+>> +	/* Map the monitor base */
+>>  	base = devm_platform_ioremap_resource(pdev, 0);
+>>  	if (IS_ERR(base))
+>>  		return dev_err_probe(dev, PTR_ERR(base),
+>> @@ -567,12 +639,38 @@ static int bwmon_init_regmap(struct platform_device *pdev,
+>>  		return dev_err_probe(dev, PTR_ERR(map),
+>>  				     "failed to initialize regmap\n");
+>>  
+>> +	BUILD_BUG_ON(ARRAY_SIZE(msm8998_bwmon_global_reg_fields) != F_NUM_GLOBAL_FIELDS);
+>>  	BUILD_BUG_ON(ARRAY_SIZE(msm8998_bwmon_reg_fields) != F_NUM_FIELDS);
+>>  	BUILD_BUG_ON(ARRAY_SIZE(sdm845_llcc_bwmon_reg_fields) != F_NUM_FIELDS);
+>>  
+>> -	return devm_regmap_field_bulk_alloc(dev, map, bwmon->regs,
+>> +	ret = devm_regmap_field_bulk_alloc(dev, map, bwmon->regs,
+>>  					   bwmon->data->regmap_fields,
+>>  					   F_NUM_FIELDS);
+> 
+> What exactly happens now on msm8998 (or updated sdm845 from your binding
+> example) for the "global" fields in this region? The regmap references
+> non-existing fields for the "monitor" region, doesn't it?
+That's correct, the regmap references 3 non-existstent (or at least
+not-what-we-think-they-are registers (ending with _845) for
+targets with two separate regions (such as MSM8998), but they're
+unaccessed if the "global" region has been mapped sucessfully
+[see `if (bwmon->global_regs[0])`].
+
+> 
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ) {
+>> +		/* Map the global base, if separate */
+>> +		base = devm_platform_ioremap_resource(pdev, 1);
+> 
+> Wouldn't this now print errors for sdm845, thus introduce dmesg regression?
+I explicitly stated this in the cover letter and asked for opinions.
+
+Konrad
+> 
+>> +
+>> +		/* If it's not, bail out early and assume the 845 register scheme */
+>> +		if (IS_ERR(base) && PTR_ERR(base) == -EINVAL)
+>> +			goto exit;
+>> +		else if (IS_ERR(base))
+>> +			return dev_err_probe(dev, PTR_ERR(base),
+>> +					     "failed to map bwmon global registers\n");
+>> +
+>> +		map = devm_regmap_init_mmio(dev, base, bwmon->data->global_regmap_cfg);
+>> +		if (IS_ERR(map))
+>> +			return dev_err_probe(dev, PTR_ERR(map),
+>> +					     "failed to initialize global regmap\n");
+>> +
+>> +		ret = devm_regmap_field_bulk_alloc(dev, map, bwmon->global_regs,
+>> +						   bwmon->data->global_regmap_fields,
+>> +						
+>>
+> 
+> Best regards,
+> Krzysztof
+> 
