@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3915E6AC5D9
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 16:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE266AC89B
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Mar 2023 17:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjCFPsC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Mar 2023 10:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S230338AbjCFQrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Mar 2023 11:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCFPr7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 10:47:59 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B003B1CF52;
-        Mon,  6 Mar 2023 07:47:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678117661; cv=none;
+        with ESMTP id S230337AbjCFQqs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Mar 2023 11:46:48 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97603E09E;
+        Mon,  6 Mar 2023 08:45:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1678119250; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=OpO31gyeAiyfGj7Qq0n9i+LLyix+4Fz8YP+IIprBlVCVH535SVSp58mNFLYTzDnGsx
-    dzpLfYv09VS/E+OMpg5hOcRlp6rIxGgkO6h7mDVkYWmhRcbI5c7AwFanoeNBAibdejan
-    1GBYqkyUU21mW6F1tApVmLZ/5nhwP9KMdlE2a/JQSnfdB3yTP593hvGo1wpmHtS+Bwt7
-    xq+hBuvZ9MSmGNbkVM4ywN1ToSqWXcT//tq4lXdeEVmt68Hx6rPdTsCkGMVzrXICB01l
-    kI/cZfXfGyu973rP8M36ta9R/9yD1UReZadRhcFAd9XQbh2JpyT82cao0QNUeuBNO+WA
-    J3zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1678117661;
+    b=r0oJisPmVmiGhfBOquIsvykEt6GuagiLlQN3/aghpdIAGN6xOQzmJJS77ZXM68sjkY
+    I8wZnax46XbT9eUc+4dfK/xGTaaRA3GQJtWIIITRmKeFKY307FaFst3ZqiNsdmJ3zgzs
+    oKXiI4sRa7ndWY6qIsTTXT8agFnhT2ThvN590G1irEy0/zh8mlHXlwoj4xfvM2v3+J5B
+    mlOZHmCGiwmmtJZ9GjKtNYgfGZH+LYsye3l4dbqkScNDujxbPHkea2B7XJleJ+lhRlHF
+    qDEWhmWVJG+rashB/PMmNwvkqTx9fA/pjJQTelfWz2NGSJOzqzb5CEIUIvMKRsh0a3Ib
+    XXZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1678119250;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=KmIA5wadD9AJClhPdtpitOvaCeW1sQ+zwa4MQNlW01E=;
-    b=dlV0ArgL82FH0c8qaZ+Mn/DPje+7T1ZRC02tU2D1L4gZupuHjT5OPXaPIVtdAf4KXu
-    q2atHQolU4BcNo4uPylfpMvJiAXiEetKvxYL5WX4fCGMAAw3pb2rW1FUFXVHlxvB6aDj
-    +i9DUFmZV4uOXBnUfKdWsnrs6gaVqyGn3n6j+V5BggeCPk0A8wb/THj5te/W0ZKxZLmQ
-    gu0tMe2AhfFd2S7nAU3k5JWtlXQv2TNNBYoXQlA4eYBk7bOYDuMrioUsPDrVw+ofckgG
-    Rg/i5CEm+mVuli9OPML5PjEIFdQnOUFdYbX9MQbP1ZwjoawGsYpQa23wQ95YLMOLQZhG
-    LK8A==
+    bh=E5MgXFLGzXqV3kZmdi0um2+BJZgLBqfV9CY4BZsWLcI=;
+    b=oJKShJQQjwd41p6Hkl3y02zdklHVMxlsNG2nS3axF1McBpSRf+5kQLNyEJ1wC1rW2c
+    Sue1UdycnksjwLZJ4+34rQn7BHYB9gCkBpXHtr3nAZ71lsaDwohImCnq7s+nWdjYGJxX
+    +pj8SPm8g7byQ+V95NEE9eQUBGT/R6Pzw/JOaNWLBSyVUYfaJmi2u0fiuhSeVWzWrqxh
+    BH5fABJ8aTN6D2Z61gJ5HM401Y+Azdh2R5b/GQx6fXsg+GzBY7kgQcPb95pJ6htKAZyq
+    xWwUv3MurZZwcOpmErASNJYuf4ITZ7fLljVVvLrktI4qDWTBKCBVU5FMhj1npV5Lo2Ct
+    cdMQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1678117660;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1678119250;
     s=strato-dkim-0002; d=gerhold.net;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=KmIA5wadD9AJClhPdtpitOvaCeW1sQ+zwa4MQNlW01E=;
-    b=XAeZ5UtgcmAvDnW/RhUyFSm1QUBZFPE1cGODH42NTTZrh0HY8BK8kiUehgmz6TetjV
-    UDNDphTOYFM7x41wyZEl16JlR9xu+pASMYGQ8RjuzNArfiMkh1KL/86CphLE94+1Utjm
-    gYJYxoRYrV/TVNqs8ljY0cAZVHolcoYfhbXDkqqPdd7mkokchuZcYphxajvZpUSRXqc/
-    eBi4t3+L7JNps/fA2luQMPhCyIcpd5QMgatFaLTGBvPLiJM5wATzzIF2gHk9/ITLPIir
-    Ov9jEEzjtaZq+538ctKhI0MCrCSSJCch0krgLxQyp5w5LYfmvY95thaNaCSsRvNr730V
-    Z6rg==
+    bh=E5MgXFLGzXqV3kZmdi0um2+BJZgLBqfV9CY4BZsWLcI=;
+    b=YGr2At5ociglkixjIGpZr9H4tKF7PQcOrsKysdzF+u/wz1H/1QQdImdpI/nwF8IQyT
+    9X2m4U8BHBwnk32YdA3JkmI3bh3/j19WQi2Y57lFWupj0lrFnMdDR8u4AsabVWr3Ia4Q
+    Ie6GkaXJ4yfzpId/2FbxeY1S28SWKI/DPuQxlxclOapv9oDISyTmEO9Ax4/QBvgQbIgJ
+    1eN65wualCMaDkLWDd3ZT2wA9zfK77e7H1l5HIl089k9vbv4n69knWXQSUpicJ2JMnhO
+    z1dZsZpbpPIPDLVAvWjsTMldwIfZ+mnCS6RB/LDLea6t9Y4YNZGnd76Nllk90OTRSSbi
+    Qq6A==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKjXrKw8/qY="
 Received: from gerhold.net
     by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id jba5bez26FleJnt
+    with ESMTPSA id jba5bez26GE9Jsp
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 6 Mar 2023 16:47:40 +0100 (CET)
-Date:   Mon, 6 Mar 2023 16:47:39 +0100
+    Mon, 6 Mar 2023 17:14:09 +0100 (CET)
+Date:   Mon, 6 Mar 2023 17:14:08 +0100
 From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -64,18 +64,15 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, benl@squareup.com,
         shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>
-Subject: Re: [PATCH v7 4/5] arm64: dts: qcom: Add Square apq8039-t2 board
-Message-ID: <ZAYLG7JkcIHQeVcz@gerhold.net>
+        dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v7 5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+Message-ID: <ZAYRUIg0SwKOnBGx@gerhold.net>
 References: <20230223153655.262783-1-bryan.odonoghue@linaro.org>
- <20230223153655.262783-5-bryan.odonoghue@linaro.org>
+ <20230223153655.262783-6-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223153655.262783-5-bryan.odonoghue@linaro.org>
+In-Reply-To: <20230223153655.262783-6-bryan.odonoghue@linaro.org>
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -86,55 +83,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 03:36:54PM +0000, Bryan O'Donoghue wrote:
-> The apq8039-t2 is an apq8039 based board paired with a wcn3680b WiFi
-> chipset.
+On Thu, Feb 23, 2023 at 03:36:55PM +0000, Bryan O'Donoghue wrote:
+> Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
 > 
-> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> Co-developed-by: Jun Nie <jun.nie@linaro.org>
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> Co-developed-by: Benjamin Li <benl@squareup.com>
-> Signed-off-by: Benjamin Li <benl@squareup.com>
-> Co-developed-by: James Willcox <jwillcox@squareup.com>
-> Signed-off-by: James Willcox <jwillcox@squareup.com>
-> Co-developed-by: Leo Yan <leo.yan@linaro.org>
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> Co-developed-by: Joseph Gates <jgates@squareup.com>
-> Signed-off-by: Joseph Gates <jgates@squareup.com>
-> Co-developed-by: Max Chen <mchen@squareup.com>
-> Signed-off-by: Max Chen <mchen@squareup.com>
-> Co-developed-by: Zac Crosby <zac@squareup.com>
-> Signed-off-by: Zac Crosby <zac@squareup.com>
+> Tulip is paired with:
+> 
+> - wcn3660
+> - smb1360 battery charger
+> - 720p Truly NT35521 Panel
+> 
 > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/Makefile       |   1 +
->  arch/arm64/boot/dts/qcom/apq8039-t2.dts | 550 ++++++++++++++++++++++++
->  2 files changed, 551 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 457 ++++++++++++++++++
+>  2 files changed, 458 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
 > 
 > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 31aa54f0428c3..2983e83a19061 100644
+> index 2983e83a19061..81a38d46deba5 100644
 > --- a/arch/arm64/boot/dts/qcom/Makefile
 > +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= apq8039-t2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> @@ -29,6 +29,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
 > new file mode 100644
-> index 0000000000000..6ff044bfe2ebc
+> index 0000000000000..c646fada11a5a
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
-> @@ -0,0 +1,550 @@
+> +++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> @@ -0,0 +1,457 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020-2023, Linaro Ltd.
+> + * Copyright (c) 2022-2023, Bryan O'Donoghue.
 > + *
 > + */
 > +
@@ -145,123 +132,279 @@ On Thu, Feb 23, 2023 at 03:36:54PM +0000, Bryan O'Donoghue wrote:
 > +#include <dt-bindings/arm/qcom,ids.h>
 > +#include <dt-bindings/gpio/gpio.h>
 > +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-> +#include <dt-bindings/sound/apq8016-lpass.h>
 > +
 > +/ {
-> +	model = "Square, Inc. T2 Devkit";
-> +	compatible = "square,apq8039-t2", "qcom,msm8939";
+> +	model = "Sony Xperia M4 Aqua";
+> +	compatible = "sony,kanuti-tulip", "qcom,msm8939";
 > +
-> +	qcom,board-id = <0x53 0x54>;
-> +	qcom,msm-id = <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>, <QCOM_ID_APQ8039 0x30000>;
+> +	qcom,board-id = <8 0>;
 
-Does the board have variants with MSM8939 v2, MSM8939 v3.0 and APQ8039
-v3.0? If not it should be enough to list only a single item (the actual
-SoC in use).
+Could use QCOM_BOARD_ID_MTP instead of 8 for more clarity here.
 
 > [...]
-> +&blsp1_uart1 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&blsp1_uart1_default>;
-> +	pinctrl-1 = <&blsp1_uart1_sleep>;
-> +	status = "okay";
-> +};
-> +
-> +&blsp1_uart2 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&blsp1_uart2_default>;
-> +	pinctrl-1 = <&blsp1_uart2_sleep>;
-
-This is in msm8939.dtsi already.
-
-> [...]
-> +&pronto {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&wcnss_pin_a>;
-
-This is also in msm8939.dtsi already.
-
+> +&dsi0 {
 > +	status = "okay";
 > +
-> +	iris {
-> +		compatible = "qcom,wcn3680";
+> +	panel@0 {
+> +		compatible = "sony,tulip-truly-nt35521";
+> +		reg = <0>;
+> +		positive5-supply = <&vreg_positive5_reg>;
+> +		negative5-supply = <&vreg_negative5_reg>;
+> +		reset-gpios = <&tlmm 25 GPIO_ACTIVE_LOW>;
+> +		enable-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
+
+Have you tested this? While this matches the (likely incorrect)
+bindings, as far as I can tell the Linux tulip-truly-nt35521 driver
+wants "backlight-gpios" instead of "enable-gpios". And it's not an
+optional GPIO so I don't quite understand how the existing driver could
+probe successfully with what you have here.
+
+> +
+> +		ports {
+> +			port {
+> +				panel_in: endpoint {
+> +					remote-endpoint = <&dsi0_out>;
+> +				};
+> +			};
+> +		};
+> +
 > +	};
 > +};
 > +
 > [...]
-> +	blsp1_uart1_default: blsp1-uart1-default-state {
-> +		pins = "gpio0", "gpio1";
-> +		function = "blsp_uart1";
-> +		drive-strength = <16>;
-> +		bias-disable;
-> +	};
-> +
-> +	blsp1_uart1_sleep: blsp1-uart1-sleep-state {
-> +		pins = "gpio0", "gpio1";
+> +&tlmm {
+> +	ak8963_default: ak8963-default-state {
+> +		pins = "gpio69";
 > +		function = "gpio";
-> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	ak8963_sleep: ak8963-sleep-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
 > +		bias-pull-down;
-> +	};
-
-Personally I'd override just the pins of the definition in msm8939.dtsi
-since everything else is exactly the same. Not a strict change request
-though, I guess this is subjective:
-
-&blsp1_uart1_default {
-	pins = "gpio0", "gpio1";
-};
-
-&blsp1_uart1_sleep {
-	pins = "gpio0", "gpio1";
-};
-
-> +
-> +	ext_buck_vsel_reg: ext-buck-vsel-reg-state {
-> +		function = "gpio";
-> +		pins = "gpio111";
 > +		drive-strength = <2>;
 > +	};
-
-This seems unused.
-
-> [...]
-> +	sq_spe_enable: sq-spe-enable-state {
-> +		pins = "gpio35";
+> +
+> +	/* Ambient light and proximity sensor apds9930 and apds9900 */
+> +	apds99xx_default: apds99xx-default-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	apds99xx_sleep: apds99xx-sleep-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cam_sensor_flash_default: cam-sensor-flash-default-state {
+> +		pins = "gpio98", "gpio97";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cci1_default: cci1-default-state {
+> +		pins = "gpio31", "gpio32";
+> +		function = "cci_i2c";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cdc_ext_spk_pa_active: cdc-ext-spk-pa-on-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		output-low;
+> +	};
+> +
+> +	cdc_ext_spk_pa_sus: cdc-ext-spk-pa-off-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cdc_slim_lines_act: lines-on-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		drive-strength = <8>;
+> +		output-high;
+> +	};
+> +
+> +	cdc_slim_lines_sus: lines-off-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cross_conn_det_act: lines-on-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <8>;
+> +		output-low;
+> +	};
+> +
+> +	cross_conn_det_sus: lines-off-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ext_buck_vsel: vsel0-state {
+> +		pins = "gpio111";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_act: tlmm-lines-on-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <8>;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_sus: tlmm-lines-off-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	gpio_key_suspend: gpio-key-suspend-state {
+> +		pins = "gpio107", "gpio108", "gpio109";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	negative5_reg_default: negative5-reg-default-state {
+> +		pins = "gpio17";
 > +		function = "gpio";
 > +		output-low;
 > +	};
-
-This seems unused as well.
-
 > +
-> +	tlmm_crq_reg: tlmm-crq-reg-state {
+> +	positive5_reg_default: positive5-reg-default-state {
+> +		pins = "gpio114";
 > +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	/* Gyroscope and accelerometer sensor combo */
+> +	mpu6050_default: mpu6050-default-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	mpu6050_sleep: mpu6050-sleep-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	nfc_disable_active: nfc-disable-active-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nfc_disable_suspend: nfc-disable-suspend-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nfc_int_active: nfc-int-active-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nfc_int_suspend: nfc-int-suspend-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nt35521_te_default: nt35521-te-default-state {
+> +		pins = "gpio24";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nt35521_backlight: nt35521-backlight-default-state {
+> +		pins = "gpio10";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	smb_int: smb-int-default-state {
+> +		pins = "gpio62";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ts_int_active: ts-int-active-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <16>;
+> +	};
+> +
+> +	ts_int_suspend: ts-int-suspend-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ts_reset_active: ts-reset-active-state {
 > +		pins = "gpio12";
-> +		output-high;
-> +	};
-> +
-> +	tlmm_spe_reg: tlmm-spe-reg-state {
-> +		pins = "gpio108";
 > +		function = "gpio";
-> +		output-high;
+> +		bias-pull-up;
+> +		drive-strength = <16>;
+> +	};
+> +
+> +	ts_reset_suspend: ts-reset-suspend-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ts_release: ts-release-default-state {
+> +		pins = "gpio13", "gpio12";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
 > +	};
 > +
 
-Does output-high really make sense here? These are assigned to a
-regulator-fixed. The driver for fixed regulators initializes the
-GPIO state based on the "regulator-boot-on" property. If the property
-exists it does gpiod_get(... GPIOD_OUT_HIGH), otherwise GPIOD_OUT_LOW.
+There are *a lot* of unused pinctrl entries here. If you don't reference
+them anywhere (by referencing them via label) they just waste space in
+the device tree. The GPIOs will still remain unconfigured.
 
-You don't have regulator-boot-on. So I would expect the GPIO/regulator
-state to toggle unnecessarily during initialization:
-
-  - First pinctrl is applied so the GPIO is set to output-high.
-    The regulator gets turned on for a few ms/ns.
-  - Then the driver probes which initializes it to GPIOD_OUT_LOW.
-    The regulator turns back off.
-
-I'd just drop the output-high here and leave it up to the regulator
-driver to initialize the GPIO state. If you want the regulator on during
-boot, use regulator-boot-on.
+Please save them locally for later usage and only keep the used entries.
+This will ease review of upcoming patches since these are better
+understandable together with the actual device node making use of them.
 
 Thanks,
 Stephan
