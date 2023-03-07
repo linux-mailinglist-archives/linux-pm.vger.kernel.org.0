@@ -2,87 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46AB6AF6F6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 21:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450246AF81B
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 22:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjCGUwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 15:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S229716AbjCGV5L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 16:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCGUwu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 15:52:50 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4075FAA739
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 12:52:49 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y144so12699788yby.12
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 12:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678222368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WtlzL8PevPLLFXmTlyBP00LAI0VoVwlqLagNnjCZdv4=;
-        b=fdlVTqePrrMgmLA0JW6a0Ng4I6EcBFnbxzj1f8rvz9FF7sq40JYQC2DdqpIRaUXwtF
-         41DGdXVFgMYIgg/CWadBAkKsiFqZVJDRVcT/G0T0TAkyR2d0ws0jMh8wEQEqQRgq9yoc
-         U7COOaBe3VbfqlYczUr2DLpZa2xMBTTfH6ldU7N7JBpUakNOmIgXBMWu9Ffvx/K9Au7n
-         VcvKRlDOWPOONtVpSY34SZw0r/Gm2NlMNU77Ll1Hc+M/jMXuZB8+VXbuyHJa/Ox0ZOHE
-         Fo2MsvQV/i9CeqRz3ko4u+oTQvEjguxWHtXDnT9NJepNOKFsju2F4Q0Q/HJbvVbtJAgq
-         inGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678222368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WtlzL8PevPLLFXmTlyBP00LAI0VoVwlqLagNnjCZdv4=;
-        b=G1uO4eFFdCu0w2BVCZX7EnNKjRdvsGo0ybUsdcfDZs2PcXanH+WN58t358KJSJtcH/
-         Pa2EA4KLHpPbnjBXYUW7q5yFq0LOfSaIe0YuC3lL8B0Vt3ruBWcEzM75JcvHZYdqz3v6
-         TTPiP5tApcf80IVr5C4HtO28if0QfyOiq7JdOJCd4x0gGULJaEhx9loac9iUX80pMU2d
-         X3iO5GSZOY3RFyWtRk706iAD3/u3gthzh0QXXiG4caJKKobCIXuFCRirTEL/B9erTony
-         7MW/QCdiWwaQYzT8mExjfPz8BC93RLY7TaewVq5K0wfuY7Ndt2zzUYvGJDxSZzcIBn+9
-         dhhg==
-X-Gm-Message-State: AO0yUKUJlm/mX6aY2Qbw5IuIvh3fBiXzQnQQZpgCmwDKPCg29Yca6dRW
-        6tCoqxa9EyKQNaGzgBT8IoJirQhpUq8uv3WabdlUYw==
-X-Google-Smtp-Source: AK7set/rWOufzYEq91GvmMEo7+BJ2m+ocGgid3S1JGWCk/qBjg1hP5yymE1zHmoD9Uvh4Fqvigk7F62XPCO37pxDjKI=
-X-Received: by 2002:a25:9281:0:b0:b0a:7108:71e9 with SMTP id
- y1-20020a259281000000b00b0a710871e9mr5325940ybl.4.1678222368490; Tue, 07 Mar
- 2023 12:52:48 -0800 (PST)
+        with ESMTP id S229819AbjCGV5K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 16:57:10 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83AFAD02F;
+        Tue,  7 Mar 2023 13:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678226228; x=1709762228;
+  h=from:to:cc:subject:date:message-id:mime-version:reply-to:
+   content-transfer-encoding;
+  bh=8vgY/QVBJu+X9HRFZSvBWKypnSnfRJHbl/eOU7wG2o4=;
+  b=SgSDl/8dCMoCFnDaMC14DGdjo5SGSgtd+eK55VAdU4UN7VJvr8mUDqy7
+   ttXQoCvybknpF2JXQUvHEHSL5QHvQoF84fM6RC2Gr+CCL+n7ocBMkkwWJ
+   qi4pUGct+GwyWcKV66DhV80evm+uHKg688r0AhdbDNqxnDMkIO2mzC8DU
+   luol4ridf32lOWvCVRAQ9wJlo7B8IdjT6b4G4WtVWhuYT7AZeyYcXaYRu
+   x3w9q1qRUzd+wk0Iahkm5Q4iky0BxAoNrjqjfY8qDzqg5Tp0M2BAfxBzY
+   mJBOxla+ZHMjXUhr57KFV6BZHa+80P8Xdz1GqnVrqTwrxDkS0dQNdS3ih
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400810562"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="400810562"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:57:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="786853606"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="786853606"
+Received: from kmdehmer-mobl1.amr.corp.intel.com (HELO lenb-mobl1.amr.corp.intel.com) ([10.212.14.112])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:57:06 -0800
+From:   Len Brown <len.brown@intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] hci_qca: do not interfere with system suspend
+Date:   Tue,  7 Mar 2023 15:56:06 -0600
+Message-Id: <7687c4239424f2a49c6c596d19eea8dd7ebe8a30.1678226070.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org> <20230307133735.90772-5-daniel.lezcano@linaro.org>
-In-Reply-To: <20230307133735.90772-5-daniel.lezcano@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Mar 2023 21:52:37 +0100
-Message-ID: <CACRpkdYqUHVkdTwfoQFLM_mkkb8XkUA1FN8=h04BpioDdQAL3g@mail.gmail.com>
-Subject: Re: [PATCH v1 04/11] thermal/drivers/db8500: Use driver dev instead
- of tz->device
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:37=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
+When hci_qca returns an error to its pm_ops.suspend routine,
+the PM subsystem will terminate the system wide suspend.
 
-> The db8500 driver uses the thermal zone device instead of the device
-> attached to it. In order to prevent the drivers to access the thermal
-> zone device structure, replace the thermal zone device by the driver
-> to show the debug message.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+It is extremely unlikely that there will ever be a justification
+for hci_qca, no matter what its internal malfunction, should
+cause system-wide suspend to terminate.
 
-Yep that's the right thing to do.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Doing so, could result in the scenario where a laptop lid is closed,
+suspend termnates, the user places the running laptop into a breifcase,
+not expecting it to be overheating or draining its battery...
 
-Yours,
-Linus Walleij
+This is not a theoretical issue.
+The 6.3-rc1 currently fails this way on the Dell XPS-13-9310:
+
+Bluetooth: hci0: SSR or FW download time out
+hci_uart_qca serial0-0: PM: dpm_run_callback(): acpi_subsys_suspend+0x0/0x70 returns -110
+hci_uart_qca serial0-0: PM: failed to suspend: error -110
+PM: suspend of devices aborted after 3218.724 msecs
+PM: start suspend of devices aborted after 3246.859 msecs
+PM: Some devices failed to suspend, or early wake event detected
+PM: resume of devices complete after 84.988 msecs
+
+Signed-off-by: Len Brown <len.brown@intel.com>
+Cc: Marcel Holtmann <marcel@holtmann.org>
+Cc: Johan Hedberg <johan.hedberg@gmail.com>
+Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc: linux-bluetooth@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/bluetooth/hci_qca.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 3df8c3606e93..1795cc527b88 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -2309,7 +2309,7 @@ static int __maybe_unused qca_suspend(struct device *dev)
+ error:
+ 	clear_bit(QCA_SUSPENDING, &qca->flags);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int __maybe_unused qca_resume(struct device *dev)
+-- 
+2.37.2
+
