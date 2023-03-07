@@ -2,93 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582C76ADEE9
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 13:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6220A6ADF3B
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 13:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCGMjZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 7 Mar 2023 07:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S229806AbjCGMzU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 7 Mar 2023 07:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCGMjX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 07:39:23 -0500
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC475DED5
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 04:39:22 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id cw28so51657841edb.5
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 04:39:22 -0800 (PST)
+        with ESMTP id S229891AbjCGMzO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 07:55:14 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334307E7B8;
+        Tue,  7 Mar 2023 04:54:47 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id ec29so20977901edb.6;
+        Tue, 07 Mar 2023 04:54:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678192760;
+        d=1e100.net; s=20210112; t=1678193685;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KGyNN9KJMeclprx5hS1bksFMh/iFUKsq22LcLzAGvAo=;
-        b=NYmoqZCJeI6RUsRaNB3nAiPVBS4niKjBDRURcg/QeNMN5Rm/AOpKykbMzl2NcKgNp5
-         6+mvWYKFbxW4NGVMSw6CmzBl/WQhSZC8s2CktLANfs/LGHQbgHzgDIeO6WlOAVfDJk45
-         BHo1M8+Ovw411ODXAl7MMwOOO+bDxYmb9dZBVL3ZBWwil2O+YQurCwBC/fsahaayZz+a
-         KpYCtLrhRF422CU7B7Q35Yv+2J0QPjNxkKcJ+xm2JAGd2V50xFPXVD71jLV1mO82aS6T
-         altiX/xHdw0VX58P9VjMCoN+W5Uicm2HdirDbdHMluOoAg/EryKqGGZ+N/fWtrQs8W+N
-         odsg==
-X-Gm-Message-State: AO0yUKXvGzGbtclvUzL2p/hXjnlKqmWay1sTzFejQ6r5X/CqYCt7yxaW
-        EKcmpa+R6bEgL4h4PcUcI+KagiDJPxQ3qkaZyvY=
-X-Google-Smtp-Source: AK7set+ABAAbwn15m3tllIaNVEWYEjwFSyNRyWcrncqJsy7djIn90j8m+i34ZdUgdwYHBWgHCEn7TXe5ltTJWdQ2KH8=
-X-Received: by 2002:a17:906:2bcc:b0:895:58be:964 with SMTP id
- n12-20020a1709062bcc00b0089558be0964mr7165673ejg.2.1678192760600; Tue, 07 Mar
- 2023 04:39:20 -0800 (PST)
+        bh=Fdy9txgHkVnb0gJq1Nn55ZKwFjS5YdEn+Po646l2Zho=;
+        b=NFzechaHlrZxpIk2p2O96twEiC6ARPDejZNaz6Ch6HD8+tJTVqx0fzNUJEOy/ON9gd
+         MNPfdWvk8jT2z5/g4x5mOGW/UCvrOCxQM4NI7DSkEkdg6DKh0pUjO6E2i30w63j+Nwkw
+         YUPMa1WI6hOGMtT3K4QIJNbGVviyCPrynKTkUCYzYPy8QFCDBrKw/oBCyftSMBHxsikk
+         Y30aDmMfe9xG6KD4EYLq6CjvGWL2u+PqXMJviOw5s/jXJXonGt6w+KCIQFIw0OpTs6R2
+         pc0rJriNwZzxw1rgjNlNBIIrMVoGo4yPGGvu95Awi1lYKKukXTeRJe3uaLQ7yphEYjy6
+         yElQ==
+X-Gm-Message-State: AO0yUKVhTQyBzc1uBTCDd7ueY/f+wp4HJLAuwIrHHdmMtlG83NaPdAoB
+        8jcOcbAMiTvACb0wGTOn6rlgIKQG6XXFRK6161DSHqTeCvk=
+X-Google-Smtp-Source: AK7set+YZY8jaCXbWSyqKj9VkWntOcBFPP1HyiH/uTbADcJoW3fzHIiDs71WAoDG4iY0gXXLzQ0/mrpWnETTLWRMMYk=
+X-Received: by 2002:a50:9b56:0:b0:4ae:e5db:abfb with SMTP id
+ a22-20020a509b56000000b004aee5dbabfbmr7963114edj.3.1678193685649; Tue, 07 Mar
+ 2023 04:54:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306123418.720679-1-dedekind1@gmail.com> <20230306123418.720679-4-dedekind1@gmail.com>
- <20230306153215.GG1267364@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230306153215.GG1267364@hirez.programming.kicks-ass.net>
+References: <20230223044550.339811-1-luoxueqin@kylinos.cn> <CAJZ5v0jyz_dpKW1GhWN=yYpR9-7WG33GbZ65aoGv+B+R9vEpEw@mail.gmail.com>
+ <5b22ef4c-d0a6-5f28-7f71-e4de67d97b87@kylinos.cn>
+In-Reply-To: <5b22ef4c-d0a6-5f28-7f71-e4de67d97b87@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Mar 2023 13:39:09 +0100
-Message-ID: <CAJZ5v0gFrWCdyVNPUoU4tq2vTzcx5WtzvhbXVx1WeyTtt=Gqvg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] intel_idle: add C0.2 state for Sapphire Rapids Xeon
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Artem Bityutskiy <dedekind1@gmail.com>, x86@kernel.org,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>
+Date:   Tue, 7 Mar 2023 13:54:34 +0100
+Message-ID: <CAJZ5v0jCKWh3=Oxq03hY1Ggp13hLnYuUM=JsmWY36KysPV4uPw@mail.gmail.com>
+Subject: Re: [PATCH -next] PM: tools: add "CPU killed" timeline on arm64 platform
+To:     luoxueqin <luoxueqin@kylinos.cn>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        todd.e.brandt@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 4:32 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, Feb 27, 2023 at 3:27 AM luoxueqin <luoxueqin@kylinos.cn> wrote:
 >
-> On Mon, Mar 06, 2023 at 02:34:18PM +0200, Artem Bityutskiy wrote:
-> > @@ -225,6 +229,27 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
-> >       return 0;
-> >  }
+> 在 2023/2/24 02:11, Rafael J. Wysocki 写道:
+> > On Thu, Feb 23, 2023 at 5:46 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
+> >>
+> >> On the arm64 platform, the core log of cpu offline is as follows:
 > >
-> > +/**
-> > + * intel_idle_umwait_irq - Request C0.x using the 'umwait' instruction.
-> > + * @dev: cpuidle device of the target CPU.
-> > + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-> > + * @index: Target idle state index.
-> > + *
-> > + * Request C0.1 or C0.2 using 'umwait' instruction with interrupts enabled.
-> > + */
-> > +static __cpuidle int intel_idle_umwait_irq(struct cpuidle_device *dev,
-> > +                                        struct cpuidle_driver *drv,
-> > +                                        int index)
-> > +{
-> > +     u32 state = flg2MWAIT(drv->states[index].flags);
-> > +
-> > +     raw_local_irq_enable();
-> > +     umwait_idle(rdtsc() + umwait_limit, state);
-> > +     local_irq_disable();
-> > +
-> > +     return index;
-> > +}
+> > Please spell CPU in capitals.
 >
-> Bad copy paste job there...
+> Thanks for pointing out my mistake.
 >
-> vmlinux.o: warning: objtool: intel_idle_umwait_irq+0x8c: call to trace_hardirqs_off() leaves .noinstr.text section
+> >
+> >> [  100.431501] CPU1: shutdown
+> >> [  100.454820] psci: CPU1 killed (polled 20 ms)
+> >> [  100.459266] CPU2: shutdown
+> >> [  100.482575] psci: CPU2 killed (polled 20 ms)
+> >> [  100.486057] CPU3: shutdown
+> >> [  100.513974] psci: CPU3 killed (polled 28 ms)
+> >> [  100.518068] CPU4: shutdown
+> >> [  100.541481] psci: CPU4 killed (polled 24 ms)
+> >>
+> >> 'smpboot: CPU (?P<cpu>[0-9]*) is now offline' cannot be applied
+> >> to the arm64 platform, which caused the loss of the suspend
+> >> machine stage in S3.
+> >
+> > I'm not exactly sure what you mean by "loss of the suspend machine stage in S3".
+>
+> I made a mistake in saying "loss of the suspend machine stage in S3",
+> please allow me to correct it. Because the original program only
+> recognized the "CPU up" action on the arm64 platform, in output.html,
+> "CPU up" was classified as the "suspend machine" stage. Adding this code
+> can put "CPU killed" and "CPU up" in the correct position.
 
-Well, it would be kind of nice to say that this is related to commit
-6d9c7f51b1d9 ("cpuidle, intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-*again*") that is present in 6.3-rc1.
+It is still somewhat unclear to be honest.
+
+What does "the original program" above mean?  sleepgraph.py before the patch?
+
+And IIUC the goal of the patch is to prevent sleepgraph from
+mistakenly treating the "CPU up" message as part of the suspend flow
+(because it should be regarded as part of the resume flow).
+
+If my understanding above is correct, please update the patch
+changelog accordingly and resubmit the patch.
