@@ -2,102 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6220A6ADF3B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 13:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040746AE009
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCGMzU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 7 Mar 2023 07:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S230387AbjCGNKg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 7 Mar 2023 08:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjCGMzO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 07:55:14 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334307E7B8;
-        Tue,  7 Mar 2023 04:54:47 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id ec29so20977901edb.6;
-        Tue, 07 Mar 2023 04:54:47 -0800 (PST)
+        with ESMTP id S231293AbjCGNKP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 08:10:15 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16293BDB1;
+        Tue,  7 Mar 2023 05:08:47 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id a25so52183560edb.0;
+        Tue, 07 Mar 2023 05:08:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678193685;
+        d=1e100.net; s=20210112; t=1678194403;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fdy9txgHkVnb0gJq1Nn55ZKwFjS5YdEn+Po646l2Zho=;
-        b=NFzechaHlrZxpIk2p2O96twEiC6ARPDejZNaz6Ch6HD8+tJTVqx0fzNUJEOy/ON9gd
-         MNPfdWvk8jT2z5/g4x5mOGW/UCvrOCxQM4NI7DSkEkdg6DKh0pUjO6E2i30w63j+Nwkw
-         YUPMa1WI6hOGMtT3K4QIJNbGVviyCPrynKTkUCYzYPy8QFCDBrKw/oBCyftSMBHxsikk
-         Y30aDmMfe9xG6KD4EYLq6CjvGWL2u+PqXMJviOw5s/jXJXonGt6w+KCIQFIw0OpTs6R2
-         pc0rJriNwZzxw1rgjNlNBIIrMVoGo4yPGGvu95Awi1lYKKukXTeRJe3uaLQ7yphEYjy6
-         yElQ==
-X-Gm-Message-State: AO0yUKVhTQyBzc1uBTCDd7ueY/f+wp4HJLAuwIrHHdmMtlG83NaPdAoB
-        8jcOcbAMiTvACb0wGTOn6rlgIKQG6XXFRK6161DSHqTeCvk=
-X-Google-Smtp-Source: AK7set+YZY8jaCXbWSyqKj9VkWntOcBFPP1HyiH/uTbADcJoW3fzHIiDs71WAoDG4iY0gXXLzQ0/mrpWnETTLWRMMYk=
+        bh=1f7ClQ084fvZPUTez1OLGUFLY9xreFNlpUR04n4znpo=;
+        b=4dO6NSrd2NEMvvBJd9E4Y11kSxUnfRGfPXHx0hcwLrzgQmw7uQGw+Meorfma4UYHCX
+         RMCcjAPIMN6oCorlvofnU0XqXVmHiO57xG5lE/QQYlSpAOcDt6gbMgEmvSnaOOEgZRei
+         7ojtBiLkjL6MLKLZtaIeeWXHgZ3REWCd9YmUW3ufW5yPQdLH+Vd395B7RkGtxWhoI4yH
+         AyU7dcQg1tr3AB2jQbtcBM/g/uxsbyNAehhnof4HporuGfsCFLSXXNsBa1Wdb+8gsZLq
+         nEgIaXrcGSbC6I7HWfnRPXU1eUfWjTNFtzFvtGrOStMyDazgeZUGHroyuTTZGSQXuaMF
+         ujkg==
+X-Gm-Message-State: AO0yUKVLUDjweqW5cVosxzAsf7ZTbd1/AGKkQSW/6aQBUUKH6yt0LozJ
+        fW2XoRP02Akkpb6OV6fysu/6ILqXlZoKYVa89rM=
+X-Google-Smtp-Source: AK7set/6UtZuMIhw4X4hNyGs7b7oDhwrVNtfIeRgKApGBdGrAm2TuHb/nT8hMSOb99IZT95kml+9lST8vgfhgAZe0Lo=
 X-Received: by 2002:a50:9b56:0:b0:4ae:e5db:abfb with SMTP id
- a22-20020a509b56000000b004aee5dbabfbmr7963114edj.3.1678193685649; Tue, 07 Mar
- 2023 04:54:45 -0800 (PST)
+ a22-20020a509b56000000b004aee5dbabfbmr7984861edj.3.1678194402638; Tue, 07 Mar
+ 2023 05:06:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20230223044550.339811-1-luoxueqin@kylinos.cn> <CAJZ5v0jyz_dpKW1GhWN=yYpR9-7WG33GbZ65aoGv+B+R9vEpEw@mail.gmail.com>
- <5b22ef4c-d0a6-5f28-7f71-e4de67d97b87@kylinos.cn>
-In-Reply-To: <5b22ef4c-d0a6-5f28-7f71-e4de67d97b87@kylinos.cn>
+References: <20230304074107.59083-1-shawn.guo@linaro.org>
+In-Reply-To: <20230304074107.59083-1-shawn.guo@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Mar 2023 13:54:34 +0100
-Message-ID: <CAJZ5v0jCKWh3=Oxq03hY1Ggp13hLnYuUM=JsmWY36KysPV4uPw@mail.gmail.com>
-Subject: Re: [PATCH -next] PM: tools: add "CPU killed" timeline on arm64 platform
-To:     luoxueqin <luoxueqin@kylinos.cn>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        todd.e.brandt@linux.intel.com, linux-pm@vger.kernel.org,
+Date:   Tue, 7 Mar 2023 14:06:31 +0100
+Message-ID: <CAJZ5v0h9=vZwENELK+w7HnTTsayaNb1D7wnBgjsXvgopc_t-cA@mail.gmail.com>
+Subject: Re: [PATCH RESEND] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 3:27 AM luoxueqin <luoxueqin@kylinos.cn> wrote:
+On Sat, Mar 4, 2023 at 8:41 AM Shawn Guo <shawn.guo@linaro.org> wrote:
 >
-> 在 2023/2/24 02:11, Rafael J. Wysocki 写道:
-> > On Thu, Feb 23, 2023 at 5:46 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
-> >>
-> >> On the arm64 platform, the core log of cpu offline is as follows:
-> >
-> > Please spell CPU in capitals.
+> In case that psci_pd_init_topology() fails for some reason,
+> psci_pd_remove() will be responsible for deleting provider and removing
+> genpd from psci_pd_providers list.  There will be a failure when removing
+> the cluster PD, because the cpu (child) PDs haven't been removed.
 >
-> Thanks for pointing out my mistake.
+> [    0.050232] CPUidle PSCI: init PM domain cpu0
+> [    0.050278] CPUidle PSCI: init PM domain cpu1
+> [    0.050329] CPUidle PSCI: init PM domain cpu2
+> [    0.050370] CPUidle PSCI: init PM domain cpu3
+> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+> [    0.051412] PM: genpd_remove: removed cpu3
+> [    0.051449] PM: genpd_remove: removed cpu2
+> [    0.051499] PM: genpd_remove: removed cpu1
+> [    0.051546] PM: genpd_remove: removed cpu0
 >
-> >
-> >> [  100.431501] CPU1: shutdown
-> >> [  100.454820] psci: CPU1 killed (polled 20 ms)
-> >> [  100.459266] CPU2: shutdown
-> >> [  100.482575] psci: CPU2 killed (polled 20 ms)
-> >> [  100.486057] CPU3: shutdown
-> >> [  100.513974] psci: CPU3 killed (polled 28 ms)
-> >> [  100.518068] CPU4: shutdown
-> >> [  100.541481] psci: CPU4 killed (polled 24 ms)
-> >>
-> >> 'smpboot: CPU (?P<cpu>[0-9]*) is now offline' cannot be applied
-> >> to the arm64 platform, which caused the loss of the suspend
-> >> machine stage in S3.
-> >
-> > I'm not exactly sure what you mean by "loss of the suspend machine stage in S3".
+> Fix the problem by iterating the provider list reversely, so that parent
+> PD gets removed after child's PDs like below.
 >
-> I made a mistake in saying "loss of the suspend machine stage in S3",
-> please allow me to correct it. Because the original program only
-> recognized the "CPU up" action on the arm64 platform, in output.html,
-> "CPU up" was classified as the "suspend machine" stage. Adding this code
-> can put "CPU killed" and "CPU up" in the correct position.
+> [    0.029052] CPUidle PSCI: init PM domain cpu0
+> [    0.029076] CPUidle PSCI: init PM domain cpu1
+> [    0.029103] CPUidle PSCI: init PM domain cpu2
+> [    0.029124] CPUidle PSCI: init PM domain cpu3
+> [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.029647] PM: genpd_remove: removed cpu0
+> [    0.029666] PM: genpd_remove: removed cpu1
+> [    0.029690] PM: genpd_remove: removed cpu2
+> [    0.029714] PM: genpd_remove: removed cpu3
+> [    0.029738] PM: genpd_remove: removed cpu-cluster0
+>
+> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
 
-It is still somewhat unclear to be honest.
+So I guess there should be Cc: stable for 5.10 and later?
 
-What does "the original program" above mean?  sleepgraph.py before the patch?
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> ---
+> Hi Rafael,
+>
+> This is a resend of the patch [1].  Could you help pick it up or let me
+> know if there is anything need to be improved, thanks!
 
-And IIUC the goal of the patch is to prevent sleepgraph from
-mistakenly treating the "CPU up" message as part of the suspend flow
-(because it should be regarded as part of the resume flow).
-
-If my understanding above is correct, please update the patch
-changelog accordingly and resubmit the patch.
+Is this regarded as 6.3-rc material, or can it wait for 6.4?
