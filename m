@@ -2,274 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB866AE537
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E956AE564
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjCGPpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 10:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S230112AbjCGPwP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 10:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjCGPpi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:45:38 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2969B8534A
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:45:32 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id g3so12577119wri.6
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:45:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203930;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JY0Ro4rQcxnhRsiPxJHCXtVEYXHerbDIXQMmbNIdWm4=;
-        b=HPRCUxRSNyyA/oVsmJzaxnWi/aGeU+cplMFkWIaR2F7aOlur6xHyVOmHaPAKxhi6S5
-         6HE4UAsO2+d0XsL5fLTME2qD1b9iemXabrKBz99/HFrLWyXgqZ10sOYFVcFPsXlzy/AS
-         qt417U9I2jHYrPuL5Wu4SH7jhN8rWtLitFhGDLuldeq4REKk8ZLMdIpSTJm9bOwakbQI
-         bsD2NwGi2p+IwZVSEEGnUIqRmG3GS4QFXwJ5n7Mx+wZ+zK+dywTlSMSeZp+gLtCSjkZ6
-         JYg57EDiQZ3V7pMCmUA9qHRyOz+/J/8UADAxwLqYYLNvcg7sDXZnmTRvVIWvty46O2Yi
-         E0Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678203930;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JY0Ro4rQcxnhRsiPxJHCXtVEYXHerbDIXQMmbNIdWm4=;
-        b=n/GcSoZ5sFHMVMTZJMShC9PFi0zcP29eyeDBy9Kcz2HW0E2wiFlwDflkXB0Q0coRqN
-         f2zOyXJfjYTgR9NYV5baIsHXmOZTw9AjjM5xQ2UcIwOHAqnpwZUP+pXyqkmX57KR8iji
-         17U0n5qnIEgnBnT/lXu2NTRn2RPhKIDP6OjxL6ulqmrf1Lj1rOf6uctJ5cuaSLqrG2rq
-         ia7QyvBwhMNLxDWlXubTlhS+w22AjYxEHIrNOXCLaRfCWeFuY7bsPrzxZzY1PzVdutAR
-         PjeB8fSN8CtAP05UwL6quD9S3B9sDIW8MMVK1Gmip4kQK7HiJ7pbHZrLB33e+tQFjbv5
-         PLLw==
-X-Gm-Message-State: AO0yUKUKc5U/k0CnSh+TVdKRB0jMJ50KbEOGiDKbng1HZIRQOCl3rxrC
-        hdORFsETO6CSymWBO8b4DZvdWg==
-X-Google-Smtp-Source: AK7set8RZzUjacZh8k2s+HDG9BdJ+pG4VhUR6FtsQdsozL54tKbWq3T7WAAE627gMEVl78AJPnNVIw==
-X-Received: by 2002:a5d:6a48:0:b0:2c7:dec:77a7 with SMTP id t8-20020a5d6a48000000b002c70dec77a7mr8356572wrw.71.1678203930693;
-        Tue, 07 Mar 2023 07:45:30 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 07:45:30 -0800 (PST)
-From:   bchihi@baylibre.com
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
-Date:   Tue,  7 Mar 2023 16:45:24 +0100
-Message-Id: <20230307154524.118541-5-bchihi@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
-References: <20230307154524.118541-1-bchihi@baylibre.com>
+        with ESMTP id S230042AbjCGPwO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:52:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D2E8C83E;
+        Tue,  7 Mar 2023 07:52:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4257D61489;
+        Tue,  7 Mar 2023 15:52:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C1DC433D2;
+        Tue,  7 Mar 2023 15:52:01 +0000 (UTC)
+Date:   Tue, 7 Mar 2023 10:51:59 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-pm@vger.kernel.org (open list:THERMAL),
+        linux-kernel@vger.kernel.org (open list),
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: Re: [PATCH v1 01/11] thermal/core: Relocate the traces definition
+ in thermal directory
+Message-ID: <20230307105159.5d137b28@gandalf.local.home>
+In-Reply-To: <20230307133735.90772-2-daniel.lezcano@linaro.org>
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+        <20230307133735.90772-2-daniel.lezcano@linaro.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+On Tue,  7 Mar 2023 14:37:25 +0100
+Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 
-Specify the targeted temperature thresholds.
+> The traces are exported but only local to the thermal core code. On
+> the other side, the traces take the thermal zone device structure as
+> argument, thus they have to rely on the exported thermal.h header
+> file. As we want to move the structure to the private thermal core
+> header, first we have to relocate those traces to the same place as
+> many drivers do.
+> 
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 90 +++++++++++++++++++-----
- 1 file changed, 72 insertions(+), 18 deletions(-)
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index b066d1eab1dc..0dab67d283a6 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -2654,11 +2654,17 @@ map0 {
- 		};
- 
- 		vpu0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
- 
- 			trips {
-+				vpu0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				vpu0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2668,11 +2674,17 @@ vpu0_crit: trip-crit {
- 		};
- 
- 		vpu1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_VPU1>;
- 
- 			trips {
-+				vpu1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				vpu1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2682,11 +2694,17 @@ vpu1_crit: trip-crit {
- 		};
- 
- 		gpu0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_GPU0>;
- 
- 			trips {
-+				gpu0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				gpu0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2696,11 +2714,17 @@ gpu0_crit: trip-crit {
- 		};
- 
- 		gpu1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_GPU1>;
- 
- 			trips {
-+				gpu1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				gpu1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2710,11 +2734,17 @@ gpu1_crit: trip-crit {
- 		};
- 
- 		vdec-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_VDEC>;
- 
- 			trips {
-+				vdec_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				vdec_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2724,11 +2754,17 @@ vdec_crit: trip-crit {
- 		};
- 
- 		img-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_IMG>;
- 
- 			trips {
-+				img_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				img_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2738,11 +2774,17 @@ img_crit: trip-crit {
- 		};
- 
- 		infra-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_INFRA>;
- 
- 			trips {
-+				infra_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				infra_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2752,11 +2794,17 @@ infra_crit: trip-crit {
- 		};
- 
- 		cam0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_CAM0>;
- 
- 			trips {
-+				cam0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cam0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
-@@ -2766,11 +2814,17 @@ cam0_crit: trip-crit {
- 		};
- 
- 		cam1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_ap MT8195_AP_CAM1>;
- 
- 			trips {
-+				cam1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cam1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
--- 
-2.34.1
+-- Steve
+
+> ---
+>  drivers/thermal/Makefile                                    | 3 ++-
+>  drivers/thermal/cpufreq_cooling.c                           | 2 +-
+>  drivers/thermal/devfreq_cooling.c                           | 2 +-
+>  drivers/thermal/gov_fair_share.c                            | 2 +-
+>  drivers/thermal/gov_power_allocator.c                       | 2 +-
+>  drivers/thermal/gov_step_wise.c                             | 2 +-
+>  drivers/thermal/thermal_core.c                              | 2 +-
+>  drivers/thermal/thermal_helpers.c                           | 3 +--
+>  .../events/thermal.h => drivers/thermal/thermal_trace.h     | 6 ++++++
+>  .../thermal/thermal_trace_ipa.h                             | 6 ++++++
+>  10 files changed, 21 insertions(+), 9 deletions(-)
+>  rename include/trace/events/thermal.h => drivers/thermal/thermal_trace.h (97%)
+>  rename include/trace/events/thermal_power_allocator.h => drivers/thermal/thermal_trace_ipa.h (96%)
 
