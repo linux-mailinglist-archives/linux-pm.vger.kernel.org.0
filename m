@@ -2,67 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6796AE0BC
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581626AE0BA
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjCGNiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 08:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
+        id S230274AbjCGNiA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 08:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjCGNh7 (ORCPT
+        with ESMTP id S229833AbjCGNh7 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 08:37:59 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6A6525D
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 05:37:56 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j2so12127832wrh.9
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 05:37:56 -0800 (PST)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E909031
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 05:37:57 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id h11so12146234wrm.5
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 05:37:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678196275;
+        d=linaro.org; s=google; t=1678196276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b5lJEnGWoR5daba7syY/YlJQMJlulw+k3BHuc1yDN1U=;
-        b=HNwN9xLjHkYN2k4XJ8+FCxhbozlsuAWJRVES03TTNWLuJDi7/D9zR0blvPsClZ4aJF
-         dZVBH9kFIfyJNf3aBDJqkT/ANpEmjPCvvMpjtEVRpbSzXmJKheHZkXa/xF2aCcoUksQG
-         /OHuCQKOOxEDZu67yNYMjHLCbqBQ7uQNupFZKwbvHiTGsnjdtceKUahaCVtpqEa0P5BL
-         yZ7RFojSHhXPz0U3y2KlOY3Vnagf+/0/imHZ/YHPIsbGd+BtzVH9Jnb3EyKFJoEkIHb6
-         XMLn49DMTSr7koKc390uGmGAn0KPKhDsaY/9OjWfea4UP28n3QM7vmfL86Rfl69LBlQM
-         2f+A==
+        bh=mIjogzcbB9NbNQDtYcUOxd5sO+Lh6rQ2yVngUMiZyBg=;
+        b=YG5ga49pJHXfSemMbf0p1srILRTv58YCHpLvV/P7+8IagzwrOhVhY7ZKGa0EYsmRo/
+         G2CoSa4u0ZEPOC0Vr70fZU1bQ41CO1Y4MMaxwuSbD7SbxOR1Dzpss8lJ/qrzohTOAMFs
+         TWxHtI4ngmaSsg3tMPJcWKwjqdVjAyBsxhGaReWOJlZo4/jUDQVQSh+7eDi7aKiHqvWq
+         Vs/+qJbWZzqKUHoiZSdeKb362nA3ACs5FJymKmMPaLPNbJgJYa34BxAVmMeOvtmasGxV
+         EgAlVDdpg2jnHLSqMEooMAFjtMZYCMpfINVTeqnOeyNAxNeurKrrDromBo23nT+lHimD
+         0F5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196275;
+        d=1e100.net; s=20210112; t=1678196276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b5lJEnGWoR5daba7syY/YlJQMJlulw+k3BHuc1yDN1U=;
-        b=IYcdc4QTDpCiGdW+KrmOFHEh03Tq4YSarxxZ3RRE9uNX6FbCf/d1AHoSSvQuuN63Bn
-         T0hzA6oJ6dD+spyU65BK7Kh7VB2rHoQPpe4ao9n6VXQ95SJUqHyzOJX6hwqirhJzRICb
-         lvo4pE0kO/MJhrBt4tvQaV97fZNuLnbMZpCNQAyR5xJrZzGA1cq5vKofpZ9OO1Ru9kkX
-         5H04Qe8QMZRezhuXSAje3qXjGRaBs2XNV3UeQFmH9HIOKqIC0U5rF4FA3SK2AZlGed1S
-         dlxoxQe3VMZ91/OtgedQU5A8Mgp5l+P2ciJhf54TIyVgVPlkUCzgdfFpZkUlVWBj9KMR
-         N9YQ==
-X-Gm-Message-State: AO0yUKU3nrys6GbonNAbOlIEP9YCrKK5BsoKqcGVfdKku7Vv7GPy2wlJ
-        1Rz2taYcWuDsTLYeUOAhldQheA==
-X-Google-Smtp-Source: AK7set8ZMrApDRZd5133PVg919iApzpcGKhJiym0d1GCCx1FzE5z2niOOu588zS7WXr0/sPqW8nwbw==
-X-Received: by 2002:adf:e745:0:b0:2c5:a38f:ca3a with SMTP id c5-20020adfe745000000b002c5a38fca3amr13239879wrn.10.1678196274952;
-        Tue, 07 Mar 2023 05:37:54 -0800 (PST)
+        bh=mIjogzcbB9NbNQDtYcUOxd5sO+Lh6rQ2yVngUMiZyBg=;
+        b=5WU4MNM5Ib36asPAJQFTfnyibvCVg8V2GTky/AnfmMSvd4IJzuwoSwVxzVJYV0+P7R
+         UF7RXPdzQBnVdqM2pB/wDtUu6nJ/6UVCOqepFvP3ASfVFsa/MNX1kq0yTyPT+8A9FXuH
+         daqrH0YK/eRlkbIscZycg0p9u/J537MWYtdR0iNi28WYyHZ1aid4KvzemuEthA73y0l2
+         XbsHOnrTwSGBgcl6uWm2LcRJDeW813JZ5igl9RApHJ5B5/DTEk428I5NbkX1pyAKCT5o
+         2bXSxzco0MjlUONgdh/Wr5dwhQRnwL0eyzklhyerE6VY5tshPve8MLRQ+D3bw1M7s+3n
+         iieA==
+X-Gm-Message-State: AO0yUKXLIy1JwBBKNn8v/FoJ39z7Scm77VCpxvWx04q5/yLuMe4/yu95
+        RCyZVXC7JDG28GF579icjVb6TQ==
+X-Google-Smtp-Source: AK7set/4lXJCmPfCyDhu+dCKKQKbXeAog36vaBFmsPGjAwv5R3tEcPT/BWmWipC6Naeq00anV5N6JA==
+X-Received: by 2002:a5d:5253:0:b0:2c5:5d21:7d4c with SMTP id k19-20020a5d5253000000b002c55d217d4cmr9400374wrc.43.1678196276323;
+        Tue, 07 Mar 2023 05:37:56 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5ab9:1ac6:870d:35c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.37.54
+        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.37.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:37:54 -0800 (PST)
+        Tue, 07 Mar 2023 05:37:56 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, amitk@kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Tim Zimmermann <tim@linux4.de>,
         linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list),
-        linux-trace-kernel@vger.kernel.org (open list:TRACING)
-Subject: [PATCH v1 01/11] thermal/core: Relocate the traces definition in thermal directory
-Date:   Tue,  7 Mar 2023 14:37:25 +0100
-Message-Id: <20230307133735.90772-2-daniel.lezcano@linaro.org>
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v1 02/11] thermal/drivers/intel_pch_thermal: Use thermal driver device to write a trace
+Date:   Tue,  7 Mar 2023 14:37:26 +0100
+Message-Id: <20230307133735.90772-3-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307133735.90772-1-daniel.lezcano@linaro.org>
 References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
@@ -70,191 +67,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The traces are exported but only local to the thermal core code. On
-the other side, the traces take the thermal zone device structure as
-argument, thus they have to rely on the exported thermal.h header
-file. As we want to move the structure to the private thermal core
-header, first we have to relocate those traces to the same place as
-many drivers do.
+The pch_critical() callback accesses the thermal zone device structure
+internals, it dereferences the thermal zone struct device and the 'type'.
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+For the former, the driver related device should be use instead and
+for the latter an accessor already exists. Use them instead of
+accessing the internals.
+
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/Makefile                                    | 3 ++-
- drivers/thermal/cpufreq_cooling.c                           | 2 +-
- drivers/thermal/devfreq_cooling.c                           | 2 +-
- drivers/thermal/gov_fair_share.c                            | 2 +-
- drivers/thermal/gov_power_allocator.c                       | 2 +-
- drivers/thermal/gov_step_wise.c                             | 2 +-
- drivers/thermal/thermal_core.c                              | 2 +-
- drivers/thermal/thermal_helpers.c                           | 3 +--
- .../events/thermal.h => drivers/thermal/thermal_trace.h     | 6 ++++++
- .../thermal/thermal_trace_ipa.h                             | 6 ++++++
- 10 files changed, 21 insertions(+), 9 deletions(-)
- rename include/trace/events/thermal.h => drivers/thermal/thermal_trace.h (97%)
- rename include/trace/events/thermal_power_allocator.h => drivers/thermal/thermal_trace_ipa.h (96%)
+ drivers/thermal/intel/intel_pch_thermal.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index eed300e83d48..058664bc3ec0 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -2,7 +2,7 @@
- #
- # Makefile for sensor chip drivers.
- #
--
-+CFLAGS_thermal_core.o		:= -I$(src)
- obj-$(CONFIG_THERMAL)		+= thermal_sys.o
- thermal_sys-y			+= thermal_core.o thermal_sysfs.o
- thermal_sys-y			+= thermal_trip.o thermal_helpers.o
-@@ -16,6 +16,7 @@ thermal_sys-$(CONFIG_THERMAL_OF)		+= thermal_of.o
- thermal_sys-$(CONFIG_THERMAL_ACPI)		+= thermal_acpi.o
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index dce50d239357..0de46057db2a 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -127,7 +127,10 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
  
- # governors
-+CFLAGS_gov_power_allocator.o			:= -I$(src)
- thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)	+= gov_fair_share.o
- thermal_sys-$(CONFIG_THERMAL_GOV_BANG_BANG)	+= gov_bang_bang.o
- thermal_sys-$(CONFIG_THERMAL_GOV_STEP_WISE)	+= gov_step_wise.o
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 9f8b438fcf8f..65ef08b30334 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -23,7 +23,7 @@
- #include <linux/thermal.h>
- #include <linux/units.h>
- 
--#include <trace/events/thermal.h>
-+#include "thermal_trace.h"
- 
- /*
-  * Cooling state <-> CPUFreq frequency
-diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-index 24b474925cd6..262e62ab6cf2 100644
---- a/drivers/thermal/devfreq_cooling.c
-+++ b/drivers/thermal/devfreq_cooling.c
-@@ -20,7 +20,7 @@
- #include <linux/thermal.h>
- #include <linux/units.h>
- 
--#include <trace/events/thermal.h>
-+#include "thermal_trace.h"
- 
- #define SCALE_ERROR_MITIGATION	100
- 
-diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
-index aad7d5fe3a14..1ce5692151f5 100644
---- a/drivers/thermal/gov_fair_share.c
-+++ b/drivers/thermal/gov_fair_share.c
-@@ -11,7 +11,7 @@
-  */
- 
- #include <linux/thermal.h>
--#include <trace/events/thermal.h>
-+#include "thermal_trace.h" 
- 
- #include "thermal_core.h"
- 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 0eaf1527d3e3..3df2d440d73d 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -12,7 +12,7 @@
- #include <linux/thermal.h>
- 
- #define CREATE_TRACE_POINTS
--#include <trace/events/thermal_power_allocator.h>
-+#include "thermal_trace_ipa.h" 
- 
- #include "thermal_core.h"
- 
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 31235e169c5a..f69c83e2992d 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -12,7 +12,7 @@
- 
- #include <linux/thermal.h>
- #include <linux/minmax.h>
--#include <trace/events/thermal.h>
-+#include "thermal_trace.h" 
- 
- #include "thermal_core.h"
- 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 46dedfe061df..cec72c6673a5 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -22,7 +22,7 @@
- #include <linux/suspend.h>
- 
- #define CREATE_TRACE_POINTS
--#include <trace/events/thermal.h>
-+#include "thermal_trace.h"
- 
- #include "thermal_core.h"
- #include "thermal_hwmon.h"
-diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-index 9558339f5633..c41b1a5700a5 100644
---- a/drivers/thermal/thermal_helpers.c
-+++ b/drivers/thermal/thermal_helpers.c
-@@ -19,9 +19,8 @@
- #include <linux/string.h>
- #include <linux/sysfs.h>
- 
--#include <trace/events/thermal.h>
--
- #include "thermal_core.h"
-+#include "thermal_trace.h"
- 
- int get_tz_trend(struct thermal_zone_device *tz, int trip)
+ static void pch_critical(struct thermal_zone_device *tzd)
  {
-diff --git a/include/trace/events/thermal.h b/drivers/thermal/thermal_trace.h
-similarity index 97%
-rename from include/trace/events/thermal.h
-rename to drivers/thermal/thermal_trace.h
-index e58bf3072f32..459c8ce6cf3b 100644
---- a/include/trace/events/thermal.h
-+++ b/drivers/thermal/thermal_trace.h
-@@ -195,5 +195,11 @@ TRACE_EVENT(thermal_power_devfreq_limit,
- #endif /* CONFIG_DEVFREQ_THERMAL */
- #endif /* _TRACE_THERMAL_H */
+-	dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
++	struct pch_thermal_device *ptd = thermal_zone_device_priv(tzd);
++
++	dev_dbg(&ptd->pdev->dev, "%s: critical temperature reached\n",
++		thermal_zone_device_type(tzd));
+ }
  
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE thermal_trace
-+
- /* This part must be outside protection */
- #include <trace/define_trace.h>
-diff --git a/include/trace/events/thermal_power_allocator.h b/drivers/thermal/thermal_trace_ipa.h
-similarity index 96%
-rename from include/trace/events/thermal_power_allocator.h
-rename to drivers/thermal/thermal_trace_ipa.h
-index 1c8fb95544f9..84568db5421b 100644
---- a/include/trace/events/thermal_power_allocator.h
-+++ b/drivers/thermal/thermal_trace_ipa.h
-@@ -84,5 +84,11 @@ TRACE_EVENT(thermal_power_allocator_pid,
- );
- #endif /* _TRACE_THERMAL_POWER_ALLOCATOR_H */
- 
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE thermal_trace_ipa
-+
- /* This part must be outside protection */
- #include <trace/define_trace.h>
+ static struct thermal_zone_device_ops tzd_ops = {
 -- 
 2.34.1
 
