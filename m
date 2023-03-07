@@ -2,64 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581626AE0BA
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A844F6AE0BD
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCGNiA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 08:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S230344AbjCGNiC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 08:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjCGNh7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 08:37:59 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E909031
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 05:37:57 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h11so12146234wrm.5
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 05:37:57 -0800 (PST)
+        with ESMTP id S229833AbjCGNiB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 08:38:01 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7B6E05D
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 05:37:58 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id q16so12162503wrw.2
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 05:37:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678196276;
+        d=linaro.org; s=google; t=1678196277;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mIjogzcbB9NbNQDtYcUOxd5sO+Lh6rQ2yVngUMiZyBg=;
-        b=YG5ga49pJHXfSemMbf0p1srILRTv58YCHpLvV/P7+8IagzwrOhVhY7ZKGa0EYsmRo/
-         G2CoSa4u0ZEPOC0Vr70fZU1bQ41CO1Y4MMaxwuSbD7SbxOR1Dzpss8lJ/qrzohTOAMFs
-         TWxHtI4ngmaSsg3tMPJcWKwjqdVjAyBsxhGaReWOJlZo4/jUDQVQSh+7eDi7aKiHqvWq
-         Vs/+qJbWZzqKUHoiZSdeKb362nA3ACs5FJymKmMPaLPNbJgJYa34BxAVmMeOvtmasGxV
-         EgAlVDdpg2jnHLSqMEooMAFjtMZYCMpfINVTeqnOeyNAxNeurKrrDromBo23nT+lHimD
-         0F5A==
+        bh=nLUnfNdm2yVAS1wkgyhep1P3VK/E8L4MHqepWzvtV2A=;
+        b=qKIJrWS9HlseEtztfIrN6k80cK8FLhU5mOoTqsxRKIDDswm6hrdb/9FJXWSrtgL4Pm
+         ZymY4A+L/FR0vKcMRpxJnpy3ko7ZviX2L3xB7TSfO4MkZ5K4R5T7I6j2QJO/IV2kfHfa
+         xRqWqAfhDP64AdJkXBlw4aRFPruwVqGBE9ynzgRIdvtK8gIYV3EbAI7UtfctX4+wYbIN
+         bMGDMVGkXtrCoEnJcQJBTZ58XDpIflI+VbB0IaYvqcKCQ/6UeWX4Am5pQ3QL1N23Kf+T
+         qNq7IV3DjqUzZ5e0CsHVPgb0IYpSE/rwbzlDfi4qNQ1X4w8H8QslY8Sjm5y/QHleuooc
+         8giw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196276;
+        d=1e100.net; s=20210112; t=1678196277;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mIjogzcbB9NbNQDtYcUOxd5sO+Lh6rQ2yVngUMiZyBg=;
-        b=5WU4MNM5Ib36asPAJQFTfnyibvCVg8V2GTky/AnfmMSvd4IJzuwoSwVxzVJYV0+P7R
-         UF7RXPdzQBnVdqM2pB/wDtUu6nJ/6UVCOqepFvP3ASfVFsa/MNX1kq0yTyPT+8A9FXuH
-         daqrH0YK/eRlkbIscZycg0p9u/J537MWYtdR0iNi28WYyHZ1aid4KvzemuEthA73y0l2
-         XbsHOnrTwSGBgcl6uWm2LcRJDeW813JZ5igl9RApHJ5B5/DTEk428I5NbkX1pyAKCT5o
-         2bXSxzco0MjlUONgdh/Wr5dwhQRnwL0eyzklhyerE6VY5tshPve8MLRQ+D3bw1M7s+3n
-         iieA==
-X-Gm-Message-State: AO0yUKXLIy1JwBBKNn8v/FoJ39z7Scm77VCpxvWx04q5/yLuMe4/yu95
-        RCyZVXC7JDG28GF579icjVb6TQ==
-X-Google-Smtp-Source: AK7set/4lXJCmPfCyDhu+dCKKQKbXeAog36vaBFmsPGjAwv5R3tEcPT/BWmWipC6Naeq00anV5N6JA==
-X-Received: by 2002:a5d:5253:0:b0:2c5:5d21:7d4c with SMTP id k19-20020a5d5253000000b002c55d217d4cmr9400374wrc.43.1678196276323;
-        Tue, 07 Mar 2023 05:37:56 -0800 (PST)
+        bh=nLUnfNdm2yVAS1wkgyhep1P3VK/E8L4MHqepWzvtV2A=;
+        b=pF2WuAwcQL9vq0/aF6TXO//bpJJju/VbKP7WmDRjwuOh5TWrmBx/2XX2OdMltYMUne
+         6AEzadAUZG0jvhH26ynzkGgfC3vVh2S0R1cjEWwcuKmNWzBbc4Vk0kYbbZKNw46qxYDx
+         uwUlkb34sUYYYJIFbvpkzEmw/9MYyCN8DW/cgBdzv1Cz4anTGHlX4cWZ1jGntqnIHQKG
+         06YQ5FvMN4H9X+BOVt7ONveR4UtQ7BWIre3krgu/i8J5VcuNAYAbdyBJDfS8spBbG6aI
+         9AqbzO96I3cn8f9LmDVxNUIbnP5ouuoy8WsCOILlCEpafZ2l5zvhka2fGRD4vnPIklFc
+         ZAxg==
+X-Gm-Message-State: AO0yUKWfxsgC8Z0Vq2y+mHSylDpLRdu3Bxj9UU0ciHIE/u1CQi7ENyCW
+        7QjggStjJQoKwPfZHRVfWXCoSA4Bt6X4WC6SrZc=
+X-Google-Smtp-Source: AK7set+5bl0ivxq0qjIDEGdtaLKiDFJabUVOomnEhZz+7wzT8OijXNC2nxhhd/MkVveZgS5ZEKTF/w==
+X-Received: by 2002:adf:e948:0:b0:2c7:478:d1d9 with SMTP id m8-20020adfe948000000b002c70478d1d9mr9055975wrn.33.1678196277140;
+        Tue, 07 Mar 2023 05:37:57 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5ab9:1ac6:870d:35c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.37.55
+        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.37.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 07 Mar 2023 05:37:56 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, amitk@kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
+        Sujith Thomas <sujith.thomas@intel.com>,
+        linux-pm@vger.kernel.org (open list:INTEL MENLOW THERMAL DRIVER),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 02/11] thermal/drivers/intel_pch_thermal: Use thermal driver device to write a trace
-Date:   Tue,  7 Mar 2023 14:37:26 +0100
-Message-Id: <20230307133735.90772-3-daniel.lezcano@linaro.org>
+Subject: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove add_one_attribute
+Date:   Tue,  7 Mar 2023 14:37:27 +0100
+Message-Id: <20230307133735.90772-4-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307133735.90772-1-daniel.lezcano@linaro.org>
 References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
@@ -75,34 +73,243 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pch_critical() callback accesses the thermal zone device structure
-internals, it dereferences the thermal zone struct device and the 'type'.
+The driver hooks the thermal framework sysfs to add some driver
+specific information. A debatable approach as that may belong the
+device sysfs directory, not the thermal zone directory.
 
-For the former, the driver related device should be use instead and
-for the latter an accessor already exists. Use them instead of
-accessing the internals.
+As the driver is accessing the thermal internals, we should provide at
+least an API to the thermal framework to add an attribute to the
+existing sysfs thermal zone entry.
+
+Before doing that and given the age of the driver (2008) may be it is
+worth to double check if these attributes are really needed. So my
+first proposal is to remove them if that does not hurt.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/intel/intel_pch_thermal.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/thermal/intel/intel_menlow.c | 193 ---------------------------
+ 1 file changed, 193 deletions(-)
 
-diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
-index dce50d239357..0de46057db2a 100644
---- a/drivers/thermal/intel/intel_pch_thermal.c
-+++ b/drivers/thermal/intel/intel_pch_thermal.c
-@@ -127,7 +127,10 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
+diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+index 5a6ad0552311..5a9738a93083 100644
+--- a/drivers/thermal/intel/intel_menlow.c
++++ b/drivers/thermal/intel/intel_menlow.c
+@@ -230,174 +230,8 @@ struct intel_menlow_attribute {
+ static LIST_HEAD(intel_menlow_attr_list);
+ static DEFINE_MUTEX(intel_menlow_attr_lock);
  
- static void pch_critical(struct thermal_zone_device *tzd)
- {
--	dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
-+	struct pch_thermal_device *ptd = thermal_zone_device_priv(tzd);
-+
-+	dev_dbg(&ptd->pdev->dev, "%s: critical temperature reached\n",
-+		thermal_zone_device_type(tzd));
- }
+-/*
+- * sensor_get_auxtrip - get the current auxtrip value from sensor
+- * @handle: Object handle
+- * @index : GET_AUX1/GET_AUX0
+- * @value : The address will be fill by the value
+- */
+-static int sensor_get_auxtrip(acpi_handle handle, int index,
+-							unsigned long long *value)
+-{
+-	acpi_status status;
+-
+-	if ((index != 0 && index != 1) || !value)
+-		return -EINVAL;
+-
+-	status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
+-				       NULL, value);
+-	if (ACPI_FAILURE(status))
+-		return -EIO;
+-
+-	return 0;
+-}
+-
+-/*
+- * sensor_set_auxtrip - set the new auxtrip value to sensor
+- * @handle: Object handle
+- * @index : GET_AUX1/GET_AUX0
+- * @value : The value will be set
+- */
+-static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
+-{
+-	acpi_status status;
+-	union acpi_object arg = {
+-		ACPI_TYPE_INTEGER
+-	};
+-	struct acpi_object_list args = {
+-		1, &arg
+-	};
+-	unsigned long long temp;
+-
+-	if (index != 0 && index != 1)
+-		return -EINVAL;
+-
+-	status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
+-				       NULL, &temp);
+-	if (ACPI_FAILURE(status))
+-		return -EIO;
+-	if ((index && value < temp) || (!index && value > temp))
+-		return -EINVAL;
+-
+-	arg.integer.value = value;
+-	status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
+-				       &args, &temp);
+-	if (ACPI_FAILURE(status))
+-		return -EIO;
+-
+-	/* do we need to check the return value of SAX0/SAX1 ? */
+-
+-	return 0;
+-}
+-
+-#define to_intel_menlow_attr(_attr)	\
+-	container_of(_attr, struct intel_menlow_attribute, attr)
+-
+-static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
+-			char *buf, int idx)
+-{
+-	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
+-	unsigned long long value;
+-	int result;
+-
+-	result = sensor_get_auxtrip(attr->handle, idx, &value);
+-	if (result)
+-		return result;
+-
+-	return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
+-}
+-
+-static ssize_t aux0_show(struct device *dev,
+-			 struct device_attribute *dev_attr, char *buf)
+-{
+-	return aux_show(dev, dev_attr, buf, 0);
+-}
+-
+-static ssize_t aux1_show(struct device *dev,
+-			 struct device_attribute *dev_attr, char *buf)
+-{
+-	return aux_show(dev, dev_attr, buf, 1);
+-}
+-
+-static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
+-			 const char *buf, size_t count, int idx)
+-{
+-	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
+-	int value;
+-	int result;
+-
+-	/*Sanity check; should be a positive integer */
+-	if (!sscanf(buf, "%d", &value))
+-		return -EINVAL;
+-
+-	if (value < 0)
+-		return -EINVAL;
+-
+-	result = sensor_set_auxtrip(attr->handle, idx,
+-				    celsius_to_deci_kelvin(value));
+-	return result ? result : count;
+-}
+-
+-static ssize_t aux0_store(struct device *dev,
+-			  struct device_attribute *dev_attr,
+-			  const char *buf, size_t count)
+-{
+-	return aux_store(dev, dev_attr, buf, count, 0);
+-}
+-
+-static ssize_t aux1_store(struct device *dev,
+-			  struct device_attribute *dev_attr,
+-			  const char *buf, size_t count)
+-{
+-	return aux_store(dev, dev_attr, buf, count, 1);
+-}
+-
+ /* BIOS can enable/disable the thermal user application in dabney platform */
+ #define BIOS_ENABLED "\\_TZ.GSTS"
+-static ssize_t bios_enabled_show(struct device *dev,
+-				 struct device_attribute *attr, char *buf)
+-{
+-	acpi_status status;
+-	unsigned long long bios_enabled;
+-
+-	status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
+-	if (ACPI_FAILURE(status))
+-		return -ENODEV;
+-
+-	return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
+-}
+-
+-static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+-					  void *store, struct device *dev,
+-					  acpi_handle handle)
+-{
+-	struct intel_menlow_attribute *attr;
+-	int result;
+-
+-	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
+-	if (!attr)
+-		return -ENOMEM;
+-
+-	sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
+-	attr->attr.attr.name = name;
+-	attr->attr.attr.mode = mode;
+-	attr->attr.show = show;
+-	attr->attr.store = store;
+-	attr->device = dev;
+-	attr->handle = handle;
+-
+-	result = device_create_file(dev, &attr->attr);
+-	if (result) {
+-		kfree(attr);
+-		return result;
+-	}
+-
+-	mutex_lock(&intel_menlow_attr_lock);
+-	list_add_tail(&attr->node, &intel_menlow_attr_list);
+-	mutex_unlock(&intel_menlow_attr_lock);
+-
+-	return 0;
+-}
  
- static struct thermal_zone_device_ops tzd_ops = {
+ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+ 						void *context, void **rv)
+@@ -420,12 +254,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+ 	if (ACPI_FAILURE(status))
+ 		return (status == AE_NOT_FOUND) ? AE_OK : status;
+ 
+-	result = intel_menlow_add_one_attribute("aux0", 0644,
+-						aux0_show, aux0_store,
+-						&thermal->device, handle);
+-	if (result)
+-		return AE_ERROR;
+-
+ 	status = acpi_get_handle(handle, GET_AUX1, &dummy);
+ 	if (ACPI_FAILURE(status))
+ 		goto aux1_not_found;
+@@ -434,27 +262,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+ 	if (ACPI_FAILURE(status))
+ 		goto aux1_not_found;
+ 
+-	result = intel_menlow_add_one_attribute("aux1", 0644,
+-						aux1_show, aux1_store,
+-						&thermal->device, handle);
+-	if (result) {
+-		intel_menlow_unregister_sensor();
+-		return AE_ERROR;
+-	}
+-
+-	/*
+-	 * create the "dabney_enabled" attribute which means the user app
+-	 * should be loaded or not
+-	 */
+-
+-	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
+-						bios_enabled_show, NULL,
+-						&thermal->device, handle);
+-	if (result) {
+-		intel_menlow_unregister_sensor();
+-		return AE_ERROR;
+-	}
+-
+ 	return AE_OK;
+ 
+  aux1_not_found:
 -- 
 2.34.1
 
