@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC5B6AE52D
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A9D6AE52E
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjCGPpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 10:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S230322AbjCGPpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 10:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjCGPpc (ORCPT
+        with ESMTP id S230434AbjCGPpc (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:45:32 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE2D36FF6
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E087029E2D
         for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:45:29 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bx12so12554457wrb.11
+Received: by mail-wr1-x42c.google.com with SMTP id f11so12572061wrv.8
         for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:45:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NMT354TdG7a+Mjd6nR8XY28RmDaq3SVnAflnava9+4=;
-        b=hMkvX07ZWoEiUrNshSUONwBDA8mCpjSl9GndL4JQtN8MUn8/BnoS2vISYH7f/VMaBf
-         3hveIte2Is2YGBevN1S5N46ox8c4WHSl4yZCnT4eydXX6lN4ozH2k/5Z9P1C1p2yY6Y6
-         UXvo62ShrMcy7kC0Wpd3efQsBiXiMT5Vi24vQ+bIxtTENvmbWZt7b5w+PIFu40sgcf+w
-         4tcZHu3Ncvf7+aFNMnKhCIWk16fLycz2FCVwP8noBTWbzETc0mefmwm+lz58SGhoQNbg
-         z80QcsPVIuLS3/Au9xz8pUr/yUVnBkLaJx1LSJmLuXzSvsLrN4xxUONwQYZZyY6efQkk
-         fErA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203928;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+OFCWs6sMvmcACVP359vGdpDLS8nF6pX77Um/B5ZzBQ=;
+        b=I4Km7KvrsZJjag+t2OnVfY3qj3nEqw18rDA/g/UnXtDjeMVyd4k+jsQmwXhiEHzOOo
+         kus9JATGqXhXUaxRpv72NOs1h97nszn7FihQqNJoWCZ4lJ2nBUxLH8V90eL0TPDQu0QI
+         QnkjKYyyNt80BDehpoieSDTVidG4vOfOz8QARoAuzl0FpUgYUQFqaeYZtm8H+1GNymNh
+         e/F9JasTMspKNjy0jKFrRUHz1uU3XzRE/rshBmRHo6TedQ2ljZi4b5ko1viqH4ExiODT
+         mezb4sGJN4y4TEdKqBJ9b97gThmeClR1kvXXs5KWMhrroBsc9N/cws97ENwz8+QX6NQ7
+         CQ3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678203927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0NMT354TdG7a+Mjd6nR8XY28RmDaq3SVnAflnava9+4=;
-        b=O5CKhvyVfVvCpI6r27HXzPRtIorMFkt5IFY0o1zXg9CLzv5TsN5Uhw1Q7wVl6ua1Ry
-         3dGaB6AslP8FUiqInZadDmhx3wtNwof0zHolFzkt4dpuCZ9GuwOlQR8e/LQS5CwfQ8U5
-         +TuCN2LkpE4ZdOWMQ9D2QQE0Lt6X/gg8z7U/6rpU1pOW6u9bY47vzE8gf2pQaB32jIlb
-         3pUomxZTtokDfdGyt62cMiK+QKECKQ1WdTqlVG0Qkv01AruXt6M2uHc7h0ieGjCx+f3P
-         oK+LK4kABM7D5qwx8M3v9iIOCHX46zy6FNakkLUDEuidxERtvKxNfaYMRRjUkmrHMyH+
-         j2jQ==
-X-Gm-Message-State: AO0yUKWH1fdaiikQF2m7A+EM5z2Asat4109EWvGMmkbgGIR2zOjh5JkP
-        cN92CUaSou2ulS0jwJ+Xfh9IeA==
-X-Google-Smtp-Source: AK7set9EHu+HV/Mv7v6/4EnH+ZLw8tMFVfGqynaBEs9+XXablQK4YXk5bcSSsrLRLVgmSo2ZJFT/wQ==
-X-Received: by 2002:a5d:4bca:0:b0:2c5:4ca8:a5a1 with SMTP id l10-20020a5d4bca000000b002c54ca8a5a1mr9236688wrt.23.1678203927555;
-        Tue, 07 Mar 2023 07:45:27 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678203928;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+OFCWs6sMvmcACVP359vGdpDLS8nF6pX77Um/B5ZzBQ=;
+        b=EJZAo1hkzvG+eQySM+PvMyQgBEFTfQ1ejj4lDhuK2XrsTU0q6RXOLnoX6AcKnor57K
+         3dC4tD7qMimDZTJAl9Om5yU6LrVmHzKpPQjWbMzOhWyCefTgD7UZr/0CKHOwVii1HlTO
+         hO9C3KB0eoFwaez9U+L3EUSX9gQwV+1us7d+WsyhGKIWSjcnMWpeg5adTmioG5TaBUqh
+         LUbsaDc0jDemkBuVdyWgpkh6SDEZ7WcwTTYiu9tgibjrpExhG1pA/2Qijx7DZHY1VlcF
+         +hXxUyw7HQNA37TXaYogSMoSw/KRhK27HCjOcaAzoyqwTlCknAqBfL9SBTteoGJPJ/U8
+         aQqA==
+X-Gm-Message-State: AO0yUKWWnMFGwLpEZRnKoWala+3Fc8COI9lFEd2AkSbTjR4K1M9CHT9e
+        yh/gBdfSP7wEGfttL59BntrJhQ==
+X-Google-Smtp-Source: AK7set/+bC2C/uYd0izZbbAPg4Ofkw0p/GsTZYFxd0TjK9UR7bUQOp5p/RMcGAtJ3iaLQsWPqZ5+hw==
+X-Received: by 2002:a5d:4089:0:b0:2c7:3ee7:a44c with SMTP id o9-20020a5d4089000000b002c73ee7a44cmr8371471wrp.65.1678203928444;
+        Tue, 07 Mar 2023 07:45:28 -0800 (PST)
 Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.26
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 07:45:27 -0800 (PST)
+        Tue, 07 Mar 2023 07:45:28 -0800 (PST)
 From:   bchihi@baylibre.com
 To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
         rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
@@ -59,15 +60,17 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
-Subject: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-Date:   Tue,  7 Mar 2023 16:45:20 +0100
-Message-Id: <20230307154524.118541-1-bchihi@baylibre.com>
+Subject: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal controllers for mt8195
+Date:   Tue,  7 Mar 2023 16:45:21 +0100
+Message-Id: <20230307154524.118541-2-bchihi@baylibre.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
+References: <20230307154524.118541-1-bchihi@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,42 +79,32 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Balsam CHIHI <bchihi@baylibre.com>
 
-Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
+Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
 
-This series is a continuation of the original series "Add LVTS Thermal Architecture" v14 :
-    https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.50294-1-bchihi@baylibre.com/
+Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+---
+ include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Based on top of thermal/linux-next :
-    base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
-
-Depends on these patches as they are not yet applyied to thermal/linux-next branch :
-    [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already included in linux master branch)
-    https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-4-bchihi@baylibre.com/
-    [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
-    https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-6-bchihi@baylibre.com/
-    [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
-    https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-7-bchihi@baylibre.com/
-
-Balsam CHIHI (4):
-  dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
-    controllers for mt8195
-  thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
-  arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-  arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
-
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 180 ++++++++++++++++++
- drivers/thermal/mediatek/lvts_thermal.c       |  94 +++++++--
- .../thermal/mediatek,lvts-thermal.h           |  10 +
- 3 files changed, 264 insertions(+), 20 deletions(-)
-
-
-base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
-prerequisite-patch-id: 73be949bd16979769e5b94905b244dcee4a8f687
-prerequisite-patch-id: 9076e9b3bd3cc411b7b80344211364db5f0cca17
-prerequisite-patch-id: e220d6ae26786f524c249588433f02e5f5f906ad
-prerequisite-patch-id: 58e295ae36ad4784f3eb3830412f35dad31bb8b6
-prerequisite-patch-id: d23d83a946e5b876ef01a717fd51b07df1fa08dd
-prerequisite-patch-id: d67f2455eef1c4a9ecc460dbf3c2e3ad47d213ec
+diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+index c09398920468..8fa5a46675c4 100644
+--- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
++++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+@@ -16,4 +16,14 @@
+ #define MT8195_MCU_LITTLE_CPU2  6
+ #define MT8195_MCU_LITTLE_CPU3  7
+ 
++#define MT8195_AP_VPU0  8
++#define MT8195_AP_VPU1  9
++#define MT8195_AP_GPU0  10
++#define MT8195_AP_GPU1  11
++#define MT8195_AP_VDEC  12
++#define MT8195_AP_IMG   13
++#define MT8195_AP_INFRA 14
++#define MT8195_AP_CAM0  15
++#define MT8195_AP_CAM1  16
++
+ #endif /* __MEDIATEK_LVTS_DT_H */
 -- 
 2.34.1
 
