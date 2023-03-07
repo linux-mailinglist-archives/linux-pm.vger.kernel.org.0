@@ -2,150 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD0E6AE0CC
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C9B6AE0F0
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 14:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjCGNiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 08:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S229717AbjCGNmz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 08:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbjCGNiM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 08:38:12 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27DF3646D
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 05:38:04 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id f11so12137238wrv.8
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 05:38:04 -0800 (PST)
+        with ESMTP id S230350AbjCGNmv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 08:42:51 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D5329413
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 05:42:49 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id j2so12142909wrh.9
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 05:42:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678196284;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678196568;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8U/QSyAheawCOnLmWTGKUDR8tl2aMMA2m4dtkvqkUZc=;
-        b=GR6ZQlXqA5cqbeBm2gQcshttPTPWd+AO20+ha+UgpBnbdoF57VHEazFHgSYJbPDU7h
-         jbJKY7pNig8f1vgtG5FHV7ImJRpzSHWX9XGcBv2zacGJDfGl0h0f7/47LutUsYIfiK6x
-         jqQiM3SCII7ftweKSw2deYgPSj7CfP6cs82rGAgVQWVwcQYXbGwYzCS6orzKGRK9CsxW
-         0/KpHJXqXSaqZ2NRrumfb5XowjkTAdqEgpM8ApxlZrPCG8lodXqqoNSOskqX8n+DCJgH
-         YX1wsWuEkmda/NWDY8dYOn4EJcAt6mLtao7N/IYPFmZwBVSXNe1BTjnml4WooEhfTJrv
-         8Hog==
+        bh=Eeel5XHVDoFzIY2YG1FRNg5liLwMdDxd6X70lesaeNg=;
+        b=cbqb/e/w8w236fE3rmjvQsm/3PyhLPMdyuWqyoTBlqyuTuh4Zx/mzq9dD/hjQM321F
+         EPB63dMqDynEzEDCff8rJuhWAX0PUbR47loqbnjH60nmVA00l41/8wBdy7xRukr/QcUB
+         ++pbWDmgErb4+w499XFEq4DfaPlLlTf3SdD8SrXqLCdEL2MyhQvoRBTKg20+piBh5+m/
+         CCCuJRSWnewbDQIs/r6yxYgEhDO4p3noRsmSDMMaAnHkeTvDz7rQxGYCDnkyJAU1AC7U
+         1dy7QQb3V8jKCHqPH19PBYbF6nyFthwQQZ6D+8uFXby+DfyGtvOZHdG91NHBDkmmwQ5u
+         OPSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196284;
+        d=1e100.net; s=20210112; t=1678196568;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8U/QSyAheawCOnLmWTGKUDR8tl2aMMA2m4dtkvqkUZc=;
-        b=2z1ipM8QX2NdF7M6APALBhSbJDqmssuPuWXEZX02FVmCPwuLY2hYCSWsXcxqrAcw3P
-         sux7EzsmXseNiYE+5W7v2tqfLa7oGB6NiCNypBsjuyVyfvz95Eg8jDEMc+gI34sE+4aN
-         sYDP1cySZkEC6BLHybsvNuM1rt4ZGXIjNDXd/g1K4aP0wyU4zvrzkRnDO6Pvkhcw1wUo
-         j3eeH639jgfnVXRZuWv2lsYI5oBRbwy4Cwgk3x3P2TtLV2L52nYzTOzsH9daizi7Qwys
-         RU0tC06XBb6oJx5fFzc2YPIkP8eev2bLZbLyO3vn4kTsZDterxnvIOX0KCxysLJmH0L8
-         Gpxw==
-X-Gm-Message-State: AO0yUKVycc3SzaChw+o0iZT2o/uODiaqJ5nkUaVFcI4AOUB0EpALE34B
-        Au7wyhSkYECsNapTMIqN/i4jQw==
-X-Google-Smtp-Source: AK7set8oVcooSVgCWWdmxDWpuyEd2Z3jvnRJ2CeM+7+8qMqBJQHNlAg09K5E7c9EClzqOD8fHohQ1Q==
-X-Received: by 2002:adf:e74a:0:b0:2c7:efb:dded with SMTP id c10-20020adfe74a000000b002c70efbddedmr10591530wrn.24.1678196284325;
-        Tue, 07 Mar 2023 05:38:04 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5ab9:1ac6:870d:35c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.38.03
+        bh=Eeel5XHVDoFzIY2YG1FRNg5liLwMdDxd6X70lesaeNg=;
+        b=OgV2JsrzpiP93vqBKp9a90mai79mX6JcpXFFmfSXJaFXZgYJHDvGfvfPaYdJ+18XuR
+         UqNYoHenrretWvUCDMJK7QNsjkzIf+BE5lAhu4NuyzOrmT/tqSxZIePtTKgNyZh5jER9
+         oPQAfHGcoEpE0+2usX8HX2YMvhG1Hjk7qSPlFrEb9yLVG4RUBes7Y8Eh/HLCVEkSBl4u
+         99RQicTX1P3LFZ/Nq3t5ywoMgv5a7kgo/RrMnx1TXHgknmfgslCJ4DDKONIgxmnGfmds
+         awQDvLXayLVw6VzjW31K1slykali/OzCkwLoWDB7dJpVjUkEwVU4e/0v1EDGdivbCr2m
+         +DrQ==
+X-Gm-Message-State: AO0yUKW1qug3Pl1itybSzuCJ4E2dCsmfpBXonbChhsJB2zaHaBpFSlYT
+        /UqLvW1qZudXSCp6VoNUbRl6vw==
+X-Google-Smtp-Source: AK7set+aspRSIaTh4/XbS+bw8KYAx2Ifi6PVWrobx0AWeOOli8vUV5Ail29oq9+yZ42Y9gSmbdGEzw==
+X-Received: by 2002:adf:ea90:0:b0:2c9:d90c:56c3 with SMTP id s16-20020adfea90000000b002c9d90c56c3mr8924250wrm.53.1678196568111;
+        Tue, 07 Mar 2023 05:42:48 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d4dc2000000b002be5bdbe40csm12495589wru.27.2023.03.07.05.42.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:38:04 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 10/11] thermal/core: Alloc-copy-free the thermal zone parameters structure
-Date:   Tue,  7 Mar 2023 14:37:34 +0100
-Message-Id: <20230307133735.90772-11-daniel.lezcano@linaro.org>
+        Tue, 07 Mar 2023 05:42:47 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH] thermal/drivers/mediatek/lvts_thermal: fix memcpy's number of bytes in lvts_calibration_init()
+Date:   Tue,  7 Mar 2023 14:42:45 +0100
+Message-Id: <20230307134245.83599-1-bchihi@baylibre.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307133735.90772-1-daniel.lezcano@linaro.org>
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20230126161048.94089-1-bchihi@baylibre.com>
+References: <20230126161048.94089-1-bchihi@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The caller of the function thermal_zone_device_register_with_trips()
-can pass a thermal_zone_params structure parameter.
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-This one is used by the thermal core code until the thermal zone is
-destroyed. That forces the caller, so the driver, to keep the pointer
-valid until it unregisters the thermal zone if we want to make the
-thermal zone device structure private the core code.
+Replace memcpy 2 bytes by sizeof(int) bytes of LVTS calibration data.
 
-As the thermal zone device structure would be private, the driver can
-not access to thermal zone device structure to retrieve the tzp field
-after it passed it to register the thermal zone.
-
-So instead of forcing the users of the function to deal with the tzp
-structure life cycle, make the usage easier by allocating our own
-thermal zone params, copying the parameter content and by freeing at
-unregister time. The user can then create the parameters on the stack,
-pass it to the registering function and forget about it.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 ---
- drivers/thermal/thermal_core.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Rebased on top of thermal/linux-next
+base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index ca91189bc441..6cbda8f4522e 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1263,13 +1263,19 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 	if (!tz)
- 		return ERR_PTR(-ENOMEM);
+Original email :
+Hello Balsam CHIHI,
+
+The patch f5f633b18234: "thermal/drivers/mediatek: Add the Low
+Voltage Thermal Sensor driver" from Feb 9, 2023, leads to the
+following Smatch static checker warning:
+
+        drivers/thermal/mediatek/lvts_thermal.c:562 lvts_calibration_init()
+        warn: not copying enough bytes for '&lvts_ctrl->calibration[i]' (4 vs 2 bytes)
+
+drivers/thermal/mediatek/lvts_thermal.c
+    555 static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
+    556                                         const struct lvts_ctrl_data *lvts_ctrl_data,
+    557                                         u8 *efuse_calibration)
+    558 {
+    559         int i;
+    560
+    561         for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
+--> 562                 memcpy(&lvts_ctrl->calibration[i],
+    563                        efuse_calibration + lvts_ctrl_data->cal_offset[i], 2);
+                                                                                  ^
+This is copying an array of known ints to a u32 array.  It should copy
+sizeof(int) instead of 2.  It only works because the data you're on
+little endian and the data is small.
+
+    564
+    565         return 0;
+    566 }
+
+regards,
+dan carpenter
+---
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index ddfdcbcf6d86..b505c6b49031 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -575,7 +575,7 @@ static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl
  
-+	if (tzp) {
-+		tz->tzp = kmemdup(tzp, sizeof(*tzp), GFP_KERNEL);
-+		if (!tz->tzp)
-+			goto free_tz;
-+	}
-+	
- 	INIT_LIST_HEAD(&tz->thermal_instances);
- 	ida_init(&tz->ida);
- 	mutex_init(&tz->lock);
- 	id = ida_alloc(&thermal_tz_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		result = id;
--		goto free_tz;
-+		goto free_tzp;
- 	}
+ 	for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
+ 		memcpy(&lvts_ctrl->calibration[i],
+-		       efuse_calibration + lvts_ctrl_data->cal_offset[i], 2);
++		       efuse_calibration + lvts_ctrl_data->cal_offset[i], sizeof(int));
  
- 	tz->id = id;
-@@ -1279,7 +1285,6 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 		ops->critical = thermal_zone_device_critical;
- 
- 	tz->ops = ops;
--	tz->tzp = tzp;
- 	tz->device.class = thermal_class;
- 	tz->devdata = devdata;
- 	tz->trips = trips;
-@@ -1377,6 +1382,8 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 	tz = NULL;
- remove_id:
- 	ida_free(&thermal_tz_ida, id);
-+free_tzp:
-+	kfree(tz->tzp);
- free_tz:
- 	kfree(tz);
- 	return ERR_PTR(result);
-@@ -1472,6 +1479,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	device_del(&tz->device);
- 	mutex_unlock(&tz->lock);
- 
-+	kfree(tzp);
-+	
- 	put_device(&tz->device);
- 
- 	thermal_notify_tz_delete(tz_id);
+ 	return 0;
+ }
+
+base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+prerequisite-patch-id: 73be949bd16979769e5b94905b244dcee4a8f687
+prerequisite-patch-id: d23d83a946e5b876ef01a717fd51b07df1fa08dd
+prerequisite-patch-id: d67f2455eef1c4a9ecc460dbf3c2e3ad47d213ec
+prerequisite-patch-id: 9076e9b3bd3cc411b7b80344211364db5f0cca17
+prerequisite-patch-id: e220d6ae26786f524c249588433f02e5f5f906ad
+prerequisite-patch-id: b407d2998e57678952128b3a4bac92a379132b09
+prerequisite-patch-id: fbb9212ce8c3530da17d213f56fa334ce4fa1b2b
+prerequisite-patch-id: 5db9eed2659028cf4419f2de3d093af7df6c2dad
+prerequisite-patch-id: a83c00c628605d1c8fbe1d97074f9f28efb1bcfc
+prerequisite-patch-id: 56a245620a4f8238cf1ba3844dc348de3db33845
+prerequisite-patch-id: 7df24b0bf11129ddd3356eacf192cc3fdb2bcded
+prerequisite-patch-id: 3213ca70cb5b26d54a7137ff40ca8cd2a795c414
+prerequisite-patch-id: 6c2202e85215d1c7e8ab16a6b85922e994c68d9b
 -- 
 2.34.1
 
