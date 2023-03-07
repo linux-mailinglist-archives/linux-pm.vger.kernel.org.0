@@ -2,64 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649316AE4AB
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03E96AE4BB
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjCGP2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 10:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S230061AbjCGPbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 10:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjCGP2S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:28:18 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF426BF
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:27:39 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id ay14so50065241edb.11
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678202857;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z0uX/whlfBY3Dw/yAaYswjgwPf2gV7oOjGwRpYic0/Y=;
-        b=BVz8SpXz92xaV1wRftu7U2qEZ7m0sqB6VhXj+2DoDmhcQMix7C6LHEQRaTmFbykdmX
-         tWwRDxR8raKY1lWcWUL7FCSxk0dC0WKXsq/8JbVF1P7qs114Gj8B/m7POKRPV0DBxK4O
-         Zz2npffLxHZ0w5l8asWJK2uDPrhMAtdZefeDBNa6RhPaPlM4xqg47bG3d9ujLLD4nMYX
-         OO6FT5mxm73Zu9rLci4XUnMwDLk9UYf6EzHRw4mO6OVhf18YP2n88FbhurHJUEV2oRqp
-         h4lyTHrkLZWAiyXXhZb3CnbMl0iCFY566QWNHJ/9+JS1ouCyUrFbApNkyisUeFgLTmsU
-         NZNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678202857;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z0uX/whlfBY3Dw/yAaYswjgwPf2gV7oOjGwRpYic0/Y=;
-        b=LiJXUM8a24klffhekbOfIxiCrD33nFZJqXOCQ6XXXM854+f9/3wzr81/K0x8Sr3lhP
-         ZWchig0AKNLf3dWTRW8K8uiH2GS9TsZmLdOcQi9AM9rraBcGRW+SrjDymN0NwvEtrDtc
-         xjssfFlyXNJn9qHCnE9XrvMTd2OLfwlY4MdWw8YSyIDFpbSqLi8ejGu40i4evuka2gUP
-         9+o76Z3b1a51PBlzy47iwjL0Dwa8QuRcZOn3lgsPOm0Zk1F7zbSw/hguY94WWq+w0GT3
-         NcLyaFGRVsORGUE1vhDwhV+S2DnVKuSfGp1Nj9rNLtO+YRCp1vtj3sKFXWsp/3ZS2M4L
-         ml0Q==
-X-Gm-Message-State: AO0yUKVMCm0/Y49MfLCnyd/MKCVnIEIPi6NcF1/u2DqO3Wq4SSbJ8KXZ
-        lB/RkcWCs8vPL5MZRlN6Grk=
-X-Google-Smtp-Source: AK7set/AbathoqiUH3gHM7f94EPTpm8a66Qf4sgqAVAmxkrDHqNlQNoY9qijUo/NUZx9aKFFdHv8AQ==
-X-Received: by 2002:a17:907:6d86:b0:8b1:3d4:6a9d with SMTP id sb6-20020a1709076d8600b008b103d46a9dmr20550903ejc.19.1678202857432;
-        Tue, 07 Mar 2023 07:27:37 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170906c00700b008cff300cf47sm6194145ejz.72.2023.03.07.07.27.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 07:27:36 -0800 (PST)
-Date:   Tue, 7 Mar 2023 18:27:32 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org
-Subject: [bug report] thermal/x86_pkg_temp_thermal: Add support for handling
- dynamic tjmax
-Message-ID: <add7a378-4d50-4ba1-81d3-a0c17db25a0b@kili.mountain>
+        with ESMTP id S231260AbjCGPbK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:31:10 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922081BB;
+        Tue,  7 Mar 2023 07:30:59 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327FUqEN074727;
+        Tue, 7 Mar 2023 09:30:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678203052;
+        bh=PuWg1KrKq8dl0F/f6mEpT2obJODTES6ox27OnS5IhC8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Wx4BMvIj6RXFBMeU0jhLXNBhI8sl0kRu8UYNISk+0Nyd1M/2XHeKg0BG8xhGSPLJi
+         OumPvdQDCAq2wJ2L60JZgVRAPjIC9hOtNZMjpb2B8Go7mtdmMys+Etnyg93al9Koby
+         f4j6kjgrcApt6JXkOWgDH4PHBQ+1BHqQ2VnQVZ7A=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327FUq9d003961
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Mar 2023 09:30:52 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
+ Mar 2023 09:30:51 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 7 Mar 2023 09:30:52 -0600
+Received: from [10.250.175.93] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327FUmqG020149;
+        Tue, 7 Mar 2023 09:30:49 -0600
+Message-ID: <0e7dabfc-8350-2225-36ee-92aca36e069d@ti.com>
+Date:   Tue, 7 Mar 2023 21:00:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 06/11] thermal/drivers/ti: Use fixed update interval
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <rafael@kernel.org>
+CC:     <rui.zhang@intel.com>, <amitk@kernel.org>,
+        Keerthy <j-keerthy@ti.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-7-daniel.lezcano@linaro.org>
+Content-Language: en-US
+From:   "Gole, Dhruva" <d-gole@ti.com>
+Organization: Texas Instruments Incorporated
+In-Reply-To: <20230307133735.90772-7-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,68 +72,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Zhang Rui,
 
-The patch 58374a3970a0: "thermal/x86_pkg_temp_thermal: Add support
-for handling dynamic tjmax" from Dec 19, 2022, leads to the following
-Smatch static checker warning:
+On 3/7/2023 7:07 PM, Daniel Lezcano wrote:
+> Currently the TI thermal driver sets the sensor update interval based
+> on the polling of the thermal zone. In order to get the polling rate,
+> the code inspects the thermal zone device strcuture internals, thus
+> breaking the self-encapsulation of the thermal framework core
+> framework.
+>
+> On the other side, we see the common polling rates set in the device
+> tree for the platforms using this driver are 500 or 1000 ms.
+>
+> Setting the polling rate to 250 ms would be far enough to cover the
+> combination we found in the device tree.
+>
+> Instead of accessing the thermal zone device structure polling rate,
+> let's use a common update interval of 250 ms for the driver.
+>
+> Cc: Keerthy <j-keerthy@ti.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index 0c8914017c18..430c4b43151f 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -23,6 +23,8 @@
+>  #include "ti-bandgap.h"
+>  #include "../thermal_hwmon.h"
+>  
+> +#define TI_BANDGAP_UPDATE_INTERVAL_MS 250
+> +
+>  /* common data structures */
+>  struct ti_thermal_data {
+>  	struct cpufreq_policy *policy;
+> @@ -159,7 +161,6 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>  			     char *domain)
+>  {
+>  	struct ti_thermal_data *data;
+> -	int interval;
+>  
+>  	data = ti_bandgap_get_sensor_data(bgp, id);
+>  
+> @@ -177,10 +178,9 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>  		return PTR_ERR(data->ti_thermal);
+>  	}
+>  
+> -	interval = jiffies_to_msecs(data->ti_thermal->polling_delay_jiffies);
+> -
+>  	ti_bandgap_set_sensor_data(bgp, id, data);
+> -	ti_bandgap_write_update_interval(bgp, data->sensor_id, interval);
+> +	ti_bandgap_write_update_interval(bgp, data->sensor_id,
+> +					 TI_BANDGAP_UPDATE_INTERVAL_MS);
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+>  
+>  	if (devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal))
+>  		dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
 
-	drivers/thermal/intel/x86_pkg_temp_thermal.c:159 sys_set_trip_temp()
-	warn: no lower bound on 'temp'
+-- 
+Regards,
+Dhruva Gole <d-gole@ti.com>
 
-drivers/thermal/intel/x86_pkg_temp_thermal.c
-    122 static int
-    123 sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
-    124 {
-    125         struct zone_device *zonedev = tzd->devdata;
-    126         u32 l, h, mask, shift, intr;
-    127         int tj_max, ret;
-    128 
-    129         tj_max = intel_tcc_get_tjmax(zonedev->cpu);
-    130         if (tj_max < 0)
-    131                 return tj_max;
-    132         tj_max *= 1000;
-    133 
-    134         if (trip >= MAX_NUMBER_OF_TRIPS || temp >= tj_max)
-
-There is an upper bound on temp, but no lower bound.  The "temp"
-variable comes from sysfs via the call tree:
-
-  trip_point_temp_store()
-  -> thermal_zone_set_trip()
-     -> sys_set_trip_temp()
-
-    135                 return -EINVAL;
-    136 
-    137         ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-    138                            &l, &h);
-    139         if (ret < 0)
-    140                 return ret;
-    141 
-    142         if (trip) {
-    143                 mask = THERM_MASK_THRESHOLD1;
-    144                 shift = THERM_SHIFT_THRESHOLD1;
-    145                 intr = THERM_INT_THRESHOLD1_ENABLE;
-    146         } else {
-    147                 mask = THERM_MASK_THRESHOLD0;
-    148                 shift = THERM_SHIFT_THRESHOLD0;
-    149                 intr = THERM_INT_THRESHOLD0_ENABLE;
-    150         }
-    151         l &= ~mask;
-    152         /*
-    153         * When users space sets a trip temperature == 0, which is indication
-    154         * that, it is no longer interested in receiving notifications.
-    155         */
-    156         if (!temp) {
-    157                 l &= ~intr;
-    158         } else {
---> 159                 l |= (tj_max - temp)/1000 << shift;
-    160                 l |= intr;
-    161         }
-    162 
-    163         return wrmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-    164                         l, h);
-    165 }
-
-regards,
-dan carpenter
