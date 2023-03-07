@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B386AE531
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7426AE534
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjCGPpi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 10:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S231409AbjCGPpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 10:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjCGPpd (ORCPT
+        with ESMTP id S231259AbjCGPpd (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:45:33 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EDC838AA
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:45:30 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id t15so12571132wrz.7
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:45:30 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5126584F4C
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:45:31 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id g3so12577054wri.6
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203929;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203930;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mDUOEs+XSiOfyiNiOvW3qp6/s0S8NXRmgJF421g68As=;
-        b=T2+UqBQ/B0o7lX4P+fFNGS8AxIhdRQnYL4u4eNa7vRwBpDax96IfUm5+btsWfAbHcK
-         Sdr3j0hYKmTAbAHYv/qL/mPpQQJJPqyKnKMepnHYk3PdPsyrRt5pQVsB4wYuygFJ7jg5
-         H0Ic8Yt+QpJOslls+C9511LK9mHgITHGmgRC6e4n2N8NOVMCiP2ueRTdPubfescwcybS
-         61uLpz+0u8U9qoUSjalcknogymte+g8ZLweUlmmH0L/cH0M4DaN7UOYZVZZ7MHUOBmzM
-         L97fKVMk6hNpf4IT17R9VddhXt8Rr0OKI/efvPyffo6FYMDI7YjO9u0YsRXDmxX0e8TL
-         uXfw==
+        bh=TK38rfMZIYSCE09aA82gNal1pzr6tS/kIcgasbLVBmk=;
+        b=3rRyCvaUzbr48hyBZ2CFsD0pYrm9ofuBZ9w+ixhFmH+Wi43j+31NC/s814q6QNIxTy
+         HhHe5i0C48LNdFjlVsmS6Qi3HTGBBAOkw+atIdb+RrvET+vqUuPqOuy10ch/rbOBIJqq
+         Gu8Q074hLUlXgXMc+9Jru5M/pXPg8DI4UHy0rYtxZIqMsTvRGHf2NF4iBLKfIxa6TeD9
+         Ytg6qE0d5W3AVCzQpeXahs23kDYVx7eDGgdSX5WI3HzCk4EFU8VUyhiqoAa0q2VbZF/C
+         DVRY4k2cCL6PX/NelxjSBxLwWI6/M0ycf6DfFO850jb8z4Kef6mdyadtYQeW4oe/5Nes
+         I+Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678203929;
+        d=1e100.net; s=20210112; t=1678203930;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mDUOEs+XSiOfyiNiOvW3qp6/s0S8NXRmgJF421g68As=;
-        b=jEKHo9AitVFMWmCrxaYpeQoDbHuG4aGSeFmTMMM856IY28sOI7P0DWook/wzQLkoX5
-         beeo5AIX7rSPJnksrAfitDFEnKBxfRSNPtVhV78Lerix6X61CrqFBpsmynyKA3eFMg+V
-         LAJ3O8ACY5tAhwS8dimUdxice8PByoSzEgd47j7ooaFgdLwTwJc9p1vR1Ir8g+sazVcW
-         iv3dSCCqgZXQ3tDN9lmJPFm9pT4EzNhTrrAhCq7TfQ3SzNUP0aeMSXYYsRAf9E/yoi/b
-         UW/k3+986wH4VyP+w2hbwgsoP6w3K2SP9z0sbRMmHwPBsWNpqUXI5quwXkfkyGQUxvFn
-         cBVw==
-X-Gm-Message-State: AO0yUKWeGyixaa0kMqxPhQTt8NFL6XROjhKdNxGLvQWC0SUDAQaPag0t
-        Xpc3foHQ1u28rkx7HzvDHnivMw==
-X-Google-Smtp-Source: AK7set+D4VvEr8Bpnmjt43C/gu6jiUPUyAHWRjw53NuTFxCehWbsdbW+MiO3KVlZBzRA8OdTuO/NLw==
-X-Received: by 2002:a5d:634d:0:b0:2c7:ae57:5acc with SMTP id b13-20020a5d634d000000b002c7ae575accmr9993378wrw.26.1678203929163;
+        bh=TK38rfMZIYSCE09aA82gNal1pzr6tS/kIcgasbLVBmk=;
+        b=poMDIxRQ/CFsp7nWTMhd46UnN9nDrmRIaXbiDqZJbnXUsbeFqvPZraEyyVWvLnglb5
+         jf2rCCkWecTEbzl28D1EAhYGWRmWPagyu0XpmKPJ9xMQqrxtAG+AKzsGolvCQirRjLuI
+         grGKv3Ifn4E5JUhC0M0eEl8i0iQlseEgSSCx6jEVM0m5gAGQmpmNX0NrcIoUYXH2Y46n
+         QhJj2AO9ls3iXSLeyzNQwKS8e9ehmSMfLUp3YZCjroYuqHSRz5VgDpb7086Jf/+Ti1ox
+         9zw9sa5L2pppFC11fFIxCLWZcCSi7dUETzsxauaUywwWmuomW+46pSbSdcL0cQeGiPKV
+         YZMg==
+X-Gm-Message-State: AO0yUKU0AjdrGfVTQUQJ4eF7xfW6elI4bWbOoez8wd6u0e93crLaaMOX
+        4YKXovCeXOt5AE9dAJfEW/ZurQ==
+X-Google-Smtp-Source: AK7set+Guq1ajs13XQHeh554Uq/SiB1NQLIWJev32JcaTps3DMHgTcd/r/3pFPm5VF8vMQ7O2omnWw==
+X-Received: by 2002:a5d:4005:0:b0:2c9:5179:41a5 with SMTP id n5-20020a5d4005000000b002c9517941a5mr9632960wrp.8.1678203929903;
         Tue, 07 Mar 2023 07:45:29 -0800 (PST)
 Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.28
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 07 Mar 2023 07:45:29 -0800 (PST)
 From:   bchihi@baylibre.com
@@ -60,9 +60,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
-Subject: [PATCH 2/4] thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
-Date:   Tue,  7 Mar 2023 16:45:22 +0100
-Message-Id: <20230307154524.118541-3-bchihi@baylibre.com>
+Subject: [PATCH 3/4] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+Date:   Tue,  7 Mar 2023 16:45:23 +0100
+Message-Id: <20230307154524.118541-4-bchihi@baylibre.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
 References: <20230307154524.118541-1-bchihi@baylibre.com>
@@ -79,143 +79,149 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Balsam CHIHI <bchihi@baylibre.com>
 
-Add MT8195 AP Domain support to LVTS Driver.
+Add AP Domain thermal zones for the mt8195.
 
 Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 ---
- drivers/thermal/mediatek/lvts_thermal.c | 94 +++++++++++++++++++------
- 1 file changed, 74 insertions(+), 20 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 126 +++++++++++++++++++++++
+ 1 file changed, 126 insertions(+)
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 5dbc80ba961b..7565def6b27c 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -528,29 +528,33 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * The efuse blob values follows the sensor enumeration per thermal
-  * controller. The decoding of the stream is as follow:
-  *
-- *                        <--?-> <----big0 ???---> <-sensor0-> <-0->
-- *                        ------------------------------------------
-- * index in the stream: : | 0x0 | 0x1 | 0x2 | 0x3 | 0x4 | 0x5 | 0x6 |
-- *                        ------------------------------------------
-+ * stream index map for MCU Domain :
-  *
-- *                        <--sensor1--><-0-> <----big1 ???---> <-sen
-- *                        ------------------------------------------
-- *                        | 0x7 | 0x8 | 0x9 | 0xA | 0xB | OxC | OxD |
-- *                        ------------------------------------------
-+ * <-----mcu-tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-+ *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09
-  *
-- *                        sor0-> <-0-> <-sensor1-> <-0-> ..........
-- *                        ------------------------------------------
-- *                        | 0x7 | 0x8 | 0x9 | 0xA | 0xB | OxC | OxD |
-- *                        ------------------------------------------
-+ * <-----mcu-tc#1-----> <-----sensor#2-----> <-----sensor#3----->
-+ *  0x0A | 0x0B | 0x0C | 0x0D | 0x0E | 0x0F | 0x10 | 0x11 | 0x12
-  *
-- * And so on ...
-+ * <-----mcu-tc#2-----> <-----sensor#4-----> <-----sensor#5-----> <-----sensor#6-----> <-----sensor#7----->
-+ *  0x13 | 0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21
-+ *
-+ * stream index map for AP Domain :
-+ *
-+ * <-----ap--tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-+ *  0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A
-+ *
-+ * <-----ap--tc#1-----> <-----sensor#2-----> <-----sensor#3----->
-+ *  0x2B | 0x2C | 0x2D | 0x2E | 0x2F | 0x30 | 0x31 | 0x32 | 0x33
-+ *
-+ * <-----ap--tc#2-----> <-----sensor#4-----> <-----sensor#5-----> <-----sensor#6----->
-+ *  0x34 | 0x35 | 0x36 | 0x37 | 0x38 | 0x39 | 0x3A | 0x3B | 0x3C | 0x3D | 0x3E | 0x3F
-+ *
-+ * <-----ap--tc#3-----> <-----sensor#7-----> <-----sensor#8----->
-+ *  0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47 | 0x48
-  *
-  * The data description gives the offset of the calibration data in
-  * this bytes stream for each sensor.
-- *
-- * Each thermal controller can handle up to 4 sensors max, we don't
-- * care if there are less as the array of calibration is sized to 4
-- * anyway. The unused sensor slot will be zeroed.
-  */
- static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
- 					const struct lvts_ctrl_data *lvts_ctrl_data,
-@@ -1163,7 +1167,7 @@ static int lvts_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct lvts_ctrl_data mt8195_lvts_data_ctrl[] = {
-+static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
- 	{
- 		.cal_offset = { 0x04, 0x07 },
- 		.lvts_sensor = {
-@@ -1198,13 +1202,63 @@ static const struct lvts_ctrl_data mt8195_lvts_data_ctrl[] = {
- 	}
- };
- 
-+static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
-+		{
-+		.cal_offset = { 0x25, 0x28 },
-+		.lvts_sensor = {
-+			{ .dt_id = MT8195_AP_VPU0 },
-+			{ .dt_id = MT8195_AP_VPU1 }
-+		},
-+		.num_lvts_sensor = 2,
-+		.offset = 0x0,
-+		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8195,
-+	},
-+	{
-+		.cal_offset = { 0x2e, 0x31 },
-+		.lvts_sensor = {
-+			{ .dt_id = MT8195_AP_GPU0 },
-+			{ .dt_id = MT8195_AP_GPU1 }
-+		},
-+		.num_lvts_sensor = 2,
-+		.offset = 0x100,
-+		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8195,
-+	},
-+	{
-+		.cal_offset = { 0x37, 0x3a, 0x3d },
-+		.lvts_sensor = {
-+			{ .dt_id = MT8195_AP_VDEC },
-+			{ .dt_id = MT8195_AP_IMG },
-+			{ .dt_id = MT8195_AP_INFRA },
-+		},
-+		.num_lvts_sensor = 3,
-+		.offset = 0x200,
-+		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8195,
-+	},
-+	{
-+		.cal_offset = { 0x43, 0x46 },
-+		.lvts_sensor = {
-+			{ .dt_id = MT8195_AP_CAM0 },
-+			{ .dt_id = MT8195_AP_CAM1 }
-+		},
-+		.num_lvts_sensor = 2,
-+		.offset = 0x300,
-+		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8195,
-+	}
-+};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index 10c8fb0856bc..b066d1eab1dc 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -2652,5 +2652,131 @@ map0 {
+ 				};
+ 			};
+ 		};
 +
- static const struct lvts_data mt8195_lvts_mcu_data = {
--	.lvts_ctrl	= mt8195_lvts_data_ctrl,
--	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_data_ctrl),
-+	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
-+	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
-+};
++		vpu0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
 +
-+static const struct lvts_data mt8195_lvts_ap_data = {
-+	.lvts_ctrl	= mt8195_lvts_ap_data_ctrl,
-+	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
++			trips {
++				vpu0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		vpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VPU1>;
++
++			trips {
++				vpu1_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		gpu0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_GPU0>;
++
++			trips {
++				gpu0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		gpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_GPU1>;
++
++			trips {
++				gpu1_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		vdec-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VDEC>;
++
++			trips {
++				vdec_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		img-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_IMG>;
++
++			trips {
++				img_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		infra-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_INFRA>;
++
++			trips {
++				infra_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		cam0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_CAM0>;
++
++			trips {
++				cam0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		cam1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_CAM1>;
++
++			trips {
++				cam1_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
+ 	};
  };
- 
- static const struct of_device_id lvts_of_match[] = {
- 	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
-+	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, lvts_of_match);
 -- 
 2.34.1
 
