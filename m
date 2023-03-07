@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7426AE534
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB866AE537
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 16:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjCGPpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 10:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S231332AbjCGPpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 10:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjCGPpd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:45:33 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5126584F4C
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:45:31 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id g3so12577054wri.6
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:45:31 -0800 (PST)
+        with ESMTP id S231345AbjCGPpi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 10:45:38 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2969B8534A
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 07:45:32 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id g3so12577119wri.6
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 07:45:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203930;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TK38rfMZIYSCE09aA82gNal1pzr6tS/kIcgasbLVBmk=;
-        b=3rRyCvaUzbr48hyBZ2CFsD0pYrm9ofuBZ9w+ixhFmH+Wi43j+31NC/s814q6QNIxTy
-         HhHe5i0C48LNdFjlVsmS6Qi3HTGBBAOkw+atIdb+RrvET+vqUuPqOuy10ch/rbOBIJqq
-         Gu8Q074hLUlXgXMc+9Jru5M/pXPg8DI4UHy0rYtxZIqMsTvRGHf2NF4iBLKfIxa6TeD9
-         Ytg6qE0d5W3AVCzQpeXahs23kDYVx7eDGgdSX5WI3HzCk4EFU8VUyhiqoAa0q2VbZF/C
-         DVRY4k2cCL6PX/NelxjSBxLwWI6/M0ycf6DfFO850jb8z4Kef6mdyadtYQeW4oe/5Nes
-         I+Lw==
+        bh=JY0Ro4rQcxnhRsiPxJHCXtVEYXHerbDIXQMmbNIdWm4=;
+        b=HPRCUxRSNyyA/oVsmJzaxnWi/aGeU+cplMFkWIaR2F7aOlur6xHyVOmHaPAKxhi6S5
+         6HE4UAsO2+d0XsL5fLTME2qD1b9iemXabrKBz99/HFrLWyXgqZ10sOYFVcFPsXlzy/AS
+         qt417U9I2jHYrPuL5Wu4SH7jhN8rWtLitFhGDLuldeq4REKk8ZLMdIpSTJm9bOwakbQI
+         bsD2NwGi2p+IwZVSEEGnUIqRmG3GS4QFXwJ5n7Mx+wZ+zK+dywTlSMSeZp+gLtCSjkZ6
+         JYg57EDiQZ3V7pMCmUA9qHRyOz+/J/8UADAxwLqYYLNvcg7sDXZnmTRvVIWvty46O2Yi
+         E0Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1678203930;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TK38rfMZIYSCE09aA82gNal1pzr6tS/kIcgasbLVBmk=;
-        b=poMDIxRQ/CFsp7nWTMhd46UnN9nDrmRIaXbiDqZJbnXUsbeFqvPZraEyyVWvLnglb5
-         jf2rCCkWecTEbzl28D1EAhYGWRmWPagyu0XpmKPJ9xMQqrxtAG+AKzsGolvCQirRjLuI
-         grGKv3Ifn4E5JUhC0M0eEl8i0iQlseEgSSCx6jEVM0m5gAGQmpmNX0NrcIoUYXH2Y46n
-         QhJj2AO9ls3iXSLeyzNQwKS8e9ehmSMfLUp3YZCjroYuqHSRz5VgDpb7086Jf/+Ti1ox
-         9zw9sa5L2pppFC11fFIxCLWZcCSi7dUETzsxauaUywwWmuomW+46pSbSdcL0cQeGiPKV
-         YZMg==
-X-Gm-Message-State: AO0yUKU0AjdrGfVTQUQJ4eF7xfW6elI4bWbOoez8wd6u0e93crLaaMOX
-        4YKXovCeXOt5AE9dAJfEW/ZurQ==
-X-Google-Smtp-Source: AK7set+Guq1ajs13XQHeh554Uq/SiB1NQLIWJev32JcaTps3DMHgTcd/r/3pFPm5VF8vMQ7O2omnWw==
-X-Received: by 2002:a5d:4005:0:b0:2c9:5179:41a5 with SMTP id n5-20020a5d4005000000b002c9517941a5mr9632960wrp.8.1678203929903;
-        Tue, 07 Mar 2023 07:45:29 -0800 (PST)
+        bh=JY0Ro4rQcxnhRsiPxJHCXtVEYXHerbDIXQMmbNIdWm4=;
+        b=n/GcSoZ5sFHMVMTZJMShC9PFi0zcP29eyeDBy9Kcz2HW0E2wiFlwDflkXB0Q0coRqN
+         f2zOyXJfjYTgR9NYV5baIsHXmOZTw9AjjM5xQ2UcIwOHAqnpwZUP+pXyqkmX57KR8iji
+         17U0n5qnIEgnBnT/lXu2NTRn2RPhKIDP6OjxL6ulqmrf1Lj1rOf6uctJ5cuaSLqrG2rq
+         ia7QyvBwhMNLxDWlXubTlhS+w22AjYxEHIrNOXCLaRfCWeFuY7bsPrzxZzY1PzVdutAR
+         PjeB8fSN8CtAP05UwL6quD9S3B9sDIW8MMVK1Gmip4kQK7HiJ7pbHZrLB33e+tQFjbv5
+         PLLw==
+X-Gm-Message-State: AO0yUKUKc5U/k0CnSh+TVdKRB0jMJ50KbEOGiDKbng1HZIRQOCl3rxrC
+        hdORFsETO6CSymWBO8b4DZvdWg==
+X-Google-Smtp-Source: AK7set8RZzUjacZh8k2s+HDG9BdJ+pG4VhUR6FtsQdsozL54tKbWq3T7WAAE627gMEVl78AJPnNVIw==
+X-Received: by 2002:a5d:6a48:0:b0:2c7:dec:77a7 with SMTP id t8-20020a5d6a48000000b002c70dec77a7mr8356572wrw.71.1678203930693;
+        Tue, 07 Mar 2023 07:45:30 -0800 (PST)
 Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.29
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 07:45:29 -0800 (PST)
+        Tue, 07 Mar 2023 07:45:30 -0800 (PST)
 From:   bchihi@baylibre.com
 To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
         rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
@@ -60,9 +60,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
-Subject: [PATCH 3/4] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-Date:   Tue,  7 Mar 2023 16:45:23 +0100
-Message-Id: <20230307154524.118541-4-bchihi@baylibre.com>
+Subject: [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
+Date:   Tue,  7 Mar 2023 16:45:24 +0100
+Message-Id: <20230307154524.118541-5-bchihi@baylibre.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
 References: <20230307154524.118541-1-bchihi@baylibre.com>
@@ -79,149 +79,197 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Balsam CHIHI <bchihi@baylibre.com>
 
-Add AP Domain thermal zones for the mt8195.
+Specify the targeted temperature thresholds.
 
 Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 126 +++++++++++++++++++++++
- 1 file changed, 126 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 90 +++++++++++++++++++-----
+ 1 file changed, 72 insertions(+), 18 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 10c8fb0856bc..b066d1eab1dc 100644
+index b066d1eab1dc..0dab67d283a6 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -2652,5 +2652,131 @@ map0 {
- 				};
- 			};
+@@ -2654,11 +2654,17 @@ map0 {
  		};
-+
-+		vpu0-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
-+
-+			trips {
-+				vpu0_crit: trip-crit {
-+					temperature = <100000>;
+ 
+ 		vpu0-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
+ 
+ 			trips {
++				vpu0_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		vpu1-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_VPU1>;
-+
-+			trips {
-+				vpu1_crit: trip-crit {
-+					temperature = <100000>;
+ 				vpu0_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2668,11 +2674,17 @@ vpu0_crit: trip-crit {
+ 		};
+ 
+ 		vpu1-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_VPU1>;
+ 
+ 			trips {
++				vpu1_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		gpu0-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_GPU0>;
-+
-+			trips {
-+				gpu0_crit: trip-crit {
-+					temperature = <100000>;
+ 				vpu1_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2682,11 +2694,17 @@ vpu1_crit: trip-crit {
+ 		};
+ 
+ 		gpu0-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_GPU0>;
+ 
+ 			trips {
++				gpu0_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		gpu1-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_GPU1>;
-+
-+			trips {
-+				gpu1_crit: trip-crit {
-+					temperature = <100000>;
+ 				gpu0_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2696,11 +2714,17 @@ gpu0_crit: trip-crit {
+ 		};
+ 
+ 		gpu1-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_GPU1>;
+ 
+ 			trips {
++				gpu1_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		vdec-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_VDEC>;
-+
-+			trips {
-+				vdec_crit: trip-crit {
-+					temperature = <100000>;
+ 				gpu1_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2710,11 +2734,17 @@ gpu1_crit: trip-crit {
+ 		};
+ 
+ 		vdec-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_VDEC>;
+ 
+ 			trips {
++				vdec_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		img-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_IMG>;
-+
-+			trips {
-+				img_crit: trip-crit {
-+					temperature = <100000>;
+ 				vdec_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2724,11 +2754,17 @@ vdec_crit: trip-crit {
+ 		};
+ 
+ 		img-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_IMG>;
+ 
+ 			trips {
++				img_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		infra-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_INFRA>;
-+
-+			trips {
-+				infra_crit: trip-crit {
-+					temperature = <100000>;
+ 				img_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2738,11 +2774,17 @@ img_crit: trip-crit {
+ 		};
+ 
+ 		infra-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_INFRA>;
+ 
+ 			trips {
++				infra_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		cam0-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_CAM0>;
-+
-+			trips {
-+				cam0_crit: trip-crit {
-+					temperature = <100000>;
+ 				infra_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2752,11 +2794,17 @@ infra_crit: trip-crit {
+ 		};
+ 
+ 		cam0-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_CAM0>;
+ 
+ 			trips {
++				cam0_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
 +
-+		cam1-thermal {
-+			polling-delay = <0>;
-+			polling-delay-passive = <0>;
-+			thermal-sensors = <&lvts_ap MT8195_AP_CAM1>;
-+
-+			trips {
-+				cam1_crit: trip-crit {
-+					temperature = <100000>;
+ 				cam0_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
+@@ -2766,11 +2814,17 @@ cam0_crit: trip-crit {
+ 		};
+ 
+ 		cam1-thermal {
+-			polling-delay = <0>;
+-			polling-delay-passive = <0>;
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
+ 			thermal-sensors = <&lvts_ap MT8195_AP_CAM1>;
+ 
+ 			trips {
++				cam1_alert: trip-alert {
++					temperature = <85000>;
 +					hysteresis = <2000>;
-+					type = "critical";
++					type = "passive";
 +				};
-+			};
-+		};
- 	};
- };
++
+ 				cam1_crit: trip-crit {
+ 					temperature = <100000>;
+ 					hysteresis = <2000>;
 -- 
 2.34.1
 
