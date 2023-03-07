@@ -2,103 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C826ADBC5
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 11:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BFA6ADD04
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 12:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjCGKZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 05:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S230161AbjCGLMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 06:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCGKZM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 05:25:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F586BB87;
-        Tue,  7 Mar 2023 02:25:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5212612E3;
-        Tue,  7 Mar 2023 10:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC0EC433D2;
-        Tue,  7 Mar 2023 10:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678184710;
-        bh=o0cPSYc9dA2JP/bjbrLx4zaWDnAO4a0TM9HJToYkFC4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QtWHQrqrPpYYuL+tYw6B20SoFnnMuZlXGWUo1tmwGYtM9LbrgbLDHRuR2/7waceJp
-         uqHcowVk17L36ZDRcn2z+gb1O1uU5yzGuWcVRR3OPWlJRcLaXDr7Sprc/3saM+aL4D
-         cs0pgxKZgrHmwOnnXIaoUcSHi2lT1y8ydDaVU4a63ElLP22IftdVuOTwfC2RwnVmuo
-         a47TtvmhAb+BZsVqnLfkLsxk0Te6HLNSt2fAtj+JQEsDd7bOuRj2no4HxaLirFkVTJ
-         xJ9Vxe5NlWbpMsiLxGccCR0UMWDw8fwR/Snqfz76vCySfz4OLZKM6cPLw4813EIwtY
-         ZO+EkS5hv0jvg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pZUW0-0000uQ-Ma; Tue, 07 Mar 2023 11:25:52 +0100
-Date:   Tue, 7 Mar 2023 11:25:52 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Alexandre Bailon <abailon@baylibre.com>
-Subject: Re: [PATCH v2 04/23] interconnect: imx: fix registration race
-Message-ID: <ZAcRMNTyDrqVMxIm@hovoldconsulting.com>
-References: <20230306075651.2449-1-johan+linaro@kernel.org>
- <20230306075651.2449-5-johan+linaro@kernel.org>
- <20230307104324.121166d1@booty>
+        with ESMTP id S231287AbjCGLLp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 06:11:45 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DEE4EC7
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 03:10:59 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id cy23so50542753edb.12
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 03:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678187457;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U6fMgeLah4uWf7JxDNW3+CyJWyyIcQsO6jtmPeeVMXE=;
+        b=HXC9XxzhKSMdrTPzwjf9lq2IDksgr9rg04okGQMA7Q4ukF0ZDAxBlwI6d803C1NN5S
+         PkIzeN5C2u/wrZ1vsuA2LmZU+7q8Z6WZL8Jwbc++j4jwhj1BY4vYz5bT2jmxZxUVR6+c
+         GmFCfUpkNPSO2Rem5YTzz7u5hmwD4EFeFtSJyITd7ej+lzx44ZA6iP73GxUF4USlm2Ox
+         UEm0cbjsaFjFe5sUSH/jkSYn2oQV/YsKRUFWbOaPtqFiKe/Z9jDJN2Xb0gL75sMRpzc0
+         5eYVCJOWzbg+DFkXE2eS4qDkTqCV5b78h2YO0R6ZGSd9GrhQXHnFjxlB/SftxEQZFE5S
+         ZZVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678187457;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U6fMgeLah4uWf7JxDNW3+CyJWyyIcQsO6jtmPeeVMXE=;
+        b=X3+NohoBXIEBbCQN8reC0HuMSgfpXEX1J4ZqzOV8eKSHLuJB3aPFamHx8KOyX+Qw2H
+         UZtpTvsUGvSTRZF5RGybvLQVJpW54lG4iSp546AWEh/nNEZZ2kcwHQvJpG3TIKCxRMdv
+         J3IIcLPnNtnGOtDELiOQ64SHNjvzMRzTPmFTeqNdHsnLorTTEhYKAHypv8adOBqkChaP
+         EqTXnDHj4pCvdPljs65bZnz/B9x96k5rbWGvDnEM4NRanzA5GnGfrAW4RRfh8RXakQSj
+         L5j60ms+G4xGbv3CVukTtjKqUeeXQCR7fhgxdo5YL0ZcDwBx1Dtrnad9SIYs0dRZij4R
+         fRvw==
+X-Gm-Message-State: AO0yUKWUSfYt7zKuiS/ufK/xbwEtfCgyvLYOpi2lycAajGPVNRTAZVmn
+        JN8JYaye373oQxweY09SkMG2F7UN1Z/fEzWADBlwcA==
+X-Google-Smtp-Source: AK7set8bWIdU0Z9WjvqcfThqe44SRQhx/Kh+doUBNgk5VvVi/rKjJ6ufHAlp/UM6cMm28XzgIpWJfxz7RAbqcEenhkY=
+X-Received: by 2002:a50:aa95:0:b0:4ad:7439:cecb with SMTP id
+ q21-20020a50aa95000000b004ad7439cecbmr7738574edc.7.1678187457726; Tue, 07 Mar
+ 2023 03:10:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307104324.121166d1@booty>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230209105628.50294-1-bchihi@baylibre.com> <20230209105628.50294-7-bchihi@baylibre.com>
+ <CAGuA+oqOgprdu0dVcmB=qJd5HJjada3d8ZazMpoG-SBPizzuPQ@mail.gmail.com>
+ <80c60f09-56eb-cb84-43f0-7b055ea4b32c@collabora.com> <CAGuA+oqJVTXE5YHm6rSv4pPWsGxR8nZD-T5EM7LS9gPtdcu4HA@mail.gmail.com>
+In-Reply-To: <CAGuA+oqJVTXE5YHm6rSv4pPWsGxR8nZD-T5EM7LS9gPtdcu4HA@mail.gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Tue, 7 Mar 2023 12:10:21 +0100
+Message-ID: <CAGuA+oroM1XmLTDZcFx5F+tHvbOJXUGuj8SnZnUxD56+9XAb2Q@mail.gmail.com>
+Subject: Re: [PATCH v14 6/6] arm64: dts: mediatek: mt8195: Add temperature
+ mitigation threshold
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 10:43:24AM +0100, Luca Ceresoli wrote:
-> On Mon,  6 Mar 2023 08:56:32 +0100
-> Johan Hovold <johan+linaro@kernel.org> wrote:
-> 
-> > The current interconnect provider registration interface is inherently
-> > racy as nodes are not added until the after adding the provider. This
-> > can specifically cause racing DT lookups to fail.
-> > 
-> > Switch to using the new API where the provider is not registered until
-> > after it has been fully initialised.
-> > 
-> > Fixes: f0d8048525d7 ("interconnect: Add imx core driver")
-> > Cc: stable@vger.kernel.org      # 5.8
-> > Cc: Alexandre Bailon <abailon@baylibre.com>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> 
-> v2 works just as well, so my Tested-by is confirmed. Maybe it's useful
-> mentioning the hardware used for testing so:
-> 
-> [Tested on i.MX8MP using an MSC SM2-MB-EP1 Board]
-> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Hi Matthias,
 
-Thanks for reconfirming. Looks like Georgi has picked these up for
-6.3-rc now.
+Is it time to apply those last two patches of the series "Add LVTS
+Thermal Architecture"?
 
-Johan
+[v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
+https://lore.kernel.org/all/20230209105628.50294-7-bchihi@baylibre.com/
+and
+[v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
+https://lore.kernel.org/all/20230209105628.50294-6-bchihi@baylibre.com/
+
+Is there anything that I could do from my side, to make it possible?
+
+Best regards,
+Balsam
