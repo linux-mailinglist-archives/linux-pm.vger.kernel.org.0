@@ -2,60 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450246AF81B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Mar 2023 22:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDAB6AFB9C
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 01:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCGV5L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 16:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S229919AbjCHA4n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 19:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCGV5K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 16:57:10 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83AFAD02F;
-        Tue,  7 Mar 2023 13:57:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678226228; x=1709762228;
-  h=from:to:cc:subject:date:message-id:mime-version:reply-to:
-   content-transfer-encoding;
-  bh=8vgY/QVBJu+X9HRFZSvBWKypnSnfRJHbl/eOU7wG2o4=;
-  b=SgSDl/8dCMoCFnDaMC14DGdjo5SGSgtd+eK55VAdU4UN7VJvr8mUDqy7
-   ttXQoCvybknpF2JXQUvHEHSL5QHvQoF84fM6RC2Gr+CCL+n7ocBMkkwWJ
-   qi4pUGct+GwyWcKV66DhV80evm+uHKg688r0AhdbDNqxnDMkIO2mzC8DU
-   luol4ridf32lOWvCVRAQ9wJlo7B8IdjT6b4G4WtVWhuYT7AZeyYcXaYRu
-   x3w9q1qRUzd+wk0Iahkm5Q4iky0BxAoNrjqjfY8qDzqg5Tp0M2BAfxBzY
-   mJBOxla+ZHMjXUhr57KFV6BZHa+80P8Xdz1GqnVrqTwrxDkS0dQNdS3ih
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400810562"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="400810562"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:57:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="786853606"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="786853606"
-Received: from kmdehmer-mobl1.amr.corp.intel.com (HELO lenb-mobl1.amr.corp.intel.com) ([10.212.14.112])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:57:06 -0800
-From:   Len Brown <len.brown@intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] hci_qca: do not interfere with system suspend
-Date:   Tue,  7 Mar 2023 15:56:06 -0600
-Message-Id: <7687c4239424f2a49c6c596d19eea8dd7ebe8a30.1678226070.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S229820AbjCHA4m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 19:56:42 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F19AFC5
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 16:56:39 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id k199so13261369ybf.4
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 16:56:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678236998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u2z17zRKFMosP6BmxLJ/3DuXXKXAyRiupSkgseBN6cU=;
+        b=Nrci12vOCp3J89fc7u/nniyE27xH7hGSUCDplHpMV9Y6JKXCcNigWzvSRMaLhClu1T
+         NVB6CAP2wfPzVTCXvkyXorZ9RP5vcQo7XsQjJ6GsbW2GXKJawPMOV3UvFNyMe00rk974
+         eZ8hq7lHZ3y5j1c9+m7FU3pl3ZrKXHhQqZZ5ePxlJ0NpfKwy3ucJWcTTQmhxo23zJFVy
+         s8T0534wZVgATFaoOnM5xbPVie8F66tojvsonEKaB7CWzPGmPrzRiu3LjSv/UEVa5Pk2
+         /6sBSCtQ8fcVnq+8HipepNdhafzNu8SRefDH8NJo1lMLSUt7LdZ9B8XpJ3H9vO6r0Tu+
+         gCKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678236998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u2z17zRKFMosP6BmxLJ/3DuXXKXAyRiupSkgseBN6cU=;
+        b=PuYG8/2Jtszj0oSf3n/Rz7utNgjOIPWqQmcFE0cBsjbv2wisQJawWiSrV/UWKyejg+
+         OGuJGXAy68iwSjQpIj7KOEgIwrPRHw8htgWORJZPnXb8OILPk+8+fjhnuwNGtefk7tBA
+         OYm0f+4roGtCsxjwuEC3+26ZCivBLBk4/YaE9YpZfVwfi0HLaBS/K7+IMe/eICR3cF+7
+         1fp1xk1zMQQezq1d7XHgxCT/4GSQ6P/UoKFk60eV5nbJtyzEbqCiNBKqqxNMfzgpg6Tn
+         fK20k7a4xbRE4fTe6HmLz/E0dTqOKFGE1tbyQuDy3R+P2NKPtTasbzr6UmjEnXjz0fR+
+         TSHw==
+X-Gm-Message-State: AO0yUKVKqUSOT29kTnp3w4izZ73nmeei7Si+7xa/UQXTO0+fP84dB2Lt
+        98uX7B84R2S+kl8/BAq+TUFS3ulNyfJZVwqXpBb9AQ==
+X-Google-Smtp-Source: AK7set9/fDieulPqxhpOdoJQrExsxumuJ87WCyLgiQG2g+Go3qkI9m0l2+tsGWVLuxsGkP0DEl9tueq8guM7LF4VUao=
+X-Received: by 2002:a05:6902:4d1:b0:8dd:4f2c:ede4 with SMTP id
+ v17-20020a05690204d100b008dd4f2cede4mr9949667ybs.2.1678236998589; Tue, 07 Mar
+ 2023 16:56:38 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20230201183201.14431-1-len.brown@intel.com> <167706207598.17049.13538001164844345072.kvalo@kernel.org>
+In-Reply-To: <167706207598.17049.13538001164844345072.kvalo@kernel.org>
+From:   Matthew Wang <matthewmwang@google.com>
+Date:   Tue, 7 Mar 2023 16:56:27 -0800
+Message-ID: <CAAooHFd4UPitENa76Dvqp3KZSKvwzcX+3mqbKFF4PEs-obKW5g@mail.gmail.com>
+Subject: Re: wifi: ath11k: allow system suspend to survive ath11k
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Len Brown <len.brown@intel.com>, rafael@kernel.org,
+        kvalo@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Carl Huang <cjhuang@codeaurora.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,51 +71,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When hci_qca returns an error to its pm_ops.suspend routine,
-the PM subsystem will terminate the system wide suspend.
+I'm a bit of a kernel n00b here, but it's unclear to me that this is
+the right thing to do and I just wanted to get some clarity. If the
+ath11k device fails to suspend, my understanding is that it might
+waste power attempting to talk to the host that's currently asleep.
+Are we sure that ath11k can recover from ignored failures/skipped
+teardown?
 
-It is extremely unlikely that there will ever be a justification
-for hci_qca, no matter what its internal malfunction, should
-cause system-wide suspend to terminate.
 
-Doing so, could result in the scenario where a laptop lid is closed,
-suspend termnates, the user places the running laptop into a breifcase,
-not expecting it to be overheating or draining its battery...
 
-This is not a theoretical issue.
-The 6.3-rc1 currently fails this way on the Dell XPS-13-9310:
-
-Bluetooth: hci0: SSR or FW download time out
-hci_uart_qca serial0-0: PM: dpm_run_callback(): acpi_subsys_suspend+0x0/0x70 returns -110
-hci_uart_qca serial0-0: PM: failed to suspend: error -110
-PM: suspend of devices aborted after 3218.724 msecs
-PM: start suspend of devices aborted after 3246.859 msecs
-PM: Some devices failed to suspend, or early wake event detected
-PM: resume of devices complete after 84.988 msecs
-
-Signed-off-by: Len Brown <len.brown@intel.com>
-Cc: Marcel Holtmann <marcel@holtmann.org>
-Cc: Johan Hedberg <johan.hedberg@gmail.com>
-Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: linux-bluetooth@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/bluetooth/hci_qca.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 3df8c3606e93..1795cc527b88 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -2309,7 +2309,7 @@ static int __maybe_unused qca_suspend(struct device *dev)
- error:
- 	clear_bit(QCA_SUSPENDING, &qca->flags);
- 
--	return ret;
-+	return 0;
- }
- 
- static int __maybe_unused qca_resume(struct device *dev)
--- 
-2.37.2
-
+On Wed, Feb 22, 2023 at 2:34=E2=80=AFAM Kalle Valo <kvalo@kernel.org> wrote=
+:
+>
+> Len Brown <len.brown@intel.com> wrote:
+>
+> > When ath11k runs into internal errors upon suspend,
+> > it returns an error code to pci_pm_suspend, which
+> > aborts the entire system suspend.
+> >
+> > The driver should not abort system suspend, but should
+> > keep its internal errors to itself, and allow the system
+> > to suspend.  Otherwise, a user can suspend a laptop
+> > by closing the lid and sealing it into a case, assuming
+> > that is will suspend, rather than heating up and draining
+> > the battery when in transit.
+> >
+> > In practice, the ath11k device seems to have plenty of transient
+> > errors, and subsequent suspend cycles after this failure
+> > often succeed.
+> >
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D216968
+> >
+> > Fixes: d1b0c33850d29 ("ath11k: implement suspend for QCA6390 PCI device=
+s")
+> >
+> > Signed-off-by: Len Brown <len.brown@intel.com>
+> > Cc: stable@vger.kernel.org
+>
+> Patch applied to wireless.git, thanks.
+>
+> 7c15430822e7 wifi: ath11k: allow system suspend to survive ath11k
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/patch/20230201183201.=
+14431-1-len.brown@intel.com/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
+tches
+>
