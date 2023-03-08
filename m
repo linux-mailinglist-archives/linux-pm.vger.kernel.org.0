@@ -2,144 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED58D6B0AC5
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 15:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161236B0DD5
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCHOPf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 09:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S232339AbjCHP5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 10:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjCHOOy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 09:14:54 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9993DB2570;
-        Wed,  8 Mar 2023 06:13:30 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id j11so46769593edq.4;
-        Wed, 08 Mar 2023 06:13:30 -0800 (PST)
+        with ESMTP id S231923AbjCHP5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 10:57:24 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4695AB67
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 07:56:33 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cy23so67503973edb.12
+        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 07:56:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678284809;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fYJgnl+7Us7KVNz74ou1/RTlLrV9+lTS5g77LiBuQ3c=;
-        b=V9sCNW+1YZWFT2DWSHIkc5h4/h1AyHtAH0y4hmTxYqQa7bxZKtkozguy7/MR2R/ynu
-         LtD7g6IMp4PRRj11DohjjcRDf+l4vp6Cabl8oX78gtNRyrX0pzKO6lT8DE1lvfKhRaA9
-         nXBy3yNr9k5TFRN3qfuee4BgcYdd5RaJKqQS1oE0OrV1+mfdYN6LILVuQhOKrTWVjpgJ
-         sOld3AdWulIj7Fa9D9WL3tZs4GfJnfKA+H+Ge3C7gSBTrHFiRmCy24gOJcCzz5caRY9V
-         8YWS/0tw24asfyeqkuKAcdzkvqjlHC0rROblChFfjD4vPyrkz0jd7aXBEHG/1s5N0KCP
-         BKEA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678290969;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=b9SP/9+AjaQNqqJgA/usyjVh7hC/+seg8SkazKsVVtg=;
+        b=CUsDAMKRuC9iHmD9Gerp7prJzQhdiUnXXeY3NrzEvh/5ifcNv9bNybLeIqepePbiZ3
+         N+thrxPlDAf63TCd+SO2/3/EszYQNfJcbn2R778RyGAlXXQ32iw370g9+WEKjDgqKb16
+         GpQpfs79wgKCueeMrZ4u57f7WMyt/i3CffCL09AYPcL58z2xlbPxFqhUr9toOMbEpTvh
+         IOx94oCWvM1x26U29pGwLImkRyaGV34nb1892YKzmouzmia/95PiDfjo/fGj31QYuiq4
+         gJ5TVBad0VIzP1S7JsNMD2OGGK9inNgTeGsAG34Ac2NLyRWAbB+AThfy9SwVSLuNiTdR
+         vPfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678284809;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fYJgnl+7Us7KVNz74ou1/RTlLrV9+lTS5g77LiBuQ3c=;
-        b=XCTjRmX/KlRm7wApElvPKaP+nXXqp2fZ4hypY3gmFpdK92RmMFCu3oaMo9yqLd2O6g
-         BhwRCrOjxQwvD1G9taHrZDJ17sZU63X+FFqLSAeUBNyjvhIRWZ9w3yyR9TZ9i7EBEegZ
-         IHDppC42nLakSHZp7gfLoNPl65MlEW5Btv9yQBWXzU7uWczwshEEvDfXj9FqT6ZFhH3H
-         6XXRl92df8/rjUZ2/zxPI5CN+I4y1seIiivzQ/4LKPGWI+jZkbUUKzLMleqmmTxwdWYp
-         x/rGRtxeCydC6tQ4yhIcE39pP3Jq1/yoc6gSJUfjkeCjJGXhby7hqK+wZjXTvucFhtNS
-         AtoA==
-X-Gm-Message-State: AO0yUKXIS0W5BzEMKyp2bocL5QgqNLU0XKI3trKKdIWA5cFAf4PuBku1
-        6/aRqLVHjquN8OYmidZNcGI=
-X-Google-Smtp-Source: AK7set9KCSNRGEm9sChY9O0wotWq3iIMBNWylAEhP+Ubz3oleChgvVargNdNb4crfUiCIX8/U+bswg==
-X-Received: by 2002:a17:906:fa82:b0:8ea:a647:a5aa with SMTP id lt2-20020a170906fa8200b008eaa647a5aamr23318599ejb.38.1678284808714;
-        Wed, 08 Mar 2023 06:13:28 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:c4be:f7db:77fd:b9e5])
-        by smtp.gmail.com with ESMTPSA id h7-20020a50cdc7000000b004bc15a440f1sm8283607edj.78.2023.03.08.06.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:13:28 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: update the 01.org website entries
-Date:   Wed,  8 Mar 2023 15:13:22 +0100
-Message-Id: <20230308141322.25201-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678290969;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b9SP/9+AjaQNqqJgA/usyjVh7hC/+seg8SkazKsVVtg=;
+        b=CZvK50y82vunHSajn1ao+XXLBgPcdZ1H3cBURhilh7nvPjrZSduAg+aeV9j7W2FTge
+         ofB+MKQx5arKP9hDFgQU7fZ/K/4lXa6zT1TvDRyexddp80JoGXXNnPhPEb86DU5bHNbx
+         60/FM2U1RMTwpd9Q1c8V1rgs82BohqHrSPfYAQp2SDBzLmTCvJRoGz3tgWd9pVewCifD
+         4R4dy3tooPRzmpN0SYZnQtWcRt1F1Zk0g4jesCpYQ5Hu4wwf39qFkP4KcR9A3iW+4iwv
+         gcKgASuFF1vtXNm3n7ZfTabFM7yOrFCaMBBZnM0Svo3dVftRakBkrtkVFyTMFR2sEc4g
+         jDXQ==
+X-Gm-Message-State: AO0yUKUEHxoXi51m3Uam9hBry91xdxra4C3ntDNk6JclMllrlpxF+1eo
+        apRSgJpgbOch/SMnriGqcD9IDrbipyVtZd56E+IF17m0rWMyffBgc7KZaA==
+X-Google-Smtp-Source: AK7set++MSA0kJY6qFTA6KF9CSRsGNNx2sdD4u4ynmCGtlRbh9tzc4ZjvrZARqg48I/75rumD77xOAEhYfM0rWdxZ6k=
+X-Received: by 2002:a50:a698:0:b0:4af:515d:5691 with SMTP id
+ e24-20020a50a698000000b004af515d5691mr10629540edc.7.1678290969024; Wed, 08
+ Mar 2023 07:56:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307135146.86084-1-bchihi@baylibre.com>
+In-Reply-To: <20230307135146.86084-1-bchihi@baylibre.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 8 Mar 2023 16:55:33 +0100
+Message-ID: <CAGuA+op4n+cFrkJfty2qpcFQQ1bHaK_KbjgUL_CHsPtMx=v7kw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: fix memcpy's
+ number of bytes in lvts_calibration_init()
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, error27@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 01.org links in MAINTAINERS now forward to different other pages or do
-not resolve.
+Hi Angelo,
 
-The link https://01.org/linuxgraphics/ resolves to the Intel Graphics for
-Linux - Programmer's Reference Manuals. Update this webpage entry.
+Could we please discuss it here in this thread?
+Because the other one
+"https://patchwork.kernel.org/project/linux-pm/patch/20230307134245.83599-1-bchihi@baylibre.com/"
+does not contain the address of "Dan Carpenter" who reported the bug
+and suggested the fix.
+It was sent by mistake. sorry.
 
-The link
-https://01.org/linuxgraphics/gfx-docs/maintainer-tools/drm-misc.html
-does not resolve. Remove this webpage entry.
-
-The link https://01.org/igvt-g resolves to
-https://github.com/intel/gvt-linux. Remove the webpage entry, as the
-github repository is already referred to by the T: entry in that section.
-
-The link resolves the pm-graph project page in Intel's Open Ecosystem area
-at intel.com. Update this webpage entry.
-
-M:      "Todd E Brandt" <todd.e.brandt@linux.intel.com>
-L:      linux-pm@vger.kernel.org
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1333928a7be4..99adcd74b06a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6747,7 +6747,6 @@ M:	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
- M:	Maxime Ripard <mripard@kernel.org>
- M:	Thomas Zimmermann <tzimmermann@suse.de>
- S:	Maintained
--W:	https://01.org/linuxgraphics/gfx-docs/maintainer-tools/drm-misc.html
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/gpu/
- F:	drivers/gpu/drm/*
-@@ -10250,7 +10249,7 @@ M:	Rodrigo Vivi <rodrigo.vivi@intel.com>
- M:	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
- L:	intel-gfx@lists.freedesktop.org
- S:	Supported
--W:	https://01.org/linuxgraphics/
-+W:	https://www.intel.com/content/www/us/en/develop/documentation/intel-graphics-for-linux-programmers-reference-guide/top.html
- Q:	http://patchwork.freedesktop.org/project/intel-gfx/
- B:	https://gitlab.freedesktop.org/drm/intel/-/wikis/How-to-file-i915-bugs
- C:	irc://irc.oftc.net/intel-gfx
-@@ -10312,7 +10311,6 @@ M:	Zhi Wang <zhi.a.wang@intel.com>
- L:	intel-gvt-dev@lists.freedesktop.org
- L:	intel-gfx@lists.freedesktop.org
- S:	Supported
--W:	https://01.org/igvt-g
- T:	git https://github.com/intel/gvt-linux.git
- F:	drivers/gpu/drm/i915/gvt/
- 
-@@ -16668,7 +16666,7 @@ PM-GRAPH UTILITY
- M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
- L:	linux-pm@vger.kernel.org
- S:	Supported
--W:	https://01.org/pm-graph
-+W:	https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
- B:	https://bugzilla.kernel.org/buglist.cgi?component=pm-graph&product=Tools
- T:	git git://github.com/intel/pm-graph
- F:	tools/power/pm-graph
--- 
-2.17.1
-
+Best regards,
+Balsam
