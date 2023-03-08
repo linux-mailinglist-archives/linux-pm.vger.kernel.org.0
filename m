@@ -2,276 +2,245 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12536B1138
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 19:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2836B1447
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 22:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCHSmX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 13:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S229574AbjCHVlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 16:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjCHSmQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 13:42:16 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AABB4F64;
-        Wed,  8 Mar 2023 10:42:12 -0800 (PST)
-Received: from mercury (dyndsl-091-248-211-125.ewe-ip-backbone.de [91.248.211.125])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A72966602FED;
-        Wed,  8 Mar 2023 18:42:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678300930;
-        bh=UKyWFZhNS8RsP12bD/s+1YGvw8RPwv6cAUSboZiUu6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m1pvZnDSr9a3Nd13D0yTZSXkrVYO6dOprifxTR3lYVan2ve4pf5sxHAlRs6H3gdpF
-         Ajt0fohTCBhzsNonhgncDSUldGRt/qrsbWOXkv80v22i7m+BiGIyx3n6zFvg/w2u4D
-         6aZ8HVqg5duEEbZqSsiKihvbjljKx1m2IBircm/1ULNhH/S9XrVxiY7de8vwJzIuBz
-         7Aqay29bwEQ6iDFqLUCOuC7c1klOIwFgYt9UW1W2UsdrMEGiGVdqFuuZ7RY0UxQR0m
-         i55lBt+DOP3Wjog71zD5Xn4ZrBlrTvWzLtm9GuWIb7ftMV7lBMFn4G4L7Gjq4bcus4
-         Z9MQl2APMdq6w==
-Received: by mercury (Postfix, from userid 1000)
-        id B49D3106083B; Wed,  8 Mar 2023 19:42:08 +0100 (CET)
-Date:   Wed, 8 Mar 2023 19:42:08 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id
- logic
-Message-ID: <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
-References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
- <20230308112253.15659-5-sebastian.reichel@collabora.com>
- <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
+        with ESMTP id S229492AbjCHVlL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 16:41:11 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426C5D49FD
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 13:40:39 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id z42so17988113ljq.13
+        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 13:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678311611;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o4y67UnJn1EP8QhERguzs/XDYl9emopnZBVkwzFsu1s=;
+        b=AlM16nEmeLLOP5B4C/LwHMaZhpMWyWaz5qKWfVC972U+f05o+UYPCU16Gm+GGaYF6J
+         ydXAP4XQivpQDw09MbSlE5n3et5qz8VVhL9uEhkjNyRcIdC7WnzAlte1OQrvevmp9JiC
+         3PtkA/qZ5ZZ2GjrYsbgxWfeSYsKjWa96duDdFW8Ik5CAYhmb+7jS2Hd3A8iBW+r4xf3z
+         8ABFb+byUBxK4RgmqBWg0/ewvGdUoOUHjUNGoIOzSFfQYsqUmNgRaQC6ijkHAiMkZ70A
+         6KpRCqr67BjD993h4ryUfSUYLaYPtKBygbGQkz22P3eUaadJfrNGzPfSL7F7D/4Q/hHy
+         09Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678311611;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o4y67UnJn1EP8QhERguzs/XDYl9emopnZBVkwzFsu1s=;
+        b=3XzUnwGnBEKjd+SpMoucI2nNFqlIh8na+sRxvejWD+DhS1iTQDFoHwzRPFGJGnN7wc
+         1x4Fz6pJO6ptd9lslMAzNrJX4nO+quh6zOKTvlOmYFe5w1G2cUaQDi8kP8drlBOfFbn4
+         xq41oQutasdxTYvdq1hgyLST/DY65r7mY6/wlHkTw9XOzHUH+kpNV/bCJ+0NpqVlmQgr
+         jLY2km6/JQCSOgRSGVwk1iPM75vdFLKTJuMF4DekHXUB/DdLQ+7kdtXCxyjyAS6cAaD+
+         jghoE4KHFGC71/BJ4YP/ZFHtjp68ALKx5aHkrYP10MCE2zTVNLLQLKlCDKV2+kEJYLsU
+         LHOA==
+X-Gm-Message-State: AO0yUKVvcbKpWOLL0NPwbxjpqUBhbXwd4nE9Ng4MThFU1SXTbjGKYxKW
+        BUSJvfi0bNE/AWWTfiZwaM3kfw==
+X-Google-Smtp-Source: AK7set+7a9irLnaTluhwl5v+ckXaUZ/qbcnC+lICCmRfPwAj2U9FypC0dFez1472w6xRWQTH+f5eMQ==
+X-Received: by 2002:a2e:87d6:0:b0:293:4ff3:7f98 with SMTP id v22-20020a2e87d6000000b002934ff37f98mr5760129ljj.15.1678311610743;
+        Wed, 08 Mar 2023 13:40:10 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id a6-20020a2e8606000000b00295a2a608e9sm2688844lji.111.2023.03.08.13.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 13:40:10 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v7 0/9] The great interconnecification fixation
+Date:   Wed, 08 Mar 2023 22:40:06 +0100
+Message-Id: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2t65xyuiafud7yss"
-Content-Disposition: inline
-In-Reply-To: <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALYACWQC/22NTQ6DIBBGr2Jm3WkMCGJXvUfjAhF1EgN2sKaN8
+ e6lrrt8L9/PDskz+QS3Ygf2GyWKIUN9KcBNNoweqc8MohSyFMLgGhdy+IwJVSWVs86Y3jSQ851
+ NHju2wU25EV7znOXCfqD3efBoM0+U1sif82/TP/tvetNYonSytrJqtNLDfaZgOV4jj9Aex/EFt
+ H0SorgAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678311609; l=6955;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=iOM21V8TjrP4sjARaIEDydlJTEpBK3MvpM+HE3MZ+8U=;
+ b=/ERD+ya3LSUsGB5xuPWvjNLybxnPQUVCYlzb9GzdcLn9k8DXpJnx5L3d85ISn1z7kjdDG4tv6VZi
+ WI0bcIZKD/DNPtCqWZfvT1QpPoi9fymqZNoMcWtVQTmLzI3TOlpD
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi!
 
---2t65xyuiafud7yss
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v6 -> v7 changelog:
+- Rebase on Johan's recent patches
 
-Hi Daniel,
+Link to v6: https://lore.kernel.org/r/20230228-topic-qos-v6-0-3c37a349656f@linaro.org
 
-On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
-> On 08/03/2023 12:22, Sebastian Reichel wrote:
-> > Replace the channel ID lookup table by a simple offset, since
-> > the channel IDs are consecutive.
-> >=20
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> As all the other patches are reviewed by Heiko, is the tag missing here?
+v5 -> v6 changelog:
+- Completely rewrite the commit message of [1/9], I realized that there
+  was actually no issue with the present upstream setups and the only
+  drivers suffering from ghost votes were.. my own OOT drivers..
+  As a consequence of that, all fixes tags were dropped and the patch
+  has been kept, since it was deemed useful for newer SoCs that don't
+  distinguish ap_owned nodes.
 
-Heiko was not happy with this in PATCHv2, when he reviewed most
-of the patches:
+- Change the number of allowed bus_clocks from (0-2 in the previous
+  revision, 0-inf in the current upstream state) to {0, 2}. Scaling is
+  only possible with a pair of wake-sleep clocks, but some providers
+  don't do scaling at all (see 8996 A0NoC, 660 GNoC). Drop the cheeky
+  -1 / 0 / >0 checks from the previous revision. [7/9]
 
-https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
+- bus_clocks are now forced to be named "bus", "bus_a", as there is no
+  need for variance here - we don't do scaling on non-SMD RPM bus clocks.
+  [7/9]
 
-I replied, but never got a response, so I kept it as is:
+- The interface clocks are now only turned on when the associated bus
+  is running at a non-zero frequency [6/9] instead of being always on
+  and leaking power
 
-https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektra=
-nox.org/
+Tested on MSM8996 Kagura, SM6375 PDX225 (OOT), MSM8998 Maple (OOT)
 
-FWIW it is essential for the series and cannot be dropped, because
-RK3588 has more than 2 channels.
+Link to v5: https://lore.kernel.org/linux-arm-msm/20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org/
 
-Greetings,
+v4 -> v5 changelog:
+- Previously the "Always set QoS params on QNoC" contained part of what
+  should have been included in "make QoS INVALID default".. (very bad)
+  Fix it!
 
--- Sebastian
+- Drop negative offset and keep_alive, they will be resubmitted with new
+  icc driver submissions
 
-> > ---
-> >   drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
-> >   1 file changed, 21 insertions(+), 27 deletions(-)
-> >=20
-> > diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockc=
-hip_thermal.c
-> > index 9ed45b318344..bcbdd618daae 100644
-> > --- a/drivers/thermal/rockchip_thermal.c
-> > +++ b/drivers/thermal/rockchip_thermal.c
-> > @@ -39,15 +39,6 @@ enum tshut_polarity {
-> >   	TSHUT_HIGH_ACTIVE,
-> >   };
-> > -/*
-> > - * The system has two Temperature Sensors.
-> > - * sensor0 is for CPU, and sensor1 is for GPU.
-> > - */
-> > -enum sensor_id {
-> > -	SENSOR_CPU =3D 0,
-> > -	SENSOR_GPU,
-> > -};
-> > -
-> >   /*
-> >    * The conversion table has the adc value and temperature.
-> >    * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_t=
-able)
-> > @@ -82,7 +73,7 @@ struct chip_tsadc_table {
-> >   /**
-> >    * struct rockchip_tsadc_chip - hold the private data of tsadc chip
-> > - * @chn_id: array of sensor ids of chip corresponding to the channel
-> > + * @chn_offset: the channel offset of the first channel
-> >    * @chn_num: the channel number of tsadc chip
-> >    * @tshut_temp: the hardware-controlled shutdown temperature value
-> >    * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
-> > @@ -98,7 +89,7 @@ struct chip_tsadc_table {
-> >    */
-> >   struct rockchip_tsadc_chip {
-> >   	/* The sensor id of chip correspond to the ADC channel */
-> > -	int chn_id[SOC_MAX_SENSORS];
-> > +	int chn_offset;
-> >   	int chn_num;
-> >   	/* The hardware-controlled tshut property */
-> > @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __i=
-omem *regs,
-> >   }
-> >   static const struct rockchip_tsadc_chip px30_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* 2 channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> > @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_=
-data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rv1108_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > +	/* cpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 1, /* one channel for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsad=
-c_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3228_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > +	/* cpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 1, /* one channel for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsad=
-c_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3288_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 1, /* cpu sensor is channel 1 */
-> > -	.chn_id[SENSOR_GPU] =3D 2, /* gpu sensor is channel 2 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 1,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3328_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > +	/* cpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 1, /* one channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> > @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3366_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3368_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3399_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3568_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform=
-_device *pdev)
-> >   	for (i =3D 0; i < thermal->chip->chn_num; i++) {
-> >   		error =3D rockchip_thermal_register_sensor(pdev, thermal,
-> >   						&thermal->sensors[i],
-> > -						thermal->chip->chn_id[i]);
-> > +						thermal->chip->chn_offset + i);
-> >   		if (error)
-> >   			return dev_err_probe(&pdev->dev, error,
-> >   				"failed to register sensor[%d].\n", i);
->=20
-> --=20
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->=20
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->=20
+- use b4 this time.. hopefully the series gets to everybody now
 
---2t65xyuiafud7yss
-Content-Type: application/pgp-signature; name="signature.asc"
+Link to v4: https://lore.kernel.org/linux-arm-msm/20230214143720.2416762-1-konrad.dybcio@linaro.org/
 
------BEGIN PGP SIGNATURE-----
+v3 -> v4 changelog:
+- Drop "Always set QoS params on QNoC", it only causes issues.. this
+  can be investigated another day, as it's not necessary for operation
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQI1vUACgkQ2O7X88g7
-+ppZNw//SfB4nsAVHynPBqs+Lcg/+GxxvJorgui/g9iaOLLG52U1lwkCFaeZMEBj
-ZwhT3tVN5X5NGOUhqqub6cD5L4zyCFq7ZbS/WebxLnAxY31SmeOUJN4tRgwQ6IVj
-PvfvoP/RAZzJsXXjZD/6jNvYRC7EhIoSWfC9pj9vX/pLshWcmBcIiUIxXcQnxy5N
-CVgQZ6pM0VUuX6dZ4gQLYtkHOlnJ9HZITyLS3YFk/k5QyrWseS1uwtkBtiiUL1xN
-dpV4loMyHFTAdAlAe1Omnm1pxoNu2/L7DkMUy9YuLedrqBva3T4qZ1hYXwYdSXGH
-z4lL2K4EtTMovqUM8wD5APzuwQUsCb6F4qsZy+ESizl+TodCS0IMEvF1BNLIvq0c
-r977XWozyKM6eHhQFm+pZga6079fqEVmFmozgt9VpHSE8u51joLtoY/A9JJsI/7V
-Ewcpj4Qk/pHoIq9bziEFPvurlQncf7OrwiTUsbFU2wvQGVKlYu4fOYr+G77AQayR
-FPCd1GE9kHQelx/ZHCZKc363Lrbh1Ta+bpOx2/VbGq5svRfsYvMnL1feFLEeV2gV
-v3E4TRSfX1vm5852grSyOnA68G4JagjX8bCNqpwKMv1lDjv5vXEO42oxu2twaeFO
-pikaz2Ti7Qwdv7iJ57zHOmiNSxoeFi4MUV9moe5q2G3omNuLH64=
-=ay3r
------END PGP SIGNATURE-----
+- Drop "Add a way to always set QoS registers", same as /\
 
---2t65xyuiafud7yss--
+- Add a way (and use it) to have no bus_clocks (the ones we set rate on),
+  as at least msm8996 has a bus (A0NoC) that doesn't have any and does
+  all the scaling through RPM requests
+
+- Promote 8996 icc to core_initcall
+
+- Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
+
+- Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
+
+Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
+
+v2 -> v3 changelog:
+- Drop "Don't set QoS params before non-zero bw is requested"
+
+- Rebase on next
+
+- [1/9] ("..make QoS INVALID default.."): remove unused define for
+  MODE_INVALID_VAL
+
+- Pick up tags
+
+v1 -> v2 changelog:
+- reorder "make QoS INVALID default", makes more sense to have it
+  before "Always set QoS params on QNoC"
+
+- Limit ap_owned-independent QoS setting to QNoC only
+
+- Add new patches for handling the 8996-and-friends clocks situation
+  and optional BIMC regardless-of-ap_owned QoS programming
+
+[1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
+[2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
+
+This series grew quite a bit bigger than the previous [1] attempt, so
+I decided to also add a cover letter.
+
+Link to v2: [2]
+
+It addresses a few things that were not quite right:
+
+- Setting QoS params before a "real" (non-zero) bandwidth request
+  makes little sense (since there's no data supposed to flow through
+  the bus, why would the QoS matter) and (at least newer) downstream
+  prevents that from happening. Do the same in Patch 1.
+
+- QNoC type buses expect to always have their QoS registers set as long
+  as there's a non-INVALID QoS mode set; ap_owned is not really a thing
+  on these anymore, Patch 3 handles that.
+
+- The recent MSM8996 boot fix was done quickly and not quite properly,
+  leading to possibly setting the aggregate bus rate on "normal"
+  hardware interface clocks; this series handles that by limiting the
+  number of bus_clocks to 2 (which is the maximum that makes sense,
+  anyway) and handling the rest as "intf_clocks", which are required
+  to access the   hardware at the other end. Patches 5-8 take care of
+  that and Patch 10 reverts the _optional moniker in clk_get_ to make
+  sure we always have the bus scaling clocks, as they're well, kind
+  of important ;)
+
+- Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
+  by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
+  always receive QoS programming, whereas BIMC on "older" SoCs cries
+  like a wild boar and crashes the platform when trying to do so
+  unconditionally. Patch 9 adds a way to take care of that for newer
+  SoCs (like SM6375)
+
+- QoS mode INVALID was assumed by developers before to be the default
+  ("I didn't specify any QoS settings, so the driver can't assume I
+  did.. right? right!?" - wrong, partial struct initialization led to
+  0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
+  that's the logical choice. This allows the "Always set QoS params
+  on QNoC" patch to work without setting tons of what-should-
+  -obviously-be-the-default values everywhere, as well as fixes older
+  drivers that set ap_owned = true but left the QoS mode field unset.
+  Patch 2 cleans that up.
+
+- Some nodes are physically connected over more than one channel
+  (usually DDR or other high-throughput paths). Patch 4 allows that
+  to be reflected in calculations. This will be required for at least
+  MSM8998 and SM6375 (which will be submitted soon after this lands)
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (9):
+      interconnect: qcom: rpm: make QoS INVALID default
+      interconnect: qcom: rpm: Add support for specifying channel num
+      interconnect: qcom: Sort kerneldoc entries
+      interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+      interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
+      interconnect: qcom: rpm: Handle interface clocks
+      interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
+      interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
+      interconnect: qcom: msm8996: Promote to core_initcall
+
+ drivers/interconnect/qcom/icc-rpm.c | 89 +++++++++++++++++++++++++------------
+ drivers/interconnect/qcom/icc-rpm.h | 38 +++++++++++-----
+ drivers/interconnect/qcom/msm8996.c | 35 +++++++++------
+ drivers/interconnect/qcom/sdm660.c  | 17 +++----
+ 4 files changed, 115 insertions(+), 64 deletions(-)
+---
+base-commit: fc31900c948610e7b5c2f15fb7795832c8325327
+change-id: 20230228-topic-qos-5435cac88d89
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
