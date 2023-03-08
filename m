@@ -2,76 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435F46B1097
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 19:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506106B10D2
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 19:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjCHSEz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 13:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S229945AbjCHSOF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 13:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCHSEq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 13:04:46 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A15E99D63
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 10:04:45 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id t15so16216536wrz.7
-        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 10:04:45 -0800 (PST)
+        with ESMTP id S230043AbjCHSN6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 13:13:58 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADD5618AC
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 10:13:29 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id l7-20020a05600c1d0700b003eb5e6d906bso1689717wms.5
+        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 10:13:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678298683;
+        d=linaro.org; s=google; t=1678299204;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=36QQSXDy6HLVF+1TRChIdbNOy+S6sdWRo/ebFHbbL/w=;
-        b=xwZVnDqNNrqeOGErsihKhmARGxeQxjenT2pg8APxKJnrKeG6DXe8WYFgNiDuQ+2D9m
-         e4uwYe92oW5h1tkYR1zpX7j4asq8c800kUnoDi1PaBEDQEMCLgcGuBElgAsTmdjLvG2C
-         CoBgPsAwavVxsyOGBHol+wMrq2hGf+9vlSo2EpOnOSsiV88LdFfmhVq04SXead5XF3c4
-         PdCU29X6TE7g+MRSfBwCcELU8xq1nroQLo3d+4P3vtJRTfT6IqxgLaHQ9nGd+TY8SwgC
-         NhbjR3CX/HMUelCRyvYO5p6i/OnD14BNIkD6RvMBCXX4RpGPWcufq4Bunp1tESKwmZUy
-         A48Q==
+        bh=lqnDgNByCxKJMz7E61gZ4/wBvcfPmg0KpSzK4NDBPz4=;
+        b=NMEnQHT+tczCVbLhYEtQpkzzaIJbbfRVYCrkHLIqR8xKE3iRP7AQIuNlEwHun8qWxI
+         GAHgHWszxUdGaOoiPHnRbIwiU6yVkSN8Ruk1TKA0hbf+XUKfeyOXaHkspoK5O6+1n8wq
+         6qIoAdJ/C+E+5CuxpW065fQ+ObYvM9RGJ4xwqF4ED8cdyzL/B0a46cSbNYuYuoH+Cu/8
+         CbHKvgRQ1IbFpCpSWUUHgEfx1dR1er8IrAMRMtwvsvAy0RfVJSlJTuvBKHZ2mnQNzJ3W
+         +Y9zIn9afNaVAK4M8Quc62pRt3TJXFXu2tBEK2rTKWT7o+8O1ZlRFkVvPJs1FWIr4eo+
+         GsMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678298683;
+        d=1e100.net; s=20210112; t=1678299204;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=36QQSXDy6HLVF+1TRChIdbNOy+S6sdWRo/ebFHbbL/w=;
-        b=sBhTC1tW1AtvlcAmp1l6T+1WaJ6GjUCusu7yOWQkh2Xpq9aRmbfn6jogVxzqHyT7XT
-         bXBKyCjJupA38q+0ffKQcap//grQLs0bjO8Bqr57a/YfiREz2pu7tVmfPtXuuMtAhMAh
-         PQW0JHFGprvyS+tOn9wJhnU4WQPAYylAr7qF5bmQLbqwplMdAmJ5vrueNv2EVPb7Xhdj
-         dJDd4aRDagJffUJ7Xs1af6phHoVUPv4sRoiHW9e4go7SnL9w6sZE5hXmo11+ISa0Dj5N
-         j3igR88d1SlwN+D4/hYvEJYrYuO7dgX1dccrsAsbZC7WSarf8cOtyZIk4HwtH1dW504D
-         56ug==
-X-Gm-Message-State: AO0yUKXq+acwp8xjGjfW2dnmuuCliTj7g3u2zPmnjB9XKjgReYpnpzdn
-        89lznnKIgBuWUlRjJJ4aGr0q3Q==
-X-Google-Smtp-Source: AK7set87hJiYUFdWOhlkLfiCzzQEgcB/m/PwMmOH752pH3UfZH7d6XhMNiDWB4G+OFRfnegFoUu/Ug==
-X-Received: by 2002:a5d:6912:0:b0:2c8:14ba:4589 with SMTP id t18-20020a5d6912000000b002c814ba4589mr11585613wru.42.1678298683569;
-        Wed, 08 Mar 2023 10:04:43 -0800 (PST)
+        bh=lqnDgNByCxKJMz7E61gZ4/wBvcfPmg0KpSzK4NDBPz4=;
+        b=QdlMC6JqbXmaiYpUb3UzI8Ou6CEGdg4cYO+4sqE+d6884zVCPvYP2n0ykW2v7I5brD
+         niEHHPABHUl19LdsCXUWnf3U6nQDicr4Na8r8YbtJnFhZVBEvvLR2acuZRsVXOhWwQGK
+         aaMPf5ISrpgvifUWOi3ZeCw2n1oFLU4lVKPTj++I9UjwG+qDvlobw8rcgqxItjklAerk
+         HdiKR4EzaYMD84L1smE4wizgO+sM8TtMOpr4SbHAu7hzWcrBB+V3EZJmK6eBtlkKJClH
+         jNaict27UKDJ4cK1fnVx9KXkJ6e+XLdLgPQi57iopkvaXG+CL3ebT+sg1cxeAG6sR10g
+         1Wpw==
+X-Gm-Message-State: AO0yUKVXAQ0auObcVyIFTQYrCkKXlOvFBWx0OY/+TCYHDgexQVssKG72
+        iTaUBa7IuoqArtUfmio5DqmzJw==
+X-Google-Smtp-Source: AK7set/eGnfdLqSXO5k6gFPSjXsc2URwOw444gIhoTtUY4ojZeX2D/CyDqsIDbiTRIe+Ndr8X6+uRg==
+X-Received: by 2002:a05:600c:198e:b0:3eb:2e27:2d0c with SMTP id t14-20020a05600c198e00b003eb2e272d0cmr13899448wmq.1.1678299203675;
+        Wed, 08 Mar 2023 10:13:23 -0800 (PST)
 Received: from ?IPV6:2a05:6e02:1041:c10:4213:ad42:5630:43c4? ([2a05:6e02:1041:c10:4213:ad42:5630:43c4])
-        by smtp.googlemail.com with ESMTPSA id r11-20020a5d494b000000b002c54c9bd71fsm15310715wrs.93.2023.03.08.10.04.42
+        by smtp.googlemail.com with ESMTPSA id r11-20020a05600c458b00b003e20970175dsm162809wmo.32.2023.03.08.10.13.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 10:04:43 -0800 (PST)
-Message-ID: <1d0e06ca-c61c-27f1-281a-ed75034c91d4@linaro.org>
-Date:   Wed, 8 Mar 2023 19:04:42 +0100
+        Wed, 08 Mar 2023 10:13:23 -0800 (PST)
+Message-ID: <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
+Date:   Wed, 8 Mar 2023 19:13:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 06/11] thermal/drivers/rcar_gen3_thermal: remove R-Car H3
- ES1.* handling
+Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id
+ logic
 Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
- <20230307163041.3815-7-wsa+renesas@sang-engineering.com>
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
+ <20230308112253.15659-5-sebastian.reichel@collabora.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230307163041.3815-7-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230308112253.15659-5-sebastian.reichel@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,21 +83,162 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/03/2023 17:30, Wolfram Sang wrote:
-> R-Car H3 ES1.* was only available to an internal development group and
-> needed a lot of quirks and workarounds. These become a maintenance
-> burden now, so our development group decided to remove upstream support
-> and disable booting for this SoC. Public users only have ES2 onwards.
+On 08/03/2023 12:22, Sebastian Reichel wrote:
+> Replace the channel ID lookup table by a simple offset, since
+> the channel IDs are consecutive.
 > 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> Please apply individually per subsystem. There are no dependencies and the SoC
-> doesn't boot anymore since v6.3-rc1.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Applied, thanks
+As all the other patches are reviewed by Heiko, is the tag missing here?
+
+
+> ---
+>   drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
+>   1 file changed, 21 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
+> index 9ed45b318344..bcbdd618daae 100644
+> --- a/drivers/thermal/rockchip_thermal.c
+> +++ b/drivers/thermal/rockchip_thermal.c
+> @@ -39,15 +39,6 @@ enum tshut_polarity {
+>   	TSHUT_HIGH_ACTIVE,
+>   };
+>   
+> -/*
+> - * The system has two Temperature Sensors.
+> - * sensor0 is for CPU, and sensor1 is for GPU.
+> - */
+> -enum sensor_id {
+> -	SENSOR_CPU = 0,
+> -	SENSOR_GPU,
+> -};
+> -
+>   /*
+>    * The conversion table has the adc value and temperature.
+>    * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
+> @@ -82,7 +73,7 @@ struct chip_tsadc_table {
+>   
+>   /**
+>    * struct rockchip_tsadc_chip - hold the private data of tsadc chip
+> - * @chn_id: array of sensor ids of chip corresponding to the channel
+> + * @chn_offset: the channel offset of the first channel
+>    * @chn_num: the channel number of tsadc chip
+>    * @tshut_temp: the hardware-controlled shutdown temperature value
+>    * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
+> @@ -98,7 +89,7 @@ struct chip_tsadc_table {
+>    */
+>   struct rockchip_tsadc_chip {
+>   	/* The sensor id of chip correspond to the ADC channel */
+> -	int chn_id[SOC_MAX_SENSORS];
+> +	int chn_offset;
+>   	int chn_num;
+>   
+>   	/* The hardware-controlled tshut property */
+> @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
+>   }
+>   
+>   static const struct rockchip_tsadc_chip px30_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
+> +	/* cpu, gpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 2, /* 2 channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
+> @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> +	/* cpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 1, /* one channel for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> +	/* cpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 1, /* one channel for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 1, /* cpu sensor is channel 1 */
+> -	.chn_id[SENSOR_GPU] = 2, /* gpu sensor is channel 2 */
+> +	/* cpu, gpu */
+> +	.chn_offset = 1,
+>   	.chn_num = 2, /* two channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> +	/* cpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 1, /* one channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
+> @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
+> +	/* cpu, gpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 2, /* two channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
+> +	/* cpu, gpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 2, /* two channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
+> +	/* cpu, gpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 2, /* two channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
+>   };
+>   
+>   static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
+> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
+> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
+> +	/* cpu, gpu */
+> +	.chn_offset = 0,
+>   	.chn_num = 2, /* two channels for tsadc */
+>   
+>   	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
+> @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+>   	for (i = 0; i < thermal->chip->chn_num; i++) {
+>   		error = rockchip_thermal_register_sensor(pdev, thermal,
+>   						&thermal->sensors[i],
+> -						thermal->chip->chn_id[i]);
+> +						thermal->chip->chn_offset + i);
+>   		if (error)
+>   			return dev_err_probe(&pdev->dev, error,
+>   				"failed to register sensor[%d].\n", i);
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
