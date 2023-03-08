@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630CA6B02A5
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 10:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E14B76B02AD
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 10:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjCHJP5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 04:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S230512AbjCHJSH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 04:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCHJPY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 04:15:24 -0500
+        with ESMTP id S230419AbjCHJRn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 04:17:43 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA98521CE;
-        Wed,  8 Mar 2023 01:15:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC3BB79D3;
+        Wed,  8 Mar 2023 01:17:31 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E39F6602FE7;
-        Wed,  8 Mar 2023 09:15:21 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 17B946602FE7;
+        Wed,  8 Mar 2023 09:17:29 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678266922;
-        bh=fPTLQFHujY/oHUC/I3K9qqyVNGNAzjDCKWvze41sJ3g=;
+        s=mail; t=1678267050;
+        bh=7CthwUYZWwI26oi5ci4iad7NhcobXUwsiHbgXRCKMaE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Jf92UZEG/n2ScLk5Mzh1jykzYmXKZkEEJvFdfcrvXio2hJZm6Dlf/QZlZez6hXdRs
-         KCi3EdmDhdutGmLzHpchyCy/9eE3HkELdBpG6q7eh9TD/MA3JkCh634pN6aZvvaFhu
-         9PN07W87fFVKaQFc78Zup2w7H3JoilbpB/yVi9CbQ7l+woBOOy87Oyc9+2osDvCIC9
-         LIFflngramEmJTtqdP/YNJIfsjgDFyhALX/wh53yrH5j4rRa18Vo9YMDj2lpKOZwtN
-         nrzS7jzAahEq0fw23m/JnnASHQpmSydI9MYO8iH4gbfhzfN3RsOWbtIwXM/47xyd7J
-         aUoz507p4jKnA==
-Message-ID: <6b1e9d19-b176-280d-0277-492120e3a1fa@collabora.com>
-Date:   Wed, 8 Mar 2023 10:15:19 +0100
+        b=dd/8bSV8L/ApStx6zaCqY1vsUbxan/m6w/4ZEuSB1oWwoWucZRZhOTJ7+mR0Y8ilA
+         vWo/V8x8/Rum5972/abhAnxzI6KoW06Wz7hTPoZVTJQP0zLP6xh6+Z48gFG7tazMsi
+         HCM34qdTGRIPhdoItDrL4xsSsjhhZPidAO+q69u/QuIADFAjulhGDNFkqsR+Loy7nf
+         oPsA5L42D9dkb0ohRuA6Net0gKCoSRFZJNBU5IRfVgZyalhdKknxxuKyVjSZE2LWWP
+         JJA1gevsEt9oPW6cVuPYAK81cYkfRawWPYx6qnzMyUMi+PZTk4iurjsFPemLs/Y4Fe
+         oHE7zGxBlfwKQ==
+Message-ID: <5f980c7d-1bc4-cfdf-9392-70626317ca54@collabora.com>
+Date:   Wed, 8 Mar 2023 10:17:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 2/4] thermal/drivers/mediatek/lvts_thermal: Add AP domain
- for mt8195
+Subject: Re: [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain
+ temperature thresholds
 Content-Language: en-US
 To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
         amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
@@ -50,10 +50,10 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
 References: <20230307154524.118541-1-bchihi@baylibre.com>
- <20230307154524.118541-3-bchihi@baylibre.com>
+ <20230307154524.118541-5-bchihi@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230307154524.118541-3-bchihi@baylibre.com>
+In-Reply-To: <20230307154524.118541-5-bchihi@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,11 +68,16 @@ X-Mailing-List: linux-pm@vger.kernel.org
 Il 07/03/23 16:45, bchihi@baylibre.com ha scritto:
 > From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Add MT8195 AP Domain support to LVTS Driver.
+> Specify the targeted temperature thresholds.
 
-Please mention the documentation changes in the commit description.
+You're introducing the thermal zones and *then* fixing them in this commit.
+To be honest, this doesn't make a lot of sense...
 
-Regards,
+Please squash this commit with
+arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+
+P.S.: After squashing.. looks good.
+
+Thanks,
 Angelo
-
 
