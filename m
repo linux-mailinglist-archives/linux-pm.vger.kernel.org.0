@@ -2,135 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0F16B1087
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 19:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435F46B1097
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 19:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCHSAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 13:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S229878AbjCHSEz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 13:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbjCHSAa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 13:00:30 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B22C5616
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 10:00:27 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k37so10372912wms.0
-        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 10:00:27 -0800 (PST)
+        with ESMTP id S229737AbjCHSEq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 13:04:46 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A15E99D63
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 10:04:45 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t15so16216536wrz.7
+        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 10:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678298426;
+        d=linaro.org; s=google; t=1678298683;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aHQFyw10BVunJxsxfMJNLLH0YrstlFb/O3uzZ6Wfpjg=;
-        b=ufyRbw83qMR9Tdb34LRa+lUAFh1PAN8VwgGsw0takIfgH/kTPequORWhdtOk/hz5TD
-         uRxobnLYhVlG+PW0wIj1K+cJm0mLhmrmqXvQER3wRGFHdw7ddbyx2E0NGGU0xaDUN9dT
-         1jme7DeSFewuaURlDbgMvR3SjknlL/1TH8PLnBVBldHtbqonpBflPeRQ/DiO6gl4jHzw
-         3KMmb7RulbUuusz8Q1dpE8PPu7jEni9L+dAPnnDD4Vz3LDHbV5XocVtJT1zor4B8UDWx
-         /VZOqy5NR9DrnbUzr2m/2Vg/se5GqLAZDeSKleWyH3pkj2F9BIx3p9dn8YOga/ccjCKo
-         g8pA==
+        bh=36QQSXDy6HLVF+1TRChIdbNOy+S6sdWRo/ebFHbbL/w=;
+        b=xwZVnDqNNrqeOGErsihKhmARGxeQxjenT2pg8APxKJnrKeG6DXe8WYFgNiDuQ+2D9m
+         e4uwYe92oW5h1tkYR1zpX7j4asq8c800kUnoDi1PaBEDQEMCLgcGuBElgAsTmdjLvG2C
+         CoBgPsAwavVxsyOGBHol+wMrq2hGf+9vlSo2EpOnOSsiV88LdFfmhVq04SXead5XF3c4
+         PdCU29X6TE7g+MRSfBwCcELU8xq1nroQLo3d+4P3vtJRTfT6IqxgLaHQ9nGd+TY8SwgC
+         NhbjR3CX/HMUelCRyvYO5p6i/OnD14BNIkD6RvMBCXX4RpGPWcufq4Bunp1tESKwmZUy
+         A48Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678298426;
+        d=1e100.net; s=20210112; t=1678298683;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHQFyw10BVunJxsxfMJNLLH0YrstlFb/O3uzZ6Wfpjg=;
-        b=L3BFS802QqV/aax2ZhRKxSt1Ng0xhS64jXHKu4Hn87UrHyy7M3JTEVzvpaJQGbIgHD
-         uSgwcJqVphRxpmYqMZv6GMh8geVir4k9eLtcvBUbRbV3pggnOptcNHEdGAp/CB9qKc4O
-         APPOndfm69uoNzuP0/nbe8V/UzLLjwjlm9aFiLurKZlzjIkiwDY85XlGjnEA7iZY7wHa
-         xJDa+s8IH18y+6sHcBXItpFpXl44Ui3PE3zzjNkh28PwGjTZZP30G1a5o5akZOxKFeJp
-         XMkEIGyp4CNgd6I4K80WsxKoopnYMqaq4py+Gyxk88aiPxHA7jsfAqTVJnTCYHClG64r
-         1syA==
-X-Gm-Message-State: AO0yUKURMMtk5T7YSDvayJh80Jn0TmVIVY0wZHFtECH6KczHorUZU7e6
-        apGqDi08uV5PhHhj887QY1vhOQ==
-X-Google-Smtp-Source: AK7set+jvMl0EhuBZoHUFo60bJY0uF8ULFjfyqCjDSi5m2PvUIoskKxq3Mw/V3oU38SLKMDcpmJjBA==
-X-Received: by 2002:a05:600c:4509:b0:3eb:29fe:7343 with SMTP id t9-20020a05600c450900b003eb29fe7343mr16964033wmo.33.1678298426297;
-        Wed, 08 Mar 2023 10:00:26 -0800 (PST)
+        bh=36QQSXDy6HLVF+1TRChIdbNOy+S6sdWRo/ebFHbbL/w=;
+        b=sBhTC1tW1AtvlcAmp1l6T+1WaJ6GjUCusu7yOWQkh2Xpq9aRmbfn6jogVxzqHyT7XT
+         bXBKyCjJupA38q+0ffKQcap//grQLs0bjO8Bqr57a/YfiREz2pu7tVmfPtXuuMtAhMAh
+         PQW0JHFGprvyS+tOn9wJhnU4WQPAYylAr7qF5bmQLbqwplMdAmJ5vrueNv2EVPb7Xhdj
+         dJDd4aRDagJffUJ7Xs1af6phHoVUPv4sRoiHW9e4go7SnL9w6sZE5hXmo11+ISa0Dj5N
+         j3igR88d1SlwN+D4/hYvEJYrYuO7dgX1dccrsAsbZC7WSarf8cOtyZIk4HwtH1dW504D
+         56ug==
+X-Gm-Message-State: AO0yUKXq+acwp8xjGjfW2dnmuuCliTj7g3u2zPmnjB9XKjgReYpnpzdn
+        89lznnKIgBuWUlRjJJ4aGr0q3Q==
+X-Google-Smtp-Source: AK7set87hJiYUFdWOhlkLfiCzzQEgcB/m/PwMmOH752pH3UfZH7d6XhMNiDWB4G+OFRfnegFoUu/Ug==
+X-Received: by 2002:a5d:6912:0:b0:2c8:14ba:4589 with SMTP id t18-20020a5d6912000000b002c814ba4589mr11585613wru.42.1678298683569;
+        Wed, 08 Mar 2023 10:04:43 -0800 (PST)
 Received: from ?IPV6:2a05:6e02:1041:c10:4213:ad42:5630:43c4? ([2a05:6e02:1041:c10:4213:ad42:5630:43c4])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a5d49c1000000b002c563b124basm15585115wrs.103.2023.03.08.10.00.25
+        by smtp.googlemail.com with ESMTPSA id r11-20020a5d494b000000b002c54c9bd71fsm15310715wrs.93.2023.03.08.10.04.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 10:00:25 -0800 (PST)
-Message-ID: <aefb1a57-6ec4-fefc-b5eb-42c899228255@linaro.org>
-Date:   Wed, 8 Mar 2023 19:00:24 +0100
+        Wed, 08 Mar 2023 10:04:43 -0800 (PST)
+Message-ID: <1d0e06ca-c61c-27f1-281a-ed75034c91d4@linaro.org>
+Date:   Wed, 8 Mar 2023 19:04:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v9 0/5] thermal: mediatek: Add support for MT8365 SoC
+Subject: Re: [PATCH 06/11] thermal/drivers/rcar_gen3_thermal: remove R-Car H3
+ ES1.* handling
 Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Michael Kao <michael.kao@mediatek.com>
-References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
- <afa4aacd-bacf-a545-3973-474286fd4b9c@linaro.org>
- <a328c1c5-7cec-4499-8e5f-92d8cc233d38@baylibre.com>
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
+ <20230307163041.3815-7-wsa+renesas@sang-engineering.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <a328c1c5-7cec-4499-8e5f-92d8cc233d38@baylibre.com>
+In-Reply-To: <20230307163041.3815-7-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/03/2023 11:13, Amjad Ouled-Ameur wrote:
-> Hi Daniel,
+On 07/03/2023 17:30, Wolfram Sang wrote:
+> R-Car H3 ES1.* was only available to an internal development group and
+> needed a lot of quirks and workarounds. These become a maintenance
+> burden now, so our development group decided to remove upstream support
+> and disable booting for this SoC. Public users only have ES2 onwards.
 > 
-> On 1/27/23 22:59, Daniel Lezcano wrote:
->> On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
->>> This patchset adds thermal support for MT8365 SoC.
->>>
->>> MT8365 has 4 thermal sensors, one for CPUs and the rest for debug/dev
->>> purposes. The CPU thermal zone uses passive cooling device with
->>> CPU{0..3}.
->>>
->>> Changes in v9:
->>> - Use delay between bank init and the thermal zone device register.
->>> - Link to v8: 
->>> https://lore.kernel.org/r/20221018-up-i350-thermal-bringup-v8-0-23e8fbb08837@baylibre.com
->>>
->>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->>> ---
->>> Amjad Ouled-Ameur (2):
->>>        thermal: mediatek: add callback for raw to mcelsius conversion
->>>        thermal: mediatek: add delay after thermal banks initialization
->>>
->>> Fabien Parent (2):
->>>        dt-bindings: thermal: mediatek: add binding documentation for 
->>> MT8365 SoC
->>>        thermal: mediatek: add support for MT8365 SoC
->>>
->>> Markus Schneider-Pargmann (1):
->>>        thermal: mediatek: control buffer enablement tweaks
->>>
->>>   .../bindings/thermal/mediatek-thermal.txt          |   1 +
->>>   drivers/thermal/mtk_thermal.c                      | 117 
->>> +++++++++++++++++----
->>>   2 files changed, 96 insertions(+), 22 deletions(-)
->>> ---
->>
->> Applied, with some changes and the subject fixed:
->>
-> Any news about this patchset ?
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> Please apply individually per subsystem. There are no dependencies and the SoC
+> doesn't boot anymore since v6.3-rc1.
 
-Yep, sorry for that. It will be in bleeding-edge soon.
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
