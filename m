@@ -2,75 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC176B029D
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 10:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29EB6B02A4
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 10:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjCHJPb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 04:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S230244AbjCHJP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 04:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjCHJOx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 04:14:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20A83E9;
-        Wed,  8 Mar 2023 01:14:33 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 879CE6602FE7;
-        Wed,  8 Mar 2023 09:14:31 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678266872;
-        bh=ufIfZplrAvq48akm0xlpo2QYks+rqP+EvBycvF6XRtk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cklbuY+l4wzRVIpVXTp8xZiMU7kAjX1f9fpMxpT3cS57EQJeBPKoWAX91KN8vp+SA
-         iOjH7h4aqrChuf4SKSreZyDS78D9C4i8o5fXQR2H9dVybuoc4j6NvOJGDXeVrRUPaV
-         ouiT70nOQl3eIzqgBHFfs7itFgk2nmK54UiEzAhv7YPAViU0P4Rzcpc0f1tY/2xxLs
-         5newQa2tPOhOZ7QaZetgN4gg2BvFZxr4XPMUV28Mr001QYkvTgNJYb9vqyVHsnUdg3
-         gJxbslPV4T4IJ8NnIlnCWgXOIAFaWAa8CDA6XZCZMBvEOAZdk95rZh5InkkR1/1rZE
-         whXKqg72fPwwQ==
-Message-ID: <1031de17-d9fe-49c0-40f7-172a4448f1d8@collabora.com>
-Date:   Wed, 8 Mar 2023 10:14:28 +0100
+        with ESMTP id S231206AbjCHJPS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 04:15:18 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D418B3B3EB;
+        Wed,  8 Mar 2023 01:15:16 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s11so62888368edy.8;
+        Wed, 08 Mar 2023 01:15:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678266915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BYU6xRrCo7Eg4hpvG3XnYtcuIZBEd0DQKy28YwzSQQk=;
+        b=BVf2goqkrlUSEMtDBpvfeCdTaiRd9bxccoO+Rjo3QAZAamxoeWvvp/yx7POY3RKHsd
+         3PCy3jFAApYZfvsqizHREi0dE6FpxyeBwnEquHb+IOL/fw5qpVL93x7lOS1AskM4mLo6
+         rpkx3zG9tn8dEeUNjHlDmqutDlUcOrHTTpVG0WRvMQhpT5DPxTu/giPO2X1V5tk9zkF9
+         5HoG4r/0GUjBU493cdqxQqfNGUQ2pB4RyAr1DEyKUPXPm+snWKg39b9cOKfuML/g8ZXo
+         Ll9wnqB3dIaTyP4IFsOeXn0t3pGAwiqBtWjwL43tvL9OWYmLMuNA5tYxIJOTZDomQY15
+         78Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678266915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BYU6xRrCo7Eg4hpvG3XnYtcuIZBEd0DQKy28YwzSQQk=;
+        b=dgaT2JfmzmDCy8BM7O10uE+BXDSb9NaKj/sR05/6UcNhksNTHMpi9mJBNfPPNx1sT6
+         k0Y8WyM9rhcpHV+SsBmnj8+GBE8wYhsaIQYGJl9D04Z83ISxFN8TbuuA2CBc0jpxRs2e
+         jG0TNxRuCBcHxzQ4zQzpzg3i+esdoOg66NafSaUfgcef1BHwmixKkD9vuQLDXZhfYjli
+         JHypeE6KAH+RuYlxpLvcrN5EOnqTGTXJclWIjYpDIOd2TfAQrnJe+CDyBrsivcGHv+Cy
+         B8JPSiKtdADl9uL5+5tKJho6tUfti4ejHp+YEHr4sNTIfH6BFEqU6Pj333fD4IID/Agg
+         jkcg==
+X-Gm-Message-State: AO0yUKU8eJ7MXvgnzqe0S6TkiiU8GSQE8KwICbmWi7R50lX9G9fB/x4m
+        YHSnZTwX+OtqW33smlqTc01wJSOwaYnKBymflhUamT4g1Vq8tg==
+X-Google-Smtp-Source: AK7set9NuxHx5r1ed+t/LZOyuUmXUIjveQgkGkdbiPTDl8JLn1WsDdd/qAkdEgg/CWChRn66jUlcaUs7AQiuSZIsTnY=
+X-Received: by 2002:a17:906:f47:b0:877:747f:f6e5 with SMTP id
+ h7-20020a1709060f4700b00877747ff6e5mr8304223ejj.11.1678266915351; Wed, 08 Mar
+ 2023 01:15:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
- thermal controllers for mt8195
-Content-Language: en-US
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230307154524.118541-1-bchihi@baylibre.com>
- <20230307154524.118541-2-bchihi@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230307154524.118541-2-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308084419.11934-1-clamor95@gmail.com> <20230308084419.11934-2-clamor95@gmail.com>
+ <95fa5f0f-cf53-7a37-2170-98b81c0982f1@linaro.org>
+In-Reply-To: <95fa5f0f-cf53-7a37-2170-98b81c0982f1@linaro.org>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 8 Mar 2023 11:15:04 +0200
+Message-ID: <CAPVz0n1QDFyHiGAa7UOuuwPiSH+ELiYNeO9-fxPWrOWkWqEuHg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] dt-bindings: power: supply: maxim,max17040: update properties
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Iskren Chernev <me@iskren.info>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 07/03/23 16:45, bchihi@baylibre.com ha scritto:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
-> 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+=D1=81=D1=80, 8 =D0=B1=D0=B5=D1=80. 2023=E2=80=AF=D1=80. =D0=BE 11:04 Krzys=
+ztof Kozlowski
+<krzysztof.kozlowski@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 08/03/2023 09:44, Svyatoslav Ryhel wrote:
+> > Add simple cell, status, health and temperature properties.
+> >
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  .../bindings/power/supply/maxim,max17040.yaml | 37 +++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17=
+040.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17040.ya=
+ml
+> > index 3a529326ecbd..6f1c25b4729f 100644
+> > --- a/Documentation/devicetree/bindings/power/supply/maxim,max17040.yam=
+l
+> > +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yam=
+l
+> > @@ -55,6 +55,20 @@ properties:
+> >    interrupts:
+> >      maxItems: 1
+> >
+> > +  monitored-battery:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: phandle to the battery node being monitored
+> > +
+> > +  power-supplies: true
+>
+> This should be rather specific input name, e.g. vdd-supply.
+>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+it is not vdd it is actual charger device
 
+> > +
+> > +  io-channels:
+> > +    items:
+> > +      - description: battery temperature
+>
+>
+>
+> max17040 does not have ADC temperature input... so is it system
+> configuration?
+>
+
+yes, I own a device (LG Optimus Vu P895) which uses max17043
+coupled with ADC thermal sensor
+
+> > +
+> > +  io-channel-names:
+> > +    items:
+> > +      - const: temp
+>
+> Drop the names property, not needed for one item.
+>
+
+Alright, but driver patch expects temp name. I will look if this
+is adjustable.
+
+> > +
+> >    wakeup-source:
+> >      type: boolean
+> >      description: |
+> > @@ -95,3 +109,26 @@ examples:
+> >          wakeup-source;
+> >        };
+> >      };
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    i2c0 {
+> > +      #address-cells =3D <1>;
+> > +      #size-cells =3D <0>;
+> > +
+> > +      fuel-gauge@36 {
+> > +        compatible =3D "maxim,max17043";
+> > +        reg =3D <0x36>;
+> > +
+> > +        interrupt-parent =3D <&gpio>;
+> > +        interrupts =3D <144 IRQ_TYPE_EDGE_FALLING>;
+> > +
+> > +        monitored-battery =3D <&battery>;
+> > +        power-supplies =3D <&charger>;
+>
+> But here you suggests something else than VDD... The hardware does not
+> take charger as input. It takes power supply - vdd.
+>
+
+Power system allows passing properties from other power devices.
+In this case battery health and status are passed from charger.
+
+> > +
+> > +        io-channels =3D <&adc 8>;
+>
+> Just add these to existing example.
+>
+
+Not sure if it is a good idea, as you wish.
+
+> > +        io-channel-names =3D "temp";
+> > +
+> > +        maxim,alert-low-soc-level =3D <10>;
+> > +        wakeup-source;
+> > +      };
+> > +    };
+>
+> Best regards,
+> Krzysztof
+>
+
+Best regards,
+Svyatoslav R.
