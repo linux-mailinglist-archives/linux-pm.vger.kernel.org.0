@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811476B0723
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 13:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC526B0731
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 13:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjCHMci (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 07:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S231302AbjCHMfO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 07:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCHMch (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 07:32:37 -0500
+        with ESMTP id S230224AbjCHMfK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 07:35:10 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27548BF381
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 04:32:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6232FBCFCE
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 04:35:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
         Sender:Reply-To:Content-ID:Content-Description;
-        bh=g93j4sciifNtiIViZbXDGczP+j4YLGkmpu+N4lDCjjc=; b=ZG848N/AgvGqDRdrHvyONe1klq
-        r8a5Xof91zLbheBahdQ57aDCulA14cBb1yd05PtVtRWo9M6GM9L2eCUHXQ91dTXZZO5Fj3ct/dKZt
-        sF58v+QZaGsd+vOW1g6ZHuaZzipYT3VpV/IVhTmOT9hmlQ0G4xIwAfuvRlf4oyy6hy8adjN+I6KDV
-        bkEjcnAxmswvIQleGpedJiiMy4SPA8f9+ov73DvLOiMvFl8oY601p7nCrG8K4RGo7GFkwsS0Z0X++
-        RN07Jv6hilCLIWBwWiY718qOORee3S+goYK8FtXupmpRAc4sDU1cHoXk/7wiQSPkUJQmsb7RNRBbW
-        F2XgbJKQ==;
+        bh=IC76Uj3MliMRjbnHSSXxLEmrdt8NTTVNvjgl4QoBL4Y=; b=eXi8TE/wDWMHfH62RE3JU9ZwEU
+        KMbHCPLiVDxkP1KLmBufVN7s9/B9lBBokIC7lUkrFoi4i0SrA0nqjrM/OQt01Fph/MdrR25/ij+Dq
+        kgFmsckq/oZa6n5LpN8XoD66GcILUTb7LXsWkxyOvJmJ23eyCVUgjO0WMSj5zYfTUBv22vIyibYCU
+        Co/i1RALfebR6XR2W/L7llmx4F312uP9/wovQCbwOA1KhU7UlFyFP/swfSWbTqJVj+PjGTuCiUyXk
+        QBpF0P5WCwhDc6EFvkhKIRFWFBRhON04bnrNubFngvmwtleYNj/2eVqbAQcQVV066j86AkzcGdehb
+        Rr8lLtug==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pZsy0-00HNbM-2X;
-        Wed, 08 Mar 2023 12:32:27 +0000
+        id 1pZt0b-00HNeM-2W;
+        Wed, 08 Mar 2023 12:35:06 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 17FA83001E5;
-        Wed,  8 Mar 2023 13:32:23 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B6C2300193;
+        Wed,  8 Mar 2023 13:35:05 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DAD47202648EA; Wed,  8 Mar 2023 13:32:22 +0100 (CET)
-Date:   Wed, 8 Mar 2023 13:32:22 +0100
+        id 1D1A1202648EA; Wed,  8 Mar 2023 13:35:05 +0100 (CET)
+Date:   Wed, 8 Mar 2023 13:35:05 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Artem Bityutskiy <dedekind1@gmail.com>, x86@kernel.org,
         Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 3/3] intel_idle: add C0.2 state for Sapphire Rapids Xeon
-Message-ID: <20230308123222.GF2017917@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH 1/3] x86/mwait: Add support for idle via umwait
+Message-ID: <20230308123505.GG2017917@hirez.programming.kicks-ass.net>
 References: <20230306123418.720679-1-dedekind1@gmail.com>
- <20230306123418.720679-4-dedekind1@gmail.com>
- <20230306153215.GG1267364@hirez.programming.kicks-ass.net>
- <CAJZ5v0gFrWCdyVNPUoU4tq2vTzcx5WtzvhbXVx1WeyTtt=Gqvg@mail.gmail.com>
+ <20230306123418.720679-2-dedekind1@gmail.com>
+ <20230306145524.GF1267364@hirez.programming.kicks-ass.net>
+ <CAJZ5v0iAitp+4UHfSJWyNACYthRHCSj5nBpJ1_5Zzq4fnJNKeA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gFrWCdyVNPUoU4tq2vTzcx5WtzvhbXVx1WeyTtt=Gqvg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iAitp+4UHfSJWyNACYthRHCSj5nBpJ1_5Zzq4fnJNKeA@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -61,42 +61,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 01:39:09PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Mar 6, 2023 at 4:32 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Tue, Mar 07, 2023 at 12:55:45PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Mar 6, 2023 at 3:56 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > On Mon, Mar 06, 2023 at 02:34:18PM +0200, Artem Bityutskiy wrote:
-> > > @@ -225,6 +229,27 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
-> > >       return 0;
-> > >  }
+> > On Mon, Mar 06, 2023 at 02:34:16PM +0200, Artem Bityutskiy wrote:
+> > > From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 > > >
-> > > +/**
-> > > + * intel_idle_umwait_irq - Request C0.x using the 'umwait' instruction.
-> > > + * @dev: cpuidle device of the target CPU.
-> > > + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-> > > + * @index: Target idle state index.
-> > > + *
-> > > + * Request C0.1 or C0.2 using 'umwait' instruction with interrupts enabled.
-> > > + */
-> > > +static __cpuidle int intel_idle_umwait_irq(struct cpuidle_device *dev,
-> > > +                                        struct cpuidle_driver *drv,
-> > > +                                        int index)
-> > > +{
-> > > +     u32 state = flg2MWAIT(drv->states[index].flags);
-> > > +
-> > > +     raw_local_irq_enable();
-> > > +     umwait_idle(rdtsc() + umwait_limit, state);
-> > > +     local_irq_disable();
-> > > +
-> > > +     return index;
-> > > +}
+> > > On Intel platforms, C-states are requested using the 'monitor/mwait'
+> > > instructions pair, as implemented in 'mwait_idle_with_hints()'. This
+> > > mechanism allows for entering C1 and deeper C-states.
+> > >
+> > > Sapphire Rapids Xeon supports new idle states - C0.1 and C0.2 (later C0.x).
+> > > These idle states have lower latency comparing to C1, and can be requested
+> > > with either 'tpause' and 'umwait' instructions.
+> > >
+> > > Linux already uses the 'tpause' instruction in delay functions like
+> > > 'udelay()'. This patch adds 'umwait' and 'umonitor' instructions support.
+> > >
+> > > 'umwait' and 'tpause' instructions are very similar - both send the CPU to
+> > > C0.x and have the same break out rules. But unlike 'tpause', 'umwait' works
+> > > together with 'umonitor' and exits the C0.x when the monitored memory
+> > > address is modified (similar idea as with 'monitor/mwait').
+> > >
+> > > This patch implements the 'umwait_idle()' function, which works very
+> > > similarly to existing 'mwait_idle_with_hints()', but requests C0.x. The
+> > > intention is to use it from the 'intel_idle' driver.
 > >
-> > Bad copy paste job there...
-> >
-> > vmlinux.o: warning: objtool: intel_idle_umwait_irq+0x8c: call to trace_hardirqs_off() leaves .noinstr.text section
+> > Still wondering wth regular mwait can't access these new idle states.
 > 
-> Well, it would be kind of nice to say that this is related to commit
-> 6d9c7f51b1d9 ("cpuidle, intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-> *again*") that is present in 6.3-rc1.
+> But is this a question for Artem to answer?
 
-Right, but he said the patches were based on -next, which would've had
-that commit for a fair while too.
+Maybe, maybe not, but I did want to call out this 'design' in public. It
+is really weird IMO.
