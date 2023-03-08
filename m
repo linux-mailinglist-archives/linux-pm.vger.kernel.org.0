@@ -2,136 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A096AFBFC
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 02:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4436AFC41
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 02:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjCHBQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 20:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S230079AbjCHB11 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 20:27:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjCHBQN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 20:16:13 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81975AA72C
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 17:16:07 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id ky4so16212611plb.3
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 17:16:07 -0800 (PST)
+        with ESMTP id S229586AbjCHB10 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 20:27:26 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB8094A55
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 17:27:18 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id j11so19420611lfg.13
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 17:27:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678238167;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ild2aOAw0SSnaRUE1Z6/lJxrkOZZmZupy/Fq/JRIlso=;
-        b=nUbraQvxaiPSqzqCATDgonC9FmtkQ0fxf3SeASKXE5yOb+an9bw9B18yNtNfh0UYqQ
-         UchPiniXQ57F+9dl817EXAaDnP9yBtWw7ZTTh0v6X0e51DTvuQ+24KoLRNm6Ji22XKcF
-         otS96Mfht1G2m9keg2wS7VZ0t0QUwhk9H9Fo/nOpYmN/YcSYbwJJY9XN/KINGxz2uqRW
-         aq/n5FllulQtvDw9MEnX+agu6qGEQV6/cnR+hA6bBwOeP1cHty7R93e+yXsgcCaKeIvO
-         2vpgMtTDNzsrWETSiwwGn5VvFuvngnl5nCbD3TK9OSHRA9nzJ1kTKlp66StNO3b7Ebfv
-         Q+vw==
+        d=linaro.org; s=google; t=1678238836;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnkuEnGdkuVKTgCNdaVXaPdrwyMARXY+OCtr+H09yOk=;
+        b=SO8rsVQb7F8kyhL8IL4sklmWEmag8ksGKG9KXYX8J7XW6uz5MMN8Cv5jkwwjnvMeRb
+         zzbUVcPk6wsgzo3zwSPBy+oiD+KTfpx9nMOpEsE6su2NsGFXRNF9VhOO7YhdtSi0GZ81
+         GUtxZY0QBgfMEsiuctE7rPV4Sd4+YcntUhzJcVEa1eh9Gmdwn29JiB343rit3oWCwIEN
+         k5bYnEzwC91x+hGr2VRBFMYCUqjJwQJ/MBdLPAbYGkmAPwXgxv9ubUVA6bbzFsov+o5f
+         OoLh6S7HKopaevgtcunc35L+8x6gWGTK/FqorJrQAqeGiJTlwF/3L5Bka6VlfeYqUS0D
+         HIXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678238167;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678238836;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ild2aOAw0SSnaRUE1Z6/lJxrkOZZmZupy/Fq/JRIlso=;
-        b=2NUAhV3BTHBYh+YEWHcxh83oc8Hymo+gPs34QSIkL7569eNSa3Fn/gypcWV2Tf77R6
-         CNpWKLISbg7y64EJxhTOWmTHEpiiOdG8BWbS5ZB4BWWEYT2YIutcBwg8STZVetR5AlNR
-         Vn+7dg4dL0asTJrXAw/Yi86/kmwHPzNadg5DkddUzhL1xrJuiFQ2atFgqOzDnw6r0sh5
-         2xJzpo6UrUIGLu611axCs4yCohlDmxZdrjtpOwMjGnE2kJYum7Cz6J8Lr6X67mwGwRZ6
-         BrK6GYsrMSyNYyH5xyvcKE3Uv4P2yL3YEqWYUcfp26EP2DERWyth0/Pqg5ihJGWgoHgX
-         XDcw==
-X-Gm-Message-State: AO0yUKWcqlKp3jErY6Q+ehzCOizIqkd9J6D1dmNJ29m8jKN1Il8MxJ/z
-        hLgxT4a4skleLJIcuG7Mo+KAtw==
-X-Google-Smtp-Source: AK7set/1ndIB85fieFwPsMv5bffYHzdyjT8LWWI27Vh5jtWoWeEkcM/uXo3dtAqvP2JOPFHNOn9AIw==
-X-Received: by 2002:a05:6a21:32a4:b0:c7:8644:a9f3 with SMTP id yt36-20020a056a2132a400b000c78644a9f3mr15671877pzb.11.1678238166923;
-        Tue, 07 Mar 2023 17:16:06 -0800 (PST)
-Received: from T480 (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id q21-20020a62e115000000b0058bcb42dd1asm8452554pfh.111.2023.03.07.17.16.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 Mar 2023 17:16:06 -0800 (PST)
-Date:   Wed, 8 Mar 2023 09:15:55 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] cpuidle: psci: Iterate backwards over list in
- psci_pd_remove()
-Message-ID: <20230308011554.GA18319@T480>
-References: <20230304074107.59083-1-shawn.guo@linaro.org>
- <CAJZ5v0h9=vZwENELK+w7HnTTsayaNb1D7wnBgjsXvgopc_t-cA@mail.gmail.com>
+        bh=fnkuEnGdkuVKTgCNdaVXaPdrwyMARXY+OCtr+H09yOk=;
+        b=qRt8Sf3veJxkjRstz2t4a3nwX5BW20dK8v3TbCQX1mHdeNR/FvKBzEanAm91gxILd+
+         Wc5oBgBoa2Rqc8C4p1zV+hcZpGNGCaQWmT0W05zdO3VJFMZ1SRIMbKJfcCRURl7M3geX
+         Q5Rh/4yeE8idHypjKBGm9ikzkxKt/RflsGmkvo7rA89w5HEZTEw7NEdNxbqh+dWwdyhq
+         pq0kcGM6f0/egjCPi9uGOb0xpsnIDrU4vabqBPUigea7rvDoT1zo0PWfgGqfnbncwh2M
+         hjIVMLs7vSrKKbrJrf0dCriPcMJ4ocZAY1jkfth+DQIjKLjmwjOwUPfTqAtqNeiNxv5l
+         f7fg==
+X-Gm-Message-State: AO0yUKXvUy+y0J3ybvRJ5p6bavoOjyMMKvwp2aZ0DpbSt4F3QyWDjp/I
+        Ev6rhcoNb9wdkeo+t7EnJUcfEg==
+X-Google-Smtp-Source: AK7set/RGVBfMaBWTEVNbiNbTiWzRl6Q/cw6AtLGHBJGzwGHwR46rq/MiE6MhHcZHekKWQViNwv3hQ==
+X-Received: by 2002:a19:c214:0:b0:4ca:98ec:7d9a with SMTP id l20-20020a19c214000000b004ca98ec7d9amr4386825lfc.15.1678238836571;
+        Tue, 07 Mar 2023 17:27:16 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id o24-20020a056512051800b004a2c447598fsm2182944lfb.159.2023.03.07.17.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 17:27:15 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/8] qcom-cpufreq-hw binding improvements
+Date:   Wed, 08 Mar 2023 02:26:57 +0100
+Message-Id: <20230308-topic-cpufreq_bindings-v1-0-3368473ec52d@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0h9=vZwENELK+w7HnTTsayaNb1D7wnBgjsXvgopc_t-cA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGHkB2QC/x2N0QrCMAwAf2Xk2UBdmU5/RUTaLt0CI6uNk8HYv
+ xt8vIPjdlCqTAr3ZodKX1ZexOB8aiBNQUZCHoyhda133vX4WQonTGXNld6vyDKwjIpdvvbkQ75
+ dogeLY1DCWIOkyXJZ59lkqZR5+98ez+P4AXvYZLZ9AAAA
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678238834; l=1470;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=xI1zlOQmpQoj7NqQfsUAGQS5w5X6WW+TqN5bUGAVdZY=;
+ b=KxPHiETKTjI7JvF17ebvbBEqnysNlVPhuiU5/ZPy9YqTyLKrLtTimseEW+3EgQJVTkWkzL2/kHRh
+ eXcQejQyDxudWrEVbEFwRqbb6v1h4Em4I5Njl0fnmEezETDLXh2j
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 02:06:31PM +0100, Rafael J. Wysocki wrote:
-> On Sat, Mar 4, 2023 at 8:41 AM Shawn Guo <shawn.guo@linaro.org> wrote:
-> >
-> > In case that psci_pd_init_topology() fails for some reason,
-> > psci_pd_remove() will be responsible for deleting provider and removing
-> > genpd from psci_pd_providers list.  There will be a failure when removing
-> > the cluster PD, because the cpu (child) PDs haven't been removed.
-> >
-> > [    0.050232] CPUidle PSCI: init PM domain cpu0
-> > [    0.050278] CPUidle PSCI: init PM domain cpu1
-> > [    0.050329] CPUidle PSCI: init PM domain cpu2
-> > [    0.050370] CPUidle PSCI: init PM domain cpu3
-> > [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
-> > [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
-> > [    0.051412] PM: genpd_remove: removed cpu3
-> > [    0.051449] PM: genpd_remove: removed cpu2
-> > [    0.051499] PM: genpd_remove: removed cpu1
-> > [    0.051546] PM: genpd_remove: removed cpu0
-> >
-> > Fix the problem by iterating the provider list reversely, so that parent
-> > PD gets removed after child's PDs like below.
-> >
-> > [    0.029052] CPUidle PSCI: init PM domain cpu0
-> > [    0.029076] CPUidle PSCI: init PM domain cpu1
-> > [    0.029103] CPUidle PSCI: init PM domain cpu2
-> > [    0.029124] CPUidle PSCI: init PM domain cpu3
-> > [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
-> > [    0.029647] PM: genpd_remove: removed cpu0
-> > [    0.029666] PM: genpd_remove: removed cpu1
-> > [    0.029690] PM: genpd_remove: removed cpu2
-> > [    0.029714] PM: genpd_remove: removed cpu3
-> > [    0.029738] PM: genpd_remove: removed cpu-cluster0
-> >
-> > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-> 
-> So I guess there should be Cc: stable for 5.10 and later?
+This series tries to better sanitize what's actually allowed on which
+SoC and lowers the minimum frequency domain count to 1, as that's what's
+present on at least QCM2290.
 
-Yes.  I was thinking that stable team will pick it up due to the Fixes
-tag, but yes, explicitly copying stable would be the best.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (8):
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Allow just 1 frequency domain
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Sanitize data per compatible
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCM2290
+      arm64: dts: qcom: sc7180: Add SoC-specific compatible to cpufreq_hw
+      arm64: dts: qcom: sdm845: Add SoC-specific compatible to cpufreq_hw
+      arm64: dts: qcom: sm6115: Add SoC-specific compatible to cpufreq_hw
+      arm64: dts: qcom: sm6350: Add SoC-specific compatible to cpufreq_hw
+      arm64: dts: qcom: sm8150: Add SoC-specific compatible to cpufreq_hw
 
-> 
-> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > ---
-> > Hi Rafael,
-> >
-> > This is a resend of the patch [1].  Could you help pick it up or let me
-> > know if there is anything need to be improved, thanks!
-> 
-> Is this regarded as 6.3-rc material, or can it wait for 6.4?
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          | 118 ++++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |   2 +-
+ 6 files changed, 120 insertions(+), 8 deletions(-)
+---
+base-commit: 709c6adf19dc558e44ab5c01659b09a16a2d3c82
+change-id: 20230308-topic-cpufreq_bindings-5f78e3af96b3
 
-As it's regarded as a fix, it would nice to apply it for 6.3-rc.
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Shawn
