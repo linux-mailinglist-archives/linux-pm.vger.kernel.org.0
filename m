@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2977E6B0E16
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 17:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E028D6B0E2B
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 17:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjCHQEP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 11:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S232055AbjCHQHo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 11:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbjCHQDw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 11:03:52 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015E5DC98
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 08:02:04 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id o12so67652756edb.9
-        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 08:02:04 -0800 (PST)
+        with ESMTP id S232361AbjCHQHQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 11:07:16 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312FBB7D8A
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 08:06:13 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g3so67887109eda.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 08:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678291317;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678291571;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HvghSm+izAzoZfMW7sPseegOBllvRQAJZKazD98Q5ek=;
-        b=f3GHy9XwNtZAVyNU/gw7bH0xY9mv5hj6I/KXK5IsVgFchFE6xqpHD4ttjk/YveOWnD
-         +niOXVxlamUfbWhNqCuIUQb9+leO9ykdzXnWpaL0OCN6Ak36qveLZhTO/ECbbqwg6qws
-         9v7AhZLaWcht3nvCscEKcAKmu00AGiDlj35POr9ssy8/AnRm9g3+YWR1eAVnH4CqFBr0
-         5hgH2QDyBv9q4LVqM4Hje6dmSgFi0BbrPmRD3gymEF3VbbWqIJPwaCfQMw/G51O+9XIi
-         /UUQ8UgxBME4CQXoTcZG+GCWSUrUacmppusRzIpdtDqbPxgYWMf93RgN8EbgZ7WPAMv4
-         DHDg==
+        bh=pUOD/X3MLXbaSFinuRbww5tKoyJ/4JSfYyoEzJIPkIg=;
+        b=Rg3SgBcpYBK+DKWE8tmQoSeFokOAj8h+6SfVAZZrcMVcD1fjv6zoukEd68kmJVfB1U
+         rtXl4gzwdGPBeGN7Axms/raMcUjg+U4TcKeexu2o2C6K54xuOZ+iYw5YPoB0ybO69NAs
+         1BP0+07mCjH3lHUXfQOu6PGKlpFp5PRHRoWkBIQRuLGd6OGNVB4gHXQU+uK9FXdJyEI0
+         rG+nmhLXy2sMKceLAOZBGMYYSiXtfsD+p3vfnP0o4rupbtGQ+cmLlLpn2wYFhHFXCK8S
+         NjL/0QKisG47gol+EKvwZeR3en4zINPSMlki3pGW4LjfiddGJAPjK4JdvB0vm5k7Fbmz
+         08+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678291317;
+        d=1e100.net; s=20210112; t=1678291571;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HvghSm+izAzoZfMW7sPseegOBllvRQAJZKazD98Q5ek=;
-        b=2zitN/ULNdOD0m5urhWx1VXRGSX4nAvqXnSdsqjSvXfFDYQcDb1or5nAdBOVZfmQn8
-         pBjHGTivsuKq86clTuzrjPhK/s3xxx4VSthrqnv0eC24CEgwLP0lSQ61A4cMq6v39upZ
-         HlFhLF8Z0mRGBwudrP+m/wzqEfHeBYFpDbdFw6lkCW7AGJ63dG0es+iyKRCjjGGme/Q0
-         7gNcmqle/AEqOsdZ2WtIGkK8eSOKMkoJMwtWDflSOtv35FRVBA7WzfReeCkzD8Pdx6An
-         McCM6I4fLnkZGRG7NNH/HDrFi6pH0tB/EUa0+DLQcuoMSr46pX2pEOByyuj7BdN1OAhz
-         IH5Q==
-X-Gm-Message-State: AO0yUKUT+djhAUrNkpSOBs71t7Q5dp+9EXa6a6AhArMCXCR/PaFSxKtI
-        TqCwuiRvrnu1mCBxF3rbGlbvXQNZYJSWDJxLuZCCDw==
-X-Google-Smtp-Source: AK7set9czStAcUNQ29jUhnUVYnTaY/lCYjixN6pRCnxEte8YUnfIYJlN08SvDepMIhgpwQmcnVtlX42y0dTAE4mfCYM=
-X-Received: by 2002:a17:906:a0d8:b0:88d:f759:15b1 with SMTP id
- bh24-20020a170906a0d800b0088df75915b1mr9362342ejb.13.1678291316969; Wed, 08
- Mar 2023 08:01:56 -0800 (PST)
+        bh=pUOD/X3MLXbaSFinuRbww5tKoyJ/4JSfYyoEzJIPkIg=;
+        b=Wb5oVQ/+OCqORpJP75sfM4pkjOGojLqWFdgIaOpNSX6ENSf//MbcLNLmhwP8lciXCU
+         qYVC3lVnouNKmitzIbZm4dj+85IHAPpQzjypvmUIola5he54VNhN/0s840VieJDNfDWG
+         NV9tbq13BllC/9stnWBrEjMgSdQWWnJGRHnBstoVN/3ou1DU/QW68FoT9oDtZ0pH8Zwj
+         /NwcdZWBoRuWFYalPs0FXtAB8oGXhz+1OFj3BCLGmDMb7/Wv41mnCLLwOW7+Uab1K2zf
+         ZNotaBlt6Avc+JL5vazzgLcFsknq3ic3AwxeGre615hb6bNV+1xPK8uJuzL7sU1P8Fuc
+         SgTQ==
+X-Gm-Message-State: AO0yUKUSykpEmStAIatWy08EpZM3Ale6M27KyQQwZmoaRhOekx6aEgGT
+        1nG6oHO9nvbiaQD4NAklwwGnVccoMKjtE1aSsn+R0g==
+X-Google-Smtp-Source: AK7set8DCQYR6EeCLCdicp+N7+vPQpFqmFvqGYAUUsZf3YwgIQkfZ7vvmfspmzmc3Ic0/+IpWN2QQYksgERyDGcPThc=
+X-Received: by 2002:a17:906:1850:b0:8b1:780d:e43d with SMTP id
+ w16-20020a170906185000b008b1780de43dmr9541197eje.13.1678291571683; Wed, 08
+ Mar 2023 08:06:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307154524.118541-1-bchihi@baylibre.com> <20230307154524.118541-5-bchihi@baylibre.com>
- <5f980c7d-1bc4-cfdf-9392-70626317ca54@collabora.com>
-In-Reply-To: <5f980c7d-1bc4-cfdf-9392-70626317ca54@collabora.com>
+References: <20230307154524.118541-1-bchihi@baylibre.com> <20230307154524.118541-3-bchihi@baylibre.com>
+ <6b1e9d19-b176-280d-0277-492120e3a1fa@collabora.com>
+In-Reply-To: <6b1e9d19-b176-280d-0277-492120e3a1fa@collabora.com>
 From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 8 Mar 2023 17:01:21 +0100
-Message-ID: <CAGuA+oqEG-grekf=x6c7XwvbaAjgDDF1FJ=E+6zYLx8J2B+QJw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain
- temperature thresholds
+Date:   Wed, 8 Mar 2023 17:05:35 +0100
+Message-ID: <CAGuA+or+r-RwrD0htS=fMsAi5rGaWRCb8ZFdJRRZ7cayL3w_Wg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] thermal/drivers/mediatek/lvts_thermal: Add AP domain
+ for mt8195
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
@@ -77,32 +77,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 10:17=E2=80=AFAM AngeloGioacchino Del Regno
+On Wed, Mar 8, 2023 at 10:15=E2=80=AFAM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
 > Il 07/03/23 16:45, bchihi@baylibre.com ha scritto:
 > > From: Balsam CHIHI <bchihi@baylibre.com>
 > >
-> > Specify the targeted temperature thresholds.
+> > Add MT8195 AP Domain support to LVTS Driver.
 >
-> You're introducing the thermal zones and *then* fixing them in this commi=
-t.
-> To be honest, this doesn't make a lot of sense...
+> Please mention the documentation changes in the commit description.
 >
-> Please squash this commit with
-> arm64: dts: mediatek: mt8195: Add AP domain thermal zones
->
-> P.S.: After squashing.. looks good.
 
 Hi Angelo,
 
-Thanks again for the review.
-OK, I will squash them in the new series.
+A new commit will be created for the documentation in the new upcoming
+series for both SoCs,
+as you asked.
 
 Best regards,
 Balsam
 
->
-> Thanks,
+> Regards,
 > Angelo
+>
 >
