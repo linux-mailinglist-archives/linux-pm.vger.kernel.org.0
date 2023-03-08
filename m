@@ -2,120 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDAB6AFB9C
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 01:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A096AFBFC
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 02:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjCHA4n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Mar 2023 19:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S229998AbjCHBQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Mar 2023 20:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjCHA4m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 19:56:42 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F19AFC5
-        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 16:56:39 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id k199so13261369ybf.4
-        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 16:56:39 -0800 (PST)
+        with ESMTP id S229993AbjCHBQN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Mar 2023 20:16:13 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81975AA72C
+        for <linux-pm@vger.kernel.org>; Tue,  7 Mar 2023 17:16:07 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id ky4so16212611plb.3
+        for <linux-pm@vger.kernel.org>; Tue, 07 Mar 2023 17:16:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678236998;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u2z17zRKFMosP6BmxLJ/3DuXXKXAyRiupSkgseBN6cU=;
-        b=Nrci12vOCp3J89fc7u/nniyE27xH7hGSUCDplHpMV9Y6JKXCcNigWzvSRMaLhClu1T
-         NVB6CAP2wfPzVTCXvkyXorZ9RP5vcQo7XsQjJ6GsbW2GXKJawPMOV3UvFNyMe00rk974
-         eZ8hq7lHZ3y5j1c9+m7FU3pl3ZrKXHhQqZZ5ePxlJ0NpfKwy3ucJWcTTQmhxo23zJFVy
-         s8T0534wZVgATFaoOnM5xbPVie8F66tojvsonEKaB7CWzPGmPrzRiu3LjSv/UEVa5Pk2
-         /6sBSCtQ8fcVnq+8HipepNdhafzNu8SRefDH8NJo1lMLSUt7LdZ9B8XpJ3H9vO6r0Tu+
-         gCKw==
+        d=linaro.org; s=google; t=1678238167;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ild2aOAw0SSnaRUE1Z6/lJxrkOZZmZupy/Fq/JRIlso=;
+        b=nUbraQvxaiPSqzqCATDgonC9FmtkQ0fxf3SeASKXE5yOb+an9bw9B18yNtNfh0UYqQ
+         UchPiniXQ57F+9dl817EXAaDnP9yBtWw7ZTTh0v6X0e51DTvuQ+24KoLRNm6Ji22XKcF
+         otS96Mfht1G2m9keg2wS7VZ0t0QUwhk9H9Fo/nOpYmN/YcSYbwJJY9XN/KINGxz2uqRW
+         aq/n5FllulQtvDw9MEnX+agu6qGEQV6/cnR+hA6bBwOeP1cHty7R93e+yXsgcCaKeIvO
+         2vpgMtTDNzsrWETSiwwGn5VvFuvngnl5nCbD3TK9OSHRA9nzJ1kTKlp66StNO3b7Ebfv
+         Q+vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678236998;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u2z17zRKFMosP6BmxLJ/3DuXXKXAyRiupSkgseBN6cU=;
-        b=PuYG8/2Jtszj0oSf3n/Rz7utNgjOIPWqQmcFE0cBsjbv2wisQJawWiSrV/UWKyejg+
-         OGuJGXAy68iwSjQpIj7KOEgIwrPRHw8htgWORJZPnXb8OILPk+8+fjhnuwNGtefk7tBA
-         OYm0f+4roGtCsxjwuEC3+26ZCivBLBk4/YaE9YpZfVwfi0HLaBS/K7+IMe/eICR3cF+7
-         1fp1xk1zMQQezq1d7XHgxCT/4GSQ6P/UoKFk60eV5nbJtyzEbqCiNBKqqxNMfzgpg6Tn
-         fK20k7a4xbRE4fTe6HmLz/E0dTqOKFGE1tbyQuDy3R+P2NKPtTasbzr6UmjEnXjz0fR+
-         TSHw==
-X-Gm-Message-State: AO0yUKVKqUSOT29kTnp3w4izZ73nmeei7Si+7xa/UQXTO0+fP84dB2Lt
-        98uX7B84R2S+kl8/BAq+TUFS3ulNyfJZVwqXpBb9AQ==
-X-Google-Smtp-Source: AK7set9/fDieulPqxhpOdoJQrExsxumuJ87WCyLgiQG2g+Go3qkI9m0l2+tsGWVLuxsGkP0DEl9tueq8guM7LF4VUao=
-X-Received: by 2002:a05:6902:4d1:b0:8dd:4f2c:ede4 with SMTP id
- v17-20020a05690204d100b008dd4f2cede4mr9949667ybs.2.1678236998589; Tue, 07 Mar
- 2023 16:56:38 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678238167;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ild2aOAw0SSnaRUE1Z6/lJxrkOZZmZupy/Fq/JRIlso=;
+        b=2NUAhV3BTHBYh+YEWHcxh83oc8Hymo+gPs34QSIkL7569eNSa3Fn/gypcWV2Tf77R6
+         CNpWKLISbg7y64EJxhTOWmTHEpiiOdG8BWbS5ZB4BWWEYT2YIutcBwg8STZVetR5AlNR
+         Vn+7dg4dL0asTJrXAw/Yi86/kmwHPzNadg5DkddUzhL1xrJuiFQ2atFgqOzDnw6r0sh5
+         2xJzpo6UrUIGLu611axCs4yCohlDmxZdrjtpOwMjGnE2kJYum7Cz6J8Lr6X67mwGwRZ6
+         BrK6GYsrMSyNYyH5xyvcKE3Uv4P2yL3YEqWYUcfp26EP2DERWyth0/Pqg5ihJGWgoHgX
+         XDcw==
+X-Gm-Message-State: AO0yUKWcqlKp3jErY6Q+ehzCOizIqkd9J6D1dmNJ29m8jKN1Il8MxJ/z
+        hLgxT4a4skleLJIcuG7Mo+KAtw==
+X-Google-Smtp-Source: AK7set/1ndIB85fieFwPsMv5bffYHzdyjT8LWWI27Vh5jtWoWeEkcM/uXo3dtAqvP2JOPFHNOn9AIw==
+X-Received: by 2002:a05:6a21:32a4:b0:c7:8644:a9f3 with SMTP id yt36-20020a056a2132a400b000c78644a9f3mr15671877pzb.11.1678238166923;
+        Tue, 07 Mar 2023 17:16:06 -0800 (PST)
+Received: from T480 (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id q21-20020a62e115000000b0058bcb42dd1asm8452554pfh.111.2023.03.07.17.16.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 Mar 2023 17:16:06 -0800 (PST)
+Date:   Wed, 8 Mar 2023 09:15:55 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] cpuidle: psci: Iterate backwards over list in
+ psci_pd_remove()
+Message-ID: <20230308011554.GA18319@T480>
+References: <20230304074107.59083-1-shawn.guo@linaro.org>
+ <CAJZ5v0h9=vZwENELK+w7HnTTsayaNb1D7wnBgjsXvgopc_t-cA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230201183201.14431-1-len.brown@intel.com> <167706207598.17049.13538001164844345072.kvalo@kernel.org>
-In-Reply-To: <167706207598.17049.13538001164844345072.kvalo@kernel.org>
-From:   Matthew Wang <matthewmwang@google.com>
-Date:   Tue, 7 Mar 2023 16:56:27 -0800
-Message-ID: <CAAooHFd4UPitENa76Dvqp3KZSKvwzcX+3mqbKFF4PEs-obKW5g@mail.gmail.com>
-Subject: Re: wifi: ath11k: allow system suspend to survive ath11k
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Len Brown <len.brown@intel.com>, rafael@kernel.org,
-        kvalo@codeaurora.org, linux-pm@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Carl Huang <cjhuang@codeaurora.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0h9=vZwENELK+w7HnTTsayaNb1D7wnBgjsXvgopc_t-cA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I'm a bit of a kernel n00b here, but it's unclear to me that this is
-the right thing to do and I just wanted to get some clarity. If the
-ath11k device fails to suspend, my understanding is that it might
-waste power attempting to talk to the host that's currently asleep.
-Are we sure that ath11k can recover from ignored failures/skipped
-teardown?
+On Tue, Mar 07, 2023 at 02:06:31PM +0100, Rafael J. Wysocki wrote:
+> On Sat, Mar 4, 2023 at 8:41 AM Shawn Guo <shawn.guo@linaro.org> wrote:
+> >
+> > In case that psci_pd_init_topology() fails for some reason,
+> > psci_pd_remove() will be responsible for deleting provider and removing
+> > genpd from psci_pd_providers list.  There will be a failure when removing
+> > the cluster PD, because the cpu (child) PDs haven't been removed.
+> >
+> > [    0.050232] CPUidle PSCI: init PM domain cpu0
+> > [    0.050278] CPUidle PSCI: init PM domain cpu1
+> > [    0.050329] CPUidle PSCI: init PM domain cpu2
+> > [    0.050370] CPUidle PSCI: init PM domain cpu3
+> > [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+> > [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+> > [    0.051412] PM: genpd_remove: removed cpu3
+> > [    0.051449] PM: genpd_remove: removed cpu2
+> > [    0.051499] PM: genpd_remove: removed cpu1
+> > [    0.051546] PM: genpd_remove: removed cpu0
+> >
+> > Fix the problem by iterating the provider list reversely, so that parent
+> > PD gets removed after child's PDs like below.
+> >
+> > [    0.029052] CPUidle PSCI: init PM domain cpu0
+> > [    0.029076] CPUidle PSCI: init PM domain cpu1
+> > [    0.029103] CPUidle PSCI: init PM domain cpu2
+> > [    0.029124] CPUidle PSCI: init PM domain cpu3
+> > [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
+> > [    0.029647] PM: genpd_remove: removed cpu0
+> > [    0.029666] PM: genpd_remove: removed cpu1
+> > [    0.029690] PM: genpd_remove: removed cpu2
+> > [    0.029714] PM: genpd_remove: removed cpu3
+> > [    0.029738] PM: genpd_remove: removed cpu-cluster0
+> >
+> > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> 
+> So I guess there should be Cc: stable for 5.10 and later?
 
+Yes.  I was thinking that stable team will pick it up due to the Fixes
+tag, but yes, explicitly copying stable would be the best.
 
+> 
+> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > ---
+> > Hi Rafael,
+> >
+> > This is a resend of the patch [1].  Could you help pick it up or let me
+> > know if there is anything need to be improved, thanks!
+> 
+> Is this regarded as 6.3-rc material, or can it wait for 6.4?
 
-On Wed, Feb 22, 2023 at 2:34=E2=80=AFAM Kalle Valo <kvalo@kernel.org> wrote=
-:
->
-> Len Brown <len.brown@intel.com> wrote:
->
-> > When ath11k runs into internal errors upon suspend,
-> > it returns an error code to pci_pm_suspend, which
-> > aborts the entire system suspend.
-> >
-> > The driver should not abort system suspend, but should
-> > keep its internal errors to itself, and allow the system
-> > to suspend.  Otherwise, a user can suspend a laptop
-> > by closing the lid and sealing it into a case, assuming
-> > that is will suspend, rather than heating up and draining
-> > the battery when in transit.
-> >
-> > In practice, the ath11k device seems to have plenty of transient
-> > errors, and subsequent suspend cycles after this failure
-> > often succeed.
-> >
-> > https://bugzilla.kernel.org/show_bug.cgi?id=3D216968
-> >
-> > Fixes: d1b0c33850d29 ("ath11k: implement suspend for QCA6390 PCI device=
-s")
-> >
-> > Signed-off-by: Len Brown <len.brown@intel.com>
-> > Cc: stable@vger.kernel.org
->
-> Patch applied to wireless.git, thanks.
->
-> 7c15430822e7 wifi: ath11k: allow system suspend to survive ath11k
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/patch/20230201183201.=
-14431-1-len.brown@intel.com/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
-tches
->
+As it's regarded as a fix, it would nice to apply it for 6.3-rc.
+
+Shawn
