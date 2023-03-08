@@ -2,110 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEED6B01AA
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 09:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3710C6B01D1
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 09:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjCHIij convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 8 Mar 2023 03:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S229701AbjCHIoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 03:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjCHIiM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 03:38:12 -0500
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B43BDFF;
-        Wed,  8 Mar 2023 00:38:07 -0800 (PST)
-Received: by mail-lf1-f44.google.com with SMTP id k14so20336406lfj.7;
-        Wed, 08 Mar 2023 00:38:07 -0800 (PST)
+        with ESMTP id S229735AbjCHIoh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 03:44:37 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00868FBDF;
+        Wed,  8 Mar 2023 00:44:35 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u9so62713483edd.2;
+        Wed, 08 Mar 2023 00:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678265074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RfRb5S56BPBA0+cLXTQV+70i2hjJgSw3qjK6yqkpQmA=;
+        b=T+uYE2LzhkooSS7rrRfLJM9pWFxZwabb26+AHUd6qrHyOnbgZYXgUc0ADMS8nCXfl9
+         3Bammt8siYoiuycqzAgrEiYPXiRjPIl/+YH/A9OoTfddJg5wklJXWXZ9j++45rtEiP6L
+         YyBgK5XelJ8yBvmTs8KxiEC9YN6GI/weGpfV2bio8eYv0pdi0bpHFaZnZP2oePi6pGHd
+         UXdBBbTyqU4sgR/CGvHODaYxkQJef+DuoH3d3laT/Vl8gZgygKlCWw3DxA2mQ30SICmD
+         58jJlTOYwOfV+Di32Jvx4v9S5Apci9Gq/AKMv1CxqOt0ko8gEtDt+r/hmifxQGFWOJmi
+         K7zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678264685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ANgFNPaR0GvIitWau5iY4IFEMttHskDR5w8JjBg/OUo=;
-        b=YdG9J8sbdJqk7uHW1wkmXfqY3HY3w/hghqTjNYdjUHRMt9A8tIzDT7fX7nCGQS5JSx
-         iIaW+bIVeAAyX+F9wp9Xz0CekkZcxujblCyzlgKvupt5clOb7CyG8EbUsGRjJ4ryA3MB
-         Mth3HrIdFEe+EX2rqUNjbyg+J8tomkPX5zc/3A3rj6CbM+HB5B2Ok3Z3ehk8qhYj1E6r
-         +uw3Oy6rYZlxcyLcQjmg9vkIplCXgidXZ98A3RT99A9Wyt+9azVKz/XGg3Bwtz1Pun+h
-         l5AX3k6Vx548I/wY2AD2EnmHgPGJQDWOV61PhCynKcGk12gXPjNxPWagjVvAoJO2jdXe
-         mtRQ==
-X-Gm-Message-State: AO0yUKXPkjXlRn+K+WLzU4VPNPpgmn/A21Jw2rxELeMsBpbzURtar6IX
-        wxSAS5R1wyNB/7bsYdieUIAKdZtgGwxtONPF
-X-Google-Smtp-Source: AK7set+bmXEYIiwjlvtrM2FP7knyjiJrfOvOMShlRg81L2mrFpAPhrYMH3IYepuMyE5Y27SjNjlyxw==
-X-Received: by 2002:ac2:4148:0:b0:4db:3e7e:51d3 with SMTP id c8-20020ac24148000000b004db3e7e51d3mr4098617lfi.55.1678264685342;
-        Wed, 08 Mar 2023 00:38:05 -0800 (PST)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id w29-20020a05651204dd00b004da8d947c57sm2300867lfq.149.2023.03.08.00.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 00:38:03 -0800 (PST)
-Received: by mail-lf1-f49.google.com with SMTP id m6so20348373lfq.5;
-        Wed, 08 Mar 2023 00:38:02 -0800 (PST)
-X-Received: by 2002:ac2:4c13:0:b0:4dd:a4c5:2b42 with SMTP id
- t19-20020ac24c13000000b004dda4c52b42mr5285064lfq.8.1678264682409; Wed, 08 Mar
- 2023 00:38:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20230308060357.45647-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230308060357.45647-1-yang.lee@linux.alibaba.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 Mar 2023 09:37:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUSpSBriV8i=zSbSqeDTxnf_QuXO+u1Cx+jXshBaSbiZg@mail.gmail.com>
-Message-ID: <CAMuHMdUSpSBriV8i=zSbSqeDTxnf_QuXO+u1Cx+jXshBaSbiZg@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal/hwmon: Use devm_platform_ioremap_resource()
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     niklas.soderlund@ragnatech.se, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1678265074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RfRb5S56BPBA0+cLXTQV+70i2hjJgSw3qjK6yqkpQmA=;
+        b=1gbxHcOpRH5ZxbCiVKbvIGZa8FiVlbT+R17aFDgEk4oKM6yvULC6FJXjaWP9yyDclv
+         XW4pIMq1GPlsrGeUWaVO1c1KBmZ+7U8sSH2jWsS/ZEqHFkVXEhO02CubuW7u+1IOGjdo
+         EXXb42qy/w5CGUzuTLgTaAB8U0xm7b4RgkKMPrrdEYq2GBRstPPAaqaPUgRXJ8RoLxja
+         0gDzP7iMNiVccpZROg/EcU2SRMzVhH9cBpjk1Q21ItW3mQio3cAV9GChq9L1pDMnua1a
+         6sM+GtUnk1e/6Note6XkFHDlIL6QxjHC+TtEl6lWvoT/5lvY4D0XcaS+g9eikMYe6DF2
+         8IDQ==
+X-Gm-Message-State: AO0yUKXyBk5wseS3svFIgqSXRea0cO6kvECcZrizfIO+TPlAU4GV5aut
+        8/0ZUwzjvzCMuwdTGY+XxSs7PFuZCPs=
+X-Google-Smtp-Source: AK7set/s0xsnZw0bMDdW87f8QuGjZXhn+kDZ0PQ/l58nOv/yYpmY39+MpUlRUORbOu7xl8Q2KC3xmg==
+X-Received: by 2002:a17:906:4c8e:b0:8af:447a:ff8e with SMTP id q14-20020a1709064c8e00b008af447aff8emr15131068eju.20.1678265074178;
+        Wed, 08 Mar 2023 00:44:34 -0800 (PST)
+Received: from xeon.. ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170906838800b008ee95ccfe06sm7163891ejx.119.2023.03.08.00.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 00:44:33 -0800 (PST)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: [PATCH v1 0/4] Add optional properties to MAX17040
+Date:   Wed,  8 Mar 2023 10:44:15 +0200
+Message-Id: <20230308084419.11934-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yang,
+Extend properties supported by max17040 fuel gauge with static
+simple battery cell properties, some supplier properties (like
+health and status) and thermal data from external sensor.
 
-On Wed, Mar 8, 2023 at 7:17 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
-> According to commit 7945f929f1a7 ("drivers: provide
-> devm_platform_ioremap_resource()"), convert platform_get_resource(),
-> devm_ioremap_resource() to a single call to Use
-> devm_platform_ioremap_resource(), as this is exactly what this function
-> does.
+Svyatoslav Ryhel (4):
+  dt-bindings: power: supply: maxim,max17040: update properties
+  power: max17040: add simple battery cell support
+  power: max17040: add passing props from supplier
+  power: max17040: get thermal data from adc if available
 
-Thanks for your patch!
-
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -435,9 +435,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->                          * Then, driver uses common registers
->                          * rcar_has_irq_support() will be enabled
->                          */
-> -                       res = platform_get_resource(pdev, IORESOURCE_MEM,
-> -                                                   mres++);
-> -                       common->base = devm_ioremap_resource(dev, res);
-> +                       common->base = devm_platform_ioremap_resource(pdev, mres++);
->                         if (IS_ERR(common->base)) {
->                                 ret = PTR_ERR(common->base);
->                                 goto error_unregister;
-
-Note that there is a second opportunity for conversion in the same
-function, a few lines below.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+ .../bindings/power/supply/maxim,max17040.yaml | 37 +++++++++++
+ drivers/power/supply/max17040_battery.c       | 66 +++++++++++++++++++
+ 2 files changed, 103 insertions(+)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.37.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
