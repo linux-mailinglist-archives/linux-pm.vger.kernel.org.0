@@ -2,94 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC526B0731
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 13:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2BA6B09AD
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 14:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjCHMfO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 07:35:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S230013AbjCHNp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 08:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjCHMfK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 07:35:10 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6232FBCFCE
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 04:35:08 -0800 (PST)
+        with ESMTP id S229852AbjCHNpc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 08:45:32 -0500
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F6D36082;
+        Wed,  8 Mar 2023 05:44:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=IC76Uj3MliMRjbnHSSXxLEmrdt8NTTVNvjgl4QoBL4Y=; b=eXi8TE/wDWMHfH62RE3JU9ZwEU
-        KMbHCPLiVDxkP1KLmBufVN7s9/B9lBBokIC7lUkrFoi4i0SrA0nqjrM/OQt01Fph/MdrR25/ij+Dq
-        kgFmsckq/oZa6n5LpN8XoD66GcILUTb7LXsWkxyOvJmJ23eyCVUgjO0WMSj5zYfTUBv22vIyibYCU
-        Co/i1RALfebR6XR2W/L7llmx4F312uP9/wovQCbwOA1KhU7UlFyFP/swfSWbTqJVj+PjGTuCiUyXk
-        QBpF0P5WCwhDc6EFvkhKIRFWFBRhON04bnrNubFngvmwtleYNj/2eVqbAQcQVV066j86AkzcGdehb
-        Rr8lLtug==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pZt0b-00HNeM-2W;
-        Wed, 08 Mar 2023 12:35:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B6C2300193;
-        Wed,  8 Mar 2023 13:35:05 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1D1A1202648EA; Wed,  8 Mar 2023 13:35:05 +0100 (CET)
-Date:   Wed, 8 Mar 2023 13:35:05 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Artem Bityutskiy <dedekind1@gmail.com>, x86@kernel.org,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 1/3] x86/mwait: Add support for idle via umwait
-Message-ID: <20230308123505.GG2017917@hirez.programming.kicks-ass.net>
-References: <20230306123418.720679-1-dedekind1@gmail.com>
- <20230306123418.720679-2-dedekind1@gmail.com>
- <20230306145524.GF1267364@hirez.programming.kicks-ass.net>
- <CAJZ5v0iAitp+4UHfSJWyNACYthRHCSj5nBpJ1_5Zzq4fnJNKeA@mail.gmail.com>
+        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:Message-Id
+        :Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LxRacmfIvgaRbB0Z7H5JqLVFHGGbxKZooKh3Y/fevhQ=; b=OWyNqP5VtJqiLvOll6ZCZ/blLf
+        SgLyYURcHGgydwvt5+GLjluW6HSVvYRQj63d3S66GfiGdK7Ry4IVo1Tk0kBSCXCflguCicwh/QTQd
+        YxgHBe6GY1OD3lHB+QZvtcj9Nbj0rufg5Ebn4LJMWe7fZPmY11rqS6fPwdIQKry4ePsjMMCDmujRn
+        5cfLYSh2ui67tr4XT1aGr+Uf0qAIJuUqxEQw2uCaONcClNwewsGfqoWbJEA0k/oke4UGpfg14av2Y
+        HSJQRsgIVRkn6Fn40tS/lRcjyPM9qOYireUyhslSBm+SSSRNGbzO8zeOKeKXl3ai1NkL5dozOfadx
+        +0ZJnLUA==;
+Received: from [10.22.3.24] (helo=kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1pZtZp-00FDCA-TN; Wed, 08 Mar 2023 14:11:29 +0100
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [PATCH v2 0/6] thermal: qcom: tsens: Fix MDM9607, add MSM8909
+Date:   Wed,  8 Mar 2023 14:10:35 +0100
+Message-Id: <20230308131041.124482-1-stephan.gerhold@kernkonzept.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iAitp+4UHfSJWyNACYthRHCSj5nBpJ1_5Zzq4fnJNKeA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 12:55:45PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Mar 6, 2023 at 3:56 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Mon, Mar 06, 2023 at 02:34:16PM +0200, Artem Bityutskiy wrote:
-> > > From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> > >
-> > > On Intel platforms, C-states are requested using the 'monitor/mwait'
-> > > instructions pair, as implemented in 'mwait_idle_with_hints()'. This
-> > > mechanism allows for entering C1 and deeper C-states.
-> > >
-> > > Sapphire Rapids Xeon supports new idle states - C0.1 and C0.2 (later C0.x).
-> > > These idle states have lower latency comparing to C1, and can be requested
-> > > with either 'tpause' and 'umwait' instructions.
-> > >
-> > > Linux already uses the 'tpause' instruction in delay functions like
-> > > 'udelay()'. This patch adds 'umwait' and 'umonitor' instructions support.
-> > >
-> > > 'umwait' and 'tpause' instructions are very similar - both send the CPU to
-> > > C0.x and have the same break out rules. But unlike 'tpause', 'umwait' works
-> > > together with 'umonitor' and exits the C0.x when the monitored memory
-> > > address is modified (similar idea as with 'monitor/mwait').
-> > >
-> > > This patch implements the 'umwait_idle()' function, which works very
-> > > similarly to existing 'mwait_idle_with_hints()', but requests C0.x. The
-> > > intention is to use it from the 'intel_idle' driver.
-> >
-> > Still wondering wth regular mwait can't access these new idle states.
-> 
-> But is this a question for Artem to answer?
+Make the MDM9607 thermal sensor support consistent with Qualcomm's
+vendor kernel (msm-3.18) by applying the correct default slope values
+and adding "correction factors" to the factory calibration values in
+the fuses. Use the same functionality to add the very similar MSM8909 SoC
+to the tsens driver.
 
-Maybe, maybe not, but I did want to call out this 'design' in public. It
-is really weird IMO.
+---
+Changes in v2:
+  - Rewrite on top of per-sensor nvmem cell changes that landed in 6.3
+  - Add patches to fix existing support for MDM9607
+
+Stephan Gerhold (6):
+  thermal: qcom: tsens: Drop unused legacy structs
+  thermal: qcom: tsens-v0_1: Fix mdm9607 slope values
+  thermal: qcom: tsens-v0_1: Add mdm9607 correction offsets
+  dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
+  dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
+  thermal: qcom: tsens-v0_1: Add MSM8909 data
+
+ .../bindings/thermal/qcom-tsens.yaml          | 23 +----
+ drivers/thermal/qcom/tsens-v0_1.c             | 97 +++++++++++--------
+ drivers/thermal/qcom/tsens-v1.c               | 22 -----
+ drivers/thermal/qcom/tsens.c                  | 19 +++-
+ drivers/thermal/qcom/tsens.h                  |  6 +-
+ 5 files changed, 84 insertions(+), 83 deletions(-)
+
+-- 
+2.30.2
+
