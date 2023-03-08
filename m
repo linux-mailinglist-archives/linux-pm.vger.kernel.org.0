@@ -2,125 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DA36B145F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 22:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA82E6B1479
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 22:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCHVlw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 16:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S230176AbjCHVs6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 16:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjCHVld (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 16:41:33 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13624168A2
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 13:41:08 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id z5so18043836ljc.8
-        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 13:41:07 -0800 (PST)
+        with ESMTP id S230112AbjCHVs4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 16:48:56 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CEE99D51
+        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 13:48:40 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h14so33025wru.4
+        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 13:48:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678311637;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vveGd9sf9fGz7xfjIX4ynPRPTvQaFdGwhHtakqOTRYg=;
-        b=MDAy6R+jjctd0vx9CWrQXaXsEMkgKA/ZE6LE8uRw86hdQoO9sa3Q/9/chs5qLDJccG
-         rNTN/514pGvz9ibGNcPpdTSm1gyKyXCLqS82bHUk5rhi1jQv16Hidf90VLLI678+qNCh
-         Vk7/QAFl7cKP6IZWezjF4730IJVbEGaHbwsJFfQsUbF9IYp4ApjG9/PVR+loQyMeCk4H
-         LW2yWvgpwDJtw7fuEpK1Hq4cVpft2f/Ss1lkaj39Dx/Ei0C/kevGyefEznjdROje9YLK
-         LU1vHYgO4loidMf5EOI/tV1KT28QxAAlMPkTALUPRwHIAvFswlDmSPWVZPMCyBVReHya
-         2Okg==
+        d=linaro.org; s=google; t=1678312118;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9b973OIjh2A0q4it2tRxdKfeAcI3pT5uZD5jTJWInpI=;
+        b=YMAZmJORveNcNQt8Xuwzh04+SXOMfA0xiAPvb6CaAqKSZGmF0QwHOHB2Qmu1jT1yxQ
+         Y4WWPCF9Nj+IS21dbGu7Hh1bRdn5iwZJTGmgxGn7OfVXfTLVjaCxt0puIxF/msRd9np4
+         pgszGCaIjfQCdHQDxsxpzWwcopep3sj7QnEz6xk0unVb+rg3gKtoWSh4Vm8cNuqPDGae
+         vR1lm6gamA6AnRxa+PiJ/QrI1Hd4fA7PifMMitRNmRPWjXnALM8Mp9FQBVCeMe/af4L3
+         8Y/FDU9hCDAOqDc61m5MYZugAa9DLbj1B4t696f0Pyx3K7WoL+OZUWBm7d/Lhky4Nhjw
+         ms4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678311637;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vveGd9sf9fGz7xfjIX4ynPRPTvQaFdGwhHtakqOTRYg=;
-        b=b0kUjjwwXlQE9P57MPznlGixiAG08tj55LXybgHc3h+uwNx6UV5JCXI7d0DtINPVfH
-         7oP7+JjfeKzeZjMcY+E4+rLy6Evj1saeD1i/1MUcF6ZPgUSAWV2JZ6Uu8ehjrcYabL9U
-         DSWbrRNyZQMje301ojwi7+0cKf/buG2HC/jNHrl+eFg8jz1sQgAafbYQqmv+NzJNdYwO
-         qRPNeis4z6ywNbDnpPJnC9kQ2U+gowCSsYgeSNYnj30O/PAe37As/aMorZ9d6HgtizFe
-         WjdsXxBPn6ONanJOiZk7YasghEm8wbVH+qVJ4WXGyhF2NyrkLMHacxhnOsu6LLAKjioj
-         2eqA==
-X-Gm-Message-State: AO0yUKUHgLOFuponCgO6VFRCilMaATL+7BrX2lzaxQCM8+MgEP3J2Psl
-        Zy46qfkA+E7Wn5U+pXqvhImUOw==
-X-Google-Smtp-Source: AK7set8JeXNHn4TnkWOhL+wkhYu2gkjGes9+4TTQV1KtujPgQcUC0f+IFVgsBNsru/W0JaARFY+M4Q==
-X-Received: by 2002:a2e:7e10:0:b0:295:9d05:4a56 with SMTP id z16-20020a2e7e10000000b002959d054a56mr4824962ljc.9.1678311637409;
-        Wed, 08 Mar 2023 13:40:37 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id a6-20020a2e8606000000b00295a2a608e9sm2688844lji.111.2023.03.08.13.40.35
+        d=1e100.net; s=20210112; t=1678312118;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9b973OIjh2A0q4it2tRxdKfeAcI3pT5uZD5jTJWInpI=;
+        b=54GWQBEOguTzbpOlKwx1WxyUvD4EAx7ZydNwI63Fc7RKtpUU7H8PuqLsKjQ3tPDlEe
+         JejJPoMMSLEUrvWhdt2ZpJe7mzQkLZ76QMkOPgsMGBYJX3y0G/t+cFOuQVcC06yJmKr9
+         BcArVbz+Zeme5StsBXUcTkNESv+vCIsHxA1Xd9fQo/j/pSH3/tJCjXV2ey4HznPYpHEv
+         YR3fBhSNBCMKmQBOpaICKEmUUgzyQXEVDN9UEuN0Q+2ucx2qh+5nTIJToXXvwleJuhuI
+         jhGhHAMn5ms5hiUFblYTe4c9rq9ylTZDo8C6lGLO6CB4k3++FzzgOQMaPMC8VrYE+mx5
+         wfzw==
+X-Gm-Message-State: AO0yUKVfGI/1QnDEiaiPcL0e+q17jimn8Wh7aFc1AZ1wV3HVjv/1vW/4
+        OBLcbhOUSzvi/dS2nGlHAeHSHw==
+X-Google-Smtp-Source: AK7set9dNQIoqJwJ1YDp+pOXC2yzZe8SPtUpY47j+15NDVfKGPTAxNPVDJYhNaO50DjaF0ITnaNgKQ==
+X-Received: by 2002:a5d:62c3:0:b0:2c5:5237:3b21 with SMTP id o3-20020a5d62c3000000b002c552373b21mr13902966wrv.69.1678312118499;
+        Wed, 08 Mar 2023 13:48:38 -0800 (PST)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:fbda:65f5:e873:7527])
+        by smtp.gmail.com with ESMTPSA id z6-20020adfd0c6000000b002c55efa9cbesm16065713wrh.39.2023.03.08.13.48.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:40:36 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 08 Mar 2023 22:40:15 +0100
-Subject: [PATCH v7 9/9] interconnect: qcom: msm8996: Promote to
- core_initcall
+        Wed, 08 Mar 2023 13:48:38 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE)
+Subject: [PATCH 1/2] thermal/drivers/imx: Remove get_trip_temp ops
+Date:   Wed,  8 Mar 2023 22:48:21 +0100
+Message-Id: <20230308214822.1317086-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-qos-v7-9-815606092fff@linaro.org>
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
-In-Reply-To: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678311609; l=1279;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=5H1KJ2r/pG170nOV3v3bsq3JNwWcNEZN04iD5DDB2kw=;
- b=mA+CUaUze95pv7UwCHyxJG284m7hyf7mpYPzfRrzl/yoikhuSf999ZWFXM2KiHMv5jr/d5NJq0Lb
- GnYlQwesD62E+SECS98WGgXTUqKbxD8cKwtBkI2a+l3MTLs+7Q4u
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The interconnect driver is (or soon will be) vital to many other
-devices, as it's not a given that the bootloader will set up enough
-bandwidth for us or that the values we come into are reasonable.
+The i.MX thermal sensor uses the generic trip points. The thermal
+framework can return the critical temperature directly.
 
-Promote the driver to core_initcall to ensure the consumers (i.e.
-most "meaningful" parts of the SoC) can probe without deferrals.
+Remove the pointless get_trip_temp ops.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/interconnect/qcom/msm8996.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/thermal/imx_thermal.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index 347fe59ec293..1eb51ed18b0b 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -2109,7 +2109,17 @@ static struct platform_driver qnoc_driver = {
- 		.sync_state = icc_sync_state,
- 	}
- };
--module_platform_driver(qnoc_driver);
-+static int __init qnoc_driver_init(void)
-+{
-+	return platform_driver_register(&qnoc_driver);
-+}
-+core_initcall(qnoc_driver_init);
-+
-+static void __exit qnoc_driver_exit(void)
-+{
-+	platform_driver_unregister(&qnoc_driver);
-+}
-+module_exit(qnoc_driver_exit);
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index c3136978adee..69ed482167f7 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -330,13 +330,6 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+ 	return 0;
+ }
  
- MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
- MODULE_DESCRIPTION("Qualcomm MSM8996 NoC driver");
-
+-static int imx_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+-{
+-	*temp = trips[IMX_TRIP_CRITICAL].temperature;
+-
+-	return 0;
+-}
+-
+ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 			     int temp)
+ {
+@@ -384,7 +377,6 @@ static struct thermal_zone_device_ops imx_tz_ops = {
+ 	.unbind = imx_unbind,
+ 	.get_temp = imx_get_temp,
+ 	.change_mode = imx_change_mode,
+-	.get_crit_temp = imx_get_crit_temp,
+ 	.set_trip_temp = imx_set_trip_temp,
+ };
+ 
 -- 
-2.39.2
+2.34.1
 
