@@ -2,167 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882BE6B09A1
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 14:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064FA6B0AAB
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 15:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjCHNp1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 08:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S232221AbjCHOM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 09:12:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjCHNpE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 08:45:04 -0500
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF52783155;
-        Wed,  8 Mar 2023 05:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:References
-        :In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QNpLZI4QGEZ9zqfRRjnmcl5vwu4v8kej+ev70a+XED0=; b=SyaCWLH2ORjanRgmjXv6D/tSNe
-        TfRo3R2m6mFA7hKf9l1/en7q2z+9PTR8EUGm2lIlISCbz3muLDFIjzmMpn/TiStKhUu5aPke7hHHV
-        0UQ6UIZx7RbB4mhSbgemHNl0VQErACEvNbCc5YGuDGW9cU69XIO7icDr7oo3LgPyNPtL4TvPSsjWG
-        h925CixOJNmQKFq/sQlyc6C2iHhMYUNHJwtVp7CBnT/0tHtp76M2vrRomBGy457yzrByaAYjLOlkQ
-        TdNyvP6cMVJvToHfqtiC1n5RCxFYgGBelchgt9lU2JBCj9ZDTMtipwURXJYz7ETmgpT2JzFqPBfzQ
-        HGnoFAFg==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1pZta4-00FDCA-PP; Wed, 08 Mar 2023 14:11:44 +0100
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232210AbjCHOLz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 09:11:55 -0500
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E621C5A18B;
+        Wed,  8 Mar 2023 06:11:07 -0800 (PST)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-17711f56136so3904840fac.12;
+        Wed, 08 Mar 2023 06:11:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678284654;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BG0LVvFn1C/Da2Gc5O3YD8isCIsXrAwtxSQEVgE87AI=;
+        b=RuXhJut4bN5ftmAJRq/9tiPeccWmierAJ/UbTICusRzkQoNjOG8YL+iO6w9GSVNIuM
+         MPtwwCiEy+25yUZFLSJsd3hKagE0EjYwuuHWlDHqKe5tzf12n1eJ8OjJtouxIvAr3QC7
+         88GZUJLP+OkfWqJCL7HTpUXun+wYZU/uG+o3MEAa5LXcru31ZdoY7MX5vzll1Rv8Dzct
+         zAzR5KnmZc84jvww4EXmvexiilrLMwn6PYBZvDlTfaWgpNgoc0KZZ7lol0aCX4VVNSwg
+         cZ+eAEv1WLNX71i5WEP4zviOzQlZyshApKdpJpw7tMGOzzPVduiQ+NL3jgxyN0jZAyhZ
+         ubGA==
+X-Gm-Message-State: AO0yUKXuLLm7p33VFPZHs4Jkv2fwt77YSwXkDWEog9cgBmjuS5E4ggJk
+        14ELtuV8z/AxECVO1tdDZw==
+X-Google-Smtp-Source: AK7set/cT2sp1M7e47IzQCQD2W8xtmPnZuAp+jI6K0s2N6oikhajQ93ypk71x4/YPZM2+Kr1qDFxTg==
+X-Received: by 2002:a05:6871:b11:b0:176:3849:4e96 with SMTP id fq17-20020a0568710b1100b0017638494e96mr10140723oab.13.1678284654485;
+        Wed, 08 Mar 2023 06:10:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f8-20020a9d2c08000000b00690dc5d9b9esm6498673otb.6.2023.03.08.06.10.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 06:10:54 -0800 (PST)
+Received: (nullmailer pid 2719199 invoked by uid 1000);
+        Wed, 08 Mar 2023 14:10:52 -0000
+Date:   Wed, 8 Mar 2023 08:10:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-leds@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Subject: [PATCH v2 6/6] thermal: qcom: tsens-v0_1: Add MSM8909 data
-Date:   Wed,  8 Mar 2023 14:10:41 +0100
-Message-Id: <20230308131041.124482-7-stephan.gerhold@kernkonzept.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230308131041.124482-1-stephan.gerhold@kernkonzept.com>
-References: <20230308131041.124482-1-stephan.gerhold@kernkonzept.com>
+        linux-gpio@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Lee Jones <lee@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        alsa-devel@alsa-project.org, netdev@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-can@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Benson Leung <bleung@chromium.org>, linux-i2c@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+Message-ID: <167828463126.2715010.4541489267949266802.robh@kernel.org>
+References: <20230228215433.3944508-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The MSM8909 SoC has 5 thermal sensors in a TSENS v0.1 block. Like
-MDM9607 it uses a non-standard default slope value of 3000 [1] and needs
-per-sensor "correction factors" to workaround issues with the factory
-calibration [2].
 
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.UM.7.7.c26-09100-8x09.0/arch/arm/boot/dts/qcom/msm8909.dtsi#L476
-[2]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/6df022c6d0c2c1b4a5a6c2124dba4d57910c0911
+On Tue, 28 Feb 2023 15:54:33 -0600, Rob Herring wrote:
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+> 
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/spi[0-9] {/spi {/'
+> 
+> With this, a few errors in examples were exposed and fixed.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
+>  .../bindings/chrome/google,cros-ec-typec.yaml     |  2 +-
+>  .../chrome/google,cros-kbd-led-backlight.yaml     |  2 +-
+>  .../devicetree/bindings/clock/ti,lmk04832.yaml    |  2 +-
+>  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
+>  .../bindings/display/bridge/anx6345.yaml          |  2 +-
+>  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
+>  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
+>  .../bindings/display/bridge/ps8640.yaml           |  2 +-
+>  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
+>  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
+>  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
+>  .../bindings/display/solomon,ssd1307fb.yaml       |  4 ++--
+>  .../devicetree/bindings/eeprom/at25.yaml          |  2 +-
+>  .../bindings/extcon/extcon-usbc-cros-ec.yaml      |  2 +-
+>  .../bindings/extcon/extcon-usbc-tusb320.yaml      |  2 +-
+>  .../devicetree/bindings/gpio/gpio-pca9570.yaml    |  2 +-
+>  .../devicetree/bindings/gpio/gpio-pca95xx.yaml    |  8 ++++----
+>  .../bindings/i2c/google,cros-ec-i2c-tunnel.yaml   |  2 +-
+>  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  2 +-
+>  .../devicetree/bindings/leds/issi,is31fl319x.yaml |  2 +-
+>  .../devicetree/bindings/leds/leds-aw2013.yaml     |  2 +-
+>  .../devicetree/bindings/leds/leds-rt4505.yaml     |  2 +-
+>  .../devicetree/bindings/leds/ti,tca6507.yaml      |  2 +-
+>  .../bindings/media/i2c/aptina,mt9p031.yaml        |  2 +-
+>  .../bindings/media/i2c/aptina,mt9v111.yaml        |  2 +-
+>  .../devicetree/bindings/media/i2c/imx219.yaml     |  2 +-
+>  .../devicetree/bindings/media/i2c/imx258.yaml     |  4 ++--
+>  .../devicetree/bindings/media/i2c/mipi-ccs.yaml   |  2 +-
+>  .../bindings/media/i2c/ovti,ov5648.yaml           |  2 +-
+>  .../bindings/media/i2c/ovti,ov772x.yaml           |  2 +-
+>  .../bindings/media/i2c/ovti,ov8865.yaml           |  2 +-
+>  .../bindings/media/i2c/ovti,ov9282.yaml           |  2 +-
+>  .../bindings/media/i2c/rda,rda5807.yaml           |  2 +-
+>  .../bindings/media/i2c/sony,imx214.yaml           |  2 +-
+>  .../bindings/media/i2c/sony,imx274.yaml           |  2 +-
+>  .../bindings/media/i2c/sony,imx334.yaml           |  2 +-
+>  .../bindings/media/i2c/sony,imx335.yaml           |  2 +-
+>  .../bindings/media/i2c/sony,imx412.yaml           |  2 +-
+>  .../devicetree/bindings/mfd/actions,atc260x.yaml  |  2 +-
+>  .../devicetree/bindings/mfd/google,cros-ec.yaml   |  6 +++---
+>  .../devicetree/bindings/mfd/ti,tps65086.yaml      |  2 +-
+>  .../devicetree/bindings/mfd/x-powers,axp152.yaml  |  4 ++--
+>  .../devicetree/bindings/net/asix,ax88796c.yaml    |  2 +-
+>  .../bindings/net/can/microchip,mcp251xfd.yaml     |  2 +-
+>  .../bindings/net/dsa/microchip,ksz.yaml           |  2 +-
+>  .../bindings/net/nfc/samsung,s3fwrn5.yaml         |  2 +-
+>  .../bindings/net/vertexcom-mse102x.yaml           |  2 +-
+>  .../bindings/net/wireless/ti,wlcore.yaml          | 10 ++++++++--
+>  .../devicetree/bindings/pinctrl/pinmux-node.yaml  |  2 +-
+>  .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq2415x.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq24190.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq24257.yaml |  4 ++--
+>  .../devicetree/bindings/power/supply/bq24735.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq2515x.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq25890.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq25980.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq27xxx.yaml | 15 ++++++++-------
+>  .../bindings/power/supply/lltc,ltc294x.yaml       |  2 +-
+>  .../bindings/power/supply/ltc4162-l.yaml          |  2 +-
+>  .../bindings/power/supply/maxim,max14656.yaml     |  2 +-
+>  .../bindings/power/supply/maxim,max17040.yaml     |  4 ++--
+>  .../bindings/power/supply/maxim,max17042.yaml     |  2 +-
+>  .../bindings/power/supply/richtek,rt9455.yaml     |  2 +-
+>  .../bindings/power/supply/ti,lp8727.yaml          |  2 +-
+>  .../bindings/regulator/active-semi,act8865.yaml   |  2 +-
+>  .../regulator/google,cros-ec-regulator.yaml       |  2 +-
+>  .../bindings/regulator/nxp,pf8x00-regulator.yaml  |  2 +-
+>  .../devicetree/bindings/sound/everest,es8316.yaml |  2 +-
+>  .../devicetree/bindings/sound/tas2562.yaml        |  2 +-
+>  .../devicetree/bindings/sound/tas2770.yaml        |  2 +-
+>  .../devicetree/bindings/sound/tas27xx.yaml        |  2 +-
+>  .../devicetree/bindings/sound/tas5805m.yaml       |  2 +-
+>  .../devicetree/bindings/sound/tlv320adcx140.yaml  |  2 +-
+>  .../devicetree/bindings/sound/zl38060.yaml        |  2 +-
+>  .../devicetree/bindings/usb/maxim,max33359.yaml   |  2 +-
+>  .../bindings/usb/maxim,max3420-udc.yaml           |  2 +-
+>  .../bindings/usb/mediatek,mt6360-tcpc.yaml        |  2 +-
+>  .../devicetree/bindings/usb/richtek,rt1711h.yaml  |  2 +-
+>  .../devicetree/bindings/usb/richtek,rt1719.yaml   |  2 +-
+>  .../devicetree/bindings/usb/st,stusb160x.yaml     |  2 +-
+>  .../devicetree/bindings/usb/ti,hd3ss3220.yaml     |  2 +-
+>  .../devicetree/bindings/usb/ti,tps6598x.yaml      |  2 +-
+>  86 files changed, 110 insertions(+), 103 deletions(-)
+> 
 
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
-Change in v2:
-  - Rewrite on top of per-sensor nvmem cell changes that landed in 6.3
----
- drivers/thermal/qcom/tsens-v0_1.c | 32 ++++++++++++++++++++++++++++++-
- drivers/thermal/qcom/tsens.c      |  3 +++
- drivers/thermal/qcom/tsens.h      |  2 +-
- 3 files changed, 35 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index 9d264dafcd7c..7865165863c6 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -207,6 +207,23 @@ static int calibrate_8974(struct tsens_priv *priv)
- 	return 0;
- }
- 
-+static int __init init_8909(struct tsens_priv *priv)
-+{
-+	int i;
-+
-+	for (i = 0; i < priv->num_sensors; ++i)
-+		priv->sensor[i].slope = 3000;
-+
-+	priv->sensor[1].p1_calib_offset = -10;
-+	priv->sensor[1].p2_calib_offset = -6;
-+	priv->sensor[3].p1_calib_offset = -9;
-+	priv->sensor[3].p2_calib_offset = -9;
-+	priv->sensor[4].p1_calib_offset = -8;
-+	priv->sensor[4].p2_calib_offset = -10;
-+
-+	return init_common(priv);
-+}
-+
- static int __init init_8939(struct tsens_priv *priv) {
- 	priv->sensor[0].slope = 2911;
- 	priv->sensor[1].slope = 2789;
-@@ -243,7 +260,7 @@ static int __init init_9607(struct tsens_priv *priv)
- 	return init_common(priv);
- }
- 
--/* v0.1: 8916, 8939, 8974, 9607 */
-+/* v0.1: 8909, 8916, 8939, 8974, 9607 */
- 
- static struct tsens_features tsens_v0_1_feat = {
- 	.ver_major	= VER_0_1,
-@@ -298,6 +315,19 @@ static const struct tsens_ops ops_v0_1 = {
- 	.get_temp	= get_temp_common,
- };
- 
-+static const struct tsens_ops ops_8909 = {
-+	.init		= init_8909,
-+	.calibrate	= tsens_calibrate_common,
-+	.get_temp	= get_temp_common,
-+};
-+
-+struct tsens_plat_data data_8909 = {
-+	.num_sensors	= 5,
-+	.ops		= &ops_8909,
-+	.feat		= &tsens_v0_1_feat,
-+	.fields	= tsens_v0_1_regfields,
-+};
-+
- static const struct tsens_ops ops_8916 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_8916,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 32d2907f76e5..a04179247b34 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -1109,6 +1109,9 @@ static const struct of_device_id tsens_table[] = {
- 	}, {
- 		.compatible = "qcom,mdm9607-tsens",
- 		.data = &data_9607,
-+	}, {
-+		.compatible = "qcom,msm8909-tsens",
-+		.data = &data_8909,
- 	}, {
- 		.compatible = "qcom,msm8916-tsens",
- 		.data = &data_8916,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 880be6be5c3f..c88287dede96 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -639,7 +639,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp);
- extern struct tsens_plat_data data_8960;
- 
- /* TSENS v0.1 targets */
--extern struct tsens_plat_data data_8916, data_8939, data_8974, data_9607;
-+extern struct tsens_plat_data data_8909, data_8916, data_8939, data_8974, data_9607;
- 
- /* TSENS v1 targets */
- extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
--- 
-2.30.2
+Applied, thanks!
 
