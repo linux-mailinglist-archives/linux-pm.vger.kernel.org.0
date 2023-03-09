@@ -2,73 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250826B21C8
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 11:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC4D6B21D3
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 11:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCIKp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 05:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S229572AbjCIKs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 05:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjCIKp1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 05:45:27 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60956797;
-        Thu,  9 Mar 2023 02:45:26 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id a9so1490191plh.11;
-        Thu, 09 Mar 2023 02:45:26 -0800 (PST)
+        with ESMTP id S230075AbjCIKsY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 05:48:24 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03274D2AE
+        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 02:48:20 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so5119643edb.10
+        for <linux-pm@vger.kernel.org>; Thu, 09 Mar 2023 02:48:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678358726;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678358899;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=syVx+vjdf/ZCrQkBBKtgWw7KFf16AwGumErh0SNakMY=;
-        b=RMfuFP3mDNznKhLqGvBYhoijvFUiShtojQD9/XXBSWaozsV5lIm8ssQlgQIWfK1Xbh
-         z3WIPFZagV1zjPpyNKKXDcMm9Qk/NmrAKSBJYlSkfoAXDtbywjHxsJP/nS901YGO9BGc
-         QWw28wEikC1YqIM1e3TWHAYq8oxQLzVWpIPBS9LcttLzt6OZ7q2RiXOa4RBYxzpt2xfd
-         4NHm5SBgjgLy1UTfNk8u2puDOKuAOASqrZDSql3pTd1bAacuEHSKyTXvql5OEzqjmt/p
-         oqtrNWz3QKiLkAqHSkG3mcRGpUOxvbmi51i4cx4QaQo9WqyE3nEmSOvjPUzWsedqmV0r
-         IwDQ==
+        bh=RXTLVKonq145fe0ytXdOtgCPf7KTsG27A4IaoSc+Vu0=;
+        b=RhuYXi/vwq0tgS5GhFnoNC8LMoV5+GTnZzhggDxNiDUfvUTEwHjXH1QFdCwwWjE+G1
+         e0/S+kYLzRP6l1fYv2oTVChyZ92RZ9jv3ZjVCC5abcHsLGtNPVh5F+wjvYAlFL2eFG3p
+         Hf6be/kM1yWovX+Gxbt5XypEX0RGI51I9b/zn/41TNhfusLsWJ173XcR2JmECfLbnJKg
+         Ph+KR9/Xt5aa86kOYksjU75n5VXBllhrOrOX3JpZ59U+D60EIS0T2trte2YoUV5XtW85
+         U25kVOxsfFpHo0lQa0dpIUezA/Jl2MXlIAnxlnVOps2JcsYm2FxHgyZEDW95eHKdTei/
+         b8FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678358726;
+        d=1e100.net; s=20210112; t=1678358899;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=syVx+vjdf/ZCrQkBBKtgWw7KFf16AwGumErh0SNakMY=;
-        b=NLzOHet7NsqWJDfGYprlBLigLTWXDR8oh3rY2VkKOPs8hqwDiYe4I6Df2Yj1kVHSwk
-         CKOMmTNJQ+MYmoCXxxfpzIcZdg+s7ybB7yi0Qty/aXh3q5hX9rmWVX/wnhkDDFQ79tZm
-         o8tU4+Zeoz9cPhBK/sZaWDUBTBlWwOm6B9WORY/+QWQ+hTwiAOwXZc8F+fjTmETzzcSX
-         s6eR0lU1OWb7Jtq6d0u5yCAwaq7g+nP7RnrQicY4XgAJm83GSExUL0kREUDc0mwBOrJI
-         FyJIPxku+iMnVPvG2l0HGbz+8ili65LOYkyAtg0xD9T1mx8X4TSf0fEi1i5O7hVFeidP
-         81yA==
-X-Gm-Message-State: AO0yUKWlPwUCb0eBLivf5kSj7ZnEupxbm6FTzHt2RXoU0EDB47LTlqXj
-        MRJQpmnDgL3vCd/94W2j1rxJUQZfIJ4Iub/k7/k+qFvqhl3jsw==
-X-Google-Smtp-Source: AK7set9wVn30YXm55DaP7zMI+PaHXqrCLIffmIm/qdvgb/14tq0QJwGlqbKlTk3VTYzmc5kMS1madgEGh/Lav7/SY8k=
-X-Received: by 2002:a17:902:ef92:b0:19b:636:b153 with SMTP id
- iz18-20020a170902ef9200b0019b0636b153mr8117005plb.6.1678358725826; Thu, 09
- Mar 2023 02:45:25 -0800 (PST)
+        bh=RXTLVKonq145fe0ytXdOtgCPf7KTsG27A4IaoSc+Vu0=;
+        b=qPut65QOhBvQkefbqJ9QdUzXxN2wYiwG33tyN9xt89QeiBdVpcxEmBdD01CgjhDEa7
+         GnI9B8yz/+qvUgwroskHIMPKtmWQJTQhRyHo7rO8RYIU+/bpbQYQFmnAAcYt1NOtE7P4
+         PuuAstw7p778Ou8PYpL8saKrY8Q+5smNqcs6u6hBYDU5SWNVKZ+STOPi6BBw+dVgi4Rk
+         KqDbMA/llJX11dbqGKDy0cGm1jsPzC3P1YVKiq2N8rdjPeIlLUwwHnzlcAeBMJFATM2x
+         eR+5ZMaTxX/fskV7wSM7hebF2ly0NPMWj2wmhs4ZLyN51h81FrfJjl5zXm32e7B+Q0t0
+         nMBQ==
+X-Gm-Message-State: AO0yUKWA562/hMKGNiMyrvHrXFTPGoqMigW1A0TLXsZHjBmca+Q0/2/y
+        Crp1sy/mVs7jDxc1elq2osKxHgfXUXvqy9aibnI5SQ==
+X-Google-Smtp-Source: AK7set8OJIO98YFS8R5gs+1Y4ruIuk2NfbZOxptFzB7tMyH1e5MDNlprG5ONb0fZqQq4CxO53p4GZ4Hhr1rIMNPEkRo=
+X-Received: by 2002:a17:906:338b:b0:879:e5b2:e12d with SMTP id
+ v11-20020a170906338b00b00879e5b2e12dmr9882276eja.13.1678358899375; Thu, 09
+ Mar 2023 02:48:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20230309092821.1590586-1-daniel.lezcano@linaro.org> <20230309092821.1590586-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20230309092821.1590586-2-daniel.lezcano@linaro.org>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 9 Mar 2023 07:45:14 -0300
-Message-ID: <CAOMZO5CdLXMtBbdH1j1RLFL=t5ZGXVgi5=Aw5pde1QNcCAVKxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal/drivers/imx: Use the thermal framework for
- the trip point
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
+References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+In-Reply-To: <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Thu, 9 Mar 2023 11:47:43 +0100
+Message-ID: <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +75,128 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 6:28=E2=80=AFAM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> The thermal framework provides an API to get the trip related to a
-> trip point id. We want to consolidate the generic trip points code,
-> thus preventing the different drivers to deal with the trip points
-> after they registered them.
->
-> The set_trip_temp ops will be changed regarding the above changes but
-> first we need to rework a bit the different implementation in the
-> drivers.
->
-> The goal is to prevent using the trip id but use a trip point passed
-> as parameter which will contain all the needed information.
->
-> As we don't have the trip point passed as parameter yet, we get the
-> trip point using the generic trip thermal framewrok APIs and use it to
-> take exactly the same decisions.
->
-> The difference with this change and the previous code is from where we
-> get the thermal trip point (which is the same).
->
-> No functional change intended.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   V2:
->     - Remove extra tab inserted in the previous version
+Hi Chen-Yu,
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+On Thu, Mar 9, 2023 at 6:04=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> wr=
+ote:
+>
+> On Wed, Mar 8, 2023 at 12:34=E2=80=AFAM <bchihi@baylibre.com> wrote:
+> >
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > Add full LVTS support (MCU thermal domain + AP thermal domain) to Media=
+Tek MT8192 SoC.
+> >
+> > This series is a continuation of the previous series "Add LVTS Thermal =
+Architecture" v14 :
+> >     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.=
+50294-1-bchihi@baylibre.com/
+> > and "Add LVTS's AP thermal domain support for mt8195" :
+> >     https://patchwork.kernel.org/project/linux-pm/cover/20230307154524.=
+118541-1-bchihi@baylibre.com/
+> >
+> > Based on top of thermal/linux-next :
+> >     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+> >
+> > Depends on these patches as they are not yet applyied to thermal/linux-=
+next branch :
+> >     [1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal=
+ controllers for mt8195
+> >     https://patchwork.kernel.org/project/linux-pm/patch/20230307154524.=
+118541-2-bchihi@baylibre.com/
+> >     [2/4] thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt81=
+95
+> >     https://patchwork.kernel.org/project/linux-pm/patch/20230307154524.=
+118541-3-bchihi@baylibre.com/
+> >
+> > Balsam CHIHI (4):
+> >   dt-bindings: thermal: mediatek: Add LVTS thermal controller definitio=
+n
+> >     for mt8192
+> >   thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+> >   arm64: dts: mediatek: mt8192: Add thermal zones and thermal nodes
+> >   arm64: dts: mediatek: mt8192: Add temperature mitigation threshold
+>
+> I tried this on my Hayato. As soon as lvts_ap probes and its thermal zone=
+s
+> are registered, a "critical temperature reached" warning is immediately
+> triggered for all the zones, a reboot is forced. A NULL pointer dereferen=
+ce
+> is also triggered somewhere. I filtered out all the interspersed "critica=
+l
+> temperature" messages:
+>
+
+Thank you very much for testing!
+It seems like interrupts on mt8192 and mt8195 do not behave the same way.
+I am investigating the issues.
+
+> [    2.943847] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000600
+> [    2.958818] Mem abort info:
+> [    2.965996]   ESR =3D 0x0000000096000005
+> [    2.973765] SMCCC: SOC_ID: ID =3D jep106:0426:8192 Revision =3D 0x0000=
+0000
+> [    2.975442]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> [    2.987305]   SET =3D 0, FnV =3D 0
+> [    2.995521]   EA =3D 0, S1PTW =3D 0
+> [    3.004265]   FSC =3D 0x05: level 1 translation fault
+> [    3.014365] Data abort info:
+> [    3.017344]   ISV =3D 0, ISS =3D 0x00000005
+> [    3.021279]   CM =3D 0, WnR =3D 0
+> [    3.022124] GACT probability NOT on
+> [    3.024277] [0000000000000600] user address but active_mm is swapper
+> [    3.034190] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+> [    3.044738] Modules linked in:
+> [    3.044745] CPU: 0 PID: 97 Comm: irq/273-1100b00 Not tainted
+> 6.3.0-rc1-next-20230308-01996-g3c0b9a61a3e5-dirty #575
+> c7b94096b594a95f18217c2ad4a2bd6d2c431108
+> [    3.044751] Hardware name: Google Hayato rev1 (DT)
+> [    3.044755] pstate: 60000009 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+> [    3.052055] pc : __mutex_lock+0x60/0x438
+> [    3.052066] lr : __mutex_lock+0x54/0x438
+> [    3.052070] sp : ffffffc008883c60
+> [    3.070822] x29: ffffffc008883c60 x28: ffffff80c281a880 x27: 000881f00=
+009001f
+> [    3.070830] x26: 1fc0000000247c00 x25: ffffff80c281a900 x24: 000000000=
+0000000
+> [    3.070837] x23: 0000000000000000 x22: ffffffe5ae5d45f4 x21: 000000000=
+0000002
+> [    3.086211] x20: 0000000000000000 x19: 00000000000005a0 x18: fffffffff=
+fffffff
+> [    3.086218] x17: 6568636165722065 x16: 727574617265706d x15: 000000000=
+0000028
+> [    3.097773] x14: 0000000000000000 x13: 0000000000003395 x12: ffffffe5a=
+f7f6ff0
+> [    3.097780] x11: 65706d655428206e x10: 0000000000000000 x9 : ffffffe5a=
+dcf4b08
+> [    3.097787] x8 : ffffffe5afe03230 x7 : 00000000000261b0 x6 : ffffff80c=
+2b86600
+> [    3.105609] x5 : 0000000000000000 x4 : ffffff80c2b86600 x3 : 000000000=
+0000000
+> [    3.112565] x2 : ffffff9b505f6000 x1 : 0000000000000000 x0 : 000000000=
+0000000
+> [    3.127593] Call trace:
+> [    3.127595]  __mutex_lock+0x60/0x438
+> [    3.127600]  mutex_lock_nested+0x34/0x48
+> [    3.141844]  thermal_zone_device_update+0x34/0x80
+> [    3.152879]  lvts_irq_handler+0xbc/0x158
+> [    3.152886]  irq_thread_fn+0x34/0xb8
+> [    3.161489]  irq_thread+0x19c/0x298
+> [    3.161494]  kthread+0x11c/0x128
+> [    3.175152]  ret_from_fork+0x10/0x20
+> [    3.175163] Code: 97ccbb7c 9000bea0 b9411400 35000080 (f9403260)
+> [    3.189402] ---[ end trace 0000000000000000 ]---
+> [    3.193417] Kernel panic - not syncing: Oops: Fatal exception
+> [    3.201255] Kernel Offset: 0x25a5c00000 from 0xffffffc008000000
+> [    3.201257] PHYS_OFFSET: 0x40000000
+> [    3.201259] CPU features: 0x600000,01700506,3200720b
+> [    3.201263] Memory Limit: none
+> [    3.376838] Rebooting in 30 seconds..
+>
+>
+[...]
+
+Best regards,
+Balsam
