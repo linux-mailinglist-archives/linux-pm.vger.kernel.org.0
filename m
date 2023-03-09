@@ -2,72 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3B46B20FF
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 11:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1996B21AF
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 11:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjCIKNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 05:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S229611AbjCIKlN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 05:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjCIKND (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 05:13:03 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232CFE6831
-        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 02:12:47 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id o12so4780825edb.9
-        for <linux-pm@vger.kernel.org>; Thu, 09 Mar 2023 02:12:47 -0800 (PST)
+        with ESMTP id S230325AbjCIKkk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 05:40:40 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A1410A85
+        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 02:39:29 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id j2so1355145wrh.9
+        for <linux-pm@vger.kernel.org>; Thu, 09 Mar 2023 02:39:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678356765;
+        d=linaro.org; s=google; t=1678358355;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YM/JDbd0VPnawILSkvqIBzMrYyUcm2iXljNAjcmjND4=;
-        b=HNVE2HpXW56r51lhzb1tZh1LXSowpMnWYvjKkajOpEy7TNp8+qL5uL1vpy8TEQb1hB
-         9ED4L0yiGHmeKUWQdjiWgV4DnRC9TDykOaQwbcTnJfsW7CKK8OO1OlZ8YZE3oa/oO0Az
-         JN1SkedI8D+GHY8izVPuuwbJK4gg6BuIO+stXqgtP62UWBXKGyb/R7IEvhCz4B0kJxOf
-         qiQtIzxmk9q9kpfqMJynnBOwrqSp84R/CAgnDYEyE/9h/vQK+aMiq3ix45gcPkNs0UGZ
-         3RWjEeTIt0EzVMAyatbSGrW3Q4BcUkptE75NJsNq+wBhJw1PyMy5n+HS6AhgKku8rBvi
-         uPdA==
+        bh=hqPGgd3BFdJ5Z3N2xYuAK2cKJFro8IMB7DoFRyNGYm4=;
+        b=cyuWrije1J+G0kpt9rtg9Zl9sy2vZ6FM3iuAuq3aa6xpiGzEf2lm0y2C8jOCJlsWeJ
+         EWmWc+ptmmIZ9VpxZoDLI1gR53mm2YZY+lWHHX9DnYPngQ1jRmg6Jeu657tZGxz2jX6N
+         YsoLVo8eGy3iUnDoOpwdsva1cuCV/u8EvWap4XFofYLdq6F3rlwtUXKWVPAevmo9lZVA
+         HDTeFqtX5+kZHYiMCjYQZiL2O9EhJWAWwx+6m0tXDA025+3xrVorFWwpWXEzFQ6EFYpQ
+         qC2bZ8Hc50FwsaxXuDrl5qnMSJlJexrK54vU2rtvMh2yoUkAcNaGANtYbeaPWwZlJBxe
+         G4/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678356765;
+        d=1e100.net; s=20210112; t=1678358355;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YM/JDbd0VPnawILSkvqIBzMrYyUcm2iXljNAjcmjND4=;
-        b=hDS1/2T4+qt3Kcg7IJg22VgKEihzlM8HwlpmBMhkODqGJKWsSGXAKD0rPxa3hxS5kR
-         XwgZ0Gf7WwEYU+RNfakw284zuzi5HzHzGtw8a3C9loa9dsQgG8l2C3Ujz5QPnZM4WwVv
-         V39maN6UFeRHMdOZMswW1B/sVHGUVo6WRhDtBrbJcf/VjX8a/OliGSdf1WGWToDXRJio
-         t5na36qwhmdNS4eJkSUjkp4+p2GaGQOfoJsx7mxic0BMyiUr+p6Yx06PFInH9BLxaEiH
-         HdI74k56HHC1BjWiFTut21BTg0ecicHJt0Ut5a3cX5QO3QvcQBAFQ33w5Aap7+8ZRkz4
-         SKOA==
-X-Gm-Message-State: AO0yUKVQSi38d1A7Zbg7RHS6umB8M3IGZDd7vUFOSPYQTDP3PAQdujEs
-        CrLM/6d+8SOAALyU7JR/zsjMMg==
-X-Google-Smtp-Source: AK7set9NCiqLzxFOuWG9zuFJMcWCWwY1UJM+flMqHq9P1KRkknaFl7gGlf39ORhlj9cCZE7bEY/Xww==
-X-Received: by 2002:a05:6402:88b:b0:4ad:5220:79f6 with SMTP id e11-20020a056402088b00b004ad522079f6mr19947573edy.18.1678356765683;
-        Thu, 09 Mar 2023 02:12:45 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id ga1-20020a170906b84100b008b17879ec95sm8597656ejb.22.2023.03.09.02.12.44
+        bh=hqPGgd3BFdJ5Z3N2xYuAK2cKJFro8IMB7DoFRyNGYm4=;
+        b=FqhpCLmHag4iRKvlbq/Up/ZBJ2Z8AKhGrRLfpFXFaovrzwkejNIpW8+KdCPWdqH4gG
+         Gw7UxERhTNXjHfgPcOBudmwf5v64mcLsdZiS8wSKqNglmXJTJb55YwOimHAxed1RM8oF
+         kbQB4U076qpsuhQFBkFwvUP6NxPMp7tGA9n1prMy6upqEyV1RUbQswhOlSePLQZV9xZa
+         FJywtQPk8pg4Bej1govoLtw1O+9dcwy7iOa8RpYfPeonSqHeTiRjBIvXoS7NUxM4Hkc5
+         CLpOwo7proVcrFMckfQHeQ4EPAAJp51eE0rKErTyZmZiduruVZDcBSNVB253dwaYeSDG
+         HNiA==
+X-Gm-Message-State: AO0yUKW7dUoATp6n/oGWHGjMDuiqCBDaYH2zkDFUpj9NH9yXaZHzj87Z
+        N1ptTlxdfx4qV5GW3TIX4YCaHg==
+X-Google-Smtp-Source: AK7set/FRRRB0+8uQ1yztBz2VteqoM/5ZDzGzNq25bY2dg07fWy53EiQjle/35Q0iTayjTBe36Tw7Q==
+X-Received: by 2002:a5d:4a43:0:b0:2cd:ceab:df1a with SMTP id v3-20020a5d4a43000000b002cdceabdf1amr14687125wrs.32.1678358354769;
+        Thu, 09 Mar 2023 02:39:14 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:fbda:65f5:e873:7527? ([2a05:6e02:1041:c10:fbda:65f5:e873:7527])
+        by smtp.googlemail.com with ESMTPSA id s1-20020a5d5101000000b002c559405a1csm17580482wrt.20.2023.03.09.02.39.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 02:12:45 -0800 (PST)
-Message-ID: <49e67fb3-4ef9-5d50-c3e8-3c7857145bbc@linaro.org>
-Date:   Thu, 9 Mar 2023 11:12:43 +0100
+        Thu, 09 Mar 2023 02:39:14 -0800 (PST)
+Message-ID: <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+Date:   Thu, 9 Mar 2023 11:39:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dt-bindings: power: supply: bq256xx: Add ts-ignore
- property
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
+ thermal controllers for mt8195
 Content-Language: en-US
-To:     Hermes Zhang <chenhuiz@axis.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Davis <afd@ti.com>
-Cc:     kernel@axis.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230309023926.38682-1-chenhuiz@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230309023926.38682-1-chenhuiz@axis.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Chen-Yu Tsai <wenst@chromium.org>, bchihi@baylibre.com
+Cc:     angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
+ <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -78,41 +83,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/03/2023 03:39, Hermes Zhang wrote:
-> Add a new property: ts-ignore to allow user to enable the TS_IGNORE flag
-> in chip. Ignore TS pin will allow user to control the charging
-> parameters instead of the default JEITA profile in chip.
-
-You miss users of it.
-
+On 09/03/2023 05:40, Chen-Yu Tsai wrote:
+> On Wed, Mar 8, 2023 at 12:46 AM <bchihi@baylibre.com> wrote:
+>>
+>> From: Balsam CHIHI <bchihi@baylibre.com>
+>>
+>> Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
+>>
+>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>> ---
+>>   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>> index c09398920468..8fa5a46675c4 100644
+>> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>> @@ -16,4 +16,14 @@
+>>   #define MT8195_MCU_LITTLE_CPU2  6
+>>   #define MT8195_MCU_LITTLE_CPU3  7
+>>
+>> +#define MT8195_AP_VPU0  8
 > 
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
->  Documentation/devicetree/bindings/power/supply/bq256xx.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> index 82f382a7ffb3..74fd48f4bec5 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> @@ -68,6 +68,12 @@ properties:
->        Interrupt sends an active low, 256 μs pulse to host to report the charger
->        device status and faults.
->  
-> +  ts-ignore:
+> Can't this start from 0? This is a different hardware block. The index
+> namespace is separate. Same question for MT8192.
 
-Missing vendor prefix... is this generic property? ts-ignore is very
-cryptic. You should describe here rather desired system characteristic.
-Why anyone would need to use it per-board level?
+The ID is used to differentiate the thermal zone identifier in the 
+device tree from the driver.
 
-> +    type: boolean
-> +    description: |
-> +      If this property is set, the TS_IGNORE flag will be set to 1 which means
-> +      will not apply JEITA profile during the charging.> +
->  required:
->    - compatible
->    - reg
++		vpu0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
++
++			trips {
++				vpu0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
 
-Best regards,
-Krzysztof
+If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate 
+MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+
+The LVTS driver will call devm_thermal_of_zone_register() with the 
+sensor id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id, 
+then at the moment of registering the MT8195_AP_VPU0, the underlying OF 
+thermal framework code will use MT8195_MCU_BIG_CPU0 description instead 
+because it will be the first to be find in the DT.
+
+If MT8195_AP_VPU0 is described in DT before, then the same will happen 
+when registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered 
+instead.
+
+IOW all ids must be different.
+
+The namespace is already described by the macro name AFAICS, so whatever 
+the values, we see only the macro names and those IDs are private the 
+kernel implementation.
+
+If the numbering is really important, may be something like:
+
+#define MT8195_MCU_BIG_CPU0     00
+#define MT8195_MCU_BIG_CPU1     01
+#define MT8195_MCU_BIG_CPU2     02
+#define MT8195_MCU_BIG_CPU3     03
+#define MT8195_MCU_LITTLE_CPU0  04
+#define MT8195_MCU_LITTLE_CPU1  05
+#define MT8195_MCU_LITTLE_CPU2  06
+#define MT8195_MCU_LITTLE_CPU3  07
+
+#define MT8195_AP_VPU1  10
+#define MT8195_AP_GPU0  11
+#define MT8195_AP_GPU1  12
+#define MT8195_AP_VDEC  13
+#define MT8195_AP_IMG   14
+#define MT8195_AP_INFRA 15
+#define MT8195_AP_CAM0  16
+#define MT8195_AP_CAM1  17
+
+But I would suggest considering this change as a separate patch after 
+the AP domain is added.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
