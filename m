@@ -2,148 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145386B147A
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Mar 2023 22:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037D56B17D1
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 01:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjCHVs7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 16:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S229629AbjCIAZZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 19:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjCHVs4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 16:48:56 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD4889F2C
-        for <linux-pm@vger.kernel.org>; Wed,  8 Mar 2023 13:48:41 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h14so33054wru.4
-        for <linux-pm@vger.kernel.org>; Wed, 08 Mar 2023 13:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678312120;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bSi6Beth8Hd606NS4V715NDwa0mm95xS/EhiukW+s4A=;
-        b=s6QYhBdP4xz1DCwwEoxAGKi1ZWo634kvMmuIClnvYe1bD7KyDs4Pt+l2UGtPZaHKWX
-         sYfJSWEk4DSD6oQMZTxMdn9TkZ97eARWubG7zg/JIxCAa3Q9/2aCRZ7E5qoNBClSnNvb
-         plkJISAvvYC2DYpTm1dMEOG21vnT2p8VeVDSK+0TRWDSzy6pzofQmDhwK8+DMs1Y4Sda
-         7rUNdsF2BXDNxe/MBCxV9cvN0fqFIt6b+88U3WLzPo/g0UWdhyNfV7eWtk7FVHOiVbFy
-         8mtL4imBVP0o3acwsFIGlyKSp3nqP2X26+VTLiOPg5UKxgw7BPiy1DIG9sOvzI62JazG
-         blRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678312120;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bSi6Beth8Hd606NS4V715NDwa0mm95xS/EhiukW+s4A=;
-        b=H9Op8RZKuFBrbmtVoo8OiVLMKfPFhpH7/8NlZqDCEfSHv0eyQyYAJeYcknUOlqe+w2
-         p6jRpQ2IDIP1CVHQ/I/LkP+/6yba2npanEzXyLPFW6kvbPEF/+2GSCNdFE+JfMAGojk1
-         tfZtabuTllgDi7MxZSma7+ZFMMNR0Ha7zK+zayzd8VI7jk3b/PbvIb+b6TcXM7RrNFMa
-         Y3P530ZPeigMGWo0asFcGKvb43V3iGiZNDqciREfi0TjfG6gkE7w9SCMtf3fid657xcF
-         Js47E6AjHfkPGH5uxJSFZ2fTPA70ZNQaLGOvG3elG0sw1eye9TXcX2kFjc+gdtuXS+6R
-         YjFQ==
-X-Gm-Message-State: AO0yUKX43WNFH7QdFfHcNG6ffj877UMfbAN3rTD2iGb/tDs7GK4/BiF8
-        s46qKioZ/0e3ry2qDGVDhV9fdfaxV37F/3z9uGs=
-X-Google-Smtp-Source: AK7set9vuN8INCmFZBDldnjaZzya3b21KVx/xTSSssDzxqlXf8GDST84z4Er4IgIf1dKoCZy3qx6pw==
-X-Received: by 2002:adf:df8f:0:b0:2c8:dc8f:3951 with SMTP id z15-20020adfdf8f000000b002c8dc8f3951mr12301392wrl.5.1678312119704;
-        Wed, 08 Mar 2023 13:48:39 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:fbda:65f5:e873:7527])
-        by smtp.gmail.com with ESMTPSA id z6-20020adfd0c6000000b002c55efa9cbesm16065713wrh.39.2023.03.08.13.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:48:39 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE)
-Subject: [PATCH 2/2] thermal/drivers/imx: Use the thermal framework for the trip point
-Date:   Wed,  8 Mar 2023 22:48:22 +0100
-Message-Id: <20230308214822.1317086-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230308214822.1317086-1-daniel.lezcano@linaro.org>
-References: <20230308214822.1317086-1-daniel.lezcano@linaro.org>
+        with ESMTP id S229708AbjCIAZN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 19:25:13 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B9064B38;
+        Wed,  8 Mar 2023 16:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678321512; x=1709857512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9dM7kn4pp6sfTQF2DTxl3EoqHV4XCsiAN4jcbawygdc=;
+  b=VJwS7n5wt1cc0WO0/UMJSWyLihv3TNoJpFySAQxNM5JxvJ9G15yIFCzr
+   YxdH4vZAZ7AhnkApQNC27Cm0EY1yr8yXnnaCZsTr2An8OHjXaEMQjR45D
+   +Y7+RD6Abmw6pHuqhdDL+IhPTSDH9DuPA8iSc4oQS1moDa+wv5eoXhwBB
+   OGXOeuWAJ3znElF9+3cu4mlWZ7gpmgMheX+Q+QmmCZAq4DBSp+JFtI3wG
+   i0m1QhxcssMX7UIws/DiW0INEGWl5wVX0gt7rWnuDD7WYon0adYx6DKsn
+   CZr4zQRMSmIjR4Pvjqgzz5/P7HBLC9HAaREisidmZW2xf2CgQV2Qqv8Lx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="422585947"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="422585947"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 16:25:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="923005680"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="923005680"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Mar 2023 16:25:09 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pa45f-0002Vz-2J;
+        Thu, 09 Mar 2023 00:25:03 +0000
+Date:   Thu, 9 Mar 2023 08:24:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if
+ available
+Message-ID: <202303090802.G5XRtUbY-lkp@intel.com>
+References: <20230308084419.11934-5-clamor95@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308084419.11934-5-clamor95@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework provides an API to get the trip related to a
-trip point id. We want to consolidate the generic trip points code,
-thus preventing the different drivers to deal with the trip points
-after they registered them.
+Hi Svyatoslav,
 
-The set_trip_temp ops will be changed regarding the above changes but
-first we need to rework a bit the different implementation in the
-drivers.
+Thank you for the patch! Yet something to improve:
 
-The goal is to prevent using the trip id but use a trip point passed
-as parameter which will contain all the needed information.
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on krzk-dt/for-next linus/master v6.3-rc1 next-20230308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-As we don't have the trip point passed as parameter yet, we get the
-trip point using the generic trip thermal framewrok APIs and use it to
-take exactly the same decisions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20230308084419.11934-5-clamor95%40gmail.com
+patch subject: [PATCH v1 4/4] power: max17040: get thermal data from adc if available
+config: xtensa-randconfig-r002-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090802.G5XRtUbY-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7b9bbf6f2b910ef4ffab18022223573e9094f007
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
+        git checkout 7b9bbf6f2b910ef4ffab18022223573e9094f007
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-The difference with this change and the previous code is from where we
-get the thermal trip point (which is the same).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090802.G5XRtUbY-lkp@intel.com/
 
-No functional change intended.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/imx_thermal.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+   arch/xtensa/kernel/entry.o: in function `fast_syscall_spill_registers':
+   arch/xtensa/kernel/entry.S:1424:(.exception.text+0x1e3): dangerous relocation: windowed longcall crosses 1GB boundary; return may fail: make_task_dead
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_stop_work':
+>> max17040_battery.c:(.text+0x60): undefined reference to `iio_read_channel_raw'
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_get_property':
+   max17040_battery.c:(.text+0x11e): undefined reference to `iio_read_channel_raw'
+>> xtensa-linux-ld: max17040_battery.c:(.text+0x170): undefined reference to `iio_channel_release'
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_remove':
+>> max17040_battery.c:(.text+0x188): undefined reference to `iio_channel_release'
+>> xtensa-linux-ld: max17040_battery.c:(.text+0x260): undefined reference to `iio_channel_get'
+   xtensa-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_probe':
+>> max17040_battery.c:(.text+0x542): undefined reference to `iio_channel_get'
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 69ed482167f7..e4e82bdf34f1 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -330,26 +330,29 @@ static int imx_change_mode(struct thermal_zone_device *tz,
- 	return 0;
- }
- 
--static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
-+static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip_id,
- 			     int temp)
- {
- 	struct imx_thermal_data *data = thermal_zone_device_priv(tz);
-+	struct thermal_trip trip;
- 	int ret;
- 
- 	ret = pm_runtime_resume_and_get(data->dev);
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
-+	if (ret)
-+		return ret;
-+
- 	/* do not allow changing critical threshold */
--	if (trip == IMX_TRIP_CRITICAL)
-+	if (trip.type == THERMAL_TRIP_CRITICAL)
- 		return -EPERM;
--
-+	
- 	/* do not allow passive to be set higher than critical */
- 	if (temp < 0 || temp > trips[IMX_TRIP_CRITICAL].temperature)
- 		return -EINVAL;
- 
--	trips[IMX_TRIP_PASSIVE].temperature = temp;
--
- 	imx_set_alarm_temp(data, temp);
- 
- 	pm_runtime_put(data->dev);
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
