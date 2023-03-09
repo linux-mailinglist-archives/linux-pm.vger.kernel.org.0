@@ -2,80 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2126B1D43
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 09:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C116B1EF7
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 09:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjCIICo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Mar 2023 03:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S229708AbjCIIyP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 03:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCIICU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 03:02:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4965F516
-        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 00:02:00 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="335087288"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="335087288"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:02:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="923143532"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="923143532"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Mar 2023 00:01:59 -0800
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
-        by linux.intel.com (Postfix) with ESMTP id 84FA65807E7;
-        Thu,  9 Mar 2023 00:01:58 -0800 (PST)
-Message-ID: <12e008c7fd280c8abc45f417f64bb782485a40b8.camel@gmail.com>
-Subject: Re: [PATCH 3/3] intel_idle: add C0.2 state for Sapphire Rapids Xeon
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     x86@kernel.org, Linux PM Mailing List <linux-pm@vger.kernel.org>
-Date:   Thu, 09 Mar 2023 10:01:57 +0200
-In-Reply-To: <20230308123222.GF2017917@hirez.programming.kicks-ass.net>
-References: <20230306123418.720679-1-dedekind1@gmail.com>
-         <20230306123418.720679-4-dedekind1@gmail.com>
-         <20230306153215.GG1267364@hirez.programming.kicks-ass.net>
-         <CAJZ5v0gFrWCdyVNPUoU4tq2vTzcx5WtzvhbXVx1WeyTtt=Gqvg@mail.gmail.com>
-         <20230308123222.GF2017917@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        with ESMTP id S230246AbjCIIxy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 03:53:54 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC683C13
+        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 00:53:04 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id g3so1085719wri.6
+        for <linux-pm@vger.kernel.org>; Thu, 09 Mar 2023 00:53:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678351969;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wgsd04bd/4ZlXKnGTYrKD1brl2xaIFoF6CeDsO4R2+k=;
+        b=UNYfRpl5IDPD7X1lssRtZwOAbexVl2G3nPgbYuy+hCS3Dm8tMrZJwQr6CGS6QEGrTi
+         X0gQs5Fgv8FdTxoqxrvJfyIeUjKA8u5KVpznJouanmOZk4mavwCpKT+nolJcXM9NlF2e
+         OAMuYRS9Ipp6Jg1gC+Omc7pJa3e7S3g5JVycgaTA0iSzHrTIf6gdCLL1bz1Nn7MhPxkb
+         UUt/P0/p3THefFCgmRzYsXuA1A53LQxlCvlNOiFDMsUwvtQHgb6IEkgnp4FQ3BCDx1XS
+         10I4C5pNHPsSsKnqvag3nvGhNJZAm5QWU7zEB6vVEeMUVpbj5hmXKHgDOu/MBrGIbMf/
+         DN1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678351969;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgsd04bd/4ZlXKnGTYrKD1brl2xaIFoF6CeDsO4R2+k=;
+        b=DQbW1o7rhAqmUBU8MjJQ5fp+scGVs0IZyqo7xxSo+dSyreAgGiJmCr4/Z7zTJeRgy1
+         NOjCkZJKciINVD1jI8tn3M4DmlXXIWz4CcgJ97Hed8t/pYdoyVCtJdZrKKlyJziO1B+d
+         ynGGBjolIX6FLpd3cqGJD6Ozu3sIB5LiRviG3ocVrFNPCJFROOfCiLdGhqSi5azD7tqu
+         A/2shiKsqv0RdfaMhJIFI64lprUq6u7aLgB6kyP7eR5cUG0K6URskUNGlPlm5urvX7uj
+         xWNT6dS5fbtKKs+YvysL36pkcW9dDAbChwrts/6HZ89qxm4rCIY2/bDhYvW0ZevNUTHz
+         qhWQ==
+X-Gm-Message-State: AO0yUKUlCv/qz1xvZtJLLQ/WZnn67Cj1wnhnNJtpZDu2aotwWo9tlMwv
+        mMwDNcwY8Di8fKVFMgEOC+pBkQ==
+X-Google-Smtp-Source: AK7set8xpNyJ3o3WnUcz7wfa9DU7K46He76yy5JUXSygLLieBRvBj5E0uvIHvSlIDvoMZhrKwTYk4Q==
+X-Received: by 2002:adf:df06:0:b0:2c7:6bf:16cc with SMTP id y6-20020adfdf06000000b002c706bf16ccmr13176676wrl.32.1678351969396;
+        Thu, 09 Mar 2023 00:52:49 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:fbda:65f5:e873:7527? ([2a05:6e02:1041:c10:fbda:65f5:e873:7527])
+        by smtp.googlemail.com with ESMTPSA id s10-20020adfea8a000000b002c7e1a39adcsm17428865wrm.23.2023.03.09.00.52.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 00:52:49 -0800 (PST)
+Message-ID: <4e8235b8-9c2d-69e2-a965-b0787d016ef2@linaro.org>
+Date:   Thu, 9 Mar 2023 09:52:48 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] thermal/drivers/imx: Use the thermal framework for
+ the trip point
+Content-Language: en-US
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230308214822.1317086-1-daniel.lezcano@linaro.org>
+ <20230308214822.1317086-2-daniel.lezcano@linaro.org>
+ <CAOMZO5CoYi2MpVLBqoKh7g9Dhjq77KfNy3QQNi2AawjGTrFZpw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAOMZO5CoYi2MpVLBqoKh7g9Dhjq77KfNy3QQNi2AawjGTrFZpw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2023-03-08 at 13:32 +0100, Peter Zijlstra wrote:
-> > Well, it would be kind of nice to say that this is related to commit
-> > 6d9c7f51b1d9 ("cpuidle, intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-> > *again*") that is present in 6.3-rc1.
+On 09/03/2023 02:11, Fabio Estevam wrote:
+> Hi Daniel,
 > 
-> Right, but he said the patches were based on -next, which would've had
-> that commit for a fair while too.
+> On Wed, Mar 8, 2023 at 6:48 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> 
+>>          /* do not allow changing critical threshold */
+>> -       if (trip == IMX_TRIP_CRITICAL)
+>> +       if (trip.type == THERMAL_TRIP_CRITICAL)
+>>                  return -EPERM;
+>> -
+>> +
+> 
+> Unrelated change?
 
-I can see what is the problem from the above mentioned commit. But I struggle to
-reproduce it. I tried 'make W=1', and 'tools/objtool/objtool -n vmlinux.o'. I
-have 'CONFIG_HAVE_NOINSTR_VALIDATION' too.
+The 'trip' is used as an index and it is checked against 
+IMX_TRIP_CRITICAL which is a index in the array also. We replace that 
+with the real type of trip point regardless its id.
 
-I also tries this:
+But the extra line is a tab which was inserted, I will fix it.
 
-1. Build kernel with this patch-set
-2. tools/objtool/objtool -n vmlinux.o > ~/tmp/before.txt  2>&1
-3. Make clean; Build kernel with a fix (local_irq_disable() ->
-raw_local_irq_disable())
-4. tools/objtool/objtool -n vmlinux.o > ~/tmp/after.txt  2>&1
-5. diff -u ~/tmp/before.txt ~/tmp/after.txt
 
-And no difference.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Could you please help by giving a hint how to verify?
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
