@@ -2,94 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EE16B2CAC
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 19:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D3F6B314C
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 23:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCISK7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 13:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S231411AbjCIWu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 17:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCISK7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 13:10:59 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B990E8CE3;
-        Thu,  9 Mar 2023 10:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=MbP/r
-        M8Rc/DiEdJHJClQCoN2UOe8VkwrD7GNpwsewxM=; b=B1m6xNYnsi2cnw3RSN8k/
-        ULKWcyyr+tyIh4tInDbtjZkJbVzH+/Xyh8nZtYdnmIN49dVOmbPKtK72FHLZUEiS
-        O4ye5R7g74/9Q+Q448PFVr/Z6Dc94LV/+nlu9bA9cOwHoQZ5nXT497PICxUNnT8L
-        ztSVEASiWczKuHDpw9bT/c=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g2-3 (Coremail) with SMTP id _____wC3vyceIQpklqXqCg--.13222S2;
-        Fri, 10 Mar 2023 02:10:38 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     support.opensource@diasemi.com
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] power: supply: da9150: Fix use after free bug in da9150_charger_remove due to race condition
-Date:   Fri, 10 Mar 2023 02:10:36 +0800
-Message-Id: <20230309181036.262674-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231303AbjCIWuy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 17:50:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F127DF8656;
+        Thu,  9 Mar 2023 14:50:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C749B820C6;
+        Thu,  9 Mar 2023 22:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05051C4339E;
+        Thu,  9 Mar 2023 22:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678402246;
+        bh=iCMgj+CPrlEuf1ZGNOclyieKYt4V6/ejryH1dc1Ea6g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CIn1tilWaisniSGHJ3/x27i7Zyc215rJ8lNNLSQ4z6+KXGMT/XFVXxG8EAzs53XKj
+         puCH3jUhybLnNv38JLR8qwjc7W7tLbEpAMbxDCFfT6k7VG6z+WTmeZ0JVVRHBFHbUL
+         2Y/Oi+gBIOLrGetm8Uzh752LBak7sjEhBdAR6jLnh3+jScPJxLlomkB4iEfCZE5Q4r
+         g1dq4HNRik6ZMZ0gaw/HYCk4pJpRo8s5BTXD0C1YKmiCEJgyowyX6GZXI2pCDdidmu
+         NCZo95LFnijsU66gTJJBcqnmf7IMbSVFUgHTQ329V4Sr+S+2SgnCelmLgh7GzWxg5l
+         El+BnBfUOLz7A==
+Received: by mercury (Postfix, from userid 1000)
+        id 57A03106083C; Thu,  9 Mar 2023 23:50:43 +0100 (CET)
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCHv1 00/11] Add DT support for generic ADC battery
+Date:   Thu,  9 Mar 2023 23:50:30 +0100
+Message-Id: <20230309225041.477440-1-sre@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wC3vyceIQpklqXqCg--.13222S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFy7trWftr1kJF1furyUKFg_yoW8GFy5p3
-        98Cr98Kr48tFWUtF1Dtw17WFyUGa43C34Yyr4xGw45Aw13Zr4jqr1rGFnxKFy7Jr4xAF42
-        qFsaq3yIqF98WrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgAtU2I0XlTmVAAAse
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In da9150_charger_probe, &charger->otg_work is bound with
-da9150_charger_otg_work. da9150_charger_otg_ncb may be
-called to start the work.
+Hi,
 
-If we remove the module which will call da9150_charger_remove
- to make cleanup, there may be a unfinished work. The possible
-  sequence is as follows:
+This series cleans up the generic ADC battery driver and adds
+devicetree support. The plan is to use the driver to add upstream
+support for a handheld thermal camera.
 
-Fix it by canceling the work before cleanup in the mtk_jpeg_remove
+Instead of reading and exposing the monitored battery data manually
+I started the series with an addition to the power-supply core,
+which allows automatic handling of the static battery information.
+It simplifies the generic-adc-battery driver a lot and should also
+be useful for other battery drivers.
 
-CPU0                  CPUc1
+-- Sebastian
 
-                    |da9150_charger_otg_work
-da9150_charger_remove      |
-power_supply_unregister  |
-device_unregister   |
-power_supply_dev_release|
-kfree(psy)          |
-                    |
-                    | 	power_supply_changed(charger->usb);
-                    |   //use
-Fixes: c1a281e34dae ("power: Add support for DA9150 Charger")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/power/supply/da9150-charger.c | 1 +
- 1 file changed, 1 insertion(+)
+Sebastian Reichel (11):
+  dt-bindings: power: supply: adc-battery: add binding
+  power: supply: core: auto-exposure of simple-battery data
+  power: supply: generic-adc-battery: convert to managed resources
+  power: supply: generic-adc-battery: fix unit scaling
+  power: supply: generic-adc-battery: drop jitter delay support
+  power: supply: generic-adc-battery: drop charge now support
+  power: supply: generic-adc-battery: drop memory alloc error message
+  power: supply: generic-adc-battery: use simple-battery API
+  power: supply: generic-adc-battery: simplify read_channel logic
+  power: supply: generic-adc-battery: add DT support
+  power: supply: generic-adc-battery: update copyright info
 
-diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supply/da9150-charger.c
-index 14da5c595dd9..41b68f2f6ed8 100644
---- a/drivers/power/supply/da9150-charger.c
-+++ b/drivers/power/supply/da9150-charger.c
-@@ -642,6 +642,7 @@ static int da9150_charger_remove(struct platform_device *pdev)
- 	struct da9150_charger *charger = platform_get_drvdata(pdev);
- 	int irq;
- 
-+	cancel_work_sync(&charger->otg_work);
- 	/* Make sure IRQs are released before unregistering power supplies */
- 	irq = platform_get_irq_byname(pdev, "CHG_VBUS");
- 	free_irq(irq, charger);
+ .../bindings/power/supply/adc-battery.yaml    |  67 ++++++
+ drivers/power/supply/generic-adc-battery.c    | 221 +++++-------------
+ drivers/power/supply/power_supply_core.c      | 153 ++++++++++--
+ drivers/power/supply/power_supply_sysfs.c     |  16 ++
+ include/linux/power/generic-adc-battery.h     |  23 --
+ include/linux/power_supply.h                  |  31 +++
+ 6 files changed, 301 insertions(+), 210 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/adc-battery.yaml
+ delete mode 100644 include/linux/power/generic-adc-battery.h
+
 -- 
-2.25.1
+2.39.2
 
