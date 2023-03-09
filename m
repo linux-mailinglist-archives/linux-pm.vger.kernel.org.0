@@ -2,90 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9676B188A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 02:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FF46B1920
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 03:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjCIBLh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Mar 2023 20:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S229623AbjCICR0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Mar 2023 21:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCIBLg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 20:11:36 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A21CB06B;
-        Wed,  8 Mar 2023 17:11:35 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id y10so526073pfi.8;
-        Wed, 08 Mar 2023 17:11:35 -0800 (PST)
+        with ESMTP id S229501AbjCICR0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Mar 2023 21:17:26 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAFED51C;
+        Wed,  8 Mar 2023 18:17:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678324295;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7h0BP7xRpMiCpSEztDZ3QdlwVhz3jyLstzHsPlgVJDw=;
-        b=NOqnwJENL1Q9PVZRY335mvButCucwaOiAbrXXU/4G4FTRPyagudVZybZ3Fzkl5+jTb
-         KhmCff4VZhjDz/xK30mPZqkd9RFRr56gb/owUNTvYgTlX+mrHkKSbEoSnCzeN8c7nkyv
-         nfMfltsuON5u0Rs9AFqzXBYHfOqbmUKCjxTQDM5nPNKbDVHSE4HPEo3BHojQl+9iY9Cx
-         KGRAszLC4w9aVQzLR8py0w7rJ0akYNmjGng+0I+3JtP1IyIXSMRfkx/2R7ryswa8Tpz1
-         TaHI74cO7uobsyvlz14f9VIkOUg7Y6C2jSEoNywD8yUUZ/OBz4DcBxMuYTeWJVpgbfoI
-         FXsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678324295;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7h0BP7xRpMiCpSEztDZ3QdlwVhz3jyLstzHsPlgVJDw=;
-        b=g4AYSzZL8+7uODLTfehOGEGiu1cTfNVSTeQEtInTxwhkfatqhweaDzNoHmpN/VDv1T
-         PBEKKblfCemAmIbtJw50uCi1uvkv8bmLcZ7NlqUkNmV62xsznFnBvBBjPAyVHSeKXl7q
-         wug02ReFEwVQ5C8r0pp5emNZjr4pM0TPgBCI9cCrYattnCZXtm8ZCkejdL1+xEY6skDu
-         IiWcB6dETjYYt+laohhbouMP9pnUYPzssMwQoR7vP/0ZnGv0jSZio9MB0ltnZ9QwyeB5
-         d2OoEoTxxEWIGVqm0/snf3ZJprU1c8rWVZHtpJqdNQmKTaOMmHaR4du8hzQLZVtijr56
-         9w/Q==
-X-Gm-Message-State: AO0yUKXLKz38JDjvQwy8p1mwxDcnzY9uE4QlG8KIKDXU9IUJMPK8uiia
-        j6hv0xHdCj7mTeriwMJmGOM5e6CAiubTJfr/wgs=
-X-Google-Smtp-Source: AK7set8G04eAaKT8IT1CwFNzw4sP6YNYzd5eCbQqOutz3SXq0kB0WR8GgDsy9HZpPV+RT2tSY0ISSjlZ8iXC7ruzzow=
-X-Received: by 2002:a63:5904:0:b0:503:a26a:2e7a with SMTP id
- n4-20020a635904000000b00503a26a2e7amr6959585pgb.6.1678324294761; Wed, 08 Mar
- 2023 17:11:34 -0800 (PST)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1678328244;
+  x=1709864244;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9YEGvio/iqDK3JdieQdWylUvHdGNdObTcIRi0A8Xw78=;
+  b=na23Cb5BTrG3fYfLS/wGPkry7Opu99UyqFKQRHMeUsalgJnpmemxPDWv
+   TmnBJW/ljcuiM2vFf4O4lmSo0muH55dpjjbw7kgFbaY8iQb3GSr9MvDMA
+   9rAh95X1rapBURQw0Vl1VTKDs08aeUuxuTQTt0YNW2qnGklT3ltpjaRJe
+   x+JNbnExGA81XvYe4P9YftY9nQlJPF9lfU4B8Y3SGlZC6TIvmSD5JN2fi
+   OvoDpKE3TNb2iQJUZGUJJIJpLu6fxSMh3eKeLCabAwM3ON5g1HdhrOCSV
+   16IOwaCkJ3xO93WP7V/3YFLbkAxOJJITX3Au2do+klgSqwGqV5xBK9geB
+   g==;
+From:   Hermes Zhang <chenhuiz@axis.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: bq256xx: Apply TS_IGNORE from devicetree
+Date:   Thu, 9 Mar 2023 10:16:06 +0800
+Message-ID: <20230309021606.24353-1-chenhuiz@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230308214822.1317086-1-daniel.lezcano@linaro.org> <20230308214822.1317086-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20230308214822.1317086-2-daniel.lezcano@linaro.org>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 8 Mar 2023 22:11:23 -0300
-Message-ID: <CAOMZO5CoYi2MpVLBqoKh7g9Dhjq77KfNy3QQNi2AawjGTrFZpw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal/drivers/imx: Use the thermal framework for
- the trip point
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+TS_IGNORE is default off in bq256xx chip. For some battery the default
+JEITA profile is too simple to fullfill the battery requirement, so it's
+better to disable the JEITA profile (by set TS_IGNORE to on) and let
+user space to control the charging parameters base on the condition
+(e.g. temperature)
 
-On Wed, Mar 8, 2023 at 6:48=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+---
+ drivers/power/supply/bq256xx_charger.c | 28 ++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
->         /* do not allow changing critical threshold */
-> -       if (trip =3D=3D IMX_TRIP_CRITICAL)
-> +       if (trip.type =3D=3D THERMAL_TRIP_CRITICAL)
->                 return -EPERM;
-> -
-> +
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index 9cf4936440c9..abd728032910 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -41,6 +41,9 @@
+ #define BQ256XX_IINDPM_MAX_uA		3200000
+ #define BQ256XX_IINDPM_DEF_uA		2400000
+ 
++#define BQ256XX_TS_IGNORE		BIT(6)
++#define BQ256XX_TS_IGNORE_SHIFT		6
++
+ #define BQ256XX_VINDPM_MASK		GENMASK(3, 0)
+ #define BQ256XX_VINDPM_STEP_uV		100000
+ #define BQ256XX_VINDPM_OFFSET_uV	3900000
+@@ -153,6 +156,7 @@
+  * @vindpm: input voltage limit
+  * @ichg_max: maximum fast charge current
+  * @vbatreg_max: maximum charge voltage
++ * @ts_ignore: TS_IGNORE flag
+  */
+ struct bq256xx_init_data {
+ 	u32 ichg;
+@@ -163,6 +167,7 @@ struct bq256xx_init_data {
+ 	u32 vindpm;
+ 	u32 ichg_max;
+ 	u32 vbatreg_max;
++	bool ts_ignore;
+ };
+ 
+ /**
+@@ -259,6 +264,7 @@ struct bq256xx_device {
+  * @bq256xx_set_iterm: pointer to instance specific set_iterm function
+  * @bq256xx_set_iprechg: pointer to instance specific set_iprechg function
+  * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
++ * @bq256xx_set_ts_ignore: pointer to instance specific set_ts_ignore function
+  *
+  * @bq256xx_def_ichg: default ichg value in microamps
+  * @bq256xx_def_iindpm: default iindpm value in microamps
+@@ -290,6 +296,7 @@ struct bq256xx_chip_info {
+ 	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
+ 	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
+ 	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
++	int (*bq256xx_set_ts_ignore)(struct bq256xx_device *bq, bool ts_ignore);
+ 
+ 	int bq256xx_def_ichg;
+ 	int bq256xx_def_iindpm;
+@@ -670,6 +677,12 @@ static int bq25601d_set_chrg_volt(struct bq256xx_device *bq, int vbatreg)
+ 						BQ256XX_VBATREG_BIT_SHIFT);
+ }
+ 
++static int bq256xx_set_ts_ignore(struct bq256xx_device *bq, bool ts_ignore)
++{
++	return regmap_update_bits(bq->regmap, BQ256XX_INPUT_CURRENT_LIMIT,
++				BQ256XX_TS_IGNORE, (ts_ignore ? 1 : 0) << BQ256XX_TS_IGNORE_SHIFT);
++}
++
+ static int bq256xx_get_prechrg_curr(struct bq256xx_device *bq)
+ {
+ 	unsigned int prechg_and_term_curr_lim;
+@@ -1279,6 +1292,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_get_iterm = bq256xx_get_term_curr,
+ 		.bq256xx_get_iprechg = bq256xx_get_prechrg_curr,
+ 		.bq256xx_get_vindpm = bq256xx_get_input_volt_lim,
++		.bq256xx_set_ts_ignore = NULL,
+ 
+ 		.bq256xx_set_ichg = bq256xx_set_ichg_curr,
+ 		.bq256xx_set_iindpm = bq256xx_set_input_curr_lim,
+@@ -1316,6 +1330,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_ts_ignore = NULL,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1346,6 +1361,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_ts_ignore = NULL,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1376,6 +1392,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_ts_ignore = NULL,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1406,6 +1423,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_ts_ignore = bq256xx_set_ts_ignore,
+ 
+ 		.bq256xx_def_ichg = BQ25611D_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1436,6 +1454,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
+ 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_ts_ignore = bq256xx_set_ts_ignore,
+ 
+ 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1466,6 +1485,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
+ 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_ts_ignore = bq256xx_set_ts_ignore,
+ 
+ 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1582,6 +1602,12 @@ static int bq256xx_hw_init(struct bq256xx_device *bq)
+ 	if (ret)
+ 		return ret;
+ 
++	if (bq->chip_info->bq256xx_set_ts_ignore) {
++		ret = bq->chip_info->bq256xx_set_ts_ignore(bq, bq->init_data.ts_ignore);
++		if (ret)
++			return ret;
++	}
++
+ 	power_supply_put_battery_info(bq->charger, bat_info);
+ 
+ 	return 0;
+@@ -1616,6 +1642,8 @@ static int bq256xx_parse_dt(struct bq256xx_device *bq,
+ 	if (ret)
+ 		bq->init_data.iindpm = bq->chip_info->bq256xx_def_iindpm;
+ 
++	bq->init_data.ts_ignore = device_property_read_bool(bq->dev, "ts-ignore");
++
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
 
-Unrelated change?
