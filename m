@@ -2,85 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35EE6B1C4F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 08:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2126B1D43
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 09:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjCIHa1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 02:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S229708AbjCIICo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Mar 2023 03:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCIHaY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 02:30:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAA662FDE;
-        Wed,  8 Mar 2023 23:30:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA2E2CE228E;
-        Thu,  9 Mar 2023 07:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFAE8C433AA;
-        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678347019;
-        bh=pLu2EUjm0EUWWJ8Bq7EHf6FFQCmBn3/LFHoWP+HFOaM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TRQuKn87mlc14w2ao4dBhX1cwTkgy+XNoKUXHEVGLpkVkwA961dPU03wWDtoaRCoA
-         KyBg+99tIz4BIEUt4yRJjLm4kakaKOhBW2bABom535uQzWsAYQzIuv2b1wGgbxVv1I
-         h99HVGsJH5XnneOV/MClhLyGOSNsyynn8EROjm+3GxkFpvcDqjJgsJvhOCzKNNWsad
-         T7AURXwMYPT/hjEhGGqeiGj61NUZLPgN9CxIxpcYVno1yA6HaIr2DDe7b/W8+MxBYs
-         sw45PH57JbFR6WTsYZyqATB+g1nHYdBuBvdZyVhillv7JBDYRYVwybV3DK0ya5tBtz
-         fVjbtpLQp/f2A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB1B0E61B60;
-        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229770AbjCIICU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 03:02:20 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4965F516
+        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 00:02:00 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="335087288"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="335087288"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:02:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="923143532"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="923143532"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 09 Mar 2023 00:01:59 -0800
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+        by linux.intel.com (Postfix) with ESMTP id 84FA65807E7;
+        Thu,  9 Mar 2023 00:01:58 -0800 (PST)
+Message-ID: <12e008c7fd280c8abc45f417f64bb782485a40b8.camel@gmail.com>
+Subject: Re: [PATCH 3/3] intel_idle: add C0.2 state for Sapphire Rapids Xeon
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     x86@kernel.org, Linux PM Mailing List <linux-pm@vger.kernel.org>
+Date:   Thu, 09 Mar 2023 10:01:57 +0200
+In-Reply-To: <20230308123222.GF2017917@hirez.programming.kicks-ass.net>
+References: <20230306123418.720679-1-dedekind1@gmail.com>
+         <20230306123418.720679-4-dedekind1@gmail.com>
+         <20230306153215.GG1267364@hirez.programming.kicks-ass.net>
+         <CAJZ5v0gFrWCdyVNPUoU4tq2vTzcx5WtzvhbXVx1WeyTtt=Gqvg@mail.gmail.com>
+         <20230308123222.GF2017917@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/11] tree-wide: remove support for Renesas R-Car H3 ES1
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167834701982.22182.9521763384207545073.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Mar 2023 07:30:19 +0000
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue,  7 Mar 2023 17:30:28 +0100 you wrote:
-> Because H3 ES1 becomes an increasing maintenance burden and was only available
-> to a development group, we decided to remove upstream support for it. Here are
-> the patches to remove driver changes. Review tags have been gathered before
-> during an internal discussion. Only change since the internal version is a
-> plain rebase to v6.3-rc1. A branch with all removals is here:
+On Wed, 2023-03-08 at 13:32 +0100, Peter Zijlstra wrote:
+> > Well, it would be kind of nice to say that this is related to commit
+> > 6d9c7f51b1d9 ("cpuidle, intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+> > *again*") that is present in 6.3-rc1.
 > 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/h3es1-removal
-> 
-> [...]
+> Right, but he said the patches were based on -next, which would've had
+> that commit for a fair while too.
 
-Here is the summary with links:
-  - [07/11] ravb: remove R-Car H3 ES1.* handling
-    https://git.kernel.org/netdev/net-next/c/6bf0ad7f2917
+I can see what is the problem from the above mentioned commit. But I struggle to
+reproduce it. I tried 'make W=1', and 'tools/objtool/objtool -n vmlinux.o'. I
+have 'CONFIG_HAVE_NOINSTR_VALIDATION' too.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I also tries this:
 
+1. Build kernel with this patch-set
+2. tools/objtool/objtool -n vmlinux.o > ~/tmp/before.txt  2>&1
+3. Make clean; Build kernel with a fix (local_irq_disable() ->
+raw_local_irq_disable())
+4. tools/objtool/objtool -n vmlinux.o > ~/tmp/after.txt  2>&1
+5. diff -u ~/tmp/before.txt ~/tmp/after.txt
 
+And no difference.
+
+Could you please help by giving a hint how to verify?
