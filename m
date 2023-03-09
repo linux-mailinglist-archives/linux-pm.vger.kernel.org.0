@@ -2,95 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D426B3153
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Mar 2023 23:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693526B321F
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 00:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjCIWvU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 17:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S230467AbjCIXjU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 18:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjCIWvA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 17:51:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9993C791;
-        Thu,  9 Mar 2023 14:50:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230095AbjCIXjT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 18:39:19 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78610F5A9E;
+        Thu,  9 Mar 2023 15:39:18 -0800 (PST)
+Received: from mercury (unknown [185.254.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C824C61D20;
-        Thu,  9 Mar 2023 22:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8FFDC433A7;
-        Thu,  9 Mar 2023 22:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678402248;
-        bh=B2rIHqE7234kAZRPUOTS1Nsn1bhxYVZgs/rCANZZIM4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K/POFntf5lpb9LQj2VkYsSIlG8RQ3Q/A+qI5ewAi6EX3N1+cz5v5PSseS20Hef/6b
-         k3vhzADdubr1dVbWfpsp+HRZTpuHY5uVtHPIq++0J3FN/jA3X0aOyjmPaoIe2EhLj2
-         vDlO8Mmgo86jiUgDa/5Sw4JZH5Ks91rZrRI6c8/d02Z8jeVanxTWoll8d/QQE//rl+
-         Kyn7+epqDLDNsYCmyTxnBowOpSxTqeuKne/RR7JmjNO6k66oshlh8D2nUcadV121cB
-         Lnn+JToPmWnzZhF67rDlXpg5xc3+lBmYe2LCBTSPQ8Unq29Jk5bZ3BQw0q/mLmg0LK
-         DVsIncTovlZyw==
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C6146602FA9;
+        Thu,  9 Mar 2023 23:39:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678405156;
+        bh=sw0SP7znHcbMaYLFlrdtC+IVpzQcmnkAonuPK990SE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W/ma3Reoeh8jLwaUGRS9wce6nvdmXYeStCA5md3BjcboEUIUZGvGMcUWjHE61klfl
+         fwe9TpoJLed6W5IVb87jIBPbJYCG39yahdxjZ+o1mcU2uDSLDaUTc3jQHfvfvxkiZj
+         JK6AX4xafOn2sKLIswsp9qL464cRuK+Oz8IE6Vnku8l6/wE9sVB7saE1Nq0LfUpgfU
+         4wQT4YAoKpXpZWt9HzQspN7j7KdlcGu6IEKbg3QjcShVaOb8j7vOfj0DMKeftw0OdT
+         TSPMZoJwqtncjVZWgkcKHi4v1duRLXmjapqPhaXf+juBDWji2gMmg347q6J7w3jA4g
+         yX2ou+i8OAWjg==
 Received: by mercury (Postfix, from userid 1000)
-        id 6DFA51061BBE; Thu,  9 Mar 2023 23:50:43 +0100 (CET)
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCHv1 11/11] power: supply: generic-adc-battery: update copyright info
-Date:   Thu,  9 Mar 2023 23:50:41 +0100
-Message-Id: <20230309225041.477440-12-sre@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230309225041.477440-1-sre@kernel.org>
-References: <20230309225041.477440-1-sre@kernel.org>
+        id 1E448106083C; Fri, 10 Mar 2023 00:39:13 +0100 (CET)
+Date:   Fri, 10 Mar 2023 00:39:13 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     support.opensource@diasemi.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Subject: Re: [PATCH] power: supply: da9150: Fix use after free bug in
+ da9150_charger_remove due to race condition
+Message-ID: <e5b1ee16-796e-43fe-b703-3ce06aed364d@mercury.local>
+References: <20230309181036.262674-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yn5uwxsqlu5pcour"
+Content-Disposition: inline
+In-Reply-To: <20230309181036.262674-1-zyytlz.wz@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-jz4740-battery.c and s3c_adc_battery.c have been removed
-from the tree and after all of my restructuring the driver
-is basically no longer based on them.
 
-Thus update the copyright information and switch to SPDX
-license identifier while being at it.
+--yn5uwxsqlu5pcour
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Sebastian Reichel <sre@kernel.org>
----
- drivers/power/supply/generic-adc-battery.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+Hi,
 
-diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-index 436e75d226ed..ac72140dc136 100644
---- a/drivers/power/supply/generic-adc-battery.c
-+++ b/drivers/power/supply/generic-adc-battery.c
-@@ -1,13 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * Generic battery driver code using IIO
-+ * Generic battery driver using IIO
-  * Copyright (C) 2012, Anish Kumar <anish198519851985@gmail.com>
-- * based on jz4740-battery.c
-- * based on s3c_adc_battery.c
-- *
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file COPYING in the main directory of this archive for
-- * more details.
-- *
-+ * Copyright (c) 2023, Sebastian Reichel <sre@kernel.org>
-  */
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
--- 
-2.39.2
+On Fri, Mar 10, 2023 at 02:10:36AM +0800, Zheng Wang wrote:
+> In da9150_charger_probe, &charger->otg_work is bound with
+> da9150_charger_otg_work. da9150_charger_otg_ncb may be
+> called to start the work.
+>=20
+> If we remove the module which will call da9150_charger_remove
+>  to make cleanup, there may be a unfinished work. The possible
+>   sequence is as follows:
+>=20
+> Fix it by canceling the work before cleanup in the mtk_jpeg_remove
 
+mtk_jpeg_remove?
+
+>=20
+> CPU0                  CPUc1
+>=20
+>                     |da9150_charger_otg_work
+> da9150_charger_remove      |
+> power_supply_unregister  |
+> device_unregister   |
+> power_supply_dev_release|
+> kfree(psy)          |
+>                     |
+>                     | 	power_supply_changed(charger->usb);
+>                     |   //use
+> Fixes: c1a281e34dae ("power: Add support for DA9150 Charger")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+
+Looks correct to me, but the cancel_work_sync should happen after
+usb_unregister_notifier(), otherwise there is still a race
+condition.
+
+-- Sebastian
+
+>  drivers/power/supply/da9150-charger.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supply=
+/da9150-charger.c
+> index 14da5c595dd9..41b68f2f6ed8 100644
+> --- a/drivers/power/supply/da9150-charger.c
+> +++ b/drivers/power/supply/da9150-charger.c
+> @@ -642,6 +642,7 @@ static int da9150_charger_remove(struct platform_devi=
+ce *pdev)
+>  	struct da9150_charger *charger =3D platform_get_drvdata(pdev);
+>  	int irq;
+> =20
+> +	cancel_work_sync(&charger->otg_work);
+>  	/* Make sure IRQs are released before unregistering power supplies */
+>  	irq =3D platform_get_irq_byname(pdev, "CHG_VBUS");
+>  	free_irq(irq, charger);
+> --=20
+> 2.25.1
+>=20
+
+--yn5uwxsqlu5pcour
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQKbhUACgkQ2O7X88g7
++pozKRAAkt+cogTU0OitcVOC7xKmnQ9usa1JLlbQavCplC7OB37jUPNmMwexLRdn
+Y+KXwUPBV6RtIAUzqpqfRy5DRxbtTt5j4n1Ibs3l5gV/iuprncTI3tnGC/YMaJrM
+u89V5+BTW6A6qy1HjcQNFewwwC6GglBy4Upgk6h0rb4MZQxboqZzgRzv8mCmuHZl
+7yMQtmrgd7EmSrcPSkevrnVSKaKzHGmSt8KBmgAuMD9Cewhubg9cmr2gg8tHfhAs
+11zDQWBIy529qH7zgiwTFssRJ7RTcYrlobEtWKTKvOy/j9ah4s+anB4i/VGmP+lK
+DjdnBTz63sXZ+eFPqhe0Po96uRlBmGbznP3v9cXtCyWuXdVj1zzsOMUacjJ3RGwj
+4o6xlg90id5xKshOyOYF3nHSUYNSz4pOZw+DgdtVMBN/Z/VLVfRVttG2Tf3RzOoW
+/jR2wqB5FmMWgoxbtDmdCGr62KPOC8Mie22Oklr3IEZaB365CJ9Zwk8uquZJaPdy
+i2syS0mHxis5n4q7F6B2olckwDLPxYvYrXXcp/cM1HG68ixvWhHsAakyVsHxa9t8
+xnaj5fM72lK9SQhL37oFrV15nQ20nwxFhNXlGH0uA3gq5sHI2EDqJuuwkBK/X//A
+4PdQ7iJKNADN8ScFnJMwEL3eumT3MhGzWAvw4vzSP9hawR2XEzY=
+=x/P3
+-----END PGP SIGNATURE-----
+
+--yn5uwxsqlu5pcour--
