@@ -2,77 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F916B4D9D
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 17:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B315A6B4F61
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 18:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjCJQvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 11:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S231336AbjCJRsX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 12:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjCJQue (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 11:50:34 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194485980A
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 08:47:49 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id l1so5610267wry.12
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 08:47:49 -0800 (PST)
+        with ESMTP id S231286AbjCJRsT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 12:48:19 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84AD12C83B
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 09:47:44 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id v11so6398718plz.8
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 09:47:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678466867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U/LKz9Z+i8/pfBTy65hMgjCrFZDTBJvWaBtbp+nH9F8=;
-        b=Ji9AJDYh+Ic/SOQplTPaZS0E8a+2hkIiyiOZciKrF1mm7az08TYfoeW0TwPpQYfvf9
-         CrHM1x8rQpN9EzLHIWTNNd74wgiFHW8AtTzMhzBbuYEpkiER6QRzG40iytckNsSL+IRV
-         Q7hZ3p4XsHi5cDlmf7QLzoXB8jl/wkS2aC0KOGDhhxRzReIssBN28Kee22LW8rulsO6Y
-         2/U8T5IAG867JiWk2SYJRVSBJFLqLxZcqp8yvo09KsTGmTn3Ry4EBBRPxkYQvh7lNDev
-         d9oYV3P50cqyyskRBbDgi5u4VpJoni3NEVDce3s8W49rxNaw4sGxoKc+3orJ9eIH4pfK
-         7TUw==
+        d=linaro.org; s=google; t=1678470457;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cxGEPKOwr+tmbFiOp83p4hK/QKt7HqPKsBOKDzMhBlo=;
+        b=H8XP1MoNcr9KjteVGhX7zomURyl8s+0CZ8OFezv1JoRblg1566OYEafcR01mg4DhWw
+         36uFcnFShxOwidS6iMe0fCiWfQegp8tsjuegktg2Q7jSVKuJmQ6S3PfNecL3zUmaUUaU
+         V2bj7a00LdpAgDfhvKB28e4PvPKY28lcG1+bnG4KShTw6fhx9t8dL9DKOLzELjHL/b0u
+         bY3MV78r5K5zGnHB7DFYPn5rsmyMz5SdahEiQFPAluhXDrjz+YySUyEmsqckqImvHejX
+         0mK20SbzE9qKWWtoUa7cMhFkDmyMvEQyIhrEEUkrnFDeYMK9ILOuPscqxi7lbtyPfUD9
+         Q/Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U/LKz9Z+i8/pfBTy65hMgjCrFZDTBJvWaBtbp+nH9F8=;
-        b=xXWYKBYbOgd5jxsL5UkSDQYxQp2eFM7/WUWQPDPbhaqBmkZ6uCb0t7eV5VQViQYBf7
-         +3rFU3wTn0EupZjnElJjUPQ6dkYlpUoXaLNXwiS+egd0cBtOqCSwPsGDWDIsk/bg4nSU
-         /gBtwFcfPBPwkwUF8CHDew9Y9Imw0srQ/L19CJBElUr+cz1WszLKlXVyamc2mII7BM48
-         O3Wj/gfxZb9o4XnOZf/5j9/5p4vW3fRTRqMiqWVoqrDp2S2cmbaBhR9E0z71nPBlL2iM
-         zumpBkAtvqrNOe71QdY7ug2hnPrW6qh23w45Xrge8qd6fUOXgsWaK4gQnGWxOZS9Fwsi
-         CEUw==
-X-Gm-Message-State: AO0yUKWYSTvk13dkMYyyc3kYo8/U0Q9HSMiUCblzPS0fs16/pt1FTcGv
-        O5nJqz3gVw3A4Neh7T1WZ0E3ZA==
-X-Google-Smtp-Source: AK7set/oodN4OVmnyHcGHYwIoEfj4k6WxmAE3DKgRrwUzmL51ZJ0tqbollXaa3GQ+O3mki2sBL4lLw==
-X-Received: by 2002:a5d:4b46:0:b0:2cb:72c2:3d12 with SMTP id w6-20020a5d4b46000000b002cb72c23d12mr15591639wrs.68.1678466867480;
-        Fri, 10 Mar 2023 08:47:47 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id x4-20020a5d60c4000000b002c6d0462163sm205297wrt.100.2023.03.10.08.47.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 08:47:47 -0800 (PST)
-Message-ID: <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
-Date:   Fri, 10 Mar 2023 16:47:46 +0000
+        d=1e100.net; s=20210112; t=1678470457;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cxGEPKOwr+tmbFiOp83p4hK/QKt7HqPKsBOKDzMhBlo=;
+        b=BrDfW9EGx03V/TNFyYPRux67grY4YGgJ7JhxF/ZCIV0LVT2PPx908o1oP5DIb6WYe5
+         5WTa0yEH7NJxhhWS/t5AvwMhQw0t0gLNewopLbOFgzEZ1OsSqt5fuxkr+aGCfCTgZ7df
+         5owhXKGzXV2x+dg0p4EFiRziB9VsCg+rSDc+JQxhidwQtYPSBPYCL9m7yUg+YXMDuqoT
+         dVPSLbp67Lqez1eFq7FKGxRD0ZW6W9u9rYlYnTpbZNBzc/ljwTSFqtvb40nDyTkj6GvS
+         mmiF+eFMrlR1REVjO7A0QJ/h2wi308sv6NUJ01r9c6NGbK6sIRM4AQa+g7JTl0SuR2Eo
+         gRpg==
+X-Gm-Message-State: AO0yUKWniO2y+mJKHn3lZxRld4a01HYN8fBa5oTa7H/UuQdEtFJufnz+
+        zhvUsVAqXKJtcBIhvV8a9v9KMZTY9CnV0QFiUl+w9fZ7EsRERmts
+X-Google-Smtp-Source: AK7set9qlzyfJQkPmeS1QvtKn+DzHcVEf//e44mpadhloRlsZ0QlMRrI+kEDfbQXl075/XuicaWTao1yhsQc5P/VAV8=
+X-Received: by 2002:a17:902:edc2:b0:19a:9834:bb2c with SMTP id
+ q2-20020a170902edc200b0019a9834bb2cmr10491816plk.11.1678470456953; Fri, 10
+ Mar 2023 09:47:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <50f03895-816f-be8d-d956-d237fb13f5a0@linaro.org>
- <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230310144703.1541888-1-robh@kernel.org>
+In-Reply-To: <20230310144703.1541888-1-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 10 Mar 2023 18:46:59 +0100
+Message-ID: <CAPDyKFoVUQEmseNT+dZFJDfwh7ijTwUs5_NckpZLhRQ=VuFpFQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Use of_property_present() for testing DT
+ property presence
+To:     Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,58 +73,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/03/2023 14:26, Konrad Dybcio wrote:
-> 
-> 
-> On 10.03.2023 15:21, Bryan O'Donoghue wrote:
->> On 08/03/2023 21:40, Konrad Dybcio wrote:
->>> Some (but not all) providers (or their specific nodes) require
->>> specific clocks to be turned on before they can be accessed. Failure
->>> to ensure that results in a seemingly random system crash (which
->>> would usually happen at boot with the interconnect driver built-in),
->>> resulting in the platform not booting up properly.
->>
->> Can you give an example of which clocks on which SoC's ?
-> See for example 67fb53745e0b
-> 
-> This was a clock documented downstream under the node-qos clocks here:
-> 
-> https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.5.7.r1/arch/arm/boot/dts/qcom/msm8996-bus.dtsi#L102-L109
-> 
-> but there are occasions where such clocks are undocumented and downstream
-> skips them because it relies on them being on by miracle, such as the case
-> of MASTER_IPA and the IPA rpmcc clock on msm8998. Downstream has no
-> sync_state, so they would only set the QoS registers when the relevant
-> hardware was online, so the clocks were on already.
+On Fri, 10 Mar 2023 at 15:47, Rob Herring <robh@kernel.org> wrote:
+>
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-What switched the clocks on ? Presumably LK.
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Is this a symptom of using a bootloader other than LK ? If you use the 
-same bootloader, then why hasn't the bootloader/LK already set it up on 
-your platform ?
+Rafael, can you please pick this via your tree.
 
->>
->> Is the intention of this patch to subsequently go through *.dts *.dtsi and start to remove assigned-clocks ?
->>
->> Are we saying that currently there ought to be assigned-clocks for some of these NoC declarations ?
-> Not really, assigned-clocks are used for static ratesetting, see
-> for example dwc3 nodes where we need it to be fast enough for
-> HS/SS operation at all times (though that should have prooobably
-> been handled in the driver but it's a separate topic), I don't
-> think any of them were used to combat what this commit tries to.
+Kind regards
+Uffe
 
-I think you could use assigned-clocks for that ..
-
-So its not part of your series but then presumably you have a follow-on 
-patch for the 8998 dts that points your ->intf_clks at these then ?
-
-clocks = <&clock_gcc clk_aggre2_noc_clk>,
-          <&clock_gcc clk_gcc_ufs_axi_clk>,
-          <&clock_gcc clk_gcc_aggre2_ufs_axi_clk>;
-
-It seems like the right thing to do..
-
-Still not clear why these clocks are off.. your bootchain ?
-
----
-bod
+> ---
+>  drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
+>  drivers/cpuidle/cpuidle-riscv-sbi.c   | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index 6ad2954948a5..e875ddadc51b 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -165,7 +165,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+>          * initialize a genpd/genpd-of-provider pair when it's found.
+>          */
+>         for_each_child_of_node(np, node) {
+> -               if (!of_find_property(node, "#power-domain-cells", NULL))
+> +               if (!of_property_present(node, "#power-domain-cells"))
+>                         continue;
+>
+>                 ret = psci_pd_init(node, use_osi);
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> index be383f4b6855..1fab1abc6eb6 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -497,7 +497,7 @@ static int sbi_genpd_probe(struct device_node *np)
+>          * initialize a genpd/genpd-of-provider pair when it's found.
+>          */
+>         for_each_child_of_node(np, node) {
+> -               if (!of_find_property(node, "#power-domain-cells", NULL))
+> +               if (!of_property_present(node, "#power-domain-cells"))
+>                         continue;
+>
+>                 ret = sbi_pd_init(node);
+> @@ -548,8 +548,8 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+>         for_each_possible_cpu(cpu) {
+>                 np = of_cpu_device_node_get(cpu);
+>                 if (np &&
+> -                   of_find_property(np, "power-domains", NULL) &&
+> -                   of_find_property(np, "power-domain-names", NULL)) {
+> +                   of_property_present(np, "power-domains") &&
+> +                   of_property_present(np, "power-domain-names")) {
+>                         continue;
+>                 } else {
+>                         sbi_cpuidle_use_osi = false;
+> --
+> 2.39.2
+>
