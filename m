@@ -2,67 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F27B6B4CF2
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 17:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F916B4D9D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 17:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjCJQ3K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 11:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S231701AbjCJQvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 11:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCJQ2s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 11:28:48 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B47512B3D1;
-        Fri, 10 Mar 2023 08:25:19 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id fr5-20020a17090ae2c500b0023af8a036d2so9576745pjb.5;
-        Fri, 10 Mar 2023 08:25:19 -0800 (PST)
+        with ESMTP id S231232AbjCJQue (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 11:50:34 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194485980A
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 08:47:49 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l1so5610267wry.12
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 08:47:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678465518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mZckrDh0gNUjjPnxw6spU9sZzJ4TszybOgyApFqlu7U=;
-        b=LU7+073O6w5U52IXebrmCaUh8hNcAo33J7HqB2q3WawBCue6VU6yp37Nhdezu/MJVR
-         mFoN8iEGpgvqjEW5JzJoCvOygDMtWyJ+YS0Uu1kErjxxzoZfIv70As1YtIE7qrOMkk3z
-         MrRTe9X2DpYdJWvypqemJtZZND4CLT+CDYg9nKkTDo7ZY42sN2sWEULZVdJ3n+ntbzH3
-         hvZdf72swe/0aPELOy2Q3e1VmNSAZUSBNl/I6dAV0f2K1dTN9eu4VTNsCh52EsNHYfdA
-         37fwk6WgYAiGIsmYc+G2FH66YnAUFvxQMN+r1AGIou6Tjnt6asN1Pls9HpR95mJDnvub
-         xT1Q==
+        d=linaro.org; s=google; t=1678466867;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U/LKz9Z+i8/pfBTy65hMgjCrFZDTBJvWaBtbp+nH9F8=;
+        b=Ji9AJDYh+Ic/SOQplTPaZS0E8a+2hkIiyiOZciKrF1mm7az08TYfoeW0TwPpQYfvf9
+         CrHM1x8rQpN9EzLHIWTNNd74wgiFHW8AtTzMhzBbuYEpkiER6QRzG40iytckNsSL+IRV
+         Q7hZ3p4XsHi5cDlmf7QLzoXB8jl/wkS2aC0KOGDhhxRzReIssBN28Kee22LW8rulsO6Y
+         2/U8T5IAG867JiWk2SYJRVSBJFLqLxZcqp8yvo09KsTGmTn3Ry4EBBRPxkYQvh7lNDev
+         d9oYV3P50cqyyskRBbDgi5u4VpJoni3NEVDce3s8W49rxNaw4sGxoKc+3orJ9eIH4pfK
+         7TUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678465518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mZckrDh0gNUjjPnxw6spU9sZzJ4TszybOgyApFqlu7U=;
-        b=iSul0KhNgkruVz4fhm1HvETtkCKdWrtfVHKEUXse9f9vRCpbKC4V0oiysH2utkypwV
-         suZfHK4xcpCMUOOT3Ynk6VNbdSxuME9d+beq8YkmCPrUbVrSxYpu4oVxW4eug4ta+q1I
-         GgcFHVLbi4Bi5q8XRapw+EeWQRJUiiWtoZUDfMTLJvc9JwYkYB06T+tO+w3LY7kxQa5w
-         VkBEqnPMdLEm2sT1v70qtBqNF42fTrqzs8EipdsPFrlvnZIXSyujI7jFBQ5SsDhHr1RS
-         SRNnyyJxMV+rQ4zaUtjAlCIC0PGtlBBzj0XG14BcZXIZGjOANUxOAHOcCsWqxC3u3f/p
-         /ctA==
-X-Gm-Message-State: AO0yUKVViP214yzZdXOdXLR9XEaG0US1+rLIYJOi+FSTRoLoE5ECaIvC
-        YI2z5Dq1BkXcvtBVj+82tdN2jweLQ7bKBMvsnMr4/I6nRquf6dCK
-X-Google-Smtp-Source: AK7set8+qo+SOVmBxISEqgS/Jk5ePIN5CsE2VCL/n6TBHX+YlJnKbNcENSGjcwXTAzOWa9HHRyjL/Yqa5pVjBiagi6A=
-X-Received: by 2002:a17:903:25d2:b0:19a:ec61:98d4 with SMTP id
- jc18-20020a17090325d200b0019aec6198d4mr9940965plb.0.1678465518660; Fri, 10
- Mar 2023 08:25:18 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678466867;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/LKz9Z+i8/pfBTy65hMgjCrFZDTBJvWaBtbp+nH9F8=;
+        b=xXWYKBYbOgd5jxsL5UkSDQYxQp2eFM7/WUWQPDPbhaqBmkZ6uCb0t7eV5VQViQYBf7
+         +3rFU3wTn0EupZjnElJjUPQ6dkYlpUoXaLNXwiS+egd0cBtOqCSwPsGDWDIsk/bg4nSU
+         /gBtwFcfPBPwkwUF8CHDew9Y9Imw0srQ/L19CJBElUr+cz1WszLKlXVyamc2mII7BM48
+         O3Wj/gfxZb9o4XnOZf/5j9/5p4vW3fRTRqMiqWVoqrDp2S2cmbaBhR9E0z71nPBlL2iM
+         zumpBkAtvqrNOe71QdY7ug2hnPrW6qh23w45Xrge8qd6fUOXgsWaK4gQnGWxOZS9Fwsi
+         CEUw==
+X-Gm-Message-State: AO0yUKWYSTvk13dkMYyyc3kYo8/U0Q9HSMiUCblzPS0fs16/pt1FTcGv
+        O5nJqz3gVw3A4Neh7T1WZ0E3ZA==
+X-Google-Smtp-Source: AK7set/oodN4OVmnyHcGHYwIoEfj4k6WxmAE3DKgRrwUzmL51ZJ0tqbollXaa3GQ+O3mki2sBL4lLw==
+X-Received: by 2002:a5d:4b46:0:b0:2cb:72c2:3d12 with SMTP id w6-20020a5d4b46000000b002cb72c23d12mr15591639wrs.68.1678466867480;
+        Fri, 10 Mar 2023 08:47:47 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id x4-20020a5d60c4000000b002c6d0462163sm205297wrt.100.2023.03.10.08.47.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 08:47:47 -0800 (PST)
+Message-ID: <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
+Date:   Fri, 10 Mar 2023 16:47:46 +0000
 MIME-Version: 1.0
-References: <20230309174728.233732-1-zyytlz.wz@163.com> <e5b1ee16-796e-43fe-b703-3ce06aed364d@mercury.local>
-In-Reply-To: <e5b1ee16-796e-43fe-b703-3ce06aed364d@mercury.local>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Sat, 11 Mar 2023 00:25:06 +0800
-Message-ID: <CAJedcCzBWAHf=MQMDtL2bpCmCAyZGeeUyE1jFUgchXjRBZrC-g@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: bq24190: Fix use after free bug in
- bq24190_remove due to race condition
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+ <50f03895-816f-be8d-d956-d237fb13f5a0@linaro.org>
+ <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,65 +81,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian Reichel <sebastian.reichel@collabora.com> =E4=BA=8E2023=E5=B9=B43=
-=E6=9C=8810=E6=97=A5=E5=91=A8=E4=BA=94 07:40=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi,
->
-> On Fri, Mar 10, 2023 at 01:47:28AM +0800, Zheng Wang wrote:
-> > In bq24190_probe, &bdi->input_current_limit_work is bound
-> > with bq24190_input_current_limit_work. When external power
-> > changed, it will call bq24190_charger_external_power_changed
-> >  to start the work.
-> >
-> > If we remove the module which will call bq24190_remove to make
-> > cleanup, there may be a unfinished work. The possible
-> > sequence is as follows:
-> >
-> > CPU0                  CPUc1
-> >
-> >                     |bq24190_input_current_limit_work
-> > bq24190_remove      |
-> > power_supply_unregister  |
-> > device_unregister   |
-> > power_supply_dev_release|
-> > kfree(psy)          |
-> >                     |
-> >                     | power_supply_get_property_from_supplier
-> >                     |   //use
-> >
-> > Fix it by finishing the work before cleanup in the bq24190_remove
-> >
-> > Fixes: 97774672573a ("power_supply: Initialize changed_work before call=
-ing device_add")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
->
-> Thanks, queued to fixes branch.
->
-Very glad to hear that. Thanks  for your effort.
+On 10/03/2023 14:26, Konrad Dybcio wrote:
+> 
+> 
+> On 10.03.2023 15:21, Bryan O'Donoghue wrote:
+>> On 08/03/2023 21:40, Konrad Dybcio wrote:
+>>> Some (but not all) providers (or their specific nodes) require
+>>> specific clocks to be turned on before they can be accessed. Failure
+>>> to ensure that results in a seemingly random system crash (which
+>>> would usually happen at boot with the interconnect driver built-in),
+>>> resulting in the platform not booting up properly.
+>>
+>> Can you give an example of which clocks on which SoC's ?
+> See for example 67fb53745e0b
+> 
+> This was a clock documented downstream under the node-qos clocks here:
+> 
+> https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.5.7.r1/arch/arm/boot/dts/qcom/msm8996-bus.dtsi#L102-L109
+> 
+> but there are occasions where such clocks are undocumented and downstream
+> skips them because it relies on them being on by miracle, such as the case
+> of MASTER_IPA and the IPA rpmcc clock on msm8998. Downstream has no
+> sync_state, so they would only set the QoS registers when the relevant
+> hardware was online, so the clocks were on already.
 
-Best regards,
-Zheng
+What switched the clocks on ? Presumably LK.
 
->
-> >  drivers/power/supply/bq24190_charger.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/sup=
-ply/bq24190_charger.c
-> > index be34b9848450..de67b985f0a9 100644
-> > --- a/drivers/power/supply/bq24190_charger.c
-> > +++ b/drivers/power/supply/bq24190_charger.c
-> > @@ -1906,6 +1906,7 @@ static void bq24190_remove(struct i2c_client *cli=
-ent)
-> >       struct bq24190_dev_info *bdi =3D i2c_get_clientdata(client);
-> >       int error;
-> >
-> > +     cancel_delayed_work_sync(&bdi->input_current_limit_work);
-> >       error =3D pm_runtime_resume_and_get(bdi->dev);
-> >       if (error < 0)
-> >               dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", error);
-> > --
-> > 2.25.1
-> >
+Is this a symptom of using a bootloader other than LK ? If you use the 
+same bootloader, then why hasn't the bootloader/LK already set it up on 
+your platform ?
+
+>>
+>> Is the intention of this patch to subsequently go through *.dts *.dtsi and start to remove assigned-clocks ?
+>>
+>> Are we saying that currently there ought to be assigned-clocks for some of these NoC declarations ?
+> Not really, assigned-clocks are used for static ratesetting, see
+> for example dwc3 nodes where we need it to be fast enough for
+> HS/SS operation at all times (though that should have prooobably
+> been handled in the driver but it's a separate topic), I don't
+> think any of them were used to combat what this commit tries to.
+
+I think you could use assigned-clocks for that ..
+
+So its not part of your series but then presumably you have a follow-on 
+patch for the 8998 dts that points your ->intf_clks at these then ?
+
+clocks = <&clock_gcc clk_aggre2_noc_clk>,
+          <&clock_gcc clk_gcc_ufs_axi_clk>,
+          <&clock_gcc clk_gcc_aggre2_ufs_axi_clk>;
+
+It seems like the right thing to do..
+
+Still not clear why these clocks are off.. your bootchain ?
+
+---
+bod
