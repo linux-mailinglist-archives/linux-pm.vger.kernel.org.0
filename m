@@ -2,132 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA706B501D
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 19:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0D56B5168
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 21:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjCJScM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 10 Mar 2023 13:32:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S231251AbjCJUHH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 15:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjCJScK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 13:32:10 -0500
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEEB1091CD;
-        Fri, 10 Mar 2023 10:32:09 -0800 (PST)
-Received: by mail-ed1-f49.google.com with SMTP id j11so24240616edq.4;
-        Fri, 10 Mar 2023 10:32:08 -0800 (PST)
+        with ESMTP id S230093AbjCJUHG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 15:07:06 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365B2127116
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 12:06:57 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x3so25152843edb.10
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 12:06:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678478815;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YIfiMP3YESLd/oa/N7VLY54fnA1n1mTobvMyaeAJG5I=;
+        b=iGQt9h62mnOTsUoZavnl37r/m6EoFfEyryWnN1OsmzpjCwdXw+DPmgZQYPg34N9Sut
+         GBePtrnBp0ZKDZ7tKGeeOSr72F/QLtTC3uh04U3j1sBy/LP124DbBOZg3BNJBrgTHFB3
+         XoGmwC0Uemtlq6tJ6saDG6/9Uv0LOV3vQhpuOQead4HZWLZTqxz8nD0vifOYsfY41f6x
+         etSSU/8Q92k5hPLlXOcCbaui8VMt/qNfsLByZkmISBwhr2n4u96Jyy4mSmfNFlsihoy8
+         nz8Imtz50qcLgjx2oOVuOeBpgxu7WfIa0wcNzXdeNj5X5K2l0Ecscnv8Ez3vms67Nt+g
+         B6sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678473127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vhle+6K5lcSTVeYkIgUr8IwNgitz8cHVNEe9xDNhtKw=;
-        b=t7GGuj+gAyT6IZst+XTW2Bq87kc0WteWbAV9Zgqadi6D3r/Dt6r4q7MajvTcwi8Uqm
-         a2LXSu+utTKclBMmJh2EWrDiqgJI0EU7xgBh6zBYjGPMC2gg9m1miXeLqwdlszpYMwJ9
-         zLIRa9ed0cPekTy890z7lEYzHITUyVKPH7RfxyKXFuehcgNlSnSsvlqzIDJdVmGjAEFM
-         faYBudiltUGgRSYQt+oQiF/r/WAYcVtCxd8ergKnt3MvtN8HSEuRMK3x8XhNxHKosXoM
-         NMCbG3auQ/0Zsa2SNyONdY7RQqdrTCaRQOeIwPQntriH7ylaAWkRHJuoeQr+wfoJ4zn6
-         C6Qg==
-X-Gm-Message-State: AO0yUKX9QCO/YAgUc1DISEWcrs1XqtqkxbvtXEHfz+92N1BSyBXi8YTH
-        0XSwoscL+O0/1fmpRvbuq5BleaAR4kSe7NqNrZw=
-X-Google-Smtp-Source: AK7set8Whgyw4XUn06Ie6C7aHXNffp2O5UAX9qlCbbLhSjkBhgPqRnkIbFbzNXrcEToa7euMtB6x0qdP2xqxCruvhJU=
-X-Received: by 2002:a50:d758:0:b0:4bd:ce43:9ee8 with SMTP id
- i24-20020a50d758000000b004bdce439ee8mr15032900edj.6.1678473127483; Fri, 10
- Mar 2023 10:32:07 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678478815;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YIfiMP3YESLd/oa/N7VLY54fnA1n1mTobvMyaeAJG5I=;
+        b=KFXflduaWeOKZPVV3t2xQh0F9KcicrZBn72SGS07L1kMSUpi0RLWBhz8J+Dm6VKtWT
+         E1kcIMTqRC9mf9SolPkz9ULeuzxz32xBe7e1BSLGcPUAMXiSQB5A6Mo/il5p5OBHg7hx
+         VIx+XJN94LIvgR+P3291e0/8c+Qtv9egaAdomG2wO3VtzMAOJuPw/g1U+OO/4Zd0Es86
+         +WpViWPJUEVpzzhEMC1jdja7pkil4As9k+IqI4d2VT8kPkRFdJXdvaG49YhqzkCMV9po
+         J6kFNf+/btselmNcNBbf18Ki/GI3wBe1ZoVPKIdA3PAZTq2sJZhryX4HWC/+H4rrcah6
+         w4RA==
+X-Gm-Message-State: AO0yUKX0/hYUzCm5xPi3SYZ0leOYHx4UjCGDxO54B8epbZ0y1SZu4rp/
+        kNgc3H3ixOceVI8jT1QQxtpGdxtn+aKLH3Y41Jg=
+X-Google-Smtp-Source: AK7set9dhsGv4dhMKgAdhPFfT8I0cHuw6MK8CUdJF+4SF1RDBXCP/KvCfvd2pZjlUPEoFRIcVZ1STg==
+X-Received: by 2002:a17:907:9719:b0:895:ef96:9d9b with SMTP id jg25-20020a170907971900b00895ef969d9bmr29890226ejc.30.1678478815726;
+        Fri, 10 Mar 2023 12:06:55 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
+        by smtp.gmail.com with ESMTPSA id mp27-20020a1709071b1b00b008d398a4e687sm234154ejc.158.2023.03.10.12.06.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 12:06:55 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] power: reset: qcom-pon: drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 21:06:52 +0100
+Message-Id: <20230310200652.19926-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <2148907.irdbgypaU6@kreacher> <2885079.e9J7NaK4W3@kreacher> <bdafdb137ec992cee592606bc025f8f3e2cf3677.camel@intel.com>
-In-Reply-To: <bdafdb137ec992cee592606bc025f8f3e2cf3677.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Mar 2023 19:31:56 +0100
-Message-ID: <CAJZ5v0i+7AbFg1s8Bc+WA7ywOeFDcbrTVnJD8_1_DsY3abZVNA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] ACPI: processor: Reorder acpi_processor_driver_init()
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Wang, Quanxian" <quanxian.wang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 5:55 PM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Fri, 2023-03-03 at 20:19 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The cpufreq policy notifier in the ACPI processor driver may as
-> > well be registered before the driver itself, which causes
-> > acpi_processor_cpufreq_init to be true (unless the notifier
-> > registration fails, which is unlikely at that point) when the
-> > ACPI CPU thermal cooling devices are registered, so the
-> > processor_get_max_state() result does not change while
-> > acpi_processor_driver_init() is running.
-> >
-> > Change the ordering in acpi_processor_driver_init() accordingly
-> > to prevent the max_state value from remaining 0 permanently for all
-> > ACPI CPU cooling devices.
-> >
-> > Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
-> > Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
-> > Link:
-> > https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/acpi/processor_driver.c |   12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > Index: linux-pm/drivers/acpi/processor_driver.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/acpi/processor_driver.c
-> > +++ linux-pm/drivers/acpi/processor_driver.c
-> > @@ -263,6 +263,12 @@ static int __init acpi_processor_driver_
-> >       if (acpi_disabled)
-> >               return 0;
-> >
-> > +     if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
-> > +                                    CPUFREQ_POLICY_NOTIFIER)) {
-> > +             acpi_processor_cpufreq_init = true;
-> > +             acpi_processor_ignore_ppc_init();
-> > +     }
-> > +
-> >       result = driver_register(&acpi_processor_driver);
-> >       if (result < 0)
-> >               return result;
-> > @@ -276,12 +282,6 @@ static int __init acpi_processor_driver_
-> >       cpuhp_setup_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD, "acpi/cpu-
-> > drv:dead",
-> >                                 NULL, acpi_soft_cpu_dead);
-> >
-> > -     if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
-> > -                                    CPUFREQ_POLICY_NOTIFIER)) {
-> > -             acpi_processor_cpufreq_init = true;
-> > -             acpi_processor_ignore_ppc_init();
-> > -     }
-> > -
-> >       acpi_processor_throttling_init();
-> >       return 0;
-> >  err:
-> >
-> Just FYI.
-> I need some time to ramp up on the ordering here to double confirm this
-> does not break any dependency, too many things are involved here :p.
+The Qualcomm SoC power-on driver is specific to ARCH_QCOM which depends
+on OF thus the driver is OF-only.  It's of_device_id table is built
+unconditionally, thus of_match_ptr() for ID table does not make sense.
 
-Unless I've overlooked something tricky, it should be fine, but of
-course verifying this independently won't hurt.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/power/reset/qcom-pon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I will test the whole patch series later this week.
+diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
+index 16bc01738be9..ebdcfb28c4a0 100644
+--- a/drivers/power/reset/qcom-pon.c
++++ b/drivers/power/reset/qcom-pon.c
+@@ -91,7 +91,7 @@ static struct platform_driver pm8916_pon_driver = {
+ 	.probe = pm8916_pon_probe,
+ 	.driver = {
+ 		.name = "pm8916-pon",
+-		.of_match_table = of_match_ptr(pm8916_pon_id_table),
++		.of_match_table = pm8916_pon_id_table,
+ 	},
+ };
+ module_platform_driver(pm8916_pon_driver);
+-- 
+2.34.1
 
-Thank you!
