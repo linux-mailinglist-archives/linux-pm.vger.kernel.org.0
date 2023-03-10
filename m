@@ -2,99 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0423F6B5237
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 21:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF0D6B5320
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 22:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjCJUyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 15:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S232017AbjCJVp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 16:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjCJUyY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 15:54:24 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F871219D0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 12:54:21 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id da10so25720066edb.3
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 12:54:21 -0800 (PST)
+        with ESMTP id S232105AbjCJVoz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 16:44:55 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F6F12115E
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:43:55 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id cy23so25966865edb.12
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:43:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678481659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pV+3K/l4NW0KqVodGPo/7yZhA2AMdyGxW2HfljJshZg=;
-        b=HMcer2mG2SfSU0FZPwL6ALRBf1ua3QSr3S8MjIqFS5QMVkJzNCW5m++NnQVmu8+KU2
-         yda+Ju2Y1hKNd2HdwQ5ycymSqzWefcXZNJLI1ilJN8Uf8LtAlJhlpEgcyd3qOac6sfc7
-         QXvW+TOFIv66GlxPA59bbFt0VI9u7AoGvk6vZbepPKjCF9cZUT3gaSM6kdbiM66BchgH
-         NHxpBLmMMjQT6AhvV0o6WZa1hIL6cGi6jtL/AoOJXnhM0O1BGO4S6IG2uEfek0YwgxvE
-         sw4ttgw27H8h9yX0spEQBqCN+v0YZaUtKduF3wvq4wKwFl1TWdb0H4XSKtdxhck7kj5L
-         eRSw==
+        d=linaro.org; s=google; t=1678484617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VtdBZBHjdNz7Y46m59SHrmzEAnff5o2OBs5iW9CHcGo=;
+        b=xF4Q47yj1z4o8N1c5ExKygycmKfV4vmuKm+QjVP/qyjMK83nq9YYLNODjBSgjhQDnT
+         8jl1aMJl9sVn2DNo3QAlFGrjA0JOdHD8a8YmarriE5TTSSXjX29YNSyGeXM9CyOOMJ8L
+         jjnuUjg747DVx5xycOXofQb0yyr9CiK5X9tAKnVtlR/dgGTWYXXrHCzbEshp1Ri5UNFD
+         YUK9jzV0DVFPBQ64gFCPtBv1ErLLbjlry8lj9VOeLdFjcLXBqwdSyXjo7oHf6khjujln
+         uJv1oX152EL4Vo/07Sf6Qp1Eisvmtlu0fxrtuetUoiJprcXLqSQgvTwuiKWPCP8nW9AV
+         gy9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678481659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pV+3K/l4NW0KqVodGPo/7yZhA2AMdyGxW2HfljJshZg=;
-        b=Tjfi8Qhlw20bd5M2AoA+Yaeq8HwwLC1MVmDetPzx9lTUD3axayTAwQJl3mqahZ3gF+
-         3B3WeJFneLE5Kdigj8lhEuZA9Arv9SqFEt9Yi5U+6RWQohBQ0OZK8OGG+va/Waa+nPk/
-         wL7G9zsKy8+UuUkxUE5H/45lXqqs7RETi56XiipRDKWwfykGo0jWVK6WxAKDSNAzu+R+
-         jjRvUwhQfv7exVgaAgng0Ah492dBjiyaxh/07lcPQTzt7jJNU6d0ZOo7ulMVNAhr5lDy
-         W2WfLeGokzx9FijfuOPK2/WYUNOlZZjbgREfUcTI/UuTP612uLJclqO2pFns10JWaa8a
-         ceOw==
-X-Gm-Message-State: AO0yUKX05TZsyfgvAbJkaOS+8ro0q0xwozbOlFgHfJIxproOTXaoq/7e
-        QlRDoCnGllOAlX/Gb26ejqabsw==
-X-Google-Smtp-Source: AK7set+OskZI0FGLKRYk9/mBRZWSKmHBniUWPM1QIHJQYeZ1yGlN50SFxMnUaSpFBMyaPh27Fq4LXA==
-X-Received: by 2002:a17:907:8686:b0:8f7:5038:9896 with SMTP id qa6-20020a170907868600b008f750389896mr33940161ejc.70.1678481659688;
-        Fri, 10 Mar 2023 12:54:19 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:34:52e3:a77e:cac5? ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id o20-20020a170906359400b008cae50b0115sm288002ejb.87.2023.03.10.12.54.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 12:54:19 -0800 (PST)
-Message-ID: <e5a6a775-19be-5e75-a4de-922fb4f0f8e8@linaro.org>
-Date:   Fri, 10 Mar 2023 21:54:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] power: reset: qcom-pon: drop of_match_ptr for ID table
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
+        d=1e100.net; s=20210112; t=1678484617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VtdBZBHjdNz7Y46m59SHrmzEAnff5o2OBs5iW9CHcGo=;
+        b=Tn6kBZsm0cJuEo+tYxYHOSKqX0Bjf9CThkkOxLnnUkqZCMSS5+SvWbhkQ3kbKNHrPy
+         9wbk/fGsX+rGEZRnvgeuZubsi4fV+Tu0ecYLqSwAr4hhkzWR/kgbEJtzIr5J9kzjkeyj
+         2NTJySioMfP0C6W4cQ4wgXgri+0Z4Y/0G9NzEeJWX1y/FzXZPuaKcTIyifY7jOY7mlrH
+         beRS2RPhFxalQYWxXCO/f9GdTzZ2vmDcEdvFLMcE5iAtj2knb6d8SzXFewXxjGWo4Vr5
+         nyki2C9xJ4RV6/9GToUR4i/ZIcoaymvVrC0/DKtq4uce0L9w4wqAq+26WN4UKI06xSAL
+         k9qA==
+X-Gm-Message-State: AO0yUKUxp9qt7k49q2XRmvwpmOcM6lIvbOms5G3lBqojYipWMzmf8mWe
+        e1i3Ujm9r6F7V2VJb9ta4FqbWQ==
+X-Google-Smtp-Source: AK7set9ZnrYfuf8zWlLeHJSEk4HSH1D3c437QABGG/RfrwJXmg4A4Gxrs81DwgbcSe7Z36QyBFQkyg==
+X-Received: by 2002:a17:907:8686:b0:8f7:5038:9896 with SMTP id qa6-20020a170907868600b008f750389896mr34069311ejc.70.1678484617366;
+        Fri, 10 Mar 2023 13:43:37 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
+        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 13:43:36 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230310200652.19926-1-krzysztof.kozlowski@linaro.org>
- <20230310204811.sjfl3lzlmijzeatf@SoMainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310204811.sjfl3lzlmijzeatf@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/9] ASoC: qcom: lpass-sc7280: Drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 22:43:24 +0100
+Message-Id: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/03/2023 21:48, Marijn Suijten wrote:
-> On 2023-03-10 21:06:52, Krzysztof Kozlowski wrote:
->> The Qualcomm SoC power-on driver is specific to ARCH_QCOM which depends
->> on OF thus the driver is OF-only.  It's of_device_id table is built
-> 
-> Its*
-> 
->> unconditionally, thus of_match_ptr() for ID table does not make sense.
-> 
-> Agreed.  Searching for of_match_ptr on any *qcom* file yields 25 results
-> on a few-weeks-old tree, are you planning on assessing those too?
-> 
+The driver is specific to ARCH_QCOM which depends on OF thus the driver
+is OF-only.  Its of_device_id table is built unconditionally, thus
+of_match_ptr() for ID table does not make sense.
 
-There are just few incorrect usages, I'll fix these. Rest has proper
-maybe_unused or ifdef.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ sound/soc/qcom/lpass-sc7280.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/sound/soc/qcom/lpass-sc7280.c b/sound/soc/qcom/lpass-sc7280.c
+index d43f480cbae3..956b974e322e 100644
+--- a/sound/soc/qcom/lpass-sc7280.c
++++ b/sound/soc/qcom/lpass-sc7280.c
+@@ -443,7 +443,7 @@ MODULE_DEVICE_TABLE(of, sc7280_lpass_cpu_device_id);
+ static struct platform_driver sc7280_lpass_cpu_platform_driver = {
+ 	.driver = {
+ 		.name = "sc7280-lpass-cpu",
+-		.of_match_table = of_match_ptr(sc7280_lpass_cpu_device_id),
++		.of_match_table = sc7280_lpass_cpu_device_id,
+ 		.pm = &sc7280_lpass_pm_ops,
+ 	},
+ 	.probe = asoc_qcom_lpass_cpu_platform_probe,
+-- 
+2.34.1
 
