@@ -2,134 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E026B33B6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 02:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BDF6B3498
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 04:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCJBgx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 20:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S230089AbjCJDOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 22:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCJBgv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 20:36:51 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF4AE487F;
-        Thu,  9 Mar 2023 17:36:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678412209; x=1709948209;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z8WEPEBvcsSYGpL3dfPVY08NGxsidG3XT6+r94Jo1R4=;
-  b=a15yVvqT/pTdIR14D/O8eU+q5Dl+i9MC9/vUn9bGvi10WOer3KY4a1nB
-   biVVYnAp5+7gCQA1Uwou2B4j0fMLCZYnW+JUA+Bt76XXB7+z9P3q1rs8W
-   ylUowo3cvBfdR8s5KPa6iS99GlZF+ZA6S66UP59y9BiFfosUB8qDxqsoJ
-   lfRoq2XEonPXO6vqglo3WFBl0EUQsPRSGC7X6tITCQ79ZUVc6d0ey9jOI
-   LYqhkkTHq/x69fbnX3Jsbz66bucFe9R1WJ+EyNJGdABp8Wt9ZlQmUHOrL
-   CwSdUtIMw6Mwp2WaGXAbUWQXwFCbdbpkClJCMpYcdkIlxo8bjTqTsZZmE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324970315"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="324970315"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 17:36:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="670926283"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="670926283"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 09 Mar 2023 17:36:46 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paRgb-0003Ln-2I;
-        Fri, 10 Mar 2023 01:36:45 +0000
-Date:   Fri, 10 Mar 2023 09:36:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCHv1 02/11] power: supply: core: auto-exposure of
- simple-battery data
-Message-ID: <202303100854.V2YFWYZu-lkp@intel.com>
-References: <20230309225041.477440-3-sre@kernel.org>
+        with ESMTP id S230009AbjCJDOk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 22:14:40 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFB1F28A9;
+        Thu,  9 Mar 2023 19:14:39 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A14npV001842;
+        Fri, 10 Mar 2023 03:14:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=xQWrPAxRSV+EGW99i7tiOci4rzdoO4Igctk2XbVM/Ho=;
+ b=IEv5PD8y6p3id78kUUNoaq36Xc25fLOn///gHbrztdpopP48fAbJDgviRvK5eK7iMwxz
+ B8ag3+aiVg7CxCDFAwh72/yelZAKEwJUYQJjD9MVEqD75e31NI67lS9y4RFg7gRdo/tp
+ O026C/sYT6Do/Y0oV/QpUm4HHaNKCd0WJGTpcjvriJ/oMsySKveki8KVgTmhW7xs1liG
+ NdvIuZoNzkr6sVf6TsUY80CdJYfyH9XIsJhr+scjVmqxG6JWfGx5BtutUcXsmKuvl7fQ
+ KooYX6DLrN2MIvJJsMNbE6uMEncpF/6Wmd4DC0Oy00KJFhnheQypY8c5c8YYI+O2taqi cg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7q0y0s5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 03:14:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A3EXY9002855
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Mar 2023 03:14:33 GMT
+Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
+ 19:14:27 -0800
+Message-ID: <139384c3-5ebc-84b6-9109-b98e4690ca68@quicinc.com>
+Date:   Fri, 10 Mar 2023 08:44:23 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309225041.477440-3-sre@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 09/15] arm64: dts: qcom: sm6375: Add CPUCP L3 node
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
+ <20230303-topic-sm6375_features0_dts-v1-9-8c8d94fba6f0@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-9-8c8d94fba6f0@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: N5LoSnEg8LgJ9YUzq6wC_c2TlhTQEy_t
+X-Proofpoint-ORIG-GUID: N5LoSnEg8LgJ9YUzq6wC_c2TlhTQEy_t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 priorityscore=1501 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303100022
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+Hey Konrad,
 
-I love your patch! Perhaps something to improve:
+Thanks for the patch.
 
-[auto build test WARNING on sre-power-supply/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 3/4/23 03:28, Konrad Dybcio wrote:
+> Enable the CPUCP block responsible for scaling the L3 cache.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Reichel/dt-bindings-power-supply-adc-battery-add-binding/20230310-065229
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20230309225041.477440-3-sre%40kernel.org
-patch subject: [PATCHv1 02/11] power: supply: core: auto-exposure of simple-battery data
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230310/202303100854.V2YFWYZu-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/83ec4c841d68a66bc95f5e534a805e765785f934
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sebastian-Reichel/dt-bindings-power-supply-adc-battery-add-binding/20230310-065229
-        git checkout 83ec4c841d68a66bc95f5e534a805e765785f934
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/power/supply/
+FWIW, the patch just enables the l3 provider, the CPUCP block would
+already be up at this point. You would also want to include the
+expansion for CPUCP at least once in your patch.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303100854.V2YFWYZu-lkp@intel.com/
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-   In file included from drivers/power/supply/power_supply_core.c:21:
->> include/linux/power_supply.h:777:41: warning: 'power_supply_battery_info_properties' defined but not used [-Wunused-const-variable=]
-     777 | static const enum power_supply_property power_supply_battery_info_properties[] = {
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/power_supply_battery_info_properties +777 include/linux/power_supply.h
-
-   776	
- > 777	static const enum power_supply_property power_supply_battery_info_properties[] = {
-   778		POWER_SUPPLY_PROP_TECHNOLOGY,
-   779		POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
-   780		POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-   781		POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-   782		POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-   783		POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
-   784		POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
-   785		POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
-   786		POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
-   787		POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN,
-   788		POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX,
-   789		POWER_SUPPLY_PROP_TEMP_ALERT_MIN,
-   790		POWER_SUPPLY_PROP_TEMP_ALERT_MAX,
-   791		POWER_SUPPLY_PROP_TEMP_MIN,
-   792		POWER_SUPPLY_PROP_TEMP_MAX,
-   793	};
-   794	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>   arch/arm64/boot/dts/qcom/sm6375.dtsi | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
+> index 90f18754a63b..59d7ed25aa36 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
+> @@ -1505,6 +1505,15 @@ frame@f42d000 {
+>   			};
+>   		};
+>   
+> +		cpucp_l3: interconnect@fd90000 {
+> +			compatible = "qcom,sm6375-cpucp-l3", "qcom,epss-l3";
+> +			reg = <0 0x0fd90000 0 0x1000>;
+> +
+> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&gcc GPLL0>;
+> +			clock-names = "xo", "alternate";
+> +			#interconnect-cells = <1>;
+> +		};
+> +
+>   		cpufreq_hw: cpufreq@fd91000 {
+>   			compatible = "qcom,sm6375-cpufreq-epss", "qcom,cpufreq-epss";
+>   			reg = <0 0x0fd91000 0 0x1000>, <0 0x0fd92000 0 0x1000>;
+> 
