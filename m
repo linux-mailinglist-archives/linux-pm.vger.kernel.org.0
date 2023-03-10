@@ -2,113 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD2D6B39EA
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 10:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5176B3A77
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 10:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCJJPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 04:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S229827AbjCJJbY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 04:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjCJJO2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 04:14:28 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F372E15150;
-        Fri, 10 Mar 2023 01:09:59 -0800 (PST)
+        with ESMTP id S230206AbjCJJbC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 04:31:02 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7C63CE03
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 01:28:23 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id y10so3216433pfi.8
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 01:28:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678439400; x=1709975400;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HRadc1zXN2PqdKrwhkkjyFW8VZrHqm0P8DnEtzPMe9M=;
-  b=k/NOxI5nwBja1wKCCYtHteMQiBkdVys1CxlfI2k/6PvA87XcYm0ieoZK
-   LjNtl2Qd3UGbZcGUX89T2D6yvSEt5zQLQh9jQpr5EWuyxEGrOXVv6vyYI
-   AiawMkwLtJis9qnFIgG8DZvl9eQ/BbBOKm7c8+Thlmy/zBasYyK/hub/0
-   eISoUmF10Ae1T2tqwKlZHBQLE9ba1Tv4KfscBd3sPmuqHh4R7q9d2NNO1
-   2cT13mfy1qj1EMcXRn87Q5p2s6dX5IR8etrTRJSDUbMVNOX8V/AytDlHw
-   Wd3OmYM05NPZ+94fXUfXIPTrVoYX1UzprYHsu7v6iFdEgDqzqaaRudJwS
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
-   d="scan'208";a="29600347"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 10 Mar 2023 10:09:57 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 10 Mar 2023 10:09:57 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 10 Mar 2023 10:09:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678439397; x=1709975397;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HRadc1zXN2PqdKrwhkkjyFW8VZrHqm0P8DnEtzPMe9M=;
-  b=byHHmwkbMM1ggXeVCc64h7izuu1M0W99MBykH8R+n7nXGjO/NF6NRF/R
-   h2Szf0n+OW3ewj/QHIJnR58DJUAzpw93l1ZNomqzEo+tMCnDVIEZ103+W
-   mV6LiEi12RwPZxj7RxXC1J/fMPxgBvmozXq7NxHdt0Q+HkkLuQwA4GOkr
-   Kbw1q9bopuVl8k4qFTJvuUG2tY4CaBmIP+e75fgSAZY/b6ZO7L11M2VjR
-   XlCqvVay9HrIv5HbL+dnEz7AqLPgIbZmXLljMlPvmlREoYVubvYQHahdK
-   NYyV7io9alp/bgdIKOyw5aYUZKK2HZFKdGcs91OprQaca/X2Ar5TxgP94
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,249,1673910000"; 
-   d="scan'208";a="29600346"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 10 Mar 2023 10:09:57 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 478AF280056;
-        Fri, 10 Mar 2023 10:09:57 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-imx@nxp.com, "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-Subject: Re: [PATCH v1 0/4] add i.MX93 TMU support
-Date:   Fri, 10 Mar 2023 10:09:53 +0100
-Message-ID: <2570782.NG923GbCHz@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230105101748.6714-1-alice.guo@oss.nxp.com>
-References: <20230105101748.6714-1-alice.guo@oss.nxp.com>
+        d=gmail.com; s=20210112; t=1678440501;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=psT1U0rm4RuxzwL1psv8gdVVo+BGxhb10b8OD+anohk=;
+        b=ACeASh/2SbEF8rs7tz7isj/bO6XbxwpPPaN9lY8qTJgRR5vW7m4hX894+fVPARY7Z3
+         hk8dyjMpPzU08ygcGzIXjgcari2QS026mV6P0Uvzf0Wle/tQtEYd1jW/jdPSAqejkU92
+         dW+hT6FssQGPlklDrpUThUMOY/HgItQ4gBYPQODDl8IK35JyeouBxuZYUWwyc9YpTCK7
+         /cwBe84R7tacRIoxKtxkXbYF/F3RZtTbLZRomeVIRjxg2OAsNfFL9tyMeRlpQ9CzhHTB
+         jSKJlxjW0r3nbzb03v1UZlWqiOM07OssZCL0ifWNnED+EE6ETHKaYgPZ5cAqI6xaBKWD
+         lzHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678440501;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=psT1U0rm4RuxzwL1psv8gdVVo+BGxhb10b8OD+anohk=;
+        b=P2EhMQouC+GjQlN1KSiVQkvZswSTIG5hrD24iGbcxA8CvLhKI1aLMnoeKR09j55W7h
+         aO50fkMPs3lMzzEOJZiVaXXZ2AiUYYkbXCBC+pf3LeRQ2qabdoMKqtZ0aJMthQZ5QtkB
+         4Plld30yt2yLGZujUbBGdvC2vjZb8SjgLWoBizIXe8mf6u/vDT4px+rEN6weoLGjJCrc
+         kFRVWkNxNPdze8iOpj1ckOEJVzkL9W4+y2giTkQpK6fN5Z5ww4NzDgJIJD/qHuCYEIZX
+         isGEPG6KU02uMlOlGXns5jxLT6bFUjuTE5CkqfzGYCH5PtSf1JPy3fZ8mRX9Tm34xMLE
+         Vn0A==
+X-Gm-Message-State: AO0yUKWUkuczHjaH8MLLhrmD7YByRQxn1gdoIuqmJxUF2xdrx1fvDjXy
+        QKuB09oYpv/ft3Cq3z5Vujz1X7uJqPZIdw==
+X-Google-Smtp-Source: AK7set8hiLjz5ARPfNWpVl9wOqQVVuLifxJJUcXVmRskZrzIfwpU7sRS0dH98gF7ud7YcxttqR1J2A==
+X-Received: by 2002:aa7:9e44:0:b0:5d9:27a5:60bf with SMTP id z4-20020aa79e44000000b005d927a560bfmr20861011pfq.28.1678440501358;
+        Fri, 10 Mar 2023 01:28:21 -0800 (PST)
+Received: from ?IPV6:2405:201:1010:106f:653e:bbbc:9b01:9e48? ([2405:201:1010:106f:653e:bbbc:9b01:9e48])
+        by smtp.gmail.com with ESMTPSA id p5-20020aa78605000000b005e06234e70esm964688pfn.59.2023.03.10.01.28.14
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 01:28:21 -0800 (PST)
+Message-ID: <ff760a8a-ef47-35db-dbd3-29821d640517@gmail.com>
+Date:   Fri, 10 Mar 2023 14:57:14 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     linux-pm@vger.kernel.org
+From:   Rahul Pathak <rpathakmailbox@gmail.com>
+Subject: cpufreq: query regarding policy->min/max &
+ policy->cpuinfo.min_freq/max_freq
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Donnerstag, 5. Januar 2023, 11:17:44 CET schrieb Alice Guo (OSS):
-> From: Alice Guo <alice.guo@nxp.com>
->=20
-> Alice Guo (3):
->   dt-bindings: thermal: qoriq-thermal: Add compatible for i.MX93
->   thermal: qoriq: add i.MX93 TMU support
->   arm64: dts: imx93: Add CPU thermal zone
->=20
-> Pankit Garg (1):
->   qoriq_thermal: No need to program site adjustment register
->=20
->  .../bindings/thermal/qoriq-thermal.yaml       |  1 +
->  arch/arm64/boot/dts/freescale/imx93.dtsi      | 48 +++++++++++++++
->  drivers/thermal/qoriq_thermal.c               | 59 ++++++++++++++++---
->  3 files changed, 100 insertions(+), 8 deletions(-)
+Hi
 
-Additional to the small review points:
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-on TQMa93xxLA+MBa93xxCA.
+Sorry for the long email.
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+I have a query on the use case where the platform driver during
+initialization can choose to configure policy->min/max with
+a range which is a subset of policy->cpuinfo.min_freq/max_freq.
+I am trying to understand if choosing a subset of range should
+be preserved until any governor or explicit change from userspace
+changes the
+range.
 
+Let me take an example -
+From cppc_cpufreq.c which does this exactly -
 
+/*
+* Set min to lowest nonlinear perf to avoid any efficiency penalty (see
+* Section 8.4.7.1.1.5 of ACPI 6.1 spec)
+*/
+policy->min = cppc_cpufreq_perf_to_khz(cpu_data,
+       caps->lowest_nonlinear_perf);
+policy->max = cppc_cpufreq_perf_to_khz(cpu_data,
+       caps->nominal_perf);
+/*
+* Set cpuinfo.min_freq to Lowest to make the full range of performance
+* available if userspace wants to use any perf between lowest & lowest
+* nonlinear perf
+*/
+policy->cpuinfo.min_freq = cppc_cpufreq_perf_to_khz(cpu_data,
+    caps->lowest_perf);
+policy->cpuinfo.max_freq = cppc_cpufreq_perf_to_khz(cpu_data,
+    caps->nominal_perf);
+
+During initialization when cpufreq core calls the cpufreq_init_policy()
+and later cpufreq_set_policy(), inside that the new_data.min/max are not
+there as valid values since there is no user input during initialization.
+
+new_data.min = freq_qos_read_value(&policy->constraints, FREQ_QOS_MIN);
+new_data.max = freq_qos_read_value(&policy->constraints, FREQ_QOS_MAX);
+
+So, only taking the case of new_data.min which is set to 0 at this time.
+
+When subsequent cpufreq_driver->verify() compares the new_data.min with
+cpuinfo->min_freq inside cpufreq_verify_within_cpu_limits() it extends
+the policy->min to policy->cpuinfo.min_freq. Which ultimately becomes
+the new effective minimum possible.
+
+This means that setting the initial policy->min/max different from full
+range policy->cpuinfo.min_freq/max_freq has no effect and it will always
+be extended in the initialization only. And the driver should always set
+policy->min/max same as policy->cpuinfo.min_freq/max_freq. Is this the
+right understanding?
+
+Thanks
+Rahul
