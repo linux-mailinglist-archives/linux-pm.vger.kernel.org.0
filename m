@@ -2,183 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671A36B3F12
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 13:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61726B3FFC
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 14:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCJMVW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 07:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S229754AbjCJNPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 08:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjCJMVV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 07:21:21 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78902112590
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 04:21:17 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="399314629"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="399314629"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:21:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="671066083"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="671066083"
-Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007.jf.intel.com with ESMTP; 10 Mar 2023 04:21:16 -0800
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     x86@kernel.org, Linux PM Mailing List <linux-pm@vger.kernel.org>
-Cc:     Artem Bityutskiy <dedekind1@gmail.com>
-Subject: [PATCH v2 3/3] intel_idle: add C0.2 state for Sapphire Rapids Xeon
-Date:   Fri, 10 Mar 2023 14:21:10 +0200
-Message-Id: <20230310122110.895093-4-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230310122110.895093-1-dedekind1@gmail.com>
-References: <20230310122110.895093-1-dedekind1@gmail.com>
+        with ESMTP id S229469AbjCJNPT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 08:15:19 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3F1E63F3
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 05:15:16 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id n2so6507191lfb.12
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 05:15:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678454115;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b+n9NGdOuKJ/lQmTS5gpSL6Q6vZc7KKgv3f3l7G4SY4=;
+        b=BqmiVCzl+i9PBTrf9o/LwDynbaz6bpaQmIZ7b0iuFloM/rZZyGLXZIMi/Tqk8r7kyv
+         E3V0ICZOzTdCoZZvW6gMjg9Fc6n0hCku0MCJzmOo8qWzObZkrn3WCigvxX4480Ew1MBk
+         bg0oA74zxCOD8fTTBGZjituG2F5XzwEp8L+qNCGvd6fPrENMWWFtNvywrA5I8HO34Pu5
+         +UNLbGcl7X8e5IzIsx18H4uxi10pry3AmUYNMgPtvrXtSgkAwz96SwrdAOFOTPyGI1Mq
+         86DrwG07BV9Y2UJajRVm1mR6189tMHA7wMPGzdbN9fP4SLQ6q1xOGjrlfbkq1CVwwsqZ
+         H4Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678454115;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b+n9NGdOuKJ/lQmTS5gpSL6Q6vZc7KKgv3f3l7G4SY4=;
+        b=CVfQ8a/S0ED4qQGnCpd7QN5cNRngRMtIVSqeIneglbcuOWx/npKU+B8cJaEQYmc1iW
+         NSNco0D/3dPgZGlQy2Z3546aAVrIYEwTPYjIPZZtbXPjV7RaxczE4uKefC1rjbRIDSGd
+         dH38WKIaAYFiD7/LFPMX3OTPK/mXJOplU+a+J72OztmdD63qWhfHSl6kupFZ77sKrt34
+         oPFdsYJtzWG9u1d/651R00OWOB8h91lq//8B5xnukQA0qjwRtcta1UjHA7vCXMmiPDC7
+         Vi+T5bRbJ8OYUOj4uPsO/7qci67I3SyQM5i3ETQ0eLxunh8ZAPrjCg4XdHyHjvm+i05E
+         O4dg==
+X-Gm-Message-State: AO0yUKXhu5HatGOrfhmqI8qkVpdcp1/cdROD833OwBhZPb/T2ec5YzQD
+        zw3kd/Wphd60p4owR2jbgUy9Jg==
+X-Google-Smtp-Source: AK7set8Te4gM0dM2pxmOufcNoL+0U6S5YJgvr/3PgwTvf15YEiH7lBfAWdLZwDNeKIkkvMltkHL/Vg==
+X-Received: by 2002:ac2:549a:0:b0:4dd:8fd3:5cce with SMTP id t26-20020ac2549a000000b004dd8fd35ccemr8156383lfk.57.1678454114766;
+        Fri, 10 Mar 2023 05:15:14 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id m12-20020ac24acc000000b004e817c666eesm234056lfp.193.2023.03.10.05.15.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 05:15:13 -0800 (PST)
+Message-ID: <4390532c-cf94-0030-8997-1a3522272f4f@linaro.org>
+Date:   Fri, 10 Mar 2023 14:15:12 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 09/15] arm64: dts: qcom: sm6375: Add CPUCP L3 node
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
+ <20230303-topic-sm6375_features0_dts-v1-9-8c8d94fba6f0@linaro.org>
+ <139384c3-5ebc-84b6-9109-b98e4690ca68@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <139384c3-5ebc-84b6-9109-b98e4690ca68@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Add Sapphire Rapids Xeon C0.2 state support. This state has a lower exit
-latency comparing to C1, and saves energy comparing to POLL (in range of
-5-20%).
 
-This patch also improves performance (e.g., as measured by 'hackbench'),
-because idle CPU power savings in C0.2 increase busy CPU power budget and
-therefore, improve turbo boost of the busy CPU.
+On 10.03.2023 04:14, Sibi Sankar wrote:
+> Hey Konrad,
+> 
+> Thanks for the patch.
+> 
+> On 3/4/23 03:28, Konrad Dybcio wrote:
+>> Enable the CPUCP block responsible for scaling the L3 cache.
+> 
+> FWIW, the patch just enables the l3 provider, the CPUCP block would
+> already be up at this point. You would also want to include the
+> expansion for CPUCP at least once in your patch.
+Right, I didn't think much about this, but I should probably reword
+this and the bindings commit to mention that CPUCP != L3 scaler within.
 
-Suggested-by: Len Brown <len.brown@intel.com>
-Suggested-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 58 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 938c17f25d94..0d0e45de610e 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -51,11 +51,13 @@
- #include <linux/notifier.h>
- #include <linux/cpu.h>
- #include <linux/moduleparam.h>
-+#include <linux/units.h>
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
- #include <asm/nospec-branch.h>
- #include <asm/mwait.h>
- #include <asm/msr.h>
-+#include <asm/tsc.h>
- #include <asm/fpu/api.h>
- 
- #define INTEL_IDLE_VERSION "0.5.1"
-@@ -73,6 +75,8 @@ static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
- 
- static unsigned long auto_demotion_disable_flags;
- 
-+static u64 umwait_limit;
-+
- static enum {
- 	C1E_PROMOTION_PRESERVE,
- 	C1E_PROMOTION_ENABLE,
-@@ -225,6 +229,27 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 	return 0;
- }
- 
-+/**
-+ * intel_idle_umwait_irq - Request C0.x using the 'umwait' instruction.
-+ * @dev: cpuidle device of the target CPU.
-+ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-+ * @index: Target idle state index.
-+ *
-+ * Request C0.1 or C0.2 using 'umwait' instruction with interrupts enabled.
-+ */
-+static __cpuidle int intel_idle_umwait_irq(struct cpuidle_device *dev,
-+					   struct cpuidle_driver *drv,
-+					   int index)
-+{
-+	u32 state = flg2MWAIT(drv->states[index].flags);
-+
-+	raw_local_irq_enable();
-+	umwait_idle(rdtsc() + umwait_limit, state);
-+	raw_local_irq_disable();
-+
-+	return index;
-+}
-+
- /*
-  * States are indexed by the cstate number,
-  * which is also the index into the MWAIT hint array.
-@@ -968,6 +993,13 @@ static struct cpuidle_state adl_n_cstates[] __initdata = {
- };
- 
- static struct cpuidle_state spr_cstates[] __initdata = {
-+	{
-+		.name = "C0.2",
-+		.desc = "UMWAIT C0.2",
-+		.flags = MWAIT2flg(TPAUSE_C02_STATE) | CPUIDLE_FLAG_IRQ_ENABLE,
-+		.exit_latency_ns = 100,
-+		.target_residency_ns = 100,
-+		.enter = &intel_idle_umwait_irq, },
- 	{
- 		.name = "C1",
- 		.desc = "MWAIT 0x00",
-@@ -1894,7 +1926,8 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 		/* Structure copy. */
- 		drv->states[drv->state_count] = cpuidle_state_table[cstate];
- 
--		if ((cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_IRQ_ENABLE) || force_irq_on) {
-+		if (cpuidle_state_table[cstate].enter == intel_idle &&
-+		    ((cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_IRQ_ENABLE) || force_irq_on)) {
- 			printk("intel_idle: forced intel_idle_irq for state %d\n", cstate);
- 			drv->states[drv->state_count].enter = intel_idle_irq;
- 		}
-@@ -1926,6 +1959,28 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 	}
- }
- 
-+/**
-+ * umwait_limit_init - initialize time limit value for 'umwait'.
-+ *
-+ * C0.1 and C0.2 (later C0.x) idle states are requested via the 'umwait'
-+ * instruction. The 'umwait' instruction requires the "deadline" - the TSC
-+ * counter value to break out of C0.x (unless it broke out because of an
-+ * interrupt or some other event).
-+ *
-+ * The deadline is specified as an absolute TSC value, and it is calculated as
-+ * current TSC value + 'umwait_limit'. This function initializes the
-+ * 'umwait_limit' variable to count of cycles per tick. The motivation is:
-+ *   * the tick is not disabled for shallow states like C0.x so, so idle will
-+ *     not last longer than a tick anyway
-+ *   * limit idle time to give cpuidle a chance to re-evaluate its C-state
-+ *     selection decision and possibly select a deeper C-state.
-+ */
-+static void __init umwait_limit_init(void)
-+{
-+	umwait_limit = (u64)TICK_NSEC * tsc_khz;
-+	do_div(umwait_limit, MICRO);
-+}
-+
- /**
-  * intel_idle_cpuidle_driver_init - Create the list of available idle states.
-  * @drv: cpuidle driver structure to initialize.
-@@ -1933,6 +1988,7 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- static void __init intel_idle_cpuidle_driver_init(struct cpuidle_driver *drv)
- {
- 	cpuidle_poll_state_init(drv);
-+	umwait_limit_init();
- 
- 	if (disabled_states_mask & BIT(0))
- 		drv->states[0].flags |= CPUIDLE_FLAG_OFF;
--- 
-2.38.1
-
+Konrad
+> 
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+> 
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm6375.dtsi | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
+>> index 90f18754a63b..59d7ed25aa36 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
+>> @@ -1505,6 +1505,15 @@ frame@f42d000 {
+>>               };
+>>           };
+>>   +        cpucp_l3: interconnect@fd90000 {
+>> +            compatible = "qcom,sm6375-cpucp-l3", "qcom,epss-l3";
+>> +            reg = <0 0x0fd90000 0 0x1000>;
+>> +
+>> +            clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&gcc GPLL0>;
+>> +            clock-names = "xo", "alternate";
+>> +            #interconnect-cells = <1>;
+>> +        };
+>> +
+>>           cpufreq_hw: cpufreq@fd91000 {
+>>               compatible = "qcom,sm6375-cpufreq-epss", "qcom,cpufreq-epss";
+>>               reg = <0 0x0fd91000 0 0x1000>, <0 0x0fd92000 0 0x1000>;
+>>
