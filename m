@@ -2,54 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171876B4713
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 15:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107CA6B4757
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 15:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbjCJOsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 09:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S233067AbjCJOuJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 09:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbjCJOre (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 09:47:34 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35039105F13;
-        Fri, 10 Mar 2023 06:47:17 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso3045188otr.5;
-        Fri, 10 Mar 2023 06:47:17 -0800 (PST)
+        with ESMTP id S233085AbjCJOtE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 09:49:04 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D51223B9;
+        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-176261d7f45so6035547fac.11;
+        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459633;
+        d=1e100.net; s=20210112; t=1678459662;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=erVHxEOkHulgXr4ymdjMTqBXd4BHusuBykzBB4r+uDs=;
-        b=Max5u5lz6ur0UdQinEXDDb/xvgpN0N4F9TO143fM7oMuE+gA6OfsvAO8gaOV7ng/NW
-         P3vQJ/YzcSmAl8NQfXKvslbwU2W3INEjovvIuyWrWVIIzBL4SG0rQo87ViRPwkgXAnVJ
-         /0H+TjJhs7BUOSvujBRFVJX94WiISrwCa98GCDBfCfMNIkx8pVi91R7oV3w1R0kLvn8x
-         3XlYObNixfJ1a71P7MX7EH6FqAVrY3e2a/+kmHKTgFCogL8XI39jgXmBhf12hzwz/Okv
-         zzqm4OuNhX+v1iXCs7XD8/yxXkJRmuTCRqb4uALPeIvQ4f5S2IPVs1PDJvQJHiQPET19
-         66aQ==
-X-Gm-Message-State: AO0yUKVBWNcUgLcu4VH3gKr47XtHIn+t1HqeCjII56eGtu7ECsZe25NZ
-        FceojoQqAMGrpcFgwSXT3g==
-X-Google-Smtp-Source: AK7set8hJS2ezY4Sj6II5USm8t5lAU/pknQcOqjT5++f2l5DIb1/fgDXqQGDmXQaSJB3gBb5nRHPoQ==
-X-Received: by 2002:a05:6830:43a1:b0:690:e7d0:7918 with SMTP id s33-20020a05683043a100b00690e7d07918mr16287581otv.8.1678459633357;
-        Fri, 10 Mar 2023 06:47:13 -0800 (PST)
+        bh=2woDhUU8segjfXUK8bCKWWkxeooki4Tiioxihb29omI=;
+        b=77sr8Yd32bNJG5E5gvSB/QAYw7sH6uZZYnzRb9vwSvrRpBhHesYo36o5pwes2RUSC3
+         d3Bss/p+T5OVt/GFznda7n9ni/f7zW1R20nFfJ6sukfuDbhSwtKgzieznkFi4TCgzxJi
+         U6N6ppGWXSgkt/8EzRMCYbWQwmDnlBqufIxfgF2eExzan5c6B0IG6GC2rYWC0Mt89EYU
+         laQlBc+iqytku2koO8/VAcrYkt/oEXr2VX+X8TklMaygap09EJMAFwXJ8bO3Zv+aKV0R
+         hp+v6SjrzBf30bor5skzvMQA4yb/IKS5rif/2+iIA9XVGOd8f73GvYfyCP5b0t10auar
+         1lBg==
+X-Gm-Message-State: AO0yUKW8TIAL8Ny+J9gmKvnrH79XLA++G6W2cCO7qYCnyp1a6JwTAmYO
+        wF0E/cU6udmuBOX7MtEL0A==
+X-Google-Smtp-Source: AK7set8U4wjqUrryELYfSJxMuPVOOd0KXhYQxIgamWtZOI+6GdKcXJrh5sheP103x03+JPriAbk29w==
+X-Received: by 2002:a05:6870:b14d:b0:172:80f9:a545 with SMTP id a13-20020a056870b14d00b0017280f9a545mr4220778oal.25.1678459662131;
+        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05683022d300b0068bd20cf07dsm114512otc.48.2023.03.10.06.47.12
+        by smtp.gmail.com with ESMTPSA id y20-20020a056870429400b00172428894e0sm95296oah.28.2023.03.10.06.47.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:12 -0800 (PST)
-Received: (nullmailer pid 1541845 invoked by uid 1000);
+        Fri, 10 Mar 2023 06:47:41 -0800 (PST)
+Received: (nullmailer pid 1541915 invoked by uid 1000);
         Fri, 10 Mar 2023 14:47:03 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
 Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: pmac32: Use of_property_read_bool() for boolean properties
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH] cpuidle: Use of_property_present() for testing DT property presence
 Date:   Fri, 10 Mar 2023 08:47:03 -0600
-Message-Id: <20230310144703.1541819-1-robh@kernel.org>
+Message-Id: <20230310144703.1541888-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,45 +69,54 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 It is preferred to use typed property access functions (i.e.
 of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties.
-Convert reading boolean properties to to of_property_read_bool().
+of_get_property/of_find_property functions for reading properties. As
+part of this, convert of_get_property/of_find_property calls to the
+recently added of_property_present() helper when we just want to test
+for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/cpufreq/pmac32-cpufreq.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
+ drivers/cpuidle/cpuidle-riscv-sbi.c   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
-index 4b8ee2014da6..7ec6d1bb4592 100644
---- a/drivers/cpufreq/pmac32-cpufreq.c
-+++ b/drivers/cpufreq/pmac32-cpufreq.c
-@@ -546,7 +546,7 @@ static int pmac_cpufreq_init_7447A(struct device_node *cpunode)
- {
- 	struct device_node *volt_gpio_np;
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index 6ad2954948a5..e875ddadc51b 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -165,7 +165,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ 	 * initialize a genpd/genpd-of-provider pair when it's found.
+ 	 */
+ 	for_each_child_of_node(np, node) {
+-		if (!of_find_property(node, "#power-domain-cells", NULL))
++		if (!of_property_present(node, "#power-domain-cells"))
+ 			continue;
  
--	if (of_get_property(cpunode, "dynamic-power-step", NULL) == NULL)
-+	if (!of_property_read_bool(cpunode, "dynamic-power-step"))
- 		return 1;
+ 		ret = psci_pd_init(node, use_osi);
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index be383f4b6855..1fab1abc6eb6 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -497,7 +497,7 @@ static int sbi_genpd_probe(struct device_node *np)
+ 	 * initialize a genpd/genpd-of-provider pair when it's found.
+ 	 */
+ 	for_each_child_of_node(np, node) {
+-		if (!of_find_property(node, "#power-domain-cells", NULL))
++		if (!of_property_present(node, "#power-domain-cells"))
+ 			continue;
  
- 	volt_gpio_np = of_find_node_by_name(NULL, "cpu-vcore-select");
-@@ -576,7 +576,7 @@ static int pmac_cpufreq_init_750FX(struct device_node *cpunode)
- 	u32 pvr;
- 	const u32 *value;
- 
--	if (of_get_property(cpunode, "dynamic-power-step", NULL) == NULL)
-+	if (!of_property_read_bool(cpunode, "dynamic-power-step"))
- 		return 1;
- 
- 	hi_freq = cur_freq;
-@@ -632,7 +632,7 @@ static int __init pmac_cpufreq_setup(void)
- 
- 	/*  Check for 7447A based MacRISC3 */
- 	if (of_machine_is_compatible("MacRISC3") &&
--	    of_get_property(cpunode, "dynamic-power-step", NULL) &&
-+	    of_property_read_bool(cpunode, "dynamic-power-step") &&
- 	    PVR_VER(mfspr(SPRN_PVR)) == 0x8003) {
- 		pmac_cpufreq_init_7447A(cpunode);
- 
+ 		ret = sbi_pd_init(node);
+@@ -548,8 +548,8 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ 	for_each_possible_cpu(cpu) {
+ 		np = of_cpu_device_node_get(cpu);
+ 		if (np &&
+-		    of_find_property(np, "power-domains", NULL) &&
+-		    of_find_property(np, "power-domain-names", NULL)) {
++		    of_property_present(np, "power-domains") &&
++		    of_property_present(np, "power-domain-names")) {
+ 			continue;
+ 		} else {
+ 			sbi_cpuidle_use_osi = false;
 -- 
 2.39.2
 
