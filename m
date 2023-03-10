@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4192C6B3894
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 09:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C35D6B389B
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 09:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjCJI33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 03:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S230263AbjCJIaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 03:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjCJI31 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 03:29:27 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B180841B41
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 00:29:26 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-53852143afcso84391337b3.3
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 00:29:26 -0800 (PST)
+        with ESMTP id S230346AbjCJIaO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 03:30:14 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC8CE980F
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 00:29:56 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53916ab0c6bso84195307b3.7
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 00:29:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678436966;
+        d=linaro.org; s=google; t=1678436995;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pQ8WEFzt5Db0FqLZyEfnb3WolQj2HUPnMgEi1F3RxYY=;
-        b=uHHamRINr0AyuQK5iTvGzBKyhZZnSuP7G6a6oLT/A77BR2+RvuA9gbwSKGVjD08Vjp
-         I9QAUERfxdUCi3CMO8zJ8FtAZ3Zs/euFEJ+GSzb409WdKV81zwWphmfTJfeS0cg0lO8u
-         XSa5ZhhV1Oorrn5gZCcz8cz/e7yPChRQBH/GU7t32+Jci/jCaiCE6/zWrk3gML12b9qc
-         zqulLmrXD8IsMzWdhI8Onco0H9O/41fOx8wyZ901DbBS97lSty8nJUJzKPJPPfpnyOZU
-         VCDPRO04K5HVrYJFxcpU5neheCxK1mDTsvIUOJCawoq5d8TruAVsoFQRrB4zjrPcsDG4
-         jZsA==
+        bh=ICV7h+pf/rdMI7ysm0+yuoMHuqjwB0UAi1mmGinxoQw=;
+        b=wwsKVggsgfCB8PI3WpaD0vy37rNiiEQaarXZf46/WQiCJVqegR/ZzRlbLrcqcjPDFr
+         JMmWGlWxoVWXzEOZOGISruOE8Uv0LkzkOmjlR5Ai6ShLF3d8soKbNlLjvwaLPUmrv9xA
+         vvYUBmiDOeVZdsrJEgCVxA7NlnuBE2XtcEqatypOOeKl31gz+ZKZk1QLFzpviWhRGBGG
+         /sUaJI6k6BBSR2XXCyD451HnhhIjmQdrCfCMTchE/RlXjBOXh/yF+KhSO342gn1xe0Sb
+         D+kWJwIGM7KZ7s6fjUWvosAJFeAjcH+ZFdxQLHSC4KYZdFaUrkIZ57m5wJvDNPfacZNS
+         z+EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678436966;
+        d=1e100.net; s=20210112; t=1678436995;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pQ8WEFzt5Db0FqLZyEfnb3WolQj2HUPnMgEi1F3RxYY=;
-        b=4GzfKvooppIttJqJbdePtBSI6m9lvDKnATlBieEBhFiboTTm55YTiaew5lJswInq0W
-         DDTMeXDZIoJjlSgqEPMoBcNRc2dJI0jc3r4Bk7lealvj/pOGxd4Gve2dCtueu3DvEk4Z
-         YYvUtJUKsvV3p5FUyWz8dFBGQAzSb6n57YCRwFRfdo1NAwC+gVD70XoVj/X56e9i0D3g
-         mnYca1a3+cyS6di2wE11Y10aO4MHutcMhLYPDxVUwl7bwokUymwP84DLLW5MUG15M/If
-         PPZZBtjqHASTPi6N7N46/pNhoi/mhWcXZIdsuhh0JdbHgYIDINa3carJ/4hvPbvImRKd
-         PKxg==
-X-Gm-Message-State: AO0yUKXXIT5k9OKIT2c4xidDCi6rJ9WS0kVzVrOaaIi8eCTEtCHehPeC
-        gCunIuocisDyhnz1aeFH+Ffo/QQ2VDgpmGUKebe4DA==
-X-Google-Smtp-Source: AK7set86T8CEE44n5qgyc35gLPXwP69XifWW2duU0TPqtWVwZ+MpWW6b0Wlp6bSqS7vEkPRVJrk3MfYAtVr1gml/l/4=
-X-Received: by 2002:a81:ac4b:0:b0:533:9ffb:cb12 with SMTP id
- z11-20020a81ac4b000000b005339ffbcb12mr16351128ywj.10.1678436965961; Fri, 10
- Mar 2023 00:29:25 -0800 (PST)
+        bh=ICV7h+pf/rdMI7ysm0+yuoMHuqjwB0UAi1mmGinxoQw=;
+        b=56eWPWkp4DzjoQTgQsVYPo7gGD4jVlFD6t5vp38aIK271Xt+4zj3jtkupdrq+7kYJY
+         qzN1EuLeosvXgfpWEAyzWH4StmP7t15OQaEk3TPoSG85RHT5Z3/E3TmBaHL2qgFSIFbd
+         SXnFiTeVi7KdSVD2xHmpeg8LncL3wmeAYvAqbUeo6RiqLQja9kzXhIAQRyzKjvrSqR2o
+         WBuNGKfJREYegGJdUg6siZ4+3jyqD57+ARuON93UfpdBjPYmugtu1bz4H0Mm3//sokIt
+         40EPeZddIvNnXmZNxZvxjORHEd1c2Kx0u18S+AHhvnyp49zamSnEJncXuqSprVZXaIIN
+         IAtA==
+X-Gm-Message-State: AO0yUKV8cAL6WACnh/JxE6+KULdHv9pQ4QQqG5KBW9Y3BXj1FMX2/ztq
+        An0ipOPp1OQMMH0Qnw1dRRl10c0vQ/KWzoMJ0vhFRID5SyEvBrWH
+X-Google-Smtp-Source: AK7set/4BTgYluz28No6CAZL3nYPwWvQ+rrktL8qCi6XHRkSqmyDjnFzWioP1GfzMfc4UN9JxUKLnfoVJjBU3uSSYI4=
+X-Received: by 2002:a81:4317:0:b0:52e:dddf:82b9 with SMTP id
+ q23-20020a814317000000b0052edddf82b9mr16336442ywa.10.1678436995632; Fri, 10
+ Mar 2023 00:29:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-7-sre@kernel.org>
-In-Reply-To: <20230309225041.477440-7-sre@kernel.org>
+References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-8-sre@kernel.org>
+In-Reply-To: <20230309225041.477440-8-sre@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Mar 2023 09:29:14 +0100
-Message-ID: <CACRpkdYTD3OZ-44N0oRD93gToxR_DoFSkLhvNjrRpCms2TX5nw@mail.gmail.com>
-Subject: Re: [PATCHv1 06/11] power: supply: generic-adc-battery: drop charge
- now support
+Date:   Fri, 10 Mar 2023 09:29:44 +0100
+Message-ID: <CACRpkdZc_=C09tVSMFEfhCp4tgbYsDvtKe4w9QCyXz4Z4936ug@mail.gmail.com>
+Subject: Re: [PATCHv1 07/11] power: supply: generic-adc-battery: drop memory
+ alloc error message
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -75,15 +75,9 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
 wrote:
 
-> Drop CHARGE_NOW support, which requires a platform specific
-> calculation method.
+> Error printing happens automatically for memory allocation problems.
 >
 > Signed-off-by: Sebastian Reichel <sre@kernel.org>
-
-I agree. If we want to support this, we should use the generic
-methods with interpolation tables defined in DT as well, and it also
-ideally requires load compensated resistance calculation to figure
-out Ri so this can bring any kind of reasonable precision.
 
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
