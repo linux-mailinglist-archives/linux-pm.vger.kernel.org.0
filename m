@@ -2,89 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF036B38CA
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 09:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2EB6B3926
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 09:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjCJId5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 03:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S231418AbjCJItW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 10 Mar 2023 03:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjCJIdu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 03:33:50 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D6122CA5
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 00:33:37 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536af432ee5so85235287b3.0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 00:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678437217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SMpbnSHIcPFt/I1d/CqEt8qhkTKrGkj3atI3VEs4HcI=;
-        b=SJoxs05E/8Prfo6PVKGM6zZSWcMLWM31P3WBXQlcmDqPDjXNI7QTWJFRGxmhUWMHCj
-         yk8hbMwGyVBiE0yKGtR7PVa0ngMJ+Or96yAEDdeXe/nUH1Jzku2sRyWqwXq+nOGGX04L
-         NAl+8hpI9lifUh4+r+urQvfTklN9lUi/nU6lxMX5XUyvfN3FN7EDJqTrRv3rU64igw4e
-         MExob/bm+V+iAZ85ux2Q6UbzCtZhDUMiyvuux7FMyWmEguXRQ8qnoAP/iHVqD4AhaZW0
-         47Ob7dr/eo5BfUy+kFtfLNTMQopcDa7BjSP7AZnUYvtMhxrEApv7/Mz0ORDJlqKjFdq0
-         z8oQ==
+        with ESMTP id S230465AbjCJIsd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 03:48:33 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D617B114;
+        Fri, 10 Mar 2023 00:47:35 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id s12so4910786qtq.11;
+        Fri, 10 Mar 2023 00:47:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678437217;
+        d=1e100.net; s=20210112; t=1678438054;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SMpbnSHIcPFt/I1d/CqEt8qhkTKrGkj3atI3VEs4HcI=;
-        b=tnu4yiKGWmfmwi7Mb+aCPob28dyGFRZOHgENYY7bnCKwlfTFId61CkTe7Ab0qIlrQq
-         cAbmcVTdEEtB0MyR1izTsE6tW9Yrsxahb/v8h7qISvssbC029kqIfj+Cur6xRjl8Nr/O
-         Td0zu6oA+0N4+fJ/K0dR2MiyahhpB1t8LgR0lIgYDuZad8u+xVEZ5wVas/Yfksmg7PYe
-         ofCVS/E1NcLL758YkSvSEUvdqAOSNI2x8cPxS46fwVVzxoMePGSLvw0N/U2N9PdKCvN7
-         8zHpQli6KvNRiM4R0a1wtceTagcRgwTmSvyZ+L5NtgIPcxaUPIzSTEyZ+Y2zdTplzJ5q
-         cRzw==
-X-Gm-Message-State: AO0yUKVPqjgApMTvSSpmzx/tfCW7EjK6FZq/BBJarNxWJs/XeMatADNZ
-        QcT01lI8L3R/csCF+Cq6lDZBLSojV303KWUlADQsFg==
-X-Google-Smtp-Source: AK7set8Qj+8aPt8h/RLD9ek8d48Jja9NNhB5XAxVbtMUb9r6uvOpjnqFTpZc3oOuISORK9B1GdEyW326clAbqgwfgHk=
-X-Received: by 2002:a0d:dbca:0:b0:533:9d13:a067 with SMTP id
- d193-20020a0ddbca000000b005339d13a067mr905175ywe.3.1678437216839; Fri, 10 Mar
- 2023 00:33:36 -0800 (PST)
+        bh=v7g81XRiKNyIBTp5oUvq6xFiCldKiPwESDbwSoupQ7g=;
+        b=SjNd01OvvlMYDpaD7s9kVSO2bmOD5KN1Ax+ma8s9lZqETB78vPjhcHw8stPZ5KUBhP
+         m2bLU4SFkEH8UfDloEQ3m16CD2mzWs1PRokp+xNFoYJUu0zNit2BREoo1QuInyvLA9uJ
+         NHj61/ilOs3i/j11q2fITav7+zfBMycRuPK09N3YsGgX6CEb9iKsTiYRtqkOFgE8HKbt
+         GeBj4MxVNooZq8LKFcosE/UwkFjKrwLThkRqvp7JLuh74DM2BIjtwnFXXhWVU8NCdMDt
+         WYC2EVlEhL4SeRqnJwJ6iiy35Sj3JyhKFO+XxCuuWFsWoqzwk3MD5rbCwhs+9J4ZjVCi
+         hLlA==
+X-Gm-Message-State: AO0yUKUJlagsWe+wgq1WEu2Sm8Hz7yR7XZDFSK5CJxEZQ6CipptSvXjz
+        V6caXPiDmXsY0BYPgS0ElFBdrBxSu9M8jA==
+X-Google-Smtp-Source: AK7set/oJqM5NuwoCaGWwf4DCVFzHLAaE7JD3ULKA9bQPIIGCJz9wlrfQvUkvKqElSiqx8YG7hGPdw==
+X-Received: by 2002:a05:622a:1899:b0:3bf:cac4:a3a1 with SMTP id v25-20020a05622a189900b003bfcac4a3a1mr7592343qtc.66.1678438054205;
+        Fri, 10 Mar 2023 00:47:34 -0800 (PST)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac80201000000b003bf9f9f1844sm990854qtg.71.2023.03.10.00.47.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 00:47:33 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536cb25982eso84400067b3.13;
+        Fri, 10 Mar 2023 00:47:32 -0800 (PST)
+X-Received: by 2002:a81:af4b:0:b0:533:91d2:9d94 with SMTP id
+ x11-20020a81af4b000000b0053391d29d94mr16108471ywj.5.1678438052584; Fri, 10
+ Mar 2023 00:47:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-12-sre@kernel.org>
-In-Reply-To: <20230309225041.477440-12-sre@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Mar 2023 09:33:25 +0100
-Message-ID: <CACRpkdYEWDXT7DBFLbH4PYGAm4y6h7VoXQHDnFUkt+cQ58r3uQ@mail.gmail.com>
-Subject: Re: [PATCHv1 11/11] power: supply: generic-adc-battery: update
- copyright info
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
+References: <20230303092347.4825-1-cheng-jui.wang@mediatek.com> <20230303092347.4825-5-cheng-jui.wang@mediatek.com>
+In-Reply-To: <20230303092347.4825-5-cheng-jui.wang@mediatek.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Mar 2023 09:47:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU8qujVdXNfk00s66NF04=A3Z4Gsj7W+OyeeJA=pFmEbQ@mail.gmail.com>
+Message-ID: <CAMuHMdU8qujVdXNfk00s66NF04=A3Z4Gsj7W+OyeeJA=pFmEbQ@mail.gmail.com>
+Subject: Re: [PATCH 04/10] cpuidle, psci: Push RCU-idle into driver
+To:     Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
+Cc:     stable@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org> =
-wrote:
+Hi Cheng,
 
-> jz4740-battery.c and s3c_adc_battery.c have been removed
-> from the tree and after all of my restructuring the driver
-> is basically no longer based on them.
+On Fri, Mar 3, 2023 at 10:35 AM Cheng-Jui Wang
+<cheng-jui.wang@mediatek.com> wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
 >
-> Thus update the copyright information and switch to SPDX
-> license identifier while being at it.
+> commit e038f7b8028a1d1bc8ac82351c71ea538f19a879 upstream.
 >
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, at least twice, before going idle is suboptimal.
+>
+> Notably once implicitly through the cpu_pm_*() calls and once
+> explicitly doing ct_irq_*_irqon().
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> Reviewed-by: Guo Ren <guoren@kernel.org>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Link: https://lore.kernel.org/r/20230112195539.760296658@infradead.org
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Signed-off-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Given this patch introduced a so far unresolved regression upstream,
+I think it's premature to backport this to stable.
 
-Yours,
-Linus Walleij
+https://lore.kernel.org/all/ff338b9f-4ab0-741b-26ea-7b7351da156@linux-m68k.org
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
