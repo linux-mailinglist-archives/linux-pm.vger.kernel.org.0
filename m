@@ -2,57 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107CA6B4757
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 15:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE536B473D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 15:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbjCJOuJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 09:50:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S233103AbjCJOta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 09:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbjCJOtE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 09:49:04 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D51223B9;
-        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-176261d7f45so6035547fac.11;
-        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
+        with ESMTP id S233149AbjCJOsR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 09:48:17 -0500
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6863B10D31D;
+        Fri, 10 Mar 2023 06:47:31 -0800 (PST)
+Received: by mail-ot1-f52.google.com with SMTP id o4-20020a9d6d04000000b00694127788f4so3036378otp.6;
+        Fri, 10 Mar 2023 06:47:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459662;
+        d=1e100.net; s=20210112; t=1678459650;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2woDhUU8segjfXUK8bCKWWkxeooki4Tiioxihb29omI=;
-        b=77sr8Yd32bNJG5E5gvSB/QAYw7sH6uZZYnzRb9vwSvrRpBhHesYo36o5pwes2RUSC3
-         d3Bss/p+T5OVt/GFznda7n9ni/f7zW1R20nFfJ6sukfuDbhSwtKgzieznkFi4TCgzxJi
-         U6N6ppGWXSgkt/8EzRMCYbWQwmDnlBqufIxfgF2eExzan5c6B0IG6GC2rYWC0Mt89EYU
-         laQlBc+iqytku2koO8/VAcrYkt/oEXr2VX+X8TklMaygap09EJMAFwXJ8bO3Zv+aKV0R
-         hp+v6SjrzBf30bor5skzvMQA4yb/IKS5rif/2+iIA9XVGOd8f73GvYfyCP5b0t10auar
-         1lBg==
-X-Gm-Message-State: AO0yUKW8TIAL8Ny+J9gmKvnrH79XLA++G6W2cCO7qYCnyp1a6JwTAmYO
-        wF0E/cU6udmuBOX7MtEL0A==
-X-Google-Smtp-Source: AK7set8U4wjqUrryELYfSJxMuPVOOd0KXhYQxIgamWtZOI+6GdKcXJrh5sheP103x03+JPriAbk29w==
-X-Received: by 2002:a05:6870:b14d:b0:172:80f9:a545 with SMTP id a13-20020a056870b14d00b0017280f9a545mr4220778oal.25.1678459662131;
-        Fri, 10 Mar 2023 06:47:42 -0800 (PST)
+        bh=2w7H2E20MK/c+6XlILkgZ7nt0rr3HyTMC7JKg2n78vQ=;
+        b=oUvXedPYZshpGVFL5nV049LnzAn5IvvWj+T64FerSQIKwHy7PgIQBwSbNeSyIPqRoL
+         6HiPl6ivywdsKoAKKzR5Pi4l+A2TAf6N3kinEKOE/gA/uMPAEb6Ip9si5nVE5U9kbdOk
+         Bm/ix+J4KJDS//NafVty0VN4i3R31Qm/gFD1Rh/67Fjmq2l6AmGRs3dcSaxAvJq3vLtl
+         yuhz7A5O2RY+XLOVax/9gymDJHZehWV66TEmVUQaxbfMAxJtxFQar3VdYmFny+I1bl2/
+         PiaMEP9J4xC7TKPgTpRFsbrPviSb1NlRAUW19i0hvAZ2Q3Dg0Kf9/1Ty0KVMibq5cU2f
+         e7RQ==
+X-Gm-Message-State: AO0yUKU4EXq5URo6aeMQ4e57ahwAwGnGqDT8RpMo3m/o1rfbBCF/PrJz
+        5hTTwm1pJPoQMIVmpj1atkgDDDIKrA==
+X-Google-Smtp-Source: AK7set/IsF3Ai3xSNIz2lx0Yu/Fngjzx+lXBu0znW7EWt3FuwC3pB5REDfw1WSy/UMILjiyWDRhxdg==
+X-Received: by 2002:a05:6830:3687:b0:690:ddbc:d777 with SMTP id bk7-20020a056830368700b00690ddbcd777mr13641632otb.10.1678459650530;
+        Fri, 10 Mar 2023 06:47:30 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y20-20020a056870429400b00172428894e0sm95296oah.28.2023.03.10.06.47.41
+        by smtp.gmail.com with ESMTPSA id p7-20020a0568301d4700b0068bcadcad5bsm104051oth.57.2023.03.10.06.47.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:41 -0800 (PST)
-Received: (nullmailer pid 1541915 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:03 -0000
+        Fri, 10 Mar 2023 06:47:29 -0800 (PST)
+Received: (nullmailer pid 1542867 invoked by uid 1000);
+        Fri, 10 Mar 2023 14:47:09 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
+To:     Georgi Djakov <djakov@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH] cpuidle: Use of_property_present() for testing DT property presence
-Date:   Fri, 10 Mar 2023 08:47:03 -0600
-Message-Id: <20230310144703.1541888-1-robh@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] interconnect: Use of_property_present() for testing DT property presence
+Date:   Fri, 10 Mar 2023 08:47:08 -0600
+Message-Id: <20230310144709.1542841-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -76,47 +69,31 @@ for presence of a property and nothing more.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
- drivers/cpuidle/cpuidle-riscv-sbi.c   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/interconnect/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index 6ad2954948a5..e875ddadc51b 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -165,7 +165,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
- 	 * initialize a genpd/genpd-of-provider pair when it's found.
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 0f392f59b135..cc963c754da6 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -451,7 +451,7 @@ struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+ 	 * When the consumer DT node do not have "interconnects" property
+ 	 * return a NULL path to skip setting constraints.
  	 */
- 	for_each_child_of_node(np, node) {
--		if (!of_find_property(node, "#power-domain-cells", NULL))
-+		if (!of_property_present(node, "#power-domain-cells"))
- 			continue;
+-	if (!of_find_property(np, "interconnects", NULL))
++	if (!of_property_present(np, "interconnects"))
+ 		return NULL;
  
- 		ret = psci_pd_init(node, use_osi);
-diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-index be383f4b6855..1fab1abc6eb6 100644
---- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-+++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-@@ -497,7 +497,7 @@ static int sbi_genpd_probe(struct device_node *np)
- 	 * initialize a genpd/genpd-of-provider pair when it's found.
+ 	/*
+@@ -544,7 +544,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+ 	 * When the consumer DT node do not have "interconnects" property
+ 	 * return a NULL path to skip setting constraints.
  	 */
- 	for_each_child_of_node(np, node) {
--		if (!of_find_property(node, "#power-domain-cells", NULL))
-+		if (!of_property_present(node, "#power-domain-cells"))
- 			continue;
+-	if (!of_find_property(np, "interconnects", NULL))
++	if (!of_property_present(np, "interconnects"))
+ 		return NULL;
  
- 		ret = sbi_pd_init(node);
-@@ -548,8 +548,8 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
- 	for_each_possible_cpu(cpu) {
- 		np = of_cpu_device_node_get(cpu);
- 		if (np &&
--		    of_find_property(np, "power-domains", NULL) &&
--		    of_find_property(np, "power-domain-names", NULL)) {
-+		    of_property_present(np, "power-domains") &&
-+		    of_property_present(np, "power-domain-names")) {
- 			continue;
- 		} else {
- 			sbi_cpuidle_use_osi = false;
+ 	/*
 -- 
 2.39.2
 
