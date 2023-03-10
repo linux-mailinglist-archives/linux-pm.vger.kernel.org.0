@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997DE6B5330
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 22:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D5C6B5334
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 22:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCJVqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 16:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
+        id S231902AbjCJVqR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 16:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjCJVpH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 16:45:07 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEF8138F73
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:44:06 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id s11so26069976edy.8
-        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:44:06 -0800 (PST)
+        with ESMTP id S231922AbjCJVpZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 16:45:25 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98A413904C
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:44:09 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id s11so26070168edy.8
+        for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678484621;
+        d=linaro.org; s=google; t=1678484623;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=euRWHr0UtuqpwGJTkiRQ6fkvgau3vkX9qbw5gY31Oi0=;
-        b=TZru0gIOrHG64rX4eEReJHZgP+b/OcPOjctwQKLS8foHVDxU75d0W+Fb9UdQ7e6xis
-         NmBTqb+GEcVb9DwSygBWk7KtgdWIf9NLUYhb94lNNioydXarMDs4XBECaTh/4+ACvXwt
-         bFeZIniNdYlKHiRIIvDe7Fh3rF4GPJO2/JArqyVqrVpjg2VoNI37TL0CsGwUA4qmfNm+
-         xIFdCdMemXq9Lf/H+d6lu9COQ35rHXqDlGxQVVONsOab4tJKwI9M+5RcWOSci66BbPTB
-         SUKWp/qpQ0DtHVxRA+DLMD3UyFaSXyw1Ws+a1nlgN7iFK9K80Z+QN/fbKxBuRIOVG9pi
-         ubkw==
+        bh=NVncxQNg4gxFDgYIBaUsd3uzVPfps5DyaJrzAl5UBAA=;
+        b=ncSa4IpmBLB7CP0IXgXqZdSd89q1KMW/Iz2YrLgk/ZIZugabSyh0SCeAoelIf4BCcy
+         wew8y/0j0iY8rX6KcIqjUEOtfT2G8IgKy1lPbcPl7EZJAwFKTAay9d6DM5bftdwNV+4G
+         QEBCCNRaRpaNDv09XC3gX/t96zJWIgA08Lk1G1D8Mh9YiBmMqzj5azToCXnaH66iyzXQ
+         3jyXhBuy5zX+6jBzwsE4GwPJFtH/mygoLD50q0kb/UiqPILDi6Bxa5zwGMXiWKPaZQur
+         e7KCkwAl7i62olZVrX4qNRf/a0tLcMrXwbH7wnf/GLHVlMdNvcrLqCrCAYsN1x3mr3dZ
+         zp3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678484621;
+        d=1e100.net; s=20210112; t=1678484623;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=euRWHr0UtuqpwGJTkiRQ6fkvgau3vkX9qbw5gY31Oi0=;
-        b=ADsWeAOeQioVs5UeVvssXqUHRE46rD2uDf5+wAPgYLTosx4m9ZqmH7kvGE+kaQOfEu
-         s4GrGr1eXNOEbkiYPCqraXdI6uGNqPLI4iEmBuFgM3ULjdqd4Ic0362tAQE7fFnr+89Z
-         pfancGF9N/P7CTnAeXfNMYiSZVz0o4mOffh2R/LADYZrQTJFy1XrlpuZOjG+j0TTBhb6
-         xW+fMIZ2zecxyiScxG6GFS4+vtKL2Kphjpg+GqevLDQVkLyeAPWosKG9+t/rkb8k7jhb
-         7DZof1a2xttQRvGBKTRafSKoe61V/ghN/lqD9n2dhxHVj0EqPeVlhpjjq3zCItf6PzC/
-         KtKw==
-X-Gm-Message-State: AO0yUKVoQpKSXkTuDRCcL5j7FZ7kT9hf/0jdCx1yHqXCgpkTZ5tedSgN
-        wsHtv0lgOfm/l60XAy56l5hfAg==
-X-Google-Smtp-Source: AK7set+P7KiAdjrVwDphE8ZYgCZ0yPuvhmWOIJk792eAii2Tlil8k2tyFBuqwof/wHJ4HIRrO2KUNQ==
-X-Received: by 2002:a17:907:d306:b0:91e:7d56:f051 with SMTP id vg6-20020a170907d30600b0091e7d56f051mr1369413ejc.51.1678484621672;
-        Fri, 10 Mar 2023 13:43:41 -0800 (PST)
+        bh=NVncxQNg4gxFDgYIBaUsd3uzVPfps5DyaJrzAl5UBAA=;
+        b=bcTfs/g1BnDLveB5FfKhiggBnKBTZHI8sQgUVz3CJ8doUPgQuUfPFNDE+DzixAHO0W
+         ZdwYOEBlRBYtNoGJN3Gmiuz88+UBn8dAdEHe7LnSfh6vGth2xxwsDVTIee7vzbvPKbQQ
+         OhHHp9xXHOHXAMupq4wuGWUsvv+XVCV1PxWwxxr4qUnMny2QSmR+DOI52zh3Q2NHfyrH
+         jllojKSOjyHaPU5fAUf6t3GWPpmqfVH4Y45bHXHE1FJSTBEv3iO+nsNhku7IeGcvIfOj
+         uiazV/xo89naScO3kZHB+Lb7sV3qdtOzlFKDSZciG3iCidDrP6a13MiNgfdzKG+CPEEc
+         IbuQ==
+X-Gm-Message-State: AO0yUKUqT+u7yo2HS1uZWu45oIIUSLgbFwIBB8A/fbd0NaqBurA16a6T
+        aRuBsvLe1m8TewLx5CL30pkEeg==
+X-Google-Smtp-Source: AK7set8ZbxJEF5tC478I3Zm/JdDZm7PcmKmY5C2UnCmad6B3N81KaINb+wIFMS2BIhkbDLbGBPiirw==
+X-Received: by 2002:a05:6402:31fa:b0:4ac:b308:d732 with SMTP id dy26-20020a05640231fa00b004acb308d732mr24684308edb.18.1678484623164;
+        Fri, 10 Mar 2023 13:43:43 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.40
+        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 13:43:41 -0800 (PST)
+        Fri, 10 Mar 2023 13:43:42 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -71,9 +71,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 3/9] ASoC: samsung: aries_wm8994: Drop of_match_ptr for ID table
-Date:   Fri, 10 Mar 2023 22:43:27 +0100
-Message-Id: <20230310214333.274903-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/9] ASoC: samsung: rt5514-spi: Drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 22:43:28 +0100
+Message-Id: <20230310214333.274903-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
 References: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
@@ -94,26 +94,26 @@ The driver can match only via the DT table so the table should be always
 used and the of_match_ptr does not have any sense (this also allows ACPI
 matching via PRP0001, even though it is not relevant here).
 
-  sound/soc/samsung/aries_wm8994.c:523:34: error: ‘samsung_wm8994_of_match’ defined but not used [-Werror=unused-const-variable=]
+  sound/soc/codecs/rt5514-spi.c:497:34: error: ‘rt5514_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/samsung/aries_wm8994.c | 2 +-
+ sound/soc/codecs/rt5514-spi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
-index 0fbbf3b02c09..9122482a0e5c 100644
---- a/sound/soc/samsung/aries_wm8994.c
-+++ b/sound/soc/samsung/aries_wm8994.c
-@@ -684,7 +684,7 @@ static int aries_audio_probe(struct platform_device *pdev)
- static struct platform_driver aries_audio_driver = {
- 	.driver		= {
- 		.name	= "aries-audio-wm8994",
--		.of_match_table = of_match_ptr(samsung_wm8994_of_match),
-+		.of_match_table = samsung_wm8994_of_match,
- 		.pm	= &snd_soc_pm_ops,
+diff --git a/sound/soc/codecs/rt5514-spi.c b/sound/soc/codecs/rt5514-spi.c
+index 362663abcb89..22c0afa01459 100644
+--- a/sound/soc/codecs/rt5514-spi.c
++++ b/sound/soc/codecs/rt5514-spi.c
+@@ -504,7 +504,7 @@ static struct spi_driver rt5514_spi_driver = {
+ 	.driver = {
+ 		.name = "rt5514",
+ 		.pm = &rt5514_pm_ops,
+-		.of_match_table = of_match_ptr(rt5514_of_match),
++		.of_match_table = rt5514_of_match,
  	},
- 	.probe		= aries_audio_probe,
+ 	.probe = rt5514_spi_probe,
+ };
 -- 
 2.34.1
 
