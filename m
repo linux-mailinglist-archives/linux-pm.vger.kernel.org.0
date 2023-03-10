@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D3F6B5347
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 22:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3116B5340
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 22:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjCJVqq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Mar 2023 16:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S231873AbjCJVqf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Mar 2023 16:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjCJVqH (ORCPT
+        with ESMTP id S232086AbjCJVqH (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Mar 2023 16:46:07 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E9A144BF5
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A5014624C
         for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:44:21 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id da10so26158227edb.3
+Received: by mail-ed1-x52a.google.com with SMTP id k10so25985213edk.13
         for <linux-pm@vger.kernel.org>; Fri, 10 Mar 2023 13:44:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678484630;
+        d=linaro.org; s=google; t=1678484631;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VHJnD+TmpIWsb3dNvXDWriziAnT09R0JSbZSoSxYB3I=;
-        b=CCPhzuWmaV2C8C7W8SIAp77g9fF1tNRToI2X4v5sruLui5QAT3eplPYntV1A5g5snH
-         Ab+hIss+rE1Eib9wUxIspkPWeUgftjiqbcxXcQ9v+tT8liWdlpu00X7AXKAfgu1X84cT
-         3Kd3ZM+oC3Jyi84nGCCG+8BKzGFAgavCqjo25PCfWAMiIp/4wFDPaqyfxBx4tv8QPooK
-         Sm6J+U3OF0h1ela/q1CIoL+sOXB4lm5zaDO4oChwR5m6bMXq/vnRg2X+BwjEF2VbW8Xk
-         QG+s3T06qdk54u8bw/YX3am49jq1HDDkuKa8R4n6+LCJUScGQzKIRXg6SwWJhEKwrhoa
-         cAPg==
+        bh=rtTDNGd4OKXSBNgUghpGOqMcCM6UWM1avWy8539QlKU=;
+        b=aKwq/Onkzm1G69ixhhVQ9wEUply4dRoc6+jOvfU94SP6WWFKCmp4Nw3F+G+XgIS00R
+         HYJselriPM1R3rR6D5ZlcKqsA8uEsQ1waZfG1G17qWj43d6MCZeuyWAVAhhQ5h10z1PD
+         MhnVNyDszoR6wYbGeCI6G4T6dmjKTqZgXC+y4Xmwy9gKRrNaKmtgukc97tHxUkf51MDO
+         X+hnrQLt3ACFfXnf+eS8ipaMMdZ9hjaH69oO8+hOD0uyzQy6zCHiHeLXyMjeA5CH/kpI
+         KbOxukVTdBuqOCOZ4CdGK2yvHbgSZMXaCAoaKpUtTlaPl7RoRKDhqWCG65R+HjHGJZ8Q
+         7v3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678484630;
+        d=1e100.net; s=20210112; t=1678484631;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VHJnD+TmpIWsb3dNvXDWriziAnT09R0JSbZSoSxYB3I=;
-        b=KmWJjUvpDwRXr4PdzVby/V8XvH+fYVJrm/+/nvKj2QK786i5y6PiFu0NPzPyR7o5Bo
-         pWrd0t7zKuj+C7+UwUg2J13L5s71qJSnLWXzGYuhBpOp9m4FIduv4nuc5BfE/cclYU/8
-         /Snf51c+bDfkEmfP/SicZkhIg1FppmJv2xDZrqYP/9BzgkbjODWB4WxdWBbTwwpI8/84
-         7owhEWF3hDTWW8CZiUBUwZwUdJruVCzWeBEXG5/eLPQ5+uhbVIElZuEIK8i4k/hCpkl+
-         MS2AsTIOLmDP5HW2BtPucBKcU5RNN8lqrXl1AvLK3qh1+wQ+UeKTiioc+VZ3St4vi0Zq
-         i+4g==
-X-Gm-Message-State: AO0yUKVt3DiAFzhvJvvM0fj+k7vxTq4fK8QUf8xguwVNtAB0VztNyn59
-        aV1SjQgYQ1B9bFaogRcfTzE+Lw==
-X-Google-Smtp-Source: AK7set8CrVSqb0nImE54sT1v/yDICbplJWTA1hCEEjQ0wOFQkMFxqNNonQJZvgygm+HU//tgaKmXGg==
-X-Received: by 2002:a17:907:1909:b0:8b1:304b:8e2c with SMTP id ll9-20020a170907190900b008b1304b8e2cmr27647387ejc.0.1678484630055;
-        Fri, 10 Mar 2023 13:43:50 -0800 (PST)
+        bh=rtTDNGd4OKXSBNgUghpGOqMcCM6UWM1avWy8539QlKU=;
+        b=W+yc/hGhadbAZpz7mBCIPCkIWbup8ubSGQwMySSwHvZYKwMpovouRtThw6u4+Dbl0S
+         yuHGnNDey7ftF9NgVxmPUciM3pfadSvtSCto8yuf9NGM0M8ltaHSCbabX+oIirlBB7nZ
+         kd3EH87GjHy8stdguFPVZEoDudFyR3yqpxGK8mINVaGBs99d4fZ8SwuBU4+MBCRXWEdP
+         VGAzj19Xxn1H0lsOdNeleS702UvqsCTOU1k/FfHQIGx+5U4DJeE0P+EDil/P2qG4bZFY
+         U4d3kieq1FuR55Q0Dn+7hga3KeTdrbilT2lpSwxf59Ft2/1ExHJKWMs1HsAWbKXFQQMJ
+         rcdA==
+X-Gm-Message-State: AO0yUKXI7v6FopUBlc3TF4T+LTDF+NDC8fQn6zTyE3th6u3ZD3xrethN
+        5tTuDzPS0MTXryiUGiMGSsuKUg==
+X-Google-Smtp-Source: AK7set8PHUQ6DL7eFsVXVoAnmstVTGwi3LR28x814KZUIny/qh75j7xE8KDu/r3osk5u+e4VTkuMlw==
+X-Received: by 2002:aa7:ca41:0:b0:4ad:a70c:e010 with SMTP id j1-20020aa7ca41000000b004ada70ce010mr23647133edt.41.1678484631647;
+        Fri, 10 Mar 2023 13:43:51 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.48
+        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b008dcf89a72d7sm327228ejw.147.2023.03.10.13.43.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 13:43:49 -0800 (PST)
+        Fri, 10 Mar 2023 13:43:51 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -71,9 +71,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 8/9] ASoC: codecs: src4xxx-i2c: Mark OF related data as maybe unused
-Date:   Fri, 10 Mar 2023 22:43:32 +0100
-Message-Id: <20230310214333.274903-9-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 9/9] ASoC: codecs: zl38060: Mark OF related data as maybe unused
+Date:   Fri, 10 Mar 2023 22:43:33 +0100
+Message-Id: <20230310214333.274903-10-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
 References: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
@@ -93,25 +93,25 @@ X-Mailing-List: linux-pm@vger.kernel.org
 The driver can be compile tested with !CONFIG_OF making certain data
 unused:
 
-  sound/soc/codecs/src4xxx-i2c.c:27:34: error: ‘src4xxx_of_match’ defined but not used [-Werror=unused-const-variable=]
+  sound/soc/codecs/zl38060.c:611:34: error: ‘zl38_dt_ids’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/src4xxx-i2c.c | 2 +-
+ sound/soc/codecs/zl38060.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/src4xxx-i2c.c b/sound/soc/codecs/src4xxx-i2c.c
-index 27026030704a..a40fd20df984 100644
---- a/sound/soc/codecs/src4xxx-i2c.c
-+++ b/sound/soc/codecs/src4xxx-i2c.c
-@@ -24,7 +24,7 @@ static const struct i2c_device_id src4xxx_i2c_ids[] = {
- };
- MODULE_DEVICE_TABLE(i2c, src4xxx_i2c_ids);
+diff --git a/sound/soc/codecs/zl38060.c b/sound/soc/codecs/zl38060.c
+index c3d0a2a7c36f..28c92d90299e 100644
+--- a/sound/soc/codecs/zl38060.c
++++ b/sound/soc/codecs/zl38060.c
+@@ -608,7 +608,7 @@ static int zl38_spi_probe(struct spi_device *spi)
+ 					       &zl38_dai, 1);
+ }
  
--static const struct of_device_id src4xxx_of_match[] = {
-+static const struct of_device_id src4xxx_of_match[] __maybe_unused = {
- 	{ .compatible = "ti,src4392", },
- 	{ }
+-static const struct of_device_id zl38_dt_ids[] = {
++static const struct of_device_id zl38_dt_ids[] __maybe_unused = {
+ 	{ .compatible = "mscc,zl38060", },
+ 	{ /* sentinel */ }
  };
 -- 
 2.34.1
