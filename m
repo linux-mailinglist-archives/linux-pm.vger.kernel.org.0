@@ -2,130 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BDF6B3498
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 04:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B13F6B34B7
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Mar 2023 04:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCJDOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Mar 2023 22:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S229668AbjCJDVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Mar 2023 22:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjCJDOk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 22:14:40 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFB1F28A9;
-        Thu,  9 Mar 2023 19:14:39 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32A14npV001842;
-        Fri, 10 Mar 2023 03:14:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xQWrPAxRSV+EGW99i7tiOci4rzdoO4Igctk2XbVM/Ho=;
- b=IEv5PD8y6p3id78kUUNoaq36Xc25fLOn///gHbrztdpopP48fAbJDgviRvK5eK7iMwxz
- B8ag3+aiVg7CxCDFAwh72/yelZAKEwJUYQJjD9MVEqD75e31NI67lS9y4RFg7gRdo/tp
- O026C/sYT6Do/Y0oV/QpUm4HHaNKCd0WJGTpcjvriJ/oMsySKveki8KVgTmhW7xs1liG
- NdvIuZoNzkr6sVf6TsUY80CdJYfyH9XIsJhr+scjVmqxG6JWfGx5BtutUcXsmKuvl7fQ
- KooYX6DLrN2MIvJJsMNbE6uMEncpF/6Wmd4DC0Oy00KJFhnheQypY8c5c8YYI+O2taqi cg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7q0y0s5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 03:14:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32A3EXY9002855
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 03:14:33 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 9 Mar 2023
- 19:14:27 -0800
-Message-ID: <139384c3-5ebc-84b6-9109-b98e4690ca68@quicinc.com>
-Date:   Fri, 10 Mar 2023 08:44:23 +0530
+        with ESMTP id S229914AbjCJDVI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Mar 2023 22:21:08 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30DF103BFC
+        for <linux-pm@vger.kernel.org>; Thu,  9 Mar 2023 19:21:05 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id f31so3546774vsv.1
+        for <linux-pm@vger.kernel.org>; Thu, 09 Mar 2023 19:21:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678418465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jbTDjvc5ieqfrIhKoRc6A4Iamnhwe4zfbF/KdHYvMbM=;
+        b=ePB0Z4h/EVZe6K5HjRzYtbfXmGb1TicluV0XhOHpbVkr/KNK62T6oukk0GlEiwZa3n
+         mzt/b6VrT0J9pDhKgzgTuLe8B/ow3gEPUmo+4uQBs/CmbCWkkSKxeB+yMDA6hHHqfunD
+         gHJQ/rJEcbNFBbLF8zOtsNxZFidTempbV9t34=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678418465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jbTDjvc5ieqfrIhKoRc6A4Iamnhwe4zfbF/KdHYvMbM=;
+        b=bMpa2aIs4gSHzieSHh9FLXKoStRmFbPjlZ8tVt8mia8scOGaEIBUERZPLXvQLMLPDY
+         sZ6K39JVTUOXL4oPgQ+TvE3JcRtqUzvRAK8tS7NR3dRgsp+sXB1N0GXPlVQwlu3wAAak
+         MhufJ6nex9Qn3GiPirMqS69AWbFNibEXczEEcnwdndZ9UOut/YDoKjZcBcdEEd729YKI
+         WRa+YtJXxXDVqPmGeSrtgc6jv+ZIjkJYuHbEd3q9+pZbM/lgwtyChbNzaMnA0YbT95HL
+         hsREHQnar0bkiN4XBg/Kyo+ICN1lhpfFISr5xYyO27JQsFv6W1r/zwWx0Nilxqz4W1Gz
+         lGHA==
+X-Gm-Message-State: AO0yUKXOeBLfgLlimJ9kNVEm84kDX70PkIqPqEJlPxnItZfVoRCMxZCj
+        yh6aAtZaORfpFfY1RFjcZnYRy/O6ZdM9a1+zL6B9jA==
+X-Google-Smtp-Source: AK7set+si04/1KeeWL6kRQ5LkOK77tstrb85bSbjd1w4JQ4/NvTHJ5iJ4Kv4gkWbOuFVDQCpn5vP7kaNIm7RZOiAPQ8=
+X-Received: by 2002:a05:6102:3192:b0:421:c926:4b6d with SMTP id
+ c18-20020a056102319200b00421c9264b6dmr361086vsh.0.1678418464888; Thu, 09 Mar
+ 2023 19:21:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 09/15] arm64: dts: qcom: sm6375: Add CPUCP L3 node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
- <20230303-topic-sm6375_features0_dts-v1-9-8c8d94fba6f0@linaro.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-9-8c8d94fba6f0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: N5LoSnEg8LgJ9YUzq6wC_c2TlhTQEy_t
-X-Proofpoint-ORIG-GUID: N5LoSnEg8LgJ9YUzq6wC_c2TlhTQEy_t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_14,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1011 mlxscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303100022
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307154524.118541-1-bchihi@baylibre.com> <20230307154524.118541-2-bchihi@baylibre.com>
+ <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com> <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+In-Reply-To: <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 10 Mar 2023 11:20:53 +0800
+Message-ID: <CAGXv+5EhTi5t1yqDP8BqdCzWzNFSYu4n39kBi0YhEvJQPu7bLg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
+ thermal controllers for mt8195
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     bchihi@baylibre.com, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Konrad,
-
-Thanks for the patch.
-
-On 3/4/23 03:28, Konrad Dybcio wrote:
-> Enable the CPUCP block responsible for scaling the L3 cache.
-
-FWIW, the patch just enables the l3 provider, the CPUCP block would
-already be up at this point. You would also want to include the
-expansion for CPUCP at least once in your patch.
-
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-
-> ---
->   arch/arm64/boot/dts/qcom/sm6375.dtsi | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-> index 90f18754a63b..59d7ed25aa36 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-> @@ -1505,6 +1505,15 @@ frame@f42d000 {
->   			};
->   		};
->   
-> +		cpucp_l3: interconnect@fd90000 {
-> +			compatible = "qcom,sm6375-cpucp-l3", "qcom,epss-l3";
-> +			reg = <0 0x0fd90000 0 0x1000>;
+On Thu, Mar 9, 2023 at 6:39=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
+o.org> wrote:
+>
+> On 09/03/2023 05:40, Chen-Yu Tsai wrote:
+> > On Wed, Mar 8, 2023 at 12:46=E2=80=AFAM <bchihi@baylibre.com> wrote:
+> >>
+> >> From: Balsam CHIHI <bchihi@baylibre.com>
+> >>
+> >> Add AP Domain to LVTS thermal controllers dt-binding definition for mt=
+8195.
+> >>
+> >> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> >> ---
+> >>   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+> >>   1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/inc=
+lude/dt-bindings/thermal/mediatek,lvts-thermal.h
+> >> index c09398920468..8fa5a46675c4 100644
+> >> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> >> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> >> @@ -16,4 +16,14 @@
+> >>   #define MT8195_MCU_LITTLE_CPU2  6
+> >>   #define MT8195_MCU_LITTLE_CPU3  7
+> >>
+> >> +#define MT8195_AP_VPU0  8
+> >
+> > Can't this start from 0? This is a different hardware block. The index
+> > namespace is separate. Same question for MT8192.
+>
+> The ID is used to differentiate the thermal zone identifier in the
+> device tree from the driver.
+>
+> +               vpu0-thermal {
+> +                       polling-delay =3D <0>;
+> +                       polling-delay-passive =3D <0>;
+> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_VPU0>;
 > +
-> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&gcc GPLL0>;
-> +			clock-names = "xo", "alternate";
-> +			#interconnect-cells = <1>;
-> +		};
-> +
->   		cpufreq_hw: cpufreq@fd91000 {
->   			compatible = "qcom,sm6375-cpufreq-epss", "qcom,cpufreq-epss";
->   			reg = <0 0x0fd91000 0 0x1000>, <0 0x0fd92000 0 0x1000>;
-> 
+> +                       trips {
+> +                               vpu0_crit: trip-crit {
+> +                                       temperature =3D <100000>;
+> +                                       hysteresis =3D <2000>;
+> +                                       type =3D "critical";
+> +                               };
+> +                       };
+> +               };
+>
+> If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate
+> MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+>
+> The LVTS driver will call devm_thermal_of_zone_register() with the
+> sensor id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id,
+> then at the moment of registering the MT8195_AP_VPU0, the underlying OF
+> thermal framework code will use MT8195_MCU_BIG_CPU0 description instead
+> because it will be the first to be find in the DT.
+>
+> If MT8195_AP_VPU0 is described in DT before, then the same will happen
+> when registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered
+> instead.
+>
+> IOW all ids must be different.
+
+I see. I didn't realize the lookup namespace covered the whole platform.
+In that case, please ignore my request.
+
+ChenYu
+
+> The namespace is already described by the macro name AFAICS, so whatever
+> the values, we see only the macro names and those IDs are private the
+> kernel implementation.
+>
+> If the numbering is really important, may be something like:
+>
+> #define MT8195_MCU_BIG_CPU0     00
+> #define MT8195_MCU_BIG_CPU1     01
+> #define MT8195_MCU_BIG_CPU2     02
+> #define MT8195_MCU_BIG_CPU3     03
+> #define MT8195_MCU_LITTLE_CPU0  04
+> #define MT8195_MCU_LITTLE_CPU1  05
+> #define MT8195_MCU_LITTLE_CPU2  06
+> #define MT8195_MCU_LITTLE_CPU3  07
+>
+> #define MT8195_AP_VPU1  10
+> #define MT8195_AP_GPU0  11
+> #define MT8195_AP_GPU1  12
+> #define MT8195_AP_VDEC  13
+> #define MT8195_AP_IMG   14
+> #define MT8195_AP_INFRA 15
+> #define MT8195_AP_CAM0  16
+> #define MT8195_AP_CAM1  17
+>
+> But I would suggest considering this change as a separate patch after
+> the AP domain is added.
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
