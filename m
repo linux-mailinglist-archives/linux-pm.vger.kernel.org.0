@@ -2,100 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74826B5F40
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Mar 2023 18:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2B86B5F6D
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Mar 2023 18:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjCKRje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Mar 2023 12:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S230013AbjCKRyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Mar 2023 12:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjCKRjN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Mar 2023 12:39:13 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF5113C1
-        for <linux-pm@vger.kernel.org>; Sat, 11 Mar 2023 09:38:42 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id r15so5868162edq.11
-        for <linux-pm@vger.kernel.org>; Sat, 11 Mar 2023 09:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678556275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M5xwpl4H01ebuofJIsmyDXhZifNKbULLaWH0tgMeLQs=;
-        b=uHRXvcl4aQRMKSbMkJJVDHQLeJeor/p2qFQVGFmp4HbBcIjyvzBQXOOEOuHg5McWei
-         YkEPMsW0vdZEVtKDleHnOWn0qxL8bUYhMoWrRanE2Q2WOI6Ym1g3EC3UmWNyUUjGyR7y
-         V1CQmCVvmgjhZNEAg9xJW1pzDAlsnROIIVkXlqZ9BOSVhlPHNFzQPaCiSM4la7NDl4ZN
-         LuGw47EWnCQsi7sVTaNLg123uR3NHmj731YlMoLQDWIYnzcOBnmYYzHnWYGAk3vdYvkz
-         GAaeaSOr4LaUH1Fj4WcphjEjgnK3vmLSV+Dt51eeykqpi1RCcbC/3ro+zK/leUzQWe2f
-         42dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678556275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M5xwpl4H01ebuofJIsmyDXhZifNKbULLaWH0tgMeLQs=;
-        b=b2qDWzJPOVYSNT00k+Excwmj9nT/J5o4VgOtFzwfCr0Ia6yqHSG5DrOrSrtE4eV2GW
-         4+0NQ+ssov/qUGY9R0kz5C0hABdyo/cM96z+E7uzWC/fis0gmApvfHFmQ48nuS7WYIjc
-         4gIGRewu3WJJEfTVhwX24loA4vBGXeHtxyZXzHXzhSCmW190GFbvj+5kBxsSga9yqQir
-         4cetiQEqs5r0fcm8wLIi2u3qHm4XwuLWIOCg+Iv6KEY4eOmY8BjJoczDUR5qVvirQUGn
-         YMPUJ1ttM0SIH60ArWztqPKwFXfjf6ZxSPuGoKEtFOgMdWpM46XDHbUwNTdbqQyvDxMY
-         9c1A==
-X-Gm-Message-State: AO0yUKUtWU2/mazwLnkYlw1sbiaUWHzuqisD132JuzalMX/v/Cul/VW4
-        KxrU8zaf9NlKeMAE3eSyPUYb/Q==
-X-Google-Smtp-Source: AK7set9jGiGyUzTtS/mgdFjFwFwViy1GgJ823I/8lO8D9gRcovvMXzCapYxYjktiKP9R3ILihDBvIg==
-X-Received: by 2002:aa7:d58b:0:b0:4ad:7ad3:de18 with SMTP id r11-20020aa7d58b000000b004ad7ad3de18mr26993394edq.28.1678556275117;
-        Sat, 11 Mar 2023 09:37:55 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
-        by smtp.gmail.com with ESMTPSA id q4-20020a50cc84000000b004bc15a440f1sm1421975edi.78.2023.03.11.09.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 09:37:54 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] devfreq: exyos-bus: drop of_match_ptr for ID table
-Date:   Sat, 11 Mar 2023 18:37:53 +0100
-Message-Id: <20230311173753.263390-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230045AbjCKRyg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Mar 2023 12:54:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45959D6;
+        Sat, 11 Mar 2023 09:54:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E43FB80066;
+        Sat, 11 Mar 2023 17:54:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08725C433D2;
+        Sat, 11 Mar 2023 17:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678557272;
+        bh=z2cWlGV1bcM9jzPNtM9QNL0pjVBEAIJSORCobXsuCfU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t93fSk76dMiXMENVkaQV4v/sl1rw0NGyqPBmFtGMMo6YHGkqTRxwKXSvANmMN+Stp
+         E+5OZ1ct8iqicuM4/5oWyw+6QEWR/Rju8GRLFQWVHYQjXqdpSUbANCV/7qVqP6oUCm
+         HCht02ze2o2l60LRqXm9vomuxlOG68waE7A3uihF4J10ccu6kNBmWOmy8UmnxOZZtr
+         GGHAA+IFP5Y7e3pYBLpZDJlqwH4GmCFG6gm9lvauTRplJFd+rWGe29e2nfLGWutRoC
+         2iwAb0zu+86q7tXq3PpgSYcF90AP07EF14vsvhandIsI7ox0HIR4FLWk8i60JfoMe7
+         0AUBThzKpxKIg==
+Received: by mercury (Postfix, from userid 1000)
+        id 579B1106095F; Sat, 11 Mar 2023 18:54:29 +0100 (CET)
+Date:   Sat, 11 Mar 2023 18:54:29 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCHv1 01/11] dt-bindings: power: supply: adc-battery: add
+ binding
+Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+References: <20230309225041.477440-1-sre@kernel.org>
+ <20230309225041.477440-2-sre@kernel.org>
+ <CACRpkdYWP7Fc3yho5nDB3qU6rt5o4p2Zcz_RxOvOfsAwjXgqXw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r33a6f5pdav5vdbc"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdYWP7Fc3yho5nDB3qU6rt5o4p2Zcz_RxOvOfsAwjXgqXw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).
 
-  drivers/devfreq/exynos-bus.c:504:34: error: ‘exynos_bus_of_match’ defined but not used [-Werror=unused-const-variable=]
+--r33a6f5pdav5vdbc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/devfreq/exynos-bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Linus,
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 027e8f336acc..f7c554051232 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -513,7 +513,7 @@ static struct platform_driver exynos_bus_platdrv = {
- 	.driver = {
- 		.name	= "exynos-bus",
- 		.pm	= &exynos_bus_pm,
--		.of_match_table = of_match_ptr(exynos_bus_of_match),
-+		.of_match_table = exynos_bus_of_match,
- 	},
- };
- module_platform_driver(exynos_bus_platdrv);
--- 
-2.34.1
+On Fri, Mar 10, 2023 at 09:14:39AM +0100, Linus Walleij wrote:
+> Hi Sebastian,
+>=20
+> thanks for your patches!
+>=20
+> On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org=
+> wrote:
+>=20
+> > Add binding for a battery that is only monitored via ADC
+> > channels and simple status GPIOs.
+> >
+> > Signed-off-by: Sebastian Reichel <sre@kernel.org>
+>=20
+> This does look very useful.
 
+:)
+
+> > +title: ADC battery
+> > +
+> > +maintainers:
+> > +  - Sebastian Reichel <sre@kernel.org>
+> > +
+> > +description: |
+> > +  Basic Battery, which only reports (in circuit) voltage and optionally
+> > +  current via an ADC channel.
+>=20
+> I would over-specify: "voltage over the terminals" and
+> "current out of the battery" so this cannot be misunderstood.
+>=20
+> + this text:
+>=20
+> It can also optionally indicate that the battery is full by pulling a GPIO
+> line.
+
+Ack.
+
+>=20
+> > +  charged-gpios:
+> > +    description:
+> > +      GPIO which signals that the battery is fully charged.
+>=20
+> It doesn't say how, I guess either this is an analog circuit (!) or
+> a charger IC? If it doesn't matter, no big deal, but if something is
+> implicit here, then spell it out please.
+
+In my case the GPIO is provided by a charger chip, that is not
+software controllable (just reports charge-done & charger-connected
+via GPIOs). I've seen something similar in a customer device some
+years ago. I will add a sentence:
+
+The GPIO is often provided by charger ICs, that are not software
+controllable.
+
+> > +    fuel-gauge {
+>=20
+> This techno-lingo/slang term is a bit unfortunate, but if there are
+> precedents then stick with it.
+>=20
+> The correct term could be something like battery-capacity-meter
+> I suppose.
+
+Right now in DT we have
+
+ - specific node name (e.g. chip names) that should be changed :)
+ - smart-battery
+ - battery
+ - fuel-gauge
+
+I think fuel-gauge is the most sensible of that list, considering
+hardware vendors usually call their chips battery fuel gauge.
+
+-- Sebastian
+
+--r33a6f5pdav5vdbc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQMwFEACgkQ2O7X88g7
++pr7kBAAmyDSM90DC1hkH6XIxMuE1dgd9pZvygODosBhLZzRDgo+eCiRmmpUHky4
+5SpD/AK2vuptrYpv+p3yGrUorWUUE0kvNU0PMS5ID0CO7+6HOwALVhov1Mvk4oO5
+a+WKYx4jV0t7FMvHe8GJ9r+ni4ywgCvRrAfVYIzHU67G+3pfURIc5SMh7UreQg+x
++Iies0ihL86aijszMhfsaX/0+zudlRa+dSwRZ9w72dqgvO0ksUNZl3bp2Z2/W6MR
+OwbSUQmIBBxVVPs/1re18+F+GgxOkaghomxkLHLTF9shNtB5SRIqLDRi2Mszi6H2
+Rmp8sQH4IDtKFC3EtJ1qCqRceTH/6tf+kNXSQ/8fw3pLZsLRy49DGsRshW5qaLm8
+qRTZ8GU3XsbFGQgx1+GHSpzdCbTdH9Nbq+QsmETm2dl8HMFFGmMYSMWVUeixRWAx
+tU2js6NhXJMEtl2MnjMeYUWWzKBLpDUN8AqPeMe/XvfG7RHmLjUHh8nwNqXxrZCk
+7ttaRH4e8lJJNGkcbXDWQsMAaGNCBBl22GPwYNdVnE963p4BlpaPf85VzJbGmSR8
+QmW2FuPueIv74B5HPzWUlfG2G4NN85NEmeUpXxfmr92iHbVr1DLLHKMjCxkbnecq
+tPLCWhkdyD//zknvWI0+6nNuGNxx+XEhgJBLQR09jrTQtABciWc=
+=MH4X
+-----END PGP SIGNATURE-----
+
+--r33a6f5pdav5vdbc--
