@@ -2,79 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7D06B5D53
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Mar 2023 16:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74826B5F40
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Mar 2023 18:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjCKP0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Mar 2023 10:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S230493AbjCKRje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Mar 2023 12:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCKP0K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Mar 2023 10:26:10 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54D9DBB5A
-        for <linux-pm@vger.kernel.org>; Sat, 11 Mar 2023 07:26:03 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id b10so8412788ljr.0
-        for <linux-pm@vger.kernel.org>; Sat, 11 Mar 2023 07:26:03 -0800 (PST)
+        with ESMTP id S230287AbjCKRjN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Mar 2023 12:39:13 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF5113C1
+        for <linux-pm@vger.kernel.org>; Sat, 11 Mar 2023 09:38:42 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id r15so5868162edq.11
+        for <linux-pm@vger.kernel.org>; Sat, 11 Mar 2023 09:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678548362;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ocLrxz9PNmL7rxcHP9+sMO7kezIoSNjbehDL14u8SU=;
-        b=TzU6eWA4meVSyp256D93bSUZ3gTytwUcoofo8swWobouTfAwodXIB4sjeDgT48Tusw
-         ivU86pQx0LtA/JGdGgs3AhmifyQiPEXig0KIvezyGRYnc106eI35bhXqPihLuJB04ZWE
-         /Pa0IbEv7LclMguWYMHbPkL4O3YleimksrxT+sFwFl09xR/hoRP9BLW5+N8LopHbrlLh
-         CBkSU4SvtuOkZkrc8ysZ7nHAcgDD7ihmIr8779DJR4at8arw3qkCcp+lMYLeehdScnFm
-         1QiNoG9BnJ8MaEv1EzDMoEJGAc/9/6xTvvR/oxGgntWxDVWsx1JJMpzEBXLzh1l2xjpq
-         1Log==
+        d=linaro.org; s=google; t=1678556275;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M5xwpl4H01ebuofJIsmyDXhZifNKbULLaWH0tgMeLQs=;
+        b=uHRXvcl4aQRMKSbMkJJVDHQLeJeor/p2qFQVGFmp4HbBcIjyvzBQXOOEOuHg5McWei
+         YkEPMsW0vdZEVtKDleHnOWn0qxL8bUYhMoWrRanE2Q2WOI6Ym1g3EC3UmWNyUUjGyR7y
+         V1CQmCVvmgjhZNEAg9xJW1pzDAlsnROIIVkXlqZ9BOSVhlPHNFzQPaCiSM4la7NDl4ZN
+         LuGw47EWnCQsi7sVTaNLg123uR3NHmj731YlMoLQDWIYnzcOBnmYYzHnWYGAk3vdYvkz
+         GAaeaSOr4LaUH1Fj4WcphjEjgnK3vmLSV+Dt51eeykqpi1RCcbC/3ro+zK/leUzQWe2f
+         42dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678548362;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ocLrxz9PNmL7rxcHP9+sMO7kezIoSNjbehDL14u8SU=;
-        b=12ATFn7GoCr7hgvtiH/my806AhWrfUfr8GYsSVjog8QUPhJ7ClJqrqEqhiyizVIIWo
-         68l1Dx5CYuQKO0IwMkEQRleClgyuqDpPQhDUy9WE44q/ghBglTcUe9zrJ/klHLBeJucc
-         gNEz57hTxrQ+IAOtPEyxM2EfE+OMHcBVe4uwysiDyiJuIHC+ZMyZ8t4JDCpNVXh9+PC1
-         7k+QdFYFIP007bwgz8MJ8s/I67T8g2364cCR+Qey+Zr1NiDXdf8+OL1GNPYJIbuJDHHh
-         HjGKU0M1OBBC5+3hXtJ+E2wwrk3WoSPiMDvn+9mRccqi60LlDsPxdfAqXIdeINeAT/x+
-         078w==
-X-Gm-Message-State: AO0yUKXGl7DFJYtnd4ujypNFvvoJqdKyw9msWgYPBF4KyPN7icdjvJYY
-        c/FbQjSo5hLroD1UdMT+vtymeg==
-X-Google-Smtp-Source: AK7set9+alVCPes/LutSROZa3zyRKf96T2rZ97KnwF3tjoBPKGWNiB+AYEiydpEz6svx0r1ADsKhaQ==
-X-Received: by 2002:a2e:8404:0:b0:298:6f32:c182 with SMTP id z4-20020a2e8404000000b002986f32c182mr3980792ljg.36.1678548362019;
-        Sat, 11 Mar 2023 07:26:02 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u3-20020ac24c23000000b004dda9e8233asm344904lfq.42.2023.03.11.07.26.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 07:26:01 -0800 (PST)
-Message-ID: <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
-Date:   Sat, 11 Mar 2023 17:26:00 +0200
+        d=1e100.net; s=20210112; t=1678556275;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M5xwpl4H01ebuofJIsmyDXhZifNKbULLaWH0tgMeLQs=;
+        b=b2qDWzJPOVYSNT00k+Excwmj9nT/J5o4VgOtFzwfCr0Ia6yqHSG5DrOrSrtE4eV2GW
+         4+0NQ+ssov/qUGY9R0kz5C0hABdyo/cM96z+E7uzWC/fis0gmApvfHFmQ48nuS7WYIjc
+         4gIGRewu3WJJEfTVhwX24loA4vBGXeHtxyZXzHXzhSCmW190GFbvj+5kBxsSga9yqQir
+         4cetiQEqs5r0fcm8wLIi2u3qHm4XwuLWIOCg+Iv6KEY4eOmY8BjJoczDUR5qVvirQUGn
+         YMPUJ1ttM0SIH60ArWztqPKwFXfjf6ZxSPuGoKEtFOgMdWpM46XDHbUwNTdbqQyvDxMY
+         9c1A==
+X-Gm-Message-State: AO0yUKUtWU2/mazwLnkYlw1sbiaUWHzuqisD132JuzalMX/v/Cul/VW4
+        KxrU8zaf9NlKeMAE3eSyPUYb/Q==
+X-Google-Smtp-Source: AK7set9jGiGyUzTtS/mgdFjFwFwViy1GgJ823I/8lO8D9gRcovvMXzCapYxYjktiKP9R3ILihDBvIg==
+X-Received: by 2002:aa7:d58b:0:b0:4ad:7ad3:de18 with SMTP id r11-20020aa7d58b000000b004ad7ad3de18mr26993394edq.28.1678556275117;
+        Sat, 11 Mar 2023 09:37:55 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
+        by smtp.gmail.com with ESMTPSA id q4-20020a50cc84000000b004bc15a440f1sm1421975edi.78.2023.03.11.09.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 09:37:54 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] devfreq: exyos-bus: drop of_match_ptr for ID table
+Date:   Sat, 11 Mar 2023 18:37:53 +0100
+Message-Id: <20230311173753.263390-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-Content-Language: en-GB
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
- <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
- <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
- <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,26 +72,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/03/2023 16:38, Bryan O'Donoghue wrote:
-> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
->>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
->>> be added to the UFS device list of clocks.
->> While we were doing this for some of the clocks (PCIe and USB, if I'm
->> not mistaken), I think that generally this is not fully correct. In my
->> opinion it should be in the interconnect driver, who turns
->> corresponding clocks on and off. These clocks correspond to the SoC
->> topology, rather than the end-device.
->>
-> 
-> True enough, they are interconnect clocks.
-> 
-> The question is how to only turn them on when the device that depends on 
-> them wants them.
+The driver can match only via the DT table so the table should be always
+used and the of_match_ptr does not have any sense (this also allows ACPI
+matching via PRP0001, even though it might not be relevant here).
 
-I think we can turn them on an off from qcom_icc_set(). Each node can 
-list required clocks.
+  drivers/devfreq/exynos-bus.c:504:34: error: ‘exynos_bus_of_match’ defined but not used [-Werror=unused-const-variable=]
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/devfreq/exynos-bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index 027e8f336acc..f7c554051232 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -513,7 +513,7 @@ static struct platform_driver exynos_bus_platdrv = {
+ 	.driver = {
+ 		.name	= "exynos-bus",
+ 		.pm	= &exynos_bus_pm,
+-		.of_match_table = of_match_ptr(exynos_bus_of_match),
++		.of_match_table = exynos_bus_of_match,
+ 	},
+ };
+ module_platform_driver(exynos_bus_platdrv);
 -- 
-With best wishes
-Dmitry
+2.34.1
 
