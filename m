@@ -2,148 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910D66B6576
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 12:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07EB6B6592
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 12:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjCLLaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Mar 2023 07:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S229933AbjCLLgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Mar 2023 07:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjCLLaR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 07:30:17 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E81D53728
-        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 04:29:36 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r15so10778972edq.11
-        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 04:29:36 -0700 (PDT)
+        with ESMTP id S230308AbjCLLgb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 07:36:31 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08CA2C672
+        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 04:35:56 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5360147ota.1
+        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 04:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678620550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vEbvtEaqzurViy1oyu/fH6sSXoT67QNwu/aM1BVtT5Q=;
-        b=UiaN9s31eDeV25UHlbG88LmmDbVVTEkypEvQ8hej1Cgqy7kspk5tRWXzQ2v/iKm9YY
-         H0c64wjopB13GnzKYYxfISo7Iyf56+8d+V+BJFUXHfpcxyrvL9jtUYR8SLyyiv7sVGNT
-         LpQIEd0rxJWeNSaUSOvV0HkdWioiJEPHf0G7omfi2T0C/RLO8LP95qglM1Bj9/UApbbJ
-         4TSEy6sK3kS79ppHEmhdKmbW7L5shTDToZIqVCfMtFHhiTSOXBf256aTX/GV1B6vR7SZ
-         8k/51oFrp725LX/7MUhMpPqsCH0u17ulLHUhPvKLFKa9dovFmXEQtMLEcWdntitdPQ0i
-         fEzg==
+        d=gmail.com; s=20210112; t=1678620955;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XjcDtI1pwVRGAPewN/AuluWv6QfCVbMYyve36OMm9hg=;
+        b=DZ8UYMYu2A2XNCP2bQxf5x8jGFANuCSbG53PLbpCzLLhHfYAjDjJOygzlkKDqeBQSL
+         ri+T67xJAD67wejY4f+/oQZHNCc7/xCmdRW1qkOm0kcSSxZ05i4mCzsFMiKQaaQDdF5w
+         E9wR8VscaC4E/rgpz7E3UaYkxJdUGr3hYWNYNPwFjfefTsKHDnCY26O4m3QoX01W3DaB
+         vZ6zVqJ2gjMhl4pYQH92/lr/jMmLdp9r8MkFaLSMrxztAHoFIptHyP2etDleFWbHV/FW
+         b3EAAZmhzGdWHUHzVpb1hjv0LXt0eGXzBhGRWunfUR+tpfp2mAWwj1EasyTmvEV4/uAq
+         B6hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678620550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678620955;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEbvtEaqzurViy1oyu/fH6sSXoT67QNwu/aM1BVtT5Q=;
-        b=D71Pw+4VVzPcf8Mpj7QDOXjoo6xSUcq8ZLKhhkjE+O5bT9e1X0nrBXo9lEZrwT8Sx5
-         un5WdTuqNt0YQDKvkDZTMt/y/PGEcv9KqtjoYdILl6KO5ZtSwo8svi6If7tCtGpEzA1j
-         8CAKU7ovurFoBzeMjxzMkpU5EW2SeGlScHZ44n8I2y9ueHrEzgaGtTmv/W8uyEwh2Zcn
-         4/T1imxqXHG9+YawssDLVVCdeFw9CFoHTaIvOsacIJ3MyVYGyMGkTOLZ/oNirk9Rd/El
-         VK+rWmDi3bgJWbmf4J7uTyOQmXw6PSE7jj7C5vBcNeqReYFX08xpT+yO/eUddOlpZOBM
-         TUsA==
-X-Gm-Message-State: AO0yUKUidiGXykjUnhAQMIYh4GMxchriRRAy/QpyFXy1r67EMCrsxbuQ
-        8Zy2a4B2RR+pwyaRiznJjb0ZA6aLJCpKOVF5+WY=
-X-Google-Smtp-Source: AK7set+nnpVq56bCEEs1ofeUA3yrwLzE2dg0GdiAHnT9kDhhE1HoI6vlTdI7GjQxALpD4fVwpuGGkw==
-X-Received: by 2002:a05:6402:1610:b0:4c6:f2cd:9d76 with SMTP id f16-20020a056402161000b004c6f2cd9d76mr30567280edv.19.1678620550691;
-        Sun, 12 Mar 2023 04:29:10 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id m8-20020a509988000000b004bb810e0b87sm2102550edb.39.2023.03.12.04.29.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 04:29:10 -0700 (PDT)
-Message-ID: <255e857e-c4a4-c90a-f8bc-8c20b02f0839@linaro.org>
-Date:   Sun, 12 Mar 2023 12:29:09 +0100
+        bh=XjcDtI1pwVRGAPewN/AuluWv6QfCVbMYyve36OMm9hg=;
+        b=FXHmZnkvy0VtNp1srVmqEFZOmeVZafoM5E7HqIPxVt9gOGw9wrnZSypFBKfqLtYN1J
+         4s76YcTc1/U9eIZbMl9ZfX7uNZ4HwoahkZbNBzpPPFIiyzwh9n1uUMdXbDToDPJnqSIh
+         iii0gkDLMHKMLa/LG01VbXnacaHtWYeYetz/SQCBuKoyyI9Wh8x0OEK5xUz6POsIHTGK
+         9MMBunUkWscofKHCPyIA90CLkPJiJWZpvqGF7hXP8rxCgYdRzPSN9t1JGG4PXz7g9cjL
+         WNPDrddw1G4wxCFU14upU8mIJ70jQii2b//4S23u5iaOgHGd5PPUKlLkEIif51LQ81+Z
+         cObw==
+X-Gm-Message-State: AO0yUKWS/HPitDjatQmeeDYthTJdA1WZW07UYGhbisT6ODi79WBgqnFf
+        rjSMEm0uuEQz4j0nKMaIqbdvvblhCAMj5qYniOg=
+X-Google-Smtp-Source: AK7set91gtUee3OP+0Fcx5HjxJkbSvih8i57U/TQLXUvmuRm97QnX5Z1OWr6uP/6Cqjabwfo9i5h/6OmwObkRMrWQWQ=
+X-Received: by 2002:a05:6830:6210:b0:690:eb8c:bae0 with SMTP id
+ cd16-20020a056830621000b00690eb8cbae0mr10565257otb.6.1678620954820; Sun, 12
+ Mar 2023 04:35:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv1 01/11] dt-bindings: power: supply: adc-battery: add
- binding
-Content-Language: en-US
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-2-sre@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230309225041.477440-2-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Reply-To: eng.kelly103@gmail.com
+Sender: peterfuller301@gmail.com
+Received: by 2002:a05:6359:4b93:b0:f6:58a2:343a with HTTP; Sun, 12 Mar 2023
+ 04:35:54 -0700 (PDT)
+From:   "Eng. Kelly Williams" <eng.kelly103@gmail.com>
+Date:   Sun, 12 Mar 2023 04:35:54 -0700
+X-Google-Sender-Auth: -ioJQZJCqGsjjqCveOdz9GmkL2M
+Message-ID: <CACzHKnfmjCO71FRb0-7Xmzg9ctL99taC5wz-JBksbM-dL1d21Q@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 0.9998]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9998]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:331 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [peterfuller301[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [eng.kelly103[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [eng.kelly103[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.0 RISK_FREE No risk!
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/03/2023 23:50, Sebastian Reichel wrote:
-> Add binding for a battery that is only monitored via ADC
-> channels and simple status GPIOs.
-> 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-
-Thank you for your patch. There is something to discuss/improve.
+Hello
 
 
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +description: |
+My name is Eng. Kelly Williams I work with Texas oil and gas
+Association USA. I need your honest cooperation to partner with me to
+invest in your company or in any other viable business opportunity in
+your country under mutual interest benefits. Our partnership will be
+absolutely risk free, please I will also like to know the laws as it
+concerns foreign investors like me.
 
-Don't need '|'.
+I look forward to your cordial response
 
-> +  Basic Battery, which only reports (in circuit) voltage and optionally
-> +  current via an ADC channel.
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: adc-battery
-> +
-> +  charged-gpios:
-> +    description:
-> +      GPIO which signals that the battery is fully charged.
-> +    maxItems: 1
-> +
-> +  io-channels:
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +  io-channel-names:
 
-Simpler:
 
-minItems: 1
-items:
-  - const: voltage
-  - enum: [ current, power ]
-  - const: power
-
-> +    oneOf:
-> +      - const: voltage
-> +      - items:
-> +          - const: voltage
-> +          - enum:
-> +              - current
-> +              - power
-> +      - items:
-> +          - const: voltage
-> +          - const: current
-> +          - const: power
-> +
-
-What about temperature? For max17040 this was recently proposed and I
-wonder whether it is desirable.
-
-https://lore.kernel.org/all/74ba115e-9838-4983-7b93-188a8260dd8a@linaro.org/
-
-Best regards,
-Krzysztof
-
+My Regards
+Eng. Kelly Williams
