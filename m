@@ -2,114 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647DB6B6B65
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 21:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6746B6B6BF4
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 23:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjCLUoB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Mar 2023 16:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S230493AbjCLW1j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Mar 2023 18:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjCLUn0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 16:43:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3023866F;
-        Sun, 12 Mar 2023 13:42:52 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id nn12so10024226pjb.5;
-        Sun, 12 Mar 2023 13:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678653771;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZTj6lDaB879i6vS4ZDrKb4b2c9OODf1NGI0zVIt2OIQ=;
-        b=KC3a1z9EFBAXvyyxFRBFqNe8y53x3UcUyQeZSEkxdXoFUAJoXRMW5x12S3KgDohLCq
-         HgPllXDe0L7d4jpa0swkH8xEUPkFw+qkPtFiETd3slsVUSiYo1BMGyXc78dOVy4xIsa/
-         iQz7mHAZKXq1dPOkNL0Budytd+6487+pbd6M9552NaGPYaDjcY0OoL/Kg3JCLgUOfw1j
-         VKsL6McmgvXWpcQP5dDkT0F/Lf8ekwYWTnQmW8G5vhEJFBvpzPwqbXsO+AWYZohCOO6R
-         EWELqpscPHrGPQKL7eMTq4bDp1G+IKNbckzIV0LI00pT4l33/MvugcwF0S7AKAFr/dJ+
-         +U6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678653771;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZTj6lDaB879i6vS4ZDrKb4b2c9OODf1NGI0zVIt2OIQ=;
-        b=zZf/mf/mNjE69j0uXSMEK66hVgPFXs/s+ykB22M6Z/dzjee8zhc2Twzv/axebtC+zI
-         1cvZZTaN42XcgnAsJmTw0y6elsh1BEiHeOYFER8fNW4TEFjPMeXNeKWkf/CkQ0sw51Pa
-         BN7OWqrelLILq5ZE+zOIRieNW6klHX8JxCmM4oiuYhmUKW0CZLHrtJt+gHUTqMQtIqH3
-         ms4+REdr3slhKkEfvq6u3sxgPWIdV6JWxM8XQ6veChqgWh07K1VoVcNDevyYHyNQu8/5
-         XlUesKlBSyMk25ORN7PSbBnh8Sl34LA9BfkVFzkJG2lw98orG6CX6cSF6A5xyZbk7sqP
-         a6+Q==
-X-Gm-Message-State: AO0yUKV5FG81HYqh4K2eGcN2hh5mecTXxIv5A9RXOXb9jx2os2lFw1YQ
-        RmlaW9Lf91urwfvbZ4L8hJ8=
-X-Google-Smtp-Source: AK7set8LS5r2Un4ozPG4+s7BFDawLVgaX+1P9ahu9XWoxUwBD1fydMV+4TYjTw5igtEd4Yq+x4LEeg==
-X-Received: by 2002:a17:90b:368c:b0:23c:8ee2:bc14 with SMTP id mj12-20020a17090b368c00b0023c8ee2bc14mr2702243pjb.24.1678653771444;
-        Sun, 12 Mar 2023 13:42:51 -0700 (PDT)
-Received: from localhost ([2601:1c0:5080:d9fa:9b45:95de:f47d:f85e])
-        by smtp.gmail.com with ESMTPSA id it14-20020a17090afb0e00b0023530b1e4a0sm3158971pjb.2.2023.03.12.13.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 13:42:50 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org (open list:INTERCONNECT API),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 13/13] interconnect: Teach lockdep about icc_bw_lock order
-Date:   Sun, 12 Mar 2023 13:41:41 -0700
-Message-Id: <20230312204150.1353517-14-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230312204150.1353517-1-robdclark@gmail.com>
-References: <20230312204150.1353517-1-robdclark@gmail.com>
+        with ESMTP id S230274AbjCLW1i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 18:27:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35823A84D;
+        Sun, 12 Mar 2023 15:27:36 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C1B56602F13;
+        Sun, 12 Mar 2023 22:27:35 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678660055;
+        bh=pfSGgC1MHC1inDZRNev1szq2shFsVqcF8UF6pcGKhUM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AjsgF9lblP2BLTyRiButy2m/pvm7GNUjAFPKYGUVGvyD/T83X40zKRXr2FKqEO6e+
+         +z9cBGXRiX7oak+40rfB+0pnJ1/RXXa3LUpvetumR6wvYRi/hvpkxYlT6bdS8u9dsR
+         J8ib9RO55B/4330/PtrWzwFqFQBAsy/ksBuMEydCLcBlWgZBWmdj6VdWeurbLWxTUi
+         hkKhcGlOKMzBgr/thE34WT1Oo3+3ohmm/QfAz/G4ODllaAFgX1YV5m83adimHyOMST
+         tJUXhJosmxwb7FPwqUEALS+ZcM1uIg1B+wX8dstLTUyRubBizdVLSqCjMAKK/slT3c
+         O4qnJ27t2/yeg==
+Received: by mercury (Postfix, from userid 1000)
+        id 556501060FD4; Sun, 12 Mar 2023 23:27:32 +0100 (CET)
+Date:   Sun, 12 Mar 2023 23:27:32 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] power: supply: rt9455_charger: mark OF related data
+ as maybe unused
+Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+References: <20230311111532.251604-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="syfqm4melu6qgcjv"
+Content-Disposition: inline
+In-Reply-To: <20230311111532.251604-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
 
-Teach lockdep that icc_bw_lock is needed in code paths that could
-deadlock if they trigger reclaim.
+--syfqm4melu6qgcjv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/interconnect/core.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index f7251784765f..5619963ee85c 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -1127,13 +1127,21 @@ void icc_sync_state(struct device *dev)
- 			}
- 		}
- 	}
-+	mutex_unlock(&icc_bw_lock);
- 	mutex_unlock(&icc_lock);
- }
- EXPORT_SYMBOL_GPL(icc_sync_state);
- 
- static int __init icc_init(void)
- {
--	struct device_node *root = of_find_node_by_path("/");
-+	struct device_node *root;
-+
-+	/* Teach lockdep about lock ordering wrt. shrinker: */
-+	fs_reclaim_acquire(GFP_KERNEL);
-+	might_lock(&icc_bw_lock);
-+	fs_reclaim_release(GFP_KERNEL);
-+
-+	root = of_find_node_by_path("/");
- 
- 	providers_count = of_count_icc_providers(root);
- 	of_node_put(root);
--- 
-2.39.2
+Thanks, I queued all 6 patches to power-supply's for-next queue.
 
+-- Sebastian
+
+On Sat, Mar 11, 2023 at 12:15:27PM +0100, Krzysztof Kozlowski wrote:
+> The driver can be compile tested with !CONFIG_OF making certain data
+> unused:
+>=20
+>   drivers/power/supply/rt9455_charger.c:1725:34: error: =E2=80=98rt9455_o=
+f_match=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/power/supply/rt9455_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/rt9455_charger.c b/drivers/power/supply=
+/rt9455_charger.c
+> index 31fb6526a1fd..0149e00f2bf8 100644
+> --- a/drivers/power/supply/rt9455_charger.c
+> +++ b/drivers/power/supply/rt9455_charger.c
+> @@ -1722,7 +1722,7 @@ static const struct i2c_device_id rt9455_i2c_id_tab=
+le[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, rt9455_i2c_id_table);
+> =20
+> -static const struct of_device_id rt9455_of_match[] =3D {
+> +static const struct of_device_id rt9455_of_match[] __maybe_unused =3D {
+>  	{ .compatible =3D "richtek,rt9455", },
+>  	{ },
+>  };
+> --=20
+> 2.34.1
+>=20
+
+--syfqm4melu6qgcjv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOUc0ACgkQ2O7X88g7
++ppodRAApys6iqD/+L5Vsetj/LOFNu6sm2+lG+3lWY49uhOmNJ4zZBi1hJynH637
+pZFPkyWqLpiJ0XziJCSAgjj0IvkF++6T6PUjGuWU5HIUAKTplqI9ET1D3+WEh8z3
+AZYBcAfxSXC6JH9ipfHHevF4a92r5fQ214nUDvfXDTxysirmsV3mmxrGe3N2N9v8
+GGq53BkkaaiaDXrWYIIKXa4cYUQ3TXn+baQnTstUHSxKnWRRSgbRTrfaHL1yi2YF
+D3C/gaQlfYSgAkKQgL5WOKViX7SiolTid65kM2UXaFF1Dv/SGuvIz0qX/SV8Rhfp
+PMfcXRQdgtBQnJnPEA4owfv/iV5JjdXqcrX6ybNMyS7l9gj4ui9V/SfDnKxqlrN2
+ykl5QGZRbnf/Oxt3QYoZPR/uXnKI7uvRTG5FK4C227Swc3/p2k1kh/Xgbo+Qfw7l
+Iq1ou7e3Ons8GW54zJSC2B/jS6WEfpkbj3f89yPqIZcdL9+l8enRWTR1jKINocUN
+3cGIbGNOk67JTzJFhiES7f0LwH3x9LM0U5s9v9gKZ/K+3zyRdcjL/wIIfO6EV9oQ
+QfgMSFp9vUFoMIb9BKFwgPwKjx3Puz6l+QvHM7psee4VXR2dfobti+wdsC0QQpqq
+y9k3gCaCldPF56xW1zwN/0lN0wGv6IYLDpL94IF+kBJ/VDR6x/g=
+=OgAo
+-----END PGP SIGNATURE-----
+
+--syfqm4melu6qgcjv--
