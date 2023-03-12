@@ -2,73 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56996B6B1F
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 21:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15866B6B2D
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 21:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjCLUjt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Mar 2023 16:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S231308AbjCLUm3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Mar 2023 16:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjCLUjs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 16:39:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E5232CF9
-        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 13:38:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678653533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/pT5phCMTi5s8pjQ+Qg8pTnSiAKPp+ir9fSlnZIuwYY=;
-        b=EVJv7F+xfO5do5dyRqiecMUykSgFbMZgx8UhUbSIi5wx+xX3i7QMggPLFGOeW7aMj8i4Bd
-        LXraS7f6+u+/7UvIXl/IyeMm4fYKp3zYAEQRYSsppNC+74WvNYrjg/LmJXAMwhrwNTmqr9
-        UpfA1PcatbMfQpD9Kkj5490eZkkqoGU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-570-i5VDU_RCNJe-N9tRG9Q0EA-1; Sun, 12 Mar 2023 16:38:52 -0400
-X-MC-Unique: i5VDU_RCNJe-N9tRG9Q0EA-1
-Received: by mail-qk1-f200.google.com with SMTP id ou5-20020a05620a620500b007423e532628so5517429qkn.5
-        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 13:38:52 -0700 (PDT)
+        with ESMTP id S231290AbjCLUm2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 16:42:28 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235E39B88;
+        Sun, 12 Mar 2023 13:42:23 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y11so10869986plg.1;
+        Sun, 12 Mar 2023 13:42:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678653743;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eS81Bbeb7DUO+iRkvmtrK0oB4SfcOjiUFR0rKW60MA0=;
+        b=G2a3X2goAyICa7qoVr4TjJ4/OOQ1EmoCBXmcNPEVfAKqhAEIho/AfxQDCMbOYQNb6/
+         VsK86lLGHo82G880+GfCwnB7NZj1LH0T7klN9abmbKa3C8/6ysyzwU7sxSjjzz/XL6oO
+         vAuH1AamSgl6MUBggR0tNxojaYXKDM1IjIEcV5GY0MN5QC8uZEjZMKvOttvLv58I+FHt
+         xQm7dqeB+g/b7H6pg95qji23VUNrDetgUorQn2HxhlXGTz3ne2burkaHbyZqOA/jKSNX
+         WdnpofFPER2tIU2FTgT2WccI6i5Vl7jnW7WFD3EdyaZysEXME+eXg3NnWksiH0E54H0O
+         oM1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678653531;
+        d=1e100.net; s=20210112; t=1678653743;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/pT5phCMTi5s8pjQ+Qg8pTnSiAKPp+ir9fSlnZIuwYY=;
-        b=l4VPJ1bLpLvSIpr0KhOd0VJYJqnDNtGHf7dkUvKXUkj8Y+vrmA5zHFxnF5ZlQxW7HB
-         rVLH7D+ma/i9RRaXMwoE4prvDErsFroJSZy90HGEVS46+nYwpEcXD6arFpPnM4d2Sb6r
-         cOc1d6WsAQHmuXLq6qEYSsl+Z+SIFEzEvGGXhVh+y9XllaH5xoTplfwCFteNvzCGBYi0
-         sfiqbQlAiIETkmqpzF/EDt8dhDBisdt4HsQtgXmprbJlDC+j+eyGBUOGWwN6zS5SIQU1
-         EpjV7teYJ0GzU7lXY42OAaqWjwN+7CwjkL48ymTHI9HJRA+kQqJKVGNx/6wAwLZeI/6u
-         dZnA==
-X-Gm-Message-State: AO0yUKWc2rRzWR9KGmrFepYcOsTQaVoFfMi5osiiXXcwlgcpeOgw55S8
-        jYxLEByQhgzXPRrTjgwluttUoha/L8HQk9GhPs2AEzmspr9q4mx2XAjT3xhfDpmoHySF/pN3W5F
-        LZNjPFHFj5KLB4ySW0AE=
-X-Received: by 2002:a05:6214:5195:b0:56b:eceb:2d9d with SMTP id kl21-20020a056214519500b0056beceb2d9dmr9179576qvb.36.1678653531622;
-        Sun, 12 Mar 2023 13:38:51 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/01AOcYu0WzBjJNTT6hOmhHOVPiKK7FIFjZXYoappbmLrE0dT7+7RHTVc7TIvpWW+88gevpg==
-X-Received: by 2002:a05:6214:5195:b0:56b:eceb:2d9d with SMTP id kl21-20020a056214519500b0056beceb2d9dmr9179557qvb.36.1678653531370;
-        Sun, 12 Mar 2023 13:38:51 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id f17-20020ac840d1000000b003bfc2fc3235sm4200222qtm.67.2023.03.12.13.38.50
+        bh=eS81Bbeb7DUO+iRkvmtrK0oB4SfcOjiUFR0rKW60MA0=;
+        b=al7rG2oF9jCcyyXEB+stLJRMzOK6Ld4g1teJn8yYbFv4sTkLW0QGSp6Y4DAV1P6AQw
+         n8sT+5UV8Aahz+QOBLgjYnn4RfNEoihmZe7dH43P75JkYC/M6cMkLE1ghIbvnaUG2Al7
+         QBvwDNWiEs358RnrrNK9dzDdHxqvgWlf+XG/G4hK4K+81lXcXu+St5Mu5Ky/Oh8bG/7f
+         xwxLQngQFKfWv8AWJpq34WiVnJmoDGXXJqjv5X+nbLToVIrhw8Pg69A/CPwh9NaceUzx
+         NSarYgWZNCMdIOUxoShzn2bY5sJ7+nGO1o0KwHCxKXZBNgvuUpPojY7EUyDB/Kzl80RV
+         ImwQ==
+X-Gm-Message-State: AO0yUKUfUQgwW2DpSEilzUqd3H1KU4ryLcPK9R+lkm/jnRYoIll1aWmx
+        LDB6Tvv8yeWdoF4lkkDfkeyakLMd5wc=
+X-Google-Smtp-Source: AK7set+UpZ1DihZTdG/FUvyuXyzqzkkjcn3UiFdPutNdqCaUQZDans3Wexm2twEh9BfXyHomUFqSlQ==
+X-Received: by 2002:a17:902:a9cb:b0:19a:df76:ddd2 with SMTP id b11-20020a170902a9cb00b0019adf76ddd2mr27656409plr.36.1678653742882;
+        Sun, 12 Mar 2023 13:42:22 -0700 (PDT)
+Received: from localhost ([2601:1c0:5080:d9fa:9b45:95de:f47d:f85e])
+        by smtp.gmail.com with ESMTPSA id u6-20020a170902e5c600b001a049441fc8sm472317plf.193.2023.03.12.13.42.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 13:38:50 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] thermal/drivers/tsens: set some tsens_* variables storage-class-specifier to static
-Date:   Sun, 12 Mar 2023 16:38:46 -0400
-Message-Id: <20230312203846.474395-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 12 Mar 2023 13:42:22 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
+        GPU), Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK), linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        linux-pm@vger.kernel.org (open list:DEVICE FREQUENCY (DEVFREQ)),
+        Luca Weiss <luca@z3ntu.xyz>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Paul <sean@poorly.run>
+Subject: [PATCH 00/13] drm/msm+PM+icc: Make job_run() reclaim-safe
+Date:   Sun, 12 Mar 2023 13:41:28 -0700
+Message-Id: <20230312204150.1353517-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,149 +87,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-smatch reports several warnings
-drivers/thermal/qcom/tsens-v1.c:24:40: warning:
-  symbol 'tsens_qcs404_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v1.c:45:40: warning:
-  symbol 'tsens_8976_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:26:40: warning:
-  symbol 'tsens_8916_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:42:40: warning:
-  symbol 'tsens_8939_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:62:40: warning:
-  symbol 'tsens_8974_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:84:40: warning:
-  symbol 'tsens_8974_backup_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:106:40: warning:
-  symbol 'tsens_9607_nvmem' was not declared. Should it be static?
+From: Rob Clark <robdclark@chromium.org>
 
-Most variables are only used in their defining files, so they should be static.
+Inspired by https://lore.kernel.org/dri-devel/20200604081224.863494-10-daniel.vetter@ffwll.ch/
+it seemed like a good idea to get rid of memory allocation in job_run()
+and use lockdep annotations to yell at us about anything that could
+deadlock against shrinker/reclaim.  Anything that can trigger reclaim,
+or block on any other thread that has triggered reclaim, can block the
+GPU shrinker from releasing memory if it is waiting the job to complete,
+causing deadlock.
 
-The variables tsens_8976_nvmem, tsens_9607_nvmem and tsens_8939_nvmem
-are unused so remove them.
+The first two patches avoid memory allocation for the hw_fence by
+embedding it in the already allocated submit object.  The next three
+decouple various allocations that were done in the hw_init path, but
+only the first time, to let lockdep see that they won't happen in the
+job_run() path.  (The hw_init() path re-initializes the GPU after runpm
+resume, etc, which can happen in the job_run() path.)
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/thermal/qcom/tsens-v0_1.c | 42 +++----------------------------
- drivers/thermal/qcom/tsens-v1.c   | 24 +-----------------
- 2 files changed, 4 insertions(+), 62 deletions(-)
+The remaining patches clean up locking issues in various corners of PM
+and interconnect which happen in the runpm path.  These fixes can be
+picked up independently by the various maintainers.  In all cases I've
+added lockdep annotations to help keep the runpm resume path deadlock-
+free vs reclaim, but I've broken those out into their own patches.. it
+is possible that these might find issues in other code-paths not hit on
+the hw I have.  (It is a bit tricky because of locks held across call-
+backs, such as devfreq->lock held across devfreq_dev_profile callbacks.
+I've audited these and other callbacks in icc, etc, to look for problems
+and fixed one I found in smd-rpm.  But that took me through a number of
+drivers and subsystems that I am not familiar with so it is entirely
+possible that I overlooked some problematic allocations.)
 
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index e89c6f39a3ae..0d3670f03227 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -23,7 +23,7 @@
- 
- #define BIT_APPEND		0x3
- 
--struct tsens_legacy_calibration_format tsens_8916_nvmem = {
-+static struct tsens_legacy_calibration_format tsens_8916_nvmem = {
- 	.base_len = 7,
- 	.base_shift = 3,
- 	.sp_len = 5,
-@@ -39,27 +39,7 @@ struct tsens_legacy_calibration_format tsens_8916_nvmem = {
- 	},
- };
- 
--struct tsens_legacy_calibration_format tsens_8939_nvmem = {
--	.base_len = 8,
--	.base_shift = 2,
--	.sp_len = 6,
--	.mode = { 12, 0 },
--	.invalid = { 12, 2 },
--	.base = { { 0, 0 }, { 1, 24 } },
--	.sp = {
--		{ { 12, 3 },  { 12, 9 } },
--		{ { 12, 15 }, { 12, 21 } },
--		{ { 12, 27 }, { 13, 1 } },
--		{ { 13, 7 },  { 13, 13 } },
--		{ { 13, 19 }, { 13, 25 } },
--		{ { 0, 8 },   { 0, 14 } },
--		{ { 0, 20 },  { 0, 26 } },
--		{ { 1, 0 },   { 1, 6 } },
--		{ { 1, 12 },  { 1, 18 } },
--	},
--};
--
--struct tsens_legacy_calibration_format tsens_8974_nvmem = {
-+static struct tsens_legacy_calibration_format tsens_8974_nvmem = {
- 	.base_len = 8,
- 	.base_shift = 2,
- 	.sp_len = 6,
-@@ -81,7 +61,7 @@ struct tsens_legacy_calibration_format tsens_8974_nvmem = {
- 	},
- };
- 
--struct tsens_legacy_calibration_format tsens_8974_backup_nvmem = {
-+static struct tsens_legacy_calibration_format tsens_8974_backup_nvmem = {
- 	.base_len = 8,
- 	.base_shift = 2,
- 	.sp_len = 6,
-@@ -103,22 +83,6 @@ struct tsens_legacy_calibration_format tsens_8974_backup_nvmem = {
- 	},
- };
- 
--struct tsens_legacy_calibration_format tsens_9607_nvmem = {
--	.base_len = 8,
--	.base_shift = 2,
--	.sp_len = 6,
--	.mode = { 2, 20 },
--	.invalid = { 2, 22 },
--	.base = { { 0, 0 }, { 2, 12 } },
--	.sp = {
--		{ { 0, 8 },  { 0, 14 } },
--		{ { 0, 20 }, { 0, 26 } },
--		{ { 1, 0 },  { 1, 6 } },
--		{ { 1, 12 }, { 1, 18 } },
--		{ { 2, 0 },  { 2, 6 } },
--	},
--};
--
- static int calibrate_8916(struct tsens_priv *priv)
- {
- 	u32 p1[5], p2[5];
-diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-index b822a426066d..dc1c4ae2d8b0 100644
---- a/drivers/thermal/qcom/tsens-v1.c
-+++ b/drivers/thermal/qcom/tsens-v1.c
-@@ -21,7 +21,7 @@
- #define TM_HIGH_LOW_INT_STATUS_OFF		0x0088
- #define TM_HIGH_LOW_Sn_INT_THRESHOLD_OFF	0x0090
- 
--struct tsens_legacy_calibration_format tsens_qcs404_nvmem = {
-+static struct tsens_legacy_calibration_format tsens_qcs404_nvmem = {
- 	.base_len = 8,
- 	.base_shift = 2,
- 	.sp_len = 6,
-@@ -42,28 +42,6 @@ struct tsens_legacy_calibration_format tsens_qcs404_nvmem = {
- 	},
- };
- 
--struct tsens_legacy_calibration_format tsens_8976_nvmem = {
--	.base_len = 8,
--	.base_shift = 2,
--	.sp_len = 6,
--	.mode = { 4, 0 },
--	.invalid = { 4, 2 },
--	.base = { { 0, 0 }, { 2, 8 } },
--	.sp = {
--		{ { 0, 8 },  { 0, 14 } },
--		{ { 0, 20 }, { 0, 26 } },
--		{ { 1, 0 },  { 1, 6 } },
--		{ { 1, 12 }, { 1, 18 } },
--		{ { 2, 8 },  { 2, 14 } },
--		{ { 2, 20 }, { 2, 26 } },
--		{ { 3, 0 },  { 3, 6 } },
--		{ { 3, 12 }, { 3, 18 } },
--		{ { 4, 2 },  { 4, 9 } },
--		{ { 4, 14 }, { 4, 21 } },
--		{ { 4, 26 }, { 5, 1 } },
--	},
--};
--
- static int calibrate_v1(struct tsens_priv *priv)
- {
- 	u32 p1[10], p2[10];
+There is one remaining issue to resolve before we can enable the job_run
+annotations, but it is entirely self contained in drm/msm/gem.  So it
+should not block review of these patches.  So I figured it best to send
+out what I have so far.
+
+Rob Clark (13):
+  dma-buf/dma-fence: Add dma_fence_init_noref()
+  drm/msm: Embed the hw_fence in msm_gem_submit
+  drm/msm/gpu: Move fw loading out of hw_init() path
+  drm/msm/gpu: Move BO allocation out of hw_init
+  drm/msm/a6xx: Move ioremap out of hw_init path
+  PM / devfreq: Drop unneed locking to appease lockdep
+  PM / devfreq: Teach lockdep about locking order
+  PM / QoS: Fix constraints alloc vs reclaim locking
+  PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+  PM / QoS: Teach lockdep about dev_pm_qos_mtx locking order
+  soc: qcom: smd-rpm: Use GFP_ATOMIC in write path
+  interconnect: Fix locking for runpm vs reclaim
+  interconnect: Teach lockdep about icc_bw_lock order
+
+ drivers/base/power/qos.c                   | 83 ++++++++++++++++------
+ drivers/devfreq/devfreq.c                  | 52 +++++++-------
+ drivers/dma-buf/dma-fence.c                | 43 ++++++++---
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c      | 48 ++++++-------
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c      | 18 +++--
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 46 ++++++------
+ drivers/gpu/drm/msm/adreno/adreno_device.c |  6 ++
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c    |  9 +--
+ drivers/gpu/drm/msm/msm_fence.c            | 43 +++++------
+ drivers/gpu/drm/msm/msm_fence.h            |  2 +-
+ drivers/gpu/drm/msm/msm_gem.h              | 10 +--
+ drivers/gpu/drm/msm/msm_gem_submit.c       |  8 +--
+ drivers/gpu/drm/msm/msm_gpu.c              |  4 +-
+ drivers/gpu/drm/msm/msm_gpu.h              |  6 ++
+ drivers/gpu/drm/msm/msm_ringbuffer.c       |  4 +-
+ drivers/interconnect/core.c                | 18 ++++-
+ drivers/soc/qcom/smd-rpm.c                 |  2 +-
+ include/linux/dma-fence.h                  |  2 +
+ 18 files changed, 237 insertions(+), 167 deletions(-)
+
 -- 
-2.27.0
+2.39.2
 
