@@ -2,157 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6D86B75C3
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 361F96B75EE
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjCMLS1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 07:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S229934AbjCML1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 07:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCMLSX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:18:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7F25BB92;
-        Mon, 13 Mar 2023 04:18:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E26F24B3;
-        Mon, 13 Mar 2023 04:18:54 -0700 (PDT)
-Received: from [10.57.18.52] (unknown [10.57.18.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A90B3F71A;
-        Mon, 13 Mar 2023 04:18:09 -0700 (PDT)
-Message-ID: <f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com>
-Date:   Mon, 13 Mar 2023 11:18:07 +0000
+        with ESMTP id S229622AbjCML1V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:27:21 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5F45A928
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:27:19 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p26so7690299wmc.4
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678706838;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6RTjLb5cAp5kVPLrkYJRMh2ok+za0inDURjcisAo2wM=;
+        b=JKQJqG+7zH3lOS46EN479hXbyMURz8Xx67o6DOpDVSVpo4JKQIM8PQoNyCSd92iP5R
+         5asiFJbahskeuAHWilzvK+kLJzYdb75guG1VdJHmo6EutvQpVgqHtn2tbfDj/yMs5FNY
+         Lsb4tRfWK6KI3rLCfdlAAKV/IDTaNrbftUgPhvarSVGoZSyJ3T8eACrcjz941ykQGFKv
+         NO9FFjhDyGOy5MA0VcgibbU6yr0WmlbaytJdtD+u/QHq3CzH6E2zs99y0wFzUBuc30aS
+         XNoiVNsVev8v7WunvFrhyvJMwErHP3XfgTI5TjaienF05imfD3heZdcQ8Kgj7MDD0b9P
+         ek2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678706838;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6RTjLb5cAp5kVPLrkYJRMh2ok+za0inDURjcisAo2wM=;
+        b=owCLuU3FAxq4ISkHJGNTcve2N/zkktztbcSVKChUuRO1uslmgGVwKU+gsRXRlJI1QZ
+         ZJZGzptNl6KHr9dlpsZUJQ9LNx3fVuZvAzfRq/zzqxSc0vKSYEeJ0/jozjPUDjA4n0f+
+         cBx7cAs1fQR0TAwACM1QUY6dfVSNVMKCY95V2VjuhzpS2qGX/fs4U/GtoNO0gfnuTOcw
+         QeShzBA/tYx2HURSW6bqSw45A8qFgJKFrDK8ecnavwgKYMRsVLkypQWedNK9X2tYgsMh
+         ycaXDT/dmPgG+JtJWXcjebKHK5GZdGDef2XBTJakF6613VpmdDCR+pdcts1fl4bzIXP1
+         UYdg==
+X-Gm-Message-State: AO0yUKXfrd5EU5yFiUE02LvyTs8iB3ZDJs7uutibHF1yNbixKeVcsRjH
+        6SGnzRFnLjkKa4cwjsWB9X3XAg==
+X-Google-Smtp-Source: AK7set90YWxcPUDg/pH/tBeAbfVE8a7tS+c8qSvuK5ZbA0HiETlVlnS82QnPwwK789kDdXT2GIGWUw==
+X-Received: by 2002:a05:600c:c09:b0:3eb:253c:faae with SMTP id fm9-20020a05600c0c0900b003eb253cfaaemr10154938wmb.36.1678706838217;
+        Mon, 13 Mar 2023 04:27:18 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:8522:ca6e:1db4:96c6? ([2a05:6e02:1041:c10:8522:ca6e:1db4:96c6])
+        by smtp.googlemail.com with ESMTPSA id g14-20020a05600c310e00b003e8dcc67bdesm9347372wmo.30.2023.03.13.04.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 04:27:17 -0700 (PDT)
+Message-ID: <811f4f11-eecc-7021-eb16-3da276975187@linaro.org>
+Date:   Mon, 13 Mar 2023 12:27:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
- be reset
+Subject: Re: [PATCH -next] thermal: Use devm_platform_ioremap_resource()
 Content-Language: en-US
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
-References: <20230309135515.1232-1-di.shen@unisoc.com>
- <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
- <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
- <8727651b-88ec-efe7-eed2-1ff08faf22b8@arm.com>
- <CAB8ipk8dwkaqx7q_57Ehd5OZUfAJKtD_Bk2drpx+Op4grquAdQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAB8ipk8dwkaqx7q_57Ehd5OZUfAJKtD_Bk2drpx+Op4grquAdQ@mail.gmail.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>, rafael@kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308062719.79522-1-yang.lee@linux.alibaba.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230308062719.79522-1-yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 3/13/23 11:10, Xuewen Yan wrote:
-> Hi Lukasz
+On 08/03/2023 07:27, Yang Li wrote:
+> According to commit 7945f929f1a7 ("drivers: provide
+> devm_platform_ioremap_resource()"), convert platform_get_resource(),
+> devm_ioremap_resource() to a single call to Use
+> devm_platform_ioremap_resource(), as this is exactly what this function
+> does.
 > 
-> On Mon, Mar 13, 2023 at 5:35 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Xuewen,
->>
->> On 3/13/23 01:40, Xuewen Yan wrote:
->>> Hi Lukasz
->>>
->>> On Fri, Mar 10, 2023 at 11:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Hi Di,
->>>>
->>>> On 3/9/23 13:55, Di Shen wrote:
->>>>> Commit 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
->>>>> add a update flag to update cooling device only once when temp is low.
->>>>> But when the switch_on_temp is set to be a higher value, the cooling device state
->>>>> may not be reset to max, because the last_temp is smaller than the switch_on_temp.
->>>>>
->>>>> For example:
->>>>> First:
->>>>> swicth_on_temp=70 control_temp=85;
->>>>>
->>>>> Then userspace change the trip_temp:
->>>>> swicth_on_temp=45 control_temp=55 cur_temp=54
->>>>>
->>>>> Then userspace reset the trip_temp:
->>>>> swicth_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
->>>>>
->>>>> At this time, the cooling device state should be reset to be max.
->>>>> However, because cur_temp(57) < switch_on_temp(70)
->>>>> last_temp(54) < swicth_on_temp(70) --> update = false
->>>>> When update is false, the cooling device state can not be reset.
->>>>
->>>> That's a tricky use case. How is that now possible,
->>>
->>> We use the trip_temp in the Android System. Often, we set different
->>> control temperatures in different scenarios,
->>> and when we change the switch_on_temp from small to bigger, we find
->>> the power can not be reset to be max.
->>
->> I see, thanks for letting me know that this is Android.
->>
->>>
->>>
->>>>>
->>>>> So delete the update condition, so that the cooling device state
->>>>> could be reset.
->>>>
->>>> IMO this is not the desired solution. Daniel reported the issue that
->>>> IPA triggers the event sent to user-space even when there is no need.
->>>> That's the motivation for the 0952177f2a1f change.
->>>>
->>>> To address your scenario properly, we need an interface which allows
->>>> to respond properly for such situation when someone from user-space
->>>> writes a new value to something fundamental as trip point.
->>>>
->>>> You also have a kernel config enabled:
->>>> CONFIG_THERMAL_WRITABLE_TRIPS
->>>> which IMO is only for debug kernels for system integrator (according
->>>> to the Kconfig description).
->>>
->>>    Yes, we use it to meet the temperature control needs of different scenarios.
->>> And now in android with google's GKI2.0, the config must be opened.
->>
->> OK
->>
->>>
->>>>
->>>> When you disable this config in your deploy/product kernel
->>>> than this issue would disappear.
->>>>
->>>>>
->>>>> Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
->>>>> Signed-off-by: Di Shen <di.shen@unisoc.com>
->>>>> ---
->>>>>     drivers/thermal/gov_power_allocator.c | 9 +++------
->>>>>     1 file changed, 3 insertions(+), 6 deletions(-)
->>>>>
->>>>
->>>> That's why IMO this is not the solution.
->>>
->>> Yes, but I think we should fix the bug, although the
->>> CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
->>> How about record the last_trip_temp, and when the last_temp >
->>> last_trip_temp, set the update tobe true?
->>
->> Yes, if that config is used in Android then we must fix it.
->>
->> That last_trip_temp makes sense (but maybe name it last_switch_on_temp).
->> Please put that new field into the IPA local
->> struct power_allocator_params. We should store the trip temp
->> value there every time power_allocator_throttle() is called.
->> That can be called due to a write from user-space w/ a new trip point
->> value, so should be OK.
-> 
-> Thanks for the suggestion. We would send the patch-v2 as soon as possible.
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
 
-Thanks!
-I'll review that and check on my board.
-BTW, which board/device you use with this IPA? Maybe I can buy it
-and also test to capture such regression in future.
+Applied, thanks
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
