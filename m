@@ -2,110 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BF06B84B9
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 23:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1BC6B85F9
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 00:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCMW04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 18:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S229985AbjCMXRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 19:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCMW0z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 18:26:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15A65A932
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 15:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678746413; x=1710282413;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lmJa0dodVqQt4WadkYBIO7CO4lNv352IyfWSQk3Vfto=;
-  b=TSbopCXNaYcWEykjsVH5siSvaG3srUFW2EJtNzzmsLoDldi32SBSiw6Y
-   UfhaoJQYXWYfDfE5FPO6xGltJSgrDPiBwUybqnuYRaQ3EtGouneHkhK2y
-   xOSD1W8ZFmIVRyqj5b9gLSxA2acNkn/tBUZaPjYIWksCeL03BMIK4kIwl
-   F3E0wP0rRApCQwJW6Ol1U54g2/aXhqQp1CyvndnIyFD37p6kvrzoSyhw4
-   57WLwPbPT64jXbwNDKrLHHi5SvxFjOZzBrfuyLnUcxmkaeHWsqXNaaoGZ
-   sssR6EIl7mdapVhM6eA7bjONKeRm21MwuwqzT4xRg53CCsmLPNUtkQb/l
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="321126956"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="321126956"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 15:26:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="628799429"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="628799429"
-Received: from varram-mobl2.amr.corp.intel.com (HELO technocore.fios-router.home) ([10.209.13.166])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 15:26:53 -0700
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        rjw@rjwysocki.net
-Cc:     todd.e.brandt@linux.intel.com, todd.e.brandt@intel.com
-Subject: [PATCH v2] pm-graph v5.10 regression fix
-Date:   Mon, 13 Mar 2023 15:26:52 -0700
-Message-Id: <20230313222652.402272-1-todd.e.brandt@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230071AbjCMXRb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 19:17:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758997F015;
+        Mon, 13 Mar 2023 16:17:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB530CE1290;
+        Mon, 13 Mar 2023 23:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DA5C433D2;
+        Mon, 13 Mar 2023 23:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678749445;
+        bh=rkf+w2R5U9yIyPxz2FD9JcXK7xhs8LnPgBEvZWq+PXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p4uiqAV+1Dom/tq2BBK/v5VM0GdAD+C72IHMEwHM9H8xKqSslhSoJJWeWm9kUAp68
+         FqEqZXgcCQfhwmRRvRxuG6APBkfypGak6gjl5658yMjV+vJxytUgyvyE8aJOy4c4RS
+         5ZSwkfobbVqFcrFdDTr46j9cgzSbY6IKXedhVCswu9hjlObWlFucvzo5bwzVD4FzZf
+         vBm5sJc+4OloxUOZ9fZkHxwst0a1NPq1SGoWXUldtCJmaWZ1a7SpGAIq5qcdTJO8t0
+         TFxKgE7Wg15Qw3sN0us/GNeR27WazFQn89Mec3R4UpKzeF04WQRuXXQb5+O7029qb0
+         RVIIdll/Fkv6A==
+Received: by mercury (Postfix, from userid 1000)
+        id 172041061E59; Tue, 14 Mar 2023 00:17:19 +0100 (CET)
+Date:   Tue, 14 Mar 2023 00:17:19 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCHv1 04/11] power: supply: generic-adc-battery: fix unit
+ scaling
+Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+References: <20230309225041.477440-1-sre@kernel.org>
+ <20230309225041.477440-5-sre@kernel.org>
+ <CACRpkdaa6ZOt7U+iLwjrTGx87BdgXX6wbW2Ab_bHye_TNzi9Tg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7uyvyepd44usvzdp"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdaa6ZOt7U+iLwjrTGx87BdgXX6wbW2Ab_bHye_TNzi9Tg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A regression has occurred in the hid-sensor code where a device
-name string has not been initialized to 0, and ends up without
-a NULL char and its printed with %s. This includes random binary
-data in the device name, which makes its way into the ftrace output
-and ends up crashing sleepgraph because it expects the ftrace output
-to be ASCII only.
 
-For example: "HID-SENSOR-INT-020b?.39.auto" ends up in ftrace instead
-of "HID-SENSOR-INT-020b.39.auto". It causes this crash in sleepgraph:
+--7uyvyepd44usvzdp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  File "/usr/bin/sleepgraph", line 5579, in executeSuspend
-    for line in fp:
-  File "/usr/lib/python3.10/codecs.py", line 322, in decode
-    (result, consumed) = self._buffer_decode(data, self.errors, final)
-UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position
-1568: invalid start byte
+Hi,
 
-The issue is in 6.3-rc1 and is decribed in full here:
-https://bugzilla.kernel.org/show_bug.cgi?id=217169
+On Fri, Mar 10, 2023 at 09:23:06AM +0100, Linus Walleij wrote:
+> On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org=
+> wrote:
+>=20
+> > power-supply properties are reported in =C2=B5V, =C2=B5A and =C2=B5W.
+> > The IIO API provides mV, mA, mW, so the values need to
+> > be multiplied by 1000.
+> >
+> > Signed-off-by: Sebastian Reichel <sre@kernel.org>
+>=20
+> Fixes: tag?
+> Cc: stable@vger.kernel.org
+>=20
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>=20
+> This code can not have seen much testing.
 
-I've submitted a separate fix to have this issue repaired, but
-it has also exposed a larger bug in sleepgraph, since nothing should make
-sleepgraph crash. Sleepgraph needs to be able to handle biary
-data showing up in ftrace gracefully.
+There is no mainline board using this driver and I think there
+never was one. I did add a Fixes tag now, but its probably not worth
+any backporting trouble considering it has no users.
 
-I've changed the ftrace processing code to treat it as potentially
-binary and to filter out binary data and leave just the ASCII.
+-- Sebastian
 
-Signed-off-by: Todd Brandt <todd.e.brandt@linux.intel.com>
----
- tools/power/pm-graph/sleepgraph.py | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+--7uyvyepd44usvzdp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
-index 82c09cd25cc2..bf4ac24a1c7a 100755
---- a/tools/power/pm-graph/sleepgraph.py
-+++ b/tools/power/pm-graph/sleepgraph.py
-@@ -5556,9 +5556,8 @@ def executeSuspend(quiet=False):
- 		if not quiet:
- 			pprint('CAPTURING TRACE')
- 		op = sv.writeDatafileHeader(sv.ftracefile, testdata)
--		fp = open(tp+'trace', 'r')
--		for line in fp:
--			op.write(line)
-+		fp = open(tp+'trace', 'rb')
-+		op.write(ascii(fp.read()))
- 		op.close()
- 		sv.fsetVal('', 'trace')
- 		sv.platforminfo(cmdafter)
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQPrvcACgkQ2O7X88g7
++pr+5g//boqvVUatIQJz3AYJDUC/o9r62m7SjGB5Zumh4KgV0KuIQmVqm3yxiW6u
+o3Gxo+SrJw5aUmUceXIhjzueK34uaZm9ncHeIch/IcwyepZKvPBEz4o5+hOwwfG7
+b1nDx93sQsOkB2mOiCFGID6DB8M6slRagc6qIbk01lkKppWhTqxnUh1yvG1nURZo
+FaNqXkB8KJbQglknVOZZ4nVsJnkt8jj0L3H5LfoHaSEBJtd48j/22kVfHI4KCdo3
+Shyxh6B8Z+RDPxWmqGEOQd9IrCPxje07M2mq0p1XG4gARUtFc8oS+kWW15Jv2W9x
+DDy5HlPvPQ2legMlLTjsYWcDBDmO8TU1Sj/aTi6h+lV18fi2nfC/FSpUBXHW/tfI
+1/KCzDKziTMxRPAjVa4l+AjJCtOW48uTc1r+OxXpSBjQ4Tj91f+xLR2pgtq7Fvv9
+E3uNigw8WDlfzrvjFXKr5Mrt/mixYexfmfm9hRdAkhs7vMSkhnyDMGgUEylHSYtD
+6ZzLvCrF1ClMSFfN54wgk596TLM1QFIO/LZvc4/820MuprXpGqCK9OLbcyGt9OdW
+PrHSQmdCFmW+u6YGMurTeJMaxTw0fHK6QibluRvZUbLqR974sRJ4ilVfVruMEBNS
+yz1R8ifTVTACoJoKFKcWKp+HLjrTJSP/4yKcoxCoo2doUMyrbXs=
+=+FR2
+-----END PGP SIGNATURE-----
+
+--7uyvyepd44usvzdp--
