@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BF76B7642
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCEC6B7650
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjCMLmg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 07:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S230512AbjCMLmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 07:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjCMLmA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:42:00 -0400
+        with ESMTP id S231173AbjCMLmB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:42:01 -0400
 Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217164A8C
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:28 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id i28so15345065lfv.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2FB64AB5
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:32 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id g17so15320279lfv.4
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678707683;
+        d=linaro.org; s=google; t=1678707685;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SCGFjRBw5kwMjl8qNpiz2QImrKHMHXlVZTsDYHugyGg=;
-        b=Hevw8MpUQhJ7dhCXv28ZA3swpM0Ffb+hqVdNWZm7xQ9v9eTnnUy/32o6XO7j7DMCvz
-         WaC+vdC29jTZ5FRWSXUfLjfEDGxSFHpy+Jls70apaMuK9LBi51+H22vwnLWYJBiSRF6z
-         qkcu+WSSCkkrR7p8G7ydui/hvMlUDLfBnBm2Cl3a0mjpTwh05Y1q3YFpbWd6RVHZE7/K
-         mnbPJ050unHHZyqS/jAE9vXjqSuKtRi0Kxh4bDqu6d/iGwuwa2jKnDhGZW0/GTWXp300
-         YGvAdVwL8m7wzF6s0fT4EVx0oQa9XFbZHbwlHtkhrUUeRUENQmrp2FwEiOYpyOV+tOT8
-         FGgw==
+        bh=nhcwZlNg1FLmmoVA2v+6lR/X6B7kwoWSENbvRw3V+fM=;
+        b=vfSPDSVrRfmUnyJTEAUk27gZ10xbrdknu8UTKubV/WT0zi5EufFWzhMxppY2TQx5X8
+         kGMGqLrG9x2pHGecSJUUh3uwY/+Uo+DaEksZzSaQBMiHK7Rpr/ftnDfnFXIW1GzA3+g/
+         vksxTrEaxTrgPG1Skc85M7cWweigIeS1wLicUl0lwYawScQmoNRafs1XuN8lo7uYVsp+
+         wlZNfXvB1f38GcNEewUE2YX820CZvZjHWeyg43RORrGTP/DCsT26NdXFvKj2A6Oa8boN
+         uVn8986tIGtQZzI96vHQRmsSY1lp0WTFH8gjEjcLrhl6YO+s+Bj8p9KCXY5W+T6l0+gn
+         uLPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678707683;
+        d=1e100.net; s=20210112; t=1678707685;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SCGFjRBw5kwMjl8qNpiz2QImrKHMHXlVZTsDYHugyGg=;
-        b=nN8sPVU+21Nwxc5ORt00c5HtwXBLpZzEFfHhzpHPKqaTi0RWSVbnl8tZ1J5bjNfBzk
-         cr3bt/KQoM2Ir1N9v5xVXdifmI8mthlxNHN/kIKOI/lU0XDgw4Uk7mUQQiY0GAxhVbrB
-         /glgtvFoeCB+3ECi15lh1xrCm3Wtg+9hq5JHPWSshX1gPwa+hJxfhAv6mseX8tvbd7Lh
-         4ixFskz/4w/gYdCwMh8TnlTqgCHPTIm7EjfkJK4BeiApLcP4hLyJRvpBxk4JCUdzXk+U
-         wrBseb49sjON7u5OUT4iHVMLj6mVhNUyK/J2PXYAppP8dtHVkGZUbIuIj3PcR8rE3Mco
-         2xIw==
-X-Gm-Message-State: AO0yUKUm/TDRJ5LQgLENpv4oJALC3P33JhjTQTQi4yn20MzC5viXkjkP
-        aG+PE+F4vQPMgjKyQPcU07xOyw==
-X-Google-Smtp-Source: AK7set9p2ibp3gnxwnhhNIVY7ndNWc9bkAeYbLeGTpt+vkBn28KfcVYod45QeMaEjyMrscM/aBFR0w==
-X-Received: by 2002:ac2:59dc:0:b0:4d8:537a:753f with SMTP id x28-20020ac259dc000000b004d8537a753fmr10970228lfn.6.1678707683533;
-        Mon, 13 Mar 2023 04:41:23 -0700 (PDT)
+        bh=nhcwZlNg1FLmmoVA2v+6lR/X6B7kwoWSENbvRw3V+fM=;
+        b=NcYJ4cDJVKcLz0r7HjjKoBHfqm/tLGK0qBwfT2evCPPzdF81PxkRNPbtL8UBF5bSlf
+         GfNS0YKeY/jNVQyZj3XjFs59f/N3JbBYuvvck/6S5VTXltkhay8QKVTBwplSgqSBa7XD
+         9SdWEvBrcr1ageIjQH9oBsKZ/edbPzL8QxBR2TgjE6IoOy2g7iQTl4mI+iK2XoDWKO9Y
+         HByuLwAmGvLaA9R6xVBFDVA+XqcqQw6TqmClRqiIbtihcz5vspARkViRLJaSOIxy8oNC
+         lHyDxAJluo+De0V/t833zU+JnIta/325i+UiRsBvTY/Eln72GqNmVjxk02gS6QEvrA/K
+         PXxQ==
+X-Gm-Message-State: AO0yUKUQA7sbpE1x1XGO/X2Z1FYuC5E2AqO+gOoz14/E8wxTM5UJ3kjl
+        OlAOH/8E5FsSZYaJTqSsTkQ39w==
+X-Google-Smtp-Source: AK7set9nUZb/LOKJ1Ru3fd+Ng3zRMdv8buZPjLGcDSqZD+Jdo7l6mTnGUQ+SRa1ouS0Yaom0DfBFTQ==
+X-Received: by 2002:a19:ac05:0:b0:4b5:5b36:28bd with SMTP id g5-20020a19ac05000000b004b55b3628bdmr3310115lfc.2.1678707684861;
+        Mon, 13 Mar 2023 04:41:24 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.22
+        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 04:41:23 -0700 (PDT)
+        Mon, 13 Mar 2023 04:41:24 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 13 Mar 2023 12:41:11 +0100
-Subject: [PATCH v2 5/7] arm64: dts: qcom: sc8280xp: Use the correct BWMON
- fallback compatible
+Date:   Mon, 13 Mar 2023 12:41:12 +0100
+Subject: [PATCH v2 6/7] arm64: dts: qcom: sdm845: Use the correct BWMON
+ compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230304-topic-ddr_bwmon-v2-5-04db989db059@linaro.org>
+Message-Id: <20230304-topic-ddr_bwmon-v2-6-04db989db059@linaro.org>
 References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
 In-Reply-To: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -70,11 +70,11 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=790;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=887;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=IfB7PpYzYG3JhtNIYAVnyF67Vej4u/Zl5gN61g/4fsQ=;
- b=qDWyQPMu7J26e1w/bsNK1rpsK3lhrpiLLXq5/I9EI6+1HEGUbVv6euLgP/9by1+5H7qdVhwNlZW7
- kgqOguKGCB5vj9r7FeUCCJ3WpOlTFXdrbgKWpw0C/QeO+LpbQe/7
+ bh=N++71rZKj+7oTWz7RtdV/kr/uVQ7WD5qOJ8G1FDU0t4=;
+ b=B0vj+qTKkpt9ihZA5zXoBsvvJQfdra8ZsocCae4Got+Y6tx4AhzbMPk2vXYSkRuhPD7vxTLnJftX
+ bzkqiBb0C2hHUke1lwm26GpmHmbmSzaJ0AuEAYgUP2yJdNQz53K+
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,27 +87,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the correct fallback compatible for the BWMONv4 with merged global and
-monitor register spaces.
+Drop the incorrect msm8998 fallback and use the new qcom,sdm845-cpu-bwmon
+compatible to distinguish the DDR BWMON found on this platform.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 0d02599d8867..131b99bfe771 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -2946,7 +2946,7 @@ opp-12 {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 479859bd8ab3..1f2a97a20ef3 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2241,7 +2241,7 @@ opp-4 {
  		};
  
- 		pmu@90b6400 {
--			compatible = "qcom,sc8280xp-cpu-bwmon", "qcom,msm8998-bwmon";
-+			compatible = "qcom,sc8280xp-cpu-bwmon", "qcom,sdm845-bwmon";
- 			reg = <0 0x090b6400 0 0x600>;
- 
+ 		pmu@1436400 {
+-			compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
++			compatible = "qcom,sdm845-cpu-bwmon", "qcom,sdm845-bwmon";
+ 			reg = <0 0x01436400 0 0x600>;
  			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
 
 -- 
 2.39.2
