@@ -2,115 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87266B8161
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 20:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD346B8199
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 20:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCMTHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 15:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S231446AbjCMTTQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 15:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCMTHw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 15:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFF6746E3;
-        Mon, 13 Mar 2023 12:07:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8151E61469;
-        Mon, 13 Mar 2023 19:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23CAC4339C;
-        Mon, 13 Mar 2023 19:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678734469;
-        bh=mixkviXkrTQKP4glJUkMivKz0/es3ZvvcLqTmvgYhWQ=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=gMPEuJOWVffTQXdCaxYCQVCoYfBtXQ+/emqhw9/rBwO340K0nrNHThlQ+JuSc7JO1
-         o1RaJ5azj9+AIAmhoHqRamzIA1F+D3cRWGeG47J533OnytjJ2xYEItFr6s95t46qwr
-         zoSp3ejYiUUGbvkDgD5ahMgeBF5+yiowztsNutT345Oi/Q2+cqZjaYU1HLNoUacAEp
-         nh7NkZ4y1jD95dJl+veq4EzY0RBJqHcptAYFLQC5BwhbvPIxYDWqcmG16YBp/TVhyY
-         8Qa2oD4/lTIB19Y/uHQIf2eia3vlbfeFfgwS4ytVu6y1KZiXbNdSSzQ0nMBZa0Ct/l
-         oC3/Db4klimqA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-        Oder Chiou <oder_chiou@realtek.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
-References: <20230310214333.274903-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH 1/9] ASoC: qcom: lpass-sc7280: Drop
- of_match_ptr for ID table
-Message-Id: <167873446544.106067.10586777003172589901.b4-ty@kernel.org>
-Date:   Mon, 13 Mar 2023 19:07:45 +0000
+        with ESMTP id S231248AbjCMTTF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 15:19:05 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C2419686
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 12:18:22 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id fd25so8324699pfb.1
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 12:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678735086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RajhfLYDraG9eWSB41u7VR+4RMGlGZ9+XgWUGRTk49Y=;
+        b=IizE98SUhWJgY2eglPa4ZuP3kWcqFg4hJVN05U/mbbINxG5jAQIaikLdD1nWQ3eIn9
+         Es6daxY6vPCyxr+u9NPOn79hJuhl8FzU43KdG5icqsQuvOvT6y8wyWDt/8UUScmtpkeb
+         gt+4wa/aR7BKTPIBnUtD7IucVhI0M1jmou50Kc327oys5z6DJ3+ln5dQiMnQ9PjJaDXp
+         ZLx6gW/574tLl1njYit3A+/TF0oUHcTFKsVBXASERbVYW9/j2LHHjfPU5LWg5a0zCBkc
+         aLy9XUEV5BoaurBZ+ZX2cAn4jrhmNZ/HMSZpWVSdj7RuYoSn8r8RBpGdSlzxXwU8Hdx7
+         Sumg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678735086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RajhfLYDraG9eWSB41u7VR+4RMGlGZ9+XgWUGRTk49Y=;
+        b=XGVbdg3e2wytJgSJecYlZ5qFNYk6MDZM3mAG3cTMZIq2rW8o8Y6f7xk4RLuG7tuvRt
+         dMy1H7tn9WZZY4jShzNpxgUAOzcoT4IYsqNFwwmtXkeOXquCu9rUDsyqWs9MMWvtsiAm
+         UU8LdBY11P+wBiftbnw7Z/seX0myK88zM6rVq5O9phG4dda7Nhai6tckiFHy+IFlot03
+         nVxki69pp6KgWM7ZgQcKi0wD2dO7tDxWPw6EDrJ4jmZ/Otw1TfPO9Dhxnn2hXaeeE6kW
+         wUwlw5FZyAERj+fZsge3LpcRiY71gx4LgzEcA99E1NKsgag8meozLgvRXSmsk5Fk7lc+
+         c8Tw==
+X-Gm-Message-State: AO0yUKWCv7zx+soKvNsQz7VrnSOQOZdraM/W1UMpJV7BK4hw5wf7btQ7
+        CRqgJdRAeT6Iqay0T6H/MW+Gr7g/GSokcY+BL/i9hn2jnXM=
+X-Google-Smtp-Source: AK7set+eMtTsXuL5Vmwi3eUnGfy+2tMLfzuxV3VbzIx9PW2Z9q+pBXJctcHewZQvskV7KcIq1dVWXylxkOSXjnbCTU0=
+X-Received: by 2002:a63:201d:0:b0:507:4697:392d with SMTP id
+ g29-20020a63201d000000b005074697392dmr9440631pgg.7.1678735086412; Mon, 13 Mar
+ 2023 12:18:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <2176690.usQuhbGJ8B@steina-w>
+In-Reply-To: <2176690.usQuhbGJ8B@steina-w>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 13 Mar 2023 14:17:55 -0500
+Message-ID: <CAHCN7x+rEcXfC9GcJxPgro7XBb=K9kvF60htxtHRG0kVXHF0LQ@mail.gmail.com>
+Subject: Re: NOC (interconnect) lockup on i.MX8MP during resume
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 10 Mar 2023 22:43:24 +0100, Krzysztof Kozlowski wrote:
-> The driver is specific to ARCH_QCOM which depends on OF thus the driver
-> is OF-only.  Its of_device_id table is built unconditionally, thus
-> of_match_ptr() for ID table does not make sense.
-> 
-> 
+On Thu, Mar 9, 2023 at 9:11=E2=80=AFAM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Hi,
+>
+> while debugging another issue regarding suspend/resume I noticed that the=
+ imx
+> interconnect driver locks up the system when writing into registers. This
+> happens during resume of the 'g2' power domain. imx8m_blk_ctrl_power_on()
+> will eventually call down to imx_icc_node_set(). Using the debug diff fur=
+the
+> down I get this output:
+>
+> [   71.493062] imx_icc_node_set: node: VPU G2
+> [   71.497163] imx_icc_node_set: peak_bw: 1
+> [   71.501091] imx_icc_node_set: prio: 0x80000303
+> <freeze here>
+>
+> Unfortunately there is absolutely no documentation regarding NOC in the
+> reference manual, so no idea whats happening here.
+> This is on next-20230309 using imx8mp-tqma8mpql-mba8mpxl.dts with USB
+> disabled (prevents suspend) and Ethernet-PHY-IRQ disabled (the issue I'm
+> tackling).
+> Is there some idea what do in order to support resume on i.MX8MP?
 
-Applied to
+I haven't played with suspend-resume myself, but there was a thread
+[1] with discussions about fixing a race condition on the imx8mp
+interconnect.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+adam
 
-Thanks!
+[1] - https://lore.kernel.org/lkml/20230201101559.15529-5-johan+linaro@kern=
+el.org/
 
-[5/9] ASoC: codecs: adau1977-spi: Mark OF related data as maybe unused
-      commit: a9048d64fb9605eb68c9912724e4a1346db8ba1a
-[6/9] ASoC: codecs: pcm179x-spi: Mark OF related data as maybe unused
-      commit: 413beba1a336e6068119f31a4441c51a7aeb1b55
-[7/9] ASoC: codecs: rt1019: Mark OF related data as maybe unused
-      commit: 0e8599a35823f05e90513918ff1201f8d210e315
-[8/9] ASoC: codecs: src4xxx-i2c: Mark OF related data as maybe unused
-      commit: 075a430db402eed0907b80493f1432d47a5120a7
-[9/9] ASoC: codecs: zl38060: Mark OF related data as maybe unused
-      commit: da1f22825b4fec7e25431fa5238252452f3dce46
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+>
+> Best regards,
+> Alexander
+>
+> ---8<---
+> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/im=
+x.c
+> index 979ed610f704..93ec79cc7c06 100644
+> --- a/drivers/interconnect/imx/imx.c
+> +++ b/drivers/interconnect/imx/imx.c
+> @@ -44,13 +44,18 @@ static int imx_icc_node_set(struct icc_node *node)
+>         u32 prio;
+>         u64 freq;
+>
+> +       pr_info("%s: node: %s\n", __func__, node->name);
+> +       pr_info("%s: peak_bw: %u\n", __func__, node->peak_bw);
+>         if (node_data->setting && node->peak_bw) {
+>                 base =3D node_data->setting->reg + node_data->imx_provide=
+r->noc_base;
+>                 if (node_data->setting->mode =3D=3D IMX_NOC_MODE_FIXED) {
+>                         prio =3D node_data->setting->prio_level;
+>                         prio =3D PRIORITY_COMP_MARK | (prio << 8) | prio;
+> +                       pr_info("%s: prio: %#x\n", __func__, prio);
+>                         writel(prio, base + IMX_NOC_PRIO_REG);
+> +                       pr_info("%s: mode: %#x\n", __func__, node_data->s=
+etting->mode);
+>                         writel(node_data->setting->mode, base + IMX_NOC_M=
+ODE_REG);
+> +                       pr_info("%s: ext_control: #%x\n", __func__, node_=
+data->setting->ext_control);
+>                         writel(node_data->setting->ext_control, base + IM=
+X_NOC_EXT_CTL_REG);
+>                         dev_dbg(dev, "%s: mode: 0x%x, prio: 0x%x, ext_con=
+trol: 0x%x\n",
+>                                 node_data->desc->name, node_data->setting=
+->mode, prio,
+> ---8<---
+>
+> --
+> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
+rmany
+> Amtsgericht M=C3=BCnchen, HRB 105018
+> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
+chneider
+> http://www.tq-group.com/
+>
+>
