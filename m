@@ -2,152 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD346B8199
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 20:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5713F6B81ED
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 20:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCMTTQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 15:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S229642AbjCMT42 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 13 Mar 2023 15:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjCMTTF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 15:19:05 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C2419686
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 12:18:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id fd25so8324699pfb.1
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 12:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678735086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RajhfLYDraG9eWSB41u7VR+4RMGlGZ9+XgWUGRTk49Y=;
-        b=IizE98SUhWJgY2eglPa4ZuP3kWcqFg4hJVN05U/mbbINxG5jAQIaikLdD1nWQ3eIn9
-         Es6daxY6vPCyxr+u9NPOn79hJuhl8FzU43KdG5icqsQuvOvT6y8wyWDt/8UUScmtpkeb
-         gt+4wa/aR7BKTPIBnUtD7IucVhI0M1jmou50Kc327oys5z6DJ3+ln5dQiMnQ9PjJaDXp
-         ZLx6gW/574tLl1njYit3A+/TF0oUHcTFKsVBXASERbVYW9/j2LHHjfPU5LWg5a0zCBkc
-         aLy9XUEV5BoaurBZ+ZX2cAn4jrhmNZ/HMSZpWVSdj7RuYoSn8r8RBpGdSlzxXwU8Hdx7
-         Sumg==
+        with ESMTP id S229641AbjCMT41 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 15:56:27 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103238534F;
+        Mon, 13 Mar 2023 12:56:21 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id h8so9615886ede.8;
+        Mon, 13 Mar 2023 12:56:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678735086;
+        d=1e100.net; s=20210112; t=1678737380;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RajhfLYDraG9eWSB41u7VR+4RMGlGZ9+XgWUGRTk49Y=;
-        b=XGVbdg3e2wytJgSJecYlZ5qFNYk6MDZM3mAG3cTMZIq2rW8o8Y6f7xk4RLuG7tuvRt
-         dMy1H7tn9WZZY4jShzNpxgUAOzcoT4IYsqNFwwmtXkeOXquCu9rUDsyqWs9MMWvtsiAm
-         UU8LdBY11P+wBiftbnw7Z/seX0myK88zM6rVq5O9phG4dda7Nhai6tckiFHy+IFlot03
-         nVxki69pp6KgWM7ZgQcKi0wD2dO7tDxWPw6EDrJ4jmZ/Otw1TfPO9Dhxnn2hXaeeE6kW
-         wUwlw5FZyAERj+fZsge3LpcRiY71gx4LgzEcA99E1NKsgag8meozLgvRXSmsk5Fk7lc+
-         c8Tw==
-X-Gm-Message-State: AO0yUKWCv7zx+soKvNsQz7VrnSOQOZdraM/W1UMpJV7BK4hw5wf7btQ7
-        CRqgJdRAeT6Iqay0T6H/MW+Gr7g/GSokcY+BL/i9hn2jnXM=
-X-Google-Smtp-Source: AK7set+eMtTsXuL5Vmwi3eUnGfy+2tMLfzuxV3VbzIx9PW2Z9q+pBXJctcHewZQvskV7KcIq1dVWXylxkOSXjnbCTU0=
-X-Received: by 2002:a63:201d:0:b0:507:4697:392d with SMTP id
- g29-20020a63201d000000b005074697392dmr9440631pgg.7.1678735086412; Mon, 13 Mar
- 2023 12:18:06 -0700 (PDT)
+        bh=fjMVYl/zcmqZd7QTw6wKbhHzflyXdyDOQNkUW9nv/Bo=;
+        b=D9lNcrqcKWZhYGH2knR6Vx+Ac5WO2sMeDpeLzpBiMrsE1/FgKX5ZB3GOXa18jHaGvy
+         G9rk+cey7h8Km9j02MU/joCzs8i+jPo9XgDmW6BOZVNcBphPzqFUP/BsmZLVcF5fU4UA
+         B34lzzneOmVdsZ7ZpZ6SwE4tyF1VofzAqvro0dVS7AYMxWCxB7nra58OBn47TfShJs7S
+         8nvRD5BxI1g804MlCSTG2FjS2NM0VxnWt4F7Zn1N1fL3XMZvLupTR6GybCUh/CPFfLbM
+         Pd9/0VVXq9rp5k2Jz57nEQO+oDxrXkfQrK447nX5W7oRX5z6lc9CL4F9mpoZVhZEorAz
+         QBzw==
+X-Gm-Message-State: AO0yUKV8gSCuGP4UbKEf/s1aufyfr1et6CGFowTH1OKk2oDuh7zsBSCE
+        eJa9iNoo3NA5yPdMjDZo1D7+2WCYi84gKLfaOZY=
+X-Google-Smtp-Source: AK7set+6bXxAz1AjPX0PoQzviwHtDnGhZeGybBm1XzqjXjCxdk0LzSFKdn0GMUK8pc0w02DXCKDF/nRF3teWxyC89FU=
+X-Received: by 2002:a17:906:64d:b0:8d1:57cf:ef3c with SMTP id
+ t13-20020a170906064d00b008d157cfef3cmr17373566ejb.2.1678737380313; Mon, 13
+ Mar 2023 12:56:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <2176690.usQuhbGJ8B@steina-w>
-In-Reply-To: <2176690.usQuhbGJ8B@steina-w>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 13 Mar 2023 14:17:55 -0500
-Message-ID: <CAHCN7x+rEcXfC9GcJxPgro7XBb=K9kvF60htxtHRG0kVXHF0LQ@mail.gmail.com>
-Subject: Re: NOC (interconnect) lockup on i.MX8MP during resume
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20230308141322.25201-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20230308141322.25201-1-lukas.bulwahn@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Mar 2023 20:56:09 +0100
+Message-ID: <CAJZ5v0jinyS0asCT3fG+cAMkFYd=wYk9-fRnf=w=24qPH9hUkA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: update the 01.org website entries
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 9:11=E2=80=AFAM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
+On Wed, Mar 8, 2023 at 3:15 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> Hi,
+> The 01.org links in MAINTAINERS now forward to different other pages or do
+> not resolve.
 >
-> while debugging another issue regarding suspend/resume I noticed that the=
- imx
-> interconnect driver locks up the system when writing into registers. This
-> happens during resume of the 'g2' power domain. imx8m_blk_ctrl_power_on()
-> will eventually call down to imx_icc_node_set(). Using the debug diff fur=
-the
-> down I get this output:
+> The link https://01.org/linuxgraphics/ resolves to the Intel Graphics for
+> Linux - Programmer's Reference Manuals. Update this webpage entry.
 >
-> [   71.493062] imx_icc_node_set: node: VPU G2
-> [   71.497163] imx_icc_node_set: peak_bw: 1
-> [   71.501091] imx_icc_node_set: prio: 0x80000303
-> <freeze here>
+> The link
+> https://01.org/linuxgraphics/gfx-docs/maintainer-tools/drm-misc.html
+> does not resolve. Remove this webpage entry.
 >
-> Unfortunately there is absolutely no documentation regarding NOC in the
-> reference manual, so no idea whats happening here.
-> This is on next-20230309 using imx8mp-tqma8mpql-mba8mpxl.dts with USB
-> disabled (prevents suspend) and Ethernet-PHY-IRQ disabled (the issue I'm
-> tackling).
-> Is there some idea what do in order to support resume on i.MX8MP?
+> The link https://01.org/igvt-g resolves to
+> https://github.com/intel/gvt-linux. Remove the webpage entry, as the
+> github repository is already referred to by the T: entry in that section.
+>
+> The link resolves the pm-graph project page in Intel's Open Ecosystem area
+> at intel.com. Update this webpage entry.
+>
+> M:      "Todd E Brandt" <todd.e.brandt@linux.intel.com>
+> L:      linux-pm@vger.kernel.org
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-I haven't played with suspend-resume myself, but there was a thread
-[1] with discussions about fixing a race condition on the imx8mp
-interconnect.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-adam
+for the pm-graph entry.
 
-[1] - https://lore.kernel.org/lkml/20230201101559.15529-5-johan+linaro@kern=
-el.org/
+Or I can apply this part of the patch if you send it to linux-pm separately.
 
+Thanks!
 
-
+> ---
+>  MAINTAINERS | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 >
-> Best regards,
-> Alexander
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1333928a7be4..99adcd74b06a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6747,7 +6747,6 @@ M:        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+>  M:     Maxime Ripard <mripard@kernel.org>
+>  M:     Thomas Zimmermann <tzimmermann@suse.de>
+>  S:     Maintained
+> -W:     https://01.org/linuxgraphics/gfx-docs/maintainer-tools/drm-misc.html
+>  T:     git git://anongit.freedesktop.org/drm/drm-misc
+>  F:     Documentation/gpu/
+>  F:     drivers/gpu/drm/*
+> @@ -10250,7 +10249,7 @@ M:      Rodrigo Vivi <rodrigo.vivi@intel.com>
+>  M:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+>  L:     intel-gfx@lists.freedesktop.org
+>  S:     Supported
+> -W:     https://01.org/linuxgraphics/
+> +W:     https://www.intel.com/content/www/us/en/develop/documentation/intel-graphics-for-linux-programmers-reference-guide/top.html
+>  Q:     http://patchwork.freedesktop.org/project/intel-gfx/
+>  B:     https://gitlab.freedesktop.org/drm/intel/-/wikis/How-to-file-i915-bugs
+>  C:     irc://irc.oftc.net/intel-gfx
+> @@ -10312,7 +10311,6 @@ M:      Zhi Wang <zhi.a.wang@intel.com>
+>  L:     intel-gvt-dev@lists.freedesktop.org
+>  L:     intel-gfx@lists.freedesktop.org
+>  S:     Supported
+> -W:     https://01.org/igvt-g
+>  T:     git https://github.com/intel/gvt-linux.git
+>  F:     drivers/gpu/drm/i915/gvt/
 >
-> ---8<---
-> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/im=
-x.c
-> index 979ed610f704..93ec79cc7c06 100644
-> --- a/drivers/interconnect/imx/imx.c
-> +++ b/drivers/interconnect/imx/imx.c
-> @@ -44,13 +44,18 @@ static int imx_icc_node_set(struct icc_node *node)
->         u32 prio;
->         u64 freq;
->
-> +       pr_info("%s: node: %s\n", __func__, node->name);
-> +       pr_info("%s: peak_bw: %u\n", __func__, node->peak_bw);
->         if (node_data->setting && node->peak_bw) {
->                 base =3D node_data->setting->reg + node_data->imx_provide=
-r->noc_base;
->                 if (node_data->setting->mode =3D=3D IMX_NOC_MODE_FIXED) {
->                         prio =3D node_data->setting->prio_level;
->                         prio =3D PRIORITY_COMP_MARK | (prio << 8) | prio;
-> +                       pr_info("%s: prio: %#x\n", __func__, prio);
->                         writel(prio, base + IMX_NOC_PRIO_REG);
-> +                       pr_info("%s: mode: %#x\n", __func__, node_data->s=
-etting->mode);
->                         writel(node_data->setting->mode, base + IMX_NOC_M=
-ODE_REG);
-> +                       pr_info("%s: ext_control: #%x\n", __func__, node_=
-data->setting->ext_control);
->                         writel(node_data->setting->ext_control, base + IM=
-X_NOC_EXT_CTL_REG);
->                         dev_dbg(dev, "%s: mode: 0x%x, prio: 0x%x, ext_con=
-trol: 0x%x\n",
->                                 node_data->desc->name, node_data->setting=
-->mode, prio,
-> ---8<---
->
+> @@ -16668,7 +16666,7 @@ PM-GRAPH UTILITY
+>  M:     "Todd E Brandt" <todd.e.brandt@linux.intel.com>
+>  L:     linux-pm@vger.kernel.org
+>  S:     Supported
+> -W:     https://01.org/pm-graph
+> +W:     https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
+>  B:     https://bugzilla.kernel.org/buglist.cgi?component=pm-graph&product=Tools
+>  T:     git git://github.com/intel/pm-graph
+>  F:     tools/power/pm-graph
 > --
-> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
-rmany
-> Amtsgericht M=C3=BCnchen, HRB 105018
-> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
-chneider
-> http://www.tq-group.com/
->
+> 2.17.1
 >
