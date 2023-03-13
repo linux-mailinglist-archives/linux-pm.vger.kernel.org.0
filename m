@@ -2,60 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48586B7643
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FA26B7646
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCMLm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 07:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S231298AbjCMLmf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 07:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjCMLl7 (ORCPT
+        with ESMTP id S231204AbjCMLl7 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:41:59 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126B564A85
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B166423C
         for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:26 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id s20so15286012lfb.11
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:25 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id y15so5786684lfa.7
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678707681;
+        d=linaro.org; s=google; t=1678707682;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yMd/fSoMYLuM7nLGHQDb8PX/xkwXM/q1Im1epEv8KM8=;
-        b=hOJ2OIfcQ8xmOUjCn3bxJpYAGXWj68VTQ5iYJZ4OSb94VIBEomBBAl9kDiPCg2pJ4r
-         PLDG5GH5uQhx0HoIFFnSUULNMCeF6B1OFxY4OGsMEezU09bkRqzVX/40rlxTFnMb0yNL
-         AoWzp4zxNMuf5d6DyZUUmsNllrorc0AmUyYaQ7VO/ivT5GSssvB7kAF8+wmdT1YkdFWs
-         UduOL+1ltbv0U/oNLQDA72LXVL+En/Annqc6mghhfur6pQyv7cVHGy+8TDA2h0oT5ZOr
-         S36b9fmVd48KL2AvY6tnKkuxd2dvE5tZAVVaWkinXmjQ+tbztxHNLe15kTnCaQS3g5iW
-         D9hg==
+        bh=l+k+reC4AwOd4vHClc4yefjsS0s41ZK6miu+3sYuwsE=;
+        b=D+6o3R1C0cSJshMzbgjMBzugrRd02mjgMMfcRAKcnQWvZlip/dpYUvdrAwLYStgPJo
+         fiZzOFkhkhPAlxBmzrAa9GmJCIlaxse4NnECdxF1x4Yr3UqS4R4nWdNmiPFmWmDdRxY/
+         Df+eK9HgoGcaYxUT7CwXASV/f8O7XTz/pdgkKBAxrzBPktwfJxt40blD5azzyr7T/J61
+         bc1Co7BLkUKxHPkYsXIXFFrBY2Prt1gmxJjr9eawzJrvCcWGLTzDVaGLSUmmJz/3hDkE
+         Gczune8n299zuSUo6Ddj04cgXOovXbVOBcbvLb3KCfQBULipdHVGos6yEaQ3jShQtU7d
+         x97w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678707681;
+        d=1e100.net; s=20210112; t=1678707682;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yMd/fSoMYLuM7nLGHQDb8PX/xkwXM/q1Im1epEv8KM8=;
-        b=LRDW8iHXMJEdeW9H+zM0pWfVeQdpJy0hlhHET62FrUzhUeYuVQz6nLFBphjQ2zhRqq
-         HUCo570TyCy4xdN5D1G59oVtzMzSvjlUUKp99AoGO52QdUqAwpVUSa9wVaA0B9cWiPaF
-         LXkX9m4N6GD9k8rsS1KzIU/vhDwLu9DLt7X0/FcuxBPuxwVOlrJg/GgtyKzj91OU6Jdb
-         Af2Nc6IO0eBvspgJ2cRkbcCzFRS7IgJFRjaL6SUj9jQrlnyCBzfm3Mb8abNAmMK9f+QH
-         zhp6fHF/Yr/1FMTd3U+PnHzBeUbvMNeEEA6oegUpavDSyMkWGicKYF7s5nKTcZW/aEN6
-         5Ajw==
-X-Gm-Message-State: AO0yUKXHpuZkwAJVZX57vWQTtdZAZs43fxCuCESCsNh17enhsRhJjBzN
-        3hBd2DSsP5RvDeoflyTOL6Vpag==
-X-Google-Smtp-Source: AK7set9zmrkT7t9m8xfL27x8Lgvt0fcFSb+J0GYy9/1OhupDm3dJ64Pl4oe7T5QQ9b8ckQwMYHzSGQ==
-X-Received: by 2002:ac2:5106:0:b0:4db:3a92:2c85 with SMTP id q6-20020ac25106000000b004db3a922c85mr9821478lfb.67.1678707681234;
-        Mon, 13 Mar 2023 04:41:21 -0700 (PDT)
+        bh=l+k+reC4AwOd4vHClc4yefjsS0s41ZK6miu+3sYuwsE=;
+        b=WrQJrB7VoMhIg7EKv3RPEOJJsdF1+a+kAaVsIoTOZos+dZqgP8Mr9Qb99KJFMl+8CI
+         6XORPYJ6u5Hd64BBTHdlA4osflXG+ECZ6SUo3LUR/v8jmyk8qEXBuzJnK7s4HXkTaJYY
+         /P0F+XN6SLIk8h0OmL4a4bXRR6NzfKXHtIngBzNfmFd6uz3Ld5PmAQePIk5mnl25rw20
+         6fIKMtqfZxXfCyb04ieq15uqd+Xky5WjN9awi+AU99C8VYCoPqalYXa/fZrDGtEXRLzM
+         T0JjWaOQ4QHy1VWiM3mPf5bZNFGkkhbTS13MEBrqZkJQHsPR8DZQNbnHDw7/KYQ6FNfc
+         foVQ==
+X-Gm-Message-State: AO0yUKVjfLFDnGQjPRMVQtHqPHS7rF8aqe+WrfzOihSBoixXh2H6ZTxP
+        chKI7epiIuTArCEioqyw6xuxmuziFVjZEYLpSns=
+X-Google-Smtp-Source: AK7set8JAuzg3+U4FmrY83xuBoNpWhJ8U0Eae2ii+jB7mOPeJtAPpZ1/jkLcsDPaWDwSEPde5egsUA==
+X-Received: by 2002:a05:6512:204:b0:4db:a19:6dfe with SMTP id a4-20020a056512020400b004db0a196dfemr9171576lfo.26.1678707682378;
+        Mon, 13 Mar 2023 04:41:22 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.19
+        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 04:41:20 -0700 (PDT)
+        Mon, 13 Mar 2023 04:41:22 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 13 Mar 2023 12:41:09 +0100
-Subject: [PATCH v2 3/7] soc: qcom: icc-bwmon: Remove unused struct member
+Date:   Mon, 13 Mar 2023 12:41:10 +0100
+Subject: [PATCH v2 4/7] arm64: dts: qcom: sc7280: Use the correct BWMON
+ fallback compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230304-topic-ddr_bwmon-v2-3-04db989db059@linaro.org>
+Message-Id: <20230304-topic-ddr_bwmon-v2-4-04db989db059@linaro.org>
 References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
 In-Reply-To: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -69,11 +70,11 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=851;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=775;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=a+7UxhwPe8d61BMoAwcf5BTpQhH1To5AXAuiYkU2/Ik=;
- b=jUx0oZRfG7dGC/yyC6ZvD4X+x5wFkeq9oqlm+aYDu6ZAmyyHWKxjetMpSaN0o4ZZeWXm+sEeHUqy
- epkaJ87nDnBsnP6G6l6VMN7r+lHUQJOYofaPmZBasDh8Iw2jifMv
+ bh=HQt/UEo0cCtLu7F+JcX1cFn0BClxhTD3AkZRLXFvT0U=;
+ b=8GfFDsHT11QIGg4Lh93AuCcCvfDiE3d5GrUEo35sOOaBIOvDCiRTRVmEUHTptsgg9YFoj0wItyjZ
+ b0Q39cQ1Bp8sVVQITi4tFc+DvQ/0+uwT5yCCU3tEU/gbcqROcQd7
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,29 +87,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-bwmon->regmap was never used, as the regmap for bwmon is registered
-through devres and accessed through bwmon's regmap_field members.
-Remove it
+Use the correct fallback compatible for the BWMONv4 with merged global and
+monitor register spaces.
 
-Fixes: ec63dcd3c863 ("soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5")
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/soc/qcom/icc-bwmon.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
-index 2fe67a3cd2d7..3a3230a62ad9 100644
---- a/drivers/soc/qcom/icc-bwmon.c
-+++ b/drivers/soc/qcom/icc-bwmon.c
-@@ -184,7 +184,6 @@ struct icc_bwmon {
- 	const struct icc_bwmon_data *data;
- 	int irq;
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 8f4ab6bd2886..f15fea6cc316 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -3533,7 +3533,7 @@ opp-7 {
+ 		};
  
--	struct regmap *regmap;
- 	struct regmap_field *regs[F_NUM_FIELDS];
- 	struct regmap_field *global_regs[F_NUM_FIELDS];
+ 		pmu@90b6400 {
+-			compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
++			compatible = "qcom,sc7280-cpu-bwmon", "qcom,sdm845-bwmon";
+ 			reg = <0 0x090b6400 0 0x600>;
  
+ 			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
 
 -- 
 2.39.2
