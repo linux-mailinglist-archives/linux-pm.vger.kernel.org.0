@@ -2,125 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1CD6B7114
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 09:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929176B7134
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 09:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjCMIZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 04:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S229983AbjCMIdc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 04:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjCMIZG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 04:25:06 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E56303DF;
-        Mon, 13 Mar 2023 01:25:03 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id n2so14553870lfb.12;
-        Mon, 13 Mar 2023 01:25:03 -0700 (PDT)
+        with ESMTP id S229805AbjCMIda (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 04:33:30 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41219F1C
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 01:33:28 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id p203so3680327ybb.13
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 01:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678695902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FBJ+MVwgwtIkyKpO0yCKLsxBFxykpziKwNtVfj7PP28=;
-        b=dGkHmp1W69kJ0kWGmZgteojJySma8T2tk6U/O9VRhKYKJAFEt7ew6EBPUBra/kSiiK
-         99Nv1+BQqbqP/X56vXL4g+gqlnKxP/n3xp3R/2y3oxGwkarDh27XPdbyQDA0n+MBwXrj
-         SuIfItc9yEml+uevEDw0jLt33Lkiq1mHgT08AL57XfXYSYQaBTUYqn6uzIB/tcAemfGo
-         gs6YaMy7zR6MI6i2v1hzi7QZx9YCEa3iwyRBBn9QCKjpnfeUBYKsnCGUCfp9cbOEb+p0
-         tRdIAAUE1kTZVmZLdyzfrBkNIbyh8i5jbcX8xZRdUaXW5bwJd3xogxD4a0OgaRAopzDc
-         oaPw==
+        d=linaro.org; s=google; t=1678696408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ya0xeR3EOwIf2SQwBchOfop6EHpJp/mskrRR9QbQKU=;
+        b=ulacoDZkaeqpJxaGwNgh41bzF3Mu0/3b4OqyAvKgxKFWQYsb8nRc5fcQ0riYXDY8yt
+         smy4lCoCdN6Rtwj791c+Ib8RAkUysTZAguLKWGAOPk9qq67kF1IgeCFVQTEQfcZlE7t+
+         wbyllsVuvw0dIx5r/r9Uy8290CTjwUdZNicO6KKs6wQOd5AhoR+NQ633EQBiaqA4qUqq
+         leXmeMVZACMGHsRj9I/ZnRnNXLmhsMeD/6UJ/Jr+i6FHYkll0S9SYNXaYmlsBUfdeZHg
+         bhhom6zFIomkoS9E/fCJUM8zWU+lVxzQCAYwqludjFQ+N02O5pXSjVd2NrS2+tVFaCPs
+         V0tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678695902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBJ+MVwgwtIkyKpO0yCKLsxBFxykpziKwNtVfj7PP28=;
-        b=jEILvg/HsOfmAm5PJQyrzL0L794MHrEhQCA+ufOMNtBknqQuHMDpAuC9FAvisy9G68
-         qwNpEbyE/BGH01v8NCJfR77kxOYjkBSkLoW6CgqdmiIjC5OMF1ZO8fG4wtDkF+zd+mu+
-         QKRrGyn3rEXeiUfREESyoaDeBEgJRz4E2B0RQ+xpjuEa5yuVkVEvDYJXuZbP08Huk0mp
-         ezc1QX088BETc9OQ3U+a/JoSfHpFIzIVBftL7PuvkJ/vYLi11D+l/yxADa7DdPIN3CzQ
-         ALzc3Grcu3NLORBHlYm/wCh2DXTc7ivrRP2NH72NmeKzlZiKaw1Zm8ZEFY2tGZ9jyYuW
-         xosA==
-X-Gm-Message-State: AO0yUKUKDCR3P6XPwJO5Htku92wcCLuaNN91KKx92sl3oLfjLw1vIcSQ
-        dvC98RV9drd5JiIcBoXfrpI=
-X-Google-Smtp-Source: AK7set97bf4RTjqUfWvM1Tyyo3+ubA5mZTcj7G6VQav22Rj0X8ZXFBdRv9Rva7ohmFnSqdEy17TOxA==
-X-Received: by 2002:ac2:46d6:0:b0:4e8:4930:df19 with SMTP id p22-20020ac246d6000000b004e84930df19mr146815lfo.22.1678695901984;
-        Mon, 13 Mar 2023 01:25:01 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id d1-20020ac24c81000000b004da8d947c57sm893384lfl.149.2023.03.13.01.25.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 01:25:01 -0700 (PDT)
-Message-ID: <cf4732a2-44a6-65ce-d3cf-168d3502d7da@gmail.com>
-Date:   Mon, 13 Mar 2023 10:25:00 +0200
+        d=1e100.net; s=20210112; t=1678696408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7ya0xeR3EOwIf2SQwBchOfop6EHpJp/mskrRR9QbQKU=;
+        b=2yfq/5JyW0ImEFe/aM+GNAXJk7ix9TsgiXdENQkY5feZqxtrBo6B8wCQ64Noj7CIPq
+         +WOk/p3LN5Cbi2jO7F0yt0npbbV54u60o1CrDLLwZmSAnq+6Bal3KCaCXSRxpCyPqgIm
+         io/UTBh7Lns5NSSPB+rKTUxZ/abIFC2jeFKwYO7otL5jfHU561L9nG2A0ScDOJxgOaMD
+         YkIl6nHbVSUlX+DG9BUdaIVPMNKuFM3Rm617zO6l79haEdn/OAL0JoVgAWgSXLLbNKtJ
+         QeckyBIq9Lf94JkOn+y8V9kYXSh2oF6LGldWqMGZSbeqJWyBqoXz4iCbKSrY8y1o9uYR
+         b5oQ==
+X-Gm-Message-State: AO0yUKVrs8nckhrvJJk8gureCz1Yf1/azb/eMeVxFqIByuOqdMeVBrsi
+        bjUZ1o44Hbdg5dZ3L2oC/76W8Sh3JyxnnjbVe/5wUA==
+X-Google-Smtp-Source: AK7set/R4BiH/PF2hRbxzLizFVyNAKs4lvl4ii9te26TFCwaA12bbjRzIKdishRkQRMWInaP7gjjosZtyDFj/LVkRns=
+X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
+ k10-20020a5b038a000000b00ac9cb97bd0emr16155629ybp.5.1678696408073; Mon, 13
+ Mar 2023 01:33:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv1 11/11] power: supply: generic-adc-battery: update
- copyright info
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-7-sre@kernel.org>
+ <CACRpkdYTD3OZ-44N0oRD93gToxR_DoFSkLhvNjrRpCms2TX5nw@mail.gmail.com> <eaa72600-b85a-fa97-45ff-6412696682b6@gmail.com>
+In-Reply-To: <eaa72600-b85a-fa97-45ff-6412696682b6@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 13 Mar 2023 09:33:16 +0100
+Message-ID: <CACRpkdaHKZjkvZYM6GAnzXeRgfqFWE1aGMEqkN1HQ-3TX-DjtA@mail.gmail.com>
+Subject: Re: [PATCHv1 06/11] power: supply: generic-adc-battery: drop charge
+ now support
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-12-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230309225041.477440-12-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> jz4740-battery.c and s3c_adc_battery.c have been removed
-> from the tree and after all of my restructuring the driver
-> is basically no longer based on them.
-> 
-> Thus update the copyright information and switch to SPDX
-> license identifier while being at it.
-> 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+On Mon, Mar 13, 2023 at 8:49=E2=80=AFAM Matti Vaittinen
+<mazziesaccount@gmail.com> wrote:
+> On 3/10/23 10:29, Linus Walleij wrote:
+> > On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.o=
+rg> wrote:
+> >
+> >> Drop CHARGE_NOW support, which requires a platform specific
+> >> calculation method.
+> >>
+> >> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+> >
+> > I agree. If we want to support this, we should use the generic
+> > methods with interpolation tables defined in DT as well, and it also
+> > ideally requires load compensated resistance calculation to figure
+> > out Ri so this can bring any kind of reasonable precision.
+>
+> I guess you have your reasons, besides you have far better insight to
+> things than I do - hence I am not really objecting this - just asking a
+> question ;)
+>
+> Do we have generic facilities of computing this based on the DT tables /
+> Ri in place(?)
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Not yet, for the Samsung batteries I used a static look-up table
+derived from the compatible string for calculating Ri from VBAT
+and from that calculate the capacity from estimated open
+circuit voltage, see
+drivers/power/supply/samsung-sdi-battery.c
 
-> ---
->   drivers/power/supply/generic-adc-battery.c | 11 +++--------
->   1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index 436e75d226ed..ac72140dc136 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -1,13 +1,8 @@
-> +// SPDX-License-Identifier: GPL-2.0
->   /*
-> - * Generic battery driver code using IIO
-> + * Generic battery driver using IIO
->    * Copyright (C) 2012, Anish Kumar <anish198519851985@gmail.com>
-> - * based on jz4740-battery.c
-> - * based on s3c_adc_battery.c
-> - *
-> - * This file is subject to the terms and conditions of the GNU General Public
-> - * License.  See the file COPYING in the main directory of this archive for
-> - * more details.
-> - *
-> + * Copyright (c) 2023, Sebastian Reichel <sre@kernel.org>
->    */
->   #include <linux/interrupt.h>
->   #include <linux/platform_device.h>
+> I guess that we do need/see platform specific
+> implementations as long as there is no generic "de-facto" way of doing
+> this available...
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+The method I used with Samsung batteries is fine as long as all you
+need to know to know everything about a battery is the compatible
+string. Pretty much any Lion battery with a clearly defined product
+name can be done this way.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+The only reason to put the interpolation tables into the device
+tree would be to support any random battery, such as one
+that you do not know the model or this can change.
 
+I am however mildly sceptic about adding that: if you know the
+VBAT-to-Ri and OCV-to-capacity tables, you must have a
+datasheet, and then you know the name of the battery product
+and hence you know the right compatible string...
+
+I think the right way to handle any capacity curves for any battery
+would be to create static data like I did for the Samsung batteries.
+
+Yours,
+Linus Walleij
