@@ -2,80 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D7D6B6E70
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 05:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013836B6E72
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 05:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCME2z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 00:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S229782AbjCME3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 00:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCME2x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 00:28:53 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3262A6DF
-        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 21:28:51 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id i5so11586735pla.2
-        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 21:28:51 -0700 (PDT)
+        with ESMTP id S229663AbjCME3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 00:29:20 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970062A9A2
+        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 21:29:17 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so10368137pjg.4
+        for <linux-pm@vger.kernel.org>; Sun, 12 Mar 2023 21:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678681731;
+        d=linaro.org; s=google; t=1678681757;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TAvGM9A2vDOzZdyZgN/PhkShf6xY7yJiV2Tqe3Nl+SQ=;
-        b=vgSzyJf6wycqYZ/VP28K2uAd0g5ZW4Z17ATSTMj8bm/53X2tJN6kLXOuJUq2qi31px
-         yTLOEvIj36P32blXlmvFWEpkRyIyz6ATGjFYQ99xtcsCFHsc2JewOeL8a0bqcWQhue0K
-         Z5knfx4nBfuz7GdB05icBFRp6tGwuynWdlqAsAt0+7J16rlNB1iwp70JepKXzgvD38M0
-         ifWATre3vYuJ0aduoRvF3Bakmn6wIVtpHx7H288oyWgmd0dvzyus7St6jM9vCxoDphRJ
-         WCDeXAK4kePRLuHWAPz7O8Z+/yQDo4YzoXMueK6qhRQmHigR4daFHTCI5iuSZ6Um6HSk
-         5iQA==
+        bh=XZWJljCZTLJTay1u9WDo4/NCIqnGYgP7+4i4A4VqEcA=;
+        b=oOv+tWaMVEWXItt8wgN8VM3EukEgAEBFId2q13Hm7Wxd2YooYqW34MvOV3P9lDX7HF
+         QSI2VBN0ushhjIOVJOa/fPGueZ8iEYv/g5q2tmF/HjpdengJoUiQ6HLSIgwvOPvrFdgh
+         avkyIiBTxGTu04XFINDazJk0HeElR7CkAynD+rnZD5nxZukWpaeXtmowPLp8XVl2tfbZ
+         Y4xswJWHTPUslhxguVmHho9qks0ZujQcivtcmh8Y82wiBBnurI59JcM1cd+ibDgpL5RR
+         GwI4haSghTexpcZHl2KFle7Y6osMSmcCCtk+mlCovyBAB/lVlXhEXiM/RUwz8Z6LWZUV
+         +pDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678681731;
+        d=1e100.net; s=20210112; t=1678681757;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TAvGM9A2vDOzZdyZgN/PhkShf6xY7yJiV2Tqe3Nl+SQ=;
-        b=l9hEswQNHaYYPrms8Ca1Haolt1mutmM0sW2EZtXm7qy88ActmJngkviKaq1f3dFsFY
-         EfUoXZybUUQ6s62vO7Mgq5qnqFvQepu8cjkR/gm7ElA4tJcBPwWGhZdx1/qRnSOVSb6K
-         aRrAZyOGV533n/kJHDiyMmmNeyH6JUtV6TORFNd6uwh3uPjfbjs21qo5vHdBr7+ysAxG
-         WPAbd5TFSpf5pB0Bs0ztbHwYA2GPm0Erj427ueetM/zUDQbGVONE52Uf/deO8WyrixNA
-         jpRapAU5Xa6IgfkidXI6QDueZU4cAMTcnZZVZTa61AsI4GWP9Z/4kPdSHA8xhwYwTI+d
-         AnBg==
-X-Gm-Message-State: AO0yUKVrbc7E6p0FSgiqFXJiHnaU0oeEGyqXU6pXto0+Vefkago2jfyl
-        QpsVYeBAODay6d7M13KpWDdiEQ==
-X-Google-Smtp-Source: AK7set9p4bFVrpjWBwosOcH7++GcaLBhSfedNIG7sXxnuN2cWJ9UqlzAa/4KGepgTsY0V/w5bofLMg==
-X-Received: by 2002:a17:90b:943:b0:23d:198c:a5ec with SMTP id dw3-20020a17090b094300b0023d198ca5ecmr565374pjb.39.1678681730991;
-        Sun, 12 Mar 2023 21:28:50 -0700 (PDT)
+        bh=XZWJljCZTLJTay1u9WDo4/NCIqnGYgP7+4i4A4VqEcA=;
+        b=uaCgWHtz6kbShyS/ps1qaHtID/2LEBkNNl/kbngDV3Bwnmib65xrEexiV4xiDSyds+
+         hKB5KF5DbT2liM5NWQ1m2jNEjXPT6Ow0ti1TrM6WstEkaIfXT4ooZCsdVP6bNW0eB5jC
+         VtIKhqypqufoQ2yiKM3DAPDWkOQYbxxd0GWXAES9Rb2SfN5nQfroEEtCgGtVZPTlWzIs
+         7UuDyB9VMe3/OqaeM8EIPWSnWS5GnFzQG6eUysSfo+5imqsOobI9H6ivwzImcJOzflmN
+         uttIlc4gHYm5361bpLOHrKvropvlVyd1NE+l+iwGEBO0KC0PS4mdRob5h2IhkrTb48Hl
+         F4sw==
+X-Gm-Message-State: AO0yUKWPvohGn4Js3t8VE+9LO9+vxgeN5FuPDoVbpyx3c/eS+dDmSDjL
+        XD0KETfxzLUd5aOMM2X7S91Bqw==
+X-Google-Smtp-Source: AK7set908sTlB6jwJGCHrtkE9seweG/OTpEuZ6DuKlQGg8uGByBWB5Yi/DYCx+ImQpAFmhRFC5nMAA==
+X-Received: by 2002:a05:6a20:4f0a:b0:d3:78ab:77c3 with SMTP id gi10-20020a056a204f0a00b000d378ab77c3mr6670980pzb.48.1678681757095;
+        Sun, 12 Mar 2023 21:29:17 -0700 (PDT)
 Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id y2-20020a1709029b8200b0019f0f5704besm3557029plp.236.2023.03.12.21.28.50
+        by smtp.gmail.com with ESMTPSA id z12-20020a630a4c000000b00478c48cf73csm3528441pgk.82.2023.03.12.21.29.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 21:28:50 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 09:58:48 +0530
+        Sun, 12 Mar 2023 21:29:16 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 09:59:14 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rob Herring <robh@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Use of_property_present() for testing DT
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH] thermal: Use of_property_present() for testing DT
  property presence
-Message-ID: <20230313042848.bt4vl3tjjdb6qs34@vireshk-i7>
-References: <20230310144702.1541730-1-robh@kernel.org>
+Message-ID: <20230313042914.jmbpmlfczad4epkv@vireshk-i7>
+References: <20230310144726.1545543-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310144702.1541730-1-robh@kernel.org>
+In-Reply-To: <20230310144726.1545543-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,14 +93,13 @@ On 10-03-23, 08:47, Rob Herring wrote:
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 2 +-
->  drivers/cpufreq/imx-cpufreq-dt.c     | 2 +-
->  drivers/cpufreq/imx6q-cpufreq.c      | 4 ++--
->  drivers/cpufreq/scmi-cpufreq.c       | 2 +-
->  drivers/cpufreq/tegra20-cpufreq.c    | 2 +-
->  5 files changed, 6 insertions(+), 6 deletions(-)
+>  drivers/thermal/cpufreq_cooling.c                  | 2 +-
+>  drivers/thermal/imx8mm_thermal.c                   | 2 +-
+>  drivers/thermal/imx_thermal.c                      | 4 ++--
+>  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied. Thanks.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
