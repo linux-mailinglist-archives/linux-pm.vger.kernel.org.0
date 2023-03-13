@@ -2,72 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7836D6B7441
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 11:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEF26B744E
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 11:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjCMKiQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 06:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S230107AbjCMKjg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 06:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCMKiM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 06:38:12 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A84608C;
-        Mon, 13 Mar 2023 03:37:48 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id k2so4532979pll.8;
-        Mon, 13 Mar 2023 03:37:48 -0700 (PDT)
+        with ESMTP id S229519AbjCMKjf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 06:39:35 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E226B46C;
+        Mon, 13 Mar 2023 03:39:21 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id p6so6632357pga.0;
+        Mon, 13 Mar 2023 03:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678703867;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KU7DMY9k7DfRs8YYS0f44VoUtgWgosku2UjOg2Dqy5A=;
-        b=Z1uya8RuNbWxfnRK9B1p4JS3cvIl9X+qZHFgPVyN/aHwEMX/UOABbdeRabhUHAIgON
-         aB+lKl3DzzrXH0AbEh0C5aX3X8q/Q9MaMckSq90uEWd2AxyvfGrhKol7t2h+JO2QAirE
-         aPGQ0EMR/KB1+QnjgPzZbdmlgRTLyjBT8KvZVwfSRbW0QjncGBhy0qkuJtkPqHgxK9co
-         Ohft7TiBWuaPj4KXSVKjI+SaahbygujLxe2rBZt0HltJ+asnglPbW21VGuxwtZBzSYS7
-         W8xRYRFDlYzK9xJSLUU1ij0FkpF64Ic+Jco/UQnxOgLb412lCS7KqvKkNVn3/l6tYpV+
-         m2gw==
+        d=gmail.com; s=20210112; t=1678703960;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AdWZvDoiXOkhtz0FgU/G9RlHUgPqSYBL8Px+ljsJ/2U=;
+        b=Rq7s5PVDQtf1N+47DPI5ClKgMAK1EO12UUd4nsy523dgBqVvu68AUfWHZz5+vgqAEi
+         nF2zScYg1h11M8mj58jayRMOE3wB8+xXItGD7946FIgEXU4sc3erSQlm9do5AM8P4X+E
+         XkFPKu+os8LURW4jVJickOL0/+drdlptmBre7qzfvDeRzYtI/Ny6Nr9/qvDSQDWzai9R
+         fqyx+VCMcEAWEOpppGIQmHc2Il++g5mVIE2UWmNlGhsW8t+ClgaW+yB0aBDJjrqhHPRk
+         QVU+UsvGIZl2oKYG3ZCzV+qdjx8hp8fpHl8JSq5rE8bkRE6m/FVimKHrvoiNXfERHRKM
+         95mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678703867;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678703960;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KU7DMY9k7DfRs8YYS0f44VoUtgWgosku2UjOg2Dqy5A=;
-        b=yBb8e3qWrA0Vg0JxDnqC86/hmh4B2KGw+EtPzcpXvwrWEmbRDL9h8KfmdosfA+BEH7
-         yUjOTwpRlozIvWEjXoAYp8+oZYnGe28YyViHdaeSK+CnTNH140Itd+/ln91BBjySLxKg
-         MxjrfVWVypWc/H0ZFflGFI99xrZvbWRr+l1pT+2jVhvzT4aTuLr4LW8CD9Ko3rq5lQAb
-         S50f8FQ9wkD6Zt5m5Zh4Lz0pluqmmjG4wc5R5Fddb4/hjjYVsOYeQhqXauVu5LQlBFfO
-         NEGh08HH9Z/+k9fxRyMAtSd2MrSEk8urOXkEt+HB2aGGDGns+7yPx44jaTFIdQnFwYBl
-         t0pw==
-X-Gm-Message-State: AO0yUKUPu3V/qzfsEdvYHcDrV4j5AelxjQwr7bD7kB5+81nU09w4r0Iu
-        MnaRFfBFv3DTk2jTKIxmHU0=
-X-Google-Smtp-Source: AK7set8NWZf5ZuTQmuFcIevA1d7F10D+nLjVlsIq1XWd3B8TEqCd7UiHsIr7GKU4PzlppyuWARfpnA==
-X-Received: by 2002:a17:902:e886:b0:199:4a00:9788 with SMTP id w6-20020a170902e88600b001994a009788mr43057201plg.19.1678703867538;
-        Mon, 13 Mar 2023 03:37:47 -0700 (PDT)
+        bh=AdWZvDoiXOkhtz0FgU/G9RlHUgPqSYBL8Px+ljsJ/2U=;
+        b=Ger7YGfb9/kEVqNSB5kkLGIjToMRBUiDWTFjDHnzFf8xJpB6Op6ZJPSWZi/dxAy6pG
+         W7dNzeAa7B8nl1z/Uw8/V1lKsfEAXk6pU+oiVT7ZVJvyPPE9iO1QiL46QsLYitaWP97z
+         WqemH2Jtezmlat+opz38QZExz2byE9kb3Jxo3EnXd2OmHwg9awh1g7BxGoLCMBKDB3g7
+         vuQ7j2wCLI+BxischdzORMoI2r6H2lY7+sEBdA01L7pvsn9U7n6YhhdawdhwRUr/QB9u
+         fq8YIedsPQnZKjkK25dAuSo23ZcvSkUQo7KpUQzBvKqG51BGeVRL2MOWZfDY5xEDid1A
+         M0Ww==
+X-Gm-Message-State: AO0yUKVX4Jeyzq40OsDyZX/OPy3VKK3fknriOM4DpgkIn18VX/ML1wjw
+        d5X/W1khc55TzU5PJZAOi0g=
+X-Google-Smtp-Source: AK7set9+XUJbjHbUYyEfT4VL/c1p9tIG+Ibui0wwEwmhtT685uC75sYqR6DOL3fWMVSwEsNnXc7ulA==
+X-Received: by 2002:a05:6a00:15cf:b0:5a6:cbdc:2a1a with SMTP id o15-20020a056a0015cf00b005a6cbdc2a1amr11304087pfu.2.1678703960428;
+        Mon, 13 Mar 2023 03:39:20 -0700 (PDT)
 Received: from [172.30.1.89] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id jx18-20020a170903139200b001a057d36dc1sm741713plb.138.2023.03.13.03.37.44
+        by smtp.gmail.com with ESMTPSA id i16-20020a63d450000000b00502f9fba637sm4276189pgj.68.2023.03.13.03.39.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 03:37:47 -0700 (PDT)
-Message-ID: <f1019d0e-78ec-2783-5537-b8759993064b@gmail.com>
-Date:   Mon, 13 Mar 2023 19:37:42 +0900
+        Mon, 13 Mar 2023 03:39:20 -0700 (PDT)
+Message-ID: <770dde57-20b6-2877-53c6-b7ecf5980090@gmail.com>
+Date:   Mon, 13 Mar 2023 19:39:14 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] devfreq: exyos-bus: drop of_match_ptr for ID table
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Subject: Re: [PATCH] PM / devfreq: exynos: Use of_property_present() for
+ testing DT property presence
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230311173753.263390-1-krzysztof.kozlowski@linaro.org>
+References: <20230310144734.1546726-1-robh@kernel.org>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20230311173753.263390-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230310144734.1546726-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
@@ -78,34 +81,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23. 3. 12. 02:37, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).
+On 23. 3. 10. 23:47, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
 > 
->   drivers/devfreq/exynos-bus.c:504:34: error: ‘exynos_bus_of_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
 >  drivers/devfreq/exynos-bus.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index 027e8f336acc..f7c554051232 100644
+> index 027e8f336acc..d341876e7b62 100644
 > --- a/drivers/devfreq/exynos-bus.c
 > +++ b/drivers/devfreq/exynos-bus.c
-> @@ -513,7 +513,7 @@ static struct platform_driver exynos_bus_platdrv = {
->  	.driver = {
->  		.name	= "exynos-bus",
->  		.pm	= &exynos_bus_pm,
-> -		.of_match_table = of_match_ptr(exynos_bus_of_match),
-> +		.of_match_table = exynos_bus_of_match,
->  	},
->  };
->  module_platform_driver(exynos_bus_platdrv);
+> @@ -432,7 +432,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>  		goto err;
+>  
+>  	/* Create child platform device for the interconnect provider */
+> -	if (of_get_property(dev->of_node, "#interconnect-cells", NULL)) {
+> +	if (of_property_present(dev->of_node, "#interconnect-cells")) {
+>  		bus->icc_pdev = platform_device_register_data(
+>  						dev, "exynos-generic-icc",
+>  						PLATFORM_DEVID_AUTO, NULL, 0);
 
-Applied it with 'PM / ' prefix to keep the consistent title style.
-- PM / devfreq: exyos-bus: drop of_match_ptr for ID table
+Applied it. Thanks.
 
 -- 
 Best Regards,
