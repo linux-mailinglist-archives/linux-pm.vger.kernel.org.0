@@ -2,254 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598946B6C11
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Mar 2023 23:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF2A6B6D1C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 02:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjCLWuU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Mar 2023 18:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S229801AbjCMBlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Mar 2023 21:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCLWuT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 18:50:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5BE32E5D;
-        Sun, 12 Mar 2023 15:50:17 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 33D7D6602F13;
-        Sun, 12 Mar 2023 22:50:16 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678661416;
-        bh=M5+nSc1iWkLndW4q1iULDQ+SKPeVQwicOS2p4YvXLMg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=StDhfmUJlXV+oPEgIlhee7wlWGQ6o8gHfe245ShrtwlQQSeDlNj8lMEEe+JhPF0Ri
-         WexywZk9xrkQ+ZkA3FPcd7IFjbAD0iHtHgnxKG7JfQQs+XZXJocn1wiG1d7hldpAPs
-         vlvmdabSOEoRFcxoN445VC5pQ/AIjtfSJZ799oYvvWZmIq6IS1//twH1MdgSt5Plnj
-         9MJ1OEkve8JRVIcdi1SwbZQa4LvxfIe171txSoVAvrXLHyLfP2VtZsXA/H36fhShCJ
-         eLJf0QU8YCoCNHxh9xFxY2UKToUIiguOaWPTxXtES5wszBH9+lx4TehxC8huRaaSGu
-         GqVu+qYfCJGVg==
-Received: by mercury (Postfix, from userid 1000)
-        id 8912A1060FD4; Sun, 12 Mar 2023 23:50:13 +0100 (CET)
-Date:   Sun, 12 Mar 2023 23:50:13 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hermes Zhang <chenhuiz@axis.com>
-Cc:     kernel@axis.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq256xx: Support to disable charger
-Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
-References: <20230309064104.79005-1-chenhuiz@axis.com>
+        with ESMTP id S229534AbjCMBlM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 21:41:12 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6835257;
+        Sun, 12 Mar 2023 18:41:11 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-176b48a9a05so12340988fac.0;
+        Sun, 12 Mar 2023 18:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678671670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i0q2mm8WiyPEsQVto2sWAylICahAVbX9i3qYH81Jwvc=;
+        b=ie72lzfMAkLWH7aHcqP1OIVnaORmum6T3R/mE4N4JuF8AnYDh9snj3OmCq7F8RlyQZ
+         /G9OI8dXhIy2kzoUXnM6ScP5QVAzsOacIFBJJxR30ZSPNlC/DSheGAHkUUPeFScHvmJe
+         WDVsEnRXWLxXRvfq3oAFpPUvdMeKsPUD8mCFBlNxdfht4RqFt6irzLBHQCxHyEYVJXdi
+         zBYlR6tWaEYoNX1x0FpL1hlpPkQdeTxh3rtyozWGEHIGsrboCPL8xfoHvcEK+LJTJ7Bd
+         FljYC2PHuoKS3gnkRhm54x8ewBvdr+IePRbuq7ciBT9QFzsi3fP1QTaE7DGenGClBh93
+         wHNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678671670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i0q2mm8WiyPEsQVto2sWAylICahAVbX9i3qYH81Jwvc=;
+        b=rGVSM0uQ3UzBoQ+1ABLsIvzhQI4oOW2CBlCgnHlR5D0rWH/yQ8hax3KIQFI0Jn5O2L
+         0owtwxdzvd/4q7v+ybBN/SxCtkqc1cdvxcXHTd71DryBuk6fAAKbJcZjp5rdMw9fLwei
+         bbgqB1y+oa2ArAdCWECxee8b8R5zCeCytLioLtbzrC+ISUUTiSMfpMVca9DlXkFBBfCB
+         nsdu5VOx6dPHWZlQO/5cneMJKu+e7aA2U44/jC8ubhoaHkB8vyyBajfFr6vqSZhjzVMI
+         q7wD0gTHPcFsQlspEgx1MyTEtHEulmlc/NMkQYHKrObtTyXbO0pC2Y6/2vg8gX+R7035
+         TOtw==
+X-Gm-Message-State: AO0yUKUcNzqeUUZvtxParmwU8itGKunVLLkrJguWBubTdm5WKHj18cLM
+        F5++3RI2/EHtbWuiXpq2Xb2qJLHoPYzNodymMuI=
+X-Google-Smtp-Source: AK7set+/X/6iAbOva6ckym6jFXiN+VQllZzdlR+0RbWk7Op6fbeeG0ER8X0U7OgS03iS3EqqdRwi263sT1m+TJMxeOA=
+X-Received: by 2002:a05:6870:c384:b0:176:3e1e:7e95 with SMTP id
+ g4-20020a056870c38400b001763e1e7e95mr11497845oao.6.1678671670257; Sun, 12 Mar
+ 2023 18:41:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qoe3tbzunmzj3cl4"
-Content-Disposition: inline
-In-Reply-To: <20230309064104.79005-1-chenhuiz@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309135515.1232-1-di.shen@unisoc.com> <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
+In-Reply-To: <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Mon, 13 Mar 2023 09:40:58 +0800
+Message-ID: <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
+ be reset
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Lukasz
 
---qoe3tbzunmzj3cl4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 10, 2023 at 11:56=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
+wrote:
+>
+> Hi Di,
+>
+> On 3/9/23 13:55, Di Shen wrote:
+> > Commit 0952177f2a1f (thermal/core/power_allocator: Update once cooling =
+devices when temp is low)
+> > add a update flag to update cooling device only once when temp is low.
+> > But when the switch_on_temp is set to be a higher value, the cooling de=
+vice state
+> > may not be reset to max, because the last_temp is smaller than the swit=
+ch_on_temp.
+> >
+> > For example:
+> > First:
+> > swicth_on_temp=3D70 control_temp=3D85;
+> >
+> > Then userspace change the trip_temp:
+> > swicth_on_temp=3D45 control_temp=3D55 cur_temp=3D54
+> >
+> > Then userspace reset the trip_temp:
+> > swicth_on_temp=3D70 control_temp=3D85 cur_temp=3D57 last_temp=3D54
+> >
+> > At this time, the cooling device state should be reset to be max.
+> > However, because cur_temp(57) < switch_on_temp(70)
+> > last_temp(54) < swicth_on_temp(70) --> update =3D false
+> > When update is false, the cooling device state can not be reset.
+>
+> That's a tricky use case. How is that now possible,
 
-Hi,
+We use the trip_temp in the Android System. Often, we set different
+control temperatures in different scenarios,
+and when we change the switch_on_temp from small to bigger, we find
+the power can not be reset to be max.
 
-On Thu, Mar 09, 2023 at 02:41:03PM +0800, Hermes Zhang wrote:
-> To be able to control the charging process flexible, we need to able to
-> disable the charger. This commit will allow to disable the charger by
-> "echo 1 > /sys/class/power_supply/bq256xx-charger/charge_type"
-> (1 =3D POWER_SUPPLY_CHARGE_TYPE_NONE) and enable the charger by set it to
-> 2/3 (POWER_SUPPLY_CHARGE_TYPE_TRICKLE/POWER_SUPPLY_CHARGE_TYPE_FAST)
->=20
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
 
-Thanks, queued.
+> >
+> > So delete the update condition, so that the cooling device state
+> > could be reset.
+>
+> IMO this is not the desired solution. Daniel reported the issue that
+> IPA triggers the event sent to user-space even when there is no need.
+> That's the motivation for the 0952177f2a1f change.
+>
+> To address your scenario properly, we need an interface which allows
+> to respond properly for such situation when someone from user-space
+> writes a new value to something fundamental as trip point.
+>
+> You also have a kernel config enabled:
+> CONFIG_THERMAL_WRITABLE_TRIPS
+> which IMO is only for debug kernels for system integrator (according
+> to the Kconfig description).
 
--- Sebastian
+ Yes, we use it to meet the temperature control needs of different scenario=
+s.
+And now in android with google's GKI2.0, the config must be opened.
 
->  drivers/power/supply/bq256xx_charger.c | 40 ++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->=20
-> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
-y/bq256xx_charger.c
-> index 9cf4936440c9..e624834ae66c 100644
-> --- a/drivers/power/supply/bq256xx_charger.c
-> +++ b/drivers/power/supply/bq256xx_charger.c
-> @@ -70,6 +70,9 @@
->  #define BQ25611D_VBATREG_THRESH_uV	4290000
->  #define BQ25618_VBATREG_THRESH_uV	4300000
-> =20
-> +#define BQ256XX_CHG_CONFIG_MASK		BIT(4)
-> +#define BQ256XX_CHG_CONFIG_BIT_SHIFT	4
-> +
->  #define BQ256XX_ITERM_MASK		GENMASK(3, 0)
->  #define BQ256XX_ITERM_STEP_uA		60000
->  #define BQ256XX_ITERM_OFFSET_uA		60000
-> @@ -259,6 +262,7 @@ struct bq256xx_device {
->   * @bq256xx_set_iterm: pointer to instance specific set_iterm function
->   * @bq256xx_set_iprechg: pointer to instance specific set_iprechg functi=
-on
->   * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
-> + * @bq256xx_set_charge_type: pointer to instance specific set_charge_typ=
-e function
->   *
->   * @bq256xx_def_ichg: default ichg value in microamps
->   * @bq256xx_def_iindpm: default iindpm value in microamps
-> @@ -290,6 +294,7 @@ struct bq256xx_chip_info {
->  	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
->  	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
->  	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
-> +	int (*bq256xx_set_charge_type)(struct bq256xx_device *bq, int type);
-> =20
->  	int bq256xx_def_ichg;
->  	int bq256xx_def_iindpm;
-> @@ -449,6 +454,27 @@ static int bq256xx_get_state(struct bq256xx_device *=
-bq,
->  	return 0;
->  }
-> =20
-> +static int bq256xx_set_charge_type(struct bq256xx_device *bq, int type)
-> +{
-> +	int chg_config =3D 0;
-> +
-> +	switch (type) {
-> +	case POWER_SUPPLY_CHARGE_TYPE_NONE:
-> +		chg_config =3D 0x0;
-> +		break;
-> +	case POWER_SUPPLY_CHARGE_TYPE_TRICKLE:
-> +	case POWER_SUPPLY_CHARGE_TYPE_FAST:
-> +		chg_config =3D 0x1;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_0,
-> +				BQ256XX_CHG_CONFIG_MASK,
-> +				(chg_config ? 1 : 0) << BQ256XX_CHG_CONFIG_BIT_SHIFT);
-> +}
-> +
->  static int bq256xx_get_ichg_curr(struct bq256xx_device *bq)
->  {
->  	unsigned int charge_current_limit;
-> @@ -915,6 +941,12 @@ static int bq256xx_set_charger_property(struct power=
-_supply *psy,
->  			return ret;
->  		break;
-> =20
-> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-> +		ret =3D bq->chip_info->bq256xx_set_charge_type(bq, val->intval);
-> +		if (ret)
-> +			return ret;
-> +		break;
-> +
->  	default:
->  		break;
->  	}
-> @@ -1197,6 +1229,7 @@ static int bq256xx_property_is_writeable(struct pow=
-er_supply *psy,
->  	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
->  	case POWER_SUPPLY_PROP_STATUS:
->  	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
->  		return true;
->  	default:
->  		return false;
-> @@ -1286,6 +1319,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> @@ -1316,6 +1350,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> @@ -1346,6 +1381,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> @@ -1376,6 +1412,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> @@ -1406,6 +1443,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ25611D_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> @@ -1436,6 +1474,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> @@ -1466,6 +1505,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
-info_tbl[] =3D {
->  		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
->  		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
->  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
-> +		.bq256xx_set_charge_type =3D bq256xx_set_charge_type,
-> =20
->  		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
->  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
-> --=20
-> 2.30.2
->=20
+>
+> When you disable this config in your deploy/product kernel
+> than this issue would disappear.
+>
+> >
+> > Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cooling =
+devices when temp is low)
+> > Signed-off-by: Di Shen <di.shen@unisoc.com>
+> > ---
+> >   drivers/thermal/gov_power_allocator.c | 9 +++------
+> >   1 file changed, 3 insertions(+), 6 deletions(-)
+> >
+>
+> That's why IMO this is not the solution.
 
---qoe3tbzunmzj3cl4
-Content-Type: application/pgp-signature; name="signature.asc"
+Yes, but I think we should fix the bug, although the
+CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
+How about record the last_trip_temp, and when the last_temp >
+last_trip_temp, set the update tobe true?
 
------BEGIN PGP SIGNATURE-----
+Thanks!
+BR,
+xuewen
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOVyUACgkQ2O7X88g7
-+pq18A//fKNA9oreZmLLVfBcno87KV1EzcerqLASBIhTm71l67H+bcJlrfj6MtiN
-JwZljO5B0OBpd0VgbSCgPZDxrdvcOkRnK7d97F9Ld214DngO1MWIlknrEJc2iwCX
-KQtQS0x8E2FSu/ac4jg7UnnL7psJvWct65uy5FNNpFpvUJQBOP3SNyb/8mEfO3rk
-ImuZn4+B6j7WJzM3/qGK0+5VdilllFmsGvtvCUcChWkOY1PvD4BLJnTbEdGbEZ5J
-wWFsDoAXUQOqCPV0Hqt8+FRwH/tAduFqzURo2epVBONefJ3qZgS783aLfD3ALqUQ
-o0RT4Y8UPFJs81nJlubbg3BGTDETsD33XTJHZznB5WbVTTWueOh/JpHuRzt+v9UG
-J0FjNjex5/kMHueBOd5NduS+GRK8G8Hv3OXURms/2Y4r5YpSLjgOI9VZc7OM8mZl
-NVBIdTEr5xg0jE2TryefsnXdPcB56LVB985Qz7UBAXXVxrtIRQ9AcTpaEXhPoodb
-xrzsQiq4WK5h+BPJiQCc3N10LM5PAExFCqLIKZNTF2vZptsjfBKAwqauqOZWIxlQ
-rke3rMoR3KIgzv7gv8odv46oMdznfW37igg3ctQG/BuFHNOihfFttwA/ij4gFIpC
-ayIWS2ERpK1HxEFJk+bWOorZJtKkZtoziwhjhgrWP0bUNeSzBIQ=
-=e7OE
------END PGP SIGNATURE-----
-
---qoe3tbzunmzj3cl4--
+>
+> Regards,
+> Lukasz
