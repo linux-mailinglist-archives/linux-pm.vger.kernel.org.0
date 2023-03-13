@@ -2,143 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51D06B8094
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 19:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AA16B810A
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 19:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjCMSaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 14:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S231392AbjCMSrW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 13 Mar 2023 14:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjCMSao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 14:30:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003C683156;
-        Mon, 13 Mar 2023 11:30:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A62DB61468;
-        Mon, 13 Mar 2023 18:29:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC821C433D2;
-        Mon, 13 Mar 2023 18:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678732194;
-        bh=t8dfYO0KLvBwnDTabEC6Q8qADtWU+S9Nx/DV5qsE0XE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HGioplhrdEI2WqXg6RyaSAemRoVq2lTQmz+O74akI8S9P9KQkkWd6rr7lyXz9TOWu
-         93VPXul7gBSXKunekt9nTj5YFJm9jkFMULQsNkcyklppo3VhpDzmKOlM4ECFCWBc/0
-         EJdkJ0YcrmkEerZiECNBOO1bcKrZigw0DW5ReISg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 20/36] cpufreq: amd-pstate: move to use bus_get_dev_root()
-Date:   Mon, 13 Mar 2023 19:29:02 +0100
-Message-Id: <20230313182918.1312597-20-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
+        with ESMTP id S231443AbjCMSrM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 14:47:12 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B85A1FE8;
+        Mon, 13 Mar 2023 11:46:40 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id ek18so21499741edb.6;
+        Mon, 13 Mar 2023 11:46:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678733146;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UUfs2k47yRWM3aIik3Zq+XHDi6CmZG0zXGMfcz75sWk=;
+        b=uiBxQGHfQ1rREEtzcVsCYCkC0UlQWmLGp7CwmLYW/Kck+1HNKQtGRBF8CJywjn9b4j
+         ylB64dsEeQJ5dGrMp1eskMTc+uZb/Ix8aLSOU5/1IEhlxQJCvPuhnUT7Lt+NoCi1l3Pa
+         Xo9iI8IBjz6diPiGIeIiHr1j40wmc57vBklGufGtUY0GMjx8k9ESiPNOYy7IDjC1yQCC
+         CUanhY+ARNeQzcvbzYnTH2RXuNjyyQX5l2ZC/qLLSWTxVSqsDy9oK+hqeO9hR//o1o8w
+         zR7KAqr2dU0F8DURySaWfO8KXkZJ+rlglHgpBKtuTqutHIFxPLocFwU7scao4Wcb+rrr
+         /4JA==
+X-Gm-Message-State: AO0yUKUjGhSonFuUB/wf7779syXmnsLtics5pdixwavNnWRwmX1JV0QV
+        I96hDom70Ro4BCQ5VhgpsxdoQOXUiM5XWp1zufTMuy/w
+X-Google-Smtp-Source: AK7set9Pp4y5qZydk6rfFBK64FJzPD/08E/X1kJ9euGcRh0PI/wnXy3wsLoSlDBZ9wJtVrqYS//hkScDQZ31F7TF4GY=
+X-Received: by 2002:a50:d59a:0:b0:4fb:f19:881 with SMTP id v26-20020a50d59a000000b004fb0f190881mr3584874edi.3.1678733145842;
+ Mon, 13 Mar 2023 11:45:45 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3145; i=gregkh@linuxfoundation.org; h=from:subject; bh=t8dfYO0KLvBwnDTabEC6Q8qADtWU+S9Nx/DV5qsE0XE=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82ZXXBZRtTAvFnk1yaP1WWbM0JFjTKdUxcNbZcksJO Qub2vqOWBYGQSYGWTFFli/beI7urzik6GVoexpmDisTyBAGLk4BmMgWYYb5kfuLXv/YzP60ZLu+ eUv93CrDthfdDPMse++sO3xneoxO/u2AP5HT/y86oMkJAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230313182918.1312597-1-gregkh@linuxfoundation.org> <20230313182918.1312597-3-gregkh@linuxfoundation.org>
+In-Reply-To: <20230313182918.1312597-3-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Mar 2023 19:45:34 +0100
+Message-ID: <CAJZ5v0iaR7mqdKqCL-WH+GXa=pxnV+r_tta+UqX1aVgEysYu9Q@mail.gmail.com>
+Subject: Re: [PATCH 03/36] cpufreq: move to use bus_get_dev_root()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Direct access to the struct bus_type dev_root pointer is going away soon
-so replace that with a call to bus_get_dev_root() instead, which is what
-it is there for.
+On Mon, Mar 13, 2023 at 7:29 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> Direct access to the struct bus_type dev_root pointer is going away soon
+> so replace that with a call to bus_get_dev_root() instead, which is what
+> it is there for.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-In doing so, remove the unneded kobject structure that was only being
-created to cause a subdirectory for the attributes.  The name of the
-attribute group is the correct way to do this, saving code and
-complexity as well as allowing the attributes to properly show up to
-userspace tools (the raw kobject would not allow that.)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Cc: Huang Rui <ray.huang@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Note, this is a patch that is a prepatory cleanup as part of a larger
-series of patches that is working on resolving some old driver core
-design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
-its own, but I'd prefer if I could take it through my driver-core tree
-so that the driver core changes can be taken through there for 6.4-rc1.
-
- drivers/cpufreq/amd-pstate.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 73c7643b2697..b92454c50118 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -63,7 +63,6 @@ static struct cpufreq_driver *current_pstate_driver;
- static struct cpufreq_driver amd_pstate_driver;
- static struct cpufreq_driver amd_pstate_epp_driver;
- static int cppc_state = AMD_PSTATE_DISABLE;
--struct kobject *amd_pstate_kobj;
- 
- /*
-  * AMD Energy Preference Performance (EPP)
-@@ -932,6 +931,7 @@ static struct attribute *pstate_global_attributes[] = {
- };
- 
- static const struct attribute_group amd_pstate_global_attr_group = {
-+	.name = "amd_pstate",
- 	.attrs = pstate_global_attributes,
- };
- 
-@@ -1253,6 +1253,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
- 
- static int __init amd_pstate_init(void)
- {
-+	struct device *dev_root;
- 	int ret;
- 
- 	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-@@ -1299,24 +1300,19 @@ static int __init amd_pstate_init(void)
- 	if (ret)
- 		pr_err("failed to register with return %d\n", ret);
- 
--	amd_pstate_kobj = kobject_create_and_add("amd_pstate", &cpu_subsys.dev_root->kobj);
--	if (!amd_pstate_kobj) {
--		ret = -EINVAL;
--		pr_err("global sysfs registration failed.\n");
--		goto kobject_free;
--	}
--
--	ret = sysfs_create_group(amd_pstate_kobj, &amd_pstate_global_attr_group);
--	if (ret) {
--		pr_err("sysfs attribute export failed with error %d.\n", ret);
--		goto global_attr_free;
-+	dev_root = bus_get_dev_root(&cpu_subsys);
-+	if (dev_root) {
-+		ret = sysfs_create_group(&dev_root->kobj, &amd_pstate_global_attr_group);
-+		put_device(dev_root);
-+		if (ret) {
-+			pr_err("sysfs attribute export failed with error %d.\n", ret);
-+			goto global_attr_free;
-+		}
- 	}
- 
- 	return ret;
- 
- global_attr_free:
--	kobject_put(amd_pstate_kobj);
--kobject_free:
- 	cpufreq_unregister_driver(current_pstate_driver);
- 	return ret;
- }
--- 
-2.39.2
-
+> ---
+> Note, this is a patch that is a prepatory cleanup as part of a larger
+> series of patches that is working on resolving some old driver core
+> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
+> its own, but I'd prefer if I could take it through my driver-core tree
+> so that the driver core changes can be taken through there for 6.4-rc1.
+>
+>  drivers/cpufreq/cpufreq.c      | 7 ++++++-
+>  drivers/cpufreq/intel_pstate.c | 7 +++++--
+>  2 files changed, 11 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 6d8fd3b8dcb5..6ad3119b8e15 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2932,11 +2932,16 @@ EXPORT_SYMBOL_GPL(cpufreq_unregister_driver);
+>  static int __init cpufreq_core_init(void)
+>  {
+>         struct cpufreq_governor *gov = cpufreq_default_governor();
+> +       struct device *dev_root;
+>
+>         if (cpufreq_disabled())
+>                 return -ENODEV;
+>
+> -       cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
+> +       dev_root = bus_get_dev_root(&cpu_subsys);
+> +       if (dev_root) {
+> +               cpufreq_global_kobject = kobject_create_and_add("cpufreq", &dev_root->kobj);
+> +               put_device(dev_root);
+> +       }
+>         BUG_ON(!cpufreq_global_kobject);
+>
+>         if (!strlen(default_governor))
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 48a4613cef1e..102cf7f0ac63 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1473,10 +1473,13 @@ static struct kobject *intel_pstate_kobject;
+>
+>  static void __init intel_pstate_sysfs_expose_params(void)
+>  {
+> +       struct device *dev_root = bus_get_dev_root(&cpu_subsys);
+>         int rc;
+>
+> -       intel_pstate_kobject = kobject_create_and_add("intel_pstate",
+> -                                               &cpu_subsys.dev_root->kobj);
+> +       if (dev_root) {
+> +               intel_pstate_kobject = kobject_create_and_add("intel_pstate", &dev_root->kobj);
+> +               put_device(dev_root);
+> +       }
+>         if (WARN_ON(!intel_pstate_kobject))
+>                 return;
+>
+> --
+> 2.39.2
+>
