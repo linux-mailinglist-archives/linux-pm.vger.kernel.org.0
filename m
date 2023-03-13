@@ -2,63 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF2A6B6D1C
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 02:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980306B6D9D
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 03:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCMBlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Mar 2023 21:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S229470AbjCMCu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Mar 2023 22:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCMBlM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 21:41:12 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6835257;
-        Sun, 12 Mar 2023 18:41:11 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-176b48a9a05so12340988fac.0;
-        Sun, 12 Mar 2023 18:41:11 -0700 (PDT)
+        with ESMTP id S229450AbjCMCu3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Mar 2023 22:50:29 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493C226C12;
+        Sun, 12 Mar 2023 19:50:28 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id n16so617332pfa.12;
+        Sun, 12 Mar 2023 19:50:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678671670;
+        d=gmail.com; s=20210112; t=1678675827;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i0q2mm8WiyPEsQVto2sWAylICahAVbX9i3qYH81Jwvc=;
-        b=ie72lzfMAkLWH7aHcqP1OIVnaORmum6T3R/mE4N4JuF8AnYDh9snj3OmCq7F8RlyQZ
-         /G9OI8dXhIy2kzoUXnM6ScP5QVAzsOacIFBJJxR30ZSPNlC/DSheGAHkUUPeFScHvmJe
-         WDVsEnRXWLxXRvfq3oAFpPUvdMeKsPUD8mCFBlNxdfht4RqFt6irzLBHQCxHyEYVJXdi
-         zBYlR6tWaEYoNX1x0FpL1hlpPkQdeTxh3rtyozWGEHIGsrboCPL8xfoHvcEK+LJTJ7Bd
-         FljYC2PHuoKS3gnkRhm54x8ewBvdr+IePRbuq7ciBT9QFzsi3fP1QTaE7DGenGClBh93
-         wHNQ==
+        bh=NEJiBD6642oVl+6mAIFfZT/xfi0W0Ya0AiErP2hj2K8=;
+        b=FVKaKrZpDKYkWmKT2ozGMApI91pd3npAhjwSwjae8I44NPekjPyL735yXK4SasRrOZ
+         n7EjL65PpzRBlqdkfXq8mgOQ2j31niKeDKMswAH1ff9HRb1pwlAwc0paReFsEHwZa3nW
+         r2BrSOZWVPcI1An4asZl1ZV687kWlSP9K4lP9o17ZLw0Bu/pzrFxTD/JoLGiU8xoKJ6j
+         0FParhbTZeQW2fKBDq9+HxkqOieFM1hxr2pVaQAp7BmFZojjiKHXGv9/0/i61mbnUIHS
+         ghRVjr9uDWm/0U4LQ5GdfOWNihbAULdt2lCohEU5TouINH5WGzrC81Y/jXuR1wjJyLkd
+         wX5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678671670;
+        d=1e100.net; s=20210112; t=1678675827;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i0q2mm8WiyPEsQVto2sWAylICahAVbX9i3qYH81Jwvc=;
-        b=rGVSM0uQ3UzBoQ+1ABLsIvzhQI4oOW2CBlCgnHlR5D0rWH/yQ8hax3KIQFI0Jn5O2L
-         0owtwxdzvd/4q7v+ybBN/SxCtkqc1cdvxcXHTd71DryBuk6fAAKbJcZjp5rdMw9fLwei
-         bbgqB1y+oa2ArAdCWECxee8b8R5zCeCytLioLtbzrC+ISUUTiSMfpMVca9DlXkFBBfCB
-         nsdu5VOx6dPHWZlQO/5cneMJKu+e7aA2U44/jC8ubhoaHkB8vyyBajfFr6vqSZhjzVMI
-         q7wD0gTHPcFsQlspEgx1MyTEtHEulmlc/NMkQYHKrObtTyXbO0pC2Y6/2vg8gX+R7035
-         TOtw==
-X-Gm-Message-State: AO0yUKUcNzqeUUZvtxParmwU8itGKunVLLkrJguWBubTdm5WKHj18cLM
-        F5++3RI2/EHtbWuiXpq2Xb2qJLHoPYzNodymMuI=
-X-Google-Smtp-Source: AK7set+/X/6iAbOva6ckym6jFXiN+VQllZzdlR+0RbWk7Op6fbeeG0ER8X0U7OgS03iS3EqqdRwi263sT1m+TJMxeOA=
-X-Received: by 2002:a05:6870:c384:b0:176:3e1e:7e95 with SMTP id
- g4-20020a056870c38400b001763e1e7e95mr11497845oao.6.1678671670257; Sun, 12 Mar
- 2023 18:41:10 -0700 (PDT)
+        bh=NEJiBD6642oVl+6mAIFfZT/xfi0W0Ya0AiErP2hj2K8=;
+        b=K66i2+0M/eYnz1HptGm+Mk2vmVbdypSQQ9jwDdydEUO234gTDs6ZlEQgNSndkrtfqu
+         L3icqjW7cVgpguuoCHNkQz1SG+UyH6FYrfJttRnHiGoH850LSzNyV90LY+0RM3rjiJnO
+         oHYnoPIxKxu39f3aUBDAduySjRTFMWXLbRXqNIWveh1cpzaZDWKGUMFDNF1vuol9/qSK
+         QwfGQbxarBhS1W/xBc1tjs1eKTUC0WcgzUO99hbH0ItcKOTmVf+me2VShlq9oq+fmSjB
+         GzHIauUZtAF1+rdw1A1ySLTdc1Tw1EOvHZZVD5c7S/AeqkqSPCJdxelJMdVOamWo7Kl6
+         hJHQ==
+X-Gm-Message-State: AO0yUKXdqgDi6a2OXZF3i69fbkCahhOWZATG/dIiczZgebJSKhzVcGz4
+        GaPn7AOq6ynNvjIqLp6GMapzKHemKOb9Hfg7BqU=
+X-Google-Smtp-Source: AK7set8meipIL6umyzbSl8gsXRy1PGeQkPKr9Y3WkCZOIykoI2Lhq787xsZeG38PloN/Jcak0tsXaRABSJI7Mej3HPI=
+X-Received: by 2002:a62:86c5:0:b0:5e9:57b1:5bda with SMTP id
+ x188-20020a6286c5000000b005e957b15bdamr12359243pfd.3.1678675826473; Sun, 12
+ Mar 2023 19:50:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230309135515.1232-1-di.shen@unisoc.com> <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
-In-Reply-To: <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Mon, 13 Mar 2023 09:40:58 +0800
-Message-ID: <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
- be reset
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+References: <20230311174650.3979517-1-zyytlz.wz@163.com> <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+In-Reply-To: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 13 Mar 2023 10:50:13 +0800
+Message-ID: <CAJedcCy7-pNmHFC1VinXWUwvzh4cQ1yi4CSSEjgdfB1iidyjQw@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply: da9150: Fix use after free bug in
+ da9150_charger_remove due to race condition
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, njavali@marvell.com,
+        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
+        1395428693sheep@gmail.com, alex000young@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,90 +72,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz
-
-On Fri, Mar 10, 2023 at 11:56=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
+Sebastian Reichel <sebastian.reichel@collabora.com> =E4=BA=8E2023=E5=B9=B43=
+=E6=9C=8813=E6=97=A5=E5=91=A8=E4=B8=80 06:31=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Hi Di,
+> Hi,
 >
-> On 3/9/23 13:55, Di Shen wrote:
-> > Commit 0952177f2a1f (thermal/core/power_allocator: Update once cooling =
-devices when temp is low)
-> > add a update flag to update cooling device only once when temp is low.
-> > But when the switch_on_temp is set to be a higher value, the cooling de=
-vice state
-> > may not be reset to max, because the last_temp is smaller than the swit=
-ch_on_temp.
+> On Sun, Mar 12, 2023 at 01:46:50AM +0800, Zheng Wang wrote:
+> > In da9150_charger_probe, &charger->otg_work is bound with
+> > da9150_charger_otg_work. da9150_charger_otg_ncb may be
+> > called to start the work.
 > >
-> > For example:
-> > First:
-> > swicth_on_temp=3D70 control_temp=3D85;
+> > If we remove the module which will call da9150_charger_remove
+> > to make cleanup, there may be a unfinished work. The possible
+> > sequence is as follows:
 > >
-> > Then userspace change the trip_temp:
-> > swicth_on_temp=3D45 control_temp=3D55 cur_temp=3D54
+> > Fix it by canceling the work before cleanup in the da9150_charger_remov=
+e
 > >
-> > Then userspace reset the trip_temp:
-> > swicth_on_temp=3D70 control_temp=3D85 cur_temp=3D57 last_temp=3D54
+> > CPU0                  CPUc1
 > >
-> > At this time, the cooling device state should be reset to be max.
-> > However, because cur_temp(57) < switch_on_temp(70)
-> > last_temp(54) < swicth_on_temp(70) --> update =3D false
-> > When update is false, the cooling device state can not be reset.
->
-> That's a tricky use case. How is that now possible,
-
-We use the trip_temp in the Android System. Often, we set different
-control temperatures in different scenarios,
-and when we change the switch_on_temp from small to bigger, we find
-the power can not be reset to be max.
-
-
+> >                     |da9150_charger_otg_work
+> > da9150_charger_remove      |
+> > power_supply_unregister  |
+> > device_unregister   |
+> > power_supply_dev_release|
+> > kfree(psy)          |
+> >                     |
+> >                     |         power_supply_changed(charger->usb);
+> >                     |   //use
 > >
-> > So delete the update condition, so that the cooling device state
-> > could be reset.
->
-> IMO this is not the desired solution. Daniel reported the issue that
-> IPA triggers the event sent to user-space even when there is no need.
-> That's the motivation for the 0952177f2a1f change.
->
-> To address your scenario properly, we need an interface which allows
-> to respond properly for such situation when someone from user-space
-> writes a new value to something fundamental as trip point.
->
-> You also have a kernel config enabled:
-> CONFIG_THERMAL_WRITABLE_TRIPS
-> which IMO is only for debug kernels for system integrator (according
-> to the Kconfig description).
-
- Yes, we use it to meet the temperature control needs of different scenario=
-s.
-And now in android with google's GKI2.0, the config must be opened.
-
->
-> When you disable this config in your deploy/product kernel
-> than this issue would disappear.
->
-> >
-> > Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cooling =
-devices when temp is low)
-> > Signed-off-by: Di Shen <di.shen@unisoc.com>
+> > Fixes: c1a281e34dae ("power: Add support for DA9150 Charger")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 > > ---
-> >   drivers/thermal/gov_power_allocator.c | 9 +++------
-> >   1 file changed, 3 insertions(+), 6 deletions(-)
+> > v2:
+> > - fix wrong description in commit message and mov cancel_work_sync
+> > after usb_unregister_notifier suggested by Sebastian Reichel
+> > ---
+>
+> Thanks, queued to power-supply's fixes branch. Please make sure you
+> send your patches to the correct destination next time (linux-scsi
+> should be linux-pm).
+
+Thanks for your effort. I'll keep that in mind :)
+
+Best regards,
+Zheng
+
+>
+> >  drivers/power/supply/da9150-charger.c | 1 +
+> >  1 file changed, 1 insertion(+)
 > >
->
-> That's why IMO this is not the solution.
-
-Yes, but I think we should fix the bug, although the
-CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
-How about record the last_trip_temp, and when the last_temp >
-last_trip_temp, set the update tobe true?
-
-Thanks!
-BR,
-xuewen
-
->
-> Regards,
-> Lukasz
+> > diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supp=
+ly/da9150-charger.c
+> > index 14da5c595dd9..a87aeaea38e1 100644
+> > --- a/drivers/power/supply/da9150-charger.c
+> > +++ b/drivers/power/supply/da9150-charger.c
+> > @@ -657,6 +657,7 @@ static int da9150_charger_remove(struct platform_de=
+vice *pdev)
+> >
+> >       if (!IS_ERR_OR_NULL(charger->usb_phy))
+> >               usb_unregister_notifier(charger->usb_phy, &charger->otg_n=
+b);
+> > +     cancel_work_sync(&charger->otg_work);
+> >
+> >       power_supply_unregister(charger->battery);
+> >       power_supply_unregister(charger->usb);
+> > --
+> > 2.25.1
+> >
