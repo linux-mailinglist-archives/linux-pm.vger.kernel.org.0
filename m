@@ -2,116 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678FC6B7070
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 08:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515ED6B70F0
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 09:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjCMHxb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 03:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S229698AbjCMIRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 04:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCMHwv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 03:52:51 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94451F8F;
-        Mon, 13 Mar 2023 00:52:19 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id t14so11634168ljd.5;
-        Mon, 13 Mar 2023 00:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678693930;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DP22K4i2hvSQUMj03mmf1nrlTT4nDZqslXzw3b5STVg=;
-        b=mq4CVXLbEPFpKdmBnLa+DaPZzaB+5PUIR1eMjh/S3fQORQr+7borK30x1Sezcwvn3h
-         GURCYNkzr8nsUL31CT/9nX7UJ2u4sA8psHIJrab55dBjZPCFypFurmSJrIPqiUwafkLy
-         nXiFnALJjYOqNPU7FDabiJDarRrua8EmKrWRNxfQW0/fUC7XRZasBI2sBxy5KXjs3WYs
-         9A5BAyxpxFw4SzRZI7Wm3Exmv5L20yk1Zr7GmrR4Y8aG5l4BnQOiYOAt+rNw6COZSI0a
-         e5dkLHtYSuFhxNBxcFuu3+mEQNiv1ECxluOgUyxUTx2Cfr8EuDNd70C0MyzOlD3ZwZ1I
-         v8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678693930;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DP22K4i2hvSQUMj03mmf1nrlTT4nDZqslXzw3b5STVg=;
-        b=Ux67mV44g0E8te8tXR1aJsgnrRGWgAMYcH8umwDl/j5S/rcWiQkSo4iF75uVTgqUAu
-         Q3GkMA8LxHDNBkjlSII+FliKwRedARGCUsA1mDf80n5x1DPrZx7AfrJdgCPPAmF4ok11
-         AWyLQQhIaEDTfCmFbXZByV12DRnNxGamUE/h26+MNa/PiMsAX3qc8qp42DyDeXLH8op0
-         dvRdbTy8xRMVXno+toYCOD6XhrEQywKCD7hdS+EI+RaZ/toS1Jg8OWhHxtULUUz3GR7J
-         eSorgHGx87BUgkeOtoyVjnLC6PtkUNc9QmYgciCr0tO23ALlGCa1fMiKR+frYSq6JrOq
-         GNWA==
-X-Gm-Message-State: AO0yUKU04eH0GSUSzTYr1zYSTO4zbgXYPOKhwnurMGEzRAcF3ShMXd7l
-        zcFCsUWFsw3qkVrdwB4/shs=
-X-Google-Smtp-Source: AK7set+fCZnioNoLHXd86gA5fdj9retwzd09OegGlbQGd8saON8iHEbmrTCRWzvBpZhUxZqO/WFw2w==
-X-Received: by 2002:a2e:99c4:0:b0:293:4d57:7148 with SMTP id l4-20020a2e99c4000000b002934d577148mr10265826ljj.11.1678693930688;
-        Mon, 13 Mar 2023 00:52:10 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id v10-20020a2ea44a000000b002986d9bdecesm912257ljn.129.2023.03.13.00.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 00:52:10 -0700 (PDT)
-Message-ID: <e07c2fbf-6432-0065-3e68-aeac2ee51799@gmail.com>
-Date:   Mon, 13 Mar 2023 09:52:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv1 04/11] power: supply: generic-adc-battery: fix unit
- scaling
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S229591AbjCMIRr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 04:17:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB2E2B9F3;
+        Mon, 13 Mar 2023 01:17:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8602F6114C;
+        Mon, 13 Mar 2023 08:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AA9C433EF;
+        Mon, 13 Mar 2023 08:17:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678695465;
+        bh=jzyrPeuPJwvGuYEX291gbAHZu85wfusV8HgesMnJlyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nSK0sRt5aC3BDLSctPPKTY+COy70tLVrdKzFQnlo0qamNPCLzvZc8oRmkJDEwYPSl
+         6BgGS0bRyj3gcESUSnsOG5FUTc2rU+xJCo9rnqg3SxO7Zarcz8DVINr3xtUCO9Sqdi
+         SVPgfbGNXm8VYVNfIBEgimi/MdKvuwdFVz7pBI2aRf2JLV7OUvd9Ds3xxNj0y2kj6s
+         B0nE4D79AivGr9tqx4NEQAOaCn249kmw3hG4gDjOpHfCyakL6zjx4As2g6VIRit6EW
+         ioL4/eMZsyuxoeSwv0Bb1BoyPPliaahIAlY+pKqIVb946pbW1SVYix7k770NJXXkGJ
+         otKhSHWLmb+aQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pbdOG-0004Yv-VH; Mon, 13 Mar 2023 09:18:45 +0100
+Date:   Mon, 13 Mar 2023 09:18:44 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     johan+linaro@kernel.org, a.swigon@samsung.com, agross@kernel.org,
+        alim.akhtar@samsung.com, andersson@kernel.org, djakov@kernel.org,
+        festevam@gmail.com, jonathanh@nvidia.com, kernel@pengutronix.de,
+        konrad.dybcio@linaro.org, krzysztof.kozlowski@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-5-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230309225041.477440-5-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        s.hauer@pengutronix.de, s.nawrocki@samsung.com,
+        shawnguo@kernel.org, stable@vger.kernel.org,
+        thierry.reding@gmail.com, y.oudjana@protonmail.com
+Subject: Re: [PATCH 07/23] interconnect: qcom: rpm: fix probe PM domain error
+ handling
+Message-ID: <ZA7cZBF58yMSjG/+@hovoldconsulting.com>
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-8-johan+linaro@kernel.org>
+ <641d04a3-9236-fe76-a20f-11466a01460e@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <641d04a3-9236-fe76-a20f-11466a01460e@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> power-supply properties are reported in µV, µA and µW.
-> The IIO API provides mV, mA, mW, so the values need to
-> be multiplied by 1000.
+On Sat, Mar 11, 2023 at 07:17:50PM +0100, Christophe JAILLET wrote:
+> Le 01/02/2023 à 11:15, Johan Hovold a écrit :
+> > Make sure to disable clocks also in case attaching the power domain
+> > fails.
+> > 
+> > Fixes: 7de109c0abe9 ("interconnect: icc-rpm: Add support for bus power domain")
+> > Cc: stable-u79uwXL29TY76Z2rM5mHXA@public.gmane.org      # 5.17
+> > Cc: Yassine Oudjana <y.oudjana-g/b1ySJe57IN+BqQ9rBEUg@public.gmane.org>
+> > Signed-off-by: Johan Hovold <johan+linaro-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
+> > ---
+> >   drivers/interconnect/qcom/icc-rpm.c | 9 ++++-----
+> >   1 file changed, 4 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> > index 91778cfcbc65..da595059cafd 100644
+> > --- a/drivers/interconnect/qcom/icc-rpm.c
+> > +++ b/drivers/interconnect/qcom/icc-rpm.c
+> > @@ -498,8 +498,7 @@ int qnoc_probe(struct platform_device *pdev)
+> >   
+> >   	if (desc->has_bus_pd) {
+> >   		ret = dev_pm_domain_attach(dev, true);
+> > -		if (ret)
+> > -			return ret;
+> > +		goto err_disable_clks;
 > 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-
-As Linus wrote, Fixes-tag would be good. With that remark:
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-> ---
->   drivers/power/supply/generic-adc-battery.c | 3 +++
->   1 file changed, 3 insertions(+)
+> Hi,
+> this change looks strange because we now skip the rest of the function.
 > 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index 917bd2a6cc52..535972a332b3 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -136,6 +136,9 @@ static int read_channel(struct gab *adc_bat, enum power_supply_property psp,
->   			result);
->   	if (ret < 0)
->   		pr_err("read channel error\n");
-> +	else
-> +		*result *= 1000;
-> +
->   	return ret;
->   }
->   
+> Is it really intended?
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+No, this was definitely not intentional. Thanks for catching this. I'll
+send a follow up fix for Georgi to fold in or apply on top.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+> Also, should dev_pm_domain_detach() be called somewhere in the error 
+> handling path and remove function ?
 
+In principle, yes. (I think read the above as being another device
+managed resource.)
+
+It turns out, however, that this code is totally bogus as any power
+domain would already have been attached by the platform bus code and the
+above call would always just succeed. The platform code would also
+handle detach on errors. 
+
+I'll send a patch to remove this.
+
+Johan
