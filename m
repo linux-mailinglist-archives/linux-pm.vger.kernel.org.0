@@ -2,50 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADD26B7765
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 13:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E596B7776
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 13:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjCMM0n convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 13 Mar 2023 08:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S229665AbjCMM3g convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 13 Mar 2023 08:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCMM0m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 08:26:42 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213B560AB2;
-        Mon, 13 Mar 2023 05:26:40 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id h8so4200650ede.8;
-        Mon, 13 Mar 2023 05:26:40 -0700 (PDT)
+        with ESMTP id S229593AbjCMM3f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 08:29:35 -0400
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52348E08;
+        Mon, 13 Mar 2023 05:29:33 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id cn21so17824227edb.0;
+        Mon, 13 Mar 2023 05:29:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678710398;
+        d=1e100.net; s=20210112; t=1678710572;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rW2NyArCHI5O/3Aynk3ZRxx0RBAoXvO77UJQiS4WXkQ=;
-        b=Sc/x0yPaU/inAuzgE5ZzghZvQFKVUpjz6SflgIn/WJsGz2ut3WkCVlItJ4HozpZ2m0
-         DjhUhjWJ5iM2yRB5pWN5XwtWmltYd6ECSxIAWnmON4pwj8/NV1S42Oap1U+s+IYm6eUZ
-         +q2Th/+UQKq2mp/XmbtlE60IC/rsHo3IZAgq9OSipQCXfEDhdR/gstTiWali5Y3BAYrb
-         dDLPr//i6xsbEF7igpQyPDRWKSfi20Rnj+Yar4yKDpk+XaTGISn/eX7RnsJmxxTCIusS
-         h5+YHjOEkZIIfBsy8JjED0IHZZDiOaKSHQKxy9x1h+is7GTGT+vinRmTbrSreVSt8NwQ
-         i0Qw==
-X-Gm-Message-State: AO0yUKVY6zI57XjNING4f264+9z463lGNomWQY5kzpQjs6PO+kxrM8i8
-        51sPxSNTiV+Y18lbhLBM47wyCex2sPgSTvutvOg=
-X-Google-Smtp-Source: AK7set+s/h6Aq2mWeFnkrebDLY5fyFC6Lh9k8JSdRrtwsWAbV4rsN1P6IADalrpRCWvVhF9oKfp3F082arUH0QlS7uM=
-X-Received: by 2002:a50:ce1c:0:b0:4fb:2593:846 with SMTP id
- y28-20020a50ce1c000000b004fb25930846mr2739928edi.3.1678710398424; Mon, 13 Mar
- 2023 05:26:38 -0700 (PDT)
+        bh=ESAp3UfXRxsSAchomKtpcRbG9GtF4ptbUdeeyQFslxk=;
+        b=5e3qpFhXcxckJIfGwpQ3idCxlyEcooVi8tKDXKS180KuGUJsVbio6Hbkyi4bAnxeIT
+         kqlyuzN+JsOlgeNISgmly1H//osx+rRNtitWIgNjxyQ5MpdnHODAywysbAaTSrDcMuQj
+         wzeyUbIy2kq2FU6NVr8cwPN4atSnzmBlf1ukgwoq0xrw4Pn+vuxoLzgegCtCDbMGSNNr
+         iDZ0p55PjC561iELkjc85+ALER71cRwMbCNRSqpyi2nMQ5bLSunzqKUGALuLemsmWpG6
+         IRENgMQ2kf4t85J1lVveegGHpZasIiR3pkFaUfNtNNccDihLMFjl8fvSfKp/GGehzpBb
+         gNYw==
+X-Gm-Message-State: AO0yUKW6HPkn9xnnEdfwZfh5t4LsVUNNcs2TV1H/TfoAJEdN8+vO1JUB
+        xp8GesgNkMxYcjJTs7bnGcz/jTGWYuSwg9cwpBE=
+X-Google-Smtp-Source: AK7set+fobktK3NwY5dh4rmvgAxFeKPXgkIZMTivuEmcFfSghCGw4Ren1fitbeVvYdLVUpydC9R6/23nUytjswZkBYg=
+X-Received: by 2002:a17:906:13c2:b0:8b1:7aec:c8e6 with SMTP id
+ g2-20020a17090613c200b008b17aecc8e6mr17897480ejc.2.1678710572140; Mon, 13 Mar
+ 2023 05:29:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
- <20230307133735.90772-4-daniel.lezcano@linaro.org> <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
-In-Reply-To: <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
+References: <20230312204150.1353517-1-robdclark@gmail.com> <20230312204150.1353517-9-robdclark@gmail.com>
+In-Reply-To: <20230312204150.1353517-9-robdclark@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Mar 2023 13:26:23 +0100
-Message-ID: <CAJZ5v0iYk7mC0K7Tsv7Dh9N=dQW151YhVcphvLm7T2vEY10tMA@mail.gmail.com>
-Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove add_one_attribute
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        "open list:INTEL MENLOW THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+Date:   Mon, 13 Mar 2023 13:29:17 +0100
+Message-ID: <CAJZ5v0ijxoLM+bGuW0oksm8a4tbmV-wX=WSFHKutYSBcYTJTuA@mail.gmail.com>
+Subject: Re: [PATCH 08/13] PM / QoS: Fix constraints alloc vs reclaim locking
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
@@ -59,262 +61,289 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:55 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Sun, Mar 12, 2023 at 9:42 PM Rob Clark <robdclark@gmail.com> wrote:
 >
+> From: Rob Clark <robdclark@chromium.org>
 >
-> Hi,
+> In the process of adding lockdep annotation for drm GPU scheduler's
+> job_run() to detect potential deadlock against shrinker/reclaim, I hit
+> this lockdep splat:
 >
-> is this code removal acceptable ?
+>    ======================================================
+>    WARNING: possible circular locking dependency detected
+>    6.2.0-rc8-debug+ #558 Tainted: G        W
+>    ------------------------------------------------------
+>    ring0/125 is trying to acquire lock:
+>    ffffffd6d6ce0f28 (dev_pm_qos_mtx){+.+.}-{3:3}, at: dev_pm_qos_update_request+0x38/0x68
+>
+>    but task is already holding lock:
+>    ffffff8087239208 (&gpu->active_lock){+.+.}-{3:3}, at: msm_gpu_submit+0xec/0x178
+>
+>    which lock already depends on the new lock.
+>
+>    the existing dependency chain (in reverse order) is:
+>
+>    -> #4 (&gpu->active_lock){+.+.}-{3:3}:
+>           __mutex_lock+0xcc/0x3c8
+>           mutex_lock_nested+0x30/0x44
+>           msm_gpu_submit+0xec/0x178
+>           msm_job_run+0x78/0x150
+>           drm_sched_main+0x290/0x370
+>           kthread+0xf0/0x100
+>           ret_from_fork+0x10/0x20
+>
+>    -> #3 (dma_fence_map){++++}-{0:0}:
+>           __dma_fence_might_wait+0x74/0xc0
+>           dma_resv_lockdep+0x1f4/0x2f4
+>           do_one_initcall+0x104/0x2bc
+>           kernel_init_freeable+0x344/0x34c
+>           kernel_init+0x30/0x134
+>           ret_from_fork+0x10/0x20
+>
+>    -> #2 (mmu_notifier_invalidate_range_start){+.+.}-{0:0}:
+>           fs_reclaim_acquire+0x80/0xa8
+>           slab_pre_alloc_hook.constprop.0+0x40/0x25c
+>           __kmem_cache_alloc_node+0x60/0x1cc
+>           __kmalloc+0xd8/0x100
+>           topology_parse_cpu_capacity+0x8c/0x178
+>           get_cpu_for_node+0x88/0xc4
+>           parse_cluster+0x1b0/0x28c
+>           parse_cluster+0x8c/0x28c
+>           init_cpu_topology+0x168/0x188
+>           smp_prepare_cpus+0x24/0xf8
+>           kernel_init_freeable+0x18c/0x34c
+>           kernel_init+0x30/0x134
+>           ret_from_fork+0x10/0x20
+>
+>    -> #1 (fs_reclaim){+.+.}-{0:0}:
+>           __fs_reclaim_acquire+0x3c/0x48
+>           fs_reclaim_acquire+0x54/0xa8
+>           slab_pre_alloc_hook.constprop.0+0x40/0x25c
+>           __kmem_cache_alloc_node+0x60/0x1cc
+>           kmalloc_trace+0x50/0xa8
+>           dev_pm_qos_constraints_allocate+0x38/0x100
+>           __dev_pm_qos_add_request+0xb0/0x1e8
+>           dev_pm_qos_add_request+0x58/0x80
+>           dev_pm_qos_expose_latency_limit+0x60/0x13c
+>           register_cpu+0x12c/0x130
+>           topology_init+0xac/0xbc
+>           do_one_initcall+0x104/0x2bc
+>           kernel_init_freeable+0x344/0x34c
+>           kernel_init+0x30/0x134
+>           ret_from_fork+0x10/0x20
+>
+>    -> #0 (dev_pm_qos_mtx){+.+.}-{3:3}:
+>           __lock_acquire+0xe00/0x1060
+>           lock_acquire+0x1e0/0x2f8
+>           __mutex_lock+0xcc/0x3c8
+>           mutex_lock_nested+0x30/0x44
+>           dev_pm_qos_update_request+0x38/0x68
+>           msm_devfreq_boost+0x40/0x70
+>           msm_devfreq_active+0xc0/0xf0
+>           msm_gpu_submit+0x10c/0x178
+>           msm_job_run+0x78/0x150
+>           drm_sched_main+0x290/0x370
+>           kthread+0xf0/0x100
+>           ret_from_fork+0x10/0x20
+>
+>    other info that might help us debug this:
+>
+>    Chain exists of:
+>      dev_pm_qos_mtx --> dma_fence_map --> &gpu->active_lock
+>
+>     Possible unsafe locking scenario:
+>
+>           CPU0                    CPU1
+>           ----                    ----
+>      lock(&gpu->active_lock);
+>                                   lock(dma_fence_map);
+>                                   lock(&gpu->active_lock);
+>      lock(dev_pm_qos_mtx);
+>
+>     *** DEADLOCK ***
+>
+>    3 locks held by ring0/123:
+>     #0: ffffff8087251170 (&gpu->lock){+.+.}-{3:3}, at: msm_job_run+0x64/0x150
+>     #1: ffffffd00b0e57e8 (dma_fence_map){++++}-{0:0}, at: msm_job_run+0x68/0x150
+>     #2: ffffff8087251208 (&gpu->active_lock){+.+.}-{3:3}, at: msm_gpu_submit+0xec/0x178
+>
+>    stack backtrace:
+>    CPU: 6 PID: 123 Comm: ring0 Not tainted 6.2.0-rc8-debug+ #559
+>    Hardware name: Google Lazor (rev1 - 2) with LTE (DT)
+>    Call trace:
+>     dump_backtrace.part.0+0xb4/0xf8
+>     show_stack+0x20/0x38
+>     dump_stack_lvl+0x9c/0xd0
+>     dump_stack+0x18/0x34
+>     print_circular_bug+0x1b4/0x1f0
+>     check_noncircular+0x78/0xac
+>     __lock_acquire+0xe00/0x1060
+>     lock_acquire+0x1e0/0x2f8
+>     __mutex_lock+0xcc/0x3c8
+>     mutex_lock_nested+0x30/0x44
+>     dev_pm_qos_update_request+0x38/0x68
+>     msm_devfreq_boost+0x40/0x70
+>     msm_devfreq_active+0xc0/0xf0
+>     msm_gpu_submit+0x10c/0x178
+>     msm_job_run+0x78/0x150
+>     drm_sched_main+0x290/0x370
+>     kthread+0xf0/0x100
+>     ret_from_fork+0x10/0x20
+>
+> The issue is that dev_pm_qos_mtx is held in the runpm suspend/resume (or
+> freq change) path, but it is also held across allocations that could
+> recurse into shrinker.
+>
+> Solve this by changing dev_pm_qos_constraints_allocate() into a function
+> that can be called unconditionally before the device qos object is
+> needed and before aquiring dev_pm_qos_mtx.  This way the allocations can
+> be done without holding the mutex.  In the case that we raced with
+> another thread to allocate the qos object, detect this *after* acquiring
+> the dev_pm_qos_mtx and simply free the redundant allocations.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-I'll let you know later this week.
+I need to take a deeper look at this and so some time is required.
 
-> On 07/03/2023 14:37, Daniel Lezcano wrote:
-> > The driver hooks the thermal framework sysfs to add some driver
-> > specific information. A debatable approach as that may belong the
-> > device sysfs directory, not the thermal zone directory.
-> >
-> > As the driver is accessing the thermal internals, we should provide at
-> > least an API to the thermal framework to add an attribute to the
-> > existing sysfs thermal zone entry.
-> >
-> > Before doing that and given the age of the driver (2008) may be it is
-> > worth to double check if these attributes are really needed. So my
-> > first proposal is to remove them if that does not hurt.
-> >
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/base/power/qos.c | 60 +++++++++++++++++++++++++++-------------
+>  1 file changed, 41 insertions(+), 19 deletions(-)
 >
+> diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+> index 8e93167f1783..f3e0c6b65635 100644
+> --- a/drivers/base/power/qos.c
+> +++ b/drivers/base/power/qos.c
+> @@ -185,18 +185,24 @@ static int apply_constraint(struct dev_pm_qos_request *req,
+>  }
 >
+>  /*
+> - * dev_pm_qos_constraints_allocate
+> + * dev_pm_qos_constraints_ensure_allocated
+>   * @dev: device to allocate data for
+>   *
+> - * Called at the first call to add_request, for constraint data allocation
+> - * Must be called with the dev_pm_qos_mtx mutex held
+> + * Called to ensure that devices qos is allocated, before acquiring
+> + * dev_pm_qos_mtx.
+>   */
+> -static int dev_pm_qos_constraints_allocate(struct device *dev)
+> +static int dev_pm_qos_constraints_ensure_allocated(struct device *dev)
+>  {
+>         struct dev_pm_qos *qos;
+>         struct pm_qos_constraints *c;
+>         struct blocking_notifier_head *n;
 >
-> > ---
-> >   drivers/thermal/intel/intel_menlow.c | 193 ---------------------------
-> >   1 file changed, 193 deletions(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-> > index 5a6ad0552311..5a9738a93083 100644
-> > --- a/drivers/thermal/intel/intel_menlow.c
-> > +++ b/drivers/thermal/intel/intel_menlow.c
-> > @@ -230,174 +230,8 @@ struct intel_menlow_attribute {
-> >   static LIST_HEAD(intel_menlow_attr_list);
-> >   static DEFINE_MUTEX(intel_menlow_attr_lock);
-> >
-> > -/*
-> > - * sensor_get_auxtrip - get the current auxtrip value from sensor
-> > - * @handle: Object handle
-> > - * @index : GET_AUX1/GET_AUX0
-> > - * @value : The address will be fill by the value
-> > - */
-> > -static int sensor_get_auxtrip(acpi_handle handle, int index,
-> > -                                                     unsigned long long *value)
-> > -{
-> > -     acpi_status status;
-> > -
-> > -     if ((index != 0 && index != 1) || !value)
-> > -             return -EINVAL;
-> > -
-> > -     status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
-> > -                                    NULL, value);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -/*
-> > - * sensor_set_auxtrip - set the new auxtrip value to sensor
-> > - * @handle: Object handle
-> > - * @index : GET_AUX1/GET_AUX0
-> > - * @value : The value will be set
-> > - */
-> > -static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
-> > -{
-> > -     acpi_status status;
-> > -     union acpi_object arg = {
-> > -             ACPI_TYPE_INTEGER
-> > -     };
-> > -     struct acpi_object_list args = {
-> > -             1, &arg
-> > -     };
-> > -     unsigned long long temp;
-> > -
-> > -     if (index != 0 && index != 1)
-> > -             return -EINVAL;
-> > -
-> > -     status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
-> > -                                    NULL, &temp);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -     if ((index && value < temp) || (!index && value > temp))
-> > -             return -EINVAL;
-> > -
-> > -     arg.integer.value = value;
-> > -     status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
-> > -                                    &args, &temp);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -
-> > -     /* do we need to check the return value of SAX0/SAX1 ? */
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -#define to_intel_menlow_attr(_attr)  \
-> > -     container_of(_attr, struct intel_menlow_attribute, attr)
-> > -
-> > -static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
-> > -                     char *buf, int idx)
-> > -{
-> > -     struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
-> > -     unsigned long long value;
-> > -     int result;
-> > -
-> > -     result = sensor_get_auxtrip(attr->handle, idx, &value);
-> > -     if (result)
-> > -             return result;
-> > -
-> > -     return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
-> > -}
-> > -
-> > -static ssize_t aux0_show(struct device *dev,
-> > -                      struct device_attribute *dev_attr, char *buf)
-> > -{
-> > -     return aux_show(dev, dev_attr, buf, 0);
-> > -}
-> > -
-> > -static ssize_t aux1_show(struct device *dev,
-> > -                      struct device_attribute *dev_attr, char *buf)
-> > -{
-> > -     return aux_show(dev, dev_attr, buf, 1);
-> > -}
-> > -
-> > -static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
-> > -                      const char *buf, size_t count, int idx)
-> > -{
-> > -     struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
-> > -     int value;
-> > -     int result;
-> > -
-> > -     /*Sanity check; should be a positive integer */
-> > -     if (!sscanf(buf, "%d", &value))
-> > -             return -EINVAL;
-> > -
-> > -     if (value < 0)
-> > -             return -EINVAL;
-> > -
-> > -     result = sensor_set_auxtrip(attr->handle, idx,
-> > -                                 celsius_to_deci_kelvin(value));
-> > -     return result ? result : count;
-> > -}
-> > -
-> > -static ssize_t aux0_store(struct device *dev,
-> > -                       struct device_attribute *dev_attr,
-> > -                       const char *buf, size_t count)
-> > -{
-> > -     return aux_store(dev, dev_attr, buf, count, 0);
-> > -}
-> > -
-> > -static ssize_t aux1_store(struct device *dev,
-> > -                       struct device_attribute *dev_attr,
-> > -                       const char *buf, size_t count)
-> > -{
-> > -     return aux_store(dev, dev_attr, buf, count, 1);
-> > -}
-> > -
-> >   /* BIOS can enable/disable the thermal user application in dabney platform */
-> >   #define BIOS_ENABLED "\\_TZ.GSTS"
-> > -static ssize_t bios_enabled_show(struct device *dev,
-> > -                              struct device_attribute *attr, char *buf)
-> > -{
-> > -     acpi_status status;
-> > -     unsigned long long bios_enabled;
-> > -
-> > -     status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -ENODEV;
-> > -
-> > -     return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
-> > -}
-> > -
-> > -static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
-> > -                                       void *store, struct device *dev,
-> > -                                       acpi_handle handle)
-> > -{
-> > -     struct intel_menlow_attribute *attr;
-> > -     int result;
-> > -
-> > -     attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
-> > -     if (!attr)
-> > -             return -ENOMEM;
-> > -
-> > -     sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
-> > -     attr->attr.attr.name = name;
-> > -     attr->attr.attr.mode = mode;
-> > -     attr->attr.show = show;
-> > -     attr->attr.store = store;
-> > -     attr->device = dev;
-> > -     attr->handle = handle;
-> > -
-> > -     result = device_create_file(dev, &attr->attr);
-> > -     if (result) {
-> > -             kfree(attr);
-> > -             return result;
-> > -     }
-> > -
-> > -     mutex_lock(&intel_menlow_attr_lock);
-> > -     list_add_tail(&attr->node, &intel_menlow_attr_list);
-> > -     mutex_unlock(&intel_menlow_attr_lock);
-> > -
-> > -     return 0;
-> > -}
-> >
-> >   static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
-> >                                               void *context, void **rv)
-> > @@ -420,12 +254,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
-> >       if (ACPI_FAILURE(status))
-> >               return (status == AE_NOT_FOUND) ? AE_OK : status;
-> >
-> > -     result = intel_menlow_add_one_attribute("aux0", 0644,
-> > -                                             aux0_show, aux0_store,
-> > -                                             &thermal->device, handle);
-> > -     if (result)
-> > -             return AE_ERROR;
-> > -
-> >       status = acpi_get_handle(handle, GET_AUX1, &dummy);
-> >       if (ACPI_FAILURE(status))
-> >               goto aux1_not_found;
-> > @@ -434,27 +262,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
-> >       if (ACPI_FAILURE(status))
-> >               goto aux1_not_found;
-> >
-> > -     result = intel_menlow_add_one_attribute("aux1", 0644,
-> > -                                             aux1_show, aux1_store,
-> > -                                             &thermal->device, handle);
-> > -     if (result) {
-> > -             intel_menlow_unregister_sensor();
-> > -             return AE_ERROR;
-> > -     }
-> > -
-> > -     /*
-> > -      * create the "dabney_enabled" attribute which means the user app
-> > -      * should be loaded or not
-> > -      */
-> > -
-> > -     result = intel_menlow_add_one_attribute("bios_enabled", 0444,
-> > -                                             bios_enabled_show, NULL,
-> > -                                             &thermal->device, handle);
-> > -     if (result) {
-> > -             intel_menlow_unregister_sensor();
-> > -             return AE_ERROR;
-> > -     }
-> > -
-> >       return AE_OK;
-> >
-> >    aux1_not_found:
+> +       if (!dev)
+> +               return -ENODEV;
+> +
+> +       if (!IS_ERR_OR_NULL(dev->power.qos))
+> +               return 0;
+> +
+>         qos = kzalloc(sizeof(*qos), GFP_KERNEL);
+>         if (!qos)
+>                 return -ENOMEM;
+> @@ -227,10 +233,26 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
 >
+>         INIT_LIST_HEAD(&qos->flags.list);
+>
+> +       mutex_lock(&dev_pm_qos_mtx);
+> +
+> +       if (!IS_ERR_OR_NULL(dev->power.qos)) {
+> +               /*
+> +                * We have raced with another task to create the qos.
+> +                * No biggie, just free the resources we've allocated
+> +                * outside of dev_pm_qos_mtx and move on with life.
+> +                */
+> +               kfree(n);
+> +               kfree(qos);
+> +               goto unlock;
+> +       }
+> +
+>         spin_lock_irq(&dev->power.lock);
+>         dev->power.qos = qos;
+>         spin_unlock_irq(&dev->power.lock);
+>
+> +unlock:
+> +       mutex_unlock(&dev_pm_qos_mtx);
+> +
+>         return 0;
+>  }
+>
+> @@ -331,17 +353,15 @@ static int __dev_pm_qos_add_request(struct device *dev,
+>  {
+>         int ret = 0;
+>
+> -       if (!dev || !req || dev_pm_qos_invalid_req_type(dev, type))
+> +       if (!req || dev_pm_qos_invalid_req_type(dev, type))
+>                 return -EINVAL;
+>
+>         if (WARN(dev_pm_qos_request_active(req),
+>                  "%s() called for already added request\n", __func__))
+>                 return -EINVAL;
+>
+> -       if (IS_ERR(dev->power.qos))
+> +       if (IS_ERR_OR_NULL(dev->power.qos))
+>                 ret = -ENODEV;
+> -       else if (!dev->power.qos)
+> -               ret = dev_pm_qos_constraints_allocate(dev);
+>
+>         trace_dev_pm_qos_add_request(dev_name(dev), type, value);
+>         if (ret)
+> @@ -390,6 +410,10 @@ int dev_pm_qos_add_request(struct device *dev, struct dev_pm_qos_request *req,
+>  {
+>         int ret;
+>
+> +       ret = dev_pm_qos_constraints_ensure_allocated(dev);
+> +       if (ret)
+> +               return ret;
+> +
+>         mutex_lock(&dev_pm_qos_mtx);
+>         ret = __dev_pm_qos_add_request(dev, req, type, value);
+>         mutex_unlock(&dev_pm_qos_mtx);
+> @@ -537,15 +561,11 @@ int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier,
+>  {
+>         int ret = 0;
+>
+> -       mutex_lock(&dev_pm_qos_mtx);
+> -
+> -       if (IS_ERR(dev->power.qos))
+> -               ret = -ENODEV;
+> -       else if (!dev->power.qos)
+> -               ret = dev_pm_qos_constraints_allocate(dev);
+> -
+> +       ret = dev_pm_qos_constraints_ensure_allocated(dev);
+>         if (ret)
+> -               goto unlock;
+> +               return ret;
+> +
+> +       mutex_lock(&dev_pm_qos_mtx);
+>
+>         switch (type) {
+>         case DEV_PM_QOS_RESUME_LATENCY:
+> @@ -565,7 +585,6 @@ int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier,
+>                 ret = -EINVAL;
+>         }
+>
+> -unlock:
+>         mutex_unlock(&dev_pm_qos_mtx);
+>         return ret;
+>  }
+> @@ -905,10 +924,13 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+>  {
+>         int ret;
+>
+> +       ret = dev_pm_qos_constraints_ensure_allocated(dev);
+> +       if (ret)
+> +               return ret;
+> +
+>         mutex_lock(&dev_pm_qos_mtx);
+>
+> -       if (IS_ERR_OR_NULL(dev->power.qos)
+> -           || !dev->power.qos->latency_tolerance_req) {
+> +       if (!dev->power.qos->latency_tolerance_req) {
+>                 struct dev_pm_qos_request *req;
+>
+>                 if (val < 0) {
 > --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+> 2.39.2
 >
