@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8983C6B7050
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 08:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678FC6B7070
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 08:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjCMHuy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 03:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S230252AbjCMHxb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 03:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjCMHuq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 03:50:46 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8C28EBA;
-        Mon, 13 Mar 2023 00:50:44 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m4so1488608lfj.2;
-        Mon, 13 Mar 2023 00:50:44 -0700 (PDT)
+        with ESMTP id S230156AbjCMHwv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 03:52:51 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94451F8F;
+        Mon, 13 Mar 2023 00:52:19 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id t14so11634168ljd.5;
+        Mon, 13 Mar 2023 00:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678693843;
+        d=gmail.com; s=20210112; t=1678693930;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HHVFhtI+WXf+TBj10nSr3LhfstrJCEyqqp0nJVtIGAI=;
-        b=VVZESDY+oTzxvnvslJHVZjQSe5DUbdpK43nfxg2WnlNfG0M+gT0Gjl08wmwh5cQ49/
-         JQ3wfc5d/UvLsYAf9JfeMndoXE9pyJ7yGCFstuNbTB9RvTB+qZl1ylD8JGktY5Ri7FoL
-         7jzT9qXP/n0/UUT9dIy2P6Lg3LmvQAV9pdLGDJIQjXqVLsyg0p0vFE+tMvWAElf0IOuC
-         +GWmp9ieI/IyGets07dkU1CRexebvgGdK5Ciy6ppXiQWrnp56LNDO98XbErBT4jRwiwJ
-         wjfrnDbsjwi2gCOQQO282QQJeE0ru7HQ7Az/BzNzkxEQpNHAjM8JafCouafLWGl/U5IJ
-         VIIQ==
+        bh=DP22K4i2hvSQUMj03mmf1nrlTT4nDZqslXzw3b5STVg=;
+        b=mq4CVXLbEPFpKdmBnLa+DaPZzaB+5PUIR1eMjh/S3fQORQr+7borK30x1Sezcwvn3h
+         GURCYNkzr8nsUL31CT/9nX7UJ2u4sA8psHIJrab55dBjZPCFypFurmSJrIPqiUwafkLy
+         nXiFnALJjYOqNPU7FDabiJDarRrua8EmKrWRNxfQW0/fUC7XRZasBI2sBxy5KXjs3WYs
+         9A5BAyxpxFw4SzRZI7Wm3Exmv5L20yk1Zr7GmrR4Y8aG5l4BnQOiYOAt+rNw6COZSI0a
+         e5dkLHtYSuFhxNBxcFuu3+mEQNiv1ECxluOgUyxUTx2Cfr8EuDNd70C0MyzOlD3ZwZ1I
+         v8fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678693843;
+        d=1e100.net; s=20210112; t=1678693930;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HHVFhtI+WXf+TBj10nSr3LhfstrJCEyqqp0nJVtIGAI=;
-        b=eUpumf1WXVDnuIXr84HqTg1bu6I1HZJottEuWWjvsbQ6uP2RXHoacJ8Iwx3OWObVew
-         lS0XtL/KIypkpAoID9j+BMCfwcXY81XRFC9jHFtvBO0fg//WUBRbpM0CjMH67EacUh40
-         FxBP0AGQErhoMZilw3Cb0NQzbzMuKjJ6JuZdfxNSUB9ocnexqq+MJjI1HGfqcCrntPsQ
-         YuObtjxRcg7PqCGTG5Q6oehZYWDjgNup7XvZwkjluiXbBMJMWPdNWRL76rAnJw91UZUI
-         ly0iaX/uZJa+VLpYV8IBU+ha/PD2iTXy2oBzWUAe/9+TjyGC5YDUXcQsTU2QFN1zhvgq
-         kO+w==
-X-Gm-Message-State: AO0yUKXLOVP5IuJlgzCXYBCQZrLa/XeIckFjROUv2u+kOeiGapBNaWJF
-        EC0fUaT7SubOQNHDh5A6DS4=
-X-Google-Smtp-Source: AK7set+a/ehVNgVfh6mj22qz9e7j+xFSeNhlbdsU/N6rBb/9ab+vAMThy59TeGCu7cwhl4xkVxs05Q==
-X-Received: by 2002:ac2:4a90:0:b0:4dd:ac8d:671f with SMTP id l16-20020ac24a90000000b004ddac8d671fmr8196362lfp.34.1678693843053;
-        Mon, 13 Mar 2023 00:50:43 -0700 (PDT)
+        bh=DP22K4i2hvSQUMj03mmf1nrlTT4nDZqslXzw3b5STVg=;
+        b=Ux67mV44g0E8te8tXR1aJsgnrRGWgAMYcH8umwDl/j5S/rcWiQkSo4iF75uVTgqUAu
+         Q3GkMA8LxHDNBkjlSII+FliKwRedARGCUsA1mDf80n5x1DPrZx7AfrJdgCPPAmF4ok11
+         AWyLQQhIaEDTfCmFbXZByV12DRnNxGamUE/h26+MNa/PiMsAX3qc8qp42DyDeXLH8op0
+         dvRdbTy8xRMVXno+toYCOD6XhrEQywKCD7hdS+EI+RaZ/toS1Jg8OWhHxtULUUz3GR7J
+         eSorgHGx87BUgkeOtoyVjnLC6PtkUNc9QmYgciCr0tO23ALlGCa1fMiKR+frYSq6JrOq
+         GNWA==
+X-Gm-Message-State: AO0yUKU04eH0GSUSzTYr1zYSTO4zbgXYPOKhwnurMGEzRAcF3ShMXd7l
+        zcFCsUWFsw3qkVrdwB4/shs=
+X-Google-Smtp-Source: AK7set+fCZnioNoLHXd86gA5fdj9retwzd09OegGlbQGd8saON8iHEbmrTCRWzvBpZhUxZqO/WFw2w==
+X-Received: by 2002:a2e:99c4:0:b0:293:4d57:7148 with SMTP id l4-20020a2e99c4000000b002934d577148mr10265826ljj.11.1678693930688;
+        Mon, 13 Mar 2023 00:52:10 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac259c2000000b004db3d57c3a8sm895354lfn.96.2023.03.13.00.50.42
+        by smtp.gmail.com with ESMTPSA id v10-20020a2ea44a000000b002986d9bdecesm912257ljn.129.2023.03.13.00.52.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 00:50:42 -0700 (PDT)
-Message-ID: <f30f2b92-e4ba-a5a4-54e1-926495338009@gmail.com>
-Date:   Mon, 13 Mar 2023 09:50:41 +0200
+        Mon, 13 Mar 2023 00:52:10 -0700 (PDT)
+Message-ID: <e07c2fbf-6432-0065-3e68-aeac2ee51799@gmail.com>
+Date:   Mon, 13 Mar 2023 09:52:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCHv1 07/11] power: supply: generic-adc-battery: drop memory
- alloc error message
+Subject: Re: [PATCHv1 04/11] power: supply: generic-adc-battery: fix unit
+ scaling
 Content-Language: en-US, en-GB
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -64,11 +64,11 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-8-sre@kernel.org>
+ <20230309225041.477440-5-sre@kernel.org>
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230309225041.477440-8-sre@kernel.org>
+In-Reply-To: <20230309225041.477440-5-sre@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,32 +80,33 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 3/10/23 00:50, Sebastian Reichel wrote:
-> Error printing happens automatically for memory allocation problems.
+> power-supply properties are reported in µV, µA and µW.
+> The IIO API provides mV, mA, mW, so the values need to
+> be multiplied by 1000.
 > 
 > Signed-off-by: Sebastian Reichel <sre@kernel.org>
 
+As Linus wrote, Fixes-tag would be good. With that remark:
 Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 > ---
->   drivers/power/supply/generic-adc-battery.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+>   drivers/power/supply/generic-adc-battery.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
 > diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index d07eeb7d46d3..771e5cfc49c3 100644
+> index 917bd2a6cc52..535972a332b3 100644
 > --- a/drivers/power/supply/generic-adc-battery.c
 > +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -243,10 +243,8 @@ static int gab_probe(struct platform_device *pdev)
->   	bool any = false;
+> @@ -136,6 +136,9 @@ static int read_channel(struct gab *adc_bat, enum power_supply_property psp,
+>   			result);
+>   	if (ret < 0)
+>   		pr_err("read channel error\n");
+> +	else
+> +		*result *= 1000;
+> +
+>   	return ret;
+>   }
 >   
->   	adc_bat = devm_kzalloc(&pdev->dev, sizeof(*adc_bat), GFP_KERNEL);
-> -	if (!adc_bat) {
-> -		dev_err(&pdev->dev, "failed to allocate memory\n");
-> +	if (!adc_bat)
->   		return -ENOMEM;
-> -	}
->   
->   	psy_cfg.drv_data = adc_bat;
->   	psy_desc = &adc_bat->psy_desc;
 
 -- 
 Matti Vaittinen
