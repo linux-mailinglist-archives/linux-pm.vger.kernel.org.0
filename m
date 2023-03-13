@@ -2,144 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B996B72C1
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 10:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7836D6B7441
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 11:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCMJiC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 05:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S230093AbjCMKiQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 06:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjCMJhs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 05:37:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78F892B600;
-        Mon, 13 Mar 2023 02:36:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47A8A2F4;
-        Mon, 13 Mar 2023 02:36:15 -0700 (PDT)
-Received: from [10.57.18.52] (unknown [10.57.18.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E32313F71A;
-        Mon, 13 Mar 2023 02:35:29 -0700 (PDT)
-Message-ID: <8727651b-88ec-efe7-eed2-1ff08faf22b8@arm.com>
-Date:   Mon, 13 Mar 2023 09:35:27 +0000
+        with ESMTP id S229888AbjCMKiM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 06:38:12 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A84608C;
+        Mon, 13 Mar 2023 03:37:48 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id k2so4532979pll.8;
+        Mon, 13 Mar 2023 03:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678703867;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KU7DMY9k7DfRs8YYS0f44VoUtgWgosku2UjOg2Dqy5A=;
+        b=Z1uya8RuNbWxfnRK9B1p4JS3cvIl9X+qZHFgPVyN/aHwEMX/UOABbdeRabhUHAIgON
+         aB+lKl3DzzrXH0AbEh0C5aX3X8q/Q9MaMckSq90uEWd2AxyvfGrhKol7t2h+JO2QAirE
+         aPGQ0EMR/KB1+QnjgPzZbdmlgRTLyjBT8KvZVwfSRbW0QjncGBhy0qkuJtkPqHgxK9co
+         Ohft7TiBWuaPj4KXSVKjI+SaahbygujLxe2rBZt0HltJ+asnglPbW21VGuxwtZBzSYS7
+         W8xRYRFDlYzK9xJSLUU1ij0FkpF64Ic+Jco/UQnxOgLb412lCS7KqvKkNVn3/l6tYpV+
+         m2gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678703867;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KU7DMY9k7DfRs8YYS0f44VoUtgWgosku2UjOg2Dqy5A=;
+        b=yBb8e3qWrA0Vg0JxDnqC86/hmh4B2KGw+EtPzcpXvwrWEmbRDL9h8KfmdosfA+BEH7
+         yUjOTwpRlozIvWEjXoAYp8+oZYnGe28YyViHdaeSK+CnTNH140Itd+/ln91BBjySLxKg
+         MxjrfVWVypWc/H0ZFflGFI99xrZvbWRr+l1pT+2jVhvzT4aTuLr4LW8CD9Ko3rq5lQAb
+         S50f8FQ9wkD6Zt5m5Zh4Lz0pluqmmjG4wc5R5Fddb4/hjjYVsOYeQhqXauVu5LQlBFfO
+         NEGh08HH9Z/+k9fxRyMAtSd2MrSEk8urOXkEt+HB2aGGDGns+7yPx44jaTFIdQnFwYBl
+         t0pw==
+X-Gm-Message-State: AO0yUKUPu3V/qzfsEdvYHcDrV4j5AelxjQwr7bD7kB5+81nU09w4r0Iu
+        MnaRFfBFv3DTk2jTKIxmHU0=
+X-Google-Smtp-Source: AK7set8NWZf5ZuTQmuFcIevA1d7F10D+nLjVlsIq1XWd3B8TEqCd7UiHsIr7GKU4PzlppyuWARfpnA==
+X-Received: by 2002:a17:902:e886:b0:199:4a00:9788 with SMTP id w6-20020a170902e88600b001994a009788mr43057201plg.19.1678703867538;
+        Mon, 13 Mar 2023 03:37:47 -0700 (PDT)
+Received: from [172.30.1.89] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id jx18-20020a170903139200b001a057d36dc1sm741713plb.138.2023.03.13.03.37.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 03:37:47 -0700 (PDT)
+Message-ID: <f1019d0e-78ec-2783-5537-b8759993064b@gmail.com>
+Date:   Mon, 13 Mar 2023 19:37:42 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
- be reset
+Subject: Re: [PATCH] devfreq: exyos-bus: drop of_match_ptr for ID table
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230311173753.263390-1-krzysztof.kozlowski@linaro.org>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
 Content-Language: en-US
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
-References: <20230309135515.1232-1-di.shen@unisoc.com>
- <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
- <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230311173753.263390-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Xuewen,
-
-On 3/13/23 01:40, Xuewen Yan wrote:
-> Hi Lukasz
+On 23. 3. 12. 02:37, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).
 > 
-> On Fri, Mar 10, 2023 at 11:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Di,
->>
->> On 3/9/23 13:55, Di Shen wrote:
->>> Commit 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
->>> add a update flag to update cooling device only once when temp is low.
->>> But when the switch_on_temp is set to be a higher value, the cooling device state
->>> may not be reset to max, because the last_temp is smaller than the switch_on_temp.
->>>
->>> For example:
->>> First:
->>> swicth_on_temp=70 control_temp=85;
->>>
->>> Then userspace change the trip_temp:
->>> swicth_on_temp=45 control_temp=55 cur_temp=54
->>>
->>> Then userspace reset the trip_temp:
->>> swicth_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
->>>
->>> At this time, the cooling device state should be reset to be max.
->>> However, because cur_temp(57) < switch_on_temp(70)
->>> last_temp(54) < swicth_on_temp(70) --> update = false
->>> When update is false, the cooling device state can not be reset.
->>
->> That's a tricky use case. How is that now possible,
+>   drivers/devfreq/exynos-bus.c:504:34: error: ‘exynos_bus_of_match’ defined but not used [-Werror=unused-const-variable=]
 > 
-> We use the trip_temp in the Android System. Often, we set different
-> control temperatures in different scenarios,
-> and when we change the switch_on_temp from small to bigger, we find
-> the power can not be reset to be max.
-
-I see, thanks for letting me know that this is Android.
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/devfreq/exynos-bus.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
->>>
->>> So delete the update condition, so that the cooling device state
->>> could be reset.
->>
->> IMO this is not the desired solution. Daniel reported the issue that
->> IPA triggers the event sent to user-space even when there is no need.
->> That's the motivation for the 0952177f2a1f change.
->>
->> To address your scenario properly, we need an interface which allows
->> to respond properly for such situation when someone from user-space
->> writes a new value to something fundamental as trip point.
->>
->> You also have a kernel config enabled:
->> CONFIG_THERMAL_WRITABLE_TRIPS
->> which IMO is only for debug kernels for system integrator (according
->> to the Kconfig description).
-> 
->   Yes, we use it to meet the temperature control needs of different scenarios.
-> And now in android with google's GKI2.0, the config must be opened.
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 027e8f336acc..f7c554051232 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -513,7 +513,7 @@ static struct platform_driver exynos_bus_platdrv = {
+>  	.driver = {
+>  		.name	= "exynos-bus",
+>  		.pm	= &exynos_bus_pm,
+> -		.of_match_table = of_match_ptr(exynos_bus_of_match),
+> +		.of_match_table = exynos_bus_of_match,
+>  	},
+>  };
+>  module_platform_driver(exynos_bus_platdrv);
 
-OK
+Applied it with 'PM / ' prefix to keep the consistent title style.
+- PM / devfreq: exyos-bus: drop of_match_ptr for ID table
 
-> 
->>
->> When you disable this config in your deploy/product kernel
->> than this issue would disappear.
->>
->>>
->>> Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
->>> Signed-off-by: Di Shen <di.shen@unisoc.com>
->>> ---
->>>    drivers/thermal/gov_power_allocator.c | 9 +++------
->>>    1 file changed, 3 insertions(+), 6 deletions(-)
->>>
->>
->> That's why IMO this is not the solution.
-> 
-> Yes, but I think we should fix the bug, although the
-> CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
-> How about record the last_trip_temp, and when the last_temp >
-> last_trip_temp, set the update tobe true?
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-Yes, if that config is used in Android then we must fix it.
-
-That last_trip_temp makes sense (but maybe name it last_switch_on_temp).
-Please put that new field into the IPA local
-struct power_allocator_params. We should store the trip temp
-value there every time power_allocator_throttle() is called.
-That can be called due to a write from user-space w/ a new trip point
-value, so should be OK.
-
-Regards,
-Lukasz
