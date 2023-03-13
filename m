@@ -2,94 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361F96B75EE
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E414F6B7633
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Mar 2023 12:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCML1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Mar 2023 07:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S231236AbjCMLmO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Mar 2023 07:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCML1V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:27:21 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5F45A928
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:27:19 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id p26so7690299wmc.4
-        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:27:19 -0700 (PDT)
+        with ESMTP id S230456AbjCMLly (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Mar 2023 07:41:54 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FE365052
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:18 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id s22so15286280lfi.9
+        for <linux-pm@vger.kernel.org>; Mon, 13 Mar 2023 04:41:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678706838;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6RTjLb5cAp5kVPLrkYJRMh2ok+za0inDURjcisAo2wM=;
-        b=JKQJqG+7zH3lOS46EN479hXbyMURz8Xx67o6DOpDVSVpo4JKQIM8PQoNyCSd92iP5R
-         5asiFJbahskeuAHWilzvK+kLJzYdb75guG1VdJHmo6EutvQpVgqHtn2tbfDj/yMs5FNY
-         Lsb4tRfWK6KI3rLCfdlAAKV/IDTaNrbftUgPhvarSVGoZSyJ3T8eACrcjz941ykQGFKv
-         NO9FFjhDyGOy5MA0VcgibbU6yr0WmlbaytJdtD+u/QHq3CzH6E2zs99y0wFzUBuc30aS
-         XNoiVNsVev8v7WunvFrhyvJMwErHP3XfgTI5TjaienF05imfD3heZdcQ8Kgj7MDD0b9P
-         ek2w==
+        d=linaro.org; s=google; t=1678707677;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/S6tlhnVD0jMwhriK/KPRi3yBgfbrY3W/h0PzQMNaR8=;
+        b=v9TS3FASe5QrmtH2GPYTbcmnSqeIrOTUIgIFqpXj4ZNmMpyD97ZOAuRuA6xzIvOgwc
+         5ToA4XYKFdh7MtK3Vzy8M+RENE8aB1OuNTtkcXENfN0QL2yH0AlyWSZPw+lr1TGr+1Qz
+         CacIDCy0tEOHVWkgkKjsZ8INhHgsagPF3IJ4lNjKoAbA6PiKS9X9iKMW74q6C4VCWSbc
+         mdhuj4aTx44uQHF+lqxd4e2oqTAeeTAnqiESoLzT8Gc6meyqYIx/TpLvxFpfKyV6fdCG
+         eyCo71tdl5lmBzbpo0c9sS9NbluG/puOitJln1Gk34KSK9IHJAxjmjw7BtBKBh6vD1hU
+         bAtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678706838;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6RTjLb5cAp5kVPLrkYJRMh2ok+za0inDURjcisAo2wM=;
-        b=owCLuU3FAxq4ISkHJGNTcve2N/zkktztbcSVKChUuRO1uslmgGVwKU+gsRXRlJI1QZ
-         ZJZGzptNl6KHr9dlpsZUJQ9LNx3fVuZvAzfRq/zzqxSc0vKSYEeJ0/jozjPUDjA4n0f+
-         cBx7cAs1fQR0TAwACM1QUY6dfVSNVMKCY95V2VjuhzpS2qGX/fs4U/GtoNO0gfnuTOcw
-         QeShzBA/tYx2HURSW6bqSw45A8qFgJKFrDK8ecnavwgKYMRsVLkypQWedNK9X2tYgsMh
-         ycaXDT/dmPgG+JtJWXcjebKHK5GZdGDef2XBTJakF6613VpmdDCR+pdcts1fl4bzIXP1
-         UYdg==
-X-Gm-Message-State: AO0yUKXfrd5EU5yFiUE02LvyTs8iB3ZDJs7uutibHF1yNbixKeVcsRjH
-        6SGnzRFnLjkKa4cwjsWB9X3XAg==
-X-Google-Smtp-Source: AK7set90YWxcPUDg/pH/tBeAbfVE8a7tS+c8qSvuK5ZbA0HiETlVlnS82QnPwwK789kDdXT2GIGWUw==
-X-Received: by 2002:a05:600c:c09:b0:3eb:253c:faae with SMTP id fm9-20020a05600c0c0900b003eb253cfaaemr10154938wmb.36.1678706838217;
-        Mon, 13 Mar 2023 04:27:18 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8522:ca6e:1db4:96c6? ([2a05:6e02:1041:c10:8522:ca6e:1db4:96c6])
-        by smtp.googlemail.com with ESMTPSA id g14-20020a05600c310e00b003e8dcc67bdesm9347372wmo.30.2023.03.13.04.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 04:27:17 -0700 (PDT)
-Message-ID: <811f4f11-eecc-7021-eb16-3da276975187@linaro.org>
-Date:   Mon, 13 Mar 2023 12:27:17 +0100
+        d=1e100.net; s=20210112; t=1678707677;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/S6tlhnVD0jMwhriK/KPRi3yBgfbrY3W/h0PzQMNaR8=;
+        b=I1sWK+IFnjQ5pehN4gU+Jpu2ehH7RVWLShZgvCJmHvhSkc6DmjdpDVPauw1qCe0J90
+         iPJeBM9NPUs7/0zNicve6RGUH4iWAMQnyNknbihFdyS16ppyhnPfOb14YM16f6MahMh7
+         Ndz16u2nXzG5cr7i+Am3DuG0U759iM96Z8OJ6XmNlGnHXIW5c7lS+neoUea9Zuf7L1Go
+         c0bHmwOVMFTYfMFSdGzKeOBHnMpP8HOPKGbnzUPBt3GGzUobH1SX51si23lqnwICL4Pt
+         22YJxi9TxvdqLFR2YDAdc/dn3XWpM9jBr+I54com9ega7QfYQM9+/JhBF4ByVlcjDzVP
+         GVPA==
+X-Gm-Message-State: AO0yUKVB8AVHywDmP/R1pwFYV4oyL0EhqbbqOQf2ZeFKEy49jJfkzR/c
+        6hxb+L9MnVU4dFw3jsp21flWew==
+X-Google-Smtp-Source: AK7set9v8fcwISQUDvacfsx5NKc3IorSPfzW8quB1f7SIhNWvGL9qSeDapUgBCfPcNrnff23tqojJA==
+X-Received: by 2002:ac2:5151:0:b0:4e8:1798:f9e1 with SMTP id q17-20020ac25151000000b004e81798f9e1mr6000204lfd.57.1678707676842;
+        Mon, 13 Mar 2023 04:41:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 04:41:16 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/7] Fix BWMONv4 for <SDM845
+Date:   Mon, 13 Mar 2023 12:41:06 +0100
+Message-Id: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] thermal: Use devm_platform_ioremap_resource()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, rafael@kernel.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308062719.79522-1-yang.lee@linux.alibaba.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230308062719.79522-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANILD2QC/3WNQQ6CMBAAv0J6dk1pBdST/zDElHaFTbAlW6waw
+ t+t3D3OJJNZREQmjOJcLIIxUaTgM6hdIexgfI9ALrNQUmmp5QHmMJEF5/jWvR7BQy1PUinrKtS
+ VyFVnIkLHxtshd/45jllOjHd6b5trm3mgOAf+bNdU/uz/QSpBAla1PurG2caVl5G84bAP3It2X
+ dcvcrJloMQAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=3845;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=F+Wdt7KucrU/3l2BmjjW7lX2O3UZbJYREc/jBzPumpI=;
+ b=fmD4t1vb7FXPLTry4Ekkk7HRLZtygRgXTIHyurArLHXJoWQSJUMRsgWrwCyhzmLjXxyzTPBiSidp
+ yooZgnjJBYBrUG5zEv1nepmyJ3VwyyuwaNiLCGvBfjrzHjvAVSId
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/03/2023 07:27, Yang Li wrote:
-> According to commit 7945f929f1a7 ("drivers: provide
-> devm_platform_ioremap_resource()"), convert platform_get_resource(),
-> devm_ioremap_resource() to a single call to Use
-> devm_platform_ioremap_resource(), as this is exactly what this function
-> does.
-> 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
+v1 -> v2:
+- Un-mess-up the example in bindings
+- Correctly limit reg/-names in bindings
+- Introduce "qcom,sdm845-cpu-bwmon"
+- Fix incorrect register assignment in msm8998_bwmon_reg_noread_ranges
+- Clean up the code around setting global registers on <=8998
+  - Don't add a separate enum for global registers
+  - Don't use _GLOBAL vs _GLB
+  - Add of match entries for targets that abused qcom,msm8998-bwmon before
+    to keep old DTs working
+  - Add comments near of match entries to make things clearer
+  - Instead of if (...) { write to x } else { write to y } make the global
+    register variable to keep the code more readable
+- Add dts patches to stop improperly using the 8998 compatible
+- (grumpily) drop Fixes from [2/7]
+- Pick up rb on [3/7]
+- Re-test on MSM8998 and SM6375 (OOT, uses 845-style BWMONv4)
 
-Applied, thanks
+v1: https://lore.kernel.org/r/20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org
 
+BWMONv4 (the one used for DDR scaling on all SoCs from msm8998 to sm8550)
+features two register regions: "monitor" and "global" with the first one
+containing registers specific to the throughput monitor itself and the
+second one containing some sort of a head switch.
 
+The register layout on all BWMON versions an implementations up to that
+looked like this:
+
+|..........[GLOBAL].........[MONITOR]........|
+
+however with SDM845 somebody thought it would be a good idea to turn it
+into this:
+
+|................[GLOBAL]....................|
+|....................[MONITOR]...............|
+
+Sadly, the existing upstream driver was architected with SDM845 in mind,
+which means it doesn't support the global registers being somewhere else
+than near the beginning of the monitor space. This series tries to address
+that in the hopefully least painful way. Tested on msm8998 (the count unit
+seems to be wrong, should probably be 1MiB and not 64 KiB but the point is
+that this series makes it work at all, as without it the headswitch is
+never turned on) and SM6375 (with the "combined" layout introduced in
+SDM845). Equally sadly, everybody uses the qcom,msm8998-bwmon compatible
+(which frankly should have been just qcom,bwmon-v4) that never actually
+worked on MSM8998 , which prevents us from handling it in a simpler way..
+
+While at it, an unused struct member is removed.
+
+One suboptimal feature of this patchset is that it introduces an "invalid
+resource" print from within devres. This could be solved with an
+introduction of devm_ioremap_resource_optional or by dropping devres
+functions in place of manual handling, which also doesn't sound great..
+I'll leave it up to the reviewers to decide.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (7):
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Resolve MSM8998 support
+      soc: qcom: icc-bwmon: Handle global registers correctly
+      soc: qcom: icc-bwmon: Remove unused struct member
+      arm64: dts: qcom: sc7280: Use the correct BWMON fallback compatible
+      arm64: dts: qcom: sc8280xp: Use the correct BWMON fallback compatible
+      arm64: dts: qcom: sdm845: Use the correct BWMON compatible
+      arm64: dts: qcom: sm8550: Use the correct BWMON fallback compatible
+
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |  41 +++-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |   2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |   2 +-
+ drivers/soc/qcom/icc-bwmon.c                       | 229 +++++++++++++++++++--
+ 6 files changed, 246 insertions(+), 32 deletions(-)
+---
+base-commit: 24469a0e5052ba01a35a15f104717a82b7a4798b
+change-id: 20230304-topic-ddr_bwmon-609022cd5e35
+
+Best regards,
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
