@@ -2,97 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4196B8C2B
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 08:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0D06B8CE6
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 09:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjCNHqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Mar 2023 03:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S229473AbjCNIRY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Mar 2023 04:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjCNHqH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Mar 2023 03:46:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590CA94F7A;
-        Tue, 14 Mar 2023 00:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3E8F6160B;
-        Tue, 14 Mar 2023 07:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31865C433D2;
-        Tue, 14 Mar 2023 07:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678779950;
-        bh=xYFxSC3248b3wowZpsQSJGM3+Hs59s0ozCkaRtr0i7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uaknvJ1Dijgw4p6/pxdtTD1/eFsoePAIj+unNe0bfSPFIFVKJM19sl4Bdb7L0GjD1
-         1uY9U1otjheelu+adQe9s2BBcSmO2pzFLNEUbal8juiDK2oLHIbdR3hGQEoNA4ynqn
-         Dg9Qt2UdGjnageQfG9tojQRiZFCbcwRvZOCKSPDzhBSzia8OAEp1oE+ls6yf6iFpaV
-         l7VHpfuBcM8dcyAb5hNPq+xaKkQ7MTple//F7R/S5Q15m91IpKl354SMvh21GK2Cv8
-         fZ1uzImuYAi/bZnz8EO5vHT660FDohj0O4BCFK8tL1MXOnoyhW3KOW/+z+XD/zuQ/b
-         03ZZXZKfKHgeA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pbzMz-0001ZP-6n; Tue, 14 Mar 2023 08:46:53 +0100
-Date:   Tue, 14 Mar 2023 08:46:53 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] interconnect: qcom: rpm: drop bogus pm domain attach
-Message-ID: <ZBAmbYxztGTK0vHV@hovoldconsulting.com>
-References: <20230313084953.24088-1-johan+linaro@kernel.org>
- <20230313084953.24088-3-johan+linaro@kernel.org>
- <eb633e38-7972-4655-63d1-80399bb3a80b@kernel.org>
+        with ESMTP id S229675AbjCNIQk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Mar 2023 04:16:40 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A43585A75
+        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 01:14:59 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-53d277c1834so288567897b3.10
+        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 01:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678781698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CNImQ4Ug8xoniJtv59trmGana2zv4AZXvsOw6yY/IZk=;
+        b=ZESwWyVJww+MC2/YKyK1vRi5uSzGgGP6YywlmCAjypWmeWsfjEwTqxQMtS4Sy2VY4J
+         egCAyZP8W+gAgeML3lkGbYEgvku5Jhn3ox+l/9ywo9jaYdaOWDhuQz1cYXx3u3vbTIna
+         HwnQl4eV0Nchz1tGjkuggZfl6Ddk5F0Iaj9NlbeCDaRKSLNuxTHJnj9INwd4pPGrtEkD
+         mfKSdfq2bVEGavisOvb7wD/cAYdKfLcPqUP2BtuHSZVj9OIZgYO5cB6FtiXcPbCvIpjP
+         XuuKHdricLCqzI0+EqsXD+YIYRobhBys7ZYEyOvo2bb1Xxdtq0rYykraNpO2tqwEcooH
+         mj2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678781698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CNImQ4Ug8xoniJtv59trmGana2zv4AZXvsOw6yY/IZk=;
+        b=XU9uMgW0VWfmvtlyDIapvLpEuvn15kx52HnuCv/nbgbgB1Re+1yAsgo3i34usy1jkH
+         FumoGPgeDu2AoRHLop17wt4gThOxZuMCASgH+Y4t4io0c1+c+jDwPoKWkFz487XpcfTa
+         VV8RXdlAXOC1Vju/xWOHz70JfMt1d7zoGj9wTztw4NTaspjGVRgjKs+KOSrpxB9VR/QY
+         eR99m2Qt+xv7cKCArs9A+8sE0YqzQ4Mv06eU34Wv5NkE7p80sAeOUd4/c+xd19Eir/VS
+         McZqX1zQDx/a/yGbYQ4wn1BJsQ86gFj6oHuBsE5mODYNCSWJoHXMgzJLCjznx2RK+UTE
+         4yOQ==
+X-Gm-Message-State: AO0yUKW3HSzCvCYIgidOGOA/uWolfJmH5dwGjOO9Vl1FZfIcfiEb/2qw
+        15LExjba72IvXgs0Hgh0XaJTsrb9QaY/wxDZ+nqbvQ==
+X-Google-Smtp-Source: AK7set9p5PSnuy8b2Mj9t4qbjMvSgNGjF5/7MtGP9ezjbWqSQGvcnH+t8Y5IMz+134ETL/DJXkO8OG0fpKShJk+8XyI=
+X-Received: by 2002:a81:ad63:0:b0:52a:9f66:80c6 with SMTP id
+ l35-20020a81ad63000000b0052a9f6680c6mr23817685ywk.9.1678781698204; Tue, 14
+ Mar 2023 01:14:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb633e38-7972-4655-63d1-80399bb3a80b@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-5-sre@kernel.org>
+ <CACRpkdaa6ZOt7U+iLwjrTGx87BdgXX6wbW2Ab_bHye_TNzi9Tg@mail.gmail.com> <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+In-Reply-To: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 14 Mar 2023 09:14:46 +0100
+Message-ID: <CACRpkdZFBE=AFtzLShFGCpdRngK-7bZ8iD89_5buZKcXLvJK+g@mail.gmail.com>
+Subject: Re: [PATCHv1 04/11] power: supply: generic-adc-battery: fix unit scaling
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 09:58:24PM +0200, Georgi Djakov wrote:
-> Hi Johan,
-> 
-> On 13.03.23 10:49, Johan Hovold wrote:
-> > Any power domain would already have been attached by the platform bus
-> > code so drop the bogus power domain attach which always succeeds from
-> > probe.
-> > 
-> > This effectively reverts commit 7de109c0abe9 ("interconnect: icc-rpm:
-> > Add support for bus power domain").
-> > 
-> > Fixes: 7de109c0abe9 ("interconnect: icc-rpm: Add support for bus power domain")
-> > Cc: Yassine Oudjana <y.oudjana@protonmail.com>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Tue, Mar 14, 2023 at 12:17=E2=80=AFAM Sebastian Reichel <sre@kernel.org>=
+ wrote:
 
-> To make it a complete revert, I'll fold this in:
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 0badd2c75161..c80819557923 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -11,7 +11,6 @@
->   #include <linux/of_device.h>
->   #include <linux/of_platform.h>
->   #include <linux/platform_device.h>
-> -#include <linux/pm_domain.h>
->   #include <linux/regmap.h>
->   #include <linux/slab.h>
+> There is no mainline board using this driver and I think there
+> never was one. I did add a Fixes tag now, but its probably not worth
+> any backporting trouble considering it has no users.
 
-Thanks for catching that!
+Good point. If a tree falls in the wood an no-one is there to hear it,
+it doesn't make a sound.
 
-Johan
+Yours,
+Linus Walleij
