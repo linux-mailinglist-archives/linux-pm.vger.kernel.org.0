@@ -2,68 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADC76B8BE9
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 08:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9519E6B8C1A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 08:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCNH0u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Mar 2023 03:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S230268AbjCNHjz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Mar 2023 03:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjCNH0m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Mar 2023 03:26:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F74D74DDB
-        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 00:26:31 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id h8so15613848plf.10
-        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 00:26:31 -0700 (PDT)
+        with ESMTP id S230207AbjCNHjy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Mar 2023 03:39:54 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC76A8C533
+        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 00:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678778790;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbMsM2i01QtjxnKMrQQpxYIyuO8Q6638rQDFlFLw2jQ=;
-        b=dJFBxGXWOW7yXal2YtidlCABq/+YgeyiFSQaBY1Nua+M0pGxnAcTgbtnlAZP4ZVcOr
-         DlfRCnSqqqWgJJP2HmQiYnT6fLUIN3Q4E+Hy0RzzCZcgSzMiVaZPWiGFyMWOLy2/8KNi
-         dM+RUeiflua0kw9+ooWtcaMElr9A5BoJvDPt+2UY6KZprxn+OHdcc7BWrKW39tOsNDuA
-         /T4Ouhtmm4FMsQF0FOp7x9wuRp77Ml9VzWmR56XzK4BKZ44K7bJzaFjeFV+XeH3+nhIV
-         iRqaEuzWFKzUR+m0UzfZHtsPvhAAJfGNCnU3olX/Jc06XHu0P6kDi62ArPtsyP9z0Bnc
-         ycrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678778790;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cbMsM2i01QtjxnKMrQQpxYIyuO8Q6638rQDFlFLw2jQ=;
-        b=zBoMkro3sAiTYILF1IppnzbTfbzL6vgMS0CG0fnulMDWfHwmqA+Tsg2L63O8rMKc7r
-         1fYlyII9gSoMtNvoPS57isjihMU0LBl0lixtCQIgIH0nokREvOCpnPZ4Cgp27kZYDpNo
-         St06QaJePl2SstujDaTYWenFMyvPVGlM/hBFMv8Tokgoi9i0vv/IIKjPBGazl5XNzYo4
-         CV56YpMbSzJma7UyrMcZyi12O2Kn0mVNQIBKzcUbxxM08YhT3y1AFfaDJZ7Dnhlfvnro
-         FjFAVkE16f7OpTH/MT9TUIxphxo/AOsAJzktst/Yz20faqC/PDqLEHLH+t4EPdCXHNk7
-         swtw==
-X-Gm-Message-State: AO0yUKWXadUgCGuhEKJMRl3lpoiDgBAb02oAn4+vWArh6klDPrjHvLvX
-        d7ob27lFYlNljU4RLJ5lVn+Gsw==
-X-Google-Smtp-Source: AK7set+0tuICkumqzBSRLwRZmSXUqQeagKmIETEDfIg3pbtsKhaKImQGmIHWX/8QfdH8cz4aoiorYg==
-X-Received: by 2002:a05:6a20:3d82:b0:cd:36a3:3beb with SMTP id s2-20020a056a203d8200b000cd36a33bebmr39415688pzi.30.1678778790428;
-        Tue, 14 Mar 2023 00:26:30 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f3-20020a63f103000000b004eecc3080f8sm910637pgi.29.2023.03.14.00.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 00:26:30 -0700 (PDT)
-Message-ID: <641021a6.630a0220.a4d72.2b41@mx.google.com>
-Date:   Tue, 14 Mar 2023 00:26:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678779593; x=1710315593;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bGnt/g+jzGoM6d9RDIJs6Wtfqozp1RiVkvq2PhJw+DI=;
+  b=MyS0L2LOijBxgb979yt+CTFm4JCu9IVSmpgYEH2+NgvQapzE52n5JH8f
+   6s7BJdBgsyf45o9Ynb/f11zWzQYt8+Mz23M2mPXoeQHw9TLvT7gmgWNll
+   b9kvbt3dPOmkg9R/EEXZLWj/iFxoUj0ltIYqkeyaR3uTGZLra9BMjR7Ef
+   wydF5Q4VECYb++msrOVaUM/mmrA8NdkIkYIJUgY4QIGoL7aBU3ofbOw6g
+   qKJev28JBKvcdc0vL8/QTRxHACtPe0zYQRIozXw72qfdNw5bSjIczEQsR
+   BPNPJO2eoG8IGX+b8nhKvqSJvxAjIUg76lOiczpdYHrGV7xnBaYuqiHle
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,259,1673910000"; 
+   d="scan'208";a="29665317"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 14 Mar 2023 08:39:51 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 14 Mar 2023 08:39:51 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 14 Mar 2023 08:39:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678779591; x=1710315591;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bGnt/g+jzGoM6d9RDIJs6Wtfqozp1RiVkvq2PhJw+DI=;
+  b=Jn10Ljf0eDAPhynhubiolzDu2zIEQKAH6ZDElFnb80VdJec/qAVSBX0L
+   zosqS/s2tEJl/ILlNHaxMR5FNVrOEMp8LJuvYqzKMPBsVrJaQxXXeC14R
+   IP92djL1dtYP67jPC0wECnFOly2lUPiPkB3JVI5R/PVTfZNWPoi0igmrc
+   79SggibIZ3GHATRF9KbI3moeRytGZMHDvsBARl0bhaYyi9jjEYPcogB5+
+   OhhAiUTLqzSQuW2OWWLGbJ29gqjGf5p3Zl93AaeU9ZCiO/wbevTOprDSG
+   lEGvnB9jPDJg9vu/n6DnLW6k51rSolams4JJRHZ/2sKSYyROSi2ZqP6YR
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,259,1673910000"; 
+   d="scan'208";a="29665316"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 14 Mar 2023 08:39:51 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id DED05280056;
+        Tue, 14 Mar 2023 08:39:50 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: NOC (interconnect) lockup on i.MX8MP during resume
+Date:   Tue, 14 Mar 2023 08:39:48 +0100
+Message-ID: <2220041.iZASKD2KPV@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CAHCN7x+rEcXfC9GcJxPgro7XBb=K9kvF60htxtHRG0kVXHF0LQ@mail.gmail.com>
+References: <2176690.usQuhbGJ8B@steina-w> <CAHCN7x+rEcXfC9GcJxPgro7XBb=K9kvF60htxtHRG0kVXHF0LQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.3-rc2-28-gd64b2bdbf627
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 51 runs,
- 5 regressions (v6.3-rc2-28-gd64b2bdbf627)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,130 +80,115 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 51 runs, 5 regressions (v6.3-rc2-28-gd64b2bdbf627)
+Hi Adam,
 
-Regressions Summary
--------------------
+Am Montag, 13. M=C3=A4rz 2023, 20:17:55 CET schrieb Adam Ford:
+> On Thu, Mar 9, 2023 at 9:11=E2=80=AFAM Alexander Stein
+>=20
+> <alexander.stein@ew.tq-group.com> wrote:
+> > Hi,
+> >=20
+> > while debugging another issue regarding suspend/resume I noticed that t=
+he
+> > imx interconnect driver locks up the system when writing into registers.
+> > This happens during resume of the 'g2' power domain.
+> > imx8m_blk_ctrl_power_on() will eventually call down to
+> > imx_icc_node_set(). Using the debug diff furthe down I get this output:
+> >=20
+> > [   71.493062] imx_icc_node_set: node: VPU G2
+> > [   71.497163] imx_icc_node_set: peak_bw: 1
+> > [   71.501091] imx_icc_node_set: prio: 0x80000303
+> > <freeze here>
+> >=20
+> > Unfortunately there is absolutely no documentation regarding NOC in the
+> > reference manual, so no idea whats happening here.
+> > This is on next-20230309 using imx8mp-tqma8mpql-mba8mpxl.dts with USB
+> > disabled (prevents suspend) and Ethernet-PHY-IRQ disabled (the issue I'm
+> > tackling).
+> > Is there some idea what do in order to support resume on i.MX8MP?
+>=20
+> I haven't played with suspend-resume myself, but there was a thread
+> [1] with discussions about fixing a race condition on the imx8mp
+> interconnect.
 
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 5     =
-     =
+Thanks for this link, but I think this is addressing a race condition durin=
+g=20
+(un)registering. This works for me so far. I'm dealing with a freezing=20
+hardware write upon resume.
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.3-rc2=
--28-gd64b2bdbf627/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.3-rc2-28-gd64b2bdbf627
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      d64b2bdbf6274ec9d924b31de316b819d6916ab0 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 5     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/6410171abc9365cdf58c8672
-
-  Results:     90 PASS, 5 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc2-28-gd64b2b=
-dbf627/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc2-28-gd64b2b=
-dbf627/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+Best regards,
+Alexander
 
 
+> adam
+>=20
+> [1] -
+> https://lore.kernel.org/lkml/20230201101559.15529-5-johan+linaro@kernel.o=
+rg
+> /
+> > Best regards,
+> > Alexander
+> >=20
+> > ---8<---
+> > diff --git a/drivers/interconnect/imx/imx.c
+> > b/drivers/interconnect/imx/imx.c index 979ed610f704..93ec79cc7c06 100644
+> > --- a/drivers/interconnect/imx/imx.c
+> > +++ b/drivers/interconnect/imx/imx.c
+> > @@ -44,13 +44,18 @@ static int imx_icc_node_set(struct icc_node *node)
+> >=20
+> >         u32 prio;
+> >         u64 freq;
+> >=20
+> > +       pr_info("%s: node: %s\n", __func__, node->name);
+> > +       pr_info("%s: peak_bw: %u\n", __func__, node->peak_bw);
+> >=20
+> >         if (node_data->setting && node->peak_bw) {
+> >        =20
+> >                 base =3D node_data->setting->reg +
+> >                 node_data->imx_provider->noc_base;
+> >                 if (node_data->setting->mode =3D=3D IMX_NOC_MODE_FIXED)=
+ {
+> >                =20
+> >                         prio =3D node_data->setting->prio_level;
+> >                         prio =3D PRIORITY_COMP_MARK | (prio << 8) | pri=
+o;
+> >=20
+> > +                       pr_info("%s: prio: %#x\n", __func__, prio);
+> >=20
+> >                         writel(prio, base + IMX_NOC_PRIO_REG);
+> >=20
+> > +                       pr_info("%s: mode: %#x\n", __func__,
+> > node_data->setting->mode);>=20
+> >                         writel(node_data->setting->mode, base +
+> >                         IMX_NOC_MODE_REG);
+> >=20
+> > +                       pr_info("%s: ext_control: #%x\n", __func__,
+> > node_data->setting->ext_control);>=20
+> >                         writel(node_data->setting->ext_control, base +
+> >                         IMX_NOC_EXT_CTL_REG);
+> >                         dev_dbg(dev, "%s: mode: 0x%x, prio: 0x%x,
+> >                         ext_control: 0x%x\n",
+> >                        =20
+> >                                 node_data->desc->name,
+> >                                 node_data->setting->mode, prio,
+> >=20
+> > ---8<---
+> >=20
+> > --
+> > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, =
+Germany
+> > Amtsgericht M=C3=BCnchen, HRB 105018
+> > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan=
+ Schneider
+> > http://www.tq-group.com/
 
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6410171abc9365cdf58c8679
-        failing since 6 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, firs=
-t fail: v6.3-rc1-23-g06401c1b98b0)
 
-    2023-03-14T06:41:19.082307  <8>[   22.073147] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 294654_1.5.2.4.1>
-    2023-03-14T06:41:19.187538  / # #
-    2023-03-14T06:41:19.289644  export SHELL=3D/bin/sh
-    2023-03-14T06:41:19.290119  #
-    2023-03-14T06:41:19.391614  / # export SHELL=3D/bin/sh. /lava-294654/en=
-vironment
-    2023-03-14T06:41:19.392152  =
-
-    2023-03-14T06:41:19.493593  / # . /lava-294654/environment/lava-294654/=
-bin/lava-test-runner /lava-294654/1
-    2023-03-14T06:41:19.494360  =
-
-    2023-03-14T06:41:19.514113  / # /lava-294654/bin/lava-test-runner /lava=
--294654/1
-    2023-03-14T06:41:19.566035  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (18 line(s) more)  =
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
 
 
-  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
-/id/6410171abc9365cdf58c867d
-        failing since 6 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, firs=
-t fail: v6.3-rc1-23-g06401c1b98b0)
-
-    2023-03-14T06:41:20.627733  <8>[   23.621467] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-driver-present RESULT=3Dpass>
-    2023-03-14T06:41:21.664228  /lava-294654/1/../bin/lava-test-case
-    2023-03-14T06:41:21.664622  <8>[   24.643492] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
-    2023-03-14T06:41:21.664870  /lava-294654/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/64=
-10171abc9365cdf58c867f
-        failing since 6 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, firs=
-t fail: v6.3-rc1-23-g06401c1b98b0)
-
-    2023-03-14T06:41:22.720160  /lava-294654/1/../bin/lava-test-case
-    2023-03-14T06:41:22.720541  <8>[   25.681170] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/6410171abc9365cdf58c8684
-        failing since 6 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, firs=
-t fail: v6.3-rc1-23-g06401c1b98b0)
-
-    2023-03-14T06:41:23.795296  /lava-294654/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
-/id/6410171abc9365cdf58c8685
-        failing since 6 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, firs=
-t fail: v6.3-rc1-23-g06401c1b98b0)
-
-    2023-03-14T06:41:23.798448  <8>[   26.791559] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2023-03-14T06:41:24.852070  /lava-294654/1/../bin/lava-test-case
-    2023-03-14T06:41:24.852462  <8>[   27.812592] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
-    2023-03-14T06:41:24.852706  /lava-294654/1/../bin/lava-test-case
-    2023-03-14T06:41:24.852935  <8>[   27.830521] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc_mdio-driver-present RESULT=3Dpass>
-    2023-03-14T06:41:24.853161  /lava-294654/1/../bin/lava-test-case   =
-
- =20
