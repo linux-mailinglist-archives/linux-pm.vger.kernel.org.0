@@ -2,146 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3167D6B9A5C
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 16:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273B26B9D33
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Mar 2023 18:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjCNPv2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Mar 2023 11:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S229946AbjCNRjm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Mar 2023 13:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjCNPv1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Mar 2023 11:51:27 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::603])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27A050F98
-        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 08:51:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hBhLXpGyHFlQsqxTzn5IxiM3+pvO78NPcUw3mE0BdZZsEpmMbYWwMTogTExghtZxlbS8hS5uznhiRrGNrhYajdfZCaCDxXmSKTgwcJuqC4Nzq4wS4FGmoKc+s8xqS3hRTqoPOuahHtf8x9Y1CZJTKJu4ryRYtpXQ3F84f9FlboPq0Gfh0YMqHLCHRsk/zQRA9hAyJ5clQAnO/8Ck2cBWkKCkYo490LEnLqNR0QN9kq2BenLZSJbVKEueeSESlf/KKseJI00tqutjYWpIZkYfqF8v3njoKzpFzOhmAHPMth7n/o5YSs+zTDfRvflrS8vg1P/sKXYQ/JiPZEhvWf7txg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t7e+nXEkPBgyKMy+0gHC2snE5nCwa+xbkN99eWC/Mew=;
- b=GQiJ73AS+uJnCLLiyn92K9P79Rle6YvSDF7Y3GO70BPletum0WAMvTQr5zPUbDtOXRQhyuwczB60Gtpv8yoosrafJ7Vp3oMabY6eYYYuat71UJWSeY7pZ4/xRe5yB2ClyS6oIWnkpzf5yhkFmiuOhzXk9WC8OGtIqD4stdNj3hEP3LJrMZ4bvUi3bmTk1Q45bQ48bG8wP1NfiRtllpTO7Skb9zxXVGRM9Xt+UiHPtKqJ7B4eWtnHMD01uKJU9JTfuYOuClQxUr7z8TfY1CoZH4wmIoJwWt/Nsw8sEDcSO70B1XQA/f21vOyU0UZtlSBydmSdA9RZRWrEsCCL4fcEfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t7e+nXEkPBgyKMy+0gHC2snE5nCwa+xbkN99eWC/Mew=;
- b=VdrOvBi4PbSapXag+6RwgxLjKPcdhR7/gjLjXFh+rS5jrIgV+Dwq5Di9183phnkE6yNyuOa68elmIvID2v8ley5FEQqLsEKYriauNbICKzpfgkSH82ZVa4u/w7uNJxJ8Zc2wyYHh1U4Gi+PsIOXR2sU+ke4onA7M9KhUUD7nbinmw52qi7dMD3vvBmQt0F2HqLs1KhntmM67O27K/OxgNu/gK48MDoXRbCsThhXSsomMGXN1CiVoeHjoNzwjJeFH9B57TmzFTk03hTfbKi3ptT00gE/pfbYWXwx19PpTYKDohe5RBsNidTVsKO2M/ajG//2/xmqpf0UyLquLW0sqpQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by SA3PR12MB7997.namprd12.prod.outlook.com (2603:10b6:806:307::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 15:50:43 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::d228:dfe5:a8a8:28b3]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::d228:dfe5:a8a8:28b3%5]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 15:50:43 +0000
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, mlxsw@nvidia.com, vadimp@nvidia.com,
-        Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH] thermal: core: Restore behavior regarding invalid trip points
-Date:   Tue, 14 Mar 2023 17:50:10 +0200
-Message-Id: <20230314155010.3692869-1-idosch@nvidia.com>
-X-Mailer: git-send-email 2.37.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR06CA0108.eurprd06.prod.outlook.com
- (2603:10a6:803:8c::37) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|SA3PR12MB7997:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04608930-719f-4187-e5ae-08db24a3de86
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qB2xRY2i+sBi+Tsgo+9fSzR/2L7q0kqDkKANazNONiw+eCb4fr5HYx348YKIxTC1eiNNbpryACcta8x9HEFJyBTNOkWDwSbD7ksZY5pISYFJ0h8lG70dNKy+cJzYHwuBxRBlDqaogHaHXwa+O/Ixc19Seo4QwnQM5XsuYeaYALkf+y2BrRHTgv3GK/1tCzE5yDF/+c0mq71v1qTLzeS0si7y5HHmlnvtLbYwJffJ5FeKW7tfqstZmANF/QNpPy2L/qsTdt7KXtLGVKlsipcLmrusRLcJyWghDiQMEBKiNQ27OISkp2BDj0vG56Ca1NEKCk40le1m+9XLExAoqZ5nqlIyYnkVlKeX+KpE3m7Fv4HNjl0RkiVuwmVZipn4mLlcBiqBiGVRI6LC1ColKuM93mI1k0q8H28FOgqZLqsyKpgv9ZgfRe0q8x/qmGl7Bk+TelXLXuJr90YZqHH42wX51i9SbxroMY1DUqt1Kxa9EzJvARHcJ2/CJT5AxikDUZ9iZ3vyF4enfJPYjBUTZrFpmoZXxgA3/E7b6UG0ZXIg09TcvKY64gHARtyNkRIWLr6Umsl+V7r7/CCwB/E9BgEiUIDqztqRZNNPodk6DgZ3LuGsCpPdTDJNmPSuyw8T6zT4Vvd4EyTE9uBnZQbmp6WI6A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(451199018)(6666004)(38100700002)(316002)(36756003)(86362001)(83380400001)(186003)(1076003)(6512007)(6506007)(26005)(2616005)(5660300002)(6486002)(478600001)(41300700001)(107886003)(8936002)(2906002)(66556008)(8676002)(6916009)(4326008)(66946007)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?35qr1IKy41K/YIG/xiBIaw6N9gumGn6A9bPLWaZ+r8KW8zXoYGuFFciYvBSi?=
- =?us-ascii?Q?Wsm9rjNJH4q0/XTJn1g9D9hJ9NiuNiGsfo3wlZVmJcpmdjFE8qDYyqIHl9IR?=
- =?us-ascii?Q?9oDL4YJTlBFDYAbc9bPZe0EGXlRF/jAQl4Jyx54PeOrvWqJPl6XIxbtVpWMq?=
- =?us-ascii?Q?ty0K/4jjTRJhmFprCnyEMN2wisDDWQ54TcyhAx8CdW3qdzGbyj/G52Rq8nqk?=
- =?us-ascii?Q?3x0ZySVr6ckjEioh2V4fo1BHzxrymuEMchVZQ4/n+OuFT15chbp7W2A7yplQ?=
- =?us-ascii?Q?6bViFshsqKzxsbwsQsuYuONAIgty19dntledzy5yQLKcilzdWmQ0hJeYsm0I?=
- =?us-ascii?Q?WL53tDr3LwI89UG3c2YE44gZWeYT3iTW8NDh12iBEtSOHnj9gE5PIOQqA8az?=
- =?us-ascii?Q?Vew/KWQdm6nwWKgzj7x9r/gHp9WMLrmJjAohYY8ci98Fj5+Ian2gW12b2Rb6?=
- =?us-ascii?Q?dft+fVbBtDOsgxXPeXoLPA+srxVPyJwYE5UbPqsN8Zp9DiP8++yLhDEgFkBz?=
- =?us-ascii?Q?qe7BSMyiFae0l0ooGfTiV0XxnrnnAmkBhg0fk50dmmETmCDbJY6vT5pOw93t?=
- =?us-ascii?Q?qx1Dq+nmhR+k1Os5H0B44mnav7CD3brj1Rf1UVSKsE/7hK2vZn9moVs2t6Hx?=
- =?us-ascii?Q?GySO3SxaEZX2ESy6kwvC1Z7deguKRrK9u5qgT1rHJufn2kdIb4X2wUPCwhkF?=
- =?us-ascii?Q?cWaHV/x7OP0X0mzTFQyAzYka2GbhniybSufUN61If21ZeSTaD1MLfndgiBs5?=
- =?us-ascii?Q?/gTehboaSFLzoTLWXZFtevskhQYjMboYARYJcpqG6NIGGUMMsQ6mHze6o7XL?=
- =?us-ascii?Q?BXs5HCfB6Upf0lFhpRL4qLmkpwlv8mzq9xfbD5Gbc6teQqH2ecxphc9xDMG4?=
- =?us-ascii?Q?lf8/YVo1VHUMqCUN9r51Ut00tNW0ePTMJROKtw2XlIYoVDBV8kvYrHnsjig1?=
- =?us-ascii?Q?F4DnEs6bAMJrGpYHg1QWl2xPhl+p/BcbDxgNAJ7T5yi1KDbs+LC3BUWk0thY?=
- =?us-ascii?Q?vg+syocHeVKG1phWFhJzVMxvf6Hp/y6iLSMWIqh0mAJyU/TKYqSaGOUTBk4D?=
- =?us-ascii?Q?IPDOw5Fni/RqnJRx1a2yzmJ2pT5JybuYdDJ8wSV8B1vZ9OL8k2Jqjbs9qbKh?=
- =?us-ascii?Q?TFFDyefcxtx3PeT8n/oFDy3SaGayaLBipl6A/U3wo3T2XFE4+dfDvATP3XI8?=
- =?us-ascii?Q?Fs+rxB/EAZZvy9u5yPQHgn7KvaPH0Fnmn91UIESoBt0p8Km2S9k6+cUgnlY1?=
- =?us-ascii?Q?mRldXTgMSNzmTXL1lWAatAQ2hm9+UGE/HniXS61rSlxku3AvyNXN1OMitEle?=
- =?us-ascii?Q?cLbu5y8QemTvPQJF4t3n069nXexfcHJJzmblPtxKUmaWDm+YyEKIbzDNEY9t?=
- =?us-ascii?Q?wSNAampsJjJe6fDlP5KlETknF24v5UGPqaPlfAcSxgF4RSQN1+x7T2+e7Ltg?=
- =?us-ascii?Q?CNNxSgFZ/9r2OgM1VFTDo4PeK4tc1qQtS2pV43EK3TO9iud4v2yWCqrN9qWu?=
- =?us-ascii?Q?Hts2SzPxYe0EukA7s/ggHKWD7LujUgxcUuqpeHMcUrEq9ZxIBvw2gevccOye?=
- =?us-ascii?Q?ORnz/lS32cEMpl4kZitRl0QMUAtxSvQx/IEHSGt/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04608930-719f-4187-e5ae-08db24a3de86
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:50:43.5959
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xOfp4beBPgVq4sVNaSTkcSq+SUKUOVkmlohVdlWvqXD05q8f0bnG4Tm267wx3cJMMdVrKdmUWZWycA7tr9OhfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7997
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229538AbjCNRjl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Mar 2023 13:39:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DD840E4
+        for <linux-pm@vger.kernel.org>; Tue, 14 Mar 2023 10:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678815580; x=1710351580;
+  h=from:to:cc:subject:date:message-id;
+  bh=gIJvc/QUyUniwX7K9GjcSGWWJVFsIeyuYd3va43nW8M=;
+  b=CBYwB7TDrh41oFz0LcSmcKrTd7CrRiRSwo8ZYEjWlvwGx1UhjNDkTFQm
+   jgW98zRPzogCk6ZJWkqIgT2ikDFL4RfvdGeYOBjneYXv62R8mvYTFmnme
+   LJN8hzuIRAnw6FkqV0fggKaEd6F2NLCu0ff5Hj3W2dGooN5ht0/U9kJqm
+   9Jz5X+ScKk81LNdkNUo1gUX6UJQdK4YxVS8wuhDA7PZTd1h6uF6/75xmE
+   8d++caTCLlq4S+6cesroaw1lqpBsLCvFx1oU9bIXVKKTFVoW7mjJUgywV
+   kjXZDjO93Od3zb/9TH3Qwx9frVV32lTcRtpR+xuF9M7iIoRl78R0t5+eC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="325860135"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="325860135"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 10:39:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="681512603"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="681512603"
+Received: from wopr.jf.intel.com ([10.54.75.136])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Mar 2023 10:39:39 -0700
+From:   Todd Brandt <todd.e.brandt@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        rjw@rjwysocki.net
+Cc:     todd.e.brandt@linux.intel.com, todd.e.brandt@intel.com
+Subject: [PATCH v2] pm-graph v5.11
+Date:   Tue, 14 Mar 2023 10:39:36 -0700
+Message-Id: <20230314173936.14518-1-todd.e.brandt@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cited commit stopped marking trip points with a zero temperature as
-disabled, behavior that was originally introduced in commit 81ad4276b505
-("Thermal: Ignore invalid trip points").
+install_latest_from_github.sh:
+- Added a new script which allows users to install the latest pm-graph
+from the upstream github repo. This is useful if the kernel source version
+has regression issues that have already been fixed in github
 
-When using the mlxsw driver we see that when such trip points are not
-disabled, the thermal subsystem repeatedly tries to set the state of the
-associated cooling devices to the maximum state.
+sleepgraph.py:
+- updated all the dmesg suspend/resume PM print formats to be able to
+process recent timelines using dmesg only
+- added ethtool output to the log for the system's ethernet device id the
+ethtool exists. This helps in debugging network issues.
+- made the tool more robustly handle events where mangled dmesg or ftrace
+outputs do not include all the requisite data. The tool fails gracefully
+instead of creating a garbled timeline.
 
-Fix this by restoring the original behavior and mark trip points with a
-zero temperature as disabled.
-
-Fixes: 7c3d5c20dc16 ("thermal/core: Add a generic thermal_zone_get_trip() function")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
 ---
- drivers/thermal/thermal_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/power/pm-graph/README                   |  2 +-
+ .../pm-graph/install_latest_from_github.sh    | 38 +++++++++++++
+ tools/power/pm-graph/sleepgraph.py            | 53 +++++++++++++------
+ 3 files changed, 75 insertions(+), 18 deletions(-)
+ create mode 100755 tools/power/pm-graph/install_latest_from_github.sh
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 5ae72f314683..63583df4498d 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1309,7 +1309,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 		struct thermal_trip trip;
+diff --git a/tools/power/pm-graph/README b/tools/power/pm-graph/README
+index 3213dbe63b74..047ce1d76467 100644
+--- a/tools/power/pm-graph/README
++++ b/tools/power/pm-graph/README
+@@ -6,7 +6,7 @@
+    |_|                    |___/          |_|
  
- 		result = thermal_zone_get_trip(tz, count, &trip);
--		if (result)
-+		if (result || !trip.temperature)
- 			set_bit(count, &tz->trips_disabled);
- 	}
+    pm-graph: suspend/resume/boot timing analysis tools
+-    Version: 5.10
++    Version: 5.11
+      Author: Todd Brandt <todd.e.brandt@intel.com>
+   Home Page: https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
  
+diff --git a/tools/power/pm-graph/install_latest_from_github.sh b/tools/power/pm-graph/install_latest_from_github.sh
+new file mode 100755
+index 000000000000..eaa332399d36
+--- /dev/null
++++ b/tools/power/pm-graph/install_latest_from_github.sh
+@@ -0,0 +1,38 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Script which clones and installs the latest pm-graph
++# from http://github.com/intel/pm-graph.git
++
++OUT=`mktemp -d 2>/dev/null`
++if [ -z "$OUT" -o ! -e $OUT ]; then
++	echo "ERROR: mktemp failed to create folder"
++	exit
++fi
++
++cleanup() {
++	if [ -e "$OUT" ]; then
++		cd $OUT
++		rm -rf pm-graph
++		cd /tmp
++		rmdir $OUT
++	fi
++}
++
++git clone http://github.com/intel/pm-graph.git $OUT/pm-graph
++if [ ! -e "$OUT/pm-graph/sleepgraph.py" ]; then
++	echo "ERROR: pm-graph github repo failed to clone"
++	cleanup
++	exit
++fi
++
++cd $OUT/pm-graph
++echo "INSTALLING PM-GRAPH"
++sudo make install
++if [ $? -eq 0 ]; then
++	echo "INSTALL SUCCESS"
++	sleepgraph -v
++else
++	echo "INSTALL FAILED"
++fi
++cleanup
+diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
+index bf4ac24a1c7a..ab703c9227d5 100755
+--- a/tools/power/pm-graph/sleepgraph.py
++++ b/tools/power/pm-graph/sleepgraph.py
+@@ -86,7 +86,7 @@ def ascii(text):
+ #	 store system values and test parameters
+ class SystemValues:
+ 	title = 'SleepGraph'
+-	version = '5.10'
++	version = '5.11'
+ 	ansi = False
+ 	rs = 0
+ 	display = ''
+@@ -300,6 +300,7 @@ class SystemValues:
+ 		[0, 'acpidevices', 'sh', '-c', 'ls -l /sys/bus/acpi/devices/*/physical_node'],
+ 		[0, 's0ix_require', 'cat', '/sys/kernel/debug/pmc_core/substate_requirements'],
+ 		[0, 's0ix_debug', 'cat', '/sys/kernel/debug/pmc_core/slp_s0_debug_status'],
++		[0, 'ethtool', 'ethtool', '{ethdev}'],
+ 		[1, 's0ix_residency', 'cat', '/sys/kernel/debug/pmc_core/slp_s0_residency_usec'],
+ 		[1, 'interrupts', 'cat', '/proc/interrupts'],
+ 		[1, 'wakeups', 'cat', '/sys/kernel/debug/wakeup_sources'],
+@@ -1078,18 +1079,35 @@ class SystemValues:
+ 				else:
+ 					out[data[0].strip()] = data[1]
+ 		return out
++	def cmdinfovar(self, arg):
++		if arg == 'ethdev':
++			try:
++				cmd = [self.getExec('ip'), '-4', '-o', '-br', 'addr']
++				fp = Popen(cmd, stdout=PIPE, stderr=PIPE).stdout
++				info = ascii(fp.read()).strip()
++				fp.close()
++			except:
++				return 'iptoolcrash'
++			for line in info.split('\n'):
++				if line[0] == 'e' and 'UP' in line:
++					return line.split()[0]
++			return 'nodevicefound'
++		return 'unknown'
+ 	def cmdinfo(self, begin, debug=False):
+ 		out = []
+ 		if begin:
+ 			self.cmd1 = dict()
+ 		for cargs in self.infocmds:
+-			delta, name = cargs[0], cargs[1]
+-			cmdline, cmdpath = ' '.join(cargs[2:]), self.getExec(cargs[2])
++			delta, name, args = cargs[0], cargs[1], cargs[2:]
++			for i in range(len(args)):
++				if args[i][0] == '{' and args[i][-1] == '}':
++					args[i] = self.cmdinfovar(args[i][1:-1])
++			cmdline, cmdpath = ' '.join(args[0:]), self.getExec(args[0])
+ 			if not cmdpath or (begin and not delta):
+ 				continue
+ 			self.dlog('[%s]' % cmdline)
+ 			try:
+-				fp = Popen([cmdpath]+cargs[3:], stdout=PIPE, stderr=PIPE).stdout
++				fp = Popen([cmdpath]+args[1:], stdout=PIPE, stderr=PIPE).stdout
+ 				info = ascii(fp.read()).strip()
+ 				fp.close()
+ 			except:
+@@ -1452,6 +1470,7 @@ class Data:
+ 	errlist = {
+ 		'HWERROR' : r'.*\[ *Hardware Error *\].*',
+ 		'FWBUG'   : r'.*\[ *Firmware Bug *\].*',
++		'TASKFAIL': r'.*Freezing .*after *.*',
+ 		'BUG'     : r'(?i).*\bBUG\b.*',
+ 		'ERROR'   : r'(?i).*\bERROR\b.*',
+ 		'WARNING' : r'(?i).*\bWARNING\b.*',
+@@ -1462,7 +1481,6 @@ class Data:
+ 		'TIMEOUT' : r'(?i).*\bTIMEOUT\b.*',
+ 		'ABORT'   : r'(?i).*\bABORT\b.*',
+ 		'IRQ'     : r'.*\bgenirq: .*',
+-		'TASKFAIL': r'.*Freezing .*after *.*',
+ 		'ACPI'    : r'.*\bACPI *(?P<b>[A-Za-z]*) *Error[: ].*',
+ 		'DISKFULL': r'.*\bNo space left on device.*',
+ 		'USBERR'  : r'.*usb .*device .*, error [0-9-]*',
+@@ -1602,7 +1620,7 @@ class Data:
+ 			pend = self.dmesg[phase]['end']
+ 			if start <= pend:
+ 				return phase
+-		return 'resume_complete'
++		return 'resume_complete' if 'resume_complete' in self.dmesg else ''
+ 	def sourceDevice(self, phaselist, start, end, pid, type):
+ 		tgtdev = ''
+ 		for phase in phaselist:
+@@ -1645,6 +1663,8 @@ class Data:
+ 			else:
+ 				threadname = '%s-%d' % (proc, pid)
+ 			tgtphase = self.sourcePhase(start)
++			if not tgtphase:
++				return False
+ 			self.newAction(tgtphase, threadname, pid, '', start, end, '', ' kth', '')
+ 			return self.addDeviceFunctionCall(displayname, kprobename, proc, pid, start, end, cdata, rdata)
+ 		# this should not happen
+@@ -1835,9 +1855,9 @@ class Data:
+ 		hwr = self.hwend - timedelta(microseconds=rtime)
+ 		self.tLow.append('%.0f'%((hwr - hws).total_seconds() * 1000))
+ 	def getTimeValues(self):
+-		sktime = (self.tSuspended - self.tKernSus) * 1000
+-		rktime = (self.tKernRes - self.tResumed) * 1000
+-		return (sktime, rktime)
++		s = (self.tSuspended - self.tKernSus) * 1000
++		r = (self.tKernRes - self.tResumed) * 1000
++		return (max(s, 0), max(r, 0))
+ 	def setPhase(self, phase, ktime, isbegin, order=-1):
+ 		if(isbegin):
+ 			# phase start over current phase
+@@ -3961,7 +3981,7 @@ def parseKernelLog(data):
+ 		'suspend_machine': ['PM: suspend-to-idle',
+ 							'PM: noirq suspend of devices complete after.*',
+ 							'PM: noirq freeze of devices complete after.*'],
+-		 'resume_machine': ['PM: Timekeeping suspended for.*',
++		 'resume_machine': ['[PM: ]*Timekeeping suspended for.*',
+ 							'ACPI: Low-level resume complete.*',
+ 							'ACPI: resume from mwait',
+ 							'Suspended for [0-9\.]* seconds'],
+@@ -3979,14 +3999,14 @@ def parseKernelLog(data):
+ 	# action table (expected events that occur and show up in dmesg)
+ 	at = {
+ 		'sync_filesystems': {
+-			'smsg': 'PM: Syncing filesystems.*',
+-			'emsg': 'PM: Preparing system for mem sleep.*' },
++			'smsg': '.*[Ff]+ilesystems.*',
++			'emsg': 'PM: Preparing system for[a-z]* sleep.*' },
+ 		'freeze_user_processes': {
+-			'smsg': 'Freezing user space processes .*',
++			'smsg': 'Freezing user space processes.*',
+ 			'emsg': 'Freezing remaining freezable tasks.*' },
+ 		'freeze_tasks': {
+ 			'smsg': 'Freezing remaining freezable tasks.*',
+-			'emsg': 'PM: Entering (?P<mode>[a-z,A-Z]*) sleep.*' },
++			'emsg': 'PM: Suspending system.*' },
+ 		'ACPI prepare': {
+ 			'smsg': 'ACPI: Preparing to enter system sleep state.*',
+ 			'emsg': 'PM: Saving platform NVS memory.*' },
+@@ -4120,10 +4140,9 @@ def parseKernelLog(data):
+ 			for a in sorted(at):
+ 				if(re.match(at[a]['smsg'], msg)):
+ 					if(a not in actions):
+-						actions[a] = []
+-					actions[a].append({'begin': ktime, 'end': ktime})
++						actions[a] = [{'begin': ktime, 'end': ktime}]
+ 				if(re.match(at[a]['emsg'], msg)):
+-					if(a in actions):
++					if(a in actions and actions[a][-1]['begin'] == actions[a][-1]['end']):
+ 						actions[a][-1]['end'] = ktime
+ 			# now look for CPU on/off events
+ 			if(re.match('Disabling non-boot CPUs .*', msg)):
 -- 
-2.37.3
+2.17.1
 
