@@ -2,151 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405346BF588
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 23:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEFB6BF743
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Mar 2023 02:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCQW51 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Mar 2023 18:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S229585AbjCRBrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 21:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjCQW5T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 18:57:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EE52F066;
-        Fri, 17 Mar 2023 15:57:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FD08B82709;
-        Fri, 17 Mar 2023 22:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840FBC43445;
-        Fri, 17 Mar 2023 22:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679093833;
-        bh=qkCtWxh/5oWlgnhNQ/wW4H4FFCmcLw0ABvjfTL/yR5s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IpprXibR7dBjn5e1n8FJWnJxvvXRXTUnHXSG5PKMWZld5HS+DM4i9ZcUg6+tDC6pj
-         KX4qNSPXAZcfNxWEkNLBGylIJ9SLNq23lrHoPE4E93klOCGwB7pqIhGeedXT6CKTfg
-         NBFkSNyzl04F45B+n0CMAMc1c/26fXz4ODFjvuGQBu+h2FMW4hzwi6sFAudEW/jKFj
-         PY04bObeaT7zh1lW4HNOKpeDAWxgg2DceJT8osaPHEn1XxD8bQVegSJ0P1GrdgoBRJ
-         Kbt9NrCLKZRynO86QYlY+aaGmh4uZoi0zKDy3S0AvWjGp1O1D08c8PoA7YIxnBwfFj
-         4Iy5hNpitjk5A==
-Received: by mercury (Postfix, from userid 1000)
-        id A1BE01062116; Fri, 17 Mar 2023 23:57:08 +0100 (CET)
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCHv3 14/14] power: supply: generic-adc-battery: style fixes
-Date:   Fri, 17 Mar 2023 23:57:07 +0100
-Message-Id: <20230317225707.1552512-15-sre@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230317225707.1552512-1-sre@kernel.org>
-References: <20230317225707.1552512-1-sre@kernel.org>
+        with ESMTP id S229478AbjCRBrC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 21:47:02 -0400
+Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6A1AADC080
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 18:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
+         h=mime-version:content-type:content-transfer-encoding:date:from
+        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
+        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=I+WAdOcsx9IxzgojLF7aDK5y
+        zFSekzdi7aTWS5Q4+7CTRJozq/PdSg3bxRBdyR1Gka920lf6Dhj3kcZkqPhTYTu7
+        eeXun2AcATOkcPlzD7dFT5TlvjCDbTxzJXMU48Hf17i/thahd6IjgogV0rj7fn1i
+        6t7pUSGbbHor7UYC1xzpBR5iRR90j9TqKO6m9yIUFJQTWF6DwCs1ggfRvN69+aQu
+        NyWtGb6XZJ4R3Lw5fH0SUgPuaYMeMES3SeOz+jwX91ggRAZRjm2jBe9UOsMAkf1I
+        OwcNdvRtgDHtQlhwWZZW/pALtsfVuK9Xfn2Yszj36pYIVSKvP+0RepGt36XjpA==
+Received: (qmail 65688 invoked from network); 15 Mar 2023 02:14:33 -0000
+Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
+  by localhost with SMTP; 15 Mar 2023 02:14:33 -0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 14 Mar 2023 19:14:32 -0700
+From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
+To:     undisclosed-recipients:;
+Subject: LOAN FUNDING OPPORTUNITY
+Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
+Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
+Message-ID: <173d42df79ed4e371591208f8b16351c@sragenkab.go.id>
+X-Sender: jurnalsukowati@sragenkab.go.id
+User-Agent: Roundcube Webmail/0.8.1
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This does the following code-style changes:
 
- * fix inconsistent indentation in 'struct gab'
- * remove unused cable_plugged from 'struct gab'
- * remove pointless temporary is_plugged variable
- * add gab_ prefix to read_channel
 
-No functionality changes are intended.
-
-Signed-off-by: Sebastian Reichel <sre@kernel.org>
----
- drivers/power/supply/generic-adc-battery.c | 26 +++++++++-------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-index 2fa946c93fb4..7bdc6b263609 100644
---- a/drivers/power/supply/generic-adc-battery.c
-+++ b/drivers/power/supply/generic-adc-battery.c
-@@ -42,12 +42,11 @@ static const char *const gab_chan_name[] = {
- };
- 
- struct gab {
--	struct power_supply		*psy;
--	struct power_supply_desc	psy_desc;
--	struct iio_channel	*channel[GAB_MAX_CHAN_TYPE];
-+	struct power_supply *psy;
-+	struct power_supply_desc psy_desc;
-+	struct iio_channel *channel[GAB_MAX_CHAN_TYPE];
- 	struct delayed_work bat_work;
--	int	status;
--	bool cable_plugged;
-+	int status;
- 	struct gpio_desc *charge_finished;
- };
- 
-@@ -85,7 +84,7 @@ static bool gab_charge_finished(struct gab *adc_bat)
- 	return gpiod_get_value(adc_bat->charge_finished);
- }
- 
--static int read_channel(struct gab *adc_bat, enum gab_chan_type channel,
-+static int gab_read_channel(struct gab *adc_bat, enum gab_chan_type channel,
- 		int *result)
- {
- 	int ret;
-@@ -109,13 +108,13 @@ static int gab_get_property(struct power_supply *psy,
- 		val->intval = adc_bat->status;
- 		return 0;
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		return read_channel(adc_bat, GAB_VOLTAGE, &val->intval);
-+		return gab_read_channel(adc_bat, GAB_VOLTAGE, &val->intval);
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
--		return read_channel(adc_bat, GAB_CURRENT, &val->intval);
-+		return gab_read_channel(adc_bat, GAB_CURRENT, &val->intval);
- 	case POWER_SUPPLY_PROP_POWER_NOW:
--		return read_channel(adc_bat, GAB_POWER, &val->intval);
-+		return gab_read_channel(adc_bat, GAB_POWER, &val->intval);
- 	case POWER_SUPPLY_PROP_TEMP:
--		return read_channel(adc_bat, GAB_TEMP, &val->intval);
-+		return gab_read_channel(adc_bat, GAB_TEMP, &val->intval);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -125,17 +124,13 @@ static void gab_work(struct work_struct *work)
- {
- 	struct gab *adc_bat;
- 	struct delayed_work *delayed_work;
--	bool is_plugged;
- 	int status;
- 
- 	delayed_work = to_delayed_work(work);
- 	adc_bat = container_of(delayed_work, struct gab, bat_work);
- 	status = adc_bat->status;
- 
--	is_plugged = power_supply_am_i_supplied(adc_bat->psy);
--	adc_bat->cable_plugged = is_plugged;
--
--	if (!is_plugged)
-+	if (!power_supply_am_i_supplied(adc_bat->psy))
- 		adc_bat->status =  POWER_SUPPLY_STATUS_DISCHARGING;
- 	else if (gab_charge_finished(adc_bat))
- 		adc_bat->status = POWER_SUPPLY_STATUS_NOT_CHARGING;
-@@ -177,7 +172,6 @@ static int gab_probe(struct platform_device *pdev)
- 	psy_desc->name = dev_name(&pdev->dev);
- 
- 	/* bootup default values for the battery */
--	adc_bat->cable_plugged = false;
- 	adc_bat->status = POWER_SUPPLY_STATUS_DISCHARGING;
- 	psy_desc->type = POWER_SUPPLY_TYPE_BATTERY;
- 	psy_desc->get_property = gab_get_property;
 -- 
-2.39.2
+Greetings,
+   I am contacting you based on the Investment/Loan opportunity for 
+companies in need of financing a project/business, We have developed a 
+new method of financing that doesn't take long to receive financing from 
+our clients.
+    If you are looking for funds to finance your project/Business or if 
+you are willing to work as our agent in your country to find clients in 
+need of financing and earn commissions, then get back to me for more 
+details.
 
+Regards,
+Ibrahim Tafa
+ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
