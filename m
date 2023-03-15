@@ -2,63 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11BE6BB3B2
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Mar 2023 13:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5846BB3D6
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Mar 2023 14:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjCOMyx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Mar 2023 08:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S231637AbjCONFX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Mar 2023 09:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbjCOMyv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Mar 2023 08:54:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7407199D55;
-        Wed, 15 Mar 2023 05:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678884889; x=1710420889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PmN515W/2mq3hBjB/cyy5WpgL1t4bB08Urxg0WllqhU=;
-  b=YqE6FwL8sSMLAP+OZlMSD+QFduC/M+wCUW0iodnT9Sd5ZVGJk7C4vgvh
-   4Dn5mOUYJSOVp1eRhBY5GWhtmy8ylyoXNlLxa8hrk8YtrGLEPbAlUEg4d
-   rcA0cS2I47E9SFXQEYVXcb7kT3MPw0xewU7kShIVPnYVuOiDcOUfn8ENc
-   xYgnYLVY2M8gT01HNgR7YXYx1uKPjmJsby9SI1qceva2S4I8znoIpT/X5
-   GdfzKTX/4ygq+MqE287F/JhH5AK0+/sjV6MrcctLbiaCimclzBszYOD/u
-   dWE7MHzZRG2titoO2Dx5DEQgdk8tOi44UQKkHvR5R9VJ35nmH99hWtd9Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335179434"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335179434"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:54:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="629447017"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="629447017"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Mar 2023 05:54:46 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcQeT-0007g8-2Z;
-        Wed, 15 Mar 2023 12:54:45 +0000
-Date:   Wed, 15 Mar 2023 20:54:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        rui.zhang@intel.com, amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 10/11] thermal/core: Alloc-copy-free the thermal zone
- parameters structure
-Message-ID: <202303152025.rVv9btko-lkp@intel.com>
-References: <20230307133735.90772-11-daniel.lezcano@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307133735.90772-11-daniel.lezcano@linaro.org>
+        with ESMTP id S231201AbjCONFW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Mar 2023 09:05:22 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3629522037
+        for <linux-pm@vger.kernel.org>; Wed, 15 Mar 2023 06:05:20 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230315130517epoutp02846aab773cadd6982fa8a248214dc803~MmXu_WVPm1560015600epoutp02f
+        for <linux-pm@vger.kernel.org>; Wed, 15 Mar 2023 13:05:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230315130517epoutp02846aab773cadd6982fa8a248214dc803~MmXu_WVPm1560015600epoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1678885517;
+        bh=CdNz5fiQaPzuXrwBBnUFCcYw8zrKdIVuoe6hUXfIMkQ=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=VuSFeGyI61Ja7E7yNlbpaziHrtcob0SzGdbPEZbyNcrhVFXuI43EQCB/xwzzb28qY
+         wS3l1rpprPv0iU5tJKlHSFuxR4GGMctdKd0ujv/XiG2z6/LZShT2IcdNh614gVhQO+
+         9dnBIhUXhmERTmg3mtA39uHhOiadQbjDc0XYNHyE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20230315130516epcas1p32e37961cb1efbc0fdcde066eef456e4d~MmXuDy0qL0778707787epcas1p3r;
+        Wed, 15 Mar 2023 13:05:16 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.247]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Pc9bw1byrz4x9Pt; Wed, 15 Mar
+        2023 13:05:16 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E7.B5.12562.C82C1146; Wed, 15 Mar 2023 22:05:16 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230315130515epcas1p40823f20da586c1b5813b41e66e754309~MmXsWkrI13158631586epcas1p4q;
+        Wed, 15 Mar 2023 13:05:15 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230315130515epsmtrp1688eacdc57c924f96ab3ae57ba75da84~MmXsVvJ5j1840718407epsmtrp1U;
+        Wed, 15 Mar 2023 13:05:15 +0000 (GMT)
+X-AuditID: b6c32a36-bfdff70000023112-60-6411c28cc785
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3C.6F.31821.A82C1146; Wed, 15 Mar 2023 22:05:14 +0900 (KST)
+Received: from VDBS1328.vd.sec.samsung.net (unknown [168.219.243.40]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230315130514epsmtip2870080addf61c3dce6a693bb222ea5c5~MmXsJ1WEx1910919109epsmtip2v;
+        Wed, 15 Mar 2023 13:05:14 +0000 (GMT)
+From:   Jungseung Lee <js07.lee@samsung.com>
+To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bw365.lee@samsung.com, yw85.kim@samsung.com,
+        huijin.park@samsung.com
+Cc:     Jungseung Lee <js07.lee@samsung.com>
+Subject: [PATCH] workqueue: Introduce show_freeze_workqueues_busy
+Date:   Wed, 15 Mar 2023 21:45:57 +0900
+Message-Id: <1678884357-38253-1-git-send-email-js07.lee@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7bCmgW7PIcEUg85mLosTaxYxWXRcdLGY
+        unY3k8Wjm79ZLWZN2ctkcXnXHDaLz71HGC3unjrKZjH3y1Rmi1/LjzJadHy+yebA7bFz1l12
+        j8V7XjJ5bFrVyebRt2UVo8eK1d/ZPT5vkgtgi8q2yUhNTEktUkjNS85PycxLt1XyDo53jjc1
+        MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAE6T0mhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5Ra
+        kJJTYFagV5yYW1yal66Xl1piZWhgYGQKVJiQnXHj92m2gl3iFT27L7A1MO4V7mLk5JAQMJHY
+        eHcHcxcjF4eQwA5GibmXLzKCJIQEPjFK3FvLDGF/ZpR4cdwXpmH13SY2iIZdjBJzPt6F6v7F
+        KDF5zgImkCo2AS2JG783sYIkRAQ2MUks2LSBHSTBLKAh8fvATRYQW1jAUeLE8bVgcRYBVYl1
+        V3eBNfMKuEjcvDKJCWKdnMTNc51gGyQErrFL7Pt0FijBAeS4SDxZGw9RIyzx6vgWdghbSuJl
+        fxuUXS6xoW8aE0RvC6PEou1v2SASxhLv3oL8xgF0kKbE+l36EGFFiZ2/5zJC3Mkn8e5rDyvE
+        Kl6JjjYhiBIliTcPWlggbAmJC497WSFsD4kJ95ayQEIrVmL2mpfsExhlZyEsWMDIuIpRLLWg
+        ODc9tdiwwAgeScn5uZsYwSlOy2wH46S3H/QOMTJxMB5ilOBgVhLhDWcRSBHiTUmsrEotyo8v
+        Ks1JLT7EaAoMr4nMUqLJ+cAkm1cSb2hiaWBiZmRiYWxpbKYkzituezJZSCA9sSQ1OzW1ILUI
+        po+Jg1OqgWnV99Pzvjxic3qtZrzOQUY4Xbl9dsmRo4/UTopnb93eYlPY2TTjJ5/wOQa+L8dZ
+        7otuzQtm+TZT5ZJH6hOGhToyK7kn8JzhNclmkJ/xxqLzpN39f1ymFyckxjvf+fju7fviWGG3
+        HzKJTa1qZe8t15xL0LF5UdG+bZWtb/yBZQUT0jQ2pTr+02w7nbbAs3jhYt437NPfnGcw8RBY
+        wtVYtCJ/+R+HWZ8cN0fsd79onpRzmy18Z6Fw1eutiXfnT8spO76cpdT5l1VtbNZ8yynfroeY
+        rufYmstjlHziIPf8zX8OmOT9O93at16pe5K8XntwQF/IhDutsVXhorWzv2ubFQbrab3f2Vc2
+        4c46zenR/EosxRmJhlrMRcWJANkoBRf6AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOLMWRmVeSWpSXmKPExsWy7bCSvG7XIcEUg98NlhYn1ixisui46GIx
+        de1uJotHN3+zWsyaspfJ4vKuOWwWn3uPMFrcPXWUzWLul6nMFr+WH2W06Ph8k82B22PnrLvs
+        Hov3vGTy2LSqk82jb8sqRo8Vq7+ze3zeJBfAFsVlk5Kak1mWWqRvl8CVceP3abaCXeIVPbsv
+        sDUw7hXuYuTkkBAwkVh9t4mti5GLQ0hgB6PE3i/T2SASEhKPdn5h6WLkALKFJQ4fLoao+cEo
+        0dr3hRGkhk1AS+LG702sIAkRgT1MEgd+nGUCSTALaEj8PnCTBcQWFnCUOHF8LTuIzSKgKrHu
+        6i6wGl4BF4mbVyYxQSyTk7h5rpN5AiPPAkaGVYySqQXFuem5xYYFRnmp5XrFibnFpXnpesn5
+        uZsYwWGnpbWDcc+qD3qHGJk4GA8xSnAwK4nwhrMIpAjxpiRWVqUW5ccXleakFh9ilOZgURLn
+        vdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAtHmap/iM1q05bMWd53/1NaZ5b/ble9MZVyOhv/mS
+        wWxlpvCt186lHjt5qVBm5+yyPbqzrb3a1QW6PKfZK/a//Nrsxv65gnH5ouKWJxvfPMj+G5k2
+        4/OZw10flWe9t7unLr/A10n3QbL5rvTNs9ws+5ff4ktvYPj1aBW35eQJei5bVBivZ0kua048
+        N3mF85HTTX9CFq9aKj91+ZNS71m3neexVi0r57lhxBwgxjY9/MPL93IyuXXJbYs4zpjsM+aL
+        s8g5Oyn/jfbcnb0TLjkxhm/+fWPN3werhFazqX9zDzKu/n3d4n+i5LedB9yufjls87NZ5vnF
+        xI6dkfeCD6cq7U7OXbWMaeuFLHfD96p7u5VYijMSDbWYi4oTAbLKIVaqAgAA
+X-CMS-MailID: 20230315130515epcas1p40823f20da586c1b5813b41e66e754309
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230315130515epcas1p40823f20da586c1b5813b41e66e754309
+References: <CGME20230315130515epcas1p40823f20da586c1b5813b41e66e754309@epcas1p4.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,269 +113,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Currently show_all_workqueue() is called if freeze fails at the time of
+freeze the workqueues, which shows the status of all workqueues and
+of all worker pools. In this cases we may only need to dump state of
+only workqueues that are freezable and busy.
 
-I love your patch! Perhaps something to improve:
+This patch defines show_freeze_workqueues_busy, which uses
+show_one_workqueue, a granular function that shows the state of
+individual workqueues, so that dump only the state of freezable
+workqueues at that time.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230315]
-[cannot apply to rafael-pm/thermal]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Jungseung Lee <js07.lee@samsung.com>
+---
+ include/linux/workqueue.h |  1 +
+ kernel/power/process.c    |  2 +-
+ kernel/workqueue.c        | 25 ++++++++++++++++++++++++-
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-drivers-intel_pch_thermal-Use-thermal-driver-device-to-write-a-trace/20230307-223759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230307133735.90772-11-daniel.lezcano%40linaro.org
-patch subject: [PATCH v1 10/11] thermal/core: Alloc-copy-free the thermal zone parameters structure
-config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230315/202303152025.rVv9btko-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a9813bacf3531491cb02c13aafe358e6b5423aa0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-drivers-intel_pch_thermal-Use-thermal-driver-device-to-write-a-trace/20230307-223759
-        git checkout a9813bacf3531491cb02c13aafe358e6b5423aa0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thermal/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303152025.rVv9btko-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/thermal_core.c:1267:7: warning: variable 'result' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (!tz->tzp)
-                       ^~~~~~~~
-   drivers/thermal/thermal_core.c:1388:17: note: uninitialized use occurs here
-           return ERR_PTR(result);
-                          ^~~~~~
-   drivers/thermal/thermal_core.c:1267:3: note: remove the 'if' if its condition is always false
-                   if (!tz->tzp)
-                   ^~~~~~~~~~~~~
-   drivers/thermal/thermal_core.c:1217:12: note: initialize the variable 'result' to silence this warning
-           int result;
-                     ^
-                      = 0
-   1 warning generated.
-
-
-vim +1267 drivers/thermal/thermal_core.c
-
-  1183	
-  1184	/**
-  1185	 * thermal_zone_device_register_with_trips() - register a new thermal zone device
-  1186	 * @type:	the thermal zone device type
-  1187	 * @trips:	a pointer to an array of thermal trips
-  1188	 * @num_trips:	the number of trip points the thermal zone support
-  1189	 * @mask:	a bit string indicating the writeablility of trip points
-  1190	 * @devdata:	private device data
-  1191	 * @ops:	standard thermal zone device callbacks
-  1192	 * @tzp:	thermal zone platform parameters
-  1193	 * @passive_delay: number of milliseconds to wait between polls when
-  1194	 *		   performing passive cooling
-  1195	 * @polling_delay: number of milliseconds to wait between polls when checking
-  1196	 *		   whether trip points have been crossed (0 for interrupt
-  1197	 *		   driven systems)
-  1198	 *
-  1199	 * This interface function adds a new thermal zone device (sensor) to
-  1200	 * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
-  1201	 * thermal cooling devices registered at the same time.
-  1202	 * thermal_zone_device_unregister() must be called when the device is no
-  1203	 * longer needed. The passive cooling depends on the .get_trend() return value.
-  1204	 *
-  1205	 * Return: a pointer to the created struct thermal_zone_device or an
-  1206	 * in case of error, an ERR_PTR. Caller must check return value with
-  1207	 * IS_ERR*() helpers.
-  1208	 */
-  1209	struct thermal_zone_device *
-  1210	thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
-  1211						void *devdata, struct thermal_zone_device_ops *ops,
-  1212						struct thermal_zone_params *tzp, int passive_delay,
-  1213						int polling_delay)
-  1214	{
-  1215		struct thermal_zone_device *tz;
-  1216		int id;
-  1217		int result;
-  1218		int count;
-  1219		struct thermal_governor *governor;
-  1220	
-  1221		if (!type || strlen(type) == 0) {
-  1222			pr_err("No thermal zone type defined\n");
-  1223			return ERR_PTR(-EINVAL);
-  1224		}
-  1225	
-  1226		if (strlen(type) >= THERMAL_NAME_LENGTH) {
-  1227			pr_err("Thermal zone name (%s) too long, should be under %d chars\n",
-  1228			       type, THERMAL_NAME_LENGTH);
-  1229			return ERR_PTR(-EINVAL);
-  1230		}
-  1231	
-  1232		/*
-  1233		 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
-  1234		 * For example, shifting by 32 will result in compiler warning:
-  1235		 * warning: right shift count >= width of type [-Wshift-count- overflow]
-  1236		 *
-  1237		 * Also "mask >> num_trips" will always be true with 32 bit shift.
-  1238		 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
-  1239		 * mask >> 32 = 0x80000000
-  1240		 * This will result in failure for the below condition.
-  1241		 *
-  1242		 * Check will be true when the bit 31 of the mask is set.
-  1243		 * 32 bit shift will cause overflow of 4 byte integer.
-  1244		 */
-  1245		if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
-  1246			pr_err("Incorrect number of thermal trips\n");
-  1247			return ERR_PTR(-EINVAL);
-  1248		}
-  1249	
-  1250		if (!ops) {
-  1251			pr_err("Thermal zone device ops not defined\n");
-  1252			return ERR_PTR(-EINVAL);
-  1253		}
-  1254	
-  1255		if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
-  1256			return ERR_PTR(-EINVAL);
-  1257	
-  1258		if (!thermal_class)
-  1259			return ERR_PTR(-ENODEV);
-  1260	
-  1261		tz = kzalloc(sizeof(*tz), GFP_KERNEL);
-  1262		if (!tz)
-  1263			return ERR_PTR(-ENOMEM);
-  1264	
-  1265		if (tzp) {
-  1266			tz->tzp = kmemdup(tzp, sizeof(*tzp), GFP_KERNEL);
-> 1267			if (!tz->tzp)
-  1268				goto free_tz;
-  1269		}
-  1270		
-  1271		INIT_LIST_HEAD(&tz->thermal_instances);
-  1272		ida_init(&tz->ida);
-  1273		mutex_init(&tz->lock);
-  1274		id = ida_alloc(&thermal_tz_ida, GFP_KERNEL);
-  1275		if (id < 0) {
-  1276			result = id;
-  1277			goto free_tzp;
-  1278		}
-  1279	
-  1280		tz->id = id;
-  1281		strscpy(tz->type, type, sizeof(tz->type));
-  1282	
-  1283		if (!ops->critical)
-  1284			ops->critical = thermal_zone_device_critical;
-  1285	
-  1286		tz->ops = ops;
-  1287		tz->device.class = thermal_class;
-  1288		tz->devdata = devdata;
-  1289		tz->trips = trips;
-  1290		tz->num_trips = num_trips;
-  1291	
-  1292		thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
-  1293		thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-  1294	
-  1295		/* sys I/F */
-  1296		/* Add nodes that are always present via .groups */
-  1297		result = thermal_zone_create_device_groups(tz, mask);
-  1298		if (result)
-  1299			goto remove_id;
-  1300	
-  1301		/* A new thermal zone needs to be updated anyway. */
-  1302		atomic_set(&tz->need_update, 1);
-  1303	
-  1304		result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
-  1305		if (result) {
-  1306			thermal_zone_destroy_device_groups(tz);
-  1307			goto remove_id;
-  1308		}
-  1309		result = device_register(&tz->device);
-  1310		if (result)
-  1311			goto release_device;
-  1312	
-  1313		for (count = 0; count < num_trips; count++) {
-  1314			struct thermal_trip trip;
-  1315	
-  1316			result = thermal_zone_get_trip(tz, count, &trip);
-  1317			if (result)
-  1318				set_bit(count, &tz->trips_disabled);
-  1319		}
-  1320	
-  1321		/* Update 'this' zone's governor information */
-  1322		mutex_lock(&thermal_governor_lock);
-  1323	
-  1324		if (tz->tzp)
-  1325			governor = __find_governor(tz->tzp->governor_name);
-  1326		else
-  1327			governor = def_governor;
-  1328	
-  1329		result = thermal_set_governor(tz, governor);
-  1330		if (result) {
-  1331			mutex_unlock(&thermal_governor_lock);
-  1332			goto unregister;
-  1333		}
-  1334	
-  1335		mutex_unlock(&thermal_governor_lock);
-  1336	
-  1337		if (!tz->tzp || !tz->tzp->no_hwmon) {
-  1338			result = thermal_add_hwmon_sysfs(tz);
-  1339			if (result)
-  1340				goto unregister;
-  1341		}
-  1342	
-  1343		mutex_lock(&thermal_list_lock);
-  1344		list_add_tail(&tz->node, &thermal_tz_list);
-  1345		mutex_unlock(&thermal_list_lock);
-  1346	
-  1347		if (tzp && tzp->linked_dev) {
-  1348			result = sysfs_create_link(&tzp->linked_dev->kobj,
-  1349						   &tz->device.kobj, "thermal_zone");
-  1350			if (result)
-  1351				goto out_list_del;
-  1352	
-  1353			result = sysfs_create_link(&tz->device.kobj,
-  1354						   &tzp->linked_dev->kobj, "device");
-  1355			if (result)
-  1356				goto out_del_link;
-  1357		}
-  1358	
-  1359		/* Bind cooling devices for this zone */
-  1360		bind_tz(tz);
-  1361	
-  1362		INIT_DELAYED_WORK(&tz->poll_queue, thermal_zone_device_check);
-  1363	
-  1364		thermal_zone_device_init(tz);
-  1365		/* Update the new thermal zone and mark it as already updated. */
-  1366		if (atomic_cmpxchg(&tz->need_update, 1, 0))
-  1367			thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-  1368	
-  1369		thermal_notify_tz_create(tz->id, tz->type);
-  1370	
-  1371		return tz;
-  1372	
-  1373	out_del_link:
-  1374		sysfs_remove_link(&tz->device.kobj, "thermal_zone");
-  1375	out_list_del:
-  1376		list_del(&tz->node);
-  1377	unregister:
-  1378		device_del(&tz->device);
-  1379	release_device:
-  1380		put_device(&tz->device);
-  1381		tz = NULL;
-  1382	remove_id:
-  1383		ida_free(&thermal_tz_ida, id);
-  1384	free_tzp:
-  1385		kfree(tz->tzp);
-  1386	free_tz:
-  1387		kfree(tz);
-  1388		return ERR_PTR(result);
-  1389	}
-  1390	EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
-  1391	
-
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 0a10f8e..3d68631 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -472,6 +472,7 @@ extern unsigned int work_busy(struct work_struct *work);
+ extern __printf(1, 2) void set_worker_desc(const char *fmt, ...);
+ extern void print_worker_info(const char *log_lvl, struct task_struct *task);
+ extern void show_all_workqueues(void);
++extern void show_freeze_workqueues_busy(void);
+ extern void show_one_workqueue(struct workqueue_struct *wq);
+ extern void wq_worker_comm(char *buf, size_t size, struct task_struct *task);
+ 
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index 6c1c7e5..590550f 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -93,7 +93,7 @@ static int try_to_freeze_tasks(bool user_only)
+ 		       todo - wq_busy, wq_busy);
+ 
+ 		if (wq_busy)
+-			show_all_workqueues();
++			show_freeze_workqueues_busy();
+ 
+ 		if (!wakeup || pm_debug_messages_on) {
+ 			read_lock(&tasklist_lock);
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index de42827..087eedb 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -5043,7 +5043,7 @@ static void show_one_worker_pool(struct worker_pool *pool)
+ /**
+  * show_all_workqueues - dump workqueue state
+  *
+- * Called from a sysrq handler or try_to_freeze_tasks() and prints out
++ * Called from a sysrq handler and prints out
+  * all busy workqueues and pools.
+  */
+ void show_all_workqueues(void)
+@@ -5065,6 +5065,29 @@ void show_all_workqueues(void)
+ 	rcu_read_unlock();
+ }
+ 
++/**
++ * show_freeze_workqueues_busy - dump freezable workqueue state
++ *
++ * Called from try_to_freeze_tasks() and prints out
++ * all freezable workqueues still busy.
++ */
++void show_freeze_workqueues_busy(void)
++{
++	struct workqueue_struct *wq;
++
++	rcu_read_lock();
++
++	pr_info("Showing freezable workqueues still busy:\n");
++
++	list_for_each_entry_rcu(wq, &workqueues, list) {
++		if (!(wq->flags & WQ_FREEZABLE))
++			continue;
++		show_one_workqueue(wq);
++	}
++
++	rcu_read_unlock();
++}
++
+ /* used to show worker information through /proc/PID/{comm,stat,status} */
+ void wq_worker_comm(char *buf, size_t size, struct task_struct *task)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.7.4
+
