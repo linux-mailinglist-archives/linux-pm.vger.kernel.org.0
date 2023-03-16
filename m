@@ -2,250 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7596BC2E8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 01:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A516BC358
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 02:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjCPAl2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Mar 2023 20:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S229790AbjCPBdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Mar 2023 21:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCPAl1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Mar 2023 20:41:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95A22010;
-        Wed, 15 Mar 2023 17:41:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC3B761EDB;
-        Thu, 16 Mar 2023 00:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A0EC433EF;
-        Thu, 16 Mar 2023 00:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678927285;
-        bh=2baqaQl7HjA1FPCOxMOKYpBnNpjxEa9fl+66c+f4WIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YF77QI8/4ZHYEioAo73OtRr8jkZg+Hq0tS7XJDKUa7h4j7vAOEspREzPSrT80FHDP
-         RwGa+2Utd5hdOKxheYCp2qet9VxnB/ZEjBPymk77qgkXjC3xGiZa98pOrrkHSnQzdm
-         zSjEcVRvHJsnCVRdU0TGGdgLR3Y4a8gxXOA7nDTNnuLsGDnCz4IZBqf+agS/t1C/A+
-         /Nw4pPXGaZt63mCxH5VT5C2UC6j/++wceCwhf+DSDLiPaN294UH8QPCnW71qL+yJAv
-         gRPxn39njV4VckBvVhYAbkyPAUm3ZXLrAwUqYYA/7dCPNklxP3/x+A39NVyNKJPc2W
-         OjvmeSdbGJUcA==
-Received: by mercury (Postfix, from userid 1000)
-        id BC00010609DC; Thu, 16 Mar 2023 01:41:21 +0100 (CET)
-Date:   Thu, 16 Mar 2023 01:41:21 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
- simple-battery data
-Message-ID: <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
-References: <20230314225535.1321736-1-sre@kernel.org>
- <20230314225535.1321736-3-sre@kernel.org>
- <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
+        with ESMTP id S229556AbjCPBdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Mar 2023 21:33:14 -0400
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521F0AD38;
+        Wed, 15 Mar 2023 18:33:13 -0700 (PDT)
+Received: by mail-pl1-f196.google.com with SMTP id i5so173927pla.2;
+        Wed, 15 Mar 2023 18:33:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678930393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wr/Fzc5HFGOPjcLhGyD874SBWN1YYWXj06dZJbwaAIg=;
+        b=289pyiRc73aR/m87IJ72w3bXnkGNNeGUUashg71HYPGgn1L5yWjX/QZW4jwNW/lD6+
+         Hv/sJz1Q/Ccz4WAToqeG2abMsoiasAgUTc1YixbZj9pSIX4cV6jEwH7c9kCD7Vo9p+Yf
+         PeaA9Xn/K938tkOOAVEvTM9VSNXvdcGTRxfugtvgA0Dtr7W5EVT0mPlEXUF90ZiWwBW+
+         vbLcMnXUIlxy4o6JWFmJSgvCzT/6/9ztkSQe+BmWOhHTUiNXF92HRTop1mIPqoIoHmwl
+         dyyJ5FxbKHuKN9KwPTHKFUDlKcfdZVcKia5VhBJOnx4naq9t0BeuJXh1hb1uwCm2is4u
+         wKfg==
+X-Gm-Message-State: AO0yUKUArT1Q+QntrPCYDslZNocfR/ZP70e4Kcjvu1TqXKRgA0vuXvdl
+        y7g6MMrL5ybrP+b5sngk/Xnz9hfYAypfOg==
+X-Google-Smtp-Source: AK7set/OV9D4WmMO24yP28dXGBgMZhAWq2rOLCHotiYAgVlaEFJqnqUxGxr/27C/aRKf8LF+QNVQMw==
+X-Received: by 2002:a17:903:32ce:b0:1a0:67b1:a777 with SMTP id i14-20020a17090332ce00b001a067b1a777mr1627154plr.61.1678930392683;
+        Wed, 15 Mar 2023 18:33:12 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090341c700b0019460ac7c6asm4226017ple.283.2023.03.15.18.33.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 18:33:12 -0700 (PDT)
+From:   Xueqin Luo <luoxueqin@kylinos.cn>
+To:     rafael@kernel.org, todd.e.brandt@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     luoxueqin@kylinos.cn, xiongxin@kylinos.cn
+Subject: [PATCH v2] PM: tools: add "CPU killed" messages to fix an error in suspend flow
+Date:   Thu, 16 Mar 2023 09:33:07 +0800
+Message-Id: <20230316013307.322402-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pxerrciqwgwovktl"
-Content-Disposition: inline
-In-Reply-To: <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On the arm64 platform, the core log of cpu offline is as follows:
 
---pxerrciqwgwovktl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[  100.431501] CPU1: shutdown
+[  100.454820] psci: CPU1 killed (polled 20 ms)
+[  100.459266] CPU2: shutdown
+[  100.482575] psci: CPU2 killed (polled 20 ms)
+[  100.486057] CPU3: shutdown
+[  100.513974] psci: CPU3 killed (polled 28 ms)
+[  100.518068] CPU4: shutdown
+[  100.541481] psci: CPU4 killed (polled 24 ms)
 
-Hi,
+And this goal of this patch is to prevent sleepgraph from mistakenly
+treating the "CPU up" message as part of the suspend flow (because it
+should be regarded as part of the resume flow).
 
-On Wed, Mar 15, 2023 at 09:01:50AM +0200, Matti Vaittinen wrote:
-> On 3/15/23 00:55, Sebastian Reichel wrote:
-> [...]
-> >   #ifdef CONFIG_THERMAL
-> >   static int power_supply_read_temp(struct thermal_zone_device *tzd,
-> >   		int *temp)
-> > @@ -1255,6 +1387,11 @@ __power_supply_register(struct device *parent,
-> >   		goto check_supplies_failed;
-> >   	}
-> > +	/* psy->battery_info is optional */
+Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+---
 
-I forgot to add a POWER_SUPPLY_TYPE_BATTERY limitation when removing
-the opt-in method. Will be added in the next revision.
+v2: update changelog
 
-> > +	rc =3D power_supply_get_battery_info(psy, &psy->battery_info);
-> > +	if (rc && rc !=3D -ENODEV)
-> > +		goto check_supplies_failed;
-> > +
->=20
-> This is what rubs me in a slightly wrong way - but again, you probably kn=
-ow
-> better than I what's the direction things are heading so please ignore me=
- if
-> I am talking nonsense :)
->=20
-> Anyways, I think the battery information may be relevant to the driver wh=
-ich
-> is registering the power-supply. It may be there is a fuel-gauge which ne=
-eds
-> to know the capacity and OCV tables etc. Or some other thingy. And - I may
-> be wrong - but I have a feeling it might be something that should be known
-> prior registering the power-supply.
+ tools/power/pm-graph/sleepgraph.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-You can still do that, just like before. It's a bit inefficient,
-since the battery data is allocated twice, but the driver probe
-routine is not a hot path.
+diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
+index 82c09cd25cc2..d816970b0a3d 100755
+--- a/tools/power/pm-graph/sleepgraph.py
++++ b/tools/power/pm-graph/sleepgraph.py
+@@ -4132,9 +4132,12 @@ def parseKernelLog(data):
+ 			elif(re.match('Enabling non-boot CPUs .*', msg)):
+ 				# start of first cpu resume
+ 				cpu_start = ktime
+-			elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)):
++			elif(re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)) \
++				or re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)):
+ 				# end of a cpu suspend, start of the next
+ 				m = re.match('smpboot: CPU (?P<cpu>[0-9]*) is now offline', msg)
++				if(not m):
++					m = re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)
+ 				cpu = 'CPU'+m.group('cpu')
+ 				if(cpu not in actions):
+ 					actions[cpu] = []
+-- 
+2.25.1
 
-> So, in my head it should be the driver which is getting the information
-> about the battery (whether it is in the DT node or coded in some tables a=
-nd
-> fetched by battery type) - using helpers provided by core.
->=20
-> I further think it should be the driver who can pass the battery informat=
-ion
-> to core at registration - core may 'fall-back' finding information itself=
- if
-> driver did not provide it.
-
-This implements the fallback route.
-
-> So, I think the core should not unconditionally populate the battery-info
-> here but it should first check if the driver had it already filled.
-
-Not until there is a user (i.e. a driver using that feature). FWIW
-it's quite easy to implement once it is needed. Just adding a field
-in power_supply_config and taking it over here is enough, no other
-code changes are required.
-
-The alternative is adding some kind of probe/remove callback for the
-power_supply device itself to properly initialize the device. That
-would also be useful to have a sensible place for e.g. shutting of
-chargers when the device is removed. Anyways it's a bit out of scope
-for this patchset :)
-
-> Well, as I said, I recognize I may not (do not) know all the dirty details
-> and I do trust you to evaluate if what I wrote here makes any sense :) All
-> in all, I think this auto-exposure is great.
->=20
-> Please, bear with me if what I wrote above does not make sense to you and
-> just assume I don't see the big picture :)
-
-Right now the following battery drivers use power_supply_get_battery_info():
-
- * cw2015_battery
- * bq27xxx_battery
- * axp20x_battery
- * ug3105_battery
- * ingenic-battery
- * sc27xx_fuel_gauge
- * (generic-adc-battery)
-
-All of them call it after the power-supply device has been
-registered. Thus the way to go for them is removing the second call
-to power_supply_get_battery_info() and instead use the battery-info
-acquired by the core. I think that work deserves its own series.
-
-For chargers the situation is different (they usually want the data
-before registration), but they should not expose the battery data
-anyways. Also ideally chargers get the information from the battery
-power-supply device, which might supply the data from fuel-gauge
-registers (or fallback to battery-info after this series).
-
-> >   	spin_lock_init(&psy->changed_lock);
-> >   	rc =3D device_add(dev);
-> >   	if (rc)
-> > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/=
-supply/power_supply_sysfs.c
-> > index c228205e0953..5842dfe5dfb7 100644
-> > --- a/drivers/power/supply/power_supply_sysfs.c
-> > +++ b/drivers/power/supply/power_supply_sysfs.c
-> > @@ -380,6 +380,9 @@ static umode_t power_supply_attr_is_visible(struct =
-kobject *kobj,
-> >   		}
-> >   	}
-> > +	if (power_supply_battery_info_has_prop(psy->battery_info, attrno))
-> > +		return mode;
-> > +
-> >   	return 0;
-> >   }
-> > @@ -461,6 +464,8 @@ static int add_prop_uevent(const struct device *dev=
-, struct kobj_uevent_env *env
-> >   int power_supply_uevent(const struct device *dev, struct kobj_uevent_=
-env *env)
-> >   {
-> >   	const struct power_supply *psy =3D dev_get_drvdata(dev);
-> > +	const enum power_supply_property *battery_props =3D
-> > +		power_supply_battery_info_properties;
-> >   	int ret =3D 0, j;
-> >   	char *prop_buf;
-> > @@ -488,6 +493,16 @@ int power_supply_uevent(const struct device *dev, =
-struct kobj_uevent_env *env)
-> >   			goto out;
-> >   	}
-> > +	for (j =3D 0; j < power_supply_battery_info_properties_size; j++) {
-> > +		if (!power_supply_battery_info_has_prop(psy->battery_info,
-> > +				battery_props[j]))
-> > +			continue;
->=20
-> Hmm. I just noticed that there can probably be same properties in the
-> psy->desc->properties and in the battery-info.
-
-That's intended, so that battery drivers can implement their own
-behaviour for the properties.
-
-> I didn't cascade deep into the code so I can't say if it is a
-> problem to add duplicates?
-
-It does not break anything (we used to have this for the TYPE
-property in a driver), but confuses userspace. I will fix the
-duplication in uevents and send a new version.
-
-> So, if this is safe, and if what I wrote above is not something
-> you want to consider:
->
-> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-Due to the changes I will not take this over in v3. Just to make
-sure - is it correct, that you do not want your R-b tag for the
-following two patches?
-
-[05/12] power: supply: generic-adc-battery: drop jitter delay support
-[08/12] power: supply: generic-adc-battery: use simple-battery API
-
-> [...]
-
-Thanks for your reviews,
-
--- Sebastian
-
---pxerrciqwgwovktl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQSZa4ACgkQ2O7X88g7
-+poUCBAAgA+XVXm0Dr5yUfScp9DlyfZAJQ6TDO3XGQo3y0+4pYmILHaDL0g+aceA
-ddUlz73hCvGDrAZ2FlraF+Sc4yatFiblaOWLMaKDQmFMVLSroPwYztwuooU8nXL/
-ZHVVFFXeYkcfcihk2rJbrHKAco9L+gsyBlqq+ZziG8RIj6mMmNVoQwGNefcrWCT/
-WMLxpPt8p6/I0wJhMhL2/ZmGTd/+bAQ8HWXEM8Abqe3IHqCFgzxg+06sOYLrNqlG
-ZZwQPsvtjmQTZ4DRqBPtTUvpTaXcJ8S0KY23LoWP01AbUDfp8eqXthdgh19DbTQw
-VwGdmZ3o12Lhjck1umAbBO2z0smjbnFGhr0l2t+40Je5AzRxd1WcEjiuXpOIgG3o
-8cceXAiOSl1qTd5c7P4OV27XtMoiKw3awdZ3qI62qP/WL7RiUB+lCfD5zH/aNy6f
-INf7qxRTsrTnk4ODhiB+Z+OlhDb0nLIUJndlLuqCVw1Qb0mp9uamWlWe/TPIqWaN
-FzVilmfXszl5kJbjdrD9nZoxg4glkUc4+AzXuyp3bjyAsjI9ttxCedSto29OqLpP
-cDcM8Ai+LABfFeR6SYLxYDXy7IOvi9FuloF/NqcrEXbF4OeZwOrDak2dZiGPFtar
-I9/08os29w93hQwVEaE4qWVevWA97p+gjOrsgzq5iSOfnahWBd8=
-=OUow
------END PGP SIGNATURE-----
-
---pxerrciqwgwovktl--
