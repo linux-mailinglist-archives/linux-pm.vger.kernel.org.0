@@ -2,151 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BD46BCA8E
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 10:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9F36BCAC7
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 10:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbjCPJRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 05:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S230074AbjCPJ1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 05:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjCPJRl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 05:17:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8D9A0F3F;
-        Thu, 16 Mar 2023 02:17:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45CD0B81EBA;
-        Thu, 16 Mar 2023 09:17:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2EBC433A7;
-        Thu, 16 Mar 2023 09:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678958257;
-        bh=zyT8xkfWDFX+ZVDBAje6rf/gFx+GN8afenbi9RxVCJg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hN0jOpum8PpGRyHdTUdc+1+87Vx5xvVICCz7Uio/1zS3c6/q/RdCKfFV5l7N1aB7y
-         c3FqHIjEGwclFeqqOK9wpLznfhVZ4DHBzYdKdrcHWr8AMRb9avXYJdJXhPjyoYa2hR
-         Bizqyjojb56/LKF6fJNOS+fgQIqoDJDd1Kaj3Ah7k+v6NMDzLH5itVERB8gvXBqaoN
-         hTt7CQDXfXmbTsOEKRc5aP3ueE3vgbuK1/TnEeVsCByc1kcOwuL4arj6kMigx/ihhU
-         r5hltqiiT7LaX/cSKsrNWqxmXsMhQbRRWsbwWo7DZW/cM/ajqdDPg9H5K0KwQLTFTf
-         86+De5IY5yvRw==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect fixes for 6.3-rc
-Date:   Thu, 16 Mar 2023 11:16:55 +0200
-Message-Id: <20230316091655.865358-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230298AbjCPJ1f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 05:27:35 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9BDB8542
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 02:27:21 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id fd5so4893839edb.7
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 02:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678958840;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9Am4l6xMhb1vP5dilYwx3GXsl0GLDDzlZh+2OHdXw3E=;
+        b=S22BQSMOhc67lmchHChq56D944nMKduaS8BUh0D5MlnB9rjlgF4lVssG12DMHX38Mo
+         QXguqzMx45O2HNy8Z3wso8HRnxs7NrqIf+Qpq36QplqA4FbZE1guN64Q4oNM+4qhEapp
+         SjX/YRhU0LPtaBxw9+SygEMYf+paRqFBhjcIGo0fe6Uv4EKUTHpx5pJvpncmJuo44jXb
+         xYNlU5VB+zZ97kMaytRGJqaehWne3nXMcCoys6usNVXz3l7OSRUENCY2qYHwGzN2bVaU
+         dfpGNU6UyU3Ra/OcLNXNSb1F+W1Lo1vYLXvQVZHBU34v63qztMe6BJ/x0xaOh2tEsdcG
+         oHZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678958840;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Am4l6xMhb1vP5dilYwx3GXsl0GLDDzlZh+2OHdXw3E=;
+        b=1bIjB4YBI4+8CuUb8fYPcYaGj8mT7BMiMnjhmKOa+/741+bxiAyBcvgohac/a85LIw
+         j3tTbdws4CnBBO4XClT3HUp5yRpmQROh2KXuV22hFfvoaobR9nZthgy1/1v2f6svqq+A
+         5vaiyBD2ZmXl2WLcbnxaKqZ/lOClZ7g1e/YJazj91Zkb0w9GGjo2Yi1w1ODEQ5G6CUEV
+         M0qUsU48CWtA2bKC5PQg2wzM2G/YE83hYrJ9az2vppeWSn7uopEVT2uT+D59GMKgs5nq
+         G+XCbda1giWnAOILySnKxVjYSGaa95r1Dt2lINCR+/uryoKuVqJ3mLC35T0B59ITTrsR
+         7OWA==
+X-Gm-Message-State: AO0yUKXnfFvFTTAf75pZKmnkDtMK9n0IGmFOS+2eerC8RPk+fh0PVGyl
+        NgJFmIx9vyFIRInMUVTdX1hE+85etYlx0C306jY=
+X-Google-Smtp-Source: AK7set/rd7n6OFPsMVd8VZUnfm+DpVbLao1YgEyh16GEnT/5dmhBspHPgbr+AipmDEs8NStAwYll7V5pNP6ku8Uz1y4=
+X-Received: by 2002:a17:907:8a12:b0:92f:cf96:e1f6 with SMTP id
+ sc18-20020a1709078a1200b0092fcf96e1f6mr1742286ejc.11.1678958839900; Thu, 16
+ Mar 2023 02:27:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6f02:3a4:b0:46:2cca:b161 with HTTP; Thu, 16 Mar 2023
+ 02:27:19 -0700 (PDT)
+Reply-To: wormer.amos@aol.com
+From:   Wormer Amos <claudiayahya2022@gmail.com>
+Date:   Thu, 16 Mar 2023 10:27:19 +0100
+Message-ID: <CAEbGVRkP_Mn7fLQ8qRwtyi7VbV2V+bZYAEMfJbMqN47rc62sDg@mail.gmail.com>
+Subject: FOR INVESTMENT PROPOSAL ONLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52b listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6031]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [claudiayahya2022[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [claudiayahya2022[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+Please are you capable for investment in your country. i
+need serious investment project with good background, kindly connect
+me to discuss details immediately. i will appreciate you to contact me
+on this email address Thanks and awaiting your quick response,
 
-This pull request contains fixes for the current cycle. These are fixing
-a race condition and other reported issues. The details are in the signed
-tag. All patches has been in linux-next during the last few days (but in
-practice even for more than a week - i dropped one patch and some hashes
-changed). Please pull into char-misc-linus when possible.
-
-Thanks,
-Georgi
-
-
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
-
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.3-rc3
-
-for you to fetch changes up to 9db481c909dd6312ccfbdc7e343b50e41c727483:
-
-  memory: tegra30-emc: fix interconnect registration race (2023-03-13 21:13:49 +0200)
-
-----------------------------------------------------------------
-interconnect fixes for v6.3-rc
-
-This contains a bunch of fixes with the highlight being fixes for a race
-condition that could sometimes occur during the interconnect provider
-driver registration. There are also fixes for memory overallocation and
-a memory leak.
-
-- interconnect: qcom: osm-l3: fix icc_onecell_data allocation
-- interconnect: qcom: sm8450: switch to qcom_icc_rpmh_* function
-- interconnect: qcom: sm8550: switch to qcom_icc_rpmh_* function
-- interconnect: qcom: qcm2290: Fix MASTER_SNOC_BIMC_NRT
-- interconnect: fix mem leak when freeing nodes
-- interconnect: fix icc_provider_del() error handling
-- interconnect: fix provider registration API
-- interconnect: imx: fix registration race
-- interconnect: qcom: osm-l3: fix registration race
-- interconnect: qcom: rpm: fix probe child-node error handling
-- interconnect: qcom: rpm: fix registration race
-- interconnect: qcom: rpmh: fix probe child-node error handling
-- interconnect: qcom: rpmh: fix registration race
-- interconnect: qcom: msm8974: fix registration race
-- interconnect: exynos: fix node leak in probe PM QoS error path
-- interconnect: exynos: fix registration race
-- interconnect: exynos: drop redundant link destroy
-- memory: tegra: fix interconnect registration race
-- memory: tegra124-emc: fix interconnect registration race
-- memory: tegra20-emc: fix interconnect registration race
-- memory: tegra30-emc: fix interconnect registration race
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Dmitry Baryshkov (3):
-      interconnect: qcom: osm-l3: fix icc_onecell_data allocation
-      interconnect: qcom: sm8450: switch to qcom_icc_rpmh_* function
-      interconnect: qcom: sm8550: switch to qcom_icc_rpmh_* function
-
-Johan Hovold (17):
-      interconnect: fix mem leak when freeing nodes
-      interconnect: fix icc_provider_del() error handling
-      interconnect: fix provider registration API
-      interconnect: imx: fix registration race
-      interconnect: qcom: osm-l3: fix registration race
-      interconnect: qcom: rpm: fix probe child-node error handling
-      interconnect: qcom: rpm: fix registration race
-      interconnect: qcom: rpmh: fix probe child-node error handling
-      interconnect: qcom: rpmh: fix registration race
-      interconnect: qcom: msm8974: fix registration race
-      interconnect: exynos: fix node leak in probe PM QoS error path
-      interconnect: exynos: fix registration race
-      interconnect: exynos: drop redundant link destroy
-      memory: tegra: fix interconnect registration race
-      memory: tegra124-emc: fix interconnect registration race
-      memory: tegra20-emc: fix interconnect registration race
-      memory: tegra30-emc: fix interconnect registration race
-
-Konrad Dybcio (1):
-      interconnect: qcom: qcm2290: Fix MASTER_SNOC_BIMC_NRT
-
- drivers/interconnect/core.c           | 68 +++--
- drivers/interconnect/imx/imx.c        | 20 +-
- drivers/interconnect/qcom/icc-rpm.c   | 29 ++-
- drivers/interconnect/qcom/icc-rpmh.c  | 30 ++-
- drivers/interconnect/qcom/msm8974.c   | 20 +-
- drivers/interconnect/qcom/osm-l3.c    | 16 +-
- drivers/interconnect/qcom/qcm2290.c   |  4 +-
- drivers/interconnect/qcom/sm8450.c    | 98 +------
- drivers/interconnect/qcom/sm8550.c    | 99 +-------
- drivers/interconnect/samsung/exynos.c | 30 +--
- drivers/memory/tegra/mc.c             | 16 +-
- drivers/memory/tegra/tegra124-emc.c   | 12 +-
- drivers/memory/tegra/tegra20-emc.c    | 12 +-
- drivers/memory/tegra/tegra30-emc.c    | 12 +-
- include/linux/interconnect-provider.h | 12 +
- 15 files changed, 158 insertions(+), 320 deletions(-)
+Yours
+Amos,
