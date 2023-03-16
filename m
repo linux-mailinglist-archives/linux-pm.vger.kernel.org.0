@@ -2,79 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0992E6BCBF5
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 11:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D15E6BCF76
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 13:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjCPKFi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 06:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S229875AbjCPM27 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 08:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjCPKFg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 06:05:36 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17F52ED65
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 03:05:28 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so670193wmb.3
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 03:05:28 -0700 (PDT)
+        with ESMTP id S230231AbjCPM2w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 08:28:52 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B65C5AC2
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 05:28:23 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id cn21so7147837edb.0
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 05:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678961127;
+        d=linaro.org; s=google; t=1678969700;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LgYCZHGkMxWxLNxSIypAzujsXqtz2VniUuNUBnk+gis=;
-        b=VSiX4ak9m2Fbpeodc2znc0DO1Ptd/zIBs8O7Y8ughyQyMMYMUIXgqe1dCOAFuRvVwc
-         tWcGRawnoOh+glRb8/e5G2dCJYbzJQIhTEHtu1DqCrAknzoNLoIdH2rm8rIajeqxnlo6
-         w1HaoqmMwKg8RkgvbcJjaKu4ocB8AIYT4FQ7MPciNJd3fr1a6oqXK1j/6Z4B74gj97iY
-         jxMMlzv+zvU2XLgi2ZO2ok+GmZjqHraissXWmUjI7hRXKw+E5XqJu2Kq+NfD26pb32Ml
-         BPVzN5lRw5/lvK3he1qB4E2E6ut7p+wNH9MRoyVXbe3hYObOauKxNU80Kzs19zE8GT8z
-         G6OA==
+        bh=DuzDwg2lxu1rtYjhTSBJYtTkaTQvz0mwPxYBQwYy20g=;
+        b=vxJm/pF8sewwUszKYiDSfHTVUwBSWICc5MH1RuCN+eYfHnhXBErovQZaEhRLWS2t0S
+         oBnoKqECgFj7mYaG6pAolJe3JfDkDB8qgSMH5JXts1MtsUk9viXtPl9+co+SOTeSgADk
+         FCOT+Dh4PTlzam28dIfSNtv0/5uEeIUZgLqeBoHLlcX0cBZ73lwHvyXp/6dx53dwvg3S
+         hNaRx9B+h6dya1kb6FGh7wD4M3nwdX18E3bQlcBVHZyFqZyEzHuTVqp16BbQ+iAXxp20
+         wuPhDagD3QqBtUJXlc7DgijZkhcoazfyQxfNDytWOUe2Wlpdu1zjgW18qED2nc7651ia
+         WXqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678961127;
+        d=1e100.net; s=20210112; t=1678969700;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LgYCZHGkMxWxLNxSIypAzujsXqtz2VniUuNUBnk+gis=;
-        b=256utqT3I0VkYXLXiJFLsatubQ/0a1HcbhaJXyqcZ+wFNp5eoXwzjnRo8HOwcUAu0y
-         Bpb0B1IToy7uSY9gvC/Df+UrqZxUDSQ0wwlazUACwICMtxqR3oX8mdXpqqQmqhONCRJa
-         HnqqNvtSUaNyWPTzuL9RG7cJ13shyVYDUJj1c8RWe0idFYg6cJPwNLbxX06QJrsTagRw
-         zzbQlRZjY/jum3+23qRxK0Wo3s8vr0wlZbJ8lLaxGu+6VVUO7yDwp774SS9KO1esprbc
-         T3g3iFipjas5B78KBm396FG2qshzjHC07JoPr6WpgVLvGDDNiZwsKvCj9oT0UC/9NLQj
-         2k0Q==
-X-Gm-Message-State: AO0yUKUPr75r0/PB/coox/jQboa8d7bT/KMFzXDe/icGUp0XJhc0Eq5o
-        QdEz+va3w/QienBSHfVOWmKKqg==
-X-Google-Smtp-Source: AK7set+ZBAEGyPlBeMSevhv7QLiyPYaj5v7LU+lQDc2C6qWm+uykJB1zOxqDuqALnVB1LKmFbDZYXA==
-X-Received: by 2002:a05:600c:4691:b0:3ed:33a1:ba8e with SMTP id p17-20020a05600c469100b003ed33a1ba8emr4766778wmo.1.1678961126625;
-        Thu, 16 Mar 2023 03:05:26 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:cd3c:7f23:e93c:fbb4? ([2a05:6e02:1041:c10:cd3c:7f23:e93c:fbb4])
-        by smtp.googlemail.com with ESMTPSA id e4-20020a05600c4e4400b003e8f0334db8sm4601879wmq.5.2023.03.16.03.05.25
+        bh=DuzDwg2lxu1rtYjhTSBJYtTkaTQvz0mwPxYBQwYy20g=;
+        b=qUzFH0umVYM1kqkQFLROuem3OLfNsx7KdTRw0sL2EgUiFyOpG0Z1bSDZZXpckQY3YJ
+         GS0Z3dEpBc1L1rhF/e5ahPfw9/ZSutgVD5Y7aspnIFhJkOG19lE+b/5/PK9PjpFAEXSE
+         pkVkCUStf4ws65rXnoYnfT9UKgyYhR8NMYGjl4AldrBCOodinf1HxB2Kq02pBVM103Wv
+         Es9gpQr+ek2z7wh2UMbUg9vnEC/JUGUmtd8Awg7gu8nUd4WWUs2pqC1yVNif4WJ5Py0R
+         QoI+FpAom9UDfhJDMqFMVM2+qT2LiBnp0muFgyu6ue+Bqb5HO0cvyaBHQYfBECGWB6S9
+         Njzw==
+X-Gm-Message-State: AO0yUKXOGuNJ6kGBK+0avi6RP7khQs/ZUXLQJBSeNIJNpKwUMtc3jTWy
+        D9C/b43kHDuHgdrMdiAz/n4P7w==
+X-Google-Smtp-Source: AK7set8sb9Pt47A8F5UHMhUTeEFJy8nZDAA2FIy5bTWmk2ssc26ydb1AH4xupqEGnvo0UKQ1P6AZIQ==
+X-Received: by 2002:a17:906:4a09:b0:8b1:7de6:e292 with SMTP id w9-20020a1709064a0900b008b17de6e292mr9717493eju.9.1678969700160;
+        Thu, 16 Mar 2023 05:28:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id d20-20020a1709063ed400b008d1693c212csm3762281ejj.8.2023.03.16.05.28.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 03:05:26 -0700 (PDT)
-Message-ID: <bae80282-cb80-462d-e554-1934d090e216@linaro.org>
-Date:   Thu, 16 Mar 2023 11:05:25 +0100
+        Thu, 16 Mar 2023 05:28:19 -0700 (PDT)
+Message-ID: <01d18b05-238f-e938-9ad0-ff1956cb361d@linaro.org>
+Date:   Thu, 16 Mar 2023 13:28:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id
- logic
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
 Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
- <20230308112253.15659-5-sebastian.reichel@collabora.com>
- <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
- <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -86,177 +83,41 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Heiko,
-
-On 08/03/2023 19:42, Sebastian Reichel wrote:
-> Hi Daniel,
+On 15/03/2023 17:49, Krzysztof Kozlowski wrote:
+> Qualcomm cpufreq driver configures interrupts with affinity to each
+> cluster, e.g.  dcvsh-irq-0, dcvsh-irq-4 and dcvsh-irq-7 on SM8250.
+> Triggered interrupt will schedule delayed work, but, since workqueue
+> prefers local CPUs, it might get executed on a CPU dedicated to realtime
+> tasks causing unexpected latencies in realtime workload.
 > 
-> On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
->> On 08/03/2023 12:22, Sebastian Reichel wrote:
->>> Replace the channel ID lookup table by a simple offset, since
->>> the channel IDs are consecutive.
->>>
->>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>
->> As all the other patches are reviewed by Heiko, is the tag missing here?
+> Use unbound workqueue for such case.  This might come with performance
+> or energy penalty, e.g. because of cache miss or when other CPU is
+> sleeping.
 > 
-> Heiko was not happy with this in PATCHv2, when he reviewed most
-> of the patches:
-> 
-> https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
-> 
-> I replied, but never got a response, so I kept it as is:
-> 
-> https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektranox.org/
-> 
-> FWIW it is essential for the series and cannot be dropped, because
-> RK3588 has more than 2 channels.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
 
-Do you have a suggestion to improve the proposed change ?
+Let me also paste impact of this patch - rtla osnoise on entirely idle
+system (cores 2-7 isolated for Realtime):
 
-Thanks
-    -- Daniel
+BEFORE:
+       osnoise/7-2967    [007] d..h2..  3937.898311: irq_noise: dcvsh-irq-7:179 start 3937.898310871 duration 104 ns
+ irq/179-dcvsh-i-343     [007] d..h2..  3937.898318: irq_noise: IPI:6 start 3937.898317537 duration 104 ns
+ irq/179-dcvsh-i-343     [007] d...3..  3937.898321: thread_noise: irq/179-dcvsh-i:343 start 3937.898316287 duration 4740 ns
+     kworker/7:0-85      [007] d..h2..  3937.898323: irq_noise: IPI:6 start 3937.898322381 duration 104 ns
+     kworker/7:0-85      [007] d...3..  3937.898343: thread_noise: kworker/7:0:85 start 3937.898321339 duration 20990 ns
+       osnoise/7-2967    [007] .......  3937.898343: sample_threshold: start 3937.898308475 duration 34531 ns interference 5
 
+Noise duration: 34 us
 
->>> ---
->>>    drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
->>>    1 file changed, 21 insertions(+), 27 deletions(-)
->>>
->>> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
->>> index 9ed45b318344..bcbdd618daae 100644
->>> --- a/drivers/thermal/rockchip_thermal.c
->>> +++ b/drivers/thermal/rockchip_thermal.c
->>> @@ -39,15 +39,6 @@ enum tshut_polarity {
->>>    	TSHUT_HIGH_ACTIVE,
->>>    };
->>> -/*
->>> - * The system has two Temperature Sensors.
->>> - * sensor0 is for CPU, and sensor1 is for GPU.
->>> - */
->>> -enum sensor_id {
->>> -	SENSOR_CPU = 0,
->>> -	SENSOR_GPU,
->>> -};
->>> -
->>>    /*
->>>     * The conversion table has the adc value and temperature.
->>>     * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
->>> @@ -82,7 +73,7 @@ struct chip_tsadc_table {
->>>    /**
->>>     * struct rockchip_tsadc_chip - hold the private data of tsadc chip
->>> - * @chn_id: array of sensor ids of chip corresponding to the channel
->>> + * @chn_offset: the channel offset of the first channel
->>>     * @chn_num: the channel number of tsadc chip
->>>     * @tshut_temp: the hardware-controlled shutdown temperature value
->>>     * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
->>> @@ -98,7 +89,7 @@ struct chip_tsadc_table {
->>>     */
->>>    struct rockchip_tsadc_chip {
->>>    	/* The sensor id of chip correspond to the ADC channel */
->>> -	int chn_id[SOC_MAX_SENSORS];
->>> +	int chn_offset;
->>>    	int chn_num;
->>>    	/* The hardware-controlled tshut property */
->>> @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
->>>    }
->>>    static const struct rockchip_tsadc_chip px30_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* 2 channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
->>> @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> +	/* cpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 1, /* one channel for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> +	/* cpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 1, /* one channel for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 1, /* cpu sensor is channel 1 */
->>> -	.chn_id[SENSOR_GPU] = 2, /* gpu sensor is channel 2 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 1,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> +	/* cpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 1, /* one channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
->>> @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
->>>    	for (i = 0; i < thermal->chip->chn_num; i++) {
->>>    		error = rockchip_thermal_register_sensor(pdev, thermal,
->>>    						&thermal->sensors[i],
->>> -						thermal->chip->chn_id[i]);
->>> +						thermal->chip->chn_offset + i);
->>>    		if (error)
->>>    			return dev_err_probe(&pdev->dev, error,
->>>    				"failed to register sensor[%d].\n", i);
->>
->> -- 
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
->>
+AFTER:
+       osnoise/7-2637    [007] d..h2..   530.563819: irq_noise: dcvsh-irq-7:178 start 530.563817139 duration 260 ns
+       osnoise/7-2637    [007] d..h2..   530.563827: irq_noise: IPI:6 start 530.563826670 duration 156 ns
+       osnoise/7-2637    [007] .......   530.563828: sample_threshold: start 530.563814587 duration 12864 ns interference 2
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Noise duration: 13 us
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
 
