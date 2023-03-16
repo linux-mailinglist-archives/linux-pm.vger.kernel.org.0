@@ -2,98 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DE36BCFCF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 13:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C556BD1E1
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 15:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjCPMn2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 08:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S231144AbjCPONF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 10:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjCPMn1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 08:43:27 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9413BAD3E
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 05:43:13 -0700 (PDT)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 62ABA40287;
-        Thu, 16 Mar 2023 13:43:09 +0100 (CET)
-Date:   Thu, 16 Mar 2023 13:43:07 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S229955AbjCPOND (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 10:13:03 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853FE4ECF2
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 07:13:01 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id a32so1828690ljr.9
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 07:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678975980;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AkFEog4APZRdHeT2q4GaSqDGIc5SgyK33RTmMqwtReY=;
+        b=kFMBNcVnPi6z72HcIvse712jYOKaSucHb0BKbGJfosXlFmHctGwtfcwg+7AnMcdk/S
+         eOaMg1ccm4YROtE89oJsvhbm+5ZALTcfjY6u0No94VX/HGzHIv5XknXvZ/OBKDjBWkii
+         Xy76YkaBWke139YAK4y/ZCZCZTZ+5YcEFEgX4vYpTEJIlq4T3V5FwAN+IPdXtcsJaj9R
+         P4ED9TzLkci6fiFRzFZCLxZPGs2m26fbIl7w4nYyVgNAVqyE+4Nsq8hrZEUAeaawyDU9
+         5NyssS6Wsg2rA1TnJAzr88XFkh9nLDJOG/kxEWgsL4OXYt+AK7SqScnwZAUZ6iD32kz1
+         +84A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678975980;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AkFEog4APZRdHeT2q4GaSqDGIc5SgyK33RTmMqwtReY=;
+        b=bpCFmw5ZMm5svUPntyQUGVVgbF9iaiEwTkSlBIs8L6dVGDRaB6kH7i0OmqfuGIsywP
+         9WjMmfHd8RPcI133yH0lRF+t5/wdps638sgXXw1Lb90xqb0t0MJI6+ljf7IPxYHfLuSH
+         OQyj5f5jUnaiY6fC92Tu3+0OYFZGU1dL3cbupuQCrAuHbE5RU6qI82JtUMAbL4mFyVUx
+         BsVZdnfkIBGkosxiTImE8BuHSIfhVRDDqtqPuEYoWKNG/ZZ0tpkuDq/ANpq5mjAKdMxw
+         8iExn7HBhdLv6YaRgztjFWYPNOq5Vsk/Z3cjL1braGERlOLw/xwMUzD8n9UVdw/nnXwz
+         iEEg==
+X-Gm-Message-State: AO0yUKXr2sQY8jRclro09ANImwGxNh4AivAaF9d5F7Q+niMU/9z+LN04
+        50mlpF9ZJwC9s1qpXNih8fI0aQ==
+X-Google-Smtp-Source: AK7set+EQ7JhP/5dKR8j1Cl9Eas3CNLuBDSy5ysOErliFuBvLjMMtZcOUp7SKZatRaQkZWKc1Ga+JA==
+X-Received: by 2002:a2e:9402:0:b0:298:97d7:8fc3 with SMTP id i2-20020a2e9402000000b0029897d78fc3mr2205383ljh.4.1678975979734;
+        Thu, 16 Mar 2023 07:12:59 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id a9-20020a2eb549000000b00295735991edsm1261639ljn.38.2023.03.16.07.12.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 07:12:59 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 00/14] SM6375 feature enablement (round one)
+Date:   Thu, 16 Mar 2023 15:12:49 +0100
+Message-Id: <20230303-topic-sm6375_features0_dts-v2-0-708b8191f7eb@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOIjE2QC/42OTQ6CMBCFr2K6tqb8iMWV9zCElHYKk2BLZoBoC
+ He3cgLzVt9bfO9tgoEQWNxPmyBYkTGGBPn5JOxgQg8SXWKRq7xQKXKOE1rJr6q4XVsPZl4IWLV
+ uZqkrVavSF5l2WiRBZxhkRybYISnCMo6pnAg8vo/FZ5N4QJ4jfY4Da/Zr/9paM6mkttrVpe9M5
+ dVjxGAoXiL1otn3/QujVWdE2gAAAA==
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
- generic ADC node name
-Message-ID: <20230316124307.pzuvbacsmjdootfx@SoMainline.org>
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
- <20230201204447.542385-3-marijn.suijten@somainline.org>
- <20230203212501.GA908601-robh@kernel.org>
- <20230205150645.549ff062@jic23-huawei>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205150645.549ff062@jic23-huawei>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678975978; l=2737;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=RARjhqs3QRBTIsfJeubTjOqbRYf1ouM92C7DgsRRzD8=;
+ b=yKm4H5uqTeUJhy5/okAPw6qEwM4lVp6yo4kzkK3Z5im1UmNWPD5bAqgfeFLSGDhOxCY7xFCvQly0
+ aRbUzcZXANLqEShRIRatVISSA9vks4PEWnXREpxOHfiMjYtcb9HK
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2023-02-05 15:06:45, Jonathan Cameron wrote:
-> On Fri, 3 Feb 2023 15:25:01 -0600
-> Rob Herring <robh@kernel.org> wrote:
-> 
-> > On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:
-> > > Update the example to reflect a future requirement for the generic
-> > > adc-chan node name on ADC channel nodes, while conveying the board name
-> > > of the channel in a label instead.  
-> > 
-> > I don't think we've defined 'adc-chan' as THE generic name. Looks like 
-> > we have:
-> > 
-> > adc-chan
-> > adc-channel
-> > channel
-> > 
-> > 'channel' is the most common (except for QCom).
-> Good spot.
-> 
-> We also have that defined as the channel name in 
-> bindings/iio/adc.yaml
+v1 -> v2:
+- Reword CPUCP L3 commits to indicate that CPUCP != the L3 scaler within
+- Pick up tags
+- Drop the MPM introduction as we work on resolving RPM MSG RAM bindings
 
-Good point, let's match adc.yaml and use 'channel' instead.  I'll
-respin this series with thas, as well as rebasing on -next to solve
-conflicts with 8013295662f5 ("arm64: dts: qcom: sc8280xp: Add label
-property to vadc channel nodes"): supposedly that DT originally relied
-on the `@XX` suffix bug :)
+v1: https://lore.kernel.org/r/20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org
 
-> Now this particular binding doesn't use anything from that
-> generic binding (other than trivial use of reg) but better to be
-> consistent with it than not!
+Hello
 
-Should it inherit the common binding, or was it omitted for a reason?
+This series brings support for a couple of nice things on SM6375, namely:
 
-- Marijn
+* 2 TSENS controllers & associated thermal-zones
+* RPM sleep stats
+* IMEM
+* WCN3990 Wi-Fi (Bluetooth doesn't wanna play ball yet)
+* MPSS & RMTFS
+* L3 scaling interconnect (not yet hooked up in this series, but it works,
+  still assessing the best scaling configuration)
+* MPM (big!; also implicitly fixes some interrupt lanes due to my earlier
+  misunderstanding of the downstream MPM<->GIC mapping)
+* Additional CPU sleep state (gated clock, power rail still on)
+* V- key on the Xperia
+
+It does *not* bring support for GPU, MDSS, icc and various other scaling
+parts which are still in progress of being upstreamed.
+
+More PDX225-specific patches, along with Wi-Fi enablement will come after
+that. But hey, we already know it works great ;)
+
+Tested on the only sm6375 device we support, the Xperia 10 IV (PDX225).
+
+Depends on:
+https://lore.kernel.org/lkml/20230109135647.339224-5-konrad.dybcio@linaro.org/
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (14):
+      dt-bindings: thermal: qcom-tsens: Add compatible for SM6375
+      dt-bindings: interconnect: OSM L3: Add SM6375 CPUCP compatible
+      dt-bindings: sram: qcom,imem: document SM6375 IMEM
+      arm64: dts: qcom: sm6375: Add RPM sleep stats
+      arm64: dts: qcom: sm6375: Add IMEM
+      arm64: dts: qcom: sm6375: Add RMTFS
+      arm64: dts: qcom: sm6375: Add wifi node
+      arm64: dts: qcom: sm6375: Add modem nodes
+      arm64: dts: qcom: sm6375: Add CPUCP L3 node
+      arm64: dts: qcom: sm6375: Add TSENS
+      arm64: dts: qcom: sm6375: Configure TSENS thermal zones
+      arm64: dts: qcom: sm6375: Bump CPU rail power collapse index
+      arm64: dts: qcom: sm6375: Introduce C3 power state for both ARM clusters
+      arm64: dts: qcom: sm6375-pdx225: Add volume down GPIO key
+
+ .../bindings/interconnect/qcom,osm-l3.yaml         |   1 +
+ .../devicetree/bindings/sram/qcom,imem.yaml        |   1 +
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+ .../dts/qcom/sm6375-sony-xperia-murray-pdx225.dts  |  27 +
+ arch/arm64/boot/dts/qcom/sm6375.dtsi               | 904 ++++++++++++++++++++-
+ 5 files changed, 926 insertions(+), 8 deletions(-)
+---
+base-commit: 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1
+change-id: 20230303-topic-sm6375_features0_dts-860904f318d8
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
