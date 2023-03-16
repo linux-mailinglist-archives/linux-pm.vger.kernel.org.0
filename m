@@ -2,82 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381386BDBD9
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 23:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCAF6BDBE6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 23:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjCPWjj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 18:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S229608AbjCPWpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 18:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjCPWjg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 18:39:36 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95889E2752;
-        Thu, 16 Mar 2023 15:39:30 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id bp11so1845961ilb.3;
-        Thu, 16 Mar 2023 15:39:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679006369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a5aXNvYe6Lfz7Jma92mTBnkBP/+jaJ3wVWecQeVYXIU=;
-        b=LMe8+8ZmrdDDPhkUqNLITuZM7BDVPgulc06mPsDdgrRRHoxKcEVhAaJ1H1PwmuGCzx
-         jGvqI6bspPLzgUtNEbBvPGGT4S0J/xtEJX/aTQ5YNSWr+VQQblcXTjXjQweQylr8ZDkq
-         crvkOs6nRdWZi+MF6iEfJXykADolLFPe4pXztfaJpcis/H4zLkxXSCTJUnMTp7bcvY5S
-         szQ9FkvQIzKciTyzplDj+d6qfHeYGVI6NAdQuY87CGDHEhP+y9o+6VL9nx/zxI1hn+SR
-         QJn+hYZkObfGNRlAOWCFcc6UvODCZGzhgPgmqqX/+jXTAWrw7sVt8Y1dZ3tayQEzEDzd
-         I+aw==
-X-Gm-Message-State: AO0yUKX43xfgw/LsgPkeWAQeTuI0xgttnd93rMRwdocOZxJPb8Cmmsn8
-        d++YDlX6/CgTFeUapcsJ9JFZkgivag==
-X-Google-Smtp-Source: AK7set+A/04zgI5D+zpxUlN/NfcVLC8GIHlfnsQO+c99XrBbxJDpsc0FckFElMYYuiR9klu8iCu18Q==
-X-Received: by 2002:a92:c9c5:0:b0:323:bce:f23f with SMTP id k5-20020a92c9c5000000b003230bcef23fmr8095568ilq.3.1679006369431;
-        Thu, 16 Mar 2023 15:39:29 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id t23-20020a02b197000000b003c4ec576030sm173777jah.4.2023.03.16.15.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 15:39:29 -0700 (PDT)
-Received: (nullmailer pid 4017617 invoked by uid 1000);
-        Thu, 16 Mar 2023 22:39:28 -0000
-Date:   Thu, 16 Mar 2023 17:39:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S230027AbjCPWo7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 18:44:59 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF2D591EF;
+        Thu, 16 Mar 2023 15:44:58 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D2DD2402E6;
+        Thu, 16 Mar 2023 23:44:52 +0100 (CET)
+Date:   Thu, 16 Mar 2023 23:44:50 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/8] dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCM2290
-Message-ID: <167900636751.4017563.6443660096958377320.robh@kernel.org>
-References: <20230308-topic-cpufreq_bindings-v1-0-3368473ec52d@linaro.org>
- <20230308-topic-cpufreq_bindings-v1-3-3368473ec52d@linaro.org>
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
+ generic ADC node name
+Message-ID: <20230316224450.onx2bldlisfwwp23@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>, iio@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org
+References: <20230201204447.542385-1-marijn.suijten@somainline.org>
+ <20230201204447.542385-3-marijn.suijten@somainline.org>
+ <20230203212501.GA908601-robh@kernel.org>
+ <20230205150645.549ff062@jic23-huawei>
+ <20230316124307.pzuvbacsmjdootfx@SoMainline.org>
+ <20230316174428.00003c4c@Huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308-topic-cpufreq_bindings-v1-3-3368473ec52d@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230316174428.00003c4c@Huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Wed, 08 Mar 2023 02:27:00 +0100, Konrad Dybcio wrote:
-> Document the OSM CPUFREQ_HW present on QCM2290, featuring just one
-> lonely frequency domain.
+On 2023-03-16 17:44:28, Jonathan Cameron wrote:
+<snip>
+> > Should it inherit the common binding, or was it omitted for a reason?
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/cpufreq/cpufreq-qcom-hw.yaml          | 24 ++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
+> Harmless but little point as far as I can see given we don't happen
+> to have any of the generic elements defined in the generic channel
+> binding.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Supposedly the reg property, and now also the node name.  Up to you to
+say whether I should inherit this (and strip out the common bits) or
+just focus on renaming the node name in the existing binding to channel.
 
+- Marijn
