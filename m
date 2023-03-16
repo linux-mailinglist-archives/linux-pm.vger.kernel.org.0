@@ -2,76 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767176BC760
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 08:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5AF6BC782
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 08:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCPHih (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 03:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S229925AbjCPHnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 03:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCPHie (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 03:38:34 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD30819C67;
-        Thu, 16 Mar 2023 00:38:24 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id g17so1173898lfv.4;
-        Thu, 16 Mar 2023 00:38:24 -0700 (PDT)
+        with ESMTP id S229636AbjCPHnc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 03:43:32 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A109F9EF43;
+        Thu, 16 Mar 2023 00:43:25 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso5189343pjf.0;
+        Thu, 16 Mar 2023 00:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678952303;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rvs1+zLkgWFQK+bxZ6xuanlYESj2CqPRnz2A9+zJTq4=;
-        b=YhiCZFq0obvEp8H1OzbRKaO76PihZqoS/x5adjsyTQetQxTSl2hI5qSgz/NjaT+dAE
-         Fc7xtBshrXJHRTOnNXZqfO5hkjoBRRlWt13rhsZOSzre+FZfcbSD8PKOW6K5ialfLjMV
-         FD9OjG+NG1bB+4G6YA7tYei3W/ajfkyaK2XwvDGbPwez7Oo4olkLwZBu66cE0OgOM58j
-         sQOJS9ZYCBrUs7krlQXRh82f1oXdT4A5OMT3WPm3lL8Lpk17u+N9/8d1XvaWIOTn0d7S
-         XNaHs85bIxvoO+B2aqgP+mzTpqqGscRuou2p4ivu4nLY66vIyquk67Qpsm8RIJ/yvhTX
-         3N+w==
+        d=gmail.com; s=20210112; t=1678952605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4QLlBEUgeLAqwMMEZyGWn7gzXwT9sGa0xB2v33G8aaM=;
+        b=lNxqMGYb+8is1IsgAvHvY2r2VbhdeeaGaYEXfupKAKbzKMw6djVpWbTqOjYfQ/GDH3
+         tMYqNWGq4KwiqDIcVZiawObecvGV9p1L0KHWOJBH5j9mdlROYUZAZrlmW0Ahcdx1GtMx
+         q3PJgUKwSNL4rlQq1lextGObopObI7hLpLf8qwqBDhS0+a+15jsmVLltx2nDx5CWB4vH
+         zH/aN1kkXJHw0c4ID6LYyzs4kctYbBX9nvD1p3dSUA5HblgSAYoN96FdlnckyCR50xwF
+         CVEFJSKf8tBDTgfRtS989r92ppJC5+PZkuZSZm8ZAHOkCwKdJ4++rgUhOg6+a422B7rc
+         yr3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952303;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rvs1+zLkgWFQK+bxZ6xuanlYESj2CqPRnz2A9+zJTq4=;
-        b=gQcSg2GUm+pCibg7IT+2xawd2IdNcpYLZJT02wJwndWv+UD+C97Kj/sf5DyPu+7BgZ
-         oXqn+0cXlq7gLosLZr+WE0Udbjgt4k20qIVyBeHudqpGQlHHGPlM0GRJJyRqpZeW/Z1w
-         RhJp6p01+DmNQLFXj/GINJut2tVGVFbQt8BtVXCFBSU3Iutyl9bZ6+kdqowZA0XoEekQ
-         N9J4oS9aQRS1SskwuxOzSbrVSuesixfvEJI/xQJ8w7IjdzAzYJnmUTBi4JTMe0R071cJ
-         JZdaiUx4PQVjbhQcpsWXs9xuZMWJTKxsbZxQB0zAd/svkU7XFh2POAXmfHPKmHHo6oNH
-         Ow2g==
-X-Gm-Message-State: AO0yUKWZJWlNBVik6t6EaeuYq4CaaR10sbIf0wtEEx7snufE13JsLa40
-        cjP5KqvB00HvWBe+Wo3sNKto/rFpAh0=
-X-Google-Smtp-Source: AK7set9wLrN71OcjSdjEtPud0TkPUrM8kBZ2qBEj/i4aqe512qRbsbxt3VCrT+6wa6XgcmpCXpDlgw==
-X-Received: by 2002:a05:6512:7a:b0:4b0:2a2f:ea6d with SMTP id i26-20020a056512007a00b004b02a2fea6dmr2700488lfo.35.1678952303073;
-        Thu, 16 Mar 2023 00:38:23 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id t16-20020ac24c10000000b004d4d7fb0e07sm1120070lfq.216.2023.03.16.00.38.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:38:22 -0700 (PDT)
-Message-ID: <775fab33-0964-67f0-837a-b5fdd7ae7a2b@gmail.com>
-Date:   Thu, 16 Mar 2023 09:38:21 +0200
+        d=1e100.net; s=20210112; t=1678952605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4QLlBEUgeLAqwMMEZyGWn7gzXwT9sGa0xB2v33G8aaM=;
+        b=O/BYSJ3S9uUaoInCF7sSJdkAARVqs2O8DwNc93T+4VNR5uOWdxIfKMErNnTxLtB1gO
+         UZ6h84cGjGRyapjxTbexmYf/IawD8WPVYNWBiTC9ak1SGxWOkm9dQxZ5ZxgADvSCoeHX
+         Qx4HdtZgB1mMe/m37Cb17T7D5cnorZvDl89SAq1QwRhsft+fFRyM1aVhF83vIa8i9j6m
+         tJKUHiBT3R281B0fSmpJP+8Nd1sZkeNyGFltyeOaobKi6cpEPiA+3QA5QfmA+S7NIQrA
+         1H2bxEMRm/2/sDksTv+d/OfRiUkOg2/Q4ps8+7sveeqVE4kXJ0Ysxve9RsAWrmJDYszN
+         72ug==
+X-Gm-Message-State: AO0yUKUuTMjqrR/4NLfQzsY5khU2Ux/q829FpuaR5gBGkgqA5e75+Vpt
+        tMsUluVJSTV4bxfmG+bV90covQtnaGJcCg==
+X-Google-Smtp-Source: AK7set+wO+rOlcF3ePhUVRDUK/vSGdPPrSJYH9IYAOwKnaL2wtFmtExOpORweaUtdshx//2BcBQ9EQ==
+X-Received: by 2002:a05:6a20:5495:b0:d5:1c74:27af with SMTP id i21-20020a056a20549500b000d51c7427afmr3622745pzk.29.1678952605002;
+        Thu, 16 Mar 2023 00:43:25 -0700 (PDT)
+Received: from kazuki-mac ([2400:4051:ea3:5910::789])
+        by smtp.gmail.com with ESMTPSA id 7-20020aa79247000000b00582f222f088sm4762318pfp.47.2023.03.16.00.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 00:43:24 -0700 (PDT)
+From:   Kazuki H <kazukih0205@gmail.com>
+X-Google-Original-From: Kazuki H <kazuki@kazuki-mac>
+Date:   Thu, 16 Mar 2023 16:43:18 +0900
+To:     linux-pm@vger.kernel.org
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Kazuki H <kazukih0205@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpuidle: Don't pass any values to
+ cpuidle_not_available
+Message-ID: <20230316074318.hrdstgqvtywz4qho@kazuki-mac>
+References: <linux-pm@vger.kernel.org>
+ <20230316063712.33353-1-kazukih0205@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv2 08/12] power: supply: generic-adc-battery: use
- simple-battery API
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230314225535.1321736-1-sre@kernel.org>
- <20230314225535.1321736-9-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230314225535.1321736-9-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316063712.33353-1-kazukih0205@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,82 +86,4 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/15/23 00:55, Sebastian Reichel wrote:
-> Use standard simple-battery API for constant battery
-> information like min and max voltage. This simplifies
-> the driver a lot and brings automatic support for DT.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-> ---
->   drivers/power/supply/generic-adc-battery.c | 64 ++--------------------
->   include/linux/power/generic-adc-battery.h  | 18 ------
->   2 files changed, 4 insertions(+), 78 deletions(-)
->   delete mode 100644 include/linux/power/generic-adc-battery.h
-> 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index 771e5cfc49c3..d4f63d945b2c 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -22,7 +22,6 @@
->   #include <linux/slab.h>
->   #include <linux/iio/consumer.h>
->   #include <linux/iio/types.h>
-> -#include <linux/power/generic-adc-battery.h>
->   #include <linux/devm-helpers.h>
->   
->   #define JITTER_DEFAULT 10 /* hope 10ms is enough */
-> @@ -48,9 +47,7 @@ struct gab {
->   	struct power_supply		*psy;
->   	struct power_supply_desc	psy_desc;
->   	struct iio_channel	*channel[GAB_MAX_CHAN_TYPE];
-> -	struct gab_platform_data	*pdata;
->   	struct delayed_work bat_work;
-> -	int	level;
->   	int	status;
->   	bool cable_plugged;
->   	struct gpio_desc *charge_finished;
-> @@ -70,14 +67,6 @@ static void gab_ext_power_changed(struct power_supply *psy)
->   
->   static const enum power_supply_property gab_props[] = {
->   	POWER_SUPPLY_PROP_STATUS,
-> -	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-> -	POWER_SUPPLY_PROP_CHARGE_EMPTY_DESIGN,
-> -	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> -	POWER_SUPPLY_PROP_CURRENT_NOW,
-> -	POWER_SUPPLY_PROP_TECHNOLOGY,
-> -	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-> -	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-> -	POWER_SUPPLY_PROP_MODEL_NAME,
->   };
->   
->   /*
-> @@ -97,17 +86,6 @@ static bool gab_charge_finished(struct gab *adc_bat)
->   	return gpiod_get_value(adc_bat->charge_finished);
->   }
->   
-> -static int gab_get_status(struct gab *adc_bat)
-> -{
-> -	struct gab_platform_data *pdata = adc_bat->pdata;
-> -	struct power_supply_info *bat_info;
-> -
-> -	bat_info = &pdata->battery_info;
-> -	if (adc_bat->level == bat_info->charge_full_design)
-> -		return POWER_SUPPLY_STATUS_FULL;
-
-Not sure if this is intentional but I don't see the 
-POWER_SUPPLY_STATUS_FULL being reported after applying your series. If 
-this is intended, maybe it could be mentioned in commit log?
-
-Other than that - this really cleans up the driver in a nice way!
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Please ignore this, I messed it up.
