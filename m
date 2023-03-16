@@ -2,61 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5AF6BC782
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 08:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48A66BC797
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 08:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCPHnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 03:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S230116AbjCPHqV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 03:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCPHnc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 03:43:32 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A109F9EF43;
-        Thu, 16 Mar 2023 00:43:25 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso5189343pjf.0;
-        Thu, 16 Mar 2023 00:43:25 -0700 (PDT)
+        with ESMTP id S230039AbjCPHqR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 03:46:17 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18FA4033;
+        Thu, 16 Mar 2023 00:46:15 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j13so841815pjd.1;
+        Thu, 16 Mar 2023 00:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678952605;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4QLlBEUgeLAqwMMEZyGWn7gzXwT9sGa0xB2v33G8aaM=;
-        b=lNxqMGYb+8is1IsgAvHvY2r2VbhdeeaGaYEXfupKAKbzKMw6djVpWbTqOjYfQ/GDH3
-         tMYqNWGq4KwiqDIcVZiawObecvGV9p1L0KHWOJBH5j9mdlROYUZAZrlmW0Ahcdx1GtMx
-         q3PJgUKwSNL4rlQq1lextGObopObI7hLpLf8qwqBDhS0+a+15jsmVLltx2nDx5CWB4vH
-         zH/aN1kkXJHw0c4ID6LYyzs4kctYbBX9nvD1p3dSUA5HblgSAYoN96FdlnckyCR50xwF
-         CVEFJSKf8tBDTgfRtS989r92ppJC5+PZkuZSZm8ZAHOkCwKdJ4++rgUhOg6+a422B7rc
-         yr3w==
+        d=gmail.com; s=20210112; t=1678952774;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sp8n21BUQb5dHlsU/Jl3vAwa9E+kF9N6pkWBGTGEZ/c=;
+        b=m0xT41KK42bpQg1SdxIkvBesNYR67uqep4fC7Gyt9rg/ikc4w1rrJGMUwThWNw8C0q
+         COvG8Ynqr0eH9nU5VuxjbKeRAX8dZWztf30gYL2Q+gn57HUOMk2Yt8M9MXKKAG5uh0z2
+         dlGyX2rbAd28ALqBvXcKayQl00R0u5MhP5lkZVRdjuhyPz5a0YShAh51D2on3kTsnqN+
+         LB3Gkd7xol02CSwTpzHfhNKzInylacO7kiJWosuRUqy4P1Vku/IY7IwIEhWf0OPtHxxz
+         xZ63Ixv4p0Ql4tloNsrNGq2gOF9OtEdOEWfKzodBWo7tr/8CdK+yLrFrZNOlgxBqMOBg
+         JjWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952605;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4QLlBEUgeLAqwMMEZyGWn7gzXwT9sGa0xB2v33G8aaM=;
-        b=O/BYSJ3S9uUaoInCF7sSJdkAARVqs2O8DwNc93T+4VNR5uOWdxIfKMErNnTxLtB1gO
-         UZ6h84cGjGRyapjxTbexmYf/IawD8WPVYNWBiTC9ak1SGxWOkm9dQxZ5ZxgADvSCoeHX
-         Qx4HdtZgB1mMe/m37Cb17T7D5cnorZvDl89SAq1QwRhsft+fFRyM1aVhF83vIa8i9j6m
-         tJKUHiBT3R281B0fSmpJP+8Nd1sZkeNyGFltyeOaobKi6cpEPiA+3QA5QfmA+S7NIQrA
-         1H2bxEMRm/2/sDksTv+d/OfRiUkOg2/Q4ps8+7sveeqVE4kXJ0Ysxve9RsAWrmJDYszN
-         72ug==
-X-Gm-Message-State: AO0yUKUuTMjqrR/4NLfQzsY5khU2Ux/q829FpuaR5gBGkgqA5e75+Vpt
-        tMsUluVJSTV4bxfmG+bV90covQtnaGJcCg==
-X-Google-Smtp-Source: AK7set+wO+rOlcF3ePhUVRDUK/vSGdPPrSJYH9IYAOwKnaL2wtFmtExOpORweaUtdshx//2BcBQ9EQ==
-X-Received: by 2002:a05:6a20:5495:b0:d5:1c74:27af with SMTP id i21-20020a056a20549500b000d51c7427afmr3622745pzk.29.1678952605002;
-        Thu, 16 Mar 2023 00:43:25 -0700 (PDT)
-Received: from kazuki-mac ([2400:4051:ea3:5910::789])
-        by smtp.gmail.com with ESMTPSA id 7-20020aa79247000000b00582f222f088sm4762318pfp.47.2023.03.16.00.43.20
+        d=1e100.net; s=20210112; t=1678952774;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sp8n21BUQb5dHlsU/Jl3vAwa9E+kF9N6pkWBGTGEZ/c=;
+        b=4B3axtaYpTaEhy2ybPA8hdwAk9NDjm+IAGNTaLmKzw6zJfLsDogiaEpgNkKfbcXVKW
+         m3/jA3Tntc62ML2dPz/i/9+dVazsJk+BVin1Rga5YXKXRbHUzwHE6Bjs3tB0P9kCfofc
+         QszcDyXNgxlmcWC6k5c8tNg3Sle6UmYlCw93HLBwlAZqZt+5i8WRohTU7kZ0qKHWlX1a
+         naPzUzpKowtM6PX0o7XzvuiO/EXbqgfDI5zGRpwtU6/AZoF1C+qt+niCb8tzu7sgcCT+
+         wzhwFK/iJoZzYuZLnyTAx6XqmTUj0zcc477NDCFMcN3frAF7tetahbiB5RH4hrae3fjl
+         h4AA==
+X-Gm-Message-State: AO0yUKXoGDF6aKnweFjM1Di05m0Dgi5lRJ10YeMb7KOqj9rLBz1VOmXA
+        zzouQSCqlmYEWu+2iztTIPSo4Dl1v9ww2A==
+X-Google-Smtp-Source: AK7set8XFIK72Rtk0X1EhThGMVUB3zTC+gG6Mvs3ElWDeAAJgFTs5JfLsQrVjIjBH8tAINbxh3yB/A==
+X-Received: by 2002:a17:903:41d0:b0:1a0:41eb:fdb3 with SMTP id u16-20020a17090341d000b001a041ebfdb3mr2499067ple.10.1678952773962;
+        Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
+Received: from kazuki-mac.lan ([2400:4051:ea3:5910::789])
+        by smtp.gmail.com with ESMTPSA id kh5-20020a170903064500b0019b9a075f1fsm4889717plb.80.2023.03.16.00.46.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 00:43:24 -0700 (PDT)
+        Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
 From:   Kazuki H <kazukih0205@gmail.com>
-X-Google-Original-From: Kazuki H <kazuki@kazuki-mac>
-Date:   Thu, 16 Mar 2023 16:43:18 +0900
 To:     linux-pm@vger.kernel.org
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Kazuki H <kazukih0205@gmail.com>,
+Cc:     Kazuki H <kazukih0205@gmail.com>,
+        Kazuki Hashimoto <kazuki0205@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -66,16 +64,13 @@ Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpuidle: Don't pass any values to
- cpuidle_not_available
-Message-ID: <20230316074318.hrdstgqvtywz4qho@kazuki-mac>
-References: <linux-pm@vger.kernel.org>
- <20230316063712.33353-1-kazukih0205@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] sched/idle: Remove stale comments
+Date:   Thu, 16 Mar 2023 16:45:58 +0900
+Message-Id: <20230316074600.288864-1-kazukih0205@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316063712.33353-1-kazukih0205@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -86,4 +81,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Please ignore this, I messed it up.
+rcu_idle_enter/exit() got removed in commit 1098582a0f6c
+("sched,idle,rcu: Push rcu_idle deeper into the idle path"), so this
+comment is outdated. Remove it.
+
+Signed-off-by: Kazuki Hashimoto <kazuki0205@gmail.com>
+---
+ kernel/sched/idle.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index f26ab2675f7d..dbfc2eb5ccbd 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -179,12 +179,6 @@ static void cpuidle_idle_call(void)
+ 		return;
+ 	}
+ 
+-	/*
+-	 * The RCU framework needs to be told that we are entering an idle
+-	 * section, so no more rcu read side critical sections and one more
+-	 * step to the grace period
+-	 */
+-
+ 	if (cpuidle_not_available(drv, dev)) {
+ 		tick_nohz_idle_stop_tick();
+ 
+-- 
+2.40.0
+
