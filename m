@@ -2,184 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843666BD7B8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 19:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAD36BDBC1
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 23:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjCPSDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 14:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S229708AbjCPWfs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 18:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjCPSDL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 14:03:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90277A54F5;
-        Thu, 16 Mar 2023 11:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678989788; x=1710525788;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t3Z0AZq8QfGR1uNwW45+qvzjp/J3+V0/B7NRGW+sJ0k=;
-  b=XqILQmeN9ZCsWG935H8hjkDF6TEsMdfVHxpwbAlfO4Qu4MHdSOw7uTr8
-   RKWfOJZbrpZvRE4R1BhjBHFTlW0y6C7AyHJGFuos6DU4gd69R3pvF3iVG
-   6QApTshDiGcwccNRTqswviPJ+d+WHZdQD+C83fm+kVuHOGLcM8kiUAaQ2
-   TcQuCLoiKuKTc/UhxVdtL1/qae3FAV47NG8UtQ4BlUzgKLEpNd6Jr6lfF
-   CA3oG8LEIljIwom37npPDNiQS/R2h26/ZeSqBKhHFPOKXrvRKfPuMH7id
-   f/dxEhFdsO02ztdrDREzSYinzm4OckjhSWpbJmZzQUQ+OYj2VOM7HhEsl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="321927616"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="321927616"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:02:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="925851460"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="925851460"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 11:02:38 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcrvx-0008fe-17;
-        Thu, 16 Mar 2023 18:02:37 +0000
-Date:   Fri, 17 Mar 2023 02:02:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Chen-Yu Tsai <wenst@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Balsam CHIHI <bchihi@baylibre.com>, linux-pm@vger.kernel.org,
+        with ESMTP id S229608AbjCPWfr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 18:35:47 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8329D58C10;
+        Thu, 16 Mar 2023 15:35:46 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id o12so1503505iow.6;
+        Thu, 16 Mar 2023 15:35:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679006145;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsDQM6oA7Sc4GrwdW4rvd7swFz7mkc413XGqYjlViXE=;
+        b=VJegj11omvMfG1HOy22SdWAjVHXM32uEILBjYWdgS5+KpR40o2K6INph25wiE70uFA
+         /nnOt54OypgaL+NuDS5xDDKRdQLeIGgz40hG3ux0rAAFQKjwg1gCkfHRDVzVyegAQN3c
+         yY5T+SbLg3opbED/mqrLwaN5fu3SnUmybld4sqNIwR/7+pQ6gW7fmKhABMTjKi1VE/Ay
+         VasOFQhS0DrX6hfpYL7rdvb5719MyUpmNwOLGMdSaqSe7hpXYo8PtjXwpJ1s0Q0c6AZL
+         1bH4nH0b8YSrRHsGkYsu46erVzPayjc+hH25snLVn0rle/4FjEds9rVnhkSjbobAdrIb
+         lzxQ==
+X-Gm-Message-State: AO0yUKXOj0/DarVDv4ioI6n8Ncmx3GH5TZKoLHD1jjduF+O2U3MKqXUc
+        SVJxFmHBWMMojgjRRfh9MQ==
+X-Google-Smtp-Source: AK7set8scroUEs+g+P+YuNnzijoW4C2z9w+t4go2VOkci7XB0pxR0PPx9n8TncXiQ6U5y2eS8rnQbw==
+X-Received: by 2002:a6b:a13:0:b0:753:2862:a2c0 with SMTP id z19-20020a6b0a13000000b007532862a2c0mr263784ioi.21.1679006145636;
+        Thu, 16 Mar 2023 15:35:45 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id d4-20020a6b6804000000b0073f8a470bacsm117385ioc.16.2023.03.16.15.35.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 15:35:45 -0700 (PDT)
+Received: (nullmailer pid 4013127 invoked by uid 1000);
+        Thu, 16 Mar 2023 22:35:43 -0000
+Date:   Thu, 16 Mar 2023 17:35:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, bchihi@baylibre.com,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] thermal/drivers/mediatek/lvts_thermal: Register
- thermal zones as hwmon sensors
-Message-ID: <202303170104.d4JG4Rmo-lkp@intel.com>
-References: <20230315034449.2604197-1-wenst@chromium.org>
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to
+ LVTS thermal controllers for mt8195
+Message-ID: <20230316223543.GA4008428-robh@kernel.org>
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
+ <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+ <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230315034449.2604197-1-wenst@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chen-Yu,
+On Thu, Mar 09, 2023 at 11:39:13AM +0100, Daniel Lezcano wrote:
+> On 09/03/2023 05:40, Chen-Yu Tsai wrote:
+> > On Wed, Mar 8, 2023 at 12:46 AM <bchihi@baylibre.com> wrote:
+> > > 
+> > > From: Balsam CHIHI <bchihi@baylibre.com>
+> > > 
+> > > Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
+> > > 
+> > > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > > ---
+> > >   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+> > >   1 file changed, 10 insertions(+)
+> > > 
+> > > diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> > > index c09398920468..8fa5a46675c4 100644
+> > > --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> > > +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> > > @@ -16,4 +16,14 @@
+> > >   #define MT8195_MCU_LITTLE_CPU2  6
+> > >   #define MT8195_MCU_LITTLE_CPU3  7
+> > > 
+> > > +#define MT8195_AP_VPU0  8
+> > 
+> > Can't this start from 0? This is a different hardware block. The index
+> > namespace is separate. Same question for MT8192.
+> 
+> The ID is used to differentiate the thermal zone identifier in the device
+> tree from the driver.
+> 
+> +		vpu0-thermal {
+> +			polling-delay = <0>;
+> +			polling-delay-passive = <0>;
+> +			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
+> +
+> +			trips {
+> +				vpu0_crit: trip-crit {
+> +					temperature = <100000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> 
+> If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate
+> MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+> 
+> The LVTS driver will call devm_thermal_of_zone_register() with the sensor
+> id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id, then at the
+> moment of registering the MT8195_AP_VPU0, the underlying OF thermal
+> framework code will use MT8195_MCU_BIG_CPU0 description instead because it
+> will be the first to be find in the DT.
+> 
+> If MT8195_AP_VPU0 is described in DT before, then the same will happen when
+> registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered instead.
+> 
+> IOW all ids must be different.
 
-I love your patch! Yet something to improve:
+That's broken for how producer/consumer phandle+args bindings work.
 
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on linus/master v6.3-rc2 next-20230316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yu-Tsai/thermal-drivers-mediatek-lvts_thermal-Register-thermal-zones-as-hwmon-sensors/20230315-114601
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230315034449.2604197-1-wenst%40chromium.org
-patch subject: [PATCH RESEND] thermal/drivers/mediatek/lvts_thermal: Register thermal zones as hwmon sensors
-config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20230317/202303170104.d4JG4Rmo-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1f9bbeb9645230bb309c589d8bea6bf066628b44
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chen-Yu-Tsai/thermal-drivers-mediatek-lvts_thermal-Register-thermal-zones-as-hwmon-sensors/20230315-114601
-        git checkout 1f9bbeb9645230bb309c589d8bea6bf066628b44
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/misc/ drivers/net/mdio/ drivers/pci/controller/ drivers/rtc/ drivers/thermal/mediatek/ drivers/tty/serial/ drivers/usb/host/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170104.d4JG4Rmo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/thermal/mediatek/lvts_thermal.c: In function 'lvts_ctrl_start':
->> drivers/thermal/mediatek/lvts_thermal.c:997:55: error: 'chip' undeclared (first use in this function)
-     997 |                 if (devm_thermal_add_hwmon_sysfs(dev, chip->tz_dev))
-         |                                                       ^~~~
-   drivers/thermal/mediatek/lvts_thermal.c:997:55: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/chip +997 drivers/thermal/mediatek/lvts_thermal.c
-
-   971	
-   972	static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
-   973	{
-   974		struct lvts_sensor *lvts_sensors = lvts_ctrl->sensors;
-   975		struct thermal_zone_device *tz;
-   976		u32 sensor_map = 0;
-   977		int i;
-   978	
-   979		for (i = 0; i < lvts_ctrl->num_lvts_sensor; i++) {
-   980	
-   981			int dt_id = lvts_sensors[i].dt_id;
-   982	
-   983			tz = devm_thermal_of_zone_register(dev, dt_id, &lvts_sensors[i],
-   984							   &lvts_ops);
-   985			if (IS_ERR(tz)) {
-   986				/*
-   987				 * This thermal zone is not described in the
-   988				 * device tree. It is not an error from the
-   989				 * thermal OF code POV, we just continue.
-   990				 */
-   991				if (PTR_ERR(tz) == -ENODEV)
-   992					continue;
-   993	
-   994				return PTR_ERR(tz);
-   995			}
-   996	
- > 997			if (devm_thermal_add_hwmon_sysfs(dev, chip->tz_dev))
-   998				dev_warn(dev, "zone %d: Failed to add hwmon sysfs attributes\n", dt_id);
-   999	
-  1000			/*
-  1001			 * The thermal zone pointer will be needed in the
-  1002			 * interrupt handler, we store it in the sensor
-  1003			 * structure. The thermal domain structure will be
-  1004			 * passed to the interrupt handler private data as the
-  1005			 * interrupt is shared for all the controller
-  1006			 * belonging to the thermal domain.
-  1007			 */
-  1008			lvts_sensors[i].tz = tz;
-  1009	
-  1010			/*
-  1011			 * This sensor was correctly associated with a thermal
-  1012			 * zone, let's set the corresponding bit in the sensor
-  1013			 * map, so we can enable the temperature monitoring in
-  1014			 * the hardware thermal controller.
-  1015			 */
-  1016			sensor_map |= BIT(i);
-  1017		}
-  1018	
-  1019		/*
-  1020		 * Bits:
-  1021		 *      9: Single point access flow
-  1022		 *    0-3: Enable sensing point 0-3
-  1023		 *
-  1024		 * The initialization of the thermal zones give us
-  1025		 * which sensor point to enable. If any thermal zone
-  1026		 * was not described in the device tree, it won't be
-  1027		 * enabled here in the sensor map.
-  1028		 */
-  1029		writel(sensor_map | BIT(9), LVTS_MONCTL0(lvts_ctrl->base));
-  1030	
-  1031		return 0;
-  1032	}
-  1033	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Rob
