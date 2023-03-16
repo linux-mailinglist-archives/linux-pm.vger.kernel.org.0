@@ -2,62 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4786BC6B1
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 08:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767176BC760
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 08:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCPHOD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 03:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S229879AbjCPHih (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 03:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCPHOB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 03:14:01 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB45FADC11;
-        Thu, 16 Mar 2023 00:13:39 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a32so618262ljr.9;
-        Thu, 16 Mar 2023 00:13:39 -0700 (PDT)
+        with ESMTP id S229929AbjCPHie (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 03:38:34 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD30819C67;
+        Thu, 16 Mar 2023 00:38:24 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id g17so1173898lfv.4;
+        Thu, 16 Mar 2023 00:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678950818;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=gmail.com; s=20210112; t=1678952303;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=F2wFT7CrRqcdyw8L0sjGieOy+9WgGuAwjTPbuLH379I=;
-        b=AFZJv8f0LnZQ0fM7TsswxbUC8egy/hgi+pKDIFZnbGJyZicjuFs+lKy4jytlsC1VbR
-         KkA2qJJTH1nNsThH8SdG4AyIb++pNptf/eT4c81KKQxuJwAIqZQBotg0fRx1sNmEwILo
-         8Vpf2q8SkRmfx/gZMIwO3oZjPtz7znR8+OHM25x4suC5PQgC/W0zo7gC04rnEhLuIoUR
-         Sn781dn8NyRnKUwFIzSyOcVRXmAiiHtp5Q92oUq1AZLfsx1Bj4a/OP2CwAXbHiOTfpja
-         Z66ZYWwy9gDvI4r37kODI/cJpcvhkdt8Lwk/PIGi2EKaY0mCj+f1tQ9iuQvcmNXqcYUc
-         nMMA==
+        bh=Rvs1+zLkgWFQK+bxZ6xuanlYESj2CqPRnz2A9+zJTq4=;
+        b=YhiCZFq0obvEp8H1OzbRKaO76PihZqoS/x5adjsyTQetQxTSl2hI5qSgz/NjaT+dAE
+         Fc7xtBshrXJHRTOnNXZqfO5hkjoBRRlWt13rhsZOSzre+FZfcbSD8PKOW6K5ialfLjMV
+         FD9OjG+NG1bB+4G6YA7tYei3W/ajfkyaK2XwvDGbPwez7Oo4olkLwZBu66cE0OgOM58j
+         sQOJS9ZYCBrUs7krlQXRh82f1oXdT4A5OMT3WPm3lL8Lpk17u+N9/8d1XvaWIOTn0d7S
+         XNaHs85bIxvoO+B2aqgP+mzTpqqGscRuou2p4ivu4nLY66vIyquk67Qpsm8RIJ/yvhTX
+         3N+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678950818;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20210112; t=1678952303;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2wFT7CrRqcdyw8L0sjGieOy+9WgGuAwjTPbuLH379I=;
-        b=XmwElcI0/2nr2BsgRNuk46OUlXcUdnjt2UrngOXZJf19XtZedtpMYX1bOxOiWM7YM/
-         cDeRzFjHcvKHtKDnD1xbxfSsAclQfvgLWRNeq+D4ogAgwvW4vHr2zgEWeFMSzlxAD8NE
-         9ZPzIMrvbGyWqwchFWGTBoRVCtqmU5VjbUn/Cd+2TK3Zi5aTJSVBmobeB6Cv2vT1HspI
-         +jyusPuTbez7ad91ihBqJqXqSacAcK6Dw6ZRd7e/Rqe5cihQJC6GQAcCHY3HPm6gEpCF
-         bNE/hP6KEBCYxAHDCFPKAPjUNx8+UiJlXQcAsNIjjW5CDvAqJUSWYEuPUJV22GVS9q32
-         s69Q==
-X-Gm-Message-State: AO0yUKVH4Ztn2jy5fDurNv2sJub35lWkhSDMM8OqGu+NQc8NIK4zbLV0
-        8j0cL0M3InSKVzjS1CgU4EQ=
-X-Google-Smtp-Source: AK7set+QXuT4Phd7o0BtowhfYtOterzcc0ah/2EqaDQmwvsYz8jF5sUdZeNB2iugK3zTYb4BrkcsRQ==
-X-Received: by 2002:a05:651c:10cf:b0:28f:8fa4:7c25 with SMTP id l15-20020a05651c10cf00b0028f8fa47c25mr1421917ljn.25.1678950818031;
-        Thu, 16 Mar 2023 00:13:38 -0700 (PDT)
+        bh=Rvs1+zLkgWFQK+bxZ6xuanlYESj2CqPRnz2A9+zJTq4=;
+        b=gQcSg2GUm+pCibg7IT+2xawd2IdNcpYLZJT02wJwndWv+UD+C97Kj/sf5DyPu+7BgZ
+         oXqn+0cXlq7gLosLZr+WE0Udbjgt4k20qIVyBeHudqpGQlHHGPlM0GRJJyRqpZeW/Z1w
+         RhJp6p01+DmNQLFXj/GINJut2tVGVFbQt8BtVXCFBSU3Iutyl9bZ6+kdqowZA0XoEekQ
+         N9J4oS9aQRS1SskwuxOzSbrVSuesixfvEJI/xQJ8w7IjdzAzYJnmUTBi4JTMe0R071cJ
+         JZdaiUx4PQVjbhQcpsWXs9xuZMWJTKxsbZxQB0zAd/svkU7XFh2POAXmfHPKmHHo6oNH
+         Ow2g==
+X-Gm-Message-State: AO0yUKWZJWlNBVik6t6EaeuYq4CaaR10sbIf0wtEEx7snufE13JsLa40
+        cjP5KqvB00HvWBe+Wo3sNKto/rFpAh0=
+X-Google-Smtp-Source: AK7set9wLrN71OcjSdjEtPud0TkPUrM8kBZ2qBEj/i4aqe512qRbsbxt3VCrT+6wa6XgcmpCXpDlgw==
+X-Received: by 2002:a05:6512:7a:b0:4b0:2a2f:ea6d with SMTP id i26-20020a056512007a00b004b02a2fea6dmr2700488lfo.35.1678952303073;
+        Thu, 16 Mar 2023 00:38:23 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id t17-20020a2e9d11000000b0029353caa593sm1124713lji.5.2023.03.16.00.13.37
+        by smtp.gmail.com with ESMTPSA id t16-20020ac24c10000000b004d4d7fb0e07sm1120070lfq.216.2023.03.16.00.38.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:13:37 -0700 (PDT)
-Message-ID: <f581a290-4f10-5f32-7640-8c5dea0ccfce@gmail.com>
-Date:   Thu, 16 Mar 2023 09:13:36 +0200
+        Thu, 16 Mar 2023 00:38:22 -0700 (PDT)
+Message-ID: <775fab33-0964-67f0-837a-b5fdd7ae7a2b@gmail.com>
+Date:   Thu, 16 Mar 2023 09:38:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
- simple-battery data
+Subject: Re: [PATCHv2 08/12] power: supply: generic-adc-battery: use
+ simple-battery API
 Content-Language: en-US, en-GB
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -65,13 +64,11 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230314225535.1321736-1-sre@kernel.org>
- <20230314225535.1321736-3-sre@kernel.org>
- <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
- <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
- <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
-In-Reply-To: <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
+ <20230314225535.1321736-9-sre@kernel.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230314225535.1321736-9-sre@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -82,31 +79,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/16/23 09:10, Matti Vaittinen wrote:
-> On 3/16/23 02:41, Sebastian Reichel wrote:
->> Hi,
->> [08/12] power: supply: generic-adc-battery: use simple-battery API
+On 3/15/23 00:55, Sebastian Reichel wrote:
+> Use standard simple-battery API for constant battery
+> information like min and max voltage. This simplifies
+> the driver a lot and brings automatic support for DT.
 > 
-> This one did look good to me but as it was pretty trivial one I didn't 
-> think my review made much of a difference :) I can reply with my tag on 
-> that one though as I did review what there was to review.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+> ---
+>   drivers/power/supply/generic-adc-battery.c | 64 ++--------------------
+>   include/linux/power/generic-adc-battery.h  | 18 ------
+>   2 files changed, 4 insertions(+), 78 deletions(-)
+>   delete mode 100644 include/linux/power/generic-adc-battery.h
+> 
+> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
+> index 771e5cfc49c3..d4f63d945b2c 100644
+> --- a/drivers/power/supply/generic-adc-battery.c
+> +++ b/drivers/power/supply/generic-adc-battery.c
+> @@ -22,7 +22,6 @@
+>   #include <linux/slab.h>
+>   #include <linux/iio/consumer.h>
+>   #include <linux/iio/types.h>
+> -#include <linux/power/generic-adc-battery.h>
+>   #include <linux/devm-helpers.h>
+>   
+>   #define JITTER_DEFAULT 10 /* hope 10ms is enough */
+> @@ -48,9 +47,7 @@ struct gab {
+>   	struct power_supply		*psy;
+>   	struct power_supply_desc	psy_desc;
+>   	struct iio_channel	*channel[GAB_MAX_CHAN_TYPE];
+> -	struct gab_platform_data	*pdata;
+>   	struct delayed_work bat_work;
+> -	int	level;
+>   	int	status;
+>   	bool cable_plugged;
+>   	struct gpio_desc *charge_finished;
+> @@ -70,14 +67,6 @@ static void gab_ext_power_changed(struct power_supply *psy)
+>   
+>   static const enum power_supply_property gab_props[] = {
+>   	POWER_SUPPLY_PROP_STATUS,
+> -	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> -	POWER_SUPPLY_PROP_CHARGE_EMPTY_DESIGN,
+> -	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> -	POWER_SUPPLY_PROP_CURRENT_NOW,
+> -	POWER_SUPPLY_PROP_TECHNOLOGY,
+> -	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+> -	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
+> -	POWER_SUPPLY_PROP_MODEL_NAME,
+>   };
+>   
+>   /*
+> @@ -97,17 +86,6 @@ static bool gab_charge_finished(struct gab *adc_bat)
+>   	return gpiod_get_value(adc_bat->charge_finished);
+>   }
+>   
+> -static int gab_get_status(struct gab *adc_bat)
+> -{
+> -	struct gab_platform_data *pdata = adc_bat->pdata;
+> -	struct power_supply_info *bat_info;
+> -
+> -	bat_info = &pdata->battery_info;
+> -	if (adc_bat->level == bat_info->charge_full_design)
+> -		return POWER_SUPPLY_STATUS_FULL;
 
-Sorry! I mixed this patch with another one. This indeed did have some 
-changes - I must've accidentally skipped this one. Will check this after 
-eating my breakfast :)
+Not sure if this is intentional but I don't see the 
+POWER_SUPPLY_STATUS_FULL being reported after applying your series. If 
+this is intended, maybe it could be mentioned in commit log?
 
-> 
->>
->>> [...]
->>
->> Thanks for your reviews,
-> 
-> Thanks to you! You are the one making things better here, I am just 
-> treating this as an opportunity to learn ;)
-> 
-> Yours,
->      -- Matti
-> 
+Other than that - this really cleans up the driver in a nice way!
+
+Yours,
+	-- Matti
 
 -- 
 Matti Vaittinen
