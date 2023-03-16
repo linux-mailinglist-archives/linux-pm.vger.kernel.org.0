@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902EC6BD1E8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 15:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0F16BD1EB
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Mar 2023 15:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCPONJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Mar 2023 10:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S231207AbjCPONN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Mar 2023 10:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjCPONH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 10:13:07 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B2C6188D
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 07:13:04 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id f16so1819207ljq.10
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 07:13:04 -0700 (PDT)
+        with ESMTP id S231175AbjCPONI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Mar 2023 10:13:08 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429F65ADD1
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 07:13:05 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id b10so1872405ljr.0
+        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 07:13:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678975983;
+        d=linaro.org; s=google; t=1678975985;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LOCr/dp56x8yfPg236tQnpLOuN8kndNbHP2o7x5RuGY=;
-        b=Lc5KcKlhDqHl1KpuuZ5W/BnHDClDtmGbyEhuFN4hZOfZ9bBf7AybyTkPQP6acCDk0R
-         xzM+c6wqXxJEobg0Doo9IL43MP54R23YEd4gcmN98ufUr65okpYDbxZhaxEcgEeAbztC
-         52xVsAbOE8CHnWzLYFc7D8LFa1iIJ67q3080VG8pH5UR/05IvRt7lB18tin793Ao5AzS
-         E+JAL6rFweGo8cKtN3n1pa2Y3QKbuZIEpmzbvm8fmv0NZtLT5VJJAowjNQC7PJE4pxWl
-         PtXb7ViNNvLLQzMhkaLGwHk5isGRJibcHQ105pe+StMNpF2HninSAWfNu5r2FLWOxxPZ
-         jbkg==
+        bh=3HNoZo2uT81mxVeKLelFqU53D98fdSiAid3ySyEFFUc=;
+        b=OZXcUOkjYPuyo/kEj7oXIvQmAgqkee8YC7CzGHFDvFCLiYiPt+YAXku484VxFauoAO
+         fMS5DbRcBHiAI1hxrL82ChRTGWpUUdNymKBa2WemrEFZwiYfjknq+tE2RsBH9KrrAHLf
+         Tr5twCLurPfJQGqgUrECd01DwuXZ6X5nE7PPuxo4EouZUIiEYM5o6xJ11vw60/Omu5i+
+         66zMW3bmzuUuOd1pNy/q/1dcZC1Bhaej7xst63a09OD2sGF+bkSLZmVy4q5/2e6rjaGS
+         ajnHwG9BgUkR0+uMXSF0PD2DppsyHEOQeBdWGmTiOhHAixlG8tp52e+MDCkmnej4i5Ga
+         5BeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678975983;
+        d=1e100.net; s=20210112; t=1678975985;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LOCr/dp56x8yfPg236tQnpLOuN8kndNbHP2o7x5RuGY=;
-        b=ZbBT1o2JUrT5d1UXyy1vTJLMBVkuCmE9sVal8sZUPJOQswQAmOrWby92GWSrqwON3I
-         bhE8QT4rAoHlFdbdquLy8nxlnYHVZ6eTFdNXSFNJf2epCcVgwXWUrkccgnwWcsVrdnDk
-         aPn/D8Ia9Il9PuoZvhCEjbT6L+3wy+XdJtsOj9nv21LeaPjgKf6k2sxm22TTdyemiLtx
-         MYW0nnB0PL/i738jm7DG+QlhXrGGJ6+w80vuPeu9VV1x1FK1SxQRf8brU0GYETeeGJna
-         lEt3x3rFr7hAdxc7+eYouOi+fagcE/2TCHF4+kZRV+/7Nsebmee+IvXNxHzyXSuNdzBT
-         GrKg==
-X-Gm-Message-State: AO0yUKXakPTjaSrSJiSMw/e/kvB5ir3pvjhYONJiF3gB24z6xOhLzenN
-        XGYee0fy/C65OxSkpNx1ZeRrQQ==
-X-Google-Smtp-Source: AK7set83wVWsxOA+7q+2KuVzmbpaqw5DKO4c5CtIJKIJi3/iEalYzjMBNHw0lq5cNzgNDxd96vigHQ==
-X-Received: by 2002:a05:651c:1993:b0:293:5f35:d68f with SMTP id bx19-20020a05651c199300b002935f35d68fmr3014299ljb.31.1678975983034;
-        Thu, 16 Mar 2023 07:13:03 -0700 (PDT)
+        bh=3HNoZo2uT81mxVeKLelFqU53D98fdSiAid3ySyEFFUc=;
+        b=Vp8jysq3xrcwJVO58VLPmbPUHPAibLc4hKGa/xSV6YC1iToXaS7BPD0FrXhULf9IF1
+         75RT+fWY59G51bx1HqQj6+mb+DpLntOQ8f3EEDP5uoh9/ROSalSKm6OYaVyctfU/6gLg
+         f5pbd+YW+yqtZvU86JZGtnrasAmaAl4B/JCKHERXXXh8JU6qVSmr+rIxiVzCKoFnEPhh
+         qX3XWgKrX/qd7c+HyQcy0hbVqaaPCojJyjlGywTH5RXV3mLOoBEDeA+TQ0kJAZyj4IXw
+         D4OA9EJAwnCCuyKEkeZpXFs+raNpUFciuCen/u52CHKBanE4n9+jP6hSlLpPuDCa6pI6
+         sH1g==
+X-Gm-Message-State: AO0yUKW+ZsajQhJybRJKKIFQBeWsT2bJ1mtA5ALGitphKX8XqDd1dodV
+        9t79MkmzNJXLHrzLh8THK5GgHA==
+X-Google-Smtp-Source: AK7set8FzGv3wDhpfbCvBHGhmP74/TFh+5YiXdcXB8cu3s891aix25cnhj3DblLjZi0aT8XHIFj3pQ==
+X-Received: by 2002:a2e:8718:0:b0:299:ab8a:b2d1 with SMTP id m24-20020a2e8718000000b00299ab8ab2d1mr608839lji.41.1678975985347;
+        Thu, 16 Mar 2023 07:13:05 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id a9-20020a2eb549000000b00295735991edsm1261639ljn.38.2023.03.16.07.13.01
+        by smtp.gmail.com with ESMTPSA id a9-20020a2eb549000000b00295735991edsm1261639ljn.38.2023.03.16.07.13.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 07:13:02 -0700 (PDT)
+        Thu, 16 Mar 2023 07:13:04 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Thu, 16 Mar 2023 15:12:51 +0100
-Subject: [PATCH v2 02/14] dt-bindings: interconnect: OSM L3: Add SM6375
- CPUCP compatible
+Date:   Thu, 16 Mar 2023 15:12:52 +0100
+Subject: [PATCH v2 03/14] dt-bindings: sram: qcom,imem: document SM6375
+ IMEM
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-sm6375_features0_dts-v2-2-708b8191f7eb@linaro.org>
+Message-Id: <20230303-topic-sm6375_features0_dts-v2-3-708b8191f7eb@linaro.org>
 References: <20230303-topic-sm6375_features0_dts-v2-0-708b8191f7eb@linaro.org>
 In-Reply-To: <20230303-topic-sm6375_features0_dts-v2-0-708b8191f7eb@linaro.org>
 To:     Amit Kucheria <amitk@kernel.org>,
@@ -76,11 +76,11 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678975978; l=1087;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678975978; l=798;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=T2UOT192UwWYD42jhZA6LPQhbEe5pwQ77s6b/5s/QFI=;
- b=dZYzKfGZGus6e9MJbhUWopp854ldx9ddjnWZSnzdTnqz5qI1VR7IgwTWMT8ycCzFTlctd6pn0S4u
- oS5Uv1p4BxViuyMsoJvaQKwRm80YQXR1ZmH+qAPqtkcxBIktbFfM
+ bh=9sriG6OohvcstL9pTBH/SrGNaq/ftoFlv/MrKKmr1+Y=;
+ b=IndxXPxby0uI6TQ3S+VX1e7DW5de3aC7UelsLhcNRGVpQY1n0C1n95eUPmdmQerD9cppRAwG0vn6
+ JG4t0SkVCRtnO1c2rJO0Y5Dgef/ATQcT4zvSMvqwy7pfvuoFwV86
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,29 +93,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SM6375 includes a CPUCP block responsible for managing different APSS-
-related tasks, such as scaling the voltage and frequency of the
-components within the ARM DSU cluster. Add a compatible for the L3 cache
-DVFS scaler within.
+Add a compatible for SM6375 IMEM.
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+ Documentation/devicetree/bindings/sram/qcom,imem.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-index 576992a6dc5a..9d0a98d77ae9 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-@@ -29,6 +29,7 @@ properties:
-           - enum:
-               - qcom,sc7280-epss-l3
-               - qcom,sc8280xp-epss-l3
-+              - qcom,sm6375-cpucp-l3
-               - qcom,sm8250-epss-l3
-               - qcom,sm8350-epss-l3
-           - const: qcom,epss-l3
+diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+index ba694ce4a037..0548e8e0d30b 100644
+--- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
++++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+@@ -26,6 +26,7 @@ properties:
+           - qcom,sdm845-imem
+           - qcom,sdx55-imem
+           - qcom,sdx65-imem
++          - qcom,sm6375-imem
+           - qcom,sm8450-imem
+       - const: syscon
+       - const: simple-mfd
 
 -- 
 2.39.2
