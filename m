@@ -2,104 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B976BED24
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 16:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781316BEDC5
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 17:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjCQPl1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 17 Mar 2023 11:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S229843AbjCQQMt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 12:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCQPl0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 11:41:26 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA323CE14
-        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 08:41:25 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id r11so22071455edd.5
-        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 08:41:24 -0700 (PDT)
+        with ESMTP id S229654AbjCQQMs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 12:12:48 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D43FBA1;
+        Fri, 17 Mar 2023 09:12:46 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id w9so22491770edc.3;
+        Fri, 17 Mar 2023 09:12:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679067683;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PstrEflt63qoUWsP/JfaNiClr8JYCH7JWCuFUL8GKXg=;
-        b=mLQ1qMFhNlhQpGr8Skf55PDq5vPymWs83uEXysdcod+qOUgFt+t1mf7yQ9cNdUi4pX
-         qAB4ElGWUQVbUbiwZAMkRlQ9qyuqWbVgpITJMHHdwM7pxB1hHKa5nhbMzCFfDQS/jnw9
-         KdNluLgZy6CnB15HTO00Q1W2k/4wOBN1IGhqppiPfg8u9OJGwIMlMsRCN9CLmFik8v1a
-         y7q8xm73FGoS0772PK5ar8z/3VCzT+HrhZ2ubiTcZpoPwDoQKC0WTeLY5aGGQcNDlUUr
-         OBhRoWXZAbTc+b9M3T2utfLhQMmzcW/nluzTImKsweM2cCLXZVkSr47bluQGs2CFi/0v
-         GMBw==
-X-Gm-Message-State: AO0yUKUkZ+bOB99IWj4+AAomJyQ/rCFn+9h0rc/X3fGLEoTlI3Vz3Y73
-        ff64sYdDnjnGGCU0WCV3iZR8DnaYKaGnudLy2A8=
-X-Google-Smtp-Source: AK7set9t1YnLZPdb74Aqpjob3nHnUzE0Knz7BbYt2beOMx55HkIT72qhWNNSvDZ8Dt4/r2ZyEfuO76W0r4HPWVv0RCI=
-X-Received: by 2002:a17:906:ee8c:b0:931:ce20:db82 with SMTP id
- wt12-20020a170906ee8c00b00931ce20db82mr1588990ejb.2.1679067683388; Fri, 17
- Mar 2023 08:41:23 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679069564;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6+rn1YSZmbdUqRFG/vNEu75EzysOAso/oXOoTMRkq2w=;
+        b=B6UUMH4j7viakkjBSD6DEvk1LFmOYrUFv12LeLCU/Ta+59K0+gN7WUjR7ScsbNKeek
+         Xiw43K6VjOzz4x6B4Y9R+qH7N+eOSwSn1Of1pQ0E6PvGv0Pj8ifEq5oMa6VXOsHpSW8X
+         79FU5aveJU4oZ9RsZOLIuiUelvzBCmFsA+MsXdy2SefC/m8gVFPva5YTvS6bLBSY+Ait
+         QWfF1YB8/0Z3PLb3xKWH/lsm7x1IPt4tN5RUbus6tKAKs22SMJedjPhufN2lynGvyiKV
+         1pE3rtipNce9lt/OCRxGYCtE3yJeG4bIZRn4CtSMeE58Kad7VzLFtjDbV4dCRLBFiD9r
+         4ITA==
+X-Gm-Message-State: AO0yUKW+U+CmIR3+UrpOHjRVPocqA7AmK8XEt1WBWQuFGqXf3VCemDmW
+        evxluayZF89RHEAmdS/aZ/GbFypT6Yay3W7rzxvOyVfd2Dg=
+X-Google-Smtp-Source: AK7set8aTYlTuP/LTjAsV0iYNY7A3KgjsTIJEdAjg5Y1tcfhlkASP5RQjJGoxRvAMJO+ECuTInx4eeR1VEWOSfQhXgM=
+X-Received: by 2002:a50:d0d3:0:b0:4fa:71a2:982b with SMTP id
+ g19-20020a50d0d3000000b004fa71a2982bmr1970762edf.0.1679069564593; Fri, 17 Mar
+ 2023 09:12:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316031549.1343340-1-qinyu32@huawei.com>
-In-Reply-To: <20230316031549.1343340-1-qinyu32@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Mar 2023 16:41:12 +0100
-Message-ID: <CAJZ5v0gFpdWih3Z4Jy6O8t9qz64w1md00ZcQY_exEn9+rC1BOw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: warn about invalid vals to scaling_max/min_freq interfaces
-To:     qinyu <qinyu32@huawei.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, zhangxiaofeng46@huawei.com,
-        hewenliang4@huawei.com, linfeilong@huawei.com
+Date:   Fri, 17 Mar 2023 17:12:33 +0100
+Message-ID: <CAJZ5v0haUo_G041D4N7D++MBOHDX=z04sagWMs7BEmV0sjYUDw@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.3-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 4:11 AM qinyu <qinyu32@huawei.com> wrote:
->
-> When echo an invalid val to scaling_min_freq:
-> > echo 123abc123 > scaling_min_freq
-> It looks weird to have a return val of 0:
-> > echo $?
-> > 0
->
-> Sane people won't echo strings like that into these interfaces but fuzz
-> tests may do. Also, maybe it's better to inform people if input is invalid
-> or out of range.
->
-> After this:
-> > echo 123abc123 > scaling_min_freq
-> > -bash: echo: write error: Invalid argument
->
-> Signed-off-by: qinyu <qinyu32@huawei.com>
-> Tested-by: zhangxiaofeng <zhangxiaofeng46@huawei.com>
+Hi Linus,
 
-The changelog doesn't match the actual code changes.  Please make them
-match each other.
+Please pull from the tag
 
-> ---
->  drivers/cpufreq/cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6d8fd3b8d..d61f7308f 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -725,9 +725,9 @@ static ssize_t store_##file_name                                    \
->         unsigned long val;                                              \
->         int ret;                                                        \
->                                                                         \
-> -       ret = sscanf(buf, "%lu", &val);                                 \
-> -       if (ret != 1)                                                   \
-> -               return -EINVAL;                                         \
-> +       ret = kstrtoul(buf, 0, &val);                                   \
-> +       if (ret)                                                        \
-> +               return ret;                                             \
->                                                                         \
->         ret = freq_qos_update_request(policy->object##_freq_req, val);\
->         return ret >= 0 ? count : ret;                                  \
-> --
-> 2.33.0
->
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.3-rc3
+
+with top-most commit 1fa9d47baa9e61ff973e03f0ef26f5b78d545e37
+
+ Merge branch 'pm-cpuidle'
+
+on top of commit eeac8ede17557680855031c6f305ece2378af326
+
+ Linux 6.3-rc2
+
+to receive power management fixes for 6.3-rc3.
+
+These fix an error code path issue in a cpuidle driver and make the
+sleepgraph utility more robust against unexpected input.
+
+Specifics:
+
+ - Fix the psci_pd_init_topology() failure path in the PSCI cpuidle
+   driver (Shawn Guo).
+
+ - Modify the sleepgraph utility so it does not crash on binary data
+   in device names (Todd Brandt).
+
+Thanks!
+
+
+---------------
+
+Shawn Guo (1):
+      cpuidle: psci: Iterate backwards over list in psci_pd_remove()
+
+Todd Brandt (1):
+      pm-graph: sleepgraph: Avoid crashing on binary data in device names
+
+---------------
+
+ drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+ tools/power/pm-graph/sleepgraph.py    | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
