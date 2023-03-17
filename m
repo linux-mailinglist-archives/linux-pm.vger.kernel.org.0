@@ -2,119 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857126BEF13
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 18:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50376BEF9A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 18:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCQREQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Mar 2023 13:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S230047AbjCQRYR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 13:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCQREP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 13:04:15 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF324EB45;
-        Fri, 17 Mar 2023 10:04:13 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 2a8ba081e2a3b18a; Fri, 17 Mar 2023 18:04:10 +0100
-Received: from kreacher.localnet (unknown [213.134.163.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229841AbjCQRYO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 13:24:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3362A3BC58;
+        Fri, 17 Mar 2023 10:24:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 402721C52C22;
-        Fri, 17 Mar 2023 18:04:09 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0413B8263D;
+        Fri, 17 Mar 2023 17:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E06C433EF;
+        Fri, 17 Mar 2023 17:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679073845;
+        bh=q1ov1xk0U4do5di1Twf4O7l40oHoIVwEUbGW7/GLBrU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tul2MrWIiA8qWqpQ0mpkZFbX1EfW+tpHKc59rTX4Am4lq/tlg2sBHtk4YJtyqJ8ZJ
+         Z41S4Dn1/BjtiLgJ+40xFricwrNrBVJw50ZmFT6Z6TQ2Ze5uQmaZAEhUwpceB0b3lE
+         tUhu0AzxaUEzfyR4dmpHKLE6TI7CDk1OoPtLDdYW+iBx7GtU5kQGrHgZtUHWNXts2s
+         zvGKn9cobB7ntyjL67OQTc8KVbyuNmjCUquCKflmIy9iLR3YoFzVhkhHkojtsrPiIy
+         ahvLsjPxyxpT1iKQZfOTLCyPgMra5pBIy1dvpEI9ibZ5Zd0n0atqVA45zJ9pMhgwXq
+         uXcKBadNMEIIA==
+Date:   Fri, 17 Mar 2023 22:54:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Quanxian Wang <quanxian.wang@intel.com>
-Subject: [PATCH v3 4/4] ACPI: processor: thermal: Update CPU cooling devices on cpufreq policy changes
-Date:   Fri, 17 Mar 2023 18:03:40 +0100
-Message-ID: <8199264.T7Z3S40VBb@kreacher>
-In-Reply-To: <2678096.mvXUDI8C0e@kreacher>
-References: <2678096.mvXUDI8C0e@kreacher>
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/6] dt-bindings: dmaengine: qcom: gpi: Add QCM2290 GPI
+ DMA
+Message-ID: <ZBSiMAuX4qiUF06k@matsya>
+References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
+ <20230314-topic-2290_compats-v1-2-47e26c3c0365@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.228
-X-CLIENT-HOSTNAME: 213.134.163.228
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeifedrvddvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvvdekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhg
- vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314-topic-2290_compats-v1-2-47e26c3c0365@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 14-03-23, 13:52, Konrad Dybcio wrote:
+> Add a compatible for the single GPI DMA controller on QCM2290. It uses
+> the same 0x10000 offset as SM6350.
 
-When a cpufreq policy appears or goes away, the CPU cooling devices for
-the CPUs covered by that policy need to be updated so that the new
-processor_get_max_state() value is stored as max_state and the
-statistics in sysfs are rearranged for each of them.
+Applied, thanks
 
-Do that accordingly in acpi_thermal_cpufreq_init() and
-acpi_thermal_cpufreq_exit().
-
-Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
-Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
-Link: https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Tested-by: Zhang Rui <rui.zhang@intel.com>
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
----
-
-v2 -> v3: Add tags from Rui.
-
-v1 -> v2: Remove the now redundant IS_ERR() checks on cdev before calling
-          thermal_cooling_device_update().
-
----
- drivers/acpi/processor_thermal.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-Index: linux-pm/drivers/acpi/processor_thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/processor_thermal.c
-+++ linux-pm/drivers/acpi/processor_thermal.c
-@@ -140,9 +140,13 @@ void acpi_thermal_cpufreq_init(struct cp
- 		ret = freq_qos_add_request(&policy->constraints,
- 					   &pr->thermal_req,
- 					   FREQ_QOS_MAX, INT_MAX);
--		if (ret < 0)
-+		if (ret < 0) {
- 			pr_err("Failed to add freq constraint for CPU%d (%d)\n",
- 			       cpu, ret);
-+			continue;
-+		}
-+
-+		thermal_cooling_device_update(pr->cdev);
- 	}
- }
- 
-@@ -153,8 +157,12 @@ void acpi_thermal_cpufreq_exit(struct cp
- 	for_each_cpu(cpu, policy->related_cpus) {
- 		struct acpi_processor *pr = per_cpu(processors, cpu);
- 
--		if (pr)
--			freq_qos_remove_request(&pr->thermal_req);
-+		if (!pr)
-+			continue;
-+
-+		freq_qos_remove_request(&pr->thermal_req);
-+
-+		thermal_cooling_device_update(pr->cdev);
- 	}
- }
- #else				/* ! CONFIG_CPU_FREQ */
-
-
-
+-- 
+~Vinod
