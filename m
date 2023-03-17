@@ -2,118 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A2E6BF4F2
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 23:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311816BF536
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 23:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCQWQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Mar 2023 18:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S230343AbjCQWe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 18:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCQWQZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 18:16:25 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F803A4DB;
-        Fri, 17 Mar 2023 15:16:24 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so6732513pjp.1;
-        Fri, 17 Mar 2023 15:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679091384;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nmDs8RJ+PZJLRT42fwa/YYu6afWrb1yUlxIHwxmYAWU=;
-        b=W2ubJ7KO1+SGwZ4iqpDKSfg3qLC/Kj4KtWLIBE6u7NwCLzEzfGARy27RkqJvWem53j
-         h5XJzUTXVZctcQf9JzxBHTb2TqgpThw/rS9HHa9f/wTVrKE7mG5Dtg9bqHJEv0E1/9Ev
-         VflMtC4CiSQbhQw1lOWxI5BygSyUmPJoEJxLBMtdZs+mHbjhvxixIMWmeYBxvS2I1jb3
-         4D6lZahKkeUQNlQCwxCg93wmK519PKaz+QcrCIOgQ9RMcZrYVCFb9FB/9LZfFMTK94Pk
-         FGSoWPpsTwbAIMF78n5rB+jyVVrj/ce39TLvB4xdEe5fapzL6w8uqXTFBVq9H2o5apIl
-         2LMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679091384;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nmDs8RJ+PZJLRT42fwa/YYu6afWrb1yUlxIHwxmYAWU=;
-        b=7NdwbPN0lUG2sAi9THswLS6DiLHlLyav36Gnwchr9hbWe7H2fXvHuDlTqgT3fpDwo5
-         jVIZMMWvRnAHxRRYq44Ufl4FIMirHJrdpImzx6tE7QFQVWJd1ogDRmTfKPUYFNFKud+S
-         Z/5UVfe4SRCJFa/OpVbjhDsWRwbHMsJonRaq9aOG16vo+8/BoZtHyDaiiVCyo06QHSI0
-         jNMSoB/jn+cZpKDHczdjUCTny6vj2liWQsCGiHNT/OGnkQLapIg2TvG+SwN2FAORM84F
-         d//GhK52GSmooK9qk32F2RsbwQzoF2ndkTyiaW6rGv4ONsZM+o74WYM/ap6KajmffBcQ
-         Qvbw==
-X-Gm-Message-State: AO0yUKV/u9zdrSnDMKx0iPu9/kLsOT1416crGmx5TlOqtfHnn72oNytT
-        Q6LXCVAspJuR4FF3mVWRT/0=
-X-Google-Smtp-Source: AK7set89UPhuSkv0OGSMfnoxaxO3jZLef+XgDHC26amKtSYFKik0rJNh9sdAWSSeIXz8PMJqcyEhzw==
-X-Received: by 2002:a17:90b:1c0a:b0:23d:3549:82a8 with SMTP id oc10-20020a17090b1c0a00b0023d354982a8mr9643204pjb.27.1679091384077;
-        Fri, 17 Mar 2023 15:16:24 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id gc23-20020a17090b311700b0023f685f7914sm1095218pjb.49.2023.03.17.15.16.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 15:16:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 17 Mar 2023 12:16:22 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jungseung Lee <js07.lee@samsung.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        with ESMTP id S230103AbjCQWe2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 18:34:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A113CE14;
+        Fri, 17 Mar 2023 15:34:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 28C89CE2179;
+        Fri, 17 Mar 2023 22:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4322FC433D2;
+        Fri, 17 Mar 2023 22:34:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679092463;
+        bh=Le9I2nwKv2qxWdoK/EihPpLIEeWl2PAjv+kdU++Fl6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CM6C2G2uF9sAn0m58+XxDfhCd9Oav81M6b/34uamWl3+q6+jdqlvqv2QY3O844kMf
+         ZrNjo48ZV4SLwMnfWtznqRqgS41tMf9XFl+tJoaFs4LZS9xqRIYRQPMYNjLk4qJ/F5
+         HYEEy3CV/0PoBKU30JZnbLbSdv8NQqGEj5d0aT4DTMiF/IATOF47iY+86PmGMSGV/A
+         jI1ZBOcxba1T2xeZ1Mvc9/QBUWoVV1xIjMD99AZ3WSxDVz99QWmLn6QRMyPtATTlJ0
+         ZoW2G8z3yWkJZCGrIrphzgqeWkUZpnJsCNpvWzOrS/eqJ0FS0H5yN777oAHB7gvu1W
+         3Wdwxf2GtU8AQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 8DAF010620FB; Fri, 17 Mar 2023 23:34:20 +0100 (CET)
+Date:   Fri, 17 Mar 2023 23:34:20 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bw365.lee@samsung.com, yw85.kim@samsung.com,
-        huijin.park@samsung.com
-Subject: Re: [PATCH] workqueue: Introduce show_freeze_workqueues_busy
-Message-ID: <ZBTmtiyHpreu2btd@slm.duckdns.org>
-References: <CGME20230315130515epcas1p40823f20da586c1b5813b41e66e754309@epcas1p4.samsung.com>
- <1678884357-38253-1-git-send-email-js07.lee@samsung.com>
+        devicetree@vger.kernel.org
+Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
+ simple-battery data
+Message-ID: <20230317223420.n27xxoxgj54hllme@mercury.elektranox.org>
+References: <20230314225535.1321736-1-sre@kernel.org>
+ <20230314225535.1321736-3-sre@kernel.org>
+ <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
+ <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
+ <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bm5gvqe4rlmcjssl"
 Content-Disposition: inline
-In-Reply-To: <1678884357-38253-1-git-send-email-js07.lee@samsung.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
 
-A few nits.
+--bm5gvqe4rlmcjssl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 15, 2023 at 09:45:57PM +0900, Jungseung Lee wrote:
-> diff --git a/kernel/power/process.c b/kernel/power/process.c
-> index 6c1c7e5..590550f 100644
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -93,7 +93,7 @@ static int try_to_freeze_tasks(bool user_only)
->  		       todo - wq_busy, wq_busy);
->  
->  		if (wq_busy)
-> -			show_all_workqueues();
-> +			show_freeze_workqueues_busy();
+Hi,
 
-Maybe name this show_freezable_workqueues()?
+On Thu, Mar 16, 2023 at 09:10:03AM +0200, Matti Vaittinen wrote:
+> > For chargers the situation is different (they usually want the
+> > data before registration), but they should not expose the
+> > battery data anyways.
+>=20
+> I probably should go back studying how the power-supply class
+> works before continuing this discussion :)
+>=20
+> So, is it so that when a single IC contains both the charger logic
+> and battery monitoring - then the driver is expected to create two
+> power_supply devices. One for the battery and the other for the
+> charger? I assume both of these pover_supply devices will then
+> find the same battery_info - which means that one of the devices
+> (probably the charger) should not auto-expose properties(?)
 
-> @@ -5043,7 +5043,7 @@ static void show_one_worker_pool(struct worker_pool *pool)
->  /**
->   * show_all_workqueues - dump workqueue state
->   *
-> - * Called from a sysrq handler or try_to_freeze_tasks() and prints out
-> + * Called from a sysrq handler and prints out
->   * all busy workqueues and pools.
+Yes.
 
-Can you reflow the comment to 80-col?
+> Well, as I said I should go study things better before continuing
+> - but as I have limited time for studying this now I'll just ask
+> if there is a danger we auto-expose battery details from existing
+> drivers via two devices? And as I did no study I will just accept
+> what ever answer you give and trust you to know this better ^_^;
 
-> +/**
-> + * show_freeze_workqueues_busy - dump freezable workqueue state
-> + *
-> + * Called from try_to_freeze_tasks() and prints out
-> + * all freezable workqueues still busy.
+Nothing will explode. But charger devices are supposed to provide
+charger information and the data from simple-battery is about the
+battery, so it should be exposed through a battery typed device.
 
-Ditto.
+Exposing e.g. POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN for a charger
+makes no sense. Why would the charger have a design capacity?
 
-Thanks.
+> [...]
+> > [05/12] power: supply: generic-adc-battery: drop jitter delay support
+>=20
+> I didn't feel technically capable of reviewing the above delay
+> patch as I don't know what kind of delays are typically needed -
+> or if they need to be configurable - or what is the purpose of
+> this delay (some stabilization period after charging?)
+>=20
+> So, it's not that your patch had something I didn't agree with - I
+> was just not feeling I understand the consequences of the changes.
+> Purely from coding perspective it looked good to me :)
 
--- 
-tejun
+=46rom what I can tell the original author had to debounce the GPIO.
+
+-- Sebastian
+
+--bm5gvqe4rlmcjssl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQU6ucACgkQ2O7X88g7
++pqknxAAlJi7VQYoNHVt+wEjzCipiTv88KVhTRpQtXL2ydIseMy0Ana+EjZOguYz
++lLjotno0p1IGrUrOU8xS6G4S+AEaus4tFnkHUgiQ2yns7FCz29gFMsxuPuhD9lw
+660hcjOBWhCHttCsP72k+JqIVZhfRX2iV5KOLb4cLDWoObGfHxdCLqQdzUO/tviY
+gt+bmBVndCZCepBmcHkgor1WGg9wuJdcrvOq2XT/L1W0HT8Xmm7pMqX5QW4QucEi
+vV+e7wO+otBnyxT8sFcG16yHxHpLQx3waPYIMv75Hp19LOl5EqDfmBwB3tiH+RRP
+Uce+O9taal7RIHptMbEf1Bqf5xq8JHsMmUh6sSYI1kvCNJN9sYd64HK6I5PnUM0G
+lkCJ07cwp4iD9CyyzMyOf24EiKX4EgyMpfsEdvT4Bi874dg6piKxYrvoT1ksxGtK
+Pzn/Ke/nBgZqpPlHXtZOYXjAfrcANDEj5ERuEV4FApYhGqKna+dggofSfggyvi4X
+n1Vn8YbxJ24y0hZLla+p/NlxlObFtoUQJnp4BQc6ae8MJONmBTBQjws3/i8S7v7A
+LV7+bR517gYFPsVhpXIsFS4+nqXPjbf6cwEGin/zQVzR499JMwAiIrc9cOadQxd+
+XtQjtQWqd226oXeEWbNGj+6xvBq6+xYv1gSD3vXA/ibeOZMczoA=
+=HQqR
+-----END PGP SIGNATURE-----
+
+--bm5gvqe4rlmcjssl--
