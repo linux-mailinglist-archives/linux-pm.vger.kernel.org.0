@@ -2,67 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591206BE59D
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 10:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0C76BE885
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 12:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjCQJ3v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Mar 2023 05:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S229621AbjCQLsM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 07:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjCQJ3p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 05:29:45 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 89645C97CF
-        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 02:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=LqcG5p4OanqzWZq7P5mXYA4n
-        Rj+UPd7JNAsuTqxTwOpdRQwUM+bZhbPEgMARihSgCWqrMXMGHjt5DxDMC0+lFYZe
-        D0eydgdl60SBHBeLddrJNFB2lerOBmOqhyfzjZokHciS2a/qTG9iXD48aqR6g1w9
-        2gybmDzxwmP0UOPOGIv4F5YEJOAGlZxLiTcazcFxUGx+o9TnZrKWDaBpR9gmImUp
-        TTTMZMfY3qBRJL3/UF5+CT+SCFdKxzHyL8N48U6rdxm5qTiWwI8QJHCcsp7kas41
-        Xtf3BOEZMYmt5KC2kna6hIwVWCswpUvyQ0CXWatnH4lVnuiidLn8NPkYmUJFTw==
-Received: (qmail 78014 invoked from network); 14 Mar 2023 20:40:56 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 14 Mar 2023 20:40:56 -0000
+        with ESMTP id S229760AbjCQLsM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 07:48:12 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DE9ADC3F
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 04:48:01 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id fy17so2615794qtb.2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 04:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679053681;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=86bjnBxGCm0NjFMdjhahRkvyPrfitJ2dq65dYbzGQGE=;
+        b=GfULVuOXYnL8m+Lb2iOwl8z52CS6ftmCFFgEK+f5Mv8B/TdTnvG93nPLj4aaCm2U+/
+         Yn0nmtDT4rHEmTt35RxsU2qIJLdPJFRH7b9S9rzpsNlJiWjNRRJzKG8rM2CrskNb9bf6
+         gssqdxav2kNYqw59VaAFVhCC79xjeDlJFyC8rwhn1WZ9E1a2IprszizTI48uUQHsEcG5
+         SkP4di08f3/0Lna0J0p27Ctj6Pu+K+zjN1KAbChoHWSHUU+/X2P3vEne6XrZMXvxObMz
+         JrjiaC+zudcEnc2iHz3NFjFeuTNzv9L2Pu0+K2Ty4oBD4qirJRBwYxCdMGKuP8UmoYhS
+         sNIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679053681;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=86bjnBxGCm0NjFMdjhahRkvyPrfitJ2dq65dYbzGQGE=;
+        b=MT6YJwfBp7VANfY7Lder/McR/YeUA7RYmDA8qFH7zSIpnOU6lc3CSvKbkbnJy/NKsk
+         yNrhBFMzIHbRBcL5xzuC5nLah7m33TvDOJqglfs/ZnVhbR8wjqF1UX82Nw3pdTTyD+PJ
+         C9XSJcnUTiK8xRJIiijriZkk/iKKik4IJARpkhwEoQkP+qkoiIGt6a6gzPymFjqQX9+t
+         9rQxUDtnwXxhG5jmNhQ3fsLpwiz4EKl6TcZZdOOcCUVXjwgGu1LnQOYLA16CSJrayu2F
+         I8v947Rcle+izU+DabwUMhv8xy6sZNu9+ni7egM7Yxf9o/D/If/nueA6uNMjTw92ewX6
+         eYNQ==
+X-Gm-Message-State: AO0yUKXMWMgwqqB7ASiTl/SbnM4ZCpiuwgHfcD+41ZceMmcA0N0schA4
+        dOtLX7YDlcmMWY/Aw3wSZB0=
+X-Google-Smtp-Source: AK7set/zCQkWO+dI/Zekg7QMT8MO+asb3mCImfwhLs4bE8HMmvLoCW2/CDmRp6RFNnhw7/QPEeA7dA==
+X-Received: by 2002:ac8:5986:0:b0:3bf:d2ed:ace0 with SMTP id e6-20020ac85986000000b003bfd2edace0mr12925381qte.13.1679053681078;
+        Fri, 17 Mar 2023 04:48:01 -0700 (PDT)
+Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
+        by smtp.googlemail.com with ESMTPSA id h12-20020ac8568c000000b003d75bb8e652sm1141745qta.65.2023.03.17.04.47.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 04:48:00 -0700 (PDT)
+Message-ID: <42aa3ce0-b1a9-5c4c-173a-eb671ea00f71@gmail.com>
+Date:   Fri, 17 Mar 2023 06:47:58 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] cpufreq: warn about invalid vals to scaling_max/min_freq
+ interfaces
+Content-Language: en-US
+To:     qinyu <qinyu32@huawei.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, zhangxiaofeng46@huawei.com,
+        hewenliang4@huawei.com, linfeilong@huawei.com
+References: <20230316031549.1343340-1-qinyu32@huawei.com>
+From:   Russell Haley <yumpusamongus@gmail.com>
+In-Reply-To: <20230316031549.1343340-1-qinyu32@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 13:40:55 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <0212dc7efe9cab61a67d573323bc0d30@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 3/15/23 22:15, qinyu wrote:
+> When echo an invalid val to scaling_min_freq:
+>> echo 123abc123 > scaling_min_freq
+> It looks weird to have a return val of 0:
+>> echo $?
+>> 0
+> 
+> Sane people won't echo strings like that into these interfaces but fuzz
+> tests may do. Also, maybe it's better to inform people if input is invalid
+> or out of range.
 
+AFAICT, the patch doesn't actually cause it to error if the input is out
+of range. So the commit message should not be worded to imply that it does.
 
--- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
+It is good that it doesn't, I think, because someone might have a
+fail-on-unhandled-error program (ex: shell script) that writes this file
+deployed on hardware with different cpuinfo_max_freq. A new
+unanticipated error would cause such a program to crash where it hadn't
+before.
 
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
