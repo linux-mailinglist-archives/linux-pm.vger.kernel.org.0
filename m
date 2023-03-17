@@ -2,143 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E566BE014
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 05:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241F26BE2D7
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 09:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjCQEQM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Mar 2023 00:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        id S229799AbjCQIOk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 04:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCQEQK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 00:16:10 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101FB53D3
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 21:16:08 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id eh3so15606802edb.11
-        for <linux-pm@vger.kernel.org>; Thu, 16 Mar 2023 21:16:08 -0700 (PDT)
+        with ESMTP id S229913AbjCQIOc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 04:14:32 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA0025948
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 01:13:49 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r11so17239124edd.5
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 01:13:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1679026566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1ev5OIriLd8TfqA5c4EtuME02ulo1DCJFDytsxJZBhk=;
-        b=KVym4KsPs4lbipnClxHVlIDpvF0tz4OM52461JamvSARxqw4Qsd4Q1VhIogAigMF3P
-         Zh1TNuTdXgoWtDExZPpqlsQDicuZu+tVLZQiglu7KWkCHyZGEOwAREoC67gtNvFU5hX0
-         ed7KDbhUroQI/NLBZr2kwGwp0xBQmGQfS9eSK+a3QOIEPuLuQ5aLC9wOKPJmyp2Lk70M
-         UosDdD9GJIYeAuYAho7SNTOa1YJSYOslH9t6ECfzQX0hcXvBmpyIXaqChCYA5tU9OJ5r
-         rkAM8txuEzxv2nisB7MDMAHwr/hcgGqqUM54MVa0b41g0lDznS+AVy7aKBN0P3scAa2V
-         09RA==
+        d=linaro.org; s=google; t=1679040824;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NTkt885oytfYo9Lb68dSckMe6EvhfqmYNTcED2Zhid4=;
+        b=ck1t9nOjPrcc1xukWzZfjhW3Xy1y9jpxRdwbuxWkBc0Zvp/Ezztq+X4SBD/Y4ASzlQ
+         zriqdhO/8JOPDCLmj5c6++19KOLUHljtKGL6zLnR8PkyJWjYq6+Av5VZol6wWb7E2Gpu
+         MZNWZWviB/7MagoiFcNlqx1eGAAO7xlOBiShKxfYd246jd7Yx3OJ2PTeespuWYwr+Z9T
+         DtA79IbYkXPlAvBBhFty1ePYKCLwan5I3DdiNr52bup6jpHitEmddslhINbvREE7114H
+         zhN9Abs673CEDQFu3pgsCpMkmbMAoizArFKk3Pp3J5ofDs/cloqsRNAYawDLUPzM6tQ3
+         5A6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679026566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1ev5OIriLd8TfqA5c4EtuME02ulo1DCJFDytsxJZBhk=;
-        b=DNcuhvhhGG7yCUgK/Fj+TeRBhAqlVsz0/NzHWkQQdjFSU16NwHbcqYkMC/8zJQ4AZ4
-         u9YUxhibNJBWwm9CcNbwLFOIwV3zD0RwS0wP6jwYdy7J33l0jSsnufrgGSwUOWI2OfQH
-         w4R9ScCwTR25inzyu1v7hW9LBM3ynGkyLnyAthdJQkAsoNZVUuWP4CJ+WUDFw+SFNKk5
-         0h6yoxxuEf9dzTyWicEqPg3EmH3twtZn9N8TUeLShplTjPdawCQKr0aCzmc5tzJfG5EO
-         r/N05Kwew0WHgM9Xi6eKxUO/cMKA+j6Uh3GmJ6aa/Exd7V88RkFVvJ0Q63koEwKhRxjY
-         Dmvg==
-X-Gm-Message-State: AO0yUKUdlhxtzEPlYdxU7h4rpY4zBUyhgx1gSvaYCeklF6MFciFqZtBe
-        LN5J+HgvVdliE5FUhoz2HajsQZsZ3GR/N6n0J+r2WA==
-X-Google-Smtp-Source: AK7set/XeeEOd+FtzL3MTXXII1yiO1F3TxBHDttiukeaTtzGeJdZUgTY3kqMR9FqRfno5OlhXVB5YA7QTCM53ahqloc=
-X-Received: by 2002:a17:907:36e:b0:8b1:3d0d:5333 with SMTP id
- rs14-20020a170907036e00b008b13d0d5333mr6533936ejb.13.1679026566443; Thu, 16
- Mar 2023 21:16:06 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679040824;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NTkt885oytfYo9Lb68dSckMe6EvhfqmYNTcED2Zhid4=;
+        b=kLLTZ3pLWoWHC3RMFLOAFtzP6B0ttoDq++lb4A7AT1urMKlZCEhVQbUXYD4Ko6AQTs
+         c5GgBKO94r+yPW7XRRILF6lBEvhA6l14UzzyacU/eYUJN1WpyIS+lRreY5IYOQHh2etE
+         5/4SumSMN+mYxNW/3SEUBp02/Wus/VXYE9v1qfjdHoZctyv15dwmKl/D97bg7gyD0Fmg
+         BpSArnmexxxb4Wa1QeF3RjsYDAFBZ1j73O5S300PZ1GUSuvWc1Nv8MUK+Ks2WnDQrekI
+         t6kLJApxJjwszKo75tK0R5/V+r89vBdO0PoGtA9qmtMR/Ck5PxZ/6In3xQE/572lUNAB
+         BGZw==
+X-Gm-Message-State: AO0yUKU19+YVpLknlwRdy16Il0ImYxFNX6UKmyQkJDqVkoPcv51MhMuf
+        HbTu6oEw6koeY2AggNPBV/+WjvOsllzBb9IixA8=
+X-Google-Smtp-Source: AK7set+CF7YjQa2Ct2Oo7/j0ML04WAmz9uR1EGipCzOXucb3MWLgpSH22pA/XuGe+u8cXw7Q7KJmuQ==
+X-Received: by 2002:a17:906:2357:b0:931:829c:9d58 with SMTP id m23-20020a170906235700b00931829c9d58mr2026395eja.23.1679040823826;
+        Fri, 17 Mar 2023 01:13:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
+        by smtp.gmail.com with ESMTPSA id u27-20020a50951b000000b004bf999f8e57sm710282eda.19.2023.03.17.01.13.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 01:13:43 -0700 (PDT)
+Message-ID: <a0e1b3b9-b333-e0ac-ac46-c15a01b356e6@linaro.org>
+Date:   Fri, 17 Mar 2023 09:13:42 +0100
 MIME-Version: 1.0
-References: <20230310144703.1541888-1-robh@kernel.org>
-In-Reply-To: <20230310144703.1541888-1-robh@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 17 Mar 2023 09:45:55 +0530
-Message-ID: <CAAhSdy1vqiLE40ZoFaw48zyU0QGapafh=ytVFjETX_9wruqHmg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: Use of_property_present() for testing DT
- property presence
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+ <20230316235705.2235-1-hdanton@sina.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230316235705.2235-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 8:17=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
->
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 17/03/2023 00:57, Hillf Danton wrote:
+> On 16 Mar 2023 13:28:18 +0100 Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> On 15/03/2023 17:49, Krzysztof Kozlowski wrote:
+>>> Qualcomm cpufreq driver configures interrupts with affinity to each
+>>> cluster, e.g.  dcvsh-irq-0, dcvsh-irq-4 and dcvsh-irq-7 on SM8250.
+>>> Triggered interrupt will schedule delayed work, but, since workqueue
+>>> prefers local CPUs, it might get executed on a CPU dedicated to realtime
+>>> tasks causing unexpected latencies in realtime workload.
+>>>
+>>> Use unbound workqueue for such case.  This might come with performance
+>>> or energy penalty, e.g. because of cache miss or when other CPU is
+>>> sleeping.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
+>>
+>> Let me also paste impact of this patch - rtla osnoise on entirely idle
+>> system (cores 2-7 isolated for Realtime):
+> 
+> Are cores 2-7 the non-housekeeping CPUs[1]?
 
-For cpuidle-riscv-sbi:
+Yes, since their are isolated for Realtime this is synonymous.
 
-Acked-by: Anup Patel <anup@brainfault.org>
+> 
+> [1] https://lore.kernel.org/lkml/20230223150624.GA29739@lst.de/
 
-Thanks,
-Anup
 
-> ---
->  drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
->  drivers/cpuidle/cpuidle-riscv-sbi.c   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpui=
-dle-psci-domain.c
-> index 6ad2954948a5..e875ddadc51b 100644
-> --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -165,7 +165,7 @@ static int psci_cpuidle_domain_probe(struct platform_=
-device *pdev)
->          * initialize a genpd/genpd-of-provider pair when it's found.
->          */
->         for_each_child_of_node(np, node) {
-> -               if (!of_find_property(node, "#power-domain-cells", NULL))
-> +               if (!of_property_present(node, "#power-domain-cells"))
->                         continue;
->
->                 ret =3D psci_pd_init(node, use_osi);
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidl=
-e-riscv-sbi.c
-> index be383f4b6855..1fab1abc6eb6 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -497,7 +497,7 @@ static int sbi_genpd_probe(struct device_node *np)
->          * initialize a genpd/genpd-of-provider pair when it's found.
->          */
->         for_each_child_of_node(np, node) {
-> -               if (!of_find_property(node, "#power-domain-cells", NULL))
-> +               if (!of_property_present(node, "#power-domain-cells"))
->                         continue;
->
->                 ret =3D sbi_pd_init(node);
-> @@ -548,8 +548,8 @@ static int sbi_cpuidle_probe(struct platform_device *=
-pdev)
->         for_each_possible_cpu(cpu) {
->                 np =3D of_cpu_device_node_get(cpu);
->                 if (np &&
-> -                   of_find_property(np, "power-domains", NULL) &&
-> -                   of_find_property(np, "power-domain-names", NULL)) {
-> +                   of_property_present(np, "power-domains") &&
-> +                   of_property_present(np, "power-domain-names")) {
->                         continue;
->                 } else {
->                         sbi_cpuidle_use_osi =3D false;
-> --
-> 2.39.2
->
+
+Best regards,
+Krzysztof
+
