@@ -2,73 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0C76BE885
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 12:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B58E6BE8B3
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Mar 2023 12:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCQLsM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Mar 2023 07:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S229934AbjCQL5q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Mar 2023 07:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjCQLsM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 07:48:12 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DE9ADC3F
-        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 04:48:01 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id fy17so2615794qtb.2
-        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 04:48:01 -0700 (PDT)
+        with ESMTP id S229840AbjCQL5p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Mar 2023 07:57:45 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2E1B855E
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 04:57:31 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id w11so2107199wmo.2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Mar 2023 04:57:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679053681;
+        d=linaro.org; s=google; t=1679054250;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=86bjnBxGCm0NjFMdjhahRkvyPrfitJ2dq65dYbzGQGE=;
-        b=GfULVuOXYnL8m+Lb2iOwl8z52CS6ftmCFFgEK+f5Mv8B/TdTnvG93nPLj4aaCm2U+/
-         Yn0nmtDT4rHEmTt35RxsU2qIJLdPJFRH7b9S9rzpsNlJiWjNRRJzKG8rM2CrskNb9bf6
-         gssqdxav2kNYqw59VaAFVhCC79xjeDlJFyC8rwhn1WZ9E1a2IprszizTI48uUQHsEcG5
-         SkP4di08f3/0Lna0J0p27Ctj6Pu+K+zjN1KAbChoHWSHUU+/X2P3vEne6XrZMXvxObMz
-         JrjiaC+zudcEnc2iHz3NFjFeuTNzv9L2Pu0+K2Ty4oBD4qirJRBwYxCdMGKuP8UmoYhS
-         sNIw==
+        bh=qgvWbwsyEB+gGG8DJc2B/pZSZJeuWMK+G3i6ZsnIT1k=;
+        b=pxUX4MkdHQrAtuiOU3oXvUpzKVpIKtpaMMepwzt+mpVsB7GCPRsfv47EH36hQItV/e
+         zxXZEtzjMErI5HFo+2ONrE+ieAKTzu6r0jczVNF8EGi8pa0De1tvzjUD58ctdtF0lDSs
+         49JEnyexq4t0pL1bKHB9BjlMp9XKjEBv7+UBzhksVxxJh7Ty87ji28arijtidYnSmh/2
+         qNwct20R8zF/DNDBoFgRJjzGk4tmol1E1RN9T9gerJPfd13UYLRqTNCoXUSPU9D8TTgD
+         7dMLfNIMQiz1cshss/dOWca4cdfiJk9/srojK3ZpF6Xm6WW1GIIg8rZfrQXlD1lORDSI
+         GF0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679053681;
+        d=1e100.net; s=20210112; t=1679054250;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=86bjnBxGCm0NjFMdjhahRkvyPrfitJ2dq65dYbzGQGE=;
-        b=MT6YJwfBp7VANfY7Lder/McR/YeUA7RYmDA8qFH7zSIpnOU6lc3CSvKbkbnJy/NKsk
-         yNrhBFMzIHbRBcL5xzuC5nLah7m33TvDOJqglfs/ZnVhbR8wjqF1UX82Nw3pdTTyD+PJ
-         C9XSJcnUTiK8xRJIiijriZkk/iKKik4IJARpkhwEoQkP+qkoiIGt6a6gzPymFjqQX9+t
-         9rQxUDtnwXxhG5jmNhQ3fsLpwiz4EKl6TcZZdOOcCUVXjwgGu1LnQOYLA16CSJrayu2F
-         I8v947Rcle+izU+DabwUMhv8xy6sZNu9+ni7egM7Yxf9o/D/If/nueA6uNMjTw92ewX6
-         eYNQ==
-X-Gm-Message-State: AO0yUKXMWMgwqqB7ASiTl/SbnM4ZCpiuwgHfcD+41ZceMmcA0N0schA4
-        dOtLX7YDlcmMWY/Aw3wSZB0=
-X-Google-Smtp-Source: AK7set/zCQkWO+dI/Zekg7QMT8MO+asb3mCImfwhLs4bE8HMmvLoCW2/CDmRp6RFNnhw7/QPEeA7dA==
-X-Received: by 2002:ac8:5986:0:b0:3bf:d2ed:ace0 with SMTP id e6-20020ac85986000000b003bfd2edace0mr12925381qte.13.1679053681078;
-        Fri, 17 Mar 2023 04:48:01 -0700 (PDT)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id h12-20020ac8568c000000b003d75bb8e652sm1141745qta.65.2023.03.17.04.47.59
+        bh=qgvWbwsyEB+gGG8DJc2B/pZSZJeuWMK+G3i6ZsnIT1k=;
+        b=nWq/LoiSUFma1YY4hekPGcbJ5bgg2wMzBdxilim8oycK0+ml8BCBjhsQQlmv69VWQg
+         Tn0tEU7ZiQVBIpOqq7F3OaAhdiJmcInRubRBz8UiITlAd9xVCFpANMSgGbaO4GNU/j+1
+         aADyKZnKB2dq5PXkv++gU99UncsO+7mWM4Cu7i/Myx/P0C5xZx2MuCrLtH89KlaiowQq
+         6N4aSB2yVSikLwav1lzXf9fgjjO14VDGyf/gsWdz+i/KYwmSNst2yWEuCbT1LFsaFdVp
+         XdKEXopOKCrsMh92xGk7/uWPJNcO0V+POorIA6Y8X1n3vRzfhVfW5M+kWPchwdsl4Tbh
+         mCig==
+X-Gm-Message-State: AO0yUKUaBA/zqnILPRurDh0byF1yi6ALgVIlYku2YSY1a83n1WHZcEZH
+        LiI9TDL8RY8Z1t8ak7c0Q+OYdg==
+X-Google-Smtp-Source: AK7set8GSaMaBFVqOeBLDlwhD3HnE+PH9ZmLeqoREQYjdYbOiuC3GMqSxbZGn33oQJQV0LXhpudmNQ==
+X-Received: by 2002:a05:600c:198e:b0:3eb:2f3b:4477 with SMTP id t14-20020a05600c198e00b003eb2f3b4477mr23903615wmq.28.1679054249817;
+        Fri, 17 Mar 2023 04:57:29 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:1dfd:dcd7:94d3:86b3? ([2a05:6e02:1041:c10:1dfd:dcd7:94d3:86b3])
+        by smtp.googlemail.com with ESMTPSA id n13-20020a05600c3b8d00b003e8dcc67bdesm8058955wms.30.2023.03.17.04.57.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 04:48:00 -0700 (PDT)
-Message-ID: <42aa3ce0-b1a9-5c4c-173a-eb671ea00f71@gmail.com>
-Date:   Fri, 17 Mar 2023 06:47:58 -0500
+        Fri, 17 Mar 2023 04:57:29 -0700 (PDT)
+Message-ID: <59fc344b-4d1a-e0b2-92b5-2341b014ae11@linaro.org>
+Date:   Fri, 17 Mar 2023 12:57:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] cpufreq: warn about invalid vals to scaling_max/min_freq
- interfaces
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
+ thermal controllers for mt8195
 Content-Language: en-US
-To:     qinyu <qinyu32@huawei.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, zhangxiaofeng46@huawei.com,
-        hewenliang4@huawei.com, linfeilong@huawei.com
-References: <20230316031549.1343340-1-qinyu32@huawei.com>
-From:   Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <20230316031549.1343340-1-qinyu32@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, bchihi@baylibre.com,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
+ <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+ <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+ <20230316223543.GA4008428-robh@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230316223543.GA4008428-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,23 +87,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/15/23 22:15, qinyu wrote:
-> When echo an invalid val to scaling_min_freq:
->> echo 123abc123 > scaling_min_freq
-> It looks weird to have a return val of 0:
->> echo $?
->> 0
+
+Hi Rob,
+
+On 16/03/2023 23:35, Rob Herring wrote:
+> On Thu, Mar 09, 2023 at 11:39:13AM +0100, Daniel Lezcano wrote:
+>> On 09/03/2023 05:40, Chen-Yu Tsai wrote:
+>>> On Wed, Mar 8, 2023 at 12:46 AM <bchihi@baylibre.com> wrote:
+>>>>
+>>>> From: Balsam CHIHI <bchihi@baylibre.com>
+>>>>
+>>>> Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
+>>>>
+>>>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>>>> ---
+>>>>    include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+>>>>    1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>>>> index c09398920468..8fa5a46675c4 100644
+>>>> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>>>> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+>>>> @@ -16,4 +16,14 @@
+>>>>    #define MT8195_MCU_LITTLE_CPU2  6
+>>>>    #define MT8195_MCU_LITTLE_CPU3  7
+>>>>
+>>>> +#define MT8195_AP_VPU0  8
+>>>
+>>> Can't this start from 0? This is a different hardware block. The index
+>>> namespace is separate. Same question for MT8192.
+>>
+>> The ID is used to differentiate the thermal zone identifier in the device
+>> tree from the driver.
+>>
+>> +		vpu0-thermal {
+>> +			polling-delay = <0>;
+>> +			polling-delay-passive = <0>;
+>> +			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
+>> +
+>> +			trips {
+>> +				vpu0_crit: trip-crit {
+>> +					temperature = <100000>;
+>> +					hysteresis = <2000>;
+>> +					type = "critical";
+>> +				};
+>> +			};
+>> +		};
+>>
+>> If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate
+>> MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+>>
+>> The LVTS driver will call devm_thermal_of_zone_register() with the sensor
+>> id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id, then at the
+>> moment of registering the MT8195_AP_VPU0, the underlying OF thermal
+>> framework code will use MT8195_MCU_BIG_CPU0 description instead because it
+>> will be the first to be find in the DT.
+>>
+>> If MT8195_AP_VPU0 is described in DT before, then the same will happen when
+>> registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered instead.
+>>
+>> IOW all ids must be different.
 > 
-> Sane people won't echo strings like that into these interfaces but fuzz
-> tests may do. Also, maybe it's better to inform people if input is invalid
-> or out of range.
+> That's broken for how producer/consumer phandle+args bindings work.
 
-AFAICT, the patch doesn't actually cause it to error if the input is out
-of range. So the commit message should not be worded to imply that it does.
+Do you mean this is broken for thermal zone description in the DT in 
+general ?
 
-It is good that it doesn't, I think, because someone might have a
-fail-on-unhandled-error program (ex: shell script) that writes this file
-deployed on hardware with different cpuinfo_max_freq. A new
-unanticipated error would cause such a program to crash where it hadn't
-before.
+What would be the correct approach ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
