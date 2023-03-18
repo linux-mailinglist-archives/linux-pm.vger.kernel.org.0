@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4776BFB65
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Mar 2023 17:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC916BFB73
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Mar 2023 17:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCRQBF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Mar 2023 12:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S229640AbjCRQMh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Mar 2023 12:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRQBE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Mar 2023 12:01:04 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE91B28213;
-        Sat, 18 Mar 2023 09:01:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679155258; cv=none;
+        with ESMTP id S229611AbjCRQMg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Mar 2023 12:12:36 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AB025BA9;
+        Sat, 18 Mar 2023 09:12:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679155591; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=D5m/uWvsWIYVGsuXnRxfx/byaWI0xEkpV6LE0YB97ZtepML259T4rhMteImj6l5c8u
-    QmEnfWlk6n94XB//UbqHYcDfBalgywdOIR1sbH1EOrXEbUq1pfo31AjLWvun8gED9PtT
-    0X3EEVheli7YYNEc/a9lfJsky+stgqfhF3BXs/PJ9znHqg6fpMCKzgt+fhuNw+mHFdoT
-    NTckZypCbFu7NUQIIoHtUfQTv6aeNijAuziZRwBB2l+iBsLvYAkW6Kjz4yPY7Hn+FL1t
-    AArx2DMAmd6b+q1JmNhugCxXjmi4ND6LPJZHjDvmQ7rVFV65SVljv/GeR9YTzqJ0HRtJ
-    wrQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1679155258;
+    b=QM+lJSxUzEdwuOZD80fMk+7IUEwl2WOSorvRQ8gzib10or1CojJz8zVC2Ynqy9wefO
+    BM64vxq5uQj+9k6Ib1yhL4HDjifXFw9Px0mJ+v5vZ6au8rK4xoabI0A78o7bWkuAdE7U
+    kCHNAweId0Sau2Z4kho+E/iUiFf6ju8FnXhau0N3K9I9AzbLDz0hyObh2aPWHZfWvdFc
+    jS+nclAaDJ7HNx58+elnj+cePtwch07kGjGY2vBeRmNseFO2VjDsWToVpwMI69pBwKjV
+    C3hLEWG0Ppwgmj0Hc5490QOAIWoOqB4esptALTGODfu8lHjF0XIPCONkn6LZUZtxZp2+
+    oF/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1679155591;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=BorzDKph6yDuV2CwRHmTgXwBDb3OTpmSXaYIXiFcQgg=;
-    b=qZihJS76FTxmzJ0oM0Ua4bNjsR3JQRbKAlpd1kjW0AMWNvpIDCfmh5imWh/u3TU2rZ
-    CxbP+RS4Od1hw3JoOqCj2NAnz94XEMmkxKgGOXvRmc72B040jZ4oniklUVAolWpwH0hM
-    SU1dR1aOLc2N/zoxQIOx6U7Te5WjntjlK5kFfcMLm+vxXraTLGXJzRMJkRcdOzXEFsKc
-    q05PQ2kKF285oBw/A2cfEcoWnay+g5jU2GkQjAnM3aUmtjw4Bel3vky089FepwRpu1fX
-    fn0YrBxKxYCKcWfwxEB9j/ubW67c95i/CUYIX5PHCxxC1tFJtGVxyVwDs6zznP8lW4lW
-    I+rA==
+    bh=+1JUVGGqwpyFbnd+/hrUkEmDpeWXDmsdFaI+rJ6DvUA=;
+    b=rgBR5HFSl/IwBHcUYwgrRJHQafbP6jvdAlSEoyHaiBCdODSFHn3bAEEIHBRcy8yp2E
+    ce97fFJZnnuJ6n8sfbziqleifX4Sq3oDlY6QbULu7ZYxkPmUldFTOtsidjzwt5eNXDmW
+    ecfCteykNfhZz+YAThzPYwWliaUJzJVH141PqjsWEEmasnifgz49mqZDRdj0V3m8pabX
+    wvPy1pPNFeGl9xaNNfTFw7xKXyJT12dZPWTDsp6reAngsjGIsqSS6RzHOy1AWVuWXbax
+    FzoejhZ+n+woTsU88kUSwwaX4dfM0TDqMzpXhu1r2Y/GZHefeeZxFJ/E8VN3uxlxO9Hp
+    EAnA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1679155258;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1679155591;
     s=strato-dkim-0002; d=gerhold.net;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=BorzDKph6yDuV2CwRHmTgXwBDb3OTpmSXaYIXiFcQgg=;
-    b=nTozUwD1Yw5ah92CNYNSQkmuhLirYXsDvoHHDWzVNAn3pORlPneka8es67T6gjrDnw
-    M4MwDvzYKwKv4ztKTg5a+x+++jPSoxNFo7P9pLdTGmLdhtGvqUGYQqnsx2BUXnUA4YmY
-    Xc+Dbwpe3fg671YhBUOsbt/TvDS2YHhWKNyduG6GwGrye/rnwCGWz1cx4DWc9p6Xd9Yn
-    9i1UD72GHEeGYz0FcPifmidEsYHW5yl0xGrVvDq9Sakbi+4tIeTHumdGhDCVi2PazH+n
-    q6SS0eEh4BOFw/Ou1Gfz7hm/Z369MwG02UOb+j8RpICj5RHNwnKr0zl0A4GqUVZfaAiI
-    TA5A==
+    bh=+1JUVGGqwpyFbnd+/hrUkEmDpeWXDmsdFaI+rJ6DvUA=;
+    b=GtsC5fJPvCMZqy/JLeJahzJtPFg9x2wIcaKxjE0Hv9xynCd7gobtsZX2BLye+jExOG
+    kXefhfDwhaO56mR3MzDUvbisI0lP7HgLDI5COoyypgKk2fEnPf16FJnrzWH13pv6ByuX
+    Esq4dgvVMDiImYGOcrZNJoxh+wHntse/dEDEnet9fPM7CqrM9IYAeQRCv4l5LT9fiURr
+    EZaUa6MC/A83cMaMUQlYEcmm+CFRRx7W1aFrRVEVtd4bh5gjCvuHRv515Td4jpsnh+Kt
+    VkWMmx6tYrYrT9UsP8SZh1prWuCQYspWb8Wu+odLGoZEFUAVb4/PrDW0qOcFXfdIF4xB
+    jj9g==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKjWrKs9lg=="
 Received: from gerhold.net
     by smtp.strato.de (RZmta 49.3.1 AUTH)
-    with ESMTPSA id i40d22z2IG0v812
+    with ESMTPSA id i40d22z2IG6V81U
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Sat, 18 Mar 2023 17:00:57 +0100 (CET)
-Date:   Sat, 18 Mar 2023 17:00:52 +0100
+    Sat, 18 Mar 2023 17:06:31 +0100 (CET)
+Date:   Sat, 18 Mar 2023 17:06:30 +0100
 From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
@@ -71,62 +71,66 @@ Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] thermal: qcom: tsens-v0_1: Fix mdm9607 slope
- values
-Message-ID: <ZBXgNPg+g6TLP0Zt@gerhold.net>
+Subject: Re: [PATCH v3 3/6] thermal: qcom: tsens-v0_1: Add mdm9607 correction
+ offsets
+Message-ID: <ZBXhhpbMHUaWXoWb@gerhold.net>
 References: <20230315103950.2679317-1-stephan.gerhold@kernkonzept.com>
- <20230315103950.2679317-3-stephan.gerhold@kernkonzept.com>
- <ad64143c-13c0-63e3-561a-620c44f26b9d@linaro.org>
- <ZBSCN0f8yC/nkGll@gerhold.net>
- <2fd76707-9cf5-dbac-3514-89395a4225c2@linaro.org>
+ <20230315103950.2679317-4-stephan.gerhold@kernkonzept.com>
+ <30e4ee62-0297-0ffe-23a5-87db096a6154@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2fd76707-9cf5-dbac-3514-89395a4225c2@linaro.org>
+In-Reply-To: <30e4ee62-0297-0ffe-23a5-87db096a6154@linaro.org>
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 06:37:16PM +0100, Konrad Dybcio wrote:
-> On 17.03.2023 16:07, Stephan Gerhold wrote:
-> > On Fri, Mar 17, 2023 at 01:39:25AM +0100, Konrad Dybcio wrote:
-> >> On 15.03.2023 11:39, Stephan Gerhold wrote:
-> >>> According to the msm-3.18 vendor kernel from Qualcomm [1], mdm9607 uses
-> >>> a non-standard slope value of 3000 (instead of 3200) for all sensors.
-> >>> Fill it properly similar to the 8939 code added recently.
-> >>>
-> >>> [1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LE.UM.4.3.2.r1-04200-9x07/arch/arm/boot/dts/qcom/mdm9607.dtsi#L875
-> >>>
-> >> FWIW there's a 4.9 release for 9607
-> >>
-> >> https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LE.UM.2.3.6.c5-03900-9x07/arch/arm/boot/dts/qcom/mdm9607.dtsi
+On Sat, Mar 18, 2023 at 03:02:35PM +0100, Konrad Dybcio wrote:
+> On 15.03.2023 11:39, Stephan Gerhold wrote:
+> > According to the msm-3.18 vendor kernel from Qualcomm, mdm9607 needs
+> > "correction factors" to adjust for additional offsets observed after the
+> > factory calibration values in the fuses [1, 2].
 > > 
-> > You seem to have linked 3.18 too?
+> > The fixed offsets should be applied unless there is a special
+> > calibration mode value that indicates that no offsets are needed [3].
 > > 
-> > I don't see tsens support for mdm9607 in msm-4.9, although maybe I'm
-> > looking at the wrong branch. :D
-> Yeah wrong link
+> > Note that the new calibration mode values are called differently in this
+> > patch compared to the vendor kernel:
+> >   - TSENS_TWO_POINT_CALIB_N_WA        -> ONE_PT_CALIB2_NO_OFFSET
+> >   - TSENS_TWO_POINT_CALIB_N_OFFSET_WA -> TWO_PT_CALIB_NO_OFFSET
+> > This is because close inspection of the calibration function [3] reveals
+> > that TSENS_TWO_POINT_CALIB_N_WA is actually a "one point" calibration
+> > because the if statements skip all "point2" related code for it.
+> > 
+> > [1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/d9d2db1b82bf3f72f5de0803d55e6849eb5b671e
+> > [2]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/d75aef53a760e8ff7bac54049d00c8b2ee1b193e
+> > [3]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LE.UM.4.3.2.r1-04200-9x07/drivers/thermal/msm-tsens.c#L2987-3136
+> > 
+> > Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > Fixes: a2149ab815fc ("thermal/drivers/qcom/tsens-v0_1: Add support for MDM9607")
+> > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> > ---
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> and wrong kernel, it's actually 4.14
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/637e99f66c270385149d1f0041758c24c4f84aaf/arch/arm64/boot/dts/qcom/mdm9607.dtsi
+> BTW, did you notice some crazy readouts or would this have gone
+> unnoticed had you not dug in the code?
 > 
 
-Nice, I didn't know there is mdm9607 in msm-4.14. :)
+I'm afraid it would likely have remained unnoticed. I think these
+offsets only make a small difference but it's still good to have them
+for slightly more accurate readings.
 
-Nevertheless I think msm-3.18 is a better reference for the tsens code.
-In 4.9+ Qualcomm originally removed support for tsens v0.1. When porting
-the older targets it seems to have been hacked back in with very little
-thought. Note how it's called tsens 14xx there instead of v0.1, just
-with different register offsets. Personally I wouldn't trust what they
-did there, especially because most mdm9607 devices in the wild use 3.18.
+In v1 of this series I had the offsets for MSM8909 already (hardcoded
+into the old calibration function with all the bit shifts/masks etc).
+It was more coincidence that I checked MDM9607 for v2 because I had to
+make the code more generic with the new per-sensor nvmem cells. ;)
 
 Thanks,
 Stephan
