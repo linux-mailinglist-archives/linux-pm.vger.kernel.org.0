@@ -2,99 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7645F6C02B8
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Mar 2023 16:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3746C0329
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Mar 2023 17:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCSPUf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Mar 2023 11:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S230168AbjCSQdZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Mar 2023 12:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjCSPUc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 11:20:32 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3D72203C
-        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 08:20:11 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id er8so26066382edb.0
-        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 08:20:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679239209;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S4xH5bq21f5bGOA7b/uw6GIqRMVe3Lm8zhDWQRo/Dhk=;
-        b=YMgxgzsSk3vPYdBEFF6eY6ZjL7d+XcjboQZ8JhOXlIbptrNLl/qu0atkdBqjaZMkPN
-         W3GcZtsQd4SqfwN93BxPrtdPnwLnbKJ3tFEA+P0sLbn+mx+6cJbaJ+dPc3taLCzK+VVy
-         D1i7CYdpPvB//9f8PoY/Ehc5MsdgGq88EljY0wf2p66nyUQ0YLgECETYSZ42bM3DKzYx
-         ysbFqOTvrQQO+GTX5kUZFGToz4ArPhCSg/gZvKhzbJnNiDQy+kkQL8g9OI7XnUnZILmq
-         Kog4hAGPmKYe9taiPv7txbFP3dEJPykqazTXDeySh5a9GNm8TtXoR6/ISfoQOKBJISc8
-         VI7A==
+        with ESMTP id S231180AbjCSQdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 12:33:14 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6F20044;
+        Sun, 19 Mar 2023 09:32:45 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id j6so5400632ilr.7;
+        Sun, 19 Mar 2023 09:32:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679239209;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S4xH5bq21f5bGOA7b/uw6GIqRMVe3Lm8zhDWQRo/Dhk=;
-        b=zQusmQfJX8ps7Kpsk94je9DoUpP0NrNRMTW+XzwQMSuRgFNuoHvt1AnWHsb06JE6Ec
-         gAG1SqVSq+aTkNvzlNM2SUkoH/A8CFt8Fu+ReRn17CN2hpHy2svMp+eYN2iKJLbfm4Bq
-         n7nXXRMV94KmSZUF8co69Ie1JyilO+nfB/sPj34YMfbw016NHdYM0rg+HQ6017q8ffdd
-         HJF/90YnvwCYQkrywo7v2BpX7LKSf8zmzqClfYh9QhqiY8xHxNEI7ExWSC+p0JBhWpgk
-         568yjqHdcM0jKlLhc8dpgtQpaG+tRCbNAVI3t33zanUyI7hTp7nfYG77Plm7PNFUKTmh
-         zHXw==
-X-Gm-Message-State: AO0yUKX2bcks1U3ioEwPi4f537vKiRibeXw9XPyBZuI3YiiwpxC0b/ki
-        DeW6Al7X1RgI2fFKCe2s/SedcQ==
-X-Google-Smtp-Source: AK7set8dZVKzsg7dR/UhQ6awWgq4/0aOslkJPhf8bTS923fTkgyvChjFVbabhUek2iL7gD9yAR3vVw==
-X-Received: by 2002:a17:906:6055:b0:907:183f:328a with SMTP id p21-20020a170906605500b00907183f328amr5995901ejj.65.1679239209266;
-        Sun, 19 Mar 2023 08:20:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id o11-20020a17090608cb00b008d0dbf15b8bsm3363438eje.212.2023.03.19.08.20.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 08:20:08 -0700 (PDT)
-Message-ID: <5ca081d2-44fa-934b-09b1-01dd89cef096@linaro.org>
-Date:   Sun, 19 Mar 2023 16:20:07 +0100
+        d=1e100.net; s=20210112; t=1679243565;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p4tdtu/BoCpyFQiT8nwjBdDJ+pofDzulK4/CMjUXkl4=;
+        b=eUtkKrRwx+4RUtBp4V8QUPBoN7ckAUv1yR1jeXXlBRTWF40gYm19CFBqviz9OksDD2
+         Qif3fx03Vzqo1h4SW7NtqxVK+RyFq4tdSwbsVGw4astqC8CxK8ibWARuBlJuvYl/YuSo
+         CgI7Nd6/8PT2fxxLkJMSGOtQE/DY1JrCDXcds/wgsyzEbJe5ERYb4tbVwZyad1kJjE7H
+         nNyqJSJwARnPhGxku3LUpEURMieYr9dOUXuXPi+C73N8hCTA6o0OO5EmrdOjwM3VUKAB
+         q0UxMuArpxHE7BMTzYsab6PCzdoCLYHG+UyqEu4Dc97ecAijyD4ADPCf46cakS31fOWx
+         qXCA==
+X-Gm-Message-State: AO0yUKXAHkDtZnHpu0Zcf6KNLZ7UwxW3y3oZ/eF3NOmOZWJYvXNmSxaV
+        m2OHQaHzGaTh5T0Vh/a8Ag==
+X-Google-Smtp-Source: AK7set/D7386HxB0VdBbnYp8YAwsuBsb57CjrBk1CpenJ2pFHzjL+CaQ3SfHzxMJ8WK6IWZ51RjccQ==
+X-Received: by 2002:a92:d64c:0:b0:313:fddb:6e6f with SMTP id x12-20020a92d64c000000b00313fddb6e6fmr3472469ilp.9.1679243564944;
+        Sun, 19 Mar 2023 09:32:44 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80c7:2689:137d:d795:47e4:3de1])
+        by smtp.gmail.com with ESMTPSA id y19-20020a056e02119300b0031830e2c987sm2193842ili.20.2023.03.19.09.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 09:32:44 -0700 (PDT)
+Received: (nullmailer pid 226928 invoked by uid 1000);
+        Sun, 19 Mar 2023 16:32:40 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] thermal: mediatek: Use of_address_to_resource()
+Date:   Sun, 19 Mar 2023 11:32:31 -0500
+Message-Id: <20230319163231.226738-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Patch v2 8/9] memory: tegra: make cpu cluster bw request a
- multiple of mc channels
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230220140559.28289-1-sumitg@nvidia.com>
- <20230220140559.28289-9-sumitg@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230220140559.28289-9-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/02/2023 15:05, Sumit Gupta wrote:
-> Make CPU cluster's bandwidth (BW) request a multiple of MC channels.
-> CPU OPP tables have BW info per MC channel. But, the actual BW depends
-> on the number of MC channels which can change as per the boot config.
-> Get the number of MC channels which are actually enabled in current
-> boot configuration and multiply the BW request from a CPU cluster with
-> the number of enabled MC channels. This is not required to be done for
-> other MC clients.
-> 
+Replace of_get_address() and of_translate_address() calls with single
+call to of_address_to_resource().
 
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/thermal/mediatek/auxadc_thermal.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index ab730f9552d0..c8a3acaf56c1 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -897,14 +897,12 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ 
+ static u64 of_get_phys_base(struct device_node *np)
+ {
+-	u64 size64;
+-	const __be32 *regaddr_p;
++	struct resource res;
+ 
+-	regaddr_p = of_get_address(np, 0, &size64, NULL);
+-	if (!regaddr_p)
++	if (of_address_to_resource(np, 0, &res))
+ 		return OF_BAD_ADDR;
+ 
+-	return of_translate_address(np, regaddr_p);
++	return res.start;
+ }
+ 
+ static int mtk_thermal_extract_efuse_v1(struct mtk_thermal *mt, u32 *buf)
+-- 
+2.39.2
 
