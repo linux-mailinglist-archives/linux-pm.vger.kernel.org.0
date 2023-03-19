@@ -2,69 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F366BFC80
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Mar 2023 20:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4CD6C01B7
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Mar 2023 13:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjCRTs5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Mar 2023 15:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
+        id S229985AbjCSMp4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Mar 2023 08:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCRTsz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Mar 2023 15:48:55 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6210122DEB;
-        Sat, 18 Mar 2023 12:48:54 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id cy23so32585417edb.12;
-        Sat, 18 Mar 2023 12:48:54 -0700 (PDT)
+        with ESMTP id S230032AbjCSMpz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 08:45:55 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41293B761;
+        Sun, 19 Mar 2023 05:45:51 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id o8so11846870lfo.0;
+        Sun, 19 Mar 2023 05:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1679168933;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uiugbEJX8e4tBR8v5WrizkFrQvCAxHo92Z8AgfyiYuU=;
-        b=TAdAXNRbn7vxfUflIzjabTSIrtlEfFeb7PkwwR+gZ+PRgiUx/D4T2GPf9ziaXyGqHY
-         ugzsDlfiFNHi3rYsSibOyy3I7zrFRDsbxxCQGWKIptxXkoUWOfBsYyRbhueYNR6QY1vb
-         RYTtBKxRZI2eb46kc69DXbblmouCAMUvabgy6FdvBRIuyCh2ZpkZV3jbiUoiVF9TqeQK
-         SdzDcRAXL6djJA2bGDyuOMtMDV1S4ZOcThDr+2XiTpGCJKUU0seWWuswifS0Box+FKyi
-         P9cJ+y1gqy1FgGKC3XeasyVWlvvOK9s5Zi6OVFvYA6+xG7h1zmfgKu3I/ZE+scdBuABQ
-         H7SQ==
+        d=gmail.com; s=20210112; t=1679229949;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUFR/owu04/HGO42G2+su2qkeCReL5ITlw7CfWk1G2A=;
+        b=IXnYmbIXkea6DDGMhRq1jyYbb7qxrAT5M+MHIzNWOYJOsFZEZPUKLTl0S5J7teTKDj
+         BoUJPOVbdxCL6282g4NjarvQo4gjb81MWq6A3REVk2RuEClDWW/dFh9TyHIbs81XYfjN
+         eBFoet0uFATA11/hK3LM5AesFy9ief6wdMwNbDgEo0X/WNlCcP/c+REUn758trdFWG4s
+         nuZRcO8aD9Rddi21sahgmVUJIg9B6IETiq2tRRw1tPY0P4O6NNTqo23v/nBgcOielPYD
+         FH70hghO/wMSfXDc5pLAVxmRRnwFZ+Gb543OlgFl3hCZfQsITMEzRGMhw9IznyE8IK2Z
+         qYKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679168933;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uiugbEJX8e4tBR8v5WrizkFrQvCAxHo92Z8AgfyiYuU=;
-        b=GibVShz+e65NWROMRA6eu8O9RL2s2OdGXll6q8osnGVNFRkWaeAJ+8woOQgLFj+qzW
-         QzSX44RcJitE4o02Wtn9jMEwRmXkxtu2oWzYLTr2uV/6oXHLKFk5jvAf3T+jVMCc1+T6
-         SjmAXvT08RM97qFak9gK8LtckFDid5w+S6xLWYzZtHUJGapSuO8ZMJaubu/ELuwSRBKe
-         jH+KNbnioWLMvV/RKN57fxE58RZEiDM3q6RYr61m1eoaoctEpfybFSnJ2UJWllr4LnCD
-         3kwIW+ukdBRVNkNyRYFpfHMKOwH+2q8AwiLIq0WwVPk4TpNR/GruKPMkeE1G4XmR5rep
-         MlwA==
-X-Gm-Message-State: AO0yUKXtDoF2tVBYLAdKCswZFf1zPndyfvwccS96ffCrpgijV4meOo1r
-        FrrLoMIIkxgF0V29HtQgdCeEDhg7BfRNLCaTEOk=
-X-Google-Smtp-Source: AK7set+2wo8PTsdUJYcZlYuKUue/uK9itVzfKPEX5A+p+E1AWA3LaKu3QuV9nEvRcwUlT5FIDwTsb/G8zm9tdenhU8M=
-X-Received: by 2002:a17:906:bc9a:b0:924:efbb:8a8b with SMTP id
- lv26-20020a170906bc9a00b00924efbb8a8bmr1713848ejb.6.1679168932708; Sat, 18
- Mar 2023 12:48:52 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679229949;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUFR/owu04/HGO42G2+su2qkeCReL5ITlw7CfWk1G2A=;
+        b=qdOC6ApFLDuEA2GlxRFnLn0uU7OTEDGw1v7ATQktVlmrNBZi3stHj0KRa47ETGQ5gD
+         wohmcK5EilBag0UOCxPPyEFEX4qX8SqnguhoGKDFjn/OaLdjV6dSy6wKX+usCndUpXPw
+         8lWJI/7+wkk3Ykfj9Ny+u0j/plEo4obV6fRjZANG+4ucf+gVHf8SLdhvPap078+fDYbq
+         O8sBqz9bpxleRMmpVXXXJrQrnxrEdf5kEJPSzSGm9dg3dtzfN2wdS4twb2UmUI4N80H0
+         m5X0umIzcLO76cM/nKVthnOD0oo4mj7XALmukbmkM2CzbJ+W58RAqyOPgn0XO+wBqX1r
+         Ou/A==
+X-Gm-Message-State: AO0yUKUno5eu9GUIu6ChXnp1asHBBCfhwJzj3CWHs74IfeeBcs36+eWZ
+        eQ6FOdk8qF4o6V3vBx3FNwg=
+X-Google-Smtp-Source: AK7set/0Ceqe51le506ovkyGA2FAEvBQnykF4dIG7idWAdyk5nkmGhM5ooEnV03OnY5aQjvtRiSMOA==
+X-Received: by 2002:ac2:5a5e:0:b0:4e1:7dd:1142 with SMTP id r30-20020ac25a5e000000b004e107dd1142mr5255395lfn.51.1679229949369;
+        Sun, 19 Mar 2023 05:45:49 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004e83f59ed10sm1263687lfc.44.2023.03.19.05.45.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Mar 2023 05:45:48 -0700 (PDT)
+Message-ID: <c2e4540c-a607-d2d7-992f-9ff7d1c2cce7@gmail.com>
+Date:   Sun, 19 Mar 2023 14:45:48 +0200
 MIME-Version: 1.0
-References: <20230318144412.75046-1-frank.li@vivo.com> <20230318144412.75046-3-frank.li@vivo.com>
-In-Reply-To: <20230318144412.75046-3-frank.li@vivo.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 18 Mar 2023 20:48:41 +0100
-Message-ID: <CAFBinCBFXok9Of0dvZCZrw--LdFOihdLOEWPSF9UA5Nuc5eqEg@mail.gmail.com>
-Subject: Re: [PATCH 3/9] thermal/drivers/amlogic: remove redundant msg in amlogic_thermal_probe()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCHv3 08/14] power: supply: generic-adc-battery: use
+ simple-battery API
+Content-Language: en-US, en-GB
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230317225707.1552512-1-sre@kernel.org>
+ <20230317225707.1552512-9-sre@kernel.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230317225707.1552512-9-sre@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,13 +79,196 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 3:45=E2=80=AFPM Yangtao Li <frank.li@vivo.com> wrot=
-e:
->
-> The upper-layer devm_thermal_add_hwmon_sysfs() function can directly
-> print error information.
->
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-Assuming this is applied after/together with the first patch from this seri=
-es:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On 3/18/23 00:57, Sebastian Reichel wrote:
+> Constant battery data is available through power-supply's simple-battery
+> API. This works automatically, so the manual handling can be removed
+> without loosing any feature :)
+> 
+> Note, that the POWER_SUPPLY_STATUS_FULL check for the level variable can
+> be dropped, since the variable is never written. It can be re-introduced
+> properly once the driver gets functionality to calculate the current
+> charge level. Apart from that the check must be done fuzzy anyways,
+> since charge estimation usually is not precise enough to always return
+> exactly the full charge capacity for a full battery.
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+> ---
+>   drivers/power/supply/generic-adc-battery.c | 64 ++--------------------
+>   include/linux/power/generic-adc-battery.h  | 18 ------
+>   2 files changed, 4 insertions(+), 78 deletions(-)
+>   delete mode 100644 include/linux/power/generic-adc-battery.h
+> 
+> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
+> index 771e5cfc49c3..d4f63d945b2c 100644
+> --- a/drivers/power/supply/generic-adc-battery.c
+> +++ b/drivers/power/supply/generic-adc-battery.c
+> @@ -22,7 +22,6 @@
+>   #include <linux/slab.h>
+>   #include <linux/iio/consumer.h>
+>   #include <linux/iio/types.h>
+> -#include <linux/power/generic-adc-battery.h>
+>   #include <linux/devm-helpers.h>
+>   
+>   #define JITTER_DEFAULT 10 /* hope 10ms is enough */
+> @@ -48,9 +47,7 @@ struct gab {
+>   	struct power_supply		*psy;
+>   	struct power_supply_desc	psy_desc;
+>   	struct iio_channel	*channel[GAB_MAX_CHAN_TYPE];
+> -	struct gab_platform_data	*pdata;
+>   	struct delayed_work bat_work;
+> -	int	level;
+>   	int	status;
+>   	bool cable_plugged;
+>   	struct gpio_desc *charge_finished;
+> @@ -70,14 +67,6 @@ static void gab_ext_power_changed(struct power_supply *psy)
+>   
+>   static const enum power_supply_property gab_props[] = {
+>   	POWER_SUPPLY_PROP_STATUS,
+> -	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> -	POWER_SUPPLY_PROP_CHARGE_EMPTY_DESIGN,
+> -	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> -	POWER_SUPPLY_PROP_CURRENT_NOW,
+> -	POWER_SUPPLY_PROP_TECHNOLOGY,
+> -	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+> -	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
+> -	POWER_SUPPLY_PROP_MODEL_NAME,
+>   };
+>   
+>   /*
+> @@ -97,17 +86,6 @@ static bool gab_charge_finished(struct gab *adc_bat)
+>   	return gpiod_get_value(adc_bat->charge_finished);
+>   }
+>   
+> -static int gab_get_status(struct gab *adc_bat)
+> -{
+> -	struct gab_platform_data *pdata = adc_bat->pdata;
+> -	struct power_supply_info *bat_info;
+> -
+> -	bat_info = &pdata->battery_info;
+> -	if (adc_bat->level == bat_info->charge_full_design)
+> -		return POWER_SUPPLY_STATUS_FULL;
+> -	return adc_bat->status;
+> -}
+> -
+>   static enum gab_chan_type gab_prop_to_chan(enum power_supply_property psp)
+>   {
+>   	switch (psp) {
+> @@ -144,27 +122,12 @@ static int read_channel(struct gab *adc_bat, enum power_supply_property psp,
+>   static int gab_get_property(struct power_supply *psy,
+>   		enum power_supply_property psp, union power_supply_propval *val)
+>   {
+> -	struct gab *adc_bat;
+> -	struct gab_platform_data *pdata;
+> -	struct power_supply_info *bat_info;
+> -	int result = 0;
+> -	int ret = 0;
+> -
+> -	adc_bat = to_generic_bat(psy);
+> -	if (!adc_bat) {
+> -		dev_err(&psy->dev, "no battery infos ?!\n");
+> -		return -EINVAL;
+> -	}
+> -	pdata = adc_bat->pdata;
+> -	bat_info = &pdata->battery_info;
+> +	struct gab *adc_bat = to_generic_bat(psy);
+>   
+>   	switch (psp) {
+>   	case POWER_SUPPLY_PROP_STATUS:
+> -		val->intval = gab_get_status(adc_bat);
+> -		break;
+> -	case POWER_SUPPLY_PROP_CHARGE_EMPTY_DESIGN:
+> -		val->intval = 0;
+> -		break;
+> +		val->intval = adc_bat->status;
+> +		return 0;
+>   	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+>   	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>   	case POWER_SUPPLY_PROP_POWER_NOW:
+> @@ -173,26 +136,9 @@ static int gab_get_property(struct power_supply *psy,
+>   			goto err;
+>   		val->intval = result;
+>   		break;
+> -	case POWER_SUPPLY_PROP_TECHNOLOGY:
+> -		val->intval = bat_info->technology;
+> -		break;
+> -	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> -		val->intval = bat_info->voltage_min_design;
+> -		break;
+> -	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> -		val->intval = bat_info->voltage_max_design;
+> -		break;
+> -	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> -		val->intval = bat_info->charge_full_design;
+> -		break;
+> -	case POWER_SUPPLY_PROP_MODEL_NAME:
+> -		val->strval = bat_info->name;
+> -		break;
+>   	default:
+>   		return -EINVAL;
+>   	}
+> -err:
+> -	return ret;
+>   }
+>   
+>   static void gab_work(struct work_struct *work)
+> @@ -235,7 +181,6 @@ static int gab_probe(struct platform_device *pdev)
+>   	struct gab *adc_bat;
+>   	struct power_supply_desc *psy_desc;
+>   	struct power_supply_config psy_cfg = {};
+> -	struct gab_platform_data *pdata = pdev->dev.platform_data;
+>   	enum power_supply_property *properties;
+>   	int ret = 0;
+>   	int chan;
+> @@ -248,7 +193,7 @@ static int gab_probe(struct platform_device *pdev)
+>   
+>   	psy_cfg.drv_data = adc_bat;
+>   	psy_desc = &adc_bat->psy_desc;
+> -	psy_desc->name = pdata->battery_info.name;
+> +	psy_desc->name = dev_name(&pdev->dev);
+>   
+>   	/* bootup default values for the battery */
+>   	adc_bat->cable_plugged = false;
+> @@ -256,7 +201,6 @@ static int gab_probe(struct platform_device *pdev)
+>   	psy_desc->type = POWER_SUPPLY_TYPE_BATTERY;
+>   	psy_desc->get_property = gab_get_property;
+>   	psy_desc->external_power_changed = gab_ext_power_changed;
+> -	adc_bat->pdata = pdata;
+>   
+>   	/*
+>   	 * copying the static properties and allocating extra memory for holding
+> diff --git a/include/linux/power/generic-adc-battery.h b/include/linux/power/generic-adc-battery.h
+> deleted file mode 100644
+> index 54434e4304d3..000000000000
+> --- a/include/linux/power/generic-adc-battery.h
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - * Copyright (C) 2012, Anish Kumar <anish198519851985@gmail.com>
+> - */
+> -
+> -#ifndef GENERIC_ADC_BATTERY_H
+> -#define GENERIC_ADC_BATTERY_H
+> -
+> -/**
+> - * struct gab_platform_data - platform_data for generic adc iio battery driver.
+> - * @battery_info:         recommended structure to specify static power supply
+> - *			   parameters
+> - */
+> -struct gab_platform_data {
+> -	struct power_supply_info battery_info;
+> -};
+> -
+> -#endif /* GENERIC_ADC_BATTERY_H */
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
