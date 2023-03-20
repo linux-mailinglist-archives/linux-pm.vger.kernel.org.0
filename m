@@ -2,322 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1BC6C09BD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 05:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4D56C0A7E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 07:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjCTEk3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Mar 2023 00:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        id S229757AbjCTGUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 02:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCTEk2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 00:40:28 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2088.outbound.protection.outlook.com [40.107.96.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5731A971;
-        Sun, 19 Mar 2023 21:40:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uz79DCalhOqEUHIP0bmkzpkVOoSOMeREFrt1PXOsanmmxkIwPlr2ose9XNOP+W+J99o97/804cSp697KsE+iZqTqD7jzS6FksClo+nebHsmztTLqpOeg4W2t3rTDFvh6BSZ0Y0+uvlCyczX2cjN/hWOJGuBFgMk0gtMmtxRPhHkgS7y3S35oOQI3rhH3JuND2M+OYW/iqucRRUgohP/2HxMTswlWdaglsghXA0pLa5vgTrTiJrG8M1C3q4WRbCRC5Cks3MnZJQHx2qn/Ou06fwJz8CtfcyI++YuqwUF38gO7REAcWWq3pWHQsqZq/wjcDm7EG9Ys/oCL72SmBalQZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S1Hj2Bn/hMwqKf5HzYcRRvgkSWSrhzhIlhNbMAMMy1c=;
- b=H971GyWPD9cj8ZVwvMDzy+WnslauaxIyGTDTbhdXLtx/MQJTfoJ7UUMu7vsMk31H3M41HTdbOyTB6LO24PMSwYJzzvLt3XGs/jGZyBXDnJwvG7m24G8ZOK9QSycQS59/w6ZPYQgai7527uQgFQHH525sjL6PUiDTvil0FZDvK2JnFRzB1OhMM9bMh88UzpcYjtwTU9Muru8HV8J1+Ez9NXx+mBWgmqpefpbe+iIgvJo3s9gSpDloxKlDe2M3ZDq22T3p2dqor9U4dlmbiQi6XvrYQ8pWVFqhhAxZYkanMv11+0Sx+OTbiQl7dTnS4RgHwrMaXgdIU3oDPXKejpDFIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S1Hj2Bn/hMwqKf5HzYcRRvgkSWSrhzhIlhNbMAMMy1c=;
- b=mTXHZM1peIPola6vxd5sG29LfxPHcqZpv+q/DfgJaf12o6inWOSiv8w7OxVbz2QGrAbx6z2vt6zj8ZOhuASwLGP9hJwfk19iodpxfWVWIXJuSnOidrmIbXsaeksMQsaeQTy4WbQazzJGdlps1mLHBvVeJzrdehwrE+Wm18PdeFs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by MN2PR12MB4222.namprd12.prod.outlook.com (2603:10b6:208:19a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 04:40:22 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 04:40:21 +0000
-Date:   Mon, 20 Mar 2023 10:10:04 +0530
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Huang Rui <ray.huang@amd.com>, Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>,
-        Russell Haley <yumpusamongus@gmail.com>
-Subject: Re: [PATCH v8 0/6] cpufreq: amd-pstate: Add guided autonomous mode
- support
-Message-ID: <ZBfjpJAQRkzEb/+y@bhagirati.amd.com>
-References: <20230307112740.132338-1-wyes.karny@amd.com>
- <CAJZ5v0gijQJeCpxgTOD6uj9Cjn8=C+FwX5Ub1SP3xe6ygCaX4Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gijQJeCpxgTOD6uj9Cjn8=C+FwX5Ub1SP3xe6ygCaX4Q@mail.gmail.com>
-X-ClientProxiedBy: PN3PR01CA0159.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:c8::20) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        with ESMTP id S229561AbjCTGUY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 02:20:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC65CDEB
+        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 23:20:22 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32K66KEg011266;
+        Mon, 20 Mar 2023 06:19:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=vhRJkP6zSvUOBRvgshunZ4mm1ErAQqPPHd+78vJ8+gw=;
+ b=VJrkhrSQvZkTiKCIPOnNf9eDcFtcVIboiEj6Hsh4FL7fHXj8sg/aYvf7xAC5QlXmpM2g
+ eWQDLzjEGV0/Kwf8bb1MXnMZLECMN5I+B29jndJ1Eoc3teNL+347c9e2p01EqucDwCQV
+ EgljBvdrV6582HaqBRcibN/qxFOIIhg9yk0P9Tcb22K/r6O9j6d/FFvyQpUMXYFxaLar
+ Y3f8c5srsZykT9vyv7BwcBV6LamnmWbnEnmgG9FYSvFrOpLiJ+kRiiMC30VTfprNbf5I
+ u3EZqfourh1/EJ4mnJTHJjGrPuFy+R1+WqFEbeuBfhm88We+3n0tkVn4YAee+6JQ4bzx zw== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pdq6kq8gk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 06:19:57 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32K3ZDji019556;
+        Mon, 20 Mar 2023 06:19:56 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3pd4x6k607-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 06:19:56 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32K6Jtth31195874
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Mar 2023 06:19:55 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C53858055;
+        Mon, 20 Mar 2023 06:19:55 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79B6158043;
+        Mon, 20 Mar 2023 06:19:52 +0000 (GMT)
+Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.204.200.131])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 06:19:52 +0000 (GMT)
+Message-ID: <5f2ab8a44d685701fe36cdaa8042a1aef215d10d.camel@linux.vnet.ibm.com>
+Subject: CPU Hotplug optimization: offcputime analysis
+From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        paulmck@kernel.org, peterz@infradead.org,
+        daniel.lezcano@linaro.org, nicolas.pitre@linaro.org
+Cc:     srikar@linux.vnet.ibm.com, linux-pm@vger.kernel.org
+Date:   Mon, 20 Mar 2023 11:49:51 +0530
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R2KBh79dy-zP_FHKwSMrP28Z_Q3ycgwP
+X-Proofpoint-ORIG-GUID: R2KBh79dy-zP_FHKwSMrP28Z_Q3ycgwP
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|MN2PR12MB4222:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13744f35-26b8-4895-7296-08db28fd36c2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d4ujUQGmTqnf9fxgYvTSXgOxlvAKQmmgASWoUtnMm81ThCkxLadTBYAmyy1qeRGyambSj5LgQBBJk8Gl9QRRNWnbxpOTAUMegxENAav4KYMo7Yi0nZ+J/qFrIFVnx3Z+3pP7g6p7MD4qz2Eji2UnpHvs+cTNg6LYjZQHHdSBZwQ5DLkA5EaO+jNJ9TjkUPTmRaPBgqOlUAtPnWPUbqQMMJy2YOS/lQMFvHfbjNIGma6ovs2MCpbKEwvKJHp9txps5DLj2J6c9BcTWinXzC41KLGIby3RsozwLpTnV+a+C7jRh2/lHAWdU2fBA/x1PLamAS4IF3g0nkoMt/o6ia3nHlsMuEvTBNZqai+nFSUWFRalJjCYTaVkeaHkDiZEu5PmbgVgvCAOWEmsjANebJVdK8QZlca94cnxrY/4OccXiFsniKURc3PTtqL/qI72BXHan59pinnuTClFMu9vHwS3uSDKvqoKkH1DNfrFmAzdPCRyyrXr52D+WT9BNH4ioo6SGCua3c9EcXmT43FaOxkSdlFlu5dabruKEAAUq0cX/n2Q6GtuTmm+G2zm0Elb777Pwd5gXniVKcS+iZrNJmOZC7iKhJly3CINrk+cGoBoT/bYK3eLoP7Q5qlf0mveF8dy0r7EkyR+TMpWGupngVsF3Iax4Noh3ghluGH1GFEV8SQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(39860400002)(346002)(366004)(136003)(451199018)(26005)(6506007)(53546011)(6512007)(6666004)(966005)(316002)(83380400001)(8676002)(6916009)(6486002)(4326008)(54906003)(66476007)(186003)(478600001)(66946007)(5660300002)(7416002)(8936002)(44832011)(2906002)(41300700001)(66556008)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFovYVFLM0RlMkQyZEtrZjlzeW95Wit5NTdNc242Mmx0U3cwU25rakVKRWRw?=
- =?utf-8?B?TDRtU1ZBY1g2a2Rma2FIUk9iMG5NU3AwUGhsWEw3WTFEWnRTZGFRZk93STJ0?=
- =?utf-8?B?RERFck12VldySGh5V1FYVjFla1RVcDM1eXFnY1FCMWJXZXFkWjR4YzMxblZ2?=
- =?utf-8?B?MkZOVGR0eHMydWZTZ2FsblY2ZXZxU2JMY04rSGdmcndxUStWamgzWUVlYk9j?=
- =?utf-8?B?eFA0cnh6MTgwRGVFWnUxbG56V08xOHlYckl6aXU1WkIwalo0Wm1HT0t4Nkpr?=
- =?utf-8?B?ME1BRTdTK2ZhTkJxb2oyazZHUVBMUzlZUStZWkJ6dVVCZHZQejRDVGtFZlkw?=
- =?utf-8?B?MU9sWUpDRVR3Qm1xNzRRTURUTzhpSkUrODdDY0QybzdBT0xsRCtldDJZNUMw?=
- =?utf-8?B?SDFxRFduVG1kMHV5c3BWSGdiZXZUSk1mRnNxbGNjNG5aLzNDUmV2YXRrM3cr?=
- =?utf-8?B?V3hTQ0xnRVRvb0wzcExHUEIwYXBDVVhqV3UyYkJQMHUydERJaHlZczJXMlVl?=
- =?utf-8?B?RVdsNGFGRFhpdmNiMzZCU0g3L2ZhK0NFOUl5SGRQMkdFOXlrbU55ckJldlRq?=
- =?utf-8?B?V0hEVjJjb1NvSHV4cUtRYzlobEV2RGE5bHBIdGdBazBWZnUrZ0tZSmw2MnZH?=
- =?utf-8?B?a1BRQkkzSHZYTUJVazNNTHBRMlorQW5VTDNKNDZkZmtObmpLRmN0c2pQaU52?=
- =?utf-8?B?SDV1cXhOQnIzamVZbUNWR05QeGh5L1RTd1JIbkZ4UjZSVlJ3Q0pJYzVKN3dJ?=
- =?utf-8?B?VUxwS080SWtINW5taHR1R2ZHQ1NxUUQ0cnNCZHhJaG5KRWxxTm9VL2hkUWx6?=
- =?utf-8?B?UTBvQk1qVlM3b0s3REVxZ2tPL29mNlRFY3FPV3MybnVLeTU5ejZvT1NKTTZX?=
- =?utf-8?B?bU1nMFFJSC8vQVFFZjdvaGx2WHVJNXZoOFJKUm45UjBFdzhkU1NncHVRZG9n?=
- =?utf-8?B?SVBSdHFkMW0rS1BqOGlWYTlIVjFoV2FIN3BZakhLVk8yQ0dyOTRWdlBmS05p?=
- =?utf-8?B?VzVVb3ZOVGVWTlVuUVpkMGtzcTJnSVNhYitQYXVESG8rZTFpQWNhZ3RkNXds?=
- =?utf-8?B?TUtaTWtJRkVadElNaXoyVlYvZDVvL21wVTZrZkF5bG1EbDlyMHBGZlVpUmNU?=
- =?utf-8?B?ckFWT0JXOXhLQU1HK0dIZGtMZmFiWTVybWxVckRVaUdDTFJBcndYUFZGbDFt?=
- =?utf-8?B?VUZzNHRncGVUam9FTHI2alpLVENTSS9SR0hXVVFGVXBYM0NLVHJra2d4VU4y?=
- =?utf-8?B?U2hMbzZlTW9JRVRZNVM0VDN5UEM0N0xGK3RzUE1UejBUdTJVMUtMVjM4TW9s?=
- =?utf-8?B?Z2lSLzVkTnZTR3AyelEwTEhkdURZVXlwOHg2eG1rZkd1a1lEa2hzd2dpT0xx?=
- =?utf-8?B?OWoxTk9tbXVRV1V4cVN3RWhZOW1yRU11VXhvQnZ4NUpxWitzcWt3ZFNiYjZt?=
- =?utf-8?B?eW9WcXBHeXRwdkhhKzNqSE9QbFpYUCtOcnE0TE5nWEVzRzVYcHBLdFZtRis3?=
- =?utf-8?B?NkdUY1B5TnFJaHFVRDBLMkZGam81UFFMVkFUZENhVkFUSnZjbVlZc1BSMVZC?=
- =?utf-8?B?VGFjNmJ0RFQvS25JMkJ6d2RQb25FYm5BQ1hzRFlkMmVWSnY5YnNIZVNPOW9K?=
- =?utf-8?B?bHBtejNuOXFnenA2cFhrZXBTMkI2Ym1VeFVocGloak9sSEFHaGFwUGpyVmVS?=
- =?utf-8?B?TXlXRTJtSFJsM2ZBTlBqd0M4dEVMRmhmWkg5TklDQUNZanMySk51RGlJdGVR?=
- =?utf-8?B?RURLc3JXaXBHV01rVFN6RkpPdG9Rd2tBOHRwVDc4NnVONWxUbHNpVGo2Vy9h?=
- =?utf-8?B?R0lZVlJidzZXT2k0WWc0UFpBZloyempkRUxRN20rUVI2cGkzZXh6VGNsS3JW?=
- =?utf-8?B?TXE2ZlRMaXhuUHQxMGZseVJ0MWlQUmVpYktmNmNGNE1aZHhIcHJwL0hLbFN5?=
- =?utf-8?B?YnA1cFc1MHA4Z3B3MUJXY0tGZU5CRTR4cDYzdnM4aUVTNk5uTGVNakVLei9K?=
- =?utf-8?B?aWh1N04vclJVekUyWkN1TWZUTm9nOVNCT3JqVm5rZXNuLzhBRGtQYTJhdVcx?=
- =?utf-8?B?WGJJSnhVc3hvT3pjeHlsU0VRb3g2bXpkTXhRQi9MZUxPTHVJa0VtQTFyZk9Z?=
- =?utf-8?Q?spmcIkyrlxfXxTFYy19jzCe8B?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13744f35-26b8-4895-7296-08db28fd36c2
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 04:40:21.5638
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OJTV7BfkpNzzPTSIUWeRvzH937mnDnq3Hwac908bnFXnPXJ7452qf2AV7YgIo4bADxCq6FsdS1o+4K7kqIPegw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4222
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_03,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 clxscore=1011 bulkscore=0 malwarescore=0
+ spamscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303200053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+CPU Hotplug smt=off operation on a maximum configuration ppc64le system
+with 1920 logical CPUs takes more than 59 minutes to complete.
 
-On 17 Mar 19:10, Rafael J. Wysocki wrote:
-> On Tue, Mar 7, 2023 at 12:28 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> >
-> > From ACPI spec[1] below 3 modes for CPPC can be defined:
-> > 1. Non autonomous: OS scaling governor specifies operating frequency/
-> >    performance level through `Desired Performance` register and platform
-> > follows that.
-> > 2. Guided autonomous: OS scaling governor specifies min and max
-> >    frequencies/ performance levels through `Minimum Performance` and
-> > `Maximum Performance` register, and platform can autonomously select an
-> > operating frequency in this range.
-> > 3. Fully autonomous: OS only hints (via EPP) to platform for the required
-> >    energy performance preference for the workload and platform autonomously
-> > scales the frequency.
-> >
-> > Currently (1) is supported by amd_pstate as passive mode, and (3) is
-> > implemented by EPP support[2]. This change is to support (2).
-> >
-> > In guided autonomous mode the min_perf is based on the input from the
-> > scaling governor. For example, in case of schedutil this value depends
-> > on the current utilization. And max_perf is set to max capacity.
-> >
-> > To activate guided auto mode ``amd_pstate=guided`` command line
-> > parameter has to be passed in the kernel.
-> >
-> > Below are the results (normalized) of benchmarks with this patch:
-> > System: Genoa 96C 192T
-> > Kernel: 6.3-rc1 + patch
-> > Scaling governor: schedutil
-> >
-> > ================ dbench comparisons ================
-> > dbench result comparison:
-> > Here results are throughput (MB/s)
-> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >     1      1.00 (0.00 pct)         1.01 (1.00 pct)         1.02 (2.00 pct)
-> >     2      1.07 (0.00 pct)         1.06 (-0.93 pct)        1.07 (0.00 pct)
-> >     4      1.68 (0.00 pct)         1.70 (1.19 pct)         1.72 (2.38 pct)
-> >     8      2.61 (0.00 pct)         2.68 (2.68 pct)         2.76 (5.74 pct)
-> >    16      4.16 (0.00 pct)         4.24 (1.92 pct)         4.53 (8.89 pct)
-> >    32      5.98 (0.00 pct)         6.17 (3.17 pct)         7.30 (22.07 pct)
-> >    64      8.67 (0.00 pct)         8.99 (3.69 pct)        10.71 (23.52 pct)
-> >   128     11.98 (0.00 pct)        12.52 (4.50 pct)        14.67 (22.45 pct)
-> >   256     15.73 (0.00 pct)        16.13 (2.54 pct)        17.81 (13.22 pct)
-> >   512     15.77 (0.00 pct)        16.32 (3.48 pct)        16.39 (3.93 pct)
-> > dbench power comparison:
-> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >     1      1.00 (0.00 pct)         1.00 (0.00 pct)         1.04 (4.00 pct)
-> >     2      0.99 (0.00 pct)         0.97 (-2.02 pct)        1.02 (3.03 pct)
-> >     4      0.98 (0.00 pct)         0.98 (0.00 pct)         1.02 (4.08 pct)
-> >     8      0.98 (0.00 pct)         0.99 (1.02 pct)         1.02 (4.08 pct)
-> >    16      0.99 (0.00 pct)         1.00 (1.01 pct)         1.04 (5.05 pct)
-> >    32      1.02 (0.00 pct)         1.02 (0.00 pct)         1.07 (4.90 pct)
-> >    64      1.05 (0.00 pct)         1.05 (0.00 pct)         1.11 (5.71 pct)
-> >   128      1.08 (0.00 pct)         1.08 (0.00 pct)         1.15 (6.48 pct)
-> >   256      1.12 (0.00 pct)         1.12 (0.00 pct)         1.20 (7.14 pct)
-> >   512      1.18 (0.00 pct)         1.17 (-0.84 pct)        1.26 (6.77 pct)
-> >
-> > ================ git-source comparisons ================
-> > git-source result comparison:
-> > Here results are throughput (compilations per 1000 sec)
-> > Threads:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >   192      1.00 (0.00 pct)         0.93 (-7.00 pct)        1.00 (0.00 pct)
-> > git-source power comparison:
-> > Threads:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >   192      1.00 (0.00 pct)         1.00 (0.00 pct)         0.96 (-4.00 pct)
-> >
-> > ================ kernbench comparisons ================
-> > kernbench result comparison:
-> > Here results are throughput (compilations per 1000 sec)
-> > Load:      acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> > 32         1.00 (0.00 pct)         1.01 (1.00 pct)         1.02 (2.00 pct)
-> > 48         1.26 (0.00 pct)         1.28 (1.58 pct)         1.25 (-0.79 pct)
-> > 64         1.39 (0.00 pct)         1.47 (5.75 pct)         1.43 (2.87 pct)
-> > 96         1.48 (0.00 pct)         1.50 (1.35 pct)         1.49 (0.67 pct)
-> > 128        1.29 (0.00 pct)         1.32 (2.32 pct)         1.33 (3.10 pct)
-> > 192        1.17 (0.00 pct)         1.20 (2.56 pct)         1.21 (3.41 pct)
-> > 256        1.17 (0.00 pct)         1.18 (0.85 pct)         1.20 (2.56 pct)
-> > 384        1.16 (0.00 pct)         1.17 (0.86 pct)         1.21 (4.31 pct)
-> > kernbench power comparison:
-> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >    32      1.00 (0.00 pct)         0.97 (-3.00 pct)        1.00 (0.00 pct)
-> >    48      0.87 (0.00 pct)         0.81 (-6.89 pct)        0.88 (1.14 pct)
-> >    64      0.81 (0.00 pct)         0.73 (-9.87 pct)        0.77 (-4.93 pct)
-> >    96      0.75 (0.00 pct)         0.74 (-1.33 pct)        0.75 (0.00 pct)
-> >   128      0.83 (0.00 pct)         0.79 (-4.81 pct)        0.83 (0.00 pct)
-> >   192      0.92 (0.00 pct)         0.88 (-4.34 pct)        0.92 (0.00 pct)
-> >   256      0.92 (0.00 pct)         0.88 (-4.34 pct)        0.92 (0.00 pct)
-> >   384      0.92 (0.00 pct)         0.88 (-4.34 pct)        0.92 (0.00 pct)
-> >
-> > ================ tbench comparisons ================
-> > tbench result comparison:
-> > Here results are throughput (MB/s)
-> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >     1      1.00 (0.00 pct)         0.70 (-30.00 pct)       1.37 (37.00 pct)
-> >     2      2.64 (0.00 pct)         1.39 (-47.34 pct)       2.70 (2.27 pct)
-> >     4      4.89 (0.00 pct)         2.75 (-43.76 pct)       5.28 (7.97 pct)
-> >     8      9.46 (0.00 pct)         5.42 (-42.70 pct)      10.22 (8.03 pct)
-> >    16     19.05 (0.00 pct)        10.42 (-45.30 pct)      19.94 (4.67 pct)
-> >    32     37.50 (0.00 pct)        20.23 (-46.05 pct)      36.87 (-1.68 pct)
-> >    64     61.24 (0.00 pct)        43.08 (-29.65 pct)      62.96 (2.80 pct)
-> >   128     67.16 (0.00 pct)        69.08 (2.85 pct)        67.34 (0.26 pct)
-> >   256    154.59 (0.00 pct)       162.33 (5.00 pct)       156.78 (1.41 pct)
-> >   512    154.02 (0.00 pct)       156.74 (1.76 pct)       153.48 (-0.35 pct)
-> > tbench power comparison:
-> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
-> >     1      1.00 (0.00 pct)         0.97 (-3.00 pct)        1.08 (8.00 pct)
-> >     2      1.04 (0.00 pct)         0.97 (-6.73 pct)        1.11 (6.73 pct)
-> >     4      1.12 (0.00 pct)         0.99 (-11.60 pct)       1.18 (5.35 pct)
-> >     8      1.25 (0.00 pct)         1.04 (-16.80 pct)       1.31 (4.80 pct)
-> >    16      1.53 (0.00 pct)         1.13 (-26.14 pct)       1.58 (3.26 pct)
-> >    32      2.01 (0.00 pct)         1.36 (-32.33 pct)       2.03 (0.99 pct)
-> >    64      2.58 (0.00 pct)         2.14 (-17.05 pct)       2.61 (1.16 pct)
-> >   128      2.80 (0.00 pct)         2.81 (0.35 pct)         2.81 (0.35 pct)
-> >   256      3.39 (0.00 pct)         3.43 (1.17 pct)         3.42 (0.88 pct)
-> >   512      3.44 (0.00 pct)         3.44 (0.00 pct)         3.44 (0.00 pct)
-> >
-> > Change log:
-> >
-> > v7 -> v8:
-> > - Rebased on top of 6.3-rc1 tip
-> > - Pickup tested-by flag by Oleksandr
-> 
-> This series has been applied as 6.4 material, but I generally prefer
-> ACPI and CPPC to be spelled in capitals in patch subjects and you
-> should be more careful about comments and white space added by your
-> patches (I have fixed up a few assorted issues of these types in the
-> patches).
-> 
-> Thanks!
+Several attempts made to reduce the time consumption of CPU hotplug
+operation is discussed in this thread below:
+https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
 
-Thank you for taking this patch series.
+By applying the solution discussed in the above thread, time taken for
+CPU hotplug smt=off operation is brought down from 59m to 32m resulting
+in a performance improvement of around 45%.
 
-Regards,
-Wyes
+Though a significant performance improvement is achieved, still 32m for
+CPU hotplug (smt=off) operation is a large number. To bring it down further,
+we analysed the blocking time overhead in CPU hotplug using the offcputime
+bcc script. The script outputs the stack-traces of the tasks that were
+blocked and the total duration for which the tasks were blocked, to
+identify the areas of improvement.
 
-> 
-> > v6 -> v7:
-> > - Addressed comments by Ray
-> > - Reorder and rebase patches
-> > - Pick up Ack by Ray
-> >
-> > v5 -> v6:
-> > - Don't return -EBUSY when changing to same mode
-> >
-> > v4 -> v5:
-> > - Rebased on top of EPP v12 series
-> > - Addressed comments form Mario regarding documentation
-> > - Picked up RB flags from Mario and Bagas Sanjaya
-> >
-> > v3 -> v4:
-> > - Fixed active mode low frequency issue reported by Peter Jung and Tor Vic
-> > - Documentation modification suggested by Bagas Sanjaya
-> >
-> > v2 -> v3:
-> > - Addressed review comments form Mario.
-> > - Picked up RB tag from Mario.
-> > - Rebase on top of EPP v11 [3].
-> >
-> > v1 -> v2:
-> > - Fix issue with shared mem systems.
-> > - Rebase on top of EPP series.
-> >
-> > [1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
-> > [2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
-> > [3]: https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@amd.com/
-> >
-> > Wyes Karny (6):
-> >   acpi: cppc: Add min and max perf reg writing support
-> >   acpi: cppc: Add auto select register read/write support
-> >   Documentation: cpufreq: amd-pstate: Move amd_pstate param to
-> >     alphabetical order
-> >   cpufreq: amd-pstate: Add guided autonomous mode
-> >   cpufreq: amd-pstate: Add guided mode control support via sysfs
-> >   Documentation: cpufreq: amd-pstate: Update amd_pstate status sysfs for
-> >     guided
-> >
-> >  .../admin-guide/kernel-parameters.txt         |  40 ++--
-> >  Documentation/admin-guide/pm/amd-pstate.rst   |  31 ++-
-> >  drivers/acpi/cppc_acpi.c                      | 121 +++++++++++-
-> >  drivers/cpufreq/amd-pstate.c                  | 177 +++++++++++++-----
-> >  include/acpi/cppc_acpi.h                      |  11 ++
-> >  include/linux/amd-pstate.h                    |   2 +
-> >  6 files changed, 302 insertions(+), 80 deletions(-)
-> >
-> > --
-> > 2.34.1
-> >
+offcputime bcc script:
+https://github.com/iovisor/bcc/blob/master/tools/offcputime.py
+
+Below is one of the call-stacks that accounted for most of the blocking
+time overhead as reported by offcputime bcc script for CPU offline
+operation,
+
+    finish_task_switch
+    __schedule
+    schedule
+    schedule_timeout
+    wait_for_completion
+    __wait_rcu_gp
+    synchronize_rcu
+    cpuidle_uninstall_idle_handler
+    powernv_cpuidle_cpu_dead
+    cpuhp_invoke_callback
+    __cpuhp_invoke_callback_range
+    _cpu_down
+    cpu_device_down
+    cpu_subsys_offline
+    device_offline
+    online_store
+    dev_attr_store
+    sysfs_kf_write
+    kernfs_fop_write_iter
+    vfs_write
+    ksys_write
+    system_call_exception
+    system_call_common
+   -                bash (29705)
+        5771569  ------------------------>  Duration (us)
+
+From the above call-stack, it is observed that in
+cpuidle_uninstall_idle_handler, synchronize_rcu is accounting for major
+chunk of the overhead seen in CPU online and offline operations. This
+stack-trace is observed in pseries and powernv systems but not in ACPI
+based systems where we don't invoke cpuidle_disable_device during CPU
+hotplug offline operation.
+
+Patch that introduces synchronize_rcu in cpuidle_uninstall_idle_handler
+442bf3aaf55a ("sched: Let the scheduler see CPU idle states")
+is reverted to check for the accounted overhead.
+
+On a machine having 128 logical CPUs with the below configuration,
+
+root@ltc:~# lscpu
+Architecture:        ppc64le
+Byte Order:          Little Endian
+CPU(s):              128
+On-line CPU(s) list: 0-127
+Thread(s) per core:  4
+Core(s) per socket:  16
+Socket(s):           2
+NUMA node(s):        8
+Model:               2.3 (pvr 004e 1203)
+Model name:          POWER9, altivec supported
+CPU max MHz:         3800.0000
+CPU min MHz:         2300.0000
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            512K
+L3 cache:            10240K
+NUMA node0 CPU(s):   0-63
+NUMA node8 CPU(s):   64-127
+NUMA node250 CPU(s):
+NUMA node251 CPU(s):
+NUMA node252 CPU(s):
+NUMA node253 CPU(s):
+NUMA node254 CPU(s):
+NUMA node255 CPU(s):
+
+The tabulation below lists the total time taken for the CPU hotplug
+offline and online operation in 4 different scenarios:
+
+|-------------------------------------------------------------------------|
+| Time take to offline 127 CPUs (niters : 10)                             |
+|--------------------------------------------------|---------|------------|
+| kernel version                                   | avg (s) | % decrease |
+|--------------------------------------------------|---------|------------|
+| (1) v6.2.0-rc5                                   | 17.945  | baseline   |
+| (2) revert 442bf3aaf55a (remove synchronize_rcu) | 10.259  | 42.831     |
+| (3) replace synchronize_rcu with                 |         |            |
+|     synchronize_rcu_expedited                    | 10.129  | 43.554     |
+|     in cpuidle_uninstall_idle_handler  	   |         |            |
+| (4) enable system-wide rcu_expedited             | 0.842   | 95.304     |
+|--------------------------------------------------|---------|------------|
+
+|-------------------------------------------------------------------------|
+| Time take to online 127 CPUs (niters : 10)                              |
+|-------------------------------------------------------------------------|
+| kernel version                                   | avg (s) | % decrease |
+|--------------------------------------------------|---------|------------|
+| (1) v6.2.0-rc5                                   | 16.474  | baseline   |
+| (2) revert 442bf3aaf55a (remove synchronize_rcu) | 12.503  | 24.104     |
+| (3) replace synchronize_rcu with                 |         |            |
+|     synchronize_rcu_expedited                    | 12.817  | 22.197     |
+|     in cpuidle_uninstall_idle_handler            |         |            |
+| (4) enable system-wide rcu_expedited             | 0.4983  | 96.975     |
+|--------------------------------------------------|---------|------------|
+
+Note: A performance improvement of around 16% for CPU offline operation is
+observed on large configuration systems with nCPUs = 1600 as well by
+avoiding `synchronize_rcu` in `cpuidle_uninstall_idle_handler`.
+
+It is observed from the above tabulations that synchronize_rcu introduced
+in 442bf3aaf55a ("sched: Let the scheduler see CPU idle states") accounts
+for around 40% and 24% of the total time taken by the CPU hotplug offline
+and online operation respectively, it will be really helpful to get any
+guidance from the community on suggestions for optimization here.
+
+Thanks,
+Aboorva
+
