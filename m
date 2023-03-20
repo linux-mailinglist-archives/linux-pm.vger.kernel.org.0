@@ -2,115 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE1B6C1570
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 15:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F956C159B
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 15:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjCTOqz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Mar 2023 10:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S231679AbjCTOwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 10:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjCTOqS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 10:46:18 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47C5FF1F;
-        Mon, 20 Mar 2023 07:45:16 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id fd25so7072120pfb.1;
-        Mon, 20 Mar 2023 07:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679323516;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZTj6lDaB879i6vS4ZDrKb4b2c9OODf1NGI0zVIt2OIQ=;
-        b=Bj+oH3CQChclMtHQOjFJOIB+Z7POqoHz3M05DrKcE49Bnf7ohSE3pDsx71PYs3ECvr
-         oTHseaJiODm/MyHSlBMBASGteA5HzjOenIVagUXFeZlt7Q+3YFMZoD7rUejgRISy+aVY
-         2odaelScwYvdePOWDQYmQtu9g1I2XR+9uN9ba8aIcs04yVVbk2zqIX1fxAN1D/wbDGbE
-         GKnk4Dos7F1ERtbzl7QoDAY8Tv0VU4CBkNuZAfbMf6wRdovcBhxA0rKvl1ZusIAFOTqG
-         Ji6tDLvUkL6ZHoI/zPauDcA1VF/2Q7lzDyCG6Rg7kTodWzwhyU4JJcSU+8FUk5u7Mgzx
-         O7Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679323516;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZTj6lDaB879i6vS4ZDrKb4b2c9OODf1NGI0zVIt2OIQ=;
-        b=fvJT19qqknclywQ8N5iPBs4hvjycnTKC7F5IriZQ581YZxPMea6PxZ/g2thCQJZ4iC
-         cUd/DVF2jQTB3+Bt4xAPX3lYGnBaRX5gpPJYXA6oyEK0iU1OFY2FN2gY6j4fOXtnlQDU
-         7yj2/w1Qe2k67XRV2sua+WD1NoFK4nAOEaFyy+dNC44kUuoxszekUKIO7rP707kWZUCu
-         9vmkcwsspFNHKf/c7cVQvTXOB9xxsQWJwRyt5Ts2I2VAgVAjxlc1/abbV6SSGNJOSoUK
-         /r51+/3Eao5L0xO+0lzJP2DhO1GhwYcmqJngWoAzNmBDLDT2mlaybGwVTQTWYkPwgHLz
-         h5Rw==
-X-Gm-Message-State: AO0yUKUUHwpPEzNxKViOLlcC4vgvNTz2Dz3lPlcgNDBonC8oX7N5hSXN
-        o8RaDMMcT1ekio0oaBr7dufZ6TfKbp4=
-X-Google-Smtp-Source: AK7set+YZdGvBmz/yJ5ACJx//DaOCsv2sHayWOfLM7STeuIIzbdJFihoX6ELSY7Jku8dzTLjKv9Llg==
-X-Received: by 2002:a62:7946:0:b0:625:2636:9cd2 with SMTP id u67-20020a627946000000b0062526369cd2mr19429597pfc.18.1679323516022;
-        Mon, 20 Mar 2023 07:45:16 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id x48-20020a056a000bf000b005a79596c795sm6428405pfu.29.2023.03.20.07.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:45:15 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org (open list:INTERCONNECT API),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 22/23] interconnect: Teach lockdep about icc_bw_lock order
-Date:   Mon, 20 Mar 2023 07:43:44 -0700
-Message-Id: <20230320144356.803762-23-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320144356.803762-1-robdclark@gmail.com>
-References: <20230320144356.803762-1-robdclark@gmail.com>
+        with ESMTP id S231775AbjCTOw0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 10:52:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCEE25E32
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 07:50:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2cVWReUG5GEkCYzV4yscBCxRCAtz4rEYtmBQFB2xWkg=; b=emYa6+uW0DEbCfW2Rw5lCwiE1y
+        ZDDMt4UVCdcTZqWGhvhEhC1T0HAKRnzzhqUUof3nHRbQP5Ev9A7kOc21VD+7MNiD0AIpk8GmIz8rJ
+        1Q6qAxZYjJyeyzM9Ctw/TWYmBPNP/XIgaDABthu8oPdBSkRqiYpcsUxVo09qbmyZysYAOUYKqfoT6
+        PZ91wPrvEvOUwziPJMLzOruQndIkROewvfEsRkQftCYDvwGwnhst0F/HIICOVk8h8QEiBK846Mn0B
+        KhPFxEUxS97JTSVtyKcB+IEosI3BCFCRNa7fIineWIfCT0DfpOecyB26pwCUcQOMAFV47ZIcTjEj+
+        9FKvuzwA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1peGqL-00181m-DJ; Mon, 20 Mar 2023 14:50:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB99B300288;
+        Mon, 20 Mar 2023 15:50:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 87AE520EEFFC4; Mon, 20 Mar 2023 15:50:34 +0100 (CET)
+Date:   Mon, 20 Mar 2023 15:50:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     x86@kernel.org, Linux PM Mailing List <linux-pm@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>
+Subject: Re: [PATCH v2 3/3] intel_idle: add C0.2 state for Sapphire Rapids
+ Xeon
+Message-ID: <20230320145034.GM2194297@hirez.programming.kicks-ass.net>
+References: <20230310122110.895093-1-dedekind1@gmail.com>
+ <20230310122110.895093-4-dedekind1@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310122110.895093-4-dedekind1@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Fri, Mar 10, 2023 at 02:21:10PM +0200, Artem Bityutskiy wrote:
+> +/**
+> + * umwait_limit_init - initialize time limit value for 'umwait'.
+> + *
+> + * C0.1 and C0.2 (later C0.x) idle states are requested via the 'umwait'
+> + * instruction. The 'umwait' instruction requires the "deadline" - the TSC
+> + * counter value to break out of C0.x (unless it broke out because of an
+> + * interrupt or some other event).
+> + *
+> + * The deadline is specified as an absolute TSC value, and it is calculated as
+> + * current TSC value + 'umwait_limit'. This function initializes the
+> + * 'umwait_limit' variable to count of cycles per tick. The motivation is:
+> + *   * the tick is not disabled for shallow states like C0.x so, so idle will
+> + *     not last longer than a tick anyway
+> + *   * limit idle time to give cpuidle a chance to re-evaluate its C-state
+> + *     selection decision and possibly select a deeper C-state.
+> + */
+> +static void __init umwait_limit_init(void)
+> +{
+> +	umwait_limit = (u64)TICK_NSEC * tsc_khz;
+> +	do_div(umwait_limit, MICRO);
+> +}
 
-Teach lockdep that icc_bw_lock is needed in code paths that could
-deadlock if they trigger reclaim.
+Would it not make sense to put this limit in the MSR instead? By
+randomly increasing the MSR limit you also change userspace behaviour vs
+NOHZ_FULL.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/interconnect/core.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index f7251784765f..5619963ee85c 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -1127,13 +1127,21 @@ void icc_sync_state(struct device *dev)
- 			}
- 		}
- 	}
-+	mutex_unlock(&icc_bw_lock);
- 	mutex_unlock(&icc_lock);
- }
- EXPORT_SYMBOL_GPL(icc_sync_state);
- 
- static int __init icc_init(void)
- {
--	struct device_node *root = of_find_node_by_path("/");
-+	struct device_node *root;
-+
-+	/* Teach lockdep about lock ordering wrt. shrinker: */
-+	fs_reclaim_acquire(GFP_KERNEL);
-+	might_lock(&icc_bw_lock);
-+	fs_reclaim_release(GFP_KERNEL);
-+
-+	root = of_find_node_by_path("/");
- 
- 	providers_count = of_count_icc_providers(root);
- 	of_node_put(root);
--- 
-2.39.2
-
+That was part of the reason why Andy insisted on having the MSR low.
