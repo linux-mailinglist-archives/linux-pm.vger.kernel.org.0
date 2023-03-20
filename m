@@ -2,187 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037046C090E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 03:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 020BA6C097A
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 04:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCTC4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Mar 2023 22:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S230176AbjCTDtl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Mar 2023 23:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjCTC4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 22:56:10 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83545F74E
-        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 19:55:55 -0700 (PDT)
+        with ESMTP id S229904AbjCTDtP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 23:49:15 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9C965AD
+        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 20:48:34 -0700 (PDT)
 Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230320025552epoutp04c4e25d886c295f4fbc488f15b56611f9~OASD9kuet1404414044epoutp04y
-        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 02:55:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230320025552epoutp04c4e25d886c295f4fbc488f15b56611f9~OASD9kuet1404414044epoutp04y
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230320034831epoutp01e6f22fdf171b39b03d9d417ee8035d3f~OBACrwExJ2232222322epoutp01Q
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 03:48:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230320034831epoutp01e6f22fdf171b39b03d9d417ee8035d3f~OBACrwExJ2232222322epoutp01Q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679280952;
-        bh=1bZMxLn2aChs0MYcs57jeaFNS8exGaQ4qV7yWSla8dU=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=R4cl+Zb5wvJLPSxTfHhKxL5OGjUcIw44cpw5DpMyclQlD14YdTEt/1QO6nRA6dD0x
-         5+U+zGw6MmHTanbAFsMPSAyHTQLvZFbtCprXPvYMBtmSNc4nAg/ZtrLVlrzbf6BBYK
-         3GFZjy+gZZ/E9hzA0t+KC9MMiee0vV73OdheogFY=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230320025551epcas1p20c05b6ac4f0557df66c8fd1332cb4542~OASDQySKG1343013430epcas1p2I;
-        Mon, 20 Mar 2023 02:55:51 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.223]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PfzrR0j3pz4x9Px; Mon, 20 Mar
-        2023 02:55:51 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        s=mail20170921; t=1679284112;
+        bh=5iuFslU5qlP81dxFLMLd6qVFWyrZFMo71VITTugPPa0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=UC8F6YTXf+s6/0+D+OodavXAu5TAKjrmf3TBB5oIbI1yERRURa6Wdlc6O7gI2Wwx1
+         aqLvZUPeZFvgLKCF4sW+/Tjh6XQ7/uI1Why9VQJuxkhC9I/rqCCbdUTe6Ts68tR43U
+         d/+3ueHFU+OxwxCEGvlnQwCFXfEjBnbeXwg5emM0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230320034831epcas1p15f60d252a1eb1607e28ef93cbd71cd38~OBAB83ivm3164931649epcas1p14;
+        Mon, 20 Mar 2023 03:48:31 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.38.241]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Pg11B46q0z4x9QF; Mon, 20 Mar
+        2023 03:48:30 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
         epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9A.24.52037.63BC7146; Mon, 20 Mar 2023 11:55:51 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230320025550epcas1p19c51166aa8067176960ce1e0f4138284~OASCfWlU11364013640epcas1p14;
-        Mon, 20 Mar 2023 02:55:50 +0000 (GMT)
+        16.92.52037.E87D7146; Mon, 20 Mar 2023 12:48:30 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28~OBAAubEO02417824178epcas1p2M;
+        Mon, 20 Mar 2023 03:48:29 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230320025550epsmtrp17a77d9545c64df0f93a1768ec36d1a8c~OASCeit351149211492epsmtrp1K;
-        Mon, 20 Mar 2023 02:55:50 +0000 (GMT)
-X-AuditID: b6c32a37-55fff7000001cb45-51-6417cb36c478
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230320034829epsmtrp2aa67f56357dd00a42439d85441946122~OBAAtnuXY2734027340epsmtrp2M;
+        Mon, 20 Mar 2023 03:48:29 +0000 (GMT)
+X-AuditID: b6c32a37-7cbfd7000001cb45-d2-6417d78e4a2c
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        72.0F.31821.63BC7146; Mon, 20 Mar 2023 11:55:50 +0900 (KST)
-Received: from js07lee02 (unknown [10.175.110.233]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230320025550epsmtip214469f3fda3053e5632e39b0edbfce5b~OASCOhDtV2202522025epsmtip2e;
-        Mon, 20 Mar 2023 02:55:50 +0000 (GMT)
-From:   "Jungseung Lee" <js07.lee@samsung.com>
-To:     "'Tejun Heo'" <tj@kernel.org>
-Cc:     "'Lai Jiangshan'" <jiangshanlai@gmail.com>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Pavel Machek'" <pavel@ucw.cz>,
-        "'Len Brown'" <len.brown@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <bw365.lee@samsung.com>, <yw85.kim@samsung.com>,
-        <huijin.park@samsung.com>
-In-Reply-To: <ZBTmtiyHpreu2btd@slm.duckdns.org>
-Subject: RE: [PATCH] workqueue: Introduce show_freeze_workqueues_busy
-Date:   Mon, 20 Mar 2023 11:55:50 +0900
-Message-ID: <03f001d95ad7$7a9146f0$6fb3d4d0$@samsung.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHQtHBulJt7mcjMc08WTb80894JlAHeG8i/AzetQiCu65bJ8A==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmga75afEUg8m1FifWLGKy6LjoYjF1
-        7W4mi1lT9jJZXN41h83ic+8RRou7p46yWcz9MpXZ4tfyo4wWHZ9vsjlweeycdZfdY/Gel0we
-        m1Z1snn0bVnF6LFi9Xd2j8+b5ALYorJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0t
-        zJUU8hJzU22VXHwCdN0yc4AOU1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBXo
-        FSfmFpfmpevlpZZYGRoYGJkCFSZkZ8z9f4G54ClvxbEvmg2Mi7i7GDk5JARMJE6/ncLUxcjF
-        ISSwg1Fi2eSjzBDOJyBn1xp2kCohgc+MEisavWA6fs9vZ4Uo2sUosX3jEzYI5wWjxNbHE8A6
-        2AR0JDYd2MACYosIKEr8/PUObCyzwHomif4FXYxdjBwcnAL6ElN3GYDUCAu4SsxZsZARxGYR
-        UJW482wVG4jNK2Ap0bN2EiuELShxcuYTsJnMAvIS29/OYYa4SEHi59NlrBC7nCROXjzMCFEj
-        IjG7sw1sr4TADg6JO+f3MEI0uEhMvLOJHcIWlnh1fAuULSXxsr8Nyi6X2NA3jQmiuYVRYtH2
-        t2wQCWOJd2/XMoM8wCygKbF+lz5EWFFi5++5UIv5JN597WEFKZEQ4JXoaBOCKFGSePOghQXC
-        lpC48LiXdQKj0iwkr81C8tosJC/MQli2gJFlFaNYakFxbnpqsWGBMTyyk/NzNzGC06yW+Q7G
-        aW8/6B1iZOJgPMQowcGsJMLrt0A0RYg3JbGyKrUoP76oNCe1+BCjKTCwJzJLiSbnAxN9Xkm8
-        oYmlgYmZkYmFsaWxmZI4r7jtyWQhgfTEktTs1NSC1CKYPiYOTqkGJoXWQtPJjGs9Pgk8eZWe
-        Y94x88fWRw6WPXar1ItvHa5n/7ns3ifz9acUTKP3XJyzcsJpgcvn7HtmbmH492HLQs87Evdz
-        r9sWhhywmabpNvPqGr3m7uWOjlIfFwt1S653FdK7mWM2cU2zxvbA37Nj7G1sHLtn2cu/2aVy
-        Xbdd9ZP1Rd+HfA/Vnzi5KVsra+wIKmTa/mxLydzAnCfH9iyXn7okU/e7/cHyu02iptL7D86S
-        vXIrLuac/tYnL842RuzwCk4LYz7+LDf32R1/3zOcqQt+puT8OSySfOJiDpfDFbFOS+XwBXuf
-        dX1qrooTdi+K2LP9kTP/Oz2hPybz8t2rirWNSviPm562F1VLWVGloMRSnJFoqMVcVJwIAOWH
-        CCU8BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMIsWRmVeSWpSXmKPExsWy7bCSvK7ZafEUg4Y9yhYn1ixisui46GIx
-        de1uJotZU/YyWVzeNYfN4nPvEUaLu6eOslnM/TKV2eLX8qOMFh2fb7I5cHnsnHWX3WPxnpdM
-        HptWdbJ59G1ZxeixYvV3do/Pm+QC2KK4bFJSczLLUov07RK4Mub+v8Bc8JS34tgXzQbGRdxd
-        jJwcEgImEr/nt7N2MXJxCAnsYJSY9GQKE0RCQuLRzi8sXYwcQLawxOHDxRA1zxgltm3+BVbD
-        JqAjsenABhYQW0RAUeLnr3fMIEXMAtuZJD6c2scC0bGTUeL2ik9gkzgF9CWm7jIAaRAWcJWY
-        s2IhI4jNIqAqcefZKjYQm1fAUqJn7SRWCFtQ4uTMJ2CtzAJ6Em0bwcqZBeQltr+dwwxxp4LE
-        z6fLWCFucJI4efEwVI2IxOzONuYJjMKzkEyahTBpFpJJs5B0LGBkWcUomVpQnJueW2xYYJSX
-        Wq5XnJhbXJqXrpecn7uJERxvWlo7GPes+qB3iJGJg/EQowQHs5IIr98C0RQh3pTEyqrUovz4
-        otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamASuVzP8nT9B9K9O0brbM0of
-        vXTceqHmw+YPszvnavEfUbabV3/7c1OC3+0z876u9kg5EBE0+cwt2637VkdJSaWxCXM+mSc5
-        PyrExPv/LtnmBJb91w/Jb1ij90OiQ/SgvtUdSV+Oyde33XCUkQneW+/vOd++kjGwWjQ9zp39
-        w7HF/h8i8/luv/9rtLo8O3zr/BXa99y6ZhTPiDdZ3F+7d8FCbTmXTzrv1ZbUzr4eaN+ZsVbx
-        xs35xQ13q7xK+2pLjuvUP53I0KZqtOvyg2DLirObyq8lFT8R37jx+hSzA5f2xxjUMC5/JH78
-        WvgMvZLp8aW3zmxQCFzA07x0/6u5UR3fDd9kbLMJ8Zga6LhEulmJpTgj0VCLuag4EQA8xfD6
-        JgMAAA==
-X-CMS-MailID: 20230320025550epcas1p19c51166aa8067176960ce1e0f4138284
+        F4.A4.31821.D87D7146; Mon, 20 Mar 2023 12:48:29 +0900 (KST)
+Received: from VDBS1328.vd.sec.samsung.net (unknown [168.219.243.40]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230320034829epsmtip283dcb5296bf568e1421996708e4ccd40~OBAAjdnRi2600426004epsmtip2Q;
+        Mon, 20 Mar 2023 03:48:29 +0000 (GMT)
+From:   Jungseung Lee <js07.lee@samsung.com>
+To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bw365.lee@samsung.com, yw85.kim@samsung.com,
+        huijin.park@samsung.com
+Cc:     Jungseung Lee <js07.lee@samsung.com>
+Subject: [PATCH v2] workqueue: Introduce show_freezable_workqueues
+Date:   Mon, 20 Mar 2023 12:29:05 +0900
+Message-Id: <1679282945-37120-1-git-send-email-js07.lee@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBKsWRmVeSWpSXmKPExsWy7bCmrm7fdfEUg2tL5CxOrFnEZNFx0cVi
+        6trdTBaPbv5mtZg1ZS+TxeVdc9gsPvceYbS4e+oom8XcL1OZLX4tP8po0fH5JpsDt8fOWXfZ
+        PRbvecnksWlVJ5tH35ZVjB4rVn9n9/i8SS6ALSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7U
+        zMBQ19DSwlxJIS8xN9VWycUnQNctMwfoPCWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJq
+        QUpOgVmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsbDGx/YC9ZKVvzc2szWwNgv0sXIySEhYCLR
+        sLGZqYuRi0NIYAejxJV7x9ggnE+MEmf/XmeFcD4zSlyfPxvI4QBr6WtRhIjvYpR43vwJqugX
+        o8TUpfPZQeayCWhJ3Pi9CSwhIrCJSWLBpg1gCWYBDYnfB26ygNjCAk4SS3auA4uzCKhKTP09
+        kRnE5hVwkThwqIsd4kA5iZvnOpkh7GvsEu0z8iBsF4kb199CxYUlXh3fAlUvJfH53V42CLtc
+        YkPfNLDnJARaGCUWbX8LlTCWePd2LTPIO8wCmhLrd+lDhBUldv6eywhxJ5/Eu689UB/zSnS0
+        CUGUKEm8edDCAmFLSFx43MsKYXtIvF+5nwnEFhKIlVjVO4lpAqPsLIQFCxgZVzGKpRYU56an
+        FhsWGMNjKTk/dxMjOMlpme9gnPb2g94hRiYOxkOMEhzMSiK8fgtEU4R4UxIrq1KL8uOLSnNS
+        iw8xmgLDayKzlGhyPjDN5pXEG5pYGpiYGZlYGFsamymJ84rbnkwWEkhPLEnNTk0tSC2C6WPi
+        4JRqYNp5e//KpQfcVb7JXzv172FC8MJrlvM/6N1UlZnyWZDvr/iXeXmh+z2s52gqbAs9ZTjh
+        7txUNodv89Z0/nHdbxomFO28edJ3oVM7+vmnfDu84eTHRexT2P7vsmn7HrB6hfkRgTUhlnsT
+        GBIv5Cvt9fo7yeDhsw5r/T9r97ZMu3+sbMrW689Wzd3b4sbMaqnTfF7KoS5QzivtP4fM8q2u
+        hXm/f7T1lL/SzFo6ad/cmyd1zk48eJPpftXuUHYJ/vSf4unBj980KH19EfaoyftCRCRTQPPa
+        j8LV/2tlQk1nGIlWX9xXK+RoYS5hoX+Dk6cyYcXszOjKAysenNu7M/rbsd0Pkktsgp6eSD/R
+        +TfCf8k5JZbijERDLeai4kQA+bAW7vsDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGLMWRmVeSWpSXmKPExsWy7bCSvG7vdfEUg7kXDCxOrFnEZNFx0cVi
+        6trdTBaPbv5mtZg1ZS+TxeVdc9gsPvceYbS4e+oom8XcL1OZLX4tP8po0fH5JpsDt8fOWXfZ
+        PRbvecnksWlVJ5tH35ZVjB4rVn9n9/i8SS6ALYrLJiU1J7MstUjfLoEr4+GND+wFayUrfm5t
+        Zmtg7BfpYuTgkBAwkehrUexi5OIQEtjBKPHj30fGLkZOoLiExKOdX1ggaoQlDh8uhqj5wShx
+        pHMVG0gNm4CWxI3fm1hBEiICe5gkDvw4ywSSYBbQkPh94CYLiC0s4CSxZOc6dhCbRUBVYurv
+        icwgNq+Ai8SBQ13sEMvkJG6e62SewMizgJFhFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+
+        7iZGcNBpae1g3LPqg94hRiYOxkOMEhzMSiK8fgtEU4R4UxIrq1KL8uOLSnNSiw8xSnOwKInz
+        Xug6GS8kkJ5YkpqdmlqQWgSTZeLglGpg0hKZWBqiWL5NQ+N33WrNe3YruOa+uFqncC3ooZPw
+        bIeZbCtFvs76MOcsY6Ok8Dung416vMEVn1mfc979981A02NlCq/W3qenHTmzmo8JnJfc/tCx
+        W2ZOY/GLK68jLBYu/LyMeV6inv/6/XMKbe7N2DT7b/pN/ftZMuXX9YKKhD80evAb32c6u2Gq
+        0esiQ+kvv6vtvHrOq2+/5ZZ/5L/VEW33pfv/pLS/yQ0t4t3K26P/oO/gdMPLr2OnBwtLSC32
+        CzD6o5bzP9taSE8ueGO06/t52q+8/vSk33ybPSu/wvPd/Uvbr36w3Gtn/iUnxuN5u+W/N1ZP
+        pzOn/JCXsxCrYCvOeG3q0f2JqeLT8vZPSizFGYmGWsxFxYkAFeEsGqkCAAA=
+X-CMS-MailID: 20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230315130515epcas1p40823f20da586c1b5813b41e66e754309
-References: <CGME20230315130515epcas1p40823f20da586c1b5813b41e66e754309@epcas1p4.samsung.com>
-        <1678884357-38253-1-git-send-email-js07.lee@samsung.com>
-        <ZBTmtiyHpreu2btd@slm.duckdns.org>
+X-CMS-RootMailID: 20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28
+References: <CGME20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28@epcas1p2.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Tejun
+Currently show_all_workqueue is called if freeze fails at the time of
+freeze the workqueues, which shows the status of all workqueues and of
+all worker pools. In this cases we may only need to dump state of only
+workqueues that are freezable and busy.
 
->-----Original Message-----
->From: Tejun Heo <htejun@gmail.com> On Behalf Of Tejun Heo
->Sent: Saturday, March 18, 2023 7:16 AM
->To: Jungseung Lee <js07.lee@samsung.com>
->Cc: Lai Jiangshan <jiangshanlai@gmail.com>; Rafael J. Wysocki
-><rafael@kernel.org>; Pavel Machek <pavel@ucw.cz>; Len Brown
-><len.brown@intel.com>; linux-kernel@vger.kernel.org; linux-
->pm@vger.kernel.org; bw365.lee@samsung.com; yw85.kim@samsung.com;
->huijin.park@samsung.com
->Subject: Re: [PATCH] workqueue: Introduce show_freeze_workqueues_busy
->
->Hello,
->
->A few nits.
->
->On Wed, Mar 15, 2023 at 09:45:57PM +0900, Jungseung Lee wrote:
->> diff --git a/kernel/power/process.c b/kernel/power/process.c index
->> 6c1c7e5..590550f 100644
->> --- a/kernel/power/process.c
->> +++ b/kernel/power/process.c
->> @@ -93,7 +93,7 @@ static int try_to_freeze_tasks(bool user_only)
->>  		       todo - wq_busy, wq_busy);
->>
->>  		if (wq_busy)
->> -			show_all_workqueues();
->> +			show_freeze_workqueues_busy();
->
->Maybe name this show_freezable_workqueues()?
->
->> @@ -5043,7 +5043,7 @@ static void show_one_worker_pool(struct
->> worker_pool *pool)
->>  /**
->>   * show_all_workqueues - dump workqueue state
->>   *
->> - * Called from a sysrq handler or try_to_freeze_tasks() and prints
->> out
->> + * Called from a sysrq handler and prints out
->>   * all busy workqueues and pools.
->
->Can you reflow the comment to 80-col?
->
->> +/**
->> + * show_freeze_workqueues_busy - dump freezable workqueue state
->> + *
->> + * Called from try_to_freeze_tasks() and prints out
->> + * all freezable workqueues still busy.
->
->Ditto.
->
+This patch defines show_freezable_workqueues, which uses 
+show_one_workqueue, a granular function that shows the state of individual 
+workqueues, so that dump only the state of freezable workqueues 
+at that time.
 
-Thank you for the review and I will send a new patch including what you
-mentioned soon
+Signed-off-by: Jungseung Lee <js07.lee@samsung.com>
+---
+v2:                                                                              
+ - Rename function to more appropriate name.                                     
+ - Fit the comment to 80-col               
+---
+ include/linux/workqueue.h |  1 +
+ kernel/power/process.c    |  2 +-
+ kernel/workqueue.c        | 26 ++++++++++++++++++++++++--
+ 3 files changed, 26 insertions(+), 3 deletions(-)
 
-Thanks,
-
->Thanks.
->
->--
->tejun
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 0a10f8e..91d1d6e 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -472,6 +472,7 @@ extern unsigned int work_busy(struct work_struct *work);
+ extern __printf(1, 2) void set_worker_desc(const char *fmt, ...);
+ extern void print_worker_info(const char *log_lvl, struct task_struct *task);
+ extern void show_all_workqueues(void);
++extern void show_freezable_workqueues(void);
+ extern void show_one_workqueue(struct workqueue_struct *wq);
+ extern void wq_worker_comm(char *buf, size_t size, struct task_struct *task);
+ 
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index 6c1c7e5..cae81a8 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -93,7 +93,7 @@ static int try_to_freeze_tasks(bool user_only)
+ 		       todo - wq_busy, wq_busy);
+ 
+ 		if (wq_busy)
+-			show_all_workqueues();
++			show_freezable_workqueues();
+ 
+ 		if (!wakeup || pm_debug_messages_on) {
+ 			read_lock(&tasklist_lock);
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index de42827..8c5c1ec 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -5043,8 +5043,7 @@ static void show_one_worker_pool(struct worker_pool *pool)
+ /**
+  * show_all_workqueues - dump workqueue state
+  *
+- * Called from a sysrq handler or try_to_freeze_tasks() and prints out
+- * all busy workqueues and pools.
++ * Called from a sysrq handler and prints out all busy workqueues and pools.
+  */
+ void show_all_workqueues(void)
+ {
+@@ -5065,6 +5064,29 @@ void show_all_workqueues(void)
+ 	rcu_read_unlock();
+ }
+ 
++/**
++ * show_freezable_workqueues - dump freezable workqueue state
++ *
++ * Called from try_to_freeze_tasks() and prints out all freezable workqueues
++ * still busy.
++ */
++void show_freezable_workqueues(void)
++{
++	struct workqueue_struct *wq;
++
++	rcu_read_lock();
++
++	pr_info("Showing freezable workqueues still busy:\n");
++
++	list_for_each_entry_rcu(wq, &workqueues, list) {
++		if (!(wq->flags & WQ_FREEZABLE))
++			continue;
++		show_one_workqueue(wq);
++	}
++
++	rcu_read_unlock();
++}
++
+ /* used to show worker information through /proc/PID/{comm,stat,status} */
+ void wq_worker_comm(char *buf, size_t size, struct task_struct *task)
+ {
+-- 
+2.7.4
 
