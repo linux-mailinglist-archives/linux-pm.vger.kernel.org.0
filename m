@@ -2,133 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578AB6C202A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 19:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BF36C2252
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 21:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbjCTSm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Mar 2023 14:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S230331AbjCTUOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 16:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjCTSmF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 14:42:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A113599;
-        Mon, 20 Mar 2023 11:34:00 -0700 (PDT)
+        with ESMTP id S229713AbjCTUOU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 16:14:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE4E2FCFA;
+        Mon, 20 Mar 2023 13:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679337241; x=1710873241;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=RDWM5GGSfohMNn0saexlnXC0jRr3+/a2Ro1zoyhxTSc=;
-  b=UNjglqWUh/VR6yBfG48JW/FF/lFLWd0GjzuoEg42nspO+scoLbHlM7h/
-   OxnjRMkR0Giurx2d33qrbtYPST0eP8hknvtKOfKtTqTirrshxOBp2Dr2/
-   AIwvCto/qUrFbKzM9C7ZUyYlZzpqXqlXwd3bl1flOhsPniLDMXLKhap4o
-   SfRqq7QZLUmPxaXZhdOkPp+pHalZVL2wLZOXtqGhlvuXjxJx2SKSPLWCK
-   tniY7PmhKj3kcuGABadzN8Ytko8yH7hDScFMdJJ8D+bZSz4VyEp0+3D3u
-   BATHr1sN5eQpeTAHWhtCWiqAzKdgoYNBktixrvkP7nWBZQfr7Uw2210sf
+  t=1679343258; x=1710879258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u+jOUwoE6OkKQ7xRHEiSIZbHt9zZyJpg1s70VOyfcyE=;
+  b=NHgDggIOJnZ3VuvH2CuI7NNSEFzg/arHBWJyS50r70ROerwoGqakrS4r
+   TxSOTIiewwPLKDjA5HrB9Y7Mra608y9s297Millt41KPvEHsJxKvvPISb
+   Xd40ManRRIsmD57ha4yfsC8/rNiVo+W0Ww0tMSrFvNGkxx1me0P1y+pnV
+   p4AfgwBzGr4cwP2uAHyRp8wGm3Ed65sYTnGj+wDFyUJ2KhSTSTEWfF0d4
+   GPTjQJtHB5+b4tFz1932QZ5FaReKPziFyR03FIgXUFHYvm1Z9JxdUunB3
+   0QC2FH5BqMZXNgC1qJ4KgyTQgDofLGS8Vt68WznzQ5N3WaF6ccEQ6GOSE
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="318396069"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319168744"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="318396069"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 11:33:45 -0700
+   d="scan'208";a="319168744"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:13:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="927069744"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="1010629523"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="927069744"
-Received: from jordanzi-mobl2.amr.corp.intel.com ([10.212.48.149])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 11:33:44 -0700
-Message-ID: <cd670ca36053ebf5918a2d1df3255e40edb5f513.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Enable HWP IO boost for all
- servers
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>, rafael@kernel.org,
-        lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 20 Mar 2023 11:33:43 -0700
-In-Reply-To: <70119ad043502390100e66dbbe658aa069b86e45.camel@suse.cz>
-References: <20230303041411.3161780-1-srinivas.pandruvada@linux.intel.com>
-         <70119ad043502390100e66dbbe658aa069b86e45.camel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+   d="scan'208";a="1010629523"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 13:13:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peLtD-000BHc-1j;
+        Mon, 20 Mar 2023 20:13:55 +0000
+Date:   Tue, 21 Mar 2023 04:13:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Rob Clark <robdclark@chromium.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
+ dev_pm_qos_mtx
+Message-ID: <202303210444.Qtybv08z-lkp@intel.com>
+References: <20230320144356.803762-19-robdclark@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-03-20 at 18:03 +0100, Giovanni Gherdovich wrote:
-> On Thu, 2023-03-02 at 20:14 -0800, Srinivas Pandruvada wrote:
->=20
+Hi Rob,
 
-...
+I love your patch! Perhaps something to improve:
 
-Hi Giovanni,
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on rafael-pm/linux-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230320]
+[cannot apply to chanwoo/devfreq-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Hello Srinivas,
->=20
-> Good catch. We've had HWP IO Boost in the kernel for a while now but
-> we
-> weren't enabling on most of the modern CPUs... This fixes it.
->=20
-> One thing though: I've the impression that HWP IO Boost depends on
-> having
-> per-core p-states -- otherwise you'll be boosting up and down the
-> entire machine
-> instead of just the one core waking up from IO.
-> Enabling the feature on all machines with the ACPI PM server profile
-> would
-> force it also where per-core p-states aren't available.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
+patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+config: arm-randconfig-r005-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210444.Qtybv08z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+        git checkout 2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/base/power/
 
-This feature only exists on HWP systems. There are no HWP systems
-without per core P-states. Here we are enabling for performance and
-enterprise servers only.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210444.Qtybv08z-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
->=20
-> Would you agree with this assessment?
-> Do I correctly understand the reason why per-core p-states are needed
-> here?
-This problem with IO will be more pronounced in per-core P-states
-systems as it will not be influenced by other cores. But even if non
-per-core systems if other cores are idle or lightly loaded, the same
-problem can occur. But I don't have data on such systems.
-
->=20
-> I remember you mentioned the the dependency on per-core p-states in
-> the cover
-> letter from the HWP IO Boost submission in 2018
-> https://lore.kernel.org/lkml/20180605214242.62156-1-srinivas.pandruvada@l=
-inux.intel.com/
->=20
-> I think there's a tradeoff here. Up until this patch, we forgot to
-> enable the
-> feature on four generations of Intel CPUs. That's a lot of lost
-> performance;
-> thanks to this patch it won't happen ever again, because nobody will
-> have to
-> update the model list at every new CPU release.
->=20
-CPU model updates always gets missed and also misses testing
-opportunity.
-
-> On the other side, there may be some penalty for machines that:
-> - have HWP
-> - don't have per-core p-states
-> I don't know how large that interesection is, or how big the penalty.
->=20
-
-Thanks,
-Srinivas
+>> drivers/base/power/qos.c:947:8: warning: variable 'req' is uninitialized when used here [-Wuninitialized]
+                   if (!req) {
+                        ^~~
+   drivers/base/power/qos.c:938:33: note: initialize the variable 'req' to silence this warning
+                   struct dev_pm_qos_request *req;
+                                                 ^
+                                                  = NULL
+   1 warning generated.
 
 
+vim +/req +947 drivers/base/power/qos.c
 
->=20
-> Giovanni
->=20
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  917  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  918  /**
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  919   * dev_pm_qos_update_user_latency_tolerance - Update user space latency tolerance.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  920   * @dev: Device to update the user space latency tolerance for.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  921   * @val: New user space latency tolerance for @dev (negative values disable).
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  922   */
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
+2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
+00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
+00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
+00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
+00dd582e52a535 Rob Clark         2023-03-20  931  
+2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
+2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
+2d7e4629d7265d Rob Clark         2023-03-20  934  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
+00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
+2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
+2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
+2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
+2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
+2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
+2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
+2d7e4629d7265d Rob Clark         2023-03-20  964  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  975  	return ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
+034e7906211c18 Andrew Lutomirski 2016-11-29  977  EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
+13b2c4a0c3b1cd Mika Westerberg   2015-07-27  978  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
