@@ -2,348 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881976C1EEA
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 19:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17DB6C1FC1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 19:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjCTSC4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 20 Mar 2023 14:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S231363AbjCTSdg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 14:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjCTSCW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 14:02:22 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D08305F5;
-        Mon, 20 Mar 2023 10:56:43 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id cy23so49991684edb.12;
-        Mon, 20 Mar 2023 10:56:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679334955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aH/dUVL84WYXTsIKJr/MpnPHHXPnDWPTxGin3gsUTd4=;
-        b=CDcX7Y7hCj85OZUJegAYjPKgW2gM8LOfTODgEj1nZNHmcuvPmnQhmU2WRqu60dmY/H
-         lAYSn2ZDvFWbu2KsPLv68yp6gPSEKyPtSgtoXrI/Tgj/Y24bAHUmSn9pmgQOhI9eaphm
-         FsqZVzs4z3cWbjAmXAZKe9EK5OQs6hf/WiYbZKxept8egKfa3i19KY3Rji/2+sy7WNav
-         OKu8Lb6OZQobCPXErPIzRsLTpwVQNJ8ZvoU38GX2OpkcMVt0QIgn5qQtcpxbu8Mgqh7C
-         O5n8DzkOQGivFjgprWSiCbgGWSRvGS/y0jTX4OLJYWHmBN5eVDc/K2iqbdOqygyvfd7y
-         x0Kg==
-X-Gm-Message-State: AO0yUKX+7PaXyUUVngDxnvVLLvSBTSgszn8yNQoJPG5upI0EApwd9b0p
-        RvVbVxl+Q0b7UuqoDmUwrkGu1d2z18yt1doLgUi2Np0V
-X-Google-Smtp-Source: AK7set9GB33dEf5AqRNDmBDQzksX22D7iEmA0hp1YQUbxqQYZLboTVW8QHTdH5ZweaR+eRwT8xcSfAGhXOiAERzfoFs=
-X-Received: by 2002:a17:906:228b:b0:931:6921:bdbb with SMTP id
- p11-20020a170906228b00b009316921bdbbmr4143830eja.2.1679334954750; Mon, 20 Mar
- 2023 10:55:54 -0700 (PDT)
+        with ESMTP id S229902AbjCTSdE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 14:33:04 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61693C7BB;
+        Mon, 20 Mar 2023 11:25:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dAo1F1UgXFMCtnxSjjAN1gLFAGPQQts1I118ODVA3BtznNcvBJYelQpye1TfNpdaQ5YOdJMFnM6SzPfR/2eVpW131CXPIdT6chCSbjctJub8yETBVEqeCV1BZwZpcG2XjQUlv5y34cOGfYaFBZvO2wG4MnUi3y8gYq5a99aCXPcS7Fj2DfAzcP95WDHIolNnrNyltyGUaWifZSN6EJQ5oVahCYUNXsqm516K1n6ZGiaSotxgMqoc8sMR86Z/dwK/6x5STtj0XZ9eRPcLzNvV0+J1iNvWUtY9Kafi8c/s1aErnf3maBw6JlxuEFG9TgY3672ZNrAmPDWcAchtz9itWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xuc6h5Vk55fJI4jzYR6dfGm9NGSziQPSeWgE0TyKqDc=;
+ b=crtlA8p9RJheA6RDGYF3bnlorH8skgw/zpY/1kgidOK87hjZB47kkcGaLB+MfQnDiOtdRSjmlhz9h7tzJFsZPunXkouNm6DY2D/OqubPf/0HhyOmu9kwE9IBX+mNQt/AFaC+SijYltv7iG4MAy4gyppJEXeDtrCdhv7hD7EP0nVPKtTbCcSc/LzTLsa+8KfQ4Y7TBT83PZwDTWHLvh1n0j47x/StoTO0u178R4tDnSHHi6Q8CPDwh5obKZTyG6EhAfFOR1Kaejl+FXsRQzRzwg9rPMDbnj+Xzs8nCWMOX9neBsDABmIqAtmcv2J9asz8HaK7JrJP0txHu7lLocdEWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xuc6h5Vk55fJI4jzYR6dfGm9NGSziQPSeWgE0TyKqDc=;
+ b=uX1SA12xS1nE6NgQXCPnGr4qyze5No/j7Pv/DvT0XGLAkvgo6R2Bj/+NXZRXwCqdAINYtFurLuT2ZoCQvQjA1XSl8K0MdJmkFIFN+3J4l+EGrBd2Npog041T5cTfP9Bz9fDTiGTkdkQHva1h4FsgcUYTWOGQK3+UryZvv+TFTOhhK95Vhz0Tn2ye9b9zAGz+W7DmFfk63xKJ0lWR3HG4P4EkPNq6sT/7GCWGCibOjfSNhRMcYHTg44HbRiktSWneoBSSpK6ZT9399fcMdvK2FAYFZLgl4hEo3F4Kf0p/tjFityvpR2c2YDvJYkQotW/sKS6TFyCmR9ehJSldslbwVA==
+Received: from BN0PR07CA0017.namprd07.prod.outlook.com (2603:10b6:408:141::31)
+ by CY5PR12MB6129.namprd12.prod.outlook.com (2603:10b6:930:27::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 18:25:04 +0000
+Received: from BN8NAM11FT085.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:141:cafe::e5) by BN0PR07CA0017.outlook.office365.com
+ (2603:10b6:408:141::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Mon, 20 Mar 2023 18:25:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT085.mail.protection.outlook.com (10.13.176.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.16 via Frontend Transport; Mon, 20 Mar 2023 18:25:03 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 20 Mar 2023
+ 11:24:55 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Mon, 20 Mar 2023 11:24:54 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.5 via Frontend
+ Transport; Mon, 20 Mar 2023 11:24:49 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
+        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
+        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <lpieralisi@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <mmaddireddy@nvidia.com>,
+        <kw@linux.com>, <bhelgaas@google.com>, <vidyas@nvidia.com>,
+        <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
+        <bbasu@nvidia.com>, <sumitg@nvidia.com>
+Subject: [Patch v3 00/11] Tegra234 Memory interconnect support
+Date:   Mon, 20 Mar 2023 23:54:30 +0530
+Message-ID: <20230320182441.11904-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230316151036.10181-1-petr.pavlu@suse.com>
-In-Reply-To: <20230316151036.10181-1-petr.pavlu@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 20 Mar 2023 18:55:43 +0100
-Message-ID: <CAJZ5v0izMYN7NfxeVpQnmQ-D8S+YJ0s5KiswnjNYuH2kO93SZQ@mail.gmail.com>
-Subject: Re: [PATCH v4] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        pmladek@suse.com, mcgrof@kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT085:EE_|CY5PR12MB6129:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a56240f-a230-4069-7e5b-08db29706c94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: skUj1bFGFi2GsAZYgKEdrY/DxZdwLrYzI9PGl0acffPRxyd0nPKw9ThWa1WsfXIQwSDF8rogKNPu428sCIudyhp2OHrhmvOJE7/ssYhXc1LbNTeW69KBWopp229tJ4SWCNlmmonWzd1wCMoNafkxXhq/XNAgMfvTgOUz/P/VEJABCbwwVNq7lIyZhLTwr37rhf2rL1BO6KtGVDG79NZii8ocMbDXyD+dMYswxwQEmKqk/QG5gNreu5mNFePFWJBPDDGk856OhpKqS7sJFOS9cjKO91DvxyNIFBrt6X7NcDLLp3tLhAK2JIrmdHUX5cD7fH3ilgAfDPgE4eMy+QucVEpfg7+AlGr15Yr+ZcxPcZXwiOue5SkAuZhei2N7BJPHrv/bkzoGxiDj+AXM5J378D4AEo7/iEv+3tLSdT1IP60M6fbLcesjST9GX/3Q3zSFt4FrRKZNicPgXKdEasms6c4tsm3kYhCQYN0cK52CJKQbV72HzKHeNGzlkOdZ8o1zgK+EYokaE4Zy8fctaptkjJSm4yBEQavRAxOtPXwjoPq/hbdW9L7ssYZSYSkAnq+qHCcnVVbovYkKckfSyiJPrwtA71OFrPgjcKEHsStRGfTXsRdd5DNS03TQS07do8iPmVqpbjS+gWGyVQQ1dKXvxzvYnVUmKY20mVZrZHSbNnLRGWoikswV64ngeIz7M5/xnd3HCdkMmq4I3pZEOuy8czeraNKTgHbqRz3n49b+qNCw+1JqOPqMNoc9Eo0mv5AwzFLT+KI0nfTlp2fvixABsGBFUKykdJLm9McVATpGjvACVQkzqjnmpl6FIGtNY9GmjmDhm7rkpslKMhQY+DcvYg==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199018)(40470700004)(36840700001)(46966006)(7636003)(82740400003)(47076005)(426003)(66574015)(2906002)(1076003)(83380400001)(8936002)(7416002)(36756003)(40480700001)(5660300002)(82310400005)(86362001)(36860700001)(40460700003)(966005)(2616005)(356005)(41300700001)(26005)(186003)(6666004)(7696005)(316002)(54906003)(478600001)(110136005)(107886003)(336012)(70586007)(70206006)(4326008)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 18:25:03.5929
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a56240f-a230-4069-7e5b-08db29706c94
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT085.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6129
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 4:10 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
->
-> The acpi-cpufreq and pcc-cpufreq drivers are loaded through per-CPU
-> module aliases. This can result in many unnecessary load requests during
-> boot if another frequency module, such as intel_pstate, is already
-> active. For instance, on a typical Intel system, one can observe that
-> udev makes 2x#CPUs attempts to insert acpi_cpufreq and 1x#CPUs attempts
-> for pcc_cpufreq. All these tries then fail if another frequency module
-> is already registered.
->
-> In the worst case, without the recent fix in commit 0254127ab977e
-> ("module: Don't wait for GOING modules"), these module loads occupied
-> all udev workers and had their initialization attempts ran sequentially.
-> Resolving all these loads then on some larger machines took too long,
-> prevented other hardware from getting its drivers initialized and
-> resulted in a failed boot. Discussion over these duplicate module
-> requests ended up with a conclusion that only one load attempt should be
-> ideally made.
->
-> Both acpi-cpufreq and pcc-cpufreq drivers use platform firmware controls
-> which are defined by ACPI. It is possible to treat these interfaces as
-> platform devices.
->
-> The patch extends the ACPI parsing logic to check the ACPI namespace if
-> the PPC or PCC interface is present and creates a virtual platform
-> device for each if it is available. The acpi-cpufreq and pcc-cpufreq
-> drivers are then updated to map to these devices.
->
-> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
-> boot and only if a given interface is available in the firmware.
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->
-> Changes since v3 [1]:
-> - Mark acpi_pcc_cpufreq_init() as static.
->
-> Changes since v2 [2]:
-> - Remove mention about all CPUs needing same clocking parameters from the commit
->   message.
-> - Integrate the new logic to detect presence of PPC and PCC with the current
->   ACPI processor code which avoids an additional scan of the ACPI namespace.
->
-> Changes since v1 [3]:
-> - Describe the worst case scenario without the recent fix 0254127ab977e
->   ("module: Don't wait for GOING modules") and refer to its discussion
->   in the commit message.
-> - Consider ACPI processor device objects when looking for _PCT, in
->   addition to processor objects.
-> - Add a few more comments explaining the code.
->
-> [1] https://lore.kernel.org/lkml/20230301085717.10411-1-petr.pavlu@suse.com/
-> [2] https://lore.kernel.org/lkml/20230220143143.3492-1-petr.pavlu@suse.com/
-> [3] https://lore.kernel.org/lkml/20230131130041.629-1-petr.pavlu@suse.com/
->
->  drivers/acpi/acpi_processor.c  | 42 ++++++++++++++++++++++++++++++++--
->  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++++++++++--------------
->  drivers/cpufreq/pcc-cpufreq.c  | 34 +++++++++++++++++++--------
->  3 files changed, 86 insertions(+), 29 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index 6737b1cbf6d6..9dbd8d855009 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -15,6 +15,7 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/pci.h>
-> +#include <linux/platform_device.h>
->
->  #include <acpi/processor.h>
->
-> @@ -148,6 +149,34 @@ static int acpi_processor_errata(void)
->         return result;
->  }
->
-> +/* Create a platform device to represent a CPU frequency control mechanism. */
-> +static void cpufreq_add_device(const char *name)
-> +{
-> +       struct platform_device *pdev;
-> +
-> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
-> +                                              0);
-> +       if (IS_ERR(pdev))
-> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
-> +}
-> +
-> +#ifdef CONFIG_X86
-> +/* Check presence of Processor Clocking Control by searching for \_SB.PCCH. */
-> +static void __init acpi_pcc_cpufreq_init(void)
-> +{
-> +       acpi_status status;
-> +       acpi_handle handle;
-> +
-> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
-> +       if (ACPI_FAILURE(status))
-> +               return;
-> +       if (acpi_has_method(handle, "PCCH"))
-> +               cpufreq_add_device("pcc-cpufreq");
-> +}
-> +#else
-> +static void __init acpi_pcc_cpufreq_init(void) {}
-> +#endif /* CONFIG_X86 */
-> +
->  /* Initialization */
->  #ifdef CONFIG_ACPI_HOTPLUG_CPU
->  int __weak acpi_map_cpu(acpi_handle handle,
-> @@ -280,14 +309,22 @@ static int acpi_processor_get_info(struct acpi_device *device)
->                 dev_dbg(&device->dev, "Failed to get CPU physical ID.\n");
->
->         pr->id = acpi_map_cpuid(pr->phys_id, pr->acpi_id);
-> -       if (!cpu0_initialized && !acpi_has_cpu_in_madt()) {
-> +       if (!cpu0_initialized) {
->                 cpu0_initialized = 1;
->                 /*
->                  * Handle UP system running SMP kernel, with no CPU
->                  * entry in MADT
->                  */
-> -               if (invalid_logical_cpuid(pr->id) && (num_online_cpus() == 1))
-> +               if (!acpi_has_cpu_in_madt() && invalid_logical_cpuid(pr->id) &&
-> +                   (num_online_cpus() == 1))
->                         pr->id = 0;
-> +               /*
-> +                * Check availability of Processor Performance Control by
-> +                * looking at the presence of the _PCT object under the first
-> +                * processor definition.
-> +                */
-> +               if (acpi_has_method(pr->handle, "_PCT"))
-> +                       cpufreq_add_device("acpi-cpufreq");
->         }
->
->         /*
-> @@ -686,6 +723,7 @@ void __init acpi_processor_init(void)
->         acpi_processor_check_duplicates();
->         acpi_scan_add_handler_with_hotplug(&processor_handler, "processor");
->         acpi_scan_add_handler(&processor_container_handler);
-> +       acpi_pcc_cpufreq_init();
->  }
->
->  #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 78adfb2ffff6..e1a5384cf21c 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -965,7 +965,7 @@ static void __init acpi_cpufreq_boost_init(void)
->         acpi_cpufreq_driver.boost_enabled = boost_state(0);
->  }
->
-> -static int __init acpi_cpufreq_init(void)
-> +static int __init acpi_cpufreq_probe(struct platform_device *pdev)
->  {
->         int ret;
->
-> @@ -1010,13 +1010,32 @@ static int __init acpi_cpufreq_init(void)
->         return ret;
->  }
->
-> -static void __exit acpi_cpufreq_exit(void)
-> +static int acpi_cpufreq_remove(struct platform_device *pdev)
->  {
->         pr_debug("%s\n", __func__);
->
->         cpufreq_unregister_driver(&acpi_cpufreq_driver);
->
->         free_acpi_perf_data();
-> +
-> +       return 0;
-> +}
-> +
-> +static struct platform_driver acpi_cpufreq_platdrv = {
-> +       .driver = {
-> +               .name   = "acpi-cpufreq",
-> +       },
-> +       .remove         = acpi_cpufreq_remove,
-> +};
-> +
-> +static int __init acpi_cpufreq_init(void)
-> +{
-> +       return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cpufreq_probe);
-> +}
-> +
-> +static void __exit acpi_cpufreq_exit(void)
-> +{
-> +       platform_driver_unregister(&acpi_cpufreq_platdrv);
->  }
->
->  module_param(acpi_pstate_strict, uint, 0644);
-> @@ -1027,18 +1046,4 @@ MODULE_PARM_DESC(acpi_pstate_strict,
->  late_initcall(acpi_cpufreq_init);
->  module_exit(acpi_cpufreq_exit);
->
-> -static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
-> -       X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
-> -       X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
-> -       {}
-> -};
-> -MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
-> -
-> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
-> -       {ACPI_PROCESSOR_OBJECT_HID, },
-> -       {ACPI_PROCESSOR_DEVICE_HID, },
-> -       {},
-> -};
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> -
-> -MODULE_ALIAS("acpi");
-> +MODULE_ALIAS("platform:acpi-cpufreq");
-> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-> index 9f3fc7a073d0..0c362932ca60 100644
-> --- a/drivers/cpufreq/pcc-cpufreq.c
-> +++ b/drivers/cpufreq/pcc-cpufreq.c
-> @@ -384,7 +384,7 @@ static int __init pcc_cpufreq_do_osc(acpi_handle *handle)
->         return ret;
->  }
->
-> -static int __init pcc_cpufreq_probe(void)
-> +static int __init pcc_cpufreq_evaluate(void)
->  {
->         acpi_status status;
->         struct acpi_buffer output = {ACPI_ALLOCATE_BUFFER, NULL};
-> @@ -576,7 +576,7 @@ static struct cpufreq_driver pcc_cpufreq_driver = {
->         .name = "pcc-cpufreq",
->  };
->
-> -static int __init pcc_cpufreq_init(void)
-> +static int __init pcc_cpufreq_probe(struct platform_device *pdev)
->  {
->         int ret;
->
-> @@ -587,9 +587,9 @@ static int __init pcc_cpufreq_init(void)
->         if (acpi_disabled)
->                 return -ENODEV;
->
-> -       ret = pcc_cpufreq_probe();
-> +       ret = pcc_cpufreq_evaluate();
->         if (ret) {
-> -               pr_debug("pcc_cpufreq_init: PCCH evaluation failed\n");
-> +               pr_debug("pcc_cpufreq_probe: PCCH evaluation failed\n");
->                 return ret;
->         }
->
-> @@ -607,21 +607,35 @@ static int __init pcc_cpufreq_init(void)
->         return ret;
->  }
->
-> -static void __exit pcc_cpufreq_exit(void)
-> +static int pcc_cpufreq_remove(struct platform_device *pdev)
->  {
->         cpufreq_unregister_driver(&pcc_cpufreq_driver);
->
->         pcc_clear_mapping();
->
->         free_percpu(pcc_cpu_info);
-> +
-> +       return 0;
->  }
->
-> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
-> -       {ACPI_PROCESSOR_OBJECT_HID, },
-> -       {ACPI_PROCESSOR_DEVICE_HID, },
-> -       {},
-> +static struct platform_driver pcc_cpufreq_platdrv = {
-> +       .driver = {
-> +               .name   = "pcc-cpufreq",
-> +       },
-> +       .remove         = pcc_cpufreq_remove,
->  };
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> +
-> +static int __init pcc_cpufreq_init(void)
-> +{
-> +       return platform_driver_probe(&pcc_cpufreq_platdrv, pcc_cpufreq_probe);
-> +}
-> +
-> +static void __exit pcc_cpufreq_exit(void)
-> +{
-> +       platform_driver_unregister(&pcc_cpufreq_platdrv);
-> +}
-> +
-> +MODULE_ALIAS("platform:pcc-cpufreq");
->
->  MODULE_AUTHOR("Matthew Garrett, Naga Chumbalkar");
->  MODULE_VERSION(PCC_VERSION);
-> --
+Hi Krzysztof.
 
-Applied as 6.4 material under a slightly edited subject and with some
-adjustments to the white space and error message log level.
+Thank you for the ACK on the Memory patches [2-5 & 8].
+Rebased the patch series on latest next and added two more patches
+for 'memory' in v3. Please review and ACK if fine.
+  [Patch v3 10/11] memory: tegra: handle no BWMGR MRQ support in BPMP
+  [Patch v3 11/11] memory: tegra186-emc: fix interconnect registration
 
-Thanks!
+
+Hi All,
+Requesting for ACK on below remaining patches and please consider for merging
+in "6.4".
+
+- Thierry:
+   "Memory Interconnect base support" patches are dependent on the bpmp patch.
+   [Patch v3 1/9] firmware: tegra: add function to get BPMP data
+
+- Rafael & Viresh: For the CPUFREQ MC Client patches.  
+   [Patch v3 06/11] arm64: tegra: Add cpu OPP tables and interconnects property
+   [Patch v3 07/11] cpufreq: tegra194: add OPP support and set bandwidth
+
+- Lorenzo, Bjorn & Krzysztof Wilczyński: For the PCIE MC client patch.
+   [Patch v3 09/11] PCI: tegra194: add interconnect support in Tegra234
+
+Thank you,
+Sumit Gupta
+============
+
+This patch series adds memory interconnect support for Tegra234 SoC.
+It is used to dynamically scale DRAM Frequency as per the bandwidth
+requests from different Memory Controller (MC) clients.
+MC Clients use ICC Framework's icc_set_bw() api to dynamically request
+for the DRAM bandwidth (BW). As per path, the request will be routed
+from MC to the EMC driver. MC driver passes the request info like the
+Client ID, type, and frequency request info to the BPMP-FW which will
+set the final DRAM freq considering all exisiting requests.
+
+MC and EMC are the ICC providers. Nodes in path for a request will be:
+     Client[1-n] -> MC -> EMC -> EMEM/DRAM
+
+The patch series also adds interconnect support in below client drivers:
+1) CPUFREQ driver for scaling bandwidth with CPU frequency. For that,
+   added per cluster OPP table which will be used in the CPUFREQ driver
+   by requesting the minimum BW respective to the given CPU frequency in
+   the OPP table of given cluster.
+2) PCIE driver to request BW required for different modes.
+
+---
+v2[2] -> v3:
+- in 'patch 7', set 'icc_dram_bw_scaling' to false if set_opp call failed
+  to avoid flooding of uart with 'Failed to set bw' messages.
+- added 'patch 10' to handle if the bpmp-fw is old and not support bwmgr mrq.
+- added 'patch 11' to fix interconnect registration in tegra186-emc.
+  ref patch link in linux next:
+  [https://lore.kernel.org/all/20230306075651.2449-21-johan+linaro@kernel.org/]
+
+v1[1] -> v2:
+- moved BW setting to tegra234_mc_icc_set() from EMC driver.
+- moved sw clients to the 'tegra_mc_clients' table.
+- point 'node->data' to the entry within 'tegra_mc_clients'.
+- removed 'struct tegra_icc_node' and get client info using 'node->data'.
+- changed error handling in and around tegra_emc_interconnect_init().
+- moved 'tegra-icc.h' from 'include/soc/tegra' to 'include/linux'.
+- added interconnect support to PCIE driver in 'Patch 9'.
+- merged 'Patch 9 & 10' from [1] to get num_channels and use.
+- merged 'Patch 2 & 3' from [1] to add ISO and NISO clients.
+- added 'Acked-by' of Krzysztof from 'Patch 05/10' of [1].
+- Removed 'Patch 7' from [1] as that is merged now.
+
+Sumit Gupta (11):
+  firmware: tegra: add function to get BPMP data
+  memory: tegra: add interconnect support for DRAM scaling in Tegra234
+  memory: tegra: add mc clients for Tegra234
+  memory: tegra: add software mc clients in Tegra234
+  dt-bindings: tegra: add icc ids for dummy MC clients
+  arm64: tegra: Add cpu OPP tables and interconnects property
+  cpufreq: tegra194: add OPP support and set bandwidth
+  memory: tegra: make cpu cluster bw request a multiple of mc channels
+  PCI: tegra194: add interconnect support in Tegra234
+  memory: tegra: handle no BWMGR MRQ support in BPMP
+  memory: tegra186-emc: fix interconnect registration race
+
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi   | 276 ++++++++++
+ drivers/cpufreq/tegra194-cpufreq.c         | 156 +++++-
+ drivers/firmware/tegra/bpmp.c              |  38 ++
+ drivers/memory/tegra/mc.c                  |  24 +
+ drivers/memory/tegra/mc.h                  |   1 +
+ drivers/memory/tegra/tegra186-emc.c        | 118 ++++
+ drivers/memory/tegra/tegra234.c            | 599 ++++++++++++++++++++-
+ drivers/pci/controller/dwc/pcie-tegra194.c |  40 +-
+ include/dt-bindings/memory/tegra234-mc.h   |   5 +
+ include/linux/tegra-icc.h                  |  65 +++
+ include/soc/tegra/bpmp.h                   |   5 +
+ include/soc/tegra/mc.h                     |   8 +-
+ 12 files changed, 1312 insertions(+), 23 deletions(-)
+ create mode 100644 include/linux/tegra-icc.h
+
+[1] https://lore.kernel.org/lkml/20221220160240.27494-1-sumitg@nvidia.com/T/
+[2] https://lore.kernel.org/linux-tegra/20230220140559.28289-1-sumitg@nvidia.com/
+
+-- 
+2.17.1
+
