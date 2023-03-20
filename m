@@ -2,84 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6116D6C054A
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Mar 2023 22:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037046C090E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 03:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjCSVNl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Mar 2023 17:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S229665AbjCTC4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Mar 2023 22:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjCSVNk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 17:13:40 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053D411169
-        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 14:13:39 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id r1so10877747ybu.5
-        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 14:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679260418;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KDsxhFGQnrKrjnXFLksqI9RFcjP3CDq8jfhz8h9Wr4k=;
-        b=ZdQSPuWs56fqmvCrh/sVSJhIdOkQ/vQvikm5awGY8UqvL+vTlxnU7Yl4k9rvtp/EJB
-         yuTE9puWeJM8UfKx5edktDqlgs7tAJL48eNgASjUAtKGsY+ZEonkFRbwlE3xUHj9Jr0I
-         SScI4dQ/Hug570KWic10lwDSbNvVTmut2buQnk6PbpD1u1jtb95TsOIDYyix9nZuNwNY
-         1xdavpVvCaBCx/pjak00VEn5/zJXHX5aXdEHfLiMswnazUFc9LiM+uDW2nwXFjKvX84A
-         Lth7ycY4T6w9pDYNQqgtZPYq1pdHDC1Hx6llziPN88LTGl/FcrjgT5CBfLJMJsM99aEh
-         VARQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679260418;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KDsxhFGQnrKrjnXFLksqI9RFcjP3CDq8jfhz8h9Wr4k=;
-        b=fmc3GzJo3GV2YRc5hGtDuqosH3QL711Bi4CbvCz0URx9KijiULoGZbyrYkgIAcRJJY
-         2VyGk3vmqBAXI11Yk962GlTfASSKqO/QIIROev/YddESGGi4pjgR+p/CAOy8AlPZD0UA
-         IpS0lOmxvvuOxj8cSm3c0axQTAU8oJ+fVFPHtnL5B7hJs8JN+wkn8CJi2SFMCN3v6m8T
-         MpbaNltbrb8fJGfSO7UiXUS8pTIVyWDAJdrzbCuT7KciLPlYoj4/misuxIN+w23msBnD
-         uRvUTcb3fTTnWCBkTsh/d/LKAUKHsp3vdTM7KqitEJMvb1n2FpbVCQT1QJm7ih9dFzm5
-         hFXA==
-X-Gm-Message-State: AO0yUKWdraA2/B3h/XIjZO7pJXBWz/NCBj6tB6ml4hKWA2amAUIK/+KU
-        HQguNEAK5THH8C1dw4eAQoMmalG7i5YtLyi9vkyQVg==
-X-Google-Smtp-Source: AK7set9LbcgMEdxORgs5g5mPDevC1ogGsWLboK9Gf1+bew26UUN+HynMywHt5ABAKSIUCh4+qK5sXs34SUSRcLRaIsY=
-X-Received: by 2002:a25:4241:0:b0:b6b:6a39:9494 with SMTP id
- p62-20020a254241000000b00b6b6a399494mr1178014yba.4.1679260418235; Sun, 19 Mar
- 2023 14:13:38 -0700 (PDT)
+        with ESMTP id S229795AbjCTC4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 22:56:10 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83545F74E
+        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 19:55:55 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230320025552epoutp04c4e25d886c295f4fbc488f15b56611f9~OASD9kuet1404414044epoutp04y
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 02:55:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230320025552epoutp04c4e25d886c295f4fbc488f15b56611f9~OASD9kuet1404414044epoutp04y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679280952;
+        bh=1bZMxLn2aChs0MYcs57jeaFNS8exGaQ4qV7yWSla8dU=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=R4cl+Zb5wvJLPSxTfHhKxL5OGjUcIw44cpw5DpMyclQlD14YdTEt/1QO6nRA6dD0x
+         5+U+zGw6MmHTanbAFsMPSAyHTQLvZFbtCprXPvYMBtmSNc4nAg/ZtrLVlrzbf6BBYK
+         3GFZjy+gZZ/E9hzA0t+KC9MMiee0vV73OdheogFY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230320025551epcas1p20c05b6ac4f0557df66c8fd1332cb4542~OASDQySKG1343013430epcas1p2I;
+        Mon, 20 Mar 2023 02:55:51 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.36.223]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4PfzrR0j3pz4x9Px; Mon, 20 Mar
+        2023 02:55:51 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9A.24.52037.63BC7146; Mon, 20 Mar 2023 11:55:51 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230320025550epcas1p19c51166aa8067176960ce1e0f4138284~OASCfWlU11364013640epcas1p14;
+        Mon, 20 Mar 2023 02:55:50 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230320025550epsmtrp17a77d9545c64df0f93a1768ec36d1a8c~OASCeit351149211492epsmtrp1K;
+        Mon, 20 Mar 2023 02:55:50 +0000 (GMT)
+X-AuditID: b6c32a37-55fff7000001cb45-51-6417cb36c478
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        72.0F.31821.63BC7146; Mon, 20 Mar 2023 11:55:50 +0900 (KST)
+Received: from js07lee02 (unknown [10.175.110.233]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230320025550epsmtip214469f3fda3053e5632e39b0edbfce5b~OASCOhDtV2202522025epsmtip2e;
+        Mon, 20 Mar 2023 02:55:50 +0000 (GMT)
+From:   "Jungseung Lee" <js07.lee@samsung.com>
+To:     "'Tejun Heo'" <tj@kernel.org>
+Cc:     "'Lai Jiangshan'" <jiangshanlai@gmail.com>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        "'Pavel Machek'" <pavel@ucw.cz>,
+        "'Len Brown'" <len.brown@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <bw365.lee@samsung.com>, <yw85.kim@samsung.com>,
+        <huijin.park@samsung.com>
+In-Reply-To: <ZBTmtiyHpreu2btd@slm.duckdns.org>
+Subject: RE: [PATCH] workqueue: Introduce show_freeze_workqueues_busy
+Date:   Mon, 20 Mar 2023 11:55:50 +0900
+Message-ID: <03f001d95ad7$7a9146f0$6fb3d4d0$@samsung.com>
 MIME-Version: 1.0
-References: <20230317225707.1552512-1-sre@kernel.org> <20230317225707.1552512-14-sre@kernel.org>
-In-Reply-To: <20230317225707.1552512-14-sre@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 19 Mar 2023 22:13:26 +0100
-Message-ID: <CACRpkdYWWwTu5x5iR_Gco-N+dOWGLmQQ=1p1gnznKC8ovZaS+Q@mail.gmail.com>
-Subject: Re: [PATCHv3 13/14] power: supply: generic-adc-battery: improve error message
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHQtHBulJt7mcjMc08WTb80894JlAHeG8i/AzetQiCu65bJ8A==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmga75afEUg8m1FifWLGKy6LjoYjF1
+        7W4mi1lT9jJZXN41h83ic+8RRou7p46yWcz9MpXZ4tfyo4wWHZ9vsjlweeycdZfdY/Gel0we
+        m1Z1snn0bVnF6LFi9Xd2j8+b5ALYorJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0t
+        zJUU8hJzU22VXHwCdN0yc4AOU1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBXo
+        FSfmFpfmpevlpZZYGRoYGJkCFSZkZ8z9f4G54ClvxbEvmg2Mi7i7GDk5JARMJE6/ncLUxcjF
+        ISSwg1Fi2eSjzBDOJyBn1xp2kCohgc+MEisavWA6fs9vZ4Uo2sUosX3jEzYI5wWjxNbHE8A6
+        2AR0JDYd2MACYosIKEr8/PUObCyzwHomif4FXYxdjBwcnAL6ElN3GYDUCAu4SsxZsZARxGYR
+        UJW482wVG4jNK2Ap0bN2EiuELShxcuYTsJnMAvIS29/OYYa4SEHi59NlrBC7nCROXjzMCFEj
+        IjG7sw1sr4TADg6JO+f3MEI0uEhMvLOJHcIWlnh1fAuULSXxsr8Nyi6X2NA3jQmiuYVRYtH2
+        t2wQCWOJd2/XMoM8wCygKbF+lz5EWFFi5++5UIv5JN597WEFKZEQ4JXoaBOCKFGSePOghQXC
+        lpC48LiXdQKj0iwkr81C8tosJC/MQli2gJFlFaNYakFxbnpqsWGBMTyyk/NzNzGC06yW+Q7G
+        aW8/6B1iZOJgPMQowcGsJMLrt0A0RYg3JbGyKrUoP76oNCe1+BCjKTCwJzJLiSbnAxN9Xkm8
+        oYmlgYmZkYmFsaWxmZI4r7jtyWQhgfTEktTs1NSC1CKYPiYOTqkGJoXWQtPJjGs9Pgk8eZWe
+        Y94x88fWRw6WPXar1ItvHa5n/7ns3ifz9acUTKP3XJyzcsJpgcvn7HtmbmH492HLQs87Evdz
+        r9sWhhywmabpNvPqGr3m7uWOjlIfFwt1S653FdK7mWM2cU2zxvbA37Nj7G1sHLtn2cu/2aVy
+        Xbdd9ZP1Rd+HfA/Vnzi5KVsra+wIKmTa/mxLydzAnCfH9iyXn7okU/e7/cHyu02iptL7D86S
+        vXIrLuac/tYnL842RuzwCk4LYz7+LDf32R1/3zOcqQt+puT8OSySfOJiDpfDFbFOS+XwBXuf
+        dX1qrooTdi+K2LP9kTP/Oz2hPybz8t2rirWNSviPm562F1VLWVGloMRSnJFoqMVcVJwIAOWH
+        CCU8BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMIsWRmVeSWpSXmKPExsWy7bCSvK7ZafEUg4Y9yhYn1ixisui46GIx
+        de1uJotZU/YyWVzeNYfN4nPvEUaLu6eOslnM/TKV2eLX8qOMFh2fb7I5cHnsnHWX3WPxnpdM
+        HptWdbJ59G1ZxeixYvV3do/Pm+QC2KK4bFJSczLLUov07RK4Mub+v8Bc8JS34tgXzQbGRdxd
+        jJwcEgImEr/nt7N2MXJxCAnsYJSY9GQKE0RCQuLRzi8sXYwcQLawxOHDxRA1zxgltm3+BVbD
+        JqAjsenABhYQW0RAUeLnr3fMIEXMAtuZJD6c2scC0bGTUeL2ik9gkzgF9CWm7jIAaRAWcJWY
+        s2IhI4jNIqAqcefZKjYQm1fAUqJn7SRWCFtQ4uTMJ2CtzAJ6Em0bwcqZBeQltr+dwwxxp4LE
+        z6fLWCFucJI4efEwVI2IxOzONuYJjMKzkEyahTBpFpJJs5B0LGBkWcUomVpQnJueW2xYYJSX
+        Wq5XnJhbXJqXrpecn7uJERxvWlo7GPes+qB3iJGJg/EQowQHs5IIr98C0RQh3pTEyqrUovz4
+        otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamASuVzP8nT9B9K9O0brbM0of
+        vXTceqHmw+YPszvnavEfUbabV3/7c1OC3+0z876u9kg5EBE0+cwt2637VkdJSaWxCXM+mSc5
+        PyrExPv/LtnmBJb91w/Jb1ij90OiQ/SgvtUdSV+Oyde33XCUkQneW+/vOd++kjGwWjQ9zp39
+        w7HF/h8i8/luv/9rtLo8O3zr/BXa99y6ZhTPiDdZ3F+7d8FCbTmXTzrv1ZbUzr4eaN+ZsVbx
+        xs35xQ13q7xK+2pLjuvUP53I0KZqtOvyg2DLirObyq8lFT8R37jx+hSzA5f2xxjUMC5/JH78
+        WvgMvZLp8aW3zmxQCFzA07x0/6u5UR3fDd9kbLMJ8Zga6LhEulmJpTgj0VCLuag4EQA8xfD6
+        JgMAAA==
+X-CMS-MailID: 20230320025550epcas1p19c51166aa8067176960ce1e0f4138284
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230315130515epcas1p40823f20da586c1b5813b41e66e754309
+References: <CGME20230315130515epcas1p40823f20da586c1b5813b41e66e754309@epcas1p4.samsung.com>
+        <1678884357-38253-1-git-send-email-js07.lee@samsung.com>
+        <ZBTmtiyHpreu2btd@slm.duckdns.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:57=E2=80=AFPM Sebastian Reichel <sre@kernel.org>=
- wrote:
+Hi, Tejun
 
-> Add device context and error code to the error messages to make it
-> useful.
+>-----Original Message-----
+>From: Tejun Heo <htejun@gmail.com> On Behalf Of Tejun Heo
+>Sent: Saturday, March 18, 2023 7:16 AM
+>To: Jungseung Lee <js07.lee@samsung.com>
+>Cc: Lai Jiangshan <jiangshanlai@gmail.com>; Rafael J. Wysocki
+><rafael@kernel.org>; Pavel Machek <pavel@ucw.cz>; Len Brown
+><len.brown@intel.com>; linux-kernel@vger.kernel.org; linux-
+>pm@vger.kernel.org; bw365.lee@samsung.com; yw85.kim@samsung.com;
+>huijin.park@samsung.com
+>Subject: Re: [PATCH] workqueue: Introduce show_freeze_workqueues_busy
 >
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+>Hello,
+>
+>A few nits.
+>
+>On Wed, Mar 15, 2023 at 09:45:57PM +0900, Jungseung Lee wrote:
+>> diff --git a/kernel/power/process.c b/kernel/power/process.c index
+>> 6c1c7e5..590550f 100644
+>> --- a/kernel/power/process.c
+>> +++ b/kernel/power/process.c
+>> @@ -93,7 +93,7 @@ static int try_to_freeze_tasks(bool user_only)
+>>  		       todo - wq_busy, wq_busy);
+>>
+>>  		if (wq_busy)
+>> -			show_all_workqueues();
+>> +			show_freeze_workqueues_busy();
+>
+>Maybe name this show_freezable_workqueues()?
+>
+>> @@ -5043,7 +5043,7 @@ static void show_one_worker_pool(struct
+>> worker_pool *pool)
+>>  /**
+>>   * show_all_workqueues - dump workqueue state
+>>   *
+>> - * Called from a sysrq handler or try_to_freeze_tasks() and prints
+>> out
+>> + * Called from a sysrq handler and prints out
+>>   * all busy workqueues and pools.
+>
+>Can you reflow the comment to 80-col?
+>
+>> +/**
+>> + * show_freeze_workqueues_busy - dump freezable workqueue state
+>> + *
+>> + * Called from try_to_freeze_tasks() and prints out
+>> + * all freezable workqueues still busy.
+>
+>Ditto.
+>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thank you for the review and I will send a new patch including what you
+mentioned soon
 
-Yours,
-Linus Walleij
+Thanks,
+
+>Thanks.
+>
+>--
+>tejun
+
