@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D7D6C13BB
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 14:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2506C13C5
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 14:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjCTNmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Mar 2023 09:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S231396AbjCTNmu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 09:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjCTNmb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 09:42:31 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3296F951
-        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 06:42:29 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id cy23so46807207edb.12
-        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 06:42:29 -0700 (PDT)
+        with ESMTP id S231544AbjCTNmd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 09:42:33 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFFEF747
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 06:42:31 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id w9so46947353edc.3
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 06:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679319749;
+        d=linaro.org; s=google; t=1679319750;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HPUxYFnkGMoE5avSL4JFzjtLyBuUkiovE45vzPm5gIE=;
-        b=qDgGGZj4rTh9vnjkTHytvQnecNq3U/8RsnWgvn0sR57EYqL/Tk27hjcIYNMQMAfHcj
-         Ly/dojV9xXN6PUxnU0zzDS4hqZ6OBxig+eFKGKlhvM9EJA92rLXvzCMFYbwAl1ZAwjZH
-         BJ0JSiMmvmhHjUzIM6uiHD1xrCflH+W/dtwOlQSXt7+qMYN31DPIIlzuv7okpLvIrskM
-         ioUKKh5/KOJhfNKWsQUeCvxtsp0VyOiJUBj6qgUzyeVuZhbLRgbGEYyiREU0ZERUHhn5
-         xBOiBXl1fkDQsFj9ggEELJ/W6bNs09FZcaJ3juwjNS2RGiEW/6KdfN2nOrSVkGJRZg1X
-         Bj1A==
+        bh=Htzjm9MSCo4/scEOmWkP20tbOGwc7n5xhdN8GyJQ6GQ=;
+        b=bg8QBqEMCU2HBbMjnyK7G8pFNFhcaxlWlgPUkC1vmuTd98atUix3MIbBpG3lJAys+0
+         2OxXvRg04f1/Y4Zw8e3Vi2GHv7C9QlOn47ZCDI6ypkC2t9j4c/68f5X7HfJigdkdE4rU
+         i6r/7Cch0fOo1xTP21OktKc1Onawn+Hn4+yuBsrBwgR0h8M9V2FtKPI82e3hKXiBAOs3
+         0pkDKbVru0PvsTBhhRiwHkOpn+cVCzsC1PdmFNoudWUAkN/Vby253U2/xMXn+Gzbg8yk
+         ZxWg6fRkJz01IddW7B7uWGI0TLzKV5ppQJdre2FTgTZw29WSq37fGZgEi2MlHSxuctke
+         Iqng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679319749;
+        d=1e100.net; s=20210112; t=1679319750;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HPUxYFnkGMoE5avSL4JFzjtLyBuUkiovE45vzPm5gIE=;
-        b=nUR7UCUClrSMiLaMoK6PI5o6q1AOCZIH6La+ddBVv5XsUm/bNxh9GcyxwOZy21q1Qa
-         RMFrvrn77L19KhOXMOT4xzxGiva+5t0Wq/EwRKMu3rDs/KMs7Nyw/aU01YZJVQMoZWRi
-         d8kVGruiTG0PGK2QMeXPuDwEAslrMOwKnQZBVZ7yHjQhQYq/vN+piq0ohvHlBF7JVjWt
-         B7o/HIHeBRn7lZsp1Si00RwF/cJS2SlteL+hNPWrzQCL8QtRTeP3jmu0VOlYx8cRI7KD
-         br0/GtMJw7qphbd8edQs+DJWpL0CpeMapNr3fguloZbVUYnU9yKNoLQnBPF2DOiw6+Og
-         tK6w==
-X-Gm-Message-State: AO0yUKXOYHVrcs7fm6a3XP3KeZA/tG2lAS09vs4vywe+6AWQa1LRJWq8
-        G6Izuh4wKoXZt1+xxwR1/RVPaw==
-X-Google-Smtp-Source: AK7set9MXHEJtUYrxRfCKi0r5p0hqHTOQrRzxZchU9k4CB8noF1liekyd/seH/UA43C9v9iMsMnztw==
-X-Received: by 2002:a17:906:1906:b0:925:1d1d:6825 with SMTP id a6-20020a170906190600b009251d1d6825mr9770894eje.42.1679319748816;
-        Mon, 20 Mar 2023 06:42:28 -0700 (PDT)
+        bh=Htzjm9MSCo4/scEOmWkP20tbOGwc7n5xhdN8GyJQ6GQ=;
+        b=5Ny2CHjUCosB96wK5KsUCiEGuVlXc5jcz7NGCg9u5pC8Sfw2r7jAhjCNty9CSgzuTV
+         N1krSqXOV2FVxc5ek1PdL+OCUqCJEl32XIMA0zw7Z26XcJRGPYR6bgkNXtWb2ecEZeel
+         OMjROwu2GJJ0lO5qXBiYAqUBUYuU0qBArb2f8moTNbpjJyEwuHnA+A7CEs1LIfxF2q1f
+         BsRW+C53J5kXmlVedaPvVT6g/1Dv0Xl+IZEHxuzqaQ1XGnHAi/BsR9W/grzK/knF7Bm/
+         qAKNHmbnBuJ9N9t7SbZT6vzR//X2F05knT5t3I6Wq9xzkomVaoi+pFur2QYPxEv321Ra
+         yNQg==
+X-Gm-Message-State: AO0yUKUtadw+v1UcRNBwI+473FEdbVQ11JSRMpilIRqX3Daf015izwx3
+        f+60KWQ5WOL5h9jROFpBlC998w==
+X-Google-Smtp-Source: AK7set8r62lDWNAku2VSCK32k/4YB9QoETXYmzVcob5j4AQs+mzZFX1MpD0qRD8dnoNReX8JRMdX/Q==
+X-Received: by 2002:a17:906:13cb:b0:925:f542:1a3d with SMTP id g11-20020a17090613cb00b00925f5421a3dmr8999852ejc.25.1679319750345;
+        Mon, 20 Mar 2023 06:42:30 -0700 (PDT)
 Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id u23-20020a170906409700b009334a6ef3e8sm2368602ejj.141.2023.03.20.06.42.27
+        by smtp.gmail.com with ESMTPSA id u23-20020a170906409700b009334a6ef3e8sm2368602ejj.141.2023.03.20.06.42.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:42:28 -0700 (PDT)
+        Mon, 20 Mar 2023 06:42:29 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         Doug Anderson <dianders@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>
-Subject: [RFC PATCH v2 3/5] clk: qcom: gdsc: Avoid actual power off until sync state
-Date:   Mon, 20 Mar 2023 15:42:15 +0200
-Message-Id: <20230320134217.1685781-4-abel.vesa@linaro.org>
+Subject: [RFC PATCH v2 4/5] clk: qcom: Add sync state callback to all SC8280XP providers
+Date:   Mon, 20 Mar 2023 15:42:16 +0200
+Message-Id: <20230320134217.1685781-5-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230320134217.1685781-1-abel.vesa@linaro.org>
 References: <20230320134217.1685781-1-abel.vesa@linaro.org>
@@ -76,213 +76,60 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In case there is a sync state callback registered for a provider,
-do not actually power off any gdsc for that provider until sync state
-has been reached and return busy instead. Since the qcom_cc is
-private, add a helper that returns the gdsc_desc based on the device of
-the provider. Finally, add the generic gdsc sync state callback to be
-used by the platform specific providers.
+Now that we have support for sync state delayed disabling of unused
+power domains and a provided generic gdsc sync state callback, add it to
+all the providers related to the SC8280XP platform.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/clk/qcom/common.c | 19 +++++++++++++++++++
- drivers/clk/qcom/common.h |  2 ++
- drivers/clk/qcom/gdsc.c   | 26 ++++++++++++++++++++++++++
- drivers/clk/qcom/gdsc.h   |  6 ++++++
- 4 files changed, 53 insertions(+)
+ drivers/clk/qcom/dispcc-sc8280xp.c | 1 +
+ drivers/clk/qcom/gcc-sc8280xp.c    | 1 +
+ drivers/clk/qcom/gpucc-sc8280xp.c  | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
-index 75f09e6e057e..d7fd1b170c1c 100644
---- a/drivers/clk/qcom/common.c
-+++ b/drivers/clk/qcom/common.c
-@@ -20,6 +20,7 @@
- struct qcom_cc {
- 	struct qcom_reset_controller reset;
- 	struct clk_regmap **rclks;
-+	struct gdsc_desc *scd;
- 	size_t num_rclks;
+diff --git a/drivers/clk/qcom/dispcc-sc8280xp.c b/drivers/clk/qcom/dispcc-sc8280xp.c
+index 167470beb369..a64c396b9cc4 100644
+--- a/drivers/clk/qcom/dispcc-sc8280xp.c
++++ b/drivers/clk/qcom/dispcc-sc8280xp.c
+@@ -3199,6 +3199,7 @@ static struct platform_driver disp_cc_sc8280xp_driver = {
+ 	.driver = {
+ 		.name = "disp_cc-sc8280xp",
+ 		.of_match_table = disp_cc_sc8280xp_match_table,
++		.sync_state = qcom_cc_sync_state,
+ 	},
  };
  
-@@ -234,6 +235,13 @@ static struct clk_hw *qcom_cc_clk_hw_get(struct of_phandle_args *clkspec,
- 	return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
- }
- 
-+struct gdsc_desc *qcom_cc_get_gdsc_desc(struct device *dev)
-+{
-+	struct qcom_cc *cc = dev_get_drvdata(dev);
-+
-+	return cc->scd;
-+}
-+
- int qcom_cc_really_probe(struct platform_device *pdev,
- 			 const struct qcom_cc_desc *desc, struct regmap *regmap)
- {
-@@ -251,6 +259,8 @@ int qcom_cc_really_probe(struct platform_device *pdev,
- 	if (!cc)
- 		return -ENOMEM;
- 
-+	dev_set_drvdata(dev, cc);
-+
- 	reset = &cc->reset;
- 	reset->rcdev.of_node = dev->of_node;
- 	reset->rcdev.ops = &qcom_reset_ops;
-@@ -267,6 +277,9 @@ int qcom_cc_really_probe(struct platform_device *pdev,
- 		scd = devm_kzalloc(dev, sizeof(*scd), GFP_KERNEL);
- 		if (!scd)
- 			return -ENOMEM;
-+
-+		cc->scd = scd;
-+
- 		scd->dev = dev;
- 		scd->scs = desc->gdscs;
- 		scd->num = desc->num_gdscs;
-@@ -319,6 +332,12 @@ int qcom_cc_probe(struct platform_device *pdev, const struct qcom_cc_desc *desc)
- }
- EXPORT_SYMBOL_GPL(qcom_cc_probe);
- 
-+void qcom_cc_sync_state(struct device *dev)
-+{
-+	gdsc_sync_state(dev);
-+}
-+EXPORT_SYMBOL_GPL(qcom_cc_sync_state);
-+
- int qcom_cc_probe_by_index(struct platform_device *pdev, int index,
- 			   const struct qcom_cc_desc *desc)
- {
-diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
-index 9c8f7b798d9f..1bea04da0a00 100644
---- a/drivers/clk/qcom/common.h
-+++ b/drivers/clk/qcom/common.h
-@@ -61,9 +61,11 @@ extern struct regmap *qcom_cc_map(struct platform_device *pdev,
- extern int qcom_cc_really_probe(struct platform_device *pdev,
- 				const struct qcom_cc_desc *desc,
- 				struct regmap *regmap);
-+extern struct gdsc_desc *qcom_cc_get_gdsc_desc(struct device *dev);
- extern int qcom_cc_probe(struct platform_device *pdev,
- 			 const struct qcom_cc_desc *desc);
- extern int qcom_cc_probe_by_index(struct platform_device *pdev, int index,
- 				  const struct qcom_cc_desc *desc);
-+extern void qcom_cc_sync_state(struct device *dev);
- 
- #endif
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 5358e28122ab..af745907dc49 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -15,6 +15,8 @@
- #include <linux/regulator/consumer.h>
- #include <linux/reset-controller.h>
- #include <linux/slab.h>
-+
-+#include "common.h"
- #include "gdsc.h"
- 
- #define PWR_ON_MASK		BIT(31)
-@@ -319,6 +321,9 @@ static int gdsc_disable(struct generic_pm_domain *domain)
- 	struct gdsc *sc = domain_to_gdsc(domain);
- 	int ret;
- 
-+	if (!sc->state_synced)
-+		return -EBUSY;
-+
- 	if (sc->pwrsts == PWRSTS_ON)
- 		return gdsc_assert_reset(sc);
- 
-@@ -365,6 +370,7 @@ static int gdsc_disable(struct generic_pm_domain *domain)
- 
- static int gdsc_init(struct gdsc *sc)
- {
-+	struct device *dev = sc->dev;
- 	u32 mask, val;
- 	int on, ret;
- 
-@@ -452,6 +458,9 @@ static int gdsc_init(struct gdsc *sc)
- 	if (!sc->pd.power_on)
- 		sc->pd.power_on = gdsc_enable;
- 
-+	if (!dev_has_sync_state(dev))
-+		sc->state_synced = true;
-+
- 	ret = pm_genpd_init(&sc->pd, NULL, !on);
- 	if (ret)
- 		goto err_disable_supply;
-@@ -496,6 +505,7 @@ int gdsc_register(struct gdsc_desc *desc,
- 	for (i = 0; i < num; i++) {
- 		if (!scs[i])
- 			continue;
-+		scs[i]->dev = dev;
- 		scs[i]->regmap = regmap;
- 		scs[i]->rcdev = rcdev;
- 		ret = gdsc_init(scs[i]);
-@@ -536,6 +546,22 @@ void gdsc_unregister(struct gdsc_desc *desc)
- 	of_genpd_del_provider(dev->of_node);
- }
- 
-+void gdsc_sync_state(struct device *dev)
-+{
-+	struct gdsc_desc *scd = qcom_cc_get_gdsc_desc(dev);
-+	struct gdsc **scs = scd->scs;
-+	size_t num = scd->num;
-+	int i;
-+
-+	for (i = 0; i < num; i++) {
-+		if (!scs[i])
-+			continue;
-+
-+		scs[i]->state_synced = true;
-+		genpd_queue_power_off_work(&scs[i]->pd);
-+	}
-+}
-+
- /*
-  * On SDM845+ the GPU GX domain is *almost* entirely controlled by the GMU
-  * running in the CX domain so the CPU doesn't need to know anything about the
-diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-index 803512688336..e1c902caecde 100644
---- a/drivers/clk/qcom/gdsc.h
-+++ b/drivers/clk/qcom/gdsc.h
-@@ -35,6 +35,7 @@ struct gdsc {
- 	struct generic_pm_domain	pd;
- 	struct generic_pm_domain	*parent;
- 	struct regmap			*regmap;
-+	struct device			*dev;
- 	unsigned int			gdscr;
- 	unsigned int			collapse_ctrl;
- 	unsigned int			collapse_mask;
-@@ -73,6 +74,8 @@ struct gdsc {
- 
- 	const char 			*supply;
- 	struct regulator		*rsupply;
-+
-+	bool				state_synced;
+diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+index b3198784e1c3..64d828ba07da 100644
+--- a/drivers/clk/qcom/gcc-sc8280xp.c
++++ b/drivers/clk/qcom/gcc-sc8280xp.c
+@@ -7441,6 +7441,7 @@ static struct platform_driver gcc_sc8280xp_driver = {
+ 	.driver = {
+ 		.name = "gcc-sc8280xp",
+ 		.of_match_table = gcc_sc8280xp_match_table,
++		.sync_state = qcom_cc_sync_state,
+ 	},
  };
  
- struct gdsc_desc {
-@@ -86,6 +89,7 @@ int gdsc_register(struct gdsc_desc *desc, struct reset_controller_dev *,
- 		  struct regmap *);
- void gdsc_unregister(struct gdsc_desc *desc);
- int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain);
-+void gdsc_sync_state(struct device *dev);
- #else
- static inline int gdsc_register(struct gdsc_desc *desc,
- 				struct reset_controller_dev *rcdev,
-@@ -94,6 +98,8 @@ static inline int gdsc_register(struct gdsc_desc *desc,
- 	return -ENOSYS;
- }
- 
-+static inline void gdsc_sync_state(struct device *dev) { }
-+
- static inline void gdsc_unregister(struct gdsc_desc *desc) {};
- #endif /* CONFIG_QCOM_GDSC */
- #endif /* __QCOM_GDSC_H__ */
+diff --git a/drivers/clk/qcom/gpucc-sc8280xp.c b/drivers/clk/qcom/gpucc-sc8280xp.c
+index ea1e9505c335..46ca242ba427 100644
+--- a/drivers/clk/qcom/gpucc-sc8280xp.c
++++ b/drivers/clk/qcom/gpucc-sc8280xp.c
+@@ -453,6 +453,7 @@ static struct platform_driver gpu_cc_sc8280xp_driver = {
+ 	.driver = {
+ 		.name = "gpu_cc-sc8280xp",
+ 		.of_match_table = gpu_cc_sc8280xp_match_table,
++		.sync_state = qcom_cc_sync_state,
+ 	},
+ };
+ module_platform_driver(gpu_cc_sc8280xp_driver);
 -- 
 2.34.1
 
