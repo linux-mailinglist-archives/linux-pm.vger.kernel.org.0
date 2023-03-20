@@ -2,181 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710246C11D0
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 13:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83A96C13B1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 14:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCTMYO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Mar 2023 08:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
+        id S231433AbjCTNmj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 09:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjCTMYN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 08:24:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 165F2976F;
-        Mon, 20 Mar 2023 05:24:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A63B2FEC;
-        Mon, 20 Mar 2023 05:24:54 -0700 (PDT)
-Received: from [10.57.18.164] (unknown [10.57.18.164])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E69E33F67D;
-        Mon, 20 Mar 2023 05:24:08 -0700 (PDT)
-Message-ID: <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
-Date:   Mon, 20 Mar 2023 12:24:07 +0000
+        with ESMTP id S231183AbjCTNm3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 09:42:29 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38ECB74B
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 06:42:25 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so46840516edb.10
+        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 06:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679319744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KrZdAoTHd1rYa6+2bns0LZXrcUZt1Y0m6OA8qCzTSf0=;
+        b=nKq81/J0FvmXA5JsN+7z0xgyaD9ypIJv/BMXgeposmSq7l8XikkO3z4up7Arj9kxwi
+         VuV2Ip6nA1LpGeefrIatp+un0KTSs0rYOS6Tns2H8z0qDvBpOQn4PGu/17PQCK9/UrzB
+         yjh5iCdll2J6urVxY2BAcIEfwBQm44lRHj4nFo9prwAtLKSjAEph5Ln1HT9R9Y9bLrc1
+         9VArIsZE/0RK4GeOFr3eStNrxoP7l7MQOVxbIByaB70Fr0BlXOjIEf+KCuOyZH/BI93l
+         GP1lLQIpAnmwfrEAXAGbt+3Jw8C7d0gMuunLiRhQY6q7LhdK5hkG2BqUO/wAk0Yf9dUc
+         ETjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679319744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KrZdAoTHd1rYa6+2bns0LZXrcUZt1Y0m6OA8qCzTSf0=;
+        b=aRkNsRHvvporbM42c/7m2cZBvV2ke0Ew8vcHS4B6iUdgGSLQYFdOje8bnIUzZ4Qy5+
+         0PO49o5hZXJEzccniOgo4+bT6gUnrMVcVT/8/MK0OaTGkxDTcRdgaua3TOi7s8lF8iB/
+         kbVc9cX7oUdnIw1pKYQwGV/9hvY/9uEHfoDqyPc1IHI2QvG+cviv+MnufPEWBMAeFBUk
+         AHmhDO3E1Vlcqqwz3SPDrhTXVB/FtQAguoI/RL0sD014hPBC2zD0Vl1fGGX9tcnlCzk0
+         NifGh6HraGod6BKO+t6j4W4sz81w4PPT5vbLsxREQwMTIF+du0UqzSg8xUP6x/wXYg1C
+         H7mg==
+X-Gm-Message-State: AO0yUKWIJLc6+GgftrdH/HJ8dDaI61H6YohHDrRaotR8hHk8JlfGe/ww
+        3zfjOJMKvTUTyFknrigpekvJ/A==
+X-Google-Smtp-Source: AK7set8a5ZEuGsV4rxIxgp5mWPOeREMId+pRDTv53eMzIMjUrfk9Hm1tTkVX6dtosamqVSw3/ut4yA==
+X-Received: by 2002:a17:907:86a8:b0:937:9a24:370b with SMTP id qa40-20020a17090786a800b009379a24370bmr1347382ejc.67.1679319744054;
+        Mon, 20 Mar 2023 06:42:24 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u23-20020a170906409700b009334a6ef3e8sm2368602ejj.141.2023.03.20.06.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 06:42:23 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [RFC PATCH v2 0/5] Allow genpd providers to power off domains on sync state
+Date:   Mon, 20 Mar 2023 15:42:12 +0200
+Message-Id: <20230320134217.1685781-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
- not be reset
-To:     Di Shen <di.shen@unisoc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
-        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org
-References: <20230320095620.7480-1-di.shen@unisoc.com>
-Content-Language: en-US
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230320095620.7480-1-di.shen@unisoc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+There have been already a couple of tries to make the genpd "disable
+unused" late initcall skip the powering off of domains that might be
+needed until later on (i.e. until some consumer probes). The conclusion
+was that the provider could return -EBUSY from the power_off callback
+until the provider's sync state has been reached. This patch series tries
+to provide a proof-of-concept that is working on Qualcomm platforms.
 
+I've been doing extensive testing on SM8450, but I've also spinned this
+on my X13s (SC8280XP). Both patches that add the sync state callback to
+the SC8280XP and SM8450 are here to provide context. Once we agree on
+the form, I intend to add the sync state callback to all gdsc providers.
 
-On 3/20/23 09:56, Di Shen wrote:
-> Commit <0952177f2a1f>(thermal/core/power_allocator: Update once
-> cooling devices when temp is low) adds a update flag to avoid
-> the thermal event is triggered when there is no need, and
-> thermal cdev would be update once when temperature is low.
-> 
-> But when the trips are writable, and switch_on_temp is set
-> to be a higher value, the cooling device state may not be
-> reset to 0, because last_temperature is smaller than the
-> switch_on_temp.
-> 
-> For example:
-> First:
-> switch_on_temp=70 control_temp=85;
-> Then userspace change the trip_temp:
-> switch_on_temp=45 control_temp=55 cur_temp=54
-> 
-> Then userspace reset the trip_temp:
-> switch_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
-> 
-> At this time, the cooling device state should be reset to 0.
-> However, because cur_temp(57) < switch_on_temp(70)
-> last_temp(54) < switch_on_temp(70)  ---->  update = false,
-> update is false, the cooling device state can not be reset.
-> 
-> This patch adds a function thermal_cdev_needs_update() to
-> renew the update flag value only when the trips are writable,
-> so that thermal cdev->state can be reset after switch_on_temp
-> changed from low to high.
-> 
-> Fixes: <0952177f2a1f> (thermal/core/power_allocator: Update once cooling devices when temp is low)
-> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> 
-> ---
-> V3:
-> - Add fix tag.
-> 
-> V2:
-> - Compared to v1, do not revert.
-> 
-> - Add a variable(last_switch_on_temp) in power_allocator_params
->    to record the last switch_on_temp value.
-> 
-> - Adds a function to renew the update flag and update the
->    last_switch_on_temp when thermal trips are writable.
-> 
-> V1:
-> - Revert commit 0952177f2a1f.
-> ---
-> ---
->   drivers/thermal/gov_power_allocator.c | 39 ++++++++++++++++++++++-----
->   1 file changed, 33 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index 0eaf1527d3e3..c9e1f3b15f15 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -59,6 +59,8 @@ static inline s64 div_frac(s64 x, s64 y)
->    *			governor switches on when this trip point is crossed.
->    *			If the thermal zone only has one passive trip point,
->    *			@trip_switch_on should be INVALID_TRIP.
-> + * @last_switch_on_temp:Record the last switch_on_temp only when trips
-> +			are writable.
->    * @trip_max_desired_temperature:	last passive trip point of the thermal
->    *					zone.  The temperature we are
->    *					controlling for.
-> @@ -70,6 +72,9 @@ struct power_allocator_params {
->   	s64 err_integral;
->   	s32 prev_err;
->   	int trip_switch_on;
-> +#ifdef CONFIG_THERMAL_WRITABLE_TRIPS
-> +	int last_switch_on_temp;
-> +#endif
->   	int trip_max_desired_temperature;
->   	u32 sustainable_power;
->   };
-> @@ -554,6 +559,25 @@ static void get_governor_trips(struct thermal_zone_device *tz,
->   	}
->   }
->   
-> +#ifdef CONFIG_THERMAL_WRITABLE_TRIPS
-> +static bool thermal_cdev_needs_update(struct thermal_zone_device *tz, int switch_on_temp)
-> +{
-> +	bool update;
-> +	struct power_allocator_params *params = tz->governor_data;
-> +	int last_switch_on_temp = params->last_switch_on_temp;
-> +
-> +	update = (tz->last_temperature >= last_switch_on_temp);
-> +	params->last_switch_on_temp = switch_on_temp;
-> +
-> +	return update;
-> +}
-> +#else
-> +static inline bool thermal_cdev_needs_update(struct thermal_zone_device *tz, int switch_on_temp)
-> +{
-> +	return false;
-> +}
-> +#endif
-> +
->   static void reset_pid_controller(struct power_allocator_params *params)
->   {
->   	params->err_integral = 0;
-> @@ -709,12 +733,15 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
->   		return 0;
->   
->   	ret = __thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
-> -	if (!ret && (tz->temperature < trip.temperature)) {
-> -		update = (tz->last_temperature >= trip.temperature);
-> -		tz->passive = 0;
-> -		reset_pid_controller(params);
-> -		allow_maximum_power(tz, update);
-> -		return 0;
-> +	if (!ret) {
-> +		update = thermal_cdev_needs_update(tz, trip.temperature);
-> +		if (tz->temperature < trip.temperature) {
-> +			update |= (tz->last_temperature >= trip.temperature);
-> +			tz->passive = 0;
-> +			reset_pid_controller(params);
-> +			allow_maximum_power(tz, update);
-> +			return 0;
-> +		}
->   	}
->   
->   	tz->passive = 1;
+Currently, some of the gdsc providers might not reach sync state due to
+list of consumers not probing yet (or at all). The sync state can be
+enforced by writing 1 to the state_synced sysfs attribute of the
+provider, thanks to Saravana's commit [1] which has been already merged.
 
+[1] https://lore.kernel.org/r/20230304005355.746421-3-saravanak@google.com
 
-Thanks for the patch. The code looks good. The initial value of
-'last_switch_on_temp' would be set to 0. It won't harm us because it
-will get the proper value later.
+V1 of this patchset was here:
+https://lore.kernel.org/all/20230315132330.450877-1-abel.vesa@linaro.org/
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Changes since v1:
+ * Added the qcom_cc sync state callback which calls in turn the gdsc one
+ * dropped extra semicolon from pm_domain.h
+
+Abel Vesa (5):
+  PM: domains: Allow power off queuing from providers
+  soc: qcom: rpmhpd: Do proper power off when state synced
+  clk: qcom: gdsc: Avoid actual power off until sync state
+  clk: qcom: Add sync state callback to all SC8280XP providers
+  clk: qcom: Add sync state callback to all SM8450 providers
+
+ drivers/base/power/domain.c        |  3 ++-
+ drivers/clk/qcom/camcc-sm8450.c    |  1 +
+ drivers/clk/qcom/common.c          | 19 +++++++++++++++++++
+ drivers/clk/qcom/common.h          |  2 ++
+ drivers/clk/qcom/dispcc-sc8280xp.c |  1 +
+ drivers/clk/qcom/dispcc-sm8450.c   |  1 +
+ drivers/clk/qcom/gcc-sc8280xp.c    |  1 +
+ drivers/clk/qcom/gcc-sm8450.c      |  1 +
+ drivers/clk/qcom/gdsc.c            | 26 ++++++++++++++++++++++++++
+ drivers/clk/qcom/gdsc.h            |  6 ++++++
+ drivers/clk/qcom/gpucc-sc8280xp.c  |  1 +
+ drivers/soc/qcom/rpmhpd.c          | 19 +++++++------------
+ include/linux/pm_domain.h          |  6 ++++++
+ 13 files changed, 74 insertions(+), 13 deletions(-)
+
+-- 
+2.34.1
+
