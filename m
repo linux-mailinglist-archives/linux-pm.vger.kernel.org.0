@@ -2,207 +2,322 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020BA6C097A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 04:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1BC6C09BD
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Mar 2023 05:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCTDtl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Mar 2023 23:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S229493AbjCTEk3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Mar 2023 00:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjCTDtP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Mar 2023 23:49:15 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9C965AD
-        for <linux-pm@vger.kernel.org>; Sun, 19 Mar 2023 20:48:34 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230320034831epoutp01e6f22fdf171b39b03d9d417ee8035d3f~OBACrwExJ2232222322epoutp01Q
-        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 03:48:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230320034831epoutp01e6f22fdf171b39b03d9d417ee8035d3f~OBACrwExJ2232222322epoutp01Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679284112;
-        bh=5iuFslU5qlP81dxFLMLd6qVFWyrZFMo71VITTugPPa0=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=UC8F6YTXf+s6/0+D+OodavXAu5TAKjrmf3TBB5oIbI1yERRURa6Wdlc6O7gI2Wwx1
-         aqLvZUPeZFvgLKCF4sW+/Tjh6XQ7/uI1Why9VQJuxkhC9I/rqCCbdUTe6Ts68tR43U
-         d/+3ueHFU+OxwxCEGvlnQwCFXfEjBnbeXwg5emM0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230320034831epcas1p15f60d252a1eb1607e28ef93cbd71cd38~OBAB83ivm3164931649epcas1p14;
-        Mon, 20 Mar 2023 03:48:31 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.38.241]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Pg11B46q0z4x9QF; Mon, 20 Mar
-        2023 03:48:30 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        16.92.52037.E87D7146; Mon, 20 Mar 2023 12:48:30 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28~OBAAubEO02417824178epcas1p2M;
-        Mon, 20 Mar 2023 03:48:29 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230320034829epsmtrp2aa67f56357dd00a42439d85441946122~OBAAtnuXY2734027340epsmtrp2M;
-        Mon, 20 Mar 2023 03:48:29 +0000 (GMT)
-X-AuditID: b6c32a37-7cbfd7000001cb45-d2-6417d78e4a2c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F4.A4.31821.D87D7146; Mon, 20 Mar 2023 12:48:29 +0900 (KST)
-Received: from VDBS1328.vd.sec.samsung.net (unknown [168.219.243.40]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230320034829epsmtip283dcb5296bf568e1421996708e4ccd40~OBAAjdnRi2600426004epsmtip2Q;
-        Mon, 20 Mar 2023 03:48:29 +0000 (GMT)
-From:   Jungseung Lee <js07.lee@samsung.com>
-To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bw365.lee@samsung.com, yw85.kim@samsung.com,
-        huijin.park@samsung.com
-Cc:     Jungseung Lee <js07.lee@samsung.com>
-Subject: [PATCH v2] workqueue: Introduce show_freezable_workqueues
-Date:   Mon, 20 Mar 2023 12:29:05 +0900
-Message-Id: <1679282945-37120-1-git-send-email-js07.lee@samsung.com>
-X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBKsWRmVeSWpSXmKPExsWy7bCmrm7fdfEUg2tL5CxOrFnEZNFx0cVi
-        6trdTBaPbv5mtZg1ZS+TxeVdc9gsPvceYbS4e+oom8XcL1OZLX4tP8po0fH5JpsDt8fOWXfZ
-        PRbvecnksWlVJ5tH35ZVjB4rVn9n9/i8SS6ALSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7U
-        zMBQ19DSwlxJIS8xN9VWycUnQNctMwfoPCWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJq
-        QUpOgVmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsbDGx/YC9ZKVvzc2szWwNgv0sXIySEhYCLR
-        sLGZqYuRi0NIYAejxJV7x9ggnE+MEmf/XmeFcD4zSlyfPxvI4QBr6WtRhIjvYpR43vwJqugX
-        o8TUpfPZQeayCWhJ3Pi9CSwhIrCJSWLBpg1gCWYBDYnfB26ygNjCAk4SS3auA4uzCKhKTP09
-        kRnE5hVwkThwqIsd4kA5iZvnOpkh7GvsEu0z8iBsF4kb199CxYUlXh3fAlUvJfH53V42CLtc
-        YkPfNLDnJARaGCUWbX8LlTCWePd2LTPIO8wCmhLrd+lDhBUldv6eywhxJ5/Eu689UB/zSnS0
-        CUGUKEm8edDCAmFLSFx43MsKYXtIvF+5nwnEFhKIlVjVO4lpAqPsLIQFCxgZVzGKpRYU56an
-        FhsWGMNjKTk/dxMjOMlpme9gnPb2g94hRiYOxkOMEhzMSiK8fgtEU4R4UxIrq1KL8uOLSnNS
-        iw8xmgLDayKzlGhyPjDN5pXEG5pYGpiYGZlYGFsamymJ84rbnkwWEkhPLEnNTk0tSC2C6WPi
-        4JRqYNp5e//KpQfcVb7JXzv172FC8MJrlvM/6N1UlZnyWZDvr/iXeXmh+z2s52gqbAs9ZTjh
-        7txUNodv89Z0/nHdbxomFO28edJ3oVM7+vmnfDu84eTHRexT2P7vsmn7HrB6hfkRgTUhlnsT
-        GBIv5Cvt9fo7yeDhsw5r/T9r97ZMu3+sbMrW689Wzd3b4sbMaqnTfF7KoS5QzivtP4fM8q2u
-        hXm/f7T1lL/SzFo6ad/cmyd1zk48eJPpftXuUHYJ/vSf4unBj980KH19EfaoyftCRCRTQPPa
-        j8LV/2tlQk1nGIlWX9xXK+RoYS5hoX+Dk6cyYcXszOjKAysenNu7M/rbsd0Pkktsgp6eSD/R
-        +TfCf8k5JZbijERDLeai4kQA+bAW7vsDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGLMWRmVeSWpSXmKPExsWy7bCSvG7vdfEUg7kXDCxOrFnEZNFx0cVi
-        6trdTBaPbv5mtZg1ZS+TxeVdc9gsPvceYbS4e+oom8XcL1OZLX4tP8po0fH5JpsDt8fOWXfZ
-        PRbvecnksWlVJ5tH35ZVjB4rVn9n9/i8SS6ALYrLJiU1J7MstUjfLoEr4+GND+wFayUrfm5t
-        Zmtg7BfpYuTgkBAwkehrUexi5OIQEtjBKPHj30fGLkZOoLiExKOdX1ggaoQlDh8uhqj5wShx
-        pHMVG0gNm4CWxI3fm1hBEiICe5gkDvw4ywSSYBbQkPh94CYLiC0s4CSxZOc6dhCbRUBVYurv
-        icwgNq+Ai8SBQ13sEMvkJG6e62SewMizgJFhFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+
-        7iZGcNBpae1g3LPqg94hRiYOxkOMEhzMSiK8fgtEU4R4UxIrq1KL8uOLSnNSiw8xSnOwKInz
-        Xug6GS8kkJ5YkpqdmlqQWgSTZeLglGpg0hKZWBqiWL5NQ+N33WrNe3YruOa+uFqncC3ooZPw
-        bIeZbCtFvs76MOcsY6Ok8Dung416vMEVn1mfc979981A02NlCq/W3qenHTmzmo8JnJfc/tCx
-        W2ZOY/GLK68jLBYu/LyMeV6inv/6/XMKbe7N2DT7b/pN/ftZMuXX9YKKhD80evAb32c6u2Gq
-        0esiQ+kvv6vtvHrOq2+/5ZZ/5L/VEW33pfv/pLS/yQ0t4t3K26P/oO/gdMPLr2OnBwtLSC32
-        CzD6o5bzP9taSE8ueGO06/t52q+8/vSk33ybPSu/wvPd/Uvbr36w3Gtn/iUnxuN5u+W/N1ZP
-        pzOn/JCXsxCrYCvOeG3q0f2JqeLT8vZPSizFGYmGWsxFxYkAFeEsGqkCAAA=
-X-CMS-MailID: 20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28
-References: <CGME20230320034829epcas1p2a88958d53a51693906020bb5c2b8bc28@epcas1p2.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229486AbjCTEk2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 00:40:28 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2088.outbound.protection.outlook.com [40.107.96.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5731A971;
+        Sun, 19 Mar 2023 21:40:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Uz79DCalhOqEUHIP0bmkzpkVOoSOMeREFrt1PXOsanmmxkIwPlr2ose9XNOP+W+J99o97/804cSp697KsE+iZqTqD7jzS6FksClo+nebHsmztTLqpOeg4W2t3rTDFvh6BSZ0Y0+uvlCyczX2cjN/hWOJGuBFgMk0gtMmtxRPhHkgS7y3S35oOQI3rhH3JuND2M+OYW/iqucRRUgohP/2HxMTswlWdaglsghXA0pLa5vgTrTiJrG8M1C3q4WRbCRC5Cks3MnZJQHx2qn/Ou06fwJz8CtfcyI++YuqwUF38gO7REAcWWq3pWHQsqZq/wjcDm7EG9Ys/oCL72SmBalQZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S1Hj2Bn/hMwqKf5HzYcRRvgkSWSrhzhIlhNbMAMMy1c=;
+ b=H971GyWPD9cj8ZVwvMDzy+WnslauaxIyGTDTbhdXLtx/MQJTfoJ7UUMu7vsMk31H3M41HTdbOyTB6LO24PMSwYJzzvLt3XGs/jGZyBXDnJwvG7m24G8ZOK9QSycQS59/w6ZPYQgai7527uQgFQHH525sjL6PUiDTvil0FZDvK2JnFRzB1OhMM9bMh88UzpcYjtwTU9Muru8HV8J1+Ez9NXx+mBWgmqpefpbe+iIgvJo3s9gSpDloxKlDe2M3ZDq22T3p2dqor9U4dlmbiQi6XvrYQ8pWVFqhhAxZYkanMv11+0Sx+OTbiQl7dTnS4RgHwrMaXgdIU3oDPXKejpDFIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S1Hj2Bn/hMwqKf5HzYcRRvgkSWSrhzhIlhNbMAMMy1c=;
+ b=mTXHZM1peIPola6vxd5sG29LfxPHcqZpv+q/DfgJaf12o6inWOSiv8w7OxVbz2QGrAbx6z2vt6zj8ZOhuASwLGP9hJwfk19iodpxfWVWIXJuSnOidrmIbXsaeksMQsaeQTy4WbQazzJGdlps1mLHBvVeJzrdehwrE+Wm18PdeFs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by MN2PR12MB4222.namprd12.prod.outlook.com (2603:10b6:208:19a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 04:40:22 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 04:40:21 +0000
+Date:   Mon, 20 Mar 2023 10:10:04 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Huang Rui <ray.huang@amd.com>, Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ananth Narayan <ananth.narayan@amd.com>,
+        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>,
+        Russell Haley <yumpusamongus@gmail.com>
+Subject: Re: [PATCH v8 0/6] cpufreq: amd-pstate: Add guided autonomous mode
+ support
+Message-ID: <ZBfjpJAQRkzEb/+y@bhagirati.amd.com>
+References: <20230307112740.132338-1-wyes.karny@amd.com>
+ <CAJZ5v0gijQJeCpxgTOD6uj9Cjn8=C+FwX5Ub1SP3xe6ygCaX4Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gijQJeCpxgTOD6uj9Cjn8=C+FwX5Ub1SP3xe6ygCaX4Q@mail.gmail.com>
+X-ClientProxiedBy: PN3PR01CA0159.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:c8::20) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|MN2PR12MB4222:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13744f35-26b8-4895-7296-08db28fd36c2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d4ujUQGmTqnf9fxgYvTSXgOxlvAKQmmgASWoUtnMm81ThCkxLadTBYAmyy1qeRGyambSj5LgQBBJk8Gl9QRRNWnbxpOTAUMegxENAav4KYMo7Yi0nZ+J/qFrIFVnx3Z+3pP7g6p7MD4qz2Eji2UnpHvs+cTNg6LYjZQHHdSBZwQ5DLkA5EaO+jNJ9TjkUPTmRaPBgqOlUAtPnWPUbqQMMJy2YOS/lQMFvHfbjNIGma6ovs2MCpbKEwvKJHp9txps5DLj2J6c9BcTWinXzC41KLGIby3RsozwLpTnV+a+C7jRh2/lHAWdU2fBA/x1PLamAS4IF3g0nkoMt/o6ia3nHlsMuEvTBNZqai+nFSUWFRalJjCYTaVkeaHkDiZEu5PmbgVgvCAOWEmsjANebJVdK8QZlca94cnxrY/4OccXiFsniKURc3PTtqL/qI72BXHan59pinnuTClFMu9vHwS3uSDKvqoKkH1DNfrFmAzdPCRyyrXr52D+WT9BNH4ioo6SGCua3c9EcXmT43FaOxkSdlFlu5dabruKEAAUq0cX/n2Q6GtuTmm+G2zm0Elb777Pwd5gXniVKcS+iZrNJmOZC7iKhJly3CINrk+cGoBoT/bYK3eLoP7Q5qlf0mveF8dy0r7EkyR+TMpWGupngVsF3Iax4Noh3ghluGH1GFEV8SQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(39860400002)(346002)(366004)(136003)(451199018)(26005)(6506007)(53546011)(6512007)(6666004)(966005)(316002)(83380400001)(8676002)(6916009)(6486002)(4326008)(54906003)(66476007)(186003)(478600001)(66946007)(5660300002)(7416002)(8936002)(44832011)(2906002)(41300700001)(66556008)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFovYVFLM0RlMkQyZEtrZjlzeW95Wit5NTdNc242Mmx0U3cwU25rakVKRWRw?=
+ =?utf-8?B?TDRtU1ZBY1g2a2Rma2FIUk9iMG5NU3AwUGhsWEw3WTFEWnRTZGFRZk93STJ0?=
+ =?utf-8?B?RERFck12VldySGh5V1FYVjFla1RVcDM1eXFnY1FCMWJXZXFkWjR4YzMxblZ2?=
+ =?utf-8?B?MkZOVGR0eHMydWZTZ2FsblY2ZXZxU2JMY04rSGdmcndxUStWamgzWUVlYk9j?=
+ =?utf-8?B?eFA0cnh6MTgwRGVFWnUxbG56V08xOHlYckl6aXU1WkIwalo0Wm1HT0t4Nkpr?=
+ =?utf-8?B?ME1BRTdTK2ZhTkJxb2oyazZHUVBMUzlZUStZWkJ6dVVCZHZQejRDVGtFZlkw?=
+ =?utf-8?B?MU9sWUpDRVR3Qm1xNzRRTURUTzhpSkUrODdDY0QybzdBT0xsRCtldDJZNUMw?=
+ =?utf-8?B?SDFxRFduVG1kMHV5c3BWSGdiZXZUSk1mRnNxbGNjNG5aLzNDUmV2YXRrM3cr?=
+ =?utf-8?B?V3hTQ0xnRVRvb0wzcExHUEIwYXBDVVhqV3UyYkJQMHUydERJaHlZczJXMlVl?=
+ =?utf-8?B?RVdsNGFGRFhpdmNiMzZCU0g3L2ZhK0NFOUl5SGRQMkdFOXlrbU55ckJldlRq?=
+ =?utf-8?B?V0hEVjJjb1NvSHV4cUtRYzlobEV2RGE5bHBIdGdBazBWZnUrZ0tZSmw2MnZH?=
+ =?utf-8?B?a1BRQkkzSHZYTUJVazNNTHBRMlorQW5VTDNKNDZkZmtObmpLRmN0c2pQaU52?=
+ =?utf-8?B?SDV1cXhOQnIzamVZbUNWR05QeGh5L1RTd1JIbkZ4UjZSVlJ3Q0pJYzVKN3dJ?=
+ =?utf-8?B?VUxwS080SWtINW5taHR1R2ZHQ1NxUUQ0cnNCZHhJaG5KRWxxTm9VL2hkUWx6?=
+ =?utf-8?B?UTBvQk1qVlM3b0s3REVxZ2tPL29mNlRFY3FPV3MybnVLeTU5ejZvT1NKTTZX?=
+ =?utf-8?B?bU1nMFFJSC8vQVFFZjdvaGx2WHVJNXZoOFJKUm45UjBFdzhkU1NncHVRZG9n?=
+ =?utf-8?B?SVBSdHFkMW0rS1BqOGlWYTlIVjFoV2FIN3BZakhLVk8yQ0dyOTRWdlBmS05p?=
+ =?utf-8?B?VzVVb3ZOVGVWTlVuUVpkMGtzcTJnSVNhYitQYXVESG8rZTFpQWNhZ3RkNXds?=
+ =?utf-8?B?TUtaTWtJRkVadElNaXoyVlYvZDVvL21wVTZrZkF5bG1EbDlyMHBGZlVpUmNU?=
+ =?utf-8?B?ckFWT0JXOXhLQU1HK0dIZGtMZmFiWTVybWxVckRVaUdDTFJBcndYUFZGbDFt?=
+ =?utf-8?B?VUZzNHRncGVUam9FTHI2alpLVENTSS9SR0hXVVFGVXBYM0NLVHJra2d4VU4y?=
+ =?utf-8?B?U2hMbzZlTW9JRVRZNVM0VDN5UEM0N0xGK3RzUE1UejBUdTJVMUtMVjM4TW9s?=
+ =?utf-8?B?Z2lSLzVkTnZTR3AyelEwTEhkdURZVXlwOHg2eG1rZkd1a1lEa2hzd2dpT0xx?=
+ =?utf-8?B?OWoxTk9tbXVRV1V4cVN3RWhZOW1yRU11VXhvQnZ4NUpxWitzcWt3ZFNiYjZt?=
+ =?utf-8?B?eW9WcXBHeXRwdkhhKzNqSE9QbFpYUCtOcnE0TE5nWEVzRzVYcHBLdFZtRis3?=
+ =?utf-8?B?NkdUY1B5TnFJaHFVRDBLMkZGam81UFFMVkFUZENhVkFUSnZjbVlZc1BSMVZC?=
+ =?utf-8?B?VGFjNmJ0RFQvS25JMkJ6d2RQb25FYm5BQ1hzRFlkMmVWSnY5YnNIZVNPOW9K?=
+ =?utf-8?B?bHBtejNuOXFnenA2cFhrZXBTMkI2Ym1VeFVocGloak9sSEFHaGFwUGpyVmVS?=
+ =?utf-8?B?TXlXRTJtSFJsM2ZBTlBqd0M4dEVMRmhmWkg5TklDQUNZanMySk51RGlJdGVR?=
+ =?utf-8?B?RURLc3JXaXBHV01rVFN6RkpPdG9Rd2tBOHRwVDc4NnVONWxUbHNpVGo2Vy9h?=
+ =?utf-8?B?R0lZVlJidzZXT2k0WWc0UFpBZloyempkRUxRN20rUVI2cGkzZXh6VGNsS3JW?=
+ =?utf-8?B?TXE2ZlRMaXhuUHQxMGZseVJ0MWlQUmVpYktmNmNGNE1aZHhIcHJwL0hLbFN5?=
+ =?utf-8?B?YnA1cFc1MHA4Z3B3MUJXY0tGZU5CRTR4cDYzdnM4aUVTNk5uTGVNakVLei9K?=
+ =?utf-8?B?aWh1N04vclJVekUyWkN1TWZUTm9nOVNCT3JqVm5rZXNuLzhBRGtQYTJhdVcx?=
+ =?utf-8?B?WGJJSnhVc3hvT3pjeHlsU0VRb3g2bXpkTXhRQi9MZUxPTHVJa0VtQTFyZk9Z?=
+ =?utf-8?Q?spmcIkyrlxfXxTFYy19jzCe8B?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13744f35-26b8-4895-7296-08db28fd36c2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 04:40:21.5638
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OJTV7BfkpNzzPTSIUWeRvzH937mnDnq3Hwac908bnFXnPXJ7452qf2AV7YgIo4bADxCq6FsdS1o+4K7kqIPegw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4222
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently show_all_workqueue is called if freeze fails at the time of
-freeze the workqueues, which shows the status of all workqueues and of
-all worker pools. In this cases we may only need to dump state of only
-workqueues that are freezable and busy.
+Hi Rafael,
 
-This patch defines show_freezable_workqueues, which uses 
-show_one_workqueue, a granular function that shows the state of individual 
-workqueues, so that dump only the state of freezable workqueues 
-at that time.
+On 17 Mar 19:10, Rafael J. Wysocki wrote:
+> On Tue, Mar 7, 2023 at 12:28 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > From ACPI spec[1] below 3 modes for CPPC can be defined:
+> > 1. Non autonomous: OS scaling governor specifies operating frequency/
+> >    performance level through `Desired Performance` register and platform
+> > follows that.
+> > 2. Guided autonomous: OS scaling governor specifies min and max
+> >    frequencies/ performance levels through `Minimum Performance` and
+> > `Maximum Performance` register, and platform can autonomously select an
+> > operating frequency in this range.
+> > 3. Fully autonomous: OS only hints (via EPP) to platform for the required
+> >    energy performance preference for the workload and platform autonomously
+> > scales the frequency.
+> >
+> > Currently (1) is supported by amd_pstate as passive mode, and (3) is
+> > implemented by EPP support[2]. This change is to support (2).
+> >
+> > In guided autonomous mode the min_perf is based on the input from the
+> > scaling governor. For example, in case of schedutil this value depends
+> > on the current utilization. And max_perf is set to max capacity.
+> >
+> > To activate guided auto mode ``amd_pstate=guided`` command line
+> > parameter has to be passed in the kernel.
+> >
+> > Below are the results (normalized) of benchmarks with this patch:
+> > System: Genoa 96C 192T
+> > Kernel: 6.3-rc1 + patch
+> > Scaling governor: schedutil
+> >
+> > ================ dbench comparisons ================
+> > dbench result comparison:
+> > Here results are throughput (MB/s)
+> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >     1      1.00 (0.00 pct)         1.01 (1.00 pct)         1.02 (2.00 pct)
+> >     2      1.07 (0.00 pct)         1.06 (-0.93 pct)        1.07 (0.00 pct)
+> >     4      1.68 (0.00 pct)         1.70 (1.19 pct)         1.72 (2.38 pct)
+> >     8      2.61 (0.00 pct)         2.68 (2.68 pct)         2.76 (5.74 pct)
+> >    16      4.16 (0.00 pct)         4.24 (1.92 pct)         4.53 (8.89 pct)
+> >    32      5.98 (0.00 pct)         6.17 (3.17 pct)         7.30 (22.07 pct)
+> >    64      8.67 (0.00 pct)         8.99 (3.69 pct)        10.71 (23.52 pct)
+> >   128     11.98 (0.00 pct)        12.52 (4.50 pct)        14.67 (22.45 pct)
+> >   256     15.73 (0.00 pct)        16.13 (2.54 pct)        17.81 (13.22 pct)
+> >   512     15.77 (0.00 pct)        16.32 (3.48 pct)        16.39 (3.93 pct)
+> > dbench power comparison:
+> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >     1      1.00 (0.00 pct)         1.00 (0.00 pct)         1.04 (4.00 pct)
+> >     2      0.99 (0.00 pct)         0.97 (-2.02 pct)        1.02 (3.03 pct)
+> >     4      0.98 (0.00 pct)         0.98 (0.00 pct)         1.02 (4.08 pct)
+> >     8      0.98 (0.00 pct)         0.99 (1.02 pct)         1.02 (4.08 pct)
+> >    16      0.99 (0.00 pct)         1.00 (1.01 pct)         1.04 (5.05 pct)
+> >    32      1.02 (0.00 pct)         1.02 (0.00 pct)         1.07 (4.90 pct)
+> >    64      1.05 (0.00 pct)         1.05 (0.00 pct)         1.11 (5.71 pct)
+> >   128      1.08 (0.00 pct)         1.08 (0.00 pct)         1.15 (6.48 pct)
+> >   256      1.12 (0.00 pct)         1.12 (0.00 pct)         1.20 (7.14 pct)
+> >   512      1.18 (0.00 pct)         1.17 (-0.84 pct)        1.26 (6.77 pct)
+> >
+> > ================ git-source comparisons ================
+> > git-source result comparison:
+> > Here results are throughput (compilations per 1000 sec)
+> > Threads:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >   192      1.00 (0.00 pct)         0.93 (-7.00 pct)        1.00 (0.00 pct)
+> > git-source power comparison:
+> > Threads:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >   192      1.00 (0.00 pct)         1.00 (0.00 pct)         0.96 (-4.00 pct)
+> >
+> > ================ kernbench comparisons ================
+> > kernbench result comparison:
+> > Here results are throughput (compilations per 1000 sec)
+> > Load:      acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> > 32         1.00 (0.00 pct)         1.01 (1.00 pct)         1.02 (2.00 pct)
+> > 48         1.26 (0.00 pct)         1.28 (1.58 pct)         1.25 (-0.79 pct)
+> > 64         1.39 (0.00 pct)         1.47 (5.75 pct)         1.43 (2.87 pct)
+> > 96         1.48 (0.00 pct)         1.50 (1.35 pct)         1.49 (0.67 pct)
+> > 128        1.29 (0.00 pct)         1.32 (2.32 pct)         1.33 (3.10 pct)
+> > 192        1.17 (0.00 pct)         1.20 (2.56 pct)         1.21 (3.41 pct)
+> > 256        1.17 (0.00 pct)         1.18 (0.85 pct)         1.20 (2.56 pct)
+> > 384        1.16 (0.00 pct)         1.17 (0.86 pct)         1.21 (4.31 pct)
+> > kernbench power comparison:
+> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >    32      1.00 (0.00 pct)         0.97 (-3.00 pct)        1.00 (0.00 pct)
+> >    48      0.87 (0.00 pct)         0.81 (-6.89 pct)        0.88 (1.14 pct)
+> >    64      0.81 (0.00 pct)         0.73 (-9.87 pct)        0.77 (-4.93 pct)
+> >    96      0.75 (0.00 pct)         0.74 (-1.33 pct)        0.75 (0.00 pct)
+> >   128      0.83 (0.00 pct)         0.79 (-4.81 pct)        0.83 (0.00 pct)
+> >   192      0.92 (0.00 pct)         0.88 (-4.34 pct)        0.92 (0.00 pct)
+> >   256      0.92 (0.00 pct)         0.88 (-4.34 pct)        0.92 (0.00 pct)
+> >   384      0.92 (0.00 pct)         0.88 (-4.34 pct)        0.92 (0.00 pct)
+> >
+> > ================ tbench comparisons ================
+> > tbench result comparison:
+> > Here results are throughput (MB/s)
+> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >     1      1.00 (0.00 pct)         0.70 (-30.00 pct)       1.37 (37.00 pct)
+> >     2      2.64 (0.00 pct)         1.39 (-47.34 pct)       2.70 (2.27 pct)
+> >     4      4.89 (0.00 pct)         2.75 (-43.76 pct)       5.28 (7.97 pct)
+> >     8      9.46 (0.00 pct)         5.42 (-42.70 pct)      10.22 (8.03 pct)
+> >    16     19.05 (0.00 pct)        10.42 (-45.30 pct)      19.94 (4.67 pct)
+> >    32     37.50 (0.00 pct)        20.23 (-46.05 pct)      36.87 (-1.68 pct)
+> >    64     61.24 (0.00 pct)        43.08 (-29.65 pct)      62.96 (2.80 pct)
+> >   128     67.16 (0.00 pct)        69.08 (2.85 pct)        67.34 (0.26 pct)
+> >   256    154.59 (0.00 pct)       162.33 (5.00 pct)       156.78 (1.41 pct)
+> >   512    154.02 (0.00 pct)       156.74 (1.76 pct)       153.48 (-0.35 pct)
+> > tbench power comparison:
+> > Clients:   acpi-cpufreq            amd_pst+passive         amd_pst+guided
+> >     1      1.00 (0.00 pct)         0.97 (-3.00 pct)        1.08 (8.00 pct)
+> >     2      1.04 (0.00 pct)         0.97 (-6.73 pct)        1.11 (6.73 pct)
+> >     4      1.12 (0.00 pct)         0.99 (-11.60 pct)       1.18 (5.35 pct)
+> >     8      1.25 (0.00 pct)         1.04 (-16.80 pct)       1.31 (4.80 pct)
+> >    16      1.53 (0.00 pct)         1.13 (-26.14 pct)       1.58 (3.26 pct)
+> >    32      2.01 (0.00 pct)         1.36 (-32.33 pct)       2.03 (0.99 pct)
+> >    64      2.58 (0.00 pct)         2.14 (-17.05 pct)       2.61 (1.16 pct)
+> >   128      2.80 (0.00 pct)         2.81 (0.35 pct)         2.81 (0.35 pct)
+> >   256      3.39 (0.00 pct)         3.43 (1.17 pct)         3.42 (0.88 pct)
+> >   512      3.44 (0.00 pct)         3.44 (0.00 pct)         3.44 (0.00 pct)
+> >
+> > Change log:
+> >
+> > v7 -> v8:
+> > - Rebased on top of 6.3-rc1 tip
+> > - Pickup tested-by flag by Oleksandr
+> 
+> This series has been applied as 6.4 material, but I generally prefer
+> ACPI and CPPC to be spelled in capitals in patch subjects and you
+> should be more careful about comments and white space added by your
+> patches (I have fixed up a few assorted issues of these types in the
+> patches).
+> 
+> Thanks!
 
-Signed-off-by: Jungseung Lee <js07.lee@samsung.com>
----
-v2:                                                                              
- - Rename function to more appropriate name.                                     
- - Fit the comment to 80-col               
----
- include/linux/workqueue.h |  1 +
- kernel/power/process.c    |  2 +-
- kernel/workqueue.c        | 26 ++++++++++++++++++++++++--
- 3 files changed, 26 insertions(+), 3 deletions(-)
+Thank you for taking this patch series.
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index 0a10f8e..91d1d6e 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -472,6 +472,7 @@ extern unsigned int work_busy(struct work_struct *work);
- extern __printf(1, 2) void set_worker_desc(const char *fmt, ...);
- extern void print_worker_info(const char *log_lvl, struct task_struct *task);
- extern void show_all_workqueues(void);
-+extern void show_freezable_workqueues(void);
- extern void show_one_workqueue(struct workqueue_struct *wq);
- extern void wq_worker_comm(char *buf, size_t size, struct task_struct *task);
- 
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 6c1c7e5..cae81a8 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -93,7 +93,7 @@ static int try_to_freeze_tasks(bool user_only)
- 		       todo - wq_busy, wq_busy);
- 
- 		if (wq_busy)
--			show_all_workqueues();
-+			show_freezable_workqueues();
- 
- 		if (!wakeup || pm_debug_messages_on) {
- 			read_lock(&tasklist_lock);
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index de42827..8c5c1ec 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -5043,8 +5043,7 @@ static void show_one_worker_pool(struct worker_pool *pool)
- /**
-  * show_all_workqueues - dump workqueue state
-  *
-- * Called from a sysrq handler or try_to_freeze_tasks() and prints out
-- * all busy workqueues and pools.
-+ * Called from a sysrq handler and prints out all busy workqueues and pools.
-  */
- void show_all_workqueues(void)
- {
-@@ -5065,6 +5064,29 @@ void show_all_workqueues(void)
- 	rcu_read_unlock();
- }
- 
-+/**
-+ * show_freezable_workqueues - dump freezable workqueue state
-+ *
-+ * Called from try_to_freeze_tasks() and prints out all freezable workqueues
-+ * still busy.
-+ */
-+void show_freezable_workqueues(void)
-+{
-+	struct workqueue_struct *wq;
-+
-+	rcu_read_lock();
-+
-+	pr_info("Showing freezable workqueues still busy:\n");
-+
-+	list_for_each_entry_rcu(wq, &workqueues, list) {
-+		if (!(wq->flags & WQ_FREEZABLE))
-+			continue;
-+		show_one_workqueue(wq);
-+	}
-+
-+	rcu_read_unlock();
-+}
-+
- /* used to show worker information through /proc/PID/{comm,stat,status} */
- void wq_worker_comm(char *buf, size_t size, struct task_struct *task)
- {
--- 
-2.7.4
+Regards,
+Wyes
 
+> 
+> > v6 -> v7:
+> > - Addressed comments by Ray
+> > - Reorder and rebase patches
+> > - Pick up Ack by Ray
+> >
+> > v5 -> v6:
+> > - Don't return -EBUSY when changing to same mode
+> >
+> > v4 -> v5:
+> > - Rebased on top of EPP v12 series
+> > - Addressed comments form Mario regarding documentation
+> > - Picked up RB flags from Mario and Bagas Sanjaya
+> >
+> > v3 -> v4:
+> > - Fixed active mode low frequency issue reported by Peter Jung and Tor Vic
+> > - Documentation modification suggested by Bagas Sanjaya
+> >
+> > v2 -> v3:
+> > - Addressed review comments form Mario.
+> > - Picked up RB tag from Mario.
+> > - Rebase on top of EPP v11 [3].
+> >
+> > v1 -> v2:
+> > - Fix issue with shared mem systems.
+> > - Rebase on top of EPP series.
+> >
+> > [1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+> > [2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+> > [3]: https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@amd.com/
+> >
+> > Wyes Karny (6):
+> >   acpi: cppc: Add min and max perf reg writing support
+> >   acpi: cppc: Add auto select register read/write support
+> >   Documentation: cpufreq: amd-pstate: Move amd_pstate param to
+> >     alphabetical order
+> >   cpufreq: amd-pstate: Add guided autonomous mode
+> >   cpufreq: amd-pstate: Add guided mode control support via sysfs
+> >   Documentation: cpufreq: amd-pstate: Update amd_pstate status sysfs for
+> >     guided
+> >
+> >  .../admin-guide/kernel-parameters.txt         |  40 ++--
+> >  Documentation/admin-guide/pm/amd-pstate.rst   |  31 ++-
+> >  drivers/acpi/cppc_acpi.c                      | 121 +++++++++++-
+> >  drivers/cpufreq/amd-pstate.c                  | 177 +++++++++++++-----
+> >  include/acpi/cppc_acpi.h                      |  11 ++
+> >  include/linux/amd-pstate.h                    |   2 +
+> >  6 files changed, 302 insertions(+), 80 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
