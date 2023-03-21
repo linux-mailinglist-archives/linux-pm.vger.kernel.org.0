@@ -2,193 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627B26C269C
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 01:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009906C2954
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 05:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCUA6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Mar 2023 20:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S229484AbjCUExm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 00:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCUA57 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Mar 2023 20:57:59 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2560E34008
-        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 17:57:57 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id i13so1495071lfe.9
-        for <linux-pm@vger.kernel.org>; Mon, 20 Mar 2023 17:57:57 -0700 (PDT)
+        with ESMTP id S229634AbjCUExl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 00:53:41 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E01E3C01;
+        Mon, 20 Mar 2023 21:53:39 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id i10-20020a05600c354a00b003ee0da1132eso2114222wmq.4;
+        Mon, 20 Mar 2023 21:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679360275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+QQdv0je5amo1Cq/oKaE0BYeIx+5NHEzCllldmhnRkA=;
-        b=Sv5/kJ7JjO/+KR/2+5I2oRGcDtHD1zZyIh6guCTdrRzJ+t2sK/7lOsblXgxhnrT4Wg
-         QE+EBDpSgpWZvTtBAJlJwRJNS1i01GGk5tMUnPJdXT2HlCEWD/H7qHI8kunxFbtSNAVG
-         dU9xeWyu/UMMxBH45ZPk8R3it1MnWXgplHfTAuiIq3lYNxej5yIHlBBrj6cLckLUPX8+
-         lNyhYUgE6md03W6TjCy0U9o0+W8ZCEQBYdiflHiwrn/Wjjzw5eufP/+DqYpMtKVP6aTJ
-         WJJjgMI1mCYn874Eecyqomc/pJnPoS/bsW0Eh3Y5fE+eUkmuXyahv9Pb63gJTCq80d4J
-         j6sw==
+        d=gmail.com; s=20210112; t=1679374417;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GX92zv5VKe7ckWl7sGbnyvzQGMyhv0ppTgbomfq1PHk=;
+        b=qF3P8D4CRjzvhUxLVQgRiz6W+/M1ImZhcGKi9Pa0nX1Ff6WYPi63iF4XyriDoUaYvb
+         QnB3UVfLFdHHSS6XYstKNll0YwK6hb3vEAh13/HkjvahLtPX+piikYURGlt/NGF6rytO
+         nq7Bbt4QUIr2WNIQC/V5JWShA/iygKlM8vouw3PhLJeDPHu9S3vLcc3iux3BvtyjfrVT
+         6nt0zQBJhnkTcuy9lSpW/1Rv2qCgBBvXsUSsdrMqvy2WTIZQsOxMqnAvhhENYjQqTMcP
+         M25KrjljExnmI1mbMoAG1TkTQwaBwXvm5mevcQ7qY3Q3+EgAnZOyzxDdlQKsvgYOZFcT
+         /PSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679360275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+QQdv0je5amo1Cq/oKaE0BYeIx+5NHEzCllldmhnRkA=;
-        b=z8kqjE0crVnpwwJZEaBKey0fXY4JFER5oGkSUOEVPXNrXz4qpEyMnA90SU561S/p/L
-         tk4lN0MzPSkIRddclS2jAkZvsn8F2mcntbgSQjOKFsrei+6+sMKD+j/VYiLl7iTDu0nV
-         fmrFQHe8aowXRYCniSj1WpfOdZV4rQxC5HQ4wv6eWJgMIiBR7aaCnXwIqnDqJna3fz8t
-         QQOTw6yrUyIgvbvpb1ongMWHBFsWZsLrCTCfwPjZKKj1uixLQBL2IeO6i5Je8uYQBDUd
-         A+Cgo1NDryHHOg8kOsEmK3EWMvkY7Grxe/3AId3UiMB1vJZpFxDjUFxFRQ2Jdes4ZCdl
-         TecA==
-X-Gm-Message-State: AO0yUKWZJ3/NEQQ7c0dhGt0PMQjwGw3T0HgZ3ALAQEl/n8lyfJJs69aj
-        zYf2J71ghqbpu7l391jf3CsoSw==
-X-Google-Smtp-Source: AK7set+/moO/EhNXfUSGHTpDEIfpltuj+gV8kcRXMkwAT/Z6crxiXVSmrm6xJkRykoS8kJXuWTjAiQ==
-X-Received: by 2002:a19:a410:0:b0:4de:f972:6aa with SMTP id q16-20020a19a410000000b004def97206aamr294802lfc.4.1679360275333;
-        Mon, 20 Mar 2023 17:57:55 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f1-20020ac251a1000000b004e95f1c9e7dsm1919893lfk.78.2023.03.20.17.57.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 17:57:54 -0700 (PDT)
-Message-ID: <b396c5ed-5453-8755-c2f0-8fbd79fad2ba@linaro.org>
-Date:   Tue, 21 Mar 2023 02:57:53 +0200
+        d=1e100.net; s=20210112; t=1679374417;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GX92zv5VKe7ckWl7sGbnyvzQGMyhv0ppTgbomfq1PHk=;
+        b=HthukRLCr5Ygc/wq4VofQEFMS1oS/WdPREcnUsM7A6mE+Wv9ZVJ0n9gp71e+bUQH6+
+         UDYQb4EOieXcJcSJWKBYI0HRLKEsxBqCOErShoszn0dmXbwmrjMli5CTC4hOuGZmJmv5
+         LuImUCvCucy85SUGsbH6L/CC8irhOKUdZxM1hnZhj0PHePzVy/tEcvxReqZM1gApN15g
+         l/OyaQfv7wD+7IcMergBoICCib2D1vc4S/jCVgBYpG/svnkMb/vCO4egv2u/Ku1J5N9B
+         LfjaagmZxd6GotbEE1yUuhk7L64Vm87v+tdWd5jAwhkQB36sxlWo5p4xXmxpG58nP6mH
+         hbdg==
+X-Gm-Message-State: AO0yUKUkFTE9ChcGo0+WwAwUD0OSyMQrk8anYNx56Vo5uYuCYjQGfzIn
+        QezLBDf+E1GPiekyppCeK1w=
+X-Google-Smtp-Source: AK7set87NeoiO5ioLPK68M5XrIbeQVoFDpjKadoZoPnR87tYfA6zznLp86hd1TMPB583S2T+TthuaA==
+X-Received: by 2002:a05:600c:21c7:b0:3dc:4042:5c21 with SMTP id x7-20020a05600c21c700b003dc40425c21mr1263182wmj.6.1679374417390;
+        Mon, 20 Mar 2023 21:53:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003dc522dd25esm12244259wmb.30.2023.03.20.21.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 21:53:36 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 07:53:32 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Rob Clark <robdclark@chromium.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
+ dev_pm_qos_mtx
+Message-ID: <155085b0-d2e4-4503-b75b-1a71193c2587@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RESEND PATCH v3 1/3] thermal: qcom-spmi-temp-alarm: enable stage
- 2 shutdown when required
-Content-Language: en-GB
-To:     David Collins <quic_collinsd@quicinc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1674602698.git.quic_collinsd@quicinc.com>
- <57466b092dd16ed2a25e5a472dfd0b856a5cca00.1674602698.git.quic_collinsd@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <57466b092dd16ed2a25e5a472dfd0b856a5cca00.1674602698.git.quic_collinsd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/01/2023 01:46, David Collins wrote:
-> Certain TEMP_ALARM GEN2 PMIC peripherals need over-temperature
-> stage 2 automatic PMIC partial shutdown to be enabled in order to
-> avoid repeated faults in the event of reaching over-temperature
-> stage 3.  Modify the stage 2 shutdown control logic to ensure that
-> stage 2 shutdown is enabled on all affected PMICs.  Read the
-> digital major and minor revision registers to identify these
-> PMICs.
-> 
-> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-> ---
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 32 +++++++++++++++++++--
->   1 file changed, 30 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> index ad84978109e6..e2e52703ac4d 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> @@ -1,6 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0-only
->   /*
->    * Copyright (c) 2011-2015, 2017, 2020, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
->    */
->   
->   #include <linux/bitops.h>
-> @@ -18,6 +19,7 @@
->   #include "../thermal_core.h"
->   #include "../thermal_hwmon.h"
->   
-> +#define QPNP_TM_REG_DIG_MINOR		0x00
->   #define QPNP_TM_REG_DIG_MAJOR		0x01
->   #define QPNP_TM_REG_TYPE		0x04
->   #define QPNP_TM_REG_SUBTYPE		0x05
-> @@ -73,6 +75,7 @@ struct qpnp_tm_chip {
->   	struct device			*dev;
->   	struct thermal_zone_device	*tz_dev;
->   	unsigned int			subtype;
-> +	unsigned int			dig_revision;
->   	long				temp;
->   	unsigned int			thresh;
->   	unsigned int			stage;
-> @@ -224,6 +227,7 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
->   	long stage2_threshold_min = (*chip->temp_map)[THRESH_MIN][1];
->   	long stage2_threshold_max = (*chip->temp_map)[THRESH_MAX][1];
->   	bool disable_s2_shutdown = false;
-> +	bool require_s2_shutdown = false;
->   	u8 reg;
->   
->   	WARN_ON(!mutex_is_locked(&chip->lock));
-> @@ -256,9 +260,25 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
->   				 temp, stage2_threshold_max, stage2_threshold_max);
->   	}
->   
-> +	if (chip->subtype == QPNP_TM_SUBTYPE_GEN2) {
-> +		/*
-> +		 * Check if stage 2 automatic partial shutdown must remain
-> +		 * enabled to avoid potential repeated faults upon reaching
-> +		 * over-temperature stage 3.
-> +		 */
-> +		switch (chip->dig_revision) {
-> +		case 0x0001:
-> +		case 0x0002:
-> +		case 0x0100:
-> +		case 0x0101:
-> +			require_s2_shutdown = true;
-> +			break;
-> +		}
-> +	}
+Hi Rob,
 
-Please move this switch to _probe and set chip->require_s2_shutdown instead.
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +
->   skip:
->   	reg |= chip->thresh;
-> -	if (disable_s2_shutdown)
-> +	if (disable_s2_shutdown && !require_s2_shutdown)
->   		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
->   
->   	return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
-> @@ -373,7 +393,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
->   {
->   	struct qpnp_tm_chip *chip;
->   	struct device_node *node;
-> -	u8 type, subtype, dig_major;
-> +	u8 type, subtype, dig_major, dig_minor;
->   	u32 res;
->   	int ret, irq;
->   
-> @@ -429,6 +449,14 @@ static int qpnp_tm_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	ret = qpnp_tm_read(chip, QPNP_TM_REG_DIG_MINOR, &dig_minor);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "could not read dig_minor\n");
-> +		return ret;
-> +	}
-> +
-> +	chip->dig_revision = (dig_major << 8) | dig_minor;
-> +
->   	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
->   				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
->   		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
+patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230321/202303211207.mUCSt3CK-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202303211207.mUCSt3CK-lkp@intel.com/
+
+smatch warnings:
+drivers/base/power/qos.c:947 dev_pm_qos_update_user_latency_tolerance() error: uninitialized symbol 'req'.
+drivers/base/power/qos.c:975 dev_pm_qos_update_user_latency_tolerance() warn: possible memory leak of 'req'
+
+vim +/req +947 drivers/base/power/qos.c
+
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
+2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
+00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
+00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
+00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
+00dd582e52a535 Rob Clark         2023-03-20  931  
+2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
+2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
+2d7e4629d7265d Rob Clark         2023-03-20  934  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
+00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
+
+This "req" shadows the ealier req.
+
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
+
+So it leads to an unintialized variable and a leak.
+
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
+2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
+2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
+2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
+2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
+2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
+2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
+2d7e4629d7265d Rob Clark         2023-03-20  964  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11 @975  	return ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
