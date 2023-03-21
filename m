@@ -2,56 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D4E6C3382
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B88B6C33B0
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 15:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCUN6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 09:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S229844AbjCUOHH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 10:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjCUN6i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:58:38 -0400
+        with ESMTP id S229606AbjCUOHG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 10:07:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD9E59F1;
-        Tue, 21 Mar 2023 06:58:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC65C22C91;
+        Tue, 21 Mar 2023 07:06:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D9FDB81670;
-        Tue, 21 Mar 2023 13:58:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F205C433D2;
-        Tue, 21 Mar 2023 13:58:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E9DAB816A4;
+        Tue, 21 Mar 2023 14:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E5AC433EF;
+        Tue, 21 Mar 2023 14:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679407114;
-        bh=YvYs273+TLiAgYyXJ++7SOFc95DJuhpwe0d/fxlc7BA=;
+        s=k20201202; t=1679407595;
+        bh=0DAjlMi66OXkEkdTGqATRWU4fPPzde7nZPBSgSjlrvM=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ebr1TBD2fw76AqOTKcVzCH8jMzuTKpK2q9vFhCww6kANJYiBBZidJlokr+PElDN7E
-         iLhtAhKVvHmWGPmewnrjwQLLmIekRSMZ7PfhYaTJdFiLaeUaSRhXMMo29wxvtn8rb1
-         U9vWYsvJMJE52vHv47gJ/wiZuIl56bhqrwBAHMo21by8opWtRvpJmkmqqPw3dsrfS1
-         goFBRjWkvBvrqjGw9rKyadGaNnOOBisChVr7kQLGbPALZhsKNKYaJ5QFDWABjJyfv4
-         vhYCva+SnDTtL5xFOlYS65flbTSPNBRop/3H9tgGwXsreXR+DpnujVrRTDVPn0LGUY
-         prD3nLQ4XuOPA==
-Message-ID: <0af8ba67-f33c-4861-bea5-e662d19638bf@kernel.org>
-Date:   Tue, 21 Mar 2023 15:58:30 +0200
+        b=uHIK4ZDzrJRuQHL4/zcmwMKMGfx6dvwcws/wDy2sUSSdIWPyTu0W4QpiybjSqqRlK
+         QBQOkVmwZEVNQEqjb+txk0DGMdP7GHZn3etowQBppIrmiJAecwwzvQdZKmRZOe0nXe
+         W0dAS+vnzm83zkYwWTEA+TFuRZ83+2skzFNndbwBgnNeSnReO/Rl7XoR8wXM1krKE4
+         InuvdKNvoNT20xuD8EtqlRoKTmBOfVJM1qnXjYi6h4LmSMvRsC+8OOCf4vkKL7B+Jn
+         GsHs/N/KU18zUxpr1Buvmy1rVkqJCgv6WVXh0M5wFGxch5nE62AtYSktdT5fkOOSNO
+         vtEkj5GU5bBpw==
+Message-ID: <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
+Date:   Tue, 21 Mar 2023 16:06:31 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
+Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
+ specifying channel num
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
- <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
- <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
- <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
- <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
+ <20230228-topic-qos-v7-2-815606092fff@linaro.org>
 From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
+In-Reply-To: <20230228-topic-qos-v7-2-815606092fff@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,31 +59,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Konrad,
 
-On 11.03.23 17:26, Dmitry Baryshkov wrote:
-> On 11/03/2023 16:38, Bryan O'Donoghue wrote:
->> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
->>>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
->>>> be added to the UFS device list of clocks.
->>> While we were doing this for some of the clocks (PCIe and USB, if I'm
->>> not mistaken), I think that generally this is not fully correct. In my
->>> opinion it should be in the interconnect driver, who turns
->>> corresponding clocks on and off. These clocks correspond to the SoC
->>> topology, rather than the end-device.
->>>
->>
->> True enough, they are interconnect clocks.
->>
->> The question is how to only turn them on when the device that depends on them wants them.
-> 
-> I think we can turn them on an off from qcom_icc_set(). Each node can list required clocks.
+Thanks for the patch!
+
+On 8.03.23 23:40, Konrad Dybcio wrote:
+> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
+> one channel. This should be taken into account in bandwidth calcualtion,
+> as we're supposed to feed msmbus with the per-channel bandwidth. Add
+> support for specifying that and use it during bandwidth aggregation.
 > 
 
-Yes, this is a bit weird, but looks like these are the interface clocks
-required for programming the qos box of the respective peripheral and
-nothing else. Maybe we can even configure QoS just once (eg. on the first
-bandwidth request) and not every time we call qcom_icc_set().
+This looks good, but do you have any follow-up patch to use this and set
+the channels in some driver?
 
 BR,
 Georgi
+
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
+>   drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>   2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 35fd75ae70e3..27c4c6497994 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>   {
+>   	struct icc_node *node;
+>   	struct qcom_icc_node *qn;
+> +	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>   	int i;
+>   
+>   	/* Initialise aggregate values */
+> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>   	list_for_each_entry(node, &provider->nodes, node_list) {
+>   		qn = node->data;
+>   		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> -			agg_avg[i] += qn->sum_avg[i];
+> +			if (qn->channels)
+> +				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
+> +			else
+> +				sum_avg[i] = qn->sum_avg[i];
+> +			agg_avg[i] += sum_avg[i];
+>   			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+>   		}
+>   	}
+> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+> index 8ba1918d7997..8aed5400afda 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.h
+> +++ b/drivers/interconnect/qcom/icc-rpm.h
+> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
+>    * @id: a unique node identifier
+>    * @links: an array of nodes where we can go next while traversing
+>    * @num_links: the total number of @links
+> + * @channels: number of channels at this node (e.g. DDR channels)
+>    * @buswidth: width of the interconnect between a node and the bus (bytes)
+>    * @sum_avg: current sum aggregate value of all avg bw requests
+>    * @max_peak: current max aggregate value of all peak bw requests
+> @@ -78,6 +79,7 @@ struct qcom_icc_node {
+>   	u16 id;
+>   	const u16 *links;
+>   	u16 num_links;
+> +	u16 channels;
+>   	u16 buswidth;
+>   	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>   	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+> 
+
