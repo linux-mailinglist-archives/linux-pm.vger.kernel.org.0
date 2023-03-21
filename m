@@ -2,74 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1873A6C33BB
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 15:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF68E6C33C0
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 15:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjCUOJ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 10:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S230253AbjCUOLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 10:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjCUOJZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 10:09:25 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD943B3C6
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 07:09:15 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a32so15630638ljr.9
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 07:09:15 -0700 (PDT)
+        with ESMTP id S229513AbjCUOLa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 10:11:30 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02811498A9
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 07:11:29 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id h25so7630092lfv.6
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 07:11:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679407753;
+        d=linaro.org; s=google; t=1679407887;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=q1UPEKYsCEIQfSc6MFeQtLNdtOY2okvAXDN+byESpbg=;
-        b=ZssqnmZXo+gW38EhylEnNKyKU6fbUd12pD8iWQye119sxKASgzQJGlaZsKgDQUUXvP
-         mEh9EJQyRtPVEEWBmAYtpCOnWqoN4zg72ihMtbL3/S/AASV2L5czbq3ooHZmhIe1QI1G
-         9O6OhbWpz9/iVRYRdkmr7mBR2bslUbNaHEasP0eBrx5yqRWECPKnlGpVFPbmk5PtfLhm
-         6Z0x+F0EU2n5qhXNwhikPBC4lGh+iGeGF45NOyFLG/cLYfZ9Sa5sWtByGX8Zon4gbzs7
-         YbOZ+PrBfl6QGO74ARbUbY9KYt1N4kTRSNEV3YOiUkc9e0cNww03ChZHcF/qDvnuWhlz
-         31nw==
+        bh=tAGB7Aj6eWN9c4AIsJYfnptIIniy9VIg48C8wvaeq9E=;
+        b=Afm3AWjUAa2d8BjU70q955PKyyPVHboO1a16UaU67Iuld1g7MYhNxNNBjXdnKmSm/4
+         x6gBY64A1McGTG7qYGFH4PiZHRcRL3j8z7kbWRkny/ya847x30QTYK94FGQtYRmr2y9Q
+         xPILABGC42YPAaaWpC9F0xKghxKWjpMVQJfI5BXNzNsbf+xIx1zgoxDa8eR2bK2H7Yyu
+         GFy3UFIcwc9Mlr3oTWjDth6UjzAwRuuIQSbyAThI5mbQkU4vWBouv/AtYkuxIXhJuF15
+         DshsiKdWcARtUc9D08sMxgxWkY2Ry4WYYb1Dg/v8nz9KphsunSx+EplmfNIsIMm3JiDN
+         JCkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679407753;
+        d=1e100.net; s=20210112; t=1679407887;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q1UPEKYsCEIQfSc6MFeQtLNdtOY2okvAXDN+byESpbg=;
-        b=PpUx/R4x80RDw8OlKx5Sq0ccwZSN42vEo7NalcEU1Y+ncG887v6ONG5/KsEhQx0k6B
-         zpMuenVupUJWXxFpaaOWWzBU2i2daMnS3XNASE98seev7jiPv5T3LVNOXpVHbaDq8ODO
-         vn6haAf9f5cZ284/nlgcsOZSRhleXN6519Tl7hP6IYjUo087PmpKTBTpiyNIPeMTHUFd
-         30YZlumczAK9uZbLrxerMMGnzVXVbv5v2TJ2gUGCb0Y2IUYppsxlsMTpMdQEBEiYyvvi
-         Dv+pcX2whvEptcfu1B1vuX8sH9IBiR9WIACILGWlcnsx1+6xQZ97uhDSbJrIoP4HVynv
-         lwcQ==
-X-Gm-Message-State: AO0yUKXGI8O2qtQFzUx2Tu9mb1tvrAPHxyZfti5FPgUzoCKuhzv8qEti
-        X50I/fjSr7rEqTdnfgaoPeoggL6Lup1pUxj0wSc=
-X-Google-Smtp-Source: AK7set9Fr6gl7pn4u71ZDmPex4iGOgTzKttYY/W4ZNLlQINYHh30hvDV/C0EF0diC7OiAmAMy9TS8A==
-X-Received: by 2002:a05:651c:1050:b0:298:9fb5:9f20 with SMTP id x16-20020a05651c105000b002989fb59f20mr952022ljm.26.1679407753344;
-        Tue, 21 Mar 2023 07:09:13 -0700 (PDT)
+        bh=tAGB7Aj6eWN9c4AIsJYfnptIIniy9VIg48C8wvaeq9E=;
+        b=gQk1zkP44f6/fQVsILsQ2ZpWIAgP0OhI+1/X8VKU2AlZGV1yS2eK9EK588ThP/NLMx
+         e+1Rh6hiBzVLfP9LjlYwo2q6Wuml2Z7YodvdlUyZmB0JLcfks3S4uNn6z8nTdeTUc328
+         6QIWt0VlD4vDp85ob0lhwpcPT17Moy0oi7Bq1ygsolIx2a6yPOlwDA+4r7oRI1uPbkjH
+         j4SNx3cEUfL3A9SqVsgd10VShtR/4NB07oZImERoQsQ35hqoGApdzNrTwyGC63FCy7di
+         Wjf52LsgOfqblsmqn/TB2mg6uF4DO4PADcTitpyBvponcqt7Z+plz9qw8WPuC/r0/4Ba
+         KezQ==
+X-Gm-Message-State: AO0yUKWCnpMfFXRxP+AxKTZNl8GbranOo2S734I0pLz7nN4C9DRa7szS
+        V+9mDlUClXzX+uWcc3GdKj7Esw==
+X-Google-Smtp-Source: AK7set/JmSkv5k/zkT+L5VPfMmgQ3P6A/FmkZFBsiT23pb+hi1sIAmmjqGj8YU6ju8j8HZRBmCO4hw==
+X-Received: by 2002:a19:a401:0:b0:4b4:8f01:f8b1 with SMTP id q1-20020a19a401000000b004b48f01f8b1mr870353lfc.31.1679407887246;
+        Tue, 21 Mar 2023 07:11:27 -0700 (PDT)
 Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id y3-20020a2e9d43000000b0029347612e94sm2228895ljj.123.2023.03.21.07.09.12
+        by smtp.gmail.com with ESMTPSA id c5-20020a197605000000b004eaeb0a984csm317916lff.88.2023.03.21.07.11.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 07:09:12 -0700 (PDT)
-Message-ID: <38fe0736-b566-9e1b-d7f3-71e3fcd01d90@linaro.org>
-Date:   Tue, 21 Mar 2023 15:09:11 +0100
+        Tue, 21 Mar 2023 07:11:26 -0700 (PDT)
+Message-ID: <5459d8d3-4829-01ab-7000-2c1f58ad69e8@linaro.org>
+Date:   Tue, 21 Mar 2023 15:11:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
- specifying channel num
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
 Content-Language: en-US
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+To:     Georgi Djakov <djakov@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-2-815606092fff@linaro.org>
- <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+ <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
+ <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
+ <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
+ <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
+ <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
+ <0af8ba67-f33c-4861-bea5-e662d19638bf@kernel.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
+In-Reply-To: <0af8ba67-f33c-4861-bea5-e662d19638bf@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -82,84 +87,41 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 21.03.2023 15:06, Georgi Djakov wrote:
-> Hi Konrad,
+On 21.03.2023 14:58, Georgi Djakov wrote:
+> Hi,
 > 
-> Thanks for the patch!
-> 
-> On 8.03.23 23:40, Konrad Dybcio wrote:
->> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
->> one channel. This should be taken into account in bandwidth calcualtion,
->> as we're supposed to feed msmbus with the per-channel bandwidth. Add
->> support for specifying that and use it during bandwidth aggregation.
+> On 11.03.23 17:26, Dmitry Baryshkov wrote:
+>> On 11/03/2023 16:38, Bryan O'Donoghue wrote:
+>>> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
+>>>>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
+>>>>> be added to the UFS device list of clocks.
+>>>> While we were doing this for some of the clocks (PCIe and USB, if I'm
+>>>> not mistaken), I think that generally this is not fully correct. In my
+>>>> opinion it should be in the interconnect driver, who turns
+>>>> corresponding clocks on and off. These clocks correspond to the SoC
+>>>> topology, rather than the end-device.
+>>>>
+>>>
+>>> True enough, they are interconnect clocks.
+>>>
+>>> The question is how to only turn them on when the device that depends on them wants them.
+>>
+>> I think we can turn them on an off from qcom_icc_set(). Each node can list required clocks.
 >>
 > 
-> This looks good, but do you have any follow-up patch to use this and set
-> the channels in some driver?
-Yes, I have a couple of OOT drivers that are gonna make use of it.
-TBF it should have been sent separately from the QoS mess, but I
-don't think it's much of an issue to take it as-is.
+> Yes, this is a bit weird, but looks like these are the interface clocks
+> required for programming the qos box of the respective peripheral and
+> nothing else. Maybe we can even configure QoS just once (eg. on the first
+> bandwidth request) and not every time we call qcom_icc_set().
+Would that persist a full bus reset - if we e.g. shut down MMNoC 
+after the display stack is turned off in preparation for a power
+collapse, would we have to reprogram it?
 
-The aforementioned OOT drivers for MSM8998 and SM6375 will be
-submitted after we reach a consensus on how we want to ensure
-that each node is guaranteed to have its clocks enabled before
-access, among some other minor things.
+Another thing is, do we know "how persistent" the QoS settings are?
+What could reset them? Would a bandwidth request for a node that
+belongs to the same path do so?
 
 Konrad
 > 
 > BR,
 > Georgi
-> 
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
->>   drivers/interconnect/qcom/icc-rpm.h | 2 ++
->>   2 files changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->> index 35fd75ae70e3..27c4c6497994 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.c
->> +++ b/drivers/interconnect/qcom/icc-rpm.c
->> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>   {
->>       struct icc_node *node;
->>       struct qcom_icc_node *qn;
->> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>       int i;
->>         /* Initialise aggregate values */
->> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>       list_for_each_entry(node, &provider->nodes, node_list) {
->>           qn = node->data;
->>           for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->> -            agg_avg[i] += qn->sum_avg[i];
->> +            if (qn->channels)
->> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
->> +            else
->> +                sum_avg[i] = qn->sum_avg[i];
->> +            agg_avg[i] += sum_avg[i];
->>               agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
->>           }
->>       }
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index 8ba1918d7997..8aed5400afda 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
->>    * @id: a unique node identifier
->>    * @links: an array of nodes where we can go next while traversing
->>    * @num_links: the total number of @links
->> + * @channels: number of channels at this node (e.g. DDR channels)
->>    * @buswidth: width of the interconnect between a node and the bus (bytes)
->>    * @sum_avg: current sum aggregate value of all avg bw requests
->>    * @max_peak: current max aggregate value of all peak bw requests
->> @@ -78,6 +79,7 @@ struct qcom_icc_node {
->>       u16 id;
->>       const u16 *links;
->>       u16 num_links;
->> +    u16 channels;
->>       u16 buswidth;
->>       u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>       u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->>
-> 
