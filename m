@@ -2,118 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9092A6C386C
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 18:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19D16C3913
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 19:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjCURjR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 13:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S229635AbjCUSXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 14:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCURjP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 13:39:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1837F55524;
-        Tue, 21 Mar 2023 10:38:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E60C0B818D2;
-        Tue, 21 Mar 2023 17:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E580CC433EF;
-        Tue, 21 Mar 2023 17:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679420291;
-        bh=h6PaXJFdNf2jrbSib5gtfbzWZDlURlMX1ekxTl2pyT8=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=LxHBE/UOj7jZzGE6nQmnjE2zuhJVVKMaWI7bt8qm7ARn7QWGhhbPZIFY5zL1PEVh2
-         NG6LcXCL7oSQjC3azOUVfK+ekBlwqMOGc1dQ/E4tO6yGBmteXm+CVjoZEHOkfMtQKJ
-         7KcDXdmdzvHlRXvDt4VJTPFgRYu5uExNvEth/Gb/h0oueeyoIL8rl3ayf5PRYsX3sR
-         UFiNDID6byANLG9dfjQmFfKkUvw3kCAAox4FuU6tyZsTXGavQEb7tL+N8bnzrooTbF
-         7C6eZLiMjwhmjVjBxSE+rx0gxgK4nsaIgI9opSpCsmejMgozdsejYSbylnVpFk7LPE
-         0LTCzsAEVu6ew==
-Message-ID: <a9819d66-43fc-e964-b523-27161466a70a@kernel.org>
-Date:   Tue, 21 Mar 2023 19:38:06 +0200
+        with ESMTP id S230395AbjCUSXB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 14:23:01 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BF344B1
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 11:23:00 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id le6so16915040plb.12
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 11:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679422980;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DWj8fuzeYJMjYBlJumL5aEAWqq9PFl2kOv0q+T5/KNM=;
+        b=1S94hpAShAgVDEkxSKzLkZeTqgrvx3FCM0lol6A0Vxm5goBjQmlCP0tApEsdHZR5Ck
+         519/q3oeQWy6vsUdumtJR8lDSzGPUyOK4O8Jq07bVyheq/mmuqI2l7YRbEzR+RQwDeAn
+         BrRg24qAesSRbdtMWr5fqjJt2eCpZjR/WdemV9u7AiZs2LceSqCUYWpFWRxKOtrPIAwy
+         7pRl5UvvjJtzdCZyX33pdkKfzRM/ony2ArK0kPqb+ZVgHPB0zttwx439cgdObR7kHX6G
+         rQSPrX0e8RYfPSLco+DUmVEbNwr4PsF6UABPm366sGvggc05lUongyl2nuyXoORq90YU
+         Jlsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679422980;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DWj8fuzeYJMjYBlJumL5aEAWqq9PFl2kOv0q+T5/KNM=;
+        b=fEqbeu8MP64kS4067N39w9DB6ah0G/c/P+GRzyvyPsTEY3Aiz5Iov39XmRE2gaCtb0
+         s06GsIN5XoQ7YXA5TR39tPuiQzF+csRCAb2FORPnwFiJnbqv3GdrCJ8GErW7tLfzQBP0
+         SRdh67ZRFYiq/BbKgXohfqAqZsWcFkfWokqKwQFnQXK8Bypvle2u2H1GxyzqASsN4Hhh
+         JcD+wOC1XmtLHh6V0yRJwVjGlMX5gDdyI57oMybGdOan7DcfT5KZ00RRm8etFhfBSA6l
+         gKtUmoAsxHnRWxMwSI0q1cieginGYmBHK6n+lHi56suNBbOGXmE71RcnAT8kygeqaAO3
+         A7Mg==
+X-Gm-Message-State: AO0yUKWcQSG7Kk7Wgz5XhH6HZ7V6AKhPCWbMVmuu3cZgvMqv32gqJhml
+        RMSDRf2Hf8x4o7TYsWT9vf0xYFGuCD9W/G41GjvwMg==
+X-Google-Smtp-Source: AK7set8MWr+oViw3vpbCOnSty4nQUNuYe+73yzAZ1YRLl7A0QgXplfATLYdqKspe3DgrPaPVeUV3ew==
+X-Received: by 2002:a17:90b:4a08:b0:234:bf0:86b9 with SMTP id kk8-20020a17090b4a0800b002340bf086b9mr618290pjb.25.1679422980039;
+        Tue, 21 Mar 2023 11:23:00 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q20-20020a170902b11400b0019251e959b1sm9043695plr.262.2023.03.21.11.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:22:59 -0700 (PDT)
+Message-ID: <6419f603.170a0220.15473.0b88@mx.google.com>
+Date:   Tue, 21 Mar 2023 11:22:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-Content-Language: en-US
-From:   Georgi Djakov <djakov@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
- <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
- <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
- <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
- <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
- <0af8ba67-f33c-4861-bea5-e662d19638bf@kernel.org>
- <5459d8d3-4829-01ab-7000-2c1f58ad69e8@linaro.org>
- <f32cffc4-c327-5019-3598-21516056b4e1@kernel.org>
-In-Reply-To: <f32cffc4-c327-5019-3598-21516056b4e1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.3-rc3-33-g8e95155f8f29
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc3-33-g8e95155f8f29)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21.03.23 16:38, Georgi Djakov wrote:
-> On 21.03.23 16:11, Konrad Dybcio wrote:
->>
->>
->> On 21.03.2023 14:58, Georgi Djakov wrote:
->>> Hi,
->>>
->>> On 11.03.23 17:26, Dmitry Baryshkov wrote:
->>>> On 11/03/2023 16:38, Bryan O'Donoghue wrote:
->>>>> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
->>>>>>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
->>>>>>> be added to the UFS device list of clocks.
->>>>>> While we were doing this for some of the clocks (PCIe and USB, if I'm
->>>>>> not mistaken), I think that generally this is not fully correct. In my
->>>>>> opinion it should be in the interconnect driver, who turns
->>>>>> corresponding clocks on and off. These clocks correspond to the SoC
->>>>>> topology, rather than the end-device.
->>>>>>
->>>>>
->>>>> True enough, they are interconnect clocks.
->>>>>
->>>>> The question is how to only turn them on when the device that depends on them wants them.
->>>>
->>>> I think we can turn them on an off from qcom_icc_set(). Each node can list required clocks.
->>>>
->>>
->>> Yes, this is a bit weird, but looks like these are the interface clocks
->>> required for programming the qos box of the respective peripheral and
->>> nothing else. Maybe we can even configure QoS just once (eg. on the first
->>> bandwidth request) and not every time we call qcom_icc_set().
->> Would that persist a full bus reset - if we e.g. shut down MMNoC
->> after the display stack is turned off in preparation for a power
->> collapse, would we have to reprogram it?
->>
->> Another thing is, do we know "how persistent" the QoS settings are?
->> What could reset them? Would a bandwidth request for a node that
->> belongs to the same path do so?
-> 
-> That's a good question. From what i recall, i expect them to persist until
-> you reset the board. Probably we can verify it with an experiment by reading
-> them back, but let me check if i can find some info.
-> 
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc3-33-g8e=
+95155f8f29)
 
-This seems to be hardware specific and there is no general answer. It depends
-on where the reset line for the NIU comes from. It could be from the primary
-chip reset in most cases, but it could be also within the power domain of the
-associated core.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc3-33-g8e95155f8f29/
 
-Thanks,
-Georgi
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc3-33-g8e95155f8f29
+Git Commit: 8e95155f8f299d6c2941c7bfa133ae8d0242870e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
