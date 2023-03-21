@@ -2,94 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541536C3A8B
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 20:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974E16C3AF2
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 20:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCUTbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 15:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S229508AbjCUTq7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 21 Mar 2023 15:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjCUTbo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 15:31:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F7567B2;
-        Tue, 21 Mar 2023 12:31:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E23F8B8197F;
-        Tue, 21 Mar 2023 19:30:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DC5C433D2;
-        Tue, 21 Mar 2023 19:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679427054;
-        bh=4J6Qc0ELM8cEsY9i03YO4rNGi65qtpTyn5i1uQsxcCQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=INapG943gubolZaqrNT9yN1ZhD3yy6TjbGDpVUke1O2dbagGzE4OvAKItDxfsIP5L
-         znLM/MFcxbJHeb2/2ouSS5DKLLhxzAmtZzgFyWzOz4Fx09iDcfKzwDr8nD/6doJvru
-         BWZdZaE6Hh7LkN0HB+u/3e3wFg803O4npbtx+szXEf2Zgl/yM6IO5HkzgZGmqEgX0a
-         h+cZ69QMl+7i23o1CWukXhcJzGO5Fwa0BN2akytTx+o1cSZuPLBsXAeGD+2pbl6yk3
-         eoT8bH01zwUCWPJpTgcNT7XVh78JOAkxjq6Dok0nesE12K1DjkZ6v+NOyE62xCe/rw
-         68V8knbK19W8A==
-Message-ID: <783081e3-d78b-bf9c-cef4-af2df6888a72@kernel.org>
-Date:   Tue, 21 Mar 2023 21:30:48 +0200
+        with ESMTP id S229911AbjCUTqv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 15:46:51 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7A2580F7;
+        Tue, 21 Mar 2023 12:46:20 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id cn12so18509491edb.4;
+        Tue, 21 Mar 2023 12:46:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679427840;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eVY2bCbzUOo/p7S7OEi2ht4GUnDgKAs6VyB8tC8Oe8k=;
+        b=22a+7nVziU8bhcwOaN/46pbr7gS6G03xOU5jC7hB0tDdBEfEhpcnDhvbt28H25nJGf
+         xfc9cVYHViltQQGXXJxXNesielacB1DFmuAOSAsxXYLv6eLd+uRVcO2iZxdVJGHGIeR+
+         08OmbOU9O4xFHjBt18tvsJMwyOom3VJpEwLa7H1gXpuHVMUYrnYKjgu3kQ5ZxQ5QnCxB
+         N+zXpV/NYp+FWlkyIRs/g8yHEIqp32Kr2rBDnLO8d25B7kYsu0wy9oUdNMVAr1rgety6
+         mFXRhl3gctyMn19RRntjX7mM/fwXVmv0oJ2hm8a3G3rjjhY6ZIp2Ppn67NPyai8WZ+o3
+         /Eig==
+X-Gm-Message-State: AO0yUKV/N8uqAFQEjfwbYrUr8BSyvNrO5z6lR0bzYeBA5onHNiXQnQ0L
+        lGv+4/zIxBziF7DWLjExPryS78fSEADYNOPapPPJzwMrV4k=
+X-Google-Smtp-Source: AK7set8ZxxSpLDDzdZnzsWdnytwLxHh3DXH/bs7YD5S/d1HcHR+UgtAmfvhF3xL8COLWn/3Qg2/MdUA15Xqf1EC8Spk=
+X-Received: by 2002:a50:c3cf:0:b0:4fb:2593:846 with SMTP id
+ i15-20020a50c3cf000000b004fb25930846mr2214262edf.3.1679427840205; Tue, 21 Mar
+ 2023 12:44:00 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
- __qcom_icc_set twice on the same node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230321154627.17787-1-rui.zhang@intel.com>
+In-Reply-To: <20230321154627.17787-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 21 Mar 2023 20:43:49 +0100
+Message-ID: <CAJZ5v0hof_Hb0awv8-MkTwcKVQvrWvVvu-yBcFFw8C67Hzr6=A@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core: update cooling device during thermal zone unregistration
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3.03.23 4:35, Konrad Dybcio wrote:
-> Currently, when sync_state calls set(n, n) all the paths for setting
-> parameters on an icc node are called twice. Avoid that.
+On Tue, Mar 21, 2023 at 4:46 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> When unregistering a thermal zone device, update the cooling device in
+> case the cooling device is activated by the current thermal zone.
 
-This could be optimized indeed.
+I think that all cooling devices bound to the thermal zone being
+removed need to be updated at this point?  Which is what the patch
+really does IIUC.
 
-> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+It also avoids unbinding cooling devices that have not been bound to that zone.
+
+> This fixes a problem that the frequency of ACPI processors are still
+> limited after unloading ACPI thermal driver while ACPI passive cooling
+> is activated.
+>
+
+Cc: stable@vger ?
+
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
-> RFC comes from the fact that I *believe* this should be correct, but I'm
-> not entirely sure about it..
-> 
-> 
->   drivers/interconnect/qcom/icc-rpm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index a6e0de03f46b..d35db1af9b08 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   	ret = __qcom_icc_set(src, src_qn, sum_bw);
->   	if (ret)
->   		return ret;
-> -	if (dst_qn) {
-> +	if (dst_qn && src_qn != dst_qn) {
->   		ret = __qcom_icc_set(dst, dst_qn, sum_bw);
->   		if (ret)
->   			return ret;
+>  drivers/thermal/thermal_core.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index cfd4c1afeae7..9f120e3c9bf0 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1477,6 +1477,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+>         const struct thermal_zone_params *tzp;
+>         struct thermal_cooling_device *cdev;
+>         struct thermal_zone_device *pos = NULL;
+> +       struct thermal_instance *ti;
+>
+>         if (!tz)
+>                 return;
+> @@ -1497,9 +1498,22 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+>
 
-Today we also call provider->set(node, node) in icc_node_add() to set
-the initial bandwidth when nodes are being added to the topology. The
-above change will affect that as well.
+I would rearrange the code as follows.
 
-BR,
-Georgi
+>         /* Unbind all cdevs associated with 'this' thermal zone */
+>         list_for_each_entry(cdev, &thermal_cdev_list, node) {
+                    struct thermal_instance *ti;
+
+> +               mutex_lock(&tz->lock);
+> +               list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
+
+                            if (ti->cdev == cdev) {
+                                    mutex_unlock(&tz->lock);
+                                    goto unbind;
+                            }
+                    }
+                    /* The cooling device is not used by this thermal zone. */
+                    mutex_unlock(&tz->lock);
+                    continue;
+
+unbind:
+
+>                 if (tz->ops->unbind) {
+>                         tz->ops->unbind(tz, cdev);
+
+                            /*
+                             * The thermal instance for current
+thermal zone has been
+                             * removed, so update the cooling device
+in case it has been
+                             * activated by the thermal zone device going away.
+                             */
+                            mutex_lock(&cdev->lock);
+                            __thermal_cdev_update(cdev);
+                            mutex_unlock(&cdev->lock);
+
+                            continue;
+>                 }
+>
+>                 if (!tzp || !tzp->tbp)
