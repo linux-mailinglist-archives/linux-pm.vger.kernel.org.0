@@ -2,127 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3FA6C361A
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 16:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EA86C3842
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 18:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjCUPqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 11:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S229606AbjCURd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 13:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjCUPqn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 11:46:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8542B2ED53;
-        Tue, 21 Mar 2023 08:46:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679413598; x=1710949598;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yMZXccUu1lBAd8v18L5Z/TESPdIfHYj6uBIHlG8Q0SM=;
-  b=bvgnoBTr+OE2TX1zmWXTrgYMk2Qwnzcyzf7XOL9dsilnQoRJboXjPgc7
-   RNxt54KFlkgsuBHa/mW08T08YRRetmRXg49OlU41jQCtg3micXTcY/4sQ
-   jFR94uS7CYoVXZIYvRKYWD/VCUE1bqsP8IXFixu/MiVieaEpj7NJiiJKd
-   5oriMeZW2iaZw7wj1VdrF5VAMg6SQ+CJnUh47HGwXi+s/eIjCZe2+eo8f
-   itWTOXJcGUq0sVIiBfVUAClELYPTc4Ptk7vWTrwHY6wi/yFZGC+lazNdM
-   +arHZuP6+/4SjIod+kI9HAxr9S/lUWo5+NqEUn9XIURUvypj7LJK6c54V
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339014467"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="339014467"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:46:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="683913453"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="683913453"
-Received: from gongzhi-mobl1.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.254.214.88])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:46:36 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal/core: update cooling device during thermal zone unregistration
-Date:   Tue, 21 Mar 2023 23:46:27 +0800
-Message-Id: <20230321154627.17787-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229892AbjCURdx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 13:33:53 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251F45291A
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 10:33:40 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a11so5821615lji.6
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 10:33:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679420017;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LDwSwzPjD3OmF84qtgDXFqEH88rRTxQOUzKCvWTZg7o=;
+        b=Nuj2JeD4rsGzzlDo9UKgA4bvRT01eirRyUTYHHwsc+ua4RG/H6RTxWwwUX/VoOF1JQ
+         7LNmg/FqYH3ASWg9k77e8ut/0/rAZZTlDhSJ4P4Gc6xlWdlRx2jNcNNW1/JioFZxOG/F
+         /JBq/CwCeSO47RYdKCTsRd77dXUqgSio8i+HeWZ57nUra1tCn7B6nmeTJmt2qzBbbTcY
+         EQ1dmdjel1rb0hQAEk03dPGujuTy8YR35Dws1Gz2WK+QBgkTH/sOzvrmXDivMMAZmExS
+         RKSvg03OzB/szl2vgDBhGyhYoH7tyyskFzffPTE3qRYct7KjBuevQp9fA6oGAP6IRLvO
+         /PGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679420017;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDwSwzPjD3OmF84qtgDXFqEH88rRTxQOUzKCvWTZg7o=;
+        b=b2aNEo64Jw0PGZ5k7WN67bkeFY3vyE1ZK35UwJihfWrO3v8zJ2jGy8Qsd+cpRWARRw
+         fHVwFojrVjG276M5YgaSKgvP4S/FApD0hHq9Dk6IezWrbuiwVoJSI26FuaLnOCXkM9ZY
+         9noySNls7oZHbuHn+kJcZYEBlkBnk41ZMgd09Th2umcNqbaAPCUzOYYqAjquSf5TzOMI
+         sgJsqUweyClhEVhwwxKVxDmvCH2MjkuEeYrozNtq73cygMNyGRfotywB3m6NvgzZKQjk
+         ekJZcS5Y9MULPD8gWdmt/zK9aFctq0X4RJERqo07yYKIrAYLx2/vBQaqQhjX2wfnHFd+
+         0o9w==
+X-Gm-Message-State: AO0yUKVuQv131ToBLPzVnuRa7aWcWzN/+MrIKMpnQX6tSBZSUArWXfT7
+        ZK/1cYB53PTdWQZVhOeHvO9b/A==
+X-Google-Smtp-Source: AK7set9oLoBN5qVhPyUil9/Rg3m9u1I4YYDTnxm3ahqrTYWVm7mtVqkYbJ3Og4n7B59zrYisKgcJFA==
+X-Received: by 2002:a05:651c:10e:b0:29b:d436:5c91 with SMTP id a14-20020a05651c010e00b0029bd4365c91mr1158228ljb.4.1679420017283;
+        Tue, 21 Mar 2023 10:33:37 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id u5-20020ac24c25000000b004e7a0f67490sm2220806lfq.110.2023.03.21.10.33.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 10:33:36 -0700 (PDT)
+Message-ID: <564e5b54-66a5-2cb8-5bfc-b13b08f5eb6e@linaro.org>
+Date:   Tue, 21 Mar 2023 18:33:35 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
+ specifying channel num
+Content-Language: en-US
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-2-815606092fff@linaro.org>
+ <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
+ <38fe0736-b566-9e1b-d7f3-71e3fcd01d90@linaro.org>
+ <f8baed88-6a3b-17c5-4134-ce3917ee8632@kernel.org>
+ <101834f0-e00c-5469-c8a5-59a00a5160a5@linaro.org>
+ <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When unregistering a thermal zone device, update the cooling device in
-case the cooling device is activated by the current thermal zone.
 
-This fixes a problem that the frequency of ACPI processors are still
-limited after unloading ACPI thermal driver while ACPI passive cooling
-is activated.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/thermal/thermal_core.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+On 21.03.2023 15:49, Georgi Djakov wrote:
+> On 21.03.23 16:23, Konrad Dybcio wrote:
+>>
+>>
+>> On 21.03.2023 15:21, Georgi Djakov wrote:
+>>> On 21.03.23 16:09, Konrad Dybcio wrote:
+>>>>
+>>>> On 21.03.2023 15:06, Georgi Djakov wrote:
+>>>>> Hi Konrad,
+>>>>>
+>>>>> Thanks for the patch!
+>>>>>
+>>>>> On 8.03.23 23:40, Konrad Dybcio wrote:
+>>>>>> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
+>>>>>> one channel. This should be taken into account in bandwidth calcualtion,
+>>>>>> as we're supposed to feed msmbus with the per-channel bandwidth. Add
+>>>>>> support for specifying that and use it during bandwidth aggregation.
+>>>>>>
+>>>>>
+>>>>> This looks good, but do you have any follow-up patch to use this and set
+>>>>> the channels in some driver?
+>>>> Yes, I have a couple of OOT drivers that are gonna make use of it.
+>>>> TBF it should have been sent separately from the QoS mess, but I
+>>>> don't think it's much of an issue to take it as-is.
+>>>>
+>>>> The aforementioned OOT drivers for MSM8998 and SM6375 will be
+>>>> submitted after we reach a consensus on how we want to ensure
+>>>> that each node is guaranteed to have its clocks enabled before
+>>>> access, among some other minor things.
+>>>
+>>> Yes, these QoS clocks are confusing. Maybe you can even submit them
+>>> without configuring any QoS stuff in first place? Does enabling QoS
+>>> actually show any benefits on these devices?
+>> Haven't tested that thoroughly to be honest. But I'll try to get
+>> some numbers.
+> 
+> I expect this to have impact only on some latency sensitive stuff like
+> modem or when there is heavy traffic flows. Maybe we can start without
+> QoS first and then add it on top as a next step?
+I only now remembered why I didn't do that.. Adding QoS at a later time
+will break older DTs, as with QoS we need to pass some clocks to the driver.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index cfd4c1afeae7..9f120e3c9bf0 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1477,6 +1477,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	const struct thermal_zone_params *tzp;
- 	struct thermal_cooling_device *cdev;
- 	struct thermal_zone_device *pos = NULL;
-+	struct thermal_instance *ti;
- 
- 	if (!tz)
- 		return;
-@@ -1497,9 +1498,22 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 
- 	/* Unbind all cdevs associated with 'this' thermal zone */
- 	list_for_each_entry(cdev, &thermal_cdev_list, node) {
-+		mutex_lock(&tz->lock);
-+		list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
-+			if (ti->cdev == cdev)
-+				break;
-+		}
-+
-+		/* The cooling device is not used by current thermal zone */
-+		if (ti->cdev != cdev) {
-+			mutex_unlock(&tz->lock);
-+			continue;
-+		}
-+		mutex_unlock(&tz->lock);
-+
- 		if (tz->ops->unbind) {
- 			tz->ops->unbind(tz, cdev);
--			continue;
-+			goto deactivate_cdev;
- 		}
- 
- 		if (!tzp || !tzp->tbp)
-@@ -1511,6 +1525,16 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 				tzp->tbp[i].cdev = NULL;
- 			}
- 		}
-+
-+deactivate_cdev:
-+		/*
-+		 * The thermal instances for current thermal zone has been
-+		 * removed. Update the cooling device in case it is activated
-+		 * by current thermal zone device.
-+		 */
-+		mutex_lock(&cdev->lock);
-+		__thermal_cdev_update(cdev);
-+		mutex_unlock(&cdev->lock);
- 	}
- 
- 	mutex_unlock(&thermal_list_lock);
--- 
-2.25.1
-
+Konrad
+> 
+> BR,
+> Georgi
+> 
+>>
+>> Konrad
+>>>
+>>> Thanks,
+>>> Georgi
+>>>
+>>>> Konrad
+>>>>>
+>>>>> BR,
+>>>>> Georgi
+>>>>>
+>>>>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>> ---
+>>>>>>     drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
+>>>>>>     drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>>>>>>     2 files changed, 8 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>>>>>> index 35fd75ae70e3..27c4c6497994 100644
+>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>>>>>> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>>>>>>     {
+>>>>>>         struct icc_node *node;
+>>>>>>         struct qcom_icc_node *qn;
+>>>>>> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>>>>>>         int i;
+>>>>>>           /* Initialise aggregate values */
+>>>>>> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>>>>>>         list_for_each_entry(node, &provider->nodes, node_list) {
+>>>>>>             qn = node->data;
+>>>>>>             for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+>>>>>> -            agg_avg[i] += qn->sum_avg[i];
+>>>>>> +            if (qn->channels)
+>>>>>> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
+>>>>>> +            else
+>>>>>> +                sum_avg[i] = qn->sum_avg[i];
+>>>>>> +            agg_avg[i] += sum_avg[i];
+>>>>>>                 agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+>>>>>>             }
+>>>>>>         }
+>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+>>>>>> index 8ba1918d7997..8aed5400afda 100644
+>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.h
+>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.h
+>>>>>> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
+>>>>>>      * @id: a unique node identifier
+>>>>>>      * @links: an array of nodes where we can go next while traversing
+>>>>>>      * @num_links: the total number of @links
+>>>>>> + * @channels: number of channels at this node (e.g. DDR channels)
+>>>>>>      * @buswidth: width of the interconnect between a node and the bus (bytes)
+>>>>>>      * @sum_avg: current sum aggregate value of all avg bw requests
+>>>>>>      * @max_peak: current max aggregate value of all peak bw requests
+>>>>>> @@ -78,6 +79,7 @@ struct qcom_icc_node {
+>>>>>>         u16 id;
+>>>>>>         const u16 *links;
+>>>>>>         u16 num_links;
+>>>>>> +    u16 channels;
+>>>>>>         u16 buswidth;
+>>>>>>         u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>>>>>>         u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+>>>>>>
+>>>>>
+>>>
+> 
