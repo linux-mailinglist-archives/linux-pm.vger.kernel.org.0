@@ -2,139 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E156C324D
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F926C3312
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjCUNIH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 09:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S230523AbjCUNj2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 09:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCUNID (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:08:03 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC574D614
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 06:07:46 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-541a05e4124so279856737b3.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 06:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679404066;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OMTf5Ga7cygQE1B9rsS6pN7RAXO/nEzZ4boh/y9Vt0=;
-        b=cmJ8XIdSsNL/DkdwP6cioRpdQEMqyvRHRipv5kDKib1eCTK9r/TTQFkJ591EPAprgW
-         kq+VOaFqG5IX5Y49IJLieVe4Yfzzh0D1CbApAa2dUuBDYA2BQKTHPzVhniNz4VD8TBmW
-         4BquqEkEWXiF/o+8UKQ02d9YUbI2e0zJzXEUI4h6K9P1ZuDYQusqtbSPZ5a7NSUD26Cv
-         ffegSH5qZRqhh+unOsVNC8HjiZJZe13TQR1kZOv7c/SgoL2Z/zOYub+eld/LVyB/ot02
-         akzOY70zzgoeGMVkMtWSYvwHdpV3ThAm3o5tWKy9XvO4dfqJnRiN3+TAqeppxewF7dzE
-         iXAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679404066;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7OMTf5Ga7cygQE1B9rsS6pN7RAXO/nEzZ4boh/y9Vt0=;
-        b=VCZvltOvB/OFaHnB3tjVVKUUWdfYFndWf07pBfI3GzqMBt8vIMshoB+koyNvE/6W43
-         qzTo4S8Dwk2q3xIUFeSNut0y+WPdip5P8Nwl+RTXMF3QJ05U+Vn1fdNOSAPM/igu240a
-         CXCzjOIEa//TGCYokwpnyYrqtn7TxznP9eyhOFLLLrkSgfZSy57UX/l/UjDwHYMQ3wAX
-         RyU5GZJxfQe0mTbzaQUZlxVw2cmFAdYL0aBvMIzFLpB+phrNLGGKsvAmmmWgXLjAxSpy
-         g04zNE6cYlb2a8bxkC2ezw3B4CzKjpNTolygU7PTb0VGrmD5+JWunuH3278RtgmEg1a8
-         740g==
-X-Gm-Message-State: AAQBX9eer87caCnVjAhdWrXsiXAB6xhmM2XT3stWl/ECbOJ1fdQnCjlf
-        SXYznIyBc10WtVd+5qvcokD3wk85CZ42fMxfFBWiow==
-X-Google-Smtp-Source: AKy350aj0PlWxbSVBeOrBC5vlMmi49wh+264w2jb98dmgSFBHyYGXdbEC1QiSslS+rFn7ARz91359uDeEapA874kEBA=
-X-Received: by 2002:a81:4305:0:b0:52e:e095:d840 with SMTP id
- q5-20020a814305000000b0052ee095d840mr1020956ywa.0.1679404065610; Tue, 21 Mar
- 2023 06:07:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230320134217.1685781-1-abel.vesa@linaro.org>
-In-Reply-To: <20230320134217.1685781-1-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 21 Mar 2023 14:07:09 +0100
-Message-ID: <CAPDyKFrhqOfiUPEcb724Qw0ZCUV6LYj8HL0OhnVbr-2vj+_6Wg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/5] Allow genpd providers to power off domains on
- sync state
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S230496AbjCUNj1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:39:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB511A7;
+        Tue, 21 Mar 2023 06:39:26 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 14:39:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679405963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
+        b=nAS1PiYdPQp25hSPtZD9qb4LVvIfl5+Iq5YN9Mxy/T1EHmDnbg8pR/VShA4l3+N1ogc6aW
+        VwtM2UDEZYA6VEkgWdZEDkmtWRDDukXVPXLHXTbLyH6ZbjoAJ9Cfs5RNZleYiuxWbLLgIz
+        1sA8e5lPAUKvng31ckchCFGaRylR3MWgiUqvqFPZFhGgEtSm+7G2BcaFlLjBdm8CtUZKbR
+        3qpTBNFWDOtkTbPA45Uc3zYiQeeDTJQCf42V2Lq7jvmRwTnHCalrc8CIeNA59l2+sM/kZT
+        lmWt30xKc70YatBYQPgSqUoUNbdlTLtiQnQbj5RrCjiGXUR/tmB3GkxlH4nR2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679405963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
+        b=MuC8fJg05kjTXLdb4HxI+i197gCnckEYTxojaKeYuFelpshq39C3x6bX0kq2UQSeu12Sg0
+        dPtD75Vt7oRPDUAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+Message-ID: <20230321133922.ontdC41h@linutronix.de>
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+ <20230321100456.0_DhhkZJ@linutronix.de>
+ <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
+ <20230321105734.Z7F3Uvf1@linutronix.de>
+ <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 20 Mar 2023 at 14:42, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> There have been already a couple of tries to make the genpd "disable
-> unused" late initcall skip the powering off of domains that might be
-> needed until later on (i.e. until some consumer probes). The conclusion
-> was that the provider could return -EBUSY from the power_off callback
-> until the provider's sync state has been reached. This patch series tries
-> to provide a proof-of-concept that is working on Qualcomm platforms.
->
-> I've been doing extensive testing on SM8450, but I've also spinned this
-> on my X13s (SC8280XP). Both patches that add the sync state callback to
-> the SC8280XP and SM8450 are here to provide context. Once we agree on
-> the form, I intend to add the sync state callback to all gdsc providers.
->
-> Currently, some of the gdsc providers might not reach sync state due to
-> list of consumers not probing yet (or at all). The sync state can be
-> enforced by writing 1 to the state_synced sysfs attribute of the
-> provider, thanks to Saravana's commit [1] which has been already merged.
->
-> [1] https://lore.kernel.org/r/20230304005355.746421-3-saravanak@google.com
->
-> V1 of this patchset was here:
-> https://lore.kernel.org/all/20230315132330.450877-1-abel.vesa@linaro.org/
->
-> Changes since v1:
->  * Added the qcom_cc sync state callback which calls in turn the gdsc one
->  * dropped extra semicolon from pm_domain.h
->
-> Abel Vesa (5):
->   PM: domains: Allow power off queuing from providers
->   soc: qcom: rpmhpd: Do proper power off when state synced
->   clk: qcom: gdsc: Avoid actual power off until sync state
->   clk: qcom: Add sync state callback to all SC8280XP providers
->   clk: qcom: Add sync state callback to all SM8450 providers
->
->  drivers/base/power/domain.c        |  3 ++-
->  drivers/clk/qcom/camcc-sm8450.c    |  1 +
->  drivers/clk/qcom/common.c          | 19 +++++++++++++++++++
->  drivers/clk/qcom/common.h          |  2 ++
->  drivers/clk/qcom/dispcc-sc8280xp.c |  1 +
->  drivers/clk/qcom/dispcc-sm8450.c   |  1 +
->  drivers/clk/qcom/gcc-sc8280xp.c    |  1 +
->  drivers/clk/qcom/gcc-sm8450.c      |  1 +
->  drivers/clk/qcom/gdsc.c            | 26 ++++++++++++++++++++++++++
->  drivers/clk/qcom/gdsc.h            |  6 ++++++
->  drivers/clk/qcom/gpucc-sc8280xp.c  |  1 +
->  drivers/soc/qcom/rpmhpd.c          | 19 +++++++------------
->  include/linux/pm_domain.h          |  6 ++++++
->  13 files changed, 74 insertions(+), 13 deletions(-)
->
+On 2023-03-21 12:27:42 [+0100], Krzysztof Kozlowski wrote:
+> > I still fail to understand why this is PREEMPT_RT specific and not a
+> > problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
+> 
+> Hm, good point, I actually don't know what is the workqueue
+> recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
+> preferred?
 
-Besides the minor comments on patch1, this looks good to me! So, feel
-free to add:
+If you isolate a CPU you want the kernel to stay away from it. The idea
+is that something is done on that CPU and the kernel should leave it
+alone. That is why the HZ tick avoided. That is why timers migrate to
+the "housekeeping" CPU and do not fire on the CPU that it was programmed
+on (unless the timer has to fire on this CPU).
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> And how such code would look like?
+> if (tick_nohz_tick_stopped())?
 
-Kind regards
-Uffe
+Yeah closer :) The CPU-mask for workqueues can still be different on
+non-NOHZ-full CPUs. Still you interrupt the CPU doing in-userland work
+and this is not desired.
+
+You have a threaded-IRQ which does nothing but schedules a worker. Why?
+Why not sleep and remain in that threaded IRQ until the work is done?
+You _can_ sleep in the threaded IRQ if you have to. Force-threaded is
+different but this is one is explicit threaded so you could do it.
+	
+> > However the thermal notifications have nothing to do with cpufreq.
+> 
+> They have. The FW notifies that thermal mitigation is happening and
+> maximum allowed frequency is now XYZ. The cpufreq receives this and sets
+> maximum allowed scaling frequency for governor.
+
+I see. So the driver is doing something in worst case. This interrupt,
+you have per-CPU and you need to do this CPU? I mean could you change
+the affinity of the interrupt to another CPU?
+
+> Best regards,
+> Krzysztof
+
+Sebastian
