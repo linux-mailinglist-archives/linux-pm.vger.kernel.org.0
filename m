@@ -2,110 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F926C3312
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981CA6C3327
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjCUNj2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 09:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S229971AbjCUNqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 09:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjCUNj1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:39:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB511A7;
-        Tue, 21 Mar 2023 06:39:26 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 14:39:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679405963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
-        b=nAS1PiYdPQp25hSPtZD9qb4LVvIfl5+Iq5YN9Mxy/T1EHmDnbg8pR/VShA4l3+N1ogc6aW
-        VwtM2UDEZYA6VEkgWdZEDkmtWRDDukXVPXLHXTbLyH6ZbjoAJ9Cfs5RNZleYiuxWbLLgIz
-        1sA8e5lPAUKvng31ckchCFGaRylR3MWgiUqvqFPZFhGgEtSm+7G2BcaFlLjBdm8CtUZKbR
-        3qpTBNFWDOtkTbPA45Uc3zYiQeeDTJQCf42V2Lq7jvmRwTnHCalrc8CIeNA59l2+sM/kZT
-        lmWt30xKc70YatBYQPgSqUoUNbdlTLtiQnQbj5RrCjiGXUR/tmB3GkxlH4nR2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679405963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
-        b=MuC8fJg05kjTXLdb4HxI+i197gCnckEYTxojaKeYuFelpshq39C3x6bX0kq2UQSeu12Sg0
-        dPtD75Vt7oRPDUAA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
- other CPU for PREEMPT_RT
-Message-ID: <20230321133922.ontdC41h@linutronix.de>
-References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
- <20230321100456.0_DhhkZJ@linutronix.de>
- <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
- <20230321105734.Z7F3Uvf1@linutronix.de>
- <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+        with ESMTP id S229475AbjCUNqh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:46:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CCC367CA;
+        Tue, 21 Mar 2023 06:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679406396; x=1710942396;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZW8wdPHKShucaPeOtFDEvYAWNcF09UzyV28v8Mrljks=;
+  b=NFPK6oMpKPtTUk6Cl9vopqPyccPuZeDJJHnsPiw0cjF7iBtyWEnQBMy/
+   qDoPhxia/D8iCB+YahITAjTn0BjsT1VmceAYq2gdueFpmqerWI1J9LkIK
+   LbhzteKz5TM8Ato3T4PPBA6gi3HjiKs3RFzzTLgAHPCMZIRCArq5DFh5y
+   f0rykEzYWvu+JQV2glH+nbj9irNr9kY9gsGGmNAoBctjs2HDUgigpedt/
+   q7eDsvNkuhFcKcUIlGNV0vV/Xn5dkc/XODTadB/OGaHPjdp4oyv4MC2QH
+   vdVms5CK2buzsowqD5K14OYfmoE/tdzUVEKaOkZmsN5pVv32V1JH5agbv
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="336446594"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="336446594"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 06:46:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="683880872"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="683880872"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Mar 2023 06:46:29 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pecJp-000Bx4-0R;
+        Tue, 21 Mar 2023 13:46:29 +0000
+Date:   Tue, 21 Mar 2023 21:46:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 52/63] kismet: WARNING: unmet direct
+ dependencies detected for ISAPNP when selected by SND_ALS100
+Message-ID: <202303212130.VdcuD2v8-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2023-03-21 12:27:42 [+0100], Krzysztof Kozlowski wrote:
-> > I still fail to understand why this is PREEMPT_RT specific and not a
-> > problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
-> 
-> Hm, good point, I actually don't know what is the workqueue
-> recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
-> preferred?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   226ec3112c6fa4db1188828f76319f7eb6eb85ee
+commit: e46dd09e5172877dd18dce7703f13338f3732ce3 [52/63] PNP: add HAS_IOPORT dependencies
+config: x86_64-kismet-CONFIG_ISAPNP-CONFIG_SND_ALS100-0-0 (https://download.01.org/0day-ci/archive/20230321/202303212130.VdcuD2v8-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=e46dd09e5172877dd18dce7703f13338f3732ce3
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout e46dd09e5172877dd18dce7703f13338f3732ce3
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_ISAPNP --selectors CONFIG_SND_ALS100 -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
 
-If you isolate a CPU you want the kernel to stay away from it. The idea
-is that something is done on that CPU and the kernel should leave it
-alone. That is why the HZ tick avoided. That is why timers migrate to
-the "housekeeping" CPU and do not fire on the CPU that it was programmed
-on (unless the timer has to fire on this CPU).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303212130.VdcuD2v8-lkp@intel.com/
 
-> And how such code would look like?
-> if (tick_nohz_tick_stopped())?
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for ISAPNP when selected by SND_ALS100
+   .config:4982:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
+   
+   WARNING: unmet direct dependencies detected for ISAPNP
+     Depends on [n]: PNP [=y] && (ISA [=n] || HAS_IOPORT && COMPILE_TEST [=y])
+     Selected by [y]:
+     - SND_ALS100 [=y] && SOUND [=y] && !UML && SND [=y] && SND_ISA [=y] && PNP [=y]
 
-Yeah closer :) The CPU-mask for workqueues can still be different on
-non-NOHZ-full CPUs. Still you interrupt the CPU doing in-userland work
-and this is not desired.
-
-You have a threaded-IRQ which does nothing but schedules a worker. Why?
-Why not sleep and remain in that threaded IRQ until the work is done?
-You _can_ sleep in the threaded IRQ if you have to. Force-threaded is
-different but this is one is explicit threaded so you could do it.
-	
-> > However the thermal notifications have nothing to do with cpufreq.
-> 
-> They have. The FW notifies that thermal mitigation is happening and
-> maximum allowed frequency is now XYZ. The cpufreq receives this and sets
-> maximum allowed scaling frequency for governor.
-
-I see. So the driver is doing something in worst case. This interrupt,
-you have per-CPU and you need to do this CPU? I mean could you change
-the affinity of the interrupt to another CPU?
-
-> Best regards,
-> Krzysztof
-
-Sebastian
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
