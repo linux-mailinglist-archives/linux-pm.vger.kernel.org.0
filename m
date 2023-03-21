@@ -2,113 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9696C2DB6
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 10:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4B26C2E5F
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 11:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCUJS1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 05:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S229629AbjCUKFC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 06:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCUJS0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 05:18:26 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B157319C46;
-        Tue, 21 Mar 2023 02:18:24 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k37so5291331lfv.0;
-        Tue, 21 Mar 2023 02:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679390303;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0T3oq9djYzOJnwp3xYk8Woh65ZLlWo8BcwxC1O4wO6I=;
-        b=pcT91DR3FOOn50KYI9YhEVeD3PMycMs8J/Skd0dq10eyt6x6vgzEFJQaj7WM6CFI7J
-         Pbe48kUruJX+Cm7FoVwc/jNKBagUdKX3QIK6xbPR+1AmCpRWTnlNerDsl49GkSvsdMCW
-         JJiVx3PiVmE+hiC0bTUL5WQHk5KiJTzc7KssKjxwi0j06bxqALyalBeEFO4jX4l0kPwM
-         TgbyDFzmHcrwq4nBDFDena+rB27ZWJKk0Aehilq2VVr7RlPYxfgEqLvjC8/6OR7QoVZj
-         mhlF6piUTKBHr/FbwBI342yiimP0ExE5hjC4tv9qe+YCLh0NBL+LWzvx+GgF1stszItr
-         iulA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679390303;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0T3oq9djYzOJnwp3xYk8Woh65ZLlWo8BcwxC1O4wO6I=;
-        b=4QWDCY0n9VSNruqXiBahxVR24Z/aRDmD7bvh2v8KJP+YLV6LEPv61+pyZ9MoSVrAGo
-         wPdSr/vX4AbbZhYpr0zvu+lT9Xk714CVXh2qO0cYGwoBHgZI29T8o4E9qhBC4cdVMU6O
-         okyQKNBJgNoUnGV7gqqb65gDqTtxE2sDvGMCJ0NnegB5k2sgLVOHyRYMssOmtDIIaPX7
-         +G8GAw+5T94JZaOSU268JLjG1Bd8gG0Mx6GETuq6zma2lytBaM8SRDthcCCmU1PyiRnd
-         h98RYmOjwWBWhPjsJZGPyieHa8acIhR5guSsJStVbg5PfzRUxKEOhURcdLXZtKZxW+6G
-         CRXg==
-X-Gm-Message-State: AO0yUKUcRZwn+ac6VciMVIbvJNjfTWEafskSZD1TnKANkJbRN32+q1Dq
-        GgmnrC3YszfK+cMRaJ41M6A=
-X-Google-Smtp-Source: AK7set9BqmXUpPpRKRNPHGy6vUlKy57a6Mwwq6mWn4txFyDQe3KZrWmki6FUYXDqbSFk9fXKvCUXdA==
-X-Received: by 2002:a19:ee16:0:b0:4e1:fa71:f187 with SMTP id g22-20020a19ee16000000b004e1fa71f187mr610057lfb.3.1679390302767;
-        Tue, 21 Mar 2023 02:18:22 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id y17-20020ac24211000000b004ddaea30ba6sm2079096lfh.235.2023.03.21.02.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 02:18:22 -0700 (PDT)
-Message-ID: <ae2dd341-c22c-7f93-6e35-1538ff4e137a@gmail.com>
-Date:   Tue, 21 Mar 2023 11:18:21 +0200
+        with ESMTP id S229854AbjCUKFB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 06:05:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C390B22C93;
+        Tue, 21 Mar 2023 03:04:59 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 11:04:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679393098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gs+5h35jpcBbsUqy1yYnuNWbnvGi9SFjCXiZrEILP6Y=;
+        b=FX37LclzSzYNgjIXv1slzw45d7o/t37Dt6f6cQy1Q+ttyiUKTSr8tBvL0J5ctMdZCO+mA2
+        ELa71WycrZ9+5KSzPrADLDDbP7m8EmQKibSTHo6kyamjv6dOuCTBXKG4Oj2n9M1NzuQ/R/
+        WqaLaOzKJ6ozvUPtWZT1Iii2uPlZsEi3Zg/n567JK1DyECKh6wd9jg5ePhnlwtngLfsmt0
+        Vfc89XhdhTr6xkJnH2B9PwIRVW+3EVf6LuuKTGHcfQZFDOv+bGh0DIUk2B5sd1kE5LrwJc
+        nT8aEy54Y4cPJ/P7uhAKuLS+vDDZWL5KdfPX+HjLztcgF92Jd5UfbPcTxURuIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679393098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gs+5h35jpcBbsUqy1yYnuNWbnvGi9SFjCXiZrEILP6Y=;
+        b=9b1LJ3Zuvi3m6zmWVdQdswxY1suryCcv+pBjseZEqLO/gRie3U6Hg2Mvr2dQGXB/1JM3HU
+        Gce2ECbXXVRL3oBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+Message-ID: <20230321100456.0_DhhkZJ@linutronix.de>
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv3 13/14] power: supply: generic-adc-battery: improve error
- message
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230317225707.1552512-1-sre@kernel.org>
- <20230317225707.1552512-14-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230317225707.1552512-14-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/18/23 00:57, Sebastian Reichel wrote:
-> Add device context and error code to the error messages to make it
-> useful.
+On 2023-03-15 17:49:10 [+0100], Krzysztof Kozlowski wrote:
+> Qualcomm cpufreq driver configures interrupts with affinity to each
+> cluster, e.g.  dcvsh-irq-0, dcvsh-irq-4 and dcvsh-irq-7 on SM8250.
+> Triggered interrupt will schedule delayed work, but, since workqueue
+> prefers local CPUs, it might get executed on a CPU dedicated to realtime
+> tasks causing unexpected latencies in realtime workload.
 > 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+> Use unbound workqueue for such case.  This might come with performance
+> or energy penalty, e.g. because of cache miss or when other CPU is
+> sleeping.
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+I miss the point where it explains that only PREEMPT_RT is affected by
+this.
 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   drivers/power/supply/generic-adc-battery.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index df1c0a1c6b52..2fa946c93fb4 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -92,7 +92,7 @@ static int read_channel(struct gab *adc_bat, enum gab_chan_type channel,
->   
->   	ret = iio_read_channel_processed(adc_bat->channel[channel], result);
->   	if (ret < 0)
-> -		pr_err("read channel error\n");
-> +		dev_err(&adc_bat->psy->dev, "read channel error: %d\n", ret);
->   	else
->   		*result *= 1000;
->   
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 2f581d2d617d..c5ff8d25fabb 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -390,7 +390,16 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
+>  
+>  	/* Disable interrupt and enable polling */
+>  	disable_irq_nosync(c_data->throttle_irq);
+> -	schedule_delayed_work(&c_data->throttle_work, 0);
+> +
+> +	/*
+> +	 * Workqueue prefers local CPUs and since interrupts have set affinity,
+> +	 * the work might execute on a CPU dedicated to realtime tasks.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> +		queue_delayed_work_on(WORK_CPU_UNBOUND, system_unbound_wq,
+> +				      &c_data->throttle_work, 0);
+> +	else
+> +		schedule_delayed_work(&c_data->throttle_work, 0);
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+You isolated CPUs and use this on PREEMPT_RT. And this special use-case
+is your reasoning to make this change and let it depend on PREEMPT_RT?
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+If you do PREEMPT_RT and you care about latency I would argue that you
+either disable cpufreq and set it to PERFORMANCE so that the highest
+available frequency is set once and not changed afterwards.
 
+>  	if (qcom_cpufreq.soc_data->reg_intr_clr)
+>  		writel_relaxed(GT_IRQ_STATUS,
+> -- 
+> 2.34.1
+> 
