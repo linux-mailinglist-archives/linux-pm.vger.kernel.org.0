@@ -2,99 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981CA6C3327
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9EE6C337E
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 14:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjCUNqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 09:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S231302AbjCUN44 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 09:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCUNqh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:46:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CCC367CA;
-        Tue, 21 Mar 2023 06:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679406396; x=1710942396;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZW8wdPHKShucaPeOtFDEvYAWNcF09UzyV28v8Mrljks=;
-  b=NFPK6oMpKPtTUk6Cl9vopqPyccPuZeDJJHnsPiw0cjF7iBtyWEnQBMy/
-   qDoPhxia/D8iCB+YahITAjTn0BjsT1VmceAYq2gdueFpmqerWI1J9LkIK
-   LbhzteKz5TM8Ato3T4PPBA6gi3HjiKs3RFzzTLgAHPCMZIRCArq5DFh5y
-   f0rykEzYWvu+JQV2glH+nbj9irNr9kY9gsGGmNAoBctjs2HDUgigpedt/
-   q7eDsvNkuhFcKcUIlGNV0vV/Xn5dkc/XODTadB/OGaHPjdp4oyv4MC2QH
-   vdVms5CK2buzsowqD5K14OYfmoE/tdzUVEKaOkZmsN5pVv32V1JH5agbv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="336446594"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="336446594"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 06:46:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="683880872"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="683880872"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Mar 2023 06:46:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pecJp-000Bx4-0R;
-        Tue, 21 Mar 2023 13:46:29 +0000
-Date:   Tue, 21 Mar 2023 21:46:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [rafael-pm:bleeding-edge 52/63] kismet: WARNING: unmet direct
- dependencies detected for ISAPNP when selected by SND_ALS100
-Message-ID: <202303212130.VdcuD2v8-lkp@intel.com>
+        with ESMTP id S229696AbjCUN4t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 09:56:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAED6199;
+        Tue, 21 Mar 2023 06:56:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F06861C14;
+        Tue, 21 Mar 2023 13:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23950C433D2;
+        Tue, 21 Mar 2023 13:56:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679407007;
+        bh=ezAwooPCONqOE3wCgSpV5G/v4lBoltOn+J+AETmWWLk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VLi5xk4+KrQZ3LPmifTMt/HGiUMRfZnocFTOrMRPwIU2YG90z6qMuDvzqDGbinAp8
+         FCrOWWN98c+cTc+mLR3760ZYW+c1zKyu7FMwVNHBI5VrRQ7D42uiKp45DZpj0O+W8z
+         KHBxpiplb3BOj3uTvaArK3VbmYzktIF3aLQLH5PDUIx27O12YDy94gfTQarH8JaFKD
+         09uVZxnPSLP9uMsqC7NY2+Xl6DnjASr4FADJDxenOSf4Q5bFPCPM9zJJPQlpVrHUjj
+         YH5JJleSHdYUbR00x4KUAiZp6/oqQCGPk5lAwfIi8twyt93JhRL9uWKTytXk2ohJ8+
+         it2hd92EtM3pQ==
+Message-ID: <32bcb19f-db74-8660-7270-305e81363376@kernel.org>
+Date:   Tue, 21 Mar 2023 15:56:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+Content-Language: en-US
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   226ec3112c6fa4db1188828f76319f7eb6eb85ee
-commit: e46dd09e5172877dd18dce7703f13338f3732ce3 [52/63] PNP: add HAS_IOPORT dependencies
-config: x86_64-kismet-CONFIG_ISAPNP-CONFIG_SND_ALS100-0-0 (https://download.01.org/0day-ci/archive/20230321/202303212130.VdcuD2v8-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=e46dd09e5172877dd18dce7703f13338f3732ce3
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout e46dd09e5172877dd18dce7703f13338f3732ce3
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_ISAPNP --selectors CONFIG_SND_ALS100 -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+Hi Konrad,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303212130.VdcuD2v8-lkp@intel.com/
+Thank you for working on this and sorry about jumping a bit late into
+the discussion.
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for ISAPNP when selected by SND_ALS100
-   .config:4982:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
-   
-   WARNING: unmet direct dependencies detected for ISAPNP
-     Depends on [n]: PNP [=y] && (ISA [=n] || HAS_IOPORT && COMPILE_TEST [=y])
-     Selected by [y]:
-     - SND_ALS100 [=y] && SOUND [=y] && !UML && SND [=y] && SND_ISA [=y] && PNP [=y]
+On 8.03.23 23:40, Konrad Dybcio wrote:
+> Some (but not all) providers (or their specific nodes) require
+> specific clocks to be turned on before they can be accessed. Failure
+> to ensure that results in a seemingly random system crash (which
+> would usually happen at boot with the interconnect driver built-in),
+> resulting in the platform not booting up properly.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+These "interface" clocks seem to be used only to program QoS for the
+respective ip block (eg ufs). So if we don't program QoS, there should
+be no crashes, right?
+
+I believe that in downstream they defer setting QoS until the first
+non-zero bandwidth request because of drivers that probe asynchronously
+or there is some firmware booting involved (IPA maybe). And bad stuff
+might happen if we touch the clock while the firmware is still booting.
+So setting the QoS on the first non-zero bandwidth request might not be
+a bad idea. Such nodes should probably be also excluded from sync_state
+by implementing get_bw() to return 0 bandwidth.
+
+BR,
+Georgi
+
+> 
+> Limit the number of bus_clocks to 2 (which is the maximum that SMD
+> RPM interconnect supports anyway) and handle non-scaling clocks
+> separately. Update MSM8996 and SDM660 drivers to make sure they do
+> not regress with this change.
+> 
+> This unfortunately has to be done in one patch to prevent either
+> compile errors or broken bisect.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/interconnect/qcom/icc-rpm.c | 52 ++++++++++++++++++++++++++++++-------
+>   drivers/interconnect/qcom/icc-rpm.h | 14 ++++++++--
+>   drivers/interconnect/qcom/msm8996.c | 22 +++++++---------
+>   drivers/interconnect/qcom/sdm660.c  | 16 +++++-------
+>   4 files changed, 70 insertions(+), 34 deletions(-)
+> 
+[..]
+
