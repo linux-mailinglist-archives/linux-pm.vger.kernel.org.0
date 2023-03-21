@@ -2,144 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D296C2EAF
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 11:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2F76C2ED8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 11:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjCUKY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 06:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S229743AbjCUK2k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 06:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjCUKYv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 06:24:51 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B401514D
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 03:24:49 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id o12so57591066edb.9
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 03:24:49 -0700 (PDT)
+        with ESMTP id S229778AbjCUK2i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 06:28:38 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249061E284
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 03:28:37 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so19702350pjt.2
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 03:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679394287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IojLlT21b+GTCHUtZS1AK6pqmw384n2x7uObuVhtqoc=;
-        b=UKXfMgENBu09lAoUSD7nvesPp0S9T1AzoiAdAZHyKn0WHgV3DqQ4FU8TJ10FzPwKXm
-         8D4JVetj2hzKVtpPDJK7+hkKLlUWAFNFXGfGSMAStSZABMIEUNHo/+TUqItMgDPM5uFl
-         hYLBeuTdHDlesRIrQL3alAhd6tijHEAxfDlvR+Pxe1QeJWkO9ExTUFCwXmfiL3vctEp/
-         qvj0W60irEm66vsi+17rc6DbP0XkD0f9x1pM3YLvPCoSx8SwELSOhJIqjHJG1UR/UOJ+
-         rTqNl5BG/aMw8NiBkYU0dVnQ1GZQ3wxpB0xNyg9a8nvj0cHsuMUf0Wz4uKsmXHxisRBg
-         S3ig==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679394516;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yh1GbxN6NlfsvLEY/zDb70pAlknLyh+ItpJBDZ1c6e0=;
+        b=z53eYG2gZSHHhwU2MywL/O2ZgjTENLPqjnMwWrc3NlSYpql5qNxBZmX7PAsaHudsoM
+         xOKym5uvcwog9AkteNvIQobFW74oC7dNU1MjUDjdKEJ1yg8cMBJfPhWeVqj+p5vxtVyo
+         39rqtsgaETSzxDG8prr+xkuW1GCUsfisFj2N5GsdNI0KMPvLido+vcWxK2hkZXc6rwQa
+         sHh1O/SYgtthPAjdidoxuXyBott8UueojiyWUK7M6eL7L7TK6j03uKLnTyS0ocnf7CtQ
+         GnRYXkuiAxUZaAZ32gTW21UBm6H28cao3VxLVoD1EhNUERGnmxiIsqU12fAYzlzhbFfC
+         YO1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679394287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IojLlT21b+GTCHUtZS1AK6pqmw384n2x7uObuVhtqoc=;
-        b=DZakt/4szEUIpt5IzFOmEdirrh+UIgCNkbOBiUuWnoY72MYCg88bsOYgdsBhMjwOcM
-         qBYtbeVxoqYSToOsUezImXcQ6pxO3aq5+gUUO32nDW1v1xr3A3TwqybzCBuqYxHaeWL9
-         UkHoyncwz+qr11LPmlqnb1pxIV8q/8GY0TsdsCAiS9kA5VMAZnju8R8QX7atjkvz9DPi
-         YtDCrHZ5StOD13bubIP7AJX6tHH96eh5li2bJhT1r6XrN0B0LeXVNfCVMhp3R7oyoosI
-         OxdwxnigRByMTt399ZPT1dkr3Emo/lRx+4giEbYtxvgyUwynoLDP34GJMym2b9gav4JT
-         OFZg==
-X-Gm-Message-State: AO0yUKV9gtDEyzYDU93j0xPiWPX1HxawQqAHFDxsqwj/FVumzcnJLn7w
-        oREk5MMHlxOdATKpNOMIwccY0A==
-X-Google-Smtp-Source: AK7set+Re3gHO4/eHWbeE7YoEV3C+eK0AvkdSnJPHMcJRgk8nhROk37jPOCG3x6x2FoLieODZrSWQw==
-X-Received: by 2002:a17:906:30d2:b0:8ab:4c4:d0f6 with SMTP id b18-20020a17090630d200b008ab04c4d0f6mr2023868ejb.56.1679394287704;
-        Tue, 21 Mar 2023 03:24:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id ia9-20020a170907a06900b00932b3e2c015sm4696908ejc.51.2023.03.21.03.24.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 03:24:47 -0700 (PDT)
-Message-ID: <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
-Date:   Tue, 21 Mar 2023 11:24:46 +0100
+        d=1e100.net; s=20210112; t=1679394516;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yh1GbxN6NlfsvLEY/zDb70pAlknLyh+ItpJBDZ1c6e0=;
+        b=RYuRwLhOI2ERHtKU8B8Nfids+clBrXAIns3UVIDMIOqPYmMd1sI9jHm/2McC0nlS6X
+         GmbguE9AhqMDvQMVCiW/XCR8fo9AnbKsfbKF6EeTGcHfzzbK1mRXdLOlXZdebxaGPJc7
+         vlkLWJx98ZHVs5fE8iOFDQqXUCKgYLWWbx6TWQ7IkohV+umf/pu5pbddTCJLX8C5P9cU
+         2tLswtkyBDV3cBopvktjOIpeeMUSaxzA3qCDOx/SHwb5HEO9bD8NqJj7WN87Fq3sQ6XB
+         kZrgQiG9nWtBU85qUt3U8xSaTlk5oelvrEAj0hJ3SntWUJeTK5BpdVOVeU5L+r4i7UFy
+         mOBQ==
+X-Gm-Message-State: AO0yUKV9qGLqL31ox2XFbsECCYI60ruckO0Wju+Ns5zVKNuZp71hjG0A
+        VGMpqjl4swc0kwFOs7c79C7kyQ==
+X-Google-Smtp-Source: AK7set9iFP8oRptDOCgQyKYFOM3oq6WQlk1JKpmIs91lei4EHBC+XcfWOPwy3mcYesz3R6MzegYJyw==
+X-Received: by 2002:a05:6a20:299e:b0:da:c080:9b86 with SMTP id f30-20020a056a20299e00b000dac0809b86mr831856pzh.53.1679394516611;
+        Tue, 21 Mar 2023 03:28:36 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g5-20020a655805000000b005039c35225bsm7541739pgr.94.2023.03.21.03.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 03:28:36 -0700 (PDT)
+Message-ID: <641986d4.650a0220.9df74.c436@mx.google.com>
+Date:   Tue, 21 Mar 2023 03:28:36 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
- other CPU for PREEMPT_RT
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
- <20230321100456.0_DhhkZJ@linutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230321100456.0_DhhkZJ@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.3-rc3-30-g51555d0c77b35
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc3-30-g51555d0c77b35)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/03/2023 11:04, Sebastian Andrzej Siewior wrote:
-> On 2023-03-15 17:49:10 [+0100], Krzysztof Kozlowski wrote:
->> Qualcomm cpufreq driver configures interrupts with affinity to each
->> cluster, e.g.  dcvsh-irq-0, dcvsh-irq-4 and dcvsh-irq-7 on SM8250.
->> Triggered interrupt will schedule delayed work, but, since workqueue
->> prefers local CPUs, it might get executed on a CPU dedicated to realtime
->> tasks causing unexpected latencies in realtime workload.
->>
->> Use unbound workqueue for such case.  This might come with performance
->> or energy penalty, e.g. because of cache miss or when other CPU is
->> sleeping.
-> 
-> I miss the point where it explains that only PREEMPT_RT is affected by
-> this.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc3-30-g51=
+555d0c77b35)
 
-I assume "realtime tasks" implies this, but I can make it clearer.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc3-30-g51555d0c77b35/
 
-> 
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
->>  1 file changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index 2f581d2d617d..c5ff8d25fabb 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -390,7 +390,16 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
->>  
->>  	/* Disable interrupt and enable polling */
->>  	disable_irq_nosync(c_data->throttle_irq);
->> -	schedule_delayed_work(&c_data->throttle_work, 0);
->> +
->> +	/*
->> +	 * Workqueue prefers local CPUs and since interrupts have set affinity,
->> +	 * the work might execute on a CPU dedicated to realtime tasks.
->> +	 */
->> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
->> +		queue_delayed_work_on(WORK_CPU_UNBOUND, system_unbound_wq,
->> +				      &c_data->throttle_work, 0);
->> +	else
->> +		schedule_delayed_work(&c_data->throttle_work, 0);
-> 
-> You isolated CPUs and use this on PREEMPT_RT. And this special use-case
-> is your reasoning to make this change and let it depend on PREEMPT_RT?
-> 
-> If you do PREEMPT_RT and you care about latency I would argue that you
-> either disable cpufreq and set it to PERFORMANCE so that the highest
-> available frequency is set once and not changed afterwards.
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc3-30-g51555d0c77b35
+Git Commit: 51555d0c77b35f23311fe0c81bad3a8083478a96
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-The cpufreq is set to performance. It will be changed anyway because
-underlying FW notifies through such interrupts about thermal mitigation
-happening.
+Warnings Detected:
 
-The only other solution is to disable the cpufreq device, e.g. by not
-compiling it.
+arc:
 
-Best regards,
-Krzysztof
+arm64:
 
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
