@@ -2,496 +2,263 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C8F6C39C1
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 20:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004656C39C9
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 20:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjCUTE2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 21 Mar 2023 15:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S229645AbjCUTGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 15:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjCUTE1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 15:04:27 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE2D56786;
-        Tue, 21 Mar 2023 12:03:47 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id r11so63753054edd.5;
-        Tue, 21 Mar 2023 12:03:46 -0700 (PDT)
+        with ESMTP id S229878AbjCUTGv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 15:06:51 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB39050FB4
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 12:06:48 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso21208127pjb.3
+        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 12:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679425608;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=6UPpKpeSvW/WQW9b0YJAWW5afUjTfpxDRaqP+/frAUI=;
+        b=G4e05FlDD56j/PVxGQm8cAZFKmW3dCVqGw/BDEYu+o46gI1xCEzAITDVPFVKorcqGF
+         0rancWj8KZyJfiX5FmHqWIWfIDb39RazRUNObpHJY7eumL4BhF/jyENaBls2cPNsAqIP
+         WpGiKQP6iTbjZj++bfZraZcWHhFeIiV+1V9DvrI+19VieGmF1gfqKc2zOksVo8ZtwXhe
+         2jG4xHdfngZ2SImJSdu2lHT1cHG51czrUpZRT0b1Ja+gAJ0sIQyt1UFZUVmd6cL//P9S
+         Xq9HtuT3W1DjgzigaPA/ImXr/5kuaK7nfwoxviS8Y/xPR/kqRqdICxnlEj5Antg/6sZf
+         dJlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679425412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jmnmZtVwh0puQIb6yEMmIylWiNGozacRydhBtogRSdg=;
-        b=WDuZaYqNVm5Bq0oMiiGuI9EC+FHeecFSd++10ZSKBGuJn1LnZCVyhX8HLM5nde0ixt
-         eUl4XTRtKRPmW9khohzn3jHhSq0BZkajET7vNkPY1GI+EaV7VOpEME0b1oPmLoOPaC5e
-         5eAYSFu5Xgp7S62CFr3qXFTrgO4L54u6WO2IxQDSmTgJ44Ddugn1bPyXnRAmerbO9gED
-         cwAyGqaJpJE1cfeUe9dIBhoViLvlrnQjRsoE4OBWGoFf0wN8TAvy+AxRvpFWMu5iFw6K
-         Pp7q83/yc2zKivzxAWvv9g5qpMblLkfkAaSLpLUlTzkaMKrqIPtz+Hu6i6+psoFSUncb
-         W+gg==
-X-Gm-Message-State: AO0yUKUdQcSgzRC9muIEnt5hJxQ0JgHYitfySWXPzPQE4U9wbHqucqJb
-        qcREE9E9teEI6o++MVUJEKlXpoVt8SbHNla8bE0=
-X-Google-Smtp-Source: AK7set8yznaAVu5LBKNGeaOw/o8U3N72bmMocsiI13/nwd2tjFyDpcWI62ErxNGyo6BDmaKVoAiZhdHvCAWnyYFV4so=
-X-Received: by 2002:a50:cd1d:0:b0:4fc:8749:cd77 with SMTP id
- z29-20020a50cd1d000000b004fc8749cd77mr2277316edi.3.1679425411834; Tue, 21 Mar
- 2023 12:03:31 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679425608;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6UPpKpeSvW/WQW9b0YJAWW5afUjTfpxDRaqP+/frAUI=;
+        b=IiBw0CgOy1hxzwaaUkHpZgoipVfaMKXXQelDLiHrN+hHFJq12s3uB7YomzavRorQUv
+         Hucp6NyEeBB0oI4nMDX5UPSLyO8R8JhMtZmptPiNOieIBF1kDuFNpYPoMMI35ZrXhjsl
+         Tn1RSQKuHIuBU1YaeCFW9/VK19Djut65solOj4ERxTgbaR0P3p6sFO8iJjaSScZ+EauV
+         Kte7qGyjjQCjdCat3ZNJe7/8nZjeyZIDUVxj4aLi/ageAz1YHleJnUl4Z6JT3vlUkc8R
+         HIQQ7TrrxUGNkk0zHWES5a0SzX2m8v0eI/oCOv3inwA+ZCPfNZDo+DGSc8Rq9XimAAhs
+         3cNA==
+X-Gm-Message-State: AO0yUKWJ6wh4I9Zu8Umiqy40oSlnEZjG1fnZbhEK8NHTPhEgPLUogzGk
+        gox8ULFdX0a2Zj43tf1ASwXKMiRIRBNDxsCmEdt+Ew==
+X-Google-Smtp-Source: AK7set90ku2M/vVrFAr44w49aQ/K3lSfTvpGxpqtvTh+/AjitoQYPUsauwrHowU/UeeTcQOT5oiquQ==
+X-Received: by 2002:a17:902:e5cf:b0:19d:7a4:4063 with SMTP id u15-20020a170902e5cf00b0019d07a44063mr147800plf.46.1679425608014;
+        Tue, 21 Mar 2023 12:06:48 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o11-20020a1709026b0b00b0019a96d3b456sm5339618plk.44.2023.03.21.12.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 12:06:47 -0700 (PDT)
+Message-ID: <641a0047.170a0220.e76d8.98ed@mx.google.com>
+Date:   Tue, 21 Mar 2023 12:06:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <2678096.mvXUDI8C0e@kreacher> <2878875.e9J7NaK4W3@kreacher> <8f15bc65578f105dfc126569068d8eb1ee12107c.camel@intel.com>
-In-Reply-To: <8f15bc65578f105dfc126569068d8eb1ee12107c.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 21 Mar 2023 20:03:20 +0100
-Message-ID: <CAJZ5v0jmDZW-maaQRrD-A1D9YXaVtLtM+bJ=Ho7C5vcYunRkjg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] thermal: core: Introduce thermal_cooling_device_update()
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Wang, Quanxian" <quanxian.wang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.3-rc3-33-g8e95155f8f29
+Subject: pm/testing baseline: 50 runs,
+ 6 regressions (v6.3-rc3-33-g8e95155f8f29)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 4:08 PM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Fri, 2023-03-17 at 18:01 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Introduce a core thermal API function,
-> > thermal_cooling_device_update(),
-> > for updating the max_state value for a cooling device and rearranging
-> > its statistics in sysfs after a possible change of its
-> > ->get_max_state()
-> > callback return value.
-> >
-> > That callback is now invoked only once, during cooling device
-> > registration, to populate the max_state field in the cooling device
-> > object, so if its return value changes, it needs to be invoked again
-> > and the new return value needs to be stored as max_state.  Moreover,
-> > the statistics presented in sysfs need to be rearranged in general,
-> > because there may not be enough room in them to store data for all
-> > of the possible states (in the case when max_state grows).
-> >
-> > The new function takes care of that (and some other minor things
-> > related to it), but some extra locking and lockdep annotations are
-> > added in several places too to protect against crashes in the cases
-> > when the statistics are not present or when a stale max_state value
-> > might be used by sysfs attributes.
-> >
-> > Note that the actual user of the new function will be added
-> > separately.
-> >
-> > Link:
-> > https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > Rui, please have a look at this again and give it a go if
-> > possible.  It is the
-> > only patch in the series changing in v3.
->
-> Hi, Rafael,
->
-> Thanks for the patch, I can confirm that it works, with ACPI passive
-> cooling activated on my side.
->
-> Tested-by: Zhang Rui <rui.zhang@intel.com>
-> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+pm/testing baseline: 50 runs, 6 regressions (v6.3-rc3-33-g8e95155f8f29)
 
-Thank you!
+Regressions Summary
+-------------------
 
-I'll queue up this series for 6.3-rc4.
+platform              | arch  | lab         | compiler | defconfig | regres=
+sions
+----------------------+-------+-------------+----------+-----------+-------=
+-----
+fsl-lx2160a-rdb       | arm64 | lab-nxp     | gcc-10   | defconfig | 1     =
+     =
 
-> > v2 -> v3:
-> >    Make thermal_cooling_device_update() check thermal instances
-> > involving the
-> >    given thermal device and update the "upper" value for them if
-> > necessary (the
-> >    "lower" and "target" values may need to be adjusted too in some
-> > cases) to avoid
-> >    leaving thermal instances with "upper" above the new max_state of
-> > the
-> >    corresponding cooling device.
-> >
-> > v1 -> v2:
-> >     * Make thermal_cooling_device_update() do the full
-> > IS_ERR_OR_NULL() check
-> >       on cdev, so that its callers don't need to do it.
-> >     * Remove ->set_cur_state() callback invocation from
-> >       thermal_cooling_device_update(), because it is redundant (and
-> > it doesn't
-> >       make sense to pass a state value exceeding max_state to it
-> > anyway).
-> >
-> > ---
-> >  drivers/thermal/thermal_core.c  |   83
-> > +++++++++++++++++++++++++++++++++++++++-
-> >  drivers/thermal/thermal_core.h  |    2
-> >  drivers/thermal/thermal_sysfs.c |   72
-> > ++++++++++++++++++++++++++++++----
-> >  include/linux/thermal.h         |    1
-> >  4 files changed, 149 insertions(+), 9 deletions(-)
-> >
-> > Index: linux-pm/drivers/thermal/thermal_core.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > +++ linux-pm/drivers/thermal/thermal_core.c
-> > @@ -613,6 +613,7 @@ int thermal_zone_bind_cooling_device(str
-> >       struct thermal_instance *pos;
-> >       struct thermal_zone_device *pos1;
-> >       struct thermal_cooling_device *pos2;
-> > +     bool upper_no_limit;
-> >       int result;
-> >
-> >       if (trip >= tz->num_trips || trip < 0)
-> > @@ -632,7 +633,13 @@ int thermal_zone_bind_cooling_device(str
-> >
-> >       /* lower default 0, upper default max_state */
-> >       lower = lower == THERMAL_NO_LIMIT ? 0 : lower;
-> > -     upper = upper == THERMAL_NO_LIMIT ? cdev->max_state : upper;
-> > +
-> > +     if (upper == THERMAL_NO_LIMIT) {
-> > +             upper = cdev->max_state;
-> > +             upper_no_limit = true;
-> > +     } else {
-> > +             upper_no_limit = false;
-> > +     }
-> >
-> >       if (lower > upper || upper > cdev->max_state)
-> >               return -EINVAL;
-> > @@ -644,6 +651,7 @@ int thermal_zone_bind_cooling_device(str
-> >       dev->cdev = cdev;
-> >       dev->trip = trip;
-> >       dev->upper = upper;
-> > +     dev->upper_no_limit = upper_no_limit;
-> >       dev->lower = lower;
-> >       dev->target = THERMAL_NO_TARGET;
-> >       dev->weight = weight;
-> > @@ -1057,6 +1065,79 @@ static bool thermal_cooling_device_prese
-> >       return false;
-> >  }
-> >
-> > +/**
-> > + * thermal_cooling_device_update - Update a cooling device object
-> > + * @cdev: Target cooling device.
-> > + *
-> > + * Update @cdev to reflect a change of the underlying hardware or
-> > platform.
-> > + *
-> > + * Must be called when the maximum cooling state of @cdev becomes
-> > invalid and so
-> > + * its .get_max_state() callback needs to be run to produce the new
-> > maximum
-> > + * cooling state value.
-> > + */
-> > +void thermal_cooling_device_update(struct thermal_cooling_device
-> > *cdev)
-> > +{
-> > +     struct thermal_instance *ti;
-> > +     unsigned long state;
-> > +
-> > +     if (IS_ERR_OR_NULL(cdev))
-> > +             return;
-> > +
-> > +     /*
-> > +      * Hold thermal_list_lock throughout the update to prevent the
-> > device
-> > +      * from going away while being updated.
-> > +      */
-> > +     mutex_lock(&thermal_list_lock);
-> > +
-> > +     if (!thermal_cooling_device_present(cdev))
-> > +             goto unlock_list;
-> > +
-> > +     /*
-> > +      * Update under the cdev lock to prevent the state from being
-> > set beyond
-> > +      * the new limit concurrently.
-> > +      */
-> > +     mutex_lock(&cdev->lock);
-> > +
-> > +     if (cdev->ops->get_max_state(cdev, &cdev->max_state))
-> > +             goto unlock;
-> > +
-> > +     thermal_cooling_device_stats_reinit(cdev);
-> > +
-> > +     list_for_each_entry(ti, &cdev->thermal_instances, cdev_node) {
-> > +             if (ti->upper == cdev->max_state)
-> > +                     continue;
-> > +
-> > +             if (ti->upper < cdev->max_state) {
-> > +                     if (ti->upper_no_limit)
-> > +                             ti->upper = cdev->max_state;
-> > +
-> > +                     continue;
-> > +             }
-> > +
-> > +             ti->upper = cdev->max_state;
-> > +             if (ti->lower > ti->upper)
-> > +                     ti->lower = ti->upper;
-> > +
-> > +             if (ti->target == THERMAL_NO_TARGET)
-> > +                     continue;
-> > +
-> > +             if (ti->target > ti->upper)
-> > +                     ti->target = ti->upper;
-> > +     }
-> > +
-> > +     if (cdev->ops->get_cur_state(cdev, &state) || state > cdev-
-> > >max_state)
-> > +             goto unlock;
-> > +
-> > +     thermal_cooling_device_stats_update(cdev, state);
-> > +
-> > +unlock:
-> > +     mutex_unlock(&cdev->lock);
-> > +
-> > +unlock_list:
-> > +     mutex_unlock(&thermal_list_lock);
-> > +}
-> > +EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
-> > +
-> >  static void __unbind(struct thermal_zone_device *tz, int mask,
-> >                    struct thermal_cooling_device *cdev)
-> >  {
-> > Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> > +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> > @@ -685,6 +685,8 @@ void thermal_cooling_device_stats_update
-> >  {
-> >       struct cooling_dev_stats *stats = cdev->stats;
-> >
-> > +     lockdep_assert_held(&cdev->lock);
-> > +
-> >       if (!stats)
-> >               return;
-> >
-> > @@ -706,13 +708,22 @@ static ssize_t total_trans_show(struct d
-> >                               struct device_attribute *attr, char
-> > *buf)
-> >  {
-> >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> > -     struct cooling_dev_stats *stats = cdev->stats;
-> > +     struct cooling_dev_stats *stats;
-> >       int ret;
-> >
-> > +     mutex_lock(&cdev->lock);
-> > +
-> > +     stats = cdev->stats;
-> > +     if (!stats)
-> > +             goto unlock;
-> > +
-> >       spin_lock(&stats->lock);
-> >       ret = sprintf(buf, "%u\n", stats->total_trans);
-> >       spin_unlock(&stats->lock);
-> >
-> > +unlock:
-> > +     mutex_unlock(&cdev->lock);
-> > +
-> >       return ret;
-> >  }
-> >
-> > @@ -721,11 +732,18 @@ time_in_state_ms_show(struct device *dev
-> >                     char *buf)
-> >  {
-> >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> > -     struct cooling_dev_stats *stats = cdev->stats;
-> > +     struct cooling_dev_stats *stats;
-> >       ssize_t len = 0;
-> >       int i;
-> >
-> > +     mutex_lock(&cdev->lock);
-> > +
-> > +     stats = cdev->stats;
-> > +     if (!stats)
-> > +             goto unlock;
-> > +
-> >       spin_lock(&stats->lock);
-> > +
-> >       update_time_in_state(stats);
-> >
-> >       for (i = 0; i <= cdev->max_state; i++) {
-> > @@ -734,6 +752,9 @@ time_in_state_ms_show(struct device *dev
-> >       }
-> >       spin_unlock(&stats->lock);
-> >
-> > +unlock:
-> > +     mutex_unlock(&cdev->lock);
-> > +
-> >       return len;
-> >  }
-> >
-> > @@ -742,8 +763,16 @@ reset_store(struct device *dev, struct d
-> >           size_t count)
-> >  {
-> >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> > -     struct cooling_dev_stats *stats = cdev->stats;
-> > -     int i, states = cdev->max_state + 1;
-> > +     struct cooling_dev_stats *stats;
-> > +     int i, states;
-> > +
-> > +     mutex_lock(&cdev->lock);
-> > +
-> > +     stats = cdev->stats;
-> > +     if (!stats)
-> > +             goto unlock;
-> > +
-> > +     states = cdev->max_state + 1;
-> >
-> >       spin_lock(&stats->lock);
-> >
-> > @@ -757,6 +786,9 @@ reset_store(struct device *dev, struct d
-> >
-> >       spin_unlock(&stats->lock);
-> >
-> > +unlock:
-> > +     mutex_unlock(&cdev->lock);
-> > +
-> >       return count;
-> >  }
-> >
-> > @@ -764,10 +796,18 @@ static ssize_t trans_table_show(struct d
-> >                               struct device_attribute *attr, char
-> > *buf)
-> >  {
-> >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> > -     struct cooling_dev_stats *stats = cdev->stats;
-> > +     struct cooling_dev_stats *stats;
-> >       ssize_t len = 0;
-> >       int i, j;
-> >
-> > +     mutex_lock(&cdev->lock);
-> > +
-> > +     stats = cdev->stats;
-> > +     if (!stats) {
-> > +             len = -ENODATA;
-> > +             goto unlock;
-> > +     }
-> > +
-> >       len += snprintf(buf + len, PAGE_SIZE - len, "
-> > From  :    To\n");
-> >       len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
-> >       for (i = 0; i <= cdev->max_state; i++) {
-> > @@ -775,8 +815,10 @@ static ssize_t trans_table_show(struct d
-> >                       break;
-> >               len += snprintf(buf + len, PAGE_SIZE - len,
-> > "state%2u  ", i);
-> >       }
-> > -     if (len >= PAGE_SIZE)
-> > -             return PAGE_SIZE;
-> > +     if (len >= PAGE_SIZE) {
-> > +             len = PAGE_SIZE;
-> > +             goto unlock;
-> > +     }
-> >
-> >       len += snprintf(buf + len, PAGE_SIZE - len, "\n");
-> >
-> > @@ -799,8 +841,12 @@ static ssize_t trans_table_show(struct d
-> >
-> >       if (len >= PAGE_SIZE) {
-> >               pr_warn_once("Thermal transition table exceeds
-> > PAGE_SIZE. Disabling\n");
-> > -             return -EFBIG;
-> > +             len = -EFBIG;
-> >       }
-> > +
-> > +unlock:
-> > +     mutex_unlock(&cdev->lock);
-> > +
-> >       return len;
-> >  }
-> >
-> > @@ -830,6 +876,8 @@ static void cooling_device_stats_setup(s
-> >       unsigned long states = cdev->max_state + 1;
-> >       int var;
-> >
-> > +     lockdep_assert_held(&cdev->lock);
-> > +
-> >       var = sizeof(*stats);
-> >       var += sizeof(*stats->time_in_state) * states;
-> >       var += sizeof(*stats->trans_table) * states * states;
-> > @@ -855,6 +903,8 @@ out:
-> >
-> >  static void cooling_device_stats_destroy(struct
-> > thermal_cooling_device *cdev)
-> >  {
-> > +     lockdep_assert_held(&cdev->lock);
-> > +
-> >       kfree(cdev->stats);
-> >       cdev->stats = NULL;
-> >  }
-> > @@ -879,6 +929,12 @@ void thermal_cooling_device_destroy_sysf
-> >       cooling_device_stats_destroy(cdev);
-> >  }
-> >
-> > +void thermal_cooling_device_stats_reinit(struct
-> > thermal_cooling_device *cdev)
-> > +{
-> > +     cooling_device_stats_destroy(cdev);
-> > +     cooling_device_stats_setup(cdev);
-> > +}
-> > +
-> >  /* these helper will be used only at the time of bindig */
-> >  ssize_t
-> >  trip_point_show(struct device *dev, struct device_attribute *attr,
-> > char *buf)
-> > Index: linux-pm/drivers/thermal/thermal_core.h
-> > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/thermal_core.h
-> > +++ linux-pm/drivers/thermal/thermal_core.h
-> > @@ -101,6 +101,7 @@ struct thermal_instance {
-> >       struct list_head tz_node; /* node in tz->thermal_instances */
-> >       struct list_head cdev_node; /* node in cdev->thermal_instances
-> > */
-> >       unsigned int weight; /* The weight of the cooling device */
-> > +     bool upper_no_limit;
-> >  };
-> >
-> >  #define to_thermal_zone(_dev) \
-> > @@ -127,6 +128,7 @@ int thermal_zone_create_device_groups(st
-> >  void thermal_zone_destroy_device_groups(struct thermal_zone_device
-> > *);
-> >  void thermal_cooling_device_setup_sysfs(struct
-> > thermal_cooling_device *);
-> >  void thermal_cooling_device_destroy_sysfs(struct
-> > thermal_cooling_device *cdev);
-> > +void thermal_cooling_device_stats_reinit(struct
-> > thermal_cooling_device *cdev);
-> >  /* used only at binding time */
-> >  ssize_t trip_point_show(struct device *, struct device_attribute *,
-> > char *);
-> >  ssize_t weight_show(struct device *, struct device_attribute *, char
-> > *);
-> > Index: linux-pm/include/linux/thermal.h
-> > ===================================================================
-> > --- linux-pm.orig/include/linux/thermal.h
-> > +++ linux-pm/include/linux/thermal.h
-> > @@ -388,6 +388,7 @@ devm_thermal_of_cooling_device_register(
-> >                               struct device_node *np,
-> >                               char *type, void *devdata,
-> >                               const struct thermal_cooling_device_ops
-> > *ops);
-> > +void thermal_cooling_device_update(struct thermal_cooling_device *);
-> >  void thermal_cooling_device_unregister(struct thermal_cooling_device
-> > *);
-> >  struct thermal_zone_device *thermal_zone_get_zone_by_name(const char
-> > *name);
-> >  int thermal_zone_get_temp(struct thermal_zone_device *tz, int
-> > *temp);
-> >
-> >
-> >
->
->
+kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 5     =
+     =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.3-rc3=
+-33-g8e95155f8f29/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.3-rc3-33-g8e95155f8f29
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      8e95155f8f299d6c2941c7bfa133ae8d0242870e =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab         | compiler | defconfig | regres=
+sions
+----------------------+-------+-------------+----------+-----------+-------=
+-----
+fsl-lx2160a-rdb       | arm64 | lab-nxp     | gcc-10   | defconfig | 1     =
+     =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419f9b8733b04c89f9c954b
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc3-33-g8e9515=
+5f8f29/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc3-33-g8e9515=
+5f8f29/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/6419f9b9733b04c89f9c9554
+        failing since 5 days (last pass: v6.1-rc5-55-g60453df62d30, first f=
+ail: v6.3-rc2-33-g1240ce78c05e)
+
+    2023-03-21T18:38:16.034208  [   13.120338] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1180604_1.5.2.4.1>
+    2023-03-21T18:38:16.139754  / # #
+    2023-03-21T18:38:16.241569  export SHELL=3D/bin/sh
+    2023-03-21T18:38:16.242114  #
+    2023-03-21T18:38:16.343584  / # export SHELL=3D/bin/sh. /lava-1180604/e=
+nvironment
+    2023-03-21T18:38:16.344056  =
+
+    2023-03-21T18:38:16.445477  / # . /lava-1180604/environment/lava-118060=
+4/bin/lava-test-runner /lava-1180604/1
+    2023-03-21T18:38:16.446244  =
+
+    2023-03-21T18:38:16.448100  / # /lava-1180604/bin/lava-test-runner /lav=
+a-1180604/1
+    2023-03-21T18:38:16.473396  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform              | arch  | lab         | compiler | defconfig | regres=
+sions
+----------------------+-------+-------------+----------+-----------+-------=
+-----
+kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 5     =
+     =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419f90125d0d9ffb29c9512
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc3-33-g8e9515=
+5f8f29/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc3-33-g8e9515=
+5f8f29/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/6419f90125d0d9ffb29c9519
+        failing since 14 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, fir=
+st fail: v6.3-rc1-23-g06401c1b98b0)
+
+    2023-03-21T18:35:23.377584  / # #
+    2023-03-21T18:35:23.478876  export SHELL=3D/bin/sh
+    2023-03-21T18:35:23.479253  #
+    2023-03-21T18:35:23.580259  / # export SHELL=3D/bin/sh. /lava-300075/en=
+vironment
+    2023-03-21T18:35:23.580567  =
+
+    2023-03-21T18:35:23.681291  / # . /lava-300075/environment/lava-300075/=
+bin/lava-test-runner /lava-300075/1
+    2023-03-21T18:35:23.681800  =
+
+    2023-03-21T18:35:23.693423  / # /lava-300075/bin/lava-test-runner /lava=
+-300075/1
+    2023-03-21T18:35:23.753611  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-03-21T18:35:23.753798  + <8>[   22.418644] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 300075_1.5.2.4.5> =
+
+    ... (14 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/6419f90125d0d9ffb29c951d
+        failing since 14 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, fir=
+st fail: v6.3-rc1-23-g06401c1b98b0)
+
+    2023-03-21T18:35:24.814973  <8>[   23.505193] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-driver-present RESULT=3Dpass>
+    2023-03-21T18:35:25.850640  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:25.851051  <8>[   24.527275] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-03-21T18:35:25.851172  /lava-300075/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/64=
+19f90125d0d9ffb29c951f
+        failing since 14 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, fir=
+st fail: v6.3-rc1-23-g06401c1b98b0)
+
+    2023-03-21T18:35:26.914746  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:26.914931  <8>[   25.567957] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-03-21T18:35:26.915073  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:26.915194  <8>[   25.586566] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
+    2023-03-21T18:35:26.915306  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:26.915412  <8>[   25.606138] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
+    2023-03-21T18:35:26.915518  /lava-300075/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/6419f90125d0d9ffb29c9524
+        failing since 14 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, fir=
+st fail: v6.3-rc1-23-g06401c1b98b0)
+
+    2023-03-21T18:35:27.990321  /lava-300075/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/6419f90125d0d9ffb29c9525
+        failing since 14 days (last pass: pm-6.2-rc9-232-gea150b53b1fd, fir=
+st fail: v6.3-rc1-23-g06401c1b98b0)
+
+    2023-03-21T18:35:27.993510  <8>[   26.683390] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-03-21T18:35:29.052034  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:29.053345  <8>[   27.704484] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2023-03-21T18:35:29.053501  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:29.053605  <8>[   27.722774] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc_mdio-driver-present RESULT=3Dpass>
+    2023-03-21T18:35:29.053701  /lava-300075/1/../bin/lava-test-case
+    2023-03-21T18:35:29.053797  <8>[   27.742595] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc_mdio-probed RESULT=3Dpass>
+    2023-03-21T18:35:29.053893  /lava-300075/1/../bin/lava-test-case   =
+
+ =20
