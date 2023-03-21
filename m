@@ -2,200 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EA86C3842
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 18:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9092A6C386C
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Mar 2023 18:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjCURd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Mar 2023 13:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S229677AbjCURjR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Mar 2023 13:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCURdx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 13:33:53 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251F45291A
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 10:33:40 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id a11so5821615lji.6
-        for <linux-pm@vger.kernel.org>; Tue, 21 Mar 2023 10:33:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679420017;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LDwSwzPjD3OmF84qtgDXFqEH88rRTxQOUzKCvWTZg7o=;
-        b=Nuj2JeD4rsGzzlDo9UKgA4bvRT01eirRyUTYHHwsc+ua4RG/H6RTxWwwUX/VoOF1JQ
-         7LNmg/FqYH3ASWg9k77e8ut/0/rAZZTlDhSJ4P4Gc6xlWdlRx2jNcNNW1/JioFZxOG/F
-         /JBq/CwCeSO47RYdKCTsRd77dXUqgSio8i+HeWZ57nUra1tCn7B6nmeTJmt2qzBbbTcY
-         EQ1dmdjel1rb0hQAEk03dPGujuTy8YR35Dws1Gz2WK+QBgkTH/sOzvrmXDivMMAZmExS
-         RKSvg03OzB/szl2vgDBhGyhYoH7tyyskFzffPTE3qRYct7KjBuevQp9fA6oGAP6IRLvO
-         /PGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420017;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LDwSwzPjD3OmF84qtgDXFqEH88rRTxQOUzKCvWTZg7o=;
-        b=b2aNEo64Jw0PGZ5k7WN67bkeFY3vyE1ZK35UwJihfWrO3v8zJ2jGy8Qsd+cpRWARRw
-         fHVwFojrVjG276M5YgaSKgvP4S/FApD0hHq9Dk6IezWrbuiwVoJSI26FuaLnOCXkM9ZY
-         9noySNls7oZHbuHn+kJcZYEBlkBnk41ZMgd09Th2umcNqbaAPCUzOYYqAjquSf5TzOMI
-         sgJsqUweyClhEVhwwxKVxDmvCH2MjkuEeYrozNtq73cygMNyGRfotywB3m6NvgzZKQjk
-         ekJZcS5Y9MULPD8gWdmt/zK9aFctq0X4RJERqo07yYKIrAYLx2/vBQaqQhjX2wfnHFd+
-         0o9w==
-X-Gm-Message-State: AO0yUKVuQv131ToBLPzVnuRa7aWcWzN/+MrIKMpnQX6tSBZSUArWXfT7
-        ZK/1cYB53PTdWQZVhOeHvO9b/A==
-X-Google-Smtp-Source: AK7set9oLoBN5qVhPyUil9/Rg3m9u1I4YYDTnxm3ahqrTYWVm7mtVqkYbJ3Og4n7B59zrYisKgcJFA==
-X-Received: by 2002:a05:651c:10e:b0:29b:d436:5c91 with SMTP id a14-20020a05651c010e00b0029bd4365c91mr1158228ljb.4.1679420017283;
-        Tue, 21 Mar 2023 10:33:37 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id u5-20020ac24c25000000b004e7a0f67490sm2220806lfq.110.2023.03.21.10.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:33:36 -0700 (PDT)
-Message-ID: <564e5b54-66a5-2cb8-5bfc-b13b08f5eb6e@linaro.org>
-Date:   Tue, 21 Mar 2023 18:33:35 +0100
+        with ESMTP id S229527AbjCURjP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Mar 2023 13:39:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1837F55524;
+        Tue, 21 Mar 2023 10:38:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E60C0B818D2;
+        Tue, 21 Mar 2023 17:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E580CC433EF;
+        Tue, 21 Mar 2023 17:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679420291;
+        bh=h6PaXJFdNf2jrbSib5gtfbzWZDlURlMX1ekxTl2pyT8=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=LxHBE/UOj7jZzGE6nQmnjE2zuhJVVKMaWI7bt8qm7ARn7QWGhhbPZIFY5zL1PEVh2
+         NG6LcXCL7oSQjC3azOUVfK+ekBlwqMOGc1dQ/E4tO6yGBmteXm+CVjoZEHOkfMtQKJ
+         7KcDXdmdzvHlRXvDt4VJTPFgRYu5uExNvEth/Gb/h0oueeyoIL8rl3ayf5PRYsX3sR
+         UFiNDID6byANLG9dfjQmFfKkUvw3kCAAox4FuU6tyZsTXGavQEb7tL+N8bnzrooTbF
+         7C6eZLiMjwhmjVjBxSE+rx0gxgK4nsaIgI9opSpCsmejMgozdsejYSbylnVpFk7LPE
+         0LTCzsAEVu6ew==
+Message-ID: <a9819d66-43fc-e964-b523-27161466a70a@kernel.org>
+Date:   Tue, 21 Mar 2023 19:38:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
- specifying channel num
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
 Content-Language: en-US
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+From:   Georgi Djakov <djakov@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-2-815606092fff@linaro.org>
- <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
- <38fe0736-b566-9e1b-d7f3-71e3fcd01d90@linaro.org>
- <f8baed88-6a3b-17c5-4134-ce3917ee8632@kernel.org>
- <101834f0-e00c-5469-c8a5-59a00a5160a5@linaro.org>
- <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+ <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
+ <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
+ <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
+ <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
+ <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
+ <0af8ba67-f33c-4861-bea5-e662d19638bf@kernel.org>
+ <5459d8d3-4829-01ab-7000-2c1f58ad69e8@linaro.org>
+ <f32cffc4-c327-5019-3598-21516056b4e1@kernel.org>
+In-Reply-To: <f32cffc4-c327-5019-3598-21516056b4e1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 21.03.2023 15:49, Georgi Djakov wrote:
-> On 21.03.23 16:23, Konrad Dybcio wrote:
+On 21.03.23 16:38, Georgi Djakov wrote:
+> On 21.03.23 16:11, Konrad Dybcio wrote:
 >>
 >>
->> On 21.03.2023 15:21, Georgi Djakov wrote:
->>> On 21.03.23 16:09, Konrad Dybcio wrote:
+>> On 21.03.2023 14:58, Georgi Djakov wrote:
+>>> Hi,
+>>>
+>>> On 11.03.23 17:26, Dmitry Baryshkov wrote:
+>>>> On 11/03/2023 16:38, Bryan O'Donoghue wrote:
+>>>>> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
+>>>>>>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
+>>>>>>> be added to the UFS device list of clocks.
+>>>>>> While we were doing this for some of the clocks (PCIe and USB, if I'm
+>>>>>> not mistaken), I think that generally this is not fully correct. In my
+>>>>>> opinion it should be in the interconnect driver, who turns
+>>>>>> corresponding clocks on and off. These clocks correspond to the SoC
+>>>>>> topology, rather than the end-device.
+>>>>>>
+>>>>>
+>>>>> True enough, they are interconnect clocks.
+>>>>>
+>>>>> The question is how to only turn them on when the device that depends on them wants them.
 >>>>
->>>> On 21.03.2023 15:06, Georgi Djakov wrote:
->>>>> Hi Konrad,
->>>>>
->>>>> Thanks for the patch!
->>>>>
->>>>> On 8.03.23 23:40, Konrad Dybcio wrote:
->>>>>> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
->>>>>> one channel. This should be taken into account in bandwidth calcualtion,
->>>>>> as we're supposed to feed msmbus with the per-channel bandwidth. Add
->>>>>> support for specifying that and use it during bandwidth aggregation.
->>>>>>
->>>>>
->>>>> This looks good, but do you have any follow-up patch to use this and set
->>>>> the channels in some driver?
->>>> Yes, I have a couple of OOT drivers that are gonna make use of it.
->>>> TBF it should have been sent separately from the QoS mess, but I
->>>> don't think it's much of an issue to take it as-is.
+>>>> I think we can turn them on an off from qcom_icc_set(). Each node can list required clocks.
 >>>>
->>>> The aforementioned OOT drivers for MSM8998 and SM6375 will be
->>>> submitted after we reach a consensus on how we want to ensure
->>>> that each node is guaranteed to have its clocks enabled before
->>>> access, among some other minor things.
 >>>
->>> Yes, these QoS clocks are confusing. Maybe you can even submit them
->>> without configuring any QoS stuff in first place? Does enabling QoS
->>> actually show any benefits on these devices?
->> Haven't tested that thoroughly to be honest. But I'll try to get
->> some numbers.
-> 
-> I expect this to have impact only on some latency sensitive stuff like
-> modem or when there is heavy traffic flows. Maybe we can start without
-> QoS first and then add it on top as a next step?
-I only now remembered why I didn't do that.. Adding QoS at a later time
-will break older DTs, as with QoS we need to pass some clocks to the driver.
-
-Konrad
-> 
-> BR,
-> Georgi
-> 
+>>> Yes, this is a bit weird, but looks like these are the interface clocks
+>>> required for programming the qos box of the respective peripheral and
+>>> nothing else. Maybe we can even configure QoS just once (eg. on the first
+>>> bandwidth request) and not every time we call qcom_icc_set().
+>> Would that persist a full bus reset - if we e.g. shut down MMNoC
+>> after the display stack is turned off in preparation for a power
+>> collapse, would we have to reprogram it?
 >>
->> Konrad
->>>
->>> Thanks,
->>> Georgi
->>>
->>>> Konrad
->>>>>
->>>>> BR,
->>>>> Georgi
->>>>>
->>>>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>> ---
->>>>>>     drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
->>>>>>     drivers/interconnect/qcom/icc-rpm.h | 2 ++
->>>>>>     2 files changed, 8 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>>> index 35fd75ae70e3..27c4c6497994 100644
->>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>>> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>>>>>     {
->>>>>>         struct icc_node *node;
->>>>>>         struct qcom_icc_node *qn;
->>>>>> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>>>>>         int i;
->>>>>>           /* Initialise aggregate values */
->>>>>> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>>>>>         list_for_each_entry(node, &provider->nodes, node_list) {
->>>>>>             qn = node->data;
->>>>>>             for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->>>>>> -            agg_avg[i] += qn->sum_avg[i];
->>>>>> +            if (qn->channels)
->>>>>> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
->>>>>> +            else
->>>>>> +                sum_avg[i] = qn->sum_avg[i];
->>>>>> +            agg_avg[i] += sum_avg[i];
->>>>>>                 agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
->>>>>>             }
->>>>>>         }
->>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->>>>>> index 8ba1918d7997..8aed5400afda 100644
->>>>>> --- a/drivers/interconnect/qcom/icc-rpm.h
->>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.h
->>>>>> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
->>>>>>      * @id: a unique node identifier
->>>>>>      * @links: an array of nodes where we can go next while traversing
->>>>>>      * @num_links: the total number of @links
->>>>>> + * @channels: number of channels at this node (e.g. DDR channels)
->>>>>>      * @buswidth: width of the interconnect between a node and the bus (bytes)
->>>>>>      * @sum_avg: current sum aggregate value of all avg bw requests
->>>>>>      * @max_peak: current max aggregate value of all peak bw requests
->>>>>> @@ -78,6 +79,7 @@ struct qcom_icc_node {
->>>>>>         u16 id;
->>>>>>         const u16 *links;
->>>>>>         u16 num_links;
->>>>>> +    u16 channels;
->>>>>>         u16 buswidth;
->>>>>>         u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>>>>>         u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->>>>>>
->>>>>
->>>
+>> Another thing is, do we know "how persistent" the QoS settings are?
+>> What could reset them? Would a bandwidth request for a node that
+>> belongs to the same path do so?
 > 
+> That's a good question. From what i recall, i expect them to persist until
+> you reset the board. Probably we can verify it with an experiment by reading
+> them back, but let me check if i can find some info.
+> 
+
+This seems to be hardware specific and there is no general answer. It depends
+on where the reset line for the NIU comes from. It could be from the primary
+chip reset in most cases, but it could be also within the power domain of the
+associated core.
+
+Thanks,
+Georgi
+
