@@ -2,85 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D908D6C54B6
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 20:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A3A6C5504
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 20:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCVTQk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 22 Mar 2023 15:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S229726AbjCVTeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Mar 2023 15:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjCVTQi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 15:16:38 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCEE61320;
-        Wed, 22 Mar 2023 12:16:35 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id ek18so77262549edb.6;
-        Wed, 22 Mar 2023 12:16:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679512594;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LzwFY37hLcbFrp/171eLlZheyW72j6O2ewbOp7Pv5N4=;
-        b=F2Fnp95GRCish/MkF3fuXKejpIWk1BzlX84r52xAOYX/ucwCC2crOR49Vv/WcEecK5
-         azFXfgyZnJiScNtTyECM6v43RRL/w7ICndoLea7w/5SuAAgN8j2flL79dVR3oxvstV+K
-         ssy+21PggrlZRgZlRio0kzlRz3AcMa24ctlwEPGuTxkX2rmEoiia4Ki4xwAAMQTPcpa7
-         uhVxWVpJJlwY/OfJKacBnKTt5znm65g/DEMvjLT8iA2gEglQaRWx2LV5n5xGyaohZKUs
-         hSikRjCbwlkHOLkePtscMDuElU+hFu8H7gBP/94WdkQUD56B39Zo7pjojaHLtYNlLkvL
-         JjEQ==
-X-Gm-Message-State: AO0yUKVThmTA4M+L4PQ8dy8e1MFnynadbIGdsTBTs8lvjoNB4tEmzCUe
-        qZnlyJGAeFf7xXkaBeFvZYL97RSDokE1ButDZkwNSlTC
-X-Google-Smtp-Source: AK7set8zLikabLWIv5bjuJ/++HNk28bJ+CiLNXX7FIk6lb/GSxlaB3sBkFq4z9Qp96SExJ3kx4JRHGgxtJbq6JjGhRA=
-X-Received: by 2002:a17:906:614a:b0:8d7:edbc:a7b6 with SMTP id
- p10-20020a170906614a00b008d7edbca7b6mr1818011ejl.2.1679512593795; Wed, 22 Mar
- 2023 12:16:33 -0700 (PDT)
+        with ESMTP id S229600AbjCVTeX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 15:34:23 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932344E5F5;
+        Wed, 22 Mar 2023 12:34:15 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 66da7f182edbea95; Wed, 22 Mar 2023 20:34:13 +0100
+Received: from kreacher.localnet (unknown [213.134.163.127])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 4245422201E0;
+        Wed, 22 Mar 2023 20:34:13 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v1] thermal: core: Clean up thermal_list_lock locking
+Date:   Wed, 22 Mar 2023 20:34:12 +0100
+Message-ID: <2696911.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-References: <20230308122830.166728-1-jingyuwang_vip@163.com>
-In-Reply-To: <20230308122830.166728-1-jingyuwang_vip@163.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Mar 2023 20:16:22 +0100
-Message-ID: <CAJZ5v0jfWoWvvUk6h-L0h5FRL8EdBmiHKFEmfgd3HOOj=PjrKQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: fix repeated words in comments
-To:     Jingyu Wang <jingyuwang_vip@163.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.163.127
+X-CLIENT-HOSTNAME: 213.134.163.127
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduvdejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgt
+ ohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 1:30 PM Jingyu Wang <jingyuwang_vip@163.com> wrote:
->
-> Delete the redundant word 'to'.
->
-> Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
-> ---
->  drivers/cpufreq/Kconfig.arm | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index 97acaa2136fd..123b4bbfcfee 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -95,7 +95,7 @@ config ARM_BRCMSTB_AVS_CPUFREQ
->         help
->           Some Broadcom STB SoCs use a co-processor running proprietary firmware
->           ("AVS") to handle voltage and frequency scaling. This driver provides
-> -         a standard CPUfreq interface to to the firmware.
-> +         a standard CPUfreq interface to the firmware.
->
->           Say Y, if you have a Broadcom SoC with AVS support for DFS or DVFS.
->
-> --
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied as 6.4 material under a modified subject and with some edits
-in the changelog.
+Once thermal_list_lock has been acquired in
+__thermal_cooling_device_register(), it is not necessary to drop it
+and take it again until all of the thermal zones have been updated,
+so change the code accordingly.
 
-Thanks!
+No expected functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |    8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -826,8 +826,6 @@ static void bind_cdev(struct thermal_coo
+ 	const struct thermal_zone_params *tzp;
+ 	struct thermal_zone_device *pos = NULL;
+ 
+-	mutex_lock(&thermal_list_lock);
+-
+ 	list_for_each_entry(pos, &thermal_tz_list, node) {
+ 		if (!pos->tzp && !pos->ops->bind)
+ 			continue;
+@@ -854,8 +852,6 @@ static void bind_cdev(struct thermal_coo
+ 			       tzp->tbp[i].weight);
+ 		}
+ 	}
+-
+-	mutex_unlock(&thermal_list_lock);
+ }
+ 
+ /**
+@@ -933,17 +929,17 @@ __thermal_cooling_device_register(struct
+ 
+ 	/* Add 'this' new cdev to the global cdev list */
+ 	mutex_lock(&thermal_list_lock);
++
+ 	list_add(&cdev->node, &thermal_cdev_list);
+-	mutex_unlock(&thermal_list_lock);
+ 
+ 	/* Update binding information for 'this' new cdev */
+ 	bind_cdev(cdev);
+ 
+-	mutex_lock(&thermal_list_lock);
+ 	list_for_each_entry(pos, &thermal_tz_list, node)
+ 		if (atomic_cmpxchg(&pos->need_update, 1, 0))
+ 			thermal_zone_device_update(pos,
+ 						   THERMAL_EVENT_UNSPECIFIED);
++
+ 	mutex_unlock(&thermal_list_lock);
+ 
+ 	return cdev;
+
+
+
