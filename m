@@ -2,236 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD65A6C4561
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 09:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DA76C458E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 10:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjCVIvk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Mar 2023 04:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S229799AbjCVJEt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Mar 2023 05:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjCVIvh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 04:51:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBF658B49
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 01:51:36 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peuBx-0004Cz-9I; Wed, 22 Mar 2023 09:51:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peuBv-005sXh-Hv; Wed, 22 Mar 2023 09:51:31 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peuBu-0070Tz-RA; Wed, 22 Mar 2023 09:51:30 +0100
-Date:   Wed, 22 Mar 2023 09:51:29 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Aisheng Dong <aisheng.dong@nxp.com>
-Cc:     "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>, "lee@kernel.org" <lee@kernel.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: [PATCH] backlight: pwm_bl: Disable PWM on shutdown and suspend
- disabled PWM emiting inactive state")
-Message-ID: <20230322085129.jxxz55tbcxkc6usd@pengutronix.de>
-References: <DB9PR04MB84779AF9758B7FE747C6693D80869@DB9PR04MB8477.eurprd04.prod.outlook.com>
- <20230322070352.xfwmnqyrao3mifuu@pengutronix.de>
- <DB9PR04MB8477FD24740251860648786380869@DB9PR04MB8477.eurprd04.prod.outlook.com>
+        with ESMTP id S229487AbjCVJEs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 05:04:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9B621A35;
+        Wed, 22 Mar 2023 02:04:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3BCAB818F9;
+        Wed, 22 Mar 2023 09:04:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D7DC433EF;
+        Wed, 22 Mar 2023 09:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679475883;
+        bh=oz2PN3tKGuhTQo56pqzJbIezCGcNGA9n5ON2iB/N3K4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PMEqf3qUQsh0QDJZ0PJY25wqSIlbuILMOKwl8D2bTsqPCIHol9i51F3HlRrkxcAa9
+         HyuXIIxpj09P1x1q7PlUgmnV8b1QGANM/vllb2lLiNeC4kP9BdDwZP3HB8K3NQHijf
+         BuHuIrMnv3JnVn9rMN6wp7qxs0qYtS3toZTUGUtU=
+Date:   Wed, 22 Mar 2023 10:04:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 06/36] cpuidle: move to use bus_get_dev_root()
+Message-ID: <ZBrEqDV3IqbfokwK@kroah.com>
+References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
+ <20230313182918.1312597-6-gregkh@linuxfoundation.org>
+ <CAJZ5v0hRScLjW27k_rHZ1jnLyn7B3O26oP9Jd3AwDL97VSJ8tQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lnyoujtffpjsk2ms"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DB9PR04MB8477FD24740251860648786380869@DB9PR04MB8477.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hRScLjW27k_rHZ1jnLyn7B3O26oP9Jd3AwDL97VSJ8tQ@mail.gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Mar 13, 2023 at 07:58:02PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Mar 13, 2023 at 7:30 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > Direct access to the struct bus_type dev_root pointer is going away soon
+> > so replace that with a call to bus_get_dev_root() instead, which is what
+> > it is there for.
+> >
+> > This allows us to clean up the cpuidle_add_interface() call a bit as it
+> > was only called in one place, with the same argument so just put that
+> > into the function itself.  Note that cpuidle_remove_interface() should
+> > also probably be removed in the future as there are no callers of it for
+> > some reason.
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > Note, this is a patch that is a prepatory cleanup as part of a larger
+> > series of patches that is working on resolving some old driver core
+> > design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
+> > its own, but I'd prefer if I could take it through my driver-core tree
+> > so that the driver core changes can be taken through there for 6.4-rc1.
+> >
+> >  drivers/cpuidle/cpuidle.c |  2 +-
+> >  drivers/cpuidle/cpuidle.h |  2 +-
+> >  drivers/cpuidle/sysfs.c   | 12 +++++++++---
+> >  3 files changed, 11 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> > index 0b00f21cefe3..8e929f6602ce 100644
+> > --- a/drivers/cpuidle/cpuidle.c
+> > +++ b/drivers/cpuidle/cpuidle.c
+> > @@ -808,7 +808,7 @@ static int __init cpuidle_init(void)
+> >         if (cpuidle_disabled())
+> >                 return -ENODEV;
+> >
+> > -       return cpuidle_add_interface(cpu_subsys.dev_root);
+> > +       return cpuidle_add_interface();
+> >  }
+> >
+> >  module_param(off, int, 0444);
+> > diff --git a/drivers/cpuidle/cpuidle.h b/drivers/cpuidle/cpuidle.h
+> > index 9f336af17fa6..52701d9588f1 100644
+> > --- a/drivers/cpuidle/cpuidle.h
+> > +++ b/drivers/cpuidle/cpuidle.h
+> > @@ -30,7 +30,7 @@ extern int cpuidle_switch_governor(struct cpuidle_governor *gov);
+> >
+> >  struct device;
+> >
+> > -extern int cpuidle_add_interface(struct device *dev);
+> > +extern int cpuidle_add_interface(void);
+> >  extern void cpuidle_remove_interface(struct device *dev);
+> >  extern int cpuidle_add_device_sysfs(struct cpuidle_device *device);
+> >  extern void cpuidle_remove_device_sysfs(struct cpuidle_device *device);
+> > diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> > index 48948b171749..84e4946f1072 100644
+> > --- a/drivers/cpuidle/sysfs.c
+> > +++ b/drivers/cpuidle/sysfs.c
+> > @@ -119,11 +119,17 @@ static struct attribute_group cpuidle_attr_group = {
+> >
+> >  /**
+> >   * cpuidle_add_interface - add CPU global sysfs attributes
+> > - * @dev: the target device
+> >   */
+> > -int cpuidle_add_interface(struct device *dev)
+> > +int cpuidle_add_interface(void)
+> >  {
+> > -       return sysfs_create_group(&dev->kobj, &cpuidle_attr_group);
+> > +       struct device *dev_root = bus_get_dev_root(&cpu_subsys);
+> > +       int retval = -EINVAL;
+> > +
+> > +       if (dev_root) {
+> > +               retval = sysfs_create_group(&dev_root->kobj, &cpuidle_attr_group);
+> > +               put_device(dev_root);
+> > +       }
+> > +       return retval;
+> 
+> I would prefer
+> 
+>   if (!dev_root)
+>           return -EINVAL;
+> 
+>   retval = sysfs_create_group(&dev_root->kobj, &cpuidle_attr_group);
+>   put_device(dev_root);
+>   return retval;
+> 
+> assuming that successful group creation will bump up the reference
+> counter of dev_root.
 
---lnyoujtffpjsk2ms
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That is correct.  I'll respin this with this change in it now, thanks
+for the review!
 
-Since commit 00e7e698bff1 ("backlight: pwm_bl: Configure pwm only once
-per backlight toggle") calling pwm_backlight_power_off() doesn't disable
-the PWM any more. However this is necessary to suspend, because PWM
-drivers usually refuse to suspend if they are still enabled.
-
-Also adapt shutdown to disable the PWM for similar reasons.
-
-Fixes: 00e7e698bff1 ("backlight: pwm_bl: Configure pwm only once per backli=
-ght toggle")
-Reported-by: Aisheng Dong <aisheng.dong@nxp.com>
-Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
----
-On Wed, Mar 22, 2023 at 08:10:54AM +0000, Aisheng Dong wrote:
-> > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > Sent: 2023=E5=B9=B43=E6=9C=8822=E6=97=A5 15:04
-> >=20
-> > Hello,
-> >=20
-> > hmm, the subject is wrong, this is about commit deaeeda2051f
-> > ("backlight: pwm_bl: Don't rely on a disabled PWM emiting inactive
-> > state") and not 00e7e698bff1 ("backlight: pwm_bl: Configure pwm only on=
-ce
-> > per backlight toggle"). I fixed it accordingly.
->=20
-> I just double checked that only revert deaeeda2051f can't fix the issue.
-> I have to revert 00e7e698bff1 as well.
-
-Ah, I see, because of 00e7e698bff1 the pwm isn't modified any more if
-only pwm_backlight_power_off() (but not pwm_backlight_update_status())
-is called. But that is what the suspend callback (and also shutdown)
-does.
-
-> > On Wed, Mar 22, 2023 at 05:13:24AM +0000, Aisheng Dong wrote:
-> > > It seems this patch changed the behavior of pwm_backlight_suspend a
-> > > little bit in
-> > > pwm_backlight_power_off() that pwm state keep unchanged during
-> > suspend.
-> > > Then pwm_imx_tpm_suspend() will return -Ebusy due to
-> > tpm->enable_count > 0.
-> > > Was this intended behavior? Should we fix pwm core or the driver?
-> >=20
-> > A I see. The problem is the combination of the following facts:
-> >=20
-> >  - Some PWMs don't emit a constant inactive signal when disabled, so a
-> >    consumer who wants a constant inactive signal must not disable the
-> >    PWM.
-> >=20
-> >  - A used PWM is supposed to be disabled by its consumer on suspend.
-> >    (This is right IMHO because on suspend the PWM is likely to stop
-> >    oscillating and if the consumer requested some output wave form a
-> >    suspend usually stops to adhere to the consumer's request.)
-> >=20
-> > So the options to fix this are (in order of my preference):
-> >=20
-> >  a) Improve the check in the pwm_bl driver when it's safe to disable the
-> >     PWM.
-> >=20
-> >  b) Disable the PWM on suspend in the pwm_bl driver.
-> >=20
-> >  c) If the pwm-imx-tpm's PWM output is configured with duty_cycle =3D 0=
- and
-> >     is known not to continue driving a constant inactive signal on
-> >     suspend, it might continue to suspend.
-> >=20
-> > I think a) is not possible in general. To determine that: Which machine=
- do you
-> > experience this regression on?
->=20
-> Imx7ulp evk.
-
-OK, so a backlight with neither an enable-gpio nor a regulator. So this
-is a configuration where the PWM isn't disabled any more when
-brightness=3D0 is set. Iff the driver emits its inactive state when
-disabled (for both polarities), it might disable if .duty_cycle =3D 0 is
-requested to safe some power.
-
-> > b) is the right one from the PWM framework's POV. If you have a PWM like
-> > pwm-imx27 that might result in the backlight going on on suspend. That'=
-s bad,
-> > but compared to the pre-deaeeda2051f state it's still an improvement (as
-> > there the backlight went on on disable *and* suspend).
-> > Depending on the machine the backlight might or might not go off again =
-later
-> > when suspend progresses.
-> >=20
->=20
-> This seems like the previous working behavior on mx7ulp without this patc=
-h.
-> Would you help make a patch to fix it?
-
-Sure. I expect this fixes your issue, but I didn't test it. So if you
-give it a shot that would be great.
-
-Best regards
-Uwe
-
- drivers/video/backlight/pwm_bl.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm=
-_bl.c
-index fb388148d98f..577714e41694 100644
---- a/drivers/video/backlight/pwm_bl.c
-+++ b/drivers/video/backlight/pwm_bl.c
-@@ -643,8 +643,13 @@ static void pwm_backlight_shutdown(struct platform_dev=
-ice *pdev)
- {
- 	struct backlight_device *bl =3D platform_get_drvdata(pdev);
- 	struct pwm_bl_data *pb =3D bl_get_data(bl);
-+	struct pwm_state state;
-=20
- 	pwm_backlight_power_off(pb);
-+	pwm_get_state(pb->pwm, &state);
-+	state.duty_cycle =3D 0;
-+	state.enabled =3D false;
-+	pwm_apply_state(pb->pwm, &state);
- }
-=20
- #ifdef CONFIG_PM_SLEEP
-@@ -652,12 +657,24 @@ static int pwm_backlight_suspend(struct device *dev)
- {
- 	struct backlight_device *bl =3D dev_get_drvdata(dev);
- 	struct pwm_bl_data *pb =3D bl_get_data(bl);
-+	struct pwm_state state;
-=20
- 	if (pb->notify)
- 		pb->notify(pb->dev, 0);
-=20
- 	pwm_backlight_power_off(pb);
-=20
-+	/*
-+	 * Note that disabling the PWM doesn't guarantee that the output stays
-+	 * at its inactive state. However without the PWM disabled, the PWM
-+	 * driver refuses to suspend. So disable here even though this might
-+	 * enable the backlight on poorly designed boards.
-+	 */
-+	pwm_get_state(pb->pwm, &state);
-+	state.duty_cycle =3D 0;
-+	state.enabled =3D false;
-+	pwm_apply_state(pb->pwm, &state);
-+
- 	if (pb->notify_after)
- 		pb->notify_after(pb->dev, 0);
-=20
---=20
-2.39.2
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lnyoujtffpjsk2ms
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQawZAACgkQj4D7WH0S
-/k5oYwgAqmY82ymAX/xjQNTNnLZsaisXn7naE8efbMWtVc7RdEksnq8+N+DiPBj2
-nMz+5ZUXoZFB+rMBIk08PDqK3NHecniotMHIt8nFhRsHT1AqmPKuzNu9Ezqos3cQ
-IBFljFORVLcddhKnUYPqDA7Y3YlaTIlsswUCDzu+Wzx1LUzp4BjcSrhY60SMBi5C
-allTJPpy+p6kTcq4VrVTKNZQn9nikvLtUvY6rAjjeHdLj/d+CQC6F7nxdVyYI5Oc
-SPB1ogZFXTz0eC9TmgXDTuAO4vkbAywEhTFW89Sq7BprwIQaW1/dFBsHmTjWiJF2
-dkxHpgUTh4DSckSKEMO+9dREMp2nvQ==
-=WBYO
------END PGP SIGNATURE-----
-
---lnyoujtffpjsk2ms--
+greg k-h
