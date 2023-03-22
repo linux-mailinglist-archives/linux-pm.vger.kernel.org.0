@@ -2,51 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD666C549E
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 20:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D908D6C54B6
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 20:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjCVTMZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 22 Mar 2023 15:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S230184AbjCVTQk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 22 Mar 2023 15:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjCVTMX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 15:12:23 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1237B5D888
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 12:12:17 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id i5so30281316eda.0
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 12:12:16 -0700 (PDT)
+        with ESMTP id S230250AbjCVTQi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 15:16:38 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCEE61320;
+        Wed, 22 Mar 2023 12:16:35 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id ek18so77262549edb.6;
+        Wed, 22 Mar 2023 12:16:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679512335;
+        d=1e100.net; s=20210112; t=1679512594;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ol/IGN1lGg75qzmAkOcWS3DYpAO+pbte/S04wpN0vBU=;
-        b=QMCWaOgp1Ehcq6joEI8BH44OfQI3lwElKxtHHKpaoVKWp0NMRmaExdeCqr664hZ4/H
-         9HkdxB7tI/EoHqHD8uG37z3iUukRcBLOaiFvtXllVUeZLIg1gjo8UtI/pPfw9moRNfLi
-         6RPWjstaSEW777cj++OWvUcSJ9Qgzw+Ut4yTQubVuhcXP+6Nf0u6ACLwXTcKotmCow9u
-         l5qz8Idux/8+CBrlOeN753XAyuxs+KpZ4VH9wnxroFazH3SsV41OX2DpM2GD3u8+w1B8
-         7WOB4KwnLFCHOjJ3cO5G2ulV/u9z0cZ6QNdfqSNonWIJ1KLvule6ZupF1xpyY/luG2Qx
-         5Vyw==
-X-Gm-Message-State: AO0yUKXvHvMu/FvbBqNutkMXKyOmN30xY1LhFoYjXg9WmM6LYxcwmWid
-        /Oe5hh+Ft3FvA5uQdYkJc+zHpQwbVrulfHqVMSU=
-X-Google-Smtp-Source: AK7set8Ank6eSqO3VUrUrWdp2a7IXdWJIzjIW2S4zrvHJ4VEJ4obYRAFqbFj85LyiOnqHgQYCaHhXDvB+05d+ueIUA4=
-X-Received: by 2002:a17:907:8a19:b0:931:f8b1:4472 with SMTP id
- sc25-20020a1709078a1900b00931f8b14472mr2523545ejc.2.1679512335465; Wed, 22
- Mar 2023 12:12:15 -0700 (PDT)
+        bh=LzwFY37hLcbFrp/171eLlZheyW72j6O2ewbOp7Pv5N4=;
+        b=F2Fnp95GRCish/MkF3fuXKejpIWk1BzlX84r52xAOYX/ucwCC2crOR49Vv/WcEecK5
+         azFXfgyZnJiScNtTyECM6v43RRL/w7ICndoLea7w/5SuAAgN8j2flL79dVR3oxvstV+K
+         ssy+21PggrlZRgZlRio0kzlRz3AcMa24ctlwEPGuTxkX2rmEoiia4Ki4xwAAMQTPcpa7
+         uhVxWVpJJlwY/OfJKacBnKTt5znm65g/DEMvjLT8iA2gEglQaRWx2LV5n5xGyaohZKUs
+         hSikRjCbwlkHOLkePtscMDuElU+hFu8H7gBP/94WdkQUD56B39Zo7pjojaHLtYNlLkvL
+         JjEQ==
+X-Gm-Message-State: AO0yUKVThmTA4M+L4PQ8dy8e1MFnynadbIGdsTBTs8lvjoNB4tEmzCUe
+        qZnlyJGAeFf7xXkaBeFvZYL97RSDokE1ButDZkwNSlTC
+X-Google-Smtp-Source: AK7set8zLikabLWIv5bjuJ/++HNk28bJ+CiLNXX7FIk6lb/GSxlaB3sBkFq4z9Qp96SExJ3kx4JRHGgxtJbq6JjGhRA=
+X-Received: by 2002:a17:906:614a:b0:8d7:edbc:a7b6 with SMTP id
+ p10-20020a170906614a00b008d7edbca7b6mr1818011ejl.2.1679512593795; Wed, 22 Mar
+ 2023 12:16:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAJZ5v0gFpdWih3Z4Jy6O8t9qz64w1md00ZcQY_exEn9+rC1BOw@mail.gmail.com>
- <20230320081702.203843-1-qinyu32@huawei.com>
-In-Reply-To: <20230320081702.203843-1-qinyu32@huawei.com>
+References: <20230308122830.166728-1-jingyuwang_vip@163.com>
+In-Reply-To: <20230308122830.166728-1-jingyuwang_vip@163.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Mar 2023 20:12:04 +0100
-Message-ID: <CAJZ5v0hROXBbV5nQ_DArx+6CgGUdGuaMMpBocGAcj9q+PiDVAA@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: warn about invalid vals to
- scaling_max/min_freq interfaces
-To:     qinyu <qinyu32@huawei.com>
-Cc:     rafael@kernel.org, hewenliang4@huawei.com, linfeilong@huawei.com,
-        linux-pm@vger.kernel.org, viresh.kumar@linaro.org,
-        zhangxiaofeng46@huawei.com, yumpusamongus@gmail.com
+Date:   Wed, 22 Mar 2023 20:16:22 +0100
+Message-ID: <CAJZ5v0jfWoWvvUk6h-L0h5FRL8EdBmiHKFEmfgd3HOOj=PjrKQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix repeated words in comments
+To:     Jingyu Wang <jingyuwang_vip@163.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -59,48 +56,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 9:09 AM qinyu <qinyu32@huawei.com> wrote:
+On Wed, Mar 8, 2023 at 1:30 PM Jingyu Wang <jingyuwang_vip@163.com> wrote:
 >
-> When echo an invalid val to scaling_min_freq:
-> > echo 123abc123 > scaling_min_freq
-> It looks weird to have a return val of 0:
-> > echo $?
-> > 0
+> Delete the redundant word 'to'.
 >
-> Sane people won't echo strings like that into these interfaces but fuzz
-> tests may do. Also, maybe it's better to inform people if input is
-> invalid.
->
-> After this:
-> > echo 123abc123 > scaling_min_freq
-> > -bash: echo: write error: Invalid argument
->
-> Signed-off-by: qinyu <qinyu32@huawei.com>
-> Tested-by: zhangxiaofeng <zhangxiaofeng46@huawei.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
 > ---
-> v2:
-> - reword commit message to match the actual code changes.
->  drivers/cpufreq/cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/cpufreq/Kconfig.arm | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6d8fd3b8d..d61f7308f 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -725,9 +725,9 @@ static ssize_t store_##file_name                                    \
->         unsigned long val;                                              \
->         int ret;                                                        \
->                                                                         \
-> -       ret = sscanf(buf, "%lu", &val);                                 \
-> -       if (ret != 1)                                                   \
-> -               return -EINVAL;                                         \
-> +       ret = kstrtoul(buf, 0, &val);                                   \
-> +       if (ret)                                                        \
-> +               return ret;                                             \
->                                                                         \
->         ret = freq_qos_update_request(policy->object##_freq_req, val);\
->         return ret >= 0 ? count : ret;                                  \
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 97acaa2136fd..123b4bbfcfee 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -95,7 +95,7 @@ config ARM_BRCMSTB_AVS_CPUFREQ
+>         help
+>           Some Broadcom STB SoCs use a co-processor running proprietary firmware
+>           ("AVS") to handle voltage and frequency scaling. This driver provides
+> -         a standard CPUfreq interface to to the firmware.
+> +         a standard CPUfreq interface to the firmware.
+>
+>           Say Y, if you have a Broadcom SoC with AVS support for DFS or DVFS.
+>
 > --
 
-Applied as 6.4 material, thanks!
+Applied as 6.4 material under a modified subject and with some edits
+in the changelog.
+
+Thanks!
