@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B326C44DA
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 09:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB766C44DC
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 09:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCVIZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Mar 2023 04:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
+        id S230081AbjCVIZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Mar 2023 04:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjCVIZC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 04:25:02 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8625BD83
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 01:24:59 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so69412058edb.10
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 01:24:59 -0700 (PDT)
+        with ESMTP id S229813AbjCVIZa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 04:25:30 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01FD14EB2
+        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 01:25:29 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eh3so69448202edb.11
+        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 01:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679473498;
+        d=linaro.org; s=google; t=1679473528;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=szoZw3xvlaA8/xVMQ7gPUlc6BTRG3JxqG4Ue5578gh8=;
-        b=D8ixaQuHPM1so5P6msuMk3k2tOzaWMpYyFyf6dSVUmxV7RgYiqUd8Mxlif2f8zI+Mf
-         Wng3clmtwujrvveIwUo1d91T7dAdMWnkQ9W3lVWnX+TB70HbuHYHovpZkIz5vp0Jp+pR
-         s68+VJPftQdJUsTdZhVc2NzC80bxC1sI2R//FZKffVn3+tRrBy03W/35uJpZmfMzNm9I
-         K7scbA1RKZ04H6dVBI+vjCFkALFx44GtA1qs1WR5ywYMa740uHZS8nb1K4IKNUqLLQ4X
-         +0+BXV33JgeEpgQ/bpD94QFqcrGlUL2Q7kWNbEPWNZa7aAuupqITyZB99CchT59ECmwK
-         JQYg==
+        bh=6nHHBsgPcqoQXv3IcnxrVjy+sbpU6VtUmrNRMJlsrD0=;
+        b=NpflurRqiUYKopD7KIHpNLoR5YvWeMLnIYeI2l0cZGSjpgJUP+kZYxeTpZbPVD4wII
+         +TWHTPWMqOFr+l5dxZ/z8jP59hyLu48X6C3huhXbLLQWBxylYVyPTYAvsouRCe4aaxZc
+         c2qY7qz5ymlqdPZ758sjXJhQGMgjQ0HcYhKl1VWnPXfcRy7xSLCo+l6MxpK4eqjVZymV
+         Uc8GE0drVRIhVLEE+XYVTaFV2uFUv8XHPtf1z7MXFcATnNkSRxzsYxkEtMXEknouZpGa
+         gZoOr/FoRAwfEEkCVOrCw+T5hxb/bpnH5iVMl9q/Km4CVgaUjAduls5QLFcIumaHQ2bP
+         dxNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679473498;
+        d=1e100.net; s=20210112; t=1679473528;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=szoZw3xvlaA8/xVMQ7gPUlc6BTRG3JxqG4Ue5578gh8=;
-        b=cAiO4gRzBuL9bDj+DAzsmGMt2b2w+lv4KnVGsQC+n7lOjJQGd9jxXAjBzncxL3cAqu
-         5qmpugBPCCzHKroHMmrE7JtnPjoTz0pPDaTlazHop3tgdWjGrzFhep/uKoszg/uiu4Ll
-         XcDoZFEW5qkFCerHG291m8M55ov/tCaY9Eqiamtp6qsUTpTMh0TI1rEtkyVBH1csgCJG
-         eanDVaKJbvIaSmYwQEuvQtGvWgxrYc1KRwACeDWtdXn3c1vDUOUI48RS+Ns4pyBvlFFS
-         o0genj3K+s0qax2r/cjFmfayElRXbMvOx0Zv/oxa0oOPqpoSC40+Z78tjIQhQYqU4se7
-         Yq4Q==
-X-Gm-Message-State: AO0yUKVjkwxK1hkSXDYYXRtC0dMwIolWaYWg6xK6KLdcTia2ftHCLV3Q
-        cbg8VrZqKE95mTnjwwC0wpYz/A==
-X-Google-Smtp-Source: AK7set/z+TPpqbhYmWlz7QK/AKzno5EuRw2/ZLLKTKC0bmmMzcrOImyCU4d6DttsufEOay4I2ShZxA==
-X-Received: by 2002:a17:907:c306:b0:8b1:fc1a:7d21 with SMTP id tl6-20020a170907c30600b008b1fc1a7d21mr7716808ejc.5.1679473498053;
-        Wed, 22 Mar 2023 01:24:58 -0700 (PDT)
+        bh=6nHHBsgPcqoQXv3IcnxrVjy+sbpU6VtUmrNRMJlsrD0=;
+        b=CJkbdlfjtMeFMLbtzXnFm47aBjSUxSrayHP0VIN5CXNy7AcSeKUvlw4I91JTgWBHZn
+         c4qE7imL0269zGrM+z3zn9s4tz2KTYMb2i+1nyZVvZvGC1vu3yHXJSeXLfIqfiRj4hvR
+         mYEiR2J9uhsTK5lU9We974u1WI2RBnre56/7s0h3M8CVrSMRxz73U3aepPL7RWEfh064
+         nq76BcOAImCqcJuSbXjZt/3SCm+8CrrQHvnk4DDDXmSLvVezeiPavjM7qYDup/1TdXkq
+         1H/MwUDGuuPyOJhPHcoD+EPhoy99qMg9EFg4Zux973DVU/eQZWOxrks+IBQJ0ny8r2tk
+         tCCw==
+X-Gm-Message-State: AO0yUKUXb89csGrif3iaiqnGllHWG8LZDkX7rBu/2BFh9oxMNrjTDct1
+        63hO656OlmM8N/m4jlHm+Et0ew==
+X-Google-Smtp-Source: AK7set/ax3+09r7oIGAkbTOKrf/V2QVQAWE9pGnIkMxFOPEYcn/hQHTOSOa4OK5LgciOw1TKWuuCNA==
+X-Received: by 2002:a17:906:7c8b:b0:931:624b:680c with SMTP id w11-20020a1709067c8b00b00931624b680cmr5697043ejo.29.1679473528257;
+        Wed, 22 Mar 2023 01:25:28 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
-        by smtp.gmail.com with ESMTPSA id v15-20020a170906858f00b0093229e527cdsm6393171ejx.42.2023.03.22.01.24.57
+        by smtp.gmail.com with ESMTPSA id u6-20020a50d506000000b004fd2aab4953sm7339300edi.45.2023.03.22.01.25.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 01:24:57 -0700 (PDT)
-Message-ID: <9f5a7213-8a31-afed-f4aa-b45b6e277be4@linaro.org>
-Date:   Wed, 22 Mar 2023 09:24:51 +0100
+        Wed, 22 Mar 2023 01:25:27 -0700 (PDT)
+Message-ID: <ce89857a-53b3-d63b-c1ad-5d28fd7d8f80@linaro.org>
+Date:   Wed, 22 Mar 2023 09:25:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/8] dt-bindings: regulator: max77658: Add ADI
- MAX77643/54/58/59 Regulator
+Subject: Re: [PATCH v2 2/8] regulator: max77658: Add ADI MAX77643/54/58/59
+ Regulator Support
 Content-Language: en-US
 To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
         lee@kernel.org, robh+dt@kernel.org,
@@ -64,9 +64,9 @@ To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
 Cc:     Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
- <20230322055628.4441-2-Zeynep.Arslanbenzer@analog.com>
+ <20230322055628.4441-3-Zeynep.Arslanbenzer@analog.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230322055628.4441-2-Zeynep.Arslanbenzer@analog.com>
+In-Reply-To: <20230322055628.4441-3-Zeynep.Arslanbenzer@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -80,41 +80,27 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 22/03/2023 06:56, Zeynep Arslanbenzer wrote:
-> Add ADI MAX77643/MAX77654/MAX77658/MAX77659 Regulator devicetree document.
+> Regulator driver for ADI MAX77643/MAX77654/MAX77658/MAX77659.
+> 
+> MAX77643/MAX77659 has 1 LDO regulator.
+> MAX77654/MAX77658 has two LDO regulators.
 > 
 > Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> ---
->  .../regulator/adi,max77658-regulator.yaml     | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77658-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77658-regulator.yaml b/Documentation/devicetree/bindings/regulator/adi,max77658-regulator.yaml
-> new file mode 100644
-> index 000000000000..1d097eddcd98
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/adi,max77658-regulator.yaml
-> @@ -0,0 +1,32 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/adi,max77658-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Regulator for MAX77658 PMICs family from ADI
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  This is part of the MAX77658 MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/adi,max77658.yaml.
-> +
-> +  The regulators is represented as a sub-node of the PMIC node on the device tree.
 
-There is no select/compatible here, so this makes little sense as
-separate binding. Make it part of parent schema instead.
+
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct platform_device_id max77658_regulator_id[] = {
+> +	{ "max77643-regulator" },
+> +	{ "max77654-regulator" },
+> +	{ "max77658-regulator" },
+> +	{ "max77659-regulator" },
+
+Why do you need so many entries? They do not differ.
 
 Best regards,
 Krzysztof
