@@ -2,109 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A3A6C5504
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 20:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133B76C562E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 21:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjCVTeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Mar 2023 15:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        id S231517AbjCVUDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Mar 2023 16:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCVTeX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 15:34:23 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932344E5F5;
-        Wed, 22 Mar 2023 12:34:15 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 66da7f182edbea95; Wed, 22 Mar 2023 20:34:13 +0100
-Received: from kreacher.localnet (unknown [213.134.163.127])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S230467AbjCVUCm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 16:02:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1636F1FCF;
+        Wed, 22 Mar 2023 12:59:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 4245422201E0;
-        Wed, 22 Mar 2023 20:34:13 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1] thermal: core: Clean up thermal_list_lock locking
-Date:   Wed, 22 Mar 2023 20:34:12 +0100
-Message-ID: <2696911.mvXUDI8C0e@kreacher>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8D34622C4;
+        Wed, 22 Mar 2023 19:59:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E486C433AF;
+        Wed, 22 Mar 2023 19:59:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679515163;
+        bh=UMk1yWcwvsggJJjnaJ9yTLb2WQw1KXCFuCFy3Q+rgHE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XbbCOGDuwpY+38+XllKayiicuORjsZ55bksFA9XW60j1VKVM8WBq7HnNhBLAKXrJO
+         JaJPSv/2hnl9B/Z4xyHIour7dmnoA9+GnqbZdA1rSbazQBauj+Ez5iIhF/54xyGLtK
+         XUWHZYIXOHfoKb5Ay4xB7dew1CI+pfhU3IjK8ftg7ouIyr2KOpFGLTzx+CmbODfniL
+         o4rrAMhNNgsUWqf9Q0NX5Ed13l15UNitE2oW6ebi3aMXHFe/TEMTyeoHCXkj+LlL7V
+         TQ+Rl21N/goZhh9GZS1pQEye+HJbaG7vyMdYcCgFYFFIAuKH6sHGnipxyNR+UaI3Wb
+         Fg0TNhH9vfbxA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Prarit Bhargava <prarit@redhat.com>, linux-pm@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Sasha Levin <sashal@kernel.org>, lenb@kernel.org
+Subject: [PATCH AUTOSEL 6.2 43/45] tools/power turbostat: Fix /dev/cpu_dma_latency warnings
+Date:   Wed, 22 Mar 2023 15:56:37 -0400
+Message-Id: <20230322195639.1995821-43-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230322195639.1995821-1-sashal@kernel.org>
+References: <20230322195639.1995821-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.127
-X-CLIENT-HOSTNAME: 213.134.163.127
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduvdejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgt
- ohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Prarit Bhargava <prarit@redhat.com>
 
-Once thermal_list_lock has been acquired in
-__thermal_cooling_device_register(), it is not necessary to drop it
-and take it again until all of the thermal zones have been updated,
-so change the code accordingly.
+[ Upstream commit 40aafc7d58d3544f152a863a0e9863014b6d5d8c ]
 
-No expected functional impact.
+When running as non-root the following error is seen in turbostat:
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+turbostat: fopen /dev/cpu_dma_latency
+: Permission denied
+
+turbostat and the man page have information on how to avoid other
+permission errors, so these can be fixed the same way.
+
+Provide better /dev/cpu_dma_latency warnings that provide instructions on
+how to avoid the error, and update the man page.
+
+Signed-off-by: Prarit Bhargava <prarit@redhat.com>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/thermal_core.c |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ tools/power/x86/turbostat/turbostat.8 | 2 ++
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -826,8 +826,6 @@ static void bind_cdev(struct thermal_coo
- 	const struct thermal_zone_params *tzp;
- 	struct thermal_zone_device *pos = NULL;
+diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
+index c7b26a3603afe..3e1a4c4be001a 100644
+--- a/tools/power/x86/turbostat/turbostat.8
++++ b/tools/power/x86/turbostat/turbostat.8
+@@ -344,6 +344,8 @@ Alternatively, non-root users can be enabled to run turbostat this way:
  
--	mutex_lock(&thermal_list_lock);
--
- 	list_for_each_entry(pos, &thermal_tz_list, node) {
- 		if (!pos->tzp && !pos->ops->bind)
- 			continue;
-@@ -854,8 +852,6 @@ static void bind_cdev(struct thermal_coo
- 			       tzp->tbp[i].weight);
- 		}
+ # chmod +r /dev/cpu/*/msr
+ 
++# chmod +r /dev/cpu_dma_latency
++
+ .B "turbostat "
+ reads hardware counters, but doesn't write them.
+ So it will not interfere with the OS or other programs, including
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index aba460410dbd1..c24054e3ef7ad 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -5482,7 +5482,7 @@ void print_dev_latency(void)
+ 
+ 	retval = read(fd, (void *)&value, sizeof(int));
+ 	if (retval != sizeof(int)) {
+-		warn("read %s\n", path);
++		warn("read failed %s\n", path);
+ 		close(fd);
+ 		return;
  	}
--
--	mutex_unlock(&thermal_list_lock);
- }
- 
- /**
-@@ -933,17 +929,17 @@ __thermal_cooling_device_register(struct
- 
- 	/* Add 'this' new cdev to the global cdev list */
- 	mutex_lock(&thermal_list_lock);
-+
- 	list_add(&cdev->node, &thermal_cdev_list);
--	mutex_unlock(&thermal_list_lock);
- 
- 	/* Update binding information for 'this' new cdev */
- 	bind_cdev(cdev);
- 
--	mutex_lock(&thermal_list_lock);
- 	list_for_each_entry(pos, &thermal_tz_list, node)
- 		if (atomic_cmpxchg(&pos->need_update, 1, 0))
- 			thermal_zone_device_update(pos,
- 						   THERMAL_EVENT_UNSPECIFIED);
-+
- 	mutex_unlock(&thermal_list_lock);
- 
- 	return cdev;
-
-
+-- 
+2.39.2
 
