@@ -2,72 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B53BA6C4B1D
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 13:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF06C4D9E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Mar 2023 15:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCVMvo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Mar 2023 08:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S231448AbjCVO2B convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 22 Mar 2023 10:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjCVMvn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 08:51:43 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4195F219
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 05:51:36 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cn12so26834718edb.4
-        for <linux-pm@vger.kernel.org>; Wed, 22 Mar 2023 05:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679489495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z7uInAiqpQblW1FuguJKCYpcZGazuZcNpStJm/HJYwE=;
-        b=eQ+8m1BOPPny9D5aNyxbHYGTiCf8Na3k/SMUqrCxaa1Yd6GYecb6qZPcSNejvrGTLh
-         K2tNopHoQ+IXxsJ3Z/xQnfFtL0q0ndPimIrANSMeWDBSrX/roRZA7g4cDspQdSjlTqYO
-         ST0FoVApsvyQx4KLgzGClpGOdlW5k0tRafn6Bi6bY5+mz0yLtL72We2GmJAb5QQ+kYYe
-         IesM6YsnG3KC2VBYu5t3XjhDCr80TdEgGVarrxOWZTFYXfXlzOXXqgB+SxHxbjNmxrcf
-         xvFNepmdn5r+oAq6AWo8ad7eTxr6LF1M25wuqgQgFPKvVkQ0UoqGT+da4ojmX6Z/EwHv
-         B85Q==
+        with ESMTP id S231497AbjCVO17 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Mar 2023 10:27:59 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AC035B2;
+        Wed, 22 Mar 2023 07:27:58 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id w9so73798140edc.3;
+        Wed, 22 Mar 2023 07:27:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679489495;
+        d=1e100.net; s=20210112; t=1679495276;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z7uInAiqpQblW1FuguJKCYpcZGazuZcNpStJm/HJYwE=;
-        b=i5LlUoEUHUlls/qhFnV7NQ3uooEO4sXfefQxYMVkJh4IpjO8A50UvhW7Z3532THEng
-         7mLy3gP0oIomz2PuoFedfxM1nWldun3gfYy4khsyGVZWvtmZmtSm/1Bl0j2kFzsWrND4
-         ixCNS6No782hMmgpojRoDtPJSHkHvCMPM4nIZhpbuzM853FEMv7UwP5v8v4/qvaOSzBt
-         FoOoeMpHStoi6+/lfJ+LFRUH3YDqrZKqZHCV5DDYggwNXhFDncOzZ11FFaXFypyV1uIt
-         +jOBrE1q4iOBRYYIRckqVh3HwVsmB3/KAJwvsFGyP4anDDG6Jyb3XEKtX1VSRyqwZUno
-         sUjQ==
-X-Gm-Message-State: AO0yUKVsSmaV4GWMMSlf4BQLNADbV2jJqzAYsumYwJ/J9Z8kroB6rDk6
-        XMNUXkPvRGmOkGcIrDO/HSzR4bUdFsDQLxSfH/EoFw==
-X-Google-Smtp-Source: AK7set+H54h9AIkF40JfLtjJco8DQSGdF2j7ywDCKthKg0qqriwpU2mABmcujmqJNtXCow1utP9NeQroR4FDuRCo+94=
-X-Received: by 2002:a05:6402:3496:b0:4ad:739c:b38e with SMTP id
- v22-20020a056402349600b004ad739cb38emr1580205edc.1.1679489494871; Wed, 22 Mar
- 2023 05:51:34 -0700 (PDT)
+        bh=S3g7V0ZtaYCJ08ekmgYYgxlOXyguJ5wpLG7Fm+NVbfs=;
+        b=Sed+AhcRktJIjBI3KNaQERm67qzRiuw3U2pZuGxxZzq0IzTSST7PWYY3VEsl8qqt1p
+         XjLROe6rN3PQNaD7tIet4Nt2QwxJ5GJndjx01zsTrVyFnq+XzS0DvCpXIl6zoY2pUhl2
+         NrJ8lUBFInppOmkUmM2a0MdzYDg9xdufmhqU+JVoKqfEzhidqF1kWwq93vmk2JQ3Qmmb
+         Na6sxKfedSC8BuBue8clhFq4rT0PcFoKFNhXfqQZvixkNTK5NcSNMKk78PxnKSjoV1KA
+         XjzZwMV37l8MsWaRnALJhsV4ZBsStAr4OpwCTUdt9DyzH4Hg0GT2jOuqkm//mIJlNTlb
+         w/2Q==
+X-Gm-Message-State: AO0yUKVYT5j8KvtxuFljSgG8hbFZjumt0BGWlTs1116QDpzQdusl05ZA
+        D8apfQpsGRdQYjo1FWkCL1e0JboqhRtaXRIlVgE=
+X-Google-Smtp-Source: AK7set99yZ5uGOciVCUzVwWAsJHFIwbKSK27uzSOVjBnuial2wp9366vcARstqlfqHBvumCxVCE47cKMecudCQ5E8O8=
+X-Received: by 2002:a50:8d04:0:b0:4fc:ebe2:2fc9 with SMTP id
+ s4-20020a508d04000000b004fcebe22fc9mr3682902eds.3.1679495276403; Wed, 22 Mar
+ 2023 07:27:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307154524.118541-1-bchihi@baylibre.com> <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
-In-Reply-To: <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 22 Mar 2023 13:50:58 +0100
-Message-ID: <CAGuA+oqLi-b7YuUVYzCDQWbztPy7WOVEch6dbrbWzdPkRBOwcg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
+References: <CAJZ5v0hRScLjW27k_rHZ1jnLyn7B3O26oP9Jd3AwDL97VSJ8tQ@mail.gmail.com>
+ <20230322090557.2943479-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230322090557.2943479-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Mar 2023 15:27:45 +0100
+Message-ID: <CAJZ5v0h_oTjn5FGuyDvGzewY9VDqo7U0YN1X+XZcsQqLhtNCSg@mail.gmail.com>
+Subject: Re: [PATCH v2 03/19] cpuidle: move to use bus_get_dev_root()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,54 +59,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 4:22=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
+On Wed, Mar 22, 2023 at 10:06 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Mar 7, 2023 at 11:45=E2=80=AFPM <bchihi@baylibre.com> wrote:
-> >
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
-> >
-> > This series is a continuation of the original series "Add LVTS Thermal =
-Architecture" v14 :
-> >     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.=
-50294-1-bchihi@baylibre.com/
-> >
-> > Based on top of thermal/linux-next :
-> >     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
-> >
-> > Depends on these patches as they are not yet applyied to thermal/linux-=
-next branch :
-> >     [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already inc=
-luded in linux master branch)
-> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
-50294-4-bchihi@baylibre.com/
-> >     [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and therm=
-al nodes
-> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
-50294-6-bchihi@baylibre.com/
-> >     [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation =
-threshold
-> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
-50294-7-bchihi@baylibre.com/
-> >
-> > Balsam CHIHI (4):
-> >   dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
-> >     controllers for mt8195
-> >   thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
-> >   arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-> >   arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
+> Direct access to the struct bus_type dev_root pointer is going away soon
+> so replace that with a call to bus_get_dev_root() instead, which is what
+> it is there for.
 >
-> Whole series is
+> This allows us to clean up the cpuidle_add_interface() call a bit as it
+> was only called in one place, with the same argument so just put that
+> into the function itself.  Note that cpuidle_remove_interface() should
+> also probably be removed in the future as there are no callers of it for
+> some reason.
 >
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->
-> on MT8195 Tomato Chromebook.
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Hi Chen-Yu Tsai,
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Thank you very much for testing it!
-
-Best regards,
-Balsam
+> ---
+> v2: - reworked cpuidle_add_interface() to exit early if dev_root is not
+>       valid based on review from Rafael.
+>
+>  drivers/cpuidle/cpuidle.c |  2 +-
+>  drivers/cpuidle/cpuidle.h |  2 +-
+>  drivers/cpuidle/sysfs.c   | 13 ++++++++++---
+>  3 files changed, 12 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 0b00f21cefe3..8e929f6602ce 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -808,7 +808,7 @@ static int __init cpuidle_init(void)
+>         if (cpuidle_disabled())
+>                 return -ENODEV;
+>
+> -       return cpuidle_add_interface(cpu_subsys.dev_root);
+> +       return cpuidle_add_interface();
+>  }
+>
+>  module_param(off, int, 0444);
+> diff --git a/drivers/cpuidle/cpuidle.h b/drivers/cpuidle/cpuidle.h
+> index 9f336af17fa6..52701d9588f1 100644
+> --- a/drivers/cpuidle/cpuidle.h
+> +++ b/drivers/cpuidle/cpuidle.h
+> @@ -30,7 +30,7 @@ extern int cpuidle_switch_governor(struct cpuidle_governor *gov);
+>
+>  struct device;
+>
+> -extern int cpuidle_add_interface(struct device *dev);
+> +extern int cpuidle_add_interface(void);
+>  extern void cpuidle_remove_interface(struct device *dev);
+>  extern int cpuidle_add_device_sysfs(struct cpuidle_device *device);
+>  extern void cpuidle_remove_device_sysfs(struct cpuidle_device *device);
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index 48948b171749..d6f5da61cb7d 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -119,11 +119,18 @@ static struct attribute_group cpuidle_attr_group = {
+>
+>  /**
+>   * cpuidle_add_interface - add CPU global sysfs attributes
+> - * @dev: the target device
+>   */
+> -int cpuidle_add_interface(struct device *dev)
+> +int cpuidle_add_interface(void)
+>  {
+> -       return sysfs_create_group(&dev->kobj, &cpuidle_attr_group);
+> +       struct device *dev_root = bus_get_dev_root(&cpu_subsys);
+> +       int retval;
+> +
+> +       if (!dev_root)
+> +               return -EINVAL;
+> +
+> +       retval = sysfs_create_group(&dev_root->kobj, &cpuidle_attr_group);
+> +       put_device(dev_root);
+> +       return retval;
+>  }
+>
+>  /**
+> --
+> 2.40.0
+>
