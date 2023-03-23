@@ -2,277 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DBE6C6D43
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 17:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2106C6F7C
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 18:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCWQUG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Mar 2023 12:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S231282AbjCWRlG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Mar 2023 13:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjCWQT4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 12:19:56 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D6E2128F
-        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 09:19:54 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id d14so7332076ion.9
-        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 09:19:53 -0700 (PDT)
+        with ESMTP id S229691AbjCWRkr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 13:40:47 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C471E274B2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 10:40:33 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id eg48so90057613edb.13
+        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 10:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679588393;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4gxbyXM9VniJfchNlzpEP3glR9+pWHD0pj8j3ifk4Mw=;
-        b=EhKBazWRGtSgCzqOkEYEwT/+lIuWMsw/vxHPOhdqhXI0Sm31/YtSRJLeqz3JDZUG2q
-         jNhqcqzlnVnd1gzpSxjwVIW8Bre6XYJrgUH4H74QB0I4j4c+6KOiIXBlDc3MLEQZgqti
-         /IzvP550GXWo8HDO1L2/XfIOqWvpSi5kkZaf0=
+        d=linaro.org; s=google; t=1679593232;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ONmJsFn4VtTyqhV76hclBRWNA9ptPEzWzjO41FRshbk=;
+        b=ZOOMx6qRt3g7nOII6cvvW0hyxEjWWWvDyB98rJc12tcsH6noQhIsqu5xLxTof0r+F6
+         Fk6ByrMV8UwbwL7tUhXCMW1/tQSupmgreeis3cnrbTucwxJBVGbIiXo47uHi1RmFtad0
+         NfcBboj+c0EQ0W89ocXkpz6EoGXfx8QSla2bJ2Yp79BR1UJTy1y9u77coZDKkC/wVe/o
+         Iz1oE7G00uYZTSzJM9ApeuHNhP8WjV+yLj3GpTAYs4gp1Is9P5SwwM8n1y5WJVPzVR7l
+         r1tuvwipZ6u/wfdNztLFTIOVgRjlAmxDsrgCPJjuKVfrWG4i2K3jtA8FZ3Ll3veAvA9K
+         ZkkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679588393;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4gxbyXM9VniJfchNlzpEP3glR9+pWHD0pj8j3ifk4Mw=;
-        b=o1J6a/ZseRv3Rxb8hzzXyDZl/26lqHghg7J41gTgYgYSnn2FFPkHaMc47APP+RGpol
-         jYDlmYjXxF1ukK2CxNmfn8xKRY1TU6FgRPhfmgLrjgOK6UWv0GLUSCrqcj7JOnkhNGpQ
-         YEUo5zVf/J2Axv/gy18cJPP2NqMYVDIiSv+7RNj7L+J+9I+TAljmqC4+6/N1M0y7Uil8
-         r8zA88p90nPky5v2mQ5d1dDWGjwFRfmotne5be5yvmmr5kDqi6QJM1bf4tQvdmYUHfgb
-         z5lEVmBOKBASMxAr//OwVWqWGQMJsF62N2n4mtzz8+PWBSHcTnJUgSrwM5Jm88M5177i
-         w47A==
-X-Gm-Message-State: AO0yUKUUMKM3zJX+U/wr8dJEVhF6wpstgcIfI5r1+G6Tzj04ZkHr0woH
-        WUExKBe5iCr8EGVemrk1cClnIA==
-X-Google-Smtp-Source: AK7set9Zw8S1cGqdQPEi8gutIWlt3/JjVPmlkY4mwEcFHXd0gu8L6BT6CxV2gtl5o2UY1KiRNrrbEw==
-X-Received: by 2002:a6b:6604:0:b0:716:99e0:807f with SMTP id a4-20020a6b6604000000b0071699e0807fmr7683212ioc.11.1679588393255;
-        Thu, 23 Mar 2023 09:19:53 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id l6-20020a026646000000b003c488204c6fsm5944854jaf.76.2023.03.23.09.19.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 09:19:52 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 16:19:52 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PM: hibernate: don't store zero pages in the image
- file.
-Message-ID: <ZBx8KEuVtIbqkeq1@google.com>
-References: <20230113193006.1320379-1-bgeffon@google.com>
- <20230302171348.3601107-1-bgeffon@google.com>
+        d=1e100.net; s=20210112; t=1679593232;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ONmJsFn4VtTyqhV76hclBRWNA9ptPEzWzjO41FRshbk=;
+        b=oQOYh5GDPQCvapprPaHBr1uEma5DLHrhZ0Eu+MYHuxdVgU1aRA1rHyEjwtzgvTtIOd
+         zpfuO2aOmzVyEnGA36fcGDOSZ9wIOu8IQsS+BDqZxXx7uX/UT23+5LVbTR9auLi6J5KH
+         Z/87W6UUgKmilboe5oIlUTa9SI1lHClcScIZXRdQBTMDEURlYVk7OtNRPxz+2XKt5JUX
+         EYL1QqGYkSRNjmLwuXNC5wtfmB5ULu8lkvphu5tfn04qHmmxtc/Fmu6oEHV0UB98HX9X
+         o+p//gHiWWgWR/lfz25stxCnka2abQBWDsfsPdAKM/G3OlCBhpy+2JldqD24PSZEbiMW
+         A6TQ==
+X-Gm-Message-State: AO0yUKXonhBgkNmbOmvucwX0MZdgSNS2BDq2m7G9HGuGc1/Sndr42zQM
+        j9cz0XV3ETCey8BL0bUqP20L3RvspWWZEzHeYAY=
+X-Google-Smtp-Source: AK7set8rJQZ+O/FCvIPcGJhP6YlCEw19hFeuaPslN52OzsFHLjmX9FRAHXgcMjsK45mV7kDxLqZerQ==
+X-Received: by 2002:a17:906:378d:b0:930:7ae6:9ebd with SMTP id n13-20020a170906378d00b009307ae69ebdmr11866028ejc.70.1679593232231;
+        Thu, 23 Mar 2023 10:40:32 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:d350:23b1:cb94:f39d])
+        by smtp.gmail.com with ESMTPSA id e5-20020a170906314500b009236ae669ecsm8890787eje.191.2023.03.23.10.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 10:40:31 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] cpufreq: qcom-cpufreq-hw: fix double IO unmap and resource release on exit
+Date:   Thu, 23 Mar 2023 18:40:26 +0100
+Message-Id: <20230323174026.950622-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230302171348.3601107-1-bgeffon@google.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 12:13:48PM -0500, Brian Geffon wrote:
-> On ChromeOS we've observed a considerable number of in-use pages filled with
-> zeros. Today with hibernate it's entirely possible that saveable pages are just
-> zero filled. Since we're already copying pages word-by-word in do_copy_page it
-> becomes almost free to determine if a page was completely filled with zeros.
-> 
-> This change introduces a new bitmap which will track these zero pages. If a page
-> is zero it will not be included in the saved image, instead to track these zero
-> pages in the image file we will introduce a new flag which we will set on the
-> packed PFN list. When reading back in the image file we will detect these zero
-> page PFNs and rebuild the zero page bitmap.
-> 
-> When the image is being loaded through calls to write_next_page if we encounter
-> a zero page we will silently memset it to 0 and then continue on to the next
-> page. Given the implementation in snapshot_read_next/snapshot_write_next this
-> change  will be transparent to non-compressed/compressed and swsusp modes of
-> operation.
-> 
-> To provide some concrete numbers from simple ad-hoc testing, on a device which
-> was lightly in use we saw that:
-> 
->   PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
-> 
-> Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero filled
-> and could be tracked entirely within the packed PFN list. The savings would
-> obviously be much lower for lzo compressed images, but even in the case of
-> compression not copying pages across to the compression threads will still
-> speed things up. It's also possible that we would see better overall compression
-> ratios as larger regions of "real data" would improve the compressibility.
-> 
-> Finally, such an approach could dramatically improve swsusp performance
-> as each one of those zero pages requires a write syscall to reload, by
-> handling it as part of the packed PFN list we're able to fully avoid
-> that.
-> 
->  Patch v2 -> v3:
->    - Use nr_zero_pages rather than walking each pfn to count.
->    - Make sure zero_bm is allocated in safe pages on resume.
->      When reading in the pfn list and building the zero page bm
->      we don't know which pages are unsafe yet so we will need to
->      copy this bm to safe pages after the metadata has been read.
-> 
->  Patch v1 -> v2:
->    - minor code mistake from rebasing corrected.
-> 
-> Signed-off-by: Brian Geffon <bgeffon@google.com>
-> ---
->  kernel/power/snapshot.c | 169 +++++++++++++++++++++++++++++++---------
->  1 file changed, 133 insertions(+), 36 deletions(-)
-> 
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index cd8b7b35f1e8b..a2c4fe17f9067 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
+Commit 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data
+during probe") moved getting memory resource and iomap from
+qcom_cpufreq_hw_cpu_init() to the probe function, however it left
+untouched cleanup in qcom_cpufreq_hw_cpu_exit().
 
-...
+During device unbind this will lead to doule release of resource and
+double iounmap(), first by qcom_cpufreq_hw_cpu_exit() and second via
+managed resources:
 
-> @@ -1371,14 +1381,18 @@ static unsigned int count_data_pages(void)
->  
->  /*
->   * This is needed, because copy_page and memcpy are not usable for copying
-> - * task structs.
-> + * task structs. Returns 1 if a page was filled with only zeros, otherwise 0.
+  resource: Trying to free nonexistent resource <0x0000000018593000-0x0000000018593fff>
+  Trying to vunmap() nonexistent vm area (0000000088a7d4dc)
+  ...
+  vunmap (mm/vmalloc.c:2771 (discriminator 1))
+  iounmap (mm/ioremap.c:60)
+  devm_ioremap_release (lib/devres.c:19)
+  devres_release_all (drivers/base/devres.c:506 drivers/base/devres.c:535)
+  device_unbind_cleanup (drivers/base/dd.c:523)
+  device_release_driver_internal (drivers/base/dd.c:1248 drivers/base/dd.c:1263)
+  device_driver_detach (drivers/base/dd.c:1300)
+  unbind_store (drivers/base/bus.c:243)
+  drv_attr_store (drivers/base/bus.c:127)
+  sysfs_kf_write (fs/sysfs/file.c:137)
+  kernfs_fop_write_iter (fs/kernfs/file.c:334)
+  vfs_write (include/linux/fs.h:1851 fs/read_write.c:491 fs/read_write.c:584)
+  ksys_write (fs/read_write.c:637)
+  __arm64_sys_write (fs/read_write.c:646)
+  invoke_syscall (arch/arm64/include/asm/current.h:19 arch/arm64/kernel/syscall.c:57)
+  el0_svc_common.constprop.0 (arch/arm64/include/asm/daifflags.h:28 arch/arm64/kernel/syscall.c:150)
+  do_el0_svc (arch/arm64/kernel/syscall.c:194)
+  el0_svc (arch/arm64/include/asm/daifflags.h:28 arch/arm64/kernel/entry-common.c:133 arch/arm64/kernel/entry-common.c:142 arch/arm64/kernel/entry-common.c:638)
+  el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
+  el0t_64_sync (arch/arm64/kernel/entry.S:591)
 
-nit: s/a page/the page/
+Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
+Cc: <stable@vger.kernel.org>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
->   */
-> -static inline void do_copy_page(long *dst, long *src)
-> +static inline int do_copy_page(long *dst, long *src)
->  {
->  	int n;
-> +	long z = 0;
->  
-> -	for (n = PAGE_SIZE / sizeof(long); n; n--)
-> +	for (n = PAGE_SIZE / sizeof(long); n; n--) {
-> +		z |= *src;
->  		*dst++ = *src++;
-> +	}
-> +	return !z;
->  }
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 2f581d2d617d..b2d2907200a9 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -43,7 +43,6 @@ struct qcom_cpufreq_soc_data {
+ 
+ struct qcom_cpufreq_data {
+ 	void __iomem *base;
+-	struct resource *res;
+ 
+ 	/*
+ 	 * Mutex to synchronize between de-init sequence and re-starting LMh
+@@ -590,16 +589,12 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+ {
+ 	struct device *cpu_dev = get_cpu_device(policy->cpu);
+ 	struct qcom_cpufreq_data *data = policy->driver_data;
+-	struct resource *res = data->res;
+-	void __iomem *base = data->base;
+ 
+ 	dev_pm_opp_remove_all_dynamic(cpu_dev);
+ 	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
+ 	qcom_cpufreq_hw_lmh_exit(data);
+ 	kfree(policy->freq_table);
+ 	kfree(data);
+-	iounmap(base);
+-	release_mem_region(res->start, resource_size(res));
+ 
+ 	return 0;
+ }
+@@ -718,17 +713,15 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+ 	for (i = 0; i < num_domains; i++) {
+ 		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
+ 		struct clk_init_data clk_init = {};
+-		struct resource *res;
+ 		void __iomem *base;
+ 
+-		base = devm_platform_get_and_ioremap_resource(pdev, i, &res);
++		base = devm_platform_ioremap_resource(pdev, i);
+ 		if (IS_ERR(base)) {
+-			dev_err(dev, "Failed to map resource %pR\n", res);
++			dev_err(dev, "Failed to map resource index %d\n", i);
+ 			return PTR_ERR(base);
+ 		}
+ 
+ 		data->base = base;
+-		data->res = res;
+ 
+ 		/* Register CPU clock for each frequency domain */
+ 		clk_init.name = kasprintf(GFP_KERNEL, "qcom_cpufreq%d", i);
+-- 
+2.34.1
 
-...
-
-> -static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-> +static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
->  {
-> -	safe_copy_page(page_address(pfn_to_page(dst_pfn)),
-> +	return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
->  				pfn_to_page(src_pfn));
->  }
->  #endif /* CONFIG_HIGHMEM */
->  
->  static void copy_data_pages(struct memory_bitmap *copy_bm,
-> -			    struct memory_bitmap *orig_bm)
-> +			    struct memory_bitmap *orig_bm,
-> +			    struct memory_bitmap *zero_bm,
-> +			    unsigned int *zero_count)
->  {
->  	struct zone *zone;
-> -	unsigned long pfn;
-> +	unsigned long pfn, copy_pfn;
->  
->  	for_each_populated_zone(zone) {
->  		unsigned long max_zone_pfn;
-> @@ -1462,11 +1482,20 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
->  	}
->  	memory_bm_position_reset(orig_bm);
->  	memory_bm_position_reset(copy_bm);
-> +	copy_pfn = memory_bm_next_pfn(copy_bm);
->  	for(;;) {
->  		pfn = memory_bm_next_pfn(orig_bm);
->  		if (unlikely(pfn == BM_END_OF_MAP))
->  			break;
-> -		copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
-> +		if (copy_data_page(copy_pfn, pfn)) {
-> +			memory_bm_set_bit(zero_bm, pfn);
-> +			if (zero_count)
-
-This check is not needed. The function is called only once, with a pointer. The kernel
-trusts itself if the pointer is supposed to be always != NULL.
-
-Or better: use a local counter and have copy_data_pages() return the number of pages
-that were actually copied, which is what the caller is interested in.
-
-> +				(*zero_count)++;
-> +
-> +			/* We will reuse this copy_pfn for a real 'nonzero' page. */
-> +			continue;
-> +		}
-> +		copy_pfn = memory_bm_next_pfn(copy_bm);
->  	}
->  }
-
-...
-
-> @@ -2247,24 +2299,34 @@ static int load_header(struct swsusp_info *info)
->   * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
->   * @bm: Memory bitmap.
->   * @buf: Area of memory containing the PFNs.
-> + * @zero_bm: Memory bitmap which will be populated with the PFNs of zero pages.
->   *
->   * For each element of the array pointed to by @buf (1 page at a time), set the
-> - * corresponding bit in @bm.
-> + * corresponding bit in @bm. If the the page was originally populated with only
-> + * zeros then a corresponding bit will also be set in @zero_bm.
-
-s/the the/the/
-
-...
-
-> @@ -2486,6 +2548,7 @@ static inline void free_highmem_data(void) {}
->   * prepare_image - Make room for loading hibernation image.
->   * @new_bm: Uninitialized memory bitmap structure.
->   * @bm: Memory bitmap with unsafe pages marked.
-> + * @zero_bm: Memory bitmap containing the zero pages.
-
-That sounds as if the memory bitmap actually contained zero pages. I suggest to
-change it to something like the comment for 'bm' above, i.e. "... with zero
-pages marked"
-
->   *
->   * Use @bm to mark the pages that will be overwritten in the process of
->   * restoring the system memory state from the suspend image ("unsafe" pages)
-> @@ -2496,8 +2559,12 @@ static inline void free_highmem_data(void) {}
->   * pages will be used for just yet.  Instead, we mark them all as allocated and
->   * create a lists of "safe" pages to be used later.  On systems with high
->   * memory a list of "safe" highmem pages is created too.
-> + *
-> + * Because we didn't know which pages were unsafe when we created the zero bm we
-> + * will make a copy of it and recreate it within safe pages.
-
-nit: s/we will make/we make/
-
->   */
-> -static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
-> +static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm,
-> +		struct memory_bitmap *zero_bm)
->  {
->  	unsigned int nr_pages, nr_highmem;
->  	struct linked_page *lp;
-> @@ -2516,6 +2583,20 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
->  
->  	duplicate_memory_bitmap(new_bm, bm);
->  	memory_bm_free(bm, PG_UNSAFE_KEEP);
-> +	error = memory_bm_create(bm, GFP_ATOMIC, PG_ANY);
-> +	if (error)
-> +		goto Free;
-> +
-> +	/* use bm as storage while we rebuild zero_bm using safe pages */
-
-Re-using the 'bm' parameter is confusing, it should be avoided IMO unless there
-is a real benefit. struct memory_bitmap isn't that big, why not create a local
-variable 'zero_mb_tmp' or similar as a temporary store for the zero page bitmap?
-
-> +	duplicate_memory_bitmap(bm, zero_bm);
-> +	memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
-> +	error = memory_bm_create(zero_bm, GFP_ATOMIC, PG_SAFE);
-> +	if (error)
-> +		goto Free;
-> +	duplicate_memory_bitmap(zero_bm, bm);
-> +	memory_bm_free(bm, PG_UNSAFE_KEEP);
-> +	/* at this point zero_bm is in safe pages and we can use it while restoring */
-> +
->  	if (nr_highmem > 0) {
->  		error = prepare_highmem_image(bm, &nr_highmem);
->  		if (error)
