@@ -2,56 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4119C6C6434
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 10:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5726C6447
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 11:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjCWJ4t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Mar 2023 05:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S231301AbjCWKAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Mar 2023 06:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCWJ4Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 05:56:25 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926EE3599;
-        Thu, 23 Mar 2023 02:55:36 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w9so83972730edc.3;
-        Thu, 23 Mar 2023 02:55:36 -0700 (PDT)
+        with ESMTP id S230021AbjCWKAB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 06:00:01 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E814B35267
+        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 02:58:21 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ek18so83971721edb.6
+        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 02:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679565335;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PphF8K//KH/mvExR3XG/4qnql3FAdb+LvjCZLcvDGrk=;
-        b=WoaYs4cDl5W7Hl8gUWH/zV0hpbhNl+TFJDeRfKB/UPoKFF9wbFppTVopELseT2E3fB
-         p1+O+3B6Tzx1LI5j68FBLGijBifYwCrpHKMkc2blkdVRn+1hbZNcXDaX3he/8XuMfPZm
-         sPugHLGPdCilxoP2IMaEhstYiGKnjNnBEBHCmFerC+GdxsXkWciFXUaVC5mtf/Nh9NEv
-         J3aCs1lokSWZWrhfMeWjFAyVfYjMK9xMhlJcQ4T4tpcQgqAjUoiISWH//+1jLjpISiMN
-         nNRrlcS3bqqgWn4XUgpohK9Nv2C5FgTPrrmoZ38ELLt5y5ND3+Hp2LmGj2hp/3dvRmrr
-         S51g==
+        d=linaro.org; s=google; t=1679565500;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uE1v6Sp7zrfqf63ssth0pWpk316QqXw98EyjzxI20II=;
+        b=FzEwlLwqESso6vMuhhm7lR1SgJKiheVHYYX3fv8gxzuDWUF6ZFikST24fWNb5GrBm5
+         5/je9kg+hU/9f1i3oNuE8uvOv5yMhaCfMTZf2HTRCpXAsNlQliF9fpdoecv8d9WeIP9a
+         Fld52AvyRL4FC2wVU9XSeezjSFlRlgGilKzMYJGL1pguLlneXI0NuQniYzrupfm4a1Kc
+         Mp2fwic586QWjyM3Ftny0LnIuHT91yaimmvOIAjQlUQrsBR+q4q+APy0CNAWA+KP/zp6
+         j05QDEENtC4R87woNepbhZpOfrbsGdAtSiffaGPHewckf3e60rvLkAADkIxBabOD019l
+         mVzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679565335;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PphF8K//KH/mvExR3XG/4qnql3FAdb+LvjCZLcvDGrk=;
-        b=FNdKor28MYuT7I22xxq/nHFpCRnDlJJDesznnqGxVTcKRsdnlS2WbS5VyUphA0GtOZ
-         /sOTyqHahqD+M1cYF2IjjOa3Rakz/3BORkFjSp34I5Nnyfn8wDYF4w7UWRKJOlJdrhhN
-         HOnOUOz/vnzgt27hfw6jtHaKn48B8tJwZd02UV2SGaBSNLyQN/LGr22+U3L//PKD9ogW
-         ljY+5KZ+zku46LsTGAzlrfjSOTTcmzdFCcgleW0hnRe3xagkePx/TVi8qhzYOreMTpj6
-         kvsz0jNmFWoZN5v5BAg0V/KwFrnyKU2psjEPLQyiRWEZuaqeTJrU7VKv5pZoiTizzQ26
-         DvMQ==
-X-Gm-Message-State: AO0yUKV+cA8d4cZKGDQsgqOx6UA4THTtcuSG5kCkNYGOVueCi1nhZVNK
-        7/alXd3YNmyMtx7qlEbWe07oX1OZuek=
-X-Google-Smtp-Source: AK7set+SpQe/mPt/Uj8So7EKDhP/In9EL/bDpdZ8DnDAGNDOeKa9HsOCSo/mn+VjWloSWdcvds20LQ==
-X-Received: by 2002:a17:906:7f93:b0:932:290d:12e4 with SMTP id f19-20020a1709067f9300b00932290d12e4mr8906716ejr.25.1679565334896;
-        Thu, 23 Mar 2023 02:55:34 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id o7-20020a1709062e8700b00933356c681esm6898578eji.150.2023.03.23.02.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 02:55:34 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 10:55:32 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1679565500;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uE1v6Sp7zrfqf63ssth0pWpk316QqXw98EyjzxI20II=;
+        b=5UY3sJYoPIXULc/tDbC+BKteqp/oZ4InedF36W6ZwW4ROLQxupejiSPGxzPFhf3nL+
+         ZRtyv4J+p2uHPLiHtNt+ZlBMP2UYCbkzd/ZzcqFltCd8Ag7MUQBXyf8aCu3DrQibN2Gs
+         r5dCfUMVvRGvU7T2nruTTSkO+j8WTCb5DgABcmm6cBGc2AbEi3A8PwVik3kXPqV66kB+
+         Kovv985GZHQPQN6hBvKVNuISSWiDtvm2VOA9yERUyXMlsU7Kyk1l2eIBi32X8icHjaVt
+         jjp1cfiMZDVvi0FSNhua64ITCo/OSZSUzQfs+aPqegGt982IqyrK2EFzPULAcGZDEgt8
+         dT0g==
+X-Gm-Message-State: AO0yUKWY4pUBqcfl4ymqBXEFMC0uno4ZfBJ9xMsNBZhAkG8UjwmqgR+2
+        Yq2x6GhwIDM9qm1MLn9arqOvdQ==
+X-Google-Smtp-Source: AK7set9qeRkqIGogA/WXb/VvBg89Kje0KWuOofqgGdF/RFXcmW1sgv/LvbHdaRsNCnhkIUKVkTw4dw==
+X-Received: by 2002:aa7:dc0e:0:b0:4fc:9c79:86bc with SMTP id b14-20020aa7dc0e000000b004fc9c7986bcmr11526352edu.42.1679565500319;
+        Thu, 23 Mar 2023 02:58:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
+        by smtp.gmail.com with ESMTPSA id r3-20020a50aac3000000b004fccef39ec9sm8994955edc.70.2023.03.23.02.58.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 02:58:19 -0700 (PDT)
+Message-ID: <65352fe3-6fb8-cb84-37b8-c9f59e26d3f9@linaro.org>
+Date:   Thu, 23 Mar 2023 10:58:18 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [Patch v3 10/11] memory: tegra: handle no BWMGR MRQ support in
+ BPMP
+To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
         dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
         rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
@@ -61,20 +66,16 @@ Cc:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
         mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
         vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
         ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v3 10/11] memory: tegra: handle no BWMGR MRQ support in
- BPMP
-Message-ID: <ZBwiFEJ1bTMy6yTf@orome>
 References: <20230320182441.11904-1-sumitg@nvidia.com>
  <20230320182441.11904-11-sumitg@nvidia.com>
- <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jHN3+CG4rKdPqrN7"
-Content-Disposition: inline
-In-Reply-To: <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+ <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org> <ZBwiFEJ1bTMy6yTf@orome>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZBwiFEJ1bTMy6yTf@orome>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,52 +84,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 23/03/2023 10:55, Thierry Reding wrote:
+> On Wed, Mar 22, 2023 at 06:50:23PM +0100, Krzysztof Kozlowski wrote:
+>> On 20/03/2023 19:24, Sumit Gupta wrote:
+>>> If BPMP-FW doesn't support 'MRQ_BWMGR_INT', then the MC Client driver
+>>> probe fails with 'EPROBE_DEFER' which it receives on calling the func
+>>> 'devm_of_icc_get()'. Fix this by initializing the ICC even if the MRQ
+>>> is missing and return 'EINVAL' from 'icc_set_bw()' instead of passing
+>>> the request to BPMP-FW later when the BW request is made by client.
+>>>
+>>> Fixes: ("memory: tegra: add interconnect support for DRAM scaling in Tegra234")
+>>
+>> That's not correct tag.
+>>
+>> Anyway, send fixes separately.
+> 
+> I think this was a bit confusing. This fixes an issue that was
+> introduced in a patch earlier in this series, so it's probably better to
+> squash it into that patch rather than have a separate fix patch in the
+> same series.
+> 
 
---jHN3+CG4rKdPqrN7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, it is quite confusing to send buggy code and immediately fix it...
+Introducing known bugs is actually non-bisectable and harming.
 
-On Wed, Mar 22, 2023 at 06:50:23PM +0100, Krzysztof Kozlowski wrote:
-> On 20/03/2023 19:24, Sumit Gupta wrote:
-> > If BPMP-FW doesn't support 'MRQ_BWMGR_INT', then the MC Client driver
-> > probe fails with 'EPROBE_DEFER' which it receives on calling the func
-> > 'devm_of_icc_get()'. Fix this by initializing the ICC even if the MRQ
-> > is missing and return 'EINVAL' from 'icc_set_bw()' instead of passing
-> > the request to BPMP-FW later when the BW request is made by client.
-> >=20
-> > Fixes: ("memory: tegra: add interconnect support for DRAM scaling in Te=
-gra234")
->=20
-> That's not correct tag.
->=20
-> Anyway, send fixes separately.
+Best regards,
+Krzysztof
 
-I think this was a bit confusing. This fixes an issue that was
-introduced in a patch earlier in this series, so it's probably better to
-squash it into that patch rather than have a separate fix patch in the
-same series.
-
-Thierry
-
---jHN3+CG4rKdPqrN7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcIhQACgkQ3SOs138+
-s6GPPA//bkgG/9emg8XAzAiCCk14SYzw8PzesQOWogN/oL/DK9MK6TrmtLLHpZvm
-I8A3FSzAy0bHgtNmlvogMEog/QqVODAumS7zIUxFfuQxfU/ZFYBiphVULHvcyWNu
-/7/84LwUTURyUKPbZGlVzV+bMst1ShUnVjX/YLIMo2gt8knj/C3X12AZETLtW+i+
-raTIkwrync5K8TqbYSfQrtlRTQH7VwS2eKBt1U5zZOO9kKlhsQPexVZ2ovxrtoZG
-98nrddvhggkn6EGE8FNXxdzt2a5HgMqpbA8sGt+WfpevT6abCHOA7b2JMYYyvt5S
-8uSKGq7LFx2JA95RTwa7GaWeLiqvWPeoFeeEgFbBe8nLBxOowwYXjJA9ocjVlThI
-eIGDk47LHlesyXS2cyYsnEAa8/JuXNx6RV1QT6l139rtwIQlnq1q5xcHW5B9Xa6F
-Pn+5H6Ztr5/xU8OHlNdKUMTC0k5CpuvlapIkQ+ztdPZ0AArhjVSFXaL+rKAZsnj3
-S2CSN7r4guMWGUJ+eyoCzPujlMnF6+ZbAMNHGUYBDNYWX4Cy39r/3EUIfZP5kD8G
-/kQWWTbgf8LZD2V65bk+rcz7oCNbisO0Xv2WjYm7H6+sUK/dmEcM/qEAfqukElDP
-/s4n+oICxCOEu3Q4Ei38PDvUk9ayMpzFV5dlKutGDCJc8MH8G7o=
-=+/zC
------END PGP SIGNATURE-----
-
---jHN3+CG4rKdPqrN7--
