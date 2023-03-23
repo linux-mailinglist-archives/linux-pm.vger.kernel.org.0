@@ -2,114 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7FA6C7242
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 22:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DBF6C7325
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 23:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjCWVZp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Mar 2023 17:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        id S231305AbjCWWeC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Mar 2023 18:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCWVZo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 17:25:44 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98E027980
-        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 14:25:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mc9jC5zef/J24TiC+56TItkOnLKO8NL2bHiIvBAtkkY7z9ipEZrD9UAmVtkjcW8EXq3cZ/+kkyuGereIzXsoaHLuw0RMNDBfLfIBQvKv9mUdCPeWFyJO/7lkXIqOQNVg8A2/iCr8ZFm1e3mQdJHt6j5SoZrvGe0kxRk+UPPUJGzCbIAM7QTNp1Kb9OIhJdyCJDiSZcyWAESAHlkpphYDBm55eszZuXNI3vB37K44TyJQxQz7sc29vMrpY6w9D6pFuw72G397c+Xs0jQNLHhHjvUoF1/hZFEYeUGE4gQOSGxBkXbpiTrjZNK0ymSZC3jqUD+DiVE5CFmmvtWZPMmSug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0VZgUVJ993MBDUNQIGhfFm1j0fyEthRYJdKAscBsCTk=;
- b=H/KVcDHAG9OL5iNwO1BVlnrYb7MGD7MeGHoYFicGnn65SzOGLX5ftK/010rnSwnteN8DLMNnwS+w0Kio4HNg6CtSGcOBDK83FX+t/wFFPXvoJuKxyLKVUVmzVYuYCcyIXsjB454SX6Ox+jjtvgtxAC0mW3KWQ8rrkXctbpnDE0noXQMsfBehRU9rER9qVhHqept0QL+mp5AbroRWA9U6CwGas+yoeVK2L4l5QTFfTHPeWvz+yIDfsGd7Du3IjEtHK21GWtRRTAdSSH6+4ggFNKGD5Kp7Eti61Ksk5rGwXpUzmAnn/cnA0XwJR8LF5+EhpfT3nz6DsUU6B3xmi/hPvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0VZgUVJ993MBDUNQIGhfFm1j0fyEthRYJdKAscBsCTk=;
- b=tNRytaPLMuhsHN8/W+PDa5blk8XHGajNtrSABdoeuAU0VLQYr7W/bX45p169NvwGAYbCteRIy6kLXCNIlTNhnqBhsXCPzt9oN2GiI890erDO0Q7JNbEUh1J7Ta9aM6lQwS8BXsDQPL28NRHv7s5m0dVvjkqV348wr3Fptdt5rke1KhlP7f10/OctNQp+kIzwyRptQknAq1F037CAiTMyS4tjYOGsOQQ8pT0wvHLJc97XEwpibUoqT4T/KpcxYEFg37zPcVm7dd0SVGRg+xdK9LviAvdnxbhdBRxArrvpkXQVfESoJOr2EYdK1yHT63uVKWhE4sLj48FdFuoXfjV2FQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by MN0PR12MB5764.namprd12.prod.outlook.com (2603:10b6:208:377::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 21:25:39 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::d228:dfe5:a8a8:28b3]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::d228:dfe5:a8a8:28b3%5]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
- 21:25:39 +0000
-Date:   Thu, 23 Mar 2023 23:25:32 +0200
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, mlxsw@nvidia.com,
-        vadimp@nvidia.com
-Subject: Re: [PATCH] thermal: core: Restore behavior regarding invalid trip
- points
-Message-ID: <ZBzDzOWfGCXrsdaz@shredder>
-References: <20230314155010.3692869-1-idosch@nvidia.com>
- <CAJZ5v0gKR6xzZUgATEMCGnAgtq3dGo-QyM372yvWqJPMu3r=GQ@mail.gmail.com>
- <ZBC+gUXyTsHHIX8O@shredder>
- <CAJZ5v0hiPqpN1O4fXhoORwmi3fU_5Us5U6FKxAoVJkvGAvn6HA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hiPqpN1O4fXhoORwmi3fU_5Us5U6FKxAoVJkvGAvn6HA@mail.gmail.com>
-X-ClientProxiedBy: VI1PR07CA0195.eurprd07.prod.outlook.com
- (2603:10a6:802:3f::19) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        with ESMTP id S229586AbjCWWeA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 18:34:00 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0226594;
+        Thu, 23 Mar 2023 15:33:58 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NM93cO001022;
+        Thu, 23 Mar 2023 22:33:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Iknq7DbmCPa6NBoymiUBH+ykN+AAfltzX0txCoit3Hs=;
+ b=R44Kt7Her+aC5tByGhPDZAHE17tYb+7o0ZepTTVVgS+VXFmFl5r+rloqKq+KPXMij38e
+ 1xsrhxjhjeLlJ//GHLJMsZjlIJFvFNVXKGmKbI9X0vc0nzcqBc6vEa2xFPJFVYeCzFad
+ qD1Zki6Z5BffdC127VF365Y2WRYZeADYoVxC/qLTGFJ3xQEyjyRebabUc65dLEYqfMeY
+ AzObSH0Md21TolzR7vdB8VTn7aMDjwN46TRm1loM5KOOQkrw+sSeOlCzPqXC8kvEYkAa
+ /veCPm+tT0NWU/kjbljy4RIzIR0YipNURuzHgpa/qoIDC++fWxFcUNu7/nft9IlCRCFo bg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgxrur3a0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 22:33:49 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NMXm0I005301
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 22:33:48 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 23 Mar 2023 15:33:48 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Xuewen Yan <xuewen.yan@unisoc.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH] cpufreq: qcom-cpufreq-hw: Revert adding cpufreq qos
+Date:   Thu, 23 Mar 2023 15:33:43 -0700
+Message-ID: <20230323223343.587210-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|MN0PR12MB5764:EE_
-X-MS-Office365-Filtering-Correlation-Id: 80969d30-a48e-4a23-dd11-08db2be52640
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: etr0JiicS4LizIY75x8PDi2EYAAHvfUAodIlBU2HveUQgAelEcTMz8ONQvpHPJk3Xn4hZEQK6D3KzQ66BrbGgRMXvjLPkJ6tinHKr16PrfUZ/e/u3oq+I0qGTVRX/nXZlZJe3yCWsSqqeoCHpR47giESmDJuhkShcCC7/Vd6XPY8Hu5oz1D05cinGyrCqedpEtVhh7PoNs2B8WNS8kFjKJYbx36abQuYS8iWBOYTVnHdLZVOt2VAFmr4qWXZog1n48NgUP3cxy6A/ncMLouINcXaBMnDC3KEZniNE8F18L2Rq4Z960Y29rng2kfs/AVlf0gqVSW9mrOL/6/tstXzg6oPlexVRc/hTazw0EfWFU15bjFjO/ldMrUkuUMM2EaB1y76pqYD4ZHyy5Vr9+S/GeftSc/C8r5kKdoVF6Kq1p+pwcZCTD9i2+hhYTjP9sWumtuYRhEonqkngMHT4dxL3dMN9cWZOIfZJGkkfSbUlsLj4smgS7gT0WaH/rAVLTwSYVr/s5gOIYN1cLDJ8EYwdQG1l+7kGTFA+TK5rnrlCm2+FneDjm8/MdXYgvxxrLCjr2rHXNL72Z8ZtD5vs7gHQx8oq9HRCJbCAfkuRflglB0NZ4BgLN6Od66V7UXb06wOXzrcFbtBIJrcRNxn6d74CA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(346002)(39860400002)(366004)(376002)(396003)(136003)(451199018)(86362001)(6916009)(66556008)(38100700002)(41300700001)(2906002)(4744005)(66476007)(5660300002)(8676002)(4326008)(33716001)(8936002)(66946007)(9686003)(186003)(6506007)(83380400001)(6512007)(478600001)(316002)(6486002)(26005)(107886003)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hOgr5R+QbaLnx4F89UGqwa/75eNCLDDzd69P7R42OKOxzdc48OA6I4pTuzyI?=
- =?us-ascii?Q?i7vEXLCHqa7z9mIPslRCtnIZGnZ1u0U2aoMJXuKMX33aJaG3huEIKvHxveQb?=
- =?us-ascii?Q?ySkqEkf2J9+jYZ7o1P3TGum7dmrEePtvkyehI4YSARf8ccuXtf0OwtgJZvaG?=
- =?us-ascii?Q?DqlH4hH3V1sH77iX80vfLsB4kS3OohH7pKvTXFTfgX7K0cCTHbTybMfH6OAi?=
- =?us-ascii?Q?2Zrk2hkXonN9Hf02bCUKptyXsln6kHmLFmwgstYWYCySQO6jtcFSo1iPUI+0?=
- =?us-ascii?Q?Ha4hKPb5rv5Y6L4YFd7rTVg/UMmqVFksZB0m2kcKJykM6Ql3/52u2zFFRTpW?=
- =?us-ascii?Q?oLjV4hbU0+TDH50wH0MAaYWyso0jn/+pPKwd0a3lCRm++XGAJX2LgJuyWylQ?=
- =?us-ascii?Q?/jrkkJobwQrqQcfPEqHerwEdU+35yMtD1uaKOZjAkjBT9o1Bd6pfbFYU0LqT?=
- =?us-ascii?Q?8WYZTm0YlmaDt4kmKpmQtgwxA3dcSTxKltApnZmdSzkMwa+p3zoVp2aOtcmP?=
- =?us-ascii?Q?mcfw1UnQzJqdo/xJueJhHkgOsg2roYYgVNOm1IL1RE0spW9t6IvmQ3iJfa0D?=
- =?us-ascii?Q?Wj89CX87ejYF3zk9dKlqrIXrDkgKDJpMfqNvYAaUAtsv9Pu+nzTG7Tkggp1u?=
- =?us-ascii?Q?PFJAPuFEVBTs3NDtYxWrIAmQ5X093XPSJKHXJcOZDXQjj9KISQSnW2XUjw/R?=
- =?us-ascii?Q?EphIS7nfYWVEIF+4A10rwdSOwqY8dJuVx26AbY7ZhMA+qr+TXU4jZsf9p9kl?=
- =?us-ascii?Q?iVYxYQYM6THdsbUidhPk0XFiq9D0rVZHBzY0uX69a/D2lC75yg9Jvxkc23Gg?=
- =?us-ascii?Q?Utqnr759+M5pUdUzVBrCzrG7RGItdoWI2CRdxoJk27mEc5b8YRtmlnCcaeDd?=
- =?us-ascii?Q?+TwJG01/NpLfvv0adMLqJS1L30NIjNKs8jkzkO3AF1jZjknxTKuY8+dZXkYJ?=
- =?us-ascii?Q?/nT/+gF9P6+hLXgJJw6/OLvAqoR1oIr2miAdqfsvSTmvwMM1un423qWeSy17?=
- =?us-ascii?Q?PjawW1XN1tzMtAonAzWnSzbdwh/8Yn0Y22QAk6OB+YVq34jqDBpIQ48EK/lt?=
- =?us-ascii?Q?AGEm10iqcZk3q71hv6LtqJdnGaBs5LyfBiWnPO7ZuN75i2rD3GbIOFuc0KOv?=
- =?us-ascii?Q?g4nesGeIInLeELqnw/zGsMRq0ez9DSon7VQEnaJRGNwpQoTtiOD8F7aARyxC?=
- =?us-ascii?Q?U2O0JV81rf53Hh1hyz5zXSlogLhLb4F5q9AzZQ86mTaVhnsZwXf5LwPdDyXi?=
- =?us-ascii?Q?u1jkqFwqil/ANo3QE9N7XLfgcH9aa6p4YRPm/U02MuUeGIR3ZVZXYmN333Qn?=
- =?us-ascii?Q?9eII4pao3rODc0TVYLmIEpffprAzRW1ZS4WfxPaoXblG5XCyDM6vvJS+oZaU?=
- =?us-ascii?Q?mLG9Nyt/u68FPwUaTU2DHYz15RK0r4ElyIUOXBd2aBKBDMzJ38eszmihRcTo?=
- =?us-ascii?Q?MdgK3uBosLqLZODKC+5gOAWt2UIarMukYk82hBKMAYn1of0/JM7eqnEo9q7J?=
- =?us-ascii?Q?OgaOGqkV7lZOzSVNkpeF8fQJdPSVCxUogX+jVbdJEs0CRs0qkaBA3lMGL0Iq?=
- =?us-ascii?Q?52vpwh7/dZBgnOH81b3SoC/RZeD5gaCVCQ+x/TtW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80969d30-a48e-4a23-dd11-08db2be52640
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 21:25:39.4079
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dsZ/c5iTpIJ3gNnrt01gDiQBSSYTPMHTZkClPyHVMvfu12ayrVfJLsZGm1AwYwHARz8RdF5fa5sXGFHJXQZyYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5764
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vy4OtcRPJPGg9At0hUZb5oJirT1hd6f3
+X-Proofpoint-GUID: vy4OtcRPJPGg9At0hUZb5oJirT1hd6f3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-23_13,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1011 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303230162
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,13 +77,96 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 08:04:54PM +0100, Rafael J. Wysocki wrote:
-> So I've applied this as 6.3-rc material for the sake of avoiding a
-> driver regression in 6.3, under the assumption that we'll get the
-> mlxsw driver update on time for the 6.4 merge window.
+The OSM/EPSS hardware controls the frequency of each CPU cluster based
+on requests from the OS and various throttling events in the system.
+While throttling is in effect the related dcvs interrupt will be kept
+high. The purpose of the code handling this interrupt is to
+continuously report the thermal pressure based on the throttled
+frequency.
 
-Correct. Sent the patches for internal review and will submit them to
-netdev (where this driver is maintained) next week assuming review is OK
-and nothing explodes in our regression. Will copy Daniel and you.
+The reasoning for adding QoS control to this mechanism is not entirely
+clear, but the introduction of commit 'c4c0efb06f17 ("cpufreq:
+qcom-cpufreq-hw: Add cpufreq qos for LMh")' causes the
+scaling_max_frequncy to be set to the throttled frequency. On the next
+iteration of polling, the throttled frequency is above or equal to the
+newly requested frequency, so the polling is stopped.
 
-Thanks
+With cpufreq limiting the max frequency, the hardware no longer report a
+throttling state and no further updates to thermal pressure or qos
+state are made.
+
+The result of this is that scaling_max_frequency can only go down, and
+the system becomes slower and slower every time a thermal throttling
+event is reported by the hardware.
+
+Even if the logic could be improved, there is no reason for software to
+limit the max freqency in response to the hardware limiting the max
+frequency. At best software will follow the reported hardware state, but
+typically it will cause slower backoff of the throttling.
+
+This reverts commit c4c0efb06f17fa4a37ad99e7752b18a5405c76dc.
+
+Fixes: c4c0efb06f17 ("cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh")
+Cc: stable@vger.kernel.org
+Reported-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ drivers/cpufreq/qcom-cpufreq-hw.c | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 575a4461c25a..1503d315fa7e 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -14,7 +14,6 @@
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_opp.h>
+-#include <linux/pm_qos.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/units.h>
+@@ -60,8 +59,6 @@ struct qcom_cpufreq_data {
+ 	struct clk_hw cpu_clk;
+ 
+ 	bool per_core_dcvs;
+-
+-	struct freq_qos_request throttle_freq_req;
+ };
+ 
+ static struct {
+@@ -351,8 +348,6 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 
+ 	throttled_freq = freq_hz / HZ_PER_KHZ;
+ 
+-	freq_qos_update_request(&data->throttle_freq_req, throttled_freq);
+-
+ 	/* Update thermal pressure (the boost frequencies are accepted) */
+ 	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+ 
+@@ -445,14 +440,6 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
+ 	if (data->throttle_irq < 0)
+ 		return data->throttle_irq;
+ 
+-	ret = freq_qos_add_request(&policy->constraints,
+-				   &data->throttle_freq_req, FREQ_QOS_MAX,
+-				   FREQ_QOS_MAX_DEFAULT_VALUE);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Failed to add freq constraint (%d)\n", ret);
+-		return ret;
+-	}
+-
+ 	data->cancel_throttle = false;
+ 	data->policy = policy;
+ 
+@@ -519,7 +506,6 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
+ 	if (data->throttle_irq <= 0)
+ 		return;
+ 
+-	freq_qos_remove_request(&data->throttle_freq_req);
+ 	free_irq(data->throttle_irq, data);
+ }
+ 
+-- 
+2.25.1
+
