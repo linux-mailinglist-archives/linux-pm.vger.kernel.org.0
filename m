@@ -2,144 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6323E6C6904
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 14:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DBE6C6D43
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 17:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjCWNAH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Mar 2023 09:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        id S229796AbjCWQUG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Mar 2023 12:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCWNAG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 09:00:06 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D982FCD8;
-        Thu, 23 Mar 2023 06:00:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kjr2kXQ3oPeyvz3gN27oxcBuwBDoplpTAE2WHyMAcUeCgIzO6+VT+hwzOISFMgfMZSlHEVhSDz80v4ByAG6p5745RB11vRcV1deTjloQT9SZJIHBveHwALLx59m2emcbojrumuAmZYkJ6EoalWproLQieyPMJngGMLg7npwDk26c5/NfDYmyYO7A1VSzFier70idKJGUuEvkFe5C8pyvfnSuu5HHtl5yYz/AuShZly02qnZkm5OR4kjFeOryPQNwiGV35Va/EaO0bgpoxdbidPolLeO/Yh5dS89YN486oX8ao8LYZyNAu7k/JQnUPydFVTbyrWw8SczzkBcQdOgk1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BTWUjc5IAUswz2wUrGyMauyczuDOVyRIkwq+Wl7Zla8=;
- b=HPNRQwNryaVLcXNullXiHw6s0tlQTunQB2WLnH7tTnPZYns1prNxpctgwv+KbbRj+ksS3VVUdGEnvVsvuH0nxXLq6o31e+Qdc4cnxuyZf7R4SykroojOG57Gd81mNxKcpDEKv3HCzvCSwhajfBr6EIIH7gsTI5ZMLycJpCdi7QCSCDSd607epPS1e63PdObysmN2JZxWVF1LmzHmLSMH04ciHHZInAauskqs4pOql+e+mO0DE6vToMS0LUYJzx+IOoj70TVOZScj1fuNhHcLy52fFigTdBHXFDCldeKwdwzDaHkrC7Kp+MF52Ik8mmjWkVE7y2JI5fxELaAfx+t/kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTWUjc5IAUswz2wUrGyMauyczuDOVyRIkwq+Wl7Zla8=;
- b=t+Qby4sFpK+MRgYtODGMKr60QiJ2koJarXvVx8hh3lQhjczKaHt9VGO1hGLXMq37+tj2+uOHcdtOjMxIDCtASTiptXl3BqgMQnBi2JXNozQaY7fGvjcqGmEci6KLcjqIOJsUelEJVdcgKz31ROzinSNvRzbx0n0UnIaojFvAcVbYNNLVJPth8X828OXTpwub4NNRy0SpOUPhtRS9S1dkr6NMymS/wUPd72XC64tBxc2NDONM1EtGB4as06Khng4AQKHrRSXR7ITFOQSj4QUIyz4pdKmQxKRhhoAK8pwCL02H/Pq0GprbZmO2rbCpS7dWa2YI3Uh+hRnf+pn7zA9/tw==
-Received: from DM6PR10CA0009.namprd10.prod.outlook.com (2603:10b6:5:60::22) by
- DS0PR12MB8453.namprd12.prod.outlook.com (2603:10b6:8:157::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.36; Thu, 23 Mar 2023 13:00:02 +0000
-Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:60:cafe::b7) by DM6PR10CA0009.outlook.office365.com
- (2603:10b6:5:60::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
- Transport; Thu, 23 Mar 2023 13:00:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.21 via Frontend Transport; Thu, 23 Mar 2023 13:00:02 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 23 Mar 2023
- 05:59:53 -0700
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 23 Mar
- 2023 05:59:47 -0700
-Message-ID: <c240eae7-8862-0589-d56d-f2e82e21569c@nvidia.com>
-Date:   Thu, 23 Mar 2023 18:29:44 +0530
+        with ESMTP id S231295AbjCWQT4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 12:19:56 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D6E2128F
+        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 09:19:54 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id d14so7332076ion.9
+        for <linux-pm@vger.kernel.org>; Thu, 23 Mar 2023 09:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679588393;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4gxbyXM9VniJfchNlzpEP3glR9+pWHD0pj8j3ifk4Mw=;
+        b=EhKBazWRGtSgCzqOkEYEwT/+lIuWMsw/vxHPOhdqhXI0Sm31/YtSRJLeqz3JDZUG2q
+         jNhqcqzlnVnd1gzpSxjwVIW8Bre6XYJrgUH4H74QB0I4j4c+6KOiIXBlDc3MLEQZgqti
+         /IzvP550GXWo8HDO1L2/XfIOqWvpSi5kkZaf0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679588393;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4gxbyXM9VniJfchNlzpEP3glR9+pWHD0pj8j3ifk4Mw=;
+        b=o1J6a/ZseRv3Rxb8hzzXyDZl/26lqHghg7J41gTgYgYSnn2FFPkHaMc47APP+RGpol
+         jYDlmYjXxF1ukK2CxNmfn8xKRY1TU6FgRPhfmgLrjgOK6UWv0GLUSCrqcj7JOnkhNGpQ
+         YEUo5zVf/J2Axv/gy18cJPP2NqMYVDIiSv+7RNj7L+J+9I+TAljmqC4+6/N1M0y7Uil8
+         r8zA88p90nPky5v2mQ5d1dDWGjwFRfmotne5be5yvmmr5kDqi6QJM1bf4tQvdmYUHfgb
+         z5lEVmBOKBASMxAr//OwVWqWGQMJsF62N2n4mtzz8+PWBSHcTnJUgSrwM5Jm88M5177i
+         w47A==
+X-Gm-Message-State: AO0yUKUUMKM3zJX+U/wr8dJEVhF6wpstgcIfI5r1+G6Tzj04ZkHr0woH
+        WUExKBe5iCr8EGVemrk1cClnIA==
+X-Google-Smtp-Source: AK7set9Zw8S1cGqdQPEi8gutIWlt3/JjVPmlkY4mwEcFHXd0gu8L6BT6CxV2gtl5o2UY1KiRNrrbEw==
+X-Received: by 2002:a6b:6604:0:b0:716:99e0:807f with SMTP id a4-20020a6b6604000000b0071699e0807fmr7683212ioc.11.1679588393255;
+        Thu, 23 Mar 2023 09:19:53 -0700 (PDT)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id l6-20020a026646000000b003c488204c6fsm5944854jaf.76.2023.03.23.09.19.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 09:19:52 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 16:19:52 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PM: hibernate: don't store zero pages in the image
+ file.
+Message-ID: <ZBx8KEuVtIbqkeq1@google.com>
+References: <20230113193006.1320379-1-bgeffon@google.com>
+ <20230302171348.3601107-1-bgeffon@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Patch v3 01/11] firmware: tegra: add function to get BPMP data
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
-        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
-        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
-        <ishah@nvidia.com>, <bbasu@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-References: <20230320182441.11904-1-sumitg@nvidia.com>
- <20230320182441.11904-2-sumitg@nvidia.com> <ZBwlLmPlBgC5tYTD@orome>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <ZBwlLmPlBgC5tYTD@orome>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT003:EE_|DS0PR12MB8453:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a763006-29f7-4291-d329-08db2b9e83f9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KRXnL6wQ8BVttKldbHYwzo3hVSFyOekSIvYCr6xrFbeLitvzNU9MDn/5vTQeZsSdU2BGGnKCcDPKpQWaPmOecYUkTxONyEVNG0s1hkpkZuADmpA9g4E+NLqwTTj7P/0jaaCKjgIgwFnlcFhVvAFW4ok4ichVgu5/A+ZI+K3hcy2gadJHmCUR4DvGiaXfm11B2IRfmtZ2wTGjRMubwpLKRV1PXK1I1//62JhdZUUEwmctMxlSG1PlmQcaTJvmVWFUbk41QFbNG5BaD2ustWLii4uIFcpsHS0J1wsBsmuQ6lHpoNpnPmZuyyNILwatXQOHTyBfcjmgzrDeOZ003Ujrrt9ddGLUdOm7BQgPOX5N61tdQUTWjkWC+ioGFbc7HdclESdhGQVNiZSSnkMKtbhCDcyTFR21LnjxjUMzRq+aQgU4nFDIcK4+1Z/Fcr2Z1B23hv7VIUs721VTzFUeSLeoPQJ5PveJAt/xGtcTrtKORYDPhIRaUqrrWHMtOIyJOcbeiEdeiHi368dZK4gf38uIoh8Y+CLLTil+KASUR1DT1V7EwdWGpcSKC3d/uCFoRQE11XM4ayVOeVXCcjycV+iYDsuLs8qGR3PxhToP308UT8H79bwAGOye0/iy/AVs3qSC4JR6nyhnQINqCamCnpkNXZG79P+ywOM1ygGVsLPhwXyIygnR1OpnrBoopayHg8lifs6nXmSjmXLHAxBRZueKTZwMgD+5nu4jkw+792C7pjVU2Gg7CT10mlMEIjRdCsZTHcxYoFZz5WgdFyXvxv8z2g==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199018)(46966006)(40470700004)(36840700001)(31686004)(41300700001)(4744005)(7416002)(5660300002)(8676002)(6916009)(4326008)(2906002)(40460700003)(36860700001)(82740400003)(356005)(86362001)(36756003)(31696002)(7636003)(26005)(107886003)(6666004)(70586007)(70206006)(478600001)(16576012)(316002)(8936002)(40480700001)(82310400005)(426003)(54906003)(47076005)(336012)(2616005)(16526019)(53546011)(186003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 13:00:02.0509
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a763006-29f7-4291-d329-08db2b9e83f9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8453
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230302171348.3601107-1-bgeffon@google.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 23/03/23 15:38, Thierry Reding wrote:
-> On Mon, Mar 20, 2023 at 11:54:31PM +0530, Sumit Gupta wrote:
->> Add new function 'of_tegra_bpmp_get()' which can be
->> used by other drivers like MC to get BPMP data without
->> adding any property in respective drivers DT node.
->>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   drivers/firmware/tegra/bpmp.c | 38 +++++++++++++++++++++++++++++++++++
->>   include/soc/tegra/bpmp.h      |  5 +++++
->>   2 files changed, 43 insertions(+)
+On Thu, Mar 02, 2023 at 12:13:48PM -0500, Brian Geffon wrote:
+> On ChromeOS we've observed a considerable number of in-use pages filled with
+> zeros. Today with hibernate it's entirely possible that saveable pages are just
+> zero filled. Since we're already copying pages word-by-word in do_copy_page it
+> becomes almost free to determine if a page was completely filled with zeros.
 > 
-> Sorry for not noticing this earlier, but can we not resolve the BPMP
-> using the existing tegra_bpmp_get()? That requires the presence of the
-> nvidia,bpmp property, but since we're adding new functionality here
-> that's not a problem.
+> This change introduces a new bitmap which will track these zero pages. If a page
+> is zero it will not be included in the saved image, instead to track these zero
+> pages in the image file we will introduce a new flag which we will set on the
+> packed PFN list. When reading back in the image file we will detect these zero
+> page PFNs and rebuild the zero page bitmap.
 > 
-> Thierry
+> When the image is being loaded through calls to write_next_page if we encounter
+> a zero page we will silently memset it to 0 and then continue on to the next
+> page. Given the implementation in snapshot_read_next/snapshot_write_next this
+> change  will be transparent to non-compressed/compressed and swsusp modes of
+> operation.
+> 
+> To provide some concrete numbers from simple ad-hoc testing, on a device which
+> was lightly in use we saw that:
+> 
+>   PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
+> 
+> Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero filled
+> and could be tracked entirely within the packed PFN list. The savings would
+> obviously be much lower for lzo compressed images, but even in the case of
+> compression not copying pages across to the compression threads will still
+> speed things up. It's also possible that we would see better overall compression
+> ratios as larger regions of "real data" would improve the compressibility.
+> 
+> Finally, such an approach could dramatically improve swsusp performance
+> as each one of those zero pages requires a write syscall to reload, by
+> handling it as part of the packed PFN list we're able to fully avoid
+> that.
+> 
+>  Patch v2 -> v3:
+>    - Use nr_zero_pages rather than walking each pfn to count.
+>    - Make sure zero_bm is allocated in safe pages on resume.
+>      When reading in the pfn list and building the zero page bm
+>      we don't know which pages are unsafe yet so we will need to
+>      copy this bm to safe pages after the metadata has been read.
+> 
+>  Patch v1 -> v2:
+>    - minor code mistake from rebasing corrected.
+> 
+> Signed-off-by: Brian Geffon <bgeffon@google.com>
+> ---
+>  kernel/power/snapshot.c | 169 +++++++++++++++++++++++++++++++---------
+>  1 file changed, 133 insertions(+), 36 deletions(-)
+> 
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index cd8b7b35f1e8b..a2c4fe17f9067 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
 
-Ok, will add "nvidia,bpmp" property within mc node and cache the result 
-to use later instead of doing the lookup every time. Also, will drop 
-this patch in v4.
+...
 
-Thank you for suggesting.
+> @@ -1371,14 +1381,18 @@ static unsigned int count_data_pages(void)
+>  
+>  /*
+>   * This is needed, because copy_page and memcpy are not usable for copying
+> - * task structs.
+> + * task structs. Returns 1 if a page was filled with only zeros, otherwise 0.
 
+nit: s/a page/the page/
 
-Thank,
-Sumit
+>   */
+> -static inline void do_copy_page(long *dst, long *src)
+> +static inline int do_copy_page(long *dst, long *src)
+>  {
+>  	int n;
+> +	long z = 0;
+>  
+> -	for (n = PAGE_SIZE / sizeof(long); n; n--)
+> +	for (n = PAGE_SIZE / sizeof(long); n; n--) {
+> +		z |= *src;
+>  		*dst++ = *src++;
+> +	}
+> +	return !z;
+>  }
+
+...
+
+> -static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+> +static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+>  {
+> -	safe_copy_page(page_address(pfn_to_page(dst_pfn)),
+> +	return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
+>  				pfn_to_page(src_pfn));
+>  }
+>  #endif /* CONFIG_HIGHMEM */
+>  
+>  static void copy_data_pages(struct memory_bitmap *copy_bm,
+> -			    struct memory_bitmap *orig_bm)
+> +			    struct memory_bitmap *orig_bm,
+> +			    struct memory_bitmap *zero_bm,
+> +			    unsigned int *zero_count)
+>  {
+>  	struct zone *zone;
+> -	unsigned long pfn;
+> +	unsigned long pfn, copy_pfn;
+>  
+>  	for_each_populated_zone(zone) {
+>  		unsigned long max_zone_pfn;
+> @@ -1462,11 +1482,20 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
+>  	}
+>  	memory_bm_position_reset(orig_bm);
+>  	memory_bm_position_reset(copy_bm);
+> +	copy_pfn = memory_bm_next_pfn(copy_bm);
+>  	for(;;) {
+>  		pfn = memory_bm_next_pfn(orig_bm);
+>  		if (unlikely(pfn == BM_END_OF_MAP))
+>  			break;
+> -		copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
+> +		if (copy_data_page(copy_pfn, pfn)) {
+> +			memory_bm_set_bit(zero_bm, pfn);
+> +			if (zero_count)
+
+This check is not needed. The function is called only once, with a pointer. The kernel
+trusts itself if the pointer is supposed to be always != NULL.
+
+Or better: use a local counter and have copy_data_pages() return the number of pages
+that were actually copied, which is what the caller is interested in.
+
+> +				(*zero_count)++;
+> +
+> +			/* We will reuse this copy_pfn for a real 'nonzero' page. */
+> +			continue;
+> +		}
+> +		copy_pfn = memory_bm_next_pfn(copy_bm);
+>  	}
+>  }
+
+...
+
+> @@ -2247,24 +2299,34 @@ static int load_header(struct swsusp_info *info)
+>   * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
+>   * @bm: Memory bitmap.
+>   * @buf: Area of memory containing the PFNs.
+> + * @zero_bm: Memory bitmap which will be populated with the PFNs of zero pages.
+>   *
+>   * For each element of the array pointed to by @buf (1 page at a time), set the
+> - * corresponding bit in @bm.
+> + * corresponding bit in @bm. If the the page was originally populated with only
+> + * zeros then a corresponding bit will also be set in @zero_bm.
+
+s/the the/the/
+
+...
+
+> @@ -2486,6 +2548,7 @@ static inline void free_highmem_data(void) {}
+>   * prepare_image - Make room for loading hibernation image.
+>   * @new_bm: Uninitialized memory bitmap structure.
+>   * @bm: Memory bitmap with unsafe pages marked.
+> + * @zero_bm: Memory bitmap containing the zero pages.
+
+That sounds as if the memory bitmap actually contained zero pages. I suggest to
+change it to something like the comment for 'bm' above, i.e. "... with zero
+pages marked"
+
+>   *
+>   * Use @bm to mark the pages that will be overwritten in the process of
+>   * restoring the system memory state from the suspend image ("unsafe" pages)
+> @@ -2496,8 +2559,12 @@ static inline void free_highmem_data(void) {}
+>   * pages will be used for just yet.  Instead, we mark them all as allocated and
+>   * create a lists of "safe" pages to be used later.  On systems with high
+>   * memory a list of "safe" highmem pages is created too.
+> + *
+> + * Because we didn't know which pages were unsafe when we created the zero bm we
+> + * will make a copy of it and recreate it within safe pages.
+
+nit: s/we will make/we make/
+
+>   */
+> -static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
+> +static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm,
+> +		struct memory_bitmap *zero_bm)
+>  {
+>  	unsigned int nr_pages, nr_highmem;
+>  	struct linked_page *lp;
+> @@ -2516,6 +2583,20 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
+>  
+>  	duplicate_memory_bitmap(new_bm, bm);
+>  	memory_bm_free(bm, PG_UNSAFE_KEEP);
+> +	error = memory_bm_create(bm, GFP_ATOMIC, PG_ANY);
+> +	if (error)
+> +		goto Free;
+> +
+> +	/* use bm as storage while we rebuild zero_bm using safe pages */
+
+Re-using the 'bm' parameter is confusing, it should be avoided IMO unless there
+is a real benefit. struct memory_bitmap isn't that big, why not create a local
+variable 'zero_mb_tmp' or similar as a temporary store for the zero page bitmap?
+
+> +	duplicate_memory_bitmap(bm, zero_bm);
+> +	memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
+> +	error = memory_bm_create(zero_bm, GFP_ATOMIC, PG_SAFE);
+> +	if (error)
+> +		goto Free;
+> +	duplicate_memory_bitmap(zero_bm, bm);
+> +	memory_bm_free(bm, PG_UNSAFE_KEEP);
+> +	/* at this point zero_bm is in safe pages and we can use it while restoring */
+> +
+>  	if (nr_highmem > 0) {
+>  		error = prepare_highmem_image(bm, &nr_highmem);
+>  		if (error)
