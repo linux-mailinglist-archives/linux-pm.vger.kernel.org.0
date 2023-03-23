@@ -2,78 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045D86C645A
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 11:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554096C6471
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 11:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjCWKCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Mar 2023 06:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S230482AbjCWKIw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Mar 2023 06:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjCWKCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 06:02:46 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76B31025D;
-        Thu, 23 Mar 2023 03:02:43 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x3so83934706edb.10;
-        Thu, 23 Mar 2023 03:02:43 -0700 (PDT)
+        with ESMTP id S229642AbjCWKIv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 06:08:51 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7809811A;
+        Thu, 23 Mar 2023 03:08:50 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id h8so84023463ede.8;
+        Thu, 23 Mar 2023 03:08:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679565762;
+        d=gmail.com; s=20210112; t=1679566129;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1QLDCkiGfjxuB12NSD16ak9V/6TuGJM06eY8YUnZjuc=;
-        b=A/8U8irwMTu1zrqW7p8BT2Y42CZhN5BaFc3Tc/NvL2J9GtmOyNcPzkavntRO4AQygq
-         OcLQAAjPFpV3rgHZIHnkJHwjibdAsfh951Umib5UNzj3ketfOSOBGsBaaSDTRc+M0K6y
-         U4WkosAsUHOSV7vYl6moj56Qvi1zURYrJpkhI+IXiwwYD83u2BHdWMk2DemZU3AZi08J
-         HV0GaRMfQA8Zfg/bqyVQ02nWgT1onzDQg2O0BuKB/o0FiTJzj6cKl21yvspUzqATuowf
-         U6DZjAaFIe1hnlNDkcC4ysWyumTpCT7cgR2uKE0mH3bPj9bHQha2WvYBmaeXS+fKIXvs
-         NIhQ==
+        bh=NGAuq1vj2Az8BeSIwxE6OVDA/Cv51CPyVJAXOIa5Vuw=;
+        b=OOX/X+HlYB7eQPs76GFdPpZy1ayHbuh8C2ASVmqG7AI4UVM4ZTwmWm/S55CF3OCkvs
+         RIzx03EpXXuTutIIuOsEvndGkpQwdMpwPPzZ1uVYQ+ZTfKiqtq80YSgy/l7GsurwZd/A
+         RaD9+Yd/rCAZaYRghLOWakcm8P7f2iYeibVKrIDeIQ7yx4G9T4w/eQ6pYaJU+J26FeH2
+         NSM38Q945dqvmnc4Miz1Jh728wV4bXBjo4QQ5E3YN67VO5aXjBYmTmKzrCT0cmQvyPfk
+         NAGG2dxu9BOzwvMSIDRskr3voLcB635tcSPzMbTukJAsbLBvGJ60yN/CQtQZG3XDi8b7
+         O7nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679565762;
+        d=1e100.net; s=20210112; t=1679566129;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1QLDCkiGfjxuB12NSD16ak9V/6TuGJM06eY8YUnZjuc=;
-        b=aiaKbfQdbgron0CHxsbVJt6KaXPw9KBFPU3LYRvlOmTsSzCrsAAwwPS1enllaWNUuL
-         yyK51XE9RcKOyFYOsfdoP+EvzWBZCL0BdJKbJYeyu3F2KXdytcYRYxUl1O2dsg3OBh0o
-         PNkqsQy9ZsJSgaYV7b6bXLAE9CifxNJCTK/xGOzHGUconZdYvkF8mFBc6bCC29iWuzQK
-         0bMjJTN6ndFDrRe0PxvO1l+cA2G1ADjD/QZYPBlc0tILM0+wFlFY26a+tblwQOAK5u/l
-         RnpdT1bkA8gee3Vy/gR+C+FRmZgH/T5KvMUIn+Q/xV+17M6BzEkW4j+VZBilqV0cGaj9
-         OdmQ==
-X-Gm-Message-State: AO0yUKWqdN7coenikMPUCcDLW4PU9LWHBTNZ4/7JKfar4/a32rNcS2wM
-        xY4xSaIic0NuQDdXSVdACeo=
-X-Google-Smtp-Source: AK7set+96Vu2kio4Ss0ozHPi6bWoPEmQwPjpdtwPgocU6FJGD8S68fYR+nVcNzY2DjAHSoDXaEkRHQ==
-X-Received: by 2002:a17:906:698d:b0:930:28d6:4581 with SMTP id i13-20020a170906698d00b0093028d64581mr9818790ejr.59.1679565762054;
-        Thu, 23 Mar 2023 03:02:42 -0700 (PDT)
+        bh=NGAuq1vj2Az8BeSIwxE6OVDA/Cv51CPyVJAXOIa5Vuw=;
+        b=ZENZBkaJZ/6urB/NbnWUQBUxer3cPsJ+XM2XLmZ0Sda1wL2OpK6ewf93T7vgeRPrY4
+         +2/3DoEwRk3MxssWx0ohYLO0XPXvH5/4aGGO/e0s8vz4dTEIk62GS6fsRiopvLoq+Uf0
+         cNtueL0zF/RLfAz8CKGlsg/rYj7ECRCaBby+gpHna6izCMzaFdbr1wy4+M+1BlP8xrvK
+         PzUUIAv22uYDFVxxaSVPTwqrqek3mHfeyKBrJoQWDIe1VK7y+ujrSrsXG1h5isX8IJaj
+         C5sIKoo8JxNShXtpceo7vNkOMh4R6D9dLIos+/3Dj8hr/PkutLkSgB+Kw0Q9ZK4bokcb
+         avhg==
+X-Gm-Message-State: AO0yUKXvdwMm1g8QCZQwm7eoAiXi7EYwrI8XxGmCz/iZrSksAb5bdXU9
+        X34i1eHfQmTqK6NiTcgCZD2a1VcyMW4=
+X-Google-Smtp-Source: AK7set/e+lCIB7EqMESTFCG6SmJknH91+J8loFEApNYlA1GuhCbTcoqYH/DrnRCYxVie/7foo0EACw==
+X-Received: by 2002:aa7:d84d:0:b0:4ef:9bf0:7177 with SMTP id f13-20020aa7d84d000000b004ef9bf07177mr9364747eds.9.1679566128974;
+        Thu, 23 Mar 2023 03:08:48 -0700 (PDT)
 Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id h19-20020a1709070b1300b008ec4333fd65sm8415618ejl.188.2023.03.23.03.02.41
+        by smtp.gmail.com with ESMTPSA id u3-20020a50d503000000b004fcd78d1215sm9041451edi.36.2023.03.23.03.08.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:02:41 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:02:39 +0100
+        Thu, 23 Mar 2023 03:08:48 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:08:46 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, lpieralisi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v3 10/11] memory: tegra: handle no BWMGR MRQ support in
- BPMP
-Message-ID: <ZBwjvy9KXWE02I1X@orome>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v3 01/11] firmware: tegra: add function to get BPMP data
+Message-ID: <ZBwlLmPlBgC5tYTD@orome>
 References: <20230320182441.11904-1-sumitg@nvidia.com>
- <20230320182441.11904-11-sumitg@nvidia.com>
- <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org>
- <ZBwiFEJ1bTMy6yTf@orome>
- <65352fe3-6fb8-cb84-37b8-c9f59e26d3f9@linaro.org>
+ <20230320182441.11904-2-sumitg@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7412yGgzZ0zqK6O1"
+        protocol="application/pgp-signature"; boundary="r6ApTD5EBx3VpHtc"
 Content-Disposition: inline
-In-Reply-To: <65352fe3-6fb8-cb84-37b8-c9f59e26d3f9@linaro.org>
+In-Reply-To: <20230320182441.11904-2-sumitg@nvidia.com>
 User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
@@ -86,66 +82,47 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---7412yGgzZ0zqK6O1
+--r6ApTD5EBx3VpHtc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 23, 2023 at 10:58:18AM +0100, Krzysztof Kozlowski wrote:
-> On 23/03/2023 10:55, Thierry Reding wrote:
-> > On Wed, Mar 22, 2023 at 06:50:23PM +0100, Krzysztof Kozlowski wrote:
-> >> On 20/03/2023 19:24, Sumit Gupta wrote:
-> >>> If BPMP-FW doesn't support 'MRQ_BWMGR_INT', then the MC Client driver
-> >>> probe fails with 'EPROBE_DEFER' which it receives on calling the func
-> >>> 'devm_of_icc_get()'. Fix this by initializing the ICC even if the MRQ
-> >>> is missing and return 'EINVAL' from 'icc_set_bw()' instead of passing
-> >>> the request to BPMP-FW later when the BW request is made by client.
-> >>>
-> >>> Fixes: ("memory: tegra: add interconnect support for DRAM scaling in =
-Tegra234")
-> >>
-> >> That's not correct tag.
-> >>
-> >> Anyway, send fixes separately.
-> >=20
-> > I think this was a bit confusing. This fixes an issue that was
-> > introduced in a patch earlier in this series, so it's probably better to
-> > squash it into that patch rather than have a separate fix patch in the
-> > same series.
-> >=20
+On Mon, Mar 20, 2023 at 11:54:31PM +0530, Sumit Gupta wrote:
+> Add new function 'of_tegra_bpmp_get()' which can be
+> used by other drivers like MC to get BPMP data without
+> adding any property in respective drivers DT node.
 >=20
-> Yeah, it is quite confusing to send buggy code and immediately fix it...
-> Introducing known bugs is actually non-bisectable and harming.
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/firmware/tegra/bpmp.c | 38 +++++++++++++++++++++++++++++++++++
+>  include/soc/tegra/bpmp.h      |  5 +++++
+>  2 files changed, 43 insertions(+)
 
-I don't think this was done purposefully but rather as a way of more
-clearly showing what was changed. This is also an issue that can only
-happen on certain boards, so it's easy to miss.
-
-But yeah, this is bad for bisectibility.
-
-Sumit, please merge this into the patch that you reference in the Fixes:
-tag along with the fix in patch 11.
+Sorry for not noticing this earlier, but can we not resolve the BPMP
+using the existing tegra_bpmp_get()? That requires the presence of the
+nvidia,bpmp property, but since we're adding new functionality here
+that's not a problem.
 
 Thierry
 
---7412yGgzZ0zqK6O1
+--r6ApTD5EBx3VpHtc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcI78ACgkQ3SOs138+
-s6EhDw//Us6AoMbGIV7k4mocQuIduHsO0hohbLa+4kSJMGsVH1VulnkHvOdYQrjb
-ff7+L2m0wY84SYjhkBsi88EnF+0x/YQMMVh+ksLKwZJw+4tnh0SvjIXK/CgB2Z2R
-quNGyzrBKomz+jLkJA/q2bVJqoj3w6ReyBKPFt/P4QgDy/OG2yQcTN8OEkLIknab
-keMYf41x31W0ZkDMtPNqiII8wMGcdyqVjGX8GxXCpi6NW/LjOGDIQKIiHsT2Ybg0
-Ly3RKo34+ITUAU8wQL8h+C65dZKsLN30Lk8CCy2dZulxdcGfRzq6G2pwM4RMjjby
-1GeayKAHEvuZu/bh6EW5yQjB/Dbs3qi8Lfee2qqz5C4it6DDxXng44CQvNnOzgAA
-NdYl8pVPgBHij4+V16VzB1VcbY0QMYutfB0Z+8+U9x+ZyRxBzShcqf/aH0auy4SZ
-VeC6AyoWmii9FqVwAYcArtT8SchRQwVbTELAb/i65sfJKRbtx+EJejIc9MbR/WtD
-pqE3VkfJH8Os176+nR4KAIn7S8OLUMpIU1CMWL8ueVenUNUi5l7mtzE6228cXYOr
-u0nyxEw4EWYUNIWSiUaQnVO1/KMLaF8JOmZclk0G6Q8i0tSXPjCBJbtJr//GFUOJ
-5vbVYneAJpLcvIxHhzIJGZ+1q8M1rh/QPEkVGfJbQHICeSyahXY=
-=+sI2
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcJS4ACgkQ3SOs138+
+s6EvWA//eWb9KTOc3+VL6SIY2YLcp+/47Jg/5r8MVpHI0BwBmah2YohmvE3oUOsj
+A7zy1BJWxGrK8aw+8xXc7+osx29toqEpgI3gqEwMFvylowKPVDWL1x9+bNdYIIf6
+J8lRBpn/nG5dcL0GAx7qNIRrWZMWJbMTGUOY8TgaGLpodEaGQ5EMDuUmZBeWkPft
+asHwDuTP/fFK+dlvjCg5eabRwjfl85LoPzbq4yj0iUfY38BPZ69/ZKTHY1XIUtyS
+VfciS8Es5jDIc5gWFO67NuyPWIxygE8ceH01OJay1Oa9gE8mF+62w6yXfysiYMo9
+DV9UbxdaoKG7+Pp8+VM81Gcei+KReL5bLwiNZWhEMLdg2UOwRq6OX8SSVB8JVI/K
+INZlS+S/q6vvMhbLOy2KGQ6VgFzyDDrngpe9cXXjs6t1w/oyLouNt01MXL5//qw8
+Nl/eQCB0JLUY5JWJ4U2RbhWfFOfBDGQwCzRjv38PeAjsHNdmaLdD7amq/FZQ2cjI
+AP4tHe0q3YL2eaNJapKd7Juvz4A8guLmbxf3N/IE3Wr+4pn22OTdZm56C4z/aiEq
+zErjvkhiSJmvherwpqIDEuwGbFO7R10iR5E78icEE3il7Dxi40OYp3VmZ88wW+MT
+PnKWtpdtP14tGzvsmOpKDdZwlPJ9HFlFXKZbF9W1kLNyrb62/nY=
+=Y8ba
 -----END PGP SIGNATURE-----
 
---7412yGgzZ0zqK6O1--
+--r6ApTD5EBx3VpHtc--
