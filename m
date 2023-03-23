@@ -2,181 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B746C630F
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 10:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4119C6C6434
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Mar 2023 10:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCWJPY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Mar 2023 05:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S231163AbjCWJ4t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Mar 2023 05:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjCWJPX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 05:15:23 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAF0C1;
-        Thu, 23 Mar 2023 02:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679562922; x=1711098922;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=b6rqFNC52piarpxOmD7Eups7KIrMwGmsquHzaNOdNaE=;
-  b=lRDYVBwkH5jBt7WCO3oGaVOrSPAgQNOcUQ5fNDMQwaQdPmjfUX0EPb47
-   y8N4ogVEEKMpNMDNZ7Lp1v3yxcvF0q40w36QJtVzjMQ9hwDv/5A3SjnnI
-   cOIpKh6sJly/4K5E5xJz6hzJqvVbuibQNJAH9nfHFjPc2nnVW3LyLFKTK
-   k959033rgSx9wYqoj6HPfX94teITjS/Blgpu5t1i0VNE5aJPmhxYwscG3
-   DS0Dn4tte7fS2Vf7t87/pu8Qia7/MSNUnmi5OKyraEI0hiyvpGqL6KiyR
-   pNootql2+6NxbUp8M9UGqYLp90mufuiG/HS84MMG3+b8wfPIb3Tm1tc3W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="340976421"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="340976421"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 02:15:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="632323063"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="632323063"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Mar 2023 02:15:20 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfH2V-000ECo-12;
-        Thu, 23 Mar 2023 09:15:19 +0000
-Date:   Thu, 23 Mar 2023 17:14:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 68611940d0f307cff16552aa920496418935205c
-Message-ID: <641c187e.A5OM6RNreWZFvW7P%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229734AbjCWJ4Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Mar 2023 05:56:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926EE3599;
+        Thu, 23 Mar 2023 02:55:36 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w9so83972730edc.3;
+        Thu, 23 Mar 2023 02:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679565335;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PphF8K//KH/mvExR3XG/4qnql3FAdb+LvjCZLcvDGrk=;
+        b=WoaYs4cDl5W7Hl8gUWH/zV0hpbhNl+TFJDeRfKB/UPoKFF9wbFppTVopELseT2E3fB
+         p1+O+3B6Tzx1LI5j68FBLGijBifYwCrpHKMkc2blkdVRn+1hbZNcXDaX3he/8XuMfPZm
+         sPugHLGPdCilxoP2IMaEhstYiGKnjNnBEBHCmFerC+GdxsXkWciFXUaVC5mtf/Nh9NEv
+         J3aCs1lokSWZWrhfMeWjFAyVfYjMK9xMhlJcQ4T4tpcQgqAjUoiISWH//+1jLjpISiMN
+         nNRrlcS3bqqgWn4XUgpohK9Nv2C5FgTPrrmoZ38ELLt5y5ND3+Hp2LmGj2hp/3dvRmrr
+         S51g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679565335;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PphF8K//KH/mvExR3XG/4qnql3FAdb+LvjCZLcvDGrk=;
+        b=FNdKor28MYuT7I22xxq/nHFpCRnDlJJDesznnqGxVTcKRsdnlS2WbS5VyUphA0GtOZ
+         /sOTyqHahqD+M1cYF2IjjOa3Rakz/3BORkFjSp34I5Nnyfn8wDYF4w7UWRKJOlJdrhhN
+         HOnOUOz/vnzgt27hfw6jtHaKn48B8tJwZd02UV2SGaBSNLyQN/LGr22+U3L//PKD9ogW
+         ljY+5KZ+zku46LsTGAzlrfjSOTTcmzdFCcgleW0hnRe3xagkePx/TVi8qhzYOreMTpj6
+         kvsz0jNmFWoZN5v5BAg0V/KwFrnyKU2psjEPLQyiRWEZuaqeTJrU7VKv5pZoiTizzQ26
+         DvMQ==
+X-Gm-Message-State: AO0yUKV+cA8d4cZKGDQsgqOx6UA4THTtcuSG5kCkNYGOVueCi1nhZVNK
+        7/alXd3YNmyMtx7qlEbWe07oX1OZuek=
+X-Google-Smtp-Source: AK7set+SpQe/mPt/Uj8So7EKDhP/In9EL/bDpdZ8DnDAGNDOeKa9HsOCSo/mn+VjWloSWdcvds20LQ==
+X-Received: by 2002:a17:906:7f93:b0:932:290d:12e4 with SMTP id f19-20020a1709067f9300b00932290d12e4mr8906716ejr.25.1679565334896;
+        Thu, 23 Mar 2023 02:55:34 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id o7-20020a1709062e8700b00933356c681esm6898578eji.150.2023.03.23.02.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 02:55:34 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 10:55:32 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v3 10/11] memory: tegra: handle no BWMGR MRQ support in
+ BPMP
+Message-ID: <ZBwiFEJ1bTMy6yTf@orome>
+References: <20230320182441.11904-1-sumitg@nvidia.com>
+ <20230320182441.11904-11-sumitg@nvidia.com>
+ <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jHN3+CG4rKdPqrN7"
+Content-Disposition: inline
+In-Reply-To: <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 68611940d0f307cff16552aa920496418935205c  Merge branch 'pm-cpufreq' into bleeding-edge
 
-elapsed time: 823m
+--jHN3+CG4rKdPqrN7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 100
-configs skipped: 10
+On Wed, Mar 22, 2023 at 06:50:23PM +0100, Krzysztof Kozlowski wrote:
+> On 20/03/2023 19:24, Sumit Gupta wrote:
+> > If BPMP-FW doesn't support 'MRQ_BWMGR_INT', then the MC Client driver
+> > probe fails with 'EPROBE_DEFER' which it receives on calling the func
+> > 'devm_of_icc_get()'. Fix this by initializing the ICC even if the MRQ
+> > is missing and return 'EINVAL' from 'icc_set_bw()' instead of passing
+> > the request to BPMP-FW later when the BW request is made by client.
+> >=20
+> > Fixes: ("memory: tegra: add interconnect support for DRAM scaling in Te=
+gra234")
+>=20
+> That's not correct tag.
+>=20
+> Anyway, send fixes separately.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I think this was a bit confusing. This fixes an issue that was
+introduced in a patch earlier in this series, so it's probably better to
+squash it into that patch rather than have a separate fix patch in the
+same series.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r002-20230322   gcc  
-arc                  randconfig-r023-20230322   gcc  
-arc                  randconfig-r024-20230322   gcc  
-arc                  randconfig-r043-20230322   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230322   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230322   clang
-arm64                randconfig-r004-20230322   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r013-20230322   gcc  
-csky                 randconfig-r035-20230322   gcc  
-hexagon              randconfig-r011-20230322   clang
-hexagon              randconfig-r015-20230322   clang
-hexagon              randconfig-r041-20230322   clang
-hexagon              randconfig-r045-20230322   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r001-20230322   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r033-20230322   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r003-20230322   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r005-20230322   gcc  
-mips                 randconfig-r006-20230322   gcc  
-mips                 randconfig-r036-20230322   gcc  
-nios2        buildonly-randconfig-r002-20230322   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r026-20230322   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r012-20230322   gcc  
-parisc               randconfig-r016-20230322   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230322   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230322   gcc  
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r001-20230322   gcc  
-sparc64              randconfig-r031-20230322   gcc  
-sparc64              randconfig-r034-20230322   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r032-20230322   gcc  
+Thierry
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--jHN3+CG4rKdPqrN7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcIhQACgkQ3SOs138+
+s6GPPA//bkgG/9emg8XAzAiCCk14SYzw8PzesQOWogN/oL/DK9MK6TrmtLLHpZvm
+I8A3FSzAy0bHgtNmlvogMEog/QqVODAumS7zIUxFfuQxfU/ZFYBiphVULHvcyWNu
+/7/84LwUTURyUKPbZGlVzV+bMst1ShUnVjX/YLIMo2gt8knj/C3X12AZETLtW+i+
+raTIkwrync5K8TqbYSfQrtlRTQH7VwS2eKBt1U5zZOO9kKlhsQPexVZ2ovxrtoZG
+98nrddvhggkn6EGE8FNXxdzt2a5HgMqpbA8sGt+WfpevT6abCHOA7b2JMYYyvt5S
+8uSKGq7LFx2JA95RTwa7GaWeLiqvWPeoFeeEgFbBe8nLBxOowwYXjJA9ocjVlThI
+eIGDk47LHlesyXS2cyYsnEAa8/JuXNx6RV1QT6l139rtwIQlnq1q5xcHW5B9Xa6F
+Pn+5H6Ztr5/xU8OHlNdKUMTC0k5CpuvlapIkQ+ztdPZ0AArhjVSFXaL+rKAZsnj3
+S2CSN7r4guMWGUJ+eyoCzPujlMnF6+ZbAMNHGUYBDNYWX4Cy39r/3EUIfZP5kD8G
+/kQWWTbgf8LZD2V65bk+rcz7oCNbisO0Xv2WjYm7H6+sUK/dmEcM/qEAfqukElDP
+/s4n+oICxCOEu3Q4Ei38PDvUk9ayMpzFV5dlKutGDCJc8MH8G7o=
+=+/zC
+-----END PGP SIGNATURE-----
+
+--jHN3+CG4rKdPqrN7--
