@@ -2,159 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD626C7EE4
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Mar 2023 14:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0816C7F81
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Mar 2023 15:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjCXNe4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Mar 2023 09:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S231933AbjCXOHB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Mar 2023 10:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbjCXNez (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Mar 2023 09:34:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951D617CF3;
-        Fri, 24 Mar 2023 06:34:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4EDFB82303;
-        Fri, 24 Mar 2023 13:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5592C433D2;
-        Fri, 24 Mar 2023 13:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679664883;
-        bh=c2wu/Bm6WNJUHMK4Ot6Thtt09tmyqbq2bKCvZMjcFjg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RF58HTF7nUyUZJM+ewY5DWouIpgdEcA+xCCfNxfxKM8dJ97k22amzo5nBqLcGZ+gb
-         7V7yEoppzLj12owLbBoe7EL5B+qJwwOJ1BQCYh6/d27so9O40ZZvpWOLphxwDJrKur
-         S2TtyUmiqq6w0xT9kp2Kn9S6TbhDIJtF8EDHSliOiCruS5da9k/SQYdDTrzDIp2LBK
-         LdLMohgeBUhx0U6BSqNF4HhUNYEEdSrmdPyDGa+gFC2D3duadcY0vtAgr6kdWqFQLF
-         egVQPYkZ1nk1oJpPkhXdsymD6bFARB0ajpG0ki1hlYnKvoxrA5AnpIc0Ju14x67IqO
-         uuB9nky2OJc0g==
-Date:   Fri, 24 Mar 2023 06:37:52 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: fix double IO unmap and
- resource release on exit
-Message-ID: <20230324133752.owl5euvurik3t64q@ripper>
-References: <20230323174026.950622-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S231873AbjCXOGi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Mar 2023 10:06:38 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94631B55D
+        for <linux-pm@vger.kernel.org>; Fri, 24 Mar 2023 07:06:34 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id t10so8278568edd.12
+        for <linux-pm@vger.kernel.org>; Fri, 24 Mar 2023 07:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1679666793;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NSRH/whhkHasG61CV9A5MEslEc9VQHATlvFYwxjFGj8=;
+        b=5mNGte52FnpY3FXONGnlJ78wo0d7WWnd3PiT/98GxWyuU6hahwLQOypkA1gcdxBvc1
+         XVboBPlBnu1JdD/nMAw7FK6LsvhxhRrf3ZlRybwCLyBEVh+wwGQ6lna1yHdiVbJRikVk
+         9GDqw0Cu2le/0yYwhIjYsIJ7dIrXXZyoVQotRhYamq9wFEPq2rXoYYD3T2IVUDb0IP6z
+         1dVkmLlbRrZ4iCm4uyvIXTJtuli2Au3UrrXuU959V9+1wctRukkogPE38otZ0MINqNMQ
+         xIhnDDm9A994HmlVasqfqRpp77HPs16+9xkz0FIqD1wwE8msZNN9xV/tBoaNWlY9Pize
+         /bJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679666793;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NSRH/whhkHasG61CV9A5MEslEc9VQHATlvFYwxjFGj8=;
+        b=jk92CPhOVAGcVvU8ilh8es3DrgA5Wbb+n8IdkltxSB98VSOD8EbI9RxPlzeMide3Cl
+         2TNZ5p2JRNZ5SrhCYHXOIFK2zvp3bJCk4HH1/oTC2s7MrUrL/oadDw3UmwQTRhMfF+TL
+         PREOi4VLhOrC0jzUtETIwx1QYOglnmWajBbsGJpySiznlIjbf3+7zcq9q1fmooXNjZVV
+         MiZ7j5n1vP46z+M1KWGfrTmDgSwrtdurW4OJK66bQijZoJv/AMn5HNTf4p/936Q05E7x
+         VsLh6ODoweJ3v7YfbKi5JImDCHLGCFx1jMldKqTRbxBotvjALiE2iCgp0S3MOOdMLxJl
+         cA2w==
+X-Gm-Message-State: AAQBX9crFdbRuVih2icV9cM+UZyLqPq5USngdLJK6HXZlm/C8hCP9x4T
+        +r30fmlatqP6jmdHxP6kaIr2XA==
+X-Google-Smtp-Source: AKy350aSSQNUKP8+F3tSCmiOeC2fY+aNnCrd8kWjimpqxpgdGJmkQx3EO2E13p/C7DmSUvT+MBojvg==
+X-Received: by 2002:aa7:dd50:0:b0:4ac:bd84:43d9 with SMTP id o16-20020aa7dd50000000b004acbd8443d9mr2908854edw.2.1679666793317;
+        Fri, 24 Mar 2023 07:06:33 -0700 (PDT)
+Received: from [192.168.0.29] (84-115-214-73.cable.dynamic.surfer.at. [84.115.214.73])
+        by smtp.gmail.com with ESMTPSA id ch19-20020a170906c2d300b00933d64cd447sm7645192ejb.121.2023.03.24.07.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 07:06:32 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Date:   Fri, 24 Mar 2023 15:06:24 +0100
+Subject: [PATCH] cpufreq: Add SM7225 to cpufreq-dt-platdev blocklist
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323174026.950622-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230324-sm7225-cpufreq-v1-1-7c2e9a4ab7e3@fairphone.com>
+X-B4-Tracking: v=1; b=H4sIAF+uHWQC/x2Nyw6DIBAAf8XsuWtwQWv6K6YHoEvdg5RCnzH+e
+ 7HHSWYyKxTOwgVOzQqZX1LkFit0hwb8bOOVUS6VgRRppclgWY5EPfr0DJnvqMiNqqdh7IyGGjl
+ bGF220c97FpLBoaX2i29J+PBpod1KmYN8/tvpvG0/xbJACIYAAAA=
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 06:40:26PM +0100, Krzysztof Kozlowski wrote:
-> Commit 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data
-> during probe") moved getting memory resource and iomap from
-> qcom_cpufreq_hw_cpu_init() to the probe function, however it left
-> untouched cleanup in qcom_cpufreq_hw_cpu_exit().
-> 
-> During device unbind this will lead to doule release of resource and
-> double iounmap(), first by qcom_cpufreq_hw_cpu_exit() and second via
-> managed resources:
-> 
->   resource: Trying to free nonexistent resource <0x0000000018593000-0x0000000018593fff>
->   Trying to vunmap() nonexistent vm area (0000000088a7d4dc)
->   ...
->   vunmap (mm/vmalloc.c:2771 (discriminator 1))
->   iounmap (mm/ioremap.c:60)
->   devm_ioremap_release (lib/devres.c:19)
->   devres_release_all (drivers/base/devres.c:506 drivers/base/devres.c:535)
->   device_unbind_cleanup (drivers/base/dd.c:523)
->   device_release_driver_internal (drivers/base/dd.c:1248 drivers/base/dd.c:1263)
->   device_driver_detach (drivers/base/dd.c:1300)
->   unbind_store (drivers/base/bus.c:243)
->   drv_attr_store (drivers/base/bus.c:127)
->   sysfs_kf_write (fs/sysfs/file.c:137)
->   kernfs_fop_write_iter (fs/kernfs/file.c:334)
->   vfs_write (include/linux/fs.h:1851 fs/read_write.c:491 fs/read_write.c:584)
->   ksys_write (fs/read_write.c:637)
->   __arm64_sys_write (fs/read_write.c:646)
->   invoke_syscall (arch/arm64/include/asm/current.h:19 arch/arm64/kernel/syscall.c:57)
->   el0_svc_common.constprop.0 (arch/arm64/include/asm/daifflags.h:28 arch/arm64/kernel/syscall.c:150)
->   do_el0_svc (arch/arm64/kernel/syscall.c:194)
->   el0_svc (arch/arm64/include/asm/daifflags.h:28 arch/arm64/kernel/entry-common.c:133 arch/arm64/kernel/entry-common.c:142 arch/arm64/kernel/entry-common.c:638)
->   el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
->   el0t_64_sync (arch/arm64/kernel/entry.S:591)
-> 
-> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
-> Cc: <stable@vger.kernel.org>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The Qualcomm SM7225 platform uses the qcom-cpufreq-hw driver, so add
+it to the cpufreq-dt-platdev driver's blocklist.
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Bjorn
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 5ac6b9e5270e..452181434735 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -152,6 +152,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "qcom,sm6115", },
+ 	{ .compatible = "qcom,sm6350", },
+ 	{ .compatible = "qcom,sm6375", },
++	{ .compatible = "qcom,sm7225", },
+ 	{ .compatible = "qcom,sm8150", },
+ 	{ .compatible = "qcom,sm8250", },
+ 	{ .compatible = "qcom,sm8350", },
 
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 2f581d2d617d..b2d2907200a9 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -43,7 +43,6 @@ struct qcom_cpufreq_soc_data {
->  
->  struct qcom_cpufreq_data {
->  	void __iomem *base;
-> -	struct resource *res;
->  
->  	/*
->  	 * Mutex to synchronize between de-init sequence and re-starting LMh
-> @@ -590,16 +589,12 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
->  {
->  	struct device *cpu_dev = get_cpu_device(policy->cpu);
->  	struct qcom_cpufreq_data *data = policy->driver_data;
-> -	struct resource *res = data->res;
-> -	void __iomem *base = data->base;
->  
->  	dev_pm_opp_remove_all_dynamic(cpu_dev);
->  	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
->  	qcom_cpufreq_hw_lmh_exit(data);
->  	kfree(policy->freq_table);
->  	kfree(data);
-> -	iounmap(base);
-> -	release_mem_region(res->start, resource_size(res));
->  
->  	return 0;
->  }
-> @@ -718,17 +713,15 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  	for (i = 0; i < num_domains; i++) {
->  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
->  		struct clk_init_data clk_init = {};
-> -		struct resource *res;
->  		void __iomem *base;
->  
-> -		base = devm_platform_get_and_ioremap_resource(pdev, i, &res);
-> +		base = devm_platform_ioremap_resource(pdev, i);
->  		if (IS_ERR(base)) {
-> -			dev_err(dev, "Failed to map resource %pR\n", res);
-> +			dev_err(dev, "Failed to map resource index %d\n", i);
->  			return PTR_ERR(base);
->  		}
->  
->  		data->base = base;
-> -		data->res = res;
->  
->  		/* Register CPU clock for each frequency domain */
->  		clk_init.name = kasprintf(GFP_KERNEL, "qcom_cpufreq%d", i);
-> -- 
-> 2.34.1
-> 
+---
+base-commit: e5dbf24e8b9e6aa0a185d86ce46a7a9c79ebb40f
+change-id: 20230324-sm7225-cpufreq-02b805268143
+
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
+
