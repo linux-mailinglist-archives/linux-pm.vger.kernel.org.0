@@ -2,178 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A4A6C8E12
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Mar 2023 13:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB4B6C8E62
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Mar 2023 14:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbjCYMZh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 Mar 2023 08:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S229926AbjCYNJr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Mar 2023 09:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjCYMZd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Mar 2023 08:25:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540C215166;
-        Sat, 25 Mar 2023 05:25:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97FA3B80707;
-        Sat, 25 Mar 2023 12:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55007C433D2;
-        Sat, 25 Mar 2023 12:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679747115;
-        bh=7xUqAmJ8HSj2/hb/M/p5/jV57+kJbpWu0+glv9QlX/c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JMviEVP/Xf0ur7mqxmqR9WQ+gPEAqRHDQGGLy7qFK15RX2l8Ki3MzpuVkqnIKsRZ8
-         CDUT3yPENbyF5Lq9f3V1A0Mc6+KmR8R4C+kM2eloe+pPOxkMgVQ7rM1+T/zjjvu/6j
-         X5EV0QqYdCJZG105ebLyUmfI7vRG8Cu+TinqCCDKSCV6eocU9/B/f8rFbEH0qlhE+X
-         +I67TxuoPNRD+j10OVOWwZoh4k6n1O1wMKnfPmXBV+NZU4GA3uIqZUJZDNDw/+jcX1
-         feJtx7B0SkniPCR70doyZ7vdLvIsj/PXk+j6IIx2v3lkwP3MncDmixD0iHyfHwNCf+
-         va4obFH5eahCw==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/12] dt-bindings: interconnect: split SC8180x to own schema
-Date:   Sat, 25 Mar 2023 17:54:37 +0530
-Message-Id: <20230325122444.249507-6-vkoul@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230325122444.249507-1-vkoul@kernel.org>
-References: <20230325122444.249507-1-vkoul@kernel.org>
+        with ESMTP id S230007AbjCYNJq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Mar 2023 09:09:46 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761FC126F8;
+        Sat, 25 Mar 2023 06:09:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eh3so18053503edb.11;
+        Sat, 25 Mar 2023 06:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1679749784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BivoLDf3VVsPCNHpqkq3yz6m8MDZznemKX2EBNEZN08=;
+        b=JzRDixDW3uR/Ix337Eclo3haZk+PznJW8nHzW5WJUNXRm6KRixGO7jKbBqVbqlGFhj
+         bEbIw2DuKtOWxwf0oL+iRtWdKqApXAeeF1YwfOkKgtJHu/9WTTL74Vfa24X7LCSirV+A
+         VBm8LtvCwAGIa2zZt9g89FvJfGJ87no4ryc8eHxzDPZ/vNqaB8BiotjZMR/dWJa5fkC+
+         CEcmo+4ukDpxB3HbcuwDzpn4qStoDLqmetmYLQL1mLdKTHzu9JKHOr4HzygXLtHDl4xR
+         Vs6rIGvjlZGE29L1dShqw0opIjvPcbuaQ5+WR/DFyIVkjeMXbQ41mCoTA/2SuDswJRxO
+         OWIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679749784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BivoLDf3VVsPCNHpqkq3yz6m8MDZznemKX2EBNEZN08=;
+        b=EbEOTfoZWip1qZxCY68dagffYFAxw2TAtGahlyqpZLgEriH3vSdF5qiheoi6N9QuiY
+         rht+QWXdv56tvIJqY4J7DFu+CvWgG5dDiJ6VhPdYdzGzZhUXlIX2xVNTXijHXqcqRsRC
+         8P42vOg1w6oRHnh+b9pZxLs+VS9XtB7xmMI0aulpqop6PJL0Sdzkpx/UZojV2/jJr5pk
+         mW67ngXjJAkAyYT5l/BvLykt11STAhne4cmPSFxT7LE6Y7o3ayImTYcvGYdRqRAxdEkv
+         xBKXVdXunmWYz553QY8/x+779B21XYKl1mbHWrXiM+VwqomU0239YhAOSia1j2xSaLun
+         r9SQ==
+X-Gm-Message-State: AAQBX9eFOIebR86M/d5aoz+HERZo9Snv8DlIAsAMYsTHbnbQSkKWoUS+
+        3gHK7ELzvNSUOGBqEd/DAB89zgouOJEWhKfUF3I=
+X-Google-Smtp-Source: AKy350b73vFj+pZqqUFZhR/pREKA9FiHjczT2L2Xv6G8L8igOFUG8aqx2VJ1hJgYhHMVBooRxexmFVqke1rOYDNcQow=
+X-Received: by 2002:a50:8acf:0:b0:502:3a4b:1f1a with SMTP id
+ k15-20020a508acf000000b005023a4b1f1amr423545edk.4.1679749783823; Sat, 25 Mar
+ 2023 06:09:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <202303241020110014476@zte.com.cn>
+In-Reply-To: <202303241020110014476@zte.com.cn>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 25 Mar 2023 14:09:33 +0100
+Message-ID: <CAFBinCBCdW5Nt+cm_1E-6gG1UNv7mnnDYxQRGae_UtCigt0+uA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: amlogic: Use dev_err_probe()
+To:     ye.xingchen@zte.com.cn
+Cc:     glaroque@baylibre.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SC8180x comes with interconnects having and missing IO address space, and
-variable number of clocks, so split it from common file for easier
-maintenance and to fix warnings like:
-
-sc8180x-lenovo-flex-5g.dtb: interconnect-0: 'reg' is a required property
-
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- .../bindings/interconnect/qcom,rpmh.yaml      | 11 ---
- .../interconnect/qcom,sc8180x-rpmh.yaml       | 76 +++++++++++++++++++
- 2 files changed, 76 insertions(+), 11 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
-
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-index 4d93ad415e0b..5cbc3be49e99 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-@@ -39,17 +39,6 @@ properties:
-       - qcom,sc7180-npu-noc
-       - qcom,sc7180-qup-virt
-       - qcom,sc7180-system-noc
--      - qcom,sc8180x-aggre1-noc
--      - qcom,sc8180x-aggre2-noc
--      - qcom,sc8180x-camnoc-virt
--      - qcom,sc8180x-compute-noc
--      - qcom,sc8180x-config-noc
--      - qcom,sc8180x-dc-noc
--      - qcom,sc8180x-gem-noc
--      - qcom,sc8180x-mc-virt
--      - qcom,sc8180x-mmss-noc
--      - qcom,sc8180x-qup-virt
--      - qcom,sc8180x-system-noc
-       - qcom,sdm670-aggre1-noc
-       - qcom,sdm670-aggre2-noc
-       - qcom,sdm670-config-noc
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
-new file mode 100644
-index 000000000000..613af6caa71d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interconnect/qcom,sc8180x-rpmh.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm RPMh Network-On-Chip Interconnect on SC8180X
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Konrad Dybcio <konrad.dybcio@linaro.org>
-+
-+description: |
-+  RPMh interconnect providers support system bandwidth requirements through
-+  RPMh hardware accelerators known as Bus Clock Manager (BCM).
-+
-+  See also:: include/dt-bindings/interconnect/qcom,sc8180x.h
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sc8180x-aggre1-noc
-+      - qcom,sc8180x-aggre1-noc
-+      - qcom,sc8180x-aggre2-noc
-+      - qcom,sc8180x-camnoc-virt
-+      - qcom,sc8180x-compute-noc
-+      - qcom,sc8180x-config-noc
-+      - qcom,sc8180x-dc-noc
-+      - qcom,sc8180x-gem-noc
-+      - qcom,sc8180x-mc-virt
-+      - qcom,sc8180x-mmss-noc
-+      - qcom,sc8180x-qup-virt
-+      - qcom,sc8180x-system-noc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 2
-+
-+allOf:
-+  - $ref: qcom,rpmh-common.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc8180x-camnoc-virt
-+              - qcom,sc8180x-mc-virt
-+              - qcom,sc8180x-qup-virt
-+    then:
-+      properties:
-+        reg: false
-+    else:
-+      required:
-+        - reg
-+required:
-+  - compatible
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    camnoc_virt: interconnect-0{
-+        compatible = "qcom,sc8180x-camnoc-virt";
-+        #interconnect-cells = <2>;
-+        qcom,bcm-voters = <&apps_bcm_voter>;
-+    };
-+
-+    aggre1_noc: interconnect@16e0000 {
-+        compatible = "qcom,sc8180x-aggre1-noc";
-+        reg = <0 0x016e0000 0 0xd080>;
-+        #interconnect-cells = <2>;
-+        qcom,bcm-voters = <&apps_bcm_voter>;
-+    };
--- 
-2.39.2
-
+On Fri, Mar 24, 2023 at 3:20=E2=80=AFAM <ye.xingchen@zte.com.cn> wrote:
+>
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>
+> Replace the open-code with dev_err_probe() to simplify the code.
+>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
