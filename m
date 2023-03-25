@@ -2,51 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FD96C8A46
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Mar 2023 03:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FE56C8AD4
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Mar 2023 05:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjCYChV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Mar 2023 22:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        id S229441AbjCYEaw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Mar 2023 00:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjCYChU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Mar 2023 22:37:20 -0400
-X-Greylist: delayed 59783 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 19:37:19 PDT
-Received: from out-49.mta0.migadu.com (out-49.mta0.migadu.com [IPv6:2001:41d0:1004:224b::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599219F20
-        for <linux-pm@vger.kernel.org>; Fri, 24 Mar 2023 19:37:18 -0700 (PDT)
+        with ESMTP id S230271AbjCYEav (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Mar 2023 00:30:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8184BAF3F;
+        Fri, 24 Mar 2023 21:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679718650; x=1711254650;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XONF7oRmghd72W/1BSQGVxcX8W6Q6KOXIsMlNN6PMkY=;
+  b=AU1FAgLY2xEA2zyBxR1JdZ0/loUNW5tQCvnP3k9lYexjXfU3DD6b7Y6a
+   ve5EhkKi0qycTUVGQT7woXREHFXBG3w5LWNJB9HZchyzYtpVTClIETibN
+   ytHQcy8K1ThxAhpZNg9IbDUmYJTcXShdpTVNRZYuD3S398rJvtgOu3usO
+   rFHVF6OlF7ZmlEGqlvU+scDt4b0gHNkk8tIoqrqWRcrD40PEuqRSEFyMd
+   Z3HmKLxbOhxThIgc8lqAO+SMBHvU+epMih1cJwAW/rpaRhlrZ2kAuLLJT
+   U5pNasDwHS17NQ2udoXOrTTrUHykmMw0SZDlv6AHn4BtSwUGiDhr+RLcn
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="323817556"
+X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
+   d="scan'208";a="323817556"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 21:30:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="676394700"
+X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
+   d="scan'208";a="676394700"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2023 21:30:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfvYE-000Fwd-0n;
+        Sat, 25 Mar 2023 04:30:46 +0000
+Date:   Sat, 25 Mar 2023 12:29:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 29468e280ce5617470ddef97adc751fc9cc9827b
+Message-ID: <641e78bd.eKiYBeafSaO3Cv9N%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679711836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JbJ5P4BKOqb4iS2A7y/+fQzC8w3jldyyCXASrx+9Klg=;
-        b=A8AdZMKgicxUWLO6Gev3tL9/z5ysmGAXBhvs+u6A869cWjk52dFInEfDyA7B854p/Hbigs
-        h23rU+YWhWRcB0prCOcYmL74bvzd08gF0qPMxH9Kyie3u3TKH8VZQYeqJiCDS+ywjXQxhq
-        SgUJ0WTWuOuoRTTV5W8taSiNCmvrFPY=
-Date:   Sat, 25 Mar 2023 02:37:16 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <fc39e67bdf397f0aa51f00c58d135ac0@linux.dev>
-Subject: Re: [PATCH] cpufreq: schedutil: Combine two loops into one in
- sugov_start()
-To:     "Lukasz Luba" <lukasz.luba@arm.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, mingo@redhat.com, vschneid@redhat.com,
-        bristot@redhat.com, bsegall@google.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mgorman@suse.de, viresh.kumar@linaro.org,
-        rafael@kernel.org
-In-Reply-To: <09ea63b7-7294-a143-c797-95eba87c765e@arm.com>
-References: <09ea63b7-7294-a143-c797-95eba87c765e@arm.com>
- <20230324100023.900616-1-yajun.deng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,46 +63,123 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-March 24, 2023 6:46 PM, "Lukasz Luba" <lukasz.luba@arm.com> wrote:=0A=0A>=
- Hi Yajun,=0A> =0A> On 3/24/23 10:00, Yajun Deng wrote:=0A> =0A>> The sug=
-ov_start() function currently contains two for loops that=0A>> traverse t=
-he CPU list and perform some initialization tasks. The first=0A>> loop in=
-itializes each sugov_cpu struct and assigns the CPU number and=0A>> sugov=
-_policy pointer. The second loop sets up the update_util hook for=0A>> ea=
-ch CPU based on the policy type.=0A>> Since both loops operate on the sam=
-e CPU list, it is possible to combine=0A>> them into a single for loop. T=
-his simplifies the code and reduces the=0A>> number of times the CPU list=
- needs to be traversed, which can improve=0A>> performance.=0A>> Signed-o=
-ff-by: Yajun Deng <yajun.deng@linux.dev>=0A>> ---=0A>> kernel/sched/cpufr=
-eq_schedutil.c | 12 ++++--------=0A>> 1 file changed, 4 insertions(+), 8 =
-deletions(-)=0A>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/=
-sched/cpufreq_schedutil.c=0A>> index e3211455b203..9a28ebbb9c1e 100644=0A=
->> --- a/kernel/sched/cpufreq_schedutil.c=0A>> +++ b/kernel/sched/cpufreq=
-_schedutil.c=0A>> @@ -766,14 +766,6 @@ static int sugov_start(struct cpuf=
-req_policy *policy)=0A>>> sg_policy->need_freq_update =3D cpufreq_driver_=
-test_flags(CPUFREQ_NEED_UPDATE_LIMITS);=0A>>> - for_each_cpu(cpu, policy-=
->cpus) {=0A>> - struct sugov_cpu *sg_cpu =3D &per_cpu(sugov_cpu, cpu);=0A=
->> -=0A>> - memset(sg_cpu, 0, sizeof(*sg_cpu));=0A>> - sg_cpu->cpu =3D cp=
-u;=0A>> - sg_cpu->sg_policy =3D sg_policy;=0A>> - }=0A>> -=0A>> if (polic=
-y_is_shared(policy))=0A>> uu =3D sugov_update_shared;=0A>> else if (polic=
-y->fast_switch_enabled && cpufreq_driver_has_adjust_perf())=0A>> @@ -784,=
-6 +776,10 @@ static int sugov_start(struct cpufreq_policy *policy)=0A>> f=
-or_each_cpu(cpu, policy->cpus) {=0A>> struct sugov_cpu *sg_cpu =3D &per_c=
-pu(sugov_cpu, cpu);=0A>>> + memset(sg_cpu, 0, sizeof(*sg_cpu));=0A>> + sg=
-_cpu->cpu =3D cpu;=0A>> + sg_cpu->sg_policy =3D sg_policy;=0A>> +=0A>> cp=
-ufreq_add_update_util_hook(cpu, &sg_cpu->update_util, uu);=0A>> }=0A>> re=
-turn 0;=0A> =0A> IMO the change might cause a race.=0A> There is a call t=
-o set scheduler hook in the 2nd loop.=0A> If you combine two loops that h=
-ook might be used=0A> from other CPU in the meantime, while still the res=
-t CPUs are not=0A> finished.=0A> The first loop makes sure all CPUs in th=
-e 'policy->cpus' get a clean=0A> context 'sg_cpu' and proper 'cpu' values=
- first (and 'sg_policy' as=0A> well). When the two loops are combined, th=
-ere might be fast usage=0A> from scheduler on other CPU the sugov code pa=
-th.=0A> =0A> If the policy is shared for many CPUs and any of them is abl=
-e to=0A> change the freq, then some CPU can enter this code flow, where=
-=0A> remotely wants to check the other CPUs' utilization:=0A> =0A> sugov_=
-next_freq_shared()=0A> for each cpu in policy->cpus:=0A> sugov_get_util()=
-=0A> where the 'sg_cpu->cpu' is used=0A> =0A> Therefore, IMO this optimiz=
-ation in a start function (which is=0A> only called once and is not part =
-of the 'hot path') is not=0A> worth the race risk.=0A>=0A=0AOk, Got it. T=
-hanks!=0A =0A> Regards=0A> Lukasz
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 29468e280ce5617470ddef97adc751fc9cc9827b  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+
+elapsed time: 730m
+
+configs tested: 104
+configs skipped: 6
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r035-20230322   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r001-20230322   clang
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230322   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r004-20230322   clang
+arm64                randconfig-r005-20230322   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r023-20230322   gcc  
+hexagon      buildonly-randconfig-r004-20230322   clang
+hexagon              randconfig-r006-20230322   clang
+hexagon              randconfig-r025-20230322   clang
+hexagon              randconfig-r036-20230322   clang
+hexagon              randconfig-r041-20230322   clang
+hexagon              randconfig-r045-20230322   clang
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r034-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r032-20230322   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r015-20230322   gcc  
+m68k                 randconfig-r024-20230322   gcc  
+m68k                 randconfig-r026-20230322   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r012-20230322   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r021-20230322   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r013-20230322   gcc  
+parisc               randconfig-r022-20230322   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r003-20230322   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230322   clang
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r002-20230322   gcc  
+s390         buildonly-randconfig-r006-20230322   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r016-20230322   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230322   gcc  
+sparc                randconfig-r014-20230322   gcc  
+sparc                randconfig-r031-20230322   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r033-20230322   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
