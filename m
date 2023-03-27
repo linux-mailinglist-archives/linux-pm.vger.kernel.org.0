@@ -2,91 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C26B6C9CA9
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 09:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A946C9CCC
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 09:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbjC0HrT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Mar 2023 03:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S232797AbjC0Hvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Mar 2023 03:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbjC0HrS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 03:47:18 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D111986
-        for <linux-pm@vger.kernel.org>; Mon, 27 Mar 2023 00:46:45 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eh3so31936638edb.11
-        for <linux-pm@vger.kernel.org>; Mon, 27 Mar 2023 00:46:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679903193;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb4tmemzNzPfIOjPtgMNPF0CGomNiXxN8XvI9oRSmNI=;
-        b=VOfYyK9i6gZs8IWKGfI37YsIXxvoNnvPus05sLgBEuQYEVjULkcjsjyFNivEOsYqvf
-         FDYabVFqnS1vndkA7pAb61k2xYxFdDu2+xLecPJuE2FIXTU4bndsTakmFPrJAkt0E44c
-         NTJldoufbchjv82hpKqsFaXg5TmLrDoPsY/STlri88zmsTVABenlQmfHInDPDblJE1Ks
-         xgB/szC11Y2g8HBr0Fn1Q9A1/UHPMZI1v78/6S02XjYf9kgLd/WKyJFWmZ0XIbBI9FgR
-         bOsJzirVpDJMdkimwZM8u7Q7Bs4mmxcerQ3hC0PcKvea6cICA28v4JaWajIg7BsoYqNm
-         brMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679903193;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb4tmemzNzPfIOjPtgMNPF0CGomNiXxN8XvI9oRSmNI=;
-        b=3sitVxbBniyNWYIrLYoQAqWvRP0nLReqOzmmUOY8VimaUf0zvc7ydaWrcAUAlqEXCG
-         pUKjqZzCoKoDiReZ/O/s9m/umEhDG6t4OqnJ/18QxyOCrspDkpGvvyKxD2bATQVcgqND
-         DLhEPDM2fOttiPTNw6Gpiwd0Dywo4XOvO6IIWKMU/2CClr0d38VfYDGiX0meLD74yZhd
-         ded4TL63o+0JPeCVQoQN5rbqjCc8iAUJJrXJz3mrWgKqJQAXrKL4ZlJ51MvETPR0OmaH
-         yONukUR5CcSggHphafQXrKBdhWJ0OcOHVBQCF0kmrHyyIetSqHVgJ+Rn/Yu83NH7oYWl
-         1ctw==
-X-Gm-Message-State: AAQBX9dcxLtKYmou9BT70KrUkYzLeHNtB+/xgRMzFkHaJQbAiyRkxYCI
-        dp1AIG7simzf1AerW5FKYH5kOw==
-X-Google-Smtp-Source: AKy350ZNWA0feM++fE9Wdn2rh/TytZ36eDYbHVPI+fh8qG3pqwsASZFFXhljXwAi23S7uHcsc2ijNA==
-X-Received: by 2002:aa7:c646:0:b0:4a0:e305:a0de with SMTP id z6-20020aa7c646000000b004a0e305a0demr11834978edr.19.1679903193519;
-        Mon, 27 Mar 2023 00:46:33 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:198e:c1a5:309b:d678? ([2a02:810d:15c0:828:198e:c1a5:309b:d678])
-        by smtp.gmail.com with ESMTPSA id v6-20020a50d086000000b004fb00831851sm14246435edd.66.2023.03.27.00.46.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 00:46:33 -0700 (PDT)
-Message-ID: <6f6be544-48da-0c22-ea54-e07e35131ec9@linaro.org>
-Date:   Mon, 27 Mar 2023 09:46:31 +0200
+        with ESMTP id S232827AbjC0Hvh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 03:51:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFDA4EE4;
+        Mon, 27 Mar 2023 00:51:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B646C61026;
+        Mon, 27 Mar 2023 07:51:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA1FC433D2;
+        Mon, 27 Mar 2023 07:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679903490;
+        bh=Yrfn9JBqEbsNPhoK5Plt1kgfkiwmSVtr9zSj8w0sHFU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jZnSQq0ikND1O8MiISARjlYQLf0kLdxPyonFUeMeSjAqOVXtAvEFPIXHYhUe3sZhy
+         Jh+rc5OpvFrn6FNvIumQp2is/jibEcDefI2WiR/1dc+oSvGEjt+3xSF10Rkp2W2Cva
+         mTFlL3cq7EFefBg87jfAZliLNynUkKJfdJ/V83nucWSN13WJWBD51fB+ok5534c4ZB
+         OoHM+zVBuAcuJqsEsCoaMn7hB6XVVk3qEu6mNuCOOGZsOCE0cFd8x364HuTaopTLlA
+         Q/iZhjKS8oOvmQsMAg1c30SdVU6tgO2jJspQ4Dba2yNVqJzpVGKo3YHZBtXvC/amRc
+         0NeXhtGBuUWtg==
+Message-ID: <06d76233-df72-b4c2-851a-c251dcd7fd23@kernel.org>
+Date:   Mon, 27 Mar 2023 17:51:23 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 00/12] Introduce the SC8180x devices
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
+ ctrl
 Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
-References: <20230325122444.249507-1-vkoul@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230325122444.249507-1-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        peng.fan@oss.nxp.com, linux-arm-kernel@lists.infradead.org
+Cc:     Markus.Niebel@ew.tq-group.com, abailon@baylibre.com,
+        abelvesa@kernel.org, aford173@gmail.com,
+        devicetree@vger.kernel.org, djakov@kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
+        l.stach@pengutronix.de, laurent.pinchart@ideasonboard.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, marex@denx.de,
+        paul.elder@ideasonboard.com, peng.fan@nxp.com, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>
+References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
+ <20230327045037.593326-1-gerg@linux-m68k.org> <2678294.mvXUDI8C0e@steina-w>
+From:   Greg Ungerer <gerg@kernel.org>
+In-Reply-To: <2678294.mvXUDI8C0e@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,17 +67,92 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/03/2023 13:24, Vinod Koul wrote:
-> This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
-> laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
-> laptop.
+Hi Alexander,
+
+On 27/3/23 16:27, Alexander Stein wrote:
+> Hi Greg,
 > 
-> I would be great if submaintainers can ack the binding patch so that
-> everything can go thru qcom tree
+> Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
+>> On 2/3/22 17:13, Peng Fan wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> Add interconnect property for hsio blk ctrl
+>>>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>
+>>   > arch/arm64/boot/dts/freescale/imx8mp.dtsi | 5 +++++
+>>   > 1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi index
+>>> 08bd57742294..9cceeeeb26be 100644
+>>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> @@ -1109,6 +1109,11 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
+>>>
+>>>   						<&pgc_hsiomix>,
+> <&pgc_pcie_phy>;
+>>>   				
+>>>   				power-domain-names = "bus", "usb",
+> "usb-phy1",
+>>>   				
+>>>   						     "usb-phy2",
+> "pcie", "pcie-phy";
+>>>
+>>> +				interconnects = <&noc
+> IMX8MP_ICM_NOC_PCIE &noc IMX8MP_ICN_HSIO>,
+>>> +						<&noc
+> IMX8MP_ICM_USB1 &noc IMX8MP_ICN_HSIO>,
+>>> +						<&noc
+> IMX8MP_ICM_USB2 &noc IMX8MP_ICN_HSIO>,
+>>> +						<&noc
+> IMX8MP_ICM_PCIE &noc IMX8MP_ICN_HSIO>;
+>>> +				interconnect-names = "noc-pcie",
+> "usb1", "usb2", "pcie";
+>>>
+>>>   				#power-domain-cells = <1>;
+>>>   			
+>>>   			};
+>>>   		
+>>>   		};
+>>
+>> This change completely breaks USB for me on a new iMX8mp platform I am
+>> working with. Before this change normal USB probe looks good:
+>>
+>>      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+>>      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+>>      xhci-hcd xhci-hcd.0.auto: hcc params 0x0220fe6d hci version 0x110 quirks
+>> 0x0000000000010010 xhci-hcd xhci-hcd.0.auto: irq 206, io mem 0x38100000
+>>      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+>>      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+>>      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.0 SuperSpeed
+>>      usb usb1: New USB device found, idVendor=1d6b, idProduct=0002,
+>> bcdDevice= 6.03 usb usb1: New USB device strings: Mfr=3, Product=2,
+>> SerialNumber=1 usb usb1: Product: xHCI Host Controller
+>>      usb usb1: Manufacturer: Linux 6.3.0-rc4-dirty xhci-hcd
+>>      ....
+>>
+>> But after this commit is applied, no USB probe messages at all.
+>>
+>> USB worked fine in 6.0 for me, but when I switched up to 6.1 USB was broken,
+>> I bisected to this as being the offending commit. This is still broken for
+>> me in todays 6.3-rc4. If I revert this change (and only this change) USB
+>> works again.
+>>
+>> Any thoughts on why this breaks USB?
+> 
+> Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
 
-I think Bjorn recently was rejecting taking bindings patches, so what
-changed?
+No, it is enabled. From my config:
 
-Best regards,
-Krzysztof
+     CONFIG_INTERCONNECT=y
+     CONFIG_INTERCONNECT_IMX=y
+     # CONFIG_INTERCONNECT_IMX8MM is not set
+     # CONFIG_INTERCONNECT_IMX8MN is not set
+     # CONFIG_INTERCONNECT_IMX8MQ is not set
+     CONFIG_INTERCONNECT_IMX8MP=y
+
+Regards
+Greg
 
