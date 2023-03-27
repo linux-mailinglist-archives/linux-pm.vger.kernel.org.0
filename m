@@ -2,46 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2706D6CAB11
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD156CAB1A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjC0QwN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S232202AbjC0QyX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjC0QwK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:52:10 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A283C02;
-        Mon, 27 Mar 2023 09:51:51 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id ek18so38884652edb.6;
-        Mon, 27 Mar 2023 09:51:51 -0700 (PDT)
+        with ESMTP id S232712AbjC0QyJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:54:09 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8694E40CE;
+        Mon, 27 Mar 2023 09:53:53 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id w9so38960519edc.3;
+        Mon, 27 Mar 2023 09:53:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679935905;
+        d=1e100.net; s=20210112; t=1679936032;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/i7oFEe73tySQfhnZAAorku18WfFptPAQV/pDmjOVSA=;
-        b=Fw1OP8nPDOvU3Uh2TIPIvrqzuYNqgyF0KUjpvPaDM5dElhtpZjHCYMztzcNSyMe2ht
-         FKfCbZa0u4zjLSwnZShBA+hgMgYlXhbB3X7qn+7C45BSNmIFY55aI7Jd2GDdhMqsUZBq
-         kMnQoKsPpjOB2PV+ZB+eMWEJWTPbl2uZUDq3DgeEkUligHcW2psknA8EGkxHr3PcVBC/
-         8HXw6uEyfPcwoLDUOX/BMl+WhdnvtfttgQvVOgutQLHcrVbKv7USBpFvHbbYU+NaFKuF
-         A4LzVY+BS9iwxwbMUGly5WZ1GIL3CKVZrdICER+rh0Ws6L5+q2w3cj14BLdezEm41pP+
-         RCIQ==
-X-Gm-Message-State: AAQBX9epi9OuMITiRX27rU5vYjcxwYLj9T+Ej8Q5a5dabEuBB3xFW7GK
-        1qx3oBIbGqilpgnHcZfYEAkmoP44S3eE+NwuAjI=
-X-Google-Smtp-Source: AKy350ZYSmpIfgUCyG1GyC43BDvsimHGcZqAriixBeTrSmL4Ak6OGNqQvtHXjLl60ptA8ZCVs9YP7/LmcalZ1N2fJT4=
-X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
- gn2-20020a1709070d0200b009316921bdbbmr5845969ejc.2.1679935904807; Mon, 27 Mar
- 2023 09:51:44 -0700 (PDT)
+        bh=uN+Iaybb1iiVqV2uil6/2jZC7AiW3B44s8UTj7v5RWo=;
+        b=nNHlSN6bJ2IoNiK8RfuQD7oAT9WH9VEMm+F5Ly3zoYW/IgSsdrfb3X9Etc8U80M3LZ
+         Gx56MHxM//z7oUBGhOY6Azbcq4SHSBwrCYok6Rio00JCJNb3ggHm/NEOByqaICYKgRGY
+         /qw63QU3AJ2KkopofgXfp8gx2TatILeXeV520h0izqd7/CX0Y+1Sa9fX9KWJmC+16NBZ
+         m0O/Lpxymlhvsw7FZJyTJE/M2DKrd/9qYyw3/dCpY6Y5ODtz5AJSKPrI4LhbWoT4fqhX
+         dfBadT0BQVc0cM6Lr3gcVQjNeQXujZn68g8tyHj1VsjtpWXz50MdhC9/5fWrkDuUhoAQ
+         Dtig==
+X-Gm-Message-State: AAQBX9fFRFKpfOhqNXgXTefM/Dm+FUR3cOuAhVD7CBYHomrrlIAXQ0yU
+        OeBAnL03fikf59TrsGG0UBhXKKtoj4iLGKTt5mQ=
+X-Google-Smtp-Source: AKy350ZM+aevf5AXvKH2scrKR+I4K9ZvXkizJjuisW1Wx0im49PYK3bxOBS6CSwpSc+bzCM3U0vMMGHlEARdC86gkdA=
+X-Received: by 2002:a50:d6d6:0:b0:4fb:c8e3:1adb with SMTP id
+ l22-20020a50d6d6000000b004fbc8e31adbmr5998695edj.3.1679936031994; Mon, 27 Mar
+ 2023 09:53:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-17-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-17-ricardo.neri-calderon@linux.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-18-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-18-ricardo.neri-calderon@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:51:33 +0200
-Message-ID: <CAJZ5v0iMkADWu2P_cn9+8FV4HR+0eDF2uAwEMAZwTAMuE3kBkA@mail.gmail.com>
-Subject: Re: [PATCH v3 16/24] thermal: intel: hfi: Define a default class for
- unclassified tasks
+Date:   Mon, 27 Mar 2023 18:53:40 +0200
+Message-ID: <CAJZ5v0jZrW0106DR7Rk2xov--dgJsw+h7g9AGzyyrg3=_znbvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 17/24] thermal: intel: hfi: Enable the Intel Thread Director
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -77,16 +76,13 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 <ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> A task may be unclassified if it has been recently created, spend most of
-> its lifetime sleeping, or hardware has not provided a classification.
+> Enable Intel Thread Director from the CPU hotplug callback: globally from
+> CPU0 and then enable the thread-classification hardware in each logical
+> processor individually.
 >
-> Most tasks will be eventually classified as scheduler's IPC class 1
-> (HFI class 0). This class corresponds to the capabilities in the legacy,
-> classless, HFI table.
+> Also, initialize the number of classes supported.
 >
-> IPC class 1 is a reasonable choice until hardware provides an actual
-> classification. Meanwhile, the scheduler will place classes of tasks with
-> higher IPC scores on higher-performance CPUs.
+> Let the scheduler know that it can start using IPC classes.
 >
 > Cc: Ben Segall <bsegall@google.com>
 > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -106,53 +102,116 @@ On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 > Cc: linux-kernel@vger.kernel.org
 > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-Fine with me, so
+For the changes in intel_hfi.c
 
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
 > Changes since v2:
->  * None
+>  * Use the new sched_enable_ipc_classes() interface to enable the use of
+>    IPC classes in the scheduler.
 >
 > Changes since v1:
->  * Now the default class is 1.
+>  * None
 > ---
->  drivers/thermal/intel/intel_hfi.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+>  arch/x86/include/asm/msr-index.h  |  2 ++
+>  drivers/thermal/intel/intel_hfi.c | 40 +++++++++++++++++++++++++++++--
+>  2 files changed, 40 insertions(+), 2 deletions(-)
 >
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index ad35355ee43e..0ea25cc9c621 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -1106,6 +1106,8 @@
+>  /* Hardware Feedback Interface */
+>  #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
+>  #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
+> +#define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
+> +#define MSR_IA32_HW_FEEDBACK_CHAR      0x17d2
+>
+>  /* x2APIC locked status */
+>  #define MSR_IA32_XAPIC_DISABLE_STATUS  0xBD
 > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index fa9b4a678d92..7ea6acce7107 100644
+> index 7ea6acce7107..35d947f47550 100644
 > --- a/drivers/thermal/intel/intel_hfi.c
 > +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -185,6 +185,19 @@ static struct workqueue_struct *hfi_updates_wq;
->  #ifdef CONFIG_IPC_CLASSES
->  static int __percpu *hfi_ipcc_scores;
+> @@ -48,6 +48,8 @@
+>  /* Hardware Feedback Interface MSR configuration bits */
+>  #define HW_FEEDBACK_PTR_VALID_BIT              BIT(0)
+>  #define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT      BIT(0)
+> +#define HW_FEEDBACK_CONFIG_ITD_ENABLE_BIT      BIT(1)
+> +#define HW_FEEDBACK_THREAD_CONFIG_ENABLE_BIT   BIT(0)
 >
-> +/*
-> + * A task may be unclassified if it has been recently created, spend most of
-> + * its lifetime sleeping, or hardware has not provided a classification.
-> + *
-> + * Most tasks will be classified as scheduler's IPC class 1 (HFI class 0)
-> + * eventually. Meanwhile, the scheduler will place classes of tasks with higher
-> + * IPC scores on higher-performance CPUs.
-> + *
-> + * IPC class 1 is a reasonable choice. It matches the performance capability
-> + * of the legacy, classless, HFI table.
-> + */
-> +#define HFI_UNCLASSIFIED_DEFAULT 1
+>  /* CPUID detection and enumeration definitions for HFI */
+>
+> @@ -72,6 +74,15 @@ union cpuid6_edx {
+>         u32 full;
+>  };
+>
+> +union cpuid6_ecx {
+> +       struct {
+> +               u32     dont_care0:8;
+> +               u32     nr_classes:8;
+> +               u32     dont_care1:16;
+> +       } split;
+> +       u32 full;
+> +};
 > +
->  void intel_hfi_update_ipcc(struct task_struct *curr)
->  {
->         union hfi_thread_feedback_char_msr msr;
-> @@ -215,7 +228,7 @@ unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
->                 return -EINVAL;
+>  #ifdef CONFIG_IPC_CLASSES
+>  union hfi_thread_feedback_char_msr {
+>         struct {
+> @@ -506,6 +517,11 @@ void intel_hfi_online(unsigned int cpu)
 >
->         if (ipcc == IPC_CLASS_UNCLASSIFIED)
-> -               return -EINVAL;
-> +               ipcc = HFI_UNCLASSIFIED_DEFAULT;
+>         init_hfi_cpu_index(info);
+>
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +               msr_val = HW_FEEDBACK_THREAD_CONFIG_ENABLE_BIT;
+> +               wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
+> +       }
+> +
+>         /*
+>          * Now check if the HFI instance of the package/die of @cpu has been
+>          * initialized (by checking its header). In such case, all we have to
+> @@ -561,8 +577,22 @@ void intel_hfi_online(unsigned int cpu)
+>          */
+>         rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>         msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
+> +
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD))
+> +               msr_val |= HW_FEEDBACK_CONFIG_ITD_ENABLE_BIT;
+> +
+>         wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>
+> +       /*
+> +        * We have all we need to support IPC classes. Task classification is
+> +        * now working.
+> +        *
+> +        * All class scores are zero until after the first HFI update. That is
+> +        * OK. The scheduler queries these scores at every load balance.
+> +        */
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD))
+> +               sched_enable_ipc_classes();
+> +
+>  unlock:
+>         mutex_unlock(&hfi_instance_lock);
+>         return;
+> @@ -640,8 +670,14 @@ static __init int hfi_parse_features(void)
+>          */
+>         hfi_features.class_stride = nr_capabilities;
+>
+> -       /* For now, use only one class of the HFI table */
+> -       hfi_features.nr_classes = 1;
+> +       if (cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +               union cpuid6_ecx ecx;
+> +
+> +               ecx.full = cpuid_ecx(CPUID_HFI_LEAF);
+> +               hfi_features.nr_classes = ecx.split.nr_classes;
+> +       } else {
+> +               hfi_features.nr_classes = 1;
+> +       }
 >
 >         /*
->          * Scheduler IPC classes start at 1. HFI classes start at 0.
+>          * The header contains change indications for each supported feature.
 > --
 > 2.25.1
 >
