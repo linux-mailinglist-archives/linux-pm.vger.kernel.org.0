@@ -2,49 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1F86CAA53
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75396CAA98
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjC0QRn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S232307AbjC0QbT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjC0QRg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:17:36 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA52D5FCD;
-        Mon, 27 Mar 2023 09:17:04 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id b20so38530905edd.1;
-        Mon, 27 Mar 2023 09:17:04 -0700 (PDT)
+        with ESMTP id S230386AbjC0QbS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:31:18 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5141BF8;
+        Mon, 27 Mar 2023 09:31:16 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id ek18so38641247edb.6;
+        Mon, 27 Mar 2023 09:31:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679933812;
+        d=1e100.net; s=20210112; t=1679934675;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zxPtolN39h2PLfA1b2YCugQifzSuo9B122mhTUOTwWk=;
-        b=BI8AfE8/QvUaOAYiSsqgInyjhGSv7+YnoRX6MuaPHcRrrweyp/iBViIC2f6KFDzXlM
-         D1OD4WxeSx17tqub8rnANXP3EbrnR78NagwnPYDA8+CviqoyGI0tsWn/REkdp8JnepYm
-         S4mmfh+FE3tTRiPhPolhkIt6tIWAO87CuVje6c9sExQe1Ka3VOaBYROATrP2lH3AktYc
-         1np/xAWDW/i8jQ92jClae9IlfEZ0s9Shj2PwdCQQfk/jeykiptq+5tQxNDfTr3BrGOP1
-         XPbCDC1qMZA+Hoy6qygZns8jpKLw0tsWbT46XxhsBx2ouPmRTqgJnlu/YTaTAs8SbCwC
-         TWag==
-X-Gm-Message-State: AAQBX9csaBXHDz9EeNxYIbFhg4c3MmybbERPsE7nBsphvp1mi6IM8Fxv
-        1xThcGRKS//Nro0ifEtMNOoUlt1TJxtaVVmv2AM=
-X-Google-Smtp-Source: AKy350aaYoiVU1D2NAgL7MckmXbcMbIzlqVSmHA3O8q4kPD4hJT3CIQdm5RxbHrlc1Nk1hiPHLjBXd9Ved4a6NggsjY=
-X-Received: by 2002:a17:907:3e8b:b0:931:ce20:db6e with SMTP id
- hs11-20020a1709073e8b00b00931ce20db6emr6710511ejc.2.1679933812554; Mon, 27
- Mar 2023 09:16:52 -0700 (PDT)
+        bh=9Ze47oiOMMwEVxqfmFdemK0JOgAXssrF7lNQS7gfxOk=;
+        b=qAzAqN/uh3+eKGho/srvYPoyOC3KGmS+xRmqgXoTrVW59idRa/rHRlTAQuoHHU3FyJ
+         0OJ1/3iTRxcvvB0XduWx9RNdtiN7HX/r2UyE2KbmL3SKkcO8AdDBQu8/sq/xdJg2fGkO
+         +0GR96FYJsIboQWJaZ79o+9C2t+0cn5z+DhUfhMNcHXwREjwHoCrW55AyW8Bb+Que0Kj
+         aqJpw6eRF7oZ70YXAsfUo8cVauCtGAOsA/B9o1XF0gc1nub3FN9dkvBS+Rl4dZ57IFDs
+         O1FUO1p+5/fBMcrTI0hBIyWJgpzOeZmRImfXjyFdoNrpHjwbhsggdQ3R0hZJzxkUA7QB
+         DO3A==
+X-Gm-Message-State: AAQBX9ehkzJxx1ZALCeDb79aXdjKauT2McpmvDNqEKTp49JT9hWE9fFB
+        sQ5tmcvZ6L7qXsq95U7fqluxUwwryLJcC4x8mx8=
+X-Google-Smtp-Source: AKy350aSM5bh29ivpbq6LAhxYig+POjK4M7ZT6QDUBFSac9DFKNJ1s03/LnJQH/g9PiZt0GifWQAyZI7IoRbKqB+zXk=
+X-Received: by 2002:a50:d49e:0:b0:502:148d:9e1e with SMTP id
+ s30-20020a50d49e000000b00502148d9e1emr6145533edi.3.1679934674643; Mon, 27 Mar
+ 2023 09:31:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org> <20230307133735.90772-10-daniel.lezcano@linaro.org>
-In-Reply-To: <20230307133735.90772-10-daniel.lezcano@linaro.org>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-12-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-12-ricardo.neri-calderon@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:16:41 +0200
-Message-ID: <CAJZ5v0hW1B7XmU16PHRE2B6z2e-qs=X8m4v8qb--MUttiPuGqw@mail.gmail.com>
-Subject: Re: [PATCH v1 09/11] thermal/core: Add a linked device parameter
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, rui.zhang@intel.com
+Date:   Mon, 27 Mar 2023 18:31:03 +0200
+Message-ID: <CAJZ5v0hOdubRdhDpHyU474Px5mSo7hcYGS+oXLYLf38_y+V-Gg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/24] thermal: intel: hfi: Introduce Intel Thread
+ Director classes
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -57,34 +74,137 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> Some drivers want to create a link from the thermal zone to the device
-> sysfs entry and vice versa.
-
-Which device is this, exactly?
-
-> That is the case of the APCI driver.
+> On Intel hybrid parts, each type of CPU has specific performance and
+> energy efficiency capabilities. The Intel Thread Director technology
+> extends the Hardware Feedback Interface (HFI) to provide performance and
+> energy efficiency data for advanced classes of instructions.
 >
-> Having a backpointer from the device to the thermal zone sounds akward
-> as we can have the same device instantiating multiple thermal zones so
-> there will be a conflict while creating the second link with the same
-> name. Moreover, the userspace has enough information to build the
-> dependency from the thermal zone device link without having this cyclic
-> link from the device to thermal zone.
+> Add support to parse per-class capabilities.
 >
-> Anyway, everything in its time.
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+
+No objections to this patch, so
+
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+> Changes since v2:
+>  * None
 >
-> This change allows to create a these cyclic links tz <-> device as
-> ACPI does and will allow to remove the code in the ACPI driver.
-
-Well, I'd rather have it in the driver than in the core TBH.
-
-If ACPI is the only user of this, let it do the dirty thing by itself.
-
-There are two cases which would justify making this change:
-1. There will be more users of it going forward (seems unlikely from
-the description).
-2. It gets in the way of some other changes somehow.
-
-I kind of expect 2. to be the case, so how does it get in the way?
+> Changes since v1:
+>  * Removed a now obsolete comment.
+> ---
+>  drivers/thermal/intel/intel_hfi.c | 30 ++++++++++++++++++++++++------
+>  1 file changed, 24 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 6e604bda2b93..2527ae3836c7 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -77,7 +77,7 @@ union cpuid6_edx {
+>   * @ee_cap:            Energy efficiency capability
+>   *
+>   * Capabilities of a logical processor in the HFI table. These capabilities are
+> - * unitless.
+> + * unitless and specific to each HFI class.
+>   */
+>  struct hfi_cpu_data {
+>         u8      perf_cap;
+> @@ -89,7 +89,8 @@ struct hfi_cpu_data {
+>   * @perf_updated:      Hardware updated performance capabilities
+>   * @ee_updated:                Hardware updated energy efficiency capabilities
+>   *
+> - * Properties of the data in an HFI table.
+> + * Properties of the data in an HFI table. There exists one header per each
+> + * HFI class.
+>   */
+>  struct hfi_hdr {
+>         u8      perf_updated;
+> @@ -127,16 +128,21 @@ struct hfi_instance {
+>
+>  /**
+>   * struct hfi_features - Supported HFI features
+> + * @nr_classes:                Number of classes supported
+>   * @nr_table_pages:    Size of the HFI table in 4KB pages
+>   * @cpu_stride:                Stride size to locate the capability data of a logical
+>   *                     processor within the table (i.e., row stride)
+> + * @class_stride:      Stride size to locate a class within the capability
+> + *                     data of a logical processor or the HFI table header
+>   * @hdr_size:          Size of the table header
+>   *
+>   * Parameters and supported features that are common to all HFI instances
+>   */
+>  struct hfi_features {
+> +       unsigned int    nr_classes;
+>         size_t          nr_table_pages;
+>         unsigned int    cpu_stride;
+> +       unsigned int    class_stride;
+>         unsigned int    hdr_size;
+>  };
+>
+> @@ -333,8 +339,8 @@ static void init_hfi_cpu_index(struct hfi_cpu_info *info)
+>  }
+>
+>  /*
+> - * The format of the HFI table depends on the number of capabilities that the
+> - * hardware supports. Keep a data structure to navigate the table.
+> + * The format of the HFI table depends on the number of capabilities and classes
+> + * that the hardware supports. Keep a data structure to navigate the table.
+>   */
+>  static void init_hfi_instance(struct hfi_instance *hfi_instance)
+>  {
+> @@ -515,18 +521,30 @@ static __init int hfi_parse_features(void)
+>         /* The number of 4KB pages required by the table */
+>         hfi_features.nr_table_pages = edx.split.table_pages + 1;
+>
+> +       /*
+> +        * Capability fields of an HFI class are grouped together. Classes are
+> +        * contiguous in memory.  Hence, use the number of supported features to
+> +        * locate a specific class.
+> +        */
+> +       hfi_features.class_stride = nr_capabilities;
+> +
+> +       /* For now, use only one class of the HFI table */
+> +       hfi_features.nr_classes = 1;
+> +
+>         /*
+>          * The header contains change indications for each supported feature.
+>          * The size of the table header is rounded up to be a multiple of 8
+>          * bytes.
+>          */
+> -       hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities, 8) * 8;
+> +       hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities *
+> +                                            hfi_features.nr_classes, 8) * 8;
+>
+>         /*
+>          * Data of each logical processor is also rounded up to be a multiple
+>          * of 8 bytes.
+>          */
+> -       hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities, 8) * 8;
+> +       hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities *
+> +                                              hfi_features.nr_classes, 8) * 8;
+>
+>         return 0;
+>  }
+> --
+> 2.25.1
+>
