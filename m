@@ -2,66 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3AD6CAB77
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 19:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29A56CAB82
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 19:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjC0RFU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 13:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
+        id S232329AbjC0RIv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 13:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbjC0RFC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 13:05:02 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE2659E;
-        Mon, 27 Mar 2023 10:03:40 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id b20so39094090edd.1;
-        Mon, 27 Mar 2023 10:03:40 -0700 (PDT)
+        with ESMTP id S231956AbjC0RIa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 13:08:30 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0D3AA2;
+        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id cn12so39095941edb.4;
+        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936599;
+        d=1e100.net; s=20210112; t=1679936807;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NrDYYOMYb+x8U/wfL/PFhG97cTznz+G4jcEke1v/IHU=;
-        b=EwbSTXreQsrMaHpCFAoZ4myc0v9x3hDILiBAVzvBtLhWJ4a7be3+nyBi2cA3OT8kb1
-         gH3KlFfbu3NF99r9i1AKa3V8qoow7ZygUs4bcSjJ47PEy39Mc41wwJHJkvNai7DY1lsx
-         2xt5ulPeQ2GV7lleDox46L27PwzX2L5zRjPnZk9KV31JqOwdme1ktBHQZokb/W2NtoOf
-         O9u/rr6QS8k0/jmuUXOPbe3I+JYb/3JMFEAuLm/ERpXqsvUws/el34GpYDcsdl0aQn8X
-         1Gb/Dm4dpgOLbTsBxm2NMiC0MKTjagkPcnAJNSU/ojTRWocPpq/F7QwrbRRH2QXum19k
-         lQ2Q==
-X-Gm-Message-State: AAQBX9c7NddHwgEXVqwzScSUudcA8GGfxHOJGe9iSWRRXDXi13MFtoRJ
-        jSV0Wxna18KutGb4FNYQuc7RuwKSTCcbO8Mw3ghrZ6NG
-X-Google-Smtp-Source: AKy350YxZ9UwICWr6Z8iBfwYyXlNdUeDwwOy0xuisjczUTXuz9epYy1WkEmilorXcZnLu0BVS6UEYLiCBrH7r6ZgGGM=
-X-Received: by 2002:a50:d54f:0:b0:502:4f7:d287 with SMTP id
- f15-20020a50d54f000000b0050204f7d287mr6124726edj.3.1679936599286; Mon, 27 Mar
- 2023 10:03:19 -0700 (PDT)
+        bh=rYJe8F65O4jssLoudktBYu87ax2vScUAeJoZjXvj+pA=;
+        b=ax4PQdLGfH2tlyGScgcrnGJt2YhZMdTh/0ASNfM6Mp4xeEZJv5ZJiE09JCkQV0rhF+
+         5vHTC9DaFXhsZprrQxeIU7k3BK7/ISjUb0oA73NOr3Bx9wc6LilVnmSdZZ3KCXyIcja2
+         6m/3Ul/fgtADHuqYhNUPuvr7QCqGAmNb/wrSaN1L3UwSRha2Pl4HmUErOWR05mQHHoIU
+         X5RB2/veKVPEINGthCz08GPk0jEhrflyHS0rce1ovpU8Ux/gNE+qHG60LAdW1k3/1sWw
+         JhgQC8ZFJesZ6kNC9VhJ/wFOKIw5VbqnHnz6h4/aFNARerPFDKuodt2TxCkvTYAAd1bS
+         Q0QQ==
+X-Gm-Message-State: AAQBX9c14DmbYDTS+jfAm0cjTgpR4h1fdWeLe1Yndrb/liNRduN2LRHB
+        8qKh6ITt0D/DJqfAWJCzZLLFX55HMpkADjVQq7EPc0oW
+X-Google-Smtp-Source: AKy350ZN8Lzz2e4S3Dkb20kL7Entt9Xr2yf9sdds1wXkXk8KUQ74xH5Ju7fHSwL2bMuBW6GWZlh0B0FEo/U6K7eyeAs=
+X-Received: by 2002:a50:9f82:0:b0:4fa:3c0b:74b with SMTP id
+ c2-20020a509f82000000b004fa3c0b074bmr6398781edf.3.1679936807303; Mon, 27 Mar
+ 2023 10:06:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
+References: <20230309140724.2152712-1-cristian.marussi@arm.com> <20230309140724.2152712-2-cristian.marussi@arm.com>
+In-Reply-To: <20230309140724.2152712-2-cristian.marussi@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 19:03:08 +0200
-Message-ID: <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
-Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
- checks for task classification
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
+Date:   Mon, 27 Mar 2023 19:06:36 +0200
+Message-ID: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set helpers
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
+        f.fainelli@gmail.com, vincent.guittot@linaro.org,
+        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        wbartczak@marvell.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -74,143 +61,126 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
+On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
+<cristian.marussi@arm.com> wrote:
 >
-> In Alder Lake and Raptor Lake, the result of thread classification is more
-> accurate when only one SMT sibling is busy. Classification results for
-> class 2 and 3 are always reliable.
+> Refactor SCMI powercap internal get/set helpers.
 >
-> To avoid unnecessary migrations, only update the class of a task if it has
-> been the same during 4 consecutive user ticks.
->
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v2:
->  * None
->
-> Changes since v1:
->  * Adjusted the result the classification of Intel Thread Director to start
->    at class 1. Class 0 for the scheduler means that the task is
->    unclassified.
->  * Used the new names of the IPC classes members in task_struct.
->  * Reworked helper functions to use sched_smt_siblings_idle() to query
->    the idle state of the SMT siblings of a CPU.
-> ---
->  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
->  1 file changed, 59 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 35d947f47550..fdb53e4cabc1 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -40,6 +40,7 @@
->  #include <linux/workqueue.h>
->
->  #include <asm/msr.h>
-> +#include <asm/intel-family.h>
->
->  #include "../thermal_core.h"
->  #include "intel_hfi.h"
-> @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
->   */
->  #define HFI_UNCLASSIFIED_DEFAULT 1
->
-> +#define CLASS_DEBOUNCER_SKIPS 4
-> +
-> +/**
-> + * debounce_and_update_class() - Process and update a task's classification
-> + *
-> + * @p:         The task of which the classification will be updated
-> + * @new_ipcc:  The new IPC classification
-> + *
-> + * Update the classification of @p with the new value that hardware provides.
-> + * Only update the classification of @p if it has been the same during
-> + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-> + */
-> +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
-> +{
-> +       u16 debounce_skip;
-> +
-> +       /* The class of @p changed. Only restart the debounce counter. */
-> +       if (p->ipcc_tmp != new_ipcc) {
-> +               p->ipcc_cntr = 1;
-> +               goto out;
-> +       }
-> +
-> +       /*
-> +        * The class of @p did not change. Update it if it has been the same
-> +        * for CLASS_DEBOUNCER_SKIPS user ticks.
-> +        */
-> +       debounce_skip = p->ipcc_cntr + 1;
-> +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-> +               p->ipcc_cntr++;
-> +       else
-> +               p->ipcc = new_ipcc;
-> +
-> +out:
-> +       p->ipcc_tmp = new_ipcc;
-> +}
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 
-Why does the code above belong to the Intel HFI driver?  It doesn't
-look like there is anything driver-specific in it.
+I can apply this series if I get an ACK or preferably Reviewed-by:
+from an SCMI person.
 
-> +
-> +static bool classification_is_accurate(u8 hfi_class, bool smt_siblings_idle)
-> +{
-> +       switch (boot_cpu_data.x86_model) {
-> +       case INTEL_FAM6_ALDERLAKE:
-> +       case INTEL_FAM6_ALDERLAKE_L:
-> +       case INTEL_FAM6_RAPTORLAKE:
-> +       case INTEL_FAM6_RAPTORLAKE_P:
-> +       case INTEL_FAM6_RAPTORLAKE_S:
-> +               if (hfi_class == 3 || hfi_class == 2 || smt_siblings_idle)
-> +                       return true;
-> +
-> +               return false;
-> +
-> +       default:
-> +               return true;
-> +       }
-> +}
-> +
->  void intel_hfi_update_ipcc(struct task_struct *curr)
->  {
->         union hfi_thread_feedback_char_msr msr;
-> +       bool idle;
+However, I think that it would be more appropriate to route it through
+ARM/ARM64 anyway.
+
+> ---
+>  drivers/firmware/arm_scmi/powercap.c | 65 +++++++++++++++++++---------
+>  1 file changed, 45 insertions(+), 20 deletions(-)
 >
->         /* We should not be here if ITD is not supported. */
->         if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
-> @@ -227,7 +283,9 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
->          * 0 is a valid classification for Intel Thread Director. A scheduler
->          * IPCC class of 0 means that the task is unclassified. Adjust.
->          */
-> -       curr->ipcc = msr.split.classid + 1;
-> +       idle = sched_smt_siblings_idle(task_cpu(curr));
-> +       if (classification_is_accurate(msr.split.classid, idle))
-> +               debounce_and_update_class(curr, msr.split.classid + 1);
+> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
+> index 83b90bde755c..2e490492f187 100644
+> --- a/drivers/firmware/arm_scmi/powercap.c
+> +++ b/drivers/firmware/arm_scmi/powercap.c
+> @@ -313,24 +313,33 @@ static int scmi_powercap_xfer_cap_get(const struct scmi_protocol_handle *ph,
+>         return ret;
 >  }
-
-I still think that this function should just return a number, possibly
-including a special "no IPCC" value.  It may be passed a bool argument
-indicating whether or not the SMT siblings are idle.
-
 >
->  unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
+> -static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
+> -                                u32 domain_id, u32 *power_cap)
+> +static int __scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
+> +                                  const struct scmi_powercap_info *dom,
+> +                                  u32 *power_cap)
+>  {
+> -       struct scmi_powercap_info *dom;
+> -       struct powercap_info *pi = ph->get_priv(ph);
+> -
+> -       if (!power_cap || domain_id >= pi->num_domains)
+> -               return -EINVAL;
+> -
+> -       dom = pi->powercaps + domain_id;
+>         if (dom->fc_info && dom->fc_info[POWERCAP_FC_CAP].get_addr) {
+>                 *power_cap = ioread32(dom->fc_info[POWERCAP_FC_CAP].get_addr);
+>                 trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_GET,
+> -                                  domain_id, *power_cap, 0);
+> +                                  dom->id, *power_cap, 0);
+>                 return 0;
+>         }
+>
+> -       return scmi_powercap_xfer_cap_get(ph, domain_id, power_cap);
+> +       return scmi_powercap_xfer_cap_get(ph, dom->id, power_cap);
+> +}
+> +
+> +static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
+> +                                u32 domain_id, u32 *power_cap)
+> +{
+> +       const struct scmi_powercap_info *dom;
+> +
+> +       if (!power_cap)
+> +               return -EINVAL;
+> +
+> +       dom = scmi_powercap_dom_info_get(ph, domain_id);
+> +       if (!dom)
+> +               return -EINVAL;
+> +
+> +       return __scmi_powercap_cap_get(ph, dom, power_cap);
+>  }
+>
+>  static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
+> @@ -375,17 +384,20 @@ static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
+>         return ret;
+>  }
+>
+> -static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
+> -                                u32 domain_id, u32 power_cap,
+> -                                bool ignore_dresp)
+> +static int __scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
+> +                                  struct powercap_info *pi, u32 domain_id,
+> +                                  u32 power_cap, bool ignore_dresp)
+>  {
+> +       int ret = -EINVAL;
+>         const struct scmi_powercap_info *pc;
+>
+>         pc = scmi_powercap_dom_info_get(ph, domain_id);
+> -       if (!pc || !pc->powercap_cap_config || !power_cap ||
+> -           power_cap < pc->min_power_cap ||
+> -           power_cap > pc->max_power_cap)
+> -               return -EINVAL;
+> +       if (!pc || !pc->powercap_cap_config)
+> +               return ret;
+> +
+> +       if (power_cap &&
+> +           (power_cap < pc->min_power_cap || power_cap > pc->max_power_cap))
+> +               return ret;
+>
+>         if (pc->fc_info && pc->fc_info[POWERCAP_FC_CAP].set_addr) {
+>                 struct scmi_fc_info *fci = &pc->fc_info[POWERCAP_FC_CAP];
+> @@ -394,10 +406,23 @@ static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
+>                 ph->hops->fastchannel_db_ring(fci->set_db);
+>                 trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_SET,
+>                                    domain_id, power_cap, 0);
+> -               return 0;
+> +               ret = 0;
+> +       } else {
+> +               ret = scmi_powercap_xfer_cap_set(ph, pc, power_cap,
+> +                                                ignore_dresp);
+>         }
+>
+> -       return scmi_powercap_xfer_cap_set(ph, pc, power_cap, ignore_dresp);
+> +       return ret;
+> +}
+> +
+> +static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
+> +                                u32 domain_id, u32 power_cap,
+> +                                bool ignore_dresp)
+> +{
+> +       struct powercap_info *pi = ph->get_priv(ph);
+> +
+> +       return __scmi_powercap_cap_set(ph, pi, domain_id,
+> +                                      power_cap, ignore_dresp);
+>  }
+>
+>  static int scmi_powercap_xfer_pai_get(const struct scmi_protocol_handle *ph,
 > --
+> 2.34.1
+>
