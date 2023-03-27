@@ -2,157 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A946C9CCC
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 09:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8046C9D2E
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 10:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbjC0Hvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Mar 2023 03:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S232629AbjC0IHy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Mar 2023 04:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbjC0Hvh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 03:51:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFDA4EE4;
-        Mon, 27 Mar 2023 00:51:32 -0700 (PDT)
+        with ESMTP id S231946AbjC0IHx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 04:07:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B2149C1;
+        Mon, 27 Mar 2023 01:07:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B646C61026;
-        Mon, 27 Mar 2023 07:51:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA1FC433D2;
-        Mon, 27 Mar 2023 07:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679903490;
-        bh=Yrfn9JBqEbsNPhoK5Plt1kgfkiwmSVtr9zSj8w0sHFU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jZnSQq0ikND1O8MiISARjlYQLf0kLdxPyonFUeMeSjAqOVXtAvEFPIXHYhUe3sZhy
-         Jh+rc5OpvFrn6FNvIumQp2is/jibEcDefI2WiR/1dc+oSvGEjt+3xSF10Rkp2W2Cva
-         mTFlL3cq7EFefBg87jfAZliLNynUkKJfdJ/V83nucWSN13WJWBD51fB+ok5534c4ZB
-         OoHM+zVBuAcuJqsEsCoaMn7hB6XVVk3qEu6mNuCOOGZsOCE0cFd8x364HuTaopTLlA
-         Q/iZhjKS8oOvmQsMAg1c30SdVU6tgO2jJspQ4Dba2yNVqJzpVGKo3YHZBtXvC/amRc
-         0NeXhtGBuUWtg==
-Message-ID: <06d76233-df72-b4c2-851a-c251dcd7fd23@kernel.org>
-Date:   Mon, 27 Mar 2023 17:51:23 +1000
+        by sin.source.kernel.org (Postfix) with ESMTPS id 75818CE0171;
+        Mon, 27 Mar 2023 08:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B70CC433EF;
+        Mon, 27 Mar 2023 08:07:43 +0000 (UTC)
+Message-ID: <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
+Date:   Mon, 27 Mar 2023 18:07:41 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
  ctrl
 Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        peng.fan@oss.nxp.com, linux-arm-kernel@lists.infradead.org
-Cc:     Markus.Niebel@ew.tq-group.com, abailon@baylibre.com,
-        abelvesa@kernel.org, aford173@gmail.com,
-        devicetree@vger.kernel.org, djakov@kernel.org, festevam@gmail.com,
-        kernel@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
-        l.stach@pengutronix.de, laurent.pinchart@ideasonboard.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, marex@denx.de,
-        paul.elder@ideasonboard.com, peng.fan@nxp.com, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, shawnguo@kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     peng.fan@nxp.com, laurent.pinchart@ideasonboard.com,
+        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
+        abelvesa@kernel.org, marex@denx.de, Markus.Niebel@ew.tq-group.com,
+        paul.elder@ideasonboard.com, gerg@kernel.org, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        djakov@kernel.org, l.stach@pengutronix.de, shawnguo@kernel.org,
+        abailon@baylibre.com,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
 References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
  <20230327045037.593326-1-gerg@linux-m68k.org> <2678294.mvXUDI8C0e@steina-w>
-From:   Greg Ungerer <gerg@kernel.org>
-In-Reply-To: <2678294.mvXUDI8C0e@steina-w>
+ <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Alexander,
+Hi Ahmad,
 
-On 27/3/23 16:27, Alexander Stein wrote:
-> Hi Greg,
+On 27/3/23 17:16, Ahmad Fatoum wrote:
+> On 27.03.23 08:27, Alexander Stein wrote:
+>> Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
+>>> Any thoughts on why this breaks USB?
+>>
+>> Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
 > 
-> Am Montag, 27. März 2023, 06:50:37 CEST schrieb Greg Ungerer:
->> On 2/3/22 17:13, Peng Fan wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> Add interconnect property for hsio blk ctrl
->>>
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>
->>   > arch/arm64/boot/dts/freescale/imx8mp.dtsi | 5 +++++
->>   > 1 file changed, 5 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi index
->>> 08bd57742294..9cceeeeb26be 100644
->>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> @@ -1109,6 +1109,11 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
->>>
->>>   						<&pgc_hsiomix>,
-> <&pgc_pcie_phy>;
->>>   				
->>>   				power-domain-names = "bus", "usb",
-> "usb-phy1",
->>>   				
->>>   						     "usb-phy2",
-> "pcie", "pcie-phy";
->>>
->>> +				interconnects = <&noc
-> IMX8MP_ICM_NOC_PCIE &noc IMX8MP_ICN_HSIO>,
->>> +						<&noc
-> IMX8MP_ICM_USB1 &noc IMX8MP_ICN_HSIO>,
->>> +						<&noc
-> IMX8MP_ICM_USB2 &noc IMX8MP_ICN_HSIO>,
->>> +						<&noc
-> IMX8MP_ICM_PCIE &noc IMX8MP_ICN_HSIO>;
->>> +				interconnect-names = "noc-pcie",
-> "usb1", "usb2", "pcie";
->>>
->>>   				#power-domain-cells = <1>;
->>>   			
->>>   			};
->>>   		
->>>   		};
->>
->> This change completely breaks USB for me on a new iMX8mp platform I am
->> working with. Before this change normal USB probe looks good:
->>
->>      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->>      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->>      xhci-hcd xhci-hcd.0.auto: hcc params 0x0220fe6d hci version 0x110 quirks
->> 0x0000000000010010 xhci-hcd xhci-hcd.0.auto: irq 206, io mem 0x38100000
->>      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->>      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
->>      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.0 SuperSpeed
->>      usb usb1: New USB device found, idVendor=1d6b, idProduct=0002,
->> bcdDevice= 6.03 usb usb1: New USB device strings: Mfr=3, Product=2,
->> SerialNumber=1 usb usb1: Product: xHCI Host Controller
->>      usb usb1: Manufacturer: Linux 6.3.0-rc4-dirty xhci-hcd
->>      ....
->>
->> But after this commit is applied, no USB probe messages at all.
->>
->> USB worked fine in 6.0 for me, but when I switched up to 6.1 USB was broken,
->> I bisected to this as being the offending commit. This is still broken for
->> me in todays 6.3-rc4. If I revert this change (and only this change) USB
->> works again.
->>
->> Any thoughts on why this breaks USB?
-> 
-> Maybe you are missing CONFIG_INTERCONNECT_IMX8MP?
+> And if that's the case, did you check /sys/kernel/debug/devices_deferred
+> to see if there was any indication that this is the reason?
 
-No, it is enabled. From my config:
+Yeah, it does:
 
-     CONFIG_INTERCONNECT=y
-     CONFIG_INTERCONNECT_IMX=y
-     # CONFIG_INTERCONNECT_IMX8MM is not set
-     # CONFIG_INTERCONNECT_IMX8MN is not set
-     # CONFIG_INTERCONNECT_IMX8MQ is not set
-     CONFIG_INTERCONNECT_IMX8MP=y
+     # cat /sys/kernel/debug/devices_deferred
+     32f10100.usb	platform: supplier 32f10000.blk-ctrl not ready
+     32f10108.usb	platform: supplier 32f10000.blk-ctrl not ready
+     32ec0000.blk-ctrl	imx8m-blk-ctrl: failed to get noc entries
+     381f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
+     382f0040.usb-phy	platform: supplier 32f10000.blk-ctrl not ready
+     imx-pgc-domain.11	
+     imx-pgc-domain.12	
+     imx-pgc-domain.13	
+     38330000.blk-ctrl	platform: supplier imx-pgc-domain.11 not ready
+     32f10000.blk-ctrl	imx8mp-blk-ctrl: failed to get noc entries
 
-Regards
+As far as I can tell blk-ctrl should be good:
+
+     #
+     # i.MX SoC drivers
+     #
+     CONFIG_IMX_GPCV2_PM_DOMAINS=y
+     CONFIG_SOC_IMX8M=y
+     # CONFIG_SOC_IMX9 is not set
+     CONFIG_IMX8M_BLK_CTRL=y
+     # end of i.MX SoC drivers
+
+
+> If you didn't find any hint there, you might want to place a
+> dev_err_probe with a suitable message at the place where -EPROBE_DEFER
+> was returned.
+
+I will try that.
+
+Thanks
 Greg
+
 
