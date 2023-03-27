@@ -2,46 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75396CAA98
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EA26CAAC7
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbjC0QbT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S232056AbjC0Qhr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbjC0QbS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:31:18 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5141BF8;
-        Mon, 27 Mar 2023 09:31:16 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id ek18so38641247edb.6;
-        Mon, 27 Mar 2023 09:31:16 -0700 (PDT)
+        with ESMTP id S232132AbjC0Qhq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:37:46 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC0C268F;
+        Mon, 27 Mar 2023 09:37:44 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id y4so38798017edo.2;
+        Mon, 27 Mar 2023 09:37:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679934675;
+        d=1e100.net; s=20210112; t=1679935063;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9Ze47oiOMMwEVxqfmFdemK0JOgAXssrF7lNQS7gfxOk=;
-        b=qAzAqN/uh3+eKGho/srvYPoyOC3KGmS+xRmqgXoTrVW59idRa/rHRlTAQuoHHU3FyJ
-         0OJ1/3iTRxcvvB0XduWx9RNdtiN7HX/r2UyE2KbmL3SKkcO8AdDBQu8/sq/xdJg2fGkO
-         +0GR96FYJsIboQWJaZ79o+9C2t+0cn5z+DhUfhMNcHXwREjwHoCrW55AyW8Bb+Que0Kj
-         aqJpw6eRF7oZ70YXAsfUo8cVauCtGAOsA/B9o1XF0gc1nub3FN9dkvBS+Rl4dZ57IFDs
-         O1FUO1p+5/fBMcrTI0hBIyWJgpzOeZmRImfXjyFdoNrpHjwbhsggdQ3R0hZJzxkUA7QB
-         DO3A==
-X-Gm-Message-State: AAQBX9ehkzJxx1ZALCeDb79aXdjKauT2McpmvDNqEKTp49JT9hWE9fFB
-        sQ5tmcvZ6L7qXsq95U7fqluxUwwryLJcC4x8mx8=
-X-Google-Smtp-Source: AKy350aSM5bh29ivpbq6LAhxYig+POjK4M7ZT6QDUBFSac9DFKNJ1s03/LnJQH/g9PiZt0GifWQAyZI7IoRbKqB+zXk=
-X-Received: by 2002:a50:d49e:0:b0:502:148d:9e1e with SMTP id
- s30-20020a50d49e000000b00502148d9e1emr6145533edi.3.1679934674643; Mon, 27 Mar
- 2023 09:31:14 -0700 (PDT)
+        bh=LCUgcNjEyWvD6sTwdUsnBUalyH9Ao6KbTN9qB87isrs=;
+        b=liZ09ojyiPa/c3FjJXr7uEle7/0fEtLJTJjVcwQh9+788V7S+MGzRhq1EwpiAQSmpV
+         QFO8HFNpEQjZIQ5yeVt5vm7DSawuphA+rHoiPsTi+CrnHNaPcXXSeJSxYcmimuSzLZnB
+         lhwZ+rv4mAD1QyVlRH57cca9PKh0cjG+tC9oIFQbytFOWMXqc/OiZIngRaShoI3YJWT3
+         bQbecOVD/O6czpSlBfNXZKNxsdSkwIUegG7kUYncQAY7kmW1TCy+IKKUqqvizDi4UFsK
+         G3W8gAv9xbxlGsQX35DV+VqbK2rjQbJBG2/uCX+KOxkUgscSOJxLVn96I4Y2HBche0EX
+         OLhw==
+X-Gm-Message-State: AAQBX9eTYWUDeiUvkmpjTZBv3eGPJL0iP36vApX7uCOVvcNPE1zWagOX
+        SJ4AR+G0orFAVvabSM4q2o2KJIIlxhsCOnPT+KU=
+X-Google-Smtp-Source: AKy350bm4a5N//wgIe5Wng8uUcDgLjI5L6PYP4mpAWWYjRulhFdv87bGt6Yikb1YiDdE1xG01SmMwN+2H3RGgLEmUqk=
+X-Received: by 2002:a17:907:d48d:b0:93e:c1ab:ae67 with SMTP id
+ vj13-20020a170907d48d00b0093ec1abae67mr5066951ejc.2.1679935063106; Mon, 27
+ Mar 2023 09:37:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-12-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-12-ricardo.neri-calderon@linux.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:31:03 +0200
-Message-ID: <CAJZ5v0hOdubRdhDpHyU474Px5mSo7hcYGS+oXLYLf38_y+V-Gg@mail.gmail.com>
-Subject: Re: [PATCH v3 11/24] thermal: intel: hfi: Introduce Intel Thread
- Director classes
+Date:   Mon, 27 Mar 2023 18:37:32 +0200
+Message-ID: <CAJZ5v0hooaHtM8=KCx6XYZjPFh66kVBSbPTX4GwiMTgovxoVzg@mail.gmail.com>
+Subject: Re: [PATCH v3 13/24] thermal: intel: hfi: Store per-CPU IPCC scores
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -77,12 +76,13 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 <ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On Intel hybrid parts, each type of CPU has specific performance and
-> energy efficiency capabilities. The Intel Thread Director technology
-> extends the Hardware Feedback Interface (HFI) to provide performance and
-> energy efficiency data for advanced classes of instructions.
+> The scheduler reads the IPCC scores when balancing load. These reads can
+> be quite frequent. Hardware can also update the HFI table frequently.
+> Concurrent access may cause a lot of lock contention. It gets worse as the
+> number of CPUs increases.
 >
-> Add support to parse per-class capabilities.
+> Instead, create separate per-CPU IPCC scores that the scheduler can read
+> without the HFI table lock.
 >
 > Cc: Ben Segall <bsegall@google.com>
 > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -100,111 +100,113 @@ On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 > Cc: x86@kernel.org
 > Cc: linux-pm@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-
-No objections to this patch, so
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
 > ---
 > Changes since v2:
->  * None
+>  * Only create these per-CPU variables when Intel Thread Director is
+>    supported.
 >
 > Changes since v1:
->  * Removed a now obsolete comment.
+>  * Added this patch.
 > ---
->  drivers/thermal/intel/intel_hfi.c | 30 ++++++++++++++++++++++++------
->  1 file changed, 24 insertions(+), 6 deletions(-)
+>  drivers/thermal/intel/intel_hfi.c | 46 +++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
 >
 > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 6e604bda2b93..2527ae3836c7 100644
+> index 2527ae3836c7..b06021828892 100644
 > --- a/drivers/thermal/intel/intel_hfi.c
 > +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -77,7 +77,7 @@ union cpuid6_edx {
->   * @ee_cap:            Energy efficiency capability
->   *
->   * Capabilities of a logical processor in the HFI table. These capabilities are
-> - * unitless.
-> + * unitless and specific to each HFI class.
->   */
->  struct hfi_cpu_data {
->         u8      perf_cap;
-> @@ -89,7 +89,8 @@ struct hfi_cpu_data {
->   * @perf_updated:      Hardware updated performance capabilities
->   * @ee_updated:                Hardware updated energy efficiency capabilities
->   *
-> - * Properties of the data in an HFI table.
-> + * Properties of the data in an HFI table. There exists one header per each
-> + * HFI class.
->   */
->  struct hfi_hdr {
->         u8      perf_updated;
-> @@ -127,16 +128,21 @@ struct hfi_instance {
+> @@ -29,6 +29,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/math.h>
+>  #include <linux/mutex.h>
+> +#include <linux/percpu.h>
+>  #include <linux/percpu-defs.h>
+>  #include <linux/printk.h>
+>  #include <linux/processor.h>
+> @@ -170,6 +171,43 @@ static struct workqueue_struct *hfi_updates_wq;
+>  #define HFI_UPDATE_INTERVAL            HZ
+>  #define HFI_MAX_THERM_NOTIFY_COUNT     16
 >
->  /**
->   * struct hfi_features - Supported HFI features
-> + * @nr_classes:                Number of classes supported
->   * @nr_table_pages:    Size of the HFI table in 4KB pages
->   * @cpu_stride:                Stride size to locate the capability data of a logical
->   *                     processor within the table (i.e., row stride)
-> + * @class_stride:      Stride size to locate a class within the capability
-> + *                     data of a logical processor or the HFI table header
->   * @hdr_size:          Size of the table header
->   *
->   * Parameters and supported features that are common to all HFI instances
->   */
->  struct hfi_features {
-> +       unsigned int    nr_classes;
->         size_t          nr_table_pages;
->         unsigned int    cpu_stride;
-> +       unsigned int    class_stride;
->         unsigned int    hdr_size;
->  };
->
-> @@ -333,8 +339,8 @@ static void init_hfi_cpu_index(struct hfi_cpu_info *info)
->  }
->
->  /*
-> - * The format of the HFI table depends on the number of capabilities that the
-> - * hardware supports. Keep a data structure to navigate the table.
-> + * The format of the HFI table depends on the number of capabilities and classes
-> + * that the hardware supports. Keep a data structure to navigate the table.
->   */
->  static void init_hfi_instance(struct hfi_instance *hfi_instance)
+> +#ifdef CONFIG_IPC_CLASSES
+
+It would be good to provide a (concise) description of this variable.
+
+> +static int __percpu *hfi_ipcc_scores;
+> +
+> +static int alloc_hfi_ipcc_scores(void)
+> +{
+> +       if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +               return 0;
+> +
+> +       hfi_ipcc_scores = __alloc_percpu(sizeof(*hfi_ipcc_scores) *
+> +                                        hfi_features.nr_classes,
+> +                                        sizeof(*hfi_ipcc_scores));
+> +
+> +       return !hfi_ipcc_scores;
+
+I would do
+
+if (!hfi_ipcc_scores)
+        return -ENOMEM;
+
+return 0;
+
+Or make the function return bool.
+
+> +}
+> +
+> +static void set_hfi_ipcc_score(void *caps, int cpu)
+> +{
+> +       int i, *hfi_class;
+> +
+> +       if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +               return;
+> +
+> +       hfi_class = per_cpu_ptr(hfi_ipcc_scores, cpu);
+> +
+> +       for (i = 0;  i < hfi_features.nr_classes; i++) {
+> +               struct hfi_cpu_data *class_caps;
+> +
+> +               class_caps = caps + i * hfi_features.class_stride;
+> +               WRITE_ONCE(hfi_class[i], class_caps->perf_cap);
+
+As it stands, it is unclear why WRITE_ONCE() is needed here.
+
+> +       }
+> +}
+> +
+> +#else
+> +static int alloc_hfi_ipcc_scores(void) { return 0; }
+> +static void set_hfi_ipcc_score(void *caps, int cpu) { }
+> +#endif /* CONFIG_IPC_CLASSES */
+> +
+>  static void get_hfi_caps(struct hfi_instance *hfi_instance,
+>                          struct thermal_genl_cpu_caps *cpu_caps)
 >  {
-> @@ -515,18 +521,30 @@ static __init int hfi_parse_features(void)
->         /* The number of 4KB pages required by the table */
->         hfi_features.nr_table_pages = edx.split.table_pages + 1;
+> @@ -192,6 +230,8 @@ static void get_hfi_caps(struct hfi_instance *hfi_instance,
+>                 cpu_caps[i].efficiency = caps->ee_cap << 2;
 >
-> +       /*
-> +        * Capability fields of an HFI class are grouped together. Classes are
-> +        * contiguous in memory.  Hence, use the number of supported features to
-> +        * locate a specific class.
-> +        */
-> +       hfi_features.class_stride = nr_capabilities;
+>                 ++i;
 > +
-> +       /* For now, use only one class of the HFI table */
-> +       hfi_features.nr_classes = 1;
-> +
->         /*
->          * The header contains change indications for each supported feature.
->          * The size of the table header is rounded up to be a multiple of 8
->          * bytes.
->          */
-> -       hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities, 8) * 8;
-> +       hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities *
-> +                                            hfi_features.nr_classes, 8) * 8;
->
->         /*
->          * Data of each logical processor is also rounded up to be a multiple
->          * of 8 bytes.
->          */
-> -       hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities, 8) * 8;
-> +       hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities *
-> +                                              hfi_features.nr_classes, 8) * 8;
->
->         return 0;
+> +               set_hfi_ipcc_score(caps, cpu);
+>         }
+>         raw_spin_unlock_irq(&hfi_instance->table_lock);
 >  }
-> --
-> 2.25.1
+> @@ -580,8 +620,14 @@ void __init intel_hfi_init(void)
+>         if (!hfi_updates_wq)
+>                 goto err_nomem;
 >
+> +       if (alloc_hfi_ipcc_scores())
+> +               goto err_ipcc;
+> +
+>         return;
+>
+> +err_ipcc:
+> +       destroy_workqueue(hfi_updates_wq);
+> +
+>  err_nomem:
+>         for (j = 0; j < i; ++j) {
+>                 hfi_instance = &hfi_instances[j];
+> --
