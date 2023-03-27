@@ -2,47 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E33A6CA9B4
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 17:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2AB6CA9DE
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbjC0P5S convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 11:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
+        id S232933AbjC0QCd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbjC0P5P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 11:57:15 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452D3AB8
-        for <linux-pm@vger.kernel.org>; Mon, 27 Mar 2023 08:57:09 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id t10so38086013edd.12
-        for <linux-pm@vger.kernel.org>; Mon, 27 Mar 2023 08:57:09 -0700 (PDT)
+        with ESMTP id S232546AbjC0QCG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:02:06 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976135FDC;
+        Mon, 27 Mar 2023 09:01:37 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id i5so38460567eda.0;
+        Mon, 27 Mar 2023 09:01:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679932628;
+        d=1e100.net; s=20210112; t=1679932896;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q+vSMUm0wxWKNA9lr25aYdQzLS1yIcwSkXtSPFSh1PU=;
-        b=R0eF+SS+IEH3bKby7hqZiKrDWlodIKgGE2IzCaFW2B0PnL/y8L4txmhb4iXWnOEokZ
-         JK7O61T02i9XH0TPQCt9sX35awqLe+e4EoVk+npIKd4BgByijfNFRGuk7HfWOM6OOveg
-         3lKcgYDb4JFs9H2sOcTGt8VHRP3f+b/zcKjQ0NqB8435aG1AUeEDn4HqvCaBtFBp4lop
-         m9JquGrJEC3Bh71qC0JYP16PWIpKFjIqctN/JzkWNZh9oef++bfAM1RbHjiUBbq//abW
-         MhJx3PSTPsAfuVav5VI6eCHRVszjlu+nYa/WyAdbPkEXlEnmiEuRMBJZCSnp0rgUB0+2
-         1MrQ==
-X-Gm-Message-State: AO0yUKUdvc37ObnhgQ2cgCRGfWQj6WfuRnRxVEDDzXVUGVhlqvXmAso+
-        stiF3xwkFQPZryUZozv9ng7GsjBD0mfU2o0vcLw=
-X-Google-Smtp-Source: AK7set+IAV4XjJch5jmo9HzhIyQ+MrvBBcNxmnOlHCnaiKT2uoK2gLBgE8BwIUwnV00LHr/1x82NH0qGM19jJxf5Q7U=
-X-Received: by 2002:a17:906:ca41:b0:939:a51a:dc30 with SMTP id
- jx1-20020a170906ca4100b00939a51adc30mr9942258ejb.2.1679932627863; Mon, 27 Mar
- 2023 08:57:07 -0700 (PDT)
+        bh=7Tc92jHKfzCM4jUDYAxaTKlNKg/5FTvfvoaAMWmN/OQ=;
+        b=mb525LNVTuNpuaGSn7Xf1LNE/4/6BXVqvA5ibcQbKG2seFxUD/+ds2nzcVTi4k7AB8
+         fGxMZ0xEm5NKf4onIaxNLdKywTDOk9yKKhVO9scNLGzEMRMETtH9YIL9BrNN42yON87e
+         S/7VKcMvN4xxv0WEwpxVCWJGML8mlAqmTtSoOcO8ZWtwwUlFHyVgFK5TomvqdT0P6FBA
+         CLQCjsT3XyLh70O0AuBjqcaqDc4i57lw4Z+22ZbGSKCua7Zr42nxOfgkquQYBiFKw3xh
+         nKNV/Xq5cm5m6Vd37cqYM3zMESa7N+UMbD7peaQglwJMeIzP/CSXRlCVkWrEilDrWjPO
+         wvLw==
+X-Gm-Message-State: AAQBX9eJlLzl6xFDWSZ5w1rBKhBpDjEZFP2JC2+VcAsKtS7M8mXgpxIF
+        GP7L65q8WeKeIGXpq3Oyl2ovPFcrJcKD+PDgbsQ=
+X-Google-Smtp-Source: AKy350YgZX9In/W9hp5TUd0tJLk0yAccI5vepKK0RbxyNnymI8UpbQqZDC5h/S6zQjHHSL3PDL7hxoHUlXqvd8nfg8k=
+X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
+ gn2-20020a1709070d0200b009316921bdbbmr5766122ejc.2.1679932895870; Mon, 27 Mar
+ 2023 09:01:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230227121318.2116638-1-md@chromium.org> <20230227121318.2116638-2-md@chromium.org>
-In-Reply-To: <20230227121318.2116638-2-md@chromium.org>
+References: <20230303055133.28752-1-luoxueqin@kylinos.cn>
+In-Reply-To: <20230303055133.28752-1-luoxueqin@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 17:56:56 +0200
-Message-ID: <CAJZ5v0ik2vJ9t24nj0dpUfekvzwacLVkbGpViaBdADrLf6-cvQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernel/freezer: Add routine to read task's freezing reason
-To:     Michal Dubiel <md@chromium.org>
-Cc:     linux-pm@vger.kernel.org, rafael@kernel.org, pavel@ucw.cz
+Date:   Mon, 27 Mar 2023 18:01:24 +0200
+Message-ID: <CAJZ5v0jdCx3PB1JOgEc8ZhDvvXNBzcfYYsSy5PB4s29PfoQ8Rg@mail.gmail.com>
+Subject: Re: [PATCH v2] PM/hibernation: set the default image size for large memory
+To:     Xueqin Luo <luoxueqin@kylinos.cn>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin@kylinos.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -55,114 +57,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 1:14 PM Michal Dubiel <md@chromium.org> wrote:
+On Fri, Mar 3, 2023 at 6:51 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
 >
-> There are few reasons why a task is freezing. It can be due to system
-> suspend, it can be due to explicit user request, etc.
-
-Actually, there are two of them, either it is cgroup freezing, or it
-is freezing on system suspend AFAICS.
-
-> For most cases, the actual reason is not important, but there are some that
-> it is useful to distinguish between what actually caused the task to
-> freeze.
+> From: xueqin Luo <luoxueqin@kylinos.cn>
 >
-> One example is when user requests freezing of tasks belonging to a certain
-> cgroup. If for any reason, system goes suspend and resume when the cgroup
-> is frozen, the already frozen tasks should not be thawed but remain frozen
-> to ensure the suspend/resume cycle transparency. The system should not warn
-> about skipping thawing of such processes as it is normal situation.
+> As computers have more and more memory, they can store larger and
+> larger images. This poses a problem. Let's take a 16GB computer as
+> an example. When the number of pre-allocated pages is greater than
+> 900,000 and smaller than image_size, the duration of S4 increases
+> with the number of saved pages. When the number of pre-allocated
+> pages reaches 1.2 million, the duration of S4 increases by 8-10s.
+
+Well, I'm not quite sure what the problem is from the description
+above.  Can you please explain?
+
+> We found that the image size is generally more than 900,000 pages,
+> so we set the default size of image_size for 16GB and above
+> computers to 1 million pages, which can reduce the running time
+> of S4 under certain conditions.
 >
-> The proposed function allows to obtain information about the freezing
-> reason and let the calling code decide what to do accordingly.
-
-I honestly don't think that this new function is necessary.
-
-Moreover, it would be better to combine this patch with the other one
-in the series.
-
-> Signed-off-by: Michal Dubiel <md@chromium.org>
+> This is the test data for 5 hours after the computer is turned on:
+>
+> Original kernel begin:
+>
+> [2023-02-24 19:16:56] [   46.105423][ 2] [ T3075] PM: hibernation entry
+> [2023-02-24 19:16:59] [   47.632000][ 1] [ T3075] done (allocated
+> 959239 pages)
+> [2023-02-24 19:18:05] [   56.987043][ 2] [ T3075] PM: hibernation exit
+>
+> Five hours later:
+>
+> [2023-02-25 00:22:48] [18069.651640][ 4] [ T7590] PM: hibernation entry
+> [2023-02-25 01:23:59] [21671.194049][ 0] [ T8563] done (allocated
+> 1228878 pages)
+> [2023-02-25 00:24:06] [18080.639889][ 2] [ T7590] PM: hibernation exit
+>
+> After 5h, you can see that the S4 takes 8s more time.
+>
+> Five hours later, the modified kernel test data:
+>
+> [2023-02-24 15:52:08] [18190.171183][ 7] [T11151] PM: hibernation entry
+> [2023-02-24 15:52:11] [18191.677021][ 7] [T11151] done (allocated
+> 792597 pages)
+> [2023-02-24 15:53:15] [18201.028488][ 2] [T11151] PM: hibernation exit
+>
+> You can see that after five hours, the time has changed little compared
+> to the initial test data.
+>
+> Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
 > ---
->  include/linux/freezer.h | 17 +++++++++++++++
->  kernel/freezer.c        | 23 ++++++++++++++------
->  2 files changed, 33 insertions(+), 7 deletions(-)
 >
-> diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-> index b303472255b..b936a349e0d 100644
-> --- a/include/linux/freezer.h
-> +++ b/include/linux/freezer.h
-> @@ -28,6 +28,23 @@ extern bool frozen(struct task_struct *p);
+> v3: modify some comments
 >
->  extern bool freezing_slow_path(struct task_struct *p);
+> v2: add test data
 >
-> +extern enum freezing_reason freezing_reason_slow_path(struct task_struct *p);
-> +
-> +enum freezing_reason {
-> +       FREEZING_NONE     = 0,
-> +       FREEZING_CGROUP   = (1 << 0),
-> +       FREEZING_PM       = (1 << 1),
-> +       FREEZING_PM_NOSIG = (1 << 2),
-> +};
-> +
-> +static inline enum freezing_reason freezing_reason(struct task_struct *p)
-> +{
-> +       if (static_branch_unlikely(&freezer_active))
-> +               return freezing_reason_slow_path(p);
-> +
-> +       return FREEZING_NONE;
-> +}
-> +
->  /*
->   * Check if there is a request to freeze a process
->   */
-> diff --git a/kernel/freezer.c b/kernel/freezer.c
-> index 4fad0e6fca6..2536054db60 100644
-> --- a/kernel/freezer.c
-> +++ b/kernel/freezer.c
-> @@ -26,6 +26,21 @@ bool pm_nosig_freezing;
->  /* protects freezing and frozen transitions */
->  static DEFINE_SPINLOCK(freezer_lock);
+>  kernel/power/snapshot.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 >
-> +enum freezing_reason freezing_reason_slow_path(struct task_struct *p)
-> +{
-> +       if (pm_nosig_freezing)
-> +               return FREEZING_PM_NOSIG;
-> +
-> +       if (cgroup_freezing(p))
-> +               return FREEZING_CGROUP;
-> +
-> +       if (pm_freezing && !(p->flags & PF_KTHREAD))
-> +               return FREEZING_PM;
-> +
-> +       return FREEZING_NONE;
-> +}
-> +EXPORT_SYMBOL(freezing_reason_slow_path);
-
-Why do you need to export this and why is it not EXPORT_SYMBOL_GPL()?
-
-> +
->  /**
->   * freezing_slow_path - slow path for testing whether a task needs to be frozen
->   * @p: task to be tested
-> @@ -43,13 +58,7 @@ bool freezing_slow_path(struct task_struct *p)
->         if (test_tsk_thread_flag(p, TIF_MEMDIE))
->                 return false;
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index cd8b7b35f1e8..fa3950b19849 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -136,7 +136,14 @@ unsigned long image_size;
 >
-> -       if (pm_nosig_freezing || cgroup_freezing(p))
-> -               return true;
-> -
-> -       if (pm_freezing && !(p->flags & PF_KTHREAD))
-> -               return true;
-> -
-> -       return false;
-> +       return (bool)freezing_reason_slow_path(p);
-
-This is the only call site of this function, so the explicit
-conversion to bool like this doesn't make any sense.
-
-It should return bool instead.
-
+>  void __init hibernate_image_size_init(void)
+>  {
+> -       image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
+> +       /* The totalram pages() for a computer of 16 memory size is
+> +        * equal to 4032990 pages. And according to our observation,
+> +        * the average image size is less than 1 million pages.
+> +        */
+> +       if (totalram_pages() < 4032990)
+> +               image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
+> +       else
+> +               image_size = 1000000 * PAGE_SIZE;
 >  }
->  EXPORT_SYMBOL(freezing_slow_path);
 >
+>  /*
 > --
+> 2.25.1
+>
