@@ -2,80 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9A46CABD9
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 19:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625E06CAC06
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 19:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjC0R2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Mar 2023 13:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S229986AbjC0Rna convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 13:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjC0R2w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 13:28:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 897372132;
-        Mon, 27 Mar 2023 10:28:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76D73C14;
-        Mon, 27 Mar 2023 10:29:35 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6455C3F6C4;
-        Mon, 27 Mar 2023 10:28:49 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 18:28:47 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, vincent.guittot@linaro.org,
-        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        wbartczak@marvell.com
-Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set
- helpers
-Message-ID: <ZCHOyqZ2tqOkogp6@e120937-lin>
-References: <20230309140724.2152712-1-cristian.marussi@arm.com>
- <20230309140724.2152712-2-cristian.marussi@arm.com>
- <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
+        with ESMTP id S229862AbjC0Rn3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 13:43:29 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42644199F;
+        Mon, 27 Mar 2023 10:43:15 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id cn12so39504113edb.4;
+        Mon, 27 Mar 2023 10:43:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679938994;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a/6QbkEHb4B/BXK0+h2X9zrCNoo1bmDUb4Gn69mm/y8=;
+        b=2AfG8+khTMdLcziPL7938DnqzYvtBcVuQ8f2emwA/BTgj9ykX1SNiZH+SvbY7/cv3n
+         joMC4YsSCc1b5tZlBOAN9gW3hsoHWs1IcfIctJ4oNGmZS96847R29jZ6NrQBi+/E0eEB
+         IbVEDP+nXUG0qsAe/4ltQrCsI1rBMFcLV/KVXGixAJU9st/GzNUW8lflTC33uKg75F7a
+         6gLpDMVQK0oG73W6eYzY1qwdHkOM1hK9X24zlligKqX6uF4T4iQScxoTg6ybMR/edbS6
+         PzsBSp9nPN9rnGVphqczZNxUoA8733MzjQ4PMezCRvdF6VSwpW/eqncRVwSBqUI3xFMI
+         +Xbg==
+X-Gm-Message-State: AAQBX9frM55hm7f+ART0ggcUdUF2UnESkltE8gc9zloYUK4IA5/RTSEX
+        lcLtzsXdrgX3MJxCTwgCQ96GgiEqAoDVWZfmRC8=
+X-Google-Smtp-Source: AKy350aVJX8/CZSaj8yQKpjNWYSfLmfrmTJ9Ofp2ac1yHLIcGHYd0fXXBEpm164oUpi6tJCHXJJl+3F7JAiXlhrqB9A=
+X-Received: by 2002:a50:d49e:0:b0:4fc:ebe2:2fc9 with SMTP id
+ s30-20020a50d49e000000b004fcebe22fc9mr6249104edi.3.1679938993646; Mon, 27 Mar
+ 2023 10:43:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230316074750.289025-1-kazukih0205@gmail.com> <20230316074750.289025-3-kazukih0205@gmail.com>
+In-Reply-To: <20230316074750.289025-3-kazukih0205@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Mar 2023 19:43:02 +0200
+Message-ID: <CAJZ5v0jncgS6Uh1n3RrTwbwJpEQ+x2Rw5Gr8dcZuVx=W9L8B4Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] PM: s2idle: Fully block the system from entering
+ s2idle when cpuidle isn't supported
+To:     Kazuki H <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:06:36PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
-> <cristian.marussi@arm.com> wrote:
-> >
-> > Refactor SCMI powercap internal get/set helpers.
-> >
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> 
+On Thu, Mar 16, 2023 at 8:49 AM Kazuki H <kazukih0205@gmail.com> wrote:
+>
+> s2idle isn't supported on platforms that don't support cpuidle as of
+> 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze()
+> too").
 
-Hi Rafael,
+This simply isn't correct.
 
-Thanks for having a look.
+As of the above commit, s2idle was still supported without cpuidle as
+long as arch_cpu_idle() worked.
 
-> I can apply this series if I get an ACK or preferably Reviewed-by:
-> from an SCMI person.
-> 
+> There is a check in the cpuidle subsystem which would prevent the
+> system from entering s2idle. However, there is nothing in the suspend
+> framework which prevents this, which can cause the suspend subsystem to
+> think that the machine is entering s2idle while the cpuidle subsystem is
+> not, which can completely break the system.
+>
+> Block the machine from entering s2idle when cpuidle isn't supported in
+> the suspend subsystem as well.
 
-I'll see if I can chase someone for this cycle :D
+First, please explain why the cpuidle_not_available() check in
+cpuidle_idle_call() is not sufficient to avoid the breakage.
 
-> However, I think that it would be more appropriate to route it through
-> ARM/ARM64 anyway.
-> 
+> Link: https://lore.kernel.org/all/20230204152747.drte4uitljzngdt6@kazuki-mac
+> Fixes: 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze() too")
+> Signed-off-by: Kazuki H <kazukih0205@gmail.com>
+> ---
+>  kernel/power/main.c    | 12 +++++++++---
+>  kernel/power/suspend.c |  5 +++++
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 31ec4a9b9d70..b14765447989 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -133,6 +133,8 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
+>         for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
+>                 if (i >= PM_SUSPEND_MEM && cxl_mem_active())
+>                         continue;
+> +               if (i == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
+> +                       continue;
 
-Yes, indeed it is what usually happens I think, but I thought
-appropriate to Cc you being power related.
+Not really.
 
-Thanks,
-Cristian
+>                 if (mem_sleep_states[i]) {
+>                         const char *label = mem_sleep_states[i];
+>
+> @@ -185,11 +187,15 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
+>         }
+>
+>         state = decode_suspend_state(buf, n);
+> -       if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON)
+> +       if (state == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
 
+And same here.
+
+> +               goto einval;
+> +       if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON) {
+>                 mem_sleep_current = state;
+> -       else
+> -               error = -EINVAL;
+> +               goto out;
+> +       }
+>
+> + einval:
+> +       error = -EINVAL;
+>   out:
+>         pm_autosleep_unlock();
+>         return error ? error : n;
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 3f436282547c..55ddf525aaaf 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -556,6 +556,11 @@ static int enter_state(suspend_state_t state)
+>
+>         trace_suspend_resume(TPS("suspend_enter"), state, true);
+>         if (state == PM_SUSPEND_TO_IDLE) {
+> +               if (cpuidle_not_available()) {
+> +                       pr_warn("s2idle is unsupported when cpuidle is unavailable");
+> +                       return -EINVAL;
+> +               }
+> +
+>  #ifdef CONFIG_PM_DEBUG
+>                 if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
+>                         pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
+> --
+
+Again, I need to understand what the problem is in the first place.
