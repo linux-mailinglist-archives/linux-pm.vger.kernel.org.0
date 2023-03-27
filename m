@@ -2,53 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29A56CAB82
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 19:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4EF6CAB90
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 19:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjC0RIv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 13:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S232908AbjC0RKe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 13:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjC0RIa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 13:08:30 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0D3AA2;
-        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id cn12so39095941edb.4;
-        Mon, 27 Mar 2023 10:07:27 -0700 (PDT)
+        with ESMTP id S231493AbjC0RKR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 13:10:17 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2184696;
+        Mon, 27 Mar 2023 10:09:43 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id er18so27854570edb.9;
+        Mon, 27 Mar 2023 10:09:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679936807;
+        d=1e100.net; s=20210112; t=1679936982;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rYJe8F65O4jssLoudktBYu87ax2vScUAeJoZjXvj+pA=;
-        b=ax4PQdLGfH2tlyGScgcrnGJt2YhZMdTh/0ASNfM6Mp4xeEZJv5ZJiE09JCkQV0rhF+
-         5vHTC9DaFXhsZprrQxeIU7k3BK7/ISjUb0oA73NOr3Bx9wc6LilVnmSdZZ3KCXyIcja2
-         6m/3Ul/fgtADHuqYhNUPuvr7QCqGAmNb/wrSaN1L3UwSRha2Pl4HmUErOWR05mQHHoIU
-         X5RB2/veKVPEINGthCz08GPk0jEhrflyHS0rce1ovpU8Ux/gNE+qHG60LAdW1k3/1sWw
-         JhgQC8ZFJesZ6kNC9VhJ/wFOKIw5VbqnHnz6h4/aFNARerPFDKuodt2TxCkvTYAAd1bS
-         Q0QQ==
-X-Gm-Message-State: AAQBX9c14DmbYDTS+jfAm0cjTgpR4h1fdWeLe1Yndrb/liNRduN2LRHB
-        8qKh6ITt0D/DJqfAWJCzZLLFX55HMpkADjVQq7EPc0oW
-X-Google-Smtp-Source: AKy350ZN8Lzz2e4S3Dkb20kL7Entt9Xr2yf9sdds1wXkXk8KUQ74xH5Ju7fHSwL2bMuBW6GWZlh0B0FEo/U6K7eyeAs=
-X-Received: by 2002:a50:9f82:0:b0:4fa:3c0b:74b with SMTP id
- c2-20020a509f82000000b004fa3c0b074bmr6398781edf.3.1679936807303; Mon, 27 Mar
- 2023 10:06:47 -0700 (PDT)
+        bh=916y5uBFwWgOo9alDh+0q8lvXTnxrYU+/IU/mAeJkWc=;
+        b=0A4bKicBw3OVXe1hkC02o9BBH13efEtdDb+1BSIsCJ0MGcATYu2BfSjK1gw+ELwQS2
+         a4KCH9sj8KmtJHRxz1N+5AhNOgupgWw1LtDxi/bhiAQaySmxorX/L6dZAIMwyWRQrSnA
+         GknkHAjc8bXFZUuzQvWPuIVrZC+2kYWByNhQw/IdvXlTSgDu1sx+jOaRCMpPyxQxb2dG
+         JueBkjQeT3XlGDBK/NjELoVSNKS0/D1tszLiMZVHtAhUFl4TkvLoPS1cBDewYauc1F7N
+         ubYdbS4HkW4eeaubLLmKHSxt34kjdo49MCFCDpTBu6r1xPpJTG3OVwDWt6jTkHl+iCle
+         UrhQ==
+X-Gm-Message-State: AAQBX9essL3M38COOhRUm3bvldGThoEsklp5L5PTeHmzYtOqOOy1XPk7
+        bv8HNe5UsFbZBEafmbb0w19Kng2tikpg8qvVvPWlhZkx
+X-Google-Smtp-Source: AKy350YIAgoU5/pPhgYFHzwE54SIN2M00utwdiDdeoXlDJPlxpp6WHnTBlVa0Tn3T0Sq5dCVTup4C6TRcUIQImKqm20=
+X-Received: by 2002:a17:906:5fca:b0:930:310:abcf with SMTP id
+ k10-20020a1709065fca00b009300310abcfmr6216312ejv.2.1679936982247; Mon, 27 Mar
+ 2023 10:09:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230309140724.2152712-1-cristian.marussi@arm.com> <20230309140724.2152712-2-cristian.marussi@arm.com>
-In-Reply-To: <20230309140724.2152712-2-cristian.marussi@arm.com>
+References: <20230310144703.1541888-1-robh@kernel.org> <CAPDyKFoVUQEmseNT+dZFJDfwh7ijTwUs5_NckpZLhRQ=VuFpFQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFoVUQEmseNT+dZFJDfwh7ijTwUs5_NckpZLhRQ=VuFpFQ@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 19:06:36 +0200
-Message-ID: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set helpers
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, vincent.guittot@linaro.org,
-        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        wbartczak@marvell.com
+Date:   Mon, 27 Mar 2023 19:09:30 +0200
+Message-ID: <CAJZ5v0hx_zQj+JHdgkvHaq4C_UVqNAH_8ANF-v4fEmRWKyRCMA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Use of_property_present() for testing DT
+ property presence
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -61,126 +64,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
-<cristian.marussi@arm.com> wrote:
+On Fri, Mar 10, 2023 at 6:47 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Refactor SCMI powercap internal get/set helpers.
+> On Fri, 10 Mar 2023 at 15:47, Rob Herring <robh@kernel.org> wrote:
+> >
+> > It is preferred to use typed property access functions (i.e.
+> > of_property_read_<type> functions) rather than low-level
+> > of_get_property/of_find_property functions for reading properties. As
+> > part of this, convert of_get_property/of_find_property calls to the
+> > recently added of_property_present() helper when we just want to test
+> > for presence of a property and nothing more.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
 >
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> Rafael, can you please pick this via your tree.
 
-I can apply this series if I get an ACK or preferably Reviewed-by:
-from an SCMI person.
+Done (queued up for 6.4), thanks!
 
-However, I think that it would be more appropriate to route it through
-ARM/ARM64 anyway.
-
-> ---
->  drivers/firmware/arm_scmi/powercap.c | 65 +++++++++++++++++++---------
->  1 file changed, 45 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-> index 83b90bde755c..2e490492f187 100644
-> --- a/drivers/firmware/arm_scmi/powercap.c
-> +++ b/drivers/firmware/arm_scmi/powercap.c
-> @@ -313,24 +313,33 @@ static int scmi_powercap_xfer_cap_get(const struct scmi_protocol_handle *ph,
->         return ret;
->  }
->
-> -static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
-> -                                u32 domain_id, u32 *power_cap)
-> +static int __scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
-> +                                  const struct scmi_powercap_info *dom,
-> +                                  u32 *power_cap)
->  {
-> -       struct scmi_powercap_info *dom;
-> -       struct powercap_info *pi = ph->get_priv(ph);
-> -
-> -       if (!power_cap || domain_id >= pi->num_domains)
-> -               return -EINVAL;
-> -
-> -       dom = pi->powercaps + domain_id;
->         if (dom->fc_info && dom->fc_info[POWERCAP_FC_CAP].get_addr) {
->                 *power_cap = ioread32(dom->fc_info[POWERCAP_FC_CAP].get_addr);
->                 trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_GET,
-> -                                  domain_id, *power_cap, 0);
-> +                                  dom->id, *power_cap, 0);
->                 return 0;
->         }
->
-> -       return scmi_powercap_xfer_cap_get(ph, domain_id, power_cap);
-> +       return scmi_powercap_xfer_cap_get(ph, dom->id, power_cap);
-> +}
-> +
-> +static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
-> +                                u32 domain_id, u32 *power_cap)
-> +{
-> +       const struct scmi_powercap_info *dom;
-> +
-> +       if (!power_cap)
-> +               return -EINVAL;
-> +
-> +       dom = scmi_powercap_dom_info_get(ph, domain_id);
-> +       if (!dom)
-> +               return -EINVAL;
-> +
-> +       return __scmi_powercap_cap_get(ph, dom, power_cap);
->  }
->
->  static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
-> @@ -375,17 +384,20 @@ static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
->         return ret;
->  }
->
-> -static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
-> -                                u32 domain_id, u32 power_cap,
-> -                                bool ignore_dresp)
-> +static int __scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
-> +                                  struct powercap_info *pi, u32 domain_id,
-> +                                  u32 power_cap, bool ignore_dresp)
->  {
-> +       int ret = -EINVAL;
->         const struct scmi_powercap_info *pc;
->
->         pc = scmi_powercap_dom_info_get(ph, domain_id);
-> -       if (!pc || !pc->powercap_cap_config || !power_cap ||
-> -           power_cap < pc->min_power_cap ||
-> -           power_cap > pc->max_power_cap)
-> -               return -EINVAL;
-> +       if (!pc || !pc->powercap_cap_config)
-> +               return ret;
-> +
-> +       if (power_cap &&
-> +           (power_cap < pc->min_power_cap || power_cap > pc->max_power_cap))
-> +               return ret;
->
->         if (pc->fc_info && pc->fc_info[POWERCAP_FC_CAP].set_addr) {
->                 struct scmi_fc_info *fci = &pc->fc_info[POWERCAP_FC_CAP];
-> @@ -394,10 +406,23 @@ static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
->                 ph->hops->fastchannel_db_ring(fci->set_db);
->                 trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_SET,
->                                    domain_id, power_cap, 0);
-> -               return 0;
-> +               ret = 0;
-> +       } else {
-> +               ret = scmi_powercap_xfer_cap_set(ph, pc, power_cap,
-> +                                                ignore_dresp);
->         }
->
-> -       return scmi_powercap_xfer_cap_set(ph, pc, power_cap, ignore_dresp);
-> +       return ret;
-> +}
-> +
-> +static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
-> +                                u32 domain_id, u32 power_cap,
-> +                                bool ignore_dresp)
-> +{
-> +       struct powercap_info *pi = ph->get_priv(ph);
-> +
-> +       return __scmi_powercap_cap_set(ph, pi, domain_id,
-> +                                      power_cap, ignore_dresp);
->  }
->
->  static int scmi_powercap_xfer_pai_get(const struct scmi_protocol_handle *ph,
-> --
-> 2.34.1
->
+> > ---
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
+> >  drivers/cpuidle/cpuidle-riscv-sbi.c   | 6 +++---
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > index 6ad2954948a5..e875ddadc51b 100644
+> > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -165,7 +165,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+> >          * initialize a genpd/genpd-of-provider pair when it's found.
+> >          */
+> >         for_each_child_of_node(np, node) {
+> > -               if (!of_find_property(node, "#power-domain-cells", NULL))
+> > +               if (!of_property_present(node, "#power-domain-cells"))
+> >                         continue;
+> >
+> >                 ret = psci_pd_init(node, use_osi);
+> > diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > index be383f4b6855..1fab1abc6eb6 100644
+> > --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > @@ -497,7 +497,7 @@ static int sbi_genpd_probe(struct device_node *np)
+> >          * initialize a genpd/genpd-of-provider pair when it's found.
+> >          */
+> >         for_each_child_of_node(np, node) {
+> > -               if (!of_find_property(node, "#power-domain-cells", NULL))
+> > +               if (!of_property_present(node, "#power-domain-cells"))
+> >                         continue;
+> >
+> >                 ret = sbi_pd_init(node);
+> > @@ -548,8 +548,8 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+> >         for_each_possible_cpu(cpu) {
+> >                 np = of_cpu_device_node_get(cpu);
+> >                 if (np &&
+> > -                   of_find_property(np, "power-domains", NULL) &&
+> > -                   of_find_property(np, "power-domain-names", NULL)) {
+> > +                   of_property_present(np, "power-domains") &&
+> > +                   of_property_present(np, "power-domain-names")) {
+> >                         continue;
+> >                 } else {
+> >                         sbi_cpuidle_use_osi = false;
+> > --
+> > 2.39.2
+> >
