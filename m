@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EA26CAAC7
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97806CAAE1
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 18:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbjC0Qhr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S229498AbjC0QnB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 27 Mar 2023 12:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjC0Qhq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:37:46 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC0C268F;
-        Mon, 27 Mar 2023 09:37:44 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id y4so38798017edo.2;
-        Mon, 27 Mar 2023 09:37:44 -0700 (PDT)
+        with ESMTP id S232617AbjC0Qmp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 12:42:45 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50DE269A;
+        Mon, 27 Mar 2023 09:42:40 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id y4so38855166edo.2;
+        Mon, 27 Mar 2023 09:42:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679935063;
+        d=1e100.net; s=20210112; t=1679935359;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LCUgcNjEyWvD6sTwdUsnBUalyH9Ao6KbTN9qB87isrs=;
-        b=liZ09ojyiPa/c3FjJXr7uEle7/0fEtLJTJjVcwQh9+788V7S+MGzRhq1EwpiAQSmpV
-         QFO8HFNpEQjZIQ5yeVt5vm7DSawuphA+rHoiPsTi+CrnHNaPcXXSeJSxYcmimuSzLZnB
-         lhwZ+rv4mAD1QyVlRH57cca9PKh0cjG+tC9oIFQbytFOWMXqc/OiZIngRaShoI3YJWT3
-         bQbecOVD/O6czpSlBfNXZKNxsdSkwIUegG7kUYncQAY7kmW1TCy+IKKUqqvizDi4UFsK
-         G3W8gAv9xbxlGsQX35DV+VqbK2rjQbJBG2/uCX+KOxkUgscSOJxLVn96I4Y2HBche0EX
-         OLhw==
-X-Gm-Message-State: AAQBX9eTYWUDeiUvkmpjTZBv3eGPJL0iP36vApX7uCOVvcNPE1zWagOX
-        SJ4AR+G0orFAVvabSM4q2o2KJIIlxhsCOnPT+KU=
-X-Google-Smtp-Source: AKy350bm4a5N//wgIe5Wng8uUcDgLjI5L6PYP4mpAWWYjRulhFdv87bGt6Yikb1YiDdE1xG01SmMwN+2H3RGgLEmUqk=
-X-Received: by 2002:a17:907:d48d:b0:93e:c1ab:ae67 with SMTP id
- vj13-20020a170907d48d00b0093ec1abae67mr5066951ejc.2.1679935063106; Mon, 27
- Mar 2023 09:37:43 -0700 (PDT)
+        bh=tUPHgvLfynF1cW2avQZPE6tiBmDlV9HQFs1/wQ1dwVM=;
+        b=eoPMcnkC9rM06FqUv0sPMik9DZMBBtJWMDD0M1esxNmyTefZVqoxAt9uam7QYF9GjC
+         H09dU2AMlCR+n1HYObC8igf8oQgIF7lf8Byxgz6oBKnG7+1yS7+Ydasog/mr6kitcvNp
+         UYsE84Xb+ZueMC7OEWvyg4kMxLTw+4F+s6Mh2ljhgf4oQQjXlHmfYszCVZCAcwhVcw47
+         Pa+LSIGGQksXpJQQwVLbk3JQwvbT5AEap42xNO9uGEU5gXpf3DuV8bRjstQXJHmiN54g
+         pc+EGqo+vQ05R3DC4l1eJFyFO/iwTgjFd+ZQz5h2JHw8Je63KrWdu6JWPJ1D9B0apeln
+         qzyQ==
+X-Gm-Message-State: AAQBX9eVkACzBkA4gFqcpHzKA4qFGWtTKTVj3MCxPxdfd24NpIISbr/t
+        SWxDnun/qsTaO/tFD1WlSDyVwWugqJGsAN8i8xM=
+X-Google-Smtp-Source: AKy350b72okw9liyVfLi4WzanTU70F/d4X8oDQ6ArNMbl9jCRmQNvcZbkkmCL2nUxLcxWsROTyahAtKojt+G8XvFC04=
+X-Received: by 2002:a50:d54f:0:b0:502:4f7:d287 with SMTP id
+ f15-20020a50d54f000000b0050204f7d287mr6090063edj.3.1679935359304; Mon, 27 Mar
+ 2023 09:42:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Mar 2023 18:37:32 +0200
-Message-ID: <CAJZ5v0hooaHtM8=KCx6XYZjPFh66kVBSbPTX4GwiMTgovxoVzg@mail.gmail.com>
-Subject: Re: [PATCH v3 13/24] thermal: intel: hfi: Store per-CPU IPCC scores
+Date:   Mon, 27 Mar 2023 18:42:28 +0200
+Message-ID: <CAJZ5v0hGKKPiK86Z5PcG-EEHU7a=3d-4S2miRqNPuwjS1tF0BQ@mail.gmail.com>
+Subject: Re: [PATCH v3 14/24] thermal: intel: hfi: Update the IPC class of the
+ current task
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -76,13 +77,8 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 <ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> The scheduler reads the IPCC scores when balancing load. These reads can
-> be quite frequent. Hardware can also update the HFI table frequently.
-> Concurrent access may cause a lot of lock contention. It gets worse as the
-> number of CPUs increases.
->
-> Instead, create separate per-CPU IPCC scores that the scheduler can read
-> without the HFI table lock.
+> Use Intel Thread Director classification to update the IPC class of a
+> task. Implement the arch_update_ipcc() interface of the scheduler.
 >
 > Cc: Ben Segall <bsegall@google.com>
 > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -100,113 +96,95 @@ On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 > Cc: x86@kernel.org
 > Cc: linux-pm@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > ---
 > Changes since v2:
->  * Only create these per-CPU variables when Intel Thread Director is
->    supported.
+>  * Removed the implementation of arch_has_ipc_classes().
 >
 > Changes since v1:
->  * Added this patch.
+>  * Adjusted the result the classification of Intel Thread Director to start
+>    at class 1. Class 0 for the scheduler means that the task is
+>    unclassified.
+>  * Redefined union hfi_thread_feedback_char_msr to ensure all
+>    bit-fields are packed. (PeterZ)
+>  * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
+>  * Shortened the names of the functions that implement IPC classes.
+>  * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
+>    (PeterZ)
 > ---
->  drivers/thermal/intel/intel_hfi.c | 46 +++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
+>  arch/x86/include/asm/topology.h   |  6 ++++++
+>  drivers/thermal/intel/intel_hfi.c | 32 +++++++++++++++++++++++++++++++
+>  2 files changed, 38 insertions(+)
 >
+> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+> index 458c891a8273..ffcdac3f398f 100644
+> --- a/arch/x86/include/asm/topology.h
+> +++ b/arch/x86/include/asm/topology.h
+> @@ -227,4 +227,10 @@ void init_freq_invariance_cppc(void);
+>  #define arch_init_invariance_cppc init_freq_invariance_cppc
+>  #endif
+>
+> +#if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
+> +void intel_hfi_update_ipcc(struct task_struct *curr);
+> +
+> +#define arch_update_ipcc intel_hfi_update_ipcc
+> +#endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
+> +
+>  #endif /* _ASM_X86_TOPOLOGY_H */
 > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 2527ae3836c7..b06021828892 100644
+> index b06021828892..530dcf57e06e 100644
 > --- a/drivers/thermal/intel/intel_hfi.c
 > +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -29,6 +29,7 @@
->  #include <linux/kernel.h>
->  #include <linux/math.h>
->  #include <linux/mutex.h>
-> +#include <linux/percpu.h>
->  #include <linux/percpu-defs.h>
->  #include <linux/printk.h>
->  #include <linux/processor.h>
-> @@ -170,6 +171,43 @@ static struct workqueue_struct *hfi_updates_wq;
->  #define HFI_UPDATE_INTERVAL            HZ
->  #define HFI_MAX_THERM_NOTIFY_COUNT     16
+> @@ -72,6 +72,17 @@ union cpuid6_edx {
+>         u32 full;
+>  };
 >
 > +#ifdef CONFIG_IPC_CLASSES
-
-It would be good to provide a (concise) description of this variable.
-
-> +static int __percpu *hfi_ipcc_scores;
+> +union hfi_thread_feedback_char_msr {
+> +       struct {
+> +               u64     classid : 8;
+> +               u64     __reserved : 55;
+> +               u64     valid : 1;
+> +       } split;
+> +       u64 full;
+> +};
+> +#endif
 > +
-> +static int alloc_hfi_ipcc_scores(void)
+>  /**
+>   * struct hfi_cpu_data - HFI capabilities per CPU
+>   * @perf_cap:          Performance capability
+> @@ -174,6 +185,27 @@ static struct workqueue_struct *hfi_updates_wq;
+>  #ifdef CONFIG_IPC_CLASSES
+>  static int __percpu *hfi_ipcc_scores;
+>
+> +void intel_hfi_update_ipcc(struct task_struct *curr)
 > +{
-> +       if (!cpu_feature_enabled(X86_FEATURE_ITD))
-> +               return 0;
+> +       union hfi_thread_feedback_char_msr msr;
 > +
-> +       hfi_ipcc_scores = __alloc_percpu(sizeof(*hfi_ipcc_scores) *
-> +                                        hfi_features.nr_classes,
-> +                                        sizeof(*hfi_ipcc_scores));
+> +       /* We should not be here if ITD is not supported. */
+> +       if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +               pr_warn_once("task classification requested but not supported!");
+> +               return;
+> +       }
 > +
-> +       return !hfi_ipcc_scores;
-
-I would do
-
-if (!hfi_ipcc_scores)
-        return -ENOMEM;
-
-return 0;
-
-Or make the function return bool.
-
-> +}
-> +
-> +static void set_hfi_ipcc_score(void *caps, int cpu)
-> +{
-> +       int i, *hfi_class;
-> +
-> +       if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +       rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
+> +       if (!msr.split.valid)
 > +               return;
 > +
-> +       hfi_class = per_cpu_ptr(hfi_ipcc_scores, cpu);
-> +
-> +       for (i = 0;  i < hfi_features.nr_classes; i++) {
-> +               struct hfi_cpu_data *class_caps;
-> +
-> +               class_caps = caps + i * hfi_features.class_stride;
-> +               WRITE_ONCE(hfi_class[i], class_caps->perf_cap);
-
-As it stands, it is unclear why WRITE_ONCE() is needed here.
-
-> +       }
+> +       /*
+> +        * 0 is a valid classification for Intel Thread Director. A scheduler
+> +        * IPCC class of 0 means that the task is unclassified. Adjust.
+> +        */
+> +       curr->ipcc = msr.split.classid + 1;
 > +}
+
+Wouldn't it be better to return the adjusted value from this function
+and let the caller store it where appropriate?
+
+It doesn't look like it is necessary to pass the task_struct pointer to it.
+
 > +
-> +#else
-> +static int alloc_hfi_ipcc_scores(void) { return 0; }
-> +static void set_hfi_ipcc_score(void *caps, int cpu) { }
-> +#endif /* CONFIG_IPC_CLASSES */
-> +
->  static void get_hfi_caps(struct hfi_instance *hfi_instance,
->                          struct thermal_genl_cpu_caps *cpu_caps)
+>  static int alloc_hfi_ipcc_scores(void)
 >  {
-> @@ -192,6 +230,8 @@ static void get_hfi_caps(struct hfi_instance *hfi_instance,
->                 cpu_caps[i].efficiency = caps->ee_cap << 2;
->
->                 ++i;
-> +
-> +               set_hfi_ipcc_score(caps, cpu);
->         }
->         raw_spin_unlock_irq(&hfi_instance->table_lock);
->  }
-> @@ -580,8 +620,14 @@ void __init intel_hfi_init(void)
->         if (!hfi_updates_wq)
->                 goto err_nomem;
->
-> +       if (alloc_hfi_ipcc_scores())
-> +               goto err_ipcc;
-> +
->         return;
->
-> +err_ipcc:
-> +       destroy_workqueue(hfi_updates_wq);
-> +
->  err_nomem:
->         for (j = 0; j < i; ++j) {
->                 hfi_instance = &hfi_instances[j];
+>         if (!cpu_feature_enabled(X86_FEATURE_ITD))
 > --
