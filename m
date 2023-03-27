@@ -2,116 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D316C9506
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Mar 2023 16:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393026C9AA6
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Mar 2023 06:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjCZOLf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Mar 2023 10:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S229546AbjC0Euw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Mar 2023 00:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbjCZOLd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Mar 2023 10:11:33 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2205983E8;
-        Sun, 26 Mar 2023 07:11:02 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-17ec8963db8so6689175fac.8;
-        Sun, 26 Mar 2023 07:11:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679839823;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RI84tHAsFIA+Z9+3RM9Ce999KROH+/bxjRxCcU6olVY=;
-        b=aAiivHeu/Tsv0dz4SKSXiaosIrrtpdO20RyVijglBIQSFePnfJw8aHDNss+5DIUrPr
-         ZBITDtgL3ha4o2n7JoB7olDrYijdQLBI/mfMPzKRQoscY8sP7dTXAJbxL4sZkq2DsVZv
-         JsY0xLCedFhueLhfXW/XHeGW8cehxf3xocLlQYtfpSXO1NRk0ADks5ov07xdFZeac0fv
-         vCx2lxGlSACaDWqT+tyFxSircfW9guaQm/sxhlDpFR8+4tUB6u1oTOwUpohP5Pp/uHyp
-         QQSNgzf5uMtWTk0/k+yguqpZZv5wkXO6OyDLIDn8fpaF/5KPVOBG8mdfm7xM0kAq+bAc
-         NXLg==
-X-Gm-Message-State: AAQBX9e4EGXZ7BfiiuTjZVtCVM3GQilSlhZ2ChFkk0TfNPWqzCUlQPIk
-        Y/nkSwWVuJwo/hsv8Jth0g==
-X-Google-Smtp-Source: AKy350a+wztBAVZCse1OmxrhNfzmyAzezy7grQ/X6mbQuuEsDbhoHnKJRF53Dr55qRBhmiRDuQzhDA==
-X-Received: by 2002:a05:6870:ec8c:b0:17a:bf1b:cab8 with SMTP id eo12-20020a056870ec8c00b0017abf1bcab8mr6363964oab.4.1679839823002;
-        Sun, 26 Mar 2023 07:10:23 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s2-20020a4a5102000000b005252e5b6604sm10485165ooa.36.2023.03.26.07.10.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 07:10:22 -0700 (PDT)
-Received: (nullmailer pid 380188 invoked by uid 1000);
-        Sun, 26 Mar 2023 14:10:21 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229462AbjC0Euv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Mar 2023 00:50:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0E646AE;
+        Sun, 26 Mar 2023 21:50:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7E93FCE0B26;
+        Mon, 27 Mar 2023 04:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0459C433EF;
+        Mon, 27 Mar 2023 04:50:40 +0000 (UTC)
+From:   Greg Ungerer <gerg@linux-m68k.org>
+To:     peng.fan@oss.nxp.com
+Cc:     Markus.Niebel@ew.tq-group.com, abailon@baylibre.com,
+        abelvesa@kernel.org, aford173@gmail.com,
+        devicetree@vger.kernel.org, djakov@kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
+        l.stach@pengutronix.de, laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        marex@denx.de, paul.elder@ideasonboard.com, peng.fan@nxp.com,
+        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org,
+        gerg@kernel.org
+Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk ctrl
+Date:   Mon, 27 Mar 2023 14:50:37 +1000
+Message-Id: <20230327045037.593326-1-gerg@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
+References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230325122444.249507-6-vkoul@kernel.org>
-References: <20230325122444.249507-1-vkoul@kernel.org>
- <20230325122444.249507-6-vkoul@kernel.org>
-Message-Id: <167983963951.350350.7524342280614332456.robh@kernel.org>
-Subject: Re: [PATCH v2 05/12] dt-bindings: interconnect: split SC8180x to
- own schema
-Date:   Sun, 26 Mar 2023 09:10:21 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Sat, 25 Mar 2023 17:54:37 +0530, Vinod Koul wrote:
-> SC8180x comes with interconnects having and missing IO address space, and
-> variable number of clocks, so split it from common file for easier
-> maintenance and to fix warnings like:
+On 2/3/22 17:13, Peng Fan wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> sc8180x-lenovo-flex-5g.dtb: interconnect-0: 'reg' is a required property
+> Add interconnect property for hsio blk ctrl
 > 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  .../bindings/interconnect/qcom,rpmh.yaml      | 11 ---
->  .../interconnect/qcom,sc8180x-rpmh.yaml       | 76 +++++++++++++++++++
->  2 files changed, 76 insertions(+), 11 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
+ > arch/arm64/boot/dts/freescale/imx8mp.dtsi | 5 +++++
+ > 1 file changed, 5 insertions(+)
 > 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index 08bd57742294..9cceeeeb26be 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> @@ -1109,6 +1109,11 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
+>  						<&pgc_hsiomix>, <&pgc_pcie_phy>;
+>  				power-domain-names = "bus", "usb", "usb-phy1",
+>  						     "usb-phy2", "pcie", "pcie-phy";
+> +				interconnects = <&noc IMX8MP_ICM_NOC_PCIE &noc IMX8MP_ICN_HSIO>,
+> +						<&noc IMX8MP_ICM_USB1 &noc IMX8MP_ICN_HSIO>,
+> +						<&noc IMX8MP_ICM_USB2 &noc IMX8MP_ICN_HSIO>,
+> +						<&noc IMX8MP_ICM_PCIE &noc IMX8MP_ICN_HSIO>;
+> +				interconnect-names = "noc-pcie", "usb1", "usb2", "pcie";
+>  				#power-domain-cells = <1>;
+>  			};
+>  		};
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This change completely breaks USB for me on a new iMX8mp platform I am
+working with. Before this change normal USB probe looks good:
 
-yamllint warnings/errors:
+    xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+    xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+    xhci-hcd xhci-hcd.0.auto: hcc params 0x0220fe6d hci version 0x110 quirks 0x0000000000010010
+    xhci-hcd xhci-hcd.0.auto: irq 206, io mem 0x38100000
+    xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+    xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+    xhci-hcd xhci-hcd.0.auto: Host supports USB 3.0 SuperSpeed
+    usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.03
+    usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+    usb usb1: Product: xHCI Host Controller
+    usb usb1: Manufacturer: Linux 6.3.0-rc4-dirty xhci-hcd
+    ....
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml: properties:compatible:enum: ['qcom,sc8180x-aggre1-noc', 'qcom,sc8180x-aggre1-noc', 'qcom,sc8180x-aggre2-noc', 'qcom,sc8180x-camnoc-virt', 'qcom,sc8180x-compute-noc', 'qcom,sc8180x-config-noc', 'qcom,sc8180x-dc-noc', 'qcom,sc8180x-gem-noc', 'qcom,sc8180x-mc-virt', 'qcom,sc8180x-mmss-noc', 'qcom,sc8180x-qup-virt', 'qcom,sc8180x-system-noc'] has non-unique elements
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.example.dtb: interconnect@16e0000: reg: [[0, 23986176], [0, 53376]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.example.dtb: interconnect@16e0000: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
+But after this commit is applied, no USB probe messages at all.
 
-doc reference errors (make refcheckdocs):
+USB worked fine in 6.0 for me, but when I switched up to 6.1 USB was broken,
+I bisected to this as being the offending commit. This is still broken for me
+in todays 6.3-rc4. If I revert this change (and only this change) USB works
+again.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230325122444.249507-6-vkoul@kernel.org
+Any thoughts on why this breaks USB?
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Regards
+greg
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
