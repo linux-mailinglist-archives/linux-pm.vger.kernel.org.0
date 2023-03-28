@@ -2,132 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042206CC9BE
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 19:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15EF6CCA28
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 20:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjC1RzN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 28 Mar 2023 13:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S229800AbjC1Sny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Mar 2023 14:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjC1RzM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 13:55:12 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16786114;
-        Tue, 28 Mar 2023 10:55:06 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id eg48so52975483edb.13;
-        Tue, 28 Mar 2023 10:55:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680026104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zM4djXyeY54M5VkLAl8JUHt2hpd0bXhVxLFdkufkV9o=;
-        b=UtAKrpjz7YFvGG2TbaA2Pttf9zL9cU5gYd81nieRUFGJrO9ZQlh0dNZp7AVWfwpNUv
-         3Nv9+inVC57pHb2AeLNnPN0PoVn/Pc7+GfoFuBJNpqIQIk907EIwxstRKa9KpzOtw+Nw
-         2+VXCHq5RlurmFjUqCby6bMKgd4Zzuf4gJ4YMC1mIV43ZSaztt21rblB4ndBjUPxLCiF
-         Fobn4dkPjVZBHX77imJCE1kHbl2X2R4oB5FVGVtYqdCLxkV9g5+oKGYHQ//gC+tDT/t7
-         n5kpqZ9c4ADXPZstzaPKybkLzxK33d9KFab+2rnn8B8pMkTmVnvD2u8BMaqY0NCY5qoD
-         05pg==
-X-Gm-Message-State: AAQBX9eDopD51t4OSAtmHJiKvJiXKumSQzJBGa0CUTmjM3sYz7d7PSYT
-        bSb6QAs0CeyvIkZ/wqVKs76ATUaTkIvdzYMzr7Q=
-X-Google-Smtp-Source: AKy350b9Z4GwCR8srptBUVQbgwRAwz0E8DIrura3Ims79FFh250KZIsb1mu7c9SmmLZVZrfKNgoDfIv5nVr96OoH/5g=
-X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
- gn2-20020a1709070d0200b009316921bdbbmr7903400ejc.2.1680026104457; Tue, 28 Mar
- 2023 10:55:04 -0700 (PDT)
+        with ESMTP id S229511AbjC1Sny (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 14:43:54 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E402121;
+        Tue, 28 Mar 2023 11:43:30 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 81b377ba140dd037; Tue, 28 Mar 2023 20:43:28 +0200
+Received: from kreacher.localnet (unknown [213.134.169.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 72F1578215F;
+        Tue, 28 Mar 2023 20:43:27 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: [PATCH v1] thermal: core: Drop excessive lockdep_assert_held() calls
+Date:   Tue, 28 Mar 2023 20:43:26 +0200
+Message-ID: <2681615.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-References: <20230324070807.6342-1-rui.zhang@intel.com> <20230324070807.6342-2-rui.zhang@intel.com>
- <CAJZ5v0gze1wBEMcuEu4Aa9343rh-3=Bu+pdSYuY3stMd8QGf0A@mail.gmail.com>
- <528f7e58507df4b6137856828e371bb8913b8b59.camel@intel.com>
- <CAJZ5v0gL_7VPdcgkmuTz=afYSbGsWZi5wW9vUvyAgverjxsNdw@mail.gmail.com> <ba48eb3b3f4b82d33faa9233dc151f65d6380ed7.camel@intel.com>
-In-Reply-To: <ba48eb3b3f4b82d33faa9233dc151f65d6380ed7.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Mar 2023 19:54:53 +0200
-Message-ID: <CAJZ5v0h6PX8EmPtVKbPPG+e0FZn53CGG=RvpOH-vuO0fNF6-=g@mail.gmail.com>
-Subject: Re: [PATCH 2/5] thermal/core: Reset cooling state during cooling
- device unregistration
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.169.43
+X-CLIENT-HOSTNAME: 213.134.169.43
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedguddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduieelrdegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdegfedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehl
+ ihhnrghrohdrohhrghdprhgtphhtthhopehimhhrvgdruggvrghksehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 4:46 AM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Mon, 2023-03-27 at 17:13 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Mar 27, 2023 at 4:50 PM Zhang, Rui <rui.zhang@intel.com>
-> > wrote:
-> > > On Fri, 2023-03-24 at 14:19 +0100, Rafael J. Wysocki wrote:
-> > > > On Fri, Mar 24, 2023 at 8:08 AM Zhang Rui <rui.zhang@intel.com>
-> > > > wrote:
-> > > > > When unregistering a cooling device, it is possible that the
-> > > > > cooling
-> > > > > device has been activated. And once the cooling device is
-> > > > > unregistered,
-> > > > > no one will deactivate it anymore.
-> > > > >
-> > > > > Reset cooling state during cooling device unregistration.
-> > > > >
-> > > > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > > > ---
-> > > > > In theory, this problem that this patch fixes can be triggered
-> > > > > on a
-> > > > > platform with ACPI Active cooling, by
-> > > > > 1. overheat the system to trigger ACPI active cooling
-> > > > > 2. unload ACPI fan driver
-> > > > > 3. check if the fan is still spinning
-> > > > > But I don't have such a system so I didn't trigger then problem
-> > > > > and
-> > > > > I
-> > > > > only did build & boot test.
-> > > >
-> > > > So I'm not sure if this change is actually safe.
-> > > >
-> > > > In the example above, the system will still need the fan to spin
-> > > > after
-> > > > the ACPI fan driver is unloaded in order to cool down, won't it?
-> > >
-> > > Then we can argue that the ACPI fan driver should not be unloaded
-> > > in
-> > > this case.
-> >
-> > I don't think that whether or not the driver is expected to be
-> > unloaded at a given time has any bearing on how it should behave when
-> > actually unloaded.
-> >
-> > Leaving the cooling device in its current state is "safe" from the
-> > thermal control perspective, but it may affect the general user
-> > experience (which may include performance too) going forward, so
-> > there
-> > is a tradeoff.
->
-> Right.
-> If we don't have a third choice, then the question is simple.
-> "thermal safety" vs. "user experience"?
->
-> I'd vote for "thermal safety" and drop this patch series.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Works for me.
+The lockdep_assert_held() calls added to cooling_device_stats_setup()
+and cooling_device_stats_destroy() by commit 790930f44289 ("thermal:
+core: Introduce thermal_cooling_device_update()") trigger false-positive
+lockdep reports in code paths that are not subject to race conditions
+(before cooling device registration and after cooling device removal).
 
-> > What do the other cooling device drivers do in general when they get
-> > removed?
->
-> No cooling device driver has extra handling after cdev unregistration.
+For this reason, remove the lockdep_assert_held() calls from both
+cooling_device_stats_setup() and cooling_device_stats_destroy() and
+add one to thermal_cooling_device_stats_reinit() that has to be called
+under the cdev lock.
 
-However, the question regarding what to do when the driver of a
-cooling device in use is being removed is a valid one.
+Fixes: 790930f44289 ("thermal: core: Introduce thermal_cooling_device_update()")
+Link: https://lore.kernel.org/linux-acpi/ZCIDTLFt27Ei7+V6@ideak-desk.fi.intel.com
+Reported-by: Imre Deak <imre.deak@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_sysfs.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-One possible approach that comes to mind could be to defer the driver
-removal until the overheat condition goes away, but anyway it would be
-better to do that in the core IMV.
+Index: linux-pm/drivers/thermal/thermal_sysfs.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_sysfs.c
++++ linux-pm/drivers/thermal/thermal_sysfs.c
+@@ -876,8 +876,6 @@ static void cooling_device_stats_setup(s
+ 	unsigned long states = cdev->max_state + 1;
+ 	int var;
+ 
+-	lockdep_assert_held(&cdev->lock);
+-
+ 	var = sizeof(*stats);
+ 	var += sizeof(*stats->time_in_state) * states;
+ 	var += sizeof(*stats->trans_table) * states * states;
+@@ -903,8 +901,6 @@ out:
+ 
+ static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+ {
+-	lockdep_assert_held(&cdev->lock);
+-
+ 	kfree(cdev->stats);
+ 	cdev->stats = NULL;
+ }
+@@ -931,6 +927,8 @@ void thermal_cooling_device_destroy_sysf
+ 
+ void thermal_cooling_device_stats_reinit(struct thermal_cooling_device *cdev)
+ {
++	lockdep_assert_held(&cdev->lock);
++
+ 	cooling_device_stats_destroy(cdev);
+ 	cooling_device_stats_setup(cdev);
+ }
+
+
+
