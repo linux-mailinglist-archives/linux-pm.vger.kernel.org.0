@@ -2,69 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0F16CB7D9
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 09:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1E86CB7DE
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 09:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjC1HTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Mar 2023 03:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S229645AbjC1HVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Mar 2023 03:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjC1HTF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 03:19:05 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F2212B
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 00:19:04 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y4so45751973edo.2
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 00:19:04 -0700 (PDT)
+        with ESMTP id S230052AbjC1HVM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 03:21:12 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872E72D71
+        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 00:21:09 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id ek18so45680919edb.6
+        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 00:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679987943;
+        d=linaro.org; s=google; t=1679988068;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YyLtcWfck99XSuqte56OpC8fUbT/DMhZm1MlJJ7vA8=;
-        b=z1sqXxQK/OtJ1ZoqcpRiUEqtysmThq/PWJo1jm3zyBVh6LaVkSGBoxN8ooZDIBhrRi
-         AITIizoPzmojNxjJAffW6kihGC0PGvdhqWbx2MwKQ6xCm5aB5V3VavxKn6aHF5MgmO82
-         mmMBH9Sd1ZL46KOA6eb5bj9VQRcH8eTNpI0K/isyA5zlWFkeB4/ll/K69oFb1YXm6ary
-         Kv3/1K2WGEetv3zLP1p+ylZcOp0kT+oeNCf/ki8TG1Zj+qJo69PtyeQMBx95h2IJpDir
-         Z5r4DObtH2ILFJJ0A6MxX1BswYzhkDdJbjVnE2lZe6oVWxFbeOrbooUC0DejK7kosH+Z
-         polg==
+        bh=M4CYgrnxL/oD4LhNxCijRW1wSvmkQAAax1ssKQ5T4oE=;
+        b=TimBilBJ/4qlKuklhMtkkntEIp2MCOBC0BvhGaTAvMCWbYhcry589vp2bRc9T+zNVs
+         +LaQ2wTJ2rcFawHBLnEgFzXEtxzCEmuH7WuTlqvGH+GmLBnN1Zt/iGY+PhQvJZWyHX0/
+         pGyYghOr/wjgN7Qh9K9+QT6o92dNzoYVO+srLA8rufopIH2d9hmWgsbsMOYHKanCqxkN
+         Uv6qEQIvclCC6dRgY2wg/oT6O6ijp4mTnvPNqLJI6YClpV21jpJfeOxdpQ5yp/1LQkud
+         W9HkZwD0J2eWRv0gKn4oRf7hDjLz1iEyjBon/CWNvoyKYFmY3QVVaPuoj9d7oGEi9IyJ
+         E/Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679987943;
+        d=1e100.net; s=20210112; t=1679988068;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YyLtcWfck99XSuqte56OpC8fUbT/DMhZm1MlJJ7vA8=;
-        b=apOa1uuLjLlIRxJpPA7vg0rFbw5qS1W/lvUqv3W0cVN0buFF0isGtnO/JOFzYscrUg
-         W1ebMzDxnCVE+H4uzFyR2BQFHNVdV+cn92ddzYBY2uqnyXGD6H8S0XvUqD3q6P5fOyZl
-         avRmDSeoDM1c6A1jO4mYYPqLfgzqfdIOTYJOKSQTKoekybD4z0PzEzi0TNStugYcJpEq
-         acxeYZ2zFRMdvcKZ0gy6AQjrZhdPlxRM9+uD1hLssk35Pt7Iikae7dst59+Xz5BQ5tqo
-         5nDlb8KeCUBYdgvNWM9LQmknH7K2yE28bb8TCUcrOvbMKzaGZrxDHAgTwX+KzA3FKZcO
-         8/gg==
-X-Gm-Message-State: AAQBX9dlDuOYbfMTKSdMOFnwmceI+7o56IGTecMioDllW8LoQpu64d3f
-        6bZYlgXOebN9cKoUSU4Zus91jw==
-X-Google-Smtp-Source: AKy350bneuuGtkW4SO7vxT4eJZc8NFZcpqqqi3sMZmlLvaa3a9JEy+Nj0eljodAD/Qx+zXHyGfM3gg==
-X-Received: by 2002:a17:906:8288:b0:933:44ef:851e with SMTP id h8-20020a170906828800b0093344ef851emr16333902ejx.55.1679987943119;
-        Tue, 28 Mar 2023 00:19:03 -0700 (PDT)
+        bh=M4CYgrnxL/oD4LhNxCijRW1wSvmkQAAax1ssKQ5T4oE=;
+        b=D/YqXLBRHqtmrJOGyhKsZHyT+u5AqxpRFMZEUk46abH2TjTHh2X4cvA+mslQ3FPo3d
+         DjV50gp6C14orYs/5EXdyc3P/rEriSv+EDzhkh57q4kfBVZq6HwzlP6eEmNkr3KE9/qc
+         AVJgvXQgV2ei7Nq++9ZV41sDbK8toP6+51DywWnS1+VAsx4zNHYmvXJ4z6SQelE4qtT6
+         HTNy7apHjh7im3oYXaxAnP61Ih5IBWG566auoYYHXUKyoTLVctiMF5dFl1/p5Q763dyv
+         yl2rk1M3GdnqkehcOfEg6V4HND/qUAGtInGaYf4jSaBtRZiGXz9xSMHIqPZhKMftNmF+
+         uf2Q==
+X-Gm-Message-State: AAQBX9dOrVtEE3wb4KadULb+6n9T4DRwEikmEyebIFB2q4/wIi/Tgds1
+        qpsj7tXUvViFPaAj1SQx6Y8KIw==
+X-Google-Smtp-Source: AKy350boEBP6L5wV56dT/8UCE41l1icRJq861X7V/ttRVdVf35fbUR36SPMnrgi+Gjem8bJPYlbXCw==
+X-Received: by 2002:a17:906:641:b0:8b1:77bf:3bdd with SMTP id t1-20020a170906064100b008b177bf3bddmr15668254ejb.36.1679988067996;
+        Tue, 28 Mar 2023 00:21:07 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
-        by smtp.gmail.com with ESMTPSA id zc14-20020a170906988e00b00927f6c799e6sm15053068ejb.132.2023.03.28.00.19.02
+        by smtp.gmail.com with ESMTPSA id g17-20020a170906c19100b00921c608b737sm14912135ejz.126.2023.03.28.00.21.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 00:19:02 -0700 (PDT)
-Message-ID: <8779217b-bd70-37a4-c779-139690048d4d@linaro.org>
-Date:   Tue, 28 Mar 2023 09:19:01 +0200
+        Tue, 28 Mar 2023 00:21:07 -0700 (PDT)
+Message-ID: <af455119-7178-bed8-4099-ee50c7b6134b@linaro.org>
+Date:   Tue, 28 Mar 2023 09:21:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH -next] devfreq: exynos-ppmu: Use
- devm_platform_get_and_ioremap_resource()
+Subject: Re: [Patch v4 02/10] arm64: tegra: add bpmp ref in tegra234-mc node
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     kyungmin.park@samsung.com, myungjoo.ham@samsung.com,
-        cw00.choi@samsung.com, alim.akhtar@samsung.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230328053853.23159-1-yang.lee@linux.alibaba.com>
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+References: <20230327161426.32639-1-sumitg@nvidia.com>
+ <20230327161426.32639-3-sumitg@nvidia.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328053853.23159-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20230327161426.32639-3-sumitg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -77,17 +81,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/03/2023 07:38, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
+On 27/03/2023 18:14, Sumit Gupta wrote:
+> Add the "nvidia,bpmp" property within the "memory-controller" node
+> to reference BPMP node. This is needed by the MC driver to pass
+> the client info to the BPMP-FW when memory interconnect support is
+> available.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 
-I don't understand why do you reference this commit. There is no bug
-introduced there, there is nothing related to this driver.
-
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-
+DTS goes to the end of patchset. If you put it here to fix
+bisectability, then your patchset is already broken.
 
 Best regards,
 Krzysztof
