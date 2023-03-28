@@ -2,236 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFA56CBBD0
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 12:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05396CBBE8
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 12:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjC1KEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Mar 2023 06:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S233102AbjC1KHZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Mar 2023 06:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjC1KEY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 06:04:24 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ACB659C
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:04:10 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so11978667pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:04:10 -0700 (PDT)
+        with ESMTP id S233029AbjC1KHP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 06:07:15 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8105876BE
+        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:07:01 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id eg48so47193906edb.13
+        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:07:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679997850;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KxWO7xZCpZy/QjDSfmiWAP83Yc5YWXIyhWWtxZPMVEw=;
-        b=hN008miUyq4MP/sgibqJJlMmfh8gH3r8syzVXMiCVNpJu7bFv+86OoVc8hvtcrJq9l
-         TgURfR0jeZOVO3+o0wxzcpEQN+V9QOtwDglhz8jZWBw+o+TmXtKp+JGTru3i1fPcajoJ
-         xbGkAnHZiK57fucBmJwx1BMnwvU/cW2JC/SaqYeaMj6ixkpSa/MFlrcIfQ+rlptOxt33
-         CNQOyU5QyW0NWD/JtFg2wERWJVCKnTg8JGBAWilW+mHgaloVS9mPVnEosdtlrEQjOmQS
-         ++BxlWRuy85Ulv4UPEvKXvL0Rk6K9N8bJgdFo1CJPCSX/rUAlgBs0/OzDDaVhL3H9/Z7
-         16eg==
+        d=linaro.org; s=google; t=1679998020;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0ZPljhKeSnuSGlSWfKaLNDMSdJrVY6lMlRIxToWIHSE=;
+        b=vgTGHg8fA3BZsk9LUPzWlrSQZGnASPGPFuZqfImemSFhHCJj5lrtNpJl1qhJaeaYPE
+         leDREJVTlbajzM8RI1c/JJjEonQftsvxksAxwpBnCXhjUjMQyZCY4O7SkHN3OBwzks9Q
+         bSr5gSOwPFoaT1eeMkd5r80jXAD5DRr7hRbPRW9rD8V9QLlHdLS6qaVN7LXketIv2oGr
+         aUCy2skJ6KxoLOyx9EuzZc6uSN/bxCuCJjKG7VExpH/QuwU/f09lG+YfT/ojSHZl4qh5
+         XyE2kG1yPMFqjfQgNc0IQHuEDp6GG1mNDOzZOWLy0yK0OsdVuG6AogQkCxaEJ5VYdtiH
+         4Rxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679997850;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KxWO7xZCpZy/QjDSfmiWAP83Yc5YWXIyhWWtxZPMVEw=;
-        b=C1IIma32l1aWoCAhPbl2uhQPbHvukj2v3koJ/A//3gX1Gi3bujgON3K38wN4jqPEQs
-         FA7rnO+pr2ydAx5lYimvFURV7YbHdgx5poNz4Ffen8aAxCsVm+eqU2NJ7blJq3ZqV7d+
-         NLwiyQKBR976FPPdyzH59tUYemmkKhf8plfBVIj5sSqB3wemV53EAi343hfp8A9eImfI
-         vUwMDTREow9R5/8NjCnzi/3hT+80sdPkKz0Cg84G6VjS/e45+5fxdguBiMps753VJPp7
-         DhRo3v+9HQMaSMiDiZCvrE6erIALyKG0vhKXNTVHz0bzsAZ/VNadQkaE+64gmbfL7JN4
-         gUKQ==
-X-Gm-Message-State: AAQBX9fS+sH/+MP/ZmvOVvwhj4XZZx9+RByI4wuhM5SQ1myLi5QdoT10
-        jEAtGsr4BSE3LiPs8NbQSq9lvffW+5gTrrJp3lZ0jA==
-X-Google-Smtp-Source: AKy350Z2K54gIuz3a2WlczjWFC5hAW3ydoLsfQD5zWkB2qMCTp+k60kvFzz827Gr9gz3s/3zbMgQUhkvIw3Fta2qLxs=
-X-Received: by 2002:a17:902:9b88:b0:1a1:c523:a9bd with SMTP id
- y8-20020a1709029b8800b001a1c523a9bdmr5428987plp.0.1679997849712; Tue, 28 Mar
- 2023 03:04:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679998020;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ZPljhKeSnuSGlSWfKaLNDMSdJrVY6lMlRIxToWIHSE=;
+        b=ehOYG5yLgwnjT4fWSfkfuoDuboCOHIf+p4JvWVuEM0xTqCjEUdHSJ2fiZVBHVoNxqV
+         CGiIpPgAdmONcbyVYkkfnUlXktzH/qEpIXynBNRpZcc17UL+/zbRYPAzaxilRooWXMmq
+         /Gthq9B1S/geNXxLBHdDWAEAo8EEL8ZNcHu2KconwFXV1/n+HvcHQRYZdXYJ+bmJScGj
+         LXqycryhVSlpnuEjYsyINKDndEhPF28ClN8uL0VgPzUx642aax1QzYoKD4yKHm/pl+It
+         DuCRLnqmI6eVSiedaXms0M1QAVs8Xr1ABZ8D6G7kPg7PX/Ru6wr9ZRP/MWI0pR6/FAUO
+         vLWw==
+X-Gm-Message-State: AAQBX9dWxiODcKYngFo1PvsudjxJRv36Qe7FNUtuaFFdux4yMc4j9+87
+        V2iOcrNLOzkFe4JnemhMm4aaBVGsns4+pvxonI4=
+X-Google-Smtp-Source: AKy350ZFYyOvQbIZ2wc5ylrWhyV44C9OKuB3cjIa2tHpjn0Dm3C5pFk/kZSkKlTmHvKCSly/UXuydw==
+X-Received: by 2002:a17:906:9244:b0:939:4c86:d492 with SMTP id c4-20020a170906924400b009394c86d492mr14400048ejx.5.1679998019965;
+        Tue, 28 Mar 2023 03:06:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9e92:dca6:241d:71b6? ([2a02:810d:15c0:828:9e92:dca6:241d:71b6])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170906b10700b0092f38a6d082sm15071729ejy.209.2023.03.28.03.06.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 03:06:59 -0700 (PDT)
+Message-ID: <81fad553-e8c1-f387-4df2-70c91a6ebc33@linaro.org>
+Date:   Tue, 28 Mar 2023 12:06:58 +0200
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com> <20230207051105.11575-11-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20230207051105.11575-11-ricardo.neri-calderon@linux.intel.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 28 Mar 2023 12:03:58 +0200
-Message-ID: <CAKfTPtAciJr-ZQWcJN3bHZHyHmjmSOuDYZz9UwfK2EnMVPX6aQ@mail.gmail.com>
-Subject: Re: [PATCH v3 10/24] sched/fair: Use IPCC scores to select a busiest runqueue
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH -next] devfreq: exynos-ppmu: Use
+ devm_platform_get_and_ioremap_resource()
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Yang Li <yang.lee@linux.alibaba.com>, kyungmin.park@samsung.com,
+        myungjoo.ham@samsung.com, cw00.choi@samsung.com,
+        alim.akhtar@samsung.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230328053853.23159-1-yang.lee@linux.alibaba.com>
+ <8779217b-bd70-37a4-c779-139690048d4d@linaro.org>
+ <20230328095337.sr6s3klmhiyz63pr@intel.intel>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230328095337.sr6s3klmhiyz63pr@intel.intel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 7 Feb 2023 at 06:01, Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> For two runqueues of equal priority and equal number of running of tasks,
-> select the one whose current task would have the highest IPC class score
-> if placed on the destination CPU.
+On 28/03/2023 11:53, Andi Shyti wrote:
+> Hi,
+> 
+> On Tue, Mar 28, 2023 at 09:19:01AM +0200, Krzysztof Kozlowski wrote:
+>> On 28/03/2023 07:38, Yang Li wrote:
+>>> According to commit 890cc39a8799 ("drivers: provide
+>>> devm_platform_get_and_ioremap_resource()"), convert
+>>
+>> I don't understand why do you reference this commit. There is no bug
+>> introduced there, there is nothing related to this driver.
+>>
+>>> platform_get_resource(), devm_ioremap_resource() to a single
+>>> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+>>> what this function does.
+> 
+> I've seen Yang has sent many of these cleanups, perhaps he can
+> write something like:
+> 
+> "
+> Commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()") introduces the
+> devm_platform_get_and_ioremap_resource() function which combines
+> both platform_get_resource() and devm_ioremap_resource() into a
+> single call.
 
-You failed to explain why it make sense to compare current task score
-whereas we will most probably not pull this task at the end
->
-> For now, use IPCC scores only for scheduling domains with the
-> SD_ASYM_PACKING flag.
->
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v2:
->  * Only use IPCC scores to break ties if the sched domain uses
->    asym_packing. (Ionela)
->  * Handle errors of arch_get_ipcc_score(). (Ionela)
->
-> Changes since v1:
->  * Fixed a bug when selecting a busiest runqueue: when comparing two
->    runqueues with equal nr_running, we must compute the IPCC score delta
->    of both.
->  * Renamed local variables to improve the layout of the code block.
->    (PeterZ)
->  * Used the new interface names.
-> ---
->  kernel/sched/fair.c | 64 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 72d88270b320..d3c22dc145f7 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9399,6 +9399,37 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
->         return sched_asym_ipcc_prefer(a_stats, b_stats);
->  }
->
-> +/**
-> + * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
-> + * @p:         A task
-> + * @env:       Load balancing environment
-> + *
-> + * Returns: The IPCC score delta that @p would get if placed in the destination
-> + * CPU of @env. LONG_MIN to indicate that the delta should not be used.
-> + */
-> +static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-> +{
-> +       unsigned long score_src, score_dst;
-> +       unsigned short ipcc = p->ipcc;
-> +
-> +       if (!sched_ipcc_enabled())
-> +               return LONG_MIN;
-> +
-> +       /* Only asym_packing uses IPCC scores at the moment. */
-> +       if (!(env->sd->flags & SD_ASYM_PACKING))
-> +               return LONG_MIN;
-> +
-> +       score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
-> +       if (IS_ERR_VALUE(score_dst))
-> +               return LONG_MIN;
-> +
-> +       score_src = arch_get_ipcc_score(ipcc, task_cpu(p));
-> +       if (IS_ERR_VALUE(score_src))
-> +               return LONG_MIN;
-> +
-> +       return score_dst - score_src;
-> +}
-> +
->  #else /* CONFIG_IPC_CLASSES */
->  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
->                                     struct rq *rq)
-> @@ -9429,6 +9460,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
->         return false;
->  }
->
-> +static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-> +{
-> +       return LONG_MIN;
-> +}
-> +
->  #endif /* CONFIG_IPC_CLASSES */
->
->  /**
-> @@ -10589,6 +10625,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
->  {
->         struct rq *busiest = NULL, *rq;
->         unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> +       long busiest_ipcc_delta = LONG_MIN;
->         unsigned int busiest_nr = 0;
->         int i;
->
-> @@ -10705,8 +10742,35 @@ static struct rq *find_busiest_queue(struct lb_env *env,
->
->                 case migrate_task:
->                         if (busiest_nr < nr_running) {
-> +                               struct task_struct *curr;
-> +
->                                 busiest_nr = nr_running;
->                                 busiest = rq;
-> +
-> +                               /*
-> +                                * Remember the IPCC score delta of busiest::curr.
-> +                                * We may need it to break a tie with other queues
-> +                                * with equal nr_running.
-> +                                */
-> +                               curr = rcu_dereference(busiest->curr);
-> +                               busiest_ipcc_delta = ipcc_score_delta(curr, env);
+I don't think we need to reference that commit at all. It does not
+matter when the API was introduced and just makes commit msg unnecessary
+long. Instead the commit msg should shortly say why this change is
+needed or even worth accepting.
 
-Hmm, i don't like this at all
+> 
+> Update the code to use the new combined function instead of the
+> separate calls.
 
-Also, curr is the least probable task to be pulled which means that
-all this his useless
+Best regards,
+Krzysztof
 
-> +                       /*
-> +                        * If rq and busiest have the same number of running
-> +                        * tasks and IPC classes are supported, pick rq if doing
-> +                        * so would give rq::curr a bigger IPC boost on dst_cpu.
-> +                        */
-> +                       } else if (busiest_nr == nr_running) {
-> +                               struct task_struct *curr;
-> +                               long delta;
-> +
-> +                               curr = rcu_dereference(rq->curr);
-> +                               delta = ipcc_score_delta(curr, env);
-> +
-> +                               if (busiest_ipcc_delta < delta) {
-> +                                       busiest_ipcc_delta = delta;
-> +                                       busiest_nr = nr_running;
-> +                                       busiest = rq;
-> +                               }
->                         }
->                         break;
->
-> --
-> 2.25.1
->
