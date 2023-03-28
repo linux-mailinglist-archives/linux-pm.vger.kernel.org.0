@@ -2,71 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6DE6CBC62
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 12:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA606CBCB3
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 12:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjC1KR1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Mar 2023 06:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        id S231293AbjC1KmG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Mar 2023 06:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjC1KR0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 06:17:26 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872E249D7
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:17:17 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x3so47315757edb.10
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:17:17 -0700 (PDT)
+        with ESMTP id S229631AbjC1KmF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 06:42:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B806184;
+        Tue, 28 Mar 2023 03:42:04 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r11so47705973edd.5;
+        Tue, 28 Mar 2023 03:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679998635;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680000123;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LNLT5+oHFXOacJzceFxr6eKivsdkixlMlAuR8QNdsfE=;
-        b=SQXMZjWzqiYx4WyfjOKPIYgcNqy9lzlQivjk7Fl7bHvgdbHz/llSdJSbYdYcImc0R8
-         YPKLKWUHz67TMbMX8q7jJ1ovZRjwH3eh7g3StZSA/PLZ31adYExAcPfduJrDFzC8CbUZ
-         qYKyYwVsd6ehlLcwOJAWoUIIIXQad4Qc/goiI=
+        bh=Ynr5Gc8TJTXozi1CcIVdlcGkAdeP7juyzEqKu/8mAM4=;
+        b=Z/O97aA9J13eQcteDS6l+Zx+PUiE41PX+ochkiIVu0R137xgDh58BTExIGr1MKeiPz
+         MQ1vDamf0bl1to0uFk0MzNXul/DJXgVqsZmHgHAesJfn9PxxpWr9yXs6m3g0mMFg1/z3
+         +wfxx18AsJOP6d7D+MuVy5+zKMIK8kAyQqCVXDHrV0f8PlBtxUh2mF5fWnh5LgA66bSi
+         dqR6DOzqtQDb8SvJ+BzW9VxzXLHdbpT3j9oe/VCTZqTPzXVAk3LaptM63lfdYDW48orj
+         Mg0TLhE+f5td+DRKI3voT+c171kSNpG9/lHbchrZBoO/ikMD13XmBQwYVaDqH7eZhAFX
+         1HcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679998635;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680000123;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LNLT5+oHFXOacJzceFxr6eKivsdkixlMlAuR8QNdsfE=;
-        b=eobqXrukTJk1gfYkthz2BvI0EanLaG6N7BTN68EsgKtiXWFIRv7CqRF6R0bJ2YYM2N
-         crPQpo00qSBOtFHG5KoIAx/hIVQWoY4ujwT/boYXDdKLzeeyV5gHPIF7Z5LvN+Tanal1
-         FzwcasYgR3wTebJwEhA9nd/HIBk61nAoBNuD1xF5tQX2zSKIOMUW3hDswACOUeJGWGiC
-         209xkVTOwRqyroRD8oxXE03KlX/32D8tkDa0zzjOwNSNqS9Rz3w83ELe/t+v8gMzyHxa
-         9gixA6Mlt4RyElGvoazy7BRylQXv3m95rLl7Tab26OjT8/m84Pbqlh/PRtgs12ibqSzj
-         Z1uQ==
-X-Gm-Message-State: AAQBX9c6HiHqlrMn/TjtKZL/I/6AyInkDdwo5YdlRBNqMQPD/k9rg6Uf
-        Djj8uZGKep8A+WznoKayvbVnr5MOpYhs5jfnpUw=
-X-Google-Smtp-Source: AKy350Yvh85oCOUY+Zj6EtraT8lUtOalyKikURLp5AMJ4C7rV8tsA/zln87kiP7W3k1xR9hv+fqUaQ==
-X-Received: by 2002:a05:6402:4c3:b0:4fb:fd9f:737a with SMTP id n3-20020a05640204c300b004fbfd9f737amr15799869edw.4.1679998635691;
-        Tue, 28 Mar 2023 03:17:15 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id ec21-20020a0564020d5500b004fc01b0aa55sm15600510edb.4.2023.03.28.03.17.14
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 03:17:15 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id x3so47315408edb.10
-        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 03:17:14 -0700 (PDT)
-X-Received: by 2002:a17:906:524b:b0:877:747d:4a90 with SMTP id
- y11-20020a170906524b00b00877747d4a90mr7793742ejm.14.1679998634021; Tue, 28
- Mar 2023 03:17:14 -0700 (PDT)
+        bh=Ynr5Gc8TJTXozi1CcIVdlcGkAdeP7juyzEqKu/8mAM4=;
+        b=Km/fFSaHumjYzCMQWNHsfv3FMRMnz7zIfc1cL+TMa1sw0//tLHwXqaDDt5JOdDCCSg
+         jtblpMLj83pYIqLxk5dKsTD+RMcYoQn9/Be2Z8omOlqCIOq1hVV42byndI8VlBaBhjSx
+         cy80fB85Tkf1WqUtWMbgCoEodadrLO/uteHrhAcREnjBNFRkuZvZpJS7essZKegxppaP
+         6rqtHIjcmcLn33AyAJ7Wk9/74xMUdJ4fBSzlOnh9RZC2D1zX2Ferl646a2+powN+KVT4
+         PoaCQpoUmxISl1/jSAv3pKOEMHHVSGBDt5Hjrd0TiuFaZSbJp7teYIMNHNMF6ro3MnEj
+         ddkA==
+X-Gm-Message-State: AAQBX9dQvlzEVohzfGaP9BQq0oceMFXivXZ2P6PpwY8uymVxPnqvkzvu
+        F+owb5qvlqWZoHInEqkvBa5ThBZTlsc=
+X-Google-Smtp-Source: AKy350bruWB9oU9V6zbqhojVKn2vtnkt+mYjtaIieKDNScKJHUzl51pxAzvw9zKCyDZRsjY0KzCEcw==
+X-Received: by 2002:a17:906:3a45:b0:932:8dc:5bf4 with SMTP id a5-20020a1709063a4500b0093208dc5bf4mr15898961ejf.61.1680000122687;
+        Tue, 28 Mar 2023 03:42:02 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id sd24-20020a170906ce3800b00931024e96c5sm15350868ejb.99.2023.03.28.03.42.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 03:42:02 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 12:42:00 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v4 01/10] dt-bindings: memory: tegra: add bpmp ref in
+ tegra234-mc node
+Message-ID: <ZCLEeABPtzXqpZdY@orome>
+References: <20230327161426.32639-1-sumitg@nvidia.com>
+ <20230327161426.32639-2-sumitg@nvidia.com>
 MIME-Version: 1.0
-References: <20230227121318.2116638-1-md@chromium.org> <20230227121318.2116638-2-md@chromium.org>
- <CAJZ5v0ik2vJ9t24nj0dpUfekvzwacLVkbGpViaBdADrLf6-cvQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ik2vJ9t24nj0dpUfekvzwacLVkbGpViaBdADrLf6-cvQ@mail.gmail.com>
-From:   Michal Dubiel <md@chromium.org>
-Date:   Tue, 28 Mar 2023 12:17:02 +0200
-X-Gmail-Original-Message-ID: <CAPxDTA_v__C=PGTfduu1GbwcECvx=LsVjFtqTAAcEEVN2o2Geg@mail.gmail.com>
-Message-ID: <CAPxDTA_v__C=PGTfduu1GbwcECvx=LsVjFtqTAAcEEVN2o2Geg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernel/freezer: Add routine to read task's freezing reason
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, pavel@ucw.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wf4WgXMFCZE62Nbf"
+Content-Disposition: inline
+In-Reply-To: <20230327161426.32639-2-sumitg@nvidia.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,163 +82,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 5:57=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Mon, Feb 27, 2023 at 1:14=E2=80=AFPM Michal Dubiel <md@chromium.org> w=
-rote:
-> >
-> > There are few reasons why a task is freezing. It can be due to system
-> > suspend, it can be due to explicit user request, etc.
->
-> Actually, there are two of them, either it is cgroup freezing, or it
-> is freezing on system suspend AFAICS.
->
-> > For most cases, the actual reason is not important, but there are some =
-that
-> > it is useful to distinguish between what actually caused the task to
-> > freeze.
-> >
-> > One example is when user requests freezing of tasks belonging to a cert=
-ain
-> > cgroup. If for any reason, system goes suspend and resume when the cgro=
-up
-> > is frozen, the already frozen tasks should not be thawed but remain fro=
-zen
-> > to ensure the suspend/resume cycle transparency. The system should not =
-warn
-> > about skipping thawing of such processes as it is normal situation.
-> >
-> > The proposed function allows to obtain information about the freezing
-> > reason and let the calling code decide what to do accordingly.
->
-> I honestly don't think that this new function is necessary.
 
-This function (freezing_reason) is used in the second patch to
-differentiate between the freezing reason and suppress warnings for
-the tasks explicitly requested for freezing by the user.
+--wf4WgXMFCZE62Nbf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Moreover, it would be better to combine this patch with the other one
-> in the series.
+On Mon, Mar 27, 2023 at 09:44:17PM +0530, Sumit Gupta wrote:
+> For Tegra234, add the "nvidia,bpmp" property within the Memory
+> Controller (MC) node to reference BPMP node. This is needed in
+> the MC driver to pass the client info to the BPMP-FW when memory
+> interconnect support is available.
+>=20
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  .../bindings/memory-controllers/nvidia,tegra186-mc.yaml    | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,=
+tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvi=
+dia,tegra186-mc.yaml
+> index 935d63d181d9..398d27bb2373 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra18=
+6-mc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra18=
+6-mc.yaml
+> @@ -58,6 +58,10 @@ properties:
+>    "#interconnect-cells":
+>      const: 1
+> =20
+> +  nvidia,bpmp:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle of the node representing the BPMP
+> +
+>  patternProperties:
+>    "^external-memory-controller@[0-9a-f]+$":
+>      description:
+> @@ -220,6 +224,9 @@ allOf:
+>              - const: ch14
+>              - const: ch15
+> =20
+> +        nvidia,bpmp:
+> +          description: phandle of the node representing the BPMP
+> +
 
-I thought that separation into two patches makes sense as the first
-introduces a new, generic function in the kernel/freezer and the
-second one suppresses unnecessary warnings. The second patch is doing
-that by using the function introduced in the first patch, but that
-function is more generic and can potentially be used elsewhere so I
-thought there is a functional separation here, thus 2 patches.
-Nevertheless, if you prefer a single patch that is perfectly fine,
-just let me know I will squash the patches.
+Why do we need this one? There's already an nvidia,bpmp phandle defined
+in the patternProperties section for external memory controllers.
 
-> > Signed-off-by: Michal Dubiel <md@chromium.org>
-> > ---
-> >  include/linux/freezer.h | 17 +++++++++++++++
-> >  kernel/freezer.c        | 23 ++++++++++++++------
-> >  2 files changed, 33 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-> > index b303472255b..b936a349e0d 100644
-> > --- a/include/linux/freezer.h
-> > +++ b/include/linux/freezer.h
-> > @@ -28,6 +28,23 @@ extern bool frozen(struct task_struct *p);
-> >
-> >  extern bool freezing_slow_path(struct task_struct *p);
-> >
-> > +extern enum freezing_reason freezing_reason_slow_path(struct task_stru=
-ct *p);
-> > +
-> > +enum freezing_reason {
-> > +       FREEZING_NONE     =3D 0,
-> > +       FREEZING_CGROUP   =3D (1 << 0),
-> > +       FREEZING_PM       =3D (1 << 1),
-> > +       FREEZING_PM_NOSIG =3D (1 << 2),
-> > +};
-> > +
-> > +static inline enum freezing_reason freezing_reason(struct task_struct =
-*p)
-> > +{
-> > +       if (static_branch_unlikely(&freezer_active))
-> > +               return freezing_reason_slow_path(p);
-> > +
-> > +       return FREEZING_NONE;
-> > +}
-> > +
-> >  /*
-> >   * Check if there is a request to freeze a process
-> >   */
-> > diff --git a/kernel/freezer.c b/kernel/freezer.c
-> > index 4fad0e6fca6..2536054db60 100644
-> > --- a/kernel/freezer.c
-> > +++ b/kernel/freezer.c
-> > @@ -26,6 +26,21 @@ bool pm_nosig_freezing;
-> >  /* protects freezing and frozen transitions */
-> >  static DEFINE_SPINLOCK(freezer_lock);
-> >
-> > +enum freezing_reason freezing_reason_slow_path(struct task_struct *p)
-> > +{
-> > +       if (pm_nosig_freezing)
-> > +               return FREEZING_PM_NOSIG;
-> > +
-> > +       if (cgroup_freezing(p))
-> > +               return FREEZING_CGROUP;
-> > +
-> > +       if (pm_freezing && !(p->flags & PF_KTHREAD))
-> > +               return FREEZING_PM;
-> > +
-> > +       return FREEZING_NONE;
-> > +}
-> > +EXPORT_SYMBOL(freezing_reason_slow_path);
->
-> Why do you need to export this and why is it not EXPORT_SYMBOL_GPL()?
+Thierry
 
-I considered that function a part of the kernel/freezer external
-interface, similarly as the existing freezing_slow_path() is. Both the
-existing freezing_slow_path() and the newly introduced
-freezing_reason_slow_path() are currently not used outside of
-kernel/freezer.c by any intree modules, but they potentially could be
-and since the existing freezing_slow_path() already had been exported
-I opted for being consistent and export (using the same
-EXPORT_SYMBOL() as the rest of the entire file)
-freezing_reason_slow_path() as well. However, if you think that's not
-necessary or wrong I am happy to remove that. Please let me know.
+--wf4WgXMFCZE62Nbf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > +
-> >  /**
-> >   * freezing_slow_path - slow path for testing whether a task needs to =
-be frozen
-> >   * @p: task to be tested
-> > @@ -43,13 +58,7 @@ bool freezing_slow_path(struct task_struct *p)
-> >         if (test_tsk_thread_flag(p, TIF_MEMDIE))
-> >                 return false;
-> >
-> > -       if (pm_nosig_freezing || cgroup_freezing(p))
-> > -               return true;
-> > -
-> > -       if (pm_freezing && !(p->flags & PF_KTHREAD))
-> > -               return true;
-> > -
-> > -       return false;
-> > +       return (bool)freezing_reason_slow_path(p);
->
-> This is the only call site of this function, so the explicit
-> conversion to bool like this doesn't make any sense.
->
-> It should return bool instead.
+-----BEGIN PGP SIGNATURE-----
 
-I am not sure if I got the comment right, please correct me if that's
-the case. I introduced freezeing_reason_slow_path() explicitly to
-return more information than just bool (freezing, not freezing) in
-order to be able to differentiate between the causes of freeze (please
-note there is another call site of the function in freezeing_reason()
-which uses that additional information). This call of the function
-here in freezing_slow_path() indeed does not need that additional
-info. However, in order to not duplicate identical code that checks
-for freezing we can call the freezing_reason_slow_path() and just
-return whether it is freezing or not regardless of the actual reason.
-That way the freezing_slow_path() functionality is not altered in any
-way and we don't introduce code duplication.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQixHgACgkQ3SOs138+
+s6FPyhAAnZhwTSvoZp45DLHq9a51QzbNzm2ftllz08w6ApGhG4loPBoceTxA5SN/
+02806+yYIHfJNlu5G0x8x6U6W9rXg0/QLeTITWx0XbpU6FuiEashzDJD+Kg7eSpe
+4+yJSRjSYilYNatKfPiXpil1pvLXtmQ2YAPJ2SFFRiVYBcqvBUS6xXyOpXa6eJCr
+1hh9QqMTsnxTxx1D+FGKAZYT8M+E2kBowkQ/vIpAg1UMlXD3lWa2crfEJQq744R+
+K3rDfOkLaeVzFrN8XMUCTX5ZcTR1FHwqCpLFjaSY9qytJYyimEhyARb0jr43iVKF
+yRuNqLfDEUDyYvCxDjFCGYgQca1jRhGyzrWAXF9yfz5EuEBWoIIRooeru5VRscsB
+OD3I+iD5V8DNGwDnD94WQXgcTBSD8aGCPrCzIxGCAyOqBO1pSfGsu1LiMElBQ+aF
+2gs4gVUMvAOytfVpNZpJ4PpikMSsxLSu27XDJM+GCEL7pQwiW5oUHs1nSoIDUGt2
+K9CoJeVKKsikMz1LzzrAsL53rH8/blh7ozoHDXTUKH7xAZVtQzHd9yIRF5RINyOY
+8neVsEo7nTSn1naWJt5pHnWKgmcKkZI0CZnxLPII/x3v6LySyOHtF+oY0J0TqFdz
+LqZCsEaDfElewKibVzJM2jxrd5A2Rh3ybti7Me5xj5m13n8WzKI=
+=xsrS
+-----END PGP SIGNATURE-----
 
-> >  }
-> >  EXPORT_SYMBOL(freezing_slow_path);
-> >
-> > --
+--wf4WgXMFCZE62Nbf--
