@@ -2,143 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E011E6CC9B9
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 19:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042206CC9BE
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Mar 2023 19:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjC1RyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Mar 2023 13:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S229755AbjC1RzN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 28 Mar 2023 13:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjC1RyB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 13:54:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA86BE05C;
-        Tue, 28 Mar 2023 10:53:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F158B81E34;
-        Tue, 28 Mar 2023 17:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AEDC433EF;
-        Tue, 28 Mar 2023 17:53:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680026032;
-        bh=2YiRa5zMmLavggXXj54qS1KpalIDFc2G9Mo2Yjx/i+s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=d1Jz9mFoMyg/YgxPBKDO/yvKkTgt8/GT8XBPbHu5QOP0cMWOODHX2SQJDx0RdhGIY
-         PfEuHxmKwpNeM9/KWDoVOMIoXWvmhOAqZSGMPi+6INV0NfxFXJwPdZBt8bSrcZSBHo
-         wh22JAu/Wb4hPdSUzNHGBlTpHi6wScwSpz3Is8zW40fZryc+CaFp/6gC+LKaKqmyuk
-         fR7v0xIKH0mLrldmBA+vdsx4I/XCskuJrnKE/Ab++MVgVttm4ZUb3PtRAfYRvj0x0Y
-         vMnxxs4qigE3avnh6Rfqkon9vbMm9aY7cvnNWLI6ziYfohWeQRgj88fWQd7txEnLl+
-         sK+wMk++drGmg==
-Date:   Tue, 28 Mar 2023 12:53:50 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v4 10/10] PCI: tegra194: add interconnect support in
- Tegra234
-Message-ID: <20230328175350.GA2953686@bhelgaas>
+        with ESMTP id S229837AbjC1RzM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 13:55:12 -0400
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16786114;
+        Tue, 28 Mar 2023 10:55:06 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id eg48so52975483edb.13;
+        Tue, 28 Mar 2023 10:55:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680026104;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zM4djXyeY54M5VkLAl8JUHt2hpd0bXhVxLFdkufkV9o=;
+        b=UtAKrpjz7YFvGG2TbaA2Pttf9zL9cU5gYd81nieRUFGJrO9ZQlh0dNZp7AVWfwpNUv
+         3Nv9+inVC57pHb2AeLNnPN0PoVn/Pc7+GfoFuBJNpqIQIk907EIwxstRKa9KpzOtw+Nw
+         2+VXCHq5RlurmFjUqCby6bMKgd4Zzuf4gJ4YMC1mIV43ZSaztt21rblB4ndBjUPxLCiF
+         Fobn4dkPjVZBHX77imJCE1kHbl2X2R4oB5FVGVtYqdCLxkV9g5+oKGYHQ//gC+tDT/t7
+         n5kpqZ9c4ADXPZstzaPKybkLzxK33d9KFab+2rnn8B8pMkTmVnvD2u8BMaqY0NCY5qoD
+         05pg==
+X-Gm-Message-State: AAQBX9eDopD51t4OSAtmHJiKvJiXKumSQzJBGa0CUTmjM3sYz7d7PSYT
+        bSb6QAs0CeyvIkZ/wqVKs76ATUaTkIvdzYMzr7Q=
+X-Google-Smtp-Source: AKy350b9Z4GwCR8srptBUVQbgwRAwz0E8DIrura3Ims79FFh250KZIsb1mu7c9SmmLZVZrfKNgoDfIv5nVr96OoH/5g=
+X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
+ gn2-20020a1709070d0200b009316921bdbbmr7903400ejc.2.1680026104457; Tue, 28 Mar
+ 2023 10:55:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327161426.32639-11-sumitg@nvidia.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324070807.6342-1-rui.zhang@intel.com> <20230324070807.6342-2-rui.zhang@intel.com>
+ <CAJZ5v0gze1wBEMcuEu4Aa9343rh-3=Bu+pdSYuY3stMd8QGf0A@mail.gmail.com>
+ <528f7e58507df4b6137856828e371bb8913b8b59.camel@intel.com>
+ <CAJZ5v0gL_7VPdcgkmuTz=afYSbGsWZi5wW9vUvyAgverjxsNdw@mail.gmail.com> <ba48eb3b3f4b82d33faa9233dc151f65d6380ed7.camel@intel.com>
+In-Reply-To: <ba48eb3b3f4b82d33faa9233dc151f65d6380ed7.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 28 Mar 2023 19:54:53 +0200
+Message-ID: <CAJZ5v0h6PX8EmPtVKbPPG+e0FZn53CGG=RvpOH-vuO0fNF6-=g@mail.gmail.com>
+Subject: Re: [PATCH 2/5] thermal/core: Reset cooling state during cooling
+ device unregistration
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Capitalize subject line please, to match pcie-tegra194.c history.
+On Tue, Mar 28, 2023 at 4:46 AM Zhang, Rui <rui.zhang@intel.com> wrote:
+>
+> On Mon, 2023-03-27 at 17:13 +0200, Rafael J. Wysocki wrote:
+> > On Mon, Mar 27, 2023 at 4:50 PM Zhang, Rui <rui.zhang@intel.com>
+> > wrote:
+> > > On Fri, 2023-03-24 at 14:19 +0100, Rafael J. Wysocki wrote:
+> > > > On Fri, Mar 24, 2023 at 8:08 AM Zhang Rui <rui.zhang@intel.com>
+> > > > wrote:
+> > > > > When unregistering a cooling device, it is possible that the
+> > > > > cooling
+> > > > > device has been activated. And once the cooling device is
+> > > > > unregistered,
+> > > > > no one will deactivate it anymore.
+> > > > >
+> > > > > Reset cooling state during cooling device unregistration.
+> > > > >
+> > > > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > > > > ---
+> > > > > In theory, this problem that this patch fixes can be triggered
+> > > > > on a
+> > > > > platform with ACPI Active cooling, by
+> > > > > 1. overheat the system to trigger ACPI active cooling
+> > > > > 2. unload ACPI fan driver
+> > > > > 3. check if the fan is still spinning
+> > > > > But I don't have such a system so I didn't trigger then problem
+> > > > > and
+> > > > > I
+> > > > > only did build & boot test.
+> > > >
+> > > > So I'm not sure if this change is actually safe.
+> > > >
+> > > > In the example above, the system will still need the fan to spin
+> > > > after
+> > > > the ACPI fan driver is unloaded in order to cool down, won't it?
+> > >
+> > > Then we can argue that the ACPI fan driver should not be unloaded
+> > > in
+> > > this case.
+> >
+> > I don't think that whether or not the driver is expected to be
+> > unloaded at a given time has any bearing on how it should behave when
+> > actually unloaded.
+> >
+> > Leaving the cooling device in its current state is "safe" from the
+> > thermal control perspective, but it may affect the general user
+> > experience (which may include performance too) going forward, so
+> > there
+> > is a tradeoff.
+>
+> Right.
+> If we don't have a third choice, then the question is simple.
+> "thermal safety" vs. "user experience"?
+>
+> I'd vote for "thermal safety" and drop this patch series.
 
-On Mon, Mar 27, 2023 at 09:44:26PM +0530, Sumit Gupta wrote:
-> Add support to request DRAM bandwidth with Memory Interconnect
-> in Tegra234 SoC. The DRAM BW required for different modes depends
-> on speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
-> 
-> Suggested-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/pci/controller/dwc/pcie-tegra194.c | 40 +++++++++++++++++-----
->  1 file changed, 32 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-> index 09825b4a075e..d2513c9d3feb 100644
-> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
-> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-> @@ -15,6 +15,7 @@
->  #include <linux/gpio.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/interrupt.h>
-> +#include <linux/interconnect.h>
+Works for me.
 
-Almost alphabetized, swap interrupt.h and interconnect.h.
+> > What do the other cooling device drivers do in general when they get
+> > removed?
+>
+> No cooling device driver has extra handling after cdev unregistration.
 
->  #include <linux/iopoll.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> @@ -287,6 +288,7 @@ struct tegra_pcie_dw {
->  	unsigned int pex_rst_irq;
->  	int ep_state;
->  	long link_status;
-> +	struct icc_path *icc_path;
->  };
->  
->  static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
-> @@ -309,6 +311,24 @@ struct tegra_pcie_soc {
->  	enum dw_pcie_device_mode mode;
->  };
->  
-> +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
-> +{
-> +	struct dw_pcie *pci = &pcie->pci;
-> +	u32 val, speed, width;
-> +
-> +	val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
-> +
-> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
-> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
-> +
-> +	val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
-> +
-> +	if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
-> +		dev_err(pcie->dev, "can't set bw[%u]\n", val);
-> +
-> +	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+However, the question regarding what to do when the driver of a
+cooling device in use is being removed is a valid one.
 
-Array bounds violation; PCI_EXP_LNKSTA_CLS is 0x000f, so possible
-speed (CLS) values are 0..0xf and "speed - 1" values are -1..0xe.
-
-pcie_gen_freq[] is of size 4 (valid indices 0..3).
-
-I see that you're just *moving* this code, but might as well fix it.
-
-> +}
-> +
->  static void apply_bad_link_workaround(struct dw_pcie_rp *pp)
->  {
->  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> @@ -452,14 +472,12 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
->  	struct tegra_pcie_dw *pcie = arg;
->  	struct dw_pcie_ep *ep = &pcie->pci.ep;
->  	struct dw_pcie *pci = &pcie->pci;
-> -	u32 val, speed;
-> +	u32 val;
->  
->  	if (test_and_clear_bit(0, &pcie->link_status))
->  		dw_pcie_ep_linkup(ep);
->  
-> -	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
-> -		PCI_EXP_LNKSTA_CLS;
-> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> +	tegra_pcie_icc_set(pcie);
+One possible approach that comes to mind could be to defer the driver
+removal until the overheat condition goes away, but anyway it would be
+better to do that in the core IMV.
