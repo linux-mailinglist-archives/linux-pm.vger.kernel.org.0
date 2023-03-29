@@ -2,74 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C006CD912
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 14:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352206CD919
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 14:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjC2MFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 08:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S229457AbjC2MHI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 08:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjC2MFV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 08:05:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6D2049F1;
-        Wed, 29 Mar 2023 05:05:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5DAB1FB;
-        Wed, 29 Mar 2023 05:05:53 -0700 (PDT)
-Received: from bogus (unknown [10.57.52.160])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42F203F6C4;
-        Wed, 29 Mar 2023 05:05:06 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 13:04:32 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, tarek.el-sherbiny@arm.com,
-        nicola.mazzucato@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com
-Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set
- helpers
-Message-ID: <20230329120432.ao36v536sdwqi6e5@bogus>
-References: <20230309140724.2152712-1-cristian.marussi@arm.com>
- <20230309140724.2152712-2-cristian.marussi@arm.com>
- <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
+        with ESMTP id S229627AbjC2MHF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 08:07:05 -0400
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018354EDC;
+        Wed, 29 Mar 2023 05:06:49 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id ek18so62284488edb.6;
+        Wed, 29 Mar 2023 05:06:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680091605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rBKTbYlgw1SWLsizAbyAtonV/EpLz0QgLlpYGjBRVus=;
+        b=QKkbD/d+pHU3WigOE8TdfQbxCJtb9jW9qDBNgkL2Wwx9KZOTJaBE44DWC5QgqJg63m
+         T2PxeC43NB1RO+FXuLyYB4ij4PocPdxoQ0eBjw76NzGLumyMI21j6TBcSPHZAMXMRzuj
+         Q07G7OoLzYj0oXJp14aOI0arZl+DovZrN3A/zNhSB/11x/VES83b4MlrfMYzfrrdMo+j
+         WAWAxHjwtHCdl2nBLX7cWpcGL0MdyZ8D8wMlHnDoTSXNIifTnDdBjq88CFJ6cpGEs5j5
+         TmMKe2qupu7wP6IqiA6XxUC55HDDQOna07+nz3W3LqT+Nv//xSETvzWldhbUEAjF+tEh
+         5tyQ==
+X-Gm-Message-State: AAQBX9cjJWLx/7H6Sj3MCxcpFlSu3u6GDbR+2jpTA2H/fVICeRbgiAxg
+        QRezgRgSyW50hUOGjYQVNTjwXdVGJtWsAZjEKbo=
+X-Google-Smtp-Source: AKy350bZkFgLT7HSJQhwKWGP/IfIKc/U8VtH9WDXl9TfWiQBUMX1mQd7/sJBo2HipPiF7lDRaDT/eXIj/sfgCyZ4/Hc=
+X-Received: by 2002:a17:906:5fca:b0:930:310:abcf with SMTP id
+ k10-20020a1709065fca00b009300310abcfmr9635227ejv.2.1680091605284; Wed, 29 Mar
+ 2023 05:06:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230329090055.7537-1-rui.zhang@intel.com> <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
+In-Reply-To: <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Mar 2023 14:06:34 +0200
+Message-ID: <CAJZ5v0hGnoEhYadoK-KPTvMtvviOrGqbY9jrmOUzTjOGe_rB_A@mail.gmail.com>
+Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
+ pointer dereference
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:06:36PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
-> <cristian.marussi@arm.com> wrote:
-> >
-> > Refactor SCMI powercap internal get/set helpers.
-> >
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> 
-> I can apply this series if I get an ACK or preferably Reviewed-by:
-> from an SCMI person.
+On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
+> On 29/03/2023 11:00, Zhang Rui wrote:
+> > When the hwmon device node of a thermal zone device is not found,
+> > using hwmon->device causes a kernel NULL pointer dereference.
+> >
+> > Reported-by: Preble Adam C <adam.c.preble@intel.com>
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > ---
+> > Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+> > dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+> > I'm not sure if the Fix tag applies to such commit or not.
+>
+> Actually it reverts the work done to encapsulate the thermal zone device
+> structure.
 
-Sorry, I had looked at this and just delayed asking you about your preference.
-I am fine to take it or else
+So maybe instead of the wholesale switch to using "driver-specific"
+device pointers for printing messages, something like
+thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
+the first argument can be defined?
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for SCMI parts)
+At least this particular bug could be avoided this way.
 
-Please ack 3/3 if you prefer me to take it once you are happy with it.
-
--- 
-Regards,
-Sudeep
+> > ---
+> >   drivers/thermal/thermal_hwmon.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> > index c59db17dddd6..261743f461be 100644
+> > --- a/drivers/thermal/thermal_hwmon.c
+> > +++ b/drivers/thermal/thermal_hwmon.c
+> > @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+> >       hwmon = thermal_hwmon_lookup_by_type(tz);
+> >       if (unlikely(!hwmon)) {
+> >               /* Should never happen... */
+> > -             dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
+> > +             dev_dbg(&tz->device, "hwmon device lookup failed!\n");
+>
+> As it 'Should never happen', I would replace that by:
+>
+>         if (WARN_ON(!hwmon))
+>                 /* Should never happen... */
+>                 return;
+>
+>
+>
+> >               return;
+> >       }
+> >
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
