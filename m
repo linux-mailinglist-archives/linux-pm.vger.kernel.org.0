@@ -2,209 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB866CD377
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC326CD3FD
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 10:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjC2Hkt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 03:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S230107AbjC2IGd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 04:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjC2Hks (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 03:40:48 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D314B10DE;
-        Wed, 29 Mar 2023 00:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680075643; x=1711611643;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9oKYEcBp0CusUw/Kjrt4ftdMr9BFrOXO9Pmo09w2kCw=;
-  b=j74151YH6MZmcV2dolbrq+Gltx78GGClMW3kMEmQyswll/LNqayska1S
-   uyKNGsNKOfnPGzaaxclLwTpSXDK3yXOecPQNds69ssSgArfJfp/xbLAYS
-   QKByjlLQb2eDBrYQVR9XrX+AVcSsKW1ZRMYfd+9uTBrYbY+zIUflXPjjS
-   +87PvUprIPX6lV2AsZfCoVAZ8od//zePdjS7wgHTCxoT3WLpMECUlzZJ0
-   74PtxiUodreDPHjyivhoLYd91orcVeyIvPBr2V0N9wqa3hDjmeByujRlN
-   cwPyIZviNvElRaGR/U0lUtM8uLyvZTIjVmAi6E2+HYPyDOvquqp5jK83Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="403428069"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="403428069"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 00:40:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="858372648"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="858372648"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 00:40:41 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phQQC-000JJi-2J;
-        Wed, 29 Mar 2023 07:40:40 +0000
-Date:   Wed, 29 Mar 2023 15:40:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 8e76079c4ac1007cd5d09357f4cbab9b820f8e65
-Message-ID: <6423eb70.Thn1ERBapZnTQb8c%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230051AbjC2IG1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 04:06:27 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A740740C4
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 01:06:19 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ew6so59769842edb.7
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 01:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680077178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pgTEvOUqu+byIlNns2PeM/+eklWaDNG6sL3F+Izsnuo=;
+        b=78B+nejVnS9usHWPg0iqljIaK4pxCQzU1+8yHfJq6bvLatsVHbSasFqcUXDAi1w5ty
+         ru6zbvClprRaH6/+61fnfwiWn6Lnt4yCrkUjxEfT9d2AanAzELr4mM8xWdV5scUE0ucB
+         ELWD4r4l6HdyvxOsGNVTOK1rE2t8JO/6sZJR7NvuODLSotPDvmafMutvEUGT7OSU9L3S
+         nayxjkorDtR+YqpRJ9A31V4yJvw82utxCeqHx5lFS+EMO8sDLIlo9DinRejrMiNbXD9S
+         i4Vaheq/9S0knMn8t8VT3MRxm+2Vp1+ViLuycFVSBFcHnBJa6IJNLol+bZGWy4KJ+5Ym
+         rx+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680077178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pgTEvOUqu+byIlNns2PeM/+eklWaDNG6sL3F+Izsnuo=;
+        b=3vWqdC0OXU+Lf/9uwb4HX1/uKEQGzn3nLnuP09zIxcda2J7WQCRqTETgmRyUJUVnDO
+         QP01m+Lb7GcWt/pXdFvGmDOab5uOaAUHjI9mLB5BjlD4AG14rZGeD7eAKOocJbPwAW63
+         YoKeJw1M0z+xOLUxBu9hAkPEKpcgapwGJKU/nyZfoib8XhE1kKv0OsA/VTQHh8lUICrz
+         JYZl9e/ugy2glCPptIDAlFo1H/etquMMKgXkhsOQEv20sTsBFiROW+BY7kkiL1S5jtdD
+         rsCj/GkZvikry90FnKpBLaCtrl1jYV2tWrnB7ExXYgjz3CBzJsB3qjtkqckgKhnev3IF
+         tlNQ==
+X-Gm-Message-State: AAQBX9dnYC2MnihLs41ZnKMg70tNCmtKby6R02Uo/+Qs8woLg+W6fwlz
+        KmsN7qjrSvDp3YBDFfAaKHpUjLXgk1QMH1QWGINgbQ==
+X-Google-Smtp-Source: AKy350YCm9Z8/PIeUFOKRay3tHd8uEY3gEm45xBRMugyFV6UFUnNJW6cauEggJeb48L7uR904b/TwctWGwwl+7M3Ehs=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr9282057ejc.2.1680077178000; Wed, 29 Mar
+ 2023 01:06:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+ <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
+ <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
+ <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
+ <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com> <CAGXv+5GGO76H9Z-X=3nhtmSyp7uhuUF4DE0T527M5z+SBX482Q@mail.gmail.com>
+In-Reply-To: <CAGXv+5GGO76H9Z-X=3nhtmSyp7uhuUF4DE0T527M5z+SBX482Q@mail.gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 29 Mar 2023 10:05:41 +0200
+Message-ID: <CAGuA+or4CvyZVNuMu9tOvpoZ5nJimbp7=KX-85FiF4ghaownAg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 8e76079c4ac1007cd5d09357f4cbab9b820f8e65  Merge branch 'thermal-core-fixes' into bleeding-edge
+Hi Chen-Yu,
 
-elapsed time: 724m
+On Tue, Mar 28, 2023 at 5:12=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
+rote:
+>
+> On Tue, Mar 28, 2023 at 8:21=E2=80=AFAM Balsam CHIHI <bchihi@baylibre.com=
+> wrote:
+> >
+> > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.or=
+g> wrote:
+> > >
+> > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@baylibre=
+.com> wrote:
+> > > >
+> > > > Hi Chen-Yu,
+> > > >
+> > > > I suspect the bug comes from incorrect calibration data offsets for=
+ AP
+> > > > Domain because you confirm that MCU Domain probe runs without issue=
+s.
+> > > > Is it possible to test something for us to confirm this theory (i
+> > > > don't have an mt8192 board on hand now), when you have the time of
+> > > > course?
+> > > > We would like to test AP Domain's calibration data offsets with a
+> > > > working one, for example :
+> > > >
+> > > >  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D =
+{
+> > > >                 {
+> > > > -               .cal_offset =3D { 0x25, 0x28 },
+> > > > +               .cal_offset =3D { 0x04, 0x04 },
+> > > >                 .lvts_sensor =3D {
+> > > >                         { .dt_id =3D MT8192_AP_VPU0 },
+> > > >                         { .dt_id =3D MT8192_AP_VPU1 }
+> > > > @@ -1336,7 +1336,7 @@ static const struct lvts_ctrl_data
+> > > > mt8192_lvts_ap_data_ctrl[] =3D {
+> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+> > > >         },
+> > > >         {
+> > > > -               .cal_offset =3D { 0x2e, 0x31 },
+> > > > +               .cal_offset =3D { 0x04, 0x04 },
+> > > >                 .lvts_sensor =3D {
+> > > >                         { .dt_id =3D MT8192_AP_GPU0 },
+> > > >                         { .dt_id =3D MT8192_AP_GPU1 }
+> > > > @@ -1346,7 +1346,7 @@ static const struct lvts_ctrl_data
+> > > > mt8192_lvts_ap_data_ctrl[] =3D {
+> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+> > > >         },
+> > > >         {
+> > > > -               .cal_offset =3D { 0x37, 0x3a },
+> > > > +               .cal_offset =3D { 0x04, 0x04 },
+> > > >                 .lvts_sensor =3D {
+> > > >                         { .dt_id =3D MT8192_AP_INFRA },
+> > > >                         { .dt_id =3D MT8192_AP_CAM },
+> > > > @@ -1356,7 +1356,7 @@ static const struct lvts_ctrl_data
+> > > > mt8192_lvts_ap_data_ctrl[] =3D {
+> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+> > > >         },
+> > > >         {
+> > > > -               .cal_offset =3D { 0x40, 0x43, 0x46 },
+> > > > +               .cal_offset =3D { 0x04, 0x04, 0x04 },
+> > > >                 .lvts_sensor =3D {
+> > > >                         { .dt_id =3D MT8192_AP_MD0 },
+> > > >                         { .dt_id =3D MT8192_AP_MD1 },
+> > > >
+> > > > This example is tested and works for mt8195,
+> > > > (all sensors use the same calibration data offset for testing purpo=
+ses).
+> > > >
+> > > > Thank you in advance for your help.
+> > >
+> > > The MCU ones are still tripping though. If I change all of them to 0x=
+04,
+> > > then nothing trips. There's also a bug in the interrupt handling code
+> > > that needs to be dealt with.
+> > >
+> > > AFAICT the calibration data is stored differently. If you look at Chr=
+omeOS's
+> > > downstream v5.10 driver, you'll see mt6873_efuse_to_cal_data() for MT=
+8192,
+> > > and mt8195_efuse_to_cal_data() for MT8195. The difference sums up to:
+> > > MT8195 has all data sequentially stored, while MT8192 has most data s=
+tored
+> > > in lower 24 bits of each 32-bit word, and the highest 8 bits are then=
+ used
+> > > to pack data for the remaining sensors.
+> > >
+> > > Regards
+> > > ChenYu
+> >
+> > Hi Chen-Yu Tsai,
+> >
+> > Thank you very much for helping me testing this suggestion.
+> >
+> > Indeed, calibration data is stored differently in the mt8192 compared t=
+o mt8195.
+> > So, the mt8192's support will be delayed for now, to allow further debu=
+gging.
+> >
+> > In the mean time, we will only continue to upstream the remaining
+> > mt8195's source code, so it will get full LVTS support.
+> > A new series will be submitted soon.
+> >
+> > Would you please point me out to the bug in interrupt handling code?
+>
+> I just sent out two patches and CC-ed you on them. They are here just in =
+case:
+>
+> https://lore.kernel.org/linux-pm/20230328031037.1361048-1-wenst@chromium.=
+org/
+> https://lore.kernel.org/linux-pm/20230328031017.1360976-1-wenst@chromium.=
+org/
 
-configs tested: 129
-configs skipped: 14
+Well received. I'm testing it.
+Thanks!
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Best regards,
+Balsam
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r004-20230326   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r012-20230326   gcc  
-arc                  randconfig-r034-20230327   gcc  
-arc                  randconfig-r043-20230326   gcc  
-arc                  randconfig-r043-20230327   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r031-20230327   clang
-arm                  randconfig-r046-20230326   clang
-arm                  randconfig-r046-20230327   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r005-20230327   gcc  
-csky         buildonly-randconfig-r002-20230327   gcc  
-csky         buildonly-randconfig-r003-20230326   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r004-20230326   gcc  
-csky                 randconfig-r006-20230326   gcc  
-csky                 randconfig-r034-20230326   gcc  
-hexagon              randconfig-r013-20230327   clang
-hexagon              randconfig-r041-20230326   clang
-hexagon              randconfig-r041-20230327   clang
-hexagon              randconfig-r045-20230326   clang
-hexagon              randconfig-r045-20230327   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230327   gcc  
-i386                 randconfig-a002-20230327   gcc  
-i386                 randconfig-a003-20230327   gcc  
-i386                 randconfig-a004-20230327   gcc  
-i386                 randconfig-a005-20230327   gcc  
-i386                 randconfig-a006-20230327   gcc  
-i386                 randconfig-a011-20230327   clang
-i386                 randconfig-a012-20230327   clang
-i386                 randconfig-a013-20230327   clang
-i386                 randconfig-a014-20230327   clang
-i386                 randconfig-a015-20230327   clang
-i386                 randconfig-a016-20230327   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230327   gcc  
-loongarch            randconfig-r012-20230327   gcc  
-loongarch            randconfig-r032-20230326   gcc  
-loongarch            randconfig-r033-20230327   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r031-20230326   gcc  
-m68k                 randconfig-r031-20230328   gcc  
-microblaze           randconfig-r016-20230327   gcc  
-microblaze           randconfig-r024-20230328   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r003-20230327   clang
-mips                 randconfig-r001-20230326   gcc  
-nios2        buildonly-randconfig-r001-20230326   gcc  
-nios2        buildonly-randconfig-r002-20230326   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r005-20230326   gcc  
-nios2                randconfig-r015-20230327   gcc  
-nios2                randconfig-r036-20230328   gcc  
-openrisc     buildonly-randconfig-r001-20230327   gcc  
-openrisc             randconfig-r006-20230327   gcc  
-parisc       buildonly-randconfig-r004-20230327   gcc  
-parisc       buildonly-randconfig-r005-20230327   gcc  
-parisc       buildonly-randconfig-r006-20230326   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r035-20230328   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r002-20230326   clang
-powerpc              randconfig-r026-20230328   gcc  
-powerpc              randconfig-r036-20230327   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r006-20230327   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230326   gcc  
-riscv                randconfig-r042-20230327   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r015-20230326   gcc  
-s390                 randconfig-r044-20230326   gcc  
-s390                 randconfig-r044-20230327   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r011-20230327   gcc  
-sh                   randconfig-r033-20230328   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230326   gcc  
-sparc64              randconfig-r001-20230327   gcc  
-sparc64              randconfig-r003-20230327   gcc  
-sparc64              randconfig-r034-20230328   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230327   gcc  
-x86_64               randconfig-a002-20230327   gcc  
-x86_64               randconfig-a003-20230327   gcc  
-x86_64               randconfig-a004-20230327   gcc  
-x86_64               randconfig-a005-20230327   gcc  
-x86_64               randconfig-a006-20230327   gcc  
-x86_64               randconfig-a011-20230327   clang
-x86_64               randconfig-a012-20230327   clang
-x86_64               randconfig-a013-20230327   clang
-x86_64               randconfig-a014-20230327   clang
-x86_64               randconfig-a015-20230327   clang
-x86_64               randconfig-a016-20230327   clang
-x86_64               randconfig-r014-20230327   clang
-x86_64               randconfig-r035-20230327   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r004-20230327   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> ChenYu
