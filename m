@@ -2,89 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEFC6CEF31
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 18:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D5C6CF007
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjC2QWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 12:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        id S229753AbjC2RAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 13:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjC2QWX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 12:22:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39CD1AC;
-        Wed, 29 Mar 2023 09:22:19 -0700 (PDT)
+        with ESMTP id S229495AbjC2RAC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:00:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B189619B5;
+        Wed, 29 Mar 2023 10:00:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE06BB8238F;
-        Wed, 29 Mar 2023 16:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59034C4339B;
-        Wed, 29 Mar 2023 16:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680106937;
-        bh=BeBWudnFSsiVzY/XlA8t6ty5AObYn0Ada11HTQX3T+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u77tBwSS5bosw8PvckswT9NhtXRstnMxAy7Krq+Abf7i3tkpUwr6drporyQLSvXtT
-         BCvaZ5mRgUkrF8Y8zhtgEhfhsvlF2lzrP+gYl5jlH4LfSa3L8n2CSNIB+unlcfrkqG
-         7NTDsu7EcBbp717SiI4mSEHcjZWUE8a9cr7163R4=
-Date:   Wed, 29 Mar 2023 18:22:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 10/19] cacheinfo: Adjust includes to remove of_device.h
-Message-ID: <ZCRltUZOTDsmLJsE@kroah.com>
-References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
- <20230329-dt-cpu-header-cleanups-v1-10-581e2605fe47@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD82B820CA;
+        Wed, 29 Mar 2023 17:00:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4DDC433EF;
+        Wed, 29 Mar 2023 16:59:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680109198;
+        bh=VdnuvhIM2cRnRHD6OIlrF1vM7Xa/zS4dOr/IjqNNj7k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WGmVkGJxklNiVx1FInWIqUPg+a4lgK5x2N65ZVa820iEqX8AIhS7d7atd8Myt23wC
+         X2Q0weysAdn2Lbmulawv6SRWEHTu7yONn0ZcgcOp0SRZAvuGDjweZcjPz2VcVse/aP
+         jSdZwBRk93rjHWyWyALcl5jVeV0FahOn/vPHKlBKTtwj0l20pXyoKcibpoI5VgSLyA
+         VNPS5MuyCqgBNAk6ydScLCI8EyYtX+zVGiP3U4/ztRdsOMB6bSo+QCZ91+LOpWuWL5
+         p8YVMnS4tdEHgrPfYrxOyaWfJVbveOrlrj4QubImSg1dOQP65Bu5IQyT3W8cZYj64h
+         X8PZMTiWVlYdg==
+Date:   Wed, 29 Mar 2023 11:59:57 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v4 10/10] PCI: tegra194: add interconnect support in
+ Tegra234
+Message-ID: <20230329165957.GA3066317@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-10-581e2605fe47@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <8d0e4e2f-a131-ca19-e5ae-ef2349623b39@nvidia.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,14 +59,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:52:07AM -0500, Rob Herring wrote:
-> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
-> implicitly including other includes, and is no longer needed. Update the
-> includes to use of.h instead of of_device.h.
+On Wed, Mar 29, 2023 at 02:44:34PM +0530, Sumit Gupta wrote:
+> On 28/03/23 23:23, Bjorn Helgaas wrote:
+> > > +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
+> > > +{
+> > > +     struct dw_pcie *pci = &pcie->pci;
+> > > +     u32 val, speed, width;
+> > > +
+> > > +     val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
+> > > +
+> > > +     speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+> > > +     width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+> > > +
+> > > +     val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
+> > > +
+> > > +     if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
+> > > +             dev_err(pcie->dev, "can't set bw[%u]\n", val);
+> > > +
+> > > +     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+> > 
+> > Array bounds violation; PCI_EXP_LNKSTA_CLS is 0x000f, so possible
+> > speed (CLS) values are 0..0xf and "speed - 1" values are -1..0xe.
+> > 
+> > pcie_gen_freq[] is of size 4 (valid indices 0..3).
+> > 
+> > I see that you're just *moving* this code, but might as well fix it.
+> > 
+> Thank you for the review.
+> Will include the below change in the same patch. Please let me know if any
+> issue.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Please ack and I will take the series via the DT tree.
-> ---
+>  -       clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+>  +       if (speed && (speed <= ARRAY_SIZE(pcie_gen_freq)))
+>  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+>  +       else
+>  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[0]);
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I didn't notice that speed is a u32, so -1 is not a possible value.
+Also, it's used earlier for PCIE_SPEED2MBS_ENC(), so you could do
+something like this:
+
+  speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val) - 1;
+  if (speed >= ARRAY_SIZE(pcie_gen_freq))
+    speed = 0;
+
+  val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) /
+	BITS_PER_BYTE);
+  ...
+  clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
