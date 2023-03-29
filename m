@@ -2,55 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4406CF019
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C7E6CF01B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjC2RFk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 13:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S231148AbjC2RFz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 13:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2RFi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:05:38 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D6230C2;
-        Wed, 29 Mar 2023 10:05:37 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id ew6so66054812edb.7;
-        Wed, 29 Mar 2023 10:05:37 -0700 (PDT)
+        with ESMTP id S231209AbjC2RFv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:05:51 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E5F4C33
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 10:05:49 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id iw3so15572638plb.6
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 10:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680109548;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4mRc/BEFgQg1VtRSgRcMJUt1R0yc+3GsW0Lo0tWcZ34=;
+        b=r37VQuNRDpl5UBcpaDS++HPX9Ltltgw4nKF1QQeXnhOAE3c9XW8g32sN+oMo5KKJf9
+         7bPUNeBaRqulLxWhRFyuC7jXEcQP+QrCWuCSSbzL6ZqeXiI5mTt6CDZZAM7R4q6wiNTy
+         Dr0TV7cY+tzpIKWvJMQVRghL/fgpWefhWJRh5rpIoTyQY5EwiV3xo4pu9U5+RmWARKII
+         f5OtUUuJcOm+EXDLwNFSru1VMHJCEbxDKOwCPDwdD5gfM2AIvIoonxyFro0pIQGDMo7J
+         SpvNvPL0AsEPCX4yGC0nG0ssVrSxbrgZiLgXx5LjhfxUtwnZg0fS3IhgHC1SHbxgIQIT
+         I+sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680109536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=62e4+lmBq/lhs+cZOFYzhKCQ2kaGBP2Gx8PsA2GJi24=;
-        b=brwTXAhpSqTEZUTTq2fbdAOQgP2fNMAkrmXFGqBFPZvgUtoV1PaGW3Du4zTljiTFKq
-         N9DMw3kUENKj2MHsqhBn2YgWGanXtLgNwGHJudL8pvy6Jv98YYsOF4pP2oQ/p5QA8fZN
-         hK/g/OZqVXkBarjZHKozBlBwZ/RMiSPv7Ymfo7LEMPLry7wd+mXNNiZxN6eledtMgJU+
-         0aYPT+cKYzfGbapbk/6Vk5hMTLWnagjgoAswIBFvAeJ42XogID7gAbP7SYynmvFE/g9Q
-         uN3S+V5oG4pDvGWfXEIsdBKP1pSTlXjXmBUkmsC8OPMse/OeMvu9bRS9BjqFwLasY4KA
-         vDUA==
-X-Gm-Message-State: AAQBX9d/zrUAnNeI3v2IObhpku0I7pfKwrzVp5WIJisnWoXNZ5CZ2cd+
-        tUoUjGP8FOXMWPppL4I9GseXixie03d2Ip/pkNFWHGYG
-X-Google-Smtp-Source: AKy350aHcjL7yz7Sbh4G6+sP7BBKgi6D6567dXMKOJGqJ8hG0xKM6j5+g367Xq7mJFaE2+NGl/RrLB2bq74A7x/17vg=
-X-Received: by 2002:a17:907:160e:b0:946:a095:b314 with SMTP id
- hb14-20020a170907160e00b00946a095b314mr3933611ejc.2.1680109536322; Wed, 29
- Mar 2023 10:05:36 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680109548;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4mRc/BEFgQg1VtRSgRcMJUt1R0yc+3GsW0Lo0tWcZ34=;
+        b=HC0FkJpJlT4yHAC1WBVi+8qVTr6mrCBh7+X7bpn2+T81GvxRMNbMwC/M6nshg/I4rx
+         84LRyUWjjRV+70wPsHPgWc7B36+tZNXBo6q+nMWCuGy8FG6NLk/Bx3sNjuIF2XAI8nil
+         bTIC7CrQ/ZJ2Hl6IOBPmlJzoue1r7bMo/L0laoIoX+e1Cf/YpMJ93LqZj5PF0xHTqqf9
+         UBAf1BqtElvBXTWT8tEjdVFmoh+jgXTlVMQYc7XNhMfIL9hPGrEpHH0SA8I+WMDeG+Fi
+         ABYdYpX4uZnvC7x9nGoE+XKs82/z3YwG4sQa455dxldKlAUBMZT0Vr6zyEDe4pL7SU6Q
+         o9Ng==
+X-Gm-Message-State: AAQBX9cl7EnVeUNTnBlpzsAD700i0OkTPLNa9jh8diNwVUZyAJcha1Yd
+        vggyLWuQi+SR9C1po6zjojptQvYIU/1NkFo9AvGg1A==
+X-Google-Smtp-Source: AKy350Y0CjX4zGtfV67LaR0XEZnfq4WvCWuhMOaR2HwXfyVKRDezTtYJhZHQzK5EUlUSvLyARBGZTA==
+X-Received: by 2002:a17:902:ea0e:b0:1a1:b65c:dea7 with SMTP id s14-20020a170902ea0e00b001a1b65cdea7mr23743111plg.47.1680109548630;
+        Wed, 29 Mar 2023 10:05:48 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id bi11-20020a170902bf0b00b0019f11caf11asm23309370plb.166.2023.03.29.10.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 10:05:48 -0700 (PDT)
+Message-ID: <64246fec.170a0220.faced.b6cb@mx.google.com>
+Date:   Wed, 29 Mar 2023 10:05:48 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230329090055.7537-1-rui.zhang@intel.com> <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
-In-Reply-To: <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 19:05:25 +0200
-Message-ID: <CAJZ5v0jwrMKMSzVWkzSLBwWZGp0H0-GvnK+gPDtHEsw2XD8KKg@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
- pointer dereference
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.3-rc4-59-gb6c50a785821
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc4-59-gb6c50a785821)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,46 +71,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 6:03 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 29/03/2023 11:00, Zhang Rui wrote:
-> > When the hwmon device node of a thermal zone device is not found,
-> > using hwmon->device causes a kernel NULL pointer dereference.
-> >
-> > Reported-by: Preble Adam C <adam.c.preble@intel.com>
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
->
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc4-59-gb6=
+c50a785821)
 
-Applied, thanks!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc4-59-gb6c50a785821/
 
-> > ---
-> > Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-> > dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
-> > I'm not sure if the Fix tag applies to such commit or not.
-> > ---
-> >   drivers/thermal/thermal_hwmon.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> > index c59db17dddd6..261743f461be 100644
-> > --- a/drivers/thermal/thermal_hwmon.c
-> > +++ b/drivers/thermal/thermal_hwmon.c
-> > @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
-> >       hwmon = thermal_hwmon_lookup_by_type(tz);
-> >       if (unlikely(!hwmon)) {
-> >               /* Should never happen... */
-> > -             dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
-> > +             dev_dbg(&tz->device, "hwmon device lookup failed!\n");
-> >               return;
-> >       }
-> >
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc4-59-gb6c50a785821
+Git Commit: b6c50a7858215b7aea9958979c0c15f2f98de0fb
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
