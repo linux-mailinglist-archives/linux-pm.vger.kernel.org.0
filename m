@@ -2,149 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E4B6CEF1D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 18:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEFC6CEF31
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 18:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjC2QTI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 12:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S229508AbjC2QWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 12:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjC2QTA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 12:19:00 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1378C26A4
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 09:18:35 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so11830395wmq.4
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 09:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680106713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U/3ZXVoIKxVs/p2ePsaiOudqZVjYFCyOHTolPsKeMIE=;
-        b=zhBeRzLjXXN7jqHGC5Zw1MCquTnjs3lNKA492yHvqv0SUf7DJk+Tnys0BFYYF2YGAW
-         yUw+JIaXTFsSCqebewTBv4ccDWzd+b8a1dy9I3wcnlN8oQx/7t1b//sWMXV5sR8l5LE+
-         sLQiyvWhw8EwtSFoAR3IBGHWd5kSohsAKhLcknR4BTxhUGma3FVv6JpS/d0Rq6r4O63S
-         L9viX+3tSrw71RNxR02c/BnChgQAJUCub/+VjrcwJcHYNRwF5GjJ82mTe5rdQkF7nGfN
-         h/HOwKTCyGriCjbcC4cTSfpQB9olMxKXwNHZLZV8j3/k3gutSPSsI+XM34N0TbABzuYk
-         gKXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680106713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U/3ZXVoIKxVs/p2ePsaiOudqZVjYFCyOHTolPsKeMIE=;
-        b=c8iI/E6waATp7XzeCzl+FpbFsLlXevXzdbr70U+5felldEPgrMMr2nLCSw2lo/y0qn
-         su5fsjn7y/b1j/4HrhFYa2REGyj6/ccmYL5Hr8D8CIIc23eCZ05ufsxdyO1LCOAlHNcF
-         Lc1l0B1LCku/A0fLgOEEtcHlGb64BS22ESaAZbDwtGYPY84S5oOyEzbvnpA2u7cLYTbV
-         j6A5OX3LsjHp6H4orO1w5MxwndR/RyIIKhJtA0O+9EyanmIdt3qQeX1vcjze5Bx0taWy
-         xNkXGA78XxrziPjmej0H4WMLqX528SM7TLXgy2RwORYjoPn/wEg4LlyOJnK7Q+e0rdLj
-         Fx+w==
-X-Gm-Message-State: AO0yUKX0ZjmWEsb/ykmeFhS3KfgcdB6GS+6In0w5//ZqLwlwxFOao6aF
-        U3bQmcd2dRi9gLvc0SnuS5M42lqCJeGI+LZBeqc=
-X-Google-Smtp-Source: AK7set+VydZ65WUhInUNI7FznI50frXNOSsSP5cK3NBVorxmB4VPsyYYoMa3LmNx8MnkEX15ayGKLA==
-X-Received: by 2002:a7b:c8c4:0:b0:3ed:ce6f:e86e with SMTP id f4-20020a7bc8c4000000b003edce6fe86emr15341004wml.23.1680106713524;
-        Wed, 29 Mar 2023 09:18:33 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:7c0e:2838:74e9:d05? ([2a05:6e02:1041:c10:7c0e:2838:74e9:d05])
-        by smtp.googlemail.com with ESMTPSA id fc11-20020a05600c524b00b003ebff290a52sm2956826wmb.28.2023.03.29.09.18.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 09:18:32 -0700 (PDT)
-Message-ID: <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
-Date:   Wed, 29 Mar 2023 18:18:31 +0200
+        with ESMTP id S229800AbjC2QWX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 12:22:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39CD1AC;
+        Wed, 29 Mar 2023 09:22:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE06BB8238F;
+        Wed, 29 Mar 2023 16:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59034C4339B;
+        Wed, 29 Mar 2023 16:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680106937;
+        bh=BeBWudnFSsiVzY/XlA8t6ty5AObYn0Ada11HTQX3T+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u77tBwSS5bosw8PvckswT9NhtXRstnMxAy7Krq+Abf7i3tkpUwr6drporyQLSvXtT
+         BCvaZ5mRgUkrF8Y8zhtgEhfhsvlF2lzrP+gYl5jlH4LfSa3L8n2CSNIB+unlcfrkqG
+         7NTDsu7EcBbp717SiI4mSEHcjZWUE8a9cr7163R4=
+Date:   Wed, 29 Mar 2023 18:22:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 10/19] cacheinfo: Adjust includes to remove of_device.h
+Message-ID: <ZCRltUZOTDsmLJsE@kroah.com>
+References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
+ <20230329-dt-cpu-header-cleanups-v1-10-581e2605fe47@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
- pointer dereference
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
-References: <20230329090055.7537-1-rui.zhang@intel.com>
- <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
- <CAJZ5v0hGnoEhYadoK-KPTvMtvviOrGqbY9jrmOUzTjOGe_rB_A@mail.gmail.com>
- <016dc073-c9a3-4b96-6c58-7b21e0f998a5@linaro.org>
- <CAJZ5v0jmo_bj4iMVe9ARei4-oyP3TdD+FXiiu+-g55FqJxLJsg@mail.gmail.com>
- <c1c0945b-4772-e6b1-e662-d9901d224f6a@linaro.org>
- <CAJZ5v0iMAT_1cQorTqK4xRTjD3a_s=Vf3OJYy3hi7=pAekLv+g@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0iMAT_1cQorTqK4xRTjD3a_s=Vf3OJYy3hi7=pAekLv+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-10-581e2605fe47@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/03/2023 18:03, Rafael J. Wysocki wrote:
-> On Wed, Mar 29, 2023 at 5:59 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 29/03/2023 16:38, Rafael J. Wysocki wrote:
->>> On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
->>>>> On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
->>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>
->>>>>> On 29/03/2023 11:00, Zhang Rui wrote:
->>>>>>> When the hwmon device node of a thermal zone device is not found,
->>>>>>> using hwmon->device causes a kernel NULL pointer dereference.
->>>>>>>
->>>>>>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
->>>>>>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
->>>>>>> ---
->>>>>>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
->>>>>>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
->>>>>>> I'm not sure if the Fix tag applies to such commit or not.
->>>>>>
->>>>>> Actually it reverts the work done to encapsulate the thermal zone device
->>>>>> structure.
->>>>>
->>>>> So maybe instead of the wholesale switch to using "driver-specific"
->>>>> device pointers for printing messages, something like
->>>>> thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
->>>>> the first argument can be defined?
->>>>>
->>>>> At least this particular bug could be avoided this way.
->>>>
->>>> Actually we previously said the thermal_hwmon can be considered as part
->>>> of the thermal core code, so we can keep using tz->device.
->>>>
->>>> I'll drop this change from the series.
->>>
->>> But it's there in my thermal branch already.
->>>
->>> Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
->>
->> Oh, right. Fair enough.
->>
->> I think Rui's patch is fine then.
+On Wed, Mar 29, 2023 at 10:52:07AM -0500, Rob Herring wrote:
+> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
+> implicitly including other includes, and is no longer needed. Update the
+> includes to use of.h instead of of_device.h.
 > 
-> I guess you mean the $subject one, that is:
-> 
-> https://patchwork.kernel.org/project/linux-pm/patch/20230329090055.7537-1-rui.zhang@intel.com
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Please ack and I will take the series via the DT tree.
+> ---
 
-Correct
-
-> What about the message printed when temp is NULL.  Should the original
-> form of it be restored too?
-
-Yes, you are right, for the sake of consistency we should restore also 
-this one.
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
