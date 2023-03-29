@@ -2,108 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8B06CEBE5
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 16:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126806CEC0C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 16:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjC2OmL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 10:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S229917AbjC2OqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 10:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjC2Ols (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 10:41:48 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B1E4EC1;
-        Wed, 29 Mar 2023 07:39:08 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id ew6so64215487edb.7;
-        Wed, 29 Mar 2023 07:39:08 -0700 (PDT)
+        with ESMTP id S230021AbjC2Opq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 10:45:46 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739C57699
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 07:43:31 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id z83so19622327ybb.2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 07:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680101010;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AZF3AgcFtqgGpO60iEgE/VpjMgkSPsUVITQ8vjVr8tw=;
+        b=bYHVBrYbjFKnwVQc+oSbH0aO1boPvLUHwnJakgPZubdfvnrzgXeWZOrvVbu8fqfPp8
+         PMJ2EIoo4Ryf6hAzSweHqHCs7iLOsu69lUxBkU+yM6Q+hy59Nhjm67PT4HPvpwlqS+nF
+         C78uiy2AEdagKFyXjciEjHqiGI28n5s2Bnu8t9RX5mDICPbIqT3JG9bHzs9OsXHoWWS8
+         SfdgrZcb0o+fLljQPD4/PsGOE4LoGzbSyD6u7Kpr2QHyufPJ/OvhxQ/GvTr07K7IFVyu
+         s+UPbi7PZ0NTNVy/veH8A3qN9ZKfb+Dg9ElP9YbqVLtzfEMh3Xc6De9YhVbLmbWRGoSL
+         YemA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680100747;
+        d=1e100.net; s=20210112; t=1680101010;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mNiF0TAEnjTwFsCRZZ5me++D62yLeN4frM4I1Vw9ZcM=;
-        b=i85Qg4yXfOunE2MWtPAiJuMfi5zrjmDUiHo9+OgENCui5hZqe5CvGMw1eO2u6iljuY
-         3eCxEJRuTAUmoAdKXQHV1kJXd6tJslKr9K2w5SkrHhIVU0B0FS/JTgLR1grm0IOKSJCW
-         kudMh+cPZUU195N5JIYQtqTFO2O2LTxNXO2wxZx6yZUj1C5MLrKQZtHgEpoxhowayGOi
-         WGzL5fs/ddPHdecCWYlfMY99aB1DBlIEpm06i2zrn7Veyr1AZiXrhI5zFKjtQPKvRAu+
-         b+2frm56PcLmFYDm2gRtq/u/9w6EahdNYdYVIjpJBDH4jHQU91QJJZZivSUmEcfrsrI4
-         Q1NQ==
-X-Gm-Message-State: AAQBX9ecKDpJrIw57O7X8ZAUrbdpwPfVoqPPYUOsQRhy3zc72V0hnXIL
-        LoVtsv29yOzZgDpL5ZIOdsJhE+uoQv7AfaOm66c=
-X-Google-Smtp-Source: AKy350Z4UhJSWCT5bD/fUslVkJW5Yvj8kRFX+8v23g/h+Nt8vEYj4Tv0j89x/ULIv19eY/u/rrCGvYsJNWA3mVZOe4o=
-X-Received: by 2002:a50:cbc1:0:b0:4fb:e069:77ac with SMTP id
- l1-20020a50cbc1000000b004fbe06977acmr1547826edi.0.1680100746930; Wed, 29 Mar
- 2023 07:39:06 -0700 (PDT)
+        bh=AZF3AgcFtqgGpO60iEgE/VpjMgkSPsUVITQ8vjVr8tw=;
+        b=ERaaPd4tgNTHV5CkjFJqwNzPTfkZEQGvDrLdvgPnkjpbGw5ELoxxZRoJGbKtLdL6gS
+         tDZwa0bPZqQ7zm1ZP7SlqCElxs1Naedo6XCeRt/xgzPyEd9O/egM7sYEHDKBw/JtlMKo
+         sufTvDjKg1AqzvMXZJd7k7S8o93WbaWtAMCYIYf1DZS88Y078ZMJE6AuZBwzUAyJvIBt
+         TAEfPhFo0HkOe++uF0NV1TPMwkIxd/Qf6V60nR3Uv+Qec0TK4ZclrVbam8XP1WNVafT2
+         OqVVt7AgsChG8nGpAd2vgRX7Jdh32Cq7hF6wozXngiQ7SJyvtKH+nwRkF5q15D1yNUTk
+         Ercg==
+X-Gm-Message-State: AAQBX9cNtVstGpj+g+iBmN4zsrqvTuZ6sa+NNcnQTnyDSaqf8Izrnj1B
+        6GRRkTt5aC6othEYB2SopzdtVYqMm2WG8MciFWq/RA==
+X-Google-Smtp-Source: AKy350bkVJFUGOJ4fGvEYsgcY1FSLfwT3yDuK+YuUkzV6Xv7XLerocMrkLsc9rq8nKymjJM/AyAgSB2kNV5hYHQ1HbI=
+X-Received: by 2002:a05:6902:120c:b0:b74:77fa:581d with SMTP id
+ s12-20020a056902120c00b00b7477fa581dmr10308565ybu.4.1680101010667; Wed, 29
+ Mar 2023 07:43:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230329090055.7537-1-rui.zhang@intel.com> <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
- <CAJZ5v0hGnoEhYadoK-KPTvMtvviOrGqbY9jrmOUzTjOGe_rB_A@mail.gmail.com> <016dc073-c9a3-4b96-6c58-7b21e0f998a5@linaro.org>
-In-Reply-To: <016dc073-c9a3-4b96-6c58-7b21e0f998a5@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 16:38:55 +0200
-Message-ID: <CAJZ5v0jmo_bj4iMVe9ARei4-oyP3TdD+FXiiu+-g55FqJxLJsg@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
- pointer dereference
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
+References: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
+In-Reply-To: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 29 Mar 2023 16:43:19 +0200
+Message-ID: <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
+Subject: Re: power_supply_show_property Kernel Oops
+To:     Alistair <alistair@alistair23.me>
+Cc:     ye.xingchen@zte.com.cn, sebastian.reichel@collabora.com,
+        sre@kernel.org, pali@kernel.org, sravanhome@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
-> > On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 29/03/2023 11:00, Zhang Rui wrote:
-> >>> When the hwmon device node of a thermal zone device is not found,
-> >>> using hwmon->device causes a kernel NULL pointer dereference.
-> >>>
-> >>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
-> >>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> >>> ---
-> >>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-> >>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
-> >>> I'm not sure if the Fix tag applies to such commit or not.
-> >>
-> >> Actually it reverts the work done to encapsulate the thermal zone device
-> >> structure.
-> >
-> > So maybe instead of the wholesale switch to using "driver-specific"
-> > device pointers for printing messages, something like
-> > thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
-> > the first argument can be defined?
-> >
-> > At least this particular bug could be avoided this way.
->
-> Actually we previously said the thermal_hwmon can be considered as part
-> of the thermal core code, so we can keep using tz->device.
->
-> I'll drop this change from the series.
+On Wed, Mar 29, 2023 at 1:16=E2=80=AFPM Alistair <alistair@alistair23.me> w=
+rote:
 
-But it's there in my thermal branch already.
+> [    2.466136]  string from vsnprintf+0x158/0x424
+> [    2.470603]  vsnprintf from vscnprintf+0x10/0x24
+> [    2.475241]  vscnprintf from sysfs_emit+0x50/0xac
+> [    2.479975]  sysfs_emit from power_supply_show_property+0x1d0/0x26c
+> [    2.486269]  power_supply_show_property from add_prop_uevent+0x30/0x8c
+> [    2.492815]  add_prop_uevent from power_supply_uevent+0xb4/0xe4
+> [    2.498753]  power_supply_uevent from dev_uevent+0xc4/0x21c
+> [    2.504352]  dev_uevent from kobject_uevent_env+0x1cc/0x510
+> [    2.509953]  kobject_uevent_env from power_supply_changed_work+0x7c/0x=
+b4
+> [    2.516675]  power_supply_changed_work from process_one_work+0x1e8/0x3=
+e8
+> [    2.523396]  process_one_work from worker_thread+0x2c/0x504
+> [    2.528986]  worker_thread from kthread+0xcc/0xec
+> [    2.533716]  kthread from ret_from_fork+0x14/0x24
+> [    2.538443] Exception stack(0xf0dadfb0 to 0xf0dadff8)
 
-Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
+This looks like running a worker before something this worker is accessing
+has been set up.
 
-> On the other side, adding more thermal_zone_debug/info.. gives
-> opportunities to external components of the core thermal framework to
-> write thermal zone device related message. I'm not sure that is a good
-> thing, each writer should stay in its namespace, no ?
+> As it's on a consumer device I don't have a way to connect a debugger. So=
+ I'm
+> a little stuck on what the problem is. The only related change I see betw=
+een
+> 6.2 and 6.3-rc4 is commit a441f3b90a340e5c94df36c33fb7000193ee0aa7
+> "power: supply: use sysfs_emit() instead of sprintf() for sysfs show()", =
+but
+> that doesn't look like it would cause this oops.
 
-IMV whoever is allowed to use a thermal zone pointer should also be
-allowed to print messages related to its use, especially debug ones.
+Did you try reverting it?
 
-"Encapsulation" means that the members of a thermal zone device object
-should not be accessed directly by its users other than the core, not
-that it cannot be used as a message tag.
+Yours,
+Linus Walleij
