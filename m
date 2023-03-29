@@ -2,120 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E6F6CF205
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 20:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DF76CF247
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 20:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjC2SRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 14:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S229590AbjC2SiU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 14:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjC2SRr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 14:17:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D62C049D5;
-        Wed, 29 Mar 2023 11:17:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDC9912FC;
-        Wed, 29 Mar 2023 11:18:30 -0700 (PDT)
-Received: from bogus (unknown [10.57.52.160])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 158D23F6C4;
-        Wed, 29 Mar 2023 11:17:36 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 19:17:02 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 16/19] cpuidle: Adjust includes to remove of_device.h
-Message-ID: <20230329181702.x5u562himerwolfg@bogus>
-References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
- <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
+        with ESMTP id S229733AbjC2SiJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 14:38:09 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE931FE2;
+        Wed, 29 Mar 2023 11:38:08 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id r11so67122201edd.5;
+        Wed, 29 Mar 2023 11:38:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680115087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kqpDvgPhxjybA6O6J83PctT4fmZDiL55ZH7/KdrAc4M=;
+        b=b1BGwGt4atOwLwGLVgYjRG+GJk/wlCW3PjEsfaQ0Zq4oZEojfFC5qL7RlJ5RNpW+kO
+         J90ma8XVvnb1tbYhQBDRXoSGJBPqQXI9Bliy3nNoUB7FdEsWiuTYOH6VrfMGy2tQanxJ
+         /bV3rX8KCiskV6VJK6wkgrqoXdy+Ss5XGxUr62Zm8n/0Swil8n773+WE+WMsk5AldbQ3
+         dl7ixtmEFBBHT1/wmX9yG/whjDwm5euQVfSp8MdqGQ81SlzmJCW9j2t4QfKjuqUSq2ZX
+         Xcfl4j/P42HLZ43BrhYP8pEtSMJKxc2i6KiwtDJg37n7kYXhbj8o/OZg3RrUuysUZPPN
+         0P+A==
+X-Gm-Message-State: AAQBX9e/HNHmdLyDeO5e2b1JVHGIEvLz9Gi0WKhWzZdmAZLZiAPxLWVK
+        GoYfEtGQ2TCacaXBTVmxnsDWJNx7ME925t18HOo=
+X-Google-Smtp-Source: AKy350bHlW2Ztb1e3p6I7MCUYVVt6rsLJAvu+BHmQidJQ8uPC4PVyzvnN8BITUGaFyRF/YPK/ixgKlkTDckqSQw+61I=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr10307692ejc.2.1680115087111; Wed, 29
+ Mar 2023 11:38:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230329152207.991768-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230329152207.991768-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Mar 2023 20:37:55 +0200
+Message-ID: <CAJZ5v0iz6HAG+bhGb0HHmjwANdGmziJLHzH4XEz_CK7R1MexWQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: int340x: processor_thermal: Fix
+ additional deadlock
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:52:13AM -0500, Rob Herring wrote:
-> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
-> implicitly including other includes, and is no longer needed. Adjust the
-> include files with what was implicitly included by of_device.h (cpu.h,
-> cpuhotplug.h, of.h, and of_platform.h) and drop including of_device.h.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Wed, Mar 29, 2023 at 5:23 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Commit 52f04f10b900 ("thermal: intel: int340x: processor_thermal: Fix
+> deadlock") addressed deadlock issue during user space trip update. But it
+> missed a case when thermal zone device is disabled when user writes 0.
+>
+> Call to thermal_zone_device_disable() also causes deadlock as it also
+> tries to lock tz->lock, which is already claimed by trip_point_temp_store()
+> in the thermal core code.
+>
+> Remove call to thermal_zone_device_disable() in the function
+> sys_set_trip_temp(), which is called from trip_point_temp_store().
+>
+> Fixes: 52f04f10b900 ("thermal: intel: int340x: processor_thermal: Fix deadlock")
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org # 6.2+
 > ---
-> Please ack and I will take the series via the DT tree.
-> ---
->  drivers/cpuidle/cpuidle-psci.c      | 1 -
->  drivers/cpuidle/cpuidle-qcom-spm.c  | 3 +--
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 2 +-
->  drivers/cpuidle/dt_idle_states.c    | 1 -
->  4 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 6de027f9f6f5..bf68920d038a 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -16,7 +16,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/psci.h>
->  #include <linux/pm_domain.h>
+>  .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index 90526f46c9b1..d71ee50e7878 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -153,7 +153,6 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp
+>                 cancel_delayed_work_sync(&pci_info->work);
+>                 proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
+>                 proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_THRES_0, 0);
+> -               thermal_zone_device_disable(tzd);
+>                 pci_info->stored_thres = 0;
+>                 return 0;
+>         }
+> --
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
--- 
-Regards,
-Sudeep
+Applied as 6.3-rc material, thanks!
