@@ -2,103 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF65E6CD7FC
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 12:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC316CD803
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 12:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjC2K4D convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 06:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        id S229555AbjC2K7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 06:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjC2K4C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 06:56:02 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4601FDA;
-        Wed, 29 Mar 2023 03:56:01 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id eh3so61360827edb.11;
-        Wed, 29 Mar 2023 03:56:01 -0700 (PDT)
+        with ESMTP id S229507AbjC2K66 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 06:58:58 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C530E272A
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 03:58:56 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id c9so9151976lfb.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 03:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680087535;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CarlS/VU8aJv526dWxLfE21OLuYaolNHG12/rq9FVAw=;
+        b=NiUPYCtAcly/5nLkHOTow4ELPXiCEO/Vv1E+6JMJX5H0Uvfi1E1Af86mDMyCyd/6Ek
+         Lkmwr3PNug0NBRnKIC3HpzhznMeXYxgJYGRsjyqkMtU8UbZS8OFdWVnqF9JGQw2ksMBv
+         6TiYVl/83h9LjpcYNwbzIQpgo8cN3SnsOAdUaSS+Pd7ISurPNxWqkQ3r4Vx16BhVQs5l
+         u2xmnobKAdqgey8BDBN8uSRGVTghH6ptanbD216QbJ9QfjtRv8wGvxTaGeP1eWGtFhhD
+         ntP1KMTer630EqjnYeiWTLeGOThrTPHnn8hpvVqONpM+UPQbQGKgKwMPjdWw5O0TGq2q
+         Kikg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680087360;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60MFOnOMzhKutMqhUhC/XDEFJcDrJox6s7Cc5/xbTOU=;
-        b=5/wgTTYLagH3fdNOkK/D2Nd11ZF1NXbr9JqTn7w6nGi0QZRRrhF45yF5rfB9Ap3C5C
-         veB729RXyJtd9Pv/6p/mDL0kbyyI8KFQesBcCDTvFKdSAEYvGrFxVRIc1a/VOLSAxbaw
-         M8A1HunOHfsFyrdj6xXBYnLrvE0IrLfpvaA6QNfK1ZkBNqx7/saWT/7ZN4cdVMdvG3EA
-         NhTOV+mxQO8mkIw+hFbeDBZ89udO8uLZdELudyv0EBlxPN6tk5/WmyujddBNPszR3tw2
-         BnY4y2pLwcgm3MmA4J25ooVCeMUGm0FBkrmJ4M22t7CMza+k3/fCDdDJdj3QiEsFDcs6
-         WQXw==
-X-Gm-Message-State: AAQBX9cbMFWbNWvmliZdAG+/wtqZZAX3D4hxmoG23cYYAQdYa+AZKT8F
-        liq1fgCSZagrUMujm1PCoi4MmiEpL+ASkoC/kh0=
-X-Google-Smtp-Source: AKy350ZroOYiUyj3bHI+fbjU8MrFNJ7zh+fyN1BgN6AQd9U5ZmfpZPI7EkeJLNi2YORdQgB+WBGrPaY0bXYwl15FyL0=
-X-Received: by 2002:a17:907:160e:b0:946:a095:b314 with SMTP id
- hb14-20020a170907160e00b00946a095b314mr3284928ejc.2.1680087359772; Wed, 29
- Mar 2023 03:55:59 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680087535;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CarlS/VU8aJv526dWxLfE21OLuYaolNHG12/rq9FVAw=;
+        b=KqvDktgid1ka+ah9rTeGHFbMWXwjikMX3tVz4ApPJF4YZbs4Nh2YUxkZa/GXp4GZNp
+         wuOFlnJYw3DBkxz4P0NfAMpd1VZ5sZ8eetFsWh0nwQh0qezrxzdDmyZpl2PkrffwQ98l
+         fWIknMNhC1ciikxLjq+XJX1NH+X8P3N3QLqmxYpRRJKwbWTwzipaKjk0DkJKe2pAmqod
+         8Nic0BvwFhSgBcHMtRu4MSQ7DRvSo+Na7xdkPK2IioYtoMumsdvIrC5+pmV6DBQIFNiW
+         +BTRAzd1TlehdxcgQuW+D0JmlL9lVk3KQJUgL2qonUkzzXNnZ2QcklbIXGy4CMPkhMhS
+         v3QA==
+X-Gm-Message-State: AAQBX9e0NtEfJ0VS49d5V43LtHUt4qiZdyjl0EboiDMwCQDQ0xluH9dt
+        2HoRxUv8TDC8aV2BItAH4/4ukQ==
+X-Google-Smtp-Source: AKy350Y+u+dwj4XIorHbUb/MvzHyow+z04caWsQCMU5XkmlzHEOkZqFoJmVsO3yb3D0ew9Y0eLXCgA==
+X-Received: by 2002:ac2:5448:0:b0:4e8:485c:6a13 with SMTP id d8-20020ac25448000000b004e8485c6a13mr5732819lfn.21.1680087534896;
+        Wed, 29 Mar 2023 03:58:54 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id g12-20020a19ac0c000000b004dda76fad5asm5429156lfc.218.2023.03.29.03.58.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 03:58:54 -0700 (PDT)
+Message-ID: <5c232df5-fbce-21a4-6414-9522f70be087@linaro.org>
+Date:   Wed, 29 Mar 2023 13:58:53 +0300
 MIME-Version: 1.0
-References: <20230329090055.7537-1-rui.zhang@intel.com> <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
-In-Reply-To: <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 12:55:47 +0200
-Message-ID: <CAJZ5v0hasj4-XmWTGPehqQFW91WG+n5LgEhMp=ziXL=C7mv9nQ@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
- pointer dereference
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/6] arm64: dts: qcom: sm8250: drop incorrect domain idle
+ states properties
+Content-Language: en-GB
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20230324073813.22158-1-krzysztof.kozlowski@linaro.org>
+ <880c0932-117f-61cd-dd97-c36076869c3b@linaro.org>
+ <CAPDyKFrnEwkS5p+vQ0htYTBLaZ8iFPnV0kckf6F65cacBB2k4w@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAPDyKFrnEwkS5p+vQ0htYTBLaZ8iFPnV0kckf6F65cacBB2k4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 29/03/2023 11:00, Zhang Rui wrote:
-> > When the hwmon device node of a thermal zone device is not found,
-> > using hwmon->device causes a kernel NULL pointer dereference.
-> >
-> > Reported-by: Preble Adam C <adam.c.preble@intel.com>
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > ---
-> > Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-> > dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
-> > I'm not sure if the Fix tag applies to such commit or not.
->
-> Actually it reverts the work done to encapsulate the thermal zone device
-> structure.
->
-> > ---
-> >   drivers/thermal/thermal_hwmon.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> > index c59db17dddd6..261743f461be 100644
-> > --- a/drivers/thermal/thermal_hwmon.c
-> > +++ b/drivers/thermal/thermal_hwmon.c
-> > @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
-> >       hwmon = thermal_hwmon_lookup_by_type(tz);
-> >       if (unlikely(!hwmon)) {
-> >               /* Should never happen... */
-> > -             dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
-> > +             dev_dbg(&tz->device, "hwmon device lookup failed!\n");
->
-> As it 'Should never happen', I would replace that by:
->
->         if (WARN_ON(!hwmon))
->                 /* Should never happen... */
->                 return;
->
+On 29/03/2023 12:45, Ulf Hansson wrote:
+> On Wed, 29 Mar 2023 at 00:51, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>>
+>> On 24/03/2023 09:38, Krzysztof Kozlowski wrote:
+>>> Domain idle states do not use 'idle-state-name' and 'local-timer-stop':
+>>>
+>>>     sm8250-hdk.dtb: domain-idle-states: cluster-sleep-0: 'idle-state-name', 'local-timer-stop' do not match any of the regexes: 'pinctrl-[0-9]+'
+>>>
+>>> Reported-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> Link: https://lore.kernel.org/all/20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-4-3ead1e418fe4@linaro.org/
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>    arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 --
+>>>    1 file changed, 2 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+>>> index 79d67b466856..9cf2de87c632 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+>>> @@ -354,12 +354,10 @@ BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
+>>>                domain-idle-states {
+>>>                        CLUSTER_SLEEP_0: cluster-sleep-0 {
+>>>                                compatible = "domain-idle-state";
+>>> -                             idle-state-name = "cluster-llcc-off";
+>>>                                arm,psci-suspend-param = <0x4100c244>;
+>>>                                entry-latency-us = <3264>;
+>>>                                exit-latency-us = <6562>;
+>>>                                min-residency-us = <9987>;
+>>> -                             local-timer-stop;
+>>
+>> Hmm, so we support setting the broadcast timer when using plain PSCI
+>> idle states, but not when using the domain-based idle states.
+>>
+>> Ulf, Rafael, Daniel, is that an omission for the domain-based idle
+>> support? Or is it handled in some other way?
+> 
+> I am not sure that we need a DT binding specifically for this, or do we?
+> 
+> So far, the timer is managed from platform specific code. For some
+> Qcom based platforms, the timer should be managed in
+> rpmh_rsc_write_next_wakeup(), which makes use of
+> dev_pm_genpd_get_next_hrtimer().
 
-Or just use pr_debug() instead of dev_dbg().
+I'm not sure whether I fully follow this (I might lack some 
+understanding here). I thought that with "local-timer-stop" (well, 
+CPUIDLE_FLAG_TIMER_STOP), we were switching to the broadcast timer 
+before a core/cluster goes into idle state with no local timer, while 
+with  rpmh_rsc_write_next_wakeup() we write that only before shutting 
+down the last core (see the comment at rpmh_flush()).
 
->
-> >               return;
-> >       }
-> >
+This might be an expected thing, I probably don't have enough 
+understanding of the cpuidle internals to judge this.
+
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
+
+-- 
+With best wishes
+Dmitry
+
