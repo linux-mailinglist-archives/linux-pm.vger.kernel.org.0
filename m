@@ -2,71 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37746CEE66
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 18:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047106CEE7E
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 18:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjC2QBK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 12:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S230090AbjC2QCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 12:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjC2P75 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 11:59:57 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59D659CF
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 08:59:30 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id r29so16245751wra.13
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 08:59:30 -0700 (PDT)
+        with ESMTP id S231319AbjC2QB4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 12:01:56 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E195E3A8E
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 09:00:44 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id m2so16279810wrh.6
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 09:00:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680105565;
+        d=linaro.org; s=google; t=1680105630;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zBJkXabIUFXjdoz3ymumlCy03vftbPDEKeNtnyEkrz8=;
-        b=YdpfQk27kKNVYmWdxp/LTVIpL9/Vlb9z8P04OSPiTEBLZiAg8hINsKbJvWjGMQu38+
-         VsF5S6kmYNBG8R3BlrvDWxdd60oHj8KvJ8AtLzOyVpUUPEkp/aqmKIZwITpd9UnZ9hgg
-         tVJLyE2hbIYhPCFHpmFpwBfY/wibcSVGXRPa1fFWkF/SQ68kNXFv2W5TbzGE3Y8w1wA9
-         SKEbKkEptThZMsDVhs7KhfSUnZRwpncmEfxBv+YdKPsNnS65c/BtNfRHLuxL0TlY1LFg
-         9TBqqaVm6LyF8vju9vovFEAZELJVSX9FSL6gAn+pIxeag4Zuis4kiwDebgdTkhfx6oqw
-         URSQ==
+        bh=ArwpNVIf9POAixbklkhIv67If2EwgIZ+QA4ChZDwYgE=;
+        b=Idh5bizNTidzmJWpFEgi4q88BF2+/lO675pVeMaNsr8ygV36SvVkmWzi+QBNiYJKu6
+         tF5oIdEWoj9xksHV/Xh4B2dTuZbzjgbBCTkwp67pEUOiif8JVbwKT2DIsUJd9GVb3CRo
+         47Rj6TldHbceb66V68BIp976mKiukc2vkMUla6L7tV9MGqQ4sf2ibQf0WoYH9bCeSFGq
+         NIOlXf1sFNwfiWODEiK8SIJcHA+NJ8UbpqrP+yLm2t/qnphTwYpc6Chxnlotla+7lUiZ
+         lkvuRshIJgjHnsBbpXYjPnD6tIKAeDfnYY1juoZlKdm7rN1zNc6YRdEEtKEaEyhdGSwf
+         yO0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105565;
+        d=1e100.net; s=20210112; t=1680105630;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBJkXabIUFXjdoz3ymumlCy03vftbPDEKeNtnyEkrz8=;
-        b=x4yOGFeI1mKbhUWzDPl8/NSUGYcVS6QRQ4PHjt3IYdeH96uv0pY7wRYvs15st765fY
-         aJwa3Zsq/nf0VOWXdEw6nUQOhNS2AQ70bsYNemlR/w5/G8eIgUcYIV1W7FOCvm2tXh0g
-         02EnMqbfX5Q46DXn9kwSj1SYwQrnfjDhs8GLO8rphRO84lFGOxlYkokdGO4Nq6IEKlie
-         wcsmh8osKvWPmhqX9X4g3ukD0+WCnWqLI86JG9kDJn9UhLyGW+WUDu/KX4wYpCeLf3lh
-         1IJZmOnQiGOJ8DLqd6Q7PZZYmq4zTmK68frCBhnaZ5ho/6RsRp/soFfgpKWcsDnSUdeo
-         0mlg==
-X-Gm-Message-State: AAQBX9cQnSmEMRH7CKdu92UNy3kWYnbl4svCQ+od1MKZgHsMZ5VHXwZH
-        Jb4Enx+Qs0S0h+G4XKDtihvBjqTwO5KeeDK5mYs=
-X-Google-Smtp-Source: AKy350ZSxEEdqeCzQKvyuviroGk7pylDiYLPqXxp6c6D7Prd4vO3vN5n7oGZ9fbGXUSlETdYe/Wpww==
-X-Received: by 2002:adf:db4b:0:b0:2d9:eb77:90d2 with SMTP id f11-20020adfdb4b000000b002d9eb7790d2mr14716100wrj.70.1680105565439;
-        Wed, 29 Mar 2023 08:59:25 -0700 (PDT)
+        bh=ArwpNVIf9POAixbklkhIv67If2EwgIZ+QA4ChZDwYgE=;
+        b=RjhUU7oN5mN281+XVLrcC0ApCKsS8rztkZmX5EhvQnh/YgZEiASThaXMi5CTDywQFj
+         9VwOCJSpxB2qdHf16Q87CFYvezdob2MWNiz6WjVyRWa/dVnwCzax44FygGMbMXOJOGtx
+         o942EqzfGlvNHKKyhkMdzvd5ae3lO82adXYyZyEwz+OvuXzGhxpvcOel3Q9IDfBND7lb
+         l7+RUWhb9+3MZJMy4aS3Ee37FowV8l293cmOUTNUNLfX+4glL7cC2eZFlM70bp7m7qqi
+         ZdTSo+jLJlSQp0vGSfwG8LciQHN3OTyuH6jML5RAXtcuLfBnvuCHy5SgdG0pMFlCtET9
+         fI7Q==
+X-Gm-Message-State: AAQBX9fIHZeR8/+b7pjuunDAsapcf1ngTIe89cgYI1G+MO2dIoJryvd/
+        wUsbCKqCnGsY5LRk6VUSbkNRlN5iwQMwZ3sx5rE=
+X-Google-Smtp-Source: AKy350bmfLsfH9MB3jVTmKwHrCdVGLJBaNHbyMMHil+19zF7gmCcgdeO3qEC0rHmFr/2uB1iBH/aJA==
+X-Received: by 2002:a5d:4588:0:b0:2cf:ed87:37c9 with SMTP id p8-20020a5d4588000000b002cfed8737c9mr2251984wrq.11.1680105629985;
+        Wed, 29 Mar 2023 09:00:29 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:7c0e:2838:74e9:d05? ([2a05:6e02:1041:c10:7c0e:2838:74e9:d05])
-        by smtp.googlemail.com with ESMTPSA id q1-20020a5d61c1000000b002e463bd49e3sm506904wrv.66.2023.03.29.08.59.24
+        by smtp.googlemail.com with ESMTPSA id b9-20020adfde09000000b002daeb108304sm17446206wrm.33.2023.03.29.09.00.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 08:59:25 -0700 (PDT)
-Message-ID: <c1c0945b-4772-e6b1-e662-d9901d224f6a@linaro.org>
-Date:   Wed, 29 Mar 2023 17:59:24 +0200
+        Wed, 29 Mar 2023 09:00:29 -0700 (PDT)
+Message-ID: <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
+Date:   Wed, 29 Mar 2023 18:00:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
 Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
  pointer dereference
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
+To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com
+Cc:     linux-kernel@vger.kernel.org
 References: <20230329090055.7537-1-rui.zhang@intel.com>
- <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
- <CAJZ5v0hGnoEhYadoK-KPTvMtvviOrGqbY9jrmOUzTjOGe_rB_A@mail.gmail.com>
- <016dc073-c9a3-4b96-6c58-7b21e0f998a5@linaro.org>
- <CAJZ5v0jmo_bj4iMVe9ARei4-oyP3TdD+FXiiu+-g55FqJxLJsg@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jmo_bj4iMVe9ARei4-oyP3TdD+FXiiu+-g55FqJxLJsg@mail.gmail.com>
+In-Reply-To: <20230329090055.7537-1-rui.zhang@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,67 +75,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/03/2023 16:38, Rafael J. Wysocki wrote:
-> On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
->>> On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 29/03/2023 11:00, Zhang Rui wrote:
->>>>> When the hwmon device node of a thermal zone device is not found,
->>>>> using hwmon->device causes a kernel NULL pointer dereference.
->>>>>
->>>>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
->>>>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
->>>>> ---
->>>>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
->>>>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
->>>>> I'm not sure if the Fix tag applies to such commit or not.
->>>>
->>>> Actually it reverts the work done to encapsulate the thermal zone device
->>>> structure.
->>>
->>> So maybe instead of the wholesale switch to using "driver-specific"
->>> device pointers for printing messages, something like
->>> thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
->>> the first argument can be defined?
->>>
->>> At least this particular bug could be avoided this way.
->>
->> Actually we previously said the thermal_hwmon can be considered as part
->> of the thermal core code, so we can keep using tz->device.
->>
->> I'll drop this change from the series.
+On 29/03/2023 11:00, Zhang Rui wrote:
+> When the hwmon device node of a thermal zone device is not found,
+> using hwmon->device causes a kernel NULL pointer dereference.
 > 
-> But it's there in my thermal branch already.
+> Reported-by: Preble Adam C <adam.c.preble@intel.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+> ---
+> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+> I'm not sure if the Fix tag applies to such commit or not.
+> ---
+>   drivers/thermal/thermal_hwmon.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
-
-Oh, right. Fair enough.
-
-I think Rui's patch is fine then.
-
-
->> On the other side, adding more thermal_zone_debug/info.. gives
->> opportunities to external components of the core thermal framework to
->> write thermal zone device related message. I'm not sure that is a good
->> thing, each writer should stay in its namespace, no ?
-> 
-> IMV whoever is allowed to use a thermal zone pointer should also be
-> allowed to print messages related to its use, especially debug ones.
-> 
-> "Encapsulation" means that the members of a thermal zone device object
-> should not be accessed directly by its users other than the core, not
-> that it cannot be used as a message tag.
-
-Actually it is not about the encapsulation but the namespace of the 
-messages. If a driver has an issue, IMO it is better it uses the device 
-related messages and let thermal zone messages to be related to what is 
-happening in the thermal framework, not in the back end.
-
-
+> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> index c59db17dddd6..261743f461be 100644
+> --- a/drivers/thermal/thermal_hwmon.c
+> +++ b/drivers/thermal/thermal_hwmon.c
+> @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+>   	hwmon = thermal_hwmon_lookup_by_type(tz);
+>   	if (unlikely(!hwmon)) {
+>   		/* Should never happen... */
+> -		dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
+> +		dev_dbg(&tz->device, "hwmon device lookup failed!\n");
+>   		return;
+>   	}
+>   
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
