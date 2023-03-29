@@ -2,201 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC326CD3FD
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 10:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CF96CD5C5
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 11:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjC2IGd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 04:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S230045AbjC2JCY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 05:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjC2IG1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 04:06:27 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A740740C4
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 01:06:19 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id ew6so59769842edb.7
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 01:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680077178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pgTEvOUqu+byIlNns2PeM/+eklWaDNG6sL3F+Izsnuo=;
-        b=78B+nejVnS9usHWPg0iqljIaK4pxCQzU1+8yHfJq6bvLatsVHbSasFqcUXDAi1w5ty
-         ru6zbvClprRaH6/+61fnfwiWn6Lnt4yCrkUjxEfT9d2AanAzELr4mM8xWdV5scUE0ucB
-         ELWD4r4l6HdyvxOsGNVTOK1rE2t8JO/6sZJR7NvuODLSotPDvmafMutvEUGT7OSU9L3S
-         nayxjkorDtR+YqpRJ9A31V4yJvw82utxCeqHx5lFS+EMO8sDLIlo9DinRejrMiNbXD9S
-         i4Vaheq/9S0knMn8t8VT3MRxm+2Vp1+ViLuycFVSBFcHnBJa6IJNLol+bZGWy4KJ+5Ym
-         rx+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680077178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pgTEvOUqu+byIlNns2PeM/+eklWaDNG6sL3F+Izsnuo=;
-        b=3vWqdC0OXU+Lf/9uwb4HX1/uKEQGzn3nLnuP09zIxcda2J7WQCRqTETgmRyUJUVnDO
-         QP01m+Lb7GcWt/pXdFvGmDOab5uOaAUHjI9mLB5BjlD4AG14rZGeD7eAKOocJbPwAW63
-         YoKeJw1M0z+xOLUxBu9hAkPEKpcgapwGJKU/nyZfoib8XhE1kKv0OsA/VTQHh8lUICrz
-         JYZl9e/ugy2glCPptIDAlFo1H/etquMMKgXkhsOQEv20sTsBFiROW+BY7kkiL1S5jtdD
-         rsCj/GkZvikry90FnKpBLaCtrl1jYV2tWrnB7ExXYgjz3CBzJsB3qjtkqckgKhnev3IF
-         tlNQ==
-X-Gm-Message-State: AAQBX9dnYC2MnihLs41ZnKMg70tNCmtKby6R02Uo/+Qs8woLg+W6fwlz
-        KmsN7qjrSvDp3YBDFfAaKHpUjLXgk1QMH1QWGINgbQ==
-X-Google-Smtp-Source: AKy350YCm9Z8/PIeUFOKRay3tHd8uEY3gEm45xBRMugyFV6UFUnNJW6cauEggJeb48L7uR904b/TwctWGwwl+7M3Ehs=
-X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
- wf7-20020a170907d68700b0093da14fc9b4mr9282057ejc.2.1680077178000; Wed, 29 Mar
- 2023 01:06:18 -0700 (PDT)
+        with ESMTP id S229539AbjC2JCV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 05:02:21 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DD549C7;
+        Wed, 29 Mar 2023 02:01:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680080509; x=1711616509;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MpN+NoE8ltrbIOFRhoiH8RX1fmB1SfinxkoJtqy1yZQ=;
+  b=VJvlDSumZvChIuQE72fkllLEKkkOVJkHZLdhTmR128bZ978zpCRHRUyR
+   Msklf7Co3nNoy1WWs+vUuceDB9ocfnyPvIXwopKtPtnCKZ9gvSs5yKTiN
+   E3awsYZ5bx5dRAImEgwl8t7ydZxjq8tJDOGAFFZzp4drQUpBotH7bSstQ
+   u4g+oYUsXKrF3lEyAHHdwuQoqkRlcoJVKK+4bkXUbzDbzBnFljn7o2xyD
+   Pw5ZIrZtfLfnBTIQagYLuQEN7KvSDQ6v9uC/tEOX7DC3fRV/mUdXoIMLf
+   YeytPmGqGHRCbOZXZ0KeAJmhk0yniAf7ddqIY8qnOqG94BfM04uLcaVts
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="324726927"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="324726927"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 02:01:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="748717768"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="748717768"
+Received: from wenqin8x-mobl1.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.254.212.141])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 02:01:03 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL pointer dereference
+Date:   Wed, 29 Mar 2023 17:00:55 +0800
+Message-Id: <20230329090055.7537-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
- <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
- <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
- <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
- <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com> <CAGXv+5GGO76H9Z-X=3nhtmSyp7uhuUF4DE0T527M5z+SBX482Q@mail.gmail.com>
-In-Reply-To: <CAGXv+5GGO76H9Z-X=3nhtmSyp7uhuUF4DE0T527M5z+SBX482Q@mail.gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 29 Mar 2023 10:05:41 +0200
-Message-ID: <CAGuA+or4CvyZVNuMu9tOvpoZ5nJimbp7=KX-85FiF4ghaownAg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chen-Yu,
+When the hwmon device node of a thermal zone device is not found,
+using hwmon->device causes a kernel NULL pointer dereference.
 
-On Tue, Mar 28, 2023 at 5:12=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Tue, Mar 28, 2023 at 8:21=E2=80=AFAM Balsam CHIHI <bchihi@baylibre.com=
-> wrote:
-> >
-> > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> > >
-> > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@baylibre=
-.com> wrote:
-> > > >
-> > > > Hi Chen-Yu,
-> > > >
-> > > > I suspect the bug comes from incorrect calibration data offsets for=
- AP
-> > > > Domain because you confirm that MCU Domain probe runs without issue=
-s.
-> > > > Is it possible to test something for us to confirm this theory (i
-> > > > don't have an mt8192 board on hand now), when you have the time of
-> > > > course?
-> > > > We would like to test AP Domain's calibration data offsets with a
-> > > > working one, for example :
-> > > >
-> > > >  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D =
-{
-> > > >                 {
-> > > > -               .cal_offset =3D { 0x25, 0x28 },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_VPU0 },
-> > > >                         { .dt_id =3D MT8192_AP_VPU1 }
-> > > > @@ -1336,7 +1336,7 @@ static const struct lvts_ctrl_data
-> > > > mt8192_lvts_ap_data_ctrl[] =3D {
-> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
-> > > >         },
-> > > >         {
-> > > > -               .cal_offset =3D { 0x2e, 0x31 },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_GPU0 },
-> > > >                         { .dt_id =3D MT8192_AP_GPU1 }
-> > > > @@ -1346,7 +1346,7 @@ static const struct lvts_ctrl_data
-> > > > mt8192_lvts_ap_data_ctrl[] =3D {
-> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
-> > > >         },
-> > > >         {
-> > > > -               .cal_offset =3D { 0x37, 0x3a },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_INFRA },
-> > > >                         { .dt_id =3D MT8192_AP_CAM },
-> > > > @@ -1356,7 +1356,7 @@ static const struct lvts_ctrl_data
-> > > > mt8192_lvts_ap_data_ctrl[] =3D {
-> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
-> > > >         },
-> > > >         {
-> > > > -               .cal_offset =3D { 0x40, 0x43, 0x46 },
-> > > > +               .cal_offset =3D { 0x04, 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_MD0 },
-> > > >                         { .dt_id =3D MT8192_AP_MD1 },
-> > > >
-> > > > This example is tested and works for mt8195,
-> > > > (all sensors use the same calibration data offset for testing purpo=
-ses).
-> > > >
-> > > > Thank you in advance for your help.
-> > >
-> > > The MCU ones are still tripping though. If I change all of them to 0x=
-04,
-> > > then nothing trips. There's also a bug in the interrupt handling code
-> > > that needs to be dealt with.
-> > >
-> > > AFAICT the calibration data is stored differently. If you look at Chr=
-omeOS's
-> > > downstream v5.10 driver, you'll see mt6873_efuse_to_cal_data() for MT=
-8192,
-> > > and mt8195_efuse_to_cal_data() for MT8195. The difference sums up to:
-> > > MT8195 has all data sequentially stored, while MT8192 has most data s=
-tored
-> > > in lower 24 bits of each 32-bit word, and the highest 8 bits are then=
- used
-> > > to pack data for the remaining sensors.
-> > >
-> > > Regards
-> > > ChenYu
-> >
-> > Hi Chen-Yu Tsai,
-> >
-> > Thank you very much for helping me testing this suggestion.
-> >
-> > Indeed, calibration data is stored differently in the mt8192 compared t=
-o mt8195.
-> > So, the mt8192's support will be delayed for now, to allow further debu=
-gging.
-> >
-> > In the mean time, we will only continue to upstream the remaining
-> > mt8195's source code, so it will get full LVTS support.
-> > A new series will be submitted soon.
-> >
-> > Would you please point me out to the bug in interrupt handling code?
->
-> I just sent out two patches and CC-ed you on them. They are here just in =
-case:
->
-> https://lore.kernel.org/linux-pm/20230328031037.1361048-1-wenst@chromium.=
-org/
-> https://lore.kernel.org/linux-pm/20230328031017.1360976-1-wenst@chromium.=
-org/
+Reported-by: Preble Adam C <adam.c.preble@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+I'm not sure if the Fix tag applies to such commit or not.
+---
+ drivers/thermal/thermal_hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Well received. I'm testing it.
-Thanks!
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index c59db17dddd6..261743f461be 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+ 	hwmon = thermal_hwmon_lookup_by_type(tz);
+ 	if (unlikely(!hwmon)) {
+ 		/* Should never happen... */
+-		dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
++		dev_dbg(&tz->device, "hwmon device lookup failed!\n");
+ 		return;
+ 	}
+ 
+-- 
+2.25.1
 
-Best regards,
-Balsam
-
->
-> ChenYu
