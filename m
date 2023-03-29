@@ -2,156 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FDB6CD359
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 09:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB866CD377
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 09:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjC2HgL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 03:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
+        id S229625AbjC2Hkt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 03:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjC2Hfz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 03:35:55 -0400
+        with ESMTP id S229808AbjC2Hks (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 03:40:48 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B85272
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 00:33:24 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="403426348"
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D314B10DE;
+        Wed, 29 Mar 2023 00:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680075643; x=1711611643;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9oKYEcBp0CusUw/Kjrt4ftdMr9BFrOXO9Pmo09w2kCw=;
+  b=j74151YH6MZmcV2dolbrq+Gltx78GGClMW3kMEmQyswll/LNqayska1S
+   uyKNGsNKOfnPGzaaxclLwTpSXDK3yXOecPQNds69ssSgArfJfp/xbLAYS
+   QKByjlLQb2eDBrYQVR9XrX+AVcSsKW1ZRMYfd+9uTBrYbY+zIUflXPjjS
+   +87PvUprIPX6lV2AsZfCoVAZ8od//zePdjS7wgHTCxoT3WLpMECUlzZJ0
+   74PtxiUodreDPHjyivhoLYd91orcVeyIvPBr2V0N9wqa3hDjmeByujRlN
+   cwPyIZviNvElRaGR/U0lUtM8uLyvZTIjVmAi6E2+HYPyDOvquqp5jK83Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="403428069"
 X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="403426348"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 00:32:33 -0700
+   d="scan'208";a="403428069"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 00:40:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="714532714"
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="858372648"
 X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="714532714"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2023 00:32:33 -0700
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
-        by linux.intel.com (Postfix) with ESMTP id C30C4580BA2;
-        Wed, 29 Mar 2023 00:32:31 -0700 (PDT)
-Message-ID: <f68572c70fe023692954b35c14a69355bea42189.camel@gmail.com>
-Subject: Re: [PATCH v2 3/3] intel_idle: add C0.2 state for Sapphire Rapids
- Xeon
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     Andy Lutomirski <luto@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     the arch/x86 maintainers <x86@kernel.org>,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>,
-        "luto@amacapital.net" <luto@amacapital.net>
-Date:   Wed, 29 Mar 2023 10:32:30 +0300
-In-Reply-To: <05fdea5a-bfad-4d7c-9925-9a45b2882782@app.fastmail.com>
-References: <20230310122110.895093-1-dedekind1@gmail.com>
-         <20230310122110.895093-4-dedekind1@gmail.com>
-         <20230320145034.GM2194297@hirez.programming.kicks-ass.net>
-         <05fdea5a-bfad-4d7c-9925-9a45b2882782@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+   d="scan'208";a="858372648"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 00:40:41 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phQQC-000JJi-2J;
+        Wed, 29 Mar 2023 07:40:40 +0000
+Date:   Wed, 29 Mar 2023 15:40:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 8e76079c4ac1007cd5d09357f4cbab9b820f8e65
+Message-ID: <6423eb70.Thn1ERBapZnTQb8c%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a lot of feedback. Let me summarize a bit.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 8e76079c4ac1007cd5d09357f4cbab9b820f8e65  Merge branch 'thermal-core-fixes' into bleeding-edge
 
-1. C0.x time limit is controlled by MSR 0xE1 - IA32_UMWAIT_CONTROL[31:2]. This
-limit applies to both CPL0 and CPL3. Your feedback is that this MSR should be
-ignored in CPL0, or there should be a different MSR for CPL3.
+elapsed time: 724m
 
-Interesting point. I am discussing this with HW folks internally now and trying
-to figure it out.
+configs tested: 129
+configs skipped: 14
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-2. Peter Zijlstra said earlier: why C0.x states are not available via 'mwait'.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r004-20230326   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r012-20230326   gcc  
+arc                  randconfig-r034-20230327   gcc  
+arc                  randconfig-r043-20230326   gcc  
+arc                  randconfig-r043-20230327   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r031-20230327   clang
+arm                  randconfig-r046-20230326   clang
+arm                  randconfig-r046-20230327   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r005-20230327   gcc  
+csky         buildonly-randconfig-r002-20230327   gcc  
+csky         buildonly-randconfig-r003-20230326   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r004-20230326   gcc  
+csky                 randconfig-r006-20230326   gcc  
+csky                 randconfig-r034-20230326   gcc  
+hexagon              randconfig-r013-20230327   clang
+hexagon              randconfig-r041-20230326   clang
+hexagon              randconfig-r041-20230327   clang
+hexagon              randconfig-r045-20230326   clang
+hexagon              randconfig-r045-20230327   clang
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230327   gcc  
+i386                 randconfig-a002-20230327   gcc  
+i386                 randconfig-a003-20230327   gcc  
+i386                 randconfig-a004-20230327   gcc  
+i386                 randconfig-a005-20230327   gcc  
+i386                 randconfig-a006-20230327   gcc  
+i386                 randconfig-a011-20230327   clang
+i386                 randconfig-a012-20230327   clang
+i386                 randconfig-a013-20230327   clang
+i386                 randconfig-a014-20230327   clang
+i386                 randconfig-a015-20230327   clang
+i386                 randconfig-a016-20230327   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r002-20230327   gcc  
+loongarch            randconfig-r012-20230327   gcc  
+loongarch            randconfig-r032-20230326   gcc  
+loongarch            randconfig-r033-20230327   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r031-20230326   gcc  
+m68k                 randconfig-r031-20230328   gcc  
+microblaze           randconfig-r016-20230327   gcc  
+microblaze           randconfig-r024-20230328   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r003-20230327   clang
+mips                 randconfig-r001-20230326   gcc  
+nios2        buildonly-randconfig-r001-20230326   gcc  
+nios2        buildonly-randconfig-r002-20230326   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230326   gcc  
+nios2                randconfig-r015-20230327   gcc  
+nios2                randconfig-r036-20230328   gcc  
+openrisc     buildonly-randconfig-r001-20230327   gcc  
+openrisc             randconfig-r006-20230327   gcc  
+parisc       buildonly-randconfig-r004-20230327   gcc  
+parisc       buildonly-randconfig-r005-20230327   gcc  
+parisc       buildonly-randconfig-r006-20230326   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r035-20230328   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r002-20230326   clang
+powerpc              randconfig-r026-20230328   gcc  
+powerpc              randconfig-r036-20230327   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r006-20230327   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230326   gcc  
+riscv                randconfig-r042-20230327   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r015-20230326   gcc  
+s390                 randconfig-r044-20230326   gcc  
+s390                 randconfig-r044-20230327   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r011-20230327   gcc  
+sh                   randconfig-r033-20230328   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r016-20230326   gcc  
+sparc64              randconfig-r001-20230327   gcc  
+sparc64              randconfig-r003-20230327   gcc  
+sparc64              randconfig-r034-20230328   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230327   gcc  
+x86_64               randconfig-a002-20230327   gcc  
+x86_64               randconfig-a003-20230327   gcc  
+x86_64               randconfig-a004-20230327   gcc  
+x86_64               randconfig-a005-20230327   gcc  
+x86_64               randconfig-a006-20230327   gcc  
+x86_64               randconfig-a011-20230327   clang
+x86_64               randconfig-a012-20230327   clang
+x86_64               randconfig-a013-20230327   clang
+x86_64               randconfig-a014-20230327   clang
+x86_64               randconfig-a015-20230327   clang
+x86_64               randconfig-a016-20230327   clang
+x86_64               randconfig-r014-20230327   clang
+x86_64               randconfig-r035-20230327   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r004-20230327   gcc  
 
-Also good point. Similarly, I am now discussing this with HW engineers and
-trying to figure it out.
-
-
-3. What happens if you do not increase the global limit in
-IA32_UMWAIT_CONTROL[31:2]? May be just drop that patch.
-
-I am taking this approach now. Measuring and benchmarking the system now.
-
-
-4. Test this in virtual environment.
-
-Will do.
-
-
-5. Then there were several references to virualization, and this is the part of
-your feedback I did not understand. I admit I do not know much about
-virtualization.
-
-Below are few questions. I apologize in advance because if they are naive,
-please, bear with me.
-
-
-Question #1.
-
-Userspace applications can do many strange things. For example, just busy-loop
-on a variable waiting for it to change.
-
-Not social behavior. May be good idea for special apps, having dedicated CPU, as
-you pointed. E.g., DPDK or other latency-sensitive apps. Bad idea for a general
-app.
-
-However, we can't control apps, in general. If they want to busy-loop they will.
-If someone buys a VM, they may decide that they payed for it and do whatever
-they want.
-
-Now take this sort of anti-social app. Replace the busy-loop with umwait or
-tpause. You get the same result, but it saves energy. So it is an optimization,
-good thing.
-
-What am I missing?
-
-May be you implied that umwait should be designed in a way that hypervisor could
-take over the core when the app or guest kernel uses it. Then the hyperwisor
-could do something else meanwhile.
-
-But think it would increase C0.x latency observed by umwait users. That would
-make umwait not useful for those few apps that do have a good reason for using
-umwait (like DPDK).
-
-
-Question #2.
-
-Why can't we just set this global A32_UMWAIT_CONTROL[31:2] limit to 0, which
-means "forever", "no limit"?
-
-Any user of tpause or umwait must have a loop checking for the "end of wait"
-condition. Inside this loop, there is a umwait or tpause (as optimization for
-busy-looping).
-
-Both tpause and umwait break out on interrupts. Scheduler will preempt the user
-task when its time-slice is over or there is something more important to run.
-Then when the task starts again, it will continue waiting in its loop, doing
-tpause of umwait inside the loop.
-
-What is the problem I am missing?
-
-Question #3:
-
-You wrote :
-
-> Also, this series needs to be tested on virt.  Because UMWAIT, if it works at
-> all on virt, is going to have all manner of odd concequences due to the fact
-> that the hypervisor hasn't the faintest clue what's going on because there's
-> no feedback.
-
-What feed-back would hypervisor need? And what would it do with it?
-
-Is your expectation that huperviser will do something else on the CPU, like run
-another VM, while original VM is umwait'ing? If so, the umwait latency will be
-way longer than sub-1us...
-
-Thanks in advance!
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
