@@ -2,145 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8546CF149
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18316CF153
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjC2Rnj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 13:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
+        id S229748AbjC2RqO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 13:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC2Rni (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:43:38 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2760B5254;
-        Wed, 29 Mar 2023 10:43:36 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id aafa1b008520eda2; Wed, 29 Mar 2023 19:43:35 +0200
-Received: from kreacher.localnet (unknown [213.134.183.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 859211FA13B8;
-        Wed, 29 Mar 2023 19:43:34 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL pointer dereference
-Date:   Wed, 29 Mar 2023 19:43:33 +0200
-Message-ID: <12190090.O9o76ZdvQC@kreacher>
-In-Reply-To: <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
-References: <20230329090055.7537-1-rui.zhang@intel.com> <CAJZ5v0iMAT_1cQorTqK4xRTjD3a_s=Vf3OJYy3hi7=pAekLv+g@mail.gmail.com> <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
+        with ESMTP id S229638AbjC2RqN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:46:13 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2053.outbound.protection.outlook.com [40.107.94.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBB655B1;
+        Wed, 29 Mar 2023 10:46:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AVb5mkmzOwFhTXqaz9/DiXmYkDxl1GnzV/mzOGaXRpSQSWYx6CLdMMlSe1TJrQMvWRsbTfjCvUMbtqDvoVhY+RGSQ6j0jU9aE+fagOiW1zvJoKNduY80OfzcuRKvGO/fb4O62svMEschccSibOqC8Z1UKRqFXD1qHkYDdL6jJdogQeIWdib3VkNDINkzxpOuP2s/otQT4Vrt9nXHldleRwIwwSrZk6tsJjl3PiQN0RelU+U2n6MSCvdh9hfHFLFMGhrsrOr+mGeO31uPnK8sM72lgb8Pe2I2iMoQM7TC5tTB8gK+/oYCW39U2xVUemTshwTGfWXQFiVy9bNQLDbNLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WFkcmUUWOjJPBKH4ad1wuM5v88Gc6KVkN6gxiwmSJsg=;
+ b=Tj3FEkDbCnj17Hq9G9+luunyj1f1LPsb8VBI/SjPBYzgQZF+08APg2QW2KqFJZjoA6t67Dbqk5Az0TBagHmS5zs7YfobFRR1amvCQdGELH58u9JVKhWUetur/UlxJOrFz99EEDMaN8HwBXw3Gen0JBT8owkKv5z/Xvaqg2u1atA79iEuw4LvCgunCzs9ujc+QuyLi30GzKrXbRfEZ71+dZZQPL8sMMRIZKkyMyhwosoaCrHaU4o7DIUaPo8T9LmlyWtoo/1SevwtAPHKJBWFvPfdf/MmLGFjvGJbxfVllVz4LRqp2uI3LBwngW8MlGpc+Nh0PWrl0lA34toI5INERg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WFkcmUUWOjJPBKH4ad1wuM5v88Gc6KVkN6gxiwmSJsg=;
+ b=w6HO8Ak/xKcWo/PRyhAj+j8Z8ZZCShZvW8kRckT0ce6LABQ25SA+DFvnHFFKXCuj4+x6X4Nj/l8pKXlGocFifueFnNGq55H/z59MEELHGVwd33Opw9yOxOecX5tyQAH/2lV8mB05v96d3tgqo36IVBsDcxUJilQka1ZuDA3syMA=
+Received: from MW4PR03CA0304.namprd03.prod.outlook.com (2603:10b6:303:dd::9)
+ by IA1PR12MB8586.namprd12.prod.outlook.com (2603:10b6:208:44e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
+ 2023 17:46:05 +0000
+Received: from CO1NAM11FT078.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dd:cafe::4f) by MW4PR03CA0304.outlook.office365.com
+ (2603:10b6:303:dd::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
+ Transport; Wed, 29 Mar 2023 17:46:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT078.mail.protection.outlook.com (10.13.175.177) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6254.20 via Frontend Transport; Wed, 29 Mar 2023 17:46:04 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 29 Mar
+ 2023 12:46:03 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Mario Limonciello <mario.limonciello@amd.com>
+CC:     Eric DeVolder <eric.devolder@oracle.com>,
+        Borislav Petkob <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/ACPI/boot: Use FADT version to check support for online capable
+Date:   Wed, 29 Mar 2023 12:45:35 -0500
+Message-ID: <20230329174536.6931-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.183.20
-X-CLIENT-HOSTNAME: 213.134.183.20
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthhqredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeekieelheffleefgffgtdejvdektedtjeefveeugeefvdfhgfduueetiefgieelteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeefrddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddvtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
- pdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT078:EE_|IA1PR12MB8586:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2ff8b979-87a5-493e-4308-08db307d7838
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z3IKNG4gMUzXHl3AxgUpoNNLr+xpUjoJvT6IOo4RT1jv7HGwBKB23E5wg9/EbwjUkPmMkL5BwwpxvOQPMxAIvfsbRmP8lxxAdgWMr98Hu5e4kdel7kya++4DYK6KGfhqDDn/oqcm7iQ5/58NVHoqjwL+PXOnN2JxZlMvYD62e8kx3kVLr21zmEY4Y3RrK0qP66xkvcaU0HgVMLNlGm/qSaIIoyE3mXsTAWt8PzD+3+BerAtmIvGkGSmOBHWSgVf/J8q+uzgq1aJmpqtkdFWR8GDWv08XsGJX+XLDUUc7qryTTXcuTl7FD38fVgDykvwXIm076SMzca+t1K4H3h2SrKh7sE/06evzS80LCbzYz6H19KcQM3NcUwOpCHMvG46+kkCa7Dp4BA3HRNc3Ce4Dcu0qATPe3u4eYnB5ZGTRCUYaIj40yGejum9ms+25dr/XfdZCMM43GgW5Q9RgmyJERBWJGzBvBJhM33dhJjtWNit7PYaQkUyOS2UBE0Kv02nseipHfls8pinJU2ahsuGm8fdisSZdjZgBhjeiSCL3zkzsOAaJfcBM3rMlb1dulenFcelOX506pnmpQ231YwGRdsAftJYfk0aSHAtRDLwKqqHK85arbuUCmKGYm+LdZ/WxdeVaNZO4tVfdx2Wtc4UT8dbUpBsck+bm6/evQt5u4WAtc0occdDClQEprdxnrASGielIFK+F47h1nl84z37tRfvZ/LWgJVxbIp3/8HGMTCs=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(2906002)(7049001)(2616005)(426003)(336012)(83380400001)(44832011)(5660300002)(7416002)(6666004)(8936002)(41300700001)(36756003)(54906003)(110136005)(8676002)(40460700003)(316002)(4326008)(478600001)(7696005)(70206006)(70586007)(36860700001)(82310400005)(86362001)(186003)(16526019)(81166007)(356005)(47076005)(40480700001)(1076003)(26005)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 17:46:04.7649
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ff8b979-87a5-493e-4308-08db307d7838
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT078.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8586
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, March 29, 2023 6:18:31 PM CEST Daniel Lezcano wrote:
-> On 29/03/2023 18:03, Rafael J. Wysocki wrote:
-> > On Wed, Mar 29, 2023 at 5:59 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 29/03/2023 16:38, Rafael J. Wysocki wrote:
-> >>> On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
-> >>>>> On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
-> >>>>> <daniel.lezcano@linaro.org> wrote:
-> >>>>>>
-> >>>>>> On 29/03/2023 11:00, Zhang Rui wrote:
-> >>>>>>> When the hwmon device node of a thermal zone device is not found,
-> >>>>>>> using hwmon->device causes a kernel NULL pointer dereference.
-> >>>>>>>
-> >>>>>>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
-> >>>>>>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> >>>>>>> ---
-> >>>>>>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-> >>>>>>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
-> >>>>>>> I'm not sure if the Fix tag applies to such commit or not.
-> >>>>>>
-> >>>>>> Actually it reverts the work done to encapsulate the thermal zone device
-> >>>>>> structure.
-> >>>>>
-> >>>>> So maybe instead of the wholesale switch to using "driver-specific"
-> >>>>> device pointers for printing messages, something like
-> >>>>> thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
-> >>>>> the first argument can be defined?
-> >>>>>
-> >>>>> At least this particular bug could be avoided this way.
-> >>>>
-> >>>> Actually we previously said the thermal_hwmon can be considered as part
-> >>>> of the thermal core code, so we can keep using tz->device.
-> >>>>
-> >>>> I'll drop this change from the series.
-> >>>
-> >>> But it's there in my thermal branch already.
-> >>>
-> >>> Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
-> >>
-> >> Oh, right. Fair enough.
-> >>
-> >> I think Rui's patch is fine then.
-> > 
-> > I guess you mean the $subject one, that is:
-> > 
-> > https://patchwork.kernel.org/project/linux-pm/patch/20230329090055.7537-1-rui.zhang@intel.com
-> 
-> Correct
-> 
-> > What about the message printed when temp is NULL.  Should the original
-> > form of it be restored too?
-> 
-> Yes, you are right, for the sake of consistency we should restore also 
-> this one.
+ACPI 6.3 introduced the online capable bit, and also introduced MADT
+version 5.
 
-So I'm going to apply the appended patch.
+This was used to distinguish whether the offset storing online capable
+could be used. However ACPI 6.2b has MADT version "45" which is for
+an errata version of the ACPI 6.2 spec.  This means that the Linux code
+for detecting availability of MADT will mistakingly flag ACPI 6.2b as
+supporting online capable which is inaccurate as it's an ACPI 6.3 feature.
 
-Please let me know if there are any concerns regarding it.
+Instead use the FADT major and minor revision fields to distingush this.
 
+Reported-by: Eric DeVolder <eric.devolder@oracle.com>
+Reported-by: Borislav Petkob <bp@alien8.de>
+Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] thermal: thermal_hwmon: Revert recent message adjustment
+ arch/x86/kernel/acpi/boot.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-For the sake of consistency, revert the second part of the
-thermal_hwmon.c hunk from commit dec07d399cc8 ("thermal: Don't use
-'device' internal thermal zone structure field") after the first
-part of it has been reverted.
-
-Link: https://lore.kernel.org/linux-pm/5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_hwmon.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux-pm/drivers/thermal/thermal_hwmon.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_hwmon.c
-+++ linux-pm/drivers/thermal/thermal_hwmon.c
-@@ -236,7 +236,7 @@ void thermal_remove_hwmon_sysfs(struct t
- 	temp = thermal_hwmon_lookup_temp(hwmon, tz);
- 	if (unlikely(!temp)) {
- 		/* Should never happen... */
--		dev_dbg(hwmon->device, "temperature input lookup failed!\n");
-+		dev_dbg(&tz->device, "temperature input lookup failed!\n");
- 		return;
- 	}
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 1c38174b5f01..e92e3292fef7 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -146,7 +146,10 @@ static int __init acpi_parse_madt(struct acpi_table_header *table)
  
-
-
+ 		pr_debug("Local APIC address 0x%08x\n", madt->address);
+ 	}
+-	if (madt->header.revision >= 5)
++
++	if (acpi_gbl_FADT.header.revision > 6 ||
++	    (acpi_gbl_FADT.header.revision == 6 &&
++	     acpi_gbl_FADT.minor_revision >= 3))
+ 		acpi_support_online_capable = true;
+ 
+ 	default_acpi_madt_oem_check(madt->header.oem_id,
+-- 
+2.34.1
 
