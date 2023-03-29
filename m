@@ -2,124 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EB06CD6C5
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 11:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 639356CD718
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 11:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjC2Jqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 05:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
+        id S231381AbjC2J5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 05:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjC2Jqh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 05:46:37 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3699DE
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 02:46:35 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id b18so18553425ybp.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 02:46:35 -0700 (PDT)
+        with ESMTP id S231422AbjC2J5h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 05:57:37 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D193A26BB
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 02:57:34 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id l27so15038082wrb.2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 02:57:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680083195;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=29yP5h60lzQ9egSpTFTbdlo7eAPDEAXWr32KHBglSMs=;
-        b=brgqN9+UwXyVawMk0f5rX96beQUS10XnlpZhRCiTME2FUCgGPcKiim8oen7O1dKlL/
-         yBhTiT/aeW6Zjte3Gpg0xWJTjPx/frs81Luaa6fF5YgZ070kk97WS1y8z0RlUvJZs9vW
-         y8nfBagUpIImsEYWr4bMoEYpEZBbREXj3fYQaTDwAtLgulKRXwGhrjx7aIurRh/3C12q
-         3nNbKQhzgNhfoYe+deAUOLdpEsQ9kaCnIV5MAQCR9DQoCREbSXEXIgPVIb7a5zlsTgre
-         jUwGSzv1ALl/rmj5O0GOR6c6MkS3yBtM6jwUTS3fag70jS6OQM3hrQzpA6iRA/Jufe9G
-         6R6w==
+        d=linaro.org; s=google; t=1680083853;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FpDwgmB/u9vyHkL9sWwGB0UNeE/S7UThI/HZB1NgANU=;
+        b=fz4NvHv1EzsirLqLhPN2yCBBo7zPz9i6igQXeykMIbVXnmacbZlaVloT9oExv6leb2
+         //O9TTeUtlAcEi9YOGiUO3/IKFI6n/ImQdMBUy77kopI2pW4hA3DTqocZIZNRqG4mzAC
+         IkSn2Qu8uUpa7/oGGpw7JCuTerPTVqHH9ZeZP+yutTSp1Od9ZCmfqm+d4OrFN4R3Pdcy
+         ptogcAi11EP4LUGscAowEn5PZ7qGgFRyKRuuYo3zIaiGABts42vkFzwQkWgk/e5ta4y7
+         WRv3D2hsICB3Ur4m0Ra7SchroZ+C5uiBoo1uHFaapTZGPcmhLQt+FjLThZRbvd1bamI2
+         zw3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680083195;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=29yP5h60lzQ9egSpTFTbdlo7eAPDEAXWr32KHBglSMs=;
-        b=2k3lYK+X9e9QaC8m+xKeAOgiQTVMxhRLdhUN1kYrJONHU5fXmiSdVYNeHUMv6KRPcS
-         IfmRdLDm/hmGQHVY+h9SgKOw1piJ30fTUIxU7ydxreW0D4cMZX0OnGjP7f84iYszQ59j
-         2owTBJHsJS4QGi799RuN58WsoaJgm+Dr3L1PPrpFJOHF6BSJfu+6HlUMW3nyCOY0KgnB
-         +ZMDHLrkudeEKMIQ4PJ/RXTUq0QWzwYmwO2VQo9rYKAbZt0YGxz1XkhSZohOzyPQdu8x
-         CI+0zwF4VDIO2az0EJWKpeJlutq+YF/7Ld02nrv0i5zjZcqVEddyKwbL5CwPPIzc3Zq5
-         RY1w==
-X-Gm-Message-State: AAQBX9el65gzYdgPs7/eIxVUofA5vUXvW/UcdfH25+lgkjjn60KJWr7B
-        mezzQpPG9Ym4FPGHfxv7k0pzHG1ohPQlyQLB8Sp3ug==
-X-Google-Smtp-Source: AKy350Z1Ta2rwN3XbL2zTMze2j2pM+kqkv5YioDEr56Tznyh/jGgGLFPF5CnnxhxzbefWOUwN+njGklRlyHFu1tyu4c=
-X-Received: by 2002:a05:6902:70a:b0:b6e:361a:c86 with SMTP id
- k10-20020a056902070a00b00b6e361a0c86mr9993544ybt.3.1680083194908; Wed, 29 Mar
- 2023 02:46:34 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680083853;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FpDwgmB/u9vyHkL9sWwGB0UNeE/S7UThI/HZB1NgANU=;
+        b=CvcmNQ+MV8IU0rRwQTbboKlXwjRQJ4ICTe+acil2NgDZFxX965J0PGLaK8uUg1q7yY
+         SUesfVgINggdGCDUGBK1BIYMAcOAJ+MVyhyBbCJjRh7WKa8uh/Cjuwv6DEqfMVdtJj3v
+         JBxysdansdkrRqPH43x0s+cXQG2jZ90iYYp43Fx0Hv+k0AmaEWa4e/V27hLwrN/lYXLy
+         sprWsTymKzBVrdDBMp3GNv8R7rmB0asnkfIikwHuZ9PAVoeOKMYUGPwnJrFbtDF+bFol
+         2pJuCdxVpaw0JNoNz2fq5z32R4H4FYr77izZKGWCxIL8C9FkHeYWkBTKWgf4oT0ipx4D
+         Pckg==
+X-Gm-Message-State: AAQBX9dN3Ci9+LaaD2CZNWAoFbW7idwkKD56LetU0nB/hXYDCY4UFlLR
+        Ctx6fdJX/I7DKgM7AXzWO9KuJw==
+X-Google-Smtp-Source: AKy350Y8qL++D6j6z5nLdN20qyPBtNIjwnzZlz09QrPn7OlTDICNYhXSCdI9pFBsycaLCxXy+Xpc2w==
+X-Received: by 2002:a5d:590c:0:b0:2c7:d7c:7d7 with SMTP id v12-20020a5d590c000000b002c70d7c07d7mr1164710wrd.22.1680083853278;
+        Wed, 29 Mar 2023 02:57:33 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:8f24:e6f1:ea42:cf21? ([2a05:6e02:1041:c10:8f24:e6f1:ea42:cf21])
+        by smtp.googlemail.com with ESMTPSA id i1-20020a5d6301000000b002d9568395f8sm19705034wru.36.2023.03.29.02.57.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 02:57:32 -0700 (PDT)
+Message-ID: <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
+Date:   Wed, 29 Mar 2023 11:57:32 +0200
 MIME-Version: 1.0
-References: <20230324073813.22158-1-krzysztof.kozlowski@linaro.org> <880c0932-117f-61cd-dd97-c36076869c3b@linaro.org>
-In-Reply-To: <880c0932-117f-61cd-dd97-c36076869c3b@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 29 Mar 2023 11:45:59 +0200
-Message-ID: <CAPDyKFrnEwkS5p+vQ0htYTBLaZ8iFPnV0kckf6F65cacBB2k4w@mail.gmail.com>
-Subject: Re: [PATCH 1/6] arm64: dts: qcom: sm8250: drop incorrect domain idle
- states properties
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
+ pointer dereference
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230329090055.7537-1-rui.zhang@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230329090055.7537-1-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 29 Mar 2023 at 00:51, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 24/03/2023 09:38, Krzysztof Kozlowski wrote:
-> > Domain idle states do not use 'idle-state-name' and 'local-timer-stop':
-> >
-> >    sm8250-hdk.dtb: domain-idle-states: cluster-sleep-0: 'idle-state-name', 'local-timer-stop' do not match any of the regexes: 'pinctrl-[0-9]+'
-> >
-> > Reported-by: Neil Armstrong <neil.armstrong@linaro.org>
-> > Link: https://lore.kernel.org/all/20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-4-3ead1e418fe4@linaro.org/
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 --
-> >   1 file changed, 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > index 79d67b466856..9cf2de87c632 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > @@ -354,12 +354,10 @@ BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-> >               domain-idle-states {
-> >                       CLUSTER_SLEEP_0: cluster-sleep-0 {
-> >                               compatible = "domain-idle-state";
-> > -                             idle-state-name = "cluster-llcc-off";
-> >                               arm,psci-suspend-param = <0x4100c244>;
-> >                               entry-latency-us = <3264>;
-> >                               exit-latency-us = <6562>;
-> >                               min-residency-us = <9987>;
-> > -                             local-timer-stop;
->
-> Hmm, so we support setting the broadcast timer when using plain PSCI
-> idle states, but not when using the domain-based idle states.
->
-> Ulf, Rafael, Daniel, is that an omission for the domain-based idle
-> support? Or is it handled in some other way?
+On 29/03/2023 11:00, Zhang Rui wrote:
+> When the hwmon device node of a thermal zone device is not found,
+> using hwmon->device causes a kernel NULL pointer dereference.
+> 
+> Reported-by: Preble Adam C <adam.c.preble@intel.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+> I'm not sure if the Fix tag applies to such commit or not.
 
-I am not sure that we need a DT binding specifically for this, or do we?
+Actually it reverts the work done to encapsulate the thermal zone device 
+structure.
 
-So far, the timer is managed from platform specific code. For some
-Qcom based platforms, the timer should be managed in
-rpmh_rsc_write_next_wakeup(), which makes use of
-dev_pm_genpd_get_next_hrtimer().
+> ---
+>   drivers/thermal/thermal_hwmon.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> index c59db17dddd6..261743f461be 100644
+> --- a/drivers/thermal/thermal_hwmon.c
+> +++ b/drivers/thermal/thermal_hwmon.c
+> @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+>   	hwmon = thermal_hwmon_lookup_by_type(tz);
+>   	if (unlikely(!hwmon)) {
+>   		/* Should never happen... */
+> -		dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
+> +		dev_dbg(&tz->device, "hwmon device lookup failed!\n");
 
-[...]
+As it 'Should never happen', I would replace that by:
 
-Kind regards
-Uffe
+	if (WARN_ON(!hwmon))
+		/* Should never happen... */
+		return;
+
+
+
+>   		return;
+>   	}
+>   
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
