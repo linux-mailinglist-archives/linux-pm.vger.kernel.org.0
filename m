@@ -2,184 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091356CCE76
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 02:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E2E6CCF89
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 03:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjC2AE5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Mar 2023 20:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
+        id S229510AbjC2Bdu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Mar 2023 21:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjC2AE4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 20:04:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EE21A2;
-        Tue, 28 Mar 2023 17:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680048295; x=1711584295;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yRvu8GhEdtw5dS1b4qEk1Wt2dMUKhKDgF3IxIuzb0+g=;
-  b=Kxn7z/xkKOo+Frct8SiNxvpeEeE3CGYb8hptViEtxKCVOYlSUO+hzocY
-   dAv+4cAE3Rt77d+FewLMkf77SjLOBg8xJXZAhUniKiIxFv/+se9rHfCGm
-   8LOGYR8i3L3qx4I0++IzNI+UBT/aSzfEVlfkqVXpMG7Gbam3s64YDlN7w
-   RuNAl4DNfDyJM+UoSLs3dUIffQcYO/KIsRk0tI8Yx3qdbGs0QvJwT2Jqy
-   I1HXdU08T7yIb4VnfmUVHHTYLKnq6yDgBP4MrAYeDXwPUM2+yex1n1FWh
-   NyeSrT47FLDjTJULwsMhek43gUi2I4cqoBq+ptSnsIncQHQ4aBXSyqnQj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="427005709"
-X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
-   d="scan'208";a="427005709"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 17:04:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="686618348"
-X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
-   d="scan'208";a="686618348"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Mar 2023 17:04:54 -0700
-Date:   Tue, 28 Mar 2023 17:15:36 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
- checks for task classification
-Message-ID: <20230329001536.GG8958@ranerica-svr.sc.intel.com>
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
+        with ESMTP id S229436AbjC2Bdt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Mar 2023 21:33:49 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6874E129
+        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 18:33:47 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ix20so13481507plb.3
+        for <linux-pm@vger.kernel.org>; Tue, 28 Mar 2023 18:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680053627;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=b0sZVwt/KF3Lw5ppLmh71hhfx6Iu8TruV6I9k5u8Xjo=;
+        b=C5EJTj1yPwAnH+x1jVXLosA97iElbM1hL5ZNeWwTbSFtpfmi/ABvllWbiyLwA9Cm0R
+         E3iJPpnVRRiJSoiSgldzcoL03LW0DBbSaD1YuEsIKXERvqAJvgJt9C1hujufRRBDzr0S
+         z/dSYOqoXr1QypM3FYsc+gtLKpW29pVFZ7UZbAMDkhF7M2leJma1uB+vhismhqKq0Ndu
+         9ARFmvMRqdKmmlP52OMRapR0ySLLImv4gBitjuY4exYkOWKDFMDCzxfuoplfS2XXJgJV
+         FRn2u02C9UVx8j/3OR3Mhr5LT3INzQ8PPdjfq/id+qUPRnqZG9RBB6UUxgbcNzTt0GrO
+         IGOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680053627;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b0sZVwt/KF3Lw5ppLmh71hhfx6Iu8TruV6I9k5u8Xjo=;
+        b=6JQ26YNsTBgwxQDtOjDvZ0V9W4wm2G0gCEcUPvtONxG3YdcwINN9rbFk7oXQZdwHRp
+         +ErqapLY9M9EW0MKS5Z3VZLe+F2QBXe3yAY/g9Ln3ilOo4jBlrTWSDhE8GdnV8o/gfIv
+         4G9PpbCeelP9AbtBMnnohtjFjYzu6FtuVtT7v8Ah1UBs8dtNxFkAsU3xC+qzm+CGojSz
+         53lnfsQ4frxvafE4LaBZI1QIkv2+UPI2Xyy/saHKH/gHXrkMvm+G9niZD2RMiXRUAMA0
+         9rvHJvvPtQvTitiYcU70rN1Tvj0/ONM/bwFRFNlz6JUjDDSAQTL7Jpu8VYE0kiKjRUk/
+         MZ9A==
+X-Gm-Message-State: AAQBX9ffui6crnWygub6aY/5Vsi+Rsqq/lAc6+AHKo82gnZnnWoHAH/r
+        PdWQ/8Fj7wk0sCkXEnICeXlu7C09rHQ9UtnMI8+96Q==
+X-Google-Smtp-Source: AKy350Yuu6Fa1MlOy1T1DvZFfUvenEk/3KALkNavcBT/GgT+33VyzEt2ooMaE3XWN2s/CbjQ5hKHUw==
+X-Received: by 2002:a17:90b:4f48:b0:22c:59c3:8694 with SMTP id pj8-20020a17090b4f4800b0022c59c38694mr19056501pjb.44.1680053626893;
+        Tue, 28 Mar 2023 18:33:46 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170902968600b001a194df5a58sm21755126plp.167.2023.03.28.18.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 18:33:46 -0700 (PDT)
+Message-ID: <6423957a.170a0220.8bdf1.8701@mx.google.com>
+Date:   Tue, 28 Mar 2023 18:33:46 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.3-rc4-55-g075e225e906f
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 4 warnings (v6.3-rc4-55-g075e225e906f)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > In Alder Lake and Raptor Lake, the result of thread classification is more
-> > accurate when only one SMT sibling is busy. Classification results for
-> > class 2 and 3 are always reliable.
-> >
-> > To avoid unnecessary migrations, only update the class of a task if it has
-> > been the same during 4 consecutive user ticks.
-> >
-> > Cc: Ben Segall <bsegall@google.com>
-> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > Cc: Mel Gorman <mgorman@suse.de>
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: x86@kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> > Changes since v2:
-> >  * None
-> >
-> > Changes since v1:
-> >  * Adjusted the result the classification of Intel Thread Director to start
-> >    at class 1. Class 0 for the scheduler means that the task is
-> >    unclassified.
-> >  * Used the new names of the IPC classes members in task_struct.
-> >  * Reworked helper functions to use sched_smt_siblings_idle() to query
-> >    the idle state of the SMT siblings of a CPU.
-> > ---
-> >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
-> >  1 file changed, 59 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > index 35d947f47550..fdb53e4cabc1 100644
-> > --- a/drivers/thermal/intel/intel_hfi.c
-> > +++ b/drivers/thermal/intel/intel_hfi.c
-> > @@ -40,6 +40,7 @@
-> >  #include <linux/workqueue.h>
-> >
-> >  #include <asm/msr.h>
-> > +#include <asm/intel-family.h>
-> >
-> >  #include "../thermal_core.h"
-> >  #include "intel_hfi.h"
-> > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
-> >   */
-> >  #define HFI_UNCLASSIFIED_DEFAULT 1
-> >
-> > +#define CLASS_DEBOUNCER_SKIPS 4
-> > +
-> > +/**
-> > + * debounce_and_update_class() - Process and update a task's classification
-> > + *
-> > + * @p:         The task of which the classification will be updated
-> > + * @new_ipcc:  The new IPC classification
-> > + *
-> > + * Update the classification of @p with the new value that hardware provides.
-> > + * Only update the classification of @p if it has been the same during
-> > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-> > + */
-> > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
-> > +{
-> > +       u16 debounce_skip;
-> > +
-> > +       /* The class of @p changed. Only restart the debounce counter. */
-> > +       if (p->ipcc_tmp != new_ipcc) {
-> > +               p->ipcc_cntr = 1;
-> > +               goto out;
-> > +       }
-> > +
-> > +       /*
-> > +        * The class of @p did not change. Update it if it has been the same
-> > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
-> > +        */
-> > +       debounce_skip = p->ipcc_cntr + 1;
-> > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-> > +               p->ipcc_cntr++;
-> > +       else
-> > +               p->ipcc = new_ipcc;
-> > +
-> > +out:
-> > +       p->ipcc_tmp = new_ipcc;
-> > +}
-> 
-> Why does the code above belong to the Intel HFI driver?  It doesn't
-> look like there is anything driver-specific in it.
+pm/testing build: 7 builds: 0 failed, 7 passed, 4 warnings (v6.3-rc4-55-g07=
+5e225e906f)
 
-That is a good point. This post-processing is specific to the
-implementation of IPCC classes using Intel Thread Director.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc4-55-g075e225e906f/
 
-Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc4-55-g075e225e906f
+Git Commit: 075e225e906f6f4845d87b260ed61306770838fa
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
