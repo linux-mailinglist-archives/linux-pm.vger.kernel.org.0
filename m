@@ -2,108 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D5C6CF007
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4406CF019
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 19:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjC2RAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 13:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        id S230393AbjC2RFk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 13:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjC2RAC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:00:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B189619B5;
-        Wed, 29 Mar 2023 10:00:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD82B820CA;
-        Wed, 29 Mar 2023 17:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4DDC433EF;
-        Wed, 29 Mar 2023 16:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680109198;
-        bh=VdnuvhIM2cRnRHD6OIlrF1vM7Xa/zS4dOr/IjqNNj7k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WGmVkGJxklNiVx1FInWIqUPg+a4lgK5x2N65ZVa820iEqX8AIhS7d7atd8Myt23wC
-         X2Q0weysAdn2Lbmulawv6SRWEHTu7yONn0ZcgcOp0SRZAvuGDjweZcjPz2VcVse/aP
-         jSdZwBRk93rjHWyWyALcl5jVeV0FahOn/vPHKlBKTtwj0l20pXyoKcibpoI5VgSLyA
-         VNPS5MuyCqgBNAk6ydScLCI8EyYtX+zVGiP3U4/ztRdsOMB6bSo+QCZ91+LOpWuWL5
-         p8YVMnS4tdEHgrPfYrxOyaWfJVbveOrlrj4QubImSg1dOQP65Bu5IQyT3W8cZYj64h
-         X8PZMTiWVlYdg==
-Date:   Wed, 29 Mar 2023 11:59:57 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v4 10/10] PCI: tegra194: add interconnect support in
- Tegra234
-Message-ID: <20230329165957.GA3066317@bhelgaas>
+        with ESMTP id S229638AbjC2RFi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 13:05:38 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D6230C2;
+        Wed, 29 Mar 2023 10:05:37 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id ew6so66054812edb.7;
+        Wed, 29 Mar 2023 10:05:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680109536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=62e4+lmBq/lhs+cZOFYzhKCQ2kaGBP2Gx8PsA2GJi24=;
+        b=brwTXAhpSqTEZUTTq2fbdAOQgP2fNMAkrmXFGqBFPZvgUtoV1PaGW3Du4zTljiTFKq
+         N9DMw3kUENKj2MHsqhBn2YgWGanXtLgNwGHJudL8pvy6Jv98YYsOF4pP2oQ/p5QA8fZN
+         hK/g/OZqVXkBarjZHKozBlBwZ/RMiSPv7Ymfo7LEMPLry7wd+mXNNiZxN6eledtMgJU+
+         0aYPT+cKYzfGbapbk/6Vk5hMTLWnagjgoAswIBFvAeJ42XogID7gAbP7SYynmvFE/g9Q
+         uN3S+V5oG4pDvGWfXEIsdBKP1pSTlXjXmBUkmsC8OPMse/OeMvu9bRS9BjqFwLasY4KA
+         vDUA==
+X-Gm-Message-State: AAQBX9d/zrUAnNeI3v2IObhpku0I7pfKwrzVp5WIJisnWoXNZ5CZ2cd+
+        tUoUjGP8FOXMWPppL4I9GseXixie03d2Ip/pkNFWHGYG
+X-Google-Smtp-Source: AKy350aHcjL7yz7Sbh4G6+sP7BBKgi6D6567dXMKOJGqJ8hG0xKM6j5+g367Xq7mJFaE2+NGl/RrLB2bq74A7x/17vg=
+X-Received: by 2002:a17:907:160e:b0:946:a095:b314 with SMTP id
+ hb14-20020a170907160e00b00946a095b314mr3933611ejc.2.1680109536322; Wed, 29
+ Mar 2023 10:05:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d0e4e2f-a131-ca19-e5ae-ef2349623b39@nvidia.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329090055.7537-1-rui.zhang@intel.com> <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
+In-Reply-To: <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Mar 2023 19:05:25 +0200
+Message-ID: <CAJZ5v0jwrMKMSzVWkzSLBwWZGp0H0-GvnK+gPDtHEsw2XD8KKg@mail.gmail.com>
+Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
+ pointer dereference
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 02:44:34PM +0530, Sumit Gupta wrote:
-> On 28/03/23 23:23, Bjorn Helgaas wrote:
-> > > +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
-> > > +{
-> > > +     struct dw_pcie *pci = &pcie->pci;
-> > > +     u32 val, speed, width;
-> > > +
-> > > +     val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
-> > > +
-> > > +     speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
-> > > +     width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
-> > > +
-> > > +     val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
-> > > +
-> > > +     if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
-> > > +             dev_err(pcie->dev, "can't set bw[%u]\n", val);
-> > > +
-> > > +     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> > 
-> > Array bounds violation; PCI_EXP_LNKSTA_CLS is 0x000f, so possible
-> > speed (CLS) values are 0..0xf and "speed - 1" values are -1..0xe.
-> > 
-> > pcie_gen_freq[] is of size 4 (valid indices 0..3).
-> > 
-> > I see that you're just *moving* this code, but might as well fix it.
-> > 
-> Thank you for the review.
-> Will include the below change in the same patch. Please let me know if any
-> issue.
-> 
->  -       clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
->  +       if (speed && (speed <= ARRAY_SIZE(pcie_gen_freq)))
->  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
->  +       else
->  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[0]);
+On Wed, Mar 29, 2023 at 6:03 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 29/03/2023 11:00, Zhang Rui wrote:
+> > When the hwmon device node of a thermal zone device is not found,
+> > using hwmon->device causes a kernel NULL pointer dereference.
+> >
+> > Reported-by: Preble Adam C <adam.c.preble@intel.com>
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-I didn't notice that speed is a u32, so -1 is not a possible value.
-Also, it's used earlier for PCIE_SPEED2MBS_ENC(), so you could do
-something like this:
+Applied, thanks!
 
-  speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val) - 1;
-  if (speed >= ARRAY_SIZE(pcie_gen_freq))
-    speed = 0;
-
-  val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) /
-	BITS_PER_BYTE);
-  ...
-  clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> > ---
+> > Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+> > dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+> > I'm not sure if the Fix tag applies to such commit or not.
+> > ---
+> >   drivers/thermal/thermal_hwmon.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> > index c59db17dddd6..261743f461be 100644
+> > --- a/drivers/thermal/thermal_hwmon.c
+> > +++ b/drivers/thermal/thermal_hwmon.c
+> > @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+> >       hwmon = thermal_hwmon_lookup_by_type(tz);
+> >       if (unlikely(!hwmon)) {
+> >               /* Should never happen... */
+> > -             dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
+> > +             dev_dbg(&tz->device, "hwmon device lookup failed!\n");
+> >               return;
+> >       }
+> >
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
