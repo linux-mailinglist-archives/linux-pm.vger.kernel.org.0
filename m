@@ -2,52 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB47F6CF68F
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 00:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442636CF6A2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 00:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjC2Wrl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 18:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S229643AbjC2W6q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 18:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC2Wrk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 18:47:40 -0400
+        with ESMTP id S229603AbjC2W6p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 18:58:45 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD4D10C3;
-        Wed, 29 Mar 2023 15:47:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF3346AF;
+        Wed, 29 Mar 2023 15:58:44 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 513A36603170;
-        Wed, 29 Mar 2023 23:47:38 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C6F386603170;
+        Wed, 29 Mar 2023 23:58:42 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680130058;
-        bh=GlKdC9Vyz/FZyEE9Yl5UDhAdLZpTF5B1FyIJmbb/pKc=;
+        s=mail; t=1680130722;
+        bh=y7U48RuXUJqEQN0UfcMmQ5lXGvZsqyULU9S+62lSVS0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ceUCbbVSvDwE3eakCvEsLwfxmXkLU3nNSUBRF4Y/Uia+HfB+A+0YFfuwfrkPQO4/d
-         szdElL7MtJ2lMHb5+aLbEQeVb5YQqFu0vyiMrZqOhe7XIADYMEzyKq1eJYbXX3uHv5
-         Jx7pXFp437rkTKfCB31YpIDwb84sm9Io79m+9HT4MCsrZg5O6k+B1gx+9hfsDJceJE
-         TEt2PtP8SnI4CEh2k843ui3hF703oye54WOoAjqVOyDHiv7ytLzyySqkNWR1aVNmsc
-         2uldq2549jhRG7baycnOxCEKIl7oshZWNeaTAP4D9Yrjvcx+ZVrckxgzfQobm6kX7u
-         e4P8Z6kzTL1TA==
+        b=EQz/cV4BLcpkSriuwlm9SUZ9nNVaOujc2k6wwcJNp8RAu/9dvIL9yY0fj1AFr5U5l
+         fleApFlh/ENyGxmSf3d/VVK8OIyRX5//vRYtKLYATv5qB+bb41JQ7bAn+hNPcKVdu4
+         IOQxyIdJVHXsLST2R4wyy9sWFLRh/oZ5+EgYFx916Ua8f8m1FYnaJ3eo+ELklk78Zl
+         WRIk30HCy8GtMY7LuZpyJrTCV+QNAGReKx6eYotwh9o9ZNAnpLhMQRm2h0ALLcpA6O
+         KNrw9SG/RvvpPyzD4476Cp0knWgZEg/VBQwQu6nPzRv0UDre20oi7b7xwhVMI5elXc
+         Drxbbb5YUWHAw==
 Received: by mercury (Postfix, from userid 1000)
-        id 67C701062665; Thu, 30 Mar 2023 00:47:36 +0200 (CEST)
-Date:   Thu, 30 Mar 2023 00:47:36 +0200
+        id 1BFFE1062665; Thu, 30 Mar 2023 00:58:40 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 00:58:40 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Alistair <alistair@alistair23.me>, ye.xingchen@zte.com.cn,
-        pali@kernel.org, sravanhome@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: power_supply_show_property Kernel Oops
-Message-ID: <20230329224736.qzidpkzkdth2lvuq@mercury.elektranox.org>
-References: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
- <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
+To:     Hermes Zhang <chenhuiz@axis.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Davis <afd@ti.com>, linux-kernel@vger.kernel.org,
+        kernel@axis.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] power: supply: bq256xx: Apply TS_IGNORE from
+ devicetree
+Message-ID: <20230329225840.26op4wdgi5cgtpkj@mercury.elektranox.org>
+References: <20230323072347.438932-1-chenhuiz@axis.com>
+ <20230323072347.438932-2-chenhuiz@axis.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qzkccpmqhu6ctnn7"
+        protocol="application/pgp-signature"; boundary="xroj6drwz4f3vnyk"
 Content-Disposition: inline
-In-Reply-To: <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
+In-Reply-To: <20230323072347.438932-2-chenhuiz@axis.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -58,89 +61,209 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---qzkccpmqhu6ctnn7
-Content-Type: text/plain; charset=utf-8
+--xroj6drwz4f3vnyk
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Mar 29, 2023 at 04:43:19PM +0200, Linus Walleij wrote:
-> On Wed, Mar 29, 2023 at 1:16=E2=80=AFPM Alistair <alistair@alistair23.me>=
- wrote:
+On Thu, Mar 23, 2023 at 03:23:47PM +0800, Hermes Zhang wrote:
+> TS_IGNORE is default off in bq256xx chip. For some HW which doesn't have
+> the NTC, we need to set TS_IGNORE to 1 to make the charge work. The new
+> "ti,no-thermistor" is introduced to toggle it.
 >=20
-> > [    2.466136]  string from vsnprintf+0x158/0x424
-> > [    2.470603]  vsnprintf from vscnprintf+0x10/0x24
-> > [    2.475241]  vscnprintf from sysfs_emit+0x50/0xac
-> > [    2.479975]  sysfs_emit from power_supply_show_property+0x1d0/0x26c
-> > [    2.486269]  power_supply_show_property from add_prop_uevent+0x30/0x=
-8c
-> > [    2.492815]  add_prop_uevent from power_supply_uevent+0xb4/0xe4
-> > [    2.498753]  power_supply_uevent from dev_uevent+0xc4/0x21c
-> > [    2.504352]  dev_uevent from kobject_uevent_env+0x1cc/0x510
-> > [    2.509953]  kobject_uevent_env from power_supply_changed_work+0x7c/=
-0xb4
-> > [    2.516675]  power_supply_changed_work from process_one_work+0x1e8/0=
-x3e8
-> > [    2.523396]  process_one_work from worker_thread+0x2c/0x504
-> > [    2.528986]  worker_thread from kthread+0xcc/0xec
-> > [    2.533716]  kthread from ret_from_fork+0x14/0x24
-> > [    2.538443] Exception stack(0xf0dadfb0 to 0xf0dadff8)
->=20
-> This looks like running a worker before something this worker is
-> accessing has been set up.
->=20
-> > As it's on a consumer device I don't have a way to connect a debugger. =
-So I'm
-> > a little stuck on what the problem is. The only related change I see be=
-tween
-> > 6.2 and 6.3-rc4 is commit a441f3b90a340e5c94df36c33fb7000193ee0aa7
-> > "power: supply: use sysfs_emit() instead of sprintf() for sysfs show()"=
-, but
-> > that doesn't look like it would cause this oops.
->=20
-> Did you try reverting it?
+> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+> ---
 
-Does not look like a race condition with a worker to me. The patch
-adds a couple of properties to the power-supply in an incorrect way.
-I did not look deeply, but it's at least missing an update to
-power_supply_attrs. I guess you were 'lucky' that it did not crash
-with v6.2.
-
-None of the extra properties are acceptable upstream btw.:
-
-POWER_SUPPLY_PROP_CURRENT_MAX2:
-    The driver seems to use CURRENT_MAX2 for input current;
-    POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT should be used for that
-
-POWER_SUPPLY_PROP_CHARGER_MODE:
-    OTG should be handled via a regulator
-
-POWER_SUPPLY_PROP_STATUS_EX:
-    Use extcon for connectors
-
-Greetings,
+Does not apply, please rebase against latest power-supply for-next
+branch.
 
 -- Sebastian
 
---qzkccpmqhu6ctnn7
+> Notes:
+>     v2: change property name to ti,no-thermistor
+>    =20
+>     v3: drop "|" in property description
+>=20
+>  drivers/power/supply/bq256xx_charger.c | 28 ++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
+y/bq256xx_charger.c
+> index 9cf4936440c9..cacaae1d559b 100644
+> --- a/drivers/power/supply/bq256xx_charger.c
+> +++ b/drivers/power/supply/bq256xx_charger.c
+> @@ -41,6 +41,9 @@
+>  #define BQ256XX_IINDPM_MAX_uA		3200000
+>  #define BQ256XX_IINDPM_DEF_uA		2400000
+> =20
+> +#define BQ256XX_TS_IGNORE		BIT(6)
+> +#define BQ256XX_TS_IGNORE_SHIFT		6
+> +
+>  #define BQ256XX_VINDPM_MASK		GENMASK(3, 0)
+>  #define BQ256XX_VINDPM_STEP_uV		100000
+>  #define BQ256XX_VINDPM_OFFSET_uV	3900000
+> @@ -153,6 +156,7 @@
+>   * @vindpm: input voltage limit
+>   * @ichg_max: maximum fast charge current
+>   * @vbatreg_max: maximum charge voltage
+> + * @ts_ignore: TS_IGNORE flag
+>   */
+>  struct bq256xx_init_data {
+>  	u32 ichg;
+> @@ -163,6 +167,7 @@ struct bq256xx_init_data {
+>  	u32 vindpm;
+>  	u32 ichg_max;
+>  	u32 vbatreg_max;
+> +	bool ts_ignore;
+>  };
+> =20
+>  /**
+> @@ -259,6 +264,7 @@ struct bq256xx_device {
+>   * @bq256xx_set_iterm: pointer to instance specific set_iterm function
+>   * @bq256xx_set_iprechg: pointer to instance specific set_iprechg functi=
+on
+>   * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
+> + * @bq256xx_set_ts_ignore: pointer to instance specific set_ts_ignore fu=
+nction
+>   *
+>   * @bq256xx_def_ichg: default ichg value in microamps
+>   * @bq256xx_def_iindpm: default iindpm value in microamps
+> @@ -290,6 +296,7 @@ struct bq256xx_chip_info {
+>  	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
+>  	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
+>  	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
+> +	int (*bq256xx_set_ts_ignore)(struct bq256xx_device *bq, bool ts_ignore);
+> =20
+>  	int bq256xx_def_ichg;
+>  	int bq256xx_def_iindpm;
+> @@ -670,6 +677,12 @@ static int bq25601d_set_chrg_volt(struct bq256xx_dev=
+ice *bq, int vbatreg)
+>  						BQ256XX_VBATREG_BIT_SHIFT);
+>  }
+> =20
+> +static int bq256xx_set_ts_ignore(struct bq256xx_device *bq, bool ts_igno=
+re)
+> +{
+> +	return regmap_update_bits(bq->regmap, BQ256XX_INPUT_CURRENT_LIMIT,
+> +				BQ256XX_TS_IGNORE, (ts_ignore ? 1 : 0) << BQ256XX_TS_IGNORE_SHIFT);
+> +}
+> +
+>  static int bq256xx_get_prechrg_curr(struct bq256xx_device *bq)
+>  {
+>  	unsigned int prechg_and_term_curr_lim;
+> @@ -1279,6 +1292,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+>  		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+>  		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+>  		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> @@ -1316,6 +1330,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1346,6 +1361,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1376,6 +1392,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1406,6 +1423,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D bq256xx_set_ts_ignore,
+> =20
+>  		.bq256xx_def_ichg =3D BQ25611D_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1436,6 +1454,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D bq256xx_set_ts_ignore,
+> =20
+>  		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1466,6 +1485,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D bq256xx_set_ts_ignore,
+> =20
+>  		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1582,6 +1602,12 @@ static int bq256xx_hw_init(struct bq256xx_device *=
+bq)
+>  	if (ret)
+>  		return ret;
+> =20
+> +	if (bq->chip_info->bq256xx_set_ts_ignore) {
+> +		ret =3D bq->chip_info->bq256xx_set_ts_ignore(bq, bq->init_data.ts_igno=
+re);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	power_supply_put_battery_info(bq->charger, bat_info);
+> =20
+>  	return 0;
+> @@ -1616,6 +1642,8 @@ static int bq256xx_parse_dt(struct bq256xx_device *=
+bq,
+>  	if (ret)
+>  		bq->init_data.iindpm =3D bq->chip_info->bq256xx_def_iindpm;
+> =20
+> +	bq->init_data.ts_ignore =3D device_property_read_bool(bq->dev, "ti,no-t=
+hermistor");
+> +
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.30.2
+>=20
+
+--xroj6drwz4f3vnyk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQkv/8ACgkQ2O7X88g7
-+poDug//Y4VmYx0Yo+rmeruHUGilW77ymPfnckdCSKkZrxvwZj1w5zKbOpsg3Twv
-14lqZ1y18QfGyNsq77YKNjgllBAfiZ0buzzozWtvm7xYoFXU92IP6ruc4oBfRR+Q
-IJLzg9BAvxFfa8f201BdbPWBoyeuJc28j48eGPzGyA2LW/Sol5nSukFuZXD8T5eD
-uCdp/Hv2DDBo/jHL7Yj8c7jQWhWQasDAHZdqqDfUO4mRk2bNBODxBj5AkmnYWiOT
-Kd8TnOelr+t0SsfkN8Pwp5OcwVJ60FHRcXTpuS5+1Vjijn+MAFFXgNMvYSXAAve/
-QlfGJ48v163eHffjeMplwt5COKLyDFxJXskvCInS+nVsEjSneIkDf6GC640DT7qq
-fu6RBTXBYYsx2b4c7AG3VGHuHp5sswQ6CJY+ApeLkqkL6PSiJjjwzuRu6R6QYFyA
-qWDtua86lLYFFYk8sEaAGDwF7lVFE+1wbCtgMxso0jN1Ddfyz1tmQGCXNcFtnlTg
-0I4fzTUGZSIAv6eW3cGplTr4SV3pA5PzVMStU8PhTKHWaIlXHFJoSl6AfosMQPpR
-1S0ynp71ftwL2tfPswEjUCrwEBYfwiG1ByzfOF4fDhlRyz6i1mi1bLWZ+ASf6pgZ
-DqAsUIDTuY6vWhiYhnCWeFUYY4BwyU324cBq5w9VbDTemL7F0q0=
-=wWQb
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQkwpcACgkQ2O7X88g7
++po4ZA//WTfB+7L6lPnP4bLUiZeBkgF/ej0grZzJtg6bxpKU2IestEF2zvn6159o
+ol+ndgwWUNjmb9PI+OhcP12pOn+rD/rpIpN5hCtPghVUyXjb7SrsX4Tvr/E/9ugm
+my5ikJOCoIpDmRdju+GN/GwOLZjxHuxcOfF09Dzni4VWsOyOnDXAfNLlctPDV/1w
++2rqcXLtxnQcp6bgc3eJ1QKKOnclfhO979+SBpwYfCVBjsiebP2vsqps00oVYmvh
+b3F5h3WQeUL8dbhwdJr8VhvfXfT7GGKdFZVI8LZvOggUrgHUQV7Oxd4YgLlxPEaz
+XC9+1qrKjO1GCiujrspRwK8h/l62nI+3G/cT/KnutfHUO0kEYwKluwBEjwdFSwhr
+OQoIVuazwtFIzhAHm5/gRhf3iCIMDp84JtbEDYMCINiTrr4omS5Dh9Svk0BUET/m
+ZqlahY73Q43wUz0136eKdzALbjMi6YO5jhdiQ4Y5++/YPPdqqKLErsH/rwCTK8j2
+fTwR7iU8SItNY5xuVY+9td83t2rfbog09Ua6Rpk2gz/5q6hE5L/ds/WQebwp7Vzt
+JxzhqIpENUx8cBSh4ZFhNUwSwQ1/Kw2JyOunGSEUUX9VSkU4xjEMD1lDXKi7ARrj
+igH544WtMs8A0iJ38dSp2Xei2kQ0+kiwWvU1rXQrgfPX3MAmIqc=
+=DA45
 -----END PGP SIGNATURE-----
 
---qzkccpmqhu6ctnn7--
+--xroj6drwz4f3vnyk--
