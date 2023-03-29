@@ -2,247 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611056CD960
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 14:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7C26CDA0C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 15:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjC2MeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 08:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S229486AbjC2NGk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 09:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjC2MeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 08:34:05 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEF349C7
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 05:34:03 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id dw14so10181183pfb.6
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 05:34:03 -0700 (PDT)
+        with ESMTP id S229615AbjC2NGj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 09:06:39 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3F54EF2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 06:06:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so18491617pjp.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 06:06:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1680093242;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kpAhLQZY7Czy6y1NGq4c0NlbJ5rELrH1U8V8KvW/EPk=;
-        b=Sfj6WKW6hh8yUQXVKEjK8xSx5KBZQTD5cOxgkAIdmAGHUF8bhz5dbFq5rfV0if5Mp3
-         xVZhukgHYouNLZy0wtNQJV+oItOByU9iKgNPnOL4tItc27x5njR4QSWwV95MdirJnZYN
-         Ns1L27ESYZE1wwIa7DUV5APwo0PwGa/vytK0zIGi5TSHv5XO52zn1zxLk+mDleOCdR/M
-         0y/Av/LYhbYRiSzH/UvBsMW9lGUdfv32lktGOxGoVjioD7xHn27oN2/GZYW28lQbpOQN
-         YMx2C1JQQmjTLgJ9GJC/SIg7LBiUfJsGrCXeWhRzlpCtSp/P5e2QnVKSMcyH6H+4Zmmg
-         XR9w==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680095169;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=u73tZ377b6xE9nGdafuPLwuocr22/5eSxEh0UWluNqo=;
+        b=LohcdaDhhjcOz7O2xTbbNQ8Y49+P6EphtEM2omW8VSV8H7zgLr6Hqu38PPH8Q9NA8z
+         yeD7rSEYWmGUj9+Q9IqjvEpC1uxsN0DBcz7rMJjZqae6GE0JFu0t9PmQ4tXB1tSFORmo
+         4cXXvGYE9Q+Kz1RU6EWUktMy7P5oO1U2pF5IhEjyp1hTOHaxBofkzv7VQxh/wVSb3Yc0
+         xqEn66zvGxEEVwBFuBZu00hffaLoID9BwrDdK4Ep4UXL4j8VQda3jr3d+RIW3d548cgw
+         Ic88mYafeTxgQsNiPbAl0NhHogjNJb34uA6KUqSFSECsyee8KM7RgO9XfLh3tSGlKmF6
+         0VlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680093242;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kpAhLQZY7Czy6y1NGq4c0NlbJ5rELrH1U8V8KvW/EPk=;
-        b=xRZvGF2G6+w6roCHa8A9T4Y2y0qrBwd3Qwd8uFrLrU8F5JsBDVHxSf/D8KWRJobPfj
-         b/oZe+Ban5mvUs7ZPatnoZ5766cqX3wRoo/bNTof/jwutSXqiWS/TLQdEk/h1dwEAjYs
-         cRxH6Hb2ERoKlozNXNRZZ+aCAeKmrTmvJSF8CMA7SQjsH0EaetzcuG7Vt1ndip8Egn56
-         53qhTG1H8xKMyjfRadzlT2uh36gm6rfSpu8kvKwpXij28nsUzPukawX9UpvsnNxoceDe
-         UJn52XmQ8BkuerV5KS4FfcGQYk2bJN8vxoQXzPqZTMGmbgQnJUtrXTG7jEqcH40P97wP
-         +pXQ==
-X-Gm-Message-State: AAQBX9eqTKEZ927LnxL3eMTmS1UT6zcNaa7X9E3Q5m+L1Bo3hwofVSr7
-        b+DAxN8r0pk0FJxfEUtrF+Ssjo2ejoNlFXSsX+dmAg==
-X-Google-Smtp-Source: AKy350bTEBVu80afZUAhcU2LzPQOG5P0SyVmTgeRpn2R04YwhKA3Js3ITRxqXFZvg3eiiSVvj8UFkqJHFHeBZUQEyHE=
-X-Received: by 2002:a63:c2:0:b0:513:5ac2:8e59 with SMTP id 185-20020a6300c2000000b005135ac28e59mr3176999pga.10.1680093242085;
- Wed, 29 Mar 2023 05:34:02 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680095169;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u73tZ377b6xE9nGdafuPLwuocr22/5eSxEh0UWluNqo=;
+        b=NjS94ljmHfWDVHW9Ca1HJQwIoEyCoXVRzMO9SDLWyn34yr1dwsqOUPgWny4tLunj4V
+         1GnYoy0ixhg9jQ/+c/Rabvu8fJ+4cXt7u1kdJFAvOL7ZOUYmVrYAd+HAhmnySKH3Bs6X
+         uP0wIR9sELAw1gWRZpaxg2dIQjNdtN8XT+PQGatiWkBeii96Spyr9iQtoN0G6M7DMaud
+         imwReGVFc71oiS25mRRhkd6fQH+zXVHwXuqKYWWSG8OA4QRZpOM8gbd0BcHQ5uNpSonP
+         wd9ei1zKF1TlRqa8Nt7YwHv8QqqZLVl0fwr5l/ZVVy1kSLGVGhASt4AU5yybPaMNk946
+         3z/g==
+X-Gm-Message-State: AAQBX9eoRXDp/+tY2Q2P/UJfYFmg3WkfwdCxcn+zLqzlF9WOWX+ik9JG
+        jrXS/m6f5b3ychS4Isuyp/TINfQEb2juBDeI1ES/2Q==
+X-Google-Smtp-Source: AKy350Y41i36EeyHITdjzdB/B0ciJS7SSNc/vV3VBe6VbPVvQPZ9V6zV3OWoVud+d+m38Fo9hJ2v3A==
+X-Received: by 2002:a17:902:fb4b:b0:1a1:924d:19f6 with SMTP id lf11-20020a170902fb4b00b001a1924d19f6mr16477228plb.66.1680095168413;
+        Wed, 29 Mar 2023 06:06:08 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902900300b001a060007fcbsm22964240plp.213.2023.03.29.06.06.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 06:06:08 -0700 (PDT)
+Message-ID: <642437c0.170a0220.28eaa.9efd@mx.google.com>
+Date:   Wed, 29 Mar 2023 06:06:08 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230213100921.268770-1-jaz@semihalf.com> <20230213100921.268770-2-jaz@semihalf.com>
-In-Reply-To: <20230213100921.268770-2-jaz@semihalf.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Wed, 29 Mar 2023 14:33:51 +0200
-Message-ID: <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
-Subject: Re: [RFCv3 1/1] platform/x86: Add virtual PMC driver used for S2Idle
-To:     linux-kernel@vger.kernel.org, hdegoede@redhat.com
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, markgross@kernel.org, dtor@google.com,
-        mario.limonciello@amd.com, linux-pm@vger.kernel.org,
-        x86@kernel.org, platform-driver-x86@vger.kernel.org,
-        rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.3-rc4-57-g2a0bc4026820
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc4-57-g2a0bc4026820)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Hans,
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc4-57-g2a=
+0bc4026820)
 
-Do you think that this RFC is in good enough state to start the ACPI
-ID registration process so after it will be completed we could land
-this solution? Or maybe we could land it (of course if there are no
-other remarks) even before and adjust if needed?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc4-57-g2a0bc4026820/
 
-Thank you in advance,
-Grzegorz
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc4-57-g2a0bc4026820
+Git Commit: 2a0bc402682085328f33e102245b49ffc51ca4a4
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
+Warnings summary:
 
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-pon., 13 lut 2023 o 11:11 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=C5=82=
-(a):
->
-> Virtual PMC driver is meant for the guest VMs for the S2Idle
-> notification. Its purpose is to register S2Idle dev ops check handler,
-> which will evaluate ACPI _DSM just before the guest enters S2Idle power
-> state.
->
-> This allows to trap on MMIO access done as a consequence of _DSM
-> evaluation and therefore notify the VMM about the guest entering S2Idle
-> state.
->
-> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
-> ---
-> Changelog v1..v2:
-> - Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
->
-> Changelog v2..v3:
-> - Add MODULE_LICENSE
-> - Remove "amd" prefixes
-> - Be more verbose in VIRT_PMC config description and make it
->   HYPERVISOR_GUEST dependent
-> - Add extra check ensuring that DSM method supports ACPI_VIRT_PMC_NOTIFY =
-function
-> ---
->  drivers/platform/x86/Kconfig    |  7 +++
->  drivers/platform/x86/Makefile   |  3 ++
->  drivers/platform/x86/virt_pmc.c | 83 +++++++++++++++++++++++++++++++++
->  3 files changed, 93 insertions(+)
->  create mode 100644 drivers/platform/x86/virt_pmc.c
->
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index 5692385e2d26..837ce201b68b 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
->           buttons below the display. This module adds an input device
->           that delivers key events when these buttons are pressed.
->
-> +config VIRT_PMC
-> +       tristate "Virtual Power Management Controller"
-> +       depends on ACPI && SUSPEND && HYPERVISOR_GUEST
-> +       help
-> +         The Virtual PMC driver is meant for the guest VMs and its main
-> +         purpose is to notify about guest entering s2idle state.
-> +
->  endif # X86_PLATFORM_DEVICES
->
->  config P2SB
-> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
-e
-> index 1d3d1b02541b..c4d3056cf4ea 100644
-> --- a/drivers/platform/x86/Makefile
-> +++ b/drivers/platform/x86/Makefile
-> @@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)         +=3D intel_scu_wd=
-t.o
->  obj-$(CONFIG_INTEL_SCU_IPC_UTIL)       +=3D intel_scu_ipcutil.o
->  obj-$(CONFIG_X86_INTEL_LPSS)           +=3D pmc_atom.o
->
-> +# Virtual PMC
-> +obj-$(CONFIG_VIRT_PMC)                 +=3D virt_pmc.o
-> +
->  # Siemens Simatic Industrial PCs
->  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)      +=3D simatic-ipc.o
->
-> diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_=
-pmc.c
-> new file mode 100644
-> index 000000000000..a5966bb9048f
-> --- /dev/null
-> +++ b/drivers/platform/x86/virt_pmc.c
-> @@ -0,0 +1,83 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Virtual Power Management Controller Driver
-> + *
-> + * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define ACPI_VIRT_PMC_DSM_UUID "9ea49ba3-434a-49a6-be30-37cc55c4d397"
-> +#define ACPI_VIRT_PMC_NOTIFY 1
-> +
-> +static acpi_handle virt_pmc_handle;
-> +
-> +static void virt_pmc_s2idle_notify(void)
-> +{
-> +       union acpi_object *out_obj;
-> +       guid_t dsm_guid;
-> +
-> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
-> +
-> +       out_obj =3D acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
-> +                                       0, ACPI_VIRT_PMC_NOTIFY, NULL);
-> +
-> +       acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %=
-s\n",
-> +                         ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : =
-"failed");
-> +
-> +       ACPI_FREE(out_obj);
-> +}
-> +
-> +static struct acpi_s2idle_dev_ops pmc_s2idle_dev_ops =3D {
-> +       .check =3D virt_pmc_s2idle_notify,
-> +};
-> +
-> +static int virt_pmc_probe(struct platform_device *pdev)
-> +{
-> +       int err =3D 0;
-> +       guid_t dsm_guid;
-> +
-> +       virt_pmc_handle =3D ACPI_HANDLE(&pdev->dev);
-> +
-> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
-> +
-> +       if (!acpi_check_dsm(virt_pmc_handle, &dsm_guid, 0,
-> +                           1 << ACPI_VIRT_PMC_NOTIFY)) {
-> +               dev_err(&pdev->dev, "DSM method doesn't support ACPI_VIRT=
-_PMC_NOTIFY\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       err =3D acpi_register_lps0_dev(&pmc_s2idle_dev_ops);
-> +       if (err)
-> +               dev_err(&pdev->dev, "failed to register LPS0 sleep handle=
-r\n");
-> +
-> +       return err;
-> +}
-> +
-> +static int virt_pmc_remove(struct platform_device *pdev)
-> +{
-> +       acpi_unregister_lps0_dev(&pmc_s2idle_dev_ops);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct acpi_device_id virt_pmc_acpi_ids[] =3D {
-> +       {"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
-> +
-> +static struct platform_driver virt_pmc_driver =3D {
-> +       .driver =3D {
-> +               .name =3D "virtual_pmc",
-> +               .acpi_match_table =3D ACPI_PTR(virt_pmc_acpi_ids),
-> +       },
-> +       .probe =3D virt_pmc_probe,
-> +       .remove =3D virt_pmc_remove,
-> +};
-> +
-> +module_platform_driver(virt_pmc_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Virtual PMC Driver");
-> --
-> 2.39.1.581.gbfd45094c4-goog
->
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
