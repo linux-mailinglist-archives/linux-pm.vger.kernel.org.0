@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFDF6CD92B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 14:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2EF6CD93D
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Mar 2023 14:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjC2MNo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 08:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S229798AbjC2MRQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 29 Mar 2023 08:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjC2MNn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 08:13:43 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7BE1A8;
-        Wed, 29 Mar 2023 05:13:42 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id w9so62414470edc.3;
-        Wed, 29 Mar 2023 05:13:42 -0700 (PDT)
+        with ESMTP id S229512AbjC2MRP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 08:17:15 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05041BC5;
+        Wed, 29 Mar 2023 05:17:13 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id ek18so62406514edb.6;
+        Wed, 29 Mar 2023 05:17:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680092021;
+        d=1e100.net; s=20210112; t=1680092232;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mjeu4VmyyyTeDLcxdUp4fgPNGQ6EeHxHPvZajGU2QbU=;
-        b=7ZJOoC3feoDJnEa8kOwhfW78BPNoAZ6vGKG6iAe3Vf/yw5m21mH0nxz8BCh+rxlCka
-         BTIIh6R90wkt1tWMJyN4sfFgBAsROt1rA9ONGLGUJ6+0Y+BVCRLFXiBlvukOB1o0WqOu
-         61EyB5ghAz54uBUoDcSk2ry17xN+W+P3DkWe7UVdvquNvVsPwNBQAjqwJTX/ncDx4WmS
-         mv3vJCXbCaSdvjYUo3wmBmMRoaF9JxNsdUAnQvO5TzaTc1LsQF5Q6lIEZDkQTwoffw2c
-         pA0nDfbM47pN/74X3nZ+yX3x22OnlTwdyml3bvc99U8Uq3Y3I8botVVffMN1a20RdpKB
-         wW2g==
-X-Gm-Message-State: AAQBX9eGZu1abC3WocVOwhRMTlje1wrMj5X+ic6jJczgU6iadTUVgImi
-        BPKq2cYDhopI47HSQ/7ryT28M6EtTvZJqQSawOk=
-X-Google-Smtp-Source: AKy350bpqRTT8ur86JxyGdFh3xBWbeNU+pQwsPX2u1UP8gk8+z/1z9r7PYF3ZVgnJU5ELFa/+a6EyaVVZRqvqEOHrqc=
-X-Received: by 2002:a50:d49e:0:b0:4fc:ebe2:2fc9 with SMTP id
- s30-20020a50d49e000000b004fcebe22fc9mr9471483edi.3.1680092020711; Wed, 29 Mar
- 2023 05:13:40 -0700 (PDT)
+        bh=DShqxr4qsaywny3Edkqb64hMKKyKlgUunkfAdtTqeEc=;
+        b=Jg+ir531VFweKkumDnhkFc0FgE/i8LG3z9wAp8FiaHOYpoAz6PPKLtFlVkctn666M0
+         c0G5BBRsqnFWabM354ykVCD/EGJe9kAza5gHYgiUEyDUjx4mC1g//cyy//E94kxCnk65
+         zGKWYWc65G/CZsznkhT6V429LAsNVUqH5l9eOVN+b+Gwkq927eaYrxOhDlQcPT9xwNwi
+         0ro1aeHBapOknESw+zA5+pJPy1oFKUNa56/nkXxWvSz59HnErRwIshiqC33yK2cQWwiC
+         WBVZLMoChGOyJAu66j6suqxT7kFxaU+pGq/6sApxwYPhwtp/noLyT98Uju8VYMPNtsRr
+         sn0g==
+X-Gm-Message-State: AAQBX9fkfTZPTwpZf74dGL7EaB95EMe2ZTYHs0sHUIhJsMpKep/9l0Kp
+        qIIlwu58Yh0Y85i4eJK4SyG8sHmenE1i2Y9ftQU=
+X-Google-Smtp-Source: AKy350a42BNZly7NT1YAwXG/xznlsRLm0qlSStJr0m15aL3s8F1xXbZi14AmXLyXGBW3zFxuIWjdqfACe78pd+6oxxo=
+X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
+ gn2-20020a1709070d0200b009316921bdbbmr9258696ejc.2.1680092232323; Wed, 29 Mar
+ 2023 05:17:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0hGKKPiK86Z5PcG-EEHU7a=3d-4S2miRqNPuwjS1tF0BQ@mail.gmail.com> <20230328234149.GB8958@ranerica-svr.sc.intel.com>
-In-Reply-To: <20230328234149.GB8958@ranerica-svr.sc.intel.com>
+ <20230207051105.11575-16-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0iidC0LxqpE60J5HHQhvv8iHjMGdxM89-7p-QQE99qVEQ@mail.gmail.com> <20230328234119.GA8958@ranerica-svr.sc.intel.com>
+In-Reply-To: <20230328234119.GA8958@ranerica-svr.sc.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 14:13:29 +0200
-Message-ID: <CAJZ5v0gOqNzpC9kqpBtqP1D2-OLNqWCf=ZYpzu9b0tqFcgBWYQ@mail.gmail.com>
-Subject: Re: [PATCH v3 14/24] thermal: intel: hfi: Update the IPC class of the
- current task
+Date:   Wed, 29 Mar 2023 14:17:01 +0200
+Message-ID: <CAJZ5v0jgSObZnVHJed_qPtGLcryZsTpysVHFgFdZNzYOuhbc2Q@mail.gmail.com>
+Subject: Re: [PATCH v3 15/24] thermal: intel: hfi: Report the IPC class score
+ of a CPU
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -77,15 +77,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 1:31 AM Ricardo Neri
+On Wed, Mar 29, 2023 at 1:30 AM Ricardo Neri
 <ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On Mon, Mar 27, 2023 at 06:42:28PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Mar 27, 2023 at 06:50:13PM +0200, Rafael J. Wysocki wrote:
 > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 > > <ricardo.neri-calderon@linux.intel.com> wrote:
 > > >
-> > > Use Intel Thread Director classification to update the IPC class of a
-> > > task. Implement the arch_update_ipcc() interface of the scheduler.
+> > > Implement the arch_get_ipcc_score() interface of the scheduler. Use the
+> > > performance capabilities of the extended Hardware Feedback Interface table
+> > > as the IPC score.
 > > >
 > > > Cc: Ben Segall <bsegall@google.com>
 > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -106,101 +107,101 @@ On Wed, Mar 29, 2023 at 1:31 AM Ricardo Neri
 > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > > > ---
 > > > Changes since v2:
-> > >  * Removed the implementation of arch_has_ipc_classes().
+> > >  * None
 > > >
 > > > Changes since v1:
-> > >  * Adjusted the result the classification of Intel Thread Director to start
-> > >    at class 1. Class 0 for the scheduler means that the task is
-> > >    unclassified.
-> > >  * Redefined union hfi_thread_feedback_char_msr to ensure all
-> > >    bit-fields are packed. (PeterZ)
-> > >  * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
-> > >  * Shortened the names of the functions that implement IPC classes.
-> > >  * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
-> > >    (PeterZ)
+> > >  * Adjusted the returned HFI class (which starts at 0) to match the
+> > >    scheduler IPCC class (which starts at 1). (PeterZ)
+> > >  * Used the new interface names.
 > > > ---
-> > >  arch/x86/include/asm/topology.h   |  6 ++++++
-> > >  drivers/thermal/intel/intel_hfi.c | 32 +++++++++++++++++++++++++++++++
-> > >  2 files changed, 38 insertions(+)
+> > >  arch/x86/include/asm/topology.h   |  2 ++
+> > >  drivers/thermal/intel/intel_hfi.c | 27 +++++++++++++++++++++++++++
+> > >  2 files changed, 29 insertions(+)
 > > >
 > > > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> > > index 458c891a8273..ffcdac3f398f 100644
+> > > index ffcdac3f398f..c4fcd9c3c634 100644
 > > > --- a/arch/x86/include/asm/topology.h
 > > > +++ b/arch/x86/include/asm/topology.h
-> > > @@ -227,4 +227,10 @@ void init_freq_invariance_cppc(void);
-> > >  #define arch_init_invariance_cppc init_freq_invariance_cppc
-> > >  #endif
+> > > @@ -229,8 +229,10 @@ void init_freq_invariance_cppc(void);
 > > >
-> > > +#if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
-> > > +void intel_hfi_update_ipcc(struct task_struct *curr);
-> > > +
-> > > +#define arch_update_ipcc intel_hfi_update_ipcc
-> > > +#endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
-> > > +
+> > >  #if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
+> > >  void intel_hfi_update_ipcc(struct task_struct *curr);
+> > > +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu);
+> > >
+> > >  #define arch_update_ipcc intel_hfi_update_ipcc
+> > > +#define arch_get_ipcc_score intel_hfi_get_ipcc_score
+> > >  #endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
+> > >
 > > >  #endif /* _ASM_X86_TOPOLOGY_H */
 > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > > index b06021828892..530dcf57e06e 100644
+> > > index 530dcf57e06e..fa9b4a678d92 100644
 > > > --- a/drivers/thermal/intel/intel_hfi.c
 > > > +++ b/drivers/thermal/intel/intel_hfi.c
-> > > @@ -72,6 +72,17 @@ union cpuid6_edx {
-> > >         u32 full;
-> > >  };
+> > > @@ -206,6 +206,33 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
+> > >         curr->ipcc = msr.split.classid + 1;
+> > >  }
 > > >
-> > > +#ifdef CONFIG_IPC_CLASSES
-> > > +union hfi_thread_feedback_char_msr {
-> > > +       struct {
-> > > +               u64     classid : 8;
-> > > +               u64     __reserved : 55;
-> > > +               u64     valid : 1;
-> > > +       } split;
-> > > +       u64 full;
-> > > +};
-> > > +#endif
-> > > +
-> > >  /**
-> > >   * struct hfi_cpu_data - HFI capabilities per CPU
-> > >   * @perf_cap:          Performance capability
-> > > @@ -174,6 +185,27 @@ static struct workqueue_struct *hfi_updates_wq;
-> > >  #ifdef CONFIG_IPC_CLASSES
-> > >  static int __percpu *hfi_ipcc_scores;
-> > >
-> > > +void intel_hfi_update_ipcc(struct task_struct *curr)
+> > > +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
 > > > +{
-> > > +       union hfi_thread_feedback_char_msr msr;
+> > > +       unsigned short hfi_class;
+> >
+> > It looks like the variable above is only used to save a subtraction or
+> > addition of 1 to something going forward.
+> >
+> > > +       int *scores;
 > > > +
-> > > +       /* We should not be here if ITD is not supported. */
-> > > +       if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
-> > > +               pr_warn_once("task classification requested but not supported!");
-> > > +               return;
-> > > +       }
+> > > +       if (cpu < 0 || cpu >= nr_cpu_ids)
+> > > +               return -EINVAL;
 > > > +
-> > > +       rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
-> > > +       if (!msr.split.valid)
-> > > +               return;
+> > > +       if (ipcc == IPC_CLASS_UNCLASSIFIED)
+> > > +               return -EINVAL;
 > > > +
 > > > +       /*
-> > > +        * 0 is a valid classification for Intel Thread Director. A scheduler
-> > > +        * IPCC class of 0 means that the task is unclassified. Adjust.
+> > > +        * Scheduler IPC classes start at 1. HFI classes start at 0.
+> > > +        * See note intel_hfi_update_ipcc().
 > > > +        */
-> > > +       curr->ipcc = msr.split.classid + 1;
-> > > +}
+> > > +       hfi_class = ipcc - 1;
+> > > +
+> > > +       if (hfi_class >= hfi_features.nr_classes)
 > >
-> > Wouldn't it be better to return the adjusted value from this function
-> > and let the caller store it where appropriate?
+> > Personally, I would do
 > >
-> > It doesn't look like it is necessary to pass the task_struct pointer to it.
+> > if (ipcc >= hfi_features.nr_classes + 1)
+> >
+> > here and ->
+> >
+> > > +               return -EINVAL;
+> > > +
+> > > +       scores = per_cpu_ptr(hfi_ipcc_scores, cpu);
+> > > +       if (!scores)
+> > > +               return -ENODEV;
+> > > +
+> >
+> > -> scores[ipcc - 1]
 >
-> Judging from this patch alone, yes, it does not make much sense to pass a
-> task_struct as argument. In patch 21, however, this function uses various
-> members of task_struct and makes it more convenient to have it as argument,
-> no?
+> Sure, I can get rid of hfi_class.
+>
+> >
+> > below.
+> >
+> > > +       return READ_ONCE(scores[hfi_class]);
+> >
+> > And why does this need to use READ_ONCE()?
+>
+> This is the corresponding read of the WRITE_ONCE in patch 13. The CPU
+> handling the HFI interrupt, very likely a different CPU, updates
+> scores[hfi_class]. My intention is to let that write to complete before
+> reading the score here.
 
-I'm not convinced about this, but anyway it is better to combine the
-two patches in such cases IMO.
+However, READ_ONCE()/WRITE_ONCE() only affect compiler optimizations
+AFAICS.  What if the CPUs running the code reorder the instructions?
 
-The way it is done now confuses things from my perspective.
+In any case, IMV the reason why READ_ONCE() is used needs to be clear
+to the reviewers from the patch itself (and to a casual reader of the
+code from the code itself).
 
 > >
+> > > +}
 > > > +
 > > >  static int alloc_hfi_ipcc_scores(void)
 > > >  {
