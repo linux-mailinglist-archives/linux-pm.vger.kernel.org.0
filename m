@@ -2,70 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACADB6CF9E0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 05:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD1C6CF9E4
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 06:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjC3D7f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 23:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S229557AbjC3EAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 00:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjC3D7f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 23:59:35 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C4A4C39
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 20:59:33 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id cu12so11628267pfb.13
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 20:59:33 -0700 (PDT)
+        with ESMTP id S229461AbjC3EAf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 00:00:35 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9494ED5
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 21:00:34 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id d8so10572473pgm.3
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 21:00:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680148773;
+        d=linaro.org; s=google; t=1680148833;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q25BjYFhUOQUROkZ0ZzAszfBEC4NCamXHxL/4xSLcMQ=;
-        b=NbyeVMSimzD6VgEF9mdpMS3oGIirpVhDdWV+jb3dJBm3UCN1sW5PyQN2PccnZbdZcj
-         BsSGJJrDc2l8Ofo0myog1VVI5Aw0F0FjRCfeB5g1ipaDF0gEfpK0Rq8Eqqx9hstfHzwy
-         XX3v36eJIckhmHQFPr/8ZJey/aQ9xvBz784zgT5KPYv81ITpqYMQxNSvh4MNBRCefAK/
-         5VS3VZ2dv3745ORC6O8Z2zrgIhZvxfZSAlCtWGcF3OdhSqCXgHgrwllh2MJr2c18g1dJ
-         HHmoaQRyckis3bYhdzKb17HRjwc6Ka7hkLVr2fFufzbBQq7gXYKIOCFBQNYVRikAkJEH
-         BqKA==
+        bh=y6Joh1yyjlzUhXvO/lz/fYfCYrQA+xYzttBmRPJ2FSk=;
+        b=RShaB8Ewrhpzb/NXunnI5Y//ZTfY/lFlID0e9yAbQXiKPlnxIKR2V3YBzFxBuW/3WW
+         8CBML0hMJwhf/F8PWtYX+PNK+P/Lzv0moVcN43zBG4mIzv91WPtGxNVrxQPDsLTKOL7e
+         Y7Jkb9JMNMS9EwmxEVvzB1vMGtrTIy1SAlbZWtWV/DS3YJ1OJS37JTVMFKlDK/V6THvq
+         6TaWh45pAIut3CST+OaLLm5r2wMpy10zOXqtkACNoLwKkkcp7y6OBYY6u92UUeE+2e/Y
+         FUHMIrWEJeC9nhHHAMwwTzPH7wK6zpkRNKXp6SRbZnMO9QdIef20+CmVG+2s1+FRfuty
+         BE8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680148773;
+        d=1e100.net; s=20210112; t=1680148833;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q25BjYFhUOQUROkZ0ZzAszfBEC4NCamXHxL/4xSLcMQ=;
-        b=4mHsvYs3uNthboK6mYHr/skVcfX8HEkoBLn7ZcnDxgI+ZIV4epoRI9TCpzcWF0WAyq
-         T6XZgruNgIUsrOxwEd/IT6oAVuPQ8wCWJeKTg4OSb2nJMGWQbAv/misDvlMImaBpjQRR
-         thToPBehIl7L40bQXLP17uPu4ShblYV7QF8ztIOoT2AJBCpKxRgInqCxFJRqyzP12SaK
-         +SlYzqNLGyvnPX1UdgEQQhLKjsmJTZqoGWuyPKRG3SUmRTMrGjd9ZrGKzZSh1v7KjwKc
-         BtKxsXbH3u/axvCfQLRyVIlYD8sKjV5q8kY7x6BByjbxsg8vIKWn3M+jSdsBfBXPXTO2
-         gzqA==
-X-Gm-Message-State: AAQBX9dRTofMxDAYn3gKX9ZJEVaEm5LPZPKJxHaaFCKFkT4sMhc1r8Rw
-        t0D2fywEOpe+6tlfUbJzdoJmPw==
-X-Google-Smtp-Source: AKy350ZdZDO3PRGGrrT+/YuyGadl5IRqO6n1xJBuLwHHNp/q4reg5l1w/HV8vpa1jUJmhsJ1XknWmA==
-X-Received: by 2002:aa7:98c3:0:b0:62d:9b86:632 with SMTP id e3-20020aa798c3000000b0062d9b860632mr8620120pfm.9.1680148773161;
-        Wed, 29 Mar 2023 20:59:33 -0700 (PDT)
+        bh=y6Joh1yyjlzUhXvO/lz/fYfCYrQA+xYzttBmRPJ2FSk=;
+        b=odnuejeKRuKNWtDjPnpCoVskS/r5m6TfqvwFTQ8sIcYb6vPJPG+0NyuqkFIKzxHdOS
+         oTbmshczFkvkRfGXAPXndNWCbRL0tIZ7jh149+TmRJFjZ9SuZAWQ+rmiIfdlIgHKIDDi
+         StJMsGuCAMHD3cWRfAVNpXQ9hydc/H27ZPZRxb8Ol9sQV/Dos3KrkLOP68qNw31pGXtP
+         fCnC8/QAVBp+oVHaiIbgRocZ7bXfx7HoAQjVk42I5B/GVa1zJ6uqv2hQvM1NWiN19lxq
+         IHtRvF488QLULqXdYqLRjIZRN4DiCBXXuwK55c2/lZBNvtB2TmZi6bi0vuKh8yEzaa3k
+         vllg==
+X-Gm-Message-State: AAQBX9fvnZaFZ0u+AejLq+NkPWj/0KRHe+CUuLagwOxmtQThP8crSBFO
+        cdNa/Ki1I9IHa8vUc03k78dVYw==
+X-Google-Smtp-Source: AKy350bstz70jNqKs7AiPJmYPZ+FFPt8xMW1yNR+PuRu02je+smc1Prw/DUlJM2bjcYaLnsnw1KNbA==
+X-Received: by 2002:a62:640e:0:b0:624:cfbe:bbfa with SMTP id y14-20020a62640e000000b00624cfbebbfamr20274534pfb.15.1680148833482;
+        Wed, 29 Mar 2023 21:00:33 -0700 (PDT)
 Received: from localhost ([122.172.85.168])
-        by smtp.gmail.com with ESMTPSA id z18-20020a63e552000000b0050f6add54fcsm19246877pgj.44.2023.03.29.20.59.32
+        by smtp.gmail.com with ESMTPSA id p14-20020a62ab0e000000b0062505afff9fsm23773417pff.126.2023.03.29.21.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 20:59:32 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 09:29:30 +0530
+        Wed, 29 Mar 2023 21:00:32 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:30:30 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/8] qcom-cpufreq-hw binding improvements
-Message-ID: <20230330035930.lv5bz43bkbdfnbhm@vireshk-i7>
-References: <20230308-topic-cpufreq_bindings-v1-0-3368473ec52d@linaro.org>
+        Xuewen Yan <xuewen.yan@unisoc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Revert adding cpufreq qos
+Message-ID: <20230330040030.bal3eqrq22xluxca@vireshk-i7>
+References: <20230323223343.587210-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308-topic-cpufreq_bindings-v1-0-3368473ec52d@linaro.org>
+In-Reply-To: <20230323223343.587210-1-quic_bjorande@quicinc.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -75,19 +73,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-03-23, 02:26, Konrad Dybcio wrote:
-> This series tries to better sanitize what's actually allowed on which
-> SoC and lowers the minimum frequency domain count to 1, as that's what's
-> present on at least QCM2290.
+On 23-03-23, 15:33, Bjorn Andersson wrote:
+> The OSM/EPSS hardware controls the frequency of each CPU cluster based
+> on requests from the OS and various throttling events in the system.
+> While throttling is in effect the related dcvs interrupt will be kept
+> high. The purpose of the code handling this interrupt is to
+> continuously report the thermal pressure based on the throttled
+> frequency.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> The reasoning for adding QoS control to this mechanism is not entirely
+> clear, but the introduction of commit 'c4c0efb06f17 ("cpufreq:
+> qcom-cpufreq-hw: Add cpufreq qos for LMh")' causes the
+> scaling_max_frequncy to be set to the throttled frequency. On the next
+> iteration of polling, the throttled frequency is above or equal to the
+> newly requested frequency, so the polling is stopped.
+> 
+> With cpufreq limiting the max frequency, the hardware no longer report a
+> throttling state and no further updates to thermal pressure or qos
+> state are made.
+> 
+> The result of this is that scaling_max_frequency can only go down, and
+> the system becomes slower and slower every time a thermal throttling
+> event is reported by the hardware.
+> 
+> Even if the logic could be improved, there is no reason for software to
+> limit the max freqency in response to the hardware limiting the max
+> frequency. At best software will follow the reported hardware state, but
+> typically it will cause slower backoff of the throttling.
+> 
+> This reverts commit c4c0efb06f17fa4a37ad99e7752b18a5405c76dc.
+> 
+> Fixes: c4c0efb06f17 ("cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh")
+> Cc: stable@vger.kernel.org
+> Reported-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
-> Konrad Dybcio (8):
->       dt-bindings: cpufreq: cpufreq-qcom-hw: Allow just 1 frequency domain
->       dt-bindings: cpufreq: cpufreq-qcom-hw: Sanitize data per compatible
->       dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCM2290
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 14 --------------
+>  1 file changed, 14 deletions(-)
 
-Applied these three, thanks..
+Applied. Thanks.
 
 -- 
 viresh
