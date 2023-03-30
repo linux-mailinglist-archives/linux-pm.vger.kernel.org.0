@@ -2,164 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9BA6D04E0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 14:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5669D6D05D3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 15:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjC3Mg6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 08:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S229694AbjC3NEU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 09:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjC3Mg4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 08:36:56 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2377DB3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 05:36:32 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id p34so10810980wms.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 05:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680179791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v2SdBqcaN+6GFOx8z6KlPRSpnR3fHYMtwzYOEPCISQU=;
-        b=dZuY7jmT9vyCXbDNUerGw0l6wRsmn0RlBppowH5woVa6tbB1tKBGzHEHu2YLRKOXfO
-         3eDfIno32GPPl8cGTXhP5VgiL3GZLtxcdzQS4uxRi2DD0wXJxj268WcYfSlll+Wi8O2i
-         Jm8hgX9+4d/bKj3ixsNXXuGoCW+PdQ4umBJKnQVGRTaXJ8n4z2VV2wHRYCwmX32v8YzC
-         0ORixTd6z+ph+bEktz6724JHFog/5u26PDHd/vlnEl/xSCLmd3p5NvynNegeBq+CwOCv
-         7t8KrOkmR26HAkeYzwzagGqVZPx7aw5NPe1cE0q8ngOZRE7o92ql9YL8p6rDoM5w4+21
-         kUsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680179791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v2SdBqcaN+6GFOx8z6KlPRSpnR3fHYMtwzYOEPCISQU=;
-        b=b3DIum3OOBYEXV54/Z+TJdZiXqdz3rA5quyEvAp63gPzVilNN5m1di9aZwIldbSN9N
-         kJ8sAoxHEY/u0a98uES3tsA/ECZB61gf9R/eZepQMKxmGs75I92ExVJPWqqNt3dBjM4/
-         jRPg5dmPzUksdbgoM+gGACKDhIUsPIr/8fh/cuq0qXIoTl838vWsDYLwoXU2jobZRGOs
-         A0R0yolWe9HsUMOIEWpWF82PiXQuy25sVUgX6P+8yMby0iUfYqT6B9iDA+OJhHZn4CTF
-         SQzsxB6pufvtEdsAz21tZqHMAsdI8pHegWs9IVxwRiEhactJxmtHPsKs4s0CabV7fLhX
-         7vGQ==
-X-Gm-Message-State: AO0yUKVATN/meXwoTIpqgLXeZxyPf/W6kTF9lgDTgonDt8T0P2p7iUec
-        q46o25MF14BDqyzBnzDbWPD3vEAXq+8hvoyYAq0=
-X-Google-Smtp-Source: AK7set8F33mlI3B/K+4GNJa26Hkl0rO/8byJx+CY3cNSKt2rN5r8e8DfPD7n3KvlXcP+LtzOfmUdaA==
-X-Received: by 2002:a7b:cb90:0:b0:3dc:4b87:a570 with SMTP id m16-20020a7bcb90000000b003dc4b87a570mr18706150wmi.35.1680179791154;
-        Thu, 30 Mar 2023 05:36:31 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc? ([2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc])
-        by smtp.googlemail.com with ESMTPSA id ay13-20020a05600c1e0d00b003ee6def283bsm6013635wmb.11.2023.03.30.05.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 05:36:30 -0700 (PDT)
-Message-ID: <ff48b15c-f8ce-b971-c840-81458715d82b@linaro.org>
-Date:   Thu, 30 Mar 2023 14:36:29 +0200
+        with ESMTP id S231474AbjC3NEU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 09:04:20 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A662B74E;
+        Thu, 30 Mar 2023 06:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680181438; x=1711717438;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aDjU7TSjjDXKbPBumCsWd1O8J4lu6X9/16uNJHbLemA=;
+  b=J+UNWFnGPh+8F1csKnpstV6bvzRQKYAoijfbt4YLMgLGbheOOk7nnvQK
+   oNUyti28RMLgBwMQfoySDGTAzCMYxPeL7pPDK3jMLEVeqf48nDXOHuukx
+   g0L9cGDaNUBm3Z5IG1Zn4QWxO4u9TW0m/3rgPp9mHJpb9zExMU7eweGqj
+   PKyYuH4cBcfQsa1jGtwF5y74GWyGpmMj9DouEaQEbLSQj6PkVJdGgh99W
+   gJh9v5RJf3BluURWC4srqNtLkpTkXTqm/6xjMaXMaOIZc6ni15CSY+GuC
+   PtU6XmlPi5hrISGVJm0T9hRlpscH8FxqCgYYkIshWEhCRU6UvDw5CCiau
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="403814172"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="403814172"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 06:03:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="714966368"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="714966368"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 06:03:54 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phrwY-000KsI-2M;
+        Thu, 30 Mar 2023 13:03:54 +0000
+Date:   Thu, 30 Mar 2023 21:03:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 86506ae8e8d0a0cfebd3eabc77feb25abe92d364
+Message-ID: <642588ae.9jtvDsK4LC1ln8a3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Content-Language: en-US
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330094904.2589428-1-cyndis@kapsi.fi>
- <a09d8edf-9db1-0037-15a4-7ce329b82bf2@linaro.org>
- <204e0435-c544-8727-e892-9fc69b8d691d@kapsi.fi>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <204e0435-c544-8727-e892-9fc69b8d691d@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/03/2023 12:06, Mikko Perttunen wrote:
-> On 3/30/23 13:03, Daniel Lezcano wrote:
->> On 30/03/2023 11:49, Mikko Perttunen wrote:
->>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>
->>> Thermal zones located in power domains may not be accessible when
->>> the domain is powergated. In this situation, reading the temperature
->>> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
->>> use -256C as the temperature for offline zones.
->>
->>> For smooth operation, for offline zones, return -EAGAIN when reading
->>> the temperature and allow registration of zones even if they are
->>> offline during probe.
->>
->> I think it makes more sense to check if the power domain associated 
->> with the device is powered up and if not return -EPROBE_DEFER.
-> 
-> The power domains in question are related to computer vision engines 
-> that only get powered on when in use, possibly never if the user doesn't 
-> run a computer vision workload on the system. We still want other 
-> thermal zones to be available.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 86506ae8e8d0a0cfebd3eabc77feb25abe92d364  Merge branch 'thermal-intel-fixes' into bleeding-edge
 
-Ok, I see the point.
+elapsed time: 1069m
 
-I'm worried about the semantic of the errors returned, the translation 
-from BPMP_EFAULT to EAGAIN and the assumption it is a disabled (may be 
-forever) thermal zone.
+configs tested: 103
+configs skipped: 7
 
-What does the documentation say for the error msg.rx.ret == -BPMP_EFAULT?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-
-
->>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>> ---
->>> v2:
->>> * Adjusted commit message.
->>> * Patch 2/2 dropped for now since it is more controversial,
->>>    and this patch is more critical.
->>>
->>>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->>>   1 file changed, 8 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c 
->>> b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>> index f5fd4018f72f..4ffc3bb3bf35 100644
->>> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct 
->>> tegra_bpmp_thermal_zone *zone,
->>>       err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->>>       if (err)
->>>           return err;
->>> +    if (msg.rx.ret == -BPMP_EFAULT)
->>> +        return -EAGAIN;
->>>       if (msg.rx.ret)
->>>           return -EINVAL;
->>> @@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct 
->>> platform_device *pdev)
->>>           zone->tegra = tegra;
->>>           err = __tegra_bpmp_thermal_get_temp(zone, &temp);
->>> -        if (err < 0) {
->>> +
->>> +        /*
->>> +         * Sensors in powergated domains may temporarily fail to be 
->>> read
->>> +         * (-EAGAIN), but will become accessible when the domain is 
->>> powered on.
->>> +         */
->>> +        if (err < 0 && err != -EAGAIN) {
->>>               devm_kfree(&pdev->dev, zone);
->>>               continue;
->>>           }
->>
-> 
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230329   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r014-20230329   gcc  
+alpha                randconfig-r031-20230329   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230329   gcc  
+arc                  randconfig-r034-20230329   gcc  
+arc                  randconfig-r043-20230329   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230329   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r005-20230329   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r025-20230329   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230329   gcc  
+hexagon              randconfig-r002-20230329   clang
+hexagon              randconfig-r041-20230329   clang
+hexagon              randconfig-r045-20230329   clang
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r003-20230329   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r001-20230329   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r004-20230329   gcc  
+m68k         buildonly-randconfig-r006-20230329   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r033-20230329   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r006-20230329   gcc  
+nios2                randconfig-r012-20230329   gcc  
+openrisc             randconfig-r032-20230329   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r001-20230329   clang
+powerpc              randconfig-r011-20230329   clang
+powerpc              randconfig-r024-20230329   clang
+powerpc              randconfig-r026-20230329   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r013-20230329   clang
+riscv                randconfig-r016-20230329   clang
+riscv                randconfig-r042-20230329   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r022-20230329   clang
+s390                 randconfig-r044-20230329   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r021-20230329   gcc  
+sh                   randconfig-r023-20230329   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
