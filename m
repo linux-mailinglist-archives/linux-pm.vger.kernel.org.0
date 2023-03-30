@@ -2,159 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D816D0614
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 15:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5499D6D0628
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 15:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbjC3NMS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 09:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S231934AbjC3NNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 09:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjC3NMR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 09:12:17 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAC7AD30;
-        Thu, 30 Mar 2023 06:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Wf6MWb07ZNdojZiHGLU/UEUqS29HIvuV7xIdWH9ogCM=; b=TyTxXCYdiREo+cP3lUaBxvkN/8
-        tpK0TZMeXm/mhBjX0BvMy4tGzxhUeDjbqb7p2Iem87a7jkD59ToSTmpzLWUejh76EByNHNQxqYQJ2
-        Zsb0X+mEA5F40k5C8A48x+Yf6cuAkdpSo9smM3tzOF651z9ab/DvQM5ujQtHYHnXbe/M09vKKBjcP
-        fT8nr3Ed/YxP/GVZomhy8GGyScU5GEgnxkOpSOlCZyVUnT5iNaUpiKMBui7v6fos/wY1JBtqVzao3
-        DqBsWt50eO6OlYFMUG5/XFC3K5Q+Hk85+DJFHb/90y17XvD/WeBT3Q3YywCEuKPuPDZqhpT/k/Ff+
-        7is0QGcA==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1phs4F-000xOs-GC; Thu, 30 Mar 2023 16:11:51 +0300
-Message-ID: <a43eab2c-c634-0b36-57eb-fe657bb17004@kapsi.fi>
-Date:   Thu, 30 Mar 2023 16:11:50 +0300
+        with ESMTP id S231932AbjC3NNm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 09:13:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B74AC9760;
+        Thu, 30 Mar 2023 06:13:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEA882F4;
+        Thu, 30 Mar 2023 06:14:22 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0FE33F663;
+        Thu, 30 Mar 2023 06:13:36 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 14:13:34 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>, andersson@kernel.org,
+        dianders@chromium.org, swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, jwerner@chromium.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Subject: Re: [PATCH v2 1/2] cpuidle: psci: Move enabling OSI mode after power
+ domains creation
+Message-ID: <20230330131334.idb25zf4tdf3zqn3@bogus>
+References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
+ <20230330084250.32600-2-quic_mkshah@quicinc.com>
+ <20230330093431.xn5wwiwqbne5owf7@bogus>
+ <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330094904.2589428-1-cyndis@kapsi.fi>
- <a09d8edf-9db1-0037-15a4-7ce329b82bf2@linaro.org>
- <204e0435-c544-8727-e892-9fc69b8d691d@kapsi.fi>
- <ff48b15c-f8ce-b971-c840-81458715d82b@linaro.org>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <ff48b15c-f8ce-b971-c840-81458715d82b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/30/23 15:36, Daniel Lezcano wrote:
-> On 30/03/2023 12:06, Mikko Perttunen wrote:
->> On 3/30/23 13:03, Daniel Lezcano wrote:
->>> On 30/03/2023 11:49, Mikko Perttunen wrote:
->>>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>>
->>>> Thermal zones located in power domains may not be accessible when
->>>> the domain is powergated. In this situation, reading the temperature
->>>> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
->>>> use -256C as the temperature for offline zones.
->>>
->>>> For smooth operation, for offline zones, return -EAGAIN when reading
->>>> the temperature and allow registration of zones even if they are
->>>> offline during probe.
->>>
->>> I think it makes more sense to check if the power domain associated 
->>> with the device is powered up and if not return -EPROBE_DEFER.
->>
->> The power domains in question are related to computer vision engines 
->> that only get powered on when in use, possibly never if the user 
->> doesn't run a computer vision workload on the system. We still want 
->> other thermal zones to be available.
+On Thu, Mar 30, 2023 at 02:06:19PM +0200, Ulf Hansson wrote:
+> On Thu, 30 Mar 2023 at 11:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Thu, Mar 30, 2023 at 02:12:49PM +0530, Maulik Shah wrote:
+> > > A switch from OSI to PC mode is only possible if all CPUs other than the
+> > > calling one are OFF, either through a call to CPU_OFF or not yet booted.
+> > >
+> >
+> > As per the spec, all cores are in one of the following states:
+> >  - Running
+> >  - OFF, either through a call to CPU_OFF or not yet booted
+> >  - Suspended, through a call to CPU_DEFAULT_SUSPEND
+> >
+> > Better to provide full information.
+> >
+> > > Currently OSI mode is enabled before power domains are created. In cases
+> > > where CPUidle states are not using hierarchical CPU topology the bail out
+> > > path tries to switch back to PC mode which gets denied by firmware since
+> > > other CPUs are online at this point and creates inconsistent state as
+> > > firmware is in OSI mode and Linux in PC mode.
+> > >
+> >
+> > OK what is the issue if the other cores are online ? As long as they are
+> > running, it is allowed in the spec, so your statement is incorrect.
+> >
+> > Is CPUidle enabled before setting the OSI mode. I see only that can cause
+> > issue as we don't use CPU_DEFAULT_SUSPEND. If idle is not yet enabled, it
+> > shouldn't be a problem.
 > 
-> Ok, I see the point.
+> Sudeep, you may very well be correct here. Nevertheless, it looks like
+> the current public TF-A implementation doesn't work exactly like this,
+> as it reports an error in Maulik's case. We should fix it too, I
+> think.
 > 
-> I'm worried about the semantic of the errors returned, the translation 
-> from BPMP_EFAULT to EAGAIN and the assumption it is a disabled (may be 
-> forever) thermal zone.
-> 
-> What does the documentation say for the error msg.rx.ret == -BPMP_EFAULT?
-> 
+> Although, to me it doesn't really matter as I think $subject patch
+> makes sense anyway. It's always nice to simplify code when it's
+> possible.
+>
 
-The documentation says
+Agreed, I don't have any objection to the change. The wording the message
+worried me and wanted to check if there are any other issues because of this.
+As such it doesn't look like there are but the commit message needs to be
+updated as it gives a different impression/understanding.
 
-Value          | Description
--------------- | -----------------------------------------
-0              | Temperature query succeeded.
--#BPMP_EINVAL  | Invalid request parameters.
--#BPMP_ENOENT  | No driver registered for thermal zone.
--#BPMP_EFAULT  | Problem reading temperature measurement.
-
-In practice, what BPMP_EFAULT means here is that the hardware has no 
-indicated temperature for the zone, which really only happens if the 
-power domain is powered off.
-
-Mikko
-
-> 
->>>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>>> ---
->>>> v2:
->>>> * Adjusted commit message.
->>>> * Patch 2/2 dropped for now since it is more controversial,
->>>>    and this patch is more critical.
->>>>
->>>>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->>>>   1 file changed, 8 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c 
->>>> b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>>> index f5fd4018f72f..4ffc3bb3bf35 100644
->>>> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>>> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>>> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct 
->>>> tegra_bpmp_thermal_zone *zone,
->>>>       err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->>>>       if (err)
->>>>           return err;
->>>> +    if (msg.rx.ret == -BPMP_EFAULT)
->>>> +        return -EAGAIN;
->>>>       if (msg.rx.ret)
->>>>           return -EINVAL;
->>>> @@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct 
->>>> platform_device *pdev)
->>>>           zone->tegra = tegra;
->>>>           err = __tegra_bpmp_thermal_get_temp(zone, &temp);
->>>> -        if (err < 0) {
->>>> +
->>>> +        /*
->>>> +         * Sensors in powergated domains may temporarily fail to be 
->>>> read
->>>> +         * (-EAGAIN), but will become accessible when the domain is 
->>>> powered on.
->>>> +         */
->>>> +        if (err < 0 && err != -EAGAIN) {
->>>>               devm_kfree(&pdev->dev, zone);
->>>>               continue;
->>>>           }
->>>
->>
-> 
-
+-- 
+Regards,
+Sudeep
