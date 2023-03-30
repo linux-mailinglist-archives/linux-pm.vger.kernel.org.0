@@ -2,77 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D736D6CFFE8
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 11:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF27E6D014D
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 12:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjC3JiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 05:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S229924AbjC3KeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 06:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjC3JiO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 05:38:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1809E4204;
-        Thu, 30 Mar 2023 02:38:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D5292F4;
-        Thu, 30 Mar 2023 02:38:57 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3851C3F663;
-        Thu, 30 Mar 2023 02:38:11 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 10:38:08 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     andersson@kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, Sudeep Holla <sudeep.holla@arm.com>,
-        swboyd@chromium.org, wingers@google.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, jwerner@chromium.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
-Subject: Re: [PATCH v2 0/2] Use PSCI OS initiated mode for sc7280
-Message-ID: <20230330093808.iytdskjjawgnvu23@bogus>
-References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
+        with ESMTP id S230401AbjC3KeA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 06:34:00 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DC240C8;
+        Thu, 30 Mar 2023 03:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=W0nW0vQLM7G/2/2VIeK8J7D28U5u8Jc7f3i4je1IBPI=; b=J+tlZn+jVHSD//mSIQllBB2cQV
+        uC95+Onna9Su0RG4BPi6Zv/0N4pET4/TZzYJkOyDpaj+lM7NKQD4FTn7/AGurFv1YdG0lye8AO247
+        QqM8jChJLdKh3t929x+yc+ZlM04TlwxJnOb2H6JWZQBtXbBBFdUPBmc0iwfLZDO1FKOgTq35Oi38L
+        mbkU8G/L6qpPC3BbO5Dl6gdPKQoN4JjQve8LB+VNDRcMs59lyzdlM8nkc7/WDbMA9nnz5veYg04ak
+        60nSwD3cehekbqDfMw88sEMzWrDUuMq4ecxL47klPOUjjyY1FY9I9j48TYrjsS3f6lmunTSpnzxL9
+        eVlu788g==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1phouA-0007Ze-AN; Thu, 30 Mar 2023 12:49:14 +0300
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
+Date:   Thu, 30 Mar 2023 12:49:04 +0300
+Message-Id: <20230330094904.2589428-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330084250.32600-1-quic_mkshah@quicinc.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 02:12:48PM +0530, Maulik Shah wrote:
-> Changes in v2:
-> - Add new change to Move enabling OSI mode after power domains creation
-> - Fix compatible string to domains-idle-states for cluster idle state.
-> - Update cover letter with some more details on OSI and PC mode comparision
-> 
-> The dependency [2] is now merged in trustedfirmware project.
-> 
-> Stats comparision between OSI and PC mode are captured at [3] with usecase
-> details, where during multiple CPUs online the residency in cluster idle
-> state is better with OSI and also inline with single CPU mode. In PC mode
-> with multiple CPUs cluster idle state residency is dropping compare to
-> single CPU mode.
-> 
-> Recording of this meeting is also available at [4].
-> 
-> This change adds power-domains for cpuidle states to use PSCI OS
-> initiated mode for sc7280.
-> 
-> This change depends on external project changes [1] & [2] which are
-> under review/discussion to add PSCI os-initiated support in Arm Trusted
-> Firmware.
->
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-I will wait for your response to understand the issue in 1/2. If it is
-firmware issue, I prefer we fix it in the firmware and no quirks or work
-around for this in the kernel while it is still fresh out of oven.
+Thermal zones located in power domains may not be accessible when
+the domain is powergated. In this situation, reading the temperature
+will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
+use -256C as the temperature for offline zones.
 
+For smooth operation, for offline zones, return -EAGAIN when reading
+the temperature and allow registration of zones even if they are
+offline during probe.
+
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+v2:
+* Adjusted commit message.
+* Patch 2/2 dropped for now since it is more controversial,
+  and this patch is more critical.
+
+ drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+index f5fd4018f72f..4ffc3bb3bf35 100644
+--- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
++++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+@@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
+ 	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
+ 	if (err)
+ 		return err;
++	if (msg.rx.ret == -BPMP_EFAULT)
++		return -EAGAIN;
+ 	if (msg.rx.ret)
+ 		return -EINVAL;
+ 
+@@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
+ 		zone->tegra = tegra;
+ 
+ 		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
+-		if (err < 0) {
++
++		/*
++		 * Sensors in powergated domains may temporarily fail to be read
++		 * (-EAGAIN), but will become accessible when the domain is powered on.
++		 */
++		if (err < 0 && err != -EAGAIN) {
+ 			devm_kfree(&pdev->dev, zone);
+ 			continue;
+ 		}
 -- 
-Regards,
-Sudeep
+2.39.2
+
