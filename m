@@ -2,110 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27E6D014D
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 12:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840BE6D008F
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 12:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjC3KeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 06:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S231163AbjC3KDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 06:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjC3KeA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 06:34:00 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DC240C8;
-        Thu, 30 Mar 2023 03:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=W0nW0vQLM7G/2/2VIeK8J7D28U5u8Jc7f3i4je1IBPI=; b=J+tlZn+jVHSD//mSIQllBB2cQV
-        uC95+Onna9Su0RG4BPi6Zv/0N4pET4/TZzYJkOyDpaj+lM7NKQD4FTn7/AGurFv1YdG0lye8AO247
-        QqM8jChJLdKh3t929x+yc+ZlM04TlwxJnOb2H6JWZQBtXbBBFdUPBmc0iwfLZDO1FKOgTq35Oi38L
-        mbkU8G/L6qpPC3BbO5Dl6gdPKQoN4JjQve8LB+VNDRcMs59lyzdlM8nkc7/WDbMA9nnz5veYg04ak
-        60nSwD3cehekbqDfMw88sEMzWrDUuMq4ecxL47klPOUjjyY1FY9I9j48TYrjsS3f6lmunTSpnzxL9
-        eVlu788g==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1phouA-0007Ze-AN; Thu, 30 Mar 2023 12:49:14 +0300
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        with ESMTP id S230234AbjC3KDi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 06:03:38 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD4F86A8
+        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 03:03:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id r11so18448241wrr.12
+        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 03:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680170608;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q67EYAzBTnF6htS4gaHY2CH+LDikgDT6oFHAac/m+GY=;
+        b=RN/ot4R7RmNmAaM2OAPxwQSFp+Q763rHDL1x+xeDIuQi4lbkpQdf2+WOA5OnrkybOd
+         56UDkV0MmIMEkrNGSjYlTdmN4v6SGFstQM5OP08ld/3dcImAwVp0CSwaxHFPDuYaqGzD
+         4+u+DPQFIyBm0zypYa81LarDCpsLq64yfgL0li8yHl6YKhKkqRJYX5sAuN2v4PcChWxm
+         cZdEvaLD1DEko3bwsvqkaqhHvUi8XjaXMhr6lgrMKHPMNQqB4hBslVDcC/m03/0rilAP
+         zXiF8oXQNPbBDqjzheOYS9MhroYeesANlFfSCvBI6DW4ZkHPI3jta4MmgOe8DgrN/jjK
+         6rEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680170608;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q67EYAzBTnF6htS4gaHY2CH+LDikgDT6oFHAac/m+GY=;
+        b=ZGwWMH10iBkYlshVxgkBjKHTj0wm5zl+TST+rre+io18iFlz+4+03pu0faykujfrvi
+         6uwNT6W/tHOXTjtB5eqtJMTVtbBWWdfZTouEumCxYUrlcaPmcLVeAvn9v+gEoqnDfnfz
+         Chgypr/AC0GJuNXOaajxOI7s6FVXjjm8OtWVaZ78ESjkWYE2YClejTuOkv6QTeafYE1t
+         SKF2SE+lxJBEu6+g7RCpyG5qjedeY1LNOl4/Y0meDrVBqUFHKyWEsUku88lBZZQEbgpX
+         5V1t3oY4EcZFfu8NYnzgouWgW8wPfUPUi9dLxBH6vauKQvKR5XaEoZpr1/KZ49WUae05
+         HpLg==
+X-Gm-Message-State: AAQBX9fDpCFY6AdyodIJ5ez5KoGqP6BzbqyyWMxD+9Yd9076CVZLO8tD
+        oEa9ckhcghPuno34saq0nXXvgw==
+X-Google-Smtp-Source: AKy350a5vtUxYvnrl3dUR+T0f1fGPMCgyWDl0eAgDoDenODoHABeaFsgi1LNWO+C7Ug/2Wg75ysSvQ==
+X-Received: by 2002:a5d:56d2:0:b0:2c7:46f:c410 with SMTP id m18-20020a5d56d2000000b002c7046fc410mr18275289wrw.36.1680170608333;
+        Thu, 30 Mar 2023 03:03:28 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc? ([2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc])
+        by smtp.googlemail.com with ESMTPSA id q18-20020a7bce92000000b003ef71d541cbsm5273793wmj.1.2023.03.30.03.03.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 03:03:27 -0700 (PDT)
+Message-ID: <a09d8edf-9db1-0037-15a4-7ce329b82bf2@linaro.org>
+Date:   Thu, 30 Mar 2023 12:03:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
+Content-Language: en-US
+To:     Mikko Perttunen <cyndis@kapsi.fi>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>
 Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Date:   Thu, 30 Mar 2023 12:49:04 +0300
-Message-Id: <20230330094904.2589428-1-cyndis@kapsi.fi>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
+References: <20230330094904.2589428-1-cyndis@kapsi.fi>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230330094904.2589428-1-cyndis@kapsi.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Mikko Perttunen <mperttunen@nvidia.com>
+On 30/03/2023 11:49, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
+> 
+> Thermal zones located in power domains may not be accessible when
+> the domain is powergated. In this situation, reading the temperature
+> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
+> use -256C as the temperature for offline zones.
 
-Thermal zones located in power domains may not be accessible when
-the domain is powergated. In this situation, reading the temperature
-will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
-use -256C as the temperature for offline zones.
+> For smooth operation, for offline zones, return -EAGAIN when reading
+> the temperature and allow registration of zones even if they are
+> offline during probe.
 
-For smooth operation, for offline zones, return -EAGAIN when reading
-the temperature and allow registration of zones even if they are
-offline during probe.
+I think it makes more sense to check if the power domain associated with 
+the device is powered up and if not return -EPROBE_DEFER.
 
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
----
-v2:
-* Adjusted commit message.
-* Patch 2/2 dropped for now since it is more controversial,
-  and this patch is more critical.
 
- drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> ---
+> v2:
+> * Adjusted commit message.
+> * Patch 2/2 dropped for now since it is more controversial,
+>    and this patch is more critical.
+> 
+>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+> index f5fd4018f72f..4ffc3bb3bf35 100644
+> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
+> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
+>   	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
+>   	if (err)
+>   		return err;
+> +	if (msg.rx.ret == -BPMP_EFAULT)
+> +		return -EAGAIN;
+>   	if (msg.rx.ret)
+>   		return -EINVAL;
+>   
+> @@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
+>   		zone->tegra = tegra;
+>   
+>   		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
+> -		if (err < 0) {
+> +
+> +		/*
+> +		 * Sensors in powergated domains may temporarily fail to be read
+> +		 * (-EAGAIN), but will become accessible when the domain is powered on.
+> +		 */
+> +		if (err < 0 && err != -EAGAIN) {
+>   			devm_kfree(&pdev->dev, zone);
+>   			continue;
+>   		}
 
-diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-index f5fd4018f72f..4ffc3bb3bf35 100644
---- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
-+++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-@@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
- 	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
- 	if (err)
- 		return err;
-+	if (msg.rx.ret == -BPMP_EFAULT)
-+		return -EAGAIN;
- 	if (msg.rx.ret)
- 		return -EINVAL;
- 
-@@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
- 		zone->tegra = tegra;
- 
- 		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
--		if (err < 0) {
-+
-+		/*
-+		 * Sensors in powergated domains may temporarily fail to be read
-+		 * (-EAGAIN), but will become accessible when the domain is powered on.
-+		 */
-+		if (err < 0 && err != -EAGAIN) {
- 			devm_kfree(&pdev->dev, zone);
- 			continue;
- 		}
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
