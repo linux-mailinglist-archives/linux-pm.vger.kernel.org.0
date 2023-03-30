@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FBF6CFFE3
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 11:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D736D6CFFE8
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 11:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjC3Jei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 05:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S229568AbjC3JiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 05:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjC3Jeh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 05:34:37 -0400
+        with ESMTP id S229486AbjC3JiO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 05:38:14 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 667B9DA;
-        Thu, 30 Mar 2023 02:34:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1809E4204;
+        Thu, 30 Mar 2023 02:38:13 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AC442F4;
-        Thu, 30 Mar 2023 02:35:20 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D5292F4;
+        Thu, 30 Mar 2023 02:38:57 -0700 (PDT)
 Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 14A303F663;
-        Thu, 30 Mar 2023 02:34:33 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 10:34:31 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3851C3F663;
+        Thu, 30 Mar 2023 02:38:11 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:38:08 +0100
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     Maulik Shah <quic_mkshah@quicinc.com>
 Cc:     andersson@kernel.org, ulf.hansson@linaro.org,
@@ -29,15 +29,13 @@ Cc:     andersson@kernel.org, ulf.hansson@linaro.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, jwerner@chromium.org,
         quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
-Subject: Re: [PATCH v2 1/2] cpuidle: psci: Move enabling OSI mode after power
- domains creation
-Message-ID: <20230330093431.xn5wwiwqbne5owf7@bogus>
+Subject: Re: [PATCH v2 0/2] Use PSCI OS initiated mode for sc7280
+Message-ID: <20230330093808.iytdskjjawgnvu23@bogus>
 References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
- <20230330084250.32600-2-quic_mkshah@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230330084250.32600-2-quic_mkshah@quicinc.com>
+In-Reply-To: <20230330084250.32600-1-quic_mkshah@quicinc.com>
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
@@ -47,31 +45,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 02:12:49PM +0530, Maulik Shah wrote:
-> A switch from OSI to PC mode is only possible if all CPUs other than the
-> calling one are OFF, either through a call to CPU_OFF or not yet booted.
+On Thu, Mar 30, 2023 at 02:12:48PM +0530, Maulik Shah wrote:
+> Changes in v2:
+> - Add new change to Move enabling OSI mode after power domains creation
+> - Fix compatible string to domains-idle-states for cluster idle state.
+> - Update cover letter with some more details on OSI and PC mode comparision
+> 
+> The dependency [2] is now merged in trustedfirmware project.
+> 
+> Stats comparision between OSI and PC mode are captured at [3] with usecase
+> details, where during multiple CPUs online the residency in cluster idle
+> state is better with OSI and also inline with single CPU mode. In PC mode
+> with multiple CPUs cluster idle state residency is dropping compare to
+> single CPU mode.
+> 
+> Recording of this meeting is also available at [4].
+> 
+> This change adds power-domains for cpuidle states to use PSCI OS
+> initiated mode for sc7280.
+> 
+> This change depends on external project changes [1] & [2] which are
+> under review/discussion to add PSCI os-initiated support in Arm Trusted
+> Firmware.
 >
 
-As per the spec, all cores are in one of the following states:
- - Running
- - OFF, either through a call to CPU_OFF or not yet booted
- - Suspended, through a call to CPU_DEFAULT_SUSPEND
-
-Better to provide full information.
-
-> Currently OSI mode is enabled before power domains are created. In cases
-> where CPUidle states are not using hierarchical CPU topology the bail out
-> path tries to switch back to PC mode which gets denied by firmware since
-> other CPUs are online at this point and creates inconsistent state as
-> firmware is in OSI mode and Linux in PC mode.
->
-
-OK what is the issue if the other cores are online ? As long as they are
-running, it is allowed in the spec, so your statement is incorrect.
-
-Is CPUidle enabled before setting the OSI mode. I see only that can cause
-issue as we don't use CPU_DEFAULT_SUSPEND. If idle is not yet enabled, it
-shouldn't be a problem.
+I will wait for your response to understand the issue in 1/2. If it is
+firmware issue, I prefer we fix it in the firmware and no quirks or work
+around for this in the kernel while it is still fresh out of oven.
 
 -- 
 Regards,
