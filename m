@@ -2,394 +2,282 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875E86D0212
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 12:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDDF6D0319
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 13:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjC3Krs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 06:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S231209AbjC3L1J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 07:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjC3KqK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 06:46:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4159000;
-        Thu, 30 Mar 2023 03:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680173139; x=1711709139;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4xO0Ca7dc6A25R7wkMyQ1gL6C8V8HTsFmCj2sQxyz88=;
-  b=n4woWMX1OZznRoG/KGb8ltDEym90/74ekxIaM5bc2J6XmHTwod1KQVyN
-   QeF8REeAVovVqznVeHB2gqy7CsQttHP+f6W3KSu/L11MRY5m/CHuDVpqg
-   cbdVWcDItzsqkA07FCrNVH8Yr06Bfw4KhkOIK4WRYExIb++ukWjVQ/jP9
-   ROiF/rMJ59SfKdXJ6NKdMwzeK94L2U6HWEQ/mpvLr3Sj/UFC49vVypThQ
-   AKv9um1pYV9vB0t8fJLcBvpDF8lwM9+EE32/K0s30hUZvNl4TWiU1bNHj
-   b5AigMj+tTmlzO+XyTvXul0jmNW1xznZ9HWAcgV5UTJUX+Nw3VdWWZWUE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343585473"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="343585473"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:45:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717259540"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="717259540"
-Received: from qzhi-mobl.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.31.106])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:45:36 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal/core: Remove thermal_bind_params structure
-Date:   Thu, 30 Mar 2023 18:45:26 +0800
-Message-Id: <20230330104526.3196-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231270AbjC3L1I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 07:27:08 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AAA8A5A
+        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 04:27:06 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id v6-20020a05600c470600b003f034269c96so1281763wmo.4
+        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 04:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680175625;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4vLEjge4HC/634Sy2dddnGDaWfI68t9NSMMgZoB4ES4=;
+        b=g23YxoWA/fdtoGi5Q8S1/UcET//4AfBMLJu5tWLh1R2KuOwpv1pstZZk+bFrkTt4Eb
+         uj+eoGEjvFEDFDm7XM3qUPA+gh9vwByQ1YBP8zqeXtkfClKKYBMqLrhUbD14shvZ6ba8
+         oMgZXlA/9G294Cw9A16FWwxTK+9ZWbZlU1EpelS7WvPrIUkaeRfwZuLruvGNhLr8kA9V
+         LuAHZbVQiJKNegh0W3g8sYTuRRM16AXCGh1EXVTHQqdO24g82t52RCGyyP7O4jLHJvbr
+         OdGVxxbUPTPJPjhWO0Mu0mmWr5rkyB+ptUnsh/Wtuf9VTd+OtiPianvw3yunHRwm0SNg
+         YWXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680175625;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4vLEjge4HC/634Sy2dddnGDaWfI68t9NSMMgZoB4ES4=;
+        b=7/WAr71X63KFl3QYRzOYUYeSyQI9AAV8gAHHs7OKdHKLLO07/J8iifN9tkZun1++4/
+         DSrL8VIdpHtNLTbZ7Ex0t2lGC8DBWGs6lUrJa/xk54NAj1CYGwu2qdpXv/qt/Jgw5O0U
+         xpA8vNV2jCvUFLo9u0UDy4pLbVuJJ41KdwNTfY9SkB5O39WT8A4jfaaGWuYR3lxTzXKZ
+         DPxJu4tw57otihxMSRdMR9U2Q6w9G4pj1kp9LfP/wDFhm9MKVDz2q9EWadQKAChd07r9
+         yCE8xpZU3bB8NllIZChuAFN7xapdg7LwOogjwYCwLiZVGiJvS3vVHEvP/2B+e7jP4hT3
+         YZNA==
+X-Gm-Message-State: AO0yUKViTbaXvc/mRpv0qdBqbJ5VNfnB0U7MtvrdihKtrDZFZt8w5Cbf
+        MF3m/AyXdHA6vAN6tRd/Hb5JMw==
+X-Google-Smtp-Source: AK7set9o58YWOYgN220KtvaM8vjDT4dxLR7AUi+GpfC1NMvHLZkw/jqx7JuRI7wtoep+Wt+/t5sTDw==
+X-Received: by 2002:a05:600c:2254:b0:3df:e41f:8396 with SMTP id a20-20020a05600c225400b003dfe41f8396mr17182048wmm.37.1680175624740;
+        Thu, 30 Mar 2023 04:27:04 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id h7-20020a05600c314700b003ef66c89af0sm12310680wmo.0.2023.03.30.04.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 04:27:04 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 14:27:02 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Saravana Kannan <saravanak@google.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v3 0/4] Allow genpd providers to power off domains on
+ sync state
+Message-ID: <ZCVyBuKMvDV0gQPW@linaro.org>
+References: <20230327193829.3756640-1-abel.vesa@linaro.org>
+ <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Remove struct thermal_bind_params because no one is using it for thermal
-binding now.
+On 23-03-27 17:17:28, Saravana Kannan wrote:
+> On Mon, Mar 27, 2023 at 12:38 PM Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > There have been already a couple of tries to make the genpd "disable
+> > unused" late initcall skip the powering off of domains that might be
+> > needed until later on (i.e. until some consumer probes). The conclusion
+> > was that the provider could return -EBUSY from the power_off callback
+> > until the provider's sync state has been reached. This patch series tries
+> > to provide a proof-of-concept that is working on Qualcomm platforms.
+> 
+> I'm giving my thoughts in the cover letter instead of spreading it
+> around all the patches so that there's context between the comments.
+> 
+> 1) Why can't all the logic in this patch series be implemented at the
+> framework level? And then allow the drivers to opt into this behavior
+> by setting the sync_state() callback.
+> 
+> That way, you can land it only for QC drivers by setting up
+> sync_state() callback only for QC drivers, but actually have the same
+> code function correctly for non-QC drivers too. And then once we have
+> this functionality working properly for QC drivers for one kernel
+> version (or two), we'll just have the framework set the device's
+> driver's sync_state() if it doesn't have one already.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- .../driver-api/thermal/sysfs-api.rst          |  40 ------
- drivers/thermal/thermal_core.c                | 129 ++----------------
- include/linux/thermal.h                       |  38 ------
- 3 files changed, 11 insertions(+), 196 deletions(-)
+I think Ulf has already NACK'ed that approach here:
+[1] https://lore.kernel.org/lkml/CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir-G+GoxkCvpN=iiA@mail.gmail.com/
 
-diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-index 2e0f79a9e2ee..6c1175c6afba 100644
---- a/Documentation/driver-api/thermal/sysfs-api.rst
-+++ b/Documentation/driver-api/thermal/sysfs-api.rst
-@@ -304,42 +304,6 @@ temperature) and throttle appropriate devices.
- 1.4 Thermal Zone Parameters
- ---------------------------
- 
--    ::
--
--	struct thermal_bind_params
--
--    This structure defines the following parameters that are used to bind
--    a zone with a cooling device for a particular trip point.
--
--    .cdev:
--	     The cooling device pointer
--    .weight:
--	     The 'influence' of a particular cooling device on this
--	     zone. This is relative to the rest of the cooling
--	     devices. For example, if all cooling devices have a
--	     weight of 1, then they all contribute the same. You can
--	     use percentages if you want, but it's not mandatory. A
--	     weight of 0 means that this cooling device doesn't
--	     contribute to the cooling of this zone unless all cooling
--	     devices have a weight of 0. If all weights are 0, then
--	     they all contribute the same.
--    .trip_mask:
--	       This is a bit mask that gives the binding relation between
--	       this thermal zone and cdev, for a particular trip point.
--	       If nth bit is set, then the cdev and thermal zone are bound
--	       for trip point n.
--    .binding_limits:
--		     This is an array of cooling state limits. Must have
--		     exactly 2 * thermal_zone.number_of_trip_points. It is an
--		     array consisting of tuples <lower-state upper-state> of
--		     state limits. Each trip will be associated with one state
--		     limit tuple when binding. A NULL pointer means
--		     <THERMAL_NO_LIMITS THERMAL_NO_LIMITS> on all trips.
--		     These limits are used when binding a cdev to a trip point.
--    .match:
--	    This call back returns success(0) if the 'tz and cdev' need to
--	    be bound, as per platform data.
--
-     ::
- 
- 	struct thermal_zone_params
-@@ -357,10 +321,6 @@ temperature) and throttle appropriate devices.
- 	       will be created. when no_hwmon == true, nothing will be done.
- 	       In case the thermal_zone_params is NULL, the hwmon interface
- 	       will be created (for backward compatibility).
--    .num_tbps:
--	       Number of thermal_bind_params entries for this zone
--    .tbp:
--	       thermal_bind_params entries
- 
- 2. sysfs attributes structure
- =============================
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index d51cacd66756..2e6a49dd527d 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -794,64 +794,18 @@ void print_bind_err_msg(struct thermal_zone_device *tz,
- 		tz->type, cdev->type, ret);
- }
- 
--static void __bind(struct thermal_zone_device *tz, int mask,
--		   struct thermal_cooling_device *cdev,
--		   unsigned long *limits,
--		   unsigned int weight)
--{
--	int i, ret;
--
--	for (i = 0; i < tz->num_trips; i++) {
--		if (mask & (1 << i)) {
--			unsigned long upper, lower;
--
--			upper = THERMAL_NO_LIMIT;
--			lower = THERMAL_NO_LIMIT;
--			if (limits) {
--				lower = limits[i * 2];
--				upper = limits[i * 2 + 1];
--			}
--			ret = thermal_zone_bind_cooling_device(tz, i, cdev,
--							       upper, lower,
--							       weight);
--			if (ret)
--				print_bind_err_msg(tz, cdev, ret);
--		}
--	}
--}
--
- static void bind_cdev(struct thermal_cooling_device *cdev)
- {
--	int i, ret;
--	const struct thermal_zone_params *tzp;
-+	int ret;
- 	struct thermal_zone_device *pos = NULL;
- 
- 	mutex_lock(&thermal_list_lock);
- 
- 	list_for_each_entry(pos, &thermal_tz_list, node) {
--		if (!pos->tzp && !pos->ops->bind)
--			continue;
--
- 		if (pos->ops->bind) {
- 			ret = pos->ops->bind(pos, cdev);
- 			if (ret)
- 				print_bind_err_msg(pos, cdev, ret);
--			continue;
--		}
--
--		tzp = pos->tzp;
--		if (!tzp || !tzp->tbp)
--			continue;
--
--		for (i = 0; i < tzp->num_tbps; i++) {
--			if (tzp->tbp[i].cdev || !tzp->tbp[i].match)
--				continue;
--			if (tzp->tbp[i].match(pos, cdev))
--				continue;
--			tzp->tbp[i].cdev = cdev;
--			__bind(pos, tzp->tbp[i].trip_mask, cdev,
--			       tzp->tbp[i].binding_limits,
--			       tzp->tbp[i].weight);
- 		}
- 	}
- 
-@@ -1138,16 +1092,6 @@ void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
- }
- EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
- 
--static void __unbind(struct thermal_zone_device *tz, int mask,
--		     struct thermal_cooling_device *cdev)
--{
--	int i;
--
--	for (i = 0; i < tz->num_trips; i++)
--		if (mask & (1 << i))
--			thermal_zone_unbind_cooling_device(tz, i, cdev);
--}
--
- /**
-  * thermal_cooling_device_unregister - removes a thermal cooling device
-  * @cdev:	the thermal cooling device to remove.
-@@ -1157,8 +1101,6 @@ static void __unbind(struct thermal_zone_device *tz, int mask,
-  */
- void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
- {
--	int i;
--	const struct thermal_zone_params *tzp;
- 	struct thermal_zone_device *tz;
- 
- 	if (!cdev)
-@@ -1175,21 +1117,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
- 
- 	/* Unbind all thermal zones associated with 'this' cdev */
- 	list_for_each_entry(tz, &thermal_tz_list, node) {
--		if (tz->ops->unbind) {
-+		if (tz->ops->unbind)
- 			tz->ops->unbind(tz, cdev);
--			continue;
--		}
--
--		if (!tz->tzp || !tz->tzp->tbp)
--			continue;
--
--		tzp = tz->tzp;
--		for (i = 0; i < tzp->num_tbps; i++) {
--			if (tzp->tbp[i].cdev == cdev) {
--				__unbind(tz, tzp->tbp[i].trip_mask, cdev);
--				tzp->tbp[i].cdev = NULL;
--			}
--		}
- 	}
- 
- 	mutex_unlock(&thermal_list_lock);
-@@ -1200,41 +1129,20 @@ EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
- 
- static void bind_tz(struct thermal_zone_device *tz)
- {
--	int i, ret;
-+	int ret;
- 	struct thermal_cooling_device *pos = NULL;
--	const struct thermal_zone_params *tzp = tz->tzp;
- 
--	if (!tzp && !tz->ops->bind)
-+	if (!tz->ops->bind)
- 		return;
- 
- 	mutex_lock(&thermal_list_lock);
- 
--	/* If there is ops->bind, try to use ops->bind */
--	if (tz->ops->bind) {
--		list_for_each_entry(pos, &thermal_cdev_list, node) {
--			ret = tz->ops->bind(tz, pos);
--			if (ret)
--				print_bind_err_msg(tz, pos, ret);
--		}
--		goto exit;
--	}
--
--	if (!tzp || !tzp->tbp)
--		goto exit;
--
- 	list_for_each_entry(pos, &thermal_cdev_list, node) {
--		for (i = 0; i < tzp->num_tbps; i++) {
--			if (tzp->tbp[i].cdev || !tzp->tbp[i].match)
--				continue;
--			if (tzp->tbp[i].match(tz, pos))
--				continue;
--			tzp->tbp[i].cdev = pos;
--			__bind(tz, tzp->tbp[i].trip_mask, pos,
--			       tzp->tbp[i].binding_limits,
--			       tzp->tbp[i].weight);
--		}
-+		ret = tz->ops->bind(tz, pos);
-+		if (ret)
-+			print_bind_err_msg(tz, pos, ret);
- 	}
--exit:
-+
- 	mutex_unlock(&thermal_list_lock);
- }
- 
-@@ -1491,15 +1399,13 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_id);
-  */
- void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- {
--	int i, tz_id;
--	const struct thermal_zone_params *tzp;
-+	int tz_id;
- 	struct thermal_cooling_device *cdev;
- 	struct thermal_zone_device *pos = NULL;
- 
- 	if (!tz)
- 		return;
- 
--	tzp = tz->tzp;
- 	tz_id = tz->id;
- 
- 	mutex_lock(&thermal_list_lock);
-@@ -1514,22 +1420,9 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	list_del(&tz->node);
- 
- 	/* Unbind all cdevs associated with 'this' thermal zone */
--	list_for_each_entry(cdev, &thermal_cdev_list, node) {
--		if (tz->ops->unbind) {
-+	list_for_each_entry(cdev, &thermal_cdev_list, node)
-+		if (tz->ops->unbind)
- 			tz->ops->unbind(tz, cdev);
--			continue;
--		}
--
--		if (!tzp || !tzp->tbp)
--			break;
--
--		for (i = 0; i < tzp->num_tbps; i++) {
--			if (tzp->tbp[i].cdev == cdev) {
--				__unbind(tz, tzp->tbp[i].trip_mask, cdev);
--				tzp->tbp[i].cdev = NULL;
--			}
--		}
--	}
- 
- 	mutex_unlock(&thermal_list_lock);
- 
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index fef625f799ae..ab7460bfdcf6 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -207,41 +207,6 @@ struct thermal_governor {
- 	struct list_head	governor_list;
- };
- 
--/* Structure that holds binding parameters for a zone */
--struct thermal_bind_params {
--	struct thermal_cooling_device *cdev;
--
--	/*
--	 * This is a measure of 'how effectively these devices can
--	 * cool 'this' thermal zone. It shall be determined by
--	 * platform characterization. This value is relative to the
--	 * rest of the weights so a cooling device whose weight is
--	 * double that of another cooling device is twice as
--	 * effective. See Documentation/driver-api/thermal/sysfs-api.rst for more
--	 * information.
--	 */
--	int weight;
--
--	/*
--	 * This is a bit mask that gives the binding relation between this
--	 * thermal zone and cdev, for a particular trip point.
--	 * See Documentation/driver-api/thermal/sysfs-api.rst for more information.
--	 */
--	int trip_mask;
--
--	/*
--	 * This is an array of cooling state limits. Must have exactly
--	 * 2 * thermal_zone.number_of_trip_points. It is an array consisting
--	 * of tuples <lower-state upper-state> of state limits. Each trip
--	 * will be associated with one state limit tuple when binding.
--	 * A NULL pointer means <THERMAL_NO_LIMITS THERMAL_NO_LIMITS>
--	 * on all trips.
--	 */
--	unsigned long *binding_limits;
--	int (*match) (struct thermal_zone_device *tz,
--			struct thermal_cooling_device *cdev);
--};
--
- /* Structure to define Thermal Zone parameters */
- struct thermal_zone_params {
- 	char governor_name[THERMAL_NAME_LENGTH];
-@@ -253,9 +218,6 @@ struct thermal_zone_params {
- 	 */
- 	bool no_hwmon;
- 
--	int num_tbps;	/* Number of tbp entries */
--	struct thermal_bind_params *tbp;
--
- 	/*
- 	 * Sustainable power (heat) that this thermal zone can dissipate in
- 	 * mW
--- 
-2.25.1
+And suggested this new approach that this patch series proposes.
+(Unless I missunderstood his point)
 
+> 
+> 2) sync_state() is not just about power on/off. It's also about the
+> power domain level. Can you handle that too please?
+
+Well, this patchset only tries to delay the disabling of unused power
+domains until all consumers have had a chance to probe. So we use sync
+state only to queue up a power-off request to make sure those unused
+ones get disabled.
+
+> 
+> 3) In your GDSC drivers, it's not clear to me if you are preventing
+> power off until sync_state() only for GDSCs that were already on at
+> boot. So if an off-at-boot GDSC gets turned on, and then you attempt
+> to turn it off before all its consumers have probed, it'll fail to
+> power it off even though that wasn't necessary?
+
+I think we can circumvent looking at a GDSC by knowing it there was ever
+a power on request since boot. I'll try to come up with something in the
+new version.
+
+> 
+> 4) The returning -EBUSY when a power off is attempted seems to be
+> quite wasteful. The framework will go through the whole sequence of
+> trying to power down, send the notifications and then fail and then
+> send the undo notifications. Combined with point (2) I think this can
+> be handled better at the aggregation level in the framework to avoid
+> even going that far into the power off sequence.
+
+Again, have a look at [1] (above).
+
+Ulf, any thoughts on this 4th point?
+
+> 
+> -Saravana
+> 
+> >
+> > I've been doing extensive testing on SM8450, but I've also spinned this
+> > on my X13s (SC8280XP). Both patches that add the sync state callback to
+> > the SC8280XP and SM8450 are here to provide context. Once we agree on
+> > the form, I intend to add the sync state callback to all gdsc providers.
+> >
+> > Currently, some of the gdsc providers might not reach sync state due to
+> > list of consumers not probing yet (or at all). The sync state can be
+> > enforced by writing 1 to the state_synced sysfs attribute of the
+> > provider, thanks to Saravana's commit [1] which has been already merged.
+> >
+> > [1] https://lore.kernel.org/r/20230304005355.746421-3-saravanak@google.com
+> >
+> > V2 (RFC) of this patchset was here:
+> > https://lore.kernel.org/all/20230320134217.1685781-1-abel.vesa@linaro.org/
+> >
+> > Changes since v2:
+> >  * renamed genpd_queue_power_off_work to pm_genpd_queue_power_off and added
+> >    comment about its purpose w.r.t. it being exported.
+> >  * added the qcom_cc generic sync state callback to all providers that
+> >    register GDSCs, instead of SM8450 and SC8280XP
+> >
+> > Changes since v1:
+> >  * Added the qcom_cc sync state callback which calls in turn the gdsc one
+> >  * dropped extra semicolon from pm_domain.h
+> >
+> > Abel Vesa (4):
+> >   PM: domains: Allow power off queuing from providers
+> >   soc: qcom: rpmhpd: Do proper power off when state synced
+> >   clk: qcom: gdsc: Avoid actual power off until sync state
+> >   clk: qcom: Add sync state callback to all providers
+> >
+> >  drivers/base/power/domain.c            | 18 ++++++++++--------
+> >  drivers/clk/qcom/apss-ipq6018.c        |  1 +
+> >  drivers/clk/qcom/camcc-sc7180.c        |  1 +
+> >  drivers/clk/qcom/camcc-sc7280.c        |  1 +
+> >  drivers/clk/qcom/camcc-sdm845.c        |  1 +
+> >  drivers/clk/qcom/camcc-sm6350.c        |  1 +
+> >  drivers/clk/qcom/camcc-sm8250.c        |  1 +
+> >  drivers/clk/qcom/camcc-sm8450.c        |  1 +
+> >  drivers/clk/qcom/common.c              | 19 +++++++++++++++++++
+> >  drivers/clk/qcom/common.h              |  2 ++
+> >  drivers/clk/qcom/dispcc-qcm2290.c      |  1 +
+> >  drivers/clk/qcom/dispcc-sc7180.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sc7280.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sc8280xp.c     |  1 +
+> >  drivers/clk/qcom/dispcc-sdm845.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm6115.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm6125.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm6350.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm6375.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm8250.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm8450.c       |  1 +
+> >  drivers/clk/qcom/dispcc-sm8550.c       |  1 +
+> >  drivers/clk/qcom/gcc-apq8084.c         |  1 +
+> >  drivers/clk/qcom/gcc-ipq806x.c         |  1 +
+> >  drivers/clk/qcom/gcc-ipq8074.c         |  1 +
+> >  drivers/clk/qcom/gcc-mdm9615.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8660.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8909.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8916.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8939.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8953.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8960.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8974.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8976.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8994.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8996.c         |  1 +
+> >  drivers/clk/qcom/gcc-msm8998.c         |  1 +
+> >  drivers/clk/qcom/gcc-qcm2290.c         |  1 +
+> >  drivers/clk/qcom/gcc-qcs404.c          |  1 +
+> >  drivers/clk/qcom/gcc-qdu1000.c         |  1 +
+> >  drivers/clk/qcom/gcc-sa8775p.c         |  1 +
+> >  drivers/clk/qcom/gcc-sc7180.c          |  1 +
+> >  drivers/clk/qcom/gcc-sc7280.c          |  1 +
+> >  drivers/clk/qcom/gcc-sc8180x.c         |  1 +
+> >  drivers/clk/qcom/gcc-sc8280xp.c        |  1 +
+> >  drivers/clk/qcom/gcc-sdm660.c          |  1 +
+> >  drivers/clk/qcom/gcc-sdm845.c          |  1 +
+> >  drivers/clk/qcom/gcc-sdx55.c           |  1 +
+> >  drivers/clk/qcom/gcc-sdx65.c           |  1 +
+> >  drivers/clk/qcom/gcc-sm6115.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm6125.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm6350.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm6375.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm7150.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm8150.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm8250.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm8350.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm8450.c          |  1 +
+> >  drivers/clk/qcom/gcc-sm8550.c          |  1 +
+> >  drivers/clk/qcom/gdsc.c                | 26 ++++++++++++++++++++++++++
+> >  drivers/clk/qcom/gdsc.h                |  6 ++++++
+> >  drivers/clk/qcom/gpucc-msm8998.c       |  1 +
+> >  drivers/clk/qcom/gpucc-sc7180.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sc7280.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sc8280xp.c      |  1 +
+> >  drivers/clk/qcom/gpucc-sdm660.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sdm845.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm6115.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm6125.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm6350.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm6375.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm8150.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm8250.c        |  1 +
+> >  drivers/clk/qcom/gpucc-sm8350.c        |  1 +
+> >  drivers/clk/qcom/lcc-ipq806x.c         |  1 +
+> >  drivers/clk/qcom/lpassaudiocc-sc7280.c |  1 +
+> >  drivers/clk/qcom/lpasscc-sc7280.c      |  1 +
+> >  drivers/clk/qcom/lpasscorecc-sc7180.c  |  2 ++
+> >  drivers/clk/qcom/lpasscorecc-sc7280.c  |  2 ++
+> >  drivers/clk/qcom/mmcc-apq8084.c        |  1 +
+> >  drivers/clk/qcom/mmcc-msm8974.c        |  1 +
+> >  drivers/clk/qcom/mmcc-msm8994.c        |  1 +
+> >  drivers/clk/qcom/mmcc-msm8996.c        |  1 +
+> >  drivers/clk/qcom/mmcc-msm8998.c        |  1 +
+> >  drivers/clk/qcom/mmcc-sdm660.c         |  1 +
+> >  drivers/clk/qcom/videocc-sc7180.c      |  1 +
+> >  drivers/clk/qcom/videocc-sc7280.c      |  1 +
+> >  drivers/clk/qcom/videocc-sdm845.c      |  1 +
+> >  drivers/clk/qcom/videocc-sm8150.c      |  1 +
+> >  drivers/clk/qcom/videocc-sm8250.c      |  1 +
+> >  drivers/soc/qcom/rpmhpd.c              | 19 +++++++------------
+> >  include/linux/pm_domain.h              |  4 ++++
+> >  92 files changed, 161 insertions(+), 20 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
