@@ -2,53 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F69B6D0D5E
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 20:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFC06D0DA0
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 20:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjC3SGc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 30 Mar 2023 14:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
+        id S229448AbjC3STr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 30 Mar 2023 14:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjC3SGb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 14:06:31 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E70EB45;
-        Thu, 30 Mar 2023 11:06:30 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id i5so80063690eda.0;
-        Thu, 30 Mar 2023 11:06:30 -0700 (PDT)
+        with ESMTP id S230049AbjC3STq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 14:19:46 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3598FEC5B;
+        Thu, 30 Mar 2023 11:19:45 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id i5so80202839eda.0;
+        Thu, 30 Mar 2023 11:19:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680199589;
+        d=1e100.net; s=20210112; t=1680200383;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7F4u3rCMjafVAuTWZMNvDvBPl2JPGH003KSSvYrUvUA=;
-        b=UaTfOSDXrA/5lIzXML9ibTHnR1S3VdmshOz/0WXAKL4YB2qU1DdorBoYUqLCPukXss
-         ADFIsW4EAfVmOTVGG0KGJBAwV09SaKN3A42RkbD1yIWK3aMgH1q41VLZcL/Fzl4CYuVU
-         LV0XDLnBMChve5S3Ow+PlXUW4Sv64WVbnp4sdCY2z+6tkQYbw2S1WItEY0EkkHc7Fpet
-         1L09ca1vyhyWTa6jTVCruzLCCcHXKdYZtZmRRyFXfmN0+weu3YwhIXLwII5NmuF4ji6Y
-         eW6yyJo0t1sssP0W53Abbu5z1lai5yaQwoNzyb+SjL5oI5zEV5k5kz5uYERxVjGUguLz
-         IWUg==
-X-Gm-Message-State: AAQBX9ftCoNmyTGeoudufNkh3xs0mVxND8CH/LWeZ6NprClBWXgfoP6Q
-        t8EfCxh5ue2Oer/fdYyGF40zcJT8j6VTlB7n0yk=
-X-Google-Smtp-Source: AKy350Z6HF7PmiHYO+7t+TSE8NwKCvaGewpS6+5eQaAzgiFfJZPXfW2S3RtVvKGGvm/vJcmSN73VcXfyP0Eyo3g3ugU=
-X-Received: by 2002:a17:906:9f0b:b0:8b1:38d6:9853 with SMTP id
- fy11-20020a1709069f0b00b008b138d69853mr10988057ejc.2.1680199589088; Thu, 30
- Mar 2023 11:06:29 -0700 (PDT)
+        bh=STSBMurQeIiaZJ0+aAMioO6okKVvv9dt5WY+P9P2Ffs=;
+        b=oAomp/ERjeZ3KCykPrGL0ZpiUrj23h597cHdls85PFyudshwQczTOMCFPyn36ZuFCC
+         PALhsuS6EZ9/9OOcyDZfr40uIYD7xQMNcIzrTVp6q8R618goyJrZ/PmatdW9zEciQz7b
+         0nzxv5Zkz2VFnkgyjaQS5SwoD17W5YyYQsgMe3QsLkkZaBddjbGMBjDDfAZWUdvkR/ec
+         ad5R8w/N0hnVqVSyeG9KJ8j0iabcNEJuc9b7KSecS4NyEnwut43XZtoVkgQcllv9PZLD
+         RAwCvy5W1dKIqGhFkGqi5YkYyiIu+smdmNND5snSms6NfW+s+VLeutsQ84zl4ACoT49N
+         YTiw==
+X-Gm-Message-State: AAQBX9dwYkSORF9bDf6qBU3+KMgBnDsT6X8gUGmDog2DtSNu2HT2mAAa
+        eiUJz2y4bfGeGwvkv7VcvPT4EVtoO5r5fa6A168=
+X-Google-Smtp-Source: AKy350ZFlQ9uvB/2IZQZth1I/dMU9HgfQQVqbdU/38YFudco92YyBhJH7q0MdiUGPR+8VkkW71+dpX8o8y/D+HtoQoQ=
+X-Received: by 2002:a50:d49e:0:b0:502:148d:9e1e with SMTP id
+ s30-20020a50d49e000000b00502148d9e1emr12039537edi.3.1680200383708; Thu, 30
+ Mar 2023 11:19:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230330134218.1897786-1-darcari@redhat.com> <9e65a37b8220943a540cc3aaf660a79cef4041dc.camel@linux.intel.com>
-In-Reply-To: <9e65a37b8220943a540cc3aaf660a79cef4041dc.camel@linux.intel.com>
+References: <20230330141314.1364083-1-wyes.karny@amd.com>
+In-Reply-To: <20230330141314.1364083-1-wyes.karny@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Mar 2023 20:06:18 +0200
-Message-ID: <CAJZ5v0jsS6YkbCovEt3nTPkcaQF7yvexOrR0iSwGoeht6orGjA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: powerclamp: Fix cpumask and max_idle
- module parameters
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Arcari <darcari@redhat.com>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Thu, 30 Mar 2023 20:19:32 +0200
+Message-ID: <CAJZ5v0jxwuAnTVdnThGmHmptB7qeKc34-keUOdHcugeADYSL+w@mail.gmail.com>
+Subject: Re: [PATCH] amd-pstate: Fix amd_pstate mode switch
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, ray.huang@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Kardashevskiy <aik@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -61,73 +59,110 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 7:36 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Thu, Mar 30, 2023 at 4:13 PM Wyes Karny <wyes.karny@amd.com> wrote:
 >
-> On Thu, 2023-03-30 at 09:42 -0400, David Arcari wrote:
-> Reviewed-by: Srinivas Pandruvada <>> When cpumask is specified as a module parameter the value is
-> > overwritten by the module init routine.  This can easily be fixed
-> > by checking to see if the mask has already been allocated in the
-> > init routine.
-> >
-> > When max_idle is specified as a module parameter a panic will occur.
-> > The problem is that the idle_injection_cpu_mask is not allocated
-> > until
-> > the module init routine executes. This can easily be fixed by
-> > allocating
-> > the cpumask if it's not already allocated.
-> >
-> > Fixes: ebf519710218 ("thermal: intel: powerclamp: Add two module
-> > parameters")
-> >
-> > Signed-off-by: David Arcari <darcari@redhat.com>
-> Reviewed-by: Srinivas Pandruvada<srinivas.pandruvada@linux.intel.com>
+> amd_pstate mode can be changed by writing the mode name to the `status`
+> sysfs. But some combinations are not working. Fix this issue by taking
+> care of the edge cases.
+>
+> Before the fix the mode change combination test fails:
+>
+>  #./pst_test.sh
+> Test passed: from: disable, to
+> Test passed: from: disable, to disable
+> Test failed: 1, From mode: disable, to mode: passive
+> Test failed: 1, From mode: disable, to mode: active
+> Test failed: 1, From mode: passive, to mode: active
+> Test passed: from: passive, to disable
+> Test failed: 1, From mode: passive, to mode: passive
+> Test failed: 1, From mode: passive, to mode: active
+> Test failed: 1, From mode: active, to mode: active
+> Test passed: from: active, to disable
+> Test failed: 1, From mode: active, to mode: passive
+> Test failed: 1, From mode: active, to mode: active
+>
+> After the fix test passes:
+>
+>  #./pst_test.sh
+> Test passed: from: disable, to
+> Test passed: from: disable, to disable
+> Test passed: from: disable, to passive
+> Test passed: from: disable, to active
+> Test passed: from: passive, to active
+> Test passed: from: passive, to disable
+> Test passed: from: passive, to passive
+> Test passed: from: passive, to active
+> Test passed: from: active, to active
+> Test passed: from: active, to disable
+> Test passed: from: active, to passive
+> Test passed: from: active, to active
+>
+> Fixes: abd61c08ef349 ("cpufreq: amd-pstate: add driver working mode switch support")
+>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Alexey Kardashevskiy <aik@amd.com>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: Perry Yuan <Perry.Yuan@amd.com>
 
-Applied as 6.3-rc material, thanks!
+This is all fine, but you need to tell me how it interacts with the
+amd-pstate changes in linux-next.
 
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Amit Kucheria <amitk@kernel.org>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: David Arcari <darcari@redhat.com>
-> > Cc: Chen Yu <yu.c.chen@intel.com>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> >
-> > ---
-> >  drivers/thermal/intel/intel_powerclamp.c | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> > b/drivers/thermal/intel/intel_powerclamp.c
-> > index c7ba5680cd48..91fc7e239497 100644
-> > --- a/drivers/thermal/intel/intel_powerclamp.c
-> > +++ b/drivers/thermal/intel/intel_powerclamp.c
-> > @@ -235,6 +235,12 @@ static int max_idle_set(const char *arg, const
-> > struct kernel_param *kp)
-> >                 goto skip_limit_set;
-> >         }
-> >
-> > +       if (!cpumask_available(idle_injection_cpu_mask)) {
-> > +               ret =
-> > allocate_copy_idle_injection_mask(cpu_present_mask);
-> > +               if (ret)
-> > +                       goto skip_limit_set;
-> > +       }
-> > +
-> >         if (check_invalid(idle_injection_cpu_mask, new_max_idle)) {
-> >                 ret = -EINVAL;
-> >                 goto skip_limit_set;
-> > @@ -791,7 +797,8 @@ static int __init powerclamp_init(void)
-> >                 return retval;
-> >
-> >         mutex_lock(&powerclamp_lock);
-> > -       retval = allocate_copy_idle_injection_mask(cpu_present_mask);
-> > +       if (!cpumask_available(idle_injection_cpu_mask))
-> > +               retval =
-> > allocate_copy_idle_injection_mask(cpu_present_mask);
-> >         mutex_unlock(&powerclamp_lock);
-> >
-> >         if (retval)
+Does it affect the code in linux-next at all or is it only for 6.3-rc?
+
+> ---
+>  drivers/cpufreq/amd-pstate.c | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 73c7643b2697..8dd46fad151e 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -840,22 +840,20 @@ static int amd_pstate_update_status(const char *buf, size_t size)
+>
+>         switch(mode_idx) {
+>         case AMD_PSTATE_DISABLE:
+> -               if (!current_pstate_driver)
+> -                       return -EINVAL;
+> -               if (cppc_state == AMD_PSTATE_ACTIVE)
+> -                       return -EBUSY;
+> -               cpufreq_unregister_driver(current_pstate_driver);
+> -               amd_pstate_driver_cleanup();
+> +               if (current_pstate_driver) {
+> +                       cpufreq_unregister_driver(current_pstate_driver);
+> +                       amd_pstate_driver_cleanup();
+> +               }
+>                 break;
+>         case AMD_PSTATE_PASSIVE:
+>                 if (current_pstate_driver) {
+>                         if (current_pstate_driver == &amd_pstate_driver)
+>                                 return 0;
+>                         cpufreq_unregister_driver(current_pstate_driver);
+> -                       cppc_state = AMD_PSTATE_PASSIVE;
+> -                       current_pstate_driver = &amd_pstate_driver;
+>                 }
+>
+> +               current_pstate_driver = &amd_pstate_driver;
+> +               cppc_state = AMD_PSTATE_PASSIVE;
+>                 ret = cpufreq_register_driver(current_pstate_driver);
+>                 break;
+>         case AMD_PSTATE_ACTIVE:
+> @@ -863,10 +861,10 @@ static int amd_pstate_update_status(const char *buf, size_t size)
+>                         if (current_pstate_driver == &amd_pstate_epp_driver)
+>                                 return 0;
+>                         cpufreq_unregister_driver(current_pstate_driver);
+> -                       current_pstate_driver = &amd_pstate_epp_driver;
+> -                       cppc_state = AMD_PSTATE_ACTIVE;
+>                 }
+>
+> +               current_pstate_driver = &amd_pstate_epp_driver;
+> +               cppc_state = AMD_PSTATE_ACTIVE;
+>                 ret = cpufreq_register_driver(current_pstate_driver);
+>                 break;
+>         default:
+> --
+> 2.34.1
 >
