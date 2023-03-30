@@ -2,270 +2,743 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAAE6D0492
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 14:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D086D04BE
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 14:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbjC3MWk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 08:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S230165AbjC3Mbq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 08:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjC3MWf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 08:22:35 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C967AB5
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 05:22:24 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id cf7so23201821ybb.5
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 05:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680178943;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fkgvBexVN7YQyw/6jRR4bXfTXLAK3o3NkknPbbqBnUc=;
-        b=FgLWSz9t3sWQkJWIb04amO3ju/Zy/bu1b0klnduPHyBdLRrKnsim8cN2Ap0lh+NJ7v
-         rOQTpRMNLMakHR8lZ4nNZJonc8b50PrHynV4j1bFMhbzJqZgdTKIpwDnXqfnt9i+ZcWv
-         9Of0Fh2TMpywg3h8wZGGu1bj+/R2RQffoS8mFz9WNJgtPkSKN5BgWY9cP4WF3HxAFKIu
-         0tx+1PUXygjYRH07aU38QCzOc1zL2TzxICadf5FnKVrFDVZ8K8O9qbwuoUixmvne8SBq
-         jDwfbNfNKa9Xa2WOpisjstOfQ4wT2jOTgZ++rT/wcEUMIxEE6JBv4hKhgXCpg6t/p110
-         K6uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680178943;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fkgvBexVN7YQyw/6jRR4bXfTXLAK3o3NkknPbbqBnUc=;
-        b=H7I9uKZRQQG5JuYa6oKCjPnwe/IQ+siihnU3emUXbwSjdCdpgfxGyToDHhWWFZ8y+A
-         iRXxX0/khmsrVrPXHZ4aoGR3QJmsZ/Q7F0k4bcijMxeA5HUuskWkClAlkIPNgFUbqFUS
-         Z+DIQJq5qT14wmMQR16YLXqsVo3hN9o+wsdGB7Avx+8uE6YrpTTuUl/eOH7wVHP4wWSS
-         wOLIH+juvNN4kJmPospl7D+b/j1q+k+0BudnTxEK+WVIMwUAX37sQrNqAOJTb6juA6gD
-         BuYhyu72zZkPbgVkDOswN7vAwUdjqlZO66bNulI1co8ctPJx5egI9FSKMSqSqI0/+/DK
-         BpPw==
-X-Gm-Message-State: AAQBX9dSfagqqGHQFC9hNWiHxWcJ1yfcTez4VAcTtSNsLb9Earj2EaJr
-        ghgvQefSNTr7A4uyqqxL2cQQDcpsW/ywn1RID9CDjg==
-X-Google-Smtp-Source: AKy350ajq/TmUBLRPZjm2/sWAgQNJKdsLd/pLSNZPUTH6/oDAeLSyRGusPDM5yEZFtErnt+S0DtkjLRkSDFn6ORxK4E=
-X-Received: by 2002:a05:6902:70a:b0:b6e:361a:c86 with SMTP id
- k10-20020a056902070a00b00b6e361a0c86mr12602065ybt.3.1680178943525; Thu, 30
- Mar 2023 05:22:23 -0700 (PDT)
+        with ESMTP id S229436AbjC3Mbp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 08:31:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295714C35;
+        Thu, 30 Mar 2023 05:31:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA6E26204E;
+        Thu, 30 Mar 2023 12:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B505BC433EF;
+        Thu, 30 Mar 2023 12:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680179502;
+        bh=g96JjbevmpD1DolYg6cARgc+/oAyG6sjJB1Lf0Sfyf4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fJjuoQUda0FD4DE7HOrQPzv6HcUrOtthFJlM/Foo8q1Hd97rwFKTc89otQ1oBL+7b
+         p6CCxLVjlOoN0gMDNIPHq5BIQNQxR6JCiBPi/w/zYKWFVIcQGWivnunHH5qIJYcPfh
+         8+E7kH435Bll4mKvh/Adj1AUEUixylhjAfbo6v8H/aCtJhI+MhDZPQ1sqIAApDB5Zd
+         cMZnSQkEAwvs56jMgXhBM1dCwRTK/vX6zdmahnHFOECCo1kWItKTvMOI0tGLP8FTs2
+         3NHfADNslN0VYVFkgGHhYOm6+Re66I375tOy5XXMYlIk1rQwgjUv7ueJUbHCYkOv0u
+         gDP5V/o2ZPsmg==
+Date:   Thu, 30 Mar 2023 13:31:36 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
+ Support
+Message-ID: <20230330123136.GF434339@google.com>
+References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
+ <20230322055628.4441-9-Zeynep.Arslanbenzer@analog.com>
 MIME-Version: 1.0
-References: <20230330084250.32600-1-quic_mkshah@quicinc.com> <20230330084250.32600-3-quic_mkshah@quicinc.com>
-In-Reply-To: <20230330084250.32600-3-quic_mkshah@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 30 Mar 2023 14:21:47 +0200
-Message-ID: <CAPDyKFoBi_TotpFF-OX2kyL=4zFSHK46nQsWFRqcX5YXTj-gLg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add power-domains for
- cpuidle states
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     andersson@kernel.org, dianders@chromium.org, swboyd@chromium.org,
-        wingers@google.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        sudeep.holla@arm.com, jwerner@chromium.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230322055628.4441-9-Zeynep.Arslanbenzer@analog.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 30 Mar 2023 at 10:43, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+On Wed, 22 Mar 2023, Zeynep Arslanbenzer wrote:
+
+> MFD driver for MAX77643/MAX77654/MAX77658/MAX77659 to enable its sub
+
+Please drop all references to 'MFD'.
+
+What are these devices, really?  I suspect they are PMICs?
+
+> devices.
 >
-> Add power-domains for cpuidle states to use psci os-initiated idle states.
+> The MAX77643 is a multi-function devices. It includes
+> regulator.
 >
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
+> The MAX77654 is a multi-function devices. It includes
+> regulator and charger.
+>
+> The MAX77658 is a multi-function devices. It includes
+> regulator, charger and battery.
+>
+> The MAX77659 is a multi-function devices. It includes
+> regulator and charger.
+>
+> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 98 +++++++++++++++++++++-------
->  1 file changed, 73 insertions(+), 25 deletions(-)
+>  drivers/mfd/Kconfig          |  15 ++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/max77658.c       | 448 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max77658.h |  88 +++++++
+>  4 files changed, 552 insertions(+)
+>  create mode 100644 drivers/mfd/max77658.c
+>  create mode 100644 include/linux/mfd/max77658.h
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 5e6f9f441f1a..1a232eb4dde6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -170,9 +170,8 @@
->                         reg = <0x0 0x0>;
->                         clocks = <&cpufreq_hw 0>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> -                                          &LITTLE_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD0>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_0>;
->                         operating-points-v2 = <&cpu0_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -196,9 +195,8 @@
->                         reg = <0x0 0x100>;
->                         clocks = <&cpufreq_hw 0>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> -                                          &LITTLE_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD1>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_100>;
->                         operating-points-v2 = <&cpu0_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -218,9 +216,8 @@
->                         reg = <0x0 0x200>;
->                         clocks = <&cpufreq_hw 0>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> -                                          &LITTLE_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD2>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_200>;
->                         operating-points-v2 = <&cpu0_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -240,9 +237,8 @@
->                         reg = <0x0 0x300>;
->                         clocks = <&cpufreq_hw 0>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> -                                          &LITTLE_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD3>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_300>;
->                         operating-points-v2 = <&cpu0_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -262,9 +258,8 @@
->                         reg = <0x0 0x400>;
->                         clocks = <&cpufreq_hw 1>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&BIG_CPU_SLEEP_0
-> -                                          &BIG_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD4>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_400>;
->                         operating-points-v2 = <&cpu4_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -284,9 +279,8 @@
->                         reg = <0x0 0x500>;
->                         clocks = <&cpufreq_hw 1>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&BIG_CPU_SLEEP_0
-> -                                          &BIG_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD5>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_500>;
->                         operating-points-v2 = <&cpu4_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -306,9 +300,8 @@
->                         reg = <0x0 0x600>;
->                         clocks = <&cpufreq_hw 1>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&BIG_CPU_SLEEP_0
-> -                                          &BIG_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD6>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_600>;
->                         operating-points-v2 = <&cpu4_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -328,9 +321,8 @@
->                         reg = <0x0 0x700>;
->                         clocks = <&cpufreq_hw 2>;
->                         enable-method = "psci";
-> -                       cpu-idle-states = <&BIG_CPU_SLEEP_0
-> -                                          &BIG_CPU_SLEEP_1
-> -                                          &CLUSTER_SLEEP_0>;
-> +                       power-domains = <&CPU_PD7>;
-> +                       power-domain-names = "psci";
->                         next-level-cache = <&L2_700>;
->                         operating-points-v2 = <&cpu7_opp_table>;
->                         interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> @@ -422,9 +414,11 @@
->                                 min-residency-us = <5555>;
->                                 local-timer-stop;
->                         };
-> +               };
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 8b93856de432..7b4be7fb8662 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -821,6 +821,21 @@ config MFD_MAX77650
+>  	  the following functionalities of the device: GPIO, regulator,
+>  	  charger, LED, onkey.
 >
-> +               domain-idle-states {
->                         CLUSTER_SLEEP_0: cluster-sleep-0 {
-> -                               compatible = "arm,idle-state";
-> +                               compatible = "domain-idle-state";
->                                 idle-state-name = "cluster-power-down";
->                                 arm,psci-suspend-param = <0x40003444>;
->                                 entry-latency-us = <3263>;
-> @@ -790,6 +784,59 @@
->         psci {
->                 compatible = "arm,psci-1.0";
->                 method = "smc";
+> +config MFD_MAX77658
+> +	tristate "Analog Devices MAX77643/MAX77654/MAX77658/MAX77659 PMIC Support"
+> +	depends on I2C
+> +	depends on OF
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	select REGMAP_IRQ
+> +	help
+> +	  Say Y here to add support for Analog Devices
+> +	  MAX77643/MAX77654/MAX77658/MAX77659 Power Management IC.
+
+"MAX776xx series"?
+
+> +	  This is the core multifunction
+
+Just "core driver" is fine.
+
+Odd place to line wrap?
+
+> +	  driver for interacting with the device. Additional drivers can be
+
+"can be"?  It's probably pretty useless if you don't, no?
+
+> +	  enabled in order to use the following functionalities of the device:
+> +	  regulator, charger.
+
+"... in order to use the regular and charger functionality of the device".
+
+>  config MFD_MAX77686
+>  	tristate "Maxim Semiconductor MAX77686/802 PMIC Support"
+>  	depends on I2C
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 7ed3ef4a698c..f52aff45878f 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -163,6 +163,7 @@ obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
+>  obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
+>  obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+>  obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+> +obj-$(CONFIG_MFD_MAX77658)	+= max77658.o
+>  obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+>  obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
+>  obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
+> diff --git a/drivers/mfd/max77658.c b/drivers/mfd/max77658.c
+> new file mode 100644
+> index 000000000000..a1c6db48eb08
+> --- /dev/null
+> +++ b/drivers/mfd/max77658.c
+> @@ -0,0 +1,448 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (c) 2023 Analog Devices, Inc.
+> + * ADI driver for the MAX77643/MAX77654/MAX77658/MAX77659
+> + */
+
+No need to list every device.
+
+"MAX776xx series"?
+
+> +#include <linux/i2c.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/max77658.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
 > +
-> +               CPU_PD0: cpu0 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> +               };
+> +#define I2C_ADDR_FUEL_GAUGE (0x6C >> 1)
 > +
-> +               CPU_PD1: cpu1 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_config max77658_regmap_config = {
+> +	.reg_bits   = 8,
+> +	.val_bits   = 8,
+> +};
 > +
-> +               CPU_PD2: cpu2 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_config max77658_regmap_config_fg = {
+> +	.reg_bits   = 8,
+> +	.val_bits   = 16,
+> +	.cache_type = REGCACHE_NONE,
+> +	.val_format_endian = REGMAP_ENDIAN_LITTLE,
+> +};
 > +
-> +               CPU_PD3: cpu3 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_irq max77643_glbl0_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_GPIO0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_GPIO0_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_EN_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_EN_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_TJAL1_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_TJAL2_R, },
+> +	{ .mask = MAX77643_BIT_INT_GLBL0_DOD0_R, },
+> +};
 > +
-> +               CPU_PD4: cpu4 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_irq_chip max77643_glbl0_irq_chip = {
+> +	.name           = "max77643_glbl0",
+> +	.status_base    = MAX77658_REG_INT_GLBL0,
+> +	.mask_base      = MAX77643_REG_INTM_GLBL0,
+> +	.num_regs       = 1,
+> +	.irqs           = max77643_glbl0_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77643_glbl0_irqs),
+> +};
 > +
-> +               CPU_PD5: cpu5 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_irq max77658_glbl0_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_GPIO0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_GPIO0_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_EN_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_EN_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_TJAL1_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_TJAL2_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_DOD1_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_DOD0_R, },
+> +};
 > +
-> +               CPU_PD6: cpu6 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_irq_chip max77654_glbl0_irq_chip = {
+> +	.name           = "max77654_glbl0",
+> +	.status_base    = MAX77658_REG_INT_GLBL0,
+> +	.mask_base      = MAX77654_REG_INTM_GLBL0,
+> +	.num_regs       = 1,
+> +	.irqs           = max77658_glbl0_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77658_glbl0_irqs),
+> +};
 > +
-> +               CPU_PD7: cpu7 {
-> +                       #power-domain-cells = <0>;
-> +                       power-domains = <&CLUSTER_PD>;
-> +                       domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> +               };
+> +static const struct regmap_irq_chip max77658_glbl0_irq_chip = {
+> +	.name           = "max77658_glbl0",
+> +	.status_base    = MAX77658_REG_INT_GLBL0,
+> +	.mask_base      = MAX77658_REG_INTM_GLBL0,
+> +	.num_regs       = 1,
+> +	.irqs           = max77658_glbl0_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77658_glbl0_irqs),
+> +};
 > +
-> +               CLUSTER_PD: cpu-cluster0 {
-> +                       #power-domain-cells = <0>;
-> +                       domain-idle-states = <&CLUSTER_SLEEP_0>;
-> +               };
->         };
->
->         qspi_opp_table: opp-table-qspi {
-> @@ -5280,6 +5327,7 @@
->                                           <SLEEP_TCS   3>,
->                                           <WAKE_TCS    3>,
->                                           <CONTROL_TCS 1>;
-> +                       power-domains = <&CLUSTER_PD>;
->
->                         apps_bcm_voter: bcm-voter {
->                                 compatible = "qcom,bcm-voter";
+> +static const struct regmap_irq max77659_glbl0_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_GPIO0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_GPIO0_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_EN_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_EN_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_TJAL1_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_TJAL2_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL0_DOD0_R, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77659_glbl0_irq_chip = {
+> +	.name           = "max77659_glbl0",
+> +	.status_base    = MAX77658_REG_INT_GLBL0,
+> +	.mask_base      = MAX77654_REG_INTM_GLBL0,
+> +	.num_regs       = 1,
+> +	.irqs           = max77659_glbl0_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77659_glbl0_irqs),
+> +};
+> +
+> +static const struct regmap_irq max77643_glbl1_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_SBB0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_SBB1_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_SBB2_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_LDO0_F, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77643_glbl1_irq_chip = {
+> +	.name           = "max77643_glbl1",
+> +	.status_base    = MAX77658_REG_INT_GLBL1,
+> +	.mask_base      = MAX77643_REG_INTM_GLBL1,
+> +	.num_regs       = 1,
+> +	.irqs           = max77643_glbl1_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77643_glbl1_irqs),
+> +};
+> +
+> +static const struct regmap_irq max77654_glbl1_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_R, },
+> +	{ .mask = MAX77654_BIT_INT_GLBL1_GPI2_F, },
+> +	{ .mask = MAX77654_BIT_INT_GLBL1_GPI2_R, },
+> +	{ .mask = MAX77654_BIT_INT_GLBL1_SBB_TO, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_LDO0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_LDO1_F, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77654_glbl1_irq_chip = {
+> +	.name           = "max77654_glbl1",
+> +	.status_base    = MAX77658_REG_INT_GLBL1,
+> +	.mask_base      = MAX77654_REG_INTM_GLBL1,
+> +	.num_regs       = 1,
+> +	.irqs           = max77654_glbl1_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77654_glbl1_irqs),
+> +};
+> +
+> +static const struct regmap_irq max77658_glbl1_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_R, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_SBB0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_SBB1_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_SBB2_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_LDO0_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_LDO1_F, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77658_glbl1_irq_chip = {
+> +	.name           = "max77658_glbl1",
+> +	.status_base    = MAX77658_REG_INT_GLBL1,
+> +	.mask_base      = MAX77658_REG_INTM_GLBL1,
+> +	.num_regs       = 1,
+> +	.irqs           = max77658_glbl1_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77658_glbl1_irqs),
+> +};
+> +
+> +static const struct regmap_irq max77659_glbl1_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_F, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_GPI1_R, },
+> +	{ .mask = MAX77659_BIT_INT_GLBL1_SBB_TO, },
+> +	{ .mask = MAX77658_BIT_INT_GLBL1_LDO0_F, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77659_glbl1_irq_chip = {
+> +	.name           = "max77659_glbl1",
+> +	.status_base    = MAX77658_REG_INT_GLBL1,
+> +	.mask_base      = MAX77658_REG_INTM_GLBL1,
+> +	.num_regs       = 1,
+> +	.irqs           = max77659_glbl1_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77659_glbl1_irqs),
+> +};
+> +
+> +static const struct regmap_irq max77658_chg_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_THM, },
+> +	{ .mask = MAX77658_BIT_INT_CHG, },
+> +	{ .mask = MAX77658_BIT_INT_CHGIN, },
+> +	{ .mask = MAX77658_BIT_INT_TJ_REG, },
+> +	{ .mask = MAX77658_BIT_INT_CHGIN_CTRL, },
+> +	{ .mask = MAX77658_BIT_INT_SYS_CTRL, },
+> +	{ .mask = MAX77658_BIT_INT_SYS_CNFG, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77654_chg_irq_chip = {
+> +	.name           = "max77654_chg",
+> +	.status_base    = MAX77658_REG_INT_CHG,
+> +	.mask_base      = MAX77658_REG_INTM_CHG,
+> +	.num_regs       = 1,
+> +	.irqs           = max77658_chg_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77658_chg_irqs),
+> +};
+> +
+> +static const struct regmap_irq_chip max77658_chg_irq_chip = {
+> +	.name           = "max77658_chg",
+> +	.status_base    = MAX77658_REG_INT_CHG,
+> +	.mask_base      = MAX77658_REG_INTM_CHG,
+> +	.num_regs       = 1,
+> +	.irqs           = max77658_chg_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77658_chg_irqs),
+> +};
+> +
+> +static const struct regmap_irq max77659_chg_irqs[] = {
+> +	{ .mask = MAX77658_BIT_INT_THM, },
+> +	{ .mask = MAX77658_BIT_INT_CHG, },
+> +	{ .mask = MAX77658_BIT_INT_CHGIN, },
+> +	{ .mask = MAX77658_BIT_INT_TJ_REG, },
+> +	{ .mask = MAX776569_BIT_INT_SYS_CTRL, },
+> +};
+> +
+> +static const struct regmap_irq_chip max77659_chg_irq_chip = {
+> +	.name           = "max77659_chg",
+> +	.status_base    = MAX77658_REG_INT_CHG,
+> +	.mask_base      = MAX77658_REG_INTM_CHG,
+> +	.num_regs       = 1,
+> +	.irqs           = max77659_chg_irqs,
+> +	.num_irqs       = ARRAY_SIZE(max77659_chg_irqs),
+> +};
+> +
+> +static const struct mfd_cell max77643_devs[] = {
+> +	MFD_CELL_OF("max77643-regulator", NULL, NULL, 0, 0,
+> +		    "adi,max77643-regulator"),
+> +};
+> +
+> +static const struct mfd_cell max77654_devs[] = {
+> +	MFD_CELL_OF("max77654-regulator", NULL, NULL, 0, 0,
+> +		    "adi,max77654-regulator"),
+> +	MFD_CELL_OF("max77654-charger", NULL, NULL, 0, 0,
+> +		    "adi,max77654-charger"),
+> +};
+> +
+> +static const struct mfd_cell max77658_devs[] = {
+> +	MFD_CELL_OF("max77658-regulator", NULL, NULL, 0, 0,
+> +		    "adi,max77658-regulator"),
+> +	MFD_CELL_OF("max77658-charger", NULL, NULL, 0, 0,
+> +		    "adi,max77658-charger"),
+> +	MFD_CELL_OF("max77658-battery", NULL, NULL, 0, 0,
+> +		    "adi,max77658-battery"),
+> +};
+> +
+> +static const struct mfd_cell max77659_devs[] = {
+> +	MFD_CELL_OF("max77659-regulator", NULL, NULL, 0, 0,
+> +		    "adi,max77659-regulator"),
+> +	MFD_CELL_OF("max77659-charger", NULL, NULL, 0, 0,
+> +		    "adi,max77659-charger"),
+> +};
+
+You can unwrap all of these, you have 100-chars to play with.
+
+> +static const struct chip_info chip[] = {
+> +	[ID_MAX77643] = {
+> +		.id = ID_MAX77643,
+> +		.n_devs = ARRAY_SIZE(max77643_devs),
+> +		.devs = max77643_devs,
+> +	},
+> +	[ID_MAX77654] = {
+> +		.id = ID_MAX77654,
+> +		.n_devs = ARRAY_SIZE(max77654_devs),
+> +		.devs = max77654_devs,
+> +	},
+> +	[ID_MAX77658] = {
+> +		.id = ID_MAX77658,
+> +		.n_devs = ARRAY_SIZE(max77658_devs),
+> +		.devs = max77658_devs,
+> +	},
+> +	[ID_MAX77659] = {
+> +		.id = ID_MAX77659,
+> +		.n_devs = ARRAY_SIZE(max77659_devs),
+> +		.devs = max77659_devs,
+> +	},
+> +};
+> +
+> +static int max77658_pmic_irq_init(struct device *dev)
+> +{
+> +	const struct regmap_irq_chip *glbl0_chip, *glbl1_chip, *chg_chip;
+> +	struct max77658_dev *max77658 = dev_get_drvdata(dev);
+> +	int ret, i;
+> +
+> +	switch (max77658->chip->id) {
+> +	case ID_MAX77643:
+> +		glbl0_chip = &max77643_glbl0_irq_chip;
+> +		glbl1_chip = &max77643_glbl1_irq_chip;
+> +		break;
+> +	case ID_MAX77654:
+> +		glbl0_chip = &max77654_glbl0_irq_chip;
+> +		glbl1_chip = &max77654_glbl1_irq_chip;
+> +		chg_chip = &max77654_chg_irq_chip;
+> +		break;
+> +	case ID_MAX77658:
+> +		glbl0_chip = &max77658_glbl0_irq_chip;
+> +		glbl1_chip = &max77658_glbl1_irq_chip;
+> +		chg_chip = &max77658_chg_irq_chip;
+> +		break;
+> +	case ID_MAX77659:
+> +		glbl0_chip = &max77659_glbl0_irq_chip;
+> +		glbl1_chip = &max77659_glbl1_irq_chip;
+> +		chg_chip = &max77659_chg_irq_chip;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	for (i = 0; i < glbl0_chip->num_regs; i++) {
+> +		ret = regmap_update_bits(max77658->regmap,
+> +					 glbl0_chip->mask_base,
+> +					 (1 << glbl0_chip->irqs[i].reg_offset),
+> +					 1);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Unable to write Global0 Interrupt Masking register\n");
+> +	}
+> +
+> +	for (i = 0; i < glbl1_chip->num_regs; i++) {
+> +		ret = regmap_update_bits(max77658->regmap,
+> +					 glbl1_chip->mask_base,
+> +					 (1 << glbl1_chip->irqs[i].reg_offset),
+> +					 1);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Unable to write Global1 Interrupt Masking register\n");
+> +	}
+> +
+> +	if (max77658->chip->id != ID_MAX77643) {
+> +		for (i = 0; i < chg_chip->num_regs; i++) {
+> +			ret = regmap_update_bits(max77658->regmap,
+> +						 chg_chip->mask_base,
+> +						 (1 <<
+> +						 chg_chip->irqs[i].reg_offset),
+> +						 1);
+> +			if (ret)
+> +				return dev_err_probe(dev, ret,
+> +						     "Unable to write Charger Interrupt Masking register\n");
+> +		}
+> +
+> +		ret = devm_regmap_add_irq_chip(dev, max77658->regmap,
+> +					       max77658->irq,
+> +					       IRQF_ONESHOT | IRQF_SHARED, 0,
+> +					       chg_chip, &max77658->irqc_chg);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Failed to add charger IRQ chip\n");
+> +	}
+> +
+> +	ret = devm_regmap_add_irq_chip(dev, max77658->regmap, max77658->irq,
+> +				       IRQF_ONESHOT | IRQF_SHARED, 0,
+> +				       glbl0_chip, &max77658->irqc_glbl0);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Failed to add global0 IRQ chip\n");
+> +
+> +	return devm_regmap_add_irq_chip(dev, max77658->regmap, max77658->irq,
+> +					IRQF_ONESHOT | IRQF_SHARED, 0,
+> +					glbl1_chip, &max77658->irqc_glbl1);
+
+This function is hectic.
+
+What exactly are you doing here?
+
+> +}
+> +
+> +static int max77658_pmic_setup(struct device *dev)
+> +{
+> +	struct max77658_dev *max77658 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = max77658_pmic_irq_init(max77658->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+> +				   max77658->chip->devs, max77658->chip->n_devs,
+> +				   NULL, 0, NULL);
+> +
+
+These are usually placed in probe.
+
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to add sub-devices\n");
+> +
+> +	ret = device_init_wakeup(dev, true);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Unable to init wakeup\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id max77658_i2c_id[];
+
+What on earth is this?  A struct forward declaration?
+
+If you need this, just move the original code block to here.
+
+> +static int max77658_i2c_probe(struct i2c_client *client)
+> +{
+> +	struct max77658_dev *max77658;
+> +	struct i2c_client *fuel;
+> +
+> +	max77658 = devm_kzalloc(&client->dev, sizeof(*max77658), GFP_KERNEL);
+> +	if (!max77658)
+> +		return -ENOMEM;
+> +
+> +	i2c_set_clientdata(client, max77658);
+> +	max77658->dev = &client->dev;
+
+How do you fetch back max77658?
+
+Don't you need access to the device structs?
+
+If so, you already have a reference, no?
+
+> +	max77658->irq = client->irq;
+> +
+> +	if (max77658->dev->of_node)
+> +		max77658->chip  = of_device_get_match_data(max77658->dev);
+> +	else
+> +		max77658->chip  = (struct chip_info *)
+
+Cast from void * shouldn't be required.
+
+> +					i2c_match_id(max77658_i2c_id,
+> +						     client)->driver_data;
+
+100-chars everywhere.
+
+> +	if (!max77658->chip)
+> +		return -EINVAL;
+> +
+> +	max77658->regmap = devm_regmap_init_i2c(client,
+> +						&max77658_regmap_config);
+> +	if (IS_ERR(max77658->regmap))
+> +		return dev_err_probe(max77658->dev, PTR_ERR(max77658->regmap),
+> +				     "Failed to allocate register map\n");
+
+s/allocate/initialise/
+
+"regmap" is fine.
+
+> +	fuel = i2c_new_dummy_device(client->adapter, I2C_ADDR_FUEL_GAUGE);
+> +	if (IS_ERR(fuel))
+> +		return dev_err_probe(max77658->dev, PTR_ERR(fuel),
+> +				     "failed add i2c device[0x%Xh]\n",
+
+"Failed to create I2C device"
+
+> +				      I2C_ADDR_FUEL_GAUGE);
+> +
+> +	i2c_set_clientdata(fuel, max77658);
+> +
+> +	max77658->regmap_fg = devm_regmap_init_i2c(fuel,
+> +						   &max77658_regmap_config_fg);
+> +	if (IS_ERR(max77658->regmap_fg))
+> +		return dev_err_probe(max77658->dev,
+> +				     PTR_ERR(max77658->regmap_fg),
+> +				     "failed to initialize i2c device[0x%Xh]\n",
+
+"Failed"
+
+"I2C"
+
+> +				     I2C_ADDR_FUEL_GAUGE);
+> +
+> +	return max77658_pmic_setup(max77658->dev);
+> +}
+> +
+> +static const struct of_device_id max77658_of_id[] = {
+> +	{ .compatible = "adi,max77643", .data = &chip[ID_MAX77643] },
+> +	{ .compatible = "adi,max77654", .data = &chip[ID_MAX77654] },
+> +	{ .compatible = "adi,max77658", .data = &chip[ID_MAX77658] },
+> +	{ .compatible = "adi,max77659", .data = &chip[ID_MAX77659] },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, max77658_of_id);
+> +
+> +static const struct i2c_device_id max77658_i2c_id[] = {
+> +	{ "max77643", (kernel_ulong_t)&chip[ID_MAX77643] },
+> +	{ "max77654", (kernel_ulong_t)&chip[ID_MAX77654] },
+> +	{ "max77658", (kernel_ulong_t)&chip[ID_MAX77658] },
+> +	{ "max77659", (kernel_ulong_t)&chip[ID_MAX77659] },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, max77658_i2c_id);
+
+Please don't pass MFD data through the DT platform initialisation API.
+
+Pass the Chip ID and match in C-code.
+
+> +static struct i2c_driver max77658_driver = {
+> +	.driver = {
+> +		.name = "max77658",
+> +		.of_match_table = max77658_of_id,
+> +	},
+> +	.probe_new = max77658_i2c_probe,
+> +	.id_table = max77658_i2c_id,
+> +};
+> +module_i2c_driver(max77658_driver);
+> +
+> +MODULE_DESCRIPTION("MAX77658 MFD Driver");
+> +MODULE_AUTHOR("Nurettin.Bolucu@analog.com, Zeynep.Arslanbenzer@analog.com");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/max77658.h b/include/linux/mfd/max77658.h
+> new file mode 100644
+> index 000000000000..471a8474513e
+> --- /dev/null
+> +++ b/include/linux/mfd/max77658.h
+> @@ -0,0 +1,88 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +
+> +#ifndef __MAX77658_MFD_H__
+> +#define __MAX77658_MFD_H__
+> +
+> +#include <linux/bits.h>
+> +#include <linux/types.h>
+> +
+> +#define MAX77658_REG_INT_GLBL0	0x00
+> +#define MAX77658_REG_INT_CHG	0x01
+> +#define MAX77658_REG_INT_GLBL1	0x04
+> +#define MAX77658_REG_INTM_CHG	0x07
+> +#define MAX77658_REG_INTM_GLBL0	0x08
+> +#define MAX77658_REG_INTM_GLBL1	0x09
+> +
+> +#define MAX77654_REG_INTM_GLBL1	0x08
+> +#define MAX77654_REG_INTM_GLBL0	0x09
+> +
+> +#define MAX77643_REG_INT_GLBL1	0x01
+> +#define MAX77643_REG_INTM_GLBL0	0x04
+> +#define MAX77643_REG_INTM_GLBL1	0x05
+> +
+> +#define MAX77658_BIT_INT_GLBL0_GPIO0_F	BIT(0)
+> +#define MAX77658_BIT_INT_GLBL0_GPIO0_R	BIT(1)
+> +#define MAX77658_BIT_INT_GLBL0_EN_F	BIT(2)
+> +#define MAX77658_BIT_INT_GLBL0_EN_R	BIT(3)
+> +#define MAX77658_BIT_INT_GLBL0_TJAL1_R	BIT(4)
+> +#define MAX77658_BIT_INT_GLBL0_TJAL2_R	BIT(5)
+> +#define MAX77658_BIT_INT_GLBL0_DOD1_R	BIT(6)
+> +#define MAX77658_BIT_INT_GLBL0_DOD0_R	BIT(7)
+> +
+> +#define MAX77643_BIT_INT_GLBL0_DOD0_R	BIT(6)
+> +
+> +#define MAX77658_BIT_INT_GLBL1_GPI1_F	BIT(0)
+> +#define MAX77658_BIT_INT_GLBL1_GPI1_R	BIT(1)
+> +#define MAX77658_BIT_INT_GLBL1_SBB0_F	BIT(2)
+> +#define MAX77658_BIT_INT_GLBL1_SBB1_F	BIT(3)
+> +#define MAX77658_BIT_INT_GLBL1_SBB2_F	BIT(4)
+> +#define MAX77658_BIT_INT_GLBL1_LDO0_F	BIT(5)
+> +#define MAX77658_BIT_INT_GLBL1_LDO1_F	BIT(6)
+> +
+> +#define MAX77659_BIT_INT_GLBL1_SBB_TO	BIT(4)
+> +
+> +#define MAX77654_BIT_INT_GLBL1_GPI2_F	BIT(2)
+> +#define MAX77654_BIT_INT_GLBL1_GPI2_R	BIT(3)
+> +#define MAX77654_BIT_INT_GLBL1_SBB_TO	BIT(4)
+> +
+> +#define MAX77658_BIT_INT_THM		BIT(0)
+> +#define MAX77658_BIT_INT_CHG		BIT(1)
+> +#define MAX77658_BIT_INT_CHGIN		BIT(2)
+> +#define MAX77658_BIT_INT_TJ_REG		BIT(3)
+> +#define MAX77658_BIT_INT_CHGIN_CTRL	BIT(4)
+> +#define MAX77658_BIT_INT_SYS_CTRL	BIT(5)
+> +#define MAX77658_BIT_INT_SYS_CNFG	BIT(6)
+> +
+> +#define MAX776569_BIT_INT_SYS_CTRL	BIT(4)
+> +
+> +enum max77658_ids {
+> +	ID_MAX77643,
+> +	ID_MAX77654,
+> +	ID_MAX77658,
+> +	ID_MAX77659
+> +};
+> +
+> +struct chip_info {
+> +	enum max77658_ids id;
+> +	int n_devs;
+> +	const struct mfd_cell *devs;
+> +};
+> +
+> +struct device;
+> +struct regmap;
+> +struct regmap_irq_chip_data;
+> +
+> +struct max77658_dev {
+> +	struct device *dev;
+> +	const struct chip_info *chip;
+> +
+> +	int irq;
+> +	struct regmap_irq_chip_data *irqc_glbl0;
+> +	struct regmap_irq_chip_data *irqc_glbl1;
+> +	struct regmap_irq_chip_data *irqc_chg;
+> +
+> +	struct regmap *regmap;
+> +	struct regmap *regmap_fg;
+> +};
+> +
+> +#endif /* __MAX77658_MFD_H__ */
 > --
-> 2.17.1
+> 2.25.1
 >
+
+--
+Lee Jones [李琼斯]
