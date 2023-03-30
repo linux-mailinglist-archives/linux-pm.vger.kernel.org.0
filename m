@@ -2,116 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD1C6CF9E4
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 06:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0D46CF9F0
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 06:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjC3EAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 00:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S229783AbjC3ECc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 00:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjC3EAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 00:00:35 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9494ED5
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 21:00:34 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id d8so10572473pgm.3
-        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 21:00:34 -0700 (PDT)
+        with ESMTP id S229828AbjC3ECZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 00:02:25 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD43C5B9D
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 21:02:19 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b20so71455579edd.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Mar 2023 21:02:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680148833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y6Joh1yyjlzUhXvO/lz/fYfCYrQA+xYzttBmRPJ2FSk=;
-        b=RShaB8Ewrhpzb/NXunnI5Y//ZTfY/lFlID0e9yAbQXiKPlnxIKR2V3YBzFxBuW/3WW
-         8CBML0hMJwhf/F8PWtYX+PNK+P/Lzv0moVcN43zBG4mIzv91WPtGxNVrxQPDsLTKOL7e
-         Y7Jkb9JMNMS9EwmxEVvzB1vMGtrTIy1SAlbZWtWV/DS3YJ1OJS37JTVMFKlDK/V6THvq
-         6TaWh45pAIut3CST+OaLLm5r2wMpy10zOXqtkACNoLwKkkcp7y6OBYY6u92UUeE+2e/Y
-         FUHMIrWEJeC9nhHHAMwwTzPH7wK6zpkRNKXp6SRbZnMO9QdIef20+CmVG+2s1+FRfuty
-         BE8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680148833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680148938;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y6Joh1yyjlzUhXvO/lz/fYfCYrQA+xYzttBmRPJ2FSk=;
-        b=odnuejeKRuKNWtDjPnpCoVskS/r5m6TfqvwFTQ8sIcYb6vPJPG+0NyuqkFIKzxHdOS
-         oTbmshczFkvkRfGXAPXndNWCbRL0tIZ7jh149+TmRJFjZ9SuZAWQ+rmiIfdlIgHKIDDi
-         StJMsGuCAMHD3cWRfAVNpXQ9hydc/H27ZPZRxb8Ol9sQV/Dos3KrkLOP68qNw31pGXtP
-         fCnC8/QAVBp+oVHaiIbgRocZ7bXfx7HoAQjVk42I5B/GVa1zJ6uqv2hQvM1NWiN19lxq
-         IHtRvF488QLULqXdYqLRjIZRN4DiCBXXuwK55c2/lZBNvtB2TmZi6bi0vuKh8yEzaa3k
-         vllg==
-X-Gm-Message-State: AAQBX9fvnZaFZ0u+AejLq+NkPWj/0KRHe+CUuLagwOxmtQThP8crSBFO
-        cdNa/Ki1I9IHa8vUc03k78dVYw==
-X-Google-Smtp-Source: AKy350bstz70jNqKs7AiPJmYPZ+FFPt8xMW1yNR+PuRu02je+smc1Prw/DUlJM2bjcYaLnsnw1KNbA==
-X-Received: by 2002:a62:640e:0:b0:624:cfbe:bbfa with SMTP id y14-20020a62640e000000b00624cfbebbfamr20274534pfb.15.1680148833482;
-        Wed, 29 Mar 2023 21:00:33 -0700 (PDT)
-Received: from localhost ([122.172.85.168])
-        by smtp.gmail.com with ESMTPSA id p14-20020a62ab0e000000b0062505afff9fsm23773417pff.126.2023.03.29.21.00.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 21:00:32 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 09:30:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Xuewen Yan <xuewen.yan@unisoc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Revert adding cpufreq qos
-Message-ID: <20230330040030.bal3eqrq22xluxca@vireshk-i7>
-References: <20230323223343.587210-1-quic_bjorande@quicinc.com>
+        bh=DRrMSTrE1hzXNMTnJR9hzwcHZG5OJLH6N1k4mRkhtxc=;
+        b=ynfExVnq8Pbne4CrK35vVvzcZo/HMcJEJUR3Ujna/kLNgyxndnnVOhaOok7Q3u4boK
+         FW4keBgSZ6pU7kWyE+manshTU5Tk7hNavSWkOvFCWTteIMmp/9Qk7GSzFj7kYZ5XfmBv
+         miUHdrLcGJzpXksYn+qz42allwe3QMPmR/pnE7vpqvm1r6J8sdtN2nbt3yHJRZJvjQa2
+         WULHOKYx2FaImOfeOidrkyK9ABt3NseOxAzqi3/iHsrvkvaPYLGzC0VonLkMDJt7dAvE
+         qA6CCYx7R2kWBHI86Kqb+JhYZk0VIktRQH4ecdVqtPrNiVN9gXZkgnTnC6UdsKE6Gs/B
+         u+Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680148938;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DRrMSTrE1hzXNMTnJR9hzwcHZG5OJLH6N1k4mRkhtxc=;
+        b=v+ORNCLwcK4vp2wBjqZA6PIsOUgkz1hy407Qgc45n6NMw6MtGokO8MqitlVbcxlqUL
+         AIdThunRMv2+StGKnnLztLqd0MgWhAF7Y+fNlxskLb1nXvhiC35H0+TGm/hybDMpPCv9
+         sHX//Q7Ta1k5opJ4lIzaqNiiUm0YHMYvb+8u3/dwSLu0EaqE4jDH5dlzOIbGMI4pIIhW
+         G/+Ep6kIbfgKybx/fMGaXVk2EdpUkMPA1I4dYCB3QU7eYN336tYhodn4fU0/0mAh6np8
+         VhVoIUVUdJy/4pCzpb+W9IM1y+lRXjZwWTeYzHa18Zfmbz3LWPUS932dAm30OHFdZ95F
+         u9TA==
+X-Gm-Message-State: AAQBX9d/83vokDZMJcRVm9lNQUlisPTKLmzHSvP8BSfCS9lWFe9CJvlG
+        QugNDeCpodPnuYEg/8ws+CfxKo+0VcdruMbyyaD69Q==
+X-Google-Smtp-Source: AKy350YsOJqAiqRYem5e01w1p2m+BEvgEUELir1jFBDVGQszGos9GuJs6YHfU/Z+9mLpMcFmxWEdJiS8UYrZt9G/tI4=
+X-Received: by 2002:a50:9fef:0:b0:4fc:1608:68c8 with SMTP id
+ c102-20020a509fef000000b004fc160868c8mr10756114edf.1.1680148938164; Wed, 29
+ Mar 2023 21:02:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323223343.587210-1-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org> <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 30 Mar 2023 09:32:06 +0530
+Message-ID: <CAAhSdy3MYV=v2TNZ_507zGe6Pj_c95TZwODPK8-zTHpkn-ukww@mail.gmail.com>
+Subject: Re: [PATCH 16/19] cpuidle: Adjust includes to remove of_device.h
+To:     Rob Herring <robh@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-03-23, 15:33, Bjorn Andersson wrote:
-> The OSM/EPSS hardware controls the frequency of each CPU cluster based
-> on requests from the OS and various throttling events in the system.
-> While throttling is in effect the related dcvs interrupt will be kept
-> high. The purpose of the code handling this interrupt is to
-> continuously report the thermal pressure based on the throttled
-> frequency.
-> 
-> The reasoning for adding QoS control to this mechanism is not entirely
-> clear, but the introduction of commit 'c4c0efb06f17 ("cpufreq:
-> qcom-cpufreq-hw: Add cpufreq qos for LMh")' causes the
-> scaling_max_frequncy to be set to the throttled frequency. On the next
-> iteration of polling, the throttled frequency is above or equal to the
-> newly requested frequency, so the polling is stopped.
-> 
-> With cpufreq limiting the max frequency, the hardware no longer report a
-> throttling state and no further updates to thermal pressure or qos
-> state are made.
-> 
-> The result of this is that scaling_max_frequency can only go down, and
-> the system becomes slower and slower every time a thermal throttling
-> event is reported by the hardware.
-> 
-> Even if the logic could be improved, there is no reason for software to
-> limit the max freqency in response to the hardware limiting the max
-> frequency. At best software will follow the reported hardware state, but
-> typically it will cause slower backoff of the throttling.
-> 
-> This reverts commit c4c0efb06f17fa4a37ad99e7752b18a5405c76dc.
-> 
-> Fixes: c4c0efb06f17 ("cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh")
-> Cc: stable@vger.kernel.org
-> Reported-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+On Wed, Mar 29, 2023 at 9:22=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
+> implicitly including other includes, and is no longer needed. Adjust the
+> include files with what was implicitly included by of_device.h (cpu.h,
+> cpuhotplug.h, of.h, and of_platform.h) and drop including of_device.h.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+For cpuidle-riscv-sbi.c
+Acked-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
 > ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 14 --------------
->  1 file changed, 14 deletions(-)
-
-Applied. Thanks.
-
--- 
-viresh
+> Please ack and I will take the series via the DT tree.
+> ---
+>  drivers/cpuidle/cpuidle-psci.c      | 1 -
+>  drivers/cpuidle/cpuidle-qcom-spm.c  | 3 +--
+>  drivers/cpuidle/cpuidle-riscv-sbi.c | 2 +-
+>  drivers/cpuidle/dt_idle_states.c    | 1 -
+>  4 files changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psc=
+i.c
+> index 6de027f9f6f5..bf68920d038a 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/psci.h>
+>  #include <linux/pm_domain.h>
+> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle=
+-qcom-spm.c
+> index c6e2e91bb4c3..1fc9968eae19 100644
+> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
+> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+> @@ -11,8 +11,7 @@
+>  #include <linux/io.h>
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+> -#include <linux/of_address.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/err.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/cpuidle.h>
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidl=
+e-riscv-sbi.c
+> index be383f4b6855..ae0b838a0634 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -8,6 +8,7 @@
+>
+>  #define pr_fmt(fmt) "cpuidle-riscv-sbi: " fmt
+>
+> +#include <linux/cpuhotplug.h>
+>  #include <linux/cpuidle.h>
+>  #include <linux/cpumask.h>
+>  #include <linux/cpu_pm.h>
+> @@ -15,7 +16,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+> diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_s=
+tates.c
+> index 02aa0b39af9d..12fec92a85fd 100644
+> --- a/drivers/cpuidle/dt_idle_states.c
+> +++ b/drivers/cpuidle/dt_idle_states.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>
+>  #include "dt_idle_states.h"
+>
+>
+> --
+> 2.39.2
+>
