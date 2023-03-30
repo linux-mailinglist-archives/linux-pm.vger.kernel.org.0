@@ -2,234 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DBC6D0C3A
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 19:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA196D0CC3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 19:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjC3RHe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 30 Mar 2023 13:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S232286AbjC3R2v convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 30 Mar 2023 13:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjC3RHc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 13:07:32 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447F6AF08;
-        Thu, 30 Mar 2023 10:07:28 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1phvjz-0005WC-Tv; Thu, 30 Mar 2023 19:07:11 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        with ESMTP id S232223AbjC3R2u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 13:28:50 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99D8CDF9;
+        Thu, 30 Mar 2023 10:28:49 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id y4so79505768edo.2;
+        Thu, 30 Mar 2023 10:28:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680197328;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/8hXWy6c7o0Kr1iLcvn9+6HR84nHwK24sk7KgE0uVSc=;
+        b=Y87FxttZtH+8VmlwVn3GRht7KHPnQYOUH/Nakoi38gK5mXSmB8IyMMfH1sePUN9yIn
+         Hy1QLLsk+mwtoepULKT4kbDGg4ZIi9xJOCq/8sLCkLAYH8Xkufx9gHslG/NMNf60vKXW
+         X50R2y+j8PBBmHY2Vi6voxYELFR40swSOac9Yhk55bhkJw/SI/VxuX1PRpND4Zbz4l0H
+         8V6asgQkotYAfsNGGFDjhGxiEvxvpns2/JdwflUCc/xwFPToiRQxmAtPEj7j67a1LPjI
+         J8vBlQSrthhRzho6DV2SbX57LqUzBPVt6ydnhE0KB0EnzOIsWdEKkm+Y4kof8fKI05Hk
+         Z1UA==
+X-Gm-Message-State: AAQBX9e4vdRPEP7JHZGHqrN/mun19HE+t7GDNkcQp+jacxul0JReTR5D
+        8HHEM0+FWPDr91HsHGzHNi+0/raEobvUi/iG7Cc=
+X-Google-Smtp-Source: AKy350bQ8RtXNV+REfnvhajyMgzLRFOmaz5LP0vGAlL2cL8esa5cPkycEr0oW6G/JKFOpqHUz2D0IyapN0eKe+G5X3o=
+X-Received: by 2002:a50:d6d6:0:b0:4fb:c8e3:1adb with SMTP id
+ l22-20020a50d6d6000000b004fbc8e31adbmr11657665edj.3.1680197328309; Thu, 30
+ Mar 2023 10:28:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230310144726.1545543-1-robh@kernel.org> <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Mar 2023 19:28:37 +0200
+Message-ID: <CAJZ5v0i-Vum+js8c7fZJiQWwTBYByy2O=UtObR6GciLMLt41Nw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Use of_property_present() for testing DT
+ property presence
+To:     Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id logic
-Date:   Thu, 30 Mar 2023 19:07:11 +0200
-Message-ID: <2066924.KlZ2vcFHjT@diego>
-In-Reply-To: <bae80282-cb80-462d-e554-1934d090e216@linaro.org>
-References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
- <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
- <bae80282-cb80-462d-e554-1934d090e216@linaro.org>
-MIME-Version: 1.0
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Donnerstag, 16. M�rz 2023, 11:05:25 CEST schrieb Daniel Lezcano:
-> 
-> Hi Heiko,
-> 
-> On 08/03/2023 19:42, Sebastian Reichel wrote:
-> > Hi Daniel,
-> > 
-> > On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
-> >> On 08/03/2023 12:22, Sebastian Reichel wrote:
-> >>> Replace the channel ID lookup table by a simple offset, since
-> >>> the channel IDs are consecutive.
-> >>>
-> >>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> >>
-> >> As all the other patches are reviewed by Heiko, is the tag missing here?
-> > 
-> > Heiko was not happy with this in PATCHv2, when he reviewed most
-> > of the patches:
-> > 
-> > https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
-> > 
-> > I replied, but never got a response, so I kept it as is:
-> > 
-> > https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektranox.org/
-> > 
-> > FWIW it is essential for the series and cannot be dropped, because
-> > RK3588 has more than 2 channels.
-> 
-> Do you have a suggestion to improve the proposed change ?
+On Mon, Mar 27, 2023 at 7:13 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Mar 10, 2023 at 3:48 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > It is preferred to use typed property access functions (i.e.
+> > of_property_read_<type> functions) rather than low-level
+> > of_get_property/of_find_property functions for reading properties. As
+> > part of this, convert of_get_property/of_find_property calls to the
+> > recently added of_property_present() helper when we just want to test
+> > for presence of a property and nothing more.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> Daniel, are you going to apply this, or should I take it directly?
 
-I guess it's fine after all.
+Applied as 6.4 material, thanks!
 
-Sebastian's response makes sense and there is not really a reason to keep
-infrastructure around for a hypothetical case that may never happen.
-
-If that really changes with some SoC in the far future we can always
-re-evaluate.
-
-
-So,
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-Sorry for dropping the ball on this
-Heiko
-
-
-> >>> ---
-> >>>    drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
-> >>>    1 file changed, 21 insertions(+), 27 deletions(-)
-> >>>
-> >>> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-> >>> index 9ed45b318344..bcbdd618daae 100644
-> >>> --- a/drivers/thermal/rockchip_thermal.c
-> >>> +++ b/drivers/thermal/rockchip_thermal.c
-> >>> @@ -39,15 +39,6 @@ enum tshut_polarity {
-> >>>    	TSHUT_HIGH_ACTIVE,
-> >>>    };
-> >>> -/*
-> >>> - * The system has two Temperature Sensors.
-> >>> - * sensor0 is for CPU, and sensor1 is for GPU.
-> >>> - */
-> >>> -enum sensor_id {
-> >>> -	SENSOR_CPU = 0,
-> >>> -	SENSOR_GPU,
-> >>> -};
-> >>> -
-> >>>    /*
-> >>>     * The conversion table has the adc value and temperature.
-> >>>     * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
-> >>> @@ -82,7 +73,7 @@ struct chip_tsadc_table {
-> >>>    /**
-> >>>     * struct rockchip_tsadc_chip - hold the private data of tsadc chip
-> >>> - * @chn_id: array of sensor ids of chip corresponding to the channel
-> >>> + * @chn_offset: the channel offset of the first channel
-> >>>     * @chn_num: the channel number of tsadc chip
-> >>>     * @tshut_temp: the hardware-controlled shutdown temperature value
-> >>>     * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
-> >>> @@ -98,7 +89,7 @@ struct chip_tsadc_table {
-> >>>     */
-> >>>    struct rockchip_tsadc_chip {
-> >>>    	/* The sensor id of chip correspond to the ADC channel */
-> >>> -	int chn_id[SOC_MAX_SENSORS];
-> >>> +	int chn_offset;
-> >>>    	int chn_num;
-> >>>    	/* The hardware-controlled tshut property */
-> >>> @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
-> >>>    }
-> >>>    static const struct rockchip_tsadc_chip px30_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* 2 channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> >>> @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> +	/* cpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 1, /* one channel for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> +	/* cpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 1, /* one channel for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 1, /* cpu sensor is channel 1 */
-> >>> -	.chn_id[SENSOR_GPU] = 2, /* gpu sensor is channel 2 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 1,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> +	/* cpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 1, /* one channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> >>> @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
-> >>>    	for (i = 0; i < thermal->chip->chn_num; i++) {
-> >>>    		error = rockchip_thermal_register_sensor(pdev, thermal,
-> >>>    						&thermal->sensors[i],
-> >>> -						thermal->chip->chn_id[i]);
-> >>> +						thermal->chip->chn_offset + i);
-> >>>    		if (error)
-> >>>    			return dev_err_probe(&pdev->dev, error,
-> >>>    				"failed to register sensor[%d].\n", i);
-> >>
-> >>
-> >> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> >> <http://twitter.com/#!/linaroorg> Twitter |
-> >> <http://www.linaro.org/linaro-blog/> Blog
-> >>
-> 
-> 
-
-
-
-
+> > ---
+> >  drivers/thermal/cpufreq_cooling.c                  | 2 +-
+> >  drivers/thermal/imx8mm_thermal.c                   | 2 +-
+> >  drivers/thermal/imx_thermal.c                      | 4 ++--
+> >  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 2 +-
+> >  4 files changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> > index 9f8b438fcf8f..4608555b7ec3 100644
+> > --- a/drivers/thermal/cpufreq_cooling.c
+> > +++ b/drivers/thermal/cpufreq_cooling.c
+> > @@ -633,7 +633,7 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+> >                 return NULL;
+> >         }
+> >
+> > -       if (of_find_property(np, "#cooling-cells", NULL)) {
+> > +       if (of_property_present(np, "#cooling-cells")) {
+> >                 struct em_perf_domain *em = em_cpu_get(policy->cpu);
+> >
+> >                 cdev = __cpufreq_cooling_register(np, policy, em);
+> > diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+> > index 72b5d6f319c1..334ce8e9830b 100644
+> > --- a/drivers/thermal/imx8mm_thermal.c
+> > +++ b/drivers/thermal/imx8mm_thermal.c
+> > @@ -282,7 +282,7 @@ static int imx8mm_tmu_probe_set_calib(struct platform_device *pdev,
+> >          * strongly recommended to update such old DTs to get correct
+> >          * temperature compensation values for each SoC.
+> >          */
+> > -       if (!of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
+> > +       if (!of_property_present(pdev->dev.of_node, "nvmem-cells")) {
+> >                 dev_warn(dev,
+> >                          "No OCOTP nvmem reference found, SoC-specific calibration not loaded. Please update your DT.\n");
+> >                 return 0;
+> > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> > index fb0d5cab70af..77d6567a3f47 100644
+> > --- a/drivers/thermal/imx_thermal.c
+> > +++ b/drivers/thermal/imx_thermal.c
+> > @@ -594,7 +594,7 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+> >
+> >         np = of_get_cpu_node(data->policy->cpu, NULL);
+> >
+> > -       if (!np || !of_find_property(np, "#cooling-cells", NULL)) {
+> > +       if (!np || !of_property_present(np, "#cooling-cells")) {
+> >                 data->cdev = cpufreq_cooling_register(data->policy);
+> >                 if (IS_ERR(data->cdev)) {
+> >                         ret = PTR_ERR(data->cdev);
+> > @@ -671,7 +671,7 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> >
+> >         platform_set_drvdata(pdev, data);
+> >
+> > -       if (of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
+> > +       if (of_property_present(pdev->dev.of_node, "nvmem-cells")) {
+> >                 ret = imx_init_from_nvmem_cells(pdev);
+> >                 if (ret)
+> >                         return dev_err_probe(&pdev->dev, ret,
+> > diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> > index 8a9055bd376e..dace6591220e 100644
+> > --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> > +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> > @@ -223,7 +223,7 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
+> >          * using DT, then it must be aware that the cooling device
+> >          * loading has to happen via cpufreq driver.
+> >          */
+> > -       if (of_find_property(np, "#thermal-sensor-cells", NULL))
+> > +       if (of_property_present(np, "#thermal-sensor-cells"))
+> >                 return 0;
+> >
+> >         data = ti_bandgap_get_sensor_data(bgp, id);
+> > --
+> > 2.39.2
+> >
