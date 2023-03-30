@@ -2,297 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CFF6D09BF
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 17:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE18F6D0B4B
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 18:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjC3PdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 11:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
+        id S231765AbjC3Qar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 12:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjC3PdJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 11:33:09 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE2BE07B
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 08:32:41 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id i9so19525727wrp.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 08:32:41 -0700 (PDT)
+        with ESMTP id S231817AbjC3Qa2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 12:30:28 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A4BEFA8;
+        Thu, 30 Mar 2023 09:29:42 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e18so19698634wra.9;
+        Thu, 30 Mar 2023 09:29:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680190353; x=1682782353;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680193776;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h0mnRIbGkQTvtA6Sd/6ZGGzaZl2jf/GCphXRThjLz5Y=;
-        b=WE17Qre8lYHzyeHrBZm6fwLP1oMW62Te+pOa65fQDXkouN+NUOZNA7Hs/wForonk+z
-         aV4iFGWsfqzYxuWbjXX+oXmWeWzhLuFBEOrqwUyzX7Sa49iwsAphwKHjqrs5+tEswKP6
-         PRw5pKYt4C2E6oSYmtNWVAZmGyOfFzTczzTxSIRe6uUsRQPQEqQSmiSMQU56jrDHPeRd
-         DXwiZOaeQrOlMWRNr6kjJJ5nXRuEGz+/VCAqINxT80nvRlZNqcLcBySgbp0Zhub9W3lA
-         a26lk5lv1j+0kfFZwQdMKDlvKZfJKNZS0+wE9hy6OIEbzVfzxmg8Ub3qkgyTEENRLwZh
-         TqwA==
+        bh=yN1+Jn1orcHwBA+J1Kqg+1Ee+kAAwlGiXyYhRzrUkxI=;
+        b=IxJYcWSTnbePkTHm5muh962DShLEtwyD6DwDMDrPDsyzRpAjDZnu+drrIvuUYGzRkM
+         UcTFEbKkxEJ4WuGCgw3SbgyIfdlaDzk4buAayfnQHT2sRJOP4R4iwKfb+aorswot9p4j
+         bfl8a5D/RTyop/iqTk8wocHODC4LHvWQ/pMbmalkEv0pu78fAy2K3+qvD9ihDJWtT+Q2
+         8uJbSU+fCW9qLlqtbDUNMeBMySs3J9ADwObm+3T5SjVHyJmDbX4bLeyZhHRMpWpf8ws+
+         lTghBOqCc/UGFuooO0qCzI3eVED4dTWtwfq7deM8BbQ9k/WJi4BdkSeOVIKJuLiBkEQ+
+         RdRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680190353; x=1682782353;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680193776;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h0mnRIbGkQTvtA6Sd/6ZGGzaZl2jf/GCphXRThjLz5Y=;
-        b=ktycTmKXbCyoszT7ShPztFggknI8w1i93WeSntlK20en8NEXPbW0s5DPHZVb+l/5YP
-         +IkF9iLPxFk/78ZhRMYvQm7plTcfe60DqIjARRNxA3IOHoJNRMyFFsMwrf/zpcwJliCL
-         JnkRah+RRJg0bJtUjHQb603xSGuIGz0fDJn7O32F0xO91Ajid7p1t+Mc4GmfUM7w0jlz
-         epjmIa5CAZzTbUlYc9gLxzDyZwQyjuWorZQKmVTqodgPs4ei4xT4bv3wq0XBHJlphBxc
-         rkq/s8zy5zjTXNoC84ls2Sq8/0ZfqP/FX49DfRS8X/wyG8X6Q9bVykAgM+7Zt2cUQQVA
-         OmVA==
-X-Gm-Message-State: AAQBX9cPS8E6VQij2Sz63hnqbfVOtCr9H0GQMlNIt4daf0zY0Afou37r
-        Q+BM6Deia9VNWpNZv3hr8M3rEg==
-X-Google-Smtp-Source: AKy350aC+RFjvAWsT892NKWeEYcETiN9cLISo67goew8T74Q9nYZx0MxDAWqnrl2lv5g0dIUeDFrvw==
-X-Received: by 2002:adf:e288:0:b0:2ce:a93d:882d with SMTP id v8-20020adfe288000000b002cea93d882dmr18958283wri.11.1680190353713;
-        Thu, 30 Mar 2023 08:32:33 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b7-20020a5d4b87000000b002cfe0ab1246sm33151794wrt.20.2023.03.30.08.32.32
+        bh=yN1+Jn1orcHwBA+J1Kqg+1Ee+kAAwlGiXyYhRzrUkxI=;
+        b=kJy8fxjaRnDdMVdxDecxMgoZBdXM2MIlMhV2sf6DT1oRL1WgSoSXSlRKoWyXe57gEW
+         cms0HXw0h+B9xjzdu7x1IYGUYBK1VW3R3/Zo8ScJPYbweafsi9rSsy8+xxtid7zWDJ6L
+         mj+tg98axfDwSSFXICDhA5atRS1mJJOQEsI44ahO3iJyWc6XqQ4IIo9ps+G40PZnyw2W
+         As0RTIIl+CqfyHKBHneS9e2Oqrnsq4js1w7hMmeP2L0YgMBDnFPHOhnunIkXEbGrS7Ls
+         1vxfT9gn0n++nPmEV+nC1V1Dro82LLVjG5Lfj8z+/+ADD8TG8QW9JgCUMJKck1oyUyJ5
+         XMWQ==
+X-Gm-Message-State: AAQBX9cUKN0RX5SaBj2EHFmQnTbrDQ8Z6kotmY2aEheUSU31aorKxuQU
+        FKOfIr5/PA0719mty/d6Heg=
+X-Google-Smtp-Source: AKy350ZdBKGl6sCjqiNiB3Fnxp2T1UpMp5P6xbf3RUuIn0/fgl3PPQ9gQduzQgKdriCNRbld2GH97Q==
+X-Received: by 2002:a05:6000:114b:b0:2e4:cbef:9f2a with SMTP id d11-20020a056000114b00b002e4cbef9f2amr2516042wrx.2.1680193775696;
+        Thu, 30 Mar 2023 09:29:35 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id o10-20020a5d684a000000b002d89e113691sm24238578wrw.52.2023.03.30.09.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:32:32 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bryan.odonoghue@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, stephan@gerhold.net
-Subject: [PATCH v8 5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
-Date:   Thu, 30 Mar 2023 16:32:22 +0100
-Message-Id: <20230330153222.2875121-6-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230330153222.2875121-1-bryan.odonoghue@linaro.org>
-References: <20230330153222.2875121-1-bryan.odonoghue@linaro.org>
+        Thu, 30 Mar 2023 09:29:35 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 18:29:33 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
+Message-ID: <ZCW47Ux5wa9XYd6j@orome>
+References: <20230330094904.2589428-1-cyndis@kapsi.fi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="q074XcMAmYlwWTlF"
+Content-Disposition: inline
+In-Reply-To: <20230330094904.2589428-1-cyndis@kapsi.fi>
+User-Agent: Mutt/2.2.10 (2023-03-25)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
 
-Tulip is paired with:
+--q074XcMAmYlwWTlF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- wcn3660
-- smb1360 battery charger
-- 720p Truly NT35521 Panel
+On Thu, Mar 30, 2023 at 12:49:04PM +0300, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
+>=20
+> Thermal zones located in power domains may not be accessible when
+> the domain is powergated. In this situation, reading the temperature
+> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
+> use -256C as the temperature for offline zones.
+>=20
+> For smooth operation, for offline zones, return -EAGAIN when reading
+> the temperature and allow registration of zones even if they are
+> offline during probe.
+>=20
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> ---
+> v2:
+> * Adjusted commit message.
+> * Patch 2/2 dropped for now since it is more controversial,
+>   and this patch is more critical.
+>=20
+>  drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 184 ++++++++++++++++++
- 2 files changed, 185 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 31e0ac97fc088..3f8321ecb7e5f 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -30,6 +30,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-new file mode 100644
-index 0000000000000..cb47bb2413a7c
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022-2023, Bryan O'Donoghue.
-+ *
-+ */
-+
-+/dts-v1/;
-+
-+#include "msm8939.dtsi"
-+#include "msm8939-pm8916.dtsi"
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-+
-+/ {
-+	model = "Sony Xperia M4 Aqua";
-+	compatible = "sony,kanuti-tulip", "qcom,msm8939";
-+
-+	qcom,board-id = <QCOM_BOARD_ID_MTP 0>;
-+	qcom,msm-id = <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>;
-+
-+	aliases {
-+		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-+		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	usb_id: usb-id {
-+		compatible = "linux,extcon-usb-gpio";
-+		id-gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-+		pinctrl-0 = <&usb_id_default>;
-+		pinctrl-names = "default";
-+	};
-+};
-+
-+&mdss {
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	usb_id_default: usb-id-default-state {
-+		pins = "gpio110";
-+		function = "gpio";
-+		bias-pull-up;
-+		drive-strength = <8>;
-+	};
-+};
-+
-+&pronto {
-+	status = "okay";
-+
-+	iris {
-+		compatible = "qcom,wcn3660";
-+	};
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-+	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-+	vdd_l7-supply = <&pm8916_s4>;
-+
-+	pm8916_s3: s3 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1300000>;
-+	};
-+
-+	pm8916_s4: s4 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2100000>;
-+	};
-+
-+	pm8916_l2: l2 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	pm8916_l4: l4 {
-+		regulator-min-microvolt = <2050000>;
-+		regulator-max-microvolt = <2050000>;
-+	};
-+
-+	pm8916_l5: l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	pm8916_l6: l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+
-+	pm8916_l7: l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	pm8916_l8: l8 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	pm8916_l9: l9 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l10: l10 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l11: l11 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-system-load = <200000>;
-+		regulator-allow-set-load;
-+	};
-+
-+	pm8916_l12: l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l13: l13 {
-+		regulator-min-microvolt = <3075000>;
-+		regulator-max-microvolt = <3075000>;
-+	};
-+
-+	pm8916_l14: l14 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l15: l15 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l16: l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l17: l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	pm8916_l18: l18 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2700000>;
-+	};
-+};
-+
-+&sdhc_1 {
-+	pinctrl-0 = <&sdc1_default_state>;
-+	pinctrl-1 = <&sdc1_sleep_state>;
-+	pinctrl-names = "default", "sleep";
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	pinctrl-0 = <&sdc2_default_state>;
-+	pinctrl-1 = <&sdc2_sleep_state>;
-+	pinctrl-names = "default", "sleep";
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
-+	status = "okay";
-+};
-+
-+&usb {
-+	dr_mode = "device";
-+	extcon = <&usb_id>, <&usb_id>;
-+	status = "okay";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&usb_id>;
-+};
--- 
-2.39.2
+--q074XcMAmYlwWTlF
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQluOsACgkQ3SOs138+
+s6H4OA/6AxZ9lvyK8vFq4QrKH+cmYkVUB6/VsqXgF42eaxIzYPBLqnaXqqXkR1Ji
+qPZe5uTay/R2v6gxgg9V97aK43DNTL4dQV7DHxk1sa+Oepe8JBEnzUEjSdUmC391
+ou98SDwyRHj8P6VoNM1BPVAfSP2F1j1jZn2f/hrr0qZ7aj2NyZltoW0G3bdyDA2e
+sLG+9GRmddEmWGzPqezNUnKLmkOgx4huodK0uk7Pi2gR4YLLcgRmj+/61p5AOeAl
+Dn0ihEzmVEzxczbY/PDzEe/Gmw55Zgs0BDGxU2I6pTvKkhDBzECJwG8Dk6RGaVqM
+Oq81jGTSTwK8ZqdgxCjSNN71tv8sc2RI5WcJ5ImFh7+WFVooyW5DWBD3SJAF24DI
+IQaSzen6n5eYx/EJ3P7ZWO6JtSdUPUj+VTRyxGgxijYv/NHQQ7cf6T4xY/HDgABU
+c5W49SLYWv2NrN8NiYkAuUqVHDK9Y/MftdQyL//sa5wnzX6BHrGBWW4nQ9Ndxlhh
+mgTSaPWEYMAFT8lQWJhwRox9xj/z+fBUF2lO/aqx2tyXYvL/iLtygGtXEWzKmQmj
+ewHCpJgmh5mdMLfQwAyWKeftO0Y2ylgnqW5xUdR6qiqfEtzhMkbXJXcfoRR3T3gk
+MQKTVBlYMw2XDrklOZRrV6VoPZb7hvnayvUmqNtQJUQkezcO8js=
+=d+wm
+-----END PGP SIGNATURE-----
+
+--q074XcMAmYlwWTlF--
