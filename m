@@ -2,75 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CBE6CFFCE
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 11:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCBA6CFFD7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 11:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjC3JaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 05:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S229470AbjC3Jbr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 05:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjC3JaU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 05:30:20 -0400
+        with ESMTP id S229640AbjC3Jbq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 05:31:46 -0400
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAB872A2;
-        Thu, 30 Mar 2023 02:30:18 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003ef90adc168so3554603wmb.5;
-        Thu, 30 Mar 2023 02:30:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329BB7ABA;
+        Thu, 30 Mar 2023 02:31:45 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so13036231wmq.4;
+        Thu, 30 Mar 2023 02:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680168616;
+        d=gmail.com; s=20210112; t=1680168703;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WxXKhS9wYHWQInB5jxFKjqRzqsBiAg9IWI/b1YLumcc=;
-        b=o5UR1YKGDskY7lYN1CPA3sqcrsWktdXRTHgC3jsX9yd/RemyoJJhGoPqOV0V9Ske29
-         /AV/2HYWYof4pYufYh7jV6blR4rPN7LHgG6yBv4pR9OPuxTcBBUaUjOemY0vz49bDPMd
-         JrzpyAQf2fVoCpFXHgHourHjognNlZ9rUz0si3TYfQoE4Jos2GGfX4ItBCOEvX5A3mLZ
-         HOVtpHENE2u11yedAN+JJOge3bv3Yf8/dfIe89NgeMLmel+jZiJkZHM8XT67kJJ+39XK
-         WaWs+aIkitN3nD2kypexmNThLm8NAWur5ehf4w28iY8cf9XsHM3/aUbmOFI0ouS3ND3F
-         vsgA==
+        bh=2wlyXiuObJJjktYiyreCZzL3rjA4zKtmBixPoT6R+F0=;
+        b=Y4OoQAhVGOqI+uv0pxKJRu4ZsIvPkStPkTUbv/2I6V3iDEot8HwhvO6dInlCxKYWBc
+         bad03C5wA4wX8bLnfeOGwydUjNhDacl6qyErhJ2XmtoyJipMNSIuJ1eD0afSmtPlZgv4
+         3VuwgNhG0xmkrhPVS/AXsIONapDnDoANbq/0JoqJeAPqulZOOfuZrfaZBgRa0YZ0KX0u
+         61yL6jG5GqP/yUlIdvtrRqUjOZF0scdaKVObg3LqAyb5EKJ4mfh/IaXPNwt82a0C2uVA
+         p1cSHvykOG99d3Br0z5fqhMb+1v5wFHN0KyfDnZosrZ35uNnKUJeCCd1mdcAp3mYgcH/
+         YFXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680168616;
+        d=1e100.net; s=20210112; t=1680168703;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WxXKhS9wYHWQInB5jxFKjqRzqsBiAg9IWI/b1YLumcc=;
-        b=qu1sHU5cNQhovdlW0kFJzjB4cvUAny8Jx2wwJYFS4ZZq4z2TfIQc6e7tHb4J6Ry1E8
-         n8uPivtE5VMOw6gM3FjggJTi0NpkGbnw06ML6q5i868yNjCSx14AcbepfFbN3/WGbwb5
-         sgcuYUn/nAmlg9+HzHSM7d/Ec8ngBKYD+W7Hph/YSNCZPnVnCnWu1dQBKFex4ZxIwhZH
-         2zT3UDvK0WpLcipLZeXf61J55CI6nC7/+o4CZLSEk8gn66RFe80gwsYNKIVMBvwgGDJ8
-         AZNvVIICzgQ+rx0ZSyQ8DExTlVOVxiPEobIvXH5QB5bKDsY0JqPoByb0A1ay2H834d1M
-         cWJg==
-X-Gm-Message-State: AAQBX9eVEgbLGyAvQyWcHeW27R9dnwKcEJ8FcKJgK2v+eHs8Ey7xKDV7
-        sqsprZAPAJd4qj41qGBAlSoCvd+QU2m4YF6I
-X-Google-Smtp-Source: AKy350ZBgLhNRR9TxRDx2aLTQWJRkGyCwyq3TOUYsvCakwonAbrsN83wbcfgg94RBbGOiSfUp+sXnA==
-X-Received: by 2002:a7b:cd93:0:b0:3ed:346d:4534 with SMTP id y19-20020a7bcd93000000b003ed346d4534mr4173874wmj.0.1680168616343;
-        Thu, 30 Mar 2023 02:30:16 -0700 (PDT)
+        bh=2wlyXiuObJJjktYiyreCZzL3rjA4zKtmBixPoT6R+F0=;
+        b=SjpmeYc0ydaYmQd4AQLrQncp7jGv27FrvtutQHKIZsLPNM7ajWh+GgVbHC+ENOuolu
+         eEHkHGaySLvuUKB+2hnJiBVbfZJNJCHW3iOOwYUdbOYT2fTmLr8GCOgr/0Pf7JsR7S+p
+         33nvRt8IbA+qlLteYYIf/swvT+1pTgeYKXl6RPL9zhhnA9V29kCc5dwST9qbmi8FBWLp
+         +MamhNz9n6fMLCLPhg0Vk04eIagZ/4pqwNoD91GCmk8AjF3wBd0pPZOb/d9P2gCMlyh8
+         XW+UIL1CkG+z9iNOb1gJaQy6+euQhzZdj729YlutDEa2290TBHg6LRpvT/J0e17QHL6s
+         TTsQ==
+X-Gm-Message-State: AO0yUKWy8/yb9COKHg4eXA+Ye5fXmM26sglMXRfJVs8Ainuc0xVNlarD
+        QkiwnCHOlxKji5FMYIepJPVdwjsjdapSfMFG
+X-Google-Smtp-Source: AK7set8MoRoP1u28J2KlqIRCUvbhxPNq5qX8D5y1gRGG9mTbXEF5Z82DXD5g1HsNB5h8AJgc4McNiQ==
+X-Received: by 2002:a7b:ca4a:0:b0:3ea:e582:48dd with SMTP id m10-20020a7bca4a000000b003eae58248ddmr17293179wml.34.1680168703616;
+        Thu, 30 Mar 2023 02:31:43 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id f18-20020a1c6a12000000b003ed2276cd0dsm5161439wmc.38.2023.03.30.02.30.14
+        by smtp.gmail.com with ESMTPSA id m18-20020a7bcb92000000b003ee58e8c971sm5107057wmi.14.2023.03.30.02.31.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 02:30:15 -0700 (PDT)
-Message-ID: <d6314775-0918-eb9a-d501-2f22db6a951c@gmail.com>
-Date:   Thu, 30 Mar 2023 11:30:14 +0200
+        Thu, 30 Mar 2023 02:31:42 -0700 (PDT)
+Message-ID: <5a1b22cb-4597-8137-e802-ca81ceb99c7c@gmail.com>
+Date:   Thu, 30 Mar 2023 11:31:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: soc: mediatek: mtk-svs: fix passing zero to 'PTR_ERR'
+Subject: Re: [PATCH v5 3/3] soc: mediatek: mtk-svs: add thermal voltage
+ compensation if needed
 Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230216132543.814-1-roger.lu@mediatek.com>
+To:     =?UTF-8?B?Um9nZXIgTHUgKOmZuOeRnuWCkSk=?= <Roger.Lu@mediatek.com>,
+        "eballetbo@gmail.com" <eballetbo@gmail.com>,
+        "khilman@kernel.org" <khilman@kernel.org>,
+        "drinkcat@google.com" <drinkcat@google.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?SmlhLXdlaSBDaGFuZyAo5by15L2z5YGJKQ==?= 
+        <Jia-wei.Chang@mediatek.com>,
+        =?UTF-8?B?RmFuIENoZW4gKOmZs+WHoSk=?= <fan.chen@mediatek.com>
+References: <20230202124104.16504-1-roger.lu@mediatek.com>
+ <20230202124104.16504-4-roger.lu@mediatek.com>
+ <26837308-4837-f252-d162-f8af4859b63e@gmail.com>
+ <fd62705e1abf8124706da6520fde5b77846bfd2c.camel@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230216132543.814-1-roger.lu@mediatek.com>
+In-Reply-To: <fd62705e1abf8124706da6520fde5b77846bfd2c.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -83,31 +93,71 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 16/02/2023 14:25, Roger Lu wrote:
-> nvmem_cell_get() cannot return NULL so checking for NULL is wrong here.
+On 11/02/2023 12:12, Roger Lu (陸瑞傑) wrote:
+> Hi Matthias Sir,
 > 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Fixes: 6c7174fd90a4690 ("soc: mediatek: mtk-svs: use svs get efuse common function")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/r/202302160720.N64SWT4l-lkp@intel.com/
-
-Applied, thanks.
-
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Sorry for the late reply.
 > 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index a7eb019b5157..8127fb6d587b 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -1726,7 +1726,7 @@ static int svs_get_efuse_data(struct svs_platform *svsp,
->   	struct nvmem_cell *cell;
->   
->   	cell = nvmem_cell_get(svsp->dev, nvmem_cell_name);
-> -	if (IS_ERR_OR_NULL(cell)) {
-> +	if (IS_ERR(cell)) {
->   		dev_err(svsp->dev, "no \"%s\"? %ld\n",
->   			nvmem_cell_name, PTR_ERR(cell));
->   		return PTR_ERR(cell);
+> ... [snip] ...
+> 
+>>> @@ -2127,6 +2123,7 @@ static struct svs_bank svs_mt8192_banks[] = {
+>>>    		.type			= SVSB_LOW,
+>>>    		.set_freq_pct		= svs_set_bank_freq_pct_v3,
+>>>    		.get_volts		= svs_get_bank_volts_v3,
+>>> +		.tzone_name		= "gpu1",
+>>>    		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
+>>>    		.mode_support		= SVSB_MODE_INIT02,
+>>>    		.opp_count		= MAX_OPP_ENTRIES,
+>>> @@ -2144,6 +2141,10 @@ static struct svs_bank svs_mt8192_banks[] = {
+>>>    		.core_sel		= 0x0fff0100,
+>>>    		.int_st			= BIT(0),
+>>>    		.ctl0			= 0x00540003,
+>>> +		.tzone_htemp		= 85000,
+>>> +		.tzone_htemp_voffset	= 0,
+>>> +		.tzone_ltemp		= 25000,
+>>> +		.tzone_ltemp_voffset	= 7,
+>>
+>> Which is the exact same tzone then in the other bank. Which brings me to a
+>> good
+>> point:
+>> Is the tzone bank specific or the same for all banks?
+> 
+> Thermal zone (tzone) isn't for all SVS banks. In other words, tzone is specific
+> for corresponding DVFS domain like SVS GPU tzone is for GPU DVFS domain. Let's
+> take MT8183 SVS and MT8192 SVS as examples.
+> 
+> MT8192 SVS applies 2-line HW design (High/low 2 banks optimize the same DVFS
+> domain). So, SVS GPU High/low bank uses the same GPU tzone.
+> 
+> MT8183 SVS applies 1-line HW design (1 bank optimizes 1 DVFS domain)
+> Therefore, SVS CPU/GPU/CCI bank use different tzone because they are different
+> DVFS domain.
+> 
+>> At least for mt8192 they are not. I suppose with this change to the code
+>> mt8183
+>> could take advantage of this on all it's banks as well.
+>> In that case, can we
+>> start to restructure the struct svs_bank to only have the tzone values
+>> declared
+>> once?
+> 
+> Since tzone isn't for all banks, we cannot declare it once for all IC supports
+> from this point of view.
+> 
+
+Thanks for clarification, applied now.
+
+>>
+>> Background is that I'm very unhappy with the svs_bank data strucutre. It
+>> seems
+>> like a "throw it all in here". It should be structured for functional parts
+>> of
+>> the banks. Maybe using structs, maybe unions where possible. In any case
+>> having
+>> a flat struct of over 50 members isn't really what we want.
+> 
+> My apology. We'll structure svs_bank for functional parts of them.
+> 
+>>
+>> Regards,
+>> Matthias
