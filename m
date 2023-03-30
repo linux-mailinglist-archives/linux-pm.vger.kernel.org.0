@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9B66CF922
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 04:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002E56CF950
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Mar 2023 04:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjC3CbP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Mar 2023 22:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S229457AbjC3Czt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Mar 2023 22:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjC3CbP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 22:31:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A93F4C21;
-        Wed, 29 Mar 2023 19:31:14 -0700 (PDT)
+        with ESMTP id S229449AbjC3Czt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Mar 2023 22:55:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC4B1FCC;
+        Wed, 29 Mar 2023 19:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680143474; x=1711679474;
+  t=1680144948; x=1711680948;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=Hr7S9nzsJY+w4/cpYEDoHxB1gqpmjEikzuZu6a6JEyk=;
-  b=ZJ9+YEkEY3wfusgTRv5iqn4xqKKQZJjXd7UfmpezrU2UD/m8Kxo6hMLD
-   /eTZ8pr3MnXsUgtw3WBXrnJdpB7Cr0CdzAV4SDAzJWksVZQgtAkb3Ilds
-   5Fp72Mp306T20VNJ7QonLUjx+FX2KPYxtGqf5Knp6M9sZXhDbNW0oP15G
-   JTncaboKjzBmsyDZHNSJwwjrpcwmncKK/NU0CvIpTlQFdJqjxQoXpCUVx
-   cIHItsUlel84o53EtpgfDhhSCutuINjC1SDGrZP4VNJE8MtBKqyCPeZNO
-   0VFz/NAywdBMgbTJarKpGcqzIvVbdMChznI04udBhNxr/HQsi5Rv3Sl2g
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="329541791"
+  bh=/Zr8RbMTWY/RYua1wovkm1YrdAuIuQRR6z4WQGPYUfM=;
+  b=kGVljaRGAjg8tLd7OJKNsmpwb56pomDoDeQpulYg8IoarCNgJJYxLB25
+   rB99h1HzFkuUY8+P42sZ/TlZ1EEQ4vci/twa9A3vyrO6w+O/lI8DiRj/a
+   ttXsmAVeU9FvRnRQyE+3vKIyMF6mslMhoHoJ8Q/k2hhNCikOoLyMUj+Md
+   v79ePcBhgg47RJUw1gxy+bwxJTPDFVve2I5pEYTbojMdPJ4+qPvOr2ZJK
+   yUgSZl31LZ2bGcHs75z6OV+kyqWv/+GJFIwEDHo/+fnEHPgoCiKFFer4a
+   w1A5C31qZkKVSy2nW/jdB5B3Bw9jgedwhMvgpJtksSu9VWrE78aOr4zNG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339777579"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="329541791"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 19:31:13 -0700
+   d="scan'208";a="339777579"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 19:55:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="828131872"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014272209"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="828131872"
+   d="scan'208";a="1014272209"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Mar 2023 19:31:12 -0700
-Date:   Wed, 29 Mar 2023 19:41:57 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 29 Mar 2023 19:55:47 -0700
+Date:   Wed, 29 Mar 2023 20:06:31 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -60,44 +60,39 @@ Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
- checks for task classification
-Message-ID: <20230330024157.GD26315@ranerica-svr.sc.intel.com>
+Subject: Re: [PATCH v3 14/24] thermal: intel: hfi: Update the IPC class of
+ the current task
+Message-ID: <20230330030631.GA27247@ranerica-svr.sc.intel.com>
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
- <20230329001536.GG8958@ranerica-svr.sc.intel.com>
- <CAJZ5v0iHJrXDU=C0oaf-3DJfatWGj4No_J1rwN6PCpRTZMXqyA@mail.gmail.com>
+ <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hGKKPiK86Z5PcG-EEHU7a=3d-4S2miRqNPuwjS1tF0BQ@mail.gmail.com>
+ <20230328234149.GB8958@ranerica-svr.sc.intel.com>
+ <CAJZ5v0gOqNzpC9kqpBtqP1D2-OLNqWCf=ZYpzu9b0tqFcgBWYQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iHJrXDU=C0oaf-3DJfatWGj4No_J1rwN6PCpRTZMXqyA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gOqNzpC9kqpBtqP1D2-OLNqWCf=ZYpzu9b0tqFcgBWYQ@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 02:21:57PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Mar 29, 2023 at 2:04 AM Ricardo Neri
+On Wed, Mar 29, 2023 at 02:13:29PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Mar 29, 2023 at 1:31 AM Ricardo Neri
 > <ricardo.neri-calderon@linux.intel.com> wrote:
 > >
-> > On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Mar 27, 2023 at 06:42:28PM +0200, Rafael J. Wysocki wrote:
 > > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 > > > <ricardo.neri-calderon@linux.intel.com> wrote:
 > > > >
-> > > > In Alder Lake and Raptor Lake, the result of thread classification is more
-> > > > accurate when only one SMT sibling is busy. Classification results for
-> > > > class 2 and 3 are always reliable.
-> > > >
-> > > > To avoid unnecessary migrations, only update the class of a task if it has
-> > > > been the same during 4 consecutive user ticks.
+> > > > Use Intel Thread Director classification to update the IPC class of a
+> > > > task. Implement the arch_update_ipcc() interface of the scheduler.
 > > > >
 > > > > Cc: Ben Segall <bsegall@google.com>
 > > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -118,93 +113,109 @@ On Wed, Mar 29, 2023 at 02:21:57PM +0200, Rafael J. Wysocki wrote:
 > > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > > > > ---
 > > > > Changes since v2:
-> > > >  * None
+> > > >  * Removed the implementation of arch_has_ipc_classes().
 > > > >
 > > > > Changes since v1:
 > > > >  * Adjusted the result the classification of Intel Thread Director to start
 > > > >    at class 1. Class 0 for the scheduler means that the task is
 > > > >    unclassified.
-> > > >  * Used the new names of the IPC classes members in task_struct.
-> > > >  * Reworked helper functions to use sched_smt_siblings_idle() to query
-> > > >    the idle state of the SMT siblings of a CPU.
+> > > >  * Redefined union hfi_thread_feedback_char_msr to ensure all
+> > > >    bit-fields are packed. (PeterZ)
+> > > >  * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
+> > > >  * Shortened the names of the functions that implement IPC classes.
+> > > >  * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
+> > > >    (PeterZ)
 > > > > ---
-> > > >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
-> > > >  1 file changed, 59 insertions(+), 1 deletion(-)
+> > > >  arch/x86/include/asm/topology.h   |  6 ++++++
+> > > >  drivers/thermal/intel/intel_hfi.c | 32 +++++++++++++++++++++++++++++++
+> > > >  2 files changed, 38 insertions(+)
 > > > >
+> > > > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+> > > > index 458c891a8273..ffcdac3f398f 100644
+> > > > --- a/arch/x86/include/asm/topology.h
+> > > > +++ b/arch/x86/include/asm/topology.h
+> > > > @@ -227,4 +227,10 @@ void init_freq_invariance_cppc(void);
+> > > >  #define arch_init_invariance_cppc init_freq_invariance_cppc
+> > > >  #endif
+> > > >
+> > > > +#if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
+> > > > +void intel_hfi_update_ipcc(struct task_struct *curr);
+> > > > +
+> > > > +#define arch_update_ipcc intel_hfi_update_ipcc
+> > > > +#endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
+> > > > +
+> > > >  #endif /* _ASM_X86_TOPOLOGY_H */
 > > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > > > index 35d947f47550..fdb53e4cabc1 100644
+> > > > index b06021828892..530dcf57e06e 100644
 > > > > --- a/drivers/thermal/intel/intel_hfi.c
 > > > > +++ b/drivers/thermal/intel/intel_hfi.c
-> > > > @@ -40,6 +40,7 @@
-> > > >  #include <linux/workqueue.h>
+> > > > @@ -72,6 +72,17 @@ union cpuid6_edx {
+> > > >         u32 full;
+> > > >  };
 > > > >
-> > > >  #include <asm/msr.h>
-> > > > +#include <asm/intel-family.h>
-> > > >
-> > > >  #include "../thermal_core.h"
-> > > >  #include "intel_hfi.h"
-> > > > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
-> > > >   */
-> > > >  #define HFI_UNCLASSIFIED_DEFAULT 1
-> > > >
-> > > > +#define CLASS_DEBOUNCER_SKIPS 4
+> > > > +#ifdef CONFIG_IPC_CLASSES
+> > > > +union hfi_thread_feedback_char_msr {
+> > > > +       struct {
+> > > > +               u64     classid : 8;
+> > > > +               u64     __reserved : 55;
+> > > > +               u64     valid : 1;
+> > > > +       } split;
+> > > > +       u64 full;
+> > > > +};
+> > > > +#endif
 > > > > +
-> > > > +/**
-> > > > + * debounce_and_update_class() - Process and update a task's classification
-> > > > + *
-> > > > + * @p:         The task of which the classification will be updated
-> > > > + * @new_ipcc:  The new IPC classification
-> > > > + *
-> > > > + * Update the classification of @p with the new value that hardware provides.
-> > > > + * Only update the classification of @p if it has been the same during
-> > > > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-> > > > + */
-> > > > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
+> > > >  /**
+> > > >   * struct hfi_cpu_data - HFI capabilities per CPU
+> > > >   * @perf_cap:          Performance capability
+> > > > @@ -174,6 +185,27 @@ static struct workqueue_struct *hfi_updates_wq;
+> > > >  #ifdef CONFIG_IPC_CLASSES
+> > > >  static int __percpu *hfi_ipcc_scores;
+> > > >
+> > > > +void intel_hfi_update_ipcc(struct task_struct *curr)
 > > > > +{
-> > > > +       u16 debounce_skip;
+> > > > +       union hfi_thread_feedback_char_msr msr;
 > > > > +
-> > > > +       /* The class of @p changed. Only restart the debounce counter. */
-> > > > +       if (p->ipcc_tmp != new_ipcc) {
-> > > > +               p->ipcc_cntr = 1;
-> > > > +               goto out;
+> > > > +       /* We should not be here if ITD is not supported. */
+> > > > +       if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
+> > > > +               pr_warn_once("task classification requested but not supported!");
+> > > > +               return;
 > > > > +       }
 > > > > +
-> > > > +       /*
-> > > > +        * The class of @p did not change. Update it if it has been the same
-> > > > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
-> > > > +        */
-> > > > +       debounce_skip = p->ipcc_cntr + 1;
-> > > > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-> > > > +               p->ipcc_cntr++;
-> > > > +       else
-> > > > +               p->ipcc = new_ipcc;
+> > > > +       rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
+> > > > +       if (!msr.split.valid)
+> > > > +               return;
 > > > > +
-> > > > +out:
-> > > > +       p->ipcc_tmp = new_ipcc;
+> > > > +       /*
+> > > > +        * 0 is a valid classification for Intel Thread Director. A scheduler
+> > > > +        * IPCC class of 0 means that the task is unclassified. Adjust.
+> > > > +        */
+> > > > +       curr->ipcc = msr.split.classid + 1;
 > > > > +}
 > > >
-> > > Why does the code above belong to the Intel HFI driver?  It doesn't
-> > > look like there is anything driver-specific in it.
+> > > Wouldn't it be better to return the adjusted value from this function
+> > > and let the caller store it where appropriate?
+> > >
+> > > It doesn't look like it is necessary to pass the task_struct pointer to it.
 > >
-> > That is a good point. This post-processing is specific to the
-> > implementation of IPCC classes using Intel Thread Director.
+> > Judging from this patch alone, yes, it does not make much sense to pass a
+> > task_struct as argument. In patch 21, however, this function uses various
+> > members of task_struct and makes it more convenient to have it as argument,
+> > no?
 > 
-> Well, the implementation-specific part is the processor model check
-> whose only contribution is to say whether or not the classification is
-> valid.  The rest appears to be fairly generic to me.
-
-I meant to say that we use Intel Thread Director and the HFI driver to
-implement the interfaces defined in patch 2. Other architectures may
-implement those interfaces differently.
- 
-For Intel, we may even need different filters and debouncers for different
-models.
-
+> I'm not convinced about this, but anyway it is better to combine the
+> two patches in such cases IMO.
 > 
-> > Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
-> 
-> So which part of this code other than the processor model check
-> mentioned above is Intel-specific?
+> The way it is done now confuses things from my perspective.
 
-debounce_and_update_class() is needed for Intel processors, other
-architectures may not need it or have a different solution.
+Right, I structured the patchset to have the additions to task_struct in
+separate patches. This made it less clear for intel_hfi.c
+
+Would it be acceptable if I kept void intel_hfi_update_ipcc(struct
+task_struct *curr) and added a static function u32 intel_hfi_get_ipcc(void)
+to return the hardware classification?
+
+Otherwise, I would need to add three different accessors for task_struct
+so that the HFI driver can retrieve the auxiliary members from patch 21.
+
+Thanks and BR,
+Ricardo
