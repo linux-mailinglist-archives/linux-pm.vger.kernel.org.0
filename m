@@ -2,66 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4B16D27C5
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 20:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8816D2834
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 20:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbjCaS0F convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 31 Mar 2023 14:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S233134AbjCaSxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 14:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjCaS0E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 14:26:04 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCB01BF4C;
-        Fri, 31 Mar 2023 11:26:03 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id er13so52176144edb.9;
-        Fri, 31 Mar 2023 11:26:02 -0700 (PDT)
+        with ESMTP id S230452AbjCaSxk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 14:53:40 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437A01025E
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 11:53:39 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso26445680pjb.0
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 11:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680288819;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+pcFbUPBt+siOQQXgwAStwWkTgQYeOcONsj2hCXVJM=;
+        b=GHQtq4zeaw/ASYjr0JFr8199DjyO8uaN0Ks0qEbGW+xG2VfUBpXsVblnW9i9JEFmbO
+         zcUqld0UyD0HV8lzt1+u42PBzkaPQGArfO2vLSLMJsREYBSERsKzMHoFbgcI+cftJn9+
+         Cd9VK7Z2D1AU6l6pcsNKJMlbA5fk4psKpwspbh+zk8alczVL7mFNLcm1Fyzwc/2ABjaW
+         I+iPuLLEFPac0hNcU34owAl3y3ojcIP524Rjwztcn1T34LFzpMPfrDYBA3zXiIgr1Dpe
+         52pvFilvf91/YELmuHZRmplAuf4Y2jtASXZXKIR/M1mbUPk4APtRTIpkm+CmrYFiGOtm
+         YSkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680287161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RaB5p8dANCz2nc2jG5lwXWHNdu974YJYtJWNgZD8A8M=;
-        b=CCZN5FF3/Ox0z+h8BWZVY6/HoRSeD1i1u16vmqKTicuMWY++c3ywrBgQiWz0tsdTtJ
-         AUx/um1OdzrqWczZomQsFxFvWtQ8YgGtays5Z92yeEMSAi8Ab+IgnMm1ZhcUBz+QuqNc
-         t7EXkeqqkWIidhoz8y7PIklVMPemnXVQhueMyVY4BNDpl+ANtqiYQ0/P5D7Gkd3m6RJm
-         d8Zlvnd4wIGt0XDu1oSyVd11op324SMA98I4MTZ8U1j/cBOmAtY6Ue0cwWusn8lZSjjS
-         IlE+L2Lm6PDRPDOygCs7NnNEStmPeCVd0nEvFi10TmJdMancdDvcDrgSPXLQzo4cCy20
-         JgSQ==
-X-Gm-Message-State: AAQBX9cyv+bilD0bZXUrPpvDpA/rN84+8gI/pykm6ru+kAZZ1bvUnDdW
-        5ng1PJ4DUDcm/W0DTUbsne1hBczrtOfCb3bmA0s=
-X-Google-Smtp-Source: AKy350adaPntcUkPWxFx1duflu6YE6LOfmcIB7o/QroDfpS7WhdUUDgFayI/MvYK8jxyM1CnjZnJ4ixoynkk5RoXGTU=
-X-Received: by 2002:a50:d49e:0:b0:4fc:ebe2:2fc9 with SMTP id
- s30-20020a50d49e000000b004fcebe22fc9mr13651347edi.3.1680287161357; Fri, 31
- Mar 2023 11:26:01 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680288819;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2+pcFbUPBt+siOQQXgwAStwWkTgQYeOcONsj2hCXVJM=;
+        b=fSOTFNj6uXzAoQ6zlguaK6d2yk4Ke4BLl5eIwuZce9P0R0PwkBhf/m/RffKJFWYQ8e
+         9HxvrMDCykVEJjNHGyRISoo9Di0G6G3PBPNF6MgNqAFHaabXc7VRwO6MiIOHu9YFCEoC
+         d9vk8l/bLUdIYy3aQrVF/koJdQDGRdl8ndjLiFwzqDXFh6f1QpKTWnagQ+1YRCogQopI
+         eS08HJCy8HAGrZBuKCx/rO8293fIW3A8zwcqtz3KJGDwwwAbL7CR209CBk0VsJJi7ONt
+         Ynv+7cTPrbodz9L0U4k7jINRks7t7NymIZr8Ggj+zbXp+LGwA+lZKCIDLdyAenpq0IC/
+         1ifQ==
+X-Gm-Message-State: AAQBX9enmB+nNWJgWEJavDObbLqvYsqtrHMqgCyv6Wh7IZppzJZqu0nO
+        raLnidR6rkN6oBlmEuz/sVKGLw==
+X-Google-Smtp-Source: AKy350ayAw/6aoeExv/FWmqD2BweJaihQAxIkb5BDFXwOSJVDfvO3WN6R9BD1OOEoXY0TXlXtn2Pzw==
+X-Received: by 2002:a17:903:18b:b0:19e:8267:9590 with SMTP id z11-20020a170903018b00b0019e82679590mr33577177plg.41.1680288818703;
+        Fri, 31 Mar 2023 11:53:38 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id jd12-20020a170903260c00b0019e8915b1b5sm1911226plb.105.2023.03.31.11.53.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 11:53:38 -0700 (PDT)
+Message-ID: <64272c32.170a0220.bd821.5189@mx.google.com>
+Date:   Fri, 31 Mar 2023 11:53:38 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230330194439.14361-1-mario.limonciello@amd.com>
- <20230330194439.14361-2-mario.limonciello@amd.com> <CAJZ5v0jbMXk5k_KG19bQnffhCkGnu=MQXjGrBPipZxA_Cg8O9w@mail.gmail.com>
- <2676888c-e93f-53aa-a4f7-e85b66f351c8@amd.com> <CAJZ5v0iia9__-jWmawvsxninoTM5ZRtqhyUJme=noZMZJdUBrA@mail.gmail.com>
- <8a04da89-1c98-8b29-bf96-1e8d0ed47e58@amd.com>
-In-Reply-To: <8a04da89-1c98-8b29-bf96-1e8d0ed47e58@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Mar 2023 20:25:50 +0200
-Message-ID: <CAJZ5v0j-uMmi7QmC3XhtNbc+aroBkexriLQWfnyCrjBMf70Z=w@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] PM: Add a sysfs file to represent time spent in
- hardware sleep state
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        John Stultz <jstultz@google.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Raul Rangel <rrangel@chromium.org>,
-        David E Box <david.e.box@intel.com>,
-        Rajat Jain <rajatja@google.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: thermal-6.3-rc5-71-g56fb1399ba81
+Subject: pm/testing build: 8 builds: 4 failed, 4 passed, 4 errors,
+ 8 warnings (thermal-6.3-rc5-71-g56fb1399ba81)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,69 +71,156 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 8:13 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
-> On 3/31/2023 13:07, Rafael J. Wysocki wrote:
-> > On Fri, Mar 31, 2023 at 8:05 PM Limonciello, Mario
-> > <mario.limonciello@amd.com> wrote:
-> >>
-> >> On 3/31/2023 13:01, Rafael J. Wysocki wrote:
-> >>> On Thu, Mar 30, 2023 at 9:45 PM Mario Limonciello
-> >>> <mario.limonciello@amd.com> wrote:
-> >>>>
-> >>>> Userspace can't easily discover how much of a sleep cycle was spent in a
-> >>>> hardware sleep state without using kernel tracing and vendor specific sysfs
-> >>>> or debugfs files.
-> >>>>
-> >>>> To make this information more discoverable, introduce a new sysfs file
-> >>>> to represent the time spent in a sleep state.
-> >>>
-> >>> This is only in the most recent suspend-resume cycle, isn't it?
-> >>
-> >> Yes; that's correct.
-> >>
-> >>>
-> >>> Wouldn't it be useful to have another attribute printing the
-> >>> accumulated total HW sleep time?
-> >>>
-> >>
-> >> I had considered this; but I didn't think it was actually very useful
-> >> because userspace will get control at the end of every cycle and can
-> >> accumulate those numbers if desirable.
-> >
-> > Unless "user space" in question is actually a human, that is.
->
-> This is what I envisioned:
->
-> * In traditional Linux some software like systemd could capture this and
-> log it.
-> It could subtract at the time the suspend started from the time it ended
-> and use that to calculate a percentage of time in hardware sleep state
-> and then put that percentage in the system journal.
->
-> * In ChromeOS something like powerd would be the only thing reading this
-> number and it could be adding it up during dark resume until the system
-> gets to a full resume.
->
-> * If a human is manually capturing these values they'll be most
-> interested in whether an individual cycle reached hardware sleep.
+pm/testing build: 8 builds: 4 failed, 4 passed, 4 errors, 8 warnings (therm=
+al-6.3-rc5-71-g56fb1399ba81)
 
-Or whether or not it has been reached in any cycle so far?  Or in the
-most recent 10 cycles?  Or similar?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/the=
+rmal-6.3-rc5-71-g56fb1399ba81/
 
-Or how much time the system spent in HW sleep in general?
+Tree: pm
+Branch: testing
+Git Describe: thermal-6.3-rc5-71-g56fb1399ba81
+Git Commit: 56fb1399ba81f8f6db1e9d667538fc0210660e55
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> If it didn't they'll want to look at debug data from that cycle.
-> The aggregate will be noise.
+Build Failures Detected:
 
-Not necessarily and the point is that you can relatively easily
-provide both values, the one from the most recent cycle and the grand
-total.
+arm64:
+    defconfig: (gcc-10) FAIL
 
-> Do you think of another use case?
+arm:
+    multi_v7_defconfig: (gcc-10) FAIL
 
-Well, if the kernel can easily compute and expose the grand total
-value, why is it better to offload that to user space, possibly in
-different ways in different system configurations?  What if somebody
-runs a minimum user space?
+mips:
+    32r2el_defconfig: (gcc-10) FAIL
+
+riscv:
+    defconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-10): 1 error, 1 warning
+
+arm:
+    multi_v7_defconfig (gcc-10): 1 error, 1 warning
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 error, 1 warning
+
+riscv:
+    defconfig (gcc-10): 1 error, 1 warning
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+Errors summary:
+
+    4    drivers/virtio/virtio_mmio.c:492:6: error: implicit declaration of=
+ function =E2=80=98of_property_read_bool=E2=80=99; did you mean =E2=80=98fw=
+node_property_read_bool=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings summary:
+
+    4    cc1: some warnings being treated as errors
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/virtio/virtio_mmio.c:492:6: error: implicit declaration of func=
+tion =E2=80=98of_property_read_bool=E2=80=99; did you mean =E2=80=98fwnode_=
+property_read_bool=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
+matches
+
+Errors:
+    drivers/virtio/virtio_mmio.c:492:6: error: implicit declaration of func=
+tion =E2=80=98of_property_read_bool=E2=80=99; did you mean =E2=80=98fwnode_=
+property_read_bool=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
+matches
+
+Errors:
+    drivers/virtio/virtio_mmio.c:492:6: error: implicit declaration of func=
+tion =E2=80=98of_property_read_bool=E2=80=99; did you mean =E2=80=98fwnode_=
+property_read_bool=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/virtio/virtio_mmio.c:492:6: error: implicit declaration of func=
+tion =E2=80=98of_property_read_bool=E2=80=99; did you mean =E2=80=98fwnode_=
+property_read_bool=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
