@@ -2,95 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540C66D1CFA
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 11:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362796D1D16
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 11:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjCaJvq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 05:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S232390AbjCaJy7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 05:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbjCaJvN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 05:51:13 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33E322EA4
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 02:49:42 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id x17so28167926lfu.5
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 02:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680256181;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZnWBUW3nUtZAoa8t2Uk9JsdIPMN187oJzfJjlXLN/3k=;
-        b=SO47t4BrSz+0Ya2L17CY5aaGJmyu12XYH/60nMWB4NqBn/p8/0zEv2hk8YZTzilXHk
-         K2leQyVkG4hZtep7CXRjOzCrcG0TVMTBy43uXEl2OyECJLd/oDYGMj6pdVf01oCBVVhM
-         7k56sT52l9DEqL/iALbWu/GA2aCPZIj7dXv5qP5jV/UIBG2pdSphgv5t3Q8n2gXtJRpT
-         3J4XmTcKq/flTsNoqwZHRLqMqXuRa+FLBI/ww3y7vhim775/t3V55vuY5AQS3vmGsct7
-         pwqlA4dbd6ly7aLwYPlNpr2fY3kwTj3aY8REs3sY4aR4A3zgCbC5dUW8NeA8jpMt16yM
-         tY/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680256181;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZnWBUW3nUtZAoa8t2Uk9JsdIPMN187oJzfJjlXLN/3k=;
-        b=DJin5dluIdjOpZwbCbXJ3EtOkkl40HZZdTYjv5LuVKzXuTcPu5o1r3WaGeyq3UZ0oy
-         ZPqzmGTbNRE4naWUautP+oyvy/+6yFRTX63u1klFUfxRduH7HZH7H8nfTCksAi7uPHBP
-         XM5HJSPvt9/j+SR4300CCnuJ7kaTKcYG0tuqXQFQr9xbGcxuTFMxnkqqqCeMRTpKdxBI
-         TI4wAh7eLm1mBaFSOuqQWzADQRa0jhY57v2gl+vwMXUMTcX+9OgxOIvAyQOjlWkXCxni
-         PgRbFrDZrmaYXnBga4zX04jt05hPWtPJH1uv6X2+NfGaHVBVv7PkQOVArSD4sx1RbgHH
-         8TbA==
-X-Gm-Message-State: AAQBX9dIQQifdCri4RXdroinKmUC2PXouGEd+6hEGBtSlQJmW6VWPiOo
-        AIfJFtBDTGZhMDiYjEN2OLGUWTjMz2STRW+gmmo=
-X-Google-Smtp-Source: AKy350bRaWmaWYv9VciLbpP08Z1N4J3jY/hl0ylFbIG8kB+HmxvcndpVh+yrb2bBTuHo0y3AhQEBVg==
-X-Received: by 2002:ac2:4c95:0:b0:4d7:58c8:5f44 with SMTP id d21-20020ac24c95000000b004d758c85f44mr8869699lfl.12.1680256181030;
-        Fri, 31 Mar 2023 02:49:41 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g12-20020ac2538c000000b004d85895d7e0sm313021lfh.147.2023.03.31.02.49.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 02:49:40 -0700 (PDT)
-Message-ID: <d9043fa1-dff0-cb9a-afb8-8db9c3eeea2c@linaro.org>
-Date:   Fri, 31 Mar 2023 11:49:39 +0200
+        with ESMTP id S231672AbjCaJyZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 05:54:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE3B0C648;
+        Fri, 31 Mar 2023 02:53:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7B692F4;
+        Fri, 31 Mar 2023 02:54:28 -0700 (PDT)
+Received: from [10.57.20.151] (unknown [10.57.20.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DB743F6C4;
+        Fri, 31 Mar 2023 02:53:42 -0700 (PDT)
+Message-ID: <b9e94d15-ee49-aa8c-e0fb-1243a91825cd@arm.com>
+Date:   Fri, 31 Mar 2023 11:53:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: bq256xx: Add
- ti,no-thermistor property
+Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
+ high error
 Content-Language: en-US
-To:     Hermes Zhang <chenhuiz@axis.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Davis <afd@ti.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230330065202.1349948-1-chenhuiz@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330065202.1349948-1-chenhuiz@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Yang Shi <yang@os.amperecomputing.com>
+Cc:     rafael@kernel.org, scott@os.amperecomputing.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vincent.guittot@linaro.org, lukasz.luba@arm.com,
+        ionela.voinescu@arm.com
+References: <20230328193846.8757-1-yang@os.amperecomputing.com>
+ <20230330035612.ekh2lpqzohggg6uf@vireshk-i7>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20230330035612.ekh2lpqzohggg6uf@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/03/2023 08:52, Hermes Zhang wrote:
-> Add a new property ti,no-thermistor to indicate that no thermistor is
-> connected to the TS pin of the chip.
+Hello,
+
+On 3/30/23 05:56, Viresh Kumar wrote:
+> + few folks.
 > 
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
+> On 28-03-23, 12:38, Yang Shi wrote:
+>> When testing CPPC cpufreq on our platform, we noticed the error may be quite
+>> high and the high error may happen quite often.  For example, on a platform
+>> with a maximum frequency of 2.8GHz when the CPUs were fully loaded (100% load),
+>> we saw cpuinfo_cur_freq may show 4GHz, it means the error is > 40%.  And the
+>> high error (> 1%) happened 256 times out of 2127 samples (sampled every 3
+>> seconds) in an approximate 2hrs test.
+>>
+>> We tried to enlarge the delay, and tested with 100us, 1ms and 10ms.  The
+>> below is the results.
+>>
+>> 100us:
+>> The highest error is 4GHz, 22 times out of 3623 samples
+>>
+>> 1ms:
+>> The highest error is 3.3GHz, 3 times out of 2814 samples
+>>
+>> 10ms:
+>> No high error anymore
+>>
+>> Increase the measurement delay in cppc_cpufreq_get_rate to 10ms to avoid
+>> high measurement errors.
+>>
+>> Signed-off-by: Yang Shi <yang@os.amperecomputing.com>
+>> ---
+>>   drivers/cpufreq/cppc_cpufreq.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 022e3555407c..c2bf65448d3d 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -851,7 +851,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	udelay(2); /* 2usec delay between sampling */
+>> +	mdelay(10); /* 10msec delay between sampling */
+>>   
+>>   	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>   	if (ret)
+>> -- 
+>> 2.39.2
+> 
 
-So you keep ignoring my comments? I wrote extensive comment at v3. You
-did not respond that anything is not clear about my request.
+Just 2 considerations:
+-
+When using the schedutil governor, frequencies should be updated with
+a period of cppc_cpufreq_get_transition_delay_us().
+This period should be 1ms if CPPC doesn't rely on PCC channels, otherwise
+the value depends on the PCC channel (cf. cppc_get_transition_latency()).
 
-If you keep ignoring it then it's a NAK from me.
+If the evaluation duration for the perf/ref counters is higher than this
+period, I think this would mean that multiple frequency update would happen
+while trying to evaluate the current frequency of a CPU.
 
-Best regards,
-Krzysztof
+-
+There is a TimeWindowRegister field in CPPC (cf. enum cppc_regs::TIME_WINDOW
+and ACPI 6.5 s8.4.6.1.2.5 "Time Window Register") that should approximately
+match what this patch aims to solve.
+"""
+When Autonomous Selection is enabled, values written to the Time Window Register are ignored. Reads of the Time
+Window register indicate minimum length of time (in ms) between successive reads of the platform’s performance
+counters.
+"""
+The only issue being that we should be in the case where Autonomous Selection
+is disabled, where the description of the register is different.
 
+Regards,
+Pierre
