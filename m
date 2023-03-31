@@ -2,49 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88D06D22BE
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 16:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400656D2341
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 16:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbjCaOgq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 10:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S232922AbjCaO5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 10:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbjCaOgq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 10:36:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD15D2112;
-        Fri, 31 Mar 2023 07:36:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A8C82F4;
-        Fri, 31 Mar 2023 07:28:12 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74E493F663;
-        Fri, 31 Mar 2023 07:27:26 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 15:27:24 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Wing Li <wingers@google.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>, andersson@kernel.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, jwerner@chromium.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
-Subject: Re: [PATCH v2 1/2] cpuidle: psci: Move enabling OSI mode after power
- domains creation
-Message-ID: <20230331142724.ogvruad7txfe7ji2@bogus>
-References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
- <20230330084250.32600-2-quic_mkshah@quicinc.com>
- <20230330093431.xn5wwiwqbne5owf7@bogus>
- <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
- <20230330131334.idb25zf4tdf3zqn3@bogus>
- <CADut4F3UmMXCYHeE6sXfoJtgEp36Fv65Poe1Z0JKT0DETyaowQ@mail.gmail.com>
+        with ESMTP id S232930AbjCaO53 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 10:57:29 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD3018811
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 07:57:12 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id r29so22677624wra.13
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 07:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680274631;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=X2dQ+lYOZmXZreHzCA27SPymWQu74XpJ9AsKWsdeeL4=;
+        b=LxMr8btqIWpZVBhNCuG3Pv8bToCfJWDTdR7+mR8mGHozcnAnNX8W0cDET2uL7CaGs9
+         5e93/RuXqDOnGQEs4AERzNy/Qogvh1lNEl5m/Bf/swKpLDINZWZrVcg2ZaNJuQJxTI3k
+         scrF3ioZ8uoXF7zeOPiJ/wP8xdLa/F/5qp3ahGdIGZuPJ7thH6JA/9PSgY4cV1Egc6BI
+         O1Rz6S+5Em4dXlsXilZs5u99e4DEWL7+4xEEyTpHsjLqG+DWWc96/933gCmUjtvMCuis
+         cNHHsNXvDWRcx4rsOJaAwffsHJR3LJLod1tAvHB9N9onT9OneeyP7ioLARMZpPHqlTA4
+         cJqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680274631;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X2dQ+lYOZmXZreHzCA27SPymWQu74XpJ9AsKWsdeeL4=;
+        b=FyS+aehwdg9YBkYwBIYFb8vsYItiRNcuhJK9+8Pte3E0BeDFC+ITgM/UAxc7qtzlzI
+         copY08Y0/EVlx+c83ESeIS9uJq4/6KMiFnk3hjZD3uxHMpDzuO9cPknKOLsf062My0US
+         cgspmT4F+U/El/lLi52LGCxcwrmCShROR+RViYUZLFHu+PReAafLx/amg3iUNVwoCI3y
+         ap+VNn1+ZIUegrqmpRfdKr9NDjYQA9NhORW83lPUfxu+pVUYObWY5jsKS3BuqU9EOE91
+         aYlx+G6QTJ0ss6kaZxgVhA9t43ixdTglbbOaur24qjfk/QB6RLT4xgcXJsyYtLpM4MFw
+         jajg==
+X-Gm-Message-State: AAQBX9fneeC4P31lmBvkfdooAP4xj+2VKE8Na5l54KeoFKeVEiPy6oA+
+        HnCX45Ljtq4oJDr2ZP+4rAwj2Q==
+X-Google-Smtp-Source: AKy350ZhM7TlzzbkKQh+f2qjf5R7dBolMimYX1XKzO4RjCFaq7KCOpO3n90LcpUgFdpKCsl7ogNfUw==
+X-Received: by 2002:a5d:4409:0:b0:2cf:e422:e28c with SMTP id z9-20020a5d4409000000b002cfe422e28cmr18329961wrq.42.1680274631125;
+        Fri, 31 Mar 2023 07:57:11 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0? ([2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0])
+        by smtp.gmail.com with ESMTPSA id b12-20020a5d4d8c000000b002e51195a3e2sm2392687wru.79.2023.03.31.07.57.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 07:57:10 -0700 (PDT)
+Message-ID: <23e513ad-9fca-30cd-1f08-2ff559072314@linaro.org>
+Date:   Fri, 31 Mar 2023 16:57:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADut4F3UmMXCYHeE6sXfoJtgEp36Fv65Poe1Z0JKT0DETyaowQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,43 +105,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:40:03PM -0700, Wing Li wrote:
-> Adding some clarifications.
+On 31/03/2023 15:42, Arnd Bergmann wrote:
+> On Fri, Mar 31, 2023, at 10:34, Neil Armstrong wrote:
+>> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+>> associated with a clear lack of maintainance, development and migration to
+>> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
+>>
+>> In addition, the OX810 hasn't been booted for years and isn't even present
+>> in an ARM config file.
+>>
+>> For the OX820, lack of USB and SATA support makes the platform not usable
+>> in the current Linux support and relies on off-tree drivers hacked from the
+>> vendor (defunct for years) sources.
+>>
+>> The last users are in the OpenWRT distribution, and today's removal means
+>> support will still be in stable 6.1 LTS kernel until end of 2026.
+>>
+>> If someone wants to take over the development even with lack of SMP, I'll
+>> be happy to hand off maintainance.
+>>
+>> The plan is to apply the first 4 patches first, then the drivers
+>> followed by bindings. Finally the MAINTAINANCE entry can be removed.
+>>
+>> I'm not sure about the process of bindings removal, but perhaps the bindings
+>> should be marked as deprecated first then removed later on ?
+>>
+>> It has been a fun time adding support for this architecture, but it's time
+>> to get over!
+>>
+>> Patch 2 obviously depends on [1].
+>>
+>> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> On Thu, Mar 30, 2023 at 6:13 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> Thanks a lot for going through this and preparing the patches!
 > 
-> > On Thu, Mar 30, 2023 at 02:06:19PM +0200, Ulf Hansson wrote:
-> > > On Thu, 30 Mar 2023 at 11:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> > > > On Thu, Mar 30, 2023 at 02:12:49PM +0530, Maulik Shah wrote:
-> > > > > A switch from OSI to PC mode is only possible if all CPUs other than
-> > the
-> > > > > calling one are OFF, either through a call to CPU_OFF or not yet
-> > booted.
-> > > > >
-> > > >
-> > > > As per the spec, all cores are in one of the following states:
-> > > >  - Running
-> > > >  - OFF, either through a call to CPU_OFF or not yet booted
-> > > >  - Suspended, through a call to CPU_DEFAULT_SUSPEND
-> > > >
-> > > > Better to provide full information.
-> >
+> I've discussed this with Daniel Golle on the OpenWRT channel as well,
+> and he indicated that the timing is probably fine here, as there are
+> already close to zero downloads for oxnas builds, and the 6.1 kernel
+> will only be part of a release in 2024.
 > 
-> The spec quoted above only applies when switching from platform-coordinated
-> mode to OS-initiated mode.
-> 
-> For switching from OS-initiated to platform-coordinated, which is the case
-> Maulik is referring to, section 5.20.2 of the spec specifies:
-> "A switch from OS-initiated mode to platform-coordinated mode is only
-> possible if all cores other than the calling one are OFF, either through a
-> call to CPU_OFF or not yet booted."
-> 
->
+> For the dependency on my other patch, I'd suggest you instead
+> remove the SMP files here as well, which means we can merge either
+> part independently based on just 6.3-rc. I can do that change
+> myself by picking up patches 1-4 of your RFC series, or maybe you
+> can send resend them after rebase to 6.3-rc1.
 
-My bad, I read/imagined it as PC->OSI mode couple of times even though it
-is pretty explicit. Sorry for that. And thanks a lot for pointing that out.
+Ack I'll send patches 1-4 rebased on v6.3-rc1 with the acks
+and sent a PR next week.
 
--- 
-Regards,
-Sudeep
+> 
+> For the driver removals, I think we can merge those at the same
+> time as the platform removal since there are no shared header files
+> that would cause build time regressions and there are no runtime
+> regressions other than breaking the platform itself. Maybe
+> just send the driver removal separately to the subsystem
+> maintainers with my
+> 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+Thanks, I'll submit those individually once the first patches are merged.
+
+Neil
+
+> 
+>       Arnd
+
