@@ -2,317 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5913D6D2645
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 18:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9376D266A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 19:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbjCaQyY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 12:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S229441AbjCaRJQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 31 Mar 2023 13:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbjCaQyF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 12:54:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251F72688;
-        Fri, 31 Mar 2023 09:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680281619; x=1711817619;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=maGKeUkvCQI8zY1Lp+jGdEdPFdmHPUreRuRmB/aQUGQ=;
-  b=Axwt7v1bacNC4I4eEzT9kVjdWHmVjX53bORqKdEfK0l3qLb5cHPBNNXz
-   ILOV86PJZvpx0X8y3XZQUKPVg951eLHtscb3SEK5rqOO3pTAyx9JLOGb3
-   Swl22MSC09zOrqzo6oslcnbbJo4mZBFencpa6NTjgXc2rkcgM8mAJZYKe
-   NHpfNa+Fqsj8yXN68/8qS4uywsWDEwMaTmWFkPXZldmHKUpAHrxxIVNYP
-   guBE7udoD4bcZ1ISMzJwi/1L0NO6xdSlQu8hjbMi6Z8Uks0KJLo5VUVTd
-   20nrOMYyXhRu+xz4CmXC7tErfCwrgIjPdjSiHZp2c0aqLSXM/TgcTrOuR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="404236613"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="404236613"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 09:53:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="774423360"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="774423360"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 Mar 2023 09:53:38 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
-Date:   Fri, 31 Mar 2023 09:53:36 -0700
-Message-Id: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S230142AbjCaRJP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 13:09:15 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17918810;
+        Fri, 31 Mar 2023 10:09:08 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id t10so92146571edd.12;
+        Fri, 31 Mar 2023 10:09:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680282547;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hHkZbyJ3qMi2ptOA6zEl8FUqKHDPucYizXoSCDQyJHw=;
+        b=T8w/yZGORaejOl+LW6hAlaFU0Jyxe/5pkCfms/HiU9mnhMG9L90uMuHiG9khPRH4Xw
+         cvLOsSipd/SmTZ1ihcv6b+Zng0xzNqO3bD53y3Th0hgNaeBdtLdpnOED1NxwOr7Q2atw
+         gBB2AIlYhJnVz2QDi6vW7wmOH+KAUctr5YK5m7FAbW2+99RvAb7xxiOrzwHwULjL19cQ
+         N3roQvm12T3ak1K+ha0kEmAiW6K9qBg8mblJzKvbia2SdVoSDbscILPAGXHyRZMX/f45
+         Whh/Ew5w5CSmViO8E9c6Xx6azLurAiZNRqqpkOgEee5h8OKSTd9GA/yz1qBcG0MdCy+V
+         T9cQ==
+X-Gm-Message-State: AAQBX9dZ2MhcE39Mn4jM1Jft8A1yHIcU4OMmGXSDRs4zh+pd1wxmxq6N
+        cg6yhgRpfRZBSOg2FgigMz4gBYOqPhCzrc4z9I8=
+X-Google-Smtp-Source: AKy350aYHVVjZqpo+lU1LvdtaeIO6o6c/gqzLGZ3mOevVz8DwFjUBDSgV6s9VVtyobQTtQ1ex/F0b1gubuzXZJ5JrXw=
+X-Received: by 2002:a17:907:160e:b0:946:a095:b314 with SMTP id
+ hb14-20020a170907160e00b00946a095b314mr7871671ejc.2.1680282546797; Fri, 31
+ Mar 2023 10:09:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
+ <20230329001536.GG8958@ranerica-svr.sc.intel.com> <CAJZ5v0iHJrXDU=C0oaf-3DJfatWGj4No_J1rwN6PCpRTZMXqyA@mail.gmail.com>
+ <20230330024157.GD26315@ranerica-svr.sc.intel.com>
+In-Reply-To: <20230330024157.GD26315@ranerica-svr.sc.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Mar 2023 19:08:55 +0200
+Message-ID: <CAJZ5v0jqC=0pSU79heEypXK6SjP8TbYZfwSscrezs3bbPx-nyQ@mail.gmail.com>
+Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
+ checks for task classification
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for DLVR (Digital Linear Voltage Regulator) attributes,
-which can be used to control RFIM.
-Here instead of "fivr" another directory "dlvr" is created with DLVR
-attributes:
+On Thu, Mar 30, 2023 at 4:31 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> On Wed, Mar 29, 2023 at 02:21:57PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Mar 29, 2023 at 2:04 AM Ricardo Neri
+> > <ricardo.neri-calderon@linux.intel.com> wrote:
+> > >
+> > > On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
+> > > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+> > > > <ricardo.neri-calderon@linux.intel.com> wrote:
+> > > > >
+> > > > > In Alder Lake and Raptor Lake, the result of thread classification is more
+> > > > > accurate when only one SMT sibling is busy. Classification results for
+> > > > > class 2 and 3 are always reliable.
+> > > > >
+> > > > > To avoid unnecessary migrations, only update the class of a task if it has
+> > > > > been the same during 4 consecutive user ticks.
+> > > > >
+> > > > > Cc: Ben Segall <bsegall@google.com>
+> > > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > > > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > Cc: Len Brown <len.brown@intel.com>
+> > > > > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > > > > Cc: Mel Gorman <mgorman@suse.de>
+> > > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > > > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > > > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > > > Cc: x86@kernel.org
+> > > > > Cc: linux-pm@vger.kernel.org
+> > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > > > > ---
+> > > > > Changes since v2:
+> > > > >  * None
+> > > > >
+> > > > > Changes since v1:
+> > > > >  * Adjusted the result the classification of Intel Thread Director to start
+> > > > >    at class 1. Class 0 for the scheduler means that the task is
+> > > > >    unclassified.
+> > > > >  * Used the new names of the IPC classes members in task_struct.
+> > > > >  * Reworked helper functions to use sched_smt_siblings_idle() to query
+> > > > >    the idle state of the SMT siblings of a CPU.
+> > > > > ---
+> > > > >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
+> > > > >  1 file changed, 59 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > > > > index 35d947f47550..fdb53e4cabc1 100644
+> > > > > --- a/drivers/thermal/intel/intel_hfi.c
+> > > > > +++ b/drivers/thermal/intel/intel_hfi.c
+> > > > > @@ -40,6 +40,7 @@
+> > > > >  #include <linux/workqueue.h>
+> > > > >
+> > > > >  #include <asm/msr.h>
+> > > > > +#include <asm/intel-family.h>
+> > > > >
+> > > > >  #include "../thermal_core.h"
+> > > > >  #include "intel_hfi.h"
+> > > > > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
+> > > > >   */
+> > > > >  #define HFI_UNCLASSIFIED_DEFAULT 1
+> > > > >
+> > > > > +#define CLASS_DEBOUNCER_SKIPS 4
+> > > > > +
+> > > > > +/**
+> > > > > + * debounce_and_update_class() - Process and update a task's classification
+> > > > > + *
+> > > > > + * @p:         The task of which the classification will be updated
+> > > > > + * @new_ipcc:  The new IPC classification
+> > > > > + *
+> > > > > + * Update the classification of @p with the new value that hardware provides.
+> > > > > + * Only update the classification of @p if it has been the same during
+> > > > > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
+> > > > > + */
+> > > > > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
+> > > > > +{
+> > > > > +       u16 debounce_skip;
+> > > > > +
+> > > > > +       /* The class of @p changed. Only restart the debounce counter. */
+> > > > > +       if (p->ipcc_tmp != new_ipcc) {
+> > > > > +               p->ipcc_cntr = 1;
+> > > > > +               goto out;
+> > > > > +       }
+> > > > > +
+> > > > > +       /*
+> > > > > +        * The class of @p did not change. Update it if it has been the same
+> > > > > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
+> > > > > +        */
+> > > > > +       debounce_skip = p->ipcc_cntr + 1;
+> > > > > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
+> > > > > +               p->ipcc_cntr++;
+> > > > > +       else
+> > > > > +               p->ipcc = new_ipcc;
+> > > > > +
+> > > > > +out:
+> > > > > +       p->ipcc_tmp = new_ipcc;
+> > > > > +}
+> > > >
+> > > > Why does the code above belong to the Intel HFI driver?  It doesn't
+> > > > look like there is anything driver-specific in it.
+> > >
+> > > That is a good point. This post-processing is specific to the
+> > > implementation of IPCC classes using Intel Thread Director.
+> >
+> > Well, the implementation-specific part is the processor model check
+> > whose only contribution is to say whether or not the classification is
+> > valid.  The rest appears to be fairly generic to me.
+>
+> I meant to say that we use Intel Thread Director and the HFI driver to
+> implement the interfaces defined in patch 2. Other architectures may
+> implement those interfaces differently.
+>
+> For Intel, we may even need different filters and debouncers for different
+> models.
+>
+> >
+> > > Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
+> >
+> > So which part of this code other than the processor model check
+> > mentioned above is Intel-specific?
+>
+> debounce_and_update_class() is needed for Intel processors, other
+> architectures may not need it or have a different solution.
 
-/sys/bus/pci/devices/0000:00:04.0/dlvr
-├── dlvr_freq_mhz
-├── dlvr_freq_select
-├── dlvr_hardware_rev
-├── dlvr_pll_busy
-├── dlvr_rfim_enable
-└── dlvr_spread_spectrum_pct
+IMV, one general problem with this approach is that it is making a
+more-or-less random thermal driver operate on task structure
+internals, while drivers/thermal/ is not a usual place to look for CPU
+scheduler code.
 
-Attributes
-dlvr_freq_mhz (RO):
-Current DLVR PLL frequency in MHz.
+I'm not sure why it has to be done this way and none of the above
+explains that IIUC.
 
-dlvr_freq_select (RW):
-Sets DLVR PLL clock frequency.
-
-dlvr_hardware_rev (RO):
-DLVR hardware revision.
-
-dlvr_pll_busy (RO):
-PLL can't accept frequency change when set.
-
-dlvr_rfim_enable (RW):
-0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
-
-dlvr_spread_spectrum_pct (RW)
-A write to this register updates the DLVR spread spectrum percent value.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../driver-api/thermal/intel_dptf.rst         | 25 ++++++
- .../processor_thermal_device.c                |  3 +-
- .../processor_thermal_device.h                |  1 +
- .../processor_thermal_device_pci.c            |  2 +-
- .../int340x_thermal/processor_thermal_rfim.c  | 80 +++++++++++++++++--
- 5 files changed, 104 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-index f5c193cccbda..da906deb6a7d 100644
---- a/Documentation/driver-api/thermal/intel_dptf.rst
-+++ b/Documentation/driver-api/thermal/intel_dptf.rst
-@@ -264,6 +264,31 @@ DVFS attributes
- ``rfi_disable (RW)``
- 	Disable DDR rate change feature
- 
-+DLVR attributes
-+
-+:file:`/sys/bus/pci/devices/0000\:00\:04.0/dlvr/`
-+
-+``dlvr_hardware_rev`` (RO)
-+	DLVR hardware revision.
-+
-+``dlvr_freq_mhz`` (RO)
-+	Current DLVR PLL frequency in MHz.
-+
-+``dlvr_freq_select`` (RW)
-+	Sets DLVR PLL clock frequency. Once set, and enabled via
-+	dlvr_rfim_enable, the dlvr_freq_mhz will show the current
-+	DLVR PLL frequency.
-+
-+``dlvr_pll_busy`` (RO)
-+	PLL can't accept frequency change when set.
-+
-+``dlvr_rfim_enable`` (RW)
-+	0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
-+
-+``dlvr_spread_spectrum_pct`` (RW)
-+	Sets DLVR spread spectrum percent value.
-+
-+
- DPTF Power supply and Battery Interface
- ----------------------------------------
- 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index a1dc18be7609..3ca0a2f5937f 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -337,7 +337,8 @@ int proc_thermal_mmio_add(struct pci_dev *pdev,
- 	}
- 
- 	if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
--	    feature_mask & PROC_THERMAL_FEATURE_DVFS) {
-+	    feature_mask & PROC_THERMAL_FEATURE_DVFS ||
-+	    feature_mask & PROC_THERMAL_FEATURE_DLVR) {
- 		ret = proc_thermal_rfim_add(pdev, proc_priv);
- 		if (ret) {
- 			dev_err(&pdev->dev, "failed to add RFIM interface\n");
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-index 7d52fcff4937..7acaa8f1b896 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-@@ -60,6 +60,7 @@ struct rapl_mmio_regs {
- #define PROC_THERMAL_FEATURE_FIVR	0x02
- #define PROC_THERMAL_FEATURE_DVFS	0x04
- #define PROC_THERMAL_FEATURE_MBOX	0x08
-+#define PROC_THERMAL_FEATURE_DLVR	0x10
- 
- #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
- int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-index 90526f46c9b1..aaff67377250 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -352,7 +352,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
- 
- static const struct pci_device_id proc_thermal_pci_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
--	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
-+	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX | PROC_THERMAL_FEATURE_DLVR) },
- 	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
- 	{ },
- };
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-index 92ed1213fe37..951a0869982a 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -39,6 +39,25 @@ static const struct mmio_reg tgl_fivr_mmio_regs[] = {
- 	{ 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
- };
- 
-+static const char * const dlvr_strings[] = {
-+	"dlvr_spread_spectrum_pct",
-+	"dlvr_rfim_enable",
-+	"dlvr_freq_select",
-+	"dlvr_hardware_rev",
-+	"dlvr_freq_mhz",
-+	"dlvr_pll_busy",
-+	NULL
-+};
-+
-+static const struct mmio_reg dlvr_mmio_regs[] = {
-+	{ 0, 0x15A08, 5, 0x1F, 0}, /* dlvr_spread_spectrum_pct */
-+	{ 0, 0x15A08, 1, 0x1, 7}, /* dlvr_rfim_enable */
-+	{ 0, 0x15A08, 12, 0xFFF, 8}, /* dlvr_freq_select */
-+	{ 1, 0x15A10, 2, 0x3, 30}, /* dlvr_hardware_rev */
-+	{ 1, 0x15A10, 16, 0xFFFF, 0}, /* dlvr_freq_mhz */
-+	{ 1, 0x15A10, 1, 0x1, 16}, /* dlvr_pll_busy */
-+};
-+
- /* These will represent sysfs attribute names */
- static const char * const dvfs_strings[] = {
- 	"rfi_restriction_run_busy",
-@@ -78,14 +97,16 @@ static ssize_t suffix##_show(struct device *dev,\
- 	int ret;\
- \
- 	proc_priv = pci_get_drvdata(pdev);\
--	if (table) {\
-+	if (table == 1) {\
- 		match_strs = (const char **)dvfs_strings;\
- 		mmio_regs = adl_dvfs_mmio_regs;\
--	} else { \
-+	} else if (table == 2) { \
-+		match_strs = (const char **)dlvr_strings;\
-+		mmio_regs = dlvr_mmio_regs;\
-+	} else {\
- 		match_strs = (const char **)fivr_strings;\
- 		mmio_regs = tgl_fivr_mmio_regs;\
- 	} \
--	\
- 	ret = match_string(match_strs, -1, attr->attr.name);\
- 	if (ret < 0)\
- 		return ret;\
-@@ -109,10 +130,13 @@ static ssize_t suffix##_store(struct device *dev,\
- 	u32 mask;\
- \
- 	proc_priv = pci_get_drvdata(pdev);\
--	if (table) {\
-+	if (table == 1) {\
- 		match_strs = (const char **)dvfs_strings;\
- 		mmio_regs = adl_dvfs_mmio_regs;\
--	} else { \
-+	} else if (table == 2) { \
-+		match_strs = (const char **)dlvr_strings;\
-+		mmio_regs = dlvr_mmio_regs;\
-+	} else {\
- 		match_strs = (const char **)fivr_strings;\
- 		mmio_regs = tgl_fivr_mmio_regs;\
- 	} \
-@@ -147,6 +171,39 @@ RFIM_STORE(spread_spectrum_clk_enable, 0)
- RFIM_STORE(rfi_vco_ref_code, 0)
- RFIM_STORE(fivr_fffc_rev, 0)
- 
-+RFIM_SHOW(dlvr_spread_spectrum_pct, 2)
-+RFIM_SHOW(dlvr_hardware_rev, 2)
-+RFIM_SHOW(dlvr_freq_mhz, 2)
-+RFIM_SHOW(dlvr_pll_busy, 2)
-+RFIM_SHOW(dlvr_freq_select, 2)
-+RFIM_SHOW(dlvr_rfim_enable, 2)
-+
-+RFIM_STORE(dlvr_spread_spectrum_pct, 2)
-+RFIM_STORE(dlvr_rfim_enable, 2)
-+RFIM_STORE(dlvr_freq_select, 2)
-+
-+static DEVICE_ATTR_RW(dlvr_spread_spectrum_pct);
-+static DEVICE_ATTR_RW(dlvr_freq_select);
-+static DEVICE_ATTR_RO(dlvr_hardware_rev);
-+static DEVICE_ATTR_RO(dlvr_freq_mhz);
-+static DEVICE_ATTR_RO(dlvr_pll_busy);
-+static DEVICE_ATTR_RW(dlvr_rfim_enable);
-+
-+static struct attribute *dlvr_attrs[] = {
-+	&dev_attr_dlvr_spread_spectrum_pct.attr,
-+	&dev_attr_dlvr_freq_select.attr,
-+	&dev_attr_dlvr_hardware_rev.attr,
-+	&dev_attr_dlvr_freq_mhz.attr,
-+	&dev_attr_dlvr_pll_busy.attr,
-+	&dev_attr_dlvr_rfim_enable.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group dlvr_attribute_group = {
-+	.attrs = dlvr_attrs,
-+	.name = "dlvr"
-+};
-+
- static DEVICE_ATTR_RW(vco_ref_code_lo);
- static DEVICE_ATTR_RW(vco_ref_code_hi);
- static DEVICE_ATTR_RW(spread_spectrum_pct);
-@@ -277,12 +334,22 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
- 			return ret;
- 	}
- 
-+	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-+		ret = sysfs_create_group(&pdev->dev.kobj, &dlvr_attribute_group);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
- 		ret = sysfs_create_group(&pdev->dev.kobj, &dvfs_attribute_group);
- 		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
- 			sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
- 			return ret;
- 		}
-+		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-+			sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
-+			return ret;
-+		}
- 	}
- 
- 	return 0;
-@@ -296,6 +363,9 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev)
- 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
- 		sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
- 
-+	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR)
-+		sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
-+
- 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
- 		sysfs_remove_group(&pdev->dev.kobj, &dvfs_attribute_group);
- }
--- 
-2.34.1
-
+Is it really the role of the thermal HFI driver to implement a task
+classification algorithm?  I'm not convinced about that.  Personally,
+I would probably introduce some proper arch code doing that and using
+input from the HFI driver.
