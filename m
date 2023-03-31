@@ -2,156 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA6B6D20C6
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 14:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296256D2193
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 15:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjCaMri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 08:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S232045AbjCaNmr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 09:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbjCaMrd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 08:47:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C967120323;
-        Fri, 31 Mar 2023 05:47:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A12362889;
-        Fri, 31 Mar 2023 12:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 946E6C433A8;
-        Fri, 31 Mar 2023 12:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680266824;
-        bh=JCi9GVM3mtwp6mIWudeUCVrCJNL56Muu1u8evTBy+Wc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=I/36sq5YnttrK9nAJ+yAGj5x1IpyNsT71dECgjcBoaca9HJKhneSL4z3L6otMFji3
-         GOq/2hPGw6UR5D3BFyqa8TjCrqlFuvRJ66X/cG8E+mntKhf4ICBjJ1/dlYFYaA8Yc4
-         3GOJIfyG2idba3EzDGv6X8RZkHCoFGp3To+lOAyj1M/UkxchL4VH7umv2G/l08/VkJ
-         040/Tlts8qn+VMOCR3m6jTv81npE+cCzoTwDBNLfO737ZBVuuvzk56RjtGwkDwYKjy
-         zS1THS9S28ejO0jvGJeBP3utl3TzvZ87rxeQgWfiyI1wWdXuonTWyuxIXtSJnqwwdw
-         sn8dL7+KF2WSw==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5445009c26bso412547247b3.8;
-        Fri, 31 Mar 2023 05:47:04 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cz1CZktmiZc11UBF4T8jb0ZoSOyONiAzXlSPjR4OAQb5PiIbWO
-        MaKf7rcfCm7EyFzph2T1f+wHhco7kar28G01Gw==
-X-Google-Smtp-Source: AKy350aWaizMSmlvku55rVfJmDcUeUGwlpCsDANKH3NMxDTLCeFuL9w+bIkaybQ1c5aF0yC2W2Oz1NrI68bsVGHq5rA=
-X-Received: by 2002:a81:ae4f:0:b0:545:ed8e:f4f6 with SMTP id
- g15-20020a81ae4f000000b00545ed8ef4f6mr9257438ywk.5.1680266823488; Fri, 31 Mar
- 2023 05:47:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230331014356.1033759-1-davidai@google.com> <20230331014356.1033759-6-davidai@google.com>
-In-Reply-To: <20230331014356.1033759-6-davidai@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 31 Mar 2023 07:46:52 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJErVOZZ==i1HpMABfuVEDC+drboLTntMDB0sUC9ZdQ_Q@mail.gmail.com>
-Message-ID: <CAL_JsqJErVOZZ==i1HpMABfuVEDC+drboLTntMDB0sUC9ZdQ_Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 5/6] dt-bindings: cpufreq: add bindings for virtual
- kvm cpufreq
-To:     David Dai <davidai@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231566AbjCaNmp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 09:42:45 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046051C1F0;
+        Fri, 31 Mar 2023 06:42:43 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id B7A372B06431;
+        Fri, 31 Mar 2023 09:42:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 31 Mar 2023 09:42:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680270158; x=1680277358; bh=g6
+        aDwmQjQnWklILxvXl/woLrKoW/quWophX6bAkTCEo=; b=TTmtV29COQdi0bvTzb
+        VEpOlT1o3jNnc2wW8GBlrOk7+9/MctBDjVr53zmvoRdTqDlOTHAZKSLyDysAlwte
+        hEq/UpD9pogU3widuS5h8W8iB0wDYNfKdJJp6rppFP540f3Gy8tENgGeSHLJCOfs
+        FsjqDoVn2xrJaPPe0yx+9YBr07Ytqv0+3MVEk6q4+goccGh7j+FOH1QrFJWc5+7l
+        1um7QLnwaAqjNCRAXNsz5fdPsFQELPHYPzUxRDOKCmdeTFZf0diPkEsF1wbYL5IU
+        o8eDmdF6Fg60Dieg3k/ZJuONUdXA4X4EOjmny+OgIeur77zl0ochP7FNQbxyH8DH
+        Ax3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680270158; x=1680277358; bh=g6aDwmQjQnWkl
+        ILxvXl/woLrKoW/quWophX6bAkTCEo=; b=SqeGvKfxDDPP6t6KWDRtwqd19OBwm
+        jLeWZaJG9njNSDuwSGhOBBwv8v+SMBgELYq66iwF60uEt+dhet3hwp909xte/2SB
+        tJyvlehj1z1m+g4xdV7w3tsirezdITNOLuB/NwH7T10WHDpsZJfpQ0/LHDrj7umk
+        fRi4pv32y+KR954J2n3JdG8/s18d4gMzJHborWBy9dO5Sl1adMDS/B0zwa2zLu5z
+        TQ0g1TsJZ+bTf3iFVHy36iQxP3hkSGdhQzuMbFsvj+V82QYHZ4eKfZqVISYgna4H
+        WiADkMFo1mKNsaSN0hl1SCrWRD/l3lNhjJL47a8Zgqen0ZYRspYfU1qhw==
+X-ME-Sender: <xms:TOMmZDEUxJuQhS9X_pVD4QAt3n0IwOnRgq2voG0ebtOIwNjFuFey4A>
+    <xme:TOMmZAW7wt-5QbCblh5vM5luzY2SXMJn6tkrqQcmi5CSSNndmSwG0iJ6QZMaKjLjW
+    QBa4jz0Ao3FL7ODJkE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddgieegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:TeMmZFJ37O-uyaodkYU6iR0w8O5z6CFRwtCjNWfSvXGVNs2ReLvN4g>
+    <xmx:TeMmZBHmXfvKlHe2yMi5gFmhlBU8f_-bZKLlj5dJSJfcjiulTMKJag>
+    <xmx:TeMmZJX_nXXwVxDg-8mFHJiCHj8DZ6XoLAflwYYAMOJ1U0Kr66Otvg>
+    <xmx:TuMmZBWNulWSSTdEsn3zCw_0hYIiZqCD6OKFcr7ytl8CB3fAQ3O89lNgRRM>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E2D7BB60092; Fri, 31 Mar 2023 09:42:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+Date:   Fri, 31 Mar 2023 15:42:15 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
+        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+        "Jose Abreu" <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pm@vger.kernel.org, "Daniel Golle" <daniel@makrotopia.org>
+Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 8:45=E2=80=AFPM David Dai <davidai@google.com> wrot=
-e:
+On Fri, Mar 31, 2023, at 10:34, Neil Armstrong wrote:
+> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+> associated with a clear lack of maintainance, development and migration to
+> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
 >
-> Add devicetree bindings for a virtual kvm cpufreq driver.
+> In addition, the OX810 hasn't been booted for years and isn't even present
+> in an ARM config file.
 >
-> Co-developed-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: David Dai <davidai@google.com>
-> ---
->  .../bindings/cpufreq/cpufreq-virtual-kvm.yaml | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-vir=
-tual-kvm.yaml
+> For the OX820, lack of USB and SATA support makes the platform not usable
+> in the current Linux support and relies on off-tree drivers hacked from the
+> vendor (defunct for years) sources.
 >
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kv=
-m.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
-> new file mode 100644
-> index 000000000000..31e64558a7f1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual-kvm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Virtual KVM CPUFreq
-> +
-> +maintainers:
-> +  - David Dai <davidai@google.com>
-> +
-> +description: |
-> +
-> +  KVM CPUFreq is a virtualized driver in guest kernels that sends utiliz=
-ation
-> +  of its vCPUs as a hint to the host. The host uses hint to schedule vCP=
-U
-> +  threads and select CPU frequency. It enables accurate Per-Entity Load
-> +  Tracking for tasks running in the guest by querying host CPU frequency
-> +  unless a virtualized FIE exists(Like AMUs).
-> +
-> +properties:
-> +  compatible:
-> +    const: virtual,kvm-cpufreq
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    {
-> +      #address-cells =3D <2>;
-> +      #size-cells =3D <2>;
-> +
-> +      cpufreq {
-> +            compatible =3D "virtual,kvm-cpufreq";
-> +      };
+> The last users are in the OpenWRT distribution, and today's removal means
+> support will still be in stable 6.1 LTS kernel until end of 2026.
+>
+> If someone wants to take over the development even with lack of SMP, I'll
+> be happy to hand off maintainance.
+>
+> The plan is to apply the first 4 patches first, then the drivers
+> followed by bindings. Finally the MAINTAINANCE entry can be removed.
+>
+> I'm not sure about the process of bindings removal, but perhaps the bindings
+> should be marked as deprecated first then removed later on ?
+>
+> It has been a fun time adding support for this architecture, but it's time
+> to get over!
+>
+> Patch 2 obviously depends on [1].
+>
+> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-The same thing was tried on non-virtual h/w too. This is not a device
-so it doesn't go in DT. It is just an abuse of DT as a kernel driver
-instantiation mechanism.
+Thanks a lot for going through this and preparing the patches!
 
-Rob
+I've discussed this with Daniel Golle on the OpenWRT channel as well,
+and he indicated that the timing is probably fine here, as there are
+already close to zero downloads for oxnas builds, and the 6.1 kernel
+will only be part of a release in 2024.
+
+For the dependency on my other patch, I'd suggest you instead
+remove the SMP files here as well, which means we can merge either
+part independently based on just 6.3-rc. I can do that change
+myself by picking up patches 1-4 of your RFC series, or maybe you
+can send resend them after rebase to 6.3-rc1.
+
+For the driver removals, I think we can merge those at the same
+time as the platform removal since there are no shared header files
+that would cause build time regressions and there are no runtime
+regressions other than breaking the platform itself. Maybe
+just send the driver removal separately to the subsystem
+maintainers with my
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+     Arnd
