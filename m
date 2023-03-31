@@ -2,241 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244CA6D2025
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 14:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9156D20A4
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 14:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjCaMYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 08:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
+        id S232500AbjCaMnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 08:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbjCaMYd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 08:24:33 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07CD1F799
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 05:24:11 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id x37so13291185pga.1
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 05:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680265449; x=1682857449;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=clsagZH1IzV6mZqufirnmuxwVgE4mGAL1lL14PTuQ+4=;
-        b=iN8qlYT5wNxoNS2qn8M0mxaV8gs52GYPc0QkRua3ybKEX4braC2vT9cF5NxBQb36C2
-         o8HIQqsptHaYHevc5+hS9EiruhZk5r/Jh3EdFWjrleiqUl7N77y1IE+5GYGsUHEQYP1u
-         kh9W5FEFpyWzg+8dKVqvD7FAME5J+TCo1miw8sCslRFoBwwNOZaMICaovzeJGyn6vjqW
-         IrArF5IQLfnBqBOoO621/UgS6IBXsXhjLKK04dXTjOje4CRwyn1wSK7Iby5ZZ5PAXdnk
-         mRV+vV6N8twXRPWaA4bmSmRFYZ89I+/Ztea3oMMmmCMhUo++fVaydK1xz2H35uyGdQ5K
-         rPUQ==
+        with ESMTP id S232548AbjCaMm6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 08:42:58 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5137A2061E;
+        Fri, 31 Mar 2023 05:42:30 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17786581fe1so22990281fac.10;
+        Fri, 31 Mar 2023 05:42:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680265449; x=1682857449;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=clsagZH1IzV6mZqufirnmuxwVgE4mGAL1lL14PTuQ+4=;
-        b=YchWtKuPGL9bCJ+AuDZ7HsEOM2qcyICK1P3wPblBu/vN6WnMqpQdErySC9UIL3d1JP
-         wmxVkhy0WBuhyhEqEs3MqTqqKdXJZeWSioZZGgFCYpZHfw4Jagfoy1XkjIoaq3d2ylKG
-         +3MJ0iMyZa4Zd+V3K2iekUedPtPNt3klejNhdSTZii3HK7hYhbFvcc3h/vjmpQe6G3Ev
-         3OBwOHpjWrJlCK8je/F9VcP6h8ZEWuucAwWKO0BU6qRbloE5xUYtj0Bs8CmyWXciPjpf
-         V53zVo795j/4RZ5cbXB9+aJ1HALdpyaZ5sj5gEGSdAC2Hx4WimAVIU3OPo/dHXOo4k6q
-         Ff+Q==
-X-Gm-Message-State: AAQBX9cUwLB9zybsIRE1L+DljBsW6WuT6kA9AUJ28Z2Tbgm6W39o2NJt
-        dqdsctO3njgdR5+6YvKoj0I+seTKrEymh34MH+NhzA==
-X-Google-Smtp-Source: AKy350a2wr3Q2CoMvwfvL505VAT9USptyWSt1TaxP4iekhbCIgfZfUcgTN1p+vJsBWlzv33HA+8DpXNgkTQ5dO4hns4=
-X-Received: by 2002:a63:4f42:0:b0:513:a24c:f45a with SMTP id
- p2-20020a634f42000000b00513a24cf45amr1576366pgl.11.1680265449447; Fri, 31 Mar
- 2023 05:24:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680266536;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=beHNZoTWpfe1Iychh8E+2Pd1ABXoxogRlM+B8js6fxY=;
+        b=2Hog1KsjnveK0cub86R0g1RzCfUL7KrMdStzkO+WlQK3dFYImmAzLtXxb09m4NKEGm
+         2SZw9kCiVRtxGqn0bWqOC3JpotMTlBGo4Ne95wrCc4W6rai6J2+wRbLma5An7zRmUZM1
+         4YYUC47iWwUMJ3vSRzP8Zf3zhZjzN2tfepxzKVj8iTRicOn4HIu3wFXhYJj/rqUO0R13
+         Qdtip0XPslqjMr6H9e/17oKxYQI9QsNDq/WB6DYHtHl7Q34+MfUak/jxVjTWZ3MmnTIJ
+         BCVlyOQAehT1Y4IfI0Z0dFlzjqqr/Qub+bXhdKi56wuDwyNdAeLhi0jYPHX4ds0hDkeb
+         85cA==
+X-Gm-Message-State: AAQBX9erdpW1Q1ep6LHquv+dVazteZ/3wl6YnQPP8sgCFC2V7ExZB9Ac
+        f2YRq+R5u1I4n1qXWm1jqw==
+X-Google-Smtp-Source: AKy350aZVWt7V5ZjS97pTxzJSN9yyHjuZdEBpdJxg6kf08veWsSig9HeD3mfdM5vIOgkoKYCiH1xbw==
+X-Received: by 2002:a05:6870:8a0d:b0:17a:ce6b:72c with SMTP id p13-20020a0568708a0d00b0017ace6b072cmr15564322oaq.51.1680266535933;
+        Fri, 31 Mar 2023 05:42:15 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id kw17-20020a056870ac1100b001802d3e181fsm902270oab.14.2023.03.31.05.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 05:42:15 -0700 (PDT)
+Received: (nullmailer pid 690279 invoked by uid 1000);
+        Fri, 31 Mar 2023 12:42:14 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-11-ricardo.neri-calderon@linux.intel.com>
- <CAKfTPtAciJr-ZQWcJN3bHZHyHmjmSOuDYZz9UwfK2EnMVPX6aQ@mail.gmail.com> <20230330021431.GB26315@ranerica-svr.sc.intel.com>
-In-Reply-To: <20230330021431.GB26315@ranerica-svr.sc.intel.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 31 Mar 2023 14:23:58 +0200
-Message-ID: <CAKfTPtCUVbiVJxRHx_AcXbfm-SeW1ATE8QZ-jOqyfMh+PLwAjw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/24] sched/fair: Use IPCC scores to select a busiest runqueue
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+From:   Rob Herring <robh@kernel.org>
+To:     David Dai <davidai@google.com>
+Cc:     linux-doc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        linux-pm@vger.kernel.org, Oliver Upton <oliver.upton@linux.dev>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        kernel-team@android.com, Ben Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-kernel@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        James Morse <james.morse@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ingo Molnar <mingo@redhat.com>, kvm@vger.kernel.org,
+        devicetree@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, kvmarm@lists.linux.dev
+In-Reply-To: <20230331014356.1033759-6-davidai@google.com>
+References: <20230331014356.1033759-1-davidai@google.com>
+ <20230331014356.1033759-6-davidai@google.com>
+Message-Id: <168026628573.685196.6713450502150551916.robh@kernel.org>
+Subject: Re: [RFC PATCH v2 5/6] dt-bindings: cpufreq: add bindings for
+ virtual kvm cpufreq
+Date:   Fri, 31 Mar 2023 07:42:14 -0500
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 30 Mar 2023 at 04:03, Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> On Tue, Mar 28, 2023 at 12:03:58PM +0200, Vincent Guittot wrote:
-> > On Tue, 7 Feb 2023 at 06:01, Ricardo Neri
-> > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > >
-> > > For two runqueues of equal priority and equal number of running of tasks,
-> > > select the one whose current task would have the highest IPC class score
-> > > if placed on the destination CPU.
-> >
-> > You failed to explain why it make sense to compare current task score
-> > whereas we will most probably not pull this task at the end
->
-> Thank you for your feedback Vincent! Please kindly refer to my reply to
-> your feedback in patch 7.
->
-> > >
-> > > For now, use IPCC scores only for scheduling domains with the
-> > > SD_ASYM_PACKING flag.
-> > >
-> > > Cc: Ben Segall <bsegall@google.com>
-> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > Cc: Len Brown <len.brown@intel.com>
-> > > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > > Cc: Mel Gorman <mgorman@suse.de>
-> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > Cc: x86@kernel.org
-> > > Cc: linux-pm@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > ---
-> > > Changes since v2:
-> > >  * Only use IPCC scores to break ties if the sched domain uses
-> > >    asym_packing. (Ionela)
-> > >  * Handle errors of arch_get_ipcc_score(). (Ionela)
-> > >
-> > > Changes since v1:
-> > >  * Fixed a bug when selecting a busiest runqueue: when comparing two
-> > >    runqueues with equal nr_running, we must compute the IPCC score delta
-> > >    of both.
-> > >  * Renamed local variables to improve the layout of the code block.
-> > >    (PeterZ)
-> > >  * Used the new interface names.
-> > > ---
-> > >  kernel/sched/fair.c | 64 +++++++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 64 insertions(+)
-> > >
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index 72d88270b320..d3c22dc145f7 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -9399,6 +9399,37 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> > >         return sched_asym_ipcc_prefer(a_stats, b_stats);
-> > >  }
-> > >
-> > > +/**
-> > > + * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
-> > > + * @p:         A task
-> > > + * @env:       Load balancing environment
-> > > + *
-> > > + * Returns: The IPCC score delta that @p would get if placed in the destination
-> > > + * CPU of @env. LONG_MIN to indicate that the delta should not be used.
-> > > + */
-> > > +static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-> > > +{
-> > > +       unsigned long score_src, score_dst;
-> > > +       unsigned short ipcc = p->ipcc;
-> > > +
-> > > +       if (!sched_ipcc_enabled())
-> > > +               return LONG_MIN;
-> > > +
-> > > +       /* Only asym_packing uses IPCC scores at the moment. */
-> > > +       if (!(env->sd->flags & SD_ASYM_PACKING))
-> > > +               return LONG_MIN;
-> > > +
-> > > +       score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
-> > > +       if (IS_ERR_VALUE(score_dst))
-> > > +               return LONG_MIN;
-> > > +
-> > > +       score_src = arch_get_ipcc_score(ipcc, task_cpu(p));
-> > > +       if (IS_ERR_VALUE(score_src))
-> > > +               return LONG_MIN;
-> > > +
-> > > +       return score_dst - score_src;
-> > > +}
-> > > +
-> > >  #else /* CONFIG_IPC_CLASSES */
-> > >  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> > >                                     struct rq *rq)
-> > > @@ -9429,6 +9460,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> > >         return false;
-> > >  }
-> > >
-> > > +static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-> > > +{
-> > > +       return LONG_MIN;
-> > > +}
-> > > +
-> > >  #endif /* CONFIG_IPC_CLASSES */
-> > >
-> > >  /**
-> > > @@ -10589,6 +10625,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > >  {
-> > >         struct rq *busiest = NULL, *rq;
-> > >         unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> > > +       long busiest_ipcc_delta = LONG_MIN;
-> > >         unsigned int busiest_nr = 0;
-> > >         int i;
-> > >
-> > > @@ -10705,8 +10742,35 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > >
-> > >                 case migrate_task:
-> > >                         if (busiest_nr < nr_running) {
-> > > +                               struct task_struct *curr;
-> > > +
-> > >                                 busiest_nr = nr_running;
-> > >                                 busiest = rq;
-> > > +
-> > > +                               /*
-> > > +                                * Remember the IPCC score delta of busiest::curr.
-> > > +                                * We may need it to break a tie with other queues
-> > > +                                * with equal nr_running.
-> > > +                                */
-> > > +                               curr = rcu_dereference(busiest->curr);
-> > > +                               busiest_ipcc_delta = ipcc_score_delta(curr, env);
-> >
-> > Hmm, i don't like this at all
-> >
-> > Also, curr is the least probable task to be pulled which means that
-> > all this his useless
->
-> but when doing asym_packing balancing nr_running = 1, need_active_balance()
-> returns true and we will pull the current task, no? This is also true for
-> fully_busy groups with one task per CPU. These are the only two cases that
-> currently use IPCC scores.
 
-hmm, for sure it's not true for fully_busy and I don't see anything
-about asym_packing mandating that  nr_running = 1
+On Thu, 30 Mar 2023 18:43:49 -0700, David Dai wrote:
+> Add devicetree bindings for a virtual kvm cpufreq driver.
+> 
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-virtual-kvm.yaml | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
+> 
 
-You should have a look at misfit task which seems to better fit your
-situation where you have one task that doesn't fit  its cpu instead of
-adding such condition
->
-> If there are more than one tasks in the runqueue, the group will be
-> classified as overloaded and we will not use IPCC scores nor active
-> balance.
->
-> Thanks and BR,
-> Ricardo
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.example.dts:18.9-10 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230331014356.1033759-6-davidai@google.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
