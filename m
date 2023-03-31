@@ -2,190 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9505E6D1AE5
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C346D1B43
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 11:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjCaIzz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 04:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S232041AbjCaJF2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 31 Mar 2023 05:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjCaIzx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:55:53 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162931994
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:55:51 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id h25so27989125lfv.6
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680252949;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4dm+BPEOnC7e4hjDLH6po2CUlQmPHlDI5qtCyO0in2Q=;
-        b=h9p+asgoR7hjf3xWGqt0dESGNOGLYImfThLBriNOU0tdhyee4Dj/v82aPxY1l+yshP
-         rJxuPxGgYI6jUI6DBjgYqYHHxlm+3k4RYYjQX99sNkOanqarLy2UZMupY9g1Qv7egTfD
-         3iQbRP3qKjrBlBC8MLOcVhwBkT2DGC+KDRqi3qP+7TvgmVGRfbMfZRu/AYlQ4SaPljzg
-         eKCGp/zIAvGJhIBwkH1RyLPXBc3rwVclVdlHiyQi2cfc80JRI6qtQmM/Tw/rIsAQTfyg
-         fAv4m06xtOPLY7yFFiKTKST/6WJIbCvp+KFLiospIbLfJzI44pgopG9eozFO+yO6h/5e
-         dQkA==
+        with ESMTP id S231855AbjCaJFD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 05:05:03 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6A71E728;
+        Fri, 31 Mar 2023 02:04:58 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id t10so86796500edd.12;
+        Fri, 31 Mar 2023 02:04:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680252949;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4dm+BPEOnC7e4hjDLH6po2CUlQmPHlDI5qtCyO0in2Q=;
-        b=JRQof3ty04GVmVsPTq+DYhrDginHeLyyIxQ1Vqo//yFGHwxDaTFFblz6uIjB/iBCHh
-         S8R41IbyUySLVDLOTrVTUhdBuCoEv/K2JtMMR3+/+B6oPOltW/9mzGv23fDIfsooWfaB
-         xH+gWmdEuDvJrRLBW91z4qC0DXligHKogCqJhZcT+Rf60jwHvo03qP+aOJOnffzXWgrR
-         g5v+X4IXTnmouDhf/LVaQDi926sLfSih+DENA/XaFTSwFdJi1UGIEg2sq2agdQKfdzuO
-         mYYVgDm1En2dXHUDPtamUSqJEwF4kL6zKEUtMDKQpEe4AUfZKwTxfpJrhRg3J0Pi+Z9m
-         OehQ==
-X-Gm-Message-State: AAQBX9dL+MW3R7WqZWzZ45Q5D2YT2HpsR2TV9mLpdLv3h2NdY08aA8rC
-        kz6+Dof9XX2qWgowKaERZ5u3LQ==
-X-Google-Smtp-Source: AKy350ZI/3UGdFSqbHDvzrq0gk2lxo1Tz6xoBuV/VTSFHLt8yiKO4pkQahghPdhIFyzf5V5sRpBGCA==
-X-Received: by 2002:a19:f619:0:b0:4d5:831a:1af8 with SMTP id x25-20020a19f619000000b004d5831a1af8mr7934107lfe.40.1680252949296;
-        Fri, 31 Mar 2023 01:55:49 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z9-20020ac25de9000000b004eb2dab8a61sm294109lfq.44.2023.03.31.01.55.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 01:55:48 -0700 (PDT)
-Message-ID: <e28e76e2-f392-44d9-e88c-27c6d26115d0@linaro.org>
-Date:   Fri, 31 Mar 2023 10:55:46 +0200
+        d=1e100.net; s=20210112; t=1680253497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pg7UvCKf4FflsOaE7m6CKblqSYNUNLu+zsGJqL+kAIo=;
+        b=CyWjmHBNCMZOZgEzkZ/LUgXPVLWsoZPxzn+HK2G6vFfmkJ53uscRRZQBbGJgBzdWp0
+         T/WG0XS1weZSm+KfPeR+so2Pcx7eQAHhiYrqvsC/ZMoYrxk8Y9RJD+7W+X6oOrOhpKcw
+         0iKfuboEwX7hrfOWKEID0y9WiZpl5QnCuTLqAr7DvxQG967Ht8IvosJAMru+mk+vFwR+
+         tbxHOnMdMjR10skuQN8HReLsjv1wSIDic77khVeA9ZL/kx6v6yznFSfAGiW77yRxM8WS
+         QWz1uoohWSTR1k/BGoDmerUZH8JcthN6zEHBjdxkSxxAHJ7FvXVVY602zt+vMYx3Gkfk
+         YwJg==
+X-Gm-Message-State: AAQBX9e09aaou8ff1PTTBf0XU8H2jZuq7hQvcbtTtOC8wjsvYEFgQ0Z0
+        WBBCKka7wYfbmiW7CKftXeldEjliwu8NhXq/fSE=
+X-Google-Smtp-Source: AKy350ZubaYRqIEgMdcx/bX/uJcrS6NTNG8xSB+YnlIP65Jv2fmonLvwL9ZmfCS2Wbvtq4XF3yqqER+2aj6WGc1q+qU=
+X-Received: by 2002:a50:cc94:0:b0:4fb:c8e3:1ae2 with SMTP id
+ q20-20020a50cc94000000b004fbc8e31ae2mr13352964edi.3.1680253496669; Fri, 31
+ Mar 2023 02:04:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v2 5/6] dt-bindings: cpufreq: add bindings for virtual
- kvm cpufreq
-Content-Language: en-US
-To:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <20230310144726.1545543-1-robh@kernel.org> <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
+ <CAJZ5v0i-Vum+js8c7fZJiQWwTBYByy2O=UtObR6GciLMLt41Nw@mail.gmail.com> <f4592c81-af30-8289-d02d-a44e25e0fe26@linaro.org>
+In-Reply-To: <f4592c81-af30-8289-d02d-a44e25e0fe26@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Mar 2023 11:04:44 +0200
+Message-ID: <CAJZ5v0ioHh2E1krvVhXTdzKN+Bh64ML+t5v-Tnt+bORpAqHUyw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Use of_property_present() for testing DT
+ property presence
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev
-References: <20230331014356.1033759-1-davidai@google.com>
- <20230331014356.1033759-6-davidai@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331014356.1033759-6-davidai@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/03/2023 03:43, David Dai wrote:
-> Add devicetree bindings for a virtual kvm cpufreq driver.
+On Fri, Mar 31, 2023 at 10:44 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 30/03/2023 19:28, Rafael J. Wysocki wrote:
+> > On Mon, Mar 27, 2023 at 7:13 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>
+> >> On Fri, Mar 10, 2023 at 3:48 PM Rob Herring <robh@kernel.org> wrote:
+> >>>
+> >>> It is preferred to use typed property access functions (i.e.
+> >>> of_property_read_<type> functions) rather than low-level
+> >>> of_get_property/of_find_property functions for reading properties. As
+> >>> part of this, convert of_get_property/of_find_property calls to the
+> >>> recently added of_property_present() helper when we just want to test
+> >>> for presence of a property and nothing more.
+> >>>
+> >>> Signed-off-by: Rob Herring <robh@kernel.org>
+> >>
+> >> Daniel, are you going to apply this, or should I take it directly?
+> >
+> > Applied as 6.4 material, thanks
+>
+> Sorry, I forgot to answer. I already applied it.
+>
+> Shall I drop it from my branch ?
 
-Why? Why virtual devices should be documented in DT? DT is for
-non-discoverable hardware, right? You have entire commit msg to explain
-it instead of saying something easily visible by the diff.
-
-> 
-> Co-developed-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: David Dai <davidai@google.com>
-> ---
->  .../bindings/cpufreq/cpufreq-virtual-kvm.yaml | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
-> new file mode 100644
-> index 000000000000..31e64558a7f1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual-kvm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Virtual KVM CPUFreq
-> +
-> +maintainers:
-> +  - David Dai <davidai@google.com>
-> +
-> +description: |
-
-Do not need '|'.
-> +
-
-Drop stray blank line.
-
-> +  KVM CPUFreq is a virtualized driver in guest kernels that sends utilization
-> +  of its vCPUs as a hint to the host. The host uses hint to schedule vCPU
-> +  threads and select CPU frequency. It enables accurate Per-Entity Load
-> +  Tracking for tasks running in the guest by querying host CPU frequency
-> +  unless a virtualized FIE exists(Like AMUs).
-
-No clue why you need DT bindings for this. KVM has interfaces between
-host and guests.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: virtual,kvm-cpufreq
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    {
-
-This is some broken syntax and/or indentation.
-
-I don't get what this node is about.
-
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-
-Why?
-
-> +
-> +      cpufreq {
-> +            compatible = "virtual,kvm-cpufreq";
-> +      };
-> +
-
-Drop stray blank lines
-
-> +    };
-
-Best regards,
-Krzysztof
-
+If you can do that, then yes, please.
