@@ -2,445 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D423E6D1543
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 03:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDB06D154E
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 03:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjCaBph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 21:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S229495AbjCaBr1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 21:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjCaBpc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 21:45:32 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AAE1882F
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 18:45:09 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5461fe3163eso75080367b3.17
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 18:45:09 -0700 (PDT)
+        with ESMTP id S229470AbjCaBr0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 21:47:26 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14BB18F92
+        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 18:46:54 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id g17so27026465lfv.4
+        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 18:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680227105;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PafzZUjsN+AldhPHNYx1ZKiIIku0MB5EoRgnFO5S24A=;
-        b=HB0lHXlx14L5D/NQiBNeXH3Bb/uJfxUFQyHKfKt354epcbSI/AILuLAo+0uZNLaPsY
-         nnNLFCOqVFvWeuRRtL7e5TCT+7nlSV8lvh1r69fTKshrt2h1WFYXX1D3i54fGHXWusJb
-         9kpeKAPIku2v4ZpDGuLc99xr92yltvpON16vudiisZ/ofSc8Yc0obyNK3mu6rE3REMje
-         tU1auuInm7EUr9ILgKZc4u1Du28tHiyrrpOM1ZkV8I+8Gd2LFRpoXH+1KGPKBrr3TOyS
-         pXkqppPZrrAs5bQjNpMNmx9jkSAk63v+BCNKCcALN3BH7MKIHKqKBocRVg1OmLSKrm9G
-         lYHg==
+        d=google.com; s=20210112; t=1680227204;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OzUFcUZYAgXJaL+peWiLAxW27PqyVrGiLd3CEntMJcI=;
+        b=DwURgHSaGuk5chgT296uFEmpi0z7WW08Mh6CM8jJnMW+qc7FB01OoHRsIkm4EIFayk
+         eFHOsW9Uv3+B/PQth4O/8vlMBpgKOjWyxuVpu1SuZY25dlrEYh1eBF1wPPft4zPE/phf
+         ExyMZo5TaJwvKfS0RgJocWzrlFt800fCZRIGgo9tvVJjaD++way20A4XqfNOPaNww2hT
+         qUVpDh66AiXTlunIa4l1peKeSKcQilSL4BKRJNpbtaMIMWWv7QMDtS2dgtrjEGtvh7CS
+         MJ6mf34v+uufODN/tFtWMaf7hApU6oqXte3ZlCQBbbzcCOnBOppDemR2xkju16Y3s+ea
+         twYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680227105;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PafzZUjsN+AldhPHNYx1ZKiIIku0MB5EoRgnFO5S24A=;
-        b=cqAJXEPHCdNFonY0LadM37upkEDOWrP8Sb7M4/FVtu3GjVKouOZXglQOYlD3GxWdbL
-         20LcxGTnmuS4xJoL7HmxTacCAiwjJlzp05kdh9JGbGIF4AiChwN/88NLMcMOvJq7v6Oj
-         mWyTfwmDaDlMoJgfn1vrwmMkZ7uGA1FGmaLm2eFBQISumKBLHi8NiHZSg+X8/amF52/o
-         C7M+9r4vbM/rpGeRLUyFPCArX4MT4v1T0Bm9kVIkZdLCKIxb2n7RJsFgjdsMKc8SyKXl
-         Xt7BAGcFHS2Oed2itX2bcPDqVtQ/EhYlzBoTVytaMvob1YW2zNXxmsnT972DJQa+svn6
-         Qm4g==
-X-Gm-Message-State: AAQBX9fOUxEskiDacI8wmNCzA7/fxTVS1AYlGFkG9mUxVT8AfX852MZG
-        JmToINkSDe/zO6hBZakVIiJy1AX4Dl5t
-X-Google-Smtp-Source: AKy350bhSeqs1M+oOYbxOjJLrxdY2ImQyDfl5iisT3zr2AF4dLMixglhW1nhVRQR+6+PArh0sAPeweQXTc9/
-X-Received: from davidai2.mtv.corp.google.com ([2620:15c:211:201:c162:24e8:ec5e:d520])
- (user=davidai job=sendgmr) by 2002:a25:a323:0:b0:b35:91cc:9e29 with SMTP id
- d32-20020a25a323000000b00b3591cc9e29mr4229627ybi.5.1680227105606; Thu, 30 Mar
- 2023 18:45:05 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 18:43:50 -0700
-In-Reply-To: <20230331014356.1033759-1-davidai@google.com>
-Mime-Version: 1.0
-References: <20230331014356.1033759-1-davidai@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230331014356.1033759-7-davidai@google.com>
-Subject: [RFC PATCH v2 6/6] cpufreq: add kvm-cpufreq driver
-From:   David Dai <davidai@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        David Dai <davidai@google.com>
-Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev
+        d=1e100.net; s=20210112; t=1680227204;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OzUFcUZYAgXJaL+peWiLAxW27PqyVrGiLd3CEntMJcI=;
+        b=mMA3E8DVebdCI9RRB5nKyVVniEUwaYOWksS3c8xjbqDNjtB3wdb1QRJBFa4JFArKa8
+         XYeg+aqGkChue8PRoCg7nWipXwfQmCrAQ10OKxhZmnPQnZb9c4D12Vak31VE9mhwl3qk
+         0EB+tDT28dEvsJVo4UDCWkbDAnaDTM+2PKTYNP7k4da+7L7OnOVlaXkJ/GPikM2J3032
+         nk+9Ras3KLeNVJ4rLYDSFo9LM+HBd4GZOi6JER6B0D7c+aT78DmCBz5wQGxxyX3Pg7+e
+         +twPdjpYXeQly4SJ7fqaeijTshACa353ANhvc1ONH/bbJUZwSqdqz2TZFt03tajV6FUU
+         lpyA==
+X-Gm-Message-State: AAQBX9duVd8JZceS+AcS2Jw7CGzCBYA7VWjpx76ZCFIdsCe0USWsRNFB
+        9iPaNCRC61GLXUGbcgBnJsQUTwwAXTipEj1UD+ve7zbWcf/4ybxnOd4RCJqbBfE=
+X-Google-Smtp-Source: AKy350acsPBv20eV+u3HvPYOhccTDn0ARk5feDJYKeFqLB+4OdDnt+vsFwe6J5FVfZODTNLEVsFreS2LwVrGv3Op15s=
+X-Received: by 2002:ac2:4884:0:b0:4e8:426d:123f with SMTP id
+ x4-20020ac24884000000b004e8426d123fmr7589065lfc.11.1680227204379; Thu, 30 Mar
+ 2023 18:46:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
+ <20230330084250.32600-2-quic_mkshah@quicinc.com> <20230330093431.xn5wwiwqbne5owf7@bogus>
+ <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com> <20230330131334.idb25zf4tdf3zqn3@bogus>
+In-Reply-To: <20230330131334.idb25zf4tdf3zqn3@bogus>
+From:   Wing Li <wingers@google.com>
+Date:   Thu, 30 Mar 2023 18:46:33 -0700
+Message-ID: <CADut4F0oh7kzv0GvuUV0CJnS_YxELoEzuZ_=tDKyKO86baCJNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cpuidle: psci: Move enabling OSI mode after power
+ domains creation
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>, andersson@kernel.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, jwerner@chromium.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce a virtualized cpufreq driver for guest kernels to improve
-performance and power of workloads within VMs.
+Adding some clarifications.
 
-This driver does two main things:
+On Thu, Mar 30, 2023 at 6:13=E2=80=AFAM Sudeep Holla <sudeep.holla@arm.com>=
+ wrote:
+>
+> On Thu, Mar 30, 2023 at 02:06:19PM +0200, Ulf Hansson wrote:
+> > On Thu, 30 Mar 2023 at 11:34, Sudeep Holla <sudeep.holla@arm.com> wrote=
+:
+> > >
+> > > On Thu, Mar 30, 2023 at 02:12:49PM +0530, Maulik Shah wrote:
+> > > > A switch from OSI to PC mode is only possible if all CPUs other tha=
+n the
+> > > > calling one are OFF, either through a call to CPU_OFF or not yet bo=
+oted.
+> > > >
+> > >
+> > > As per the spec, all cores are in one of the following states:
+> > >  - Running
+> > >  - OFF, either through a call to CPU_OFF or not yet booted
+> > >  - Suspended, through a call to CPU_DEFAULT_SUSPEND
+> > >
+> > > Better to provide full information.
 
-1. Sends utilization of vCPUs as a hint to the host. The host uses the
-hint to schedule the vCPU threads and decide physical CPU frequency.
+The spec quoted above only applies when switching from
+platform-coordinated mode to OS-initiated mode.
 
-2. If a VM does not support a virtualized FIE(like AMUs), it uses
-hypercalls to update the guest's frequency scaling factor periodically
-by querying the host CPU frequency. This enables accurate
-Per-Entity Load Tracking for tasks running in the guest.
+For switching from OS-initiated to platform-coordinated, which is the
+case Maulik is referring to, section 5.20.2 of the spec specifies:
+"A switch from OS-initiated mode to platform-coordinated mode is only
+possible if all cores other than the calling one are OFF, either
+through a call to CPU_OFF or not yet booted."
 
-Note that because the host already employs a rate_limit_us, we set the
-transition_delay_us of the cpufreq policy to a miniscule value(1)
-to avoid any additional delays between when the runqueue's util change
-and a frequency response on the host.
+> > >
+> > > > Currently OSI mode is enabled before power domains are created. In =
+cases
+> > > > where CPUidle states are not using hierarchical CPU topology the ba=
+il out
+> > > > path tries to switch back to PC mode which gets denied by firmware =
+since
+> > > > other CPUs are online at this point and creates inconsistent state =
+as
+> > > > firmware is in OSI mode and Linux in PC mode.
+> > > >
+> > >
+> > > OK what is the issue if the other cores are online ? As long as they =
+are
+> > > running, it is allowed in the spec, so your statement is incorrect.
 
-Co-developed-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: David Dai <davidai@google.com>
----
- drivers/cpufreq/Kconfig       |  13 ++
- drivers/cpufreq/Makefile      |   1 +
- drivers/cpufreq/kvm-cpufreq.c | 245 ++++++++++++++++++++++++++++++++++
- include/linux/sched.h         |   1 +
- kernel/sched/core.c           |   6 +
- 5 files changed, 266 insertions(+)
- create mode 100644 drivers/cpufreq/kvm-cpufreq.c
+The issue here is that the kernel prematurely enabled OSI mode based
+on the condition that OSI mode is supported by the firmware, and is
+unable to switch back to PC mode in the bail out path if hierarchical
+CPU topology isn't used because the other CPUs at this point are now
+online.
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 2c839bd2b051..0ef9d5be7c4d 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -217,6 +217,19 @@ config CPUFREQ_DT
- 
- 	  If in doubt, say N.
- 
-+config CPUFREQ_KVM
-+        tristate "KVM cpufreq driver"
-+        help
-+          This adds a virtualized KVM cpufreq driver for guest kernels that
-+	  uses hypercalls to communicate with the host. It sends utilization
-+	  updates to the host and gets used to schedule vCPU threads and
-+	  select CPU frequency. If a VM does not support a virtualized FIE
-+	  such as AMUs, it updates the frequency scaling factor by polling
-+	  host CPU frequency to enable accurate Per-Entity Load Tracking
-+	  for tasks running in the guest.
-+
-+	  If in doubt, say N.
-+
- config CPUFREQ_DT_PLATDEV
- 	bool
- 	help
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index ef8510774913..179ea8d45135 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)	+= cpufreq_governor_attr_set.o
- 
- obj-$(CONFIG_CPUFREQ_DT)		+= cpufreq-dt.o
- obj-$(CONFIG_CPUFREQ_DT_PLATDEV)	+= cpufreq-dt-platdev.o
-+obj-$(CONFIG_CPUFREQ_KVM)              += kvm-cpufreq.o
- 
- # Traces
- CFLAGS_amd-pstate-trace.o               := -I$(src)
-diff --git a/drivers/cpufreq/kvm-cpufreq.c b/drivers/cpufreq/kvm-cpufreq.c
-new file mode 100644
-index 000000000000..1542c9ac4119
---- /dev/null
-+++ b/drivers/cpufreq/kvm-cpufreq.c
-@@ -0,0 +1,245 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Google LLC
-+ */
-+
-+#include <linux/arch_topology.h>
-+#include <linux/arm-smccc.h>
-+#include <linux/cpufreq.h>
-+#include <linux/init.h>
-+#include <linux/sched.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_opp.h>
-+#include <linux/slab.h>
-+
-+static void kvm_scale_freq_tick(void)
-+{
-+	unsigned long scale, cur_freq, max_freq;
-+	struct arm_smccc_res hvc_res;
-+
-+	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_KVM_GET_CUR_CPUFREQ_FUNC_ID,
-+			0, &hvc_res);
-+
-+	cur_freq = hvc_res.a0;
-+	max_freq = cpufreq_get_hw_max_freq(task_cpu(current));
-+	scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
-+
-+	this_cpu_write(arch_freq_scale, (unsigned long)scale);
-+}
-+
-+static struct scale_freq_data kvm_sfd = {
-+	.source = SCALE_FREQ_SOURCE_ARCH,
-+	.set_freq_scale = kvm_scale_freq_tick,
-+};
-+
-+struct remote_data {
-+	int ret;
-+	struct cpufreq_frequency_table *table;
-+};
-+
-+static void remote_get_freqtbl_num_entries(void *data)
-+{
-+	struct arm_smccc_res hvc_res;
-+	u32 freq = 1UL;
-+	int *idx = data;
-+
-+	while (freq != CPUFREQ_TABLE_END) {
-+		arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_KVM_GET_CPUFREQ_TBL_FUNC_ID,
-+				*idx, &hvc_res);
-+		if (hvc_res.a0) {
-+			*idx = -ENODEV;
-+			return;
-+		}
-+		freq = hvc_res.a1;
-+		(*idx)++;
-+	}
-+}
-+
-+static int kvm_cpufreq_get_freqtbl_num_entries(int cpu)
-+{
-+	int num_entries = 0;
-+
-+	smp_call_function_single(cpu, remote_get_freqtbl_num_entries, &num_entries, true);
-+	return num_entries;
-+}
-+
-+static void remote_populate_freqtbl(void *data)
-+{
-+	struct arm_smccc_res hvc_res;
-+	struct remote_data *freq_data = data;
-+	struct cpufreq_frequency_table *pos;
-+	struct cpufreq_frequency_table *table = freq_data->table;
-+	int idx;
-+
-+	cpufreq_for_each_entry_idx(pos, table, idx) {
-+		arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_KVM_GET_CPUFREQ_TBL_FUNC_ID,
-+				idx, &hvc_res);
-+		if (hvc_res.a0) {
-+			freq_data->ret = -ENODEV;
-+			return;
-+		}
-+		pos->frequency = hvc_res.a1;
-+	}
-+	freq_data->ret = 0;
-+}
-+
-+static int kvm_cpufreq_populate_freqtbl(struct cpufreq_frequency_table	*table, int cpu)
-+{
-+	struct remote_data freq_data;
-+
-+	freq_data.table = table;
-+	smp_call_function_single(cpu, remote_populate_freqtbl, &freq_data, true);
-+	return freq_data.ret;
-+}
-+
-+static unsigned int kvm_cpufreq_setutil_hyp(struct cpufreq_policy *policy)
-+{
-+	struct arm_smccc_res hvc_res;
-+	u32 util = sched_cpu_util_freq(policy->cpu);
-+	u32 cap = arch_scale_cpu_capacity(policy->cpu);
-+	u32 threshold = cap - (cap >> 2);
-+
-+	if (util > threshold)
-+		util = (cap + threshold) >> 1;
-+
-+	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_KVM_UTIL_HINT_FUNC_ID,
-+			     util, &hvc_res);
-+
-+	return hvc_res.a0;
-+}
-+
-+static unsigned int kvm_cpufreq_fast_switch(struct cpufreq_policy *policy,
-+		unsigned int target_freq)
-+{
-+	kvm_cpufreq_setutil_hyp(policy);
-+	return target_freq;
-+}
-+
-+static int kvm_cpufreq_target_index(struct cpufreq_policy *policy,
-+		unsigned int index)
-+{
-+	return kvm_cpufreq_setutil_hyp(policy);
-+}
-+
-+static const struct of_device_id kvm_cpufreq_match[] = {
-+	{ .compatible = "virtual,kvm-cpufreq"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, kvm_cpufreq_match);
-+
-+static int kvm_cpufreq_cpu_init(struct cpufreq_policy *policy)
-+{
-+	struct device *cpu_dev;
-+	struct cpufreq_frequency_table	*table;
-+	int num_entries;
-+
-+	cpu_dev = get_cpu_device(policy->cpu);
-+	if (!cpu_dev) {
-+		pr_err("%s: failed to get cpu%d device\n", __func__,
-+		       policy->cpu);
-+		return -ENODEV;
-+	}
-+
-+	num_entries = kvm_cpufreq_get_freqtbl_num_entries(policy->cpu);
-+	if (num_entries == -ENODEV)
-+		return -ENODEV;
-+
-+	table = kcalloc(num_entries, sizeof(*table), GFP_KERNEL);
-+	if (!table)
-+		return -ENOMEM;
-+
-+	table[num_entries-1].frequency = CPUFREQ_TABLE_END;
-+
-+	if (kvm_cpufreq_populate_freqtbl(table, policy->cpu))
-+		return -ENODEV;
-+
-+	policy->freq_table = table;
-+	policy->dvfs_possible_from_any_cpu = false;
-+	policy->fast_switch_possible = true;
-+	policy->transition_delay_us = 1;
-+
-+	/*
-+	 * Only takes effect if another FIE source such as AMUs
-+	 * have not been registered.
-+	 */
-+	topology_set_scale_freq_source(&kvm_sfd, policy->cpus);
-+
-+	return 0;
-+}
-+
-+static int kvm_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-+{
-+	kfree(policy->freq_table);
-+	return 0;
-+}
-+
-+static int kvm_cpufreq_online(struct cpufreq_policy *policy)
-+{
-+	/* Nothing to restore. */
-+	return 0;
-+}
-+
-+static int kvm_cpufreq_offline(struct cpufreq_policy *policy)
-+{
-+	/* Dummy offline() to avoid exit() being called and freeing resources. */
-+	return 0;
-+}
-+
-+static struct cpufreq_driver cpufreq_kvm_driver = {
-+	.name		= "kvm-cpufreq",
-+	.init		= kvm_cpufreq_cpu_init,
-+	.exit		= kvm_cpufreq_cpu_exit,
-+	.online         = kvm_cpufreq_online,
-+	.offline        = kvm_cpufreq_offline,
-+	.verify		= cpufreq_generic_frequency_table_verify,
-+	.target_index	= kvm_cpufreq_target_index,
-+	.fast_switch	= kvm_cpufreq_fast_switch,
-+	.attr		= cpufreq_generic_attr,
-+};
-+
-+static int kvm_cpufreq_driver_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+
-+	ret = cpufreq_register_driver(&cpufreq_kvm_driver);
-+	if (ret) {
-+		dev_err(&pdev->dev, "KVM CPUFreq driver failed to register: %d\n", ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(&pdev->dev, "KVM CPUFreq driver initialized\n");
-+	return 0;
-+}
-+
-+static int kvm_cpufreq_driver_remove(struct platform_device *pdev)
-+{
-+	cpufreq_unregister_driver(&cpufreq_kvm_driver);
-+	return 0;
-+}
-+
-+static struct platform_driver kvm_cpufreq_driver = {
-+	.probe = kvm_cpufreq_driver_probe,
-+	.remove = kvm_cpufreq_driver_remove,
-+	.driver = {
-+		.name = "kvm-cpufreq",
-+		.of_match_table = kvm_cpufreq_match,
-+	},
-+};
-+
-+static int __init kvm_cpufreq_init(void)
-+{
-+	return platform_driver_register(&kvm_cpufreq_driver);
-+}
-+postcore_initcall(kvm_cpufreq_init);
-+
-+static void __exit kvm_cpufreq_exit(void)
-+{
-+	platform_driver_unregister(&kvm_cpufreq_driver);
-+}
-+module_exit(kvm_cpufreq_exit);
-+
-+MODULE_DESCRIPTION("KVM cpufreq driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index d8c346fcdf52..bd38aa32a57c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2303,6 +2303,7 @@ static inline bool owner_on_cpu(struct task_struct *owner)
- 
- /* Returns effective CPU energy utilization, as seen by the scheduler */
- unsigned long sched_cpu_util(int cpu);
-+unsigned long sched_cpu_util_freq(int cpu);
- #endif /* CONFIG_SMP */
- 
- #ifdef CONFIG_RSEQ
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 7700ef5610c1..dd46f4cc629b 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7421,6 +7421,12 @@ unsigned long sched_cpu_util(int cpu)
- {
- 	return effective_cpu_util(cpu, cpu_util_cfs(cpu), ENERGY_UTIL, NULL);
- }
-+
-+unsigned long sched_cpu_util_freq(int cpu)
-+{
-+	return effective_cpu_util(cpu, cpu_util_cfs(cpu), FREQUENCY_UTIL, NULL);
-+}
-+
- #endif /* CONFIG_SMP */
- 
- /**
--- 
-2.40.0.348.gf938b09366-goog
+> > >
+> > > Is CPUidle enabled before setting the OSI mode. I see only that can c=
+ause
+> > > issue as we don't use CPU_DEFAULT_SUSPEND. If idle is not yet enabled=
+, it
+> > > shouldn't be a problem.
+> >
+> > Sudeep, you may very well be correct here. Nevertheless, it looks like
+> > the current public TF-A implementation doesn't work exactly like this,
+> > as it reports an error in Maulik's case. We should fix it too, I
+> > think.
+> >
+> > Although, to me it doesn't really matter as I think $subject patch
+> > makes sense anyway. It's always nice to simplify code when it's
+> > possible.
+> >
+>
+> Agreed, I don't have any objection to the change. The wording the message
+> worried me and wanted to check if there are any other issues because of t=
+his.
+> As such it doesn't look like there are but the commit message needs to be
+> updated as it gives a different impression/understanding.
 
+I think the commit message is accurate and we can keep it as is.
+
+Best regards,
+Wing
+
+>
+> --
+> Regards,
+> Sudeep
