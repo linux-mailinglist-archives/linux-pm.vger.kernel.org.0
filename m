@@ -2,259 +2,408 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0278E6D1DE3
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 12:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F17F6D1E1A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 12:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjCaKWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 06:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S230151AbjCaKgK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 06:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCaKVR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 06:21:17 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69A02D44;
-        Fri, 31 Mar 2023 03:18:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UfA5yCBEbbAERPPaGzS08KoZu8IMA370vYl+5/uYD09HZ2J1LvwEiaUAsGIRm1IGExc4kxrELlBin9lcb8jn3BQTZak6lnQLkze4Mn+kGWE+mYYmzWM3Yd4tbClHfJAamZWG1xBnI22SDFMhZpM+xp23btoRQplpYbC8s8jg4tu6L3wdjBMCpYqlvu4WWLuIKcQmWo6s+w1YJ2/Gi2XCKc568rN7qdrt/ADHij5C9gq9hhmwNuUriaYNWrgrsFOfLeqVygF/hLVnqtSPCTutVQ5locl/T/K82E16ZOyGtaiLlp8b75TV/hWtYgm+JLfy5HOGfIUXEGAtXzE5l9huYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0zs6kRUG3GDOldgYyvK7ZjTymV1riXpxbU5xMrJODhE=;
- b=Z7RVaz7EtPHdSN8Lij7g7nsj1OiSN5twBJu3H0/r9lhOh3n0BCywxYxe/OX4JlgRK9FDgP3whNbsTrQ7L9qP40BKcaoqU5Sv/CQD21dsbYTAIZNk0WzeO7exZaSNkHUKyQ1OcVZbFJB8LD4Ij1KfpZEbGcCeUYh/U1SjcCzpwcU2I0RC1ZQajVX5U8JL8YUI3s6Dik76kAnDu0Uyfw04UfouJr67mHwxUEMuDrO0y6iisjIJ0DHCh7RtgA06I2FdHAX9Wb50qjSXsZHSX19IdtvtLBck1cKJZYC4Aok36H4k3aGLi8exofnwKr1toPOkq0rQQonO3/4QiU6uSYbhbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0zs6kRUG3GDOldgYyvK7ZjTymV1riXpxbU5xMrJODhE=;
- b=IxJiIMJ8RYro4XWJECj8K6vhrN0o8w2XbenK/orfTyqamuR5m3kvpT7N+t1mbtppWkDJG6goRHfP4Yxes40VOvOxE50hF0yXwoVZlV3rZ/5e23uAIdgQ3CozlX/2dJWODN5rtuRDUWGVDpfzczRXCjN2b1b0aC5/mV+QtnN2EGw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by BY1PR12MB8446.namprd12.prod.outlook.com (2603:10b6:a03:52d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.24; Fri, 31 Mar
- 2023 10:18:45 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6254.022; Fri, 31 Mar 2023
- 10:18:45 +0000
-Date:   Fri, 31 Mar 2023 15:48:28 +0530
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     viresh.kumar@linaro.org, ray.huang@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Kardashevskiy <aik@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Subject: Re: [PATCH] amd-pstate: Fix amd_pstate mode switch
-Message-ID: <ZCazdI9puSXLd0D4@bhagirati.amd.com>
-References: <20230330141314.1364083-1-wyes.karny@amd.com>
- <CAJZ5v0jxwuAnTVdnThGmHmptB7qeKc34-keUOdHcugeADYSL+w@mail.gmail.com>
- <ZCZ5zjw+O3gS6trx@bhagirati.amd.com>
- <CAJZ5v0iwmvnTFVKhox11gKxM8UBR+=748zPB0tr_O5mPBbkpiA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iwmvnTFVKhox11gKxM8UBR+=748zPB0tr_O5mPBbkpiA@mail.gmail.com>
-X-ClientProxiedBy: PN2PR01CA0205.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::12) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        with ESMTP id S229894AbjCaKgJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 06:36:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059176585;
+        Fri, 31 Mar 2023 03:36:06 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-213-136.ewe-ip-backbone.de [91.248.213.136])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 117B86600357;
+        Fri, 31 Mar 2023 11:36:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680258965;
+        bh=6gLxzw85mRLOJzG01mRch9rXA1jFQi0Sl2YPQQ0QA1o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T6RArj34SKOA3VU1/ngSnib2dDR5pwZ/M4t78XN4LfST7bpdrIAcP5L8rRdGQpHbZ
+         +6o6AKeLI14XAd0nNAVJxRJnpf+6k3/EsTIIBcIlLP1En48+0ne5aNsplp4vGq6oQ1
+         1pBpxyxhxclxRT+30IfPmclnXM5vlCR711D+PPe5XWdwewlKKl2rkK0Gjbz/YAUmJT
+         eahqOrhh66Cj0AFMW9cD9ApjqYCjWb0mVOlyumx7uQ8ynYS1AAslOBsZmAKOPTHNhe
+         clw5qEsIqBdT0Y+gLw5WHCcU2BJpYwaSXKuv8hJnvvZkyd+M8a+ERzccCiT58UJ2F8
+         BD8+s6FC5Lbvg==
+Received: by mercury (Postfix, from userid 1000)
+        id 5224810626B9; Fri, 31 Mar 2023 12:36:02 +0200 (CEST)
+Date:   Fri, 31 Mar 2023 12:36:02 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC 16/20] power: reset: oxnas-restart: remove obsolete
+ restart driver
+Message-ID: <20230331103602.k2cpzjwnradftxu3@mercury.elektranox.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <20230331-topic-oxnas-upstream-remove-v1-16-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|BY1PR12MB8446:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3093516b-8cd5-495f-e405-08db31d14f3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5WCkbwpgA5hgReKzL3aeGgGWtx77OvTRyHfwkisJjGwQGLHCd06ETcLNG5/xLdtutD1A32KZlGrJiOVvHX/PE/35dZcKcFOYu/chYsj+ODh25YAMuxLx0OCtAazQyZMB7qQtokK9qCYv6MnE3ny9GBupppg2GFc4/whO6FGHFhdXk1dIMs+RzUheHyO9U5PVQOLfZQxbv6F1QkwKxrkV7UR0Qwfwt8b8cZa5HiszVWzImbh6upJj4GKKFxhlO8HRbOEbEHGqKYqjWUrSjs12PJilJhTwxgc6WJBFsbR6YHpGtWZRSqVuor0r1HkPcp0/LXpmu2zRudYZ3dQ8L4XUV8AKa5s9XoRrLpzCpPocW1uKqXc9h3kfftxCoNLf8t+Y3hHsfGUWvjwdn7m8RkM1/UpSwiWXYQAudTnTP/iedpWzjeZw5W4t6S1YPBVp7QG6FsdJcPF7XtEIehC5ZMFJpeBDquRJcICHaSIqqoSARBSP2+94u/+ghX1ahfsUr9Z9Co6vClaWq4Zb4945AgGxoR21dt4LBf01MMIzhlpbzzY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(366004)(136003)(451199021)(44832011)(6666004)(83380400001)(26005)(6512007)(6506007)(53546011)(186003)(86362001)(38100700002)(8936002)(5660300002)(478600001)(966005)(6486002)(54906003)(66556008)(316002)(6916009)(4326008)(8676002)(41300700001)(66476007)(66946007)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFJxTGdTMUg4aVhUdEF4Y0pIQmZKamVKQWxrWVRlZWlobUZnY3FUc0NjcWhW?=
- =?utf-8?B?REFudk5EQ081cHVPWkZLbUJPVnJhK1B2YjZWaWlOV3AvYm12OWhIVjJBay9i?=
- =?utf-8?B?Z1FtLy9TeVQvUHF6aW9YMktESllPVXdqQ1NUSnhHYzdJNytpWUNsMCt6UHV5?=
- =?utf-8?B?bjRVV2V2Zit1V2VWVjJBWlQwUDhDZFZqVy9BTkdVYmg0NEp5MFI3N0hzcXVI?=
- =?utf-8?B?UkcyRDh6ZE5mN0JFNnI1dUVrWU44QjNMaGhCZjY2ZDlVbDd2UGdqTGhCN0t3?=
- =?utf-8?B?VHJZbWJDNWJGVWFyOHIvMk03NnlERmUzZFllS1MrRkNrY1VQcEsvamhGT2ZJ?=
- =?utf-8?B?Q2RQbEgzSklLQm9tT0w1Y081VE5BUmRBMUYzQTZQRHNPbVozN2hjblJqVEho?=
- =?utf-8?B?WjlES2l1UVVrVUF3djZDM2V2MGl1UTNyQ0FDSWhEZmtLWWlEWW9KWllwWllX?=
- =?utf-8?B?RWtpVmxVUFYyNnVSTCtLekdJM0llLzFBRUV3N2tld1dVRjNCME15VG16UHNt?=
- =?utf-8?B?VVJTYnR5bjBFU0RwaDljYmVocEtaRkhyMXlkTEU0b1lmVUxHaWpYTkJId21U?=
- =?utf-8?B?ZmJnT1oyZThSRjAxVEsvbVFYaGlFaUV1emRZakp5MnpZREV0elRrYlFQMVlX?=
- =?utf-8?B?S1hTUDJVRkg2UlFsR1dDR0JXQ1ZHSCtvM3hDdlF6Qm9URFpQZStEVzVURmxC?=
- =?utf-8?B?SWxBSnJwK0tYNEZkdzVoNzRlUDNBSzVLaTl3SExRUjA2d3hhbXI5dFNGK1ZR?=
- =?utf-8?B?Z1cvbVdpZWZyMGZQQ3o0TTNBTVdxaXNZY1BYS0g5SCsrWS8xMm9QNHU2dlB6?=
- =?utf-8?B?ekJDejJpQkZIZmJENmVJQ291UFBaSk9uR3ZLZDV4WExDTnc3YlA2RVZzTWkw?=
- =?utf-8?B?WENLRlhkTndQZVZJNzUxZ1k5MWxHbDJJZDdXSFJHS0VvcGZLL1ZReFpSK3RL?=
- =?utf-8?B?cUZqMk9KN0g1YzVLUk9GYS9XRlRwTFRrbjBxNTA1T2ZQZnhrZm1iQnRaSCs0?=
- =?utf-8?B?RVprS1ZWZ2Z3MVZXSnU1WWNnZHpHS3c4QmRMdC9QcDF5UDlaSFhhUkZwYnR6?=
- =?utf-8?B?em9Vdkl5ZlRjNmlweUttdWxhRHJtMUx0djJIYXZCQ3lyUWpHbEtEMTBrSU4x?=
- =?utf-8?B?RmdDQ3B3QW8rcUhENmJPYUZnNFUrR1ZORy8rcmNNV2ViK1c4L0FzamVmNlNI?=
- =?utf-8?B?M2ViOEcxMURsZ0wxQVFNNURVVVIxc1ZlMUZIcDlHbVhUd29DbmphYlh6YTZK?=
- =?utf-8?B?dGtWMS9VTGhOaWlTQXpiYy85WlB6cUw4elNLUzRsUDBqSXFxYW03aUt5WEpz?=
- =?utf-8?B?SXUwaG96Q3FZWGFtaFBsVml5M3lFWjRvaEdseEhGQnA2WTJrbS9OUU83bDVy?=
- =?utf-8?B?Nk5lZzAxbStJeVRXVlIvK1QySEtnVkdZbUEzYjVSd1NqUXdUa1dZZ0tMejRS?=
- =?utf-8?B?bWo3Q2xIN2I3T2x6WFUxcXR3UlM3V1oxaklhUHd0bG5OWWpGYlFhQkZYRGxu?=
- =?utf-8?B?NVR2SFJwTGRLMkxYWlNFc3dTRUoySW9jMDBpUE1LTTlDMVVYNlkzbFdrMUl2?=
- =?utf-8?B?UXBsMFVYVlVzZUhuZ0Q3TnVvYVF4OElkUE5Ecml2TitHZ3FsT0Zlc0prSlIv?=
- =?utf-8?B?N09lZDBPcXVTb0hmeUZkMElMZW5sVjZLeGJwVWFBVFFtWHloUzVzYVAzU2cy?=
- =?utf-8?B?WkoxN1kzbkJtSnI0VHdFTWRzNHpmOGFLcW82RGpKeG9nY0UwaWd1MGhMS2FO?=
- =?utf-8?B?cmpGM0IyT3BXVzFLTDlReVg2TnVZaExIRExpV3Nyem8xakVpenpXMXgzSVpR?=
- =?utf-8?B?cXk1T1MxTGYxaWpqREhLSEROem5PYkJRR1piU0puT0F2dUhoSGJPY1NQU0ZM?=
- =?utf-8?B?Z25XM3Z0NFlRNGxzblR6TzZuS2xicGw1WjZJNHVzRVI1b1ozQkJkampxdVkw?=
- =?utf-8?B?WURKTUlXVnU5cWVQUzYzVE9QMEorQlVOakMrcjNVNzFYMksvNmNTSTdyK09R?=
- =?utf-8?B?R2JOSGpSMjdDZWYyNmJOaXdUWGZ3MXdDSXh3WXBBcm9LMzVJQlRSR05vb3gv?=
- =?utf-8?B?UjlyYmt6aXBhQkR3dTV2blhOWGY3ZlFTRC9NYzYrMnZDRy9MMmlJT1NTQkJ6?=
- =?utf-8?Q?7nvDt+cql7+sBVN4hIuFePkig?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3093516b-8cd5-495f-e405-08db31d14f3f
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 10:18:45.2235
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7yE1NrN05OaKdrdfD+BHW/dLakS1db58hXn5tAsHtaaB2dgzlhit12tVJdSvvznl2CMK76rvQYgOhAe+zgzOnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR12MB8446
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nn5ipiarsss3x6zd"
+Content-Disposition: inline
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-16-5bd58fd1dd1f@linaro.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31 Mar 11:11, Rafael J. Wysocki wrote:
-> On Fri, Mar 31, 2023 at 8:12 AM Wyes Karny <wyes.karny@amd.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On 30 Mar 20:19, Rafael J. Wysocki wrote:
-> > > On Thu, Mar 30, 2023 at 4:13 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> > > >
-> > > > amd_pstate mode can be changed by writing the mode name to the `status`
-> > > > sysfs. But some combinations are not working. Fix this issue by taking
-> > > > care of the edge cases.
-> > > >
-> > > > Before the fix the mode change combination test fails:
-> > > >
-> > > >  #./pst_test.sh
-> > > > Test passed: from: disable, to
-> > > > Test passed: from: disable, to disable
-> > > > Test failed: 1, From mode: disable, to mode: passive
-> > > > Test failed: 1, From mode: disable, to mode: active
-> > > > Test failed: 1, From mode: passive, to mode: active
-> > > > Test passed: from: passive, to disable
-> > > > Test failed: 1, From mode: passive, to mode: passive
-> > > > Test failed: 1, From mode: passive, to mode: active
-> > > > Test failed: 1, From mode: active, to mode: active
-> > > > Test passed: from: active, to disable
-> > > > Test failed: 1, From mode: active, to mode: passive
-> > > > Test failed: 1, From mode: active, to mode: active
-> > > >
-> > > > After the fix test passes:
-> > > >
-> > > >  #./pst_test.sh
-> > > > Test passed: from: disable, to
-> > > > Test passed: from: disable, to disable
-> > > > Test passed: from: disable, to passive
-> > > > Test passed: from: disable, to active
-> > > > Test passed: from: passive, to active
-> > > > Test passed: from: passive, to disable
-> > > > Test passed: from: passive, to passive
-> > > > Test passed: from: passive, to active
-> > > > Test passed: from: active, to active
-> > > > Test passed: from: active, to disable
-> > > > Test passed: from: active, to passive
-> > > > Test passed: from: active, to active
-> > > >
-> > > > Fixes: abd61c08ef349 ("cpufreq: amd-pstate: add driver working mode switch support")
-> > > >
-> > > > Acked-by: Huang Rui <ray.huang@amd.com>
-> > > > Reviewed-by: Alexey Kardashevskiy <aik@amd.com>
-> > > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > > >
-> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > Cc: Mario Limonciello <mario.limonciello@amd.com>
-> > > > Cc: Perry Yuan <Perry.Yuan@amd.com>
-> > >
-> > > This is all fine, but you need to tell me how it interacts with the
-> > > amd-pstate changes in linux-next.
-> > >
-> > > Does it affect the code in linux-next at all or is it only for 6.3-rc?
-> > >
-> >
-> > This is only for 6.3-rc.
-> > The commit 3ca7bc818d8c ("cpufreq: amd-pstate: Add guided mode control
-> > support via sysfs") in linux-next may not apply cleanly after this fix.
-> > Please let me know if I need to rebase and send the guided mode patches [1].
-> >
-> > [1]: https://lore.kernel.org/linux-pm/20230307112740.132338-1-wyes.karny@amd.com/
-> 
-> Well, instead, you please let me know how to resolve the merge
-> conflict between the patch below and your series.
-> 
-> Can I simply assume that the code added by commit 3ca7bc818d8c
-> replaces the code modified by the $subject patch?
 
-Yes, commit 3ca7bc818d8c replaces the whole `amd_pstate_update_status`
-function with new implementation.
+--nn5ipiarsss3x6zd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > > > ---
-> > > >  drivers/cpufreq/amd-pstate.c | 18 ++++++++----------
-> > > >  1 file changed, 8 insertions(+), 10 deletions(-)
-> > > >
-> > > > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > > > index 73c7643b2697..8dd46fad151e 100644
-> > > > --- a/drivers/cpufreq/amd-pstate.c
-> > > > +++ b/drivers/cpufreq/amd-pstate.c
-> > > > @@ -840,22 +840,20 @@ static int amd_pstate_update_status(const char *buf, size_t size)
-> > > >
-> > > >         switch(mode_idx) {
-> > > >         case AMD_PSTATE_DISABLE:
-> > > > -               if (!current_pstate_driver)
-> > > > -                       return -EINVAL;
-> > > > -               if (cppc_state == AMD_PSTATE_ACTIVE)
-> > > > -                       return -EBUSY;
-> > > > -               cpufreq_unregister_driver(current_pstate_driver);
-> > > > -               amd_pstate_driver_cleanup();
-> > > > +               if (current_pstate_driver) {
-> > > > +                       cpufreq_unregister_driver(current_pstate_driver);
-> > > > +                       amd_pstate_driver_cleanup();
-> > > > +               }
-> > > >                 break;
-> > > >         case AMD_PSTATE_PASSIVE:
-> > > >                 if (current_pstate_driver) {
-> > > >                         if (current_pstate_driver == &amd_pstate_driver)
-> > > >                                 return 0;
-> > > >                         cpufreq_unregister_driver(current_pstate_driver);
-> > > > -                       cppc_state = AMD_PSTATE_PASSIVE;
-> > > > -                       current_pstate_driver = &amd_pstate_driver;
-> > > >                 }
-> > > >
-> > > > +               current_pstate_driver = &amd_pstate_driver;
-> > > > +               cppc_state = AMD_PSTATE_PASSIVE;
-> > > >                 ret = cpufreq_register_driver(current_pstate_driver);
-> > > >                 break;
-> > > >         case AMD_PSTATE_ACTIVE:
-> > > > @@ -863,10 +861,10 @@ static int amd_pstate_update_status(const char *buf, size_t size)
-> > > >                         if (current_pstate_driver == &amd_pstate_epp_driver)
-> > > >                                 return 0;
-> > > >                         cpufreq_unregister_driver(current_pstate_driver);
-> > > > -                       current_pstate_driver = &amd_pstate_epp_driver;
-> > > > -                       cppc_state = AMD_PSTATE_ACTIVE;
-> > > >                 }
-> > > >
-> > > > +               current_pstate_driver = &amd_pstate_epp_driver;
-> > > > +               cppc_state = AMD_PSTATE_ACTIVE;
-> > > >                 ret = cpufreq_register_driver(current_pstate_driver);
-> > > >                 break;
-> > > >         default:
-> > > > --
-> > > > 2.34.1
-> > > >
+Hi,
+
+On Fri, Mar 31, 2023 at 10:34:54AM +0200, Neil Armstrong wrote:
+> Due to lack of maintainance and stall of development for a few years now,
+> and since no new features will ever be added upstream, remove support
+> for OX810 and OX820 restart feature.
+>=20
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/power/reset/Kconfig         |   7 --
+>  drivers/power/reset/Makefile        |   1 -
+>  drivers/power/reset/oxnas-restart.c | 233 ------------------------------=
+------
+>  3 files changed, 241 deletions(-)
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 8c87eeda0fec..cc734c1fe4c0 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -148,13 +148,6 @@ config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
+>  	help
+>  	  This driver supports Power off for Odroid Go Ultra device.
+> =20
+> -config POWER_RESET_OXNAS
+> -	bool "OXNAS SoC restart driver"
+> -	depends on ARCH_OXNAS
+> -	default MACH_OX820
+> -	help
+> -	  Restart support for OXNAS/PLXTECH OX820 SoC.
+> -
+>  config POWER_RESET_PIIX4_POWEROFF
+>  	tristate "Intel PIIX4 power-off driver"
+>  	depends on PCI
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index d763e6735ee3..a95d1bd275d1 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -14,7 +14,6 @@ obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
+>  obj-$(CONFIG_POWER_RESET_LINKSTATION) +=3D linkstation-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
+> -obj-$(CONFIG_POWER_RESET_OXNAS) +=3D oxnas-restart.o
+>  obj-$(CONFIG_POWER_RESET_QCOM_PON) +=3D qcom-pon.o
+>  obj-$(CONFIG_POWER_RESET_OCELOT_RESET) +=3D ocelot-reset.o
+>  obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) +=3D odroid-go-ultra-=
+poweroff.o
+> diff --git a/drivers/power/reset/oxnas-restart.c b/drivers/power/reset/ox=
+nas-restart.c
+> deleted file mode 100644
+> index 13090bec058a..000000000000
+> --- a/drivers/power/reset/oxnas-restart.c
+> +++ /dev/null
+> @@ -1,233 +0,0 @@
+> -// SPDX-License-Identifier: (GPL-2.0)
+> -/*
+> - * oxnas SoC reset driver
+> - * based on:
+> - * Microsemi MIPS SoC reset driver
+> - * and ox820_assert_system_reset() written by Ma Hajun <mahaijuns@gmail.=
+com>
+> - *
+> - * Copyright (c) 2013 Ma Hajun <mahaijuns@gmail.com>
+> - * Copyright (c) 2017 Microsemi Corporation
+> - * Copyright (c) 2020 Daniel Golle <daniel@makrotopia.org>
+> - */
+> -#include <linux/delay.h>
+> -#include <linux/io.h>
+> -#include <linux/notifier.h>
+> -#include <linux/mfd/syscon.h>
+> -#include <linux/of_address.h>
+> -#include <linux/of_device.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/reboot.h>
+> -#include <linux/regmap.h>
+> -
+> -/* bit numbers of reset control register */
+> -#define OX820_SYS_CTRL_RST_SCU                0
+> -#define OX820_SYS_CTRL_RST_COPRO              1
+> -#define OX820_SYS_CTRL_RST_ARM0               2
+> -#define OX820_SYS_CTRL_RST_ARM1               3
+> -#define OX820_SYS_CTRL_RST_USBHS              4
+> -#define OX820_SYS_CTRL_RST_USBHSPHYA          5
+> -#define OX820_SYS_CTRL_RST_MACA               6
+> -#define OX820_SYS_CTRL_RST_MAC                OX820_SYS_CTRL_RST_MACA
+> -#define OX820_SYS_CTRL_RST_PCIEA              7
+> -#define OX820_SYS_CTRL_RST_SGDMA              8
+> -#define OX820_SYS_CTRL_RST_CIPHER             9
+> -#define OX820_SYS_CTRL_RST_DDR                10
+> -#define OX820_SYS_CTRL_RST_SATA               11
+> -#define OX820_SYS_CTRL_RST_SATA_LINK          12
+> -#define OX820_SYS_CTRL_RST_SATA_PHY           13
+> -#define OX820_SYS_CTRL_RST_PCIEPHY            14
+> -#define OX820_SYS_CTRL_RST_STATIC             15
+> -#define OX820_SYS_CTRL_RST_GPIO               16
+> -#define OX820_SYS_CTRL_RST_UART1              17
+> -#define OX820_SYS_CTRL_RST_UART2              18
+> -#define OX820_SYS_CTRL_RST_MISC               19
+> -#define OX820_SYS_CTRL_RST_I2S                20
+> -#define OX820_SYS_CTRL_RST_SD                 21
+> -#define OX820_SYS_CTRL_RST_MACB               22
+> -#define OX820_SYS_CTRL_RST_PCIEB              23
+> -#define OX820_SYS_CTRL_RST_VIDEO              24
+> -#define OX820_SYS_CTRL_RST_DDR_PHY            25
+> -#define OX820_SYS_CTRL_RST_USBHSPHYB          26
+> -#define OX820_SYS_CTRL_RST_USBDEV             27
+> -#define OX820_SYS_CTRL_RST_ARMDBG             29
+> -#define OX820_SYS_CTRL_RST_PLLA               30
+> -#define OX820_SYS_CTRL_RST_PLLB               31
+> -
+> -/* bit numbers of clock control register */
+> -#define OX820_SYS_CTRL_CLK_COPRO              0
+> -#define OX820_SYS_CTRL_CLK_DMA                1
+> -#define OX820_SYS_CTRL_CLK_CIPHER             2
+> -#define OX820_SYS_CTRL_CLK_SD                 3
+> -#define OX820_SYS_CTRL_CLK_SATA               4
+> -#define OX820_SYS_CTRL_CLK_I2S                5
+> -#define OX820_SYS_CTRL_CLK_USBHS              6
+> -#define OX820_SYS_CTRL_CLK_MACA               7
+> -#define OX820_SYS_CTRL_CLK_MAC                OX820_SYS_CTRL_CLK_MACA
+> -#define OX820_SYS_CTRL_CLK_PCIEA              8
+> -#define OX820_SYS_CTRL_CLK_STATIC             9
+> -#define OX820_SYS_CTRL_CLK_MACB               10
+> -#define OX820_SYS_CTRL_CLK_PCIEB              11
+> -#define OX820_SYS_CTRL_CLK_REF600             12
+> -#define OX820_SYS_CTRL_CLK_USBDEV             13
+> -#define OX820_SYS_CTRL_CLK_DDR                14
+> -#define OX820_SYS_CTRL_CLK_DDRPHY             15
+> -#define OX820_SYS_CTRL_CLK_DDRCK              16
+> -
+> -/* Regmap offsets */
+> -#define OX820_CLK_SET_REGOFFSET               0x2c
+> -#define OX820_CLK_CLR_REGOFFSET               0x30
+> -#define OX820_RST_SET_REGOFFSET               0x34
+> -#define OX820_RST_CLR_REGOFFSET               0x38
+> -#define OX820_SECONDARY_SEL_REGOFFSET         0x14
+> -#define OX820_TERTIARY_SEL_REGOFFSET          0x8c
+> -#define OX820_QUATERNARY_SEL_REGOFFSET        0x94
+> -#define OX820_DEBUG_SEL_REGOFFSET             0x9c
+> -#define OX820_ALTERNATIVE_SEL_REGOFFSET       0xa4
+> -#define OX820_PULLUP_SEL_REGOFFSET            0xac
+> -#define OX820_SEC_SECONDARY_SEL_REGOFFSET     0x100014
+> -#define OX820_SEC_TERTIARY_SEL_REGOFFSET      0x10008c
+> -#define OX820_SEC_QUATERNARY_SEL_REGOFFSET    0x100094
+> -#define OX820_SEC_DEBUG_SEL_REGOFFSET         0x10009c
+> -#define OX820_SEC_ALTERNATIVE_SEL_REGOFFSET   0x1000a4
+> -#define OX820_SEC_PULLUP_SEL_REGOFFSET        0x1000ac
+> -
+> -struct oxnas_restart_context {
+> -	struct regmap *sys_ctrl;
+> -	struct notifier_block restart_handler;
+> -};
+> -
+> -static int ox820_restart_handle(struct notifier_block *this,
+> -				 unsigned long mode, void *cmd)
+> -{
+> -	struct oxnas_restart_context *ctx =3D container_of(this, struct
+> -							oxnas_restart_context,
+> -							restart_handler);
+> -	u32 value;
+> -
+> -	/*
+> -	 * Assert reset to cores as per power on defaults
+> -	 * Don't touch the DDR interface as things will come to an impromptu
+> -	 * stop NB Possibly should be asserting reset for PLLB, but there are
+> -	 * timing concerns here according to the docs
+> -	 */
+> -	value =3D BIT(OX820_SYS_CTRL_RST_COPRO)		|
+> -		BIT(OX820_SYS_CTRL_RST_USBHS)		|
+> -		BIT(OX820_SYS_CTRL_RST_USBHSPHYA)	|
+> -		BIT(OX820_SYS_CTRL_RST_MACA)		|
+> -		BIT(OX820_SYS_CTRL_RST_PCIEA)		|
+> -		BIT(OX820_SYS_CTRL_RST_SGDMA)		|
+> -		BIT(OX820_SYS_CTRL_RST_CIPHER)		|
+> -		BIT(OX820_SYS_CTRL_RST_SATA)		|
+> -		BIT(OX820_SYS_CTRL_RST_SATA_LINK)	|
+> -		BIT(OX820_SYS_CTRL_RST_SATA_PHY)	|
+> -		BIT(OX820_SYS_CTRL_RST_PCIEPHY)		|
+> -		BIT(OX820_SYS_CTRL_RST_STATIC)		|
+> -		BIT(OX820_SYS_CTRL_RST_UART1)		|
+> -		BIT(OX820_SYS_CTRL_RST_UART2)		|
+> -		BIT(OX820_SYS_CTRL_RST_MISC)		|
+> -		BIT(OX820_SYS_CTRL_RST_I2S)		|
+> -		BIT(OX820_SYS_CTRL_RST_SD)		|
+> -		BIT(OX820_SYS_CTRL_RST_MACB)		|
+> -		BIT(OX820_SYS_CTRL_RST_PCIEB)		|
+> -		BIT(OX820_SYS_CTRL_RST_VIDEO)		|
+> -		BIT(OX820_SYS_CTRL_RST_USBHSPHYB)	|
+> -		BIT(OX820_SYS_CTRL_RST_USBDEV);
+> -
+> -	regmap_write(ctx->sys_ctrl, OX820_RST_SET_REGOFFSET, value);
+> -
+> -	/* Release reset to cores as per power on defaults */
+> -	regmap_write(ctx->sys_ctrl, OX820_RST_CLR_REGOFFSET,
+> -			BIT(OX820_SYS_CTRL_RST_GPIO));
+> -
+> -	/*
+> -	 * Disable clocks to cores as per power-on defaults - must leave DDR
+> -	 * related clocks enabled otherwise we'll stop rather abruptly.
+> -	 */
+> -	value =3D BIT(OX820_SYS_CTRL_CLK_COPRO)		|
+> -		BIT(OX820_SYS_CTRL_CLK_DMA)		|
+> -		BIT(OX820_SYS_CTRL_CLK_CIPHER)		|
+> -		BIT(OX820_SYS_CTRL_CLK_SD)		|
+> -		BIT(OX820_SYS_CTRL_CLK_SATA)		|
+> -		BIT(OX820_SYS_CTRL_CLK_I2S)		|
+> -		BIT(OX820_SYS_CTRL_CLK_USBHS)		|
+> -		BIT(OX820_SYS_CTRL_CLK_MAC)		|
+> -		BIT(OX820_SYS_CTRL_CLK_PCIEA)		|
+> -		BIT(OX820_SYS_CTRL_CLK_STATIC)		|
+> -		BIT(OX820_SYS_CTRL_CLK_MACB)		|
+> -		BIT(OX820_SYS_CTRL_CLK_PCIEB)		|
+> -		BIT(OX820_SYS_CTRL_CLK_REF600)		|
+> -		BIT(OX820_SYS_CTRL_CLK_USBDEV);
+> -
+> -	regmap_write(ctx->sys_ctrl, OX820_CLK_CLR_REGOFFSET, value);
+> -
+> -	/* Enable clocks to cores as per power-on defaults */
+> -
+> -	/* Set sys-control pin mux'ing as per power-on defaults */
+> -	regmap_write(ctx->sys_ctrl, OX820_SECONDARY_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_TERTIARY_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_QUATERNARY_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_DEBUG_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_ALTERNATIVE_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_PULLUP_SEL_REGOFFSET, 0);
+> -
+> -	regmap_write(ctx->sys_ctrl, OX820_SEC_SECONDARY_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_SEC_TERTIARY_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_SEC_QUATERNARY_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_SEC_DEBUG_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_SEC_ALTERNATIVE_SEL_REGOFFSET, 0);
+> -	regmap_write(ctx->sys_ctrl, OX820_SEC_PULLUP_SEL_REGOFFSET, 0);
+> -
+> -	/*
+> -	 * No need to save any state, as the ROM loader can determine whether
+> -	 * reset is due to power cycling or programatic action, just hit the
+> -	 * (self-clearing) CPU reset bit of the block reset register
+> -	 */
+> -	value =3D
+> -		BIT(OX820_SYS_CTRL_RST_SCU) |
+> -		BIT(OX820_SYS_CTRL_RST_ARM0) |
+> -		BIT(OX820_SYS_CTRL_RST_ARM1);
+> -
+> -	regmap_write(ctx->sys_ctrl, OX820_RST_SET_REGOFFSET, value);
+> -
+> -	pr_emerg("Unable to restart system\n");
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int ox820_restart_probe(struct platform_device *pdev)
+> -{
+> -	struct oxnas_restart_context *ctx;
+> -	struct regmap *sys_ctrl;
+> -	struct device *dev =3D &pdev->dev;
+> -	int err =3D 0;
+> -
+> -	sys_ctrl =3D syscon_node_to_regmap(pdev->dev.of_node);
+> -	if (IS_ERR(sys_ctrl))
+> -		return PTR_ERR(sys_ctrl);
+> -
+> -	ctx =3D devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+> -	if (!ctx)
+> -		return -ENOMEM;
+> -
+> -	ctx->sys_ctrl =3D sys_ctrl;
+> -	ctx->restart_handler.notifier_call =3D ox820_restart_handle;
+> -	ctx->restart_handler.priority =3D 192;
+> -	err =3D register_restart_handler(&ctx->restart_handler);
+> -	if (err)
+> -		dev_err(dev, "can't register restart notifier (err=3D%d)\n", err);
+> -
+> -	return err;
+> -}
+> -
+> -static const struct of_device_id ox820_restart_of_match[] =3D {
+> -	{ .compatible =3D "oxsemi,ox820-sys-ctrl" },
+> -	{}
+> -};
+> -
+> -static struct platform_driver ox820_restart_driver =3D {
+> -	.probe =3D ox820_restart_probe,
+> -	.driver =3D {
+> -		.name =3D "ox820-chip-reset",
+> -		.of_match_table =3D ox820_restart_of_match,
+> -	},
+> -};
+> -builtin_platform_driver(ox820_restart_driver);
+>=20
+> --=20
+> 2.34.1
+>=20
+
+--nn5ipiarsss3x6zd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQmt4YACgkQ2O7X88g7
++pqJzA/8CGVL0iQh94nUi0bcp3m8x6gWQZjujZuRsEK89y933fjMBL8ssJxqaGzl
+ddSbdFZrIVje9blwgWhD+eKSeAGUYm6QwGpQ8mLMnXW4Rm/qL/hlEGPEvJO/wzdn
+OR0AGgn/5E8zmD7DqCo8ZIYIAzE017KGcwlTjDa/VyXq7WbxYDwyB8lLK/NL88oo
+Agkq7u5KkKqDt3VtREBWdKYvS9O3wO6I6grvQ34N0D38g5qdDp/4xncSPYQS5jLI
+YxZ6D52yJvgrTncwsu3cB4lObBQye+hN/Nj2vkYrfaYrza+t5I/rzsQLq8yrcVv5
+jiC5xsQhZ3KjoEPI7tSiinaLAt1poc2SbNMSaAFh31RAVW/uqTU9jpZXsaLVThFU
+SmJB33O20B84AJp9He5wKVuUnYIz34FmctSdz3aKNrktmpqv3TcgwI7LJVUG2uDp
+BKeCTlU3bwA3f9P4xfirAE5rfZg3YaFgxFXFXryVQ2AyYLrbwZKdyxzgpoGUWwNZ
+6pFJ7o1opArBR/cMrN6ac1FqZXJa2UZFiYFjTDHGu2RDTCDfJnTWTmLnTopmmUno
+2e56Y3ue1P0rl1mNY+H31EWhbpOtKR4FS3OTuyTkUMwaO68o7Ja+g4VFevilErvm
+eUlNW4uTSA/5Rf0gfHUC1EA48ykYN+8u+FGelIcPQyCCK9LbCg8=
+=Q1vF
+-----END PGP SIGNATURE-----
+
+--nn5ipiarsss3x6zd--
