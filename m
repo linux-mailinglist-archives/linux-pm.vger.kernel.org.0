@@ -2,126 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9AC6D197E
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C906D19F5
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjCaIMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 04:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S231151AbjCaIeu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 04:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjCaIMP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:12:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7949461B4
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:12:14 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1pi9rc-00078K-Vo; Fri, 31 Mar 2023 10:12:01 +0200
-Message-ID: <809d5523-e0b4-cad4-f6ab-ddc0e4fe482d@pengutronix.de>
-Date:   Fri, 31 Mar 2023 10:11:58 +0200
+        with ESMTP id S231229AbjCaIes (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:34:48 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38255BAD
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:34:45 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id l12so21566336wrm.10
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680251684;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKmFDwBzmqKaD1W7wuLHbQZgTpJgWQagzC13l4DdTqw=;
+        b=ez7Y8DKhU9m8mENWYc8eLh3UjQj04JKUYpk8LZc0Cgj82lGXgAqKThXbmY29WwZFpa
+         8iJCKddXPmrHzPzXLQ682kWfEp0XTxPc6/GH5fWihQi5njtBGVCzQSKchgik6ZjPxGVs
+         LJ6kI8ENaL4ylviyHLejBooWU1vyhc5pUBM2V6BzXIypiwp1tF0C80ee0BcHRFohBjvs
+         PS3KjixZZ5L0SEv7mF4LYg/aatUGXQwxrjYjN3GBCSHubljOca4C/g7Smtoai9yEYKM2
+         MPuBgGNvstDtP1p1JijRIUW+SkbLI/c5/0B4ugSh+dx2vHET0l1a/8etg25rGkrvIHls
+         EkFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680251684;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKmFDwBzmqKaD1W7wuLHbQZgTpJgWQagzC13l4DdTqw=;
+        b=fNOmYwEL0VIMS1SiPdan2LqM0jYb9wrv0l9mKr/8XLdNzVB/UjcC0nN3cV4sHb3HFi
+         UsPQbLEBGrfOeWXFlAeJKrwtBqlB3SDKXFQwn+K2EbpP1Gpq7NFiLzGhZfQGhCxcp85c
+         NOYGP9pUHK3GkyJp3N6fFY/D63/tnk2XLUuMWCReVMrlR5Gf1QZAo/xxIkg3s5uYBZTE
+         BY7Uvud9M0u7oMcgnexe5lf2UK4zVA0VWNiGnfAYEXlHyOSO/lN/W96Tz0t6l/rl95K3
+         CUetULtwSOLmGNk6BvYbBNbwKz1/ss6Hs1zpC3xI2G1Al/wJYKIBp3wafoaSE33YorfF
+         uImQ==
+X-Gm-Message-State: AAQBX9cgPdgF938hOG017wyzg4qZYWe/9tAGtr3lYBgWzKeGY8+R3wFQ
+        CJnnldexzEK0KDqWeT7hft6b2w==
+X-Google-Smtp-Source: AKy350ZffcjiZSGBVm/JblhOGFpZodzn92ieAjz2v27srUZ+zaxOkeHyJPQUex2yEMscYYMGa2NW2w==
+X-Received: by 2002:a5d:58c9:0:b0:2cf:e34c:a229 with SMTP id o9-20020a5d58c9000000b002cfe34ca229mr22477632wrf.8.1680251684116;
+        Fri, 31 Mar 2023 01:34:44 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 01:34:43 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH RFC 00/20] ARM: oxnas support removal
+Date:   Fri, 31 Mar 2023 10:34:38 +0200
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
- ctrl
-Content-Language: en-US
-To:     Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        Greg Ungerer <gerg@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>
-Cc:     peng.fan@nxp.com,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
-        paul.elder@ideasonboard.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, djakov@kernel.org, shawnguo@kernel.org,
-        l.stach@pengutronix.de
-References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
- <20230327045037.593326-1-gerg@linux-m68k.org> <2678294.mvXUDI8C0e@steina-w>
- <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
- <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
- <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
- <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
- <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
- <20230328135100.rbmnfelphe7juhxo@pengutronix.de>
- <c368a0f8-41f0-69ac-04f4-459e5fc8b9d6@linux-m68k.org>
- <20230328151100.msl46qupstwplkgw@pengutronix.de>
- <792028b9-cd4c-4ff4-a7cb-e60c518aa573@kernel.org>
- <2924b1a62f126678870160bdbbf4e5d51aceb8d4.camel@ew.tq-group.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <2924b1a62f126678870160bdbbf4e5d51aceb8d4.camel@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAB6bJmQC/x2NwQqDMBAFf0X23AVNQLDXQj+g19JDjM+6oEnIq
+ gjivzf0OHOYOUmRBUr36qSMXVRiKNDcKvKTC1+wDIXJ1MbW1ja8xiSe4xGc8pZ0zXALZyxxB7v
+ WoBu6dgRApdA7BffZBT+VRtjmuciUMcrxX77p9XzQ57p+JL2B/4cAAAA=
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31.03.23 09:45, Markus Niebel wrote:
-> Am Freitag, dem 31.03.2023 um 15:55 +1000 schrieb Greg Ungerer:
->> On 29/3/23 01:11, Marco Felsch wrote:
->>> On 23-03-29, Greg Ungerer wrote:
->> I agree this is the problem, I don't agree that the boot loader is
->> the
->> only place to fix this :-)  I should be able to generate a working
->> devicetree
->> blob from the kernel that is good, and ready to use no runtime
->> changes
->> required I figure.
->>
-> 
-> Just to point out: the approach of run time fixing in boot loader is
-> used for the other i.MX8M SOC, too. If you know exactly what SOC type
-> is assembled, you could disable non available IP in the board part of
-> your tree.
-> 
->> It is not overly difficult to break out the vpu nodes and have them
->> only included when you have a board that has the iMX8MP-quad with the
->> VPU hardware blocks.
+With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+associated with a clear lack of maintainance, development and migration to
+dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
 
-This breaks out-of-tree DTs that include imx8mp.dtsi. Logic should be the
-other way round: imx8mp.dtsi is full-featured SoC and any new includes
-strip away, not add nodes.
+In addition, the OX810 hasn't been booted for years and isn't even present
+in an ARM config file.
 
-> Depending on the SOC type there is more to look for than the VPU: core
-> count, ISP, NPU - just to mention a few. Current approach allows to
-> keep a single tree for all types.
+For the OX820, lack of USB and SATA support makes the platform not usable
+in the current Linux support and relies on off-tree drivers hacked from the
+vendor (defunct for years) sources.
 
-+1.
+The last users are in the OpenWRT distribution, and today's removal means
+support will still be in stable 6.1 LTS kernel until end of 2026.
 
-@Greg, does your board always ship with an i.MX8MPLite? If so, just
-disable VPUs in your board DT.
+If someone wants to take over the development even with lack of SMP, I'll
+be happy to hand off maintainance.
 
-If it ships with either VPUs available or not and you don't want to do
-bootloader fixups, you may want to check out Kbuild's ability to apply
-DT overlays at build time. This would give you separate DTs for each
-variant while not having an extra file for every combination.
+The plan is to apply the first 4 patches first, then the drivers
+followed by bindings. Finally the MAINTAINANCE entry can be removed.
 
-Cheers,
-Ahmad
+I'm not sure about the process of bindings removal, but perhaps the bindings
+should be marked as deprecated first then removed later on ?
 
+It has been a fun time adding support for this architecture, but it's time
+to get over!
 
-> 
-> Regards, Markus
-> 
+Patch 2 obviously depends on [1].
 
+[1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (20):
+      ARM: dts: oxnas: remove obsolete device tree files
+      ARM: oxnas: remove OXNAS support
+      ARM: configs: remove oxnas_v6_defconfig
+      dt-bindings: arm: oxnas: remove obsolete bindings
+      clk: oxnas: remove obsolete clock driver
+      dt-bindings: clk: oxnas: remove obsolete bindings
+      clksource: timer-oxnas-rps: remove obsolete timer driver
+      dt-bindings: timer: oxsemi,rps-timer: remove obsolete bindings
+      nand: oxnas_nand: remove obsolete raw nand driver
+      dt-bindings: mtd: oxnas-nand: remove obsolete bindings
+      net: stmmac: dwmac-oxnas: remove obsolete dwmac glue driver
+      dt-bindings: net: oxnas-dwmac: remove obsolete bindings
+      pinctrl: pinctrl-oxnas: remove obsolete pinctrl driver
+      dt-bindings: pinctrl: oxnas,pinctrl: remove obsolete bindings
+      dt-bindings: gpio: gpio_oxnas: remove obsolete bindings
+      power: reset: oxnas-restart: remove obsolete restart driver
+      reset: oxnas: remove obsolete reset driver
+      irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
+      dt-bindings: interrupt-controller: arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+      MAINTAINERS: remove OXNAS entry
+
+ Documentation/devicetree/bindings/arm/oxnas.txt    |   14 -
+ .../devicetree/bindings/clock/oxnas,stdclk.txt     |   28 -
+ .../devicetree/bindings/gpio/gpio_oxnas.txt        |   47 -
+ .../arm,versatile-fpga-irq.txt                     |    4 +-
+ .../devicetree/bindings/mtd/oxnas-nand.txt         |   41 -
+ .../devicetree/bindings/net/oxnas-dwmac.txt        |   41 -
+ .../devicetree/bindings/pinctrl/oxnas,pinctrl.txt  |   56 -
+ .../devicetree/bindings/reset/oxnas,reset.txt      |   32 -
+ .../devicetree/bindings/timer/oxsemi,rps-timer.txt |   17 -
+ MAINTAINERS                                        |   10 -
+ arch/arm/Makefile                                  |    1 -
+ arch/arm/boot/dts/Makefile                         |    3 -
+ arch/arm/boot/dts/ox810se-wd-mbwe.dts              |  115 --
+ arch/arm/boot/dts/ox810se.dtsi                     |  357 ------
+ .../dts/ox820-cloudengines-pogoplug-series-3.dts   |   93 --
+ arch/arm/boot/dts/ox820.dtsi                       |  299 -----
+ arch/arm/configs/oxnas_v6_defconfig                |   92 --
+ arch/arm/mach-oxnas/Kconfig                        |   34 -
+ arch/arm/mach-oxnas/Makefile                       |    1 -
+ drivers/clk/Kconfig                                |    7 -
+ drivers/clk/Makefile                               |    1 -
+ drivers/clk/clk-oxnas.c                            |  251 ----
+ drivers/clocksource/Kconfig                        |    7 -
+ drivers/clocksource/Makefile                       |    1 -
+ drivers/clocksource/timer-oxnas-rps.c              |  288 -----
+ drivers/irqchip/irq-versatile-fpga.c               |    1 -
+ drivers/mtd/nand/raw/Kconfig                       |    7 -
+ drivers/mtd/nand/raw/Makefile                      |    1 -
+ drivers/mtd/nand/raw/oxnas_nand.c                  |  211 ----
+ drivers/net/ethernet/stmicro/stmmac/Kconfig        |   11 -
+ drivers/net/ethernet/stmicro/stmmac/Makefile       |    1 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c  |  245 ----
+ drivers/pinctrl/Kconfig                            |   11 -
+ drivers/pinctrl/Makefile                           |    1 -
+ drivers/pinctrl/pinctrl-oxnas.c                    | 1292 --------------------
+ drivers/power/reset/Kconfig                        |    7 -
+ drivers/power/reset/Makefile                       |    1 -
+ drivers/power/reset/oxnas-restart.c                |  233 ----
+ drivers/reset/Kconfig                              |    3 -
+ drivers/reset/Makefile                             |    1 -
+ drivers/reset/reset-oxnas.c                        |  114 --
+ 41 files changed, 3 insertions(+), 3977 deletions(-)
+---
+base-commit: df45499b419b31c4d44ef9f1d1656d1fc0897014
+change-id: 20230331-topic-oxnas-upstream-remove-a62e9d96feee
+
+Best regards,
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Neil Armstrong <neil.armstrong@linaro.org>
 
