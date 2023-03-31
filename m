@@ -2,133 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6DD6D1A64
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52826D1AAC
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbjCaIhP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 04:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S231714AbjCaIpl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 04:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbjCaIgc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:36:32 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53AA1FD09
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:35:12 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l12so21567656wrm.10
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:35:12 -0700 (PDT)
+        with ESMTP id S231205AbjCaIpa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:45:30 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AF71D928
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:45:06 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id r11so21602610wrr.12
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:45:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251712;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lfco65EqQfHZJxTK1kxWA78ZamfCWUWZKPHL0Bp1xH4=;
-        b=SqOTTD4EeiNGBszaNOzDLqviTo9jI0ZhAKSeRT3l5LeAaBvHoV1VbnUiNYxQjrF5S5
-         UUujdXiQCveG/Iy+PsAnxgkKeorfMhJAmQ2J1mYgkX8eg020zgf6nL/f/EExNZqkpRUx
-         XcdDXQ5bnCtHLOcSYFcdnuXeE9b+QxZG2/mH1nfNDIA7j4YtTmk1Al3zY4k3rR5puTQU
-         l2NatRLdUPmY31rjFWxbQkcwmbAI5FXvErZOPP+aB0G/SM/9J1u6rMIIFKuvCVysu2q3
-         VMSa4Jt860AaDpWD2pjM4fb8tv0/a2sxwe3l0seQy7PhpYace6EYCoZskI6VrPmid9Ji
-         W8oQ==
+        d=linaro.org; s=google; t=1680252290;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xxyqdIn+bk4QczcFBL4xE02Qvuk54XzxnYqApbWmQ7E=;
+        b=T/C6VRoG0clsKlt9wMakpFmsJW9/eJik5Xxo338Tq2stTAGKoyZqJ6beLQsP5VWvmP
+         dnvxyj9mU8lu8qyu+XXGY6Fyx7sBjawIsbGYMz4LNzyOGlJ4zg5hf9SLtX0BNdWP1BSv
+         /JAgcDA9GTBLjNk7RJBvssxuXZXcTKGC2xEsWmXKM8OflqZC/C7s03VavwsBazeW+fp/
+         VFAn8Anm+CA3IjUlG62nkGRaMFO+uQBHQj+LBuyZoa7Zvmrv74uKnQWuiaYmIGmaoj/5
+         HsCAL59OWnPfxc3crmgdXrBL0cCCvJ8Z6TD5FAXvAjNxaRdyyQGyHm1UNvm6H0lI9Sx3
+         R5qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251712;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lfco65EqQfHZJxTK1kxWA78ZamfCWUWZKPHL0Bp1xH4=;
-        b=rN9m9Mj6VP+6cKDum+SXjEknp3JUS0sEw+OOII7Lnrq/l905YgPev8w6R8puM+E5J0
-         bZuFZroBbBr4TTj0gSb9sMmrhRjSB9pERFrdfPiJvczfpOo8KSFMXu8j5eMNOylVxQnn
-         oZCVW+khzLXxNulodlqG3etFpMerQVf+dNGUs1wIaX738FfY2rYywy18UMRIIEV360Ut
-         YG7r/qb0B28DajI/2YbFDyZq1njcONjxoqWk91xIyb+uZAHCHfh1kB8NnyVK5gPljHSU
-         c2ScasZMAtux5CWsQR0FlgQGCYojs0bJNwNamo3UPVDche7xpNSAJQ7g9HRXBwrBprlq
-         2t7g==
-X-Gm-Message-State: AAQBX9f1mkJmIQVyYCOfkrWyffFfLE3SyPwrBxj3W8eIOP/mbWIRWDnd
-        kI7flMm3XiY9RKOQ0M9tLh8kyw==
-X-Google-Smtp-Source: AKy350YfLJVXZRDyUNg84s43q40a428Zli09J7iKvodwvFp3SatohdxhFRTG46DXiPWYNxkqIkfYZA==
-X-Received: by 2002:adf:f348:0:b0:2d7:9206:488d with SMTP id e8-20020adff348000000b002d79206488dmr20315336wrp.36.1680251712356;
-        Fri, 31 Mar 2023 01:35:12 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:35:11 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 31 Mar 2023 10:34:58 +0200
-Subject: [PATCH RFC 20/20] MAINTAINERS: remove OXNAS entry
+        d=1e100.net; s=20210112; t=1680252290;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xxyqdIn+bk4QczcFBL4xE02Qvuk54XzxnYqApbWmQ7E=;
+        b=ssFoXj5POBZmA6gkHzOPA/JOuGF9ZWnAvmqBCIz5dAIpIR27C5aKnFHJjbkRfeXw1c
+         V8PX4n50eaiWc01FN0BtyKf0jESwkD7JmrJIMvxAPdcx2wN2tFjQMtwTb6Ihm9H/rl3+
+         iEGST89SoEZNRrHSE7eCRI91LekGukbDtgX4krB0AC3eInEi801EKE13js9VeIF8mNlN
+         GutE8hyaPUQeU0P5wTw/lvSFTbniek3wTgXIR1I+0B046K128DwhofGuXGAxmo2vOGI4
+         /oN6ORoY7ASDj35IlJVxNwbzPfMrgwpAnH/qcv8GU52fgvZ3xnhAsNnictBSSe/LkX5o
+         O4lQ==
+X-Gm-Message-State: AAQBX9f8GABqjIJ6XWBu6L+nrbrGDMDfEdLkGwUfH6NjAOoWY4k6RwO4
+        QlSzak0xRlKDpi41SJmxWQrbBQ==
+X-Google-Smtp-Source: AKy350ZHxE08ANZvF4H7bloNjkiIkHgIWRHOGVefKapS/JJkMMHtS7CHxDmiDoX5QSSpdo+bvMN3Pw==
+X-Received: by 2002:adf:d08e:0:b0:2cf:f312:86dd with SMTP id y14-20020adfd08e000000b002cff31286ddmr17970572wrh.18.1680252290022;
+        Fri, 31 Mar 2023 01:44:50 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:17ff:909e:1b73:8366? ([2a05:6e02:1041:c10:17ff:909e:1b73:8366])
+        by smtp.googlemail.com with ESMTPSA id m7-20020a5d56c7000000b002cea9d931e6sm1590350wrw.78.2023.03.31.01.44.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 01:44:49 -0700 (PDT)
+Message-ID: <f4592c81-af30-8289-d02d-a44e25e0fe26@linaro.org>
+Date:   Fri, 31 Mar 2023 10:44:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-20-5bd58fd1dd1f@linaro.org>
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] thermal: Use of_property_present() for testing DT
+ property presence
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org
+References: <20230310144726.1545543-1-robh@kernel.org>
+ <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
+ <CAJZ5v0i-Vum+js8c7fZJiQWwTBYByy2O=UtObR6GciLMLt41Nw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0i-Vum+js8c7fZJiQWwTBYByy2O=UtObR6GciLMLt41Nw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, remove MAINTAINERS
-entry for OXNAS files.
+On 30/03/2023 19:28, Rafael J. Wysocki wrote:
+> On Mon, Mar 27, 2023 at 7:13 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Fri, Mar 10, 2023 at 3:48 PM Rob Herring <robh@kernel.org> wrote:
+>>>
+>>> It is preferred to use typed property access functions (i.e.
+>>> of_property_read_<type> functions) rather than low-level
+>>> of_get_property/of_find_property functions for reading properties. As
+>>> part of this, convert of_get_property/of_find_property calls to the
+>>> recently added of_property_present() helper when we just want to test
+>>> for presence of a property and nothing more.
+>>>
+>>> Signed-off-by: Rob Herring <robh@kernel.org>
+>>
+>> Daniel, are you going to apply this, or should I take it directly?
+> 
+> Applied as 6.4 material, thanks
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- MAINTAINERS | 10 ----------
- 1 file changed, 10 deletions(-)
+Sorry, I forgot to answer. I already applied it.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..c9a29d839ea2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2551,16 +2551,6 @@ S:	Maintained
- W:	http://www.digriz.org.uk/ts78xx/kernel
- F:	arch/arm/mach-orion5x/ts78xx-*
- 
--ARM/OXNAS platform support
--M:	Neil Armstrong <neil.armstrong@linaro.org>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--L:	linux-oxnas@groups.io (moderated for non-subscribers)
--S:	Maintained
--F:	arch/arm/boot/dts/ox8*.dts*
--F:	arch/arm/mach-oxnas/
--F:	drivers/power/reset/oxnas-restart.c
--N:	oxnas
--
- ARM/QUALCOMM SUPPORT
- M:	Andy Gross <agross@kernel.org>
- M:	Bjorn Andersson <andersson@kernel.org>
+Shall I drop it from my branch ?
 
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
