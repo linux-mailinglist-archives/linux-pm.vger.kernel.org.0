@@ -2,141 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064616D23A8
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 17:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE346D249B
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 18:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjCaPJ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 11:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S233055AbjCaQFD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 31 Mar 2023 12:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjCaPJz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 11:09:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960B56A74;
-        Fri, 31 Mar 2023 08:09:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3669AB83043;
-        Fri, 31 Mar 2023 15:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6A6C433EF;
-        Fri, 31 Mar 2023 15:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680275392;
-        bh=BzyVhplOkvkyPf8g+Z7JN0QEIIvXTpOC0UO1K8zE1AE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GZGQG74HnqSoPCJk/nq3e5LxHLnGVw821BjLWe4EePmbQRysepMvPkvXIS093QPcA
-         ZDP2iEZdGrVBXcfADLaUNUgojYvcguBtkXtZfW1bPPWnxADdHtfVpM8CfFbnoV4HhV
-         gchwwMtJmArGQKBjziT54o7OUmfYyx4TkXU9mjhzbF5jzCv2T2SvwBVckbpomSvU+Z
-         6dJp60tERkc92lcYSG5QTM54JgNF2mYhN/jzUjkr77X7UOuH7YGSSfiXWn51tSigZW
-         4xVrdfLF2tnDcymOMO54yV7gFuivo31TS/OF7lKVEScsn7nQ5rRx+vsEOmFkx8i6h8
-         SHxtHK3ZHPEqw==
-Message-ID: <e0631f32-832c-94a1-196c-dbaf41a4e68c@kernel.org>
-Date:   Sat, 1 Apr 2023 01:09:42 +1000
+        with ESMTP id S232974AbjCaQFC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 12:05:02 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3441F781;
+        Fri, 31 Mar 2023 09:04:59 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id er13so50550059edb.9;
+        Fri, 31 Mar 2023 09:04:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680278698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ij7qgvKeOX5junf5aneurxp5ZOEewwiumhnQK1iceEo=;
+        b=5//KMeCFyrDUPu8sIznfKUHSuZp/VzNEVTAoJueYVAqIGUWjH3pAqV6nCnpfb/oPpU
+         hONmV1E/vo65YO++/gVUAKkCEgWygM45tbEjUVbg5IhgWLDhn+p+PuwHCAua3pHRh1UT
+         2xNZOujov3/MC55uYqcT18P2/A+sxfQ+R8DlLO1D6uoRImazIjkSlw4wbHwQ+ta0hqhf
+         5XubEdt3j3DAP2ct0gM/woDV/ZXsMNCTRJT6jZMFI5cJtteUN5GBOgt7eHttsM3CPw2L
+         dyN1eUDobu/RE4rEOGnb4zysFg+ewQjHceucazmzInwULTFCf8ZH3+InrbjIIOw6Mj3b
+         belQ==
+X-Gm-Message-State: AAQBX9duam7Jem3ZnQlA5hxlYtotAvR8UyHBVLxlxl2r5fJKroImPOdE
+        KybRY/fMyKh08CXd0EjO23Kr3JxM+3LI4bigjFE=
+X-Google-Smtp-Source: AKy350aSC5pldvlVRpFrFY9QZV8sJSyJhmPahJDQzAvP0vfNXHdq6NWAB+uIu6O+BWoHplEGpCjS0rnymDAqzPI9xts=
+X-Received: by 2002:a50:9f82:0:b0:4fa:3c0b:74b with SMTP id
+ c2-20020a509f82000000b004fa3c0b074bmr14002372edf.3.1680278697658; Fri, 31 Mar
+ 2023 09:04:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
- ctrl
-Content-Language: en-US
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        Marco Felsch <m.felsch@pengutronix.de>
-Cc:     peng.fan@nxp.com,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
-        paul.elder@ideasonboard.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, djakov@kernel.org, shawnguo@kernel.org,
-        l.stach@pengutronix.de
-References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
- <20230327045037.593326-1-gerg@linux-m68k.org> <2678294.mvXUDI8C0e@steina-w>
- <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
- <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
- <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
- <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
- <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
- <20230328135100.rbmnfelphe7juhxo@pengutronix.de>
- <c368a0f8-41f0-69ac-04f4-459e5fc8b9d6@linux-m68k.org>
- <20230328151100.msl46qupstwplkgw@pengutronix.de>
- <792028b9-cd4c-4ff4-a7cb-e60c518aa573@kernel.org>
- <2924b1a62f126678870160bdbbf4e5d51aceb8d4.camel@ew.tq-group.com>
- <809d5523-e0b4-cad4-f6ab-ddc0e4fe482d@pengutronix.de>
-From:   Greg Ungerer <gerg@kernel.org>
-In-Reply-To: <809d5523-e0b4-cad4-f6ab-ddc0e4fe482d@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230203173331.3322089-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0gkOfbWZWzsTKLBD9C8TaAp0qmTv0L0X7E3fBSLyMUEcQ@mail.gmail.com> <a4da1cb6-80a5-a3a9-72e6-62e5ad810509@linaro.org>
+In-Reply-To: <a4da1cb6-80a5-a3a9-72e6-62e5ad810509@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Mar 2023 18:04:46 +0200
+Message-ID: <CAJZ5v0hWE_gRHj7_zZmu=firwTOnF1X4j59hrV_iy045R8GeeQ@mail.gmail.com>
+Subject: Re: [PATCH v1 00/11] Generic trip points for ACPI
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rjw@rjwysocki.net,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Feb 3, 2023 at 10:47 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 03/02/2023 19:46, Rafael J. Wysocki wrote:
+> > On Fri, Feb 3, 2023 at 6:34 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> This series introduces the generic trip points usage in the thermal ACPI
+> >> driver. It provides a step by step changes to move the current code the
+> >> generic trip points.
+> >>
+> >> I don't have an ACPI platform, the code is not tested.
+> >
+> > What's the purpose of sending this now, then?  Should it be an RFC?
+> > I'm certainly going to treat it this way.
+>
+> I did basic testing on a x86 laptop having critical trip points but
+> nothing else.
+>
+> I understand it can be treated as RFC.
 
+So I've gone through this series now and I'm not entirely convinced.
 
-On 31/3/23 18:11, Ahmad Fatoum wrote:
-> On 31.03.23 09:45, Markus Niebel wrote:
->> Am Freitag, dem 31.03.2023 um 15:55 +1000 schrieb Greg Ungerer:
->>> On 29/3/23 01:11, Marco Felsch wrote:
->>>> On 23-03-29, Greg Ungerer wrote:
->>> I agree this is the problem, I don't agree that the boot loader is
->>> the
->>> only place to fix this :-)  I should be able to generate a working
->>> devicetree
->>> blob from the kernel that is good, and ready to use no runtime
->>> changes
->>> required I figure.
->>>
->>
->> Just to point out: the approach of run time fixing in boot loader is
->> used for the other i.MX8M SOC, too. If you know exactly what SOC type
->> is assembled, you could disable non available IP in the board part of
->> your tree.
->>
->>> It is not overly difficult to break out the vpu nodes and have them
->>> only included when you have a board that has the iMX8MP-quad with the
->>> VPU hardware blocks.
-> 
-> This breaks out-of-tree DTs that include imx8mp.dtsi. Logic should be the
-> other way round: imx8mp.dtsi is full-featured SoC and any new includes
-> strip away, not add nodes.
-> 
->> Depending on the SOC type there is more to look for than the VPU: core
->> count, ISP, NPU - just to mention a few. Current approach allows to
->> keep a single tree for all types.
-> 
-> +1.
-> 
-> @Greg, does your board always ship with an i.MX8MPLite? If so, just
-> disable VPUs in your board DT.
+While I agree with the general direction (using a generically-defined
+trip point representation instead of a home-grown one is definitely an
+improvement IMV and I understand the idea of putting all trip points
+into an array which then will allow the overhead in the core to be
+reduced), I don't quite like the way the change is carried out in the
+series.  In particular, I'd prefer to avoid introducing "temporary"
+structures that get removed entirely by subsequent patches in the
+series - this makes the intermediate steps sort of pointless and
+doesn't really help to understand what's going on (quite on the
+contrary even, AFAIAC).  I also don't quite like changes like the
+temperature unit conversion in patch 9.
 
-Yes, it will only ever have the Lite. That is why I only want
-to generate a devicetree blob without the VPU nodes.
+Personally, I would do it differently.  I would start with changing
+the ACPI thermal driver to use the generic trip point definition (with
+possible extensions) instead of the home-grown one and continue from
+there.  I think that this would be more straightforward, but I guess I
+just need to try it out myself.
 
-Regards
-Greg
-
-
-> If it ships with either VPUs available or not and you don't want to do
-> bootloader fixups, you may want to check out Kbuild's ability to apply
-> DT overlays at build time. This would give you separate DTs for each
-> variant while not having an extra file for every combination.
-> 
-> Cheers,
-> Ahmad
-> 
-> 
->>
->> Regards, Markus
->>
-> 
+Beyond that, there is a question regarding the desired behavior of the
+whole framework in some cases, like when the trip points get modified
+by firmware and the kernel gets a notification to re-enumerate them.
+This may happen in ACPI-enabled systems in general, so the ACPI
+thermal driver needs to be prepared for it, but not just the driver -
+the thermal core needs to be prepared for it too.  So the question is
+how it all should work in principle.  AFAICS, not only the trip
+temperature can change, but the ordering of them can change as well
+such that the passive trip point lies between the active ones, for
+example.  So when this happens, is the core going to tear down all of
+the trip point representation in sysfs and re-create it from scratch,
+even if it may be used by user space (that may not be prepared for the
+re-enumeration) at that point, or is it sufficient to simply make the
+trip point attributes return different values when the corresponding
+trip points change?
