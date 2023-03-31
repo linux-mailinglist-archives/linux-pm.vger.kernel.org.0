@@ -2,135 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD196D27AF
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 20:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4B16D27C5
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 20:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjCaSVk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 14:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S232946AbjCaS0F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 31 Mar 2023 14:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjCaSVj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 14:21:39 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B4B1C1E7;
-        Fri, 31 Mar 2023 11:21:38 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso8962282otv.6;
-        Fri, 31 Mar 2023 11:21:38 -0700 (PDT)
+        with ESMTP id S231146AbjCaS0E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 14:26:04 -0400
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCB01BF4C;
+        Fri, 31 Mar 2023 11:26:03 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id er13so52176144edb.9;
+        Fri, 31 Mar 2023 11:26:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680286898;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3t5CKl6Ye7wvWfdL46PtBvqDLWnMxYGWKH3UaAAkiUk=;
-        b=fPh/iFOrWzvUgMPurkxKXHYyp2NqdvI172JHtMUVWwBp7xqc0Jh7yB1wDHXDMQsddS
-         FPjMz5mc9MYunc7EZ71/u61OcmC3qOmrzg8XZES54tRtp2u1XurmfS4Y7edi/YDs1R79
-         /5Lp/ujZL1JkO4MUhW7C5jrv+qHx/MqouKJElZBrNlZ89aC1FTF2NCuTKgfd0/T1ICH2
-         KZKc1biKB+hy0Udp+M/47wY3rXEuG4sdgHhiRMO7gvwB0a+zS3tZHzuEUxHTE9RdAx9E
-         vhRmcdZiLOE4I/g+dazVm8fSOtEgPbRK9EpBRgVfTe2Ki90TVFfwusRZiwB8WAPhGar7
-         DV3Q==
-X-Gm-Message-State: AAQBX9f/cSbW/R5ZoTDbchkOjnyOANXvu4cYap+Qh0UjZfbB52BW90Ww
-        jmyHecBhkv6cMzHuNDy7Ng==
-X-Google-Smtp-Source: AKy350am+Rs5fsysUO/Ou+XiPYyX5AqcPtC+SBfe66RPqx+fy71Nv5pVkD5gs3QV9tnB8HWcypjqAw==
-X-Received: by 2002:a9d:7ac9:0:b0:693:d9a5:c5d with SMTP id m9-20020a9d7ac9000000b00693d9a50c5dmr13024037otn.3.1680286897866;
-        Fri, 31 Mar 2023 11:21:37 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b22-20020a9d7556000000b006a305c68617sm56551otl.53.2023.03.31.11.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 11:21:37 -0700 (PDT)
-Received: (nullmailer pid 1900261 invoked by uid 1000);
-        Fri, 31 Mar 2023 18:21:36 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] dt-bindings: memory-controller: Drop unneeded quotes
-Date:   Fri, 31 Mar 2023 13:21:18 -0500
-Message-Id: <20230331182119.1899919-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1680287161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RaB5p8dANCz2nc2jG5lwXWHNdu974YJYtJWNgZD8A8M=;
+        b=CCZN5FF3/Ox0z+h8BWZVY6/HoRSeD1i1u16vmqKTicuMWY++c3ywrBgQiWz0tsdTtJ
+         AUx/um1OdzrqWczZomQsFxFvWtQ8YgGtays5Z92yeEMSAi8Ab+IgnMm1ZhcUBz+QuqNc
+         t7EXkeqqkWIidhoz8y7PIklVMPemnXVQhueMyVY4BNDpl+ANtqiYQ0/P5D7Gkd3m6RJm
+         d8Zlvnd4wIGt0XDu1oSyVd11op324SMA98I4MTZ8U1j/cBOmAtY6Ue0cwWusn8lZSjjS
+         IlE+L2Lm6PDRPDOygCs7NnNEStmPeCVd0nEvFi10TmJdMancdDvcDrgSPXLQzo4cCy20
+         JgSQ==
+X-Gm-Message-State: AAQBX9cyv+bilD0bZXUrPpvDpA/rN84+8gI/pykm6ru+kAZZ1bvUnDdW
+        5ng1PJ4DUDcm/W0DTUbsne1hBczrtOfCb3bmA0s=
+X-Google-Smtp-Source: AKy350adaPntcUkPWxFx1duflu6YE6LOfmcIB7o/QroDfpS7WhdUUDgFayI/MvYK8jxyM1CnjZnJ4ixoynkk5RoXGTU=
+X-Received: by 2002:a50:d49e:0:b0:4fc:ebe2:2fc9 with SMTP id
+ s30-20020a50d49e000000b004fcebe22fc9mr13651347edi.3.1680287161357; Fri, 31
+ Mar 2023 11:26:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230330194439.14361-1-mario.limonciello@amd.com>
+ <20230330194439.14361-2-mario.limonciello@amd.com> <CAJZ5v0jbMXk5k_KG19bQnffhCkGnu=MQXjGrBPipZxA_Cg8O9w@mail.gmail.com>
+ <2676888c-e93f-53aa-a4f7-e85b66f351c8@amd.com> <CAJZ5v0iia9__-jWmawvsxninoTM5ZRtqhyUJme=noZMZJdUBrA@mail.gmail.com>
+ <8a04da89-1c98-8b29-bf96-1e8d0ed47e58@amd.com>
+In-Reply-To: <8a04da89-1c98-8b29-bf96-1e8d0ed47e58@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Mar 2023 20:25:50 +0200
+Message-ID: <CAJZ5v0j-uMmi7QmC3XhtNbc+aroBkexriLQWfnyCrjBMf70Z=w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] PM: Add a sysfs file to represent time spent in
+ hardware sleep state
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        John Stultz <jstultz@google.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Raul Rangel <rrangel@chromium.org>,
+        David E Box <david.e.box@intel.com>,
+        Rajat Jain <rajatja@google.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-checking for this can be enabled in yamllint.
+On Fri, Mar 31, 2023 at 8:13 PM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
+>
+> On 3/31/2023 13:07, Rafael J. Wysocki wrote:
+> > On Fri, Mar 31, 2023 at 8:05 PM Limonciello, Mario
+> > <mario.limonciello@amd.com> wrote:
+> >>
+> >> On 3/31/2023 13:01, Rafael J. Wysocki wrote:
+> >>> On Thu, Mar 30, 2023 at 9:45 PM Mario Limonciello
+> >>> <mario.limonciello@amd.com> wrote:
+> >>>>
+> >>>> Userspace can't easily discover how much of a sleep cycle was spent in a
+> >>>> hardware sleep state without using kernel tracing and vendor specific sysfs
+> >>>> or debugfs files.
+> >>>>
+> >>>> To make this information more discoverable, introduce a new sysfs file
+> >>>> to represent the time spent in a sleep state.
+> >>>
+> >>> This is only in the most recent suspend-resume cycle, isn't it?
+> >>
+> >> Yes; that's correct.
+> >>
+> >>>
+> >>> Wouldn't it be useful to have another attribute printing the
+> >>> accumulated total HW sleep time?
+> >>>
+> >>
+> >> I had considered this; but I didn't think it was actually very useful
+> >> because userspace will get control at the end of every cycle and can
+> >> accumulate those numbers if desirable.
+> >
+> > Unless "user space" in question is actually a human, that is.
+>
+> This is what I envisioned:
+>
+> * In traditional Linux some software like systemd could capture this and
+> log it.
+> It could subtract at the time the suspend started from the time it ended
+> and use that to calculate a percentage of time in hardware sleep state
+> and then put that percentage in the system journal.
+>
+> * In ChromeOS something like powerd would be the only thing reading this
+> number and it could be adding it up during dark resume until the system
+> gets to a full resume.
+>
+> * If a human is manually capturing these values they'll be most
+> interested in whether an individual cycle reached hardware sleep.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/memory-controllers/renesas,dbsc.yaml           | 4 ++--
- .../bindings/memory-controllers/renesas,rpc-if.yaml         | 2 +-
- .../bindings/memory-controllers/samsung,exynos5422-dmc.yaml | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+Or whether or not it has been reached in any cycle so far?  Or in the
+most recent 10 cycles?  Or similar?
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml
-index 7056ccb7eb30..8e3822314b25 100644
---- a/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/memory-controllers/renesas,dbsc.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/memory-controllers/renesas,dbsc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Renesas DDR Bus Controllers
- 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-index 30a403b1b79a..56e62cd0b36a 100644
---- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-@@ -20,7 +20,7 @@ description: |
-   - if it contains "cfi-flash", then HyperFlash is used.
- 
- allOf:
--  - $ref: "/schemas/spi/spi-controller.yaml#"
-+  - $ref: /schemas/spi/spi-controller.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml b/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml
-index 098348b2b815..783ac984d898 100644
---- a/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml
-@@ -42,7 +42,7 @@ properties:
-     maxItems: 8
- 
-   devfreq-events:
--    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-     minItems: 1
-     maxItems: 16
-     items:
-@@ -50,7 +50,7 @@ properties:
-     description: phandles of the PPMU events used by the controller.
- 
-   device-handle:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       phandle of the connected DRAM memory device. For more information please
-       refer to jedec,lpddr3.yaml.
-@@ -73,7 +73,7 @@ properties:
-       - description: registers of DREX1
- 
-   samsung,syscon-clk:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       Phandle of the clock register set used by the controller, these registers
-       are used for enabling a 'pause' feature and are not exposed by clock
--- 
-2.39.2
+Or how much time the system spent in HW sleep in general?
 
+> If it didn't they'll want to look at debug data from that cycle.
+> The aggregate will be noise.
+
+Not necessarily and the point is that you can relatively easily
+provide both values, the one from the most recent cycle and the grand
+total.
+
+> Do you think of another use case?
+
+Well, if the kernel can easily compute and expose the grand total
+value, why is it better to offload that to user space, possibly in
+different ways in different system configurations?  What if somebody
+runs a minimum user space?
