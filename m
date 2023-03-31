@@ -2,67 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9528B6D1423
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 02:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7154E6D1460
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 02:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjCaAfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Mar 2023 20:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S229831AbjCaAuf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Mar 2023 20:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCaAfD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 20:35:03 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB50F75D
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 17:35:02 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id dw14so13753191pfb.6
-        for <linux-pm@vger.kernel.org>; Thu, 30 Mar 2023 17:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680222901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MH3dmPhc4+moh1k942OUVlyMUe+0ay7bXGCHlOkXk5M=;
-        b=mcRHDdbzbUBalM4xQm/dV4O4CAnvmP60HNvjCNMdG0V0+RzDyWZ0twOaW7gPPckYmh
-         l6ySSh+J6l2SUwYdNua4gOFnU3dU90B7eresyjvGu1Qr4U+Pj8rikdAKAjnIu+opqWv5
-         kF8AfcEWyaQh/MZC+lFbK1FD6OKf0kXA4qCNugDXVGm6Li5IDFcUxzJYSiqmEFri/Wq9
-         t8nQvJtUyXtfhLC44XDz0jH5RX8uokYwNCWedoV/wim5XdiwnilST7RPGaceM+Y7QDnQ
-         zkdOcCS/92CcMiU3awafEkmrvo3Te/s2SVlcm5b8vtLZ7p1qPLy6FW0w6x3rV75P7/v+
-         G+gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680222901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MH3dmPhc4+moh1k942OUVlyMUe+0ay7bXGCHlOkXk5M=;
-        b=xqLoek6Rp/233eB7eKZtUZjzzV/OIAlwS3g1sYVREL8LzBTCfInseb8o9YoOmqAzrg
-         ve2PSB/RB0wOLDlKhUvexYpnkQrlUD3KL+H4JRhRwV/IosNmme29PQbJ+9o8HoQwKsQV
-         iI9kNcKLjehIW3uaofEkWWudguJFZx6X93C5jeFwRstrR5DykYruvbgLw++un9ONrgt2
-         gpoF8Gxl+AJkeYyYjx/2/Wz3+LN8JOSDS7D2gMNfFYAgpVupbhu8jg1inVqWB7C/j94p
-         tzpGXYxebz1n8x1Gey6hHijYlAZiJ113gcegctCIjzWJP4nCoVGxY7FCrwK1xMD2UW7P
-         UR9w==
-X-Gm-Message-State: AAQBX9fFxuwOTsnzLS5Y4U7NzIBx7ysWE9dcFad3p+MGg3WcppX+g6Ap
-        hjdbX4lkYLMUzOLsNsEv0ih9XR8SyoECGCCCiT/y4Q==
-X-Google-Smtp-Source: AKy350a4DeFNtiT0puMpHPQRz//ZqQ7b+CicsE7u8pb1b0QPYo1NzBe7x2L2DYaneQRuVTtUr1bNCZzzLBDtrXjhewY=
-X-Received: by 2002:a05:6a00:2da5:b0:624:c7cc:3d0e with SMTP id
- fb37-20020a056a002da500b00624c7cc3d0emr12953815pfb.6.1680222901270; Thu, 30
- Mar 2023 17:35:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330224348.1006691-1-davidai@google.com> <ZCYZRIbPh+f3v26v@linux.dev>
- <CAGETcx_P27-=wkAkCETTR2Q0edA01M5jArS_t-zZFn61YM9Muw@mail.gmail.com> <ZCYd7kH2f/Ku8b0D@linux.dev>
-In-Reply-To: <ZCYd7kH2f/Ku8b0D@linux.dev>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 30 Mar 2023 17:34:24 -0700
-Message-ID: <CAGETcx9CHZCpUsAaEdJGmBFuwJzdp+Mr81=4JQdG0zVy42AZDw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S229830AbjCaAue (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Mar 2023 20:50:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECF410402;
+        Thu, 30 Mar 2023 17:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rYjxplCtfMbIi/IGTqusLvoyxMJu8ljmhg5x/8VsxJk=; b=vwA7Z7yaE4d/xObNIoFTAXyoH7
+        xuafAfSSueMv7XI0Xv7wTUNirC9xx772GjzqXymDGkqVAHA1diF4Rpt7KeVWRg3yunNiDlxRAyT9A
+        ZPMcA+a5PgfUDG1Mzaji0s06SxAO7+BjVXLK3UcTH26lZ9Diq6u0yk+b8P1Gsm8a/oCywLj0MMzrU
+        bzBYck+zRzsrQhYfK6Q7i6H7grFFX2Z45TBNdccLx/SQg56N0lqeedp+bjEvREjSTWGGDI+qEzuyA
+        SwhdFhciD4/1C/qQSbxNGCflFbtnm3pLd0VEJUncRt7JKD+bR1Iho+u/bmyCAcppB1Jk+wqwPJk8H
+        LBHltCPA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pi2xg-00AwVc-Ov; Fri, 31 Mar 2023 00:49:48 +0000
+Date:   Fri, 31 Mar 2023 01:49:48 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Dai <davidai@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
         James Morse <james.morse@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Zenghui Yu <yuzenghui@huawei.com>,
@@ -84,66 +58,35 @@ Cc:     David Dai <davidai@google.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <ZCYuLPlEFUnxPm4A@casper.infradead.org>
+References: <20230330224348.1006691-1-davidai@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330224348.1006691-1-davidai@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 4:40=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Thu, Mar 30, 2023 at 04:36:52PM -0700, Saravana Kannan wrote:
-> > On Thu, Mar 30, 2023 at 4:20=E2=80=AFPM Oliver Upton <oliver.upton@linu=
-x.dev> wrote:
-> > >
-> > > On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
-> > >
-> > > [...]
-> > >
-> > > > David Dai (6):
-> > > >   sched/fair: Add util_guest for tasks
-> > > >   kvm: arm64: Add support for get_cur_cpufreq service
-> > > >   kvm: arm64: Add support for util_hint service
-> > > >   kvm: arm64: Add support for get_freqtbl service
-> > > >   dt-bindings: cpufreq: add bindings for virtual kvm cpufreq
-> > > >   cpufreq: add kvm-cpufreq driver
-> > >
-> > > I only received patches 2-4 in my inbox (same goes for the mailing li=
-sts
-> > > AFAICT). Mind sending the rest? :)
-> >
-> > Oliver,
-> >
-> > Sorry about that. Actually even I'm not cc'ed in the cover letter :)
-> >
-> > Is it okay if we fix this when we send the next version? Mainly to
-> > avoid some people responding to this vs other responding to a new
-> > series (where the patches are the same).
->
-> Fine by me, as long as the full series arrived somewhere.
->
-> > We used a script for --to-cmd and --cc-cmd but looks like it needs
-> > some more fixes.
-> >
-> > Here is the full series to anyone who's wondering where the rest of
-> > the patches are:
-> > https://lore.kernel.org/lkml/20230330224348.1006691-1-davidai@google.co=
-m/T/#t
->
-> Gah, a bit of noodling would've dug up the full series. Thanks for the
-> link.
+On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> Hi,
+> 
+> This patch series is a continuation of the talk Saravana gave at LPC 2022
+> titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gist
+> of the talk is that workloads running in a guest VM get terrible task
+> placement and DVFS behavior when compared to running the same workload in
 
-Actually, we'll send out a new RFC v2 series with the To's and Cc's
-fixed with some minor cover letter fixes. So everyone can ignore this
-series and just wait for the RFC v2 series later today.
+DVFS?  Some new filesystem, perhaps?
 
+> the host. Effectively, no EAS for threads inside VMs. This would make power
 
--Saravana
+EAS?
+
+Two unfamiliar and undefined acronyms in your opening paragraph.
+You're not making me want to read the rest of your opus.
