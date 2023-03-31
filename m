@@ -2,139 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD6C6D1AD2
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9505E6D1AE5
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Mar 2023 10:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjCaIve (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Mar 2023 04:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S230400AbjCaIzz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Mar 2023 04:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbjCaIvd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:51:33 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D950E18809
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:51:31 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-544787916d9so402423797b3.13
-        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:51:31 -0700 (PDT)
+        with ESMTP id S230126AbjCaIzx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Mar 2023 04:55:53 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162931994
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:55:51 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id h25so27989125lfv.6
+        for <linux-pm@vger.kernel.org>; Fri, 31 Mar 2023 01:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680252691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cd/ibuQb3vn5g/cRqzfQk5lg+1/+bjO2UJjaxJoegBM=;
-        b=LNzF1nUPzml+JIWoLM4lEKblSafQMhII427hBVE2fYE/IMt5PPojSCas5egWKg+KRc
-         ygy0xOK7R4RMFkD7vxSF97RyeOmkq6giu97/zXrN5oKidigfgjHuuAX1t0IMgLo4oZBX
-         edyYaG7ch29g3YuQziHv5Jft/d/9abqbc5SVvOGiFX9RiIq31R+jCgvgX/wevIDuGtDP
-         lVYFMvg52OandlxR7J/XbiWCqOgv9i0qUzdZ50A6ItgiyqRbKtSt7NsOXjKBZco8abZe
-         r8h5pQWUotUJdENoR3OCLdyJleXrOQqAExqWGqNIo/gAEedNYR8Bys3HYgJETvQ50stz
-         vW4w==
+        d=linaro.org; s=google; t=1680252949;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4dm+BPEOnC7e4hjDLH6po2CUlQmPHlDI5qtCyO0in2Q=;
+        b=h9p+asgoR7hjf3xWGqt0dESGNOGLYImfThLBriNOU0tdhyee4Dj/v82aPxY1l+yshP
+         rJxuPxGgYI6jUI6DBjgYqYHHxlm+3k4RYYjQX99sNkOanqarLy2UZMupY9g1Qv7egTfD
+         3iQbRP3qKjrBlBC8MLOcVhwBkT2DGC+KDRqi3qP+7TvgmVGRfbMfZRu/AYlQ4SaPljzg
+         eKCGp/zIAvGJhIBwkH1RyLPXBc3rwVclVdlHiyQi2cfc80JRI6qtQmM/Tw/rIsAQTfyg
+         fAv4m06xtOPLY7yFFiKTKST/6WJIbCvp+KFLiospIbLfJzI44pgopG9eozFO+yO6h/5e
+         dQkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680252691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cd/ibuQb3vn5g/cRqzfQk5lg+1/+bjO2UJjaxJoegBM=;
-        b=xiTipJtE/BFMc+A3iG4ze3NX10aZzGVhEkIORhF7PrvlBVm9/ZdJ+7WsIJQllyb2Ul
-         yfSJuuNKVuovUObHUyBiFG9ELMKVYGbBM+Gw5GCSJ53hbSWNARjpdSH2JYHrw3Kd5n1F
-         Ys/1r0M3Gi6kjp3/6AsVfLHPF4EWuB8SG7FkjCY1+e984tyO+Ur6+FKUMpM5MQWJQkhM
-         YSSEZ904EB2rs487gNO4mQU0Qm2jNUUv9E1fP/KMeYEaMP+m+De114mAiBCd2aG28WBG
-         xfUic/ag+EASHuS7C5jcSN6fO8Wyxm6aeLHeSHYADHWsKHMSv8i3EQ+zywpe45WKMHay
-         m3Fg==
-X-Gm-Message-State: AAQBX9dPtg7yek5OunEwioKxLbY+lnp2jgMY8qLOryggohcPUl64vTRT
-        IkPvg61+Nxo/bZsa5EAoshnBF346TN8lDZWnYxlDmQ==
-X-Google-Smtp-Source: AKy350a6johu/GITQvnR+QBZGVCy3Nh12i/zifBxULJFlWKoDA9ufP4RPovIeYwuYMYc7B3Q1GKWJeXUD/WzDxFgGl8=
-X-Received: by 2002:a81:9993:0:b0:544:bbd2:74be with SMTP id
- q141-20020a819993000000b00544bbd274bemr5121733ywg.4.1680252691054; Fri, 31
- Mar 2023 01:51:31 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680252949;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dm+BPEOnC7e4hjDLH6po2CUlQmPHlDI5qtCyO0in2Q=;
+        b=JRQof3ty04GVmVsPTq+DYhrDginHeLyyIxQ1Vqo//yFGHwxDaTFFblz6uIjB/iBCHh
+         S8R41IbyUySLVDLOTrVTUhdBuCoEv/K2JtMMR3+/+B6oPOltW/9mzGv23fDIfsooWfaB
+         xH+gWmdEuDvJrRLBW91z4qC0DXligHKogCqJhZcT+Rf60jwHvo03qP+aOJOnffzXWgrR
+         g5v+X4IXTnmouDhf/LVaQDi926sLfSih+DENA/XaFTSwFdJi1UGIEg2sq2agdQKfdzuO
+         mYYVgDm1En2dXHUDPtamUSqJEwF4kL6zKEUtMDKQpEe4AUfZKwTxfpJrhRg3J0Pi+Z9m
+         OehQ==
+X-Gm-Message-State: AAQBX9dL+MW3R7WqZWzZ45Q5D2YT2HpsR2TV9mLpdLv3h2NdY08aA8rC
+        kz6+Dof9XX2qWgowKaERZ5u3LQ==
+X-Google-Smtp-Source: AKy350ZI/3UGdFSqbHDvzrq0gk2lxo1Tz6xoBuV/VTSFHLt8yiKO4pkQahghPdhIFyzf5V5sRpBGCA==
+X-Received: by 2002:a19:f619:0:b0:4d5:831a:1af8 with SMTP id x25-20020a19f619000000b004d5831a1af8mr7934107lfe.40.1680252949296;
+        Fri, 31 Mar 2023 01:55:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z9-20020ac25de9000000b004eb2dab8a61sm294109lfq.44.2023.03.31.01.55.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 01:55:48 -0700 (PDT)
+Message-ID: <e28e76e2-f392-44d9-e88c-27c6d26115d0@linaro.org>
+Date:   Fri, 31 Mar 2023 10:55:46 +0200
 MIME-Version: 1.0
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 31 Mar 2023 10:51:19 +0200
-Message-ID: <CACRpkdY4GAzE5DbE4yOZ8sFspZoJWWZk+DYTHsKRmm1bpX7WGQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v2 5/6] dt-bindings: cpufreq: add bindings for virtual
+ kvm cpufreq
+Content-Language: en-US
+To:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev
+References: <20230331014356.1033759-1-davidai@google.com>
+ <20230331014356.1033759-6-davidai@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331014356.1033759-6-davidai@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 10:34=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
+On 31/03/2023 03:43, David Dai wrote:
+> Add devicetree bindings for a virtual kvm cpufreq driver.
 
-> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
-> associated with a clear lack of maintainance, development and migration t=
-o
-> dt-schema it's clear that Linux support for OX810 and OX820 should be rem=
-oved.
->
-> In addition, the OX810 hasn't been booted for years and isn't even presen=
-t
-> in an ARM config file.
->
-> For the OX820, lack of USB and SATA support makes the platform not usable
-> in the current Linux support and relies on off-tree drivers hacked from t=
-he
-> vendor (defunct for years) sources.
->
-> The last users are in the OpenWRT distribution, and today's removal means
-> support will still be in stable 6.1 LTS kernel until end of 2026.
->
-> If someone wants to take over the development even with lack of SMP, I'll
-> be happy to hand off maintainance.
->
-> The plan is to apply the first 4 patches first, then the drivers
-> followed by bindings. Finally the MAINTAINANCE entry can be removed.
->
-> I'm not sure about the process of bindings removal, but perhaps the bindi=
-ngs
-> should be marked as deprecated first then removed later on ?
->
-> It has been a fun time adding support for this architecture, but it's tim=
-e
-> to get over!
->
-> Patch 2 obviously depends on [1].
->
-> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Why? Why virtual devices should be documented in DT? DT is for
+non-discoverable hardware, right? You have entire commit msg to explain
+it instead of saying something easily visible by the diff.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-virtual-kvm.yaml | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
+> new file mode 100644
+> index 000000000000..31e64558a7f1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual-kvm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Virtual KVM CPUFreq
+> +
+> +maintainers:
+> +  - David Dai <davidai@google.com>
+> +
+> +description: |
 
-Yours,
-Linus Walleij
+Do not need '|'.
+> +
+
+Drop stray blank line.
+
+> +  KVM CPUFreq is a virtualized driver in guest kernels that sends utilization
+> +  of its vCPUs as a hint to the host. The host uses hint to schedule vCPU
+> +  threads and select CPU frequency. It enables accurate Per-Entity Load
+> +  Tracking for tasks running in the guest by querying host CPU frequency
+> +  unless a virtualized FIE exists(Like AMUs).
+
+No clue why you need DT bindings for this. KVM has interfaces between
+host and guests.
+
+> +
+> +properties:
+> +  compatible:
+> +    const: virtual,kvm-cpufreq
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    {
+
+This is some broken syntax and/or indentation.
+
+I don't get what this node is about.
+
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+
+Why?
+
+> +
+> +      cpufreq {
+> +            compatible = "virtual,kvm-cpufreq";
+> +      };
+> +
+
+Drop stray blank lines
+
+> +    };
+
+Best regards,
+Krzysztof
+
