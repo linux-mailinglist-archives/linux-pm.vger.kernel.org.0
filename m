@@ -2,122 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998666D31DC
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 17:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388446D2EF5
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 09:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjDAPIH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Apr 2023 11:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S232615AbjDAHwX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Apr 2023 03:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjDAPIG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 11:08:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7291EFDF
-        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 08:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680361623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3XM0s6Py2s9NABNZsjEwB9EJNT03Us1/96JqO8MWWMA=;
-        b=LnFsUuxIRIS9g6WzD2fXW/3xb7R72K0mf287sXQ4sFOF4MSLH7CRvdQY9Mt2oFFHrsewzS
-        6iJUCGdMTRAq9XL7l+LNgTy4CxunB5x5nBCpNEGHdiWW6DfWO5CtmcOCK/p+TrkICvRqCp
-        JdvmJJaMV3fQXprjklvUfrcTjVZfPDQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-640-2V02dPoEPuW97iN-PAzPlA-1; Sat, 01 Apr 2023 11:07:01 -0400
-X-MC-Unique: 2V02dPoEPuW97iN-PAzPlA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 536F32A59560;
-        Sat,  1 Apr 2023 15:07:01 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB5032A68;
-        Sat,  1 Apr 2023 15:07:00 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Subject: [PATCH 1/1] power: supply: axp288_charger: Use alt usb-id extcon on some x86 android tablets
-Date:   Sat,  1 Apr 2023 17:06:51 +0200
-Message-Id: <20230401150651.597155-2-hdegoede@redhat.com>
-In-Reply-To: <20230401150651.597155-1-hdegoede@redhat.com>
-References: <20230401150651.597155-1-hdegoede@redhat.com>
+        with ESMTP id S230092AbjDAHwW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 03:52:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E071D2FA;
+        Sat,  1 Apr 2023 00:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680335541; x=1711871541;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a/YXkBYf71djBB8rDZkSEdiLjo6nNWgJccOZOVfbVsU=;
+  b=ETN+c5FHXT1A73tcXpne+hVZ01VExzy1jqHW/NGAKrkjQQd0ZCNVSzgf
+   D1DkBfQ1XmsHi9/oOYG2p6QVRitxRPFMnlxsXa+EOUitNUat6I+9PEtKU
+   Er4DFbHSNzzJ7DimqFFzU3W7d3NYCjRozj6XTD7GxXTgal4szTW9TAQh0
+   LMQycgVrbFuX2Fn2pb4FWtw8I938OJzlorl+fYXu32MQ+Zj37MoVOmH6F
+   R5BRtY437HvRYKACYNdKQFax2vC7N/lfPMZv8m4Y7cf3e3T0y+wZN+QfM
+   xgKRTIhzwQzuPXBH6VoNopwV00TCnJWABTEDBkepzJYBDAmxHYv+aHAgx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="369424953"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="369424953"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 00:52:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="1015103954"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="1015103954"
+Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Apr 2023 00:52:17 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>
+Cc:     Ye Bin <yebin10@huawei.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
+        Yifan Li <yifan2.li@intel.com>
+Subject: [PATCH] PM: hibernate: Do not get block device exclusively in test_resume mode
+Date:   Sat,  1 Apr 2023 23:48:32 +0800
+Message-Id: <20230401154832.320999-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-x86 ACPI boards which ship with only Android as their factory image may
-have pretty broken ACPI tables. This includes broken _AEI ACPI GPIO event
-handlers, which are normally used to listen to the micro-USB ID pin and:
+The system refused to do a test_resume because it found that the
+swap device has already been taken by someone else. Specificly,
+the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
+do this check.
 
-1. Switch the USB-mux to the host / device USB controllers
-2. Disable Vbus path before enabling the 5V boost (AXP reg 0x30 bit 7)
-3. Turn 5V Vboost on / off
+Steps to reproduce:
+ dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
+    awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
+ mkswap /swapfile
+ swapon /swapfile
+ swap-offset /swapfile
+ echo 34816 > /sys/power/resume_offset
+ echo test_resume > /sys/power/disk
+ echo disk > /sys/power/state
 
-On non broken systems where this is not done through an ACPI GPIO event
-handler, there is an ACPI INT3496 device describing the involved GPIOs
-which are handled by the extcon-intel-int3496 driver; and axp288-charger.ko
-listens to this extcon-device and disables the Vbus path when necessary.
+ PM: Using 3 thread(s) for compression
+ PM: Compressing and saving image data (293150 pages)...
+ PM: Image saving progress:   0%
+ PM: Image saving progress:  10%
+ ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+ ata1.00: configured for UDMA/100
+ ata2: SATA link down (SStatus 0 SControl 300)
+ ata5: SATA link down (SStatus 0 SControl 300)
+ ata6: SATA link down (SStatus 0 SControl 300)
+ ata3: SATA link down (SStatus 0 SControl 300)
+ ata4: SATA link down (SStatus 0 SControl 300)
+ PM: Image saving progress:  20%
+ PM: Image saving progress:  30%
+ PM: Image saving progress:  40%
+ PM: Image saving progress:  50%
+ pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
+ PM: Image saving progress:  60%
+ PM: Image saving progress:  70%
+ PM: Image saving progress:  80%
+ PM: Image saving progress:  90%
+ PM: Image saving done
+ PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
+ PM: S|
+ PM: hibernation: Basic memory bitmaps freed
+ PM: Image not found (code -16)
 
-On x86 Android boards, with broken ACPI GPIO event handlers, these are
-disabled by acpi_quirk_skip_gpio_event_handlers() and an intel-int3496
-extcon device is manually instantiated by x86-android-tablets.ko .
+This is because when using the swapfile as the hibernation storage,
+the block device where the swapfile is located has already been mounted
+by the OS distribution(usually been mounted as the rootfs). This is not
+an issue for normal hibernation, because software_resume()->swsusp_check()
+happens before the block device(rootfs) mount. But it is a problem for the
+test_resume mode. Because when test_resume happens, the block device has
+been mounted already.
 
-Add support to the axp288-charger code for this setup, so that it
-properly disables the Vbus path when necessary. Note this uses
-acpi_quirk_skip_gpio_event_handlers() to identify these systems,
-to avoid the need to add a separate DMI match table for this.
+Thus remove the FMODE_EXCL for test_resume mode. This would not be a
+problem because in test_resume stage, the processes have already been
+frozen, and the race condition described in
+Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+is unlikely to happen.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+Reported-by: Yifan Li <yifan2.li@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
- drivers/power/supply/axp288_charger.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ kernel/power/hibernate.c |  4 ++--
+ kernel/power/power.h     |  2 +-
+ kernel/power/swap.c      | 10 +++++++---
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 15219ed43ce9..b5903193e2f9 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -836,6 +836,7 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
- 	struct power_supply_config charger_cfg = {};
-+	const char *extcon_name = NULL;
- 	unsigned int val;
- 
- 	/*
-@@ -872,8 +873,18 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 		return PTR_ERR(info->cable.edev);
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 793c55a2becb..81287bfa7543 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -785,7 +785,7 @@ int hibernate(void)
+ 	unlock_device_hotplug();
+ 	if (snapshot_test) {
+ 		pm_pr_dbg("Checking hibernation image\n");
+-		error = swsusp_check();
++		error = swsusp_check(true);
+ 		if (!error)
+ 			error = load_image_and_restore();
  	}
+@@ -983,7 +983,7 @@ static int software_resume(void)
+ 		MAJOR(swsusp_resume_device), MINOR(swsusp_resume_device));
  
--	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
--		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
-+	/*
-+	 * On devices with broken ACPI GPIO event handlers there also is no ACPI
-+	 * "INT3496" (USB_HOST_EXTCON_HID) device. x86-android-tablets.ko
-+	 * instantiates an "intel-int3496" extcon on these devs as a workaround.
-+	 */
-+	if (acpi_quirk_skip_gpio_event_handlers())
-+		extcon_name = "intel-int3496";
-+	else if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1))
-+		extcon_name = USB_HOST_EXTCON_NAME;
+ 	pm_pr_dbg("Looking for hibernation image.\n");
+-	error = swsusp_check();
++	error = swsusp_check(false);
+ 	if (error)
+ 		goto Unlock;
+ 
+diff --git a/kernel/power/power.h b/kernel/power/power.h
+index b4f433943209..66a7595ad3e7 100644
+--- a/kernel/power/power.h
++++ b/kernel/power/power.h
+@@ -173,7 +173,7 @@ extern int swsusp_swap_in_use(void);
+ #define SF_HW_SIG		8
+ 
+ /* kernel/power/hibernate.c */
+-extern int swsusp_check(void);
++extern int swsusp_check(bool safe);
+ extern void swsusp_free(void);
+ extern int swsusp_read(unsigned int *flags_p);
+ extern int swsusp_write(unsigned int flags);
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 36a1df48280c..1be0257da8ab 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -1514,13 +1514,17 @@ int swsusp_read(unsigned int *flags_p)
+  *      swsusp_check - Check for swsusp signature in the resume device
+  */
+ 
+-int swsusp_check(void)
++int swsusp_check(bool safe)
+ {
++	fmode_t mode = FMODE_READ;
+ 	int error;
+ 	void *holder;
+ 
++	if (!safe)
++		mode |= FMODE_EXCL;
 +
-+	if (extcon_name) {
-+		info->otg.cable = extcon_get_extcon_dev(extcon_name);
- 		if (IS_ERR(info->otg.cable)) {
- 			dev_err_probe(dev, PTR_ERR(info->otg.cable),
- 				      "extcon_get_extcon_dev(%s) failed\n",
+ 	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
+-					    FMODE_READ | FMODE_EXCL, &holder);
++					    mode, &holder);
+ 	if (!IS_ERR(hib_resume_bdev)) {
+ 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
+ 		clear_page(swsusp_header);
+@@ -1547,7 +1551,7 @@ int swsusp_check(void)
+ 
+ put:
+ 		if (error)
+-			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
++			blkdev_put(hib_resume_bdev, mode);
+ 		else
+ 			pr_debug("Image signature found, resuming\n");
+ 	} else {
 -- 
-2.39.1
+2.25.1
 
