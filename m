@@ -2,68 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972F46D33E0
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 22:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60CE6D33ED
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 22:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjDAUpD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Apr 2023 16:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S229929AbjDAUvX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Apr 2023 16:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjDAUpC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 16:45:02 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6352658B
-        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 13:45:01 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id q19so22581434wrc.5
-        for <linux-pm@vger.kernel.org>; Sat, 01 Apr 2023 13:45:01 -0700 (PDT)
+        with ESMTP id S229719AbjDAUvW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 16:51:22 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2832827027
+        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 13:51:21 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id r11so25643453wrr.12
+        for <linux-pm@vger.kernel.org>; Sat, 01 Apr 2023 13:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680381899;
+        d=linaro.org; s=google; t=1680382279;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KONinrexyPA8SiAQ6l9QCfRBjG7yQZ71bHl8TR878bs=;
-        b=wUx6wdiaq+ifAjSRUHV71Nk0jQv97vVjCIkEYOV6vDYw4kjF0OkhX9yZ3WfGootrJd
-         QiHF4QKJkaYU9eEEvWBywj7a+CPipzKhkJZunmL48GKtWQx6XtNFlBeeuhVqFb6ZxYe/
-         5TdDbOq7k+bWktvmviGlmrDPoFyB89NpJrxW/v5nc1fU4MlqaMsFRK5E2BOlE9MgqJij
-         d93fXcGUgnB8TDPKqyhshl4nlNiA1hoMVXISicMS4AsBCw1CDGEBfVgx2tOyh5OcX6Yk
-         oGb73f1sY3CesYOmbBh0ut+Camc8fOCOqdXuAqrPcZx44VePabOzerEhmc/3uSHP0a+o
-         jcLw==
+        bh=TMWQ7lJfy2rRcfJxRRfnhA0AkYqLVxzTiSyUCxhMmZM=;
+        b=o919TC/9eFI7nT9tSFOb+eWcnqvKwTe2IZe5pRtIQW8tZyifCtY7Hv9DUm3VB7c7qv
+         z5Tr5SUIrSqDgYLjXpwtQgMsHV/gZQ47kWJzASNBw1wYQsYwFbt4E00D0cgQAe/zv4ae
+         PHTEFub8+DD2F6QxMaqZgV3vtMB8WymPab02w16puN5HOOxeIqxynrXX0H22Jd/vZjNq
+         pqmumjFy5NA4lwZmfqVPoHeU3L14lUgcHqOaSSohtBZbzQNbBiKnJacPsTx/WFSoHLVn
+         aTFvfGAXWc7YfTVBeYq99LUp54xRa/z0pWwzb9hBIAE1GHk6I9SFs/CwFpmWad7ozbUt
+         F5tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680381899;
+        d=1e100.net; s=20210112; t=1680382279;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KONinrexyPA8SiAQ6l9QCfRBjG7yQZ71bHl8TR878bs=;
-        b=XRHSyMfnKmBRYsH9VRR6rvI8AKUviIMhA6TKVPbLMZnLReJKo0eVkl5xLI4pvsfaCq
-         ehFSzMbrHG5wz2oUf1tEHj9dKWZ77TtNuSupv2gsfe2RiNsjDhFCj9HP/pZo1G0TyjLX
-         DK/L1/O+VMV+Ok28ulws3kbDZevbbJRCzfH9Jr7JmU3fi0hlGkUUSf15dFfo2+S2uLy6
-         AS5bPNDchXujOKOT7409zBTZ3cbM0orr6rDZZJCdnGPHLlJsy+D+IkzMRgYSETcXs2cu
-         irFvWJ+eB1Z/wSeRBkpQ2O0jbCNsLO3R6ASL4dSBK/mcQYIvcT+r/8ztLrESf5VobmUo
-         hraA==
-X-Gm-Message-State: AAQBX9cCrZrY/XTQ5XMLdr+zjW0C8TvggaX+0I7PzaL1POh+6AcwDPdA
-        zsbpyziX4EQDj6JI7zjvg7SQdP5CWxOYxcb1XYY=
-X-Google-Smtp-Source: AKy350YRcO2YKorYD1bzrlgh5I0ovcJIC7tfeW6/K2/joExCi2t/tOinGrstLIM4hrLi/VWtoQrIFA==
-X-Received: by 2002:a05:6000:1b92:b0:2e5:820b:9289 with SMTP id r18-20020a0560001b9200b002e5820b9289mr5530780wru.64.1680381899523;
-        Sat, 01 Apr 2023 13:44:59 -0700 (PDT)
+        bh=TMWQ7lJfy2rRcfJxRRfnhA0AkYqLVxzTiSyUCxhMmZM=;
+        b=vzOlZEgF6TSF/8YrTxIhak3yT3J9pBa5s9zdgyowJ815u+rqNWh0SEMJcOBOxB1Ot9
+         yPxJ7k5ajfyMvM2bWwBL0BF4gW+JcNjep0WIXk6lXliaoJPuCSyyUWHvmFvqEvIPq5VT
+         sOV0JZO7kTpUeYZnU0EkLzVkWqpd35A57pLa623tCcCF6ma0QqOc7DqaXleuWYncu78L
+         6GTQJ7q5rE4VEzkXeO6IH37Bal4TS0xP6Za6eS4z2/CGiQuAMHBdyLa9LeUd13z2v1SA
+         e2RC+ktl18J+58U65YNR/npMZJMIT898szWFHTi+GkmelJdoJFmNcbrsltgB4Ab8l8nw
+         +jfQ==
+X-Gm-Message-State: AAQBX9dyn6eOzSUqic9G/5OwFuli90cHWX8O6D7oJW95Dg5laBm4DPgK
+        avW3sMwCfU0rrRJhctQz4Ec+2A==
+X-Google-Smtp-Source: AKy350Y5Y5d0oyq7FRXKb5ZRRxdbT/gKk1HkXoEP4jPfypIiihsIJ3SLzYUhnJ1tLpn5pDGChougfQ==
+X-Received: by 2002:adf:f245:0:b0:2e6:2c05:8e97 with SMTP id b5-20020adff245000000b002e62c058e97mr4098803wrp.30.1680382279506;
+        Sat, 01 Apr 2023 13:51:19 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:b36a:1186:309c:1f9a? ([2a05:6e02:1041:c10:b36a:1186:309c:1f9a])
-        by smtp.googlemail.com with ESMTPSA id c13-20020adffb0d000000b002e5e7ee11besm5232558wrr.94.2023.04.01.13.44.58
+        by smtp.googlemail.com with ESMTPSA id u18-20020a5d5152000000b002be5bdbe40csm5673614wrt.27.2023.04.01.13.51.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Apr 2023 13:44:59 -0700 (PDT)
-Message-ID: <3dbb630f-abf9-4d09-f1fd-b2b05013c5dd@linaro.org>
-Date:   Sat, 1 Apr 2023 22:44:58 +0200
+        Sat, 01 Apr 2023 13:51:19 -0700 (PDT)
+Message-ID: <259ae527-631e-95cc-f3b0-039ef8536364@linaro.org>
+Date:   Sat, 1 Apr 2023 22:51:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v1] thermal: core: Clean up thermal_list_lock locking
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to LVTS
+ thermal controllers for mt8195
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <2696911.mvXUDI8C0e@kreacher>
+To:     bchihi@baylibre.com, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2696911.mvXUDI8C0e@kreacher>
+In-Reply-To: <20230307154524.118541-2-bchihi@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -76,70 +83,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/03/2023 20:34, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 07/03/2023 16:45, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Once thermal_list_lock has been acquired in
-> __thermal_cooling_device_register(), it is not necessary to drop it
-> and take it again until all of the thermal zones have been updated,
-> so change the code accordingly.
+> Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
 > 
-> No expected functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 > ---
 
-Looks good to me, shall I pick it in my branch ?
-
-
->   drivers/thermal/thermal_core.c |    8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -826,8 +826,6 @@ static void bind_cdev(struct thermal_coo
->   	const struct thermal_zone_params *tzp;
->   	struct thermal_zone_device *pos = NULL;
->   
-> -	mutex_lock(&thermal_list_lock);
-> -
->   	list_for_each_entry(pos, &thermal_tz_list, node) {
->   		if (!pos->tzp && !pos->ops->bind)
->   			continue;
-> @@ -854,8 +852,6 @@ static void bind_cdev(struct thermal_coo
->   			       tzp->tbp[i].weight);
->   		}
->   	}
-> -
-> -	mutex_unlock(&thermal_list_lock);
->   }
->   
->   /**
-> @@ -933,17 +929,17 @@ __thermal_cooling_device_register(struct
->   
->   	/* Add 'this' new cdev to the global cdev list */
->   	mutex_lock(&thermal_list_lock);
-> +
->   	list_add(&cdev->node, &thermal_cdev_list);
-> -	mutex_unlock(&thermal_list_lock);
->   
->   	/* Update binding information for 'this' new cdev */
->   	bind_cdev(cdev);
->   
-> -	mutex_lock(&thermal_list_lock);
->   	list_for_each_entry(pos, &thermal_tz_list, node)
->   		if (atomic_cmpxchg(&pos->need_update, 1, 0))
->   			thermal_zone_device_update(pos,
->   						   THERMAL_EVENT_UNSPECIFIED);
-> +
->   	mutex_unlock(&thermal_list_lock);
->   
->   	return cdev;
-> 
-> 
-> 
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
