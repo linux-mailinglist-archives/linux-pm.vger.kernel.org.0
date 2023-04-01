@@ -2,74 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1AE6D33D7
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 22:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5126D33DA
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 22:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjDAUiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Apr 2023 16:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S229646AbjDAUkH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Apr 2023 16:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDAUiO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 16:38:14 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB6B1A460
-        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 13:38:13 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id n19so14884759wms.0
-        for <linux-pm@vger.kernel.org>; Sat, 01 Apr 2023 13:38:13 -0700 (PDT)
+        with ESMTP id S229469AbjDAUkG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 16:40:06 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D39427800
+        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 13:40:01 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso15884017wmo.0
+        for <linux-pm@vger.kernel.org>; Sat, 01 Apr 2023 13:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680381491;
+        d=linaro.org; s=google; t=1680381600;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RaeiX9EdxQ+G9xoCkZsd12/NSVD20AWdIKnmJIXd8HY=;
-        b=UvHq6rgsoUw5HQ+32mAlR47rUiWddxfGMkG7EsJPaUAFivKjA3JQI6Tr3zV/LiBDhW
-         UpMHoqcSw2J5W37BJk94by64Ft0EgzYdogXx2fovMjwAV51c0qBccG/xoyROXPnrpBUJ
-         Rh85eitRQQ0CSiw2iqP8ESbGCsNC6hS5j6jrUJFDW65y7m7ebWt0g1L3xpOiN+oMTpoo
-         k/qnYZeCLyWgtGcd5nCiyLj5MWO0tVH6F0PIocO1w1PYOqrSH4FWTlA0TjF52z1HWIKk
-         d+Jq+5PHuzk83HOgIs+5TfLA2LhTQIko80I/Oat3LfoyleCZfNodfGod1wJFPa60Gf4t
-         iPPg==
+        bh=54WZlKFOH7z5ow1TMELZBNq0Ok+OKChGqnAavsTIt50=;
+        b=Zi6RFMmsqxCOCubKiabzmroMnsnSzzswgQogx2DJo7nlLLcHzNFfMrQddlDKYNaMMR
+         yXrp55GZvc/XtcGNMVmYP/GCiTroSWzEhO+IHGFbz8hYP7MtBK/r+7Tgnq5UKC3Dyr0b
+         yDlTqS7Yn2qu6zn5MUIi38OHjc+vjL3DLRs1XDoOu4koZ9hHgIbUHV6PaYHWkYwqgmE8
+         z37ad18320vLGNnWT3G9cyrTp1zxRkDz7Zk6T2sc0ChlugqjtKV1NFAHB4d+ByC1FrGp
+         fgwB7za1HTwoMHJ7abtg8Y8OwaRbXhqg4KxHnRjx8Z7ztY0WU7hmGC53nS4du9cIEEVL
+         2fRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680381491;
+        d=1e100.net; s=20210112; t=1680381600;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RaeiX9EdxQ+G9xoCkZsd12/NSVD20AWdIKnmJIXd8HY=;
-        b=ySSTLr27LsQesGFxqMibHFmtFl2eEt4NL17y9oer1YyjurO3glZTjkWvhKlnXMMY70
-         aSTpubQdKBe16b+s9hMUM2O5D4KDbEIEw60/WjxGnNnVhW6X8BarpgjT+bXWDCqODD9C
-         Nq5jR0VXHrAG/qJkQe1rFS1KRPm4PjXQhA6z3KL7Uf18USc+JPJ1YGuh65e4U9mM0a28
-         /eS5WFBD0gISJmoePaI/ZrHM9/IJMkMqEKwjjOH/f87/Yns3a6QNcT6EzwcZjYPDuQlM
-         nh5c4jUiOjsXsfT8wPU0Ca0MAAdcV8PgaZcxAb1PebUFsYGiFG6QvC8fPNpgncttm4jJ
-         B+Xw==
-X-Gm-Message-State: AO0yUKVygiQxKoco1d5XzZkZbAZphhFRwVykv2cJSGofj5iZUloPhmPJ
-        /G4eJTYKYLuKHB36M0G4wk4MmA==
-X-Google-Smtp-Source: AK7set+piPx/xqNwNWikmQSUIScX7VtS1tyyyibUMrga0PeSsXZPDOGRRgUpJYh4AX6OWPTmKTtyYA==
-X-Received: by 2002:a05:600c:2283:b0:3eb:3104:efec with SMTP id 3-20020a05600c228300b003eb3104efecmr23097598wmf.16.1680381491524;
-        Sat, 01 Apr 2023 13:38:11 -0700 (PDT)
+        bh=54WZlKFOH7z5ow1TMELZBNq0Ok+OKChGqnAavsTIt50=;
+        b=zZG7fnqGp22/sp3CL3ot4shKmY/yJ3oAVE43U/IKqpL4zQdd/PmDwswbsNlA+7WLSU
+         vSLwceygObluV0TXz2YwesHqHV8mrejU9oXecFD1UmZQHqz4+anO4tcxandTFFdFawVJ
+         ETEtY7ssz4PCkubA+tsSR/6f8lS2ZTghzP6gTmEl74fnvPGYOo4Fl0j8Z3EUT9mqlB7y
+         iBHw+efaeScApPUlWlVmcdbbtjor49bu7g5SejnjsH/4kN+PK2sI2QxMmxa+UQTasWLT
+         gj5zxnR8PdapllwVPCeC3LvaRHEhU58UNuV4674myDg/YZZH1u3PVxFVhBxdaKEb/OyJ
+         9HYQ==
+X-Gm-Message-State: AAQBX9fVC/LR61k+D5e8gs+6HRyxsST7/K/TqD0yYThOLK9whk/ilF0+
+        ywj/B/ion/XQQe4cH66c3tay6w==
+X-Google-Smtp-Source: AKy350agutLAusoP7ESlN2zNEl/9Hx3qYZ9lnD2QfxKiwZHrGUaPAddBOpSu0Jn/T9RctFKUwc2U6A==
+X-Received: by 2002:a1c:f207:0:b0:3f0:4f83:22f4 with SMTP id s7-20020a1cf207000000b003f04f8322f4mr83242wmc.20.1680381599641;
+        Sat, 01 Apr 2023 13:39:59 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:b36a:1186:309c:1f9a? ([2a05:6e02:1041:c10:b36a:1186:309c:1f9a])
-        by smtp.googlemail.com with ESMTPSA id t23-20020a1c7717000000b003edcc2223c6sm7089922wmi.28.2023.04.01.13.38.10
+        by smtp.googlemail.com with ESMTPSA id m9-20020a7bcb89000000b003ed4f6c6234sm7078132wmi.23.2023.04.01.13.39.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Apr 2023 13:38:10 -0700 (PDT)
-Message-ID: <0234d87e-1980-51d9-1656-70f7f7058af4@linaro.org>
-Date:   Sat, 1 Apr 2023 22:38:10 +0200
+        Sat, 01 Apr 2023 13:39:59 -0700 (PDT)
+Message-ID: <93922fdb-331a-15bb-514a-2015e65ee4c3@linaro.org>
+Date:   Sat, 1 Apr 2023 22:39:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Fix sensor 1
- interrupt status bitmask
+Subject: Re: [PATCH] thermal: amlogic: Use dev_err_probe()
 Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Balsam CHIHI <bchihi@baylibre.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230328031017.1360976-1-wenst@chromium.org>
+To:     ye.xingchen@zte.com.cn, glaroque@baylibre.com
+Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <202303241020110014476@zte.com.cn>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230328031017.1360976-1-wenst@chromium.org>
+In-Reply-To: <202303241020110014476@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -82,19 +75,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/03/2023 05:10, Chen-Yu Tsai wrote:
-> The binary representation for sensor 1 interrupt status was incorrectly
-> assembled, when compared to the full table given in the same comment
-> section. The conversion into hex was also incorrect, leading to
-> incorrect interrupt status bitmask for sensor 1. This would cause the
-> driver to incorrectly identify changes for sensor 1, when in fact it
-> was sensor 0, or a sensor access time out.
+On 24/03/2023 03:20, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> Fix the binary and hex representations in the comments, and the actual
-> bitmask macro.
+> Replace the open-code with dev_err_probe() to simplify the code.
 > 
-> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 > ---
 
 Applied, thanks
