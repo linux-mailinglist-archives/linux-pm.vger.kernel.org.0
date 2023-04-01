@@ -2,238 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7056D2F21
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 10:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882D56D3351
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 21:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjDAI7b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Apr 2023 04:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S229780AbjDATFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Apr 2023 15:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDAI7a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 04:59:30 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985234EC8;
-        Sat,  1 Apr 2023 01:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680339569; x=1711875569;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Bc7ArXz/vWXFGr5BByH146n6s1vyUE41mjE6rULWOSY=;
-  b=TD5EP3EQuPSsxLrl9IXmI4GVs79I+qFqh0kRkOIQa4lVnojlFU1ANBZV
-   CdC2P2mKbn/0PW4+51gWF9NNhQ5r5tMbU32K+DKxdaGw3GgZ6lesqumXK
-   C8ZZliM4Mw/Irx1Lh0NghJ6tHAtiio+0yz/ew6vYVDGKqSL57JH4HYO7n
-   cRLV8QItCnA8McT50JLgm0I3+30mzeFLyDJ1f5FVdwnMAdGb5A4HWl+K3
-   TFiAnkBVEdbBOQe2kD2C+mLCOo5ByGFbFy2vlb7vD/yW/zWxbmGN7fsWq
-   OGtm+4AlHb2V2I1AR5hAqlEHbY3hiyrK9h7PsPaYemQgxRnS+sHoupu1Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="343314041"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="343314041"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 01:59:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="635557538"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="635557538"
-Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
-  by orsmga003.jf.intel.com with ESMTP; 01 Apr 2023 01:59:26 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>
-Cc:     Ye Bin <yebin10@huawei.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
-        Yifan Li <yifan2.li@intel.com>
-Subject: [PATCH] PM: hibernate: Do not get block device exclusively in test_resume mode
-Date:   Sun,  2 Apr 2023 00:55:40 +0800
-Message-Id: <20230401165540.322665-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229450AbjDATFC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 15:05:02 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE76AD18
+        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 12:04:59 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id d17so25502048wrb.11
+        for <linux-pm@vger.kernel.org>; Sat, 01 Apr 2023 12:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680375898;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m98PBJ4u06sVFb+2thOqdSIivC6c7g7mGdj5jNvYhaE=;
+        b=N8jVwiJWykSOq4wihv5KjwnWrisRqU8Bidp4gX+tsyBkNfqmGowG4mG4zKzRKh0tCG
+         nrKLl3ZQEd0apqsRqOTwk1+Otgv/8W7qX9HP4isfP+sU9OemXWsnRDBe/Cw0IBX/anpt
+         MF4ksEBnQdAcfND2LUlOKrCGFbET+Hf9a3haFa4wBCVoztg1C0/sYm0AoQxx2OGj/mJ2
+         dPgIfF61hJbe0OXjtja5gO2Epq37ocSB/K3X8+65NrHirnGrqcdsk3Zaun/FXeDegaMu
+         bmoNdhC+iWAtKp3f+ARzmgcOfTeCQF4tRPGo4zSwUte33xi+6hWeaKGsNDz9TZg5kYLK
+         ByIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680375898;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=m98PBJ4u06sVFb+2thOqdSIivC6c7g7mGdj5jNvYhaE=;
+        b=EOmpMQEFOU5pPKSDV62M7S8vqo/rhGPjMjZmPBzgMhpsMtv33tWlg9AWMixCemLEKW
+         NlIxk3exZgulNJDdbfvdB4fzQwatwnFBO2B8LXb0ze34SAWrGf1wXohrU0098SaBWQgj
+         E9PaZvMcoDOY3ZTIdrmaoQtj+8bQCDjgf8WfzGkcmlXQqZw1S6jB+NgaWiuDAjVe3RzD
+         b/cSlGd9njhVMfEn6XtFasjzOEQTRyBHmeO5UEWI5/MHAhDM8onLGUPE7hy3KAmH1Nxb
+         szCZ8DOKZyMqHLQ0sajiKKnCf6/Bgb5vwarTRi+DxJRH/XFg1QEDWeIbNZUz7Mggh32u
+         UH6A==
+X-Gm-Message-State: AAQBX9fr/Bspa4FgRQXCZpzDCKKzftDGbA0nQr1GKFC4Ieg7lbiw4qIa
+        /VhbGkr9p7EcDGTLReYT193sq8SNkxDKDdMC60g=
+X-Google-Smtp-Source: AKy350bHmieCk/E+JXDNuyqlg93a0oSgsfoHhnTSq5oZQpaNCvPJ9GsaR9wRh/WemcSxev436nY8vQ==
+X-Received: by 2002:a5d:5601:0:b0:2d2:ac99:a72 with SMTP id l1-20020a5d5601000000b002d2ac990a72mr26085616wrv.46.1680375898029;
+        Sat, 01 Apr 2023 12:04:58 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:b36a:1186:309c:1f9a? ([2a05:6e02:1041:c10:b36a:1186:309c:1f9a])
+        by smtp.googlemail.com with ESMTPSA id r10-20020a056000014a00b002d2f0e23acbsm5534110wrx.12.2023.04.01.12.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 12:04:57 -0700 (PDT)
+Message-ID: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
+Date:   Sat, 1 Apr 2023 21:04:56 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yang Li <yang.lee@linux.alibaba.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v6.4-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The system refused to do a test_resume because it found that the
-swap device has already been taken by someone else. Specificly,
-the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
-do this check.
+The following changes since commit 2b6db9efa50799fa75ce609f24b355f29504bd9a:
 
-Steps to reproduce:
- dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo | 
-       awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
- mkswap /swapfile
- swapon /swapfile
- swap-offset /swapfile
- echo 34816 > /sys/power/resume_offset
- echo test_resume > /sys/power/disk
- echo disk > /sys/power/state
+   Merge branch 'thermal-core' into thermal (2023-03-08 14:03:56 +0100)
 
- PM: Using 3 thread(s) for compression
- PM: Compressing and saving image data (293150 pages)...
- PM: Image saving progress:   0%
- PM: Image saving progress:  10%
- ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
- ata1.00: configured for UDMA/100
- ata2: SATA link down (SStatus 0 SControl 300)
- ata5: SATA link down (SStatus 0 SControl 300)
- ata6: SATA link down (SStatus 0 SControl 300)
- ata3: SATA link down (SStatus 0 SControl 300)
- ata4: SATA link down (SStatus 0 SControl 300)
- PM: Image saving progress:  20%
- PM: Image saving progress:  30%
- PM: Image saving progress:  40%
- PM: Image saving progress:  50%
- pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
- PM: Image saving progress:  60%
- PM: Image saving progress:  70%
- PM: Image saving progress:  80%
- PM: Image saving progress:  90%
- PM: Image saving done
- PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
- PM: S|
- PM: hibernation: Basic memory bitmaps freed
- PM: Image not found (code -16)
+are available in the Git repository at:
 
-This is because when using the swapfile as the hibernation storage,
-the block device where the swapfile is located has already been mounted
-by the OS distribution(usually been mounted as the rootfs). This is not
-an issue for normal hibernation, because software_resume()->swsusp_check()
-happens before the block device(rootfs) mount. But it is a problem for the
-test_resume mode. Because when test_resume happens, the block device has
-been mounted already.
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.4-rc1-1
 
-Thus remove the FMODE_EXCL for test_resume mode. This would not be a
-problem because in test_resume stage, the processes have already been
-frozen, and the race condition described in
-Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-is unlikely to happen.
+for you to fetch changes up to 0c492be4002b7411a1587b429e68e0cf3f562488:
 
-Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-Reported-by: Yifan Li <yifan2.li@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/power/hibernate.c | 18 +++++++++++-------
- kernel/power/power.h     |  2 +-
- kernel/power/swap.c      | 10 +++++++---
- 3 files changed, 19 insertions(+), 11 deletions(-)
+   thermal/drivers/ti: Use fixed update interval (2023-04-01 20:51:45 +0200)
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 793c55a2becb..f50456e72f0a 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -683,22 +683,26 @@ static void power_down(void)
- 		cpu_relax();
- }
- 
--static int load_image_and_restore(void)
-+static int load_image_and_restore(bool safe)
- {
-+	fmode_t mode = FMODE_READ;
- 	int error;
- 	unsigned int flags;
- 
- 	pm_pr_dbg("Loading hibernation image.\n");
- 
-+	if (!safe)
-+		mode |= FMODE_EXCL;
-+
- 	lock_device_hotplug();
- 	error = create_basic_memory_bitmaps();
- 	if (error) {
--		swsusp_close(FMODE_READ | FMODE_EXCL);
-+		swsusp_close(mode);
- 		goto Unlock;
- 	}
- 
- 	error = swsusp_read(&flags);
--	swsusp_close(FMODE_READ | FMODE_EXCL);
-+	swsusp_close(mode);
- 	if (!error)
- 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
- 
-@@ -785,9 +789,9 @@ int hibernate(void)
- 	unlock_device_hotplug();
- 	if (snapshot_test) {
- 		pm_pr_dbg("Checking hibernation image\n");
--		error = swsusp_check();
-+		error = swsusp_check(true);
- 		if (!error)
--			error = load_image_and_restore();
-+			error = load_image_and_restore(true);
- 	}
- 	thaw_processes();
- 
-@@ -983,7 +987,7 @@ static int software_resume(void)
- 		MAJOR(swsusp_resume_device), MINOR(swsusp_resume_device));
- 
- 	pm_pr_dbg("Looking for hibernation image.\n");
--	error = swsusp_check();
-+	error = swsusp_check(false);
- 	if (error)
- 		goto Unlock;
- 
-@@ -1011,7 +1015,7 @@ static int software_resume(void)
- 		goto Close_Finish;
- 	}
- 
--	error = load_image_and_restore();
-+	error = load_image_and_restore(false);
- 	thaw_processes();
-  Finish:
- 	pm_notifier_call_chain(PM_POST_RESTORE);
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index b4f433943209..66a7595ad3e7 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -173,7 +173,7 @@ extern int swsusp_swap_in_use(void);
- #define SF_HW_SIG		8
- 
- /* kernel/power/hibernate.c */
--extern int swsusp_check(void);
-+extern int swsusp_check(bool safe);
- extern void swsusp_free(void);
- extern int swsusp_read(unsigned int *flags_p);
- extern int swsusp_write(unsigned int flags);
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 36a1df48280c..1be0257da8ab 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1514,13 +1514,17 @@ int swsusp_read(unsigned int *flags_p)
-  *      swsusp_check - Check for swsusp signature in the resume device
-  */
- 
--int swsusp_check(void)
-+int swsusp_check(bool safe)
- {
-+	fmode_t mode = FMODE_READ;
- 	int error;
- 	void *holder;
- 
-+	if (!safe)
-+		mode |= FMODE_EXCL;
-+
- 	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
--					    FMODE_READ | FMODE_EXCL, &holder);
-+					    mode, &holder);
- 	if (!IS_ERR(hib_resume_bdev)) {
- 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
- 		clear_page(swsusp_header);
-@@ -1547,7 +1551,7 @@ int swsusp_check(void)
- 
- put:
- 		if (error)
--			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
-+			blkdev_put(hib_resume_bdev, mode);
- 		else
- 			pr_debug("Image signature found, resuming\n");
- 	} else {
+----------------------------------------------------------------
+- Add more thermal zone device encapsulation: prevent setting
+   structure field directly, access the sensor device instead the
+   thermal zone's device for trace, relocate the traces in
+   drivers/thermal (Daniel Lezcano)
+
+- Use the generic trip point for the i.MX and remove the get_trip_temp
+   ops (Daniel Lezcano)
+
+- Use the devm_platform_ioremap_resource() in the Hisilicon driver
+   (Yang Li)
+
+- Remove R-Car H3 ES1.* handling as public has only access to the ES2
+   version and the upstream support for the ES1 has been shutdown 
+(Wolfram Sang)
+
+- Add a delay after initializing the bank in order to let the time to
+   the hardware to initialze itself before reading the temperature
+   (Amjad Ouled-Ameur)
+
+- Add MT8365 support (Amjad Ouled-Ameur)
+
+----------------------------------------------------------------
+Amjad Ouled-Ameur (1):
+       thermal/drivers/mediatek: Add delay after thermal banks 
+initialization
+
+Daniel Lezcano (6):
+       thermal/drivers/imx: Remove get_trip_temp ops
+       thermal/drivers/imx: Use the thermal framework for the trip point
+       thermal/core: Relocate the traces definition in thermal directory
+       thermal/drivers/db8500: Use driver dev instead of tz->device
+       thermal/drivers/stm: Don't set no_hwmon to false
+       thermal/drivers/ti: Use fixed update interval
+
+Fabien Parent (2):
+       dt-bindings: thermal: mediatek: Add binding documentation for 
+MT8365 SoC
+       thermal/drivers/mediatek: Add support for MT8365 SoC
+
+Markus Schneider-Pargmann (1):
+       thermal/drivers/mediatek: Control buffer enablement tweaks
+
+Wolfram Sang (1):
+       thermal/drivers/rcar_gen3_thermal: Remove R-Car H3 ES1.* handling
+
+Yang Li (1):
+       thermal/drivers/hisi: Use devm_platform_ioremap_resource()
+
+  .../bindings/thermal/mediatek-thermal.txt          |   1 +
+  drivers/thermal/Makefile                           |   3 +-
+  drivers/thermal/cpufreq_cooling.c                  |   2 +-
+  drivers/thermal/db8500_thermal.c                   |   7 +-
+  drivers/thermal/devfreq_cooling.c                  |   2 +-
+  drivers/thermal/gov_fair_share.c                   |   2 +-
+  drivers/thermal/gov_power_allocator.c              |   2 +-
+  drivers/thermal/gov_step_wise.c                    |   2 +-
+  drivers/thermal/hisi_thermal.c                     |   4 +-
+  drivers/thermal/imx_thermal.c                      |  19 ++--
+  drivers/thermal/mediatek/auxadc_thermal.c          | 107 
++++++++++++++++++----
+  drivers/thermal/rcar_gen3_thermal.c                |  52 +---------
+  drivers/thermal/st/stm_thermal.c                   |   1 -
+  drivers/thermal/thermal_core.c                     |   2 +-
+  drivers/thermal/thermal_helpers.c                  |   3 +-
+  .../thermal.h => drivers/thermal/thermal_trace.h   |   6 ++
+  .../thermal/thermal_trace_ipa.h                    |   6 ++
+  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   8 +-
+  18 files changed, 131 insertions(+), 98 deletions(-)
+  rename include/trace/events/thermal.h => 
+drivers/thermal/thermal_trace.h (97%)
+  rename include/trace/events/thermal_power_allocator.h => 
+drivers/thermal/thermal_trace_ipa.h (96%)
+
 -- 
-2.25.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
