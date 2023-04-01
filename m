@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388446D2EF5
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 09:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7056D2F21
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 10:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjDAHwX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Apr 2023 03:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        id S229536AbjDAI7b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Apr 2023 04:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjDAHwW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 03:52:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E071D2FA;
-        Sat,  1 Apr 2023 00:52:20 -0700 (PDT)
+        with ESMTP id S229437AbjDAI7a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 04:59:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985234EC8;
+        Sat,  1 Apr 2023 01:59:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680335541; x=1711871541;
+  t=1680339569; x=1711875569;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=a/YXkBYf71djBB8rDZkSEdiLjo6nNWgJccOZOVfbVsU=;
-  b=ETN+c5FHXT1A73tcXpne+hVZ01VExzy1jqHW/NGAKrkjQQd0ZCNVSzgf
-   D1DkBfQ1XmsHi9/oOYG2p6QVRitxRPFMnlxsXa+EOUitNUat6I+9PEtKU
-   Er4DFbHSNzzJ7DimqFFzU3W7d3NYCjRozj6XTD7GxXTgal4szTW9TAQh0
-   LMQycgVrbFuX2Fn2pb4FWtw8I938OJzlorl+fYXu32MQ+Zj37MoVOmH6F
-   R5BRtY437HvRYKACYNdKQFax2vC7N/lfPMZv8m4Y7cf3e3T0y+wZN+QfM
-   xgKRTIhzwQzuPXBH6VoNopwV00TCnJWABTEDBkepzJYBDAmxHYv+aHAgx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="369424953"
+  bh=Bc7ArXz/vWXFGr5BByH146n6s1vyUE41mjE6rULWOSY=;
+  b=TD5EP3EQuPSsxLrl9IXmI4GVs79I+qFqh0kRkOIQa4lVnojlFU1ANBZV
+   CdC2P2mKbn/0PW4+51gWF9NNhQ5r5tMbU32K+DKxdaGw3GgZ6lesqumXK
+   C8ZZliM4Mw/Irx1Lh0NghJ6tHAtiio+0yz/ew6vYVDGKqSL57JH4HYO7n
+   cRLV8QItCnA8McT50JLgm0I3+30mzeFLyDJ1f5FVdwnMAdGb5A4HWl+K3
+   TFiAnkBVEdbBOQe2kD2C+mLCOo5ByGFbFy2vlb7vD/yW/zWxbmGN7fsWq
+   OGtm+4AlHb2V2I1AR5hAqlEHbY3hiyrK9h7PsPaYemQgxRnS+sHoupu1Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="343314041"
 X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="369424953"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 00:52:20 -0700
+   d="scan'208";a="343314041"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 01:59:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="1015103954"
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="635557538"
 X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="1015103954"
+   d="scan'208";a="635557538"
 Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Apr 2023 00:52:17 -0700
+  by orsmga003.jf.intel.com with ESMTP; 01 Apr 2023 01:59:26 -0700
 From:   Chen Yu <yu.c.chen@intel.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>
@@ -45,8 +45,8 @@ Cc:     Ye Bin <yebin10@huawei.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
         Yifan Li <yifan2.li@intel.com>
 Subject: [PATCH] PM: hibernate: Do not get block device exclusively in test_resume mode
-Date:   Sat,  1 Apr 2023 23:48:32 +0800
-Message-Id: <20230401154832.320999-1-yu.c.chen@intel.com>
+Date:   Sun,  2 Apr 2023 00:55:40 +0800
+Message-Id: <20230401165540.322665-1-yu.c.chen@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,8 +66,8 @@ the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
 do this check.
 
 Steps to reproduce:
- dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
-    awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
+ dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo | 
+       awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
  mkswap /swapfile
  swapon /swapfile
  swap-offset /swapfile
@@ -119,25 +119,58 @@ Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_chec
 Reported-by: Yifan Li <yifan2.li@intel.com>
 Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
- kernel/power/hibernate.c |  4 ++--
+ kernel/power/hibernate.c | 18 +++++++++++-------
  kernel/power/power.h     |  2 +-
  kernel/power/swap.c      | 10 +++++++---
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
 diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 793c55a2becb..81287bfa7543 100644
+index 793c55a2becb..f50456e72f0a 100644
 --- a/kernel/power/hibernate.c
 +++ b/kernel/power/hibernate.c
-@@ -785,7 +785,7 @@ int hibernate(void)
+@@ -683,22 +683,26 @@ static void power_down(void)
+ 		cpu_relax();
+ }
+ 
+-static int load_image_and_restore(void)
++static int load_image_and_restore(bool safe)
+ {
++	fmode_t mode = FMODE_READ;
+ 	int error;
+ 	unsigned int flags;
+ 
+ 	pm_pr_dbg("Loading hibernation image.\n");
+ 
++	if (!safe)
++		mode |= FMODE_EXCL;
++
+ 	lock_device_hotplug();
+ 	error = create_basic_memory_bitmaps();
+ 	if (error) {
+-		swsusp_close(FMODE_READ | FMODE_EXCL);
++		swsusp_close(mode);
+ 		goto Unlock;
+ 	}
+ 
+ 	error = swsusp_read(&flags);
+-	swsusp_close(FMODE_READ | FMODE_EXCL);
++	swsusp_close(mode);
+ 	if (!error)
+ 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
+ 
+@@ -785,9 +789,9 @@ int hibernate(void)
  	unlock_device_hotplug();
  	if (snapshot_test) {
  		pm_pr_dbg("Checking hibernation image\n");
 -		error = swsusp_check();
 +		error = swsusp_check(true);
  		if (!error)
- 			error = load_image_and_restore();
+-			error = load_image_and_restore();
++			error = load_image_and_restore(true);
  	}
-@@ -983,7 +983,7 @@ static int software_resume(void)
+ 	thaw_processes();
+ 
+@@ -983,7 +987,7 @@ static int software_resume(void)
  		MAJOR(swsusp_resume_device), MINOR(swsusp_resume_device));
  
  	pm_pr_dbg("Looking for hibernation image.\n");
@@ -146,6 +179,15 @@ index 793c55a2becb..81287bfa7543 100644
  	if (error)
  		goto Unlock;
  
+@@ -1011,7 +1015,7 @@ static int software_resume(void)
+ 		goto Close_Finish;
+ 	}
+ 
+-	error = load_image_and_restore();
++	error = load_image_and_restore(false);
+ 	thaw_processes();
+  Finish:
+ 	pm_notifier_call_chain(PM_POST_RESTORE);
 diff --git a/kernel/power/power.h b/kernel/power/power.h
 index b4f433943209..66a7595ad3e7 100644
 --- a/kernel/power/power.h
