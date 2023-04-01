@@ -2,123 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8877C6D33F8
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 22:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557906D341B
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Apr 2023 23:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjDAUwq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Apr 2023 16:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S229529AbjDAVja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Apr 2023 17:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjDAUwn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 16:52:43 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D4E2B0D4
-        for <linux-pm@vger.kernel.org>; Sat,  1 Apr 2023 13:52:24 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so12169285wmq.3
-        for <linux-pm@vger.kernel.org>; Sat, 01 Apr 2023 13:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680382342;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1aMiCXujIGmUVuB4Z9vXOtvJHa7Wx4/lUo7wVgjnPeg=;
-        b=vkuiN9rvjWBpooAyCLyDu+pjg0gt4cQLzaQb6t8Lx2ghlnL1XUcUlNlQioyiBt4CFw
-         c9dnPmYQpp0ZZKZpdqml0vE/NrIwn9/G9HN+nSfzXg0Aepd4laDCrsQrhD9XVG3ae+tu
-         wOJ1jwlr9c4zSpX6j6xp6GIb6iFq5v2Fz/8KuVYuE6rhKeH1CSiAFjFSKkOqJSe+3+4D
-         p6DoeVJNisJrNKXPXCpsaen7XhiV4tP0OI98w80iwSha9b8qyWlPbMPXQxt62gZ87sVs
-         wvotEHObh3upaIs7GWjOvzINb47RR27Jg56v/x+X4x9OEtuUbvC/NXHMk8VBw51vEF/z
-         o/WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680382342;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1aMiCXujIGmUVuB4Z9vXOtvJHa7Wx4/lUo7wVgjnPeg=;
-        b=CzB2CuE77uTDCcTfkazIsRmNnNc8+mqgsFgZePt4IhcTeEHN/mwyi6RtUFGAQSHiAa
-         DYR/PzbKXaBgfSI3Cf6YWiTaOkHUmTl9ymsV70qv5t8f4V6opikXbH+w8swa4vUWURPX
-         xmpFsBOy7DXwwwadv2nWy3YTduymciD+fdbPZFOytivQu6dEnoUQ7etobHOUwktThcAD
-         yyiRnRbt0F7AM9C/qZbBc4OpRefEc6zf7Fv+8ELM/iqTYe5sSLHgSk8eUiaM9rq9zgBH
-         eMFVKSF3478z7oG+bP/okG25+lFpTtaovp5faIhF6tChIMTuxcYKHr/BVsdrk/vpVSCc
-         bHMQ==
-X-Gm-Message-State: AO0yUKUPc71wUEIBFzlhmitmqEQFIBoM773vwTaUpaSFQN7Rrx8R7Zht
-        1SVbjihoRVyVaAyljgaj5jUzqQ==
-X-Google-Smtp-Source: AK7set8fNgOTJJlP0UI0D+ubIU86sAui89uX/69r3P64DFMyWqZcOx1w0KXFIYt4ZdZw4qR7lGMNPg==
-X-Received: by 2002:a7b:cd97:0:b0:3ed:ce50:435a with SMTP id y23-20020a7bcd97000000b003edce50435amr23171291wmj.10.1680382342508;
-        Sat, 01 Apr 2023 13:52:22 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:b36a:1186:309c:1f9a? ([2a05:6e02:1041:c10:b36a:1186:309c:1f9a])
-        by smtp.googlemail.com with ESMTPSA id c3-20020a05600c0ac300b003edf2dc7ca3sm7116174wmr.34.2023.04.01.13.52.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Apr 2023 13:52:22 -0700 (PDT)
-Message-ID: <32ff359d-ebdb-cacd-9237-e33eb9d9cdb0@linaro.org>
-Date:   Sat, 1 Apr 2023 22:52:21 +0200
+        with ESMTP id S229379AbjDAVj3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Apr 2023 17:39:29 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C171880F;
+        Sat,  1 Apr 2023 14:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nq+wVlpePRQY2WWVL6tQTzkVmNZ7Jw4IvnL2MwD+skY=; b=hL1OEayWzlSO6rrTZwbNOwx0/T
+        YhLh0NO8HA8DFC3rLBud7OjpuWCdBhNM0fJ6zdowLldJnCqfS0eCPakKPeJYHXjhDvf1c2Bqh88kP
+        bnQrlP/8jbVZUdg8T2oOZ8h1vq23zzhpwfyT++peQsXMKbhnvd1x9NAgj4si36UjiENgsmcuSSJmq
+        wmZ6B+DTkMyeHAKDzcoFSbnswdjesb2/vFTUQdNjvJJt20mMyIImU2A19Foa5Kq14jxFOkbO35POJ
+        u+aix5ypPMQr4jS0YYHA5kfMRx4wrsMfJjcMQvrX+Mz12FN2JNqI0y+n2tsBF4h70Q5y97RZJJjTt
+        kRDQ+kaA==;
+Received: from p200300ccff2d4a001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2d:4a00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1piiwP-0000Aw-8q; Sat, 01 Apr 2023 23:39:17 +0200
+Date:   Sat, 1 Apr 2023 23:39:16 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Tom Rix <trix@redhat.com>, nathan@kernel.org,
+        ndesaulniers@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH] power: supply: twl4030-charger: remove unused cur_reg
+ variable
+Message-ID: <20230401233916.374ffe1a@aktux>
+In-Reply-To: <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
+References: <20230401113432.1873847-1-trix@redhat.com>
+        <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-Content-Language: en-US
-To:     bchihi@baylibre.com, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230307154524.118541-1-bchihi@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230307154524.118541-1-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/03/2023 16:45, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
-> 
-> This series is a continuation of the original series "Add LVTS Thermal Architecture" v14 :
->      https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.50294-1-bchihi@baylibre.com/
-> 
-> Based on top of thermal/linux-next :
->      base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
-> 
-> Depends on these patches as they are not yet applyied to thermal/linux-next branch :
->      [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already included in linux master branch)
->      https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-4-bchihi@baylibre.com/
->      [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
->      https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-6-bchihi@baylibre.com/
->      [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
->      https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-7-bchihi@baylibre.com/
-> 
-> Balsam CHIHI (4):
->    dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
->      controllers for mt8195
->    thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
->    arm64: dts: mediatek: mt8195: Add AP domain thermal zones
->    arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
-> 
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 180 ++++++++++++++++++
->   drivers/thermal/mediatek/lvts_thermal.c       |  94 +++++++--
->   .../thermal/mediatek,lvts-thermal.h           |  10 +
->   3 files changed, 264 insertions(+), 20 deletions(-)
-> 
+On Sat, 1 Apr 2023 22:30:26 +0200
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
 
-Applied, patch 1 & 2
+> Hi,
+> 
+> On Sat, Apr 01, 2023 at 07:34:32AM -0400, Tom Rix wrote:
+> > clang with W=1 reports
+> > drivers/power/supply/twl4030_charger.c:242:16: error: variable
+> >   'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
+> >         unsigned reg, cur_reg;
+> >                       ^
+> > This variable is not used so remove it.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/power/supply/twl4030_charger.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
+> > index 7adfd69fe649..5fa5b2311330 100644
+> > --- a/drivers/power/supply/twl4030_charger.c
+> > +++ b/drivers/power/supply/twl4030_charger.c
+> > @@ -239,7 +239,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+> >  {
+> >  	int status;
+> >  	int cur;
+> > -	unsigned reg, cur_reg;
+> > +	unsigned reg;
+> >  	u8 bcictl1, oldreg, fullreg;
+> >  	bool cgain = false;
+> >  	u8 boot_bci;
+> > @@ -357,11 +357,9 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+> >  	status = twl4030_bci_read(TWL4030_BCIIREF1, &oldreg);
+> >  	if (status < 0)
+> >  		return status;
+> > -	cur_reg = oldreg;
+> >  	status = twl4030_bci_read(TWL4030_BCIIREF2, &oldreg);
+> >  	if (status < 0)
+> >  		return status;
+> > -	cur_reg |= oldreg << 8;
+> >  	if (reg != oldreg) {  
+> 
+> I think the correct fix would be checking for (reg != cur_reg) here.
+> 
+yes, makes more sense.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Regards,
+Andreas
