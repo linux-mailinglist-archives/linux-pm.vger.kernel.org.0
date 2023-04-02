@@ -2,109 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A2B6D3772
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Apr 2023 12:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF57D6D3774
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Apr 2023 12:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjDBKzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Apr 2023 06:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S230295AbjDBK5f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Apr 2023 06:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjDBKzl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Apr 2023 06:55:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141C91BF72
-        for <linux-pm@vger.kernel.org>; Sun,  2 Apr 2023 03:55:38 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pivMt-0008SR-K8; Sun, 02 Apr 2023 12:55:27 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pivMr-008Qop-Gi; Sun, 02 Apr 2023 12:55:25 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pivMq-009wlK-S2; Sun, 02 Apr 2023 12:55:24 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>
-Cc:     linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel@pengtronix.de, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] i2c: omap: Don't do pm_runtime_resume in .remove()
-Date:   Sun,  2 Apr 2023 12:55:18 +0200
-Message-Id: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S230283AbjDBK5e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Apr 2023 06:57:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446891A974;
+        Sun,  2 Apr 2023 03:57:32 -0700 (PDT)
+Received: from [127.0.0.1] (dynamic-046-114-210-195.46.114.pool.telefonica.de [46.114.210.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3CB341EC0531;
+        Sun,  2 Apr 2023 12:57:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680433050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sjr/8YpBxpZu8XIgiov75FI9xlVapCwFazswEREcX9g=;
+        b=jTzWHm2czG2w1cVgRl3fWAkOCMpWd2gBrkXvAOmMQHLZIYTEbiTBl6EE5NOuG9O9CEw1XH
+        4x/KA/QaSH66bMGRkZjuf937YADfMBD96C8623hBFpfuTsy3zcjwZGcJJAIMaFMf0M1Gjj
+        HWNxrZIgorni5+O6nc+ij+1Tz7XbwpI=
+Date:   Sun, 02 Apr 2023 12:57:29 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Guy Durrieu <guy.durrieu@cegetel.net>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+CC:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Borislav Petkov <bpetkov@amd.com>,
+        Leo Duran <leo.duran@amd.com>, 1033732@bugs.debian.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_x86/acpi/boot=3A_Do_not_register?= =?US-ASCII?Q?_processors_that_cannot_be_onlined_for_x2apic?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <c02a2a2f-2b40-e13e-ac40-e5d19a66b5ba@cegetel.net>
+References: <20230105041059.39366-1-kvijayab@amd.com> <c02a2a2f-2b40-e13e-ac40-e5d19a66b5ba@cegetel.net>
+Message-ID: <D2229CD1-CD5F-49E9-A0F5-BAB3940B6BFB@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1710; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YuO3xNgH6GPTxtI5VYLq6i5csE6lG+Icg93FwUQ/z2U=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKV8VIYZQ26aaizqS1BwvhCK5/Koz/UEgHsQBZ 3D8nAnNaW2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZClfFQAKCRCPgPtYfRL+ TtWVB/4nKls0puq1UcPdg0iFBHiiJN03d3ido9512BseMSFyy+lTZ6S8cbRf8w6Fq0BDJa3I3BL 7fymnh8VHHP2ZGwar6q6dRQAHATL1vuqR70KWSPtFCLfqF+gcnDAKgwXOSMrScM1w5Lvewr34kn NklZ2CKwMpsfRkWg8nZ7rhaQ7RCi9eHgmGTJfb8rN/R1eIcJoAIQS/XnIiy93CxP7H5eUUyA/0m +epP7yoBuVofi0/zA9kJtDtvEgAdb5JLi76gBQFmtH6/bZFO6l32r0NzxnCWXNXz9Whp7qO5yB5 1I8S+9EG7GZ3mQZyabfGBbTyT5mZb9fC2/oUacadhs3DjNyD
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-One of the first things that the driver's pm_runtime_resume callback
-does is to write zero to the OMAP_I2C_CON_REG register.
-So there is no need to have the device resumed just to write to the
-OMAP_I2C_CON_REG register and the call to pm_runtime_resume_and_get()
-can be dropped.
+On April 2, 2023 12:41:46 PM GMT+02:00, Guy Durrieu <guy=2Edurrieu@cegetel=
+=2Enet> wrote:
+>My system worked fine with kernel 6=2E1=2E15, but stopped booting after
+>upgrading to 6=2E1=2E20 and resulted in a kernel panic:
 
-The intended side effect of this commit is to remove an error path of
-the function resulting in the remove callback returning a mostly ignored
-error code. This prepares changing the prototype of struct
-platform_driver's remove callback to return void.
+Does this fix it:
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/tip/tip=2Egit/log/?h=
+=3Dx86/urgent
 
-I'm not completely sure that the reasing in the commit log is sound.
-There might at least theoretical side effects of the register write
-that are different if the device is fully resumed.
+Thx=2E
 
-Best regards
-Uwe
-
- drivers/i2c/busses/i2c-omap.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index f9ae520aed22..a572f6d994ca 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1522,16 +1522,12 @@ omap_i2c_probe(struct platform_device *pdev)
- static int omap_i2c_remove(struct platform_device *pdev)
- {
- 	struct omap_i2c_dev	*omap = platform_get_drvdata(pdev);
--	int ret;
- 
- 	i2c_del_adapter(&omap->adapter);
--	ret = pm_runtime_resume_and_get(&pdev->dev);
--	if (ret < 0)
--		return ret;
- 
- 	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
-+
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 	return 0;
- }
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
--- 
-2.39.2
-
+--=20
+Sent from a small device: formatting sucks and brevity is inevitable=2E 
