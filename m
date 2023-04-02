@@ -2,82 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310506D3763
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Apr 2023 12:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A2B6D3772
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Apr 2023 12:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjDBKrI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Apr 2023 06:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S230415AbjDBKzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Apr 2023 06:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjDBKrH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Apr 2023 06:47:07 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B841207D
-        for <linux-pm@vger.kernel.org>; Sun,  2 Apr 2023 03:47:04 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id b20so106568794edd.1
-        for <linux-pm@vger.kernel.org>; Sun, 02 Apr 2023 03:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680432423;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=boY93jyd6+T4l8iYNZlZE0N095pRX4NnlYNcBxMegqE=;
-        b=KJF9SsfWvwvyR4Yw5C5V1+mHelTyrF51rvwVQmy4cS34/YnHeIMNzaqun0xl6GDRdi
-         yCD7Nxe7hxn7VJgirW/NXE9dHznT7Q4+fQq2Lrp+ZET8RipTCo/T+L8x7zqJN+m/lDh9
-         cZDJjGN5Q7c8bb5MzjB78EtPkDrxHezKhnJPw4d4ZNrsLyWGqZj4D2nf8OSWYTWOTHrY
-         uL7y6P8t3S//PuVzPNZERT9zxrfHouWnW80Yf+LkQM4jLAitXRfilQSjvegdz8c9tle/
-         vKbV8EzMR0n9zSGiX6dptsHQVHJG2nPPYST7+x/N3QFgjovOM+wp/Z5FmHInkWg0snZ+
-         YGFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680432423;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=boY93jyd6+T4l8iYNZlZE0N095pRX4NnlYNcBxMegqE=;
-        b=sCaYbLSGvaurTIPOGldmaspRRBGw2VBuGFN8S6X2Kwg+sdpS/f5tyxZGreYjfOS+Wx
-         aKPILjJEdT4PWjql5DUs5j12npi1B6bkW3rEt6l+ZS6+OtjYj/UbkfK3QYW6stZG/WZl
-         bs3/1JNnkBC4A8k5JpdnV1Wf+KO7ac4JuIfqmRzwvGYXJbRJejzTW/Ae8nIJ+rGssMOX
-         Wjp9BmdvntyOs6Iie6Y4zkymt45xMadTGxgo21puX1HWZ562JSLwI6ABU9liOW+jXPqo
-         nuO01y4JfwecLrRRCoFy75K2ShdocKuBVUosiVhlkfa7dgKI/CfMSWIeU+gB7rpMCWoa
-         OmnA==
-X-Gm-Message-State: AAQBX9e/XpBqapgvvttzJ/K5EBpUwrml8jBb2qecvIA/GUashDk8RhH9
-        ePkMZl6uLYcSNJUfJ9k5AN1VgA==
-X-Google-Smtp-Source: AKy350ZEHhfp/UzJ0URFQoZ1spvf7xAJ6vhppv6/DhrVo837ythU/SyCg9S1R8dhbRGHXfjkskDSVQ==
-X-Received: by 2002:aa7:d885:0:b0:4fd:2155:74ef with SMTP id u5-20020aa7d885000000b004fd215574efmr32584061edq.19.1680432423031;
-        Sun, 02 Apr 2023 03:47:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7f7f:6a30:7a20:94d5? ([2a02:810d:15c0:828:7f7f:6a30:7a20:94d5])
-        by smtp.gmail.com with ESMTPSA id u26-20020a50a41a000000b004fb95f51f54sm3142513edb.12.2023.04.02.03.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 03:47:02 -0700 (PDT)
-Message-ID: <8a22aea9-5027-e8a4-db80-ce79f3830e10@linaro.org>
-Date:   Sun, 2 Apr 2023 12:47:01 +0200
+        with ESMTP id S230365AbjDBKzl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Apr 2023 06:55:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141C91BF72
+        for <linux-pm@vger.kernel.org>; Sun,  2 Apr 2023 03:55:38 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pivMt-0008SR-K8; Sun, 02 Apr 2023 12:55:27 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pivMr-008Qop-Gi; Sun, 02 Apr 2023 12:55:25 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pivMq-009wlK-S2; Sun, 02 Apr 2023 12:55:24 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>
+Cc:     linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengtronix.de, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] i2c: omap: Don't do pm_runtime_resume in .remove()
+Date:   Sun,  2 Apr 2023 12:55:18 +0200
+Message-Id: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Patch v4 01/10] dt-bindings: memory: tegra: add bpmp ref in
- tegra234-mc node
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     treding@nvidia.com, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, lpieralisi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230327161426.32639-1-sumitg@nvidia.com>
- <20230327161426.32639-2-sumitg@nvidia.com>
- <787f656a-223d-5eed-e311-9cc7a6c46452@linaro.org> <ZCLF6ZRH528pu/r3@orome>
- <79d8044f-ce68-463e-66f7-8755e253bc99@linaro.org> <ZCLiCWRYbO98qwCn@orome>
- <0b393600-3f08-c2e8-9b02-664c6a984de1@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0b393600-3f08-c2e8-9b02-664c6a984de1@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1710; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YuO3xNgH6GPTxtI5VYLq6i5csE6lG+Icg93FwUQ/z2U=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKV8VIYZQ26aaizqS1BwvhCK5/Koz/UEgHsQBZ 3D8nAnNaW2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZClfFQAKCRCPgPtYfRL+ TtWVB/4nKls0puq1UcPdg0iFBHiiJN03d3ido9512BseMSFyy+lTZ6S8cbRf8w6Fq0BDJa3I3BL 7fymnh8VHHP2ZGwar6q6dRQAHATL1vuqR70KWSPtFCLfqF+gcnDAKgwXOSMrScM1w5Lvewr34kn NklZ2CKwMpsfRkWg8nZ7rhaQ7RCi9eHgmGTJfb8rN/R1eIcJoAIQS/XnIiy93CxP7H5eUUyA/0m +epP7yoBuVofi0/zA9kJtDtvEgAdb5JLi76gBQFmtH6/bZFO6l32r0NzxnCWXNXz9Whp7qO5yB5 1I8S+9EG7GZ3mQZyabfGBbTyT5mZb9fC2/oUacadhs3DjNyD
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,71 +56,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/03/2023 19:12, Sumit Gupta wrote:
-> 
-> 
-> On 28/03/23 18:18, Thierry Reding wrote:
->> On Tue, Mar 28, 2023 at 01:22:26PM +0200, Krzysztof Kozlowski wrote:
->>> On 28/03/2023 12:48, Thierry Reding wrote:
->>>> On Tue, Mar 28, 2023 at 09:23:04AM +0200, Krzysztof Kozlowski wrote:
->>>>> On 27/03/2023 18:14, Sumit Gupta wrote:
->>>>>> For Tegra234, add the "nvidia,bpmp" property within the Memory
->>>>>> Controller (MC) node to reference BPMP node. This is needed in
->>>>>> the MC driver to pass the client info to the BPMP-FW when memory
->>>>>> interconnect support is available.
->>>>>>
->>>>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->>>>>> ---
->>>>>>   .../bindings/memory-controllers/nvidia,tegra186-mc.yaml    | 7 +++++++
->>>>>>   1 file changed, 7 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>>>>> index 935d63d181d9..398d27bb2373 100644
->>>>>> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>>>>> @@ -58,6 +58,10 @@ properties:
->>>>>>     "#interconnect-cells":
->>>>>>       const: 1
->>>>>>   
->>>>>> +  nvidia,bpmp:
->>>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>>>>> +    description: phandle of the node representing the BPMP
->>>>>
->>>>> Why do you need this multiple times? Both in parent and all external-mc
->>>>> children?
->>>>
->>>> We've had nvidia,bpmp in the external memory controller node since
->>>> basically the beginning because we've always needed it there. For newer
->>>> chips we now also need it for the memory controller.
->>>>
->>>> Ideally I think we would only have this in the MC and have the EMC
->>>> driver reference it via the EMC's parent (i.e. MC), but that would break
->>>> backwards-compatibility. Reaching into the EMC's DT node from the MC was
->>>> another option that we discussed internally, but it didn't look right
->>>> given how this is also needed by the MC.
->>>>
->>>> One thing we could potentially do is deprecate the nvidia,bpmp phandle
->>>> in the EMC and only keep it as a fallback in the drivers in case the
->>>> parent MC doesn't find it's own in the DT.
->>>
->>> Yes, deprecation would answer to my question.
->>
->> Okay, great. Sumit, you can resolve this by adding a "deprecated: true"
->> to the EMC's nvidia,bpmp property schema. In the driver we can then try
->> to look at the MC's ->bpmp and if it exists reuse that. If it doesn't
->> exist, we can keep the existing lookup as a fallback for device trees
->> that haven't been updated yet.
-> 
-> We can't use MC's->bpmp in the EMC driver's probe as it will be NULL. 
-> This is because MC driver uses "arch_initcall" and gets probed earlier 
-> than BPMP. We can do this in another way as below change. This way we 
-> can use the existing "nvidia,bpmp" property from EMC node and don't need 
-> to move it to the MC node. Please share if this change sounds OK.
+One of the first things that the driver's pm_runtime_resume callback
+does is to write zero to the OMAP_I2C_CON_REG register.
+So there is no need to have the device resumed just to write to the
+OMAP_I2C_CON_REG register and the call to pm_runtime_resume_and_get()
+can be dropped.
 
-Then rather it sounds like time to fix these
-orderings/arch_initcall/missing defer.
+The intended side effect of this commit is to remove an error path of
+the function resulting in the remove callback returning a mostly ignored
+error code. This prepares changing the prototype of struct
+platform_driver's remove callback to return void.
 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-Best regards,
-Krzysztof
+I'm not completely sure that the reasing in the commit log is sound.
+There might at least theoretical side effects of the register write
+that are different if the device is fully resumed.
+
+Best regards
+Uwe
+
+ drivers/i2c/busses/i2c-omap.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index f9ae520aed22..a572f6d994ca 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -1522,16 +1522,12 @@ omap_i2c_probe(struct platform_device *pdev)
+ static int omap_i2c_remove(struct platform_device *pdev)
+ {
+ 	struct omap_i2c_dev	*omap = platform_get_drvdata(pdev);
+-	int ret;
+ 
+ 	i2c_del_adapter(&omap->adapter);
+-	ret = pm_runtime_resume_and_get(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
+ 
+ 	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
++
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+-	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	return 0;
+ }
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.39.2
 
