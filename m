@@ -2,77 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF57D6D3774
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Apr 2023 12:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471576D380D
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Apr 2023 15:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjDBK5f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Apr 2023 06:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        id S229997AbjDBNNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Apr 2023 09:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjDBK5e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Apr 2023 06:57:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446891A974;
-        Sun,  2 Apr 2023 03:57:32 -0700 (PDT)
-Received: from [127.0.0.1] (dynamic-046-114-210-195.46.114.pool.telefonica.de [46.114.210.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        with ESMTP id S229459AbjDBNNM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Apr 2023 09:13:12 -0400
+Received: from smtp26.services.sfr.fr (smtp26.services.sfr.fr [93.17.128.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DC25FFA;
+        Sun,  2 Apr 2023 06:13:08 -0700 (PDT)
+X-mail-filterd: {"version":"1.6.0","queueID":"4PqDwg18gGz1LQKcd","contextId":
+ "d5fbdbee-675f-4c3c-a303-2cad8805f6a4"}
+Received: from [192.168.1.30] (atoulouse-656-1-945-91.w90-11.abo.wanadoo.fr [90.11.30.91])
+        by msfrf2621.sfr.fr (SMTP Server) with ESMTP id 4PqDwg18gGz1LQKcd;
+        Sun,  2 Apr 2023 15:13:07 +0200 (CEST)
+X-mail-filterd: {"version":"1.6.0","queueID":"4PqDwd67f3z1LQKdJ","contextId":
+ "d71c0dae-802e-4170-b039-caf56db25b78"}
+X-sfr-mailing: LEGIT
+X-sfr-spamrating: 36
+X-sfr-spam: not-spam
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cegetel.net; s=202006;
+ t=1680441187; h=Date:Subject:To:Cc:References:From:In-Reply-To; bh=T6bCBwYVBW
+  WNvdSwubSv0cmUFyvnnKxXCzM7F4b5fQk=; b=EROc8NH5DOrUDIOUwb6AuLt56CF1PVrRXpIZRV
+  NatK/XwW1CPmGOgPcHk8B2c1WXbu5G1Q5zJeNGEbO43KentlwJUzcdO8YLVS/+TTzjyGT+87Uz0f
+  e3iTBn3PmQf0TkQfSq+AQUz+R6jm4H8jc4FlS1j7pOkqxG/aCRHdNH6wnTdYSVPXkVWtGRHJdYj9
+  R6odu2OpecTU9gdy+5zwcen9U2mN/YLp3Fgs3DqaVrghA51QADZUzgDTjXiOJOXS4/Bljm7P04JG
+  hNnZA0jSnfqkDObdal+7xi8sIb5akwUPro2MCPa5xf0XrAc8YLfT5F0ODX7ckMiR/0yYjAWIjcPQ
+  ==
+Received: from [192.168.1.30] (atoulouse-656-1-945-91.w90-11.abo.wanadoo.fr [90.11.30.91])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3CB341EC0531;
-        Sun,  2 Apr 2023 12:57:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680433050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sjr/8YpBxpZu8XIgiov75FI9xlVapCwFazswEREcX9g=;
-        b=jTzWHm2czG2w1cVgRl3fWAkOCMpWd2gBrkXvAOmMQHLZIYTEbiTBl6EE5NOuG9O9CEw1XH
-        4x/KA/QaSH66bMGRkZjuf937YADfMBD96C8623hBFpfuTsy3zcjwZGcJJAIMaFMf0M1Gjj
-        HWNxrZIgorni5+O6nc+ij+1Tz7XbwpI=
-Date:   Sun, 02 Apr 2023 12:57:29 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Guy Durrieu <guy.durrieu@cegetel.net>,
+        (Authenticated sender: guy.durrieu@cegetel.net)
+        by msfrf2621.sfr.fr (SMTP Server) with ESMTPSA id 4PqDwd67f3z1LQKdJ;
+        Sun,  2 Apr 2023 15:13:05 +0200 (CEST)
+Authentication-Results: sfr.fr; auth=pass (PLAIN) smtp.auth=guy.durrieu@cegetel.net
+Message-ID: <961f96d3-df1c-483d-f681-42a291d88740@cegetel.net>
+Date:   Sun, 2 Apr 2023 15:13:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
+ be onlined for x2apic
+To:     Borislav Petkov <bp@alien8.de>,
         Kishon Vijay Abraham I <kvijayab@amd.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>
-CC:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Santosh Shukla <santosh.shukla@amd.com>,
         Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Borislav Petkov <bpetkov@amd.com>,
         Leo Duran <leo.duran@amd.com>, 1033732@bugs.debian.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_x86/acpi/boot=3A_Do_not_register?= =?US-ASCII?Q?_processors_that_cannot_be_onlined_for_x2apic?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <c02a2a2f-2b40-e13e-ac40-e5d19a66b5ba@cegetel.net>
-References: <20230105041059.39366-1-kvijayab@amd.com> <c02a2a2f-2b40-e13e-ac40-e5d19a66b5ba@cegetel.net>
-Message-ID: <D2229CD1-CD5F-49E9-A0F5-BAB3940B6BFB@alien8.de>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230105041059.39366-1-kvijayab@amd.com>
+ <c02a2a2f-2b40-e13e-ac40-e5d19a66b5ba@cegetel.net>
+ <D2229CD1-CD5F-49E9-A0F5-BAB3940B6BFB@alien8.de>
+Content-Language: fr
+From:   Guy Durrieu <guy.durrieu@cegetel.net>
+In-Reply-To: <D2229CD1-CD5F-49E9-A0F5-BAB3940B6BFB@alien8.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On April 2, 2023 12:41:46 PM GMT+02:00, Guy Durrieu <guy=2Edurrieu@cegetel=
-=2Enet> wrote:
->My system worked fine with kernel 6=2E1=2E15, but stopped booting after
->upgrading to 6=2E1=2E20 and resulted in a kernel panic:
+Le 02/04/2023 à 12:57, Borislav Petkov a écrit :
 
-Does this fix it:
+> On April 2, 2023 12:41:46 PM GMT+02:00, Guy Durrieu <guy.durrieu@cegetel.net> wrote:
+>> My system worked fine with kernel 6.1.15, but stopped booting after
+>> upgrading to 6.1.20 and resulted in a kernel panic:
+> Does this fix it:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=x86/urgent
+>
+> Thx.
+>
+Yes it does.
 
-https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/tip/tip=2Egit/log/?h=
-=3Dx86/urgent
+Regards.
 
-Thx=2E
+-- Guy Durrieu
 
---=20
-Sent from a small device: formatting sucks and brevity is inevitable=2E 
