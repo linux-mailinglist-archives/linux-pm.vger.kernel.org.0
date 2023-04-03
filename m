@@ -2,51 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789066D4F8B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 19:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FB46D4F92
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 19:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjDCRvM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 3 Apr 2023 13:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S232579AbjDCRwe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 3 Apr 2023 13:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjDCRus (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 13:50:48 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B635AA;
-        Mon,  3 Apr 2023 10:50:17 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id y4so120637365edo.2;
-        Mon, 03 Apr 2023 10:50:17 -0700 (PDT)
+        with ESMTP id S232676AbjDCRwQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 13:52:16 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCD82724;
+        Mon,  3 Apr 2023 10:51:44 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id ew6so120517696edb.7;
+        Mon, 03 Apr 2023 10:51:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680544194;
+        d=1e100.net; s=20210112; t=1680544303;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=trLwUHvcK3wHkon8F/JeJDMZBlFlnvHVyUuthBunhUo=;
-        b=Vw/Y/IpCrcWQvKyifLHPKXpECid8or3RoecQeZPTA6phtWX/LyzcFRd/IkwnnBIPCE
-         B4bVHj/4j0SXqWUnuAV7RBeyLrfyqX+K/FfT4H6acDWmO4/C0hFW6dGlu3HltvtaG4VS
-         oYYqaMHHW2Zn3xkE30PAUy9Vk+7Au4CefVbNhCQV/0ntxnqmjiZAncyHF8ynbH2RC0v0
-         AjpXM59gJQGnZzgnC80Kw/a7nKgHKHRLQga77NA8qrIip71eoqwb3iO4hdP8Qur2XbQw
-         HrkwOXmx8BQffZsZApvlp6WR5XIc2vDXQT8NPuFbwFgQy9BFEpz8IUdlETaOb3/lT4CG
-         gpGg==
-X-Gm-Message-State: AAQBX9eAri3NaENRkXKFb2aWU3EreQGhVEwrRh9cwzGkBbhhp+gu0bH2
-        sjpMrdimxPBPxfyQLVpZMzRWiLfr3kjhgRfrbqE=
-X-Google-Smtp-Source: AKy350aMAMThM2sVQhdgQAtnQDKKZbUV+QqdzwDZGN8sDSUN1jdT3Iw8qMrz82dK2CRAWq127a7+ahqf+jd50nNEW1E=
-X-Received: by 2002:a17:907:3e8b:b0:931:ce20:db6e with SMTP id
- hs11-20020a1709073e8b00b00931ce20db6emr20289358ejc.2.1680544193791; Mon, 03
- Apr 2023 10:49:53 -0700 (PDT)
+        bh=CznSD9bS8RyObCuFJmGTR5dWb8+MmRhHb9IiF6EKc+g=;
+        b=zXhYBPK+u28xovUU0CfY+PyN0DRb73gN2xD0eSKQWFVCYrUE9tbH+9iiHrXiJK6mBg
+         cdifNoyGikFNXEZQaOAKC5bn3CjwkSE4OWw9rtPoz7bSumtWURzlwkiKYRaErLh2MZ+a
+         jVaYor+yQzCPnae4Dv8HhVp9VxsYwPGUVMWCbJD3eooAZ3cU8XpIGfaBV1uNJFIixXjr
+         sLSdiAZ0G0nSF5uDk0Kse6Yx7pIy8cUzw2TAewSmQBXRu2q1/kGXQz1XT2/YDijtPVU9
+         2/pEmisTf8Xl9kApSYrOk3ZY3svd0r5UIUL33MpZMEIa4mqeuA/FosdvvCaS8NYumm+S
+         04EA==
+X-Gm-Message-State: AAQBX9cfQGLmQBD08EyH3xR37MPVs6OR024GZlcN5ZBPfrorHgG1vmuX
+        /i7uN1thGbuORJlEH9CH/sgowR4GtgWKt9fEGJU=
+X-Google-Smtp-Source: AKy350ZdacuCAFk9OAUxlO3Usd+9JK8uI41jY0FBRaRA5QjURF92uSIJk3TxHMy/xxOajIj/4ixlWNjSWHxoWiB4liE=
+X-Received: by 2002:a17:906:4a94:b0:947:c623:2c84 with SMTP id
+ x20-20020a1709064a9400b00947c6232c84mr5366132eju.2.1680544302879; Mon, 03 Apr
+ 2023 10:51:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <2696911.mvXUDI8C0e@kreacher> <3dbb630f-abf9-4d09-f1fd-b2b05013c5dd@linaro.org>
-In-Reply-To: <3dbb630f-abf9-4d09-f1fd-b2b05013c5dd@linaro.org>
+References: <20230316153841.3666-1-rui.zhang@intel.com> <20230316153841.3666-5-rui.zhang@intel.com>
+ <CAJZ5v0hG9mC0DAWeGfgcrripi8dpANSwBgBQxjDSzzLGQcC0iQ@mail.gmail.com> <1299d6418c469d56cfe4c94af7342e9c9d26858e.camel@intel.com>
+In-Reply-To: <1299d6418c469d56cfe4c94af7342e9c9d26858e.camel@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Apr 2023 19:49:42 +0200
-Message-ID: <CAJZ5v0iueAzQ2mg0svfNJGvqL=dKtb1ibKxfGNyJVfnaeEfrOw@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: core: Clean up thermal_list_lock locking
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Mon, 3 Apr 2023 19:51:31 +0200
+Message-ID: <CAJZ5v0iwN-3TyX6A4VuX4EXwD9o04hHxm4T3=XaBg2hXPXev4g@mail.gmail.com>
+Subject: Re: [PATCH 04/15] powercap/intel_rapl: Support per Interface
+ primitive information
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -59,79 +62,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Apr 1, 2023 at 10:45 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Sun, Apr 2, 2023 at 9:43 AM Zhang, Rui <rui.zhang@intel.com> wrote:
 >
-> On 22/03/2023 20:34, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> On Thu, 2023-03-30 at 19:56 +0200, Rafael J. Wysocki wrote:
+> > On Thu, Mar 16, 2023 at 4:42 PM Zhang Rui <rui.zhang@intel.com>
+> > wrote:
+> > > RAPL primitive information is Interface specific.
+> > >
+> > > Although current MSR and MMIO Interface share the same RAPL
+> > > primitives,
+> > > new Interface like TPMI has its own RAPL primitive information.
+> > >
+> > > Save the primitive information in the Interface private structure.
+> > >
+> > > Plus, using variant name "rp" for struct rapl_primitive_info is
+> > > confusing because "rp" is also used for struct rapl_package.
+> > > Use "rpi" as the variant name for struct rapl_primitive_info, and
+> > > rename
+> > > the previous rpi[] array to avoid conflict.
+> > >
+> > > No functional change.
+> > >
+> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > > ---
+> > >  drivers/powercap/intel_rapl_common.c | 50 ++++++++++++++++++----
+> > > ------
+> > >  include/linux/intel_rapl.h           |  2 ++
+> > >  2 files changed, 35 insertions(+), 17 deletions(-)
+> > >
+> > > diff --git a/drivers/powercap/intel_rapl_common.c
+> > > b/drivers/powercap/intel_rapl_common.c
+> > > index 56e8af2a1e6f..898238285188 100644
+> > > --- a/drivers/powercap/intel_rapl_common.c
+> > > +++ b/drivers/powercap/intel_rapl_common.c
+> > > @@ -654,7 +654,7 @@ static u64 rapl_unit_xlate(struct rapl_domain
+> > > *rd, enum unit_type type,
+> > >  }
+> > >
+> > >  /* in the order of enum rapl_primitives */
+> > > -static struct rapl_primitive_info rpi[] = {
+> > > +static struct rapl_primitive_info rpis_default[] = {
 > >
-> > Once thermal_list_lock has been acquired in
-> > __thermal_cooling_device_register(), it is not necessary to drop it
-> > and take it again until all of the thermal zones have been updated,
-> > so change the code accordingly.
-> >
-> > No expected functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
+> > What does the 's' in the name stand for?
 >
-> Looks good to me, shall I pick it in my branch ?
+> 'rpi' stands for rapl_primitive_info, so I use 'rpis' for a series of
+> rapl_primitive_info.
 
-No, I;ll take care of it myself, thanks!
-
-> >   drivers/thermal/thermal_core.c |    8 ++------
-> >   1 file changed, 2 insertions(+), 6 deletions(-)
-> >
-> > Index: linux-pm/drivers/thermal/thermal_core.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > +++ linux-pm/drivers/thermal/thermal_core.c
-> > @@ -826,8 +826,6 @@ static void bind_cdev(struct thermal_coo
-> >       const struct thermal_zone_params *tzp;
-> >       struct thermal_zone_device *pos = NULL;
-> >
-> > -     mutex_lock(&thermal_list_lock);
-> > -
-> >       list_for_each_entry(pos, &thermal_tz_list, node) {
-> >               if (!pos->tzp && !pos->ops->bind)
-> >                       continue;
-> > @@ -854,8 +852,6 @@ static void bind_cdev(struct thermal_coo
-> >                              tzp->tbp[i].weight);
-> >               }
-> >       }
-> > -
-> > -     mutex_unlock(&thermal_list_lock);
-> >   }
-> >
-> >   /**
-> > @@ -933,17 +929,17 @@ __thermal_cooling_device_register(struct
-> >
-> >       /* Add 'this' new cdev to the global cdev list */
-> >       mutex_lock(&thermal_list_lock);
-> > +
-> >       list_add(&cdev->node, &thermal_cdev_list);
-> > -     mutex_unlock(&thermal_list_lock);
-> >
-> >       /* Update binding information for 'this' new cdev */
-> >       bind_cdev(cdev);
-> >
-> > -     mutex_lock(&thermal_list_lock);
-> >       list_for_each_entry(pos, &thermal_tz_list, node)
-> >               if (atomic_cmpxchg(&pos->need_update, 1, 0))
-> >                       thermal_zone_device_update(pos,
-> >                                                  THERMAL_EVENT_UNSPECIFIED);
-> > +
-> >       mutex_unlock(&thermal_list_lock);
-> >
-> >       return cdev;
-> >
-> >
-> >
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+I would call it rpi_default[] (without the 's'), because the "array"
+part is implied by its definition, so the plural is not really
+necessary.
