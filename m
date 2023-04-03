@@ -2,112 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB2E6D4B71
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 17:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466566D4BD5
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 17:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234185AbjDCPIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Apr 2023 11:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S232620AbjDCP2h convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 3 Apr 2023 11:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbjDCPIK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 11:08:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDA64C35;
-        Mon,  3 Apr 2023 08:08:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADF7561A55;
-        Mon,  3 Apr 2023 15:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A37C4339B;
-        Mon,  3 Apr 2023 15:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680534482;
-        bh=Zvq9Hzpetq9+ZiBrci0/SnW1z0Ndhco9dW2OQzO42bc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LPSID/hW1iIiGUMdrfSA+O+e5b98RytK7Y34WEdMUQGE3B5wDApQjkEE5j5LWK8IX
-         iuYzO1CRQem0UBb0MQ+yHt7bysq+oQ0HzTXXWSGs9R2uWVdIVfs9zs//X59D67fOTN
-         kkR8fYsJ0VhLg6hSdwaJ5VI3mSZ2hcwWaB7MRGOqNVPFZmJO17v7EvZSXcaKhGrYJf
-         YOsayAmvzQSvVZqafUNir2ALY1AiobPKEfd52C9PVugNvVLiTefUzF8qh3pqLB9yVC
-         OJF12k5hKshsRfEzqU1EqfYrvbkZDZbVBqMlTzMVEA72PlpFMQICPWceC5MK6a/S41
-         X+dDKoQeE4sJg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
-In-Reply-To: <20230325122444.249507-1-vkoul@kernel.org>
-References: <20230325122444.249507-1-vkoul@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/12] Introduce the SC8180x devices
-Message-Id: <168053447680.47740.2062036242012042206.b4-ty@kernel.org>
-Date:   Mon, 03 Apr 2023 16:07:56 +0100
+        with ESMTP id S232544AbjDCP2g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 11:28:36 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7399510E7;
+        Mon,  3 Apr 2023 08:28:35 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id w9so118919727edc.3;
+        Mon, 03 Apr 2023 08:28:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680535714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DiSKLnH8s6Gs1Z3VpHAX6KBIc26fK0fuzBM84eLhSpY=;
+        b=vHkeZAALKS4gef428sYpZViPj9Piasvyy/RVED8q0mP0+yHMCRoFni+koXofgqj+U1
+         VkQmH+L3uqiFZC4pJfshmKEvN6JQBLHC/+jD/1yH7ZY/XT0IPjzkF3vvqF8iaEr3Ho7Q
+         QkCJZOPMp5A19kt6LBmAA+UyvupxCQ/l1gG883RGlyDXs1z0hcV57CJn7rcrmr+lGASH
+         CtcOEJilGKLGGaJLOedj0b4TjPEBB/utaAHZaNTywrRAin8iZOTUbwEauPN1Iosf+gQ1
+         yEtsvMkFAXPPiG+XMo3BJU9WNYaO6/hNs+nGSnsu2FLX2Zl8PIwNiPa1sGQn+rs8R0Z7
+         Dueg==
+X-Gm-Message-State: AAQBX9dYYGf/BuIbSfgis5ArbipG6hDtBti65P4eB9yguVHg7Xfel/oU
+        r48eL7aAJhaKlh3vfBGDTeVNY04UKny6jBABjjsCIbEC
+X-Google-Smtp-Source: AKy350bBTP0RUd3cX3G8pswzZ8eldAiYzVe36XfKOv5lU7So16xU6XTQkLouAGDJS2Pe7qn5X2UGx5SIoKapJfnhm44=
+X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
+ gn2-20020a1709070d0200b009316921bdbbmr17344454ejc.2.1680535713826; Mon, 03
+ Apr 2023 08:28:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
+In-Reply-To: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Apr 2023 17:28:20 +0200
+Message-ID: <CAJZ5v0h4AUP92Wuprfoy2ErhiktTvRquyc9-iMwzt6d=HaqYMg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: drivers with target_index() must set freq_table
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Yajun Deng <yajun.deng@linux.dev>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 25 Mar 2023 17:54:32 +0530, Vinod Koul wrote:
-> This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
-> laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
-> laptop.
-> 
-> I would be great if submaintainers can ack the binding patch so that
-> everything can go thru qcom tree
-> 
-> [...]
+On Mon, Apr 3, 2023 at 6:09 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Since the cpufreq core directly uses freq_table, for cpufreq drivers
+> that set their target_index() callback, make it mandatory for them to
+> set the same.
+>
+> Since this is set per policy and normally from policy->init(), do this
+> from cpufreq_table_validate_and_sort() which gets called right after
+> ->init().
+>
+> Reported-by: Yajun Deng <yajun.deng@linux.dev>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c    | 5 +++++
+>  drivers/cpufreq/freq_table.c | 9 ++++++++-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 6d8fd3b8dcb5..09131c54703f 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -73,6 +73,11 @@ static inline bool has_target(void)
+>         return cpufreq_driver->target_index || cpufreq_driver->target;
+>  }
+>
+> +bool has_target_index(void)
+> +{
+> +       return !!cpufreq_driver->target_index;
+> +}
 
-Applied to
+This needs to go into a header (as a static inline) or the prototype
+of it needs to go into a header.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[08/12] regulator: dt-bindings: qcom,rpmh: Add compatible for PMC8180
-        commit: fc4fef625decc80cf3a72e884a4e37288bfa0f9b
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> +
+>  /* internal prototypes */
+>  static unsigned int __cpufreq_get(struct cpufreq_policy *policy);
+>  static int cpufreq_init_governor(struct cpufreq_policy *policy);
+> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> index 90bfc27ed1ba..c6fc5b0ea91f 100644
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -10,6 +10,8 @@
+>  #include <linux/cpufreq.h>
+>  #include <linux/module.h>
+>
+> +bool has_target_index(void);
+> +
+>  /*********************************************************************
+>   *                     FREQUENCY TABLE HELPERS                       *
+>   *********************************************************************/
+> @@ -355,8 +357,13 @@ int cpufreq_table_validate_and_sort(struct cpufreq_policy *policy)
+>  {
+>         int ret;
+>
+> -       if (!policy->freq_table)
+> +       if (!policy->freq_table) {
+> +               /* Freq table must be passed by drivers with target_index() */
+> +               if (has_target_index())
+> +                       return -EINVAL;
+> +
+>                 return 0;
+> +       }
+>
+>         ret = cpufreq_frequency_table_cpuinfo(policy, policy->freq_table);
+>         if (ret)
+> --
+> 2.31.1.272.g89b43f80a514
+>
