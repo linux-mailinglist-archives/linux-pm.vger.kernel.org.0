@@ -2,74 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9526D41FC
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 12:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42406D4201
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 12:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjDCK1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Apr 2023 06:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S231921AbjDCK2a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 06:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjDCK1Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 06:27:24 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA48728F
-        for <linux-pm@vger.kernel.org>; Mon,  3 Apr 2023 03:26:48 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l37so16778670wms.2
-        for <linux-pm@vger.kernel.org>; Mon, 03 Apr 2023 03:26:48 -0700 (PDT)
+        with ESMTP id S232227AbjDCK21 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 06:28:27 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9575C212C
+        for <linux-pm@vger.kernel.org>; Mon,  3 Apr 2023 03:28:21 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id l27so28795004wrb.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Apr 2023 03:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680517601;
+        d=linaro.org; s=google; t=1680517700;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uJqJCfXYsKrauWQ1VzvumsEN640d4PkwxnqFIZ8sjg4=;
-        b=vYyXyZIon/EizW+NXgKhpk0havOfXPqISSQhL9lsTu9/m92Lodhn4bKB4Ot5wuUM3F
-         WKj/muGRtrUUWlBVpOEuMwqWZL9T4xu648PG+TsTmD/KWTl/A6biSUS0W41DmrabNy3/
-         sRu1NwKfcwgSsl414b/wXytQJzQEnlbvoXKC8w/D7K4LtQXYMuBuDG5xpoNySCDI7G3i
-         qPDxRnUI7Pzn7j6zngUl3fhwQ9RPp8FfTtjnITZ2VZtkZgiQ9mx9plRkhgaSVcRWcOXA
-         Fs6STndGzx7tkpKp7VK7cbDG8DshTEwIIo3TtDIT2QXbiGqfl0q/5+FehMLFtqvdQLyI
-         8GHQ==
+        bh=IbYw3BcOTVr2vYhRZ5kcfhDg4Aj2okCKbHzUaqITdJ0=;
+        b=vpYIu8vv5RQlDe51YqL4pyLVV9yKIOxRirsKGqXxk5UruYtnK55UbCTVHd9uhkNnKs
+         7f00qU2pMymYbYzq1SEzJ+LMXKexScBaD1pZrVf3zR/PCQsgX1jEU84J0BjeosKgQPuo
+         jJeb+1ow+Z/FL3Kqp7m9lA2vOme1fol+d2+kuX3PNEqtNKF8v5fqxciotbzzNMIUeiIQ
+         XI/vievUtO8vwPtbSe/Z8k0ide950seKi6YqxqnD78adxydbXdW8fwNbxqi8KV07JDcN
+         cnQj7u2Yh91TnKvinPz88XNLVgIkZ0yIHPNy3lOzTYZHgyY29NaoxoG6vifxrgTKvN1X
+         pXhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680517601;
+        d=1e100.net; s=20210112; t=1680517700;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJqJCfXYsKrauWQ1VzvumsEN640d4PkwxnqFIZ8sjg4=;
-        b=CrkAjTf9Wx7EiHw4M51hvuTFOSWeLSkFw72jFTKT3aRlc20FgBWc8Puld/TtX4Bj5v
-         b5cGSKQE8ba2viFOY7zGwZMNEn5aidLeO4kn7gXewbCPm9IXJBxYqTEs8E1tlCzwgTr2
-         U6y/PZww1Uxe6ry6SyJPLX3BXM60CKki2yieP32OF4PEcK/XIQto8VrBqmOane/Qb8QH
-         8p6Urir1AShzLhU9yd2ZSsG2vO3JKmCHo9uQieLEVCf8nNjQdjq0tlZAGbupuAtGOI7v
-         Ztp8I/wkm29FewztSb5BpD0dY5aq0xpNWTFJPXa9674BOOKzUxMlrzZu8KuzxqbMq4ld
-         4Hew==
-X-Gm-Message-State: AAQBX9dQCFyingvIDwNFHg2xGO7vfKxEEbrM6+9fHZFtxN68vKljuZTK
-        qp1LM64OnipZvumJI4Idy44klw==
-X-Google-Smtp-Source: AKy350YKX9loEpC/aa7UcSmpn4QvLYOnjAUIpqPaJ3ERSh3FCOLOMkxwpPSHzNxBOFfj3nU8n2WH4Q==
-X-Received: by 2002:a7b:c3ce:0:b0:3f0:3a9a:516e with SMTP id t14-20020a7bc3ce000000b003f03a9a516emr10482522wmj.15.1680517601510;
-        Mon, 03 Apr 2023 03:26:41 -0700 (PDT)
+        bh=IbYw3BcOTVr2vYhRZ5kcfhDg4Aj2okCKbHzUaqITdJ0=;
+        b=14+8BcR0xLX24Of6YqDjR3KruZrg5TLxEK4rSARK1hicHddVV0R0w7/5pube8t+KUf
+         4LjgrnOHapnvPa5mtsJODF29e71po7gYbhq9rgQXo1WujjozC0Ssy3Sn+oPPC2CmU5Et
+         qSfZSl0w/19Uc2MDo7oyy9ug5box1DiRuCf8HhqbMvL7AhUxwifbwbu66mna0TRM9IKQ
+         2mMXqg9QXlWPULdyHqnk2lDTkZ5ywpev3oT3cfMuW5gfatDuOdxxD7aUdpuW4uxTJVmz
+         KXqTMz8xk27FX6a/RViPhzDec1bNvknu/HD/2jy5VQYqpSEcpJNeR4BRiEIcDgw6j0ag
+         R6aQ==
+X-Gm-Message-State: AAQBX9dktgaLBwD3rnhqkpDBgXUyJIf245A1heAAVbgeshtmkcrVC6kj
+        Gce38AVsvUFka0xfJkppP59XVw==
+X-Google-Smtp-Source: AKy350Ym8q6iCQz7IACYnjf8nMBRh3FCcRF5gQHC6QtL5ZQW0E5F3j1CcmyZ2hA/rIzNr5GHxnwESw==
+X-Received: by 2002:adf:e7c2:0:b0:2cf:ea5f:6de with SMTP id e2-20020adfe7c2000000b002cfea5f06demr3426533wrn.14.1680517699957;
+        Mon, 03 Apr 2023 03:28:19 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:8052:c9eb:6b69:e69a? ([2a05:6e02:1041:c10:8052:c9eb:6b69:e69a])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a7bcb11000000b003ef5db16176sm11758625wmj.32.2023.04.03.03.26.40
+        by smtp.googlemail.com with ESMTPSA id c13-20020adffb0d000000b002e5e7ee11besm8922298wrr.94.2023.04.03.03.28.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 03:26:41 -0700 (PDT)
-Message-ID: <2c37a786-0ae5-273e-f82b-4f9c82663053@linaro.org>
-Date:   Mon, 3 Apr 2023 12:26:40 +0200
+        Mon, 03 Apr 2023 03:28:19 -0700 (PDT)
+Message-ID: <38a5a6e0-2af8-8365-b20e-8494a4efcb0c@linaro.org>
+Date:   Mon, 3 Apr 2023 12:28:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] thermal: tegra-bpmp: Check if BPMP supports trip points
+Subject: Re: [PATCH v1 00/11] Generic trip points for ACPI
 Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Mikko Perttunen <cyndis@kapsi.fi>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20221129153914.2699041-1-cyndis@kapsi.fi>
- <Y9KTrO+WqJJwuEDf@orome> <a08355e1-c393-2b2e-4a44-360e08607bb9@linaro.org>
- <Y9KfcSwYt7utbcg5@orome> <e716eda4-edfc-5946-4e6f-42aab5f73b0f@linaro.org>
- <d7435a96-3480-280e-d996-73fea690c373@nvidia.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20230203173331.3322089-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0gkOfbWZWzsTKLBD9C8TaAp0qmTv0L0X7E3fBSLyMUEcQ@mail.gmail.com>
+ <a4da1cb6-80a5-a3a9-72e6-62e5ad810509@linaro.org>
+ <CAJZ5v0hWE_gRHj7_zZmu=firwTOnF1X4j59hrV_iy045R8GeeQ@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <d7435a96-3480-280e-d996-73fea690c373@nvidia.com>
+In-Reply-To: <CAJZ5v0hWE_gRHj7_zZmu=firwTOnF1X4j59hrV_iy045R8GeeQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -82,55 +77,139 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/04/2023 12:22, Jon Hunter wrote:
-> Hi Daniel,
-> 
-> On 26/01/2023 16:07, Daniel Lezcano wrote:
->> On 26/01/2023 16:42, Thierry Reding wrote:
->>> On Thu, Jan 26, 2023 at 04:08:03PM +0100, Daniel Lezcano wrote:
->>>>
->>>> Hi Thierry,
->>>>
->>>> On 26/01/2023 15:52, Thierry Reding wrote:
->>>>> On Tue, Nov 29, 2022 at 05:39:14PM +0200, Mikko Perttunen wrote:
->>>>>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>>>>
->>>>>> Check if BPMP supports thermal trip points, and if not,
->>>>>> do not expose the .set_trips callback to the thermal core
->>>>>> framework. This can happen in virtualized environments
->>>>>> where asynchronous communication with VM BPMP drivers is not
->>>>>> available.
->>>>>>
->>>>>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>>>>> ---
->>>>>>    drivers/thermal/tegra/tegra-bpmp-thermal.c | 52 
->>>>>> +++++++++++++++++++++-
->>>>>>    1 file changed, 51 insertions(+), 1 deletion(-)
->>>>>
->>>>> Applied, thanks.
->>>>
->>>> I prefer you provide an Acked-by and I take the thermal related 
->>>> patches.
->>>> Especially in this period where we are reworking the framework with the
->>>> thermal trip points ;)
->>>
->>> Sorry, my bad. I misread this as belonging to drivers/firmware/tegra
->>> which goes in via ARM SoC.
->>
->> No worries ;)
->>
->>> I'll drop this from the Tegra tree. Feel free
->>> to pick this up:
->>
->> Ok, thanks
->>
->>> Acked-by: Thierry Reding <treding@nvidia.com>
-> 
-> 
-> I don't see this one in -next. Are you able to pick this one up now?
 
-Before going in -next, it will go through bleeding-edge then -next, 
-logically tomorrow.
+Hi Rafael,
+
+thanks for taking the time to go through the series.
+
+On 31/03/2023 18:04, Rafael J. Wysocki wrote:
+> On Fri, Feb 3, 2023 at 10:47 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 03/02/2023 19:46, Rafael J. Wysocki wrote:
+>>> On Fri, Feb 3, 2023 at 6:34 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> This series introduces the generic trip points usage in the thermal ACPI
+>>>> driver. It provides a step by step changes to move the current code the
+>>>> generic trip points.
+>>>>
+>>>> I don't have an ACPI platform, the code is not tested.
+>>>
+>>> What's the purpose of sending this now, then?  Should it be an RFC?
+>>> I'm certainly going to treat it this way.
+>>
+>> I did basic testing on a x86 laptop having critical trip points but
+>> nothing else.
+>>
+>> I understand it can be treated as RFC.
+> 
+> So I've gone through this series now and I'm not entirely convinced.
+> 
+> While I agree with the general direction (using a generically-defined
+> trip point representation instead of a home-grown one is definitely an
+> improvement IMV and I understand the idea of putting all trip points
+> into an array which then will allow the overhead in the core to be
+> reduced), I don't quite like the way the change is carried out in the
+> series.  In particular, I'd prefer to avoid introducing "temporary"
+> structures that get removed entirely by subsequent patches in the
+> series - this makes the intermediate steps sort of pointless and
+> doesn't really help to understand what's going on (quite on the
+> contrary even, AFAIAC).
+
+I'm surprised it is less understandable. The ACPI trip points structure 
+have nested and duplicated descriptions. The resulting code goes through 
+these structures depending on the type.
+
+In order to convert the code to deal with the same structure, the first 
+patches are moving the structures into a single one, so can more easily 
+replace one by another.
+
+Before doing a full conversion to the trip point changes, they co-exist.
+
+> I also don't quite like changes like the
+> temperature unit conversion in patch 9.
+
+Is it the conversion itself or how the changes are done?
+
+> Personally, I would do it differently.  I would start with changing
+> the ACPI thermal driver to use the generic trip point definition (with
+> possible extensions) 
+
+Do you mean the adding a 'private' field in the trip point structure:
+
+struct thermal_trip {
+         int temperature;
+         int hysteresis;
+         enum thermal_trip_type type;
+	void *data;
+};
+
+?
+
+> instead of the home-grown one and continue from
+> there.  I think that this would be more straightforward, but I guess I
+> just need to try it out myself.
+> 
+> Beyond that, there is a question regarding the desired behavior of the
+> whole framework in some cases, like when the trip points get modified
+> by firmware and the kernel gets a notification to re-enumerate them.
+
+Yes, I think we should introduce a new function:
+
+thermal_zone_device_trips_update(struct thermal_zone_device *tz,
+	struct thermal_trip *trips, int nr_trips);
+
+> This may happen in ACPI-enabled systems in general, so the ACPI
+> thermal driver needs to be prepared for it, but not just the driver -
+> the thermal core needs to be prepared for it too.  So the question is
+> how it all should work in principle.
+
+I recently sent a patch when passing the thermal zone parameters where 
+the structure is kmemdup'ed and stored in the thermal zone device 
+structure [1].
+
+[1] 
+https://lore.kernel.org/all/20230307133735.90772-11-daniel.lezcano@linaro.org/
+
+That allows to initialize the thermal zone device and let the core code 
+thermal framework to do stuff with it.
+
+The caller does not have to keep the thermal zone device parameter 
+structure, it can create it on the stack and the forget it.
+
+IMO, we should do the same for the thermal trip array. So the thermal 
+framework kmemdups it, reorders it if needed. The thermal trip array is 
+then just an initialization array and once it is passed to 
+thermal_zone_device_register_with_trips(), the driver should not use it 
+anymore but use the thermal framework API.
+
+Having the private data in the thermal trip structure will allow the 
+ACPI to store the trip id, so the trip array can be reordered.
+
+>  AFAICS, not only the trip
+> temperature can change, but the ordering of them can change as well
+> such that the passive trip point lies between the active ones, for
+> example.  So when this happens, is the core going to tear down all of
+> the trip point representation in sysfs and re-create it from scratch,
+> even if it may be used by user space (that may not be prepared for the
+> re-enumeration) at that point, or is it sufficient to simply make the
+> trip point attributes return different values when the corresponding
+> trip points change?
+
+IMO, the function thermal_zone_device_trips_update() can take care of:
+  - delete the sysfs entries
+  - reorder the trip points,
+  - create the sysfs entries
+  - notify THERMAL_ZONE_TRIP_CHANGED
+  - update the thermal zone
+
+Probably we can move part of the code from 
+thermal_zone_device_register() into this function
+
+The userspace should be aware of the THERMAL_ZONE_TRIP_CHANGED event.
+
+However, I'm not sure there is an trip update leading to a change of the 
+number of trip points as well as changing the order.
 
 
 -- 
