@@ -2,159 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C913E6D5123
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 21:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF4B6D532E
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 23:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjDCTSJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Apr 2023 15:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S233680AbjDCVMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 17:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDCTSI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 15:18:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49341FCB;
-        Mon,  3 Apr 2023 12:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680549487; x=1712085487;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=l5Xn+y/SuHRK/WOYG/X6Gt8dlcpua3DvBSdhlkd9rms=;
-  b=Jr90yUgnLpHuAf2fCpmCnxIkkp76JtbLRNAPWZ3tmGveGWaM68iEVvo3
-   TyhsZq9eCQH2j2iI2w8iyfPm3OYDDkyIHduZPa2KiedQELoxo9o0mlUyo
-   LBR9MKe84GcJIbYyxQPP68s039O2jIlR+Uh88Jg8DTICaItZIOm6r6/sI
-   vOrEm0nxF2kru1hExKdXMxqJi7DctFCW6vsNwG3tYp6QHyLQudYUcxrQJ
-   ehdH1wb6AxjlR5sEj2IartEwqM6rFXbwVUTyN3d6FRerO2iaa3YrBtLIk
-   mXM4LcOVy97Deg+1asopJulDxMcyskrG4A/Q+pEiOMUyHe7KeF8PIG4eA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="343690632"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="343690632"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 12:18:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686095404"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="686095404"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 12:18:05 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 12:18:05 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 12:18:04 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 3 Apr 2023 12:18:04 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 3 Apr 2023 12:18:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mQPi4YaVcXohumesS/1w7nRB64AA0dUeIhU4/o4rXlIHYv7tik6wp8JkbgmoRbJ6jB8VUMZKfTGHWXD8d6N+GJLpXtDs+1Q0SVE0xlfRc4JP2BSzZGPVRjUHkVjzV7nI0HecdaKC8okhetxw43yntoZo2OhXpNjKgWkuf+rK7RimKvQzp5SyCESMeBwAlwp4MeQmFUuCoz6nC7PnPe8MjCmfYwzSyuwE5O01WK5QqHNnWkPbLlbfzRR1cCpjeYMtMX28CbtdYVMtmr5GE24zpBq+20TgU7F4dBflduAtWF8+vGarcUmY/GGW7mc4gGobGIqv/6Y6xPvBbBC+Yka7sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qUzgRmmRIstmZMzFZvQobb+HrPhHjzOPsLSSWFLZUbk=;
- b=oe34O3deCnOS7xu1A5RjONMWpogNkfqAUBoDikAD4cbyPxEEOiuYVnv+8OcBnbT8/tUAwciocYHWRNmdh+AAbcEbL/HLN9W5jwwIRp8p4WME7njvnkdxN4X7KwjO6Ksiz6snFjjeKEJy1pRpHENZL/pl1uxqZAUSVtaC5yrCj13MUKZZX87RWnjB4XHIUCtjeCVFr1zb10ZmG/93bA2JQWEjRGN7goonu2ZAiQyIl1PqQqmprhgCrpoEHQQejn+lFfhs83IUtLvz7/hSWKQEeLkAEWCVjjYt0pZ8ZCggG5vb6ayuceIFJ73lrGJD1DRJqPpfTM8h5AoC+Ja0Uyg5Kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
- by BL1PR11MB5238.namprd11.prod.outlook.com (2603:10b6:208:313::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Mon, 3 Apr
- 2023 19:18:02 +0000
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::9121:8fa8:e7d9:8e46]) by MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::9121:8fa8:e7d9:8e46%8]) with mapi id 15.20.6254.024; Mon, 3 Apr 2023
- 19:18:02 +0000
-Message-ID: <261135b7-6d81-d330-2beb-2473d9d4a36e@intel.com>
-Date:   Mon, 3 Apr 2023 21:17:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH RFC] PM: runtime: Drop device usage only after remove is
- done
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel@pengutronix.de>,
-        <linux-pm@vger.kernel.org>
-References: <20230402103951.2510773-1-u.kleine-koenig@pengutronix.de>
-Content-Language: en-US
-From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-In-Reply-To: <20230402103951.2510773-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0313.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:197::12) To MW5PR11MB5810.namprd11.prod.outlook.com
- (2603:10b6:303:192::22)
+        with ESMTP id S233597AbjDCVLx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 17:11:53 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466E11FC2
+        for <linux-pm@vger.kernel.org>; Mon,  3 Apr 2023 14:11:37 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id kc4so29321578plb.10
+        for <linux-pm@vger.kernel.org>; Mon, 03 Apr 2023 14:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1680556296;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MrvB9dLaBUlXb9132dHY3khaWN+MmC+4xODtdYapChQ=;
+        b=YClfDXVMnyD4N/fCkOJ+5VV43bCDFEyC1WQwMYHhnhYIf7C6qaiUXvhRzZcrRvH4yq
+         iw2q93xPIKLX+F4RibdFqKd4d6EB87+Qe2Ior7VTT2MUeVWVeBXTIK/GU9v5uNHsBewS
+         wYjozfd40gTZ/lIdRHaXeUlCcXeyjV6ING3N8rvaIpxgxO03uPihY0RlSdtmw3cWqAn2
+         LhVuaOfgrYWD2u5+7iqx9klGDMlmbhGqWxXA+c0YaV6mfbjTE9NhdmLIctUm9w46U/t7
+         ayfbtWPc6/TBF4VJBqv96J/mTuOwTvWuJF+I/q2uC0iZhEWOBckW0ejA//xiX0t9hmQP
+         j4Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680556296;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MrvB9dLaBUlXb9132dHY3khaWN+MmC+4xODtdYapChQ=;
+        b=rKwhbko0XiK8aOZKftQN/zODKCTCxl9yGSaJWEE1Ravc07Ks3bapm5uOh6aT88Lyp5
+         Tt8PW40s69FYO4qMu/uVl222Q2mJdImpZ6vbUePx1Bj1ZMHW8O8YYuJSksk/Cqf0U2qb
+         EFXK7MGUiXQ/94oTSGu5YdSBXfeenPtPCSnL0Md87vi285+mvIZ73YggYV/sI2bwPg5/
+         3fcpXblU9aODe6RBcwrPYONxjZeDNeJ9HZAkE0NNItNz/H73jtk1YFgfkNlt21iQ11Vd
+         kqm0V7rLLk1PsEbFJHEQ1jbwLyZotgcCUfwbtcNpF9HQy6xVT6kxfktdELNtovc8rKI6
+         6z7g==
+X-Gm-Message-State: AAQBX9d0O2gjTusKbOAi+3ssuJzFZmLnhqLYLLRA3YfRLg8KBEo7coNd
+        Hlrex6l1jSzrAoFB3jE/sM5Fzw==
+X-Google-Smtp-Source: AKy350ZzxDFZgHJ2G4M8Pxq7ivSpG//SCIzPE9kkjUJ8tEoQ90iiNfJXeSTWUFZ8dy2vd+2jwWd+KQ==
+X-Received: by 2002:a17:903:1d1:b0:1a0:76d1:545c with SMTP id e17-20020a17090301d100b001a076d1545cmr19062125plh.10.1680556296542;
+        Mon, 03 Apr 2023 14:11:36 -0700 (PDT)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id k5-20020a170902760500b001992fc0a8eesm7090147pll.174.2023.04.03.14.11.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Apr 2023 14:11:35 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     <lenb@kernel.org>
+Cc:     "Doug Smythies" <dsmythies@telus.net>, <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>
+Subject: [PATCH] tools/power/x86/turbostat: Fix added raw MSR output
+Date:   Mon, 3 Apr 2023 14:11:38 -0700
+Message-ID: <00d201d96670$e15ab9d0$a4102d70$@telus.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|BL1PR11MB5238:EE_
-X-MS-Office365-Filtering-Correlation-Id: feab9d44-0188-4706-271a-08db34782432
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iPxRZNIk9YoCbZxE2BhFu4A7z3obW/VrCpgXA8zsxm84tZ5jVP7pMeTtGtcfhaynTa6dNlQsG3AELdjqXuCftzuiWOgyFjuWOkoC083TXsBSzdgnGDwhve+dBP2yttqnNCpukifCFK5QElNhSMZPg4FHa0cPjY5//k2UHoKMKNhtLJj6vCHJhRiMhUE3yS6bGTag/WaHiK/rjcu1HAAhi0EVaW5I0AIeZcMF4wr/1rf63kLp+g7Q8veXbwzi31PR2ZWQnQ4OQ67Jgx/arcgiydFH8xrf5WSJHfAOP91VwHggxVQXK5TPD22G5/ehSmMRqIuqACjmV0i0Rog4TfWb7MJefnmVU7jDyFGDtn9nvbz2CJZT0kUfET5/P1AosIOD8uNJlt/k2wU7bFjvbSecaWgS34mC1wcqSl96dcpdZvQCbrs0dZZYzUrVKlvZRGspbONqf9RWqzZvI8WKksS9oGUQ7eUx6ITbfxmbdG7yZq6p7Wd78y1ipymfY+hfvh/AdBkDKvwvliDlPDzE7tEwDhA5N/cEZ85FxscXqziPPqML8pMENanlkRotY/Oie32KWzmXc+0bp+cjOhQheTPSRZL32ynpLF5cRQ9LlHWKopS94rplES34Z8QdNWG46/CVyNdyudclI4DQFpHOU3qYCQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(83380400001)(31686004)(5660300002)(8676002)(66946007)(66476007)(66556008)(2906002)(38100700002)(41300700001)(4326008)(82960400001)(66574015)(316002)(2616005)(110136005)(8936002)(86362001)(478600001)(6666004)(6512007)(6486002)(26005)(6506007)(31696002)(36756003)(186003)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NlJOUktlRjlFYWZHU3ppUmkzMllnYzN0TEpTSkxoTytMQ21DeEs1SnRFLzI0?=
- =?utf-8?B?VzN0dTZUUW8zbzNpMnpMOTIrdGdMMWNvN0xUeE03SEQ5WUt1bWUvRlZQbzNK?=
- =?utf-8?B?TE9zZ1p5T0w0U0ZidStZalJIeDBOa2NzckRUMFVOL0pweDZBVnNnUy9qd0hT?=
- =?utf-8?B?cy8rTHVveXZBdTVmZE96c1I4NVRIamZWNm84eFhpWnF5VkFWUWhkUEx4Wk1H?=
- =?utf-8?B?MmRFUnMvL1dwY0lKa0RzYW1pRVdTa0ZXSUwyZTlCY3NEMDgvc1podmVyVlVh?=
- =?utf-8?B?RHVJR3cxVkxMbGVSTFRaWFdLVnNPd3RHSEc4NGNzeVdPVi9BQk94OGlTTlB6?=
- =?utf-8?B?azRDMjcwVXlyNkxKTVBpV0N2elRUdlpLYys0NldvNXFiMHBjN2FSd0htL09Z?=
- =?utf-8?B?QUtKRWM0dFJZc0RqSVdCbVZBZ3dNQmYyaGRsWUJEWWI0ODR1U1M5VDIybnhY?=
- =?utf-8?B?RWhPai85cmIrcU1XekpGeStZOERxcFhFRW1DVGRHNC9ZQmhzSDhvZW5maHF2?=
- =?utf-8?B?V1Jnc2U1b1Q1UnQ5WHZsMG5iNWxwTmJkMFI2cEJzWmczT2lzSDJjRHR1WWRE?=
- =?utf-8?B?SjM2RUJrc3hldVN1c3NGTEZVVFJBYVJndS9pYUd2QlBOMU9HK2RwSUFNY2I2?=
- =?utf-8?B?cnZ1RjJldUFQWkFSdXV0UHdoQlVpR0EycGhkcnB3SnJyQTh5Z0Qza1gwUndT?=
- =?utf-8?B?Snhtb3dQaGpKY0dKUndQWWdHU3huQm1ESUQ2MUloaGZCUDFJN1I4UEZjYXFa?=
- =?utf-8?B?SzVtUUFWbUhSYzk3T1NYajhrVlJ1ZDBXNU9XZEtLbFRrL0dWWXNrb2lPOG5s?=
- =?utf-8?B?Lzg2MzRmdThoRkJEdVlVSEo0NXo1aFRVQnYrMG1SbGlucHo1ZzhuR0ZHSXNE?=
- =?utf-8?B?VTdyOWgwY200OERTd2RnUHpadVRoTm12dGk4U0UyZkQ0ZmpyK3J3eEo2V2Ir?=
- =?utf-8?B?WVRkalJBaVYyUFpKWkV5c2N6aTUwQjN4VXc3TWNuS1R6ZXpEcmJxeFNqcllU?=
- =?utf-8?B?M2lySWc4aHpCNDdTQUYxU0hGcTZNSlRpb283am1aZGFsSmlqL0o3b0JHNVpI?=
- =?utf-8?B?NFNIR1BtVXNBOFZ0SE9FR1BpRlNFSnA5djRGWWZ2QXB5ZS92NkREZGNIZ0RU?=
- =?utf-8?B?VVU1emJMekllYm5OeFZCaXZQdmVaT2laSWJoV0w4a1BOaDFSQm1VVUtwUFRP?=
- =?utf-8?B?U1F2ZGQ1dFFqZDMycFEzZFR6UXVYUG9QQ0hwNHk0ODRiV29wait2a2Y0SEMy?=
- =?utf-8?B?MjNBNFJZSG9jdEdmRGVXcGI5Umw2M24xT09rcFBwbmljai9hQWluVTBvdW5z?=
- =?utf-8?B?eEJQd0lZTHFjbjJ4QVUzOGVEclJ0dStBejBVdVo1OFoxMkVxWWJIQWdnZDBK?=
- =?utf-8?B?REZjbDNFajVQVTRFUVJqamdtWnZOMWY3YmxzZjkvSlJGTWJXMWZrTWpKdHV1?=
- =?utf-8?B?RkpWU1NFN1hYUkQwdGFqWHdxMWpOVWpvN2IxUkkrSERlMjhTRENCZGkwLzVL?=
- =?utf-8?B?WFRQR2tTK3NENWZ4SDVOam1NeXhqMnpSTG00SEYxcXpFdVN4MVNDS2ZtUUI3?=
- =?utf-8?B?NmZiT0xZRndDa2hkOUwzQVgwM3B4N1I1bkh6a2VYWEVJWUhGd0w2Ymgzb0E3?=
- =?utf-8?B?ZUljdE4xdWppdnBucnJCTTBGVlFBUUhkZkF4am00THJ3c1QvWU9aaXM1Wm40?=
- =?utf-8?B?SUVNUElWMGpsWXZpVDNZejNzZ3Q3TlBpRXp2VmFZQmordjNXU0FqczA0UGZ5?=
- =?utf-8?B?Z1VWNmVhS2lhVGllN0ZCNnI0TnNZMGVYZUljUTViZlpUQXNLVkVEamd4V2Fi?=
- =?utf-8?B?UUlpOVVkQkd4MEgvQmVwTzFNUndWTi9MQ25tUlNTWUc5azZpS002TUxJYUM4?=
- =?utf-8?B?dnVkY2d6RFlmZDRsVVRTRFJXd2svdXBYcTF1ZjBxMEZvZWtudnJmMlNWVU05?=
- =?utf-8?B?SEdDNmExc3R3aFg4NDQ3ZkhDYUI0QW1GK3pJayttd0Q3TWFQRFBCQjhhVUha?=
- =?utf-8?B?WmJ5L0p1bUNGMjZhNlJPK2NiTXpmc3E5ZDNHK3QwcndlSWI3R3NVcldTWmpP?=
- =?utf-8?B?Skl1a09lYTFwWmpnUTlneTdMOHNWNTkydUlza0VOdW5iQ1l4d1diU2lpMFdn?=
- =?utf-8?B?OWRrRmhRYWRRMFpSM1hKR1JWYlRHS0hLWXVtbXVVSFpMMjNrZDZCUmxxWE8v?=
- =?utf-8?B?M0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: feab9d44-0188-4706-271a-08db34782432
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 19:18:01.9559
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: n6atnuEguhihJKZv0vWel7mDsYJ6Z9sIE/tO76J3CcyWcrhKo0d92HEZphOIMnmiFeD2DRGPpus4j8Cg7s8fPtF2444ReICdIF7oX9z/iAM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5238
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: Adlmb4+/+92L5McLQC6ljBs2sqN+CA==
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,43 +72,104 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CC-ing linux-pm would have been nice (done now).
 
-On 4/2/2023 12:39 PM, Uwe Kleine-König wrote:
-> Many device drivers call one of the variants of pm_runtime_resume() in
-> their remove callback. So calling pm_runtime_put_sync() just before that
-> is ineffective as the suspend callback might just be called just to
-> resume the device directly afterwards again.
->
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->
-> this is a theoretical issue that I noticed while doing some research how
-> pm-runtime works. Not sure it makes sense, so I marked it as RFC.
->
-> Best regards
-> Uwe
->
->   drivers/base/dd.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 8def2ba08a82..6beac141d3d2 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -1235,10 +1235,10 @@ static void __device_release_driver(struct device *dev, struct device *parent)
->   
->   		bus_notify(dev, BUS_NOTIFY_UNBIND_DRIVER);
->   
-> -		pm_runtime_put_sync(dev);
-> -
->   		device_remove(dev);
->   
-> +		pm_runtime_put_sync(dev);
-> +
->   		if (dev->bus && dev->bus->dma_cleanup)
->   			dev->bus->dma_cleanup(dev);
->   
->
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+When using --Summary mode, added MSRs in raw mode always
+print zeros. Print the actual register contents.
+
+Example, with patch:
+
+note the added column:
+--add msr0x64f,u32,package,raw,REASON
+
+Where:
+
+0x64F is MSR_CORE_PERF_LIMIT_REASONS
+
+# ./turbostat --quiet --Summary --show Busy%,Bzy_MHz,PkgWatt,PkgTmp,CorWatt --add msr0x64f,u32,package,raw,REASON --interval 10
+Busy%   Bzy_MHz PkgTmp  PkgWatt CorWatt     REASON
+0.00    4800    35      1.42    0.76    0x00000000
+0.00    4801    34      1.42    0.76    0x00000000
+80.08   4531    66      108.17  107.52  0x08000000
+98.69   4530    66      133.21  132.54  0x08000000
+99.28   4505    66      128.26  127.60  0x0c000400
+99.65   4486    68      124.91  124.25  0x0c000400
+99.63   4483    68      124.90  124.25  0x0c000400
+79.34   4481    41      99.80   99.13   0x0c000000
+0.00    4801    41      1.40    0.73    0x0c000000
+
+Where, for the test processor (i5-10600K):
+
+PKG Limit #1: 125.000 Watts, 8.000000 sec
+MSR bit 26 = log; bit 10 = status
+
+PKG Limit #2: 136.000 Watts, 0.002441 sec
+MSR bit 27 = log; bit 11 = status
+
+Example, without patch:
+
+# ./turbostat --quiet --Summary --show Busy%,Bzy_MHz,PkgWatt,PkgTmp,CorWatt --add msr0x64f,u32,package,raw,REASON --interval 10
+Busy%   Bzy_MHz PkgTmp  PkgWatt CorWatt     REASON
+0.01    4800    35      1.43    0.77    0x00000000
+0.00    4801    35      1.39    0.73    0x00000000
+83.49   4531    66      112.71  112.06  0x00000000
+98.69   4530    68      133.35  132.69  0x00000000
+99.31   4500    67      127.96  127.30  0x00000000
+99.63   4483    69      124.91  124.25  0x00000000
+99.61   4481    69      124.90  124.25  0x00000000
+99.61   4481    71      124.92  124.25  0x00000000
+59.35   4479    42      75.03   74.37   0x00000000
+0.00    4800    42      1.39    0.73    0x00000000
+0.00    4801    42      1.42    0.76    0x00000000
+
+# rdmsr 0x64f
+c000000
+
+Signed-off-by: Doug Smythies <dsmythies@telus.net>
+---
+ tools/power/x86/turbostat/turbostat.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 8a36ba5df9f9..d8d667934a23 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -1744,8 +1744,9 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 
+ 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
+ 		if (mp->format == FORMAT_RAW)
+-			continue;
+-		average.threads.counter[i] += t->counter[i];
++			average.threads.counter[i] = t->counter[i];
++		else
++			average.threads.counter[i] += t->counter[i];
+ 	}
+ 
+ 	/* sum per-core values only for 1st thread in core */
+@@ -1764,8 +1765,9 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 
+ 	for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
+ 		if (mp->format == FORMAT_RAW)
+-			continue;
+-		average.cores.counter[i] += c->counter[i];
++			average.cores.counter[i] = c->counter[i];
++		else
++			average.cores.counter[i] += c->counter[i];
+ 	}
+ 
+ 	/* sum per-pkg values only for 1st core in pkg */
+@@ -1812,8 +1814,9 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 
+ 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
+ 		if (mp->format == FORMAT_RAW)
+-			continue;
+-		average.packages.counter[i] += p->counter[i];
++			average.packages.counter[i] = p->counter[i];
++		else
++			average.packages.counter[i] += p->counter[i];
+ 	}
+ 	return 0;
+ }
+-- 
+2.25.1
+
+
