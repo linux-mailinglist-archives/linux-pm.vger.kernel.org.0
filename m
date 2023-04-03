@@ -2,174 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF4B6D532E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 23:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB0E6D534C
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 23:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbjDCVMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Apr 2023 17:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
+        id S233677AbjDCVS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 17:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbjDCVLx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 17:11:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466E11FC2
-        for <linux-pm@vger.kernel.org>; Mon,  3 Apr 2023 14:11:37 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id kc4so29321578plb.10
-        for <linux-pm@vger.kernel.org>; Mon, 03 Apr 2023 14:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1680556296;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MrvB9dLaBUlXb9132dHY3khaWN+MmC+4xODtdYapChQ=;
-        b=YClfDXVMnyD4N/fCkOJ+5VV43bCDFEyC1WQwMYHhnhYIf7C6qaiUXvhRzZcrRvH4yq
-         iw2q93xPIKLX+F4RibdFqKd4d6EB87+Qe2Ior7VTT2MUeVWVeBXTIK/GU9v5uNHsBewS
-         wYjozfd40gTZ/lIdRHaXeUlCcXeyjV6ING3N8rvaIpxgxO03uPihY0RlSdtmw3cWqAn2
-         LhVuaOfgrYWD2u5+7iqx9klGDMlmbhGqWxXA+c0YaV6mfbjTE9NhdmLIctUm9w46U/t7
-         ayfbtWPc6/TBF4VJBqv96J/mTuOwTvWuJF+I/q2uC0iZhEWOBckW0ejA//xiX0t9hmQP
-         j4Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680556296;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MrvB9dLaBUlXb9132dHY3khaWN+MmC+4xODtdYapChQ=;
-        b=rKwhbko0XiK8aOZKftQN/zODKCTCxl9yGSaJWEE1Ravc07Ks3bapm5uOh6aT88Lyp5
-         Tt8PW40s69FYO4qMu/uVl222Q2mJdImpZ6vbUePx1Bj1ZMHW8O8YYuJSksk/Cqf0U2qb
-         EFXK7MGUiXQ/94oTSGu5YdSBXfeenPtPCSnL0Md87vi285+mvIZ73YggYV/sI2bwPg5/
-         3fcpXblU9aODe6RBcwrPYONxjZeDNeJ9HZAkE0NNItNz/H73jtk1YFgfkNlt21iQ11Vd
-         kqm0V7rLLk1PsEbFJHEQ1jbwLyZotgcCUfwbtcNpF9HQy6xVT6kxfktdELNtovc8rKI6
-         6z7g==
-X-Gm-Message-State: AAQBX9d0O2gjTusKbOAi+3ssuJzFZmLnhqLYLLRA3YfRLg8KBEo7coNd
-        Hlrex6l1jSzrAoFB3jE/sM5Fzw==
-X-Google-Smtp-Source: AKy350ZzxDFZgHJ2G4M8Pxq7ivSpG//SCIzPE9kkjUJ8tEoQ90iiNfJXeSTWUFZ8dy2vd+2jwWd+KQ==
-X-Received: by 2002:a17:903:1d1:b0:1a0:76d1:545c with SMTP id e17-20020a17090301d100b001a076d1545cmr19062125plh.10.1680556296542;
-        Mon, 03 Apr 2023 14:11:36 -0700 (PDT)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id k5-20020a170902760500b001992fc0a8eesm7090147pll.174.2023.04.03.14.11.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Apr 2023 14:11:35 -0700 (PDT)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     <lenb@kernel.org>
-Cc:     "Doug Smythies" <dsmythies@telus.net>, <linux-pm@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>
-Subject: [PATCH] tools/power/x86/turbostat: Fix added raw MSR output
-Date:   Mon, 3 Apr 2023 14:11:38 -0700
-Message-ID: <00d201d96670$e15ab9d0$a4102d70$@telus.net>
+        with ESMTP id S233673AbjDCVSy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 17:18:54 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2045.outbound.protection.outlook.com [40.107.101.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3B63A90;
+        Mon,  3 Apr 2023 14:18:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=esit964yQXs6frSyVkjYg1TDFEuA2ZiWvBCFZ2Ox5YSSqKETZqNrF6xj1FB/pKY8H/iMBOuAzfexHYxrPORdsN7AP/uspPJGkNJ7CNuOVrJVqiTEOjDw9b2Xuke1EotQWo/8QBxV9AQse9Lz3rm9wOY3yAYeRVGIPagi7eQmon8KZwtTxsCMLFgF/9Ost2o7kj8wRBw2prBxgXL3l6GntNqzXLApsBBH4m+g4aZEfcR4aWDimOZxBzoCrgZyoYrhrPGrrQc88Doq+RbjNyVjqzWw5dB3LmVLzy/zIdLA/ArREfkEQN4MTZeC5ty3qHC3ZxQmD5v1BnWZjRjLFnXn0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zre6zoz6VCEDHhbHVqJULs1y/YQC8GblVynIwh06wlE=;
+ b=fyFOllEwaEgSo8sic0QNRl/d0wHch7Z0jO3dQxEW6pH5Sl2dAcY0xww5lb66lg6vdLw5CbfblaSsOFifIBKktc33sPJ6KZ6vI6Zk8COsPF1GRU6kX8k7bavcvaK75+8pJRMeAuQZg3UZge18ml68U9oLtEUFUWZU74kaBGwjtx0/poHGth6+nA/uFWoJP17QCN17X1tm3sJYBMYE842bpgb+eIb8Ni2f/4egLwcVZmVOXQaHrbXCKnjn4xeQCf8yazR+QbpYFvsylR/dbnURn4QNRbm3S0QyA1bEIJv9Z5fmUdZfJMghfKtm7YXQnW1kPsJUrxt/d/KHp0+CmQkNrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zre6zoz6VCEDHhbHVqJULs1y/YQC8GblVynIwh06wlE=;
+ b=NEHzBA9T8RuQIk8O9cqvi28L7d5Jcc+gdJlpHsObtzIvAgzLwj1pc6wpeiCGEcVqEsy9rrmbv45fnXjoY6UZRBOp0z68mOk1Dt+SA2PL9fUZJ6tf6sCmggNbQHnRkhuiBu2Lp7g01ByzGfUSHDtnWa2y6SwxCXSIYc4uDAQZHKg=
+Received: from BLAPR03CA0099.namprd03.prod.outlook.com (2603:10b6:208:32a::14)
+ by DS7PR12MB8419.namprd12.prod.outlook.com (2603:10b6:8:e9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
+ 2023 21:18:47 +0000
+Received: from BL02EPF000100D0.namprd05.prod.outlook.com
+ (2603:10b6:208:32a:cafe::49) by BLAPR03CA0099.outlook.office365.com
+ (2603:10b6:208:32a::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
+ Transport; Mon, 3 Apr 2023 21:18:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF000100D0.mail.protection.outlook.com (10.167.241.204) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.30 via Frontend Transport; Mon, 3 Apr 2023 21:18:46 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 3 Apr
+ 2023 16:18:45 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Sven van Ashbrook <svenva@chromium.org>,
+        John Stultz <jstultz@google.com>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     Raul Rangel <rrangel@chromium.org>,
+        David E Box <david.e.box@intel.com>,
+        Rajat Jain <rajatja@google.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v6 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Mon, 3 Apr 2023 16:18:26 -0500
+Message-ID: <20230403211831.4010-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: Adlmb4+/+92L5McLQC6ljBs2sqN+CA==
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000100D0:EE_|DS7PR12MB8419:EE_
+X-MS-Office365-Filtering-Correlation-Id: fcc06b5f-7f09-4f12-46a9-08db34890314
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e7HpRJ6wVpJN3eDdB3HXSxh8iyfexXVIu6wyyRdLyoGthGt7noalWOP+aP6xq9/IJQZMvcs9nuf/vnYGDmq1ibzYFTLXW+97GPWHfcPBK+MKVUtMypBHptBhnh6b08AFCreVeMZ1d2Rz4d83oGvyUlWKf2JCpTtmVwkMqIC5GqAmS0AqeB6M+Hb9cB4vK/roF5EopI0VmJoyFfaaFQxBqVRp+JRvMwieY+OeX4t+Alah7mFjsCQcwlj54P2EeuYTohw1g4wV/bL1bOlDbuM67w4afEhlAPJVb0NGM8tBRd4Khr3D0pvm6MU4jJSyup2txrbPJtZEXT8d5aURzyzEPzqdhkIwLmsJcyuf6iyJFbdcyJswdTOHnneMfW3Y1OIO36/skHhQOmSgexZHMQPKhS041aj5Rt7G4kug6YswtPT6zvAR5F1DMUbkUvmyDuRBmhlrPFVxeXWM9Ywqr1P9KFESfiH1PXF2E8HYDMiG0au+xQJzb9H0KUVKnVDjGry21NbgNr+5M8deLDWjl6nJhYTIJPrQhMkd3U35juhCkQl+zC3h9NU40SJp6MfQuohvWPimfnFsUn8QgcjGozLEDBgZOa7Zp6dkTqbTQfDILPjsVUBf66mV/lnLsz01MXig8025pnNKWd7jsZAliaxEKWTHKjPB35kD52dKAjbqMxaXzSQfFBQVrse85CkqFSm0CgpZWzKp09Gc89dUKFZQnDQi74T0o65M8oJduKvN1rI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(2616005)(86362001)(82310400005)(2906002)(36756003)(40480700001)(47076005)(7696005)(336012)(426003)(83380400001)(186003)(16526019)(1076003)(26005)(6666004)(4326008)(8676002)(478600001)(70206006)(36860700001)(70586007)(40460700003)(82740400003)(81166007)(356005)(41300700001)(44832011)(5660300002)(7416002)(316002)(54906003)(110136005)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 21:18:46.9569
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcc06b5f-7f09-4f12-46a9-08db34890314
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000100D0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8419
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+An important part of validating that s0ix worked properly is to check how
+much of a cycle was spent in a hardware sleep state.
 
-When using --Summary mode, added MSRs in raw mode always
-print zeros. Print the actual register contents.
+The reporting of hardware sleep is a mix of kernel messages and sysfs
+files that vary from vendor to vendor. Collecting this information
+requires extra information on the kernel command line or fetching from
+debugfs.
 
-Example, with patch:
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
 
-note the added column:
---add msr0x64f,u32,package,raw,REASON
+Userspace can fetch this information and compare it against the duration
+of the cycle to allow determining residency percentages and flagging
+problems.
 
-Where:
+v5->v6
+ * Add sysfs file for total
+ * In cases we know overflow return -EOVERFLOW
+ * Update documentation
+ * Rename symbol
+ * Fix kernel robot reported missing stub
+Mario Limonciello (4):
+  PM: Add sysfs files to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
 
-0x64F is MSR_CORE_PERF_LIMIT_REASONS
+ Documentation/ABI/testing/sysfs-power | 27 ++++++++++++++++
+ drivers/platform/x86/amd/pmc.c        |  5 ++-
+ drivers/platform/x86/intel/pmc/core.c | 18 ++++++-----
+ drivers/platform/x86/intel/pmc/core.h |  2 --
+ include/linux/suspend.h               |  5 +++
+ kernel/power/main.c                   | 45 +++++++++++++++++++++++++++
+ 6 files changed, 89 insertions(+), 13 deletions(-)
 
-# ./turbostat --quiet --Summary --show Busy%,Bzy_MHz,PkgWatt,PkgTmp,CorWatt --add msr0x64f,u32,package,raw,REASON --interval 10
-Busy%   Bzy_MHz PkgTmp  PkgWatt CorWatt     REASON
-0.00    4800    35      1.42    0.76    0x00000000
-0.00    4801    34      1.42    0.76    0x00000000
-80.08   4531    66      108.17  107.52  0x08000000
-98.69   4530    66      133.21  132.54  0x08000000
-99.28   4505    66      128.26  127.60  0x0c000400
-99.65   4486    68      124.91  124.25  0x0c000400
-99.63   4483    68      124.90  124.25  0x0c000400
-79.34   4481    41      99.80   99.13   0x0c000000
-0.00    4801    41      1.40    0.73    0x0c000000
-
-Where, for the test processor (i5-10600K):
-
-PKG Limit #1: 125.000 Watts, 8.000000 sec
-MSR bit 26 = log; bit 10 = status
-
-PKG Limit #2: 136.000 Watts, 0.002441 sec
-MSR bit 27 = log; bit 11 = status
-
-Example, without patch:
-
-# ./turbostat --quiet --Summary --show Busy%,Bzy_MHz,PkgWatt,PkgTmp,CorWatt --add msr0x64f,u32,package,raw,REASON --interval 10
-Busy%   Bzy_MHz PkgTmp  PkgWatt CorWatt     REASON
-0.01    4800    35      1.43    0.77    0x00000000
-0.00    4801    35      1.39    0.73    0x00000000
-83.49   4531    66      112.71  112.06  0x00000000
-98.69   4530    68      133.35  132.69  0x00000000
-99.31   4500    67      127.96  127.30  0x00000000
-99.63   4483    69      124.91  124.25  0x00000000
-99.61   4481    69      124.90  124.25  0x00000000
-99.61   4481    71      124.92  124.25  0x00000000
-59.35   4479    42      75.03   74.37   0x00000000
-0.00    4800    42      1.39    0.73    0x00000000
-0.00    4801    42      1.42    0.76    0x00000000
-
-# rdmsr 0x64f
-c000000
-
-Signed-off-by: Doug Smythies <dsmythies@telus.net>
----
- tools/power/x86/turbostat/turbostat.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 8a36ba5df9f9..d8d667934a23 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1744,8 +1744,9 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 
- 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
- 		if (mp->format == FORMAT_RAW)
--			continue;
--		average.threads.counter[i] += t->counter[i];
-+			average.threads.counter[i] = t->counter[i];
-+		else
-+			average.threads.counter[i] += t->counter[i];
- 	}
- 
- 	/* sum per-core values only for 1st thread in core */
-@@ -1764,8 +1765,9 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 
- 	for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
- 		if (mp->format == FORMAT_RAW)
--			continue;
--		average.cores.counter[i] += c->counter[i];
-+			average.cores.counter[i] = c->counter[i];
-+		else
-+			average.cores.counter[i] += c->counter[i];
- 	}
- 
- 	/* sum per-pkg values only for 1st core in pkg */
-@@ -1812,8 +1814,9 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 
- 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
- 		if (mp->format == FORMAT_RAW)
--			continue;
--		average.packages.counter[i] += p->counter[i];
-+			average.packages.counter[i] = p->counter[i];
-+		else
-+			average.packages.counter[i] += p->counter[i];
- 	}
- 	return 0;
- }
 -- 
-2.25.1
-
+2.34.1
 
