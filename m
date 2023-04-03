@@ -2,126 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5B26D438A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 13:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41D06D4966
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 16:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjDCLc0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Apr 2023 07:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S233718AbjDCOhy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 10:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjDCLcZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 07:32:25 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1D94224
-        for <linux-pm@vger.kernel.org>; Mon,  3 Apr 2023 04:32:24 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r11so28972162wrr.12
-        for <linux-pm@vger.kernel.org>; Mon, 03 Apr 2023 04:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680521542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8oxN6OsSAvDJ/9XUkNDJfOZTdcdSQucx06S047EyHBQ=;
-        b=C6gWZp40tfEpPfYSrgRrnFTseXhT17/N3/Rd1XTWX8SljHQdb+j8qyQzRCnxitNxkA
-         mGbwHFXQb5ITNf+w/UsK+tl7GA4WaEklHtP2Gk9OwGoV3bsBkLWXg6+vzsu+xjPFbcKq
-         istoMqkmpzZZTsjxCqMlUNeuaV+wM4NiuoKM26cYhKEeXGORCVFktJRSeXU6tkQRb9U1
-         fTHAQpbiSbu2xdOJqzmannTP/O0Dmjj025fN1OI4ac9mQVEmT+vQLQuhMcUE5nvLMEYd
-         wWrJ1fH+ucZjqsu2MSSndsASCTdtDEyv8opVMnDUijCXg5DG/y1MPRlxQHr3wfMr1A+h
-         +W8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680521542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8oxN6OsSAvDJ/9XUkNDJfOZTdcdSQucx06S047EyHBQ=;
-        b=6kQ7jlru+hfsO2EW6gReADk5rXOzRsqDrklMgMgKT8KUEM5LbCYxCKC4+X1QOK2sqC
-         /2TqY55MuEr299MFpd6LTdLAdU/5rmt8h/FdWJ4kxxRd2DLLiGqqO50EoIOct2pbqzlg
-         71zIZ1msKRroKbukOrA2G1BMp7Y/eq7Qxf3JqY34MKbNamDGBk10Cd1kknogQyRJ3jE3
-         CEC4ndb0AqsrpNKUMHsX7aPli3ssaNzZUE2tXSL4fftPFzS4G7vXrzTXS6/fft7LArwH
-         Iwk6zT6MKlda0FXooesbAnw9lujTA8tuzVnf3X0OgV6fIbrTOh+E23snmd4l1O6btYUv
-         YKhA==
-X-Gm-Message-State: AAQBX9dHRimw7tO88fzelEG4ek9ZNdn2jdvr0/Bretb60MXvxoEXbEqL
-        0XQ1xCyFK79lE6srjEsDnNqfPA==
-X-Google-Smtp-Source: AKy350bJaiA62l9quKwVmDV9foxfGXFovA3zqzv8sR+okw5JpFGfalk8OYcb0L9rxeEC7w5V9ffF/w==
-X-Received: by 2002:a5d:4848:0:b0:2ce:a9e9:490b with SMTP id n8-20020a5d4848000000b002cea9e9490bmr24826782wrs.31.1680521542472;
-        Mon, 03 Apr 2023 04:32:22 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8052:c9eb:6b69:e69a? ([2a05:6e02:1041:c10:8052:c9eb:6b69:e69a])
-        by smtp.googlemail.com with ESMTPSA id r1-20020a5d4941000000b002cfefa50a8esm9527094wrs.98.2023.04.03.04.32.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 04:32:22 -0700 (PDT)
-Message-ID: <6e3c59c3-8ad0-9c53-62a4-7be6f55a7c02@linaro.org>
-Date:   Mon, 3 Apr 2023 13:32:21 +0200
+        with ESMTP id S233689AbjDCOhu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 10:37:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF2635032;
+        Mon,  3 Apr 2023 07:37:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F5D3B81CB5;
+        Mon,  3 Apr 2023 14:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D59A1C433EF;
+        Mon,  3 Apr 2023 14:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680532641;
+        bh=UMk1yWcwvsggJJjnaJ9yTLb2WQw1KXCFuCFy3Q+rgHE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HepWkbxpu2tCemP1r99PRIjNkH5QLOTAcs6xZl3EVfVOLjE0iS53T6XfGvAB38lgk
+         un7JPD72Vyh7PBWjnNbxwf5MFACGIyUe0CUzQ6Ze8HAkPL7N8VZutIUgAi4jS4gBvW
+         uAiYQJff8KlDm1SaGgsoQa7/uiPtjRb26Pfw/IP8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Prarit Bhargava <prarit@redhat.com>,
+        linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.1 061/181] tools/power turbostat: Fix /dev/cpu_dma_latency warnings
+Date:   Mon,  3 Apr 2023 16:08:16 +0200
+Message-Id: <20230403140417.120319370@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230403140415.090615502@linuxfoundation.org>
+References: <20230403140415.090615502@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drivers: thermal: mediatek: fix of_iomap leak in
- mtk_thermal_probe
-Content-Language: en-US
-To:     Kang Chen <void0red@hust.edu.cn>, dzm91@hust.edu.cn
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        daniel@makrotopia.org, rdunlap@infradead.org, bchihi@baylibre.com,
-        henry.yen@mediatek.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        hust-os-kernel-patches@googlegroups.com, void0red@gmail.com,
-        error27@gmail.com
-References: <20230403103855.3601901-1-void0red@hust.edu.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230403103855.3601901-1-void0red@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/04/2023 12:38, Kang Chen wrote:
-> Smatch reports:
-> 1. mtk_thermal_probe() warn: 'apmixed_base' from of_iomap() not released.
-> 2. mtk_thermal_probe() warn: 'auxadc_base' from of_iomap() not released.
-> 
-> The original code forgets to release iomap resource when handling errors,
-> fix it through unified error handling code at the end of mtk_thermal_probe.
-> 
-> Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
-> Signed-off-by: Kang Chen <void0red@hust.edu.cn>
-> ---
-> I think the this should be released on the success path but I was too
-> scared of breaking things. Let me know and I will resend if people want
-> me to do that.
-> 
->   drivers/thermal/mediatek/auxadc_thermal.c | 18 ++++++++++++------
->   1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-> index ab730f9552d0..741c7d8151bd 100644
-> --- a/drivers/thermal/mediatek/auxadc_thermal.c
-> +++ b/drivers/thermal/mediatek/auxadc_thermal.c
-> @@ -1149,13 +1149,15 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	if (auxadc_phys_base == OF_BAD_ADDR) {
->   		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto err_iounmap_auxadc;
->   	}
+From: Prarit Bhargava <prarit@redhat.com>
 
-Better to use the devm_of_iomap() variant
+[ Upstream commit 40aafc7d58d3544f152a863a0e9863014b6d5d8c ]
 
-And also take the opportunity to use devm_clk_get_enabled(), remove 
-clk_prepare_enable() and the rollbacking in the err_disable_clk_per*: 
-label sections.
+When running as non-root the following error is seen in turbostat:
 
+turbostat: fopen /dev/cpu_dma_latency
+: Permission denied
+
+turbostat and the man page have information on how to avoid other
+permission errors, so these can be fixed the same way.
+
+Provide better /dev/cpu_dma_latency warnings that provide instructions on
+how to avoid the error, and update the man page.
+
+Signed-off-by: Prarit Bhargava <prarit@redhat.com>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/power/x86/turbostat/turbostat.8 | 2 ++
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
+index c7b26a3603afe..3e1a4c4be001a 100644
+--- a/tools/power/x86/turbostat/turbostat.8
++++ b/tools/power/x86/turbostat/turbostat.8
+@@ -344,6 +344,8 @@ Alternatively, non-root users can be enabled to run turbostat this way:
+ 
+ # chmod +r /dev/cpu/*/msr
+ 
++# chmod +r /dev/cpu_dma_latency
++
+ .B "turbostat "
+ reads hardware counters, but doesn't write them.
+ So it will not interfere with the OS or other programs, including
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index aba460410dbd1..c24054e3ef7ad 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -5482,7 +5482,7 @@ void print_dev_latency(void)
+ 
+ 	retval = read(fd, (void *)&value, sizeof(int));
+ 	if (retval != sizeof(int)) {
+-		warn("read %s\n", path);
++		warn("read failed %s\n", path);
+ 		close(fd);
+ 		return;
+ 	}
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.39.2
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+
 
