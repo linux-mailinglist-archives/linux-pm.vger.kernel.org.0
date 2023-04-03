@@ -2,112 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FB46D4F92
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 19:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89B16D4FD7
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 20:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjDCRwe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 3 Apr 2023 13:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S232948AbjDCSB3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 14:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjDCRwQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 13:52:16 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCD82724;
-        Mon,  3 Apr 2023 10:51:44 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id ew6so120517696edb.7;
-        Mon, 03 Apr 2023 10:51:44 -0700 (PDT)
+        with ESMTP id S232950AbjDCSBY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 14:01:24 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55F3AAF;
+        Mon,  3 Apr 2023 11:01:12 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id r17-20020a05683002f100b006a131458abfso13500844ote.2;
+        Mon, 03 Apr 2023 11:01:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680544303;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CznSD9bS8RyObCuFJmGTR5dWb8+MmRhHb9IiF6EKc+g=;
-        b=zXhYBPK+u28xovUU0CfY+PyN0DRb73gN2xD0eSKQWFVCYrUE9tbH+9iiHrXiJK6mBg
-         cdifNoyGikFNXEZQaOAKC5bn3CjwkSE4OWw9rtPoz7bSumtWURzlwkiKYRaErLh2MZ+a
-         jVaYor+yQzCPnae4Dv8HhVp9VxsYwPGUVMWCbJD3eooAZ3cU8XpIGfaBV1uNJFIixXjr
-         sLSdiAZ0G0nSF5uDk0Kse6Yx7pIy8cUzw2TAewSmQBXRu2q1/kGXQz1XT2/YDijtPVU9
-         2/pEmisTf8Xl9kApSYrOk3ZY3svd0r5UIUL33MpZMEIa4mqeuA/FosdvvCaS8NYumm+S
-         04EA==
-X-Gm-Message-State: AAQBX9cfQGLmQBD08EyH3xR37MPVs6OR024GZlcN5ZBPfrorHgG1vmuX
-        /i7uN1thGbuORJlEH9CH/sgowR4GtgWKt9fEGJU=
-X-Google-Smtp-Source: AKy350ZdacuCAFk9OAUxlO3Usd+9JK8uI41jY0FBRaRA5QjURF92uSIJk3TxHMy/xxOajIj/4ixlWNjSWHxoWiB4liE=
-X-Received: by 2002:a17:906:4a94:b0:947:c623:2c84 with SMTP id
- x20-20020a1709064a9400b00947c6232c84mr5366132eju.2.1680544302879; Mon, 03 Apr
- 2023 10:51:42 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680544871;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+2HyVBZpgIAk4A8UQ7TPXHjOeuEm1wa0e7V0v5arzY=;
+        b=D+mf2KUY3Qb17H/BgD9gHZYhHxG91N05+An1M6TiE7loZwLVgRwbAMzGi2kftDTkY/
+         0yi+UJ2D4D3sdyPupBNvviknCfiuCDrKMEuMTxWw7aUWAjWbuZaCv2QwIuE3kphjsBtj
+         2/zIc5yUSgLl4QzlhtI/FNlA972TQnZsQPYrYm9rhHXMb3IfDntWygpZBV79QgLVCKJi
+         qzYjDcz4hnXrxoPBbbfLjPeyGxsfD5IL82eioISgLkENqmVMDHQky8edGiybVS4CRTdl
+         5Wjygu+wcQ55wLmbcCrHJwJTlCNY7Xnlw8fx+LVMhfX74/Pe3Gk65/OEiDpqL0w957eJ
+         d8xA==
+X-Gm-Message-State: AAQBX9cN3Iyc5deHrM9QlrX3Fp5boWC+ajKyrvG4STstCUMXXgIEXaEc
+        PuDdizaw9orhQzHXAtrhAA==
+X-Google-Smtp-Source: AKy350YbposOHjUqSKPLp1r0c5pZmS2vrYBOO8PRSBJMRbIsZ8g5xLashYmoygD9IWOODdA8MPrzFQ==
+X-Received: by 2002:a9d:63c5:0:b0:697:a381:a8f8 with SMTP id e5-20020a9d63c5000000b00697a381a8f8mr41722otl.3.1680544871315;
+        Mon, 03 Apr 2023 11:01:11 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d11-20020a9d5e0b000000b006a3170fe3efsm2707835oti.27.2023.04.03.10.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 10:59:56 -0700 (PDT)
+Received: (nullmailer pid 1164679 invoked by uid 1000);
+        Mon, 03 Apr 2023 17:59:39 -0000
+Date:   Mon, 3 Apr 2023 12:59:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC 06/20] dt-bindings: clk: oxnas: remove obsolete
+ bindings
+Message-ID: <20230403175939.GA1162106-robh@kernel.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <20230331-topic-oxnas-upstream-remove-v1-6-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-References: <20230316153841.3666-1-rui.zhang@intel.com> <20230316153841.3666-5-rui.zhang@intel.com>
- <CAJZ5v0hG9mC0DAWeGfgcrripi8dpANSwBgBQxjDSzzLGQcC0iQ@mail.gmail.com> <1299d6418c469d56cfe4c94af7342e9c9d26858e.camel@intel.com>
-In-Reply-To: <1299d6418c469d56cfe4c94af7342e9c9d26858e.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Apr 2023 19:51:31 +0200
-Message-ID: <CAJZ5v0iwN-3TyX6A4VuX4EXwD9o04hHxm4T3=XaBg2hXPXev4g@mail.gmail.com>
-Subject: Re: [PATCH 04/15] powercap/intel_rapl: Support per Interface
- primitive information
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-6-5bd58fd1dd1f@linaro.org>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 2, 2023 at 9:43 AM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Thu, 2023-03-30 at 19:56 +0200, Rafael J. Wysocki wrote:
-> > On Thu, Mar 16, 2023 at 4:42 PM Zhang Rui <rui.zhang@intel.com>
-> > wrote:
-> > > RAPL primitive information is Interface specific.
-> > >
-> > > Although current MSR and MMIO Interface share the same RAPL
-> > > primitives,
-> > > new Interface like TPMI has its own RAPL primitive information.
-> > >
-> > > Save the primitive information in the Interface private structure.
-> > >
-> > > Plus, using variant name "rp" for struct rapl_primitive_info is
-> > > confusing because "rp" is also used for struct rapl_package.
-> > > Use "rpi" as the variant name for struct rapl_primitive_info, and
-> > > rename
-> > > the previous rpi[] array to avoid conflict.
-> > >
-> > > No functional change.
-> > >
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > ---
-> > >  drivers/powercap/intel_rapl_common.c | 50 ++++++++++++++++++----
-> > > ------
-> > >  include/linux/intel_rapl.h           |  2 ++
-> > >  2 files changed, 35 insertions(+), 17 deletions(-)
-> > >
-> > > diff --git a/drivers/powercap/intel_rapl_common.c
-> > > b/drivers/powercap/intel_rapl_common.c
-> > > index 56e8af2a1e6f..898238285188 100644
-> > > --- a/drivers/powercap/intel_rapl_common.c
-> > > +++ b/drivers/powercap/intel_rapl_common.c
-> > > @@ -654,7 +654,7 @@ static u64 rapl_unit_xlate(struct rapl_domain
-> > > *rd, enum unit_type type,
-> > >  }
-> > >
-> > >  /* in the order of enum rapl_primitives */
-> > > -static struct rapl_primitive_info rpi[] = {
-> > > +static struct rapl_primitive_info rpis_default[] = {
-> >
-> > What does the 's' in the name stand for?
->
-> 'rpi' stands for rapl_primitive_info, so I use 'rpis' for a series of
-> rapl_primitive_info.
+On Fri, Mar 31, 2023 at 10:34:44AM +0200, Neil Armstrong wrote:
+> Due to lack of maintainance and stall of development for a few years now,
 
-I would call it rpi_default[] (without the 's'), because the "array"
-part is implied by its definition, so the plural is not really
-necessary.
+I can't spell it either, but checkpatch tells me it is: maintenance
+
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 clock bindings.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/clock/oxnas,stdclk.txt     | 28 ----------------------
+>  1 file changed, 28 deletions(-)
+
+Always great to see fewer bindings. 
+
+Rob
