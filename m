@@ -2,126 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466566D4BD5
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 17:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1206D4E53
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 18:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbjDCP2h convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 3 Apr 2023 11:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S232868AbjDCQsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 12:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbjDCP2g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 11:28:36 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7399510E7;
-        Mon,  3 Apr 2023 08:28:35 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id w9so118919727edc.3;
-        Mon, 03 Apr 2023 08:28:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680535714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DiSKLnH8s6Gs1Z3VpHAX6KBIc26fK0fuzBM84eLhSpY=;
-        b=vHkeZAALKS4gef428sYpZViPj9Piasvyy/RVED8q0mP0+yHMCRoFni+koXofgqj+U1
-         VkQmH+L3uqiFZC4pJfshmKEvN6JQBLHC/+jD/1yH7ZY/XT0IPjzkF3vvqF8iaEr3Ho7Q
-         QkCJZOPMp5A19kt6LBmAA+UyvupxCQ/l1gG883RGlyDXs1z0hcV57CJn7rcrmr+lGASH
-         CtcOEJilGKLGGaJLOedj0b4TjPEBB/utaAHZaNTywrRAin8iZOTUbwEauPN1Iosf+gQ1
-         yEtsvMkFAXPPiG+XMo3BJU9WNYaO6/hNs+nGSnsu2FLX2Zl8PIwNiPa1sGQn+rs8R0Z7
-         Dueg==
-X-Gm-Message-State: AAQBX9dYYGf/BuIbSfgis5ArbipG6hDtBti65P4eB9yguVHg7Xfel/oU
-        r48eL7aAJhaKlh3vfBGDTeVNY04UKny6jBABjjsCIbEC
-X-Google-Smtp-Source: AKy350bBTP0RUd3cX3G8pswzZ8eldAiYzVe36XfKOv5lU7So16xU6XTQkLouAGDJS2Pe7qn5X2UGx5SIoKapJfnhm44=
-X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
- gn2-20020a1709070d0200b009316921bdbbmr17344454ejc.2.1680535713826; Mon, 03
- Apr 2023 08:28:33 -0700 (PDT)
+        with ESMTP id S232895AbjDCQsg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 12:48:36 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6084719B7;
+        Mon,  3 Apr 2023 09:48:32 -0700 (PDT)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        (user=void0red@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 333GkBiv000418-333GkBiw000418
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 4 Apr 2023 00:46:11 +0800
+From:   Kang Chen <void0red@hust.edu.cn>
+To:     daniel.lezcano@linaro.org
+Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn,
+        error27@gmail.com, henry.yen@mediatek.com,
+        hust-os-kernel-patches@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
+        rui.zhang@intel.com, void0red@gmail.com, void0red@hust.edu.cn
+Subject: [PATCH v2 1/2] thermal: mediatek: use devm_of_iomap to avoid resource leak in mtk_thermal_probe
+Date:   Tue,  4 Apr 2023 00:46:09 +0800
+Message-Id: <20230403164610.3608082-1-void0red@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <6e3c59c3-8ad0-9c53-62a4-7be6f55a7c02@linaro.org>
+References: <6e3c59c3-8ad0-9c53-62a4-7be6f55a7c02@linaro.org>
 MIME-Version: 1.0
-References: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
-In-Reply-To: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Apr 2023 17:28:20 +0200
-Message-ID: <CAJZ5v0h4AUP92Wuprfoy2ErhiktTvRquyc9-iMwzt6d=HaqYMg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: drivers with target_index() must set freq_table
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Yajun Deng <yajun.deng@linux.dev>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: void0red@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 6:09 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Since the cpufreq core directly uses freq_table, for cpufreq drivers
-> that set their target_index() callback, make it mandatory for them to
-> set the same.
->
-> Since this is set per policy and normally from policy->init(), do this
-> from cpufreq_table_validate_and_sort() which gets called right after
-> ->init().
->
-> Reported-by: Yajun Deng <yajun.deng@linux.dev>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c    | 5 +++++
->  drivers/cpufreq/freq_table.c | 9 ++++++++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6d8fd3b8dcb5..09131c54703f 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -73,6 +73,11 @@ static inline bool has_target(void)
->         return cpufreq_driver->target_index || cpufreq_driver->target;
->  }
->
-> +bool has_target_index(void)
-> +{
-> +       return !!cpufreq_driver->target_index;
-> +}
+Smatch reports:
+1. mtk_thermal_probe() warn: 'apmixed_base' from of_iomap() not released.
+2. mtk_thermal_probe() warn: 'auxadc_base' from of_iomap() not released.
 
-This needs to go into a header (as a static inline) or the prototype
-of it needs to go into a header.
+The original code forgets to release iomap resource when handling errors,
+fix it by switch to devm_of_iomap.
 
-> +
->  /* internal prototypes */
->  static unsigned int __cpufreq_get(struct cpufreq_policy *policy);
->  static int cpufreq_init_governor(struct cpufreq_policy *policy);
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index 90bfc27ed1ba..c6fc5b0ea91f 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -10,6 +10,8 @@
->  #include <linux/cpufreq.h>
->  #include <linux/module.h>
->
-> +bool has_target_index(void);
-> +
->  /*********************************************************************
->   *                     FREQUENCY TABLE HELPERS                       *
->   *********************************************************************/
-> @@ -355,8 +357,13 @@ int cpufreq_table_validate_and_sort(struct cpufreq_policy *policy)
->  {
->         int ret;
->
-> -       if (!policy->freq_table)
-> +       if (!policy->freq_table) {
-> +               /* Freq table must be passed by drivers with target_index() */
-> +               if (has_target_index())
-> +                       return -EINVAL;
-> +
->                 return 0;
-> +       }
->
->         ret = cpufreq_frequency_table_cpuinfo(policy, policy->freq_table);
->         if (ret)
-> --
-> 2.31.1.272.g89b43f80a514
->
+Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
+Signed-off-by: Kang Chen <void0red@hust.edu.cn>
+---
+v2 -> v1: use devm_of_iomap instead.
+
+ drivers/thermal/mediatek/auxadc_thermal.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index ab730f9552d0..df5e2e354408 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -1142,7 +1142,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	auxadc_base = of_iomap(auxadc, 0);
++	auxadc_base = devm_of_iomap(&pdev->dev, auxadc, 0, NULL);
++	if (IS_ERR(auxadc_base))
++		return PTR_ERR(auxadc_base);
++
+ 	auxadc_phys_base = of_get_phys_base(auxadc);
+ 
+ 	of_node_put(auxadc);
+@@ -1158,7 +1161,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	apmixed_base = of_iomap(apmixedsys, 0);
++	apmixed_base = devm_of_iomap(&pdev->dev, apmixedsys, 0, NULL);
++	if (IS_ERR(apmixed_base)
++		return PTR_ERR(apmixed_base);
++
+ 	apmixed_phys_base = of_get_phys_base(apmixedsys);
+ 
+ 	of_node_put(apmixedsys);
+-- 
+2.34.1
+
