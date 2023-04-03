@@ -2,122 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718576D4263
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 12:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D8D6D4373
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Apr 2023 13:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjDCKnB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Apr 2023 06:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S232285AbjDCL1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Apr 2023 07:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjDCKmk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 06:42:40 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F254610264;
-        Mon,  3 Apr 2023 03:42:29 -0700 (PDT)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        (user=void0red@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 333Ad1oW026913-333Ad1oX026913
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 3 Apr 2023 18:39:01 +0800
-From:   Kang Chen <void0red@hust.edu.cn>
-To:     dzm91@hust.edu.cn
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, daniel@makrotopia.org,
-        rdunlap@infradead.org, bchihi@baylibre.com, henry.yen@mediatek.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        hust-os-kernel-patches@googlegroups.com, void0red@gmail.com,
-        error27@gmail.com, Kang Chen <void0red@hust.edu.cn>
-Subject: [PATCH] drivers: thermal: mediatek: fix of_iomap leak in mtk_thermal_probe
-Date:   Mon,  3 Apr 2023 18:38:55 +0800
-Message-Id: <20230403103855.3601901-1-void0red@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232278AbjDCL1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Apr 2023 07:27:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDBE5FDC;
+        Mon,  3 Apr 2023 04:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680521227; x=1712057227;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xv0B4zJILC1oRw/Z05WDuw1ZcoENMLOsdRoOnVSHtDk=;
+  b=FZiJDnJGtm1uGlHahkK5Nszx0j63S/CEKHZL30L0jy76uPahHZFrcXe/
+   GSSAHMdpfCy0VvXG/NUWqZOd0VJC9RkDazxAmF0JqmsZlaR2ooUfNH7j9
+   DOCoGkKy08syq8B9ebZyg6ttfd2f3tYoJrJEv792BfQtNzeJ77nVTKh5V
+   qafsVPOituLdTWSMFquzfAV43tKDyOWLSYDejTu9uKj/A0gLn+bXyggdR
+   aodFqQP+y2fzpNULaCxOEV15azDIGIkp6Edt+qj4phiGCwtxlrMx5eAyI
+   WZ+uzI96d4bM1CFnxdlRRqk9BH3DYPC7IY0gp/s2vJBN1t2xTPqMwyDWH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="344423524"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="344423524"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 04:27:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="750447103"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="750447103"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Apr 2023 04:27:04 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjIL1-000OEL-03;
+        Mon, 03 Apr 2023 11:27:03 +0000
+Date:   Mon, 3 Apr 2023 19:26:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Yajun Deng <yajun.deng@linux.dev>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: drivers with target_index() must set freq_table
+Message-ID: <202304031904.mo4oksHT-lkp@intel.com>
+References: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: void0red@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Smatch reports:
-1. mtk_thermal_probe() warn: 'apmixed_base' from of_iomap() not released.
-2. mtk_thermal_probe() warn: 'auxadc_base' from of_iomap() not released.
+Hi Viresh,
 
-The original code forgets to release iomap resource when handling errors,
-fix it through unified error handling code at the end of mtk_thermal_probe.
+I love your patch! Perhaps something to improve:
 
-Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
-Signed-off-by: Kang Chen <void0red@hust.edu.cn>
----
-I think the this should be released on the success path but I was too
-scared of breaking things. Let me know and I will resend if people want
-me to do that.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.3-rc5 next-20230331]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- drivers/thermal/mediatek/auxadc_thermal.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Viresh-Kumar/cpufreq-drivers-with-target_index-must-set-freq_table/20230403-121021
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar%40linaro.org
+patch subject: [PATCH] cpufreq: drivers with target_index() must set freq_table
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230403/202304031904.mo4oksHT-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3b521388b742e3d7b9bbba198655408c6d152579
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Viresh-Kumar/cpufreq-drivers-with-target_index-must-set-freq_table/20230403-121021
+        git checkout 3b521388b742e3d7b9bbba198655408c6d152579
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/
 
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index ab730f9552d0..741c7d8151bd 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -1149,13 +1149,15 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	if (auxadc_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_iounmap_auxadc;
- 	}
- 
- 	apmixedsys = of_parse_phandle(np, "mediatek,apmixedsys", 0);
- 	if (!apmixedsys) {
- 		dev_err(&pdev->dev, "missing apmixedsys node\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err_iounmap_auxadc;
- 	}
- 
- 	apmixed_base = of_iomap(apmixedsys, 0);
-@@ -1165,17 +1167,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	if (apmixed_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_iounmap_apmixed;
- 	}
- 
- 	ret = device_reset_optional(&pdev->dev);
- 	if (ret)
--		return ret;
-+		goto err_iounmap_apmixed;
- 
- 	ret = clk_prepare_enable(mt->clk_auxadc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+		goto err_iounmap_apmixed;
- 	}
- 
- 	ret = clk_prepare_enable(mt->clk_peri_therm);
-@@ -1220,7 +1223,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(mt->clk_peri_therm);
- err_disable_clk_auxadc:
- 	clk_disable_unprepare(mt->clk_auxadc);
--
-+err_iounmap_apmixed:
-+	iounmap(apmixed_base);
-+err_iounmap_auxadc:
-+	iounmap(auxadc_base);
- 	return ret;
- }
- 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304031904.mo4oksHT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/cpufreq.c:76:6: warning: no previous prototype for function 'has_target_index' [-Wmissing-prototypes]
+   bool has_target_index(void)
+        ^
+   drivers/cpufreq/cpufreq.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool has_target_index(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/has_target_index +76 drivers/cpufreq/cpufreq.c
+
+    75	
+  > 76	bool has_target_index(void)
+    77	{
+    78		return !!cpufreq_driver->target_index;
+    79	}
+    80	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
