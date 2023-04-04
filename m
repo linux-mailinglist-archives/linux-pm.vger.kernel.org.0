@@ -2,119 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CAF6D6B45
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Apr 2023 20:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27036D6B4B
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Apr 2023 20:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjDDSNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Apr 2023 14:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S235972AbjDDSOb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 4 Apr 2023 14:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbjDDSM7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Apr 2023 14:12:59 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0AF1BC
-        for <linux-pm@vger.kernel.org>; Tue,  4 Apr 2023 11:12:58 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id t4so28510082wra.7
-        for <linux-pm@vger.kernel.org>; Tue, 04 Apr 2023 11:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680631977;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P6UvJYb0vhNu7LxirRk26kxVyScSe7FvDHHBR5w4eq8=;
-        b=E99kdlr889mPaDlkmAJ09SWhAhJlJQmaXAZlAvya22AveV86wUfXtgLRYPiJ+zL8Nh
-         /TIx3GMyE2GrPaDcBdCNItvjGiLPMgb/AD2MytftBiDIc8BNkaxQu5K3f1uGrjTV01tE
-         eV0ENuqva2sB+/MaYJXIlo6Urr3p2PeMDpbPeg69tIoy/eZUTC/w9JhlLd7Zm0ofN6lT
-         h/LaAAD6BRVtIu9qU7e0OVrT6zSZweeH7DyCo8p3wCq+KcU1rdgRgfMdQeoF6AwovNGZ
-         xQGbKHI6WX9GXB9xoC7c65Yxt1KHUHBPi98lZuuNOzTrh4xcj7aEXx175/FPNRrt9xp+
-         F20g==
+        with ESMTP id S232492AbjDDSOb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Apr 2023 14:14:31 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7193B10C9;
+        Tue,  4 Apr 2023 11:14:30 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id i5so134364672eda.0;
+        Tue, 04 Apr 2023 11:14:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680631977;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P6UvJYb0vhNu7LxirRk26kxVyScSe7FvDHHBR5w4eq8=;
-        b=ysaIh00liEkpJqwT8HUfwSv2yPpSeW6r2MVdKXQD6Os1yFUr/FfuBo+JNICaD5PZMd
-         GaihOaFDo/cHINXqpY3SNFl/p8o7UGLceWMjOxeP3vofmQ66E6rjZ7qg/VdQmm7cgMDn
-         /hxPZ/vGTV2ic7m5AS7/0Shr/iVLTg1QapC7S9TB0G4+cGk8KXAxu4v4VhXmYfKimQis
-         cIfagVc8pSzld5s1eNhxyy4SoW31+mr2IRoIcR5DCydu++Z52f/OVyRMASsDoGSEBki9
-         O4zrt+jCWx8O3Upn3I4Ua3UnEmmEg+BQneP/Z2FLHhNHCRJS58WXm2Skg4z4TrJVC1Cv
-         gCJQ==
-X-Gm-Message-State: AAQBX9dog9YMCsejRi6aALyVMTX/jMrsgrXiqTBNhk74/gpP7bitrFHM
-        NpqGmkn2Jgvmk3rCWI5Kro57KQ==
-X-Google-Smtp-Source: AKy350ZqidUHyjPQD80Bc29Ag79Id6JamdaJKo/GDVtXZWIbJCCdPv1oJ91ZQrE1lN5Pz694+gaH3Q==
-X-Received: by 2002:a05:6000:10cc:b0:2ce:ae57:71db with SMTP id b12-20020a05600010cc00b002ceae5771dbmr2503166wrx.33.1680631976920;
-        Tue, 04 Apr 2023 11:12:56 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:abb6:73c6:c885:345d? ([2a05:6e02:1041:c10:abb6:73c6:c885:345d])
-        by smtp.googlemail.com with ESMTPSA id j7-20020a5d6047000000b002e105c017adsm12898526wrt.44.2023.04.04.11.12.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 11:12:56 -0700 (PDT)
-Message-ID: <f68a0713-3388-aa3e-38d6-04b8a4bb9d16@linaro.org>
-Date:   Tue, 4 Apr 2023 20:12:55 +0200
+        d=1e100.net; s=20210112; t=1680632069;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HhKMzHmNqvB6X1qkKZYprOrOWk/8T8qP6X22oxtMlpQ=;
+        b=djW0A5RTjq7OkOs8EMSTpAAAktgljy9Z19NArq+EoWOHXxMonJyr+G+R6dmpN5XPj6
+         Pn4+I2WGHP1rIK/XcFMO8NqpC1cLGmGiNZVkUaxJa1KLB4Tkczd3rcWl4x27oRVC9MJ2
+         MKitPKrb7dVRpjUo60MLgLqAQzTMt4vxqyyGLehYIgIS8vpTfn453Ca5rUc0kJMs0Qi7
+         LLcmzvJ+PuxsIEGOopPF2VmqeD9fh/H/6WoKo2AXxkdqKHXV43ipmxcZurhc2guWuUhf
+         jbmukyKqNnnjs2fuSySKjQTOD9n6c31/j24xHowMoBHaZFl/eWEMJgr4rIr8Csbw5NXe
+         dWUQ==
+X-Gm-Message-State: AAQBX9fEYI7MW8/2gzWXhYaGUl8kAkjn1cKCxXas68SUicWhV+GjuyI1
+        NlJUOvrKpAZH6aBWWO1NbE5Kn09rJIDHXgbVBCEMg0ZS
+X-Google-Smtp-Source: AKy350bRKPGjnc4ZAePM02pNmRNlV1Tb6qYnMPU/dgZOryDhR3nTJEsiN6vDr/wAE19ki2QC/KBpCKpwrMTAcbQNfeU=
+X-Received: by 2002:a17:907:8c18:b0:93e:c1ab:ae67 with SMTP id
+ ta24-20020a1709078c1800b0093ec1abae67mr249016ejc.2.1680632068845; Tue, 04 Apr
+ 2023 11:14:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove
- add_one_attribute
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, amitk@kernel.org,
-        Sujith Thomas <sujith.thomas@intel.com>,
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-4-daniel.lezcano@linaro.org> <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
+ <CAJZ5v0iYk7mC0K7Tsv7Dh9N=dQW151YhVcphvLm7T2vEY10tMA@mail.gmail.com>
+ <b0e158d4-5522-821f-d3e5-abc6f77509cb@linaro.org> <CAJZ5v0g7Smzd5sOJ9K1sSF73C9sRC-GmDvAEV629+bYOa7F47Q@mail.gmail.com>
+ <f68a0713-3388-aa3e-38d6-04b8a4bb9d16@linaro.org>
+In-Reply-To: <f68a0713-3388-aa3e-38d6-04b8a4bb9d16@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Apr 2023 20:14:17 +0200
+Message-ID: <CAJZ5v0gcNEtYJmOkkCKq23AsdDRxyLKY6seetnRwtLxyLPWmkg@mail.gmail.com>
+Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove add_one_attribute
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        amitk@kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
         "open list:INTEL MENLOW THERMAL DRIVER" <linux-pm@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
- <20230307133735.90772-4-daniel.lezcano@linaro.org>
- <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
- <CAJZ5v0iYk7mC0K7Tsv7Dh9N=dQW151YhVcphvLm7T2vEY10tMA@mail.gmail.com>
- <b0e158d4-5522-821f-d3e5-abc6f77509cb@linaro.org>
- <CAJZ5v0g7Smzd5sOJ9K1sSF73C9sRC-GmDvAEV629+bYOa7F47Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0g7Smzd5sOJ9K1sSF73C9sRC-GmDvAEV629+bYOa7F47Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/03/2023 19:18, Rafael J. Wysocki wrote:
-> On Mon, Mar 13, 2023 at 1:35 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 13/03/2023 13:26, Rafael J. Wysocki wrote:
->>> On Mon, Mar 13, 2023 at 11:55 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>>
->>>> Hi,
->>>>
->>>> is this code removal acceptable ?
->>>
->>> I'll let you know later this week.
->>
->> Great, thank you
-> 
-> So it would be acceptable if it had no users, but that's somewhat hard
-> to establish.
-> 
-> As I wrote in a reply to the RFC version of this, I'd rather make
-> these attributes depend on a Kconfig option or a module parameter
-> before removing them completely.
+On Tue, Apr 4, 2023 at 8:13 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 17/03/2023 19:18, Rafael J. Wysocki wrote:
+> > On Mon, Mar 13, 2023 at 1:35 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 13/03/2023 13:26, Rafael J. Wysocki wrote:
+> >>> On Mon, Mar 13, 2023 at 11:55 AM Daniel Lezcano
+> >>> <daniel.lezcano@linaro.org> wrote:
+> >>>>
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> is this code removal acceptable ?
+> >>>
+> >>> I'll let you know later this week.
+> >>
+> >> Great, thank you
+> >
+> > So it would be acceptable if it had no users, but that's somewhat hard
+> > to establish.
+> >
+> > As I wrote in a reply to the RFC version of this, I'd rather make
+> > these attributes depend on a Kconfig option or a module parameter
+> > before removing them completely.
+>
+> Do you mean we set the default to false and see if there are complaints?
+> If not after awhile, we remove the code ?
 
-Do you mean we set the default to false and see if there are complaints? 
-If not after awhile, we remove the code ?
-
-[ ... ]
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Yes.  That's the idea at least.
