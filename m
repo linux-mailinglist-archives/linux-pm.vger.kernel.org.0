@@ -2,152 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1986D6AFA
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Apr 2023 19:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CAF6D6B45
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Apr 2023 20:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbjDDRzu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Apr 2023 13:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S231539AbjDDSNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Apr 2023 14:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbjDDRzt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Apr 2023 13:55:49 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850EB35A6;
-        Tue,  4 Apr 2023 10:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680630947; x=1712166947;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=ftIB+tKx2BRDAIoJzyNRehniJ6AZq5kLCytThxBFL2I=;
-  b=cRoigRy71IUqyqno/OJ8arnQ3cT2A/ZMSjIhi8srvDUAnh8avqFlk44j
-   2C+Qh+nxyo4sVZzzXtn00VIH6fkTuZESx0odTS/PF7wwJi+O9FxPgeVim
-   vT1OrWZu6ZW1+5X/4by74Lm7PJiXyTq2LOJDPyns2OuuqKX1B4GxmvINY
-   Ve1RFkbdS+db+77gqvikVbKhWmQtrCnViN4PVoF6Gf3VvEIO7JymUhPbm
-   ScxKjCr4mhXVbXdqZSgYTKBLqzsANhVX1G16NQz2uwCEooLPOVo0EKqP5
-   7tnrYhuNBS49SCgFnIh0tBTHW93v1RUVu0eRYecyuSmuK1JSxZYJPnerc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405029064"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="405029064"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:55:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="775733761"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="775733761"
-Received: from vukivan-mobl2.amr.corp.intel.com ([10.212.38.37])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:55:29 -0700
-Message-ID: <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 04 Apr 2023 10:55:28 -0700
-In-Reply-To: <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com>
-References: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jocwROiayCpkp2CrmOFrBSShO5zPicWZQzaM+rj_25zg@mail.gmail.com>
-         <221ff60648e0e76920cb5054e9cfb98ec77612b1.camel@linux.intel.com>
-         <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S233127AbjDDSM7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Apr 2023 14:12:59 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0AF1BC
+        for <linux-pm@vger.kernel.org>; Tue,  4 Apr 2023 11:12:58 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t4so28510082wra.7
+        for <linux-pm@vger.kernel.org>; Tue, 04 Apr 2023 11:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680631977;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P6UvJYb0vhNu7LxirRk26kxVyScSe7FvDHHBR5w4eq8=;
+        b=E99kdlr889mPaDlkmAJ09SWhAhJlJQmaXAZlAvya22AveV86wUfXtgLRYPiJ+zL8Nh
+         /TIx3GMyE2GrPaDcBdCNItvjGiLPMgb/AD2MytftBiDIc8BNkaxQu5K3f1uGrjTV01tE
+         eV0ENuqva2sB+/MaYJXIlo6Urr3p2PeMDpbPeg69tIoy/eZUTC/w9JhlLd7Zm0ofN6lT
+         h/LaAAD6BRVtIu9qU7e0OVrT6zSZweeH7DyCo8p3wCq+KcU1rdgRgfMdQeoF6AwovNGZ
+         xQGbKHI6WX9GXB9xoC7c65Yxt1KHUHBPi98lZuuNOzTrh4xcj7aEXx175/FPNRrt9xp+
+         F20g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680631977;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6UvJYb0vhNu7LxirRk26kxVyScSe7FvDHHBR5w4eq8=;
+        b=ysaIh00liEkpJqwT8HUfwSv2yPpSeW6r2MVdKXQD6Os1yFUr/FfuBo+JNICaD5PZMd
+         GaihOaFDo/cHINXqpY3SNFl/p8o7UGLceWMjOxeP3vofmQ66E6rjZ7qg/VdQmm7cgMDn
+         /hxPZ/vGTV2ic7m5AS7/0Shr/iVLTg1QapC7S9TB0G4+cGk8KXAxu4v4VhXmYfKimQis
+         cIfagVc8pSzld5s1eNhxyy4SoW31+mr2IRoIcR5DCydu++Z52f/OVyRMASsDoGSEBki9
+         O4zrt+jCWx8O3Upn3I4Ua3UnEmmEg+BQneP/Z2FLHhNHCRJS58WXm2Skg4z4TrJVC1Cv
+         gCJQ==
+X-Gm-Message-State: AAQBX9dog9YMCsejRi6aALyVMTX/jMrsgrXiqTBNhk74/gpP7bitrFHM
+        NpqGmkn2Jgvmk3rCWI5Kro57KQ==
+X-Google-Smtp-Source: AKy350ZqidUHyjPQD80Bc29Ag79Id6JamdaJKo/GDVtXZWIbJCCdPv1oJ91ZQrE1lN5Pz694+gaH3Q==
+X-Received: by 2002:a05:6000:10cc:b0:2ce:ae57:71db with SMTP id b12-20020a05600010cc00b002ceae5771dbmr2503166wrx.33.1680631976920;
+        Tue, 04 Apr 2023 11:12:56 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:abb6:73c6:c885:345d? ([2a05:6e02:1041:c10:abb6:73c6:c885:345d])
+        by smtp.googlemail.com with ESMTPSA id j7-20020a5d6047000000b002e105c017adsm12898526wrt.44.2023.04.04.11.12.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 11:12:56 -0700 (PDT)
+Message-ID: <f68a0713-3388-aa3e-38d6-04b8a4bb9d16@linaro.org>
+Date:   Tue, 4 Apr 2023 20:12:55 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove
+ add_one_attribute
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rui.zhang@intel.com, amitk@kernel.org,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        "open list:INTEL MENLOW THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-4-daniel.lezcano@linaro.org>
+ <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
+ <CAJZ5v0iYk7mC0K7Tsv7Dh9N=dQW151YhVcphvLm7T2vEY10tMA@mail.gmail.com>
+ <b0e158d4-5522-821f-d3e5-abc6f77509cb@linaro.org>
+ <CAJZ5v0g7Smzd5sOJ9K1sSF73C9sRC-GmDvAEV629+bYOa7F47Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0g7Smzd5sOJ9K1sSF73C9sRC-GmDvAEV629+bYOa7F47Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2023-04-04 at 18:46 +0200, Rafael J. Wysocki wrote:
-> On Tue, Apr 4, 2023 at 6:39=E2=80=AFPM srinivas pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >=20
-> > On Mon, 2023-04-03 at 20:37 +0200, Rafael J. Wysocki wrote:
-> > > On Fri, Mar 31, 2023 at 6:53=E2=80=AFPM Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > >=20
-> > > > Add support for DLVR (Digital Linear Voltage Regulator)
-> > > > attributes,
-> > > > which can be used to control RFIM.
-> > > > Here instead of "fivr" another directory "dlvr" is created with
-> > > > DLVR
-> > > > attributes:
-> > > >=20
-> > > > /sys/bus/pci/devices/0000:00:04.0/dlvr
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_freq_mhz
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_freq_select
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_hardware_rev
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_pll_busy
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_rfim_enable
-> > > > =E2=94=94=E2=94=80=E2=94=80 dlvr_spread_spectrum_pct
-> > > >=20
-> > > > Attributes
-> > > > dlvr_freq_mhz (RO):
-> > > > Current DLVR PLL frequency in MHz.
-> > > >=20
-> > > > dlvr_freq_select (RW):
-> > > > Sets DLVR PLL clock frequency.
-> > > >=20
-> > > > dlvr_hardware_rev (RO):
-> > > > DLVR hardware revision.
-> > > >=20
-> > > > dlvr_pll_busy (RO):
-> > > > PLL can't accept frequency change when set.
-> > > >=20
-> > > > dlvr_rfim_enable (RW):
-> > > > 0: Disable RF frequency hopping, 1: Enable RF frequency
-> > > > hopping.
-> > > >=20
-> > > > dlvr_spread_spectrum_pct (RW)
-> > > > A write to this register updates the DLVR spread spectrum
-> > > > percent
-> > > > value.
-> > >=20
-> > > How is this attribute going to be used by user space in practice?
-> >=20
-> > Spread spectrum percent helps to reduce the DLVR clock noise to
-> > meet
-> > regulatory compliance. This spreading % increases bandwidth of
-> > signal
-> > transmission and hence reduces the effects of interference, noise,
-> > and
-> > signal fading.
->=20
-> The above information should be added to the documentation I think.
->=20
-> Still, I would like to know when user space is going to write to it
-> and how it is going to find out what value to write.
-As specified in the
-https://docs.kernel.org/driver-api/thermal/intel_dptf.html
-This is all related to reduce interference with WiFi radio frequencies.
+On 17/03/2023 19:18, Rafael J. Wysocki wrote:
+> On Mon, Mar 13, 2023 at 1:35 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 13/03/2023 13:26, Rafael J. Wysocki wrote:
+>>> On Mon, Mar 13, 2023 at 11:55 AM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>>
+>>>> Hi,
+>>>>
+>>>> is this code removal acceptable ?
+>>>
+>>> I'll let you know later this week.
+>>
+>> Great, thank you
+> 
+> So it would be acceptable if it had no users, but that's somewhat hard
+> to establish.
+> 
+> As I wrote in a reply to the RFC version of this, I'd rather make
+> these attributes depend on a Kconfig option or a module parameter
+> before removing them completely.
 
-The algorithm should be read current dlvr_freq_mhz,
-dlvr_spread_spectrum_pct, current WiFi frequency (channel has a fix
-freq), find the error in WiFi frame error rates (From WiFi module), and
-do small adjustment +- to dlvr_freq. While changing the dlvr
-frequencies you may induce more interference so you spread the signal
-to reduce S/N ratio using this percent knob.
+Do you mean we set the default to false and see if there are complaints? 
+If not after awhile, we remove the code ?
 
->=20
-> > > Also should it be split like the frequency one (for consistency)?
-> >=20
-> > This is a RW field and is applied immediately unlike frequency,
-> > where
-> > it is two step process. First you specify and enable and then see
-> > the
-> > effect. So they are two fields.
->=20
-> I was talking about dlvr_freq_mhz (RO) and dlvr_freq_select (RW).=C2=A0
-> I'm
-> not sure how the above is related to them TBH.
-The frequency is the base signal to which interference must be reduced.
-A good explanation for this technique
-https://www.eetimes.com/tutorial-on-spread-spectrum-technology/
+[ ... ]
 
-Thanks,
-Srinivas
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
