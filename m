@@ -2,46 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E076D8560
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Apr 2023 19:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFDB6D8606
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Apr 2023 20:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbjDER52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Apr 2023 13:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        id S229756AbjDEScZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Apr 2023 14:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjDER52 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 13:57:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBD28B0;
-        Wed,  5 Apr 2023 10:57:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A407FEC;
-        Wed,  5 Apr 2023 10:58:10 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCE313F73F;
-        Wed,  5 Apr 2023 10:57:24 -0700 (PDT)
-Message-ID: <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
-Date:   Wed, 5 Apr 2023 19:57:18 +0200
+        with ESMTP id S230335AbjDEScY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 14:32:24 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD91E268B
+        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 11:32:22 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id l12so37110466wrm.10
+        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 11:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680719541;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f2WvIYrTnKSSwYFbqQbh2QUiuKuHXaFjFbgHn4TTUZw=;
+        b=NmYvdDE6YuUvfzdXcWpDcL1pUxI6SzxixRO5b5hg97oym4B6zvxcGIp1LLisTP5ndG
+         Gx/qN6WvFu82/Qttg5rTF8/CN0z6T2ZIxQ0JByU/eE5odppxYR6GRfUHHmlMi+oSf568
+         ZtDkhPQwLrZEuYANs6anGhpvPVjDc9wlAXTBeZojw06neT50PN5BGm4Ipm3ZiQ/YYi+Q
+         g5YrtVO85abwV4AKBILJ9Yt8sPshqCOI65iKPAwRSjyMDKYbxqvyMRpgiQKgRVJPjVwr
+         6ZwKt67GV2efB2Ao2mncUqfaKhP0Rdgh7CCHpvEd9jrdzXicAwVwpEB629ps1xtF1OdX
+         t5uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680719541;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2WvIYrTnKSSwYFbqQbh2QUiuKuHXaFjFbgHn4TTUZw=;
+        b=GqVFbT7mUuGjAZ8DLUbJ8huGA0fAMJ/uUKtBSd961n6pxUJpnfoo708V+8kGfkizfi
+         8n+ggzBbmqVugC4GBrabQJNe5E/nVU5RbClKrkmu/6zBa3MlrMHAzLOEPJfdPOAw0Aw1
+         9PrZL/zueHQS+Ovm5iYNwrV8uoBjVDwG8jy5rOftd93FvjtuuHjdp7z95qP6Wl7J1w1/
+         TuzX29G9jMeyiyTsGKKuTHnIFakNyl0Swz+WVSYHFgEQFNq3unyoFSCVffLTbYIyB73+
+         mtyHLOx9J8Y1CT2TRBAfQjqOwjx0M8Pi893QvU+wjC7yC4b/0TWFSiaNiQQigE7UbcIe
+         FX1Q==
+X-Gm-Message-State: AAQBX9fMTRn1is209ScH2gQKeuAhZfq890C6ZKD4hR6OUKqyLEvUZkAr
+        ugTFrIti+4vpT8hJ4jvE33PHbQ==
+X-Google-Smtp-Source: AKy350ZxabPesATfDIB1W2CzsiR0amy27LOAm4Qv1zMDVO4+Zh/pIl+T7/SQdFgGuIIKtWjakoUE7A==
+X-Received: by 2002:adf:e643:0:b0:2ce:9f35:b645 with SMTP id b3-20020adfe643000000b002ce9f35b645mr4920966wrn.20.1680719541175;
+        Wed, 05 Apr 2023 11:32:21 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:6630:ee96:3710:24c8? ([2a05:6e02:1041:c10:6630:ee96:3710:24c8])
+        by smtp.googlemail.com with ESMTPSA id v8-20020a5d4a48000000b002c557f82e27sm15533566wrs.99.2023.04.05.11.32.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 11:32:20 -0700 (PDT)
+Message-ID: <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org>
+Date:   Wed, 5 Apr 2023 20:32:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
- high error
+Subject: Re: [GIT PULL] thermal for v6.4-rc1
 Content-Language: en-US
-To:     Yang Shi <yang@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230328193846.8757-1-yang@os.amperecomputing.com>
- <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
- <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yang Li <yang.lee@linux.alibaba.com>
+References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,96 +81,111 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+Hi Rafael,
 
-On 4/4/23 21:07, Yang Shi wrote:
+just a gentle reminder because more material will come in the next days
+
+Thanks
+
+   -- Daniel
+
+
+On 01/04/2023 21:04, Daniel Lezcano wrote:
+> The following changes since commit 
+> 2b6db9efa50799fa75ce609f24b355f29504bd9a:
+> 
+>    Merge branch 'thermal-core' into thermal (2023-03-08 14:03:56 +0100)
+> 
+> are available in the Git repository at:
 > 
 > 
-> On 3/29/23 11:43 AM, Rafael J. Wysocki wrote:
->> On Tue, Mar 28, 2023 at 9:39 PM Yang Shi <yang@os.amperecomputing.com> wrote:
->>> When testing CPPC cpufreq on our platform, we noticed the error may be quite
->>> high and the high error may happen quite often.  For example, on a platform
->>> with a maximum frequency of 2.8GHz when the CPUs were fully loaded (100% load),
->>> we saw cpuinfo_cur_freq may show 4GHz, it means the error is > 40%.  And the
->>> high error (> 1%) happened 256 times out of 2127 samples (sampled every 3
->>> seconds) in an approximate 2hrs test.
->> The description above is a bit cryptic IMV.  For example, it is not
->> particularly clear what "high error" means.
->>
->>> We tried to enlarge the delay, and tested with 100us, 1ms and 10ms.  The
->>> below is the results.
->>>
->>> 100us:
->>> The highest error is 4GHz, 22 times out of 3623 samples
->>>
->>> 1ms:
->>> The highest error is 3.3GHz, 3 times out of 2814 samples
->>>
->>> 10ms:
->>> No high error anymore
->>>
->>> Increase the measurement delay in cppc_cpufreq_get_rate to 10ms to avoid
->>> high measurement errors.
->>>
->>> Signed-off-by: Yang Shi <yang@os.amperecomputing.com>
->>> ---
->>>    drivers/cpufreq/cppc_cpufreq.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->>> index 022e3555407c..c2bf65448d3d 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>> @@ -851,7 +851,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->>>           if (ret)
->>>                   return ret;
->>>
->>> -       udelay(2); /* 2usec delay between sampling */
->>> +       mdelay(10); /* 10msec delay between sampling */
->> This function can be called with interrupts off, so it cannot spin for 10 ms.
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+> tags/thermal-v6.4-rc1-1
 > 
-> Per Pierre's comment, the delay may still be ms. Is it still too long? A
-> quick look at the code shows cpufreq_quick_get() is the only caller with
-> irq off IIRC. So can we have another callback for it, for example,
-> get_quick() which does spin for shorter time (for example, keep 2us
-> delay). Then have ->get() callback use longer delay?
-
--
-According to the same ACPI 6.5 s8.4.6.1.2.5 "Time Window Register" paragraph,
-and assuming we are in the 'Autonomous Selection is not enabled' case,
-the OS is supposed to write (not read) the delta between successive reads of the
-counter, so using this field as is would be bending the definition I think.
-
--
-It is correct that the "Time Window Register" field specifies a value in ms,
-but it seems a long time to wait for with irqs off.
-
--
-Theoretically, the perf/ref counters should accumulate to allow computing
-a correct frequency. Is it possible to know how these counters are accessed ?
-Is it through PCC channels and there is some undesired delay between the
-reads of the perf/ref counters ?
-
--
-About making the delay:
-     max(cppc_cpufreq_get_transition_delay_us(), Time Winder Register)
-I think it would be good to know why the values of the counters
-don't accumulate correctly, ideally by getting a trace where a frequency
-above the maximum frequency is computed, and with the timestamps at which
-the counters are read.
-If the values are coming from PCC channels / the firmware, it might be difficult
-to get.
-
-Just for reference, the value of 2us was picked in this thread:
-https://lore.kernel.org/all/ac2eb509-c1b0-521a-07e5-2bf8eaaa55c2@codeaurora.org/T/#u
-
-Regards,
-Pierre
-
-
+> for you to fetch changes up to 0c492be4002b7411a1587b429e68e0cf3f562488:
 > 
+>    thermal/drivers/ti: Use fixed update interval (2023-04-01 20:51:45 
+> +0200)
 > 
->>
->>>           ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->>>           if (ret)
->>> --
+> ----------------------------------------------------------------
+> - Add more thermal zone device encapsulation: prevent setting
+>    structure field directly, access the sensor device instead the
+>    thermal zone's device for trace, relocate the traces in
+>    drivers/thermal (Daniel Lezcano)
 > 
+> - Use the generic trip point for the i.MX and remove the get_trip_temp
+>    ops (Daniel Lezcano)
+> 
+> - Use the devm_platform_ioremap_resource() in the Hisilicon driver
+>    (Yang Li)
+> 
+> - Remove R-Car H3 ES1.* handling as public has only access to the ES2
+>    version and the upstream support for the ES1 has been shutdown 
+> (Wolfram Sang)
+> 
+> - Add a delay after initializing the bank in order to let the time to
+>    the hardware to initialze itself before reading the temperature
+>    (Amjad Ouled-Ameur)
+> 
+> - Add MT8365 support (Amjad Ouled-Ameur)
+> 
+> ----------------------------------------------------------------
+> Amjad Ouled-Ameur (1):
+>        thermal/drivers/mediatek: Add delay after thermal banks 
+> initialization
+> 
+> Daniel Lezcano (6):
+>        thermal/drivers/imx: Remove get_trip_temp ops
+>        thermal/drivers/imx: Use the thermal framework for the trip point
+>        thermal/core: Relocate the traces definition in thermal directory
+>        thermal/drivers/db8500: Use driver dev instead of tz->device
+>        thermal/drivers/stm: Don't set no_hwmon to false
+>        thermal/drivers/ti: Use fixed update interval
+> 
+> Fabien Parent (2):
+>        dt-bindings: thermal: mediatek: Add binding documentation for 
+> MT8365 SoC
+>        thermal/drivers/mediatek: Add support for MT8365 SoC
+> 
+> Markus Schneider-Pargmann (1):
+>        thermal/drivers/mediatek: Control buffer enablement tweaks
+> 
+> Wolfram Sang (1):
+>        thermal/drivers/rcar_gen3_thermal: Remove R-Car H3 ES1.* handling
+> 
+> Yang Li (1):
+>        thermal/drivers/hisi: Use devm_platform_ioremap_resource()
+> 
+>   .../bindings/thermal/mediatek-thermal.txt          |   1 +
+>   drivers/thermal/Makefile                           |   3 +-
+>   drivers/thermal/cpufreq_cooling.c                  |   2 +-
+>   drivers/thermal/db8500_thermal.c                   |   7 +-
+>   drivers/thermal/devfreq_cooling.c                  |   2 +-
+>   drivers/thermal/gov_fair_share.c                   |   2 +-
+>   drivers/thermal/gov_power_allocator.c              |   2 +-
+>   drivers/thermal/gov_step_wise.c                    |   2 +-
+>   drivers/thermal/hisi_thermal.c                     |   4 +-
+>   drivers/thermal/imx_thermal.c                      |  19 ++--
+>   drivers/thermal/mediatek/auxadc_thermal.c          | 107 
+> +++++++++++++++++----
+>   drivers/thermal/rcar_gen3_thermal.c                |  52 +---------
+>   drivers/thermal/st/stm_thermal.c                   |   1 -
+>   drivers/thermal/thermal_core.c                     |   2 +-
+>   drivers/thermal/thermal_helpers.c                  |   3 +-
+>   .../thermal.h => drivers/thermal/thermal_trace.h   |   6 ++
+>   .../thermal/thermal_trace_ipa.h                    |   6 ++
+>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   8 +-
+>   18 files changed, 131 insertions(+), 98 deletions(-)
+>   rename include/trace/events/thermal.h => 
+> drivers/thermal/thermal_trace.h (97%)
+>   rename include/trace/events/thermal_power_allocator.h => 
+> drivers/thermal/thermal_trace_ipa.h (96%)
+> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
