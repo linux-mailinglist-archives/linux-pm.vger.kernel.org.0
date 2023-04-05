@@ -2,236 +2,295 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD226D7706
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Apr 2023 10:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD2D6D794E
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Apr 2023 12:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbjDEIeS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Apr 2023 04:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S237481AbjDEKJa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Apr 2023 06:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237225AbjDEIeR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 04:34:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916612D64
-        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 01:34:10 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l7so33211495pjg.5
-        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 01:34:10 -0700 (PDT)
+        with ESMTP id S237666AbjDEKJ3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 06:09:29 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788833ABD
+        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 03:09:26 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id r11so139742352edd.5
+        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 03:09:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680683650; x=1683275650;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uswkZCNmvnRlVRQCSju2fZnjPjabnOYplQP8HVJ2wjE=;
-        b=hDTg9cZ5dgqFve21IhvP0vjH/LT5Qn7NqlC7lp8kDbxvOzwqcjsmIaSgUiFkxF9/rA
-         CX6RJ+FZxOinhHJXTmJWHeiM0PU12K7peccwTyhJ8SacTyOawUNsD711ZuiS/VYAiGjD
-         JxibN6nFFF/mlX0xY9ioRXj8B1hj/IrRo1VRraKc0O5K/v3oPqUvBr2n5pgr62FnlVaU
-         2hRpKMOuYdJLVWz7IDpKKO6Go35uPSTQZUdpvVPnGKhPc+aWLP8aA0Tz8VCWrmG+oJjo
-         p54SNKfSHgQ/MCAetv/xg7nmJSwNXLhATwlFTNFdgDWIHq16UuKOooTHU7SDn+oVRjSK
-         JQPA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680689366;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q6TAMt++7cMkW1BStD+wsT/sNxqsrNSnDjvkmfey6Z4=;
+        b=bEGMctTnM7DiSqO57EaQMKf5vh4yr7cDNlX1EY3Kv4Rwgb9KaAY/hM5KFna8Hffwva
+         8kMd9qGJL5flWJTqF31LQyEVjPsCKAiquJoMgzOQ1f2+2DQypuHgKCa4qCyMLfLDRClF
+         0trquQ6mQGzS7739tEkPSxc3CqbxgbtFlnkFzsLAf6Gd4Cy/G4yaBCvnDgVEvw5sJjhZ
+         G9KyyQhHKgagyaifa8Ty4aCO2up0+O7oKj1QXklUhP4xzgRpIecqZlTI90Yz/BLdHKvd
+         MEJYxlQvF1fUS+DWpsIcDefyffjc1rqgkbomvjmJ9+v8svYomd7No4uuZx+Wahbjns7U
+         P5ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680683650; x=1683275650;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680689366;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uswkZCNmvnRlVRQCSju2fZnjPjabnOYplQP8HVJ2wjE=;
-        b=b3lxH8PIkYPcURwpgJppVMY1lXvpcbCmiM39OklLowPuCn+nHAKFY4rCQ319I4CVF/
-         fzYLvTS8AaNIVYh+PkdHUPaq6SS1ae556N8Z1uzsyB+Oc4nKKgvjDi7jNY1rt10jvShe
-         +U6KX2VzfoaYbuBhlJFvAfmiA46fa+Xx+fRbbUjmjXdTLB9d4K0snj4/mlqXVPBwehnb
-         TY1abUAUdV8T72iQTAGgPwBmOBiVV5WMYA4/UdO2QO+GWzOmenXkaK/q6Agpl1lnm+Gx
-         RiogRLopAufDovJP4B/OxmajTNnsAHE1hdWnbRghyINM8AP1hgKvhdpOVS13Qjm+xYiQ
-         d5YA==
-X-Gm-Message-State: AAQBX9dAQTvEIIakHodOqZqfeVjGKfaBSqTxHoLznkDXVAHLJ3lqF66A
-        62kMuTLnXulxu035rByQ4ezwrAVKmDOaj7VQTcCnFg==
-X-Google-Smtp-Source: AKy350ZAsaPHdY8c5KE9TLI0KeNHy+W9j9/lSgVgAc0xT/TIw+751YYthPnT3mfZja3e78XtuRBHMTFr1xtbfMMwycs=
-X-Received: by 2002:a17:90a:d201:b0:240:d8d8:12c4 with SMTP id
- o1-20020a17090ad20100b00240d8d812c4mr1918429pju.3.1680683649941; Wed, 05 Apr
- 2023 01:34:09 -0700 (PDT)
+        bh=Q6TAMt++7cMkW1BStD+wsT/sNxqsrNSnDjvkmfey6Z4=;
+        b=k9AoLXKedZv87/YaSClz25hRSflfplR3eAoLFL7gLzDKsKU75fLOy66mMWOLlxilAW
+         QYdSoYXHUJQf2xg8jMNAcHw8j+YdWgBM1TajRtasb5rwDUrMld70aQw1uHvx3SziALeI
+         hzZ7dJNzlZFzJUw4N3ROcK0zoCHYVyeWMJCNwpijtk6ploKyn/lRnUzuRB0i4tQf3d3K
+         hQA+NTYEe7CrpQ8pbh7lfvpUX9SNN89ByvM5ce9CipmSx3HGbApc7ADRpjqYw04UPyQS
+         XAr7eNmeG2Nh4uH08x2tS6uoo94E5WlGGLWifRdaRmSYobsV6yYbvWMRBvgKPmBfoTKz
+         dE8A==
+X-Gm-Message-State: AAQBX9e/9aw2JhYOpR3CqmYftDpf/jFgIqlhS6ZbEbDralrp8PD4PUMY
+        f6U1SXXw2GH1YXNn0SGt4or26A==
+X-Google-Smtp-Source: AKy350bYmVv6IV6JXDqPc1avMQOvjnTmwfb8v7QF7sgI2XiiWDSjCfdP1dWYjIQjxHFNmhoK053P8Q==
+X-Received: by 2002:a17:906:22d3:b0:878:72f7:bd87 with SMTP id q19-20020a17090622d300b0087872f7bd87mr1948024eja.6.1680689365926;
+        Wed, 05 Apr 2023 03:09:25 -0700 (PDT)
+Received: from t480-bl003.. (2a02-8440-c20e-c930-8ace-7c3c-c02b-cb9a.rev.sfr.net. [2a02:8440:c20e:c930:8ace:7c3c:c02b:cb9a])
+        by smtp.gmail.com with ESMTPSA id u13-20020a1709063b8d00b0093e261cc8bcsm7195962ejf.58.2023.04.05.03.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 03:09:25 -0700 (PDT)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+Date:   Wed,  5 Apr 2023 12:09:07 +0200
+Message-Id: <20230405100907.53740-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230330224348.1006691-1-davidai@google.com> <ZCx97IKjsBibjdGc@linux.dev>
- <86sfdfv0e1.wl-maz@kernel.org> <ZC0n0HRsmNJeJZps@google.com>
-In-Reply-To: <ZC0n0HRsmNJeJZps@google.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 5 Apr 2023 10:33:58 +0200
-Message-ID: <CAKfTPtBaXao2oFjFy7Zx8T6orBgC=+zw7L+mF3My7kOFAvg2Og@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-To:     Quentin Perret <qperret@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, David Dai <davidai@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 5 Apr 2023 at 09:48, Quentin Perret <qperret@google.com> wrote:
->
-> On Tuesday 04 Apr 2023 at 21:49:10 (+0100), Marc Zyngier wrote:
-> > On Tue, 04 Apr 2023 20:43:40 +0100,
-> > Oliver Upton <oliver.upton@linux.dev> wrote:
-> > >
-> > > Folks,
-> > >
-> > > On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
-> > >
-> > > <snip>
-> > >
-> > > > PCMark
-> > > > Higher is better
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Test Case (score) | Baseline |  Hypercall | %delta |  MMIO | %delta |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Weighted Total    |     6136 |       7274 |   +19% |  6867 |   +12% |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Web Browsing      |     5558 |       6273 |   +13% |  6035 |    +9% |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Video Editing     |     4921 |       5221 |    +6% |  5167 |    +5% |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Writing           |     6864 |       8825 |   +29% |  8529 |   +24% |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Photo Editing     |     7983 |      11593 |   +45% | 10812 |   +35% |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > > | Data Manipulation |     5814 |       6081 |    +5% |  5327 |    -8% |
-> > > > +-------------------+----------+------------+--------+-------+--------+
-> > > >
-> > > > PCMark Performance/mAh
-> > > > Higher is better
-> > > > +-----------+----------+-----------+--------+------+--------+
-> > > > |           | Baseline | Hypercall | %delta | MMIO | %delta |
-> > > > +-----------+----------+-----------+--------+------+--------+
-> > > > | Score/mAh |       79 |        88 |   +11% |   83 |    +7% |
-> > > > +-----------+----------+-----------+--------+------+--------+
-> > > >
-> > > > Roblox
-> > > > Higher is better
-> > > > +-----+----------+------------+--------+-------+--------+
-> > > > |     | Baseline |  Hypercall | %delta |  MMIO | %delta |
-> > > > +-----+----------+------------+--------+-------+--------+
-> > > > | FPS |    18.25 |      28.66 |   +57% | 24.06 |   +32% |
-> > > > +-----+----------+------------+--------+-------+--------+
-> > > >
-> > > > Roblox Frames/mAh
-> > > > Higher is better
-> > > > +------------+----------+------------+--------+--------+--------+
-> > > > |            | Baseline |  Hypercall | %delta |   MMIO | %delta |
-> > > > +------------+----------+------------+--------+--------+--------+
-> > > > | Frames/mAh |    91.25 |     114.64 |   +26% | 103.11 |   +13% |
-> > > > +------------+----------+------------+--------+--------+--------+
-> > >
-> > > </snip>
-> > >
-> > > > Next steps:
-> > > > ===========
-> > > > We are continuing to look into communication mechanisms other than
-> > > > hypercalls that are just as/more efficient and avoid switching into the VMM
-> > > > userspace. Any inputs in this regard are greatly appreciated.
-> > >
-> > > We're highly unlikely to entertain such an interface in KVM.
-> > >
-> > > The entire feature is dependent on pinning vCPUs to physical cores, for which
-> > > userspace is in the driver's seat. That is a well established and documented
-> > > policy which can be seen in the way we handle heterogeneous systems and
-> > > vPMU.
-> > >
-> > > Additionally, this bloats the KVM PV ABI with highly VMM-dependent interfaces
-> > > that I would not expect to benefit the typical user of KVM.
-> > >
-> > > Based on the data above, it would appear that the userspace implementation is
-> > > in the same neighborhood as a KVM-based implementation, which only further
-> > > weakens the case for moving this into the kernel.
-> > >
-> > > I certainly can appreciate the motivation for the series, but this feature
-> > > should be in userspace as some form of a virtual device.
-> >
-> > +1 on all of the above.
->
-> And I concur with all the above as well. Putting this in the kernel is
-> not an obvious fit at all as that requires a number of assumptions about
-> the VMM.
->
-> As Oliver pointed out, the guest topology, and how it maps to the host
-> topology (vcpu pinning etc) is very much a VMM policy decision and will
-> be particularly important to handle guest frequency requests correctly.
->
-> In addition to that, the VMM's software architecture may have an impact.
-> Crosvm for example does device emulation in separate processes for
-> security reasons, so it is likely that adjusting the scheduling
-> parameters ('util_guest', uclamp, or else) only for the vCPU thread that
-> issues frequency requests will be sub-optimal for performance, we may
-> want to adjust those parameters for all the tasks that are on the
-> critical path.
->
-> And at an even higher level, assuming in the kernel a certain mapping of
-> vCPU threads to host threads feels kinda wrong, this too is a host
-> userspace policy decision I believe. Not that anybody in their right
-> mind would want to do this, but I _think_ it would technically be
-> feasible to serialize the execution of multiple vCPUs on the same host
-> thread, at which point the util_guest thingy becomes entirely bogus. (I
-> obviously don't want to conflate this use-case, it's just an example
-> that shows the proposed abstraction in the series is not a perfect fit
-> for the KVM userspace delegation model.)
->
-> So +1 from me to move this as a virtual device of some kind. And if the
-> extra cost of exiting all the way back to userspace is prohibitive (is
-> it btw?), then we can try to work on that. Maybe something a la vhost
-> can be done to optimize, I'll have a think.
->
-> > The one thing I'd like to understand that the comment seems to imply
-> > that there is a significant difference in overhead between a hypercall
-> > and an MMIO. In my experience, both are pretty similar in cost for a
-> > handling location (both in userspace or both in the kernel). MMIO
-> > handling is a tiny bit more expensive due to a guaranteed TLB miss
-> > followed by a walk of the in-kernel device ranges, but that's all. It
-> > should hardly register.
-> >
-> > And if you really want some super-low latency, low overhead
-> > signalling, maybe an exception is the wrong tool for the job. Shared
-> > memory communication could be more appropriate.
->
-> I presume some kind of signalling mechanism will be necessary to
-> synchronously update host scheduling parameters in response to guest
-> frequency requests, but if the volume of data requires it then a shared
-> buffer + doorbell type of approach should do.
->
-> Thinking about it, using SCMI over virtio would implement exactly that.
-> Linux-as-a-guest already supports it IIRC, so possibly the problem
-> being addressed in this series could be 'simply' solved using an SCMI
-> backend in the VMM...
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-This is what was suggested at LPC:
-using virtio-scmi and scmi performance domain in the guest for cpufreq driver
-using a vhost user scmi backend in user space
-from this vhost userspace backend updates the uclamp min of the vCPU
-thread or use another method is this one is not good enough
+Add AP Domain thermal zones for the mt8195 and
+specify the targeted temperature thresholds.
 
->
-> Thanks,
-> Quentin
+Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+
+---
+This patch squashes and replaces
+
+[PATCH 3/4] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+https://lore.kernel.org/all/20230307154524.118541-4-bchihi@baylibre.com/
+
+and
+
+[PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
+https://lore.kernel.org/all/20230307154524.118541-5-bchihi@baylibre.com/
+
+of the series
+
+[PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
+https://lore.kernel.org/all/20230307154524.118541-1-bchihi@baylibre.com/
+---
+---
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 180 +++++++++++++++++++++++
+ 1 file changed, 180 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index 972c5b86ddae..75da456c512b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -2909,5 +2909,185 @@ map0 {
+ 				};
+ 			};
+ 		};
++
++		vpu0-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
++
++			trips {
++				vpu0_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				vpu0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		vpu1-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VPU1>;
++
++			trips {
++				vpu1_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				vpu1_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		gpu0-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_GPU0>;
++
++			trips {
++				gpu0_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				gpu0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		gpu1-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_GPU1>;
++
++			trips {
++				gpu1_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				gpu1_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		vdec-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_VDEC>;
++
++			trips {
++				vdec_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				vdec_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		img-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_IMG>;
++
++			trips {
++				img_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				img_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		infra-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_INFRA>;
++
++			trips {
++				infra_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				infra_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		cam0-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_CAM0>;
++
++			trips {
++				cam0_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				cam0_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++
++		cam1-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&lvts_ap MT8195_AP_CAM1>;
++
++			trips {
++				cam1_alert: trip-alert {
++					temperature = <85000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				cam1_crit: trip-crit {
++					temperature = <100000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
+ 	};
+ };
+-- 
+2.34.1
+
