@@ -2,169 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44506D8943
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Apr 2023 23:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B386D8954
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Apr 2023 23:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjDEVHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Apr 2023 17:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S234149AbjDEVJm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Apr 2023 17:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbjDEVHu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 17:07:50 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE7561BA
-        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 14:07:49 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so38617127pjb.0
-        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 14:07:49 -0700 (PDT)
+        with ESMTP id S234344AbjDEVJe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 17:09:34 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D752B61BF
+        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 14:09:22 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id bm13so10424236pfb.5
+        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 14:09:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680728868;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBJpwOFp3ku4jVcQ5brTCTHQwJGZA4DUI5choGz4DIg=;
-        b=nb9B0hN0UZS0WZOCMBPRrA0OEN0o6HmMMiDGvszitY5YIt18CVLxjZAwg5SywkLWiB
-         COM0P768etQUBisLuP/Nith+msT1+OML2ljlP2+0jEP/CusPi5j+RLnta0kPKL3EVR1W
-         4u1nRbwRPpbnjb7SNI24S8vt+KUXR5NUvIN1eilbKTjQLGyoLrovQB9PTdnA5IyIOqe8
-         Ek51lpRtErgPKBYWWKefFwVLZgmVKgC2iZF7nhFDZGF3S1+4B5PJQCXPTGTNFu93wGTf
-         9LXkRHbJpJ6TLtC/V7AGuZPS8/l501l5I0+w3599vXQ2IfyNOvyx1YlSXJ7I4zPCNau+
-         1h7Q==
+        d=google.com; s=20210112; t=1680728960;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6MLGKvl/FzbLKzi4k20FGuOr9OHamYGW4v4bUuCe4Pw=;
+        b=n28dxYvaxPfq5JUzsQqU6kb+bImfDaBPK4ACVIjk36q9wbwO2Ix5OhdxzRqVx+gjh7
+         vPGDsy2Z/CkVDlg0sacBgvwyhP7Cr0CdN6fmm+V+cxa8+RtEgXZfvRyRNCKyvdMkH3IG
+         AZIFu3+14yJXDRgL1cAXUeLDtssdqJhhsK3uUP9LNJOKnlmtgEbiGDaecgZ2kxcyuk+W
+         ieFXO/j1UfguA8IRQyx5S+9eNafvz99yFQpPT34J9xYi+XPsnNySq6lG7R9Y+uCWDb48
+         YGdH1N2wSkTT52iPU+n1BLdHUrV7R+KBKxYE48TbebgWoPnGhsUXfQZtwsoUmHH5p6Uh
+         UXGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680728868;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VBJpwOFp3ku4jVcQ5brTCTHQwJGZA4DUI5choGz4DIg=;
-        b=UxNskHTJhMGbfRQNxl6EUszz28zimt1jRNOKdCx/aMedrtDvb4/RpwsP4xDIH1828t
-         KUjU8H2c+UvUw5FtmDPJcJJKx60OwN+Uy/BuMFpo7BEjMIdgpGjW/T1MTTcgk889ME0z
-         g814TuyIdGjIjIu360U0QSk5NJnsoToqabTSRDBbpRMTZ+aXEwfvdfjAuU5DvrVb6iPc
-         rGwN7R4HBiA8HhmLl0Gqvz1/ou/YJAI5uOrBD4QV/+5gVA5vITIrKVENCYov3hMVdASk
-         rEmX/UFgsqA/c93wcLnw8Hgw+ryH7uaLAvU0Su/KcknKnI4A5XY2OB2yoNvS71aa9iNI
-         t4iA==
-X-Gm-Message-State: AAQBX9ecTQGIPsmZArqnbzidePqQ/kXNcB5DwjSFpAZl/TOot7OSB3qh
-        2jV8VsCtYljLSTO799y5eEFoDQ==
-X-Google-Smtp-Source: AKy350YzMzop3LSlu/KNAt0I9relkhGlW7R/++PwkdQDrA3LHhcvd4DE5q5gA3Df1csENSpmSdE/tg==
-X-Received: by 2002:a17:902:f2cd:b0:1a1:f051:4f59 with SMTP id h13-20020a170902f2cd00b001a1f0514f59mr6170818plc.15.1680728868655;
-        Wed, 05 Apr 2023 14:07:48 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k2-20020a170902694200b001a21a593008sm10506601plt.306.2023.04.05.14.07.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 14:07:48 -0700 (PDT)
-Message-ID: <642de324.170a0220.8ddc2.63d1@mx.google.com>
-Date:   Wed, 05 Apr 2023 14:07:48 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20210112; t=1680728960;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6MLGKvl/FzbLKzi4k20FGuOr9OHamYGW4v4bUuCe4Pw=;
+        b=opnaY68DOfjkSnYRQJ81VZEuBwYHK/UZSzBvQkgcU+Pb8D2F+TAR6mS2jmONZh8HBh
+         YJe6z+s2tUCwj9qx7RwvOdc7i44wxwpjFoLw9KBZ4hFAYDT2D+OIQwGq4s1CKM/HF2Xn
+         R1nEHFWm1COD1YwHnA6m+S+F1HwB8MZXwVTzTfq/I13NkxdV5ogDTu8fruG/4LojTtFI
+         0evWIQ9jBamWGJkdkzxlW0Bblqs66Le5CNseOs0sUGbMPIAv6kdODKLpEESPJvAkD/WO
+         jNLYUS1EiQOsynzDcNxhzgi5gTfrg5hRSlCkLQx+YLhvJ3UY2AiSDVuojgSOsXkpFWYJ
+         99rg==
+X-Gm-Message-State: AAQBX9e2DdZ/BhyW35oXOf6bQl8udIUg57UBb/IqQOyQP/OJ1c7ChC7Z
+        0W/lmAc68KBzXwEQzhxuLSnXIevuzDtDShCcD2f5kg==
+X-Google-Smtp-Source: AKy350b0IUXlBzjwLLr6SEpK1cx38ABlr+yVbGlA9Wc0dSXUg0uG5eQHWSVFl7t3uBAdQCZoYdM8DgcCcOXiLa8I580=
+X-Received: by 2002:a65:430c:0:b0:514:3d3d:da5a with SMTP id
+ j12-20020a65430c000000b005143d3dda5amr427665pgq.3.1680728960348; Wed, 05 Apr
+ 2023 14:09:20 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230330224348.1006691-1-davidai@google.com> <20230405080548.GW4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230405080548.GW4253@hirez.programming.kicks-ass.net>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 5 Apr 2023 14:08:43 -0700
+Message-ID: <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.3-rc5-82-g1a2117acfb4f
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.3-rc5-82-g1a2117acfb4f)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc5-82-g1a=
-2117acfb4f)
+On Wed, Apr 5, 2023 at 1:06=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> > Hi,
+> >
+> > This patch series is a continuation of the talk Saravana gave at LPC 20=
+22
+> > titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gi=
+st
+> > of the talk is that workloads running in a guest VM get terrible task
+> > placement and DVFS behavior when compared to running the same workload =
+in
+> > the host. Effectively, no EAS for threads inside VMs. This would make p=
+ower
+> > and performance terrible just by running the workload in a VM even if w=
+e
+> > assume there is zero virtualization overhead.
+> >
+> > We have been iterating over different options for communicating between
+> > guest and host, ways of applying the information coming from the
+> > guest/host, etc to figure out the best performance and power improvemen=
+ts
+> > we could get.
+> >
+> > The patch series in its current state is NOT meant for landing in the
+> > upstream kernel. We are sending this patch series to share the current
+> > progress and data we have so far. The patch series is meant to be easy =
+to
+> > cherry-pick and test on various devices to see what performance and pow=
+er
+> > benefits this might give for others.
+> >
+> > With this series, a workload running in a VM gets the same task placeme=
+nt
+> > and DVFS treatment as it would when running in the host.
+> >
+> > As expected, we see significant performance improvement and better
+> > performance/power ratio. If anyone else wants to try this out for your =
+VM
+> > workloads and report findings, that'd be very much appreciated.
+> >
+> > The idea is to improve VM CPUfreq/sched behavior by:
+> > - Having guest kernel to do accurate load tracking by taking host CPU
+> >   arch/type and frequency into account.
+> > - Sharing vCPU run queue utilization information with the host so that =
+the
+> >   host can do proper frequency scaling and task placement on the host s=
+ide.
+>
+> So, not having actually been send many of the patches I've no idea what
+> you've done... Please, eradicate this ridiculous idea of sending random
+> people a random subset of a patch series. Either send all of it or none,
+> this is a bloody nuisance.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-3-rc5-82-g1a2117acfb4f/
+Sorry, that was our intention, but had a scripting error. It's been fixed.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.3-rc5-82-g1a2117acfb4f
-Git Commit: 1a2117acfb4fb4dfa4c5c8f0185bc88c553a4f08
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+I have a script to use with git send-email's --to-cmd and --cc-cmd
+option. It uses get_maintainers.pl to figure out who to email, but it
+gets trickier for a patch series that spans maintainer trees.
 
-Warnings Detected:
+v2 and later will have everyone get all the patches.
 
-arc:
+> Having said that; my biggest worry is that you're making scheduler
+> internals into an ABI. I would hate for this paravirt interface to tie
+> us down.
 
-arm64:
+The only 2 pieces of information shared between host/guest are:
 
-arm:
+1. Host CPU frequency -- this isn't really scheduler internals and
+will map nicely to a virtual cpufreq driver.
 
-i386:
+2. A vCPU util value between 0 - 1024 where 1024 corresponds to the
+highest performance point across all CPUs (taking freq, arch, etc into
+consideration). Yes, this currently matches how the run queue util is
+tracked, but we can document the interface as "percentage of max
+performance capability", but representing it as 0 - 1024 instead of
+0-100. That way, even if the scheduler changes how it tracks util in
+the future, we can still keep this interface between guest/host and
+map it appropriately on the host end.
 
-mips:
+In either case, we could even have a Windows guest where they might
+track vCPU utilization differently and still have this work with the
+Linux host with this interface.
 
-riscv:
+Does that sound reasonable to you?
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+Another option is to convert (2) into a "CPU frequency" request (but
+without latching it to values in the CPUfreq table) but it'll add some
+unnecessary math (with division) on the guest and host end. But I'd
+rather keep it as 0-1024 unless you really want this 2nd option.
 
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+-Saravana
