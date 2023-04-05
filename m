@@ -2,78 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C246D8A44
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 00:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3B46D8AB4
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 00:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjDEWIB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Apr 2023 18:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S233119AbjDEWmp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Apr 2023 18:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjDEWIA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 18:08:00 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65AE5266
-        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 15:07:59 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id q20so13489425pfs.2
-        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 15:07:59 -0700 (PDT)
+        with ESMTP id S232995AbjDEWmm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Apr 2023 18:42:42 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4946C19BD
+        for <linux-pm@vger.kernel.org>; Wed,  5 Apr 2023 15:42:41 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id l10-20020a05600c1d0a00b003f04bd3691eso7932430wms.5
+        for <linux-pm@vger.kernel.org>; Wed, 05 Apr 2023 15:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680732479;
+        d=google.com; s=20210112; t=1680734559;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6G4NsFlCDV5fs2a2Hk+HPn6BW+TSo8l8fhvL/n7IKto=;
-        b=Co/XH8kheGMcW5639kFQflWIBdRbseeE5Rgi33B4NHAwkIuhJ8cRjGblOk3jTnpe3M
-         r8NDGd4BbIPvGUCTtlIr1C3Zi3M3kVBDoSPBmqFnbVUgJEH+rMm0xic9kbB5F1PS469K
-         v1mqbc0XbrOyTEZFxU0ygPvmf+3dHmAY6CsJ9O7wnH7swCU/AVkriErypZpzAdgN2JX5
-         g7RiLqySQwykhvK9Yp436hJ6RVIMG7NxCvKb3YHlnhCMdin4lAC9yBtRjNUKm8bUitaS
-         sSu9j6TkAiYHkxQxzNBHO0Xb9op6XALV5XasEjMG0VTfxTM7nkVUzYMSqHE97uOdWJz9
-         t2rQ==
+        bh=/29UQfyPK3649jjW1z4gzpOB3plh282v3gXxQIKHoic=;
+        b=cxYpBjvEDKBSZZxyHcOrN9u2sjx2SZnjmdun+7EIfLHZGq/zrpf5N9wSeFjOanWILc
+         ed/DuOgRuNughqhp1zBSy4GfBY5QE3sruTOIKfcysLp1Io4SrTMV/6Y00exVqreoS8XQ
+         6J1i7atnk3uwr8cw1o/c8Cy/7RNmRJGi+sRG20knECzoUdEyMaFyD0G6ueBAFvq5HZgj
+         J6n82StK5ZgKcSEErJDmV5gHI4PhKVRdJsojQKcVXLfGypu7tima8tli1+EU0mD6f1d/
+         UtY9Gld03Yf6r1XGy9dw3C06eQZILu8kp3S3ApZJYcAcqZAtaiRTsa/JMJ+q6Kd3IBJ4
+         sBPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680732479;
+        d=1e100.net; s=20210112; t=1680734559;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6G4NsFlCDV5fs2a2Hk+HPn6BW+TSo8l8fhvL/n7IKto=;
-        b=iuA1NnbhOnRJdcmu9o8IncU3ucVQUB3zR8716iqH0Gp0wqe7yQ2Aabei7XXiWHx3X8
-         4/6s8qMoo7TBZiW4fX29s6XFxu/c4MrKlkLts40JafKvCXYF850pgvP5ZvpXoGlUBEr8
-         x6ZGVYNcATgRLUSVPGW588rTjAzWFMu2pmyPqN+kGiytvoHeFG9fXj3FAOseRUhCYwAz
-         gpl4lHyw0GyLK5jA2rVWhr+V9UTf5mC/TnNwGy/qUA5zMk+05gFAEPLOqyevuS8yWmc+
-         NaDukymgW81laUUOOKfCw4oMewzxOPnun5XXVnZpdlKtP//Z4z4dtctsSybmDVKF/Nh+
-         nJbA==
-X-Gm-Message-State: AAQBX9cL5Qtm3z47kg+EDJ4VJb1dMH6MWAgDB67lI68pCIzSgonFAL54
-        CdPr/9xVEZewg6Mba3bozetNckR9JwgOyEu7uqoLjg==
-X-Google-Smtp-Source: AKy350YWe0LQY4a1WtMtO9UBAtN8fCXxF/yrfEr5xXDYzw+Sj0JKwU0Q2JALgP82rgc6URVJ5DF6xJk/YwaCPJm10os=
-X-Received: by 2002:a05:6a00:999:b0:625:cda5:c28c with SMTP id
- u25-20020a056a00099900b00625cda5c28cmr4345578pfg.6.1680732478867; Wed, 05 Apr
- 2023 15:07:58 -0700 (PDT)
+        bh=/29UQfyPK3649jjW1z4gzpOB3plh282v3gXxQIKHoic=;
+        b=EMC2cuu+LHeWe6wCboEix7XJ5HKrkTQPROmAkPUY2FneSdeGADO2tZ+ovZMcrbhWtZ
+         dn1wLwdcK+6QOXryydrupkKwna62c21N2fYlhkIH4WewF8UzjD+wmWwkqXj8BeBziYjO
+         hGHs+16t81mLSm7f3FzAmxY77cS8Qgg8lFsnBWZJxXw0kcHo95Dnmun8gmlGfMMOQ5mo
+         uczKAPm4/idsKMdgj1FBFmUjkPwYhGdv342NE5mB5oOpNzO+sHr35Q70XWciKpfWVSyo
+         di/jfCaph/1UZSCok4Bt895kGAMv8FiXvEjsHwvB/OdHVIr3KtfrDfO5IneqpZ+73D1U
+         GwpQ==
+X-Gm-Message-State: AAQBX9clX4dRPr5OY5Bk3xuEp4UOmUsbVpoii/+luFPSTyih0Lj3r4Nj
+        A4trEUP8+gDOWMVXzRGhgXLvq369Nl2NekYu0nFx9w==
+X-Google-Smtp-Source: AKy350YPcYo5SaGc+cl+7YaUouqwMxNCd7dhGQkFBjylvDdYFoz5FtXw5nJElgAypJ5bkJqqE2B6IpqnpeTHFR+ws44=
+X-Received: by 2002:a1c:f309:0:b0:3ed:605f:23e0 with SMTP id
+ q9-20020a1cf309000000b003ed605f23e0mr2004853wmq.3.1680734559462; Wed, 05 Apr
+ 2023 15:42:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230331014356.1033759-1-davidai@google.com> <20230331014356.1033759-6-davidai@google.com>
- <CAL_JsqJErVOZZ==i1HpMABfuVEDC+drboLTntMDB0sUC9ZdQ_Q@mail.gmail.com>
-In-Reply-To: <CAL_JsqJErVOZZ==i1HpMABfuVEDC+drboLTntMDB0sUC9ZdQ_Q@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 5 Apr 2023 15:07:22 -0700
-Message-ID: <CAGETcx_YhXqgyuWwH7BrMV4-z2LVEq5-X-FtPvmi-9tCrjVXVw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 5/6] dt-bindings: cpufreq: add bindings for virtual
- kvm cpufreq
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <20230330224348.1006691-1-davidai@google.com> <20230330224348.1006691-7-davidai@google.com>
+ <20230405082256.GY4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230405082256.GY4253@hirez.programming.kicks-ass.net>
+From:   David Dai <davidai@google.com>
+Date:   Wed, 5 Apr 2023 15:42:28 -0700
+Message-ID: <CABN1KCJ0Tk5ah33zKpksq4Ftqa8Eh+V3bGZRMRAv-XrmakT1Og@mail.gmail.com>
+Subject: Re: [RFC PATCH 6/6] cpufreq: add kvm-cpufreq driver
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
@@ -81,10 +65,9 @@ Cc:     David Dai <davidai@google.com>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
@@ -98,84 +81,92 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 5:47=E2=80=AFAM Rob Herring <robh+dt@kernel.org> wr=
-ote:
+On Wed, Apr 5, 2023 at 1:23=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
 >
-> On Thu, Mar 30, 2023 at 8:45=E2=80=AFPM David Dai <davidai@google.com> wr=
-ote:
-> >
-> > Add devicetree bindings for a virtual kvm cpufreq driver.
-> >
-> > Co-developed-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: David Dai <davidai@google.com>
-> > ---
-> >  .../bindings/cpufreq/cpufreq-virtual-kvm.yaml | 39 +++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-v=
-irtual-kvm.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-=
-kvm.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.ya=
-ml
-> > new file mode 100644
-> > index 000000000000..31e64558a7f1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yam=
-l
-> > @@ -0,0 +1,39 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual-kvm.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Virtual KVM CPUFreq
-> > +
-> > +maintainers:
-> > +  - David Dai <davidai@google.com>
-> > +
-> > +description: |
-> > +
-> > +  KVM CPUFreq is a virtualized driver in guest kernels that sends util=
-ization
-> > +  of its vCPUs as a hint to the host. The host uses hint to schedule v=
-CPU
-> > +  threads and select CPU frequency. It enables accurate Per-Entity Loa=
-d
-> > +  Tracking for tasks running in the guest by querying host CPU frequen=
-cy
-> > +  unless a virtualized FIE exists(Like AMUs).
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: virtual,kvm-cpufreq
-> > +
-> > +required:
-> > +  - compatible
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    {
-> > +      #address-cells =3D <2>;
-> > +      #size-cells =3D <2>;
-> > +
-> > +      cpufreq {
-> > +            compatible =3D "virtual,kvm-cpufreq";
-> > +      };
+> On Thu, Mar 30, 2023 at 03:43:41PM -0700, David Dai wrote:
 >
-> The same thing was tried on non-virtual h/w too. This is not a device
-> so it doesn't go in DT. It is just an abuse of DT as a kernel driver
-> instantiation mechanism.
+> > +struct remote_data {
+> > +     int ret;
+> > +     struct cpufreq_frequency_table *table;
+> > +};
+> > +
+> > +static void remote_get_freqtbl_num_entries(void *data)
+> > +{
+> > +     struct arm_smccc_res hvc_res;
+> > +     u32 freq =3D 1UL;
+> > +     int *idx =3D data;
+> > +
+> > +     while (freq !=3D CPUFREQ_TABLE_END) {
+> > +             arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_KVM_GET_CPUFREQ=
+_TBL_FUNC_ID,
+> > +                             *idx, &hvc_res);
+> > +             if (hvc_res.a0) {
+> > +                     *idx =3D -ENODEV;
+> > +                     return;
+> > +             }
+> > +             freq =3D hvc_res.a1;
+> > +             (*idx)++;
+> > +     }
+> > +}
+> > +
+> > +static int kvm_cpufreq_get_freqtbl_num_entries(int cpu)
+> > +{
+> > +     int num_entries =3D 0;
+> > +
+> > +     smp_call_function_single(cpu, remote_get_freqtbl_num_entries, &nu=
+m_entries, true);
+> > +     return num_entries;
+> > +}
+> > +
+> > +static void remote_populate_freqtbl(void *data)
+> > +{
+> > +     struct arm_smccc_res hvc_res;
+> > +     struct remote_data *freq_data =3D data;
+> > +     struct cpufreq_frequency_table *pos;
+> > +     struct cpufreq_frequency_table *table =3D freq_data->table;
+> > +     int idx;
+> > +
+> > +     cpufreq_for_each_entry_idx(pos, table, idx) {
+> > +             arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_KVM_GET_CPUFREQ=
+_TBL_FUNC_ID,
+> > +                             idx, &hvc_res);
+> > +             if (hvc_res.a0) {
+> > +                     freq_data->ret =3D -ENODEV;
+> > +                     return;
+> > +             }
+> > +             pos->frequency =3D hvc_res.a1;
+> > +     }
+> > +     freq_data->ret =3D 0;
+> > +}
+> > +
+> > +static int kvm_cpufreq_populate_freqtbl(struct cpufreq_frequency_table=
+       *table, int cpu)
+> > +{
+> > +     struct remote_data freq_data;
+> > +
+> > +     freq_data.table =3D table;
+> > +     smp_call_function_single(cpu, remote_populate_freqtbl, &freq_data=
+, true);
+> > +     return freq_data.ret;
+> > +}
+>
 
-Because it has no registers it's reading and writing, right? Yeah,
-just went with this for now to make it easy for people to cherry pick
-and test it. Maybe we shouldn't have added documentation and made this
-look too official.
+Hi Peter,
 
-In the end, I'm expecting this will be a real MMIO device. Until we
-move from RFC to PATCH, feel free to ignore this patch.
+Thanks for taking the time to review!
 
--Saravana
+> *WHY* are you sending IPIs to do a hypercall ?!?
+>
+> You can simply have the hypercall tell what vCPU you're doing this for.
+>
+
+We=E2=80=99ll remove all the code that=E2=80=99s making IPI calls and switc=
+h over to
+populating the frequency tables in the device tree when we move from
+RFC to PATCH. It is here for now to make it easier for others to
+cherry-pick and test the series without needing more changes to their
+VMM.
+
+Thanks,
+David
