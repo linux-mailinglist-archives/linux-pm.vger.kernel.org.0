@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AB66D9B67
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 16:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036666D9B6A
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239148AbjDFO67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 10:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S239128AbjDFO7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 10:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238197AbjDFO6z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 10:58:55 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691852D4F
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 07:58:54 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so20385932wmq.3
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 07:58:54 -0700 (PDT)
+        with ESMTP id S239084AbjDFO67 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 10:58:59 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CE18A7E
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 07:58:55 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id d17so39790605wrb.11
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 07:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680793133; x=1683385133;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUz8JFX9S/A4V6+0uhPV3N5OL753V9MWdLlczHDK+Qw=;
-        b=EmKEsePSa12I22VXLdcQPwIk7w+aW6135rugfnphhQwQvQgTxpPmyhDBErSGUvb6yM
-         j9oDCHqtVI3oINcUxiiIlFy/VrYF8vSnCwuR2K5F9eWCloQUu2NnuCCQKCPrplUSDqc0
-         3pYWZ39VtQbjSJPoPu+6UV3mUuz4Vdf1WR/ACuF00yWL1eHJxdNukznZmr91SciPfmqA
-         okM0FPKQyUvboPD0s1Wt72RI8Zw0qcHFcdGnCTgkBuyIV31XQLN97sIT3qo1hcnMYaGG
-         FUD43Du7AEzDI/nnwSW5E1tvqnHC9AxFst/h24+IlJKNo277RYgD9vWVcc0rS3mMm+yd
-         YLUA==
+        d=linaro.org; s=google; t=1680793134; x=1683385134;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zNY1WgFE5W0+EDCsEQWZ33KMDgDEFiFDJkuxdC14U6c=;
+        b=lsMZ/tmQGh0+Gqb95YSagOXlgovDFj8+1loUBZniBPTntn/h5IVkYuQn7ILSUiUVYq
+         aYG9W1n2NKs2RptvcozWQPSf7ZiDwxLfvfzk9UiJw/4tHPRk21e260kkMA/jnzZBPjfN
+         Gr1plOLPrjpPSR0yFk6Z9QNGTRVpkWqLhnZ5Vm0GN/LuZ6WsYtGrUpFFzHamAhcbP87e
+         3RvCX7bxDIB/qxO3F1sgfYMCRb/6l9ygjdBvhYUwzHTy9HYG0+SS4BsOfB+47W4hrlhQ
+         yOTzP4LrDo7vULF8GRQ+uS04+C8AOlUZ5dpWBOexEQRaejsNhuHOFUDwU6oQEmdmu5xY
+         z0AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680793133; x=1683385133;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BUz8JFX9S/A4V6+0uhPV3N5OL753V9MWdLlczHDK+Qw=;
-        b=CCzP940PU0g3hGgx36DHfb6NeKge4iCzunynDpWt89DaQX1NinXzic61yGmiPVtu9H
-         qBEV5tl/dShfM8IpCXEJIxd7Bf+JI+SQA0vV5I0DA+rZ3Fz4gYs5mfONAZD/RSIgANYu
-         Bq2RmtG0rEGVLCNaGbU2vgD89W47nj4gPIM6ylBpBLBleF+FoYdVrt5hBSwUKDcA561v
-         0c8TJGZ0+SdBPiV9y5IS5UTg46GoYH8AFxT4cssYZ1JjsOvW1GvWAW737VvQkhbm9ULK
-         2IUuTuBZaxtfCF8oYDb4ou2oD6JW0Ry85MTuqdejniGvpdoGqkQnvmiRnRMJPgpOAIks
-         NJVA==
-X-Gm-Message-State: AAQBX9dwAgumMJne9r8j4zUPsvEIVbqmAVsiOGBCI8F6iv8faM0r6Tqt
-        2G3gHpNVNC99hWpCnotaLhNmOQ==
-X-Google-Smtp-Source: AKy350boASzJJb3JPCYtYb2ebNRQ2MIT1itORqZ3f27s88CsaAxEEQ2rP5/3FJishPx54VwS8vehOA==
-X-Received: by 2002:a05:600c:b54:b0:3ed:6c71:9dc8 with SMTP id k20-20020a05600c0b5400b003ed6c719dc8mr8532591wmr.22.1680793132814;
-        Thu, 06 Apr 2023 07:58:52 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680793134; x=1683385134;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zNY1WgFE5W0+EDCsEQWZ33KMDgDEFiFDJkuxdC14U6c=;
+        b=7pUmLnmzzdSDjeTWtRrU/6YKoWLO4Kv5m/i4/gdHixKpvTE3E42j3iOCeLWZjUUOlT
+         JBoPXUgTNuUlf1xzl6oU4AGUWbuQD+ttjrF28gYToiUAmkONZTPyZP6+QqKJUeq2TlLT
+         utrfItQ3qSrz1j5uDRFs40zH1QrUkXRJSBRLL7PZFvGYEVo68i8VU9vBVhHmaKdOb7PH
+         6KEWyL+Lge+9k1kcgRLhHKE3okvivjfCXR1PoLjQW4C9WoexufcE5dYoz6nv2JI8aLgN
+         Ue+jIgnjq+v47V3sqqxcw9jnojKPvsrB6GlsX5DaVpcaBnTXlImDDwNhpuraygczE6gi
+         8Vbg==
+X-Gm-Message-State: AAQBX9d7oKweW8Rsf/rPQkbgwDYtv5q0lUZISurLN1uG7KKMhqaMl+Fd
+        7ijs+z0YxmJb0m+9XS5fXE/S4A==
+X-Google-Smtp-Source: AKy350Y5/8nzIFtA5GLno7AkNOE83NgVqaQKljVOSMfIXaK0nWcT0TmjC4AnNwjBHz1+YX5CvUKlMw==
+X-Received: by 2002:a5d:440d:0:b0:2d8:cacd:797e with SMTP id z13-20020a5d440d000000b002d8cacd797emr7051511wrq.10.1680793133951;
+        Thu, 06 Apr 2023 07:58:53 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d10-20020a1c730a000000b003f0373d077csm1768160wmb.47.2023.04.06.07.58.51
+        by smtp.gmail.com with ESMTPSA id d10-20020a1c730a000000b003f0373d077csm1768160wmb.47.2023.04.06.07.58.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:58:52 -0700 (PDT)
+        Thu, 06 Apr 2023 07:58:53 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, rafael@kernel.org,
@@ -56,10 +57,12 @@ To:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
 Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH 0/3] drivers/thermal/qcom/tsens: Add ability to read and shift-in non-contiguous calibration data
-Date:   Thu,  6 Apr 2023 15:58:47 +0100
-Message-Id: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
+Subject: [PATCH 1/3] thermal/drivers/tsens: Add error/debug prints to calibration read
+Date:   Thu,  6 Apr 2023 15:58:48 +0100
+Message-Id: <20230406145850.357296-2-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
+References: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -71,51 +74,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On MSM8939 the last sensor has calibration data that cannot be extracted in
-one big read.
+Add in some dev_dbg() to aid in viewing of raw calibration data extracted.
 
-Rather than have a lot of MSM8939 specific code this series makes a generic
-modification to allow any other calibration data that is non-contiguous to
-be extracted and recovered.
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/thermal/qcom/tsens.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-For example s9-p2 takes bits 1-5 from @4b and bit 13 from @4d. The bit from
-bit13 then becomes the sixth bit in the calibration data.
-
-tsens_s9_p2: s9-p2@4b {
-    reg = <0x4b 0x1>;
-    bits = <1 5>;
-};
-
-tsens_s9_p2_msb: s9-p2-msb@4d {
-    reg = <0x4d 0x1>;
-    bits = <13 1>;
-};
-
-A register desciptor is introduced in the driver which takes the place of
-the previous unsigned int hw_ids array in struct tsens_plat_data.
-
-This new structure contains the previous hardware id and two variables
-p1_shift and p2_shift.
-
-If p1_shift or p2_shift is non-zero then this tells
-tsens_read_calibration() to search for sX-pY-msb where msb means "most
-significant bits".
-
-The value at p1_shift/p2_shift is then used to right shift the value read
-from sX-pY-msb and or that value into the base value from sX-pY.
-
-The nvmem 'bits' field provides the mask.
-
-Bryan O'Donoghue (3):
-  thermal/drivers/tsens: Add error/debug prints to calibration read
-  thermal/drivers/tsens: Describe sensor registers via a structure
-  thermal/drivers/tsens: Extract and shift-in optional MSB
-
- drivers/thermal/qcom/tsens-v0_1.c | 56 +++++++++++++++++++++++++++++--
- drivers/thermal/qcom/tsens.c      | 50 ++++++++++++++++++++++++---
- drivers/thermal/qcom/tsens.h      | 16 ++++++++-
- 3 files changed, 115 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index d3218127e617d..7165b0bfe8b9f 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -115,8 +115,12 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+ 			return ret;
+ 
+ 		ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &p1[i]);
+-		if (ret)
++		if (ret) {
++			dev_err(priv->dev, "Failed to read %s\n", name);
+ 			return ret;
++		}
++
++		dev_dbg(priv->dev, "%s 0x%x\n", name, p1[i]);
+ 
+ 		ret = snprintf(name, sizeof(name), "s%d_p2%s", priv->sensor[i].hw_id,
+ 			       backup ? "_backup" : "");
+@@ -124,8 +128,12 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+ 			return ret;
+ 
+ 		ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &p2[i]);
+-		if (ret)
++		if (ret) {
++			dev_err(priv->dev, "Failed to read %s\n", name);
+ 			return ret;
++		}
++
++		dev_dbg(priv->dev, "%s 0x%x\n", name, p2[i]);
+ 	}
+ 
+ 	switch (mode) {
 -- 
 2.39.2
 
