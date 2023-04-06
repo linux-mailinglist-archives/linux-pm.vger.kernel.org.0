@@ -2,224 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319286D9758
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 14:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80A16D98D5
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 16:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237833AbjDFMxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 08:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S238656AbjDFOAC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 10:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237404AbjDFMxA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 08:53:00 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E481D7ED2
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 05:52:56 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l15so1128933ejq.10
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 05:52:56 -0700 (PDT)
+        with ESMTP id S238928AbjDFN7s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 09:59:48 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C27A27C
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 06:59:30 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id u38so25819442pfg.10
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 06:59:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680785575; x=1683377575;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IJscOEPUxerIocq5ivhaFnZ1SHI0paGFj+4RY7CI49c=;
-        b=mmi2ytKq+NaQhoDUPRHBUEjRhCCPgZiy7rLgIJXfMFck1daXezUDFfW+f8Ya9qW8Nu
-         77o8Nv8mCPZJVOJ/Mw5IkzQ/lVA8K8pLYcnCheg3aUT4rIjJIAXX7Utgjw5MQqmXLhtW
-         435VTHVUt6RP3++nMGoeLtublMXBqOmF5FEHQb6o99n31lb7S6WZxLIvcTevt83tl6fV
-         cKM/LYDc4weOyCwuDkg3btNjWsl6SyXFBeMGeyFU1GWXKNRtgmCulev2zmpW5HSdx9TQ
-         WDUIoKFjlt3z2DEYShN6woFM3WBqXviuTCQLf58p6eWApFbTnPJA8N2vEAKJbmcOE3wx
-         8r5w==
+        d=semihalf.com; s=google; t=1680789560;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D62uxIrnRdLIJ/0FC1wLMU5NxXl2TZq4mxa+MvGVH2I=;
+        b=ep4um+9SshODUF+wBrCFzrXH1dy9eFmb9qXjk/h54/YrbGpDP04/j7Oc4hs3985wzM
+         3QeD+8vjiNdv/MwOB1yO8rN8BlCOdoI2WAAShmDhQ/1OWWsi1hzpaPItmeFvK99EGiiN
+         gAPiYvfaB1UZyaQ041mZGeRPAmJ3YYu5xFMUuqT+3T+58FV0uBwpNTFfLFQ77AZe85er
+         ERzx3znqXBUVdSpjGr4btsrEUuoYJ89RYaejHWSdwpkreSaB359Q2Rso+SRfAf0WsgVt
+         BW2CX1PPYFKH2JRoIqgbg2/ag81DIVEK58CLUaRdsJeDk3KrHQnZPqsrWQtowqDh8pfb
+         7GPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680785575; x=1683377575;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJscOEPUxerIocq5ivhaFnZ1SHI0paGFj+4RY7CI49c=;
-        b=FARgXc9Q8wVS6TBHqAGPOhbjM8nW3W7hRArj5APN6jRJAGR8owLKMspIS2MXiQgdzq
-         R7IE/nzlVHnA7kPxr2X+hwmEgOCuYQI0hwAZTOvr0iVPUEGELO8Io9hNILfncJvKAmVd
-         5EZhylqhQLGNf04il8EbLyhX8KtTL4IdbLUQtQ5G6cgKYHuzmkIIF2xXRBMU5R889OYZ
-         nbe44/ABlwi4Yj0G5jchkH4eg3NJG8zgx7g5EfNhBpm+cnEu2lNL2a8e14XiA6IMupE+
-         okEPiuPrsPI7YqeuQwj+s7HLeHjXL5NR/hYVMhQyXTVgHVXj1jxUY+2HGFa2h2IgNHxR
-         GqWA==
-X-Gm-Message-State: AAQBX9f6eCXeWmhotgAOtw9sm5D5y3PGQ7dKZH0IGPP0lKAbhQ25e7pq
-        vl5S9vJjPnfet/SQEh6DRnJWfw==
-X-Google-Smtp-Source: AKy350ZjSeUi5W/FMFj8cFd3FZ8IBUmJZCdwJjwrxRaSX9z1B2tETRyepfqtj3cs2LAQGBpYvDx5aA==
-X-Received: by 2002:a17:906:9be2:b0:931:624b:680c with SMTP id de34-20020a1709069be200b00931624b680cmr6404112ejc.29.1680785575139;
-        Thu, 06 Apr 2023 05:52:55 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id rj13-20020a1709076c8d00b00947ccb6150bsm657067ejc.102.2023.04.06.05.52.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 05:52:54 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 12:52:51 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, David Dai <davidai@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-Message-ID: <ZC7Ao1qoNGYXQ9h4@google.com>
-References: <20230330224348.1006691-1-davidai@google.com>
- <ZCx97IKjsBibjdGc@linux.dev>
- <86sfdfv0e1.wl-maz@kernel.org>
- <ZC0n0HRsmNJeJZps@google.com>
- <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1680789560;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D62uxIrnRdLIJ/0FC1wLMU5NxXl2TZq4mxa+MvGVH2I=;
+        b=bskWFaaEO6zYcIdv8bfbBHZB+1h8QmZT+uq74svXSYXqW6xG3IGrzvlhWmTAE9Gnoz
+         Zyg0srfLWJNRuKQylJW3KcmX0pX5wp3m1vIO5kYI40X0f2r64jh3DyzmzUctC4MIX4cG
+         JGd4joZs+AMyY9H7cnzPkr/t/ZmNdgtWa0unz1nzJFztIkL0qUC+xdb4WZAslg8Cvg17
+         yWwL/7RwDSWXyfbAgKRHj1F7X5UNTGl28tN3OOFOVUKDMiGxHnpu94yQNBPihBDgD1oH
+         PkPK3ifVoHQSZYEggOaWGyOTi0ujF4I7N6BewUIhqv4Plfp/Rx6Vww51TsCwThV4272M
+         guTA==
+X-Gm-Message-State: AAQBX9fqWjRi60XtD41yB/7LEFD92+ZObF7kR98yfxJCee8t21aTYYyK
+        7iSFG4c61ZRY2oqhBLyX/3Al7L93TP5Z0sHglQKogA==
+X-Google-Smtp-Source: AKy350awhzhXo5L1KzV0UcjmcDPDHA0lMbG00SZClLPQXXYhpDBMAKS6jF2tBEd2EBkZ3sWL3hcPOLnpoD4HJQosRMw=
+X-Received: by 2002:a63:d30b:0:b0:513:6f5:7dda with SMTP id
+ b11-20020a63d30b000000b0051306f57ddamr3239284pgg.10.1680789560598; Thu, 06
+ Apr 2023 06:59:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230213100921.268770-1-jaz@semihalf.com> <20230213100921.268770-2-jaz@semihalf.com>
+ <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com> <c5455226-1d51-1d3d-0b67-78a0473a9e8c@redhat.com>
+In-Reply-To: <c5455226-1d51-1d3d-0b67-78a0473a9e8c@redhat.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Thu, 6 Apr 2023 15:59:09 +0200
+Message-ID: <CAH76GKPkgUsXQpsBxgSaQ_qz+bGyZ-Sxu-xRMBJaQ67BZG4jsQ@mail.gmail.com>
+Subject: Re: [RFCv3 1/1] platform/x86: Add virtual PMC driver used for S2Idle
+To:     Hans de Goede <hdegoede@redhat.com>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
+        dbehr@google.com, zide.chen@intel.corp-partner.google.com,
+        seanjc@google.com, upstream@semihalf.com, markgross@kernel.org,
+        dtor@google.com, mario.limonciello@amd.com,
+        linux-pm@vger.kernel.org, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 05 Apr 2023 at 14:07:18 (-0700), Saravana Kannan wrote:
-> On Wed, Apr 5, 2023 at 12:48 AM 'Quentin Perret' via kernel-team
-> > And I concur with all the above as well. Putting this in the kernel is
-> > not an obvious fit at all as that requires a number of assumptions about
-> > the VMM.
-> >
-> > As Oliver pointed out, the guest topology, and how it maps to the host
-> > topology (vcpu pinning etc) is very much a VMM policy decision and will
-> > be particularly important to handle guest frequency requests correctly.
-> >
-> > In addition to that, the VMM's software architecture may have an impact.
-> > Crosvm for example does device emulation in separate processes for
-> > security reasons, so it is likely that adjusting the scheduling
-> > parameters ('util_guest', uclamp, or else) only for the vCPU thread that
-> > issues frequency requests will be sub-optimal for performance, we may
-> > want to adjust those parameters for all the tasks that are on the
-> > critical path.
-> >
-> > And at an even higher level, assuming in the kernel a certain mapping of
-> > vCPU threads to host threads feels kinda wrong, this too is a host
-> > userspace policy decision I believe. Not that anybody in their right
-> > mind would want to do this, but I _think_ it would technically be
-> > feasible to serialize the execution of multiple vCPUs on the same host
-> > thread, at which point the util_guest thingy becomes entirely bogus. (I
-> > obviously don't want to conflate this use-case, it's just an example
-> > that shows the proposed abstraction in the series is not a perfect fit
-> > for the KVM userspace delegation model.)
-> 
-> See my reply to Oliver and Marc. To me it looks like we are converging
-> towards having shared memory between guest, host kernel and VMM and
-> that should address all our concerns.
++linux-acpi@vger.kernel.org
 
-Hmm, that is not at all my understanding of what has been the most
-important part of the feedback so far: this whole thing belongs to
-userspace.
+Hi Hans, Rafael
 
-> The guest will see a MMIO device, writing to it will trigger the host
-> kernel to do the basic "set util_guest/uclamp for the vCPU thread that
-> corresponds to the vCPU" and then the VMM can do more on top as/if
-> needed (because it has access to the shared memory too). Does that
-> make sense?
-
-Not really no. I've given examples of why this doesn't make sense for
-the kernel to do this, which still seems to be the case with what you're
-suggesting here.
-
-> Even in the extreme example, the stuff the kernel would do would still
-> be helpful, but not sufficient. You can aggregate the
-> util_guest/uclamp and do whatever from the VMM.
-> Technically in the extreme example, you don't need any of this. The
-> normal util tracking of the vCPU thread on the host side would be
-> sufficient.
+czw., 6 kwi 2023 o 12:53 Hans de Goede <hdegoede@redhat.com> napisa=C5=82(a=
+):
 >
-> Actually any time we have only 1 vCPU host thread per VM, we shouldn't
-> be using anything in this patch series and not instantiate the guest
-> device at all.
-
-> > So +1 from me to move this as a virtual device of some kind. And if the
-> > extra cost of exiting all the way back to userspace is prohibitive (is
-> > it btw?),
-> 
-> I think the "13% increase in battery consumption for games" makes it
-> pretty clear that going to userspace is prohibitive. And that's just
-> one example.
-
-I beg to differ. We need to understand where these 13% come from in more
-details. Is it really the actual cost of the userspace exit? Or is it
-just that from userspace the only knob you can play with is uclamp and
-that didn't reach the expected level of performance?
-
-If that is the userspace exit, then we can work to optimize that -- it's
-a fairly common problem in the virt world, nothing special here.
-
-And if the issue is the lack of expressiveness in uclamp, then that too
-is something we should work on, but clearly giving vCPU threads more
-'power' than normal host threads is a bit of a red flag IMO. vCPU
-threads must be constrained in the same way that userspace threads are,
-because they _are_ userspace threads.
-
-> > then we can try to work on that. Maybe something a la vhost
-> > can be done to optimize, I'll have a think.
+> Hi Grzegorz,
+>
+> On 3/29/23 14:33, Grzegorz Jaszczyk wrote:
+> > Hi Hans,
 > >
-> > > The one thing I'd like to understand that the comment seems to imply
-> > > that there is a significant difference in overhead between a hypercall
-> > > and an MMIO. In my experience, both are pretty similar in cost for a
-> > > handling location (both in userspace or both in the kernel). MMIO
-> > > handling is a tiny bit more expensive due to a guaranteed TLB miss
-> > > followed by a walk of the in-kernel device ranges, but that's all. It
-> > > should hardly register.
-> > >
-> > > And if you really want some super-low latency, low overhead
-> > > signalling, maybe an exception is the wrong tool for the job. Shared
-> > > memory communication could be more appropriate.
+> > Do you think that this RFC is in good enough state to start the ACPI
+> > ID registration process so after it will be completed we could land
+> > this solution? Or maybe we could land it (of course if there are no
+> > other remarks) even before and adjust if needed?
+>
+> I see from the links in the cover-letter that most of
+> the previous discussion has happened on the linux-pm list
+> and I believe that the linux-pm folks are in a better place
+> to answer this question then I am.
+>
+> I have no objections against the suggested approach,
+> but I don't really feel that it is my call to make if
+> we should move forward with this.
+
+Hans: I see and thank you for your feedback.
+
+Rafael: Could you please comment above?
+
+Thank you in advance,
+Grzegorz
+
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+> > pon., 13 lut 2023 o 11:11 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=
+=C5=82(a):
+> >>
+> >> Virtual PMC driver is meant for the guest VMs for the S2Idle
+> >> notification. Its purpose is to register S2Idle dev ops check handler,
+> >> which will evaluate ACPI _DSM just before the guest enters S2Idle powe=
+r
+> >> state.
+> >>
+> >> This allows to trap on MMIO access done as a consequence of _DSM
+> >> evaluation and therefore notify the VMM about the guest entering S2Idl=
+e
+> >> state.
+> >>
+> >> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> >> ---
+> >> Changelog v1..v2:
+> >> - Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
+> >>
+> >> Changelog v2..v3:
+> >> - Add MODULE_LICENSE
+> >> - Remove "amd" prefixes
+> >> - Be more verbose in VIRT_PMC config description and make it
+> >>   HYPERVISOR_GUEST dependent
+> >> - Add extra check ensuring that DSM method supports ACPI_VIRT_PMC_NOTI=
+FY function
+> >> ---
+> >>  drivers/platform/x86/Kconfig    |  7 +++
+> >>  drivers/platform/x86/Makefile   |  3 ++
+> >>  drivers/platform/x86/virt_pmc.c | 83 ++++++++++++++++++++++++++++++++=
++
+> >>  3 files changed, 93 insertions(+)
+> >>  create mode 100644 drivers/platform/x86/virt_pmc.c
+> >>
+> >> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconf=
+ig
+> >> index 5692385e2d26..837ce201b68b 100644
+> >> --- a/drivers/platform/x86/Kconfig
+> >> +++ b/drivers/platform/x86/Kconfig
+> >> @@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
+> >>           buttons below the display. This module adds an input device
+> >>           that delivers key events when these buttons are pressed.
+> >>
+> >> +config VIRT_PMC
+> >> +       tristate "Virtual Power Management Controller"
+> >> +       depends on ACPI && SUSPEND && HYPERVISOR_GUEST
+> >> +       help
+> >> +         The Virtual PMC driver is meant for the guest VMs and its ma=
+in
+> >> +         purpose is to notify about guest entering s2idle state.
+> >> +
+> >>  endif # X86_PLATFORM_DEVICES
+> >>
+> >>  config P2SB
+> >> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Make=
+file
+> >> index 1d3d1b02541b..c4d3056cf4ea 100644
+> >> --- a/drivers/platform/x86/Makefile
+> >> +++ b/drivers/platform/x86/Makefile
+> >> @@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)         +=3D intel_scu=
+_wdt.o
+> >>  obj-$(CONFIG_INTEL_SCU_IPC_UTIL)       +=3D intel_scu_ipcutil.o
+> >>  obj-$(CONFIG_X86_INTEL_LPSS)           +=3D pmc_atom.o
+> >>
+> >> +# Virtual PMC
+> >> +obj-$(CONFIG_VIRT_PMC)                 +=3D virt_pmc.o
+> >> +
+> >>  # Siemens Simatic Industrial PCs
+> >>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)      +=3D simatic-ipc.o
+> >>
+> >> diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/vi=
+rt_pmc.c
+> >> new file mode 100644
+> >> index 000000000000..a5966bb9048f
+> >> --- /dev/null
+> >> +++ b/drivers/platform/x86/virt_pmc.c
+> >> @@ -0,0 +1,83 @@
+> >> +// SPDX-License-Identifier: GPL-2.0-only
+> >> +/*
+> >> + * Virtual Power Management Controller Driver
+> >> + *
+> >> + * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
+> >> + */
+> >> +
+> >> +#include <linux/acpi.h>
+> >> +#include <linux/platform_device.h>
+> >> +
+> >> +#define ACPI_VIRT_PMC_DSM_UUID "9ea49ba3-434a-49a6-be30-37cc55c4d397"
+> >> +#define ACPI_VIRT_PMC_NOTIFY 1
+> >> +
+> >> +static acpi_handle virt_pmc_handle;
+> >> +
+> >> +static void virt_pmc_s2idle_notify(void)
+> >> +{
+> >> +       union acpi_object *out_obj;
+> >> +       guid_t dsm_guid;
+> >> +
+> >> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
+> >> +
+> >> +       out_obj =3D acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
+> >> +                                       0, ACPI_VIRT_PMC_NOTIFY, NULL)=
+;
+> >> +
+> >> +       acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluatio=
+n %s\n",
+> >> +                         ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful"=
+ : "failed");
+> >> +
+> >> +       ACPI_FREE(out_obj);
+> >> +}
+> >> +
+> >> +static struct acpi_s2idle_dev_ops pmc_s2idle_dev_ops =3D {
+> >> +       .check =3D virt_pmc_s2idle_notify,
+> >> +};
+> >> +
+> >> +static int virt_pmc_probe(struct platform_device *pdev)
+> >> +{
+> >> +       int err =3D 0;
+> >> +       guid_t dsm_guid;
+> >> +
+> >> +       virt_pmc_handle =3D ACPI_HANDLE(&pdev->dev);
+> >> +
+> >> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
+> >> +
+> >> +       if (!acpi_check_dsm(virt_pmc_handle, &dsm_guid, 0,
+> >> +                           1 << ACPI_VIRT_PMC_NOTIFY)) {
+> >> +               dev_err(&pdev->dev, "DSM method doesn't support ACPI_V=
+IRT_PMC_NOTIFY\n");
+> >> +               return -ENODEV;
+> >> +       }
+> >> +
+> >> +       err =3D acpi_register_lps0_dev(&pmc_s2idle_dev_ops);
+> >> +       if (err)
+> >> +               dev_err(&pdev->dev, "failed to register LPS0 sleep han=
+dler\n");
+> >> +
+> >> +       return err;
+> >> +}
+> >> +
+> >> +static int virt_pmc_remove(struct platform_device *pdev)
+> >> +{
+> >> +       acpi_unregister_lps0_dev(&pmc_s2idle_dev_ops);
+> >> +
+> >> +       return 0;
+> >> +}
+> >> +
+> >> +static const struct acpi_device_id virt_pmc_acpi_ids[] =3D {
+> >> +       {"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
+> >> +       { }
+> >> +};
+> >> +MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
+> >> +
+> >> +static struct platform_driver virt_pmc_driver =3D {
+> >> +       .driver =3D {
+> >> +               .name =3D "virtual_pmc",
+> >> +               .acpi_match_table =3D ACPI_PTR(virt_pmc_acpi_ids),
+> >> +       },
+> >> +       .probe =3D virt_pmc_probe,
+> >> +       .remove =3D virt_pmc_remove,
+> >> +};
+> >> +
+> >> +module_platform_driver(virt_pmc_driver);
+> >> +
+> >> +MODULE_LICENSE("GPL");
+> >> +MODULE_DESCRIPTION("Virtual PMC Driver");
+> >> --
+> >> 2.39.1.581.gbfd45094c4-goog
+> >>
 > >
-> > I presume some kind of signalling mechanism will be necessary to
-> > synchronously update host scheduling parameters in response to guest
-> > frequency requests, but if the volume of data requires it then a shared
-> > buffer + doorbell type of approach should do.
-> 
-> Part of the communication doesn't need synchronous handling by the
-> host. So, what I said above.
-
-I've also replied to another message about the scale invariance issue,
-and I'm not convinced the frequency based interface proposed here really
-makes sense. An AMU-like interface is very likely to be superior.
-
-> > Thinking about it, using SCMI over virtio would implement exactly that.
-> > Linux-as-a-guest already supports it IIRC, so possibly the problem
-> > being addressed in this series could be 'simply' solved using an SCMI
-> > backend in the VMM...
-> 
-> This will be worse than all the options we've tried so far because it
-> has the userspace overhead AND uclamp overhead.
-
-But it doesn't violate the whole KVM userspace delegation model, so we
-should start from there and then optimize further if need be.
-
-Thanks,
-Quentin
+>
