@@ -2,61 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA196D9050
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 09:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042C26D9088
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 09:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbjDFHPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 03:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S235483AbjDFHgp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 03:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbjDFHPG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 03:15:06 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902761BCD;
-        Thu,  6 Apr 2023 00:15:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680765303; x=1712301303;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=k50dQYG6PE8iLGXoQVKiCdg87HJIiyCBTiTGyqpsi6I=;
-  b=ZgTPhefnW7ZHRofkARMbLeqHVOgW5nfEF2M/LOeOUNvNypmbEgNxAWDa
-   xJv9gXMV9WnOwSQ53DPEsrf//7IuHdgNazhFame9Va26fkzruDhihevQs
-   VpAntz9YxnXxRTPJ5RqkBF/xZ+6IfiLG0vKo0uUyEVZR2+9NKi8b/2hZR
-   Ed64Qb5kLxsMJpGepLZg1gkKzKD6YcgCFSrYj3QOhKRxt2fWKwbfh87Vy
-   3UGne8rk/gn/+8t61/w82wSvU0sY8GjgdcLy6FlznH+ubm0WUrIWX5PRB
-   0YPQLlpwFLBVZmOEwsA/vJLW4DpaypCPpOIiikaHWp/G9aH2QPBuBwbTg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="331276445"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="331276445"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 00:15:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="830649148"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="830649148"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Apr 2023 00:13:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkJoT-000R9x-2Q;
-        Thu, 06 Apr 2023 07:13:41 +0000
-Date:   Thu, 06 Apr 2023 15:13:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- a7f01d6bfe2bccdd4ecbd2a662b6b56bfff50b2d
-Message-ID: <642e7105.fhmm75qZXry+LBM7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232896AbjDFHgo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 03:36:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A16D128;
+        Thu,  6 Apr 2023 00:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TDPAEotj8o6F8kLzXvNoLAs+SKYTvzHm7djobUfwOTc=; b=ApvP7pMC4U3siyul5SjaTyWa8s
+        v7eUodewJat7J5QLzVFcIe/0VkJFso/9SrSZ+I9aoSUw847oj2LMsDMNQDNNgnMjrltgjnC+gSXb+
+        Tv1RJO4gAqlKmS2FLp8naty8VZwSDtUOs29MCbqshfEkY50bflvsq1ZHl8PnfXcMNFPIBU6X3na6N
+        RxkOPtQHR9+eCaKRDEBH+BGtOC/VJunIJhABEGsG5DWAhGExtm1IsQppGmHdEHcWWIgDqHS38Ymac
+        bNqay7jtNBYGWIIPRj3UMxhTad4mB90GxQyJ44cQNntUXHcY1zNhFtQ5k/1DW+4vpnZp5dHDqV+cW
+        elZG3vCg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pkKAB-00HCMt-Kc; Thu, 06 Apr 2023 07:36:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A8843000DC;
+        Thu,  6 Apr 2023 09:36:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E696324C025F1; Thu,  6 Apr 2023 09:36:05 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 09:36:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <20230406073605.GB386572@hirez.programming.kicks-ass.net>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <20230405080548.GW4253@hirez.programming.kicks-ass.net>
+ <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,118 +85,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: a7f01d6bfe2bccdd4ecbd2a662b6b56bfff50b2d  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On Wed, Apr 05, 2023 at 02:08:43PM -0700, Saravana Kannan wrote:
 
-elapsed time: 721m
+> Sorry, that was our intention, but had a scripting error. It's been fixed.
+> 
+> I have a script to use with git send-email's --to-cmd and --cc-cmd
+> option. It uses get_maintainers.pl to figure out who to email, but it
+> gets trickier for a patch series that spans maintainer trees.
 
-configs tested: 99
-configs skipped: 5
+What I do is I simply run get_maintainers.pl against the full series
+diff and CC everybody the same.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230403   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r036-20230403   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r004-20230403   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r011-20230403   gcc  
-arc                  randconfig-r033-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r034-20230403   gcc  
-arm                  randconfig-r046-20230403   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230403   clang
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r021-20230404   gcc  
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r045-20230403   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r022-20230403   gcc  
-ia64                 randconfig-r023-20230403   gcc  
-ia64                 randconfig-r026-20230404   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r025-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze           randconfig-r031-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2        buildonly-randconfig-r003-20230403   gcc  
-nios2        buildonly-randconfig-r006-20230403   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r002-20230403   gcc  
-nios2                randconfig-r024-20230403   gcc  
-openrisc             randconfig-r012-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r013-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230403   clang
-riscv                randconfig-r016-20230403   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r035-20230403   clang
-s390                 randconfig-r044-20230403   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r015-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230403   gcc  
-sparc                randconfig-r004-20230403   gcc  
-sparc                randconfig-r014-20230403   gcc  
-sparc                randconfig-r022-20230404   gcc  
-sparc                randconfig-r032-20230403   gcc  
-sparc64      buildonly-randconfig-r002-20230403   gcc  
-sparc64              randconfig-r001-20230403   gcc  
-sparc64              randconfig-r021-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64               randconfig-r005-20230403   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r024-20230404   gcc  
-xtensa               randconfig-r026-20230403   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Then again, I don't use git-send-email, so I've no idea how to use that.
