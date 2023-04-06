@@ -2,307 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B216D9709
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 14:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319286D9758
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 14:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237736AbjDFMbD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 08:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S237833AbjDFMxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 08:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbjDFMbC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 08:31:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A392A526C
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 05:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680784220;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xD7hj7hSemwYY6sHaFv6k5ztDu5BI61myixhJCprZ0M=;
-        b=HaE+vORj9J9QU6MFjDB32BHCG5tywJhQ5v37zOu6Yz22DYw0Am0RNl/xbBd2mohYgh/9GJ
-        uHaibeslwpQvSTO/m7FhQO17gubzJr+D89ozPcLbD7YPJN2Izc28xPoA0EPW0LmKM52bXg
-        gJuo6Tpj5pIDD6ib2G8oC6Uwf3gtiyE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-308-YFQB5k7cPKq7fBB_UiETkg-1; Thu, 06 Apr 2023 08:30:19 -0400
-X-MC-Unique: YFQB5k7cPKq7fBB_UiETkg-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-946832a17f9so83022266b.2
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 05:30:19 -0700 (PDT)
+        with ESMTP id S237404AbjDFMxA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 08:53:00 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E481D7ED2
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 05:52:56 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l15so1128933ejq.10
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 05:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680785575; x=1683377575;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IJscOEPUxerIocq5ivhaFnZ1SHI0paGFj+4RY7CI49c=;
+        b=mmi2ytKq+NaQhoDUPRHBUEjRhCCPgZiy7rLgIJXfMFck1daXezUDFfW+f8Ya9qW8Nu
+         77o8Nv8mCPZJVOJ/Mw5IkzQ/lVA8K8pLYcnCheg3aUT4rIjJIAXX7Utgjw5MQqmXLhtW
+         435VTHVUt6RP3++nMGoeLtublMXBqOmF5FEHQb6o99n31lb7S6WZxLIvcTevt83tl6fV
+         cKM/LYDc4weOyCwuDkg3btNjWsl6SyXFBeMGeyFU1GWXKNRtgmCulev2zmpW5HSdx9TQ
+         WDUIoKFjlt3z2DEYShN6woFM3WBqXviuTCQLf58p6eWApFbTnPJA8N2vEAKJbmcOE3wx
+         8r5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680784218; x=1683376218;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680785575; x=1683377575;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xD7hj7hSemwYY6sHaFv6k5ztDu5BI61myixhJCprZ0M=;
-        b=cmwlb4A+9J856iuOcA4UVD+Ug0SXDJUiha7omPA7r0tewxNSUQWDiYEtxtv1tBzpv6
-         dMTA2T1/qmShbWStxiqzW6ATzbR/9RyLR2sKYJXawTtoATD/ZUTlPz4ir9VF3ER2Mj1G
-         er9bqxq4I18x72WbWtDOcANkyJyOdpw6vQDS6pk3BgFbylBBkSy6N7BC8O+aJFFKX5jR
-         Qkjx520faliNZVTFmYXJcs0SJx3s4YwPumO6vy/wdnkgoddvScGgdLLpeMgOAxzGnBCZ
-         pu3nJp8RTo2Vn/sLejh+OG2kxeW0zGBkMMQWEZ8AAgYK6gU2K/kgF8l4dF73AqTy2IfO
-         z6Hg==
-X-Gm-Message-State: AAQBX9eWWqCLM73/TYrA2GONOZaXFr4Uz6JXm+e7OJqifgu/QRQVjVjo
-        0T0V+Fjf899jGcVxNz2JKJOHihfWfAjdDBmm6niBFr0G2BtjmJYaeWjbAiCxaAI6pNN8//PxoTp
-        4kQAyX1JcD8Z5s5a5I6s=
-X-Received: by 2002:aa7:d5c5:0:b0:504:6646:79c4 with SMTP id d5-20020aa7d5c5000000b00504664679c4mr1265156eds.36.1680784218400;
-        Thu, 06 Apr 2023 05:30:18 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bY3wYpTv7liGIGAM0M8n4OqySssmNVXXhHnh41GtzcXrfJ0LqFvmAqIy5PFOwgu5pkxb+cmQ==
-X-Received: by 2002:aa7:d5c5:0:b0:504:6646:79c4 with SMTP id d5-20020aa7d5c5000000b00504664679c4mr1265140eds.36.1680784218122;
-        Thu, 06 Apr 2023 05:30:18 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id 2-20020a508742000000b004f9e6495f94sm697222edv.50.2023.04.06.05.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 05:30:17 -0700 (PDT)
-Message-ID: <8609778b-7bbe-fb05-7317-d88f15daba6b@redhat.com>
-Date:   Thu, 6 Apr 2023 14:30:16 +0200
+        bh=IJscOEPUxerIocq5ivhaFnZ1SHI0paGFj+4RY7CI49c=;
+        b=FARgXc9Q8wVS6TBHqAGPOhbjM8nW3W7hRArj5APN6jRJAGR8owLKMspIS2MXiQgdzq
+         R7IE/nzlVHnA7kPxr2X+hwmEgOCuYQI0hwAZTOvr0iVPUEGELO8Io9hNILfncJvKAmVd
+         5EZhylqhQLGNf04il8EbLyhX8KtTL4IdbLUQtQ5G6cgKYHuzmkIIF2xXRBMU5R889OYZ
+         nbe44/ABlwi4Yj0G5jchkH4eg3NJG8zgx7g5EfNhBpm+cnEu2lNL2a8e14XiA6IMupE+
+         okEPiuPrsPI7YqeuQwj+s7HLeHjXL5NR/hYVMhQyXTVgHVXj1jxUY+2HGFa2h2IgNHxR
+         GqWA==
+X-Gm-Message-State: AAQBX9f6eCXeWmhotgAOtw9sm5D5y3PGQ7dKZH0IGPP0lKAbhQ25e7pq
+        vl5S9vJjPnfet/SQEh6DRnJWfw==
+X-Google-Smtp-Source: AKy350ZjSeUi5W/FMFj8cFd3FZ8IBUmJZCdwJjwrxRaSX9z1B2tETRyepfqtj3cs2LAQGBpYvDx5aA==
+X-Received: by 2002:a17:906:9be2:b0:931:624b:680c with SMTP id de34-20020a1709069be200b00931624b680cmr6404112ejc.29.1680785575139;
+        Thu, 06 Apr 2023 05:52:55 -0700 (PDT)
+Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id rj13-20020a1709076c8d00b00947ccb6150bsm657067ejc.102.2023.04.06.05.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 05:52:54 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 12:52:51 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, David Dai <davidai@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <ZC7Ao1qoNGYXQ9h4@google.com>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <ZCx97IKjsBibjdGc@linux.dev>
+ <86sfdfv0e1.wl-maz@kernel.org>
+ <ZC0n0HRsmNJeJZps@google.com>
+ <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 1/4] PM: Add sysfs files to represent time spent in
- hardware sleep state
-Content-Language: en-US, nl
-To:     "Box, David E" <david.e.box@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "jstultz@google.com" <jstultz@google.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "mario.limonciello@amd.com" <mario.limonciello@amd.com>,
-        "svenva@chromium.org" <svenva@chromium.org>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Shyam-sundar.S-k@amd.com" <Shyam-sundar.S-k@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "rrangel@chromium.org" <rrangel@chromium.org>,
-        "Jain, Rajat" <rajatja@google.com>
-References: <20230403211831.4010-1-mario.limonciello@amd.com>
- <20230403211831.4010-2-mario.limonciello@amd.com>
- <b6000a3d5d4d6a3e9f8a57414c0b795e8cff6855.camel@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <b6000a3d5d4d6a3e9f8a57414c0b795e8cff6855.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 4/5/23 02:42, Box, David E wrote:
-> Hi Mario,
+On Wednesday 05 Apr 2023 at 14:07:18 (-0700), Saravana Kannan wrote:
+> On Wed, Apr 5, 2023 at 12:48 AM 'Quentin Perret' via kernel-team
+> > And I concur with all the above as well. Putting this in the kernel is
+> > not an obvious fit at all as that requires a number of assumptions about
+> > the VMM.
+> >
+> > As Oliver pointed out, the guest topology, and how it maps to the host
+> > topology (vcpu pinning etc) is very much a VMM policy decision and will
+> > be particularly important to handle guest frequency requests correctly.
+> >
+> > In addition to that, the VMM's software architecture may have an impact.
+> > Crosvm for example does device emulation in separate processes for
+> > security reasons, so it is likely that adjusting the scheduling
+> > parameters ('util_guest', uclamp, or else) only for the vCPU thread that
+> > issues frequency requests will be sub-optimal for performance, we may
+> > want to adjust those parameters for all the tasks that are on the
+> > critical path.
+> >
+> > And at an even higher level, assuming in the kernel a certain mapping of
+> > vCPU threads to host threads feels kinda wrong, this too is a host
+> > userspace policy decision I believe. Not that anybody in their right
+> > mind would want to do this, but I _think_ it would technically be
+> > feasible to serialize the execution of multiple vCPUs on the same host
+> > thread, at which point the util_guest thingy becomes entirely bogus. (I
+> > obviously don't want to conflate this use-case, it's just an example
+> > that shows the proposed abstraction in the series is not a perfect fit
+> > for the KVM userspace delegation model.)
 > 
-> On Mon, 2023-04-03 at 16:18 -0500, Mario Limonciello wrote:
->> Userspace can't easily discover how much of a sleep cycle was spent in a
->> hardware sleep state without using kernel tracing and vendor specific sysfs
->> or debugfs files.
->>
->> To make this information more discoverable, introduce two new sysfs files:
->> 1) The time spent in a hw sleep state for last cycle.
->> 2) The time spent in a hw sleep state since the kernel booted
->> Both of these files will be present only if the system supports s2idle.
->>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->> v5->v6:
->>  * Add total attribute as well
->>  * Change text for documentation
->>  * Adjust flow of is_visible callback.
->>  * If overflow was detected in total attribute return -EOVERFLOW
->>  * Rename symbol
->>  * Add stub for symbol for builds without CONFIG_PM_SLEEP
->> v4->v5:
->>  * Provide time in microseconds instead of percent. Userspace can convert
->>    this if desirable.
->> ---
->>  Documentation/ABI/testing/sysfs-power | 27 ++++++++++++++++
->>  include/linux/suspend.h               |  5 +++
->>  kernel/power/main.c                   | 45 +++++++++++++++++++++++++++
->>  3 files changed, 77 insertions(+)
->>
->> diff --git a/Documentation/ABI/testing/sysfs-power
->> b/Documentation/ABI/testing/sysfs-power
->> index f99d433ff311..37240575d282 100644
->> --- a/Documentation/ABI/testing/sysfs-power
->> +++ b/Documentation/ABI/testing/sysfs-power
->> @@ -413,6 +413,33 @@ Description:
->>                 The /sys/power/suspend_stats/last_failed_step file contains
->>                 the last failed step in the suspend/resume path.
->>  
->> +What:          /sys/power/suspend_stats/last_hw_sleep
->> +Date:          June 2023
->> +Contact:       Mario Limonciello <mario.limonciello@amd.com>
->> +Description:
->> +               The /sys/power/suspend_stats/last_hw_sleep file
->> +               contains the duration of time spent in a hardware sleep
->> +               state in the most recent system suspend-resume cycle.
->> +               This number is measured in microseconds.
->> +
->> +               NOTE: Limitations in the size of the hardware counters may
->> +               cause this value to be inaccurate in longer sleep cycles.
->> +
->> +What:          /sys/power/suspend_stats/total_hw_sleep
->> +Date:          June 2023
->> +Contact:       Mario Limonciello <mario.limonciello@amd.com>
->> +Description:
->> +               The /sys/power/suspend_stats/total_hw_sleep file
->> +               contains the aggregate of time spent in a hardware sleep
->> +               state since the kernel was booted. This number
->> +               is measured in microseconds.
->> +
->> +               NOTE: Limitations in the size of the hardware counters may
->> +               cause this value to be inaccurate in longer sleep cycles.
->> +
->> +               If an overflow has been detected this file will return
->> +               -EOVERFLOW.
->> +
->>  What:          /sys/power/sync_on_suspend
->>  Date:          October 2019
->>  Contact:       Jonas Meurer <jonas@freesources.org>
->> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
->> index cfe19a028918..069ef0c0ae57 100644
->> --- a/include/linux/suspend.h
->> +++ b/include/linux/suspend.h
->> @@ -68,6 +68,8 @@ struct suspend_stats {
->>         int     last_failed_errno;
->>         int     errno[REC_FAILED_NUM];
->>         int     last_failed_step;
->> +       u64     last_hw_sleep;
->> +       u64     total_hw_sleep;
->>         enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
->>  };
->>  
->> @@ -489,6 +491,7 @@ void restore_processor_state(void);
->>  extern int register_pm_notifier(struct notifier_block *nb);
->>  extern int unregister_pm_notifier(struct notifier_block *nb);
->>  extern void ksys_sync_helper(void);
->> +extern void pm_report_hw_sleep_time(u64 t);
->>  
->>  #define pm_notifier(fn, pri) {                         \
->>         static struct notifier_block fn##_nb =                  \
->> @@ -526,6 +529,8 @@ static inline int unregister_pm_notifier(struct
->> notifier_block *nb)
->>         return 0;
->>  }
->>  
->> +static inline void pm_report_hw_sleep_time(u64 t) {};
->> +
->>  static inline void ksys_sync_helper(void) {}
->>  
->>  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
->> diff --git a/kernel/power/main.c b/kernel/power/main.c
->> index 31ec4a9b9d70..ffd4dd43cbdd 100644
->> --- a/kernel/power/main.c
->> +++ b/kernel/power/main.c
->> @@ -6,6 +6,7 @@
->>   * Copyright (c) 2003 Open Source Development Lab
->>   */
->>  
->> +#include <linux/acpi.h>
->>  #include <linux/export.h>
->>  #include <linux/kobject.h>
->>  #include <linux/string.h>
->> @@ -83,6 +84,18 @@ int unregister_pm_notifier(struct notifier_block *nb)
->>  }
->>  EXPORT_SYMBOL_GPL(unregister_pm_notifier);
->>  
->> +void pm_report_hw_sleep_time(u64 t)
->> +{
->> +       suspend_stats.last_hw_sleep = t;
->> +       if (suspend_stats.total_hw_sleep == -EOVERFLOW)
->> +               return;
->> +       if (suspend_stats.total_hw_sleep + t < suspend_stats.total_hw_sleep)
->> +               suspend_stats.total_hw_sleep = -EOVERFLOW;
->> +       else
->> +               suspend_stats.total_hw_sleep += t;
+> See my reply to Oliver and Marc. To me it looks like we are converging
+> towards having shared memory between guest, host kernel and VMM and
+> that should address all our concerns.
+
+Hmm, that is not at all my understanding of what has been the most
+important part of the feedback so far: this whole thing belongs to
+userspace.
+
+> The guest will see a MMIO device, writing to it will trigger the host
+> kernel to do the basic "set util_guest/uclamp for the vCPU thread that
+> corresponds to the vCPU" and then the VMM can do more on top as/if
+> needed (because it has access to the shared memory too). Does that
+> make sense?
+
+Not really no. I've given examples of why this doesn't make sense for
+the kernel to do this, which still seems to be the case with what you're
+suggesting here.
+
+> Even in the extreme example, the stuff the kernel would do would still
+> be helpful, but not sufficient. You can aggregate the
+> util_guest/uclamp and do whatever from the VMM.
+> Technically in the extreme example, you don't need any of this. The
+> normal util tracking of the vCPU thread on the host side would be
+> sufficient.
+>
+> Actually any time we have only 1 vCPU host thread per VM, we shouldn't
+> be using anything in this patch series and not instantiate the guest
+> device at all.
+
+> > So +1 from me to move this as a virtual device of some kind. And if the
+> > extra cost of exiting all the way back to userspace is prohibitive (is
+> > it btw?),
 > 
-> total_hw_sleep is u64. At microsecond granularity it will never realistically
-> overflow and isn't worth the check IMO. The overflow concern comes from the u32
-> hardware counter, but I don't think there's a good way to detect it.
+> I think the "13% increase in battery consumption for games" makes it
+> pretty clear that going to userspace is prohibitive. And that's just
+> one example.
+
+I beg to differ. We need to understand where these 13% come from in more
+details. Is it really the actual cost of the userspace exit? Or is it
+just that from userspace the only knob you can play with is uclamp and
+that didn't reach the expected level of performance?
+
+If that is the userspace exit, then we can work to optimize that -- it's
+a fairly common problem in the virt world, nothing special here.
+
+And if the issue is the lack of expressiveness in uclamp, then that too
+is something we should work on, but clearly giving vCPU threads more
+'power' than normal host threads is a bit of a red flag IMO. vCPU
+threads must be constrained in the same way that userspace threads are,
+because they _are_ userspace threads.
+
+> > then we can try to work on that. Maybe something a la vhost
+> > can be done to optimize, I'll have a think.
+> >
+> > > The one thing I'd like to understand that the comment seems to imply
+> > > that there is a significant difference in overhead between a hypercall
+> > > and an MMIO. In my experience, both are pretty similar in cost for a
+> > > handling location (both in userspace or both in the kernel). MMIO
+> > > handling is a tiny bit more expensive due to a guaranteed TLB miss
+> > > followed by a walk of the in-kernel device ranges, but that's all. It
+> > > should hardly register.
+> > >
+> > > And if you really want some super-low latency, low overhead
+> > > signalling, maybe an exception is the wrong tool for the job. Shared
+> > > memory communication could be more appropriate.
+> >
+> > I presume some kind of signalling mechanism will be necessary to
+> > synchronously update host scheduling parameters in response to guest
+> > frequency requests, but if the volume of data requires it then a shared
+> > buffer + doorbell type of approach should do.
 > 
-> You could just report the maximum hardware counter time as max_hw_sleep so users
-> know the value isn't reliable if suspended for longer than that.
+> Part of the communication doesn't need synchronous handling by the
+> host. So, what I said above.
 
-Yes I think we need to let userspace know the longest hw-sleep time
-the hw can reliably record and then userspace can (and should) chose
-to not use/check the counters when the total suspend time is bigger
-then the max hw-sleep time.
+I've also replied to another message about the scale invariance issue,
+and I'm not convinced the frequency based interface proposed here really
+makes sense. An AMU-like interface is very likely to be superior.
 
-Other then that this patch-set seems like a good idea to me
-and I have no objections / remarks on the pdx86 bits.
+> > Thinking about it, using SCMI over virtio would implement exactly that.
+> > Linux-as-a-guest already supports it IIRC, so possibly the problem
+> > being addressed in this series could be 'simply' solved using an SCMI
+> > backend in the VMM...
+> 
+> This will be worse than all the options we've tried so far because it
+> has the userspace overhead AND uclamp overhead.
 
-Regards,
+But it doesn't violate the whole KVM userspace delegation model, so we
+should start from there and then optimize further if need be.
 
-Hans
-
-
-
->> +}
->> +EXPORT_SYMBOL_GPL(pm_report_hw_sleep_time);
->> +
->>  int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long
->> val_down)
->>  {
->>         int ret;
->> @@ -377,6 +390,22 @@ static ssize_t last_failed_step_show(struct kobject
->> *kobj,
->>  }
->>  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
->>  
->> +static ssize_t last_hw_sleep_show(struct kobject *kobj,
->> +               struct kobj_attribute *attr, char *buf)
->> +{
->> +       return sysfs_emit(buf, "%llu\n", suspend_stats.last_hw_sleep);
->> +}
->> +static struct kobj_attribute last_hw_sleep = __ATTR_RO(last_hw_sleep);
->> +
->> +static ssize_t total_hw_sleep_show(struct kobject *kobj,
->> +               struct kobj_attribute *attr, char *buf)
->> +{
->> +       if (suspend_stats.total_hw_sleep == -EOVERFLOW)
->> +               return suspend_stats.total_hw_sleep;
->> +       return sysfs_emit(buf, "%llu\n", suspend_stats.total_hw_sleep);
->> +}
->> +static struct kobj_attribute total_hw_sleep = __ATTR_RO(total_hw_sleep);
->> +
->>  static struct attribute *suspend_attrs[] = {
->>         &success.attr,
->>         &fail.attr,
->> @@ -391,12 +420,28 @@ static struct attribute *suspend_attrs[] = {
->>         &last_failed_dev.attr,
->>         &last_failed_errno.attr,
->>         &last_failed_step.attr,
->> +       &last_hw_sleep.attr,
->> +       &total_hw_sleep.attr,
->>         NULL,
->>  };
->>  
->> +static umode_t suspend_attr_is_visible(struct kobject *kobj, struct attribute
->> *attr, int idx)
->> +{
->> +       if (attr != &last_hw_sleep.attr &&
->> +           attr != &total_hw_sleep.attr)
->> +               return 0444;
->> +
->> +#ifdef CONFIG_ACPI
->> +       if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
->> +               return 0444;
->> +#endif
->> +       return 0;
->> +}
->> +
->>  static const struct attribute_group suspend_attr_group = {
->>         .name = "suspend_stats",
->>         .attrs = suspend_attrs,
->> +       .is_visible = suspend_attr_is_visible,
->>  };
->>  
->>  #ifdef CONFIG_DEBUG_FS
-
+Thanks,
+Quentin
