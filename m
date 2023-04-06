@@ -2,157 +2,267 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435166D9395
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 12:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961E66D9479
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 12:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjDFKFA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Apr 2023 06:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S233619AbjDFKya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 06:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjDFKE6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 06:04:58 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DB18A69
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 03:04:31 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id g18so40565ejx.7
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 03:04:31 -0700 (PDT)
+        with ESMTP id S229869AbjDFKy3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 06:54:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10B555A3
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 03:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680778421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pi28H7Ys3ragZ0WvGPlL8+NvRPjRFBU0lR+sJE70dXU=;
+        b=VF7Fi54cVws/vAkLj1UDmYvSdzF1ub90SDK7/3RVN0uoW4q1u3B6MFvTejIc+wInYP+ld1
+        FJ84bqqgpx7ZxYD5E+etYx8yBx2DvQW6QYQFf4ssXABLzZgsRbk+U2xlvS1HguPZFU6bFG
+        rQ86c3XTj+rKvmakTCkOLjZ0B9FjGOc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-132-VrarZ6cOPi-jGxNY0oNHsg-1; Thu, 06 Apr 2023 06:53:39 -0400
+X-MC-Unique: VrarZ6cOPi-jGxNY0oNHsg-1
+Received: by mail-ed1-f70.google.com with SMTP id m17-20020a509991000000b0050463defdabso802126edb.6
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 03:53:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680775465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=++/XeHR7esiJtCSVGhB/ZCmtwjp+N0bD+dxVzVUERpY=;
-        b=5Ujx5cRsxp3R66HmWx+TleuWV2s3o6w/cgayTaksEHltJwJajcNsMU6lojz2smwMEN
-         PSriSopuGbmkMimg88Wji4TkmVpe5TGndgfAC80ted4IUvuzTyHQDso9KYmBvJ+yuwnl
-         VLUi18mWMGs0dcKG48WRLhngOdkQCJZo6ticlxxzIC53crJhnKIlsEacChjVDzxefFMR
-         1tezCGtAHUUF8H5SpDYOrUN6UY8r8ntq8qoWbU18yIvNGkDQkIuSOerj+Wu7hBa9Rvji
-         1u9Z/rBbKJD38V99eMubRiUYPupWl58H0htCfQtG1WR3pJUToUX1nqFC16iYnxrgxc5R
-         P5cA==
-X-Gm-Message-State: AAQBX9chlxOHFOeke2ktnRDwL2tLrVgHvoXQYo/LnGzp+kxJ2h9nwwCv
-        XqhV6IQOw30sgSsrwgNOiNNkh9A3C1aqvGFRyQY=
-X-Google-Smtp-Source: AKy350bij/7gQZDIpdJlW9U2nmyRQZwQdq0Di5oKTevTWtRxYI3s6aRG4Wu4bIYx2TtyT339PS8vdV2gmCBOYPeDxXY=
-X-Received: by 2002:a17:907:3f92:b0:934:b5d6:14d0 with SMTP id
- hr18-20020a1709073f9200b00934b5d614d0mr3466134ejc.2.1680775465370; Thu, 06
- Apr 2023 03:04:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680778418; x=1683370418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pi28H7Ys3ragZ0WvGPlL8+NvRPjRFBU0lR+sJE70dXU=;
+        b=S+JcQ5hGQn51uHravSkyP3P7hUTEwFS9U5qPBuAWE7MDaX5bthjZdu1H35057ATKtq
+         348WAB7qdxYRBUNYWJuDz0m8dh8Qc6yIbNtxQoTKotY8oKSfnWDFpibpnMXlWM84w1oH
+         vrMHam194mRPDMPrED3R5bVNzq08Hqak8VryAcx5T43uABckDiz4WPTNWPAyHuX1Xxkt
+         RxesVTdbRp8jkgc27yItic+/ob+73J6KQMykpbwz4echaiDa6Vpon0PMFErd+I2Vn9N0
+         E7CxB7swR25I7lqlj+lo6flFVGTjMY56fz2gAYzzed8OJVUCLpFEN6tA2Z1yq8xP3MJI
+         2UWA==
+X-Gm-Message-State: AAQBX9clmYBPUQsQeGERxF3/mapo+qOM5WJq30zz9jRHacDaOkRZcuXZ
+        IoufcvqfNoiOw67QpcLGfLpTcbRL/uGFKHiqkkF85O+M/dV937hmAdkP76hM0ErCSir+l2zpXpu
+        Mz6BwP0J8Dk9o9FOLiJw=
+X-Received: by 2002:a17:906:4d8c:b0:8b1:88aa:46da with SMTP id s12-20020a1709064d8c00b008b188aa46damr6227552eju.48.1680778418655;
+        Thu, 06 Apr 2023 03:53:38 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZZfiP5eeuklEaQrdVVrA6BqszwkvZHtgP4NZZiG+OQJj261ImPta+swxAFCoNIv5pmoPKVJQ==
+X-Received: by 2002:a17:906:4d8c:b0:8b1:88aa:46da with SMTP id s12-20020a1709064d8c00b008b188aa46damr6227525eju.48.1680778418309;
+        Thu, 06 Apr 2023 03:53:38 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id gs22-20020a170906f19600b00947d49ec819sm660247ejb.22.2023.04.06.03.53.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 03:53:37 -0700 (PDT)
+Message-ID: <c5455226-1d51-1d3d-0b67-78a0473a9e8c@redhat.com>
+Date:   Thu, 6 Apr 2023 12:53:37 +0200
 MIME-Version: 1.0
-References: <20230404083656.713825-1-xiongxin@kylinos.cn> <CAJZ5v0g+yrmCH0o2-ezCNmoXe24ooA4U-JAWD4xNXsjT9XBwyQ@mail.gmail.com>
- <4cfb3dd3-e564-49ff-aad8-ee4d8587b689@kylinos.cn>
-In-Reply-To: <4cfb3dd3-e564-49ff-aad8-ee4d8587b689@kylinos.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Apr 2023 12:04:13 +0200
-Message-ID: <CAJZ5v0hU2Ua0Ls1LWhRr6wCoXfETKRYGRUPrko6cZ_8yWDCYjg@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Optimize rp->domains memory allocation
-To:     TGSP <xiongxin@kylinos.cn>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFCv3 1/1] platform/x86: Add virtual PMC driver used for S2Idle
+Content-Language: en-US, nl
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org
+Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
+        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
+        upstream@semihalf.com, markgross@kernel.org, dtor@google.com,
+        mario.limonciello@amd.com, linux-pm@vger.kernel.org,
+        x86@kernel.org, platform-driver-x86@vger.kernel.org,
+        rafael@kernel.org
+References: <20230213100921.268770-1-jaz@semihalf.com>
+ <20230213100921.268770-2-jaz@semihalf.com>
+ <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 3:23 AM TGSP <xiongxin@kylinos.cn> wrote:
->
-> 在 2023/4/5 00:30, Rafael J. Wysocki 写道:
-> > On Tue, Apr 4, 2023 at 10:37 AM xiongxin <xiongxin@kylinos.cn> wrote:
-> >>
-> >> In the memory allocation of rp->domains in rapl_detect_domains(), there
-> >> is an additional memory of struct rapl_domain allocated to prevent the
-> >> pointer out of bounds called later.
-> >>
-> >> Optimize the code here to save sizeof(struct rapl_domain) bytes of
-> >> memory.
-> >>
-> >> Test in Intel NUC (i5-1135G7).
-> >>
-> >> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> >> Tested-by: xiongxin <xiongxin@kylinos.cn>
-> >> ---
-> >>   drivers/powercap/intel_rapl_common.c | 15 ++++++++-------
-> >>   1 file changed, 8 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> >> index 8970c7b80884..f8971282498a 100644
-> >> --- a/drivers/powercap/intel_rapl_common.c
-> >> +++ b/drivers/powercap/intel_rapl_common.c
-> >> @@ -1171,13 +1171,14 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
-> >>   {
-> >>          struct rapl_domain *rd;
-> >>          struct powercap_zone *power_zone = NULL;
-> >> -       int nr_pl, ret;
-> >> +       int nr_pl, ret, i;
-> >>
-> >>          /* Update the domain data of the new package */
-> >>          rapl_update_domain_data(rp);
-> >>
-> >>          /* first we register package domain as the parent zone */
-> >> -       for (rd = rp->domains; rd < rp->domains + rp->nr_domains; rd++) {
-> >> +       for (i = 0; i < rp->nr_domains; i++) {
-> >> +               rd = &rp->domains[i];
-> >>                  if (rd->id == RAPL_DOMAIN_PACKAGE) {
-> >>                          nr_pl = find_nr_power_limit(rd);
-> >>                          pr_debug("register package domain %s\n", rp->name);
-> >> @@ -1201,8 +1202,9 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
-> >>                  return -ENODEV;
-> >>          }
-> >>          /* now register domains as children of the socket/package */
-> >> -       for (rd = rp->domains; rd < rp->domains + rp->nr_domains; rd++) {
-> >> +       for (i = 0; i < rp->nr_domains; i++) {
-> >>                  struct powercap_zone *parent = rp->power_zone;
-> >> +               rd = &rp->domains[i];
-> >>
-> >>                  if (rd->id == RAPL_DOMAIN_PACKAGE)
-> >>                          continue;
-> >> @@ -1302,7 +1304,6 @@ static void rapl_detect_powerlimit(struct rapl_domain *rd)
-> >>    */
-> >>   static int rapl_detect_domains(struct rapl_package *rp, int cpu)
-> >>   {
-> >> -       struct rapl_domain *rd;
-> >>          int i;
-> >>
-> >>          for (i = 0; i < RAPL_DOMAIN_MAX; i++) {
-> >> @@ -1319,15 +1320,15 @@ static int rapl_detect_domains(struct rapl_package *rp, int cpu)
-> >>          }
-> >>          pr_debug("found %d domains on %s\n", rp->nr_domains, rp->name);
-> >>
-> >> -       rp->domains = kcalloc(rp->nr_domains + 1, sizeof(struct rapl_domain),
-> >> +       rp->domains = kcalloc(rp->nr_domains, sizeof(struct rapl_domain),
-> >>                                GFP_KERNEL);
-> >
-> > Why can't you modify just the above statement alone?  What would break
-> > if you did that?
-> At the beginning, I just didn't understand what this '+1' was for, but
-> contacting the for loop behind, here '+1', just because the rd pointer
-> will not point outside the memory of 'rp->domains' before the for loop
-> exits.
->
-> if '+1' is to prevent the invalidation of the rd pointer, and apply for
-> an additional struct rapl_domains here, then my patch may not be
-> completely modified.
->
-> >
-> >>          if (!rp->domains)
-> >>                  return -ENOMEM;
-> >>
-> >>          rapl_init_domains(rp);
-> >>
-> >> -       for (rd = rp->domains; rd < rp->domains + rp->nr_domains; rd++)
-> >> -               rapl_detect_powerlimit(rd);
->
-> If '+1' is directly removed, before the for loop exits, the rd pointer
-> has already pointed to outside the memory of rp->domains.
+Hi Grzegorz,
 
-But that value is never dereferenced AFAICS.
+On 3/29/23 14:33, Grzegorz Jaszczyk wrote:
+> Hi Hans,
+> 
+> Do you think that this RFC is in good enough state to start the ACPI
+> ID registration process so after it will be completed we could land
+> this solution? Or maybe we could land it (of course if there are no
+> other remarks) even before and adjust if needed?
 
-> >> +       for (i = 0; i < rp->nr_domains; i++)
-> >> +               rapl_detect_powerlimit(&rp->domains[i]);
-> >>
-> >>          return 0;
-> >>   }
-> >> --
+I see from the links in the cover-letter that most of
+the previous discussion has happened on the linux-pm list
+and I believe that the linux-pm folks are in a better place
+to answer this question then I am.
+
+I have no objections against the suggested approach,
+but I don't really feel that it is my call to make if
+we should move forward with this.
+
+Regards,
+
+Hans
+
+
+
+> pon., 13 lut 2023 o 11:11 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
+>>
+>> Virtual PMC driver is meant for the guest VMs for the S2Idle
+>> notification. Its purpose is to register S2Idle dev ops check handler,
+>> which will evaluate ACPI _DSM just before the guest enters S2Idle power
+>> state.
+>>
+>> This allows to trap on MMIO access done as a consequence of _DSM
+>> evaluation and therefore notify the VMM about the guest entering S2Idle
+>> state.
+>>
+>> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+>> ---
+>> Changelog v1..v2:
+>> - Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
+>>
+>> Changelog v2..v3:
+>> - Add MODULE_LICENSE
+>> - Remove "amd" prefixes
+>> - Be more verbose in VIRT_PMC config description and make it
+>>   HYPERVISOR_GUEST dependent
+>> - Add extra check ensuring that DSM method supports ACPI_VIRT_PMC_NOTIFY function
+>> ---
+>>  drivers/platform/x86/Kconfig    |  7 +++
+>>  drivers/platform/x86/Makefile   |  3 ++
+>>  drivers/platform/x86/virt_pmc.c | 83 +++++++++++++++++++++++++++++++++
+>>  3 files changed, 93 insertions(+)
+>>  create mode 100644 drivers/platform/x86/virt_pmc.c
+>>
+>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+>> index 5692385e2d26..837ce201b68b 100644
+>> --- a/drivers/platform/x86/Kconfig
+>> +++ b/drivers/platform/x86/Kconfig
+>> @@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
+>>           buttons below the display. This module adds an input device
+>>           that delivers key events when these buttons are pressed.
+>>
+>> +config VIRT_PMC
+>> +       tristate "Virtual Power Management Controller"
+>> +       depends on ACPI && SUSPEND && HYPERVISOR_GUEST
+>> +       help
+>> +         The Virtual PMC driver is meant for the guest VMs and its main
+>> +         purpose is to notify about guest entering s2idle state.
+>> +
+>>  endif # X86_PLATFORM_DEVICES
+>>
+>>  config P2SB
+>> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+>> index 1d3d1b02541b..c4d3056cf4ea 100644
+>> --- a/drivers/platform/x86/Makefile
+>> +++ b/drivers/platform/x86/Makefile
+>> @@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)         += intel_scu_wdt.o
+>>  obj-$(CONFIG_INTEL_SCU_IPC_UTIL)       += intel_scu_ipcutil.o
+>>  obj-$(CONFIG_X86_INTEL_LPSS)           += pmc_atom.o
+>>
+>> +# Virtual PMC
+>> +obj-$(CONFIG_VIRT_PMC)                 += virt_pmc.o
+>> +
+>>  # Siemens Simatic Industrial PCs
+>>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)      += simatic-ipc.o
+>>
+>> diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_pmc.c
+>> new file mode 100644
+>> index 000000000000..a5966bb9048f
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/virt_pmc.c
+>> @@ -0,0 +1,83 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Virtual Power Management Controller Driver
+>> + *
+>> + * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
+>> + */
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#define ACPI_VIRT_PMC_DSM_UUID "9ea49ba3-434a-49a6-be30-37cc55c4d397"
+>> +#define ACPI_VIRT_PMC_NOTIFY 1
+>> +
+>> +static acpi_handle virt_pmc_handle;
+>> +
+>> +static void virt_pmc_s2idle_notify(void)
+>> +{
+>> +       union acpi_object *out_obj;
+>> +       guid_t dsm_guid;
+>> +
+>> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
+>> +
+>> +       out_obj = acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
+>> +                                       0, ACPI_VIRT_PMC_NOTIFY, NULL);
+>> +
+>> +       acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %s\n",
+>> +                         ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : "failed");
+>> +
+>> +       ACPI_FREE(out_obj);
+>> +}
+>> +
+>> +static struct acpi_s2idle_dev_ops pmc_s2idle_dev_ops = {
+>> +       .check = virt_pmc_s2idle_notify,
+>> +};
+>> +
+>> +static int virt_pmc_probe(struct platform_device *pdev)
+>> +{
+>> +       int err = 0;
+>> +       guid_t dsm_guid;
+>> +
+>> +       virt_pmc_handle = ACPI_HANDLE(&pdev->dev);
+>> +
+>> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
+>> +
+>> +       if (!acpi_check_dsm(virt_pmc_handle, &dsm_guid, 0,
+>> +                           1 << ACPI_VIRT_PMC_NOTIFY)) {
+>> +               dev_err(&pdev->dev, "DSM method doesn't support ACPI_VIRT_PMC_NOTIFY\n");
+>> +               return -ENODEV;
+>> +       }
+>> +
+>> +       err = acpi_register_lps0_dev(&pmc_s2idle_dev_ops);
+>> +       if (err)
+>> +               dev_err(&pdev->dev, "failed to register LPS0 sleep handler\n");
+>> +
+>> +       return err;
+>> +}
+>> +
+>> +static int virt_pmc_remove(struct platform_device *pdev)
+>> +{
+>> +       acpi_unregister_lps0_dev(&pmc_s2idle_dev_ops);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static const struct acpi_device_id virt_pmc_acpi_ids[] = {
+>> +       {"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
+>> +       { }
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
+>> +
+>> +static struct platform_driver virt_pmc_driver = {
+>> +       .driver = {
+>> +               .name = "virtual_pmc",
+>> +               .acpi_match_table = ACPI_PTR(virt_pmc_acpi_ids),
+>> +       },
+>> +       .probe = virt_pmc_probe,
+>> +       .remove = virt_pmc_remove,
+>> +};
+>> +
+>> +module_platform_driver(virt_pmc_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("Virtual PMC Driver");
+>> --
+>> 2.39.1.581.gbfd45094c4-goog
+>>
+> 
+
