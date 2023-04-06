@@ -2,113 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4504C6D9093
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 09:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C65B6D916E
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 10:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235162AbjDFHjY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 03:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S235805AbjDFIYQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 04:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbjDFHjX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 03:39:23 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD3F76A8;
-        Thu,  6 Apr 2023 00:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PSTnZvKPii8CuqOLasDZa85RvXeN5qcfEeMj/qPN4AI=; b=NS+Rj5XNebo6MF4JhS2WqHg+pY
-        ILIdptlQ1bk40yfARr2w/c3p1krt6L0pMWX612ksBo1yCxk9YxCWaqf2t7UWlPP1tCrwpnQzKCNd3
-        cBi2ZFmaJ7k+LwPVX3gYnTYJSIF3tMDHiTVxOXbMEKAhDpOq3v6ZOpOU9kD7sFxxavM5TdWx5S3fd
-        gOJSgcgQM086pSBofRNXZVbJkznDSLzclz5TcbU0TrQy0hMUae0+OQhMcsOIPqKSLyv67cepA8V7m
-        9Tiogm4Fuxu1w4JrHqEV6JFitpcmTral7U/bnGHxrFZX4jTpKUycTLFmHBUJJZD1SM7/dBCTXlEOZ
-        0K21+nJQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkKCn-00ASbW-0T;
-        Thu, 06 Apr 2023 07:38:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 74E9D3000DC;
-        Thu,  6 Apr 2023 09:38:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5BAFA24C025F1; Thu,  6 Apr 2023 09:38:48 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 09:38:48 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-Message-ID: <20230406073848.GC386572@hirez.programming.kicks-ass.net>
-References: <20230330224348.1006691-1-davidai@google.com>
- <20230405080548.GW4253@hirez.programming.kicks-ass.net>
- <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
+        with ESMTP id S235885AbjDFIYP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 04:24:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F821BC0
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 01:24:12 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkKuT-0006zt-8j; Thu, 06 Apr 2023 10:23:57 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkKuR-009L2f-71; Thu, 06 Apr 2023 10:23:55 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkKuQ-00AzQf-G5; Thu, 06 Apr 2023 10:23:54 +0200
+Date:   Thu, 6 Apr 2023 10:23:54 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Vignesh R <vigneshr@ti.com>, linux-omap@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] i2c: omap: Improve error reporting for problems during
+ .remove()
+Message-ID: <20230406082354.jwchbl5ir6p4gjw7@pengutronix.de>
+References: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
+ <20230402225001.75a32147@aktux>
+ <20230403054837.6lxyzznzntvw2drg@pengutronix.de>
+ <20230403060404.GX7501@atomide.com>
+ <ZC5qUU4JLI9Negyi@sai>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nsmp2sx53qt2rvps"
 Content-Disposition: inline
-In-Reply-To: <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZC5qUU4JLI9Negyi@sai>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 02:08:43PM -0700, Saravana Kannan wrote:
 
-> The only 2 pieces of information shared between host/guest are:
-> 
-> 1. Host CPU frequency -- this isn't really scheduler internals and
-> will map nicely to a virtual cpufreq driver.
-> 
-> 2. A vCPU util value between 0 - 1024 where 1024 corresponds to the
-> highest performance point across all CPUs (taking freq, arch, etc into
-> consideration). Yes, this currently matches how the run queue util is
-> tracked, but we can document the interface as "percentage of max
-> performance capability", but representing it as 0 - 1024 instead of
-> 0-100. That way, even if the scheduler changes how it tracks util in
-> the future, we can still keep this interface between guest/host and
-> map it appropriately on the host end.
-> 
-> In either case, we could even have a Windows guest where they might
-> track vCPU utilization differently and still have this work with the
-> Linux host with this interface.
-> 
-> Does that sound reasonable to you?
+--nsmp2sx53qt2rvps
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, I suppose that's managable.
+If pm_runtime_get() fails in .remove() the driver used to return the
+error to the driver core. The only effect of this (compared to returning
+zero) is a generic warning that the error value is ignored.
 
-Something that wasn't initially clear to me; all this hard assumes a 1:1
-vCPU:CPU relation, right? Which isn't typical in virt land.
+So emit a better warning and return zero to suppress the generic (and
+little helpful) message. Also disable runtime PM in the error case.
+
+This prepares changing platform device remove callbacks to return void.
+
+Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+---
+On Thu, Apr 06, 2023 at 08:44:33AM +0200, Wolfram Sang wrote:
+>=20
+> > > So if there is some clk handling necessary before the register access,
+> > > I'm not aware where it's hidden. Is there some bus or omap specific c=
+ode
+> > > that ensures clk handling?
+> >=20
+> > I think the missing part is that the runtime PM calls in the i2c driver
+> > cause the parent ti-sysc interconnect target module device to get enabl=
+ed
+> > and clocked before accessing the i2c registers.
+>=20
+> So, this patch is not needed?
+
+The patch as is is wrong. For my quest to drop the return value of
+platform driver's remove callbacks, I need this patch instead:
+
+ drivers/i2c/busses/i2c-omap.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index f9ae520aed22..2b4e2be51318 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -1525,14 +1525,17 @@ static int omap_i2c_remove(struct platform_device *=
+pdev)
+ 	int ret;
+=20
+ 	i2c_del_adapter(&omap->adapter);
+-	ret =3D pm_runtime_resume_and_get(&pdev->dev);
++
++	ret =3D pm_runtime_get_sync(&pdev->dev);
+ 	if (ret < 0)
+-		return ret;
++		dev_err(omap->dev, "Failed to resume hardware, skip disable\n");
++	else
++		omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
+=20
+-	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
++
+ 	return 0;
+ }
+=20
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+--=20
+2.39.2
+
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--nsmp2sx53qt2rvps
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQugZkACgkQj4D7WH0S
+/k6e1QgAgMnr2q6+pOqsrux2OQmK4cmDqgLRGQhbp6quxKBbs7BiVJcK2NqGKE+8
+YHELGSWPVwNz/Hd6V0YxaBKbFQvPJlSJdVhELTuBiWLQ1pnUkt6DcF5zbxpLw5NT
+1qd8i621AKmq3kWowz/uoz1XqtsFo9jYrLwqj/jutbbIuUcmr3pXY8DRv4x4fb82
++oTUpMjvUyJhsdebnQ3T+NeAdNtobO4Iy73/eBSZedvmMecH3XlRx1Y9ZGiJx4Hb
+DG0+QqVIeWQJawHYVFKSo2DP2w074A1dMI5+dMd/szvn7an7pa/cT6w24iDKFXHd
+9tQji5xY/yCxCt6ZJkpL9v+rwG9iaQ==
+=3J10
+-----END PGP SIGNATURE-----
+
+--nsmp2sx53qt2rvps--
