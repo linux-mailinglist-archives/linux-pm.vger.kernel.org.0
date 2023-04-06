@@ -2,155 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1396DA066
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 20:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A79E6DA20C
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 21:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbjDFS4W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Apr 2023 14:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S237172AbjDFT6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 15:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239786AbjDFS4T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 14:56:19 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2559039;
-        Thu,  6 Apr 2023 11:56:17 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id g18so3723274ejx.7;
-        Thu, 06 Apr 2023 11:56:17 -0700 (PDT)
+        with ESMTP id S230083AbjDFT57 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 15:57:59 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D435FDB
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 12:57:58 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so41724452pjl.4
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 12:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680811078; x=1683403078;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RNWY/wrPXgBmzOGUPf97Dii6ROoNMiD5Maxsog/HK18=;
+        b=KKljFSl98kevJ96WsY6bw99zU7Xe4qhI5WEx7j7LWBLcMXPAH3mRbGi8IPh/TNgIhr
+         YTfAS7sFmMLePaAkAxntD/JqZ0F8NnBJB5fdBK/259NOP1dgtFdqvnbpdGG4OEwL/jP5
+         F5aT+v8PEoDR/n2gHoLijfGvqZxO1umOJjhsTkdoDihg3pHiklMoQz/EqyMoOSYh2ijr
+         dqba7g+7eWVmRL/4N1RE0VdgJy1nglUc+foEakRB/GXqJKeGRfwYritggQXFQlitRUnd
+         oBcb0Lhm8LA2OC8TJVRveVT7YFYDpCb01QAfNmxWBPunbtoIIM4il1vKZWdP/3k2hebw
+         zQhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GEDpzpwkdqfhFP/l/6sXm+y2yJSiLZZYXAjgzwTJOBs=;
-        b=GDlLdDlSQbNiLnFVm4JxjQMX9RMjDUUhgGrHHonW9lRrB0ofKc7mIkhPnP/qY4UNJJ
-         cy8PW3k/x810yHsL/n+7mtO8sXKVHNQVGx+lwS5PoPMsaDLjMf3TwQPs4hnKae3SDd2f
-         4WRpdY1vJSgD/YWSM6wZSboJyUSzjlaOEnNuR2HO5FeirSDOVf8lFG1mug+F11GfVkMx
-         Vr46pibwSGRXn6JQQl8q6//FoKpNc3/0gFQJfalcfhwPUiJ4VD7WFQmDdp7Vas8Nt6Nt
-         F6y/Ux7cDPchYWO+/IlxMYnqY2UJkYua2qpvO5dj7bP3HoB5zcrUwEXfAiit9nA7OU6R
-         vPWA==
-X-Gm-Message-State: AAQBX9f0g9LgT4npSda3srYPsT3WhGhL/Rnsgadonf3BBI3kb3Yq7BVw
-        XVDmpyImLitmqAuxaEuLCBGfboDvktNWwYGsE7qiwd3ScSM=
-X-Google-Smtp-Source: AKy350ZPtxgdFNbkE7L7jiTI8uCvV0sp0NYQC5OkT2/2pLMSELS/yH3WjhuSBlqbV/D5LJBazrjoLKwBj6/6GSTwHa4=
-X-Received: by 2002:a17:907:96a5:b0:946:a095:b314 with SMTP id
- hd37-20020a17090796a500b00946a095b314mr3678555ejc.2.1680807375859; Thu, 06
- Apr 2023 11:56:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680811078; x=1683403078;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RNWY/wrPXgBmzOGUPf97Dii6ROoNMiD5Maxsog/HK18=;
+        b=fBrolmSHq2/CwHAUqnqC1mLefbKpd1rVFaOT1wL5Y1ZqSjFh2AV00PxU+t6KvAfoJu
+         LmqvQfcTH1qjFe7HYmg6TPIi5l3MTZPmdYPrq0axem8rytOTZxi3+pAj5+YTaWqx5JYZ
+         2U5ECthyVWU4xDtWiG6d+aPuH9mCwEB6oZ1XuIn5UTzZH9n4Zp3Qd2QXT/K4lW8SUY5T
+         izSG8QlBCejRGSyi9f5DS56PugdLN6qiDdmvg6FbxJk1kI3zpDG0MkL7dov9O4NGa+kV
+         DSCFLNK7fJsWODJhOZ8kjYchxHKIATtfhZjbirw4aTS3SAp7uRNxbkHshiE9XDAUOElt
+         vwYQ==
+X-Gm-Message-State: AAQBX9dWioSOci9Ma9ybLkzIRVcSQ+jjLy88U2gsK6viNBBvmmo66PJc
+        BKYKaSv0jD9HVz/OEUBflE5FlLURMTLYxbDIC3wmFhoO
+X-Google-Smtp-Source: AKy350YG04IFahLy/yPW7/GlvQfU+eLI4xy7vL1wbFHQrNvsaooUKPTKlBSaZCClCU+KnGJeXcM8Jw==
+X-Received: by 2002:a17:902:c651:b0:1a0:7508:daf2 with SMTP id s17-20020a170902c65100b001a07508daf2mr308303pls.2.1680811077889;
+        Thu, 06 Apr 2023 12:57:57 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y1-20020a63de41000000b00513092bdca1sm1511472pgi.73.2023.04.06.12.57.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 12:57:57 -0700 (PDT)
+Message-ID: <642f2445.630a0220.86f13.32bc@mx.google.com>
+Date:   Thu, 06 Apr 2023 12:57:57 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0jocwROiayCpkp2CrmOFrBSShO5zPicWZQzaM+rj_25zg@mail.gmail.com>
- <221ff60648e0e76920cb5054e9cfb98ec77612b1.camel@linux.intel.com>
- <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com> <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
-In-Reply-To: <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Apr 2023 20:56:04 +0200
-Message-ID: <CAJZ5v0j2KG9+ozSkHZ9uiBca9c0tG8Nz_QH7w=DkwkChmJbp0w@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.3-rc5-82-g88579d8989f1
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc5-82-g88579d8989f1)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 7:55 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2023-04-04 at 18:46 +0200, Rafael J. Wysocki wrote:
-> > On Tue, Apr 4, 2023 at 6:39 PM srinivas pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > On Mon, 2023-04-03 at 20:37 +0200, Rafael J. Wysocki wrote:
-> > > > On Fri, Mar 31, 2023 at 6:53 PM Srinivas Pandruvada
-> > > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > > >
-> > > > > Add support for DLVR (Digital Linear Voltage Regulator)
-> > > > > attributes,
-> > > > > which can be used to control RFIM.
-> > > > > Here instead of "fivr" another directory "dlvr" is created with
-> > > > > DLVR
-> > > > > attributes:
-> > > > >
-> > > > > /sys/bus/pci/devices/0000:00:04.0/dlvr
-> > > > > ├── dlvr_freq_mhz
-> > > > > ├── dlvr_freq_select
-> > > > > ├── dlvr_hardware_rev
-> > > > > ├── dlvr_pll_busy
-> > > > > ├── dlvr_rfim_enable
-> > > > > └── dlvr_spread_spectrum_pct
-> > > > >
-> > > > > Attributes
-> > > > > dlvr_freq_mhz (RO):
-> > > > > Current DLVR PLL frequency in MHz.
-> > > > >
-> > > > > dlvr_freq_select (RW):
-> > > > > Sets DLVR PLL clock frequency.
-> > > > >
-> > > > > dlvr_hardware_rev (RO):
-> > > > > DLVR hardware revision.
-> > > > >
-> > > > > dlvr_pll_busy (RO):
-> > > > > PLL can't accept frequency change when set.
-> > > > >
-> > > > > dlvr_rfim_enable (RW):
-> > > > > 0: Disable RF frequency hopping, 1: Enable RF frequency
-> > > > > hopping.
-> > > > >
-> > > > > dlvr_spread_spectrum_pct (RW)
-> > > > > A write to this register updates the DLVR spread spectrum
-> > > > > percent
-> > > > > value.
-> > > >
-> > > > How is this attribute going to be used by user space in practice?
-> > >
-> > > Spread spectrum percent helps to reduce the DLVR clock noise to
-> > > meet
-> > > regulatory compliance. This spreading % increases bandwidth of
-> > > signal
-> > > transmission and hence reduces the effects of interference, noise,
-> > > and
-> > > signal fading.
-> >
-> > The above information should be added to the documentation I think.
-> >
-> > Still, I would like to know when user space is going to write to it
-> > and how it is going to find out what value to write.
-> As specified in the
-> https://docs.kernel.org/driver-api/thermal/intel_dptf.html
-> This is all related to reduce interference with WiFi radio frequencies.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc5-82-g88=
+579d8989f1)
 
-So the first two paragraphs in the "DPTF Processor thermal RFIM
-interface" section need to be updated to mention/cover DLVR.  Then, it
-will all be clear (at least AFAIAC).
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc5-82-g88579d8989f1/
 
-> The algorithm should be read current dlvr_freq_mhz,
-> dlvr_spread_spectrum_pct, current WiFi frequency (channel has a fix
-> freq), find the error in WiFi frame error rates (From WiFi module), and
-> do small adjustment +- to dlvr_freq. While changing the dlvr
-> frequencies you may induce more interference so you spread the signal
-> to reduce S/N ratio using this percent knob.
->
-> >
-> > > > Also should it be split like the frequency one (for consistency)?
-> > >
-> > > This is a RW field and is applied immediately unlike frequency,
-> > > where
-> > > it is two step process. First you specify and enable and then see
-> > > the
-> > > effect. So they are two fields.
-> >
-> > I was talking about dlvr_freq_mhz (RO) and dlvr_freq_select (RW).
-> > I'm
-> > not sure how the above is related to them TBH.
-> The frequency is the base signal to which interference must be reduced.
-> A good explanation for this technique
-> https://www.eetimes.com/tutorial-on-spread-spectrum-technology/
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc5-82-g88579d8989f1
+Git Commit: 88579d8989f143a528ada7f733b72091ccd3e2a6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Yes, I know what "spread spectrum" means.
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
