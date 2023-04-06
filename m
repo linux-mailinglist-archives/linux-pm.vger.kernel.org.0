@@ -2,267 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961E66D9479
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 12:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB8D6D9492
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 12:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjDFKya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 06:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S237348AbjDFK7u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 06:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjDFKy3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 06:54:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10B555A3
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 03:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680778421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pi28H7Ys3ragZ0WvGPlL8+NvRPjRFBU0lR+sJE70dXU=;
-        b=VF7Fi54cVws/vAkLj1UDmYvSdzF1ub90SDK7/3RVN0uoW4q1u3B6MFvTejIc+wInYP+ld1
-        FJ84bqqgpx7ZxYD5E+etYx8yBx2DvQW6QYQFf4ssXABLzZgsRbk+U2xlvS1HguPZFU6bFG
-        rQ86c3XTj+rKvmakTCkOLjZ0B9FjGOc=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-132-VrarZ6cOPi-jGxNY0oNHsg-1; Thu, 06 Apr 2023 06:53:39 -0400
-X-MC-Unique: VrarZ6cOPi-jGxNY0oNHsg-1
-Received: by mail-ed1-f70.google.com with SMTP id m17-20020a509991000000b0050463defdabso802126edb.6
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 03:53:39 -0700 (PDT)
+        with ESMTP id S229827AbjDFK7t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 06:59:49 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825FC7A8D
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 03:59:47 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54184571389so732080577b3.4
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 03:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680778786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nD1WTAK58/vqm28JkhVU6GZOl4ufBXsw089tkC+xpWw=;
+        b=rstXWKv7UVHpBvrj+D64aEpmhqkUePscquDSERUiqCo/2kvTPcISLn9/T2z9bf71N5
+         y0F67VeMCuWYtTzRt5GraOjnIm0DMkNgtxlH3xUKfYpi+g9eqKFeWWifs/ffvnsshV8M
+         zfXSNfMUBkYgvZx5x8XwfQELCVomMs8nyj8GHtdNZPBpsBLi068gpr7siuqqTOgoYdIM
+         dRmcs9prAopv9R3upqAW3YKcWonOSqYQKnyvCcP3BQuCoUmQq7vqqSgiaXBXdZgbVh/9
+         8pnZ/+3XBphz+u92hF1zMFIvv1FTUubcEn4lCz1GlGMus7rbkeBCuajJ/JNYDZzTsGUV
+         edxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680778418; x=1683370418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pi28H7Ys3ragZ0WvGPlL8+NvRPjRFBU0lR+sJE70dXU=;
-        b=S+JcQ5hGQn51uHravSkyP3P7hUTEwFS9U5qPBuAWE7MDaX5bthjZdu1H35057ATKtq
-         348WAB7qdxYRBUNYWJuDz0m8dh8Qc6yIbNtxQoTKotY8oKSfnWDFpibpnMXlWM84w1oH
-         vrMHam194mRPDMPrED3R5bVNzq08Hqak8VryAcx5T43uABckDiz4WPTNWPAyHuX1Xxkt
-         RxesVTdbRp8jkgc27yItic+/ob+73J6KQMykpbwz4echaiDa6Vpon0PMFErd+I2Vn9N0
-         E7CxB7swR25I7lqlj+lo6flFVGTjMY56fz2gAYzzed8OJVUCLpFEN6tA2Z1yq8xP3MJI
-         2UWA==
-X-Gm-Message-State: AAQBX9clmYBPUQsQeGERxF3/mapo+qOM5WJq30zz9jRHacDaOkRZcuXZ
-        IoufcvqfNoiOw67QpcLGfLpTcbRL/uGFKHiqkkF85O+M/dV937hmAdkP76hM0ErCSir+l2zpXpu
-        Mz6BwP0J8Dk9o9FOLiJw=
-X-Received: by 2002:a17:906:4d8c:b0:8b1:88aa:46da with SMTP id s12-20020a1709064d8c00b008b188aa46damr6227552eju.48.1680778418655;
-        Thu, 06 Apr 2023 03:53:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZZfiP5eeuklEaQrdVVrA6BqszwkvZHtgP4NZZiG+OQJj261ImPta+swxAFCoNIv5pmoPKVJQ==
-X-Received: by 2002:a17:906:4d8c:b0:8b1:88aa:46da with SMTP id s12-20020a1709064d8c00b008b188aa46damr6227525eju.48.1680778418309;
-        Thu, 06 Apr 2023 03:53:38 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id gs22-20020a170906f19600b00947d49ec819sm660247ejb.22.2023.04.06.03.53.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 03:53:37 -0700 (PDT)
-Message-ID: <c5455226-1d51-1d3d-0b67-78a0473a9e8c@redhat.com>
-Date:   Thu, 6 Apr 2023 12:53:37 +0200
+        d=1e100.net; s=20210112; t=1680778786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nD1WTAK58/vqm28JkhVU6GZOl4ufBXsw089tkC+xpWw=;
+        b=UyzM0CMwklF2athf3bjMTTfBmXz9dmwZ9X/DoQnu0Fw12W7zJzyZsGvJeXyCxqRfA6
+         lR80gnivdkHm2LrEjZoGeNKJV6O++NX5YY6V1IxfMrbORx0VvJ6od9zxCv6pbRRugaum
+         6XnxV9SaPbcDP6gehdyXsoiGJ4X5kCGcoBRrKMr/rEz7MFtgWb5Vc1ZlYriFNxuq8avC
+         lEObkbePQifv71WsismWWkAH/wpT/knDFXlpcJYSYPT8nNiQBaR9Y9ifXwZM4HitfE1J
+         8imCR29n2dIA/qQffC53jyb5DTaaLlZTgpCSmgDWk2xx8FLOuQWeP0QBlgQaHYJis2OI
+         39ZQ==
+X-Gm-Message-State: AAQBX9eZjZWYzkJ/OOD8R0uYx6f8VhgsmJ/JbK//iOyU7HB5Q53VamyD
+        k4+kocaJyTst/fxhQDmef3oyGEDSI4ZdQ1Ndp9lBAQ==
+X-Google-Smtp-Source: AKy350ZACGkl1itmcqbB+J8+S3w/c5Fd4Xstg5YxzxM0WeHeUtq63AtbTh7cY2Mf2KPnXQ8bjOeG3IRZrGTmICYhEDs=
+X-Received: by 2002:a81:c509:0:b0:549:143f:3d3 with SMTP id
+ k9-20020a81c509000000b00549143f03d3mr5573053ywi.0.1680778786661; Thu, 06 Apr
+ 2023 03:59:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFCv3 1/1] platform/x86: Add virtual PMC driver used for S2Idle
-Content-Language: en-US, nl
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, markgross@kernel.org, dtor@google.com,
-        mario.limonciello@amd.com, linux-pm@vger.kernel.org,
-        x86@kernel.org, platform-driver-x86@vger.kernel.org,
-        rafael@kernel.org
-References: <20230213100921.268770-1-jaz@semihalf.com>
- <20230213100921.268770-2-jaz@semihalf.com>
- <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230327193829.3756640-1-abel.vesa@linaro.org>
+ <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
+ <ZCVyBuKMvDV0gQPW@linaro.org> <CAGETcx-mxzzZ_FU6Agju9gMhFOEDhY6Rj78BnvAVJjNtZhif=w@mail.gmail.com>
+ <ZCZolyDL/awnt73K@linaro.org> <CAPDyKFprQwBfya-TpaVJfn82LgM9N_iE8npO9r-HzAyJXpb-hQ@mail.gmail.com>
+ <ZC6QLZOldOLNaCSg@linaro.org>
+In-Reply-To: <ZC6QLZOldOLNaCSg@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 6 Apr 2023 12:59:10 +0200
+Message-ID: <CAPDyKFo+_qxjMaQyT9=zDOuTYjF35G2q=DfS+AhHr+PdJZJz6g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Allow genpd providers to power off domains on sync state
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Grzegorz,
+On Thu, 6 Apr 2023 at 11:26, Abel Vesa <abel.vesa@linaro.org> wrote:
+>
+> On 23-04-05 16:11:18, Ulf Hansson wrote:
+> > Abel, Saravana,
+> >
+> > On Fri, 31 Mar 2023 at 06:59, Abel Vesa <abel.vesa@linaro.org> wrote:
+> > >
+> > > On 23-03-30 12:50:44, Saravana Kannan wrote:
+> > > > On Thu, Mar 30, 2023 at 4:27=E2=80=AFAM Abel Vesa <abel.vesa@linaro=
+.org> wrote:
+> > > > >
+> > > > > On 23-03-27 17:17:28, Saravana Kannan wrote:
+> > > > > > On Mon, Mar 27, 2023 at 12:38=E2=80=AFPM Abel Vesa <abel.vesa@l=
+inaro.org> wrote:
+> > > > > > >
+> > > > > > > There have been already a couple of tries to make the genpd "=
+disable
+> > > > > > > unused" late initcall skip the powering off of domains that m=
+ight be
+> > > > > > > needed until later on (i.e. until some consumer probes). The =
+conclusion
+> > > > > > > was that the provider could return -EBUSY from the power_off =
+callback
+> > > > > > > until the provider's sync state has been reached. This patch =
+series tries
+> > > > > > > to provide a proof-of-concept that is working on Qualcomm pla=
+tforms.
+> > > > > >
+> > > > > > I'm giving my thoughts in the cover letter instead of spreading=
+ it
+> > > > > > around all the patches so that there's context between the comm=
+ents.
+> > > > > >
+> > > > > > 1) Why can't all the logic in this patch series be implemented =
+at the
+> > > > > > framework level? And then allow the drivers to opt into this be=
+havior
+> > > > > > by setting the sync_state() callback.
+> > > > > >
+> > > > > > That way, you can land it only for QC drivers by setting up
+> > > > > > sync_state() callback only for QC drivers, but actually have th=
+e same
+> > > > > > code function correctly for non-QC drivers too. And then once w=
+e have
+> > > > > > this functionality working properly for QC drivers for one kern=
+el
+> > > > > > version (or two), we'll just have the framework set the device'=
+s
+> > > > > > driver's sync_state() if it doesn't have one already.
+> > > > >
+> > > > > I think Ulf has already NACK'ed that approach here:
+> > > > > [1] https://lore.kernel.org/lkml/CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y=
+1Sir-G+GoxkCvpN=3DiiA@mail.gmail.com/
+> > > >
+> > > > I would have NACK'ed that too because that's an incomplete fix. As =
+I
+> > > > said further below, the fix needs to be at the aggregation level wh=
+ere
+> > > > you aggregate all the current consumer requests. In there, you need=
+ to
+> > > > add in the "state at boot" input that gets cleared out after a
+> > > > sync_state() call is received for that power domain.
+> > > >
+> > >
+> > > So, just to make sure I understand your point. You would rather have =
+the
+> > > genpd_power_off check if 'state at boot' is 'on' and return busy and
+> > > then clear then, via a generic genpd sync state you would mark 'state=
+ at
+> > > boot' as 'off' and queue up a power off request for each PD from ther=
+e.
+> > > And as for 'state at boot' it would check the enable bit through
+> > > provider.
+> > >
+> > > Am I right so far?
+> >
+> > I am not sure I completely follow what you are suggesting here.
+>
+> Please have a look at this:
+> https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/commit=
+/?h=3Dqcom/genpd/ignore_unused_until_sync_state&id=3D4f9e6140dfe77884012383=
+f8ba2140cadb62ca4a
+>
+> Keep in mind that is WIP for now. Once I have something, I'll post it on
+> mailing list. Right now, there is a missing piece mentioned in that
+> commit message.
 
-On 3/29/23 14:33, Grzegorz Jaszczyk wrote:
-> Hi Hans,
-> 
-> Do you think that this RFC is in good enough state to start the ACPI
-> ID registration process so after it will be completed we could land
-> this solution? Or maybe we could land it (of course if there are no
-> other remarks) even before and adjust if needed?
+I had a quick look and it seems rather promising, but I will have a
+closer look when you post it.
 
-I see from the links in the cover-letter that most of
-the previous discussion has happened on the linux-pm list
-and I believe that the linux-pm folks are in a better place
-to answer this question then I am.
+>
+> >
+> > Although, let me point out that there is no requirement from the genpd
+> > API point of view, that the provider needs to be a driver. This means
+> > that the sync_state callback may not even be applicable for all genpd
+> > providers.
+>
+> Yes, I'm considering that case too.
 
-I have no objections against the suggested approach,
-but I don't really feel that it is my call to make if
-we should move forward with this.
+Good.
 
-Regards,
+>
+> >
+> > In other words, it looks to me that we may need some new genpd helper
+> > functions, no matter what. More importantly, it looks like we need an
+> > opt-in behaviour, unless we can figure out a common way for genpd to
+> > understand whether the sync_state thing is going to be applicable or
+> > not. Maybe Saravana has some ideas around this?
+> >
+> > Note that, I don't object to extending genpd to be more clever and to
+> > share common code, of course. We could, for example, make
+> > genpd_power_off() to bail out earlier, rather than calling the
+> > ->power_off() callback and waiting for it to return -EBUSY. Both of
+> > you have pointed this out to me, in some of the earlier
+> > replies/discussions too.
+>
+> The above link basically does this. I hope this is what Saravana has in
+> mind as well.
 
-Hans
+Okay, let's see what Saravana thinks.
 
+Maybe it's easier to post an RFC, based upon the above and continue
+the discussion around that?
 
-
-> pon., 13 lut 2023 o 11:11 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
->>
->> Virtual PMC driver is meant for the guest VMs for the S2Idle
->> notification. Its purpose is to register S2Idle dev ops check handler,
->> which will evaluate ACPI _DSM just before the guest enters S2Idle power
->> state.
->>
->> This allows to trap on MMIO access done as a consequence of _DSM
->> evaluation and therefore notify the VMM about the guest entering S2Idle
->> state.
->>
->> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
->> ---
->> Changelog v1..v2:
->> - Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
->>
->> Changelog v2..v3:
->> - Add MODULE_LICENSE
->> - Remove "amd" prefixes
->> - Be more verbose in VIRT_PMC config description and make it
->>   HYPERVISOR_GUEST dependent
->> - Add extra check ensuring that DSM method supports ACPI_VIRT_PMC_NOTIFY function
->> ---
->>  drivers/platform/x86/Kconfig    |  7 +++
->>  drivers/platform/x86/Makefile   |  3 ++
->>  drivers/platform/x86/virt_pmc.c | 83 +++++++++++++++++++++++++++++++++
->>  3 files changed, 93 insertions(+)
->>  create mode 100644 drivers/platform/x86/virt_pmc.c
->>
->> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
->> index 5692385e2d26..837ce201b68b 100644
->> --- a/drivers/platform/x86/Kconfig
->> +++ b/drivers/platform/x86/Kconfig
->> @@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
->>           buttons below the display. This module adds an input device
->>           that delivers key events when these buttons are pressed.
->>
->> +config VIRT_PMC
->> +       tristate "Virtual Power Management Controller"
->> +       depends on ACPI && SUSPEND && HYPERVISOR_GUEST
->> +       help
->> +         The Virtual PMC driver is meant for the guest VMs and its main
->> +         purpose is to notify about guest entering s2idle state.
->> +
->>  endif # X86_PLATFORM_DEVICES
->>
->>  config P2SB
->> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
->> index 1d3d1b02541b..c4d3056cf4ea 100644
->> --- a/drivers/platform/x86/Makefile
->> +++ b/drivers/platform/x86/Makefile
->> @@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)         += intel_scu_wdt.o
->>  obj-$(CONFIG_INTEL_SCU_IPC_UTIL)       += intel_scu_ipcutil.o
->>  obj-$(CONFIG_X86_INTEL_LPSS)           += pmc_atom.o
->>
->> +# Virtual PMC
->> +obj-$(CONFIG_VIRT_PMC)                 += virt_pmc.o
->> +
->>  # Siemens Simatic Industrial PCs
->>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)      += simatic-ipc.o
->>
->> diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_pmc.c
->> new file mode 100644
->> index 000000000000..a5966bb9048f
->> --- /dev/null
->> +++ b/drivers/platform/x86/virt_pmc.c
->> @@ -0,0 +1,83 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Virtual Power Management Controller Driver
->> + *
->> + * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
->> + */
->> +
->> +#include <linux/acpi.h>
->> +#include <linux/platform_device.h>
->> +
->> +#define ACPI_VIRT_PMC_DSM_UUID "9ea49ba3-434a-49a6-be30-37cc55c4d397"
->> +#define ACPI_VIRT_PMC_NOTIFY 1
->> +
->> +static acpi_handle virt_pmc_handle;
->> +
->> +static void virt_pmc_s2idle_notify(void)
->> +{
->> +       union acpi_object *out_obj;
->> +       guid_t dsm_guid;
->> +
->> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
->> +
->> +       out_obj = acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
->> +                                       0, ACPI_VIRT_PMC_NOTIFY, NULL);
->> +
->> +       acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %s\n",
->> +                         ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : "failed");
->> +
->> +       ACPI_FREE(out_obj);
->> +}
->> +
->> +static struct acpi_s2idle_dev_ops pmc_s2idle_dev_ops = {
->> +       .check = virt_pmc_s2idle_notify,
->> +};
->> +
->> +static int virt_pmc_probe(struct platform_device *pdev)
->> +{
->> +       int err = 0;
->> +       guid_t dsm_guid;
->> +
->> +       virt_pmc_handle = ACPI_HANDLE(&pdev->dev);
->> +
->> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
->> +
->> +       if (!acpi_check_dsm(virt_pmc_handle, &dsm_guid, 0,
->> +                           1 << ACPI_VIRT_PMC_NOTIFY)) {
->> +               dev_err(&pdev->dev, "DSM method doesn't support ACPI_VIRT_PMC_NOTIFY\n");
->> +               return -ENODEV;
->> +       }
->> +
->> +       err = acpi_register_lps0_dev(&pmc_s2idle_dev_ops);
->> +       if (err)
->> +               dev_err(&pdev->dev, "failed to register LPS0 sleep handler\n");
->> +
->> +       return err;
->> +}
->> +
->> +static int virt_pmc_remove(struct platform_device *pdev)
->> +{
->> +       acpi_unregister_lps0_dev(&pmc_s2idle_dev_ops);
->> +
->> +       return 0;
->> +}
->> +
->> +static const struct acpi_device_id virt_pmc_acpi_ids[] = {
->> +       {"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
->> +       { }
->> +};
->> +MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
->> +
->> +static struct platform_driver virt_pmc_driver = {
->> +       .driver = {
->> +               .name = "virtual_pmc",
->> +               .acpi_match_table = ACPI_PTR(virt_pmc_acpi_ids),
->> +       },
->> +       .probe = virt_pmc_probe,
->> +       .remove = virt_pmc_remove,
->> +};
->> +
->> +module_platform_driver(virt_pmc_driver);
->> +
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("Virtual PMC Driver");
->> --
->> 2.39.1.581.gbfd45094c4-goog
->>
-> 
-
+Kind regards
+Uffe
