@@ -2,58 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546DF6DA04E
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 20:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1396DA066
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 20:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjDFSs4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Apr 2023 14:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S233368AbjDFS4W convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Apr 2023 14:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240521AbjDFSsY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 14:48:24 -0400
+        with ESMTP id S239786AbjDFS4T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 14:56:19 -0400
 Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CFCBDD8;
-        Thu,  6 Apr 2023 11:47:55 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id sg7so3670676ejc.9;
-        Thu, 06 Apr 2023 11:47:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2559039;
+        Thu,  6 Apr 2023 11:56:17 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id g18so3723274ejx.7;
+        Thu, 06 Apr 2023 11:56:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680806858;
+        d=1e100.net; s=20210112; t=1680807376;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=X4jRBHVfxgd+JT9UVreLLErHTyZCuz18QSEV4mFOIkQ=;
-        b=InXbHioYHWlvl/G3VAAqJegJELLT5rQ6pkkt7J/7nVl4yKxe9f3vOG8tOMYBah5B6w
-         xbix92NfikTfyLTXgT2qftp5hNmsNNXN/VnZrvKx0VFExYxjgeTE2D7lg3Mn3hVR/XbY
-         /cb1I0IsQjz9r0s4+rni2OslJEP5bl/Q00f4XzKccTOxq7GHVDISzQEvyHQ4mom1uLTZ
-         KPFLrkMD0sTBPx+Uhap6kYKQLPZts14DTK6SOLWzectKsRPXpg+9EtIE2/EjpGd+W8EN
-         84vQhBmPntPUFzTBlMh0HJB4Iw6iAQ6Jgxizkgc7w3ofP6kThjCxq3uIKBleseziWRRS
-         sYsQ==
-X-Gm-Message-State: AAQBX9e2sIt+2Ersg4ePXP9y+C22Di969maFSMqxLGw3gM5TLG8vzx9w
-        V8C8IEi6GyEVzpLm24KKR5R0Se5wgKRisiM9l/g=
-X-Google-Smtp-Source: AKy350YPsdcxvCg4deshFZnM74wm0klT6PPQimXSIdAeXq/d+BizHedGmZ+YEm9sTp5GnxySPCZun6L5K/fHSriW+/o=
-X-Received: by 2002:a17:906:73d8:b0:939:a51a:dc30 with SMTP id
- n24-20020a17090673d800b00939a51adc30mr5153717ejl.2.1680806857947; Thu, 06 Apr
- 2023 11:47:37 -0700 (PDT)
+        bh=GEDpzpwkdqfhFP/l/6sXm+y2yJSiLZZYXAjgzwTJOBs=;
+        b=GDlLdDlSQbNiLnFVm4JxjQMX9RMjDUUhgGrHHonW9lRrB0ofKc7mIkhPnP/qY4UNJJ
+         cy8PW3k/x810yHsL/n+7mtO8sXKVHNQVGx+lwS5PoPMsaDLjMf3TwQPs4hnKae3SDd2f
+         4WRpdY1vJSgD/YWSM6wZSboJyUSzjlaOEnNuR2HO5FeirSDOVf8lFG1mug+F11GfVkMx
+         Vr46pibwSGRXn6JQQl8q6//FoKpNc3/0gFQJfalcfhwPUiJ4VD7WFQmDdp7Vas8Nt6Nt
+         F6y/Ux7cDPchYWO+/IlxMYnqY2UJkYua2qpvO5dj7bP3HoB5zcrUwEXfAiit9nA7OU6R
+         vPWA==
+X-Gm-Message-State: AAQBX9f0g9LgT4npSda3srYPsT3WhGhL/Rnsgadonf3BBI3kb3Yq7BVw
+        XVDmpyImLitmqAuxaEuLCBGfboDvktNWwYGsE7qiwd3ScSM=
+X-Google-Smtp-Source: AKy350ZPtxgdFNbkE7L7jiTI8uCvV0sp0NYQC5OkT2/2pLMSELS/yH3WjhuSBlqbV/D5LJBazrjoLKwBj6/6GSTwHa4=
+X-Received: by 2002:a17:907:96a5:b0:946:a095:b314 with SMTP id
+ hd37-20020a17090796a500b00946a095b314mr3678555ejc.2.1680807375859; Thu, 06
+ Apr 2023 11:56:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
- <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org> <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
- <CAJZ5v0iNbA0rt3QyaFA7ved19yK8-nabyJi7yCfbnVKQaMPCmA@mail.gmail.com>
- <c230ab3a-9cc3-e989-1e49-7d38be471a5c@linaro.org> <CAJZ5v0i95D_duiEnBiTgCSGTJ9_q7VYmb9y8O6yuPQ7Yp=BD3Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i95D_duiEnBiTgCSGTJ9_q7VYmb9y8O6yuPQ7Yp=BD3Q@mail.gmail.com>
+References: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0jocwROiayCpkp2CrmOFrBSShO5zPicWZQzaM+rj_25zg@mail.gmail.com>
+ <221ff60648e0e76920cb5054e9cfb98ec77612b1.camel@linux.intel.com>
+ <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com> <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
+In-Reply-To: <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Apr 2023 20:47:26 +0200
-Message-ID: <CAJZ5v0jhK431LMObxQ2seNGGQEPd2tQHhRmbeWG1b=yzSO6gKA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.4-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yang Li <yang.lee@linux.alibaba.com>
+Date:   Thu, 6 Apr 2023 20:56:04 +0200
+Message-ID: <CAJZ5v0j2KG9+ozSkHZ9uiBca9c0tG8Nz_QH7w=DkwkChmJbp0w@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -66,45 +60,97 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 9:06 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Tue, Apr 4, 2023 at 7:55 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On Wed, Apr 5, 2023 at 9:03 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 05/04/2023 20:48, Rafael J. Wysocki wrote:
-> > > On Wed, Apr 5, 2023 at 8:39 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >>
-> > >> On Wed, Apr 5, 2023 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> > >>>
-> > >>>
-> > >>> Hi Rafael,
-> > >>>
-> > >>> just a gentle reminder
-> > >>
-> > >> This is in my linux-next branch, I'll merge it into thermal tomorrow.
-> > >>
-> > >>>   because more material will come in the next days
-> > >>
-> > >> So why can't it wait?
+> On Tue, 2023-04-04 at 18:46 +0200, Rafael J. Wysocki wrote:
+> > On Tue, Apr 4, 2023 at 6:39 PM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
 > > >
-> > > BTW, I get a merge conflict in
-> > > drivers/thermal/mediatek/auxadc_thermal.c on an attempt to merge
-> > > thermal/linux-next into my linux-next branch.
+> > > On Mon, 2023-04-03 at 20:37 +0200, Rafael J. Wysocki wrote:
+> > > > On Fri, Mar 31, 2023 at 6:53 PM Srinivas Pandruvada
+> > > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > > >
+> > > > > Add support for DLVR (Digital Linear Voltage Regulator)
+> > > > > attributes,
+> > > > > which can be used to control RFIM.
+> > > > > Here instead of "fivr" another directory "dlvr" is created with
+> > > > > DLVR
+> > > > > attributes:
+> > > > >
+> > > > > /sys/bus/pci/devices/0000:00:04.0/dlvr
+> > > > > ├── dlvr_freq_mhz
+> > > > > ├── dlvr_freq_select
+> > > > > ├── dlvr_hardware_rev
+> > > > > ├── dlvr_pll_busy
+> > > > > ├── dlvr_rfim_enable
+> > > > > └── dlvr_spread_spectrum_pct
+> > > > >
+> > > > > Attributes
+> > > > > dlvr_freq_mhz (RO):
+> > > > > Current DLVR PLL frequency in MHz.
+> > > > >
+> > > > > dlvr_freq_select (RW):
+> > > > > Sets DLVR PLL clock frequency.
+> > > > >
+> > > > > dlvr_hardware_rev (RO):
+> > > > > DLVR hardware revision.
+> > > > >
+> > > > > dlvr_pll_busy (RO):
+> > > > > PLL can't accept frequency change when set.
+> > > > >
+> > > > > dlvr_rfim_enable (RW):
+> > > > > 0: Disable RF frequency hopping, 1: Enable RF frequency
+> > > > > hopping.
+> > > > >
+> > > > > dlvr_spread_spectrum_pct (RW)
+> > > > > A write to this register updates the DLVR spread spectrum
+> > > > > percent
+> > > > > value.
+> > > >
+> > > > How is this attribute going to be used by user space in practice?
+> > >
+> > > Spread spectrum percent helps to reduce the DLVR clock noise to
+> > > meet
+> > > regulatory compliance. This spreading % increases bandwidth of
+> > > signal
+> > > transmission and hence reduces the effects of interference, noise,
+> > > and
+> > > signal fading.
 > >
-> > Ah?
+> > The above information should be added to the documentation I think.
 > >
-> > I did an update and rebased thermal/linux-next on top of
-> > linux-pm/thermal without conflict
-> >
-> > Is it possible you have a change in a different branch conflicting with it ?
+> > Still, I would like to know when user space is going to write to it
+> > and how it is going to find out what value to write.
+> As specified in the
+> https://docs.kernel.org/driver-api/thermal/intel_dptf.html
+> This is all related to reduce interference with WiFi radio frequencies.
+
+So the first two paragraphs in the "DPTF Processor thermal RFIM
+interface" section need to be updated to mention/cover DLVR.  Then, it
+will all be clear (at least AFAIAC).
+
+> The algorithm should be read current dlvr_freq_mhz,
+> dlvr_spread_spectrum_pct, current WiFi frequency (channel has a fix
+> freq), find the error in WiFi frame error rates (From WiFi module), and
+> do small adjustment +- to dlvr_freq. While changing the dlvr
+> frequencies you may induce more interference so you spread the signal
+> to reduce S/N ratio using this percent knob.
 >
-> It is not impossible, but quite unlikely.
->
-> I'll see what's going on tomorrow.
+> >
+> > > > Also should it be split like the frequency one (for consistency)?
+> > >
+> > > This is a RW field and is applied immediately unlike frequency,
+> > > where
+> > > it is two step process. First you specify and enable and then see
+> > > the
+> > > effect. So they are two fields.
+> >
+> > I was talking about dlvr_freq_mhz (RO) and dlvr_freq_select (RW).
+> > I'm
+> > not sure how the above is related to them TBH.
+> The frequency is the base signal to which interference must be reduced.
+> A good explanation for this technique
+> https://www.eetimes.com/tutorial-on-spread-spectrum-technology/
 
-Confirmed, thermal/linux-next merges on top of the current
-linux-pm/thermal (just pushed out) without conflicts.
-
-There is a conflict between linux-pm/bleeding-edge and
-thermal/bleeding-edge, but it's easy to resolve.
-
-Thanks!
+Yes, I know what "spread spectrum" means.
