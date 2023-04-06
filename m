@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E46C6D9F07
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 19:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296DF6D9F28
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 19:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjDFRnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 13:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S240094AbjDFRrQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 13:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239796AbjDFRnb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 13:43:31 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B018F4C16
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 10:43:17 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id c9so41392731lfb.1
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 10:43:17 -0700 (PDT)
+        with ESMTP id S240076AbjDFRrP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 13:47:15 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4359D10C2
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 10:47:14 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id y20so51876313lfj.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 10:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680802996;
+        d=linaro.org; s=google; t=1680803232;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GE0mb6UJq7k1JZFQybibif1iBmfmBVtXpkVkOVYFr94=;
-        b=KCXSgxfHJOJRBE8Mo/Q6geTHsjWfIX/yBihfFCizuqYFEC5Io35i0x2DSGa/o3Eb6X
-         wF2wFRPGlkdcNtkjONVwvKSeM50zs1h7Ho7TxljKwA5+nK2bSwwUKcX6zb2MvcAJ98yV
-         RgYTaJ/9bgoXbYf5ARVL+30KxRG+yv+dDNBhhkPBac6+1JIPJfSeyXhU4M+FTUJ09aNF
-         g79QMFjsW3la5qkQZHXzAc33LhcLiYKhd4p5Mf9G7rYFkKDanDzbbsOdnxFUhE5Mxb1g
-         aZ/GwKEg6FVq8xaLZF9MbcxPSyIAMLT79k7hKfg4up75If6tOnk5/slDZErX0Hn7NA6l
-         +b3A==
+        bh=g2kphCzdyI8pFLM0XEcu5T4v/H3byCGSRbAeet3UKsQ=;
+        b=wDBvHwA7TFNy7JGBWgBcjPeqww2KMYjGxDTyJpfdjbn0yRz8IK9VkJ4QLV8oYvMcNS
+         UY+DsmQUN6SprUkBpgwlb6AdcA3jCYnvT2SComMrNGqJcJmgST5wbMpZ7ime7Gg/iRgI
+         k4OxRtFGDhZRrnuisEoVwNZg2ZjVStRNpIrGLL/yM/OtLIgBR61+udnwaw4a+2FAgTzB
+         tXRjfrpy6amxqkiAd6Oc5f6PF0/5qxN7Iino3SXatzD63d64Wvw2PP6ion3O9tFZIpVv
+         vKZbRKu0Wm/LP81xZ4aGpcVt45fXpnm/NYXLMUU+bO7cyER01JU1lNUzspPSJmtETmzr
+         3O5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680802996;
+        d=1e100.net; s=20210112; t=1680803232;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GE0mb6UJq7k1JZFQybibif1iBmfmBVtXpkVkOVYFr94=;
-        b=GhLgrhF7iE3F7KjlI3P8A1NkPnzg+SGsRuifzD02p6DncrUdmczLuySrc324vi2LwP
-         L4MoiEZpyzdsn5EbcrDWCEbSz0jO7xLJChKMAvBgoJg+XXzREN3wNhMR2a8Jwatcv2d3
-         yxAhkXAkAOZw0zKy77elqtFiK8cA1ybwYjcOd0PpJV9IyEoXOgjnrVR8XEDIEfi24Wgi
-         TVIorEyzcZghdRIlD43HarzD7zySqmelqcZK9nKkjUs9DRjk0pPr/3mW0XyKhM+yPK5o
-         RHmNII9oUaI/pLujPR+sZihknM/VUp2A3dOlD5ZhxB7FLHG4mPZZ7pwAdBCYkJkkk6K+
-         a/rQ==
-X-Gm-Message-State: AAQBX9dz1JCWGjKSPTkbg/X8HDssLmSjgqH5H0yZF2MmY3s0qCsuNaPB
-        z3PxAjA0tadmxRYw5R2Wnz5LdQ==
-X-Google-Smtp-Source: AKy350arRvD9FFEhmLTRYiEWRAZeo9TS7ivgO91feUtEA0w3g1Xqi6EzeQx9CMu1LhG/tsrDbZWjrg==
-X-Received: by 2002:ac2:4836:0:b0:4eb:3b97:417c with SMTP id 22-20020ac24836000000b004eb3b97417cmr10646lft.49.1680802995900;
-        Thu, 06 Apr 2023 10:43:15 -0700 (PDT)
+        bh=g2kphCzdyI8pFLM0XEcu5T4v/H3byCGSRbAeet3UKsQ=;
+        b=e/3Vy4IfZMO1ftCu2+UZsbNCaG4kPq6k1VK4slfAoOCTfk8a7XrXl7wf2T3plFFUYo
+         G252eUPQXxqHzi7Kg9InUfbZV+R81wQfTQxMfLAi+b5epvoerJK23naoAaEgreARx211
+         a4i8c7A/hXgfKN6v7inLDiAEXSCIv79aoX4Z/YdMVEAsx6hjF5Ja2ZEXxl7FDoZthkJf
+         P93Ug/EQSwv78vK4pHKNQgXaqTCQyP9LgR8bDE84IwVktPw/cpxhgD5RCibVHSHFFlpr
+         DMaQTAxCh84XRHAEP9DMFSNm4l2gV3SCAT4lA5Awp4wt1A4krxbGUOR5q0VOVLaY0Gk+
+         9qSQ==
+X-Gm-Message-State: AAQBX9eMSuyGN84j/x0l1B+0FLsn6ejWxbmzBvbX4Soy4uHCV8JzLHeG
+        GlTQQG4U7xBOlbV6rAPy4ZgL2w==
+X-Google-Smtp-Source: AKy350aFVxyM/ori3/dci0NsR1+uV42sLIEpq5lHD/+dBdDEqIdqvBj1dMatOXAgwjo45isQTkIfpg==
+X-Received: by 2002:a05:6512:991:b0:4dd:cb1d:b3cc with SMTP id w17-20020a056512099100b004ddcb1db3ccmr27761lft.11.1680803232479;
+        Thu, 06 Apr 2023 10:47:12 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id e7-20020ac25467000000b004dd0bbc89a1sm346070lfn.244.2023.04.06.10.43.15
+        by smtp.gmail.com with ESMTPSA id z17-20020a19f711000000b004ec634b0e26sm50398lfe.307.2023.04.06.10.47.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 10:43:15 -0700 (PDT)
-Message-ID: <2a94b361-2dff-e673-ba54-b4890d2bdaf8@linaro.org>
-Date:   Thu, 6 Apr 2023 20:43:14 +0300
+        Thu, 06 Apr 2023 10:47:12 -0700 (PDT)
+Message-ID: <ecf48eaf-b4b9-3749-894d-0f06d0b954e3@linaro.org>
+Date:   Thu, 6 Apr 2023 20:47:11 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] thermal/drivers/tsens: Describe sensor registers via
- a structure
+Subject: Re: [PATCH 3/3] thermal/drivers/tsens: Extract and shift-in optional
+ MSB
 Content-Language: en-GB
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, amitk@kernel.org,
         thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
@@ -64,9 +64,9 @@ To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, amitk@kernel.org,
 Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
- <20230406145850.357296-3-bryan.odonoghue@linaro.org>
+ <20230406145850.357296-4-bryan.odonoghue@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230406145850.357296-3-bryan.odonoghue@linaro.org>
+In-Reply-To: <20230406145850.357296-4-bryan.odonoghue@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -80,166 +80,94 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 06/04/2023 17:58, Bryan O'Donoghue wrote:
-> Define sensor identifiers and optional shifts in a single data-structure.
-> This facilitates extraction of calibration data from non-contiguous
-> addresses.
+> In msm8939 some of the sensor calibration data traverses byte boundaries.
+> Two examples of this are thermal sensor 2 point 1 and sensor 9 point 2.
+> 
+> For sensor 2 point 1 we can get away with a simple read traversing byte
+> boundaries as the calibration most significant bits are adjacent to the
+> least significant across the byte boundary.
+> 
+> In this case a read starting at the end of the first byte for nine bits
+> will deliver up the data we want.
+> 
+> In the case of sensor 9 point 2 however, the most significant bits are not
+> adjacent and so therefore we need to perform two reads and or the bits
+> together.
+> 
+> If reg.p1_shift or reg.p2_shift is set then automatically search for
+> pX_sY_msb in the dts applying pX_shift as a right shift or into the pX_sY
+> value.
+
+I think that having this in the common code is a bit of an overkill. No 
+other platform has this 'peculiarity' up to now. So, it might be better 
+to add 8939-specific calibration function that calls 
+tsens_read_calibration(), mixes in the s10_p2_msb and then calls 
+compute_intercept_slope().
+
 > 
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->   drivers/thermal/qcom/tsens-v0_1.c | 56 +++++++++++++++++++++++++++++--
->   drivers/thermal/qcom/tsens.c      |  5 +--
->   drivers/thermal/qcom/tsens.h      | 16 ++++++++-
->   3 files changed, 72 insertions(+), 5 deletions(-)
+>   drivers/thermal/qcom/tsens.c | 33 +++++++++++++++++++++++++++++++++
+>   1 file changed, 33 insertions(+)
 > 
-> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-> index e89c6f39a3aea..c20c002d98650 100644
-> --- a/drivers/thermal/qcom/tsens-v0_1.c
-> +++ b/drivers/thermal/qcom/tsens-v0_1.c
-> @@ -319,10 +319,31 @@ static const struct tsens_ops ops_8916 = {
->   	.get_temp	= get_temp_common,
->   };
->   
-> +struct tsens_reg_data reg_8916[] = {
-> +	{
-> +		.id = 0,
-> +	},
-> +	{
-> +		.id = 1,
-> +	},
-> +	{
-> +		.id = 2,
-> +	},
-> +	{
-> +		.id = 3,
-> +	},
-> +	{
-> +		.id = 4,
-> +	},
-> +	{
-> +		.id = 5,
-> +	},
-> +};
-> +
->   struct tsens_plat_data data_8916 = {
->   	.num_sensors	= 5,
->   	.ops		= &ops_8916,
-> -	.hw_ids		= (unsigned int []){0, 1, 2, 4, 5 },
-> +	.reg		= reg_8916,
->   
->   	.feat		= &tsens_v0_1_feat,
->   	.fields	= tsens_v0_1_regfields,
-> @@ -334,10 +355,41 @@ static const struct tsens_ops ops_8939 = {
->   	.get_temp	= get_temp_common,
->   };
->   
-> +struct tsens_reg_data reg_8939[] = {
-> +	{
-> +		.id = 0,
-> +	},
-> +	{
-> +		.id = 1,
-> +	},
-> +	{
-> +		.id = 2,
-> +	},
-> +	{
-> +		.id = 3,
-> +	},
-> +	{
-> +		.id = 5,
-> +	},
-> +	{
-> +		.id = 6,
-> +	},
-> +	{
-> +		.id = 7,
-> +	},
-> +	{
-> +		.id = 8,
-> +	},
-> +	{
-> +		.id = 9,
-
-Sensor 9 is contiguous. It's sensor with hwid=10, who requires two reads.
-
-> +		.p2_shift = 8,
-> +	},
-> +};
-> +
->   struct tsens_plat_data data_8939 = {
->   	.num_sensors	= 9,
->   	.ops		= &ops_8939,
-> -	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9, /* 10 */ },
-> +	.reg		= reg_8939,
->   
->   	.feat		= &tsens_v0_1_feat,
->   	.fields	= tsens_v0_1_regfields,
 > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 7165b0bfe8b9f..a260f563b4889 100644
+> index a260f563b4889..eff2c8671c343 100644
 > --- a/drivers/thermal/qcom/tsens.c
 > +++ b/drivers/thermal/qcom/tsens.c
-> @@ -1274,13 +1274,14 @@ static int tsens_probe(struct platform_device *pdev)
->   	priv->num_sensors = num_sensors;
->   	priv->ops = data->ops;
->   	for (i = 0;  i < priv->num_sensors; i++) {
-> -		if (data->hw_ids)
-> -			priv->sensor[i].hw_id = data->hw_ids[i];
-> +		if (data->reg)
-> +			priv->sensor[i].hw_id = data->reg[i].id;
->   		else
->   			priv->sensor[i].hw_id = i;
->   	}
->   	priv->feat = data->feat;
->   	priv->fields = data->fields;
-> +	priv->reg = data->reg;
+> @@ -74,6 +74,7 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+>   {
+>   	u32 mode;
+>   	u32 base1, base2;
+> +	u32 msb;
+>   	char name[] = "sXX_pY_backup"; /* s10_p1_backup */
+>   	int i, ret;
 >   
->   	platform_set_drvdata(pdev, priv);
+> @@ -122,6 +123,22 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
 >   
-> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> index dba9cd38f637c..31f67da03bce6 100644
-> --- a/drivers/thermal/qcom/tsens.h
-> +++ b/drivers/thermal/qcom/tsens.h
-> @@ -517,18 +517,31 @@ struct tsens_features {
->   	int trip_max_temp;
->   };
+>   		dev_dbg(priv->dev, "%s 0x%x\n", name, p1[i]);
 >   
-> +/**
-> + * struct tsens_reg_data - describes register data retrieved non-contiguously
-> + * @id: thermal sensor identifier
-> + * @p1_shift: When non-zero is the # of bits to right shift p1 MSB by
-> + * @p2_shift: When non-zero is the # of bits to right shift p2 MSB by
-> + */
-> +struct tsens_reg_data {
-> +	unsigned int id;
-> +	unsigned int p1_shift;
-> +	unsigned int p2_shift;
-> +};
+> +		if (priv->reg && priv->reg[i].p1_shift) {
+> +			ret = snprintf(name, sizeof(name), "s%d_p1_msb",
+> +				       priv->sensor[i].hw_id);
+> +			if (ret < 0)
+> +				return ret;
 > +
->   /**
->    * struct tsens_plat_data - tsens compile-time platform data
->    * @num_sensors: Number of sensors supported by platform
->    * @ops: operations the tsens instance supports
->    * @hw_ids: Subset of sensors ids supported by platform, if not the first n
-> + * @reg: Describe sensor id and calibration shifts
->    * @feat: features of the IP
->    * @fields: bitfield locations
->    */
->   struct tsens_plat_data {
->   	const u32		num_sensors;
->   	const struct tsens_ops	*ops;
-> -	unsigned int		*hw_ids;
-> +	struct tsens_reg_data	*reg;
->   	struct tsens_features	*feat;
->   	const struct reg_field		*fields;
->   };
-> @@ -575,6 +588,7 @@ struct tsens_priv {
->   	struct regmap_field		*rf[MAX_REGFIELDS];
->   	struct tsens_context		ctx;
->   	struct tsens_features		*feat;
-> +	struct tsens_reg_data		*reg;
->   	const struct reg_field		*fields;
->   	const struct tsens_ops		*ops;
+> +			ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &msb);
+> +			if (ret) {
+> +				dev_err(priv->dev, "Failed to read %s\n", name);
+> +				return ret;
+> +			}
+> +
+> +			dev_dbg(priv->dev, "%s 0x%x\n", name, msb);
+> +			p1[i] |= msb >> priv->reg[i].p1_shift;
+> +		}
+> +
+>   		ret = snprintf(name, sizeof(name), "s%d_p2%s", priv->sensor[i].hw_id,
+>   			       backup ? "_backup" : "");
+>   		if (ret < 0)
+> @@ -134,6 +151,22 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+>   		}
 >   
+>   		dev_dbg(priv->dev, "%s 0x%x\n", name, p2[i]);
+> +
+> +		if (priv->reg && priv->reg[i].p2_shift) {
+> +			ret = snprintf(name, sizeof(name), "s%d_p2_msb",
+> +				       priv->sensor[i].hw_id);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &msb);
+> +			if (ret) {
+> +				dev_err(priv->dev, "Failed to read %s\n", name);
+> +				return ret;
+> +			}
+> +
+> +			dev_dbg(priv->dev, "%s 0x%x\n", name, msb);
+> +			p2[i] |= msb >> priv->reg[i].p2_shift;
+> +		}
+>   	}
+>   
+>   	switch (mode) {
 
 -- 
 With best wishes
