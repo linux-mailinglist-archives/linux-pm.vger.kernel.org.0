@@ -2,71 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F355A6D9B6D
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 16:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DB96D9D74
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 18:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239192AbjDFO7D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 10:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S239060AbjDFQXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 12:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239209AbjDFO67 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 10:58:59 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E511BCB
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 07:58:58 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v1so39810712wrv.1
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 07:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680793136; x=1683385136;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RYyNPnzqae4khg3KV2Lt1ECRlr8f32FnQfafbs3QB5I=;
-        b=vtPP+7phDU/ux5+X1AMnqZmBs1GAc2PM6+xWc18/6ktYNlGaOycSjJMMyF1BBXC+nu
-         4QZDU9v9WinnH1FsOEkpH4dmI5ellAVQizYtvNkBWHZFWaYZaZboK1o65kSN/SeLRIaX
-         Mc1eGzGQBy9IOVt2PAdVYiujotTNItSEkduNACho30kG6upWUZ0lrSRT61tPUh/3f0n7
-         qxnxt4EZgiDFO/6sSBUmmG/CiRcw1mtKZGIDPbZ3k1i+ZEonu9CtMIGyfolTacyKP4O8
-         3/1dkQ0GqFz2waoLRBVnZiAL0B9aHM715lDxWSH6vZnD/GKwTBzx5eejjgRH/DV1TzpG
-         owRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680793136; x=1683385136;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RYyNPnzqae4khg3KV2Lt1ECRlr8f32FnQfafbs3QB5I=;
-        b=LWwS+kV5kkXDIjHDzRS/FA3NAU4Yg7QU0IOVZ0G1N3RMe3VXO2bNIss6QbRNONoLSt
-         KPdCekvhclN5w1e5cFp+8omKdeqEZuVnplTmohDd1TO3B/WHyaEDKMIn2oCYmEaO7B1w
-         0xhESYVyHX0Qvs1/t3wXlop5SWn21CnH1Ys8XXiMTMfSLME0LvCbpPIFsRjjsAe86d0F
-         Oc9OhU8u2ImwdSyeMf2iHw4uSdYInl+HwFX8HRWM6NgrsqgQG5w+KtnGhGUyWD3lC9Db
-         r2tIf0VEQzmIx6BQDyyyhGVevKi7btHsM7YQgZPaSYssLZeHFawUuaGH6BccuqMz/+Oa
-         UYwg==
-X-Gm-Message-State: AAQBX9eowj9SPjWWWvwIRsS2ZP6VeJa9FrM+T4VEFMjXTtjFS5+nz8RP
-        65L6Ui6VK+FiMo70rctgxJTJnw==
-X-Google-Smtp-Source: AKy350YVmezFAiNqfMgn8vCKeCz1co1VaJgEQqfzy5k/qQyVn240yKSvpXq066F1GHjVmN8wzocQ6A==
-X-Received: by 2002:adf:ce0a:0:b0:2c8:9cfe:9e29 with SMTP id p10-20020adfce0a000000b002c89cfe9e29mr6532039wrn.38.1680793136560;
-        Thu, 06 Apr 2023 07:58:56 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d10-20020a1c730a000000b003f0373d077csm1768160wmb.47.2023.04.06.07.58.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:58:56 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        with ESMTP id S229561AbjDFQXr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 12:23:47 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3112D4F;
+        Thu,  6 Apr 2023 09:23:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680798040; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=O1eesfxqteSKiIdr2GdIoTQmvbnxBEZzVbYH3n/Q2TR+HeUHpXtKT0xXSMTLmtn1Pk
+    GarPy6GAiYdRPnxUl5wr7kp9uGNfn6r5QxcKG+9R58bhVnPEHXtr4hQibJ6I5h27V3r5
+    6cwc6G+2KfbNV06tDQY06rzTeYATLLVFpiGhupU3/58lfcYS6pAXayqYzkiNo3t6dKhj
+    VbjYgdsjvJlPCinLVlERgM6GnCTG6zC5LaE53fSp+oNcuDAhfae+9TPLiT9zS+uELpk5
+    dxqcXr7Er5MqehNSC1ph9jr11qk7NzgdBHDnIuEqNWK0In3oEVgURfONSFkEF7j1hVo/
+    D14A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680798040;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Vw4gdqbJKdMok54e8g7DKDgQNtZkkehkhlVi7foHU+g=;
+    b=n5AX6FYxB1JPMablvoSoi7/9F/BPIJOOxTdR2Gx+g4caYY8V4OLbmG+vRGxW7IIefq
+    NB5h3a5fijWwjIpcM1OL7uN0UgYA2QwuFTIrxtpxxhTlkNSClyO1LTiO95YH8qRU6y02
+    +rFuYaYRd5c1h7jlFEbiPe4UGUsuHnag/MzqFyZ2YwGj1MjBWxPuLs8kQkqscctJD1W9
+    n5m1gk15M8rbWwKPJiKqnrPDhS6e4LhwOWNtPmB3zpqbys2FlpP/fPUenDHoEd06xRqN
+    9zGxQo5Xn0qZzd4QT+i/1j+meZUUkN9rm1rZeuF7w5EX5THJ6h53GqPb41YnZ63dXxAr
+    od8w==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680798040;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Vw4gdqbJKdMok54e8g7DKDgQNtZkkehkhlVi7foHU+g=;
+    b=myZG/n3NFrX4nzinQGYqeHFty+m08R2G/NQscAbO5NCbu/ZUIY2Z8XrS84YHee6oqN
+    BJ+3kWqqSExDKFPB2TT8sIxbDj5LnEWrsI0QhSxSDVrQ0ruATAqVAA8unl3rJMEVdmjW
+    AVWzGvtMQJQlbPnaVIldz/cEk6NRY36MIYfgazJfHvNLagYNFdGcRIqT5CPPro5w+soW
+    TncGA8XnB+kGJ3pDbzyNcG8EVK8hIaWWoXll/+2h/3XI3A0X1VtQamaQkQ23hdX8QG+w
+    qr8nKM5pi5yqQLSRDwGP6Nz32maFDhxu22uQRzuO41OOnvRHSLpV9/qj8xLEdKL1hCL5
+    9mpg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1680798040;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Vw4gdqbJKdMok54e8g7DKDgQNtZkkehkhlVi7foHU+g=;
+    b=bofcmuT28wdvr6bdJqminyaXU6o8KqKkU9MyaggOh6qaF00DKPiSMqHaXNiZlG5RWU
+    ve34xN05362IIbTzJ7AQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA+pvh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az36GKeD11
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 6 Apr 2023 18:20:40 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 18:20:34 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, rafael@kernel.org,
         daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        dmitry.baryshkov@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH 3/3] thermal/drivers/tsens: Extract and shift-in optional MSB
-Date:   Thu,  6 Apr 2023 15:58:50 +0100
-Message-Id: <20230406145850.357296-4-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
+        dmitry.baryshkov@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] drivers/thermal/qcom/tsens: Add ability to read and
+ shift-in non-contiguous calibration data
+Message-ID: <ZC7xSG7qVZ7vlOB7@gerhold.net>
 References: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,87 +88,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In msm8939 some of the sensor calibration data traverses byte boundaries.
-Two examples of this are thermal sensor 2 point 1 and sensor 9 point 2.
+On Thu, Apr 06, 2023 at 03:58:47PM +0100, Bryan O'Donoghue wrote:
+> On MSM8939 the last sensor has calibration data that cannot be extracted in
+> one big read.
+> 
+> Rather than have a lot of MSM8939 specific code this series makes a generic
+> modification to allow any other calibration data that is non-contiguous to
+> be extracted and recovered.
+> 
+> For example s9-p2 takes bits 1-5 from @4b and bit 13 from @4d. The bit from
+> bit13 then becomes the sixth bit in the calibration data.
+> 
+> tsens_s9_p2: s9-p2@4b {
+>     reg = <0x4b 0x1>;
+>     bits = <1 5>;
+> };
+> 
+> tsens_s9_p2_msb: s9-p2-msb@4d {
+>     reg = <0x4d 0x1>;
+>     bits = <13 1>;
+> };
 
-For sensor 2 point 1 we can get away with a simple read traversing byte
-boundaries as the calibration most significant bits are adjacent to the
-least significant across the byte boundary.
+As far as I can tell the sensor with the non-contiguous calibration data
+is the one with hwid=10, so do you mean s10-p2 instead of s9-p2 here?
 
-In this case a read starting at the end of the first byte for nine bits
-will deliver up the data we want.
+It's easy to mix up the numbering: Since hwid=4 is missing for MSM8939,
+the sensor 9 in the calibration code downstream (TSENS9_8939_POINT*)
+actually refers to hwid=10. hwid=9 is sensor 8 in the calibration code
+(TSENS8_8939_POINT*).
 
-In the case of sensor 9 point 2 however, the most significant bits are not
-adjacent and so therefore we need to perform two reads and or the bits
-together.
+Sensor hwid=10 was disabled for MSM8939 in the tsens driver because it
+seems unused, only exists on MSM8939 v3.0, and specifically to avoid
+having to handle this non-contiguous calibration data, see commit
+903238a33c11 ("thermal/drivers/tsens: limit num_sensors to 9 for msm8939"):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=903238a33c116edf5f64f7a3fd246e6169cccfa6
 
-If reg.p1_shift or reg.p2_shift is set then automatically search for
-pX_sY_msb in the dts applying pX_shift as a right shift or into the pX_sY
-value.
+> On msm8939 last (hwid=10) sensor was added in the hw revision 3.0.
+> Calibration data for it was placed outside of the main calibration  
+> data blob, so it is not accessible by the current blob-parsing code.
+>
+> Moreover data for the sensor's p2 is not contiguous in the fuses. This
+> makes it hard to use nvmem_cell API to parse calibration data in a
+> generic way.
+>
+> Since the sensor doesn't seem to be actually used by the existing
+> hardware, disable the sensor for now.
+>
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/thermal/qcom/tsens.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+So with sensor hwid=10 disabled, I think this patch series is actually
+not needed? :)
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index a260f563b4889..eff2c8671c343 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -74,6 +74,7 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
- {
- 	u32 mode;
- 	u32 base1, base2;
-+	u32 msb;
- 	char name[] = "sXX_pY_backup"; /* s10_p1_backup */
- 	int i, ret;
- 
-@@ -122,6 +123,22 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
- 
- 		dev_dbg(priv->dev, "%s 0x%x\n", name, p1[i]);
- 
-+		if (priv->reg && priv->reg[i].p1_shift) {
-+			ret = snprintf(name, sizeof(name), "s%d_p1_msb",
-+				       priv->sensor[i].hw_id);
-+			if (ret < 0)
-+				return ret;
-+
-+			ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &msb);
-+			if (ret) {
-+				dev_err(priv->dev, "Failed to read %s\n", name);
-+				return ret;
-+			}
-+
-+			dev_dbg(priv->dev, "%s 0x%x\n", name, msb);
-+			p1[i] |= msb >> priv->reg[i].p1_shift;
-+		}
-+
- 		ret = snprintf(name, sizeof(name), "s%d_p2%s", priv->sensor[i].hw_id,
- 			       backup ? "_backup" : "");
- 		if (ret < 0)
-@@ -134,6 +151,22 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
- 		}
- 
- 		dev_dbg(priv->dev, "%s 0x%x\n", name, p2[i]);
-+
-+		if (priv->reg && priv->reg[i].p2_shift) {
-+			ret = snprintf(name, sizeof(name), "s%d_p2_msb",
-+				       priv->sensor[i].hw_id);
-+			if (ret < 0)
-+				return ret;
-+
-+			ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &msb);
-+			if (ret) {
-+				dev_err(priv->dev, "Failed to read %s\n", name);
-+				return ret;
-+			}
-+
-+			dev_dbg(priv->dev, "%s 0x%x\n", name, msb);
-+			p2[i] |= msb >> priv->reg[i].p2_shift;
-+		}
- 	}
- 
- 	switch (mode) {
--- 
-2.39.2
-
+Thanks,
+Stephan
