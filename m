@@ -2,255 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888066D929E
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 11:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E4F6D9389
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Apr 2023 12:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbjDFJ0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 05:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S236410AbjDFKDE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Apr 2023 06:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbjDFJ0M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 05:26:12 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B856A47
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 02:26:09 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id ek18so147814116edb.6
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 02:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680773167; x=1683365167;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=puMz2ATJiXG9YrgWF8JgMsdrOIv8QlsIusgDqJEDrJA=;
-        b=O6rPtkSjq80CK4k/eo64pD/whuk5SVDaynqfg+tA7L5UNaHn/qHgR/eP1tRxNlIKyR
-         pRUgI1FZclp+oTpNodxu843L263RGfA/HCTmxncmvAL7ayYSCGwKQwTW47E00luMxflE
-         na9BTs+maql8CibxkXXB5sbVE7JtxhlpiTxeAk8ATNaUkUo8jx3gmlS/knROk7NBUzGB
-         qpvhplIBfRy6pLrtiqlxacM3YWer2kCnWU8TingwNNcV7+SS2QWxVCxn7DDZDYR1R/8S
-         RNqn8rjwuQfCq9zVQ8l7HFIm6BYDe23WFr3BHBa5biLaieom8UXmb12Db1AtYpf837Jq
-         z7gQ==
+        with ESMTP id S236476AbjDFKCj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 06:02:39 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7B87ED2;
+        Thu,  6 Apr 2023 03:02:15 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id cw23so26794ejb.12;
+        Thu, 06 Apr 2023 03:02:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680773167; x=1683365167;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=puMz2ATJiXG9YrgWF8JgMsdrOIv8QlsIusgDqJEDrJA=;
-        b=hxkCK8rxskCtoBl5C1Tw/xsX5uCdVHYyGw5JufGIQhK9xV/K7VEIsU63HC/3lcMW52
-         ewdYFfV6Ymp1K+LpAZXeyDK7DdixTSf4bI2ClQ5xo2kYhiJot2TLxQL2MeZpC2BI+f2B
-         K6D+MOY2J29uA/ZDM3EZOeumyG99lTHrMfsuti6RmhLc21PVJv9xfkdvCrqYaNFm15C+
-         0I/uN+JDWdLoRxB+9aI342lfFgWKsp3E8J0irslX0VhzmQ5dYoaviQ1yJYm25gk+vuH2
-         M2vJSPHcDugs9v8zfI5mScx5DF6MOvOQPrVChAiPx6SV8y1KOzJNd1oC1dvfvOVZPjZ9
-         CyBA==
-X-Gm-Message-State: AAQBX9dluTbTUC6Y/KXsX/6256Ul9EP5jIdC7OJhFB7yqeCPzH+qlFZY
-        ymW+zZBpvArxw/NbIkFOvaxmTA==
-X-Google-Smtp-Source: AKy350Z7osDqV+tGsqFumKfzrCUxBMuoAwbvUkpMeHy/RSpSPlaqGyT1vCOvmCNDMZ7ZX/x7iVYEBQ==
-X-Received: by 2002:a17:907:9723:b0:92f:8324:e3b7 with SMTP id jg35-20020a170907972300b0092f8324e3b7mr5178587ejc.37.1680773167364;
-        Thu, 06 Apr 2023 02:26:07 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id re9-20020a170906d8c900b0093dbb008281sm557039ejb.130.2023.04.06.02.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 02:26:06 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 12:26:05 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v3 0/4] Allow genpd providers to power off domains on
- sync state
-Message-ID: <ZC6QLZOldOLNaCSg@linaro.org>
-References: <20230327193829.3756640-1-abel.vesa@linaro.org>
- <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
- <ZCVyBuKMvDV0gQPW@linaro.org>
- <CAGETcx-mxzzZ_FU6Agju9gMhFOEDhY6Rj78BnvAVJjNtZhif=w@mail.gmail.com>
- <ZCZolyDL/awnt73K@linaro.org>
- <CAPDyKFprQwBfya-TpaVJfn82LgM9N_iE8npO9r-HzAyJXpb-hQ@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1680775334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/IeCwi9+3jSL1nb4jEHqH6GkeCus1uyB0RiSCcDwhPI=;
+        b=GpYFAZvt43qQh/7pYICkFAtADru3JiyKL7fuP6GJV0VuQh4y6JKBjgiUAiXDI24TM7
+         Ck6F6Mgje2kI10mVDLbnLd7P+ciUDglvpcfran19e7AFgpVZkMVOLQbWkRSHyOa0eSVb
+         IwU3WBv+4ZMTUWLEAm5Qeldkzg/9t7umuSsdcPgSMm7MIaDyH0Vw0xzOwi1KdR7vCtO4
+         atcsN42Znf8mlXB4xhDMg+/9uCew76oTdih8m+EagAzhlKxozw9dEgs5Cv5QSwWPp4LN
+         3OakdPSyUNHDgQvTbPhl1PfEbFZ1Y6nb9pW8sbxl+5ZBGRxelelFGre6Wp6IX/Bzy1mo
+         nf8w==
+X-Gm-Message-State: AAQBX9faGMrKo5HCcNcERYccA8Bph5FTOwsDTNyq90aE8P4hsCG3pKg+
+        k+TVRk4JyR9lLCJKltugDB3oZoFaJyinGfGM6g59ts6f
+X-Google-Smtp-Source: AKy350aevNmeeVnSdZHM6/cq3n2nSTXTAkl8tU6AAI8yhSRPn6cYfYENtrPMGZ3MdMHz51Aca8LLPVgkXTfsHfPWE7g=
+X-Received: by 2002:a17:907:8c17:b0:931:6921:bdbb with SMTP id
+ ta23-20020a1709078c1700b009316921bdbbmr2076614ejc.2.1680775333753; Thu, 06
+ Apr 2023 03:02:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPDyKFprQwBfya-TpaVJfn82LgM9N_iE8npO9r-HzAyJXpb-hQ@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230401165540.322665-1-yu.c.chen@intel.com> <CAJZ5v0j704JoCPTrDO1jTHwP1+8NVdLk7hym5036uFcfo7YHXQ@mail.gmail.com>
+ <ZC4zMv1SCiUMbcqs@chenyu5-mobl1>
+In-Reply-To: <ZC4zMv1SCiUMbcqs@chenyu5-mobl1>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 6 Apr 2023 12:02:01 +0200
+Message-ID: <CAJZ5v0j5PWsF6zCCVMRW59WevYLvWiBk82U4MpxqWdFnAcrqrQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Do not get block device exclusively in
+ test_resume mode
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yifan Li <yifan2.li@intel.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-04-05 16:11:18, Ulf Hansson wrote:
-> Abel, Saravana,
-> 
-> On Fri, 31 Mar 2023 at 06:59, Abel Vesa <abel.vesa@linaro.org> wrote:
-> >
-> > On 23-03-30 12:50:44, Saravana Kannan wrote:
-> > > On Thu, Mar 30, 2023 at 4:27 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> > > >
-> > > > On 23-03-27 17:17:28, Saravana Kannan wrote:
-> > > > > On Mon, Mar 27, 2023 at 12:38 PM Abel Vesa <abel.vesa@linaro.org> wrote:
-> > > > > >
-> > > > > > There have been already a couple of tries to make the genpd "disable
-> > > > > > unused" late initcall skip the powering off of domains that might be
-> > > > > > needed until later on (i.e. until some consumer probes). The conclusion
-> > > > > > was that the provider could return -EBUSY from the power_off callback
-> > > > > > until the provider's sync state has been reached. This patch series tries
-> > > > > > to provide a proof-of-concept that is working on Qualcomm platforms.
-> > > > >
-> > > > > I'm giving my thoughts in the cover letter instead of spreading it
-> > > > > around all the patches so that there's context between the comments.
-> > > > >
-> > > > > 1) Why can't all the logic in this patch series be implemented at the
-> > > > > framework level? And then allow the drivers to opt into this behavior
-> > > > > by setting the sync_state() callback.
-> > > > >
-> > > > > That way, you can land it only for QC drivers by setting up
-> > > > > sync_state() callback only for QC drivers, but actually have the same
-> > > > > code function correctly for non-QC drivers too. And then once we have
-> > > > > this functionality working properly for QC drivers for one kernel
-> > > > > version (or two), we'll just have the framework set the device's
-> > > > > driver's sync_state() if it doesn't have one already.
-> > > >
-> > > > I think Ulf has already NACK'ed that approach here:
-> > > > [1] https://lore.kernel.org/lkml/CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir-G+GoxkCvpN=iiA@mail.gmail.com/
+On Thu, Apr 6, 2023 at 4:49 AM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> Hi Rafael,
+> On 2023-04-05 at 20:37:32 +0200, Rafael J. Wysocki wrote:
+> > On Sat, Apr 1, 2023 at 10:59 AM Chen Yu <yu.c.chen@intel.com> wrote:
 > > >
-> > > I would have NACK'ed that too because that's an incomplete fix. As I
-> > > said further below, the fix needs to be at the aggregation level where
-> > > you aggregate all the current consumer requests. In there, you need to
-> > > add in the "state at boot" input that gets cleared out after a
-> > > sync_state() call is received for that power domain.
+> > > The system refused to do a test_resume because it found that the
+> > > swap device has already been taken by someone else. Specificly,
+> > > the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
+> > > do this check.
 > > >
+> > > Steps to reproduce:
+> > >  dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
+> > >        awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
+> > >  mkswap /swapfile
+> > >  swapon /swapfile
+> > >  swap-offset /swapfile
+> > >  echo 34816 > /sys/power/resume_offset
+> > >  echo test_resume > /sys/power/disk
+> > >  echo disk > /sys/power/state
+> > >
+> > >  PM: Using 3 thread(s) for compression
+> > >  PM: Compressing and saving image data (293150 pages)...
+> > >  PM: Image saving progress:   0%
+> > >  PM: Image saving progress:  10%
+> > >  ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+> > >  ata1.00: configured for UDMA/100
+> > >  ata2: SATA link down (SStatus 0 SControl 300)
+> > >  ata5: SATA link down (SStatus 0 SControl 300)
+> > >  ata6: SATA link down (SStatus 0 SControl 300)
+> > >  ata3: SATA link down (SStatus 0 SControl 300)
+> > >  ata4: SATA link down (SStatus 0 SControl 300)
+> > >  PM: Image saving progress:  20%
+> > >  PM: Image saving progress:  30%
+> > >  PM: Image saving progress:  40%
+> > >  PM: Image saving progress:  50%
+> > >  pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
+> > >  PM: Image saving progress:  60%
+> > >  PM: Image saving progress:  70%
+> > >  PM: Image saving progress:  80%
+> > >  PM: Image saving progress:  90%
+> > >  PM: Image saving done
+> > >  PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
+> > >  PM: S|
+> > >  PM: hibernation: Basic memory bitmaps freed
+> > >  PM: Image not found (code -16)
+> > >
+> > > This is because when using the swapfile as the hibernation storage,
+> > > the block device where the swapfile is located has already been mounted
+> > > by the OS distribution(usually been mounted as the rootfs). This is not
+> > > an issue for normal hibernation, because software_resume()->swsusp_check()
+> > > happens before the block device(rootfs) mount. But it is a problem for the
+> > > test_resume mode. Because when test_resume happens, the block device has
+> > > been mounted already.
+> > >
+> > > Thus remove the FMODE_EXCL for test_resume mode. This would not be a
+> > > problem because in test_resume stage, the processes have already been
+> > > frozen, and the race condition described in
+> > > Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > is unlikely to happen.
+> > >
+> > > Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > Reported-by: Yifan Li <yifan2.li@intel.com>
+> > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > ---
+> > >  kernel/power/hibernate.c | 18 +++++++++++-------
+> > >  kernel/power/power.h     |  2 +-
+> > >  kernel/power/swap.c      | 10 +++++++---
+> > >  3 files changed, 19 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > > index 793c55a2becb..f50456e72f0a 100644
+> > > --- a/kernel/power/hibernate.c
+> > > +++ b/kernel/power/hibernate.c
+> > > @@ -683,22 +683,26 @@ static void power_down(void)
+> > >                 cpu_relax();
+> > >  }
+> > >
+> > > -static int load_image_and_restore(void)
+> > > +static int load_image_and_restore(bool safe)
 > >
-> > So, just to make sure I understand your point. You would rather have the
-> > genpd_power_off check if 'state at boot' is 'on' and return busy and
-> > then clear then, via a generic genpd sync state you would mark 'state at
-> > boot' as 'off' and queue up a power off request for each PD from there.
-> > And as for 'state at boot' it would check the enable bit through
-> > provider.
+> > It is not very clear why the argument is called "safe".
 > >
-> > Am I right so far?
-> 
-> I am not sure I completely follow what you are suggesting here.
+> > Either this needs to be explained in a comment, or I would just call
+> > it "exclusive" and rework the checks accordingly.
+> >
+> OK, I can change it to "exclusive". Pavan proposed to add a global
+> variable snapshot_testing to indicate that the system is in test_resume mode,
+> and we can check this flag to decide whether to open the block device
+> exclusively or not. Then we don't have to add parameter for load_image_and_restore()
+> nor swsusp_check(). Could you please give advice whether this is applicable?
 
-Please have a look at this:
-https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/commit/?h=qcom/genpd/ignore_unused_until_sync_state&id=4f9e6140dfe77884012383f8ba2140cadb62ca4a
+Well, in that case, why don't you simply check pm_test_level?
 
-Keep in mind that is WIP for now. Once I have something, I'll post it on
-mailing list. Right now, there is a missing piece mentioned in that
-commit message.
-
-> 
-> Although, let me point out that there is no requirement from the genpd
-> API point of view, that the provider needs to be a driver. This means
-> that the sync_state callback may not even be applicable for all genpd
-> providers.
-
-Yes, I'm considering that case too.
-
-> 
-> In other words, it looks to me that we may need some new genpd helper
-> functions, no matter what. More importantly, it looks like we need an
-> opt-in behaviour, unless we can figure out a common way for genpd to
-> understand whether the sync_state thing is going to be applicable or
-> not. Maybe Saravana has some ideas around this?
-> 
-> Note that, I don't object to extending genpd to be more clever and to
-> share common code, of course. We could, for example, make
-> genpd_power_off() to bail out earlier, rather than calling the
-> ->power_off() callback and waiting for it to return -EBUSY. Both of
-> you have pointed this out to me, in some of the earlier
-> replies/discussions too.
-
-The above link basically does this. I hope this is what Saravana has in
-mind as well.
-
-> 
-> >
-> > > > And suggested this new approach that this patch series proposes.
-> > > > (Unless I missunderstood his point)
-> > > >
-> > > > >
-> > > > > 2) sync_state() is not just about power on/off. It's also about the
-> > > > > power domain level. Can you handle that too please?
-> > > >
-> > > > Well, this patchset only tries to delay the disabling of unused power
-> > > > domains until all consumers have had a chance to probe. So we use sync
-> > > > state only to queue up a power-off request to make sure those unused
-> > > > ones get disabled.
-> > >
-> > > Sure, but the design is completely unusable for a more complete
-> > > sync_state() behavior. I'm okay if you want to improve the
-> > > sync_state() behavior in layers, but don't do it in a way where the
-> > > current design will definitely not work for what you want to add in
-> > > the future.
-> >
-> > But you would still be OK with the qcom_cc sync state wrapper, I guess,
-> > right? Your concern is only about the sync state callback being not
-> > genpd generic one, AFAIU.
-> >
-> > >
-> > > > >
-> > > > > 3) In your GDSC drivers, it's not clear to me if you are preventing
-> > > > > power off until sync_state() only for GDSCs that were already on at
-> > > > > boot. So if an off-at-boot GDSC gets turned on, and then you attempt
-> > > > > to turn it off before all its consumers have probed, it'll fail to
-> > > > > power it off even though that wasn't necessary?
-> > > >
-> > > > I think we can circumvent looking at a GDSC by knowing it there was ever
-> > > > a power on request since boot. I'll try to come up with something in the
-> > > > new version.
-> > >
-> > > Please no. There's nothing wrong with reading the GDSC values. Please
-> > > read them and don't turn on GDSC's that weren't on at boot.
-> >
-> > Sorry for the typos above, I basically said that for this concern of
-> > yours, we can add the 'state at boot' thing you mentioned above by
-> > looking at the GDSC (as in reading reg).
-> >
-> > >
-> > > Otherwise you are making it a hassle for the case where there is a
-> > > consumer without a driver for a GDSC that was off at boot. You are now
-> > > forcing the use of timeouts or writing to state_synced file. Those
-> > > should be absolute last resorts, but you are making that a requirement
-> > > with your current implementation. If you implement it correctly by
-> > > reading the GDSC register, things will "just work". And it's not even
-> > > hard to do.
-> > >
-> > > NACK'ed until this is handled correctly.
-> > >
-> > > >
-> > > > >
-> > > > > 4) The returning -EBUSY when a power off is attempted seems to be
-> > > > > quite wasteful. The framework will go through the whole sequence of
-> > > > > trying to power down, send the notifications and then fail and then
-> > > > > send the undo notifications. Combined with point (2) I think this can
-> > > > > be handled better at the aggregation level in the framework to avoid
-> > > > > even going that far into the power off sequence.
-> > > >
-> > > > Again, have a look at [1] (above).
-> > >
-> > > See my reply above. If you do it properly at the framework level, this
-> > > can be done in a clean way and will work for all power domains.
-> > >
-> > > -Saravana
-> > >
-> > > >
-> > > > Ulf, any thoughts on this 4th point?
-> 
-> Please, see my reply above.
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
+> If yes I can change the code accordingly, otherwise I can change the "safe"
+> to "exclusive" and add some comments.
