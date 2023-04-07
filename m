@@ -2,70 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E176D6DB475
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 21:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D156DB4F7
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 22:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjDGTta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Apr 2023 15:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S229625AbjDGUOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Apr 2023 16:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjDGTtV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 15:49:21 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF8583F6
-        for <linux-pm@vger.kernel.org>; Fri,  7 Apr 2023 12:49:17 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t4so37844570wra.7
-        for <linux-pm@vger.kernel.org>; Fri, 07 Apr 2023 12:49:17 -0700 (PDT)
+        with ESMTP id S229631AbjDGUOu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 16:14:50 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6F010F8
+        for <linux-pm@vger.kernel.org>; Fri,  7 Apr 2023 13:14:47 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z8so1410168lfb.12
+        for <linux-pm@vger.kernel.org>; Fri, 07 Apr 2023 13:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680896956; x=1683488956;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MkxmsR3Vwz/M3zIv+5DC0CFkZ+1/4zFb+b2Iyh5qfkE=;
-        b=CyjjjWgOdBrflsQCOwPqWYvr5SZmyu8TRerKIKEGsWcdxWPLdJUqBLmuvaamWWuE4b
-         JQva2SIlZh3wLyXEKB7dgmnx5ZOAxIgxYhwHsiAFz3CCe5JuArExYejpGH7QH/jNg53m
-         GxpBq7KklBLOqQ4e7iPxUYMXW3N/3cYWhBaRymManAz+bZhdVhJPHqWdYaYF3YqIDfHv
-         +W5CGhYVxMeyo8MRpsQWTsg61BfhsIhRa3rbDXREqMUCCm76g1fQS7pFEhH2AlcHiueM
-         UIMw/BKrjA4SjJuQQnuMYc3cwaWSWRXLwnhdsH11+bxQd5jAj1MzFFfdxmvdjcToAyhm
-         hWbA==
+        d=linaro.org; s=google; t=1680898485;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7SCtmUuova08XpClOEdES1aqS5+J17wNI7gmcPyoK4=;
+        b=Eji6ey0ZaDelp1+GovgfomlMdK11YFcyFUBAqkInWvFRhkqsLWCuy6LHnPZ/lzJ/V3
+         G5QTP8M3pSt7gZnRcXDfq94QfjYxHmkuaBReZtJVZfvyD1kvryQwPikZV1th6oj23Eg+
+         gdmUU1FxguUECoRAVfY4DuvaIg7s3iq+hoMeWs4rDwTu3N6LoOhxlI8Y/SxOKLwkgASV
+         2kaD3ePEIe0+fySaEgKln6hnvMM2GEn8Mdo9dHChEalhMNoiYpzgDF6w8QilisoCTGns
+         9vM4Mp+mFUWfZxE8zSPHJ5dUTlTIbHSpA8C5eiKhpqPCOHyiYpPV77SCnQwVG8AgD5H5
+         UhMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680896956; x=1683488956;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MkxmsR3Vwz/M3zIv+5DC0CFkZ+1/4zFb+b2Iyh5qfkE=;
-        b=PcLy18fS3JBegwWulQWBmmIep+NAfkGdluBnmwTnhdXaG3EtSOp//34Hv7B9NAarwh
-         V2j/6m7auoo/JBkai75HtH+C6rG0AnZjy47V0xHezeCkF02Sx6df6OF87hPzZeJtA0Xw
-         +lAmuvgsIoGJGzCKrVN6xv4uhFlJQ4Ir11cBTSvdSCmcHuptJCkrCHdqZfIJToAojB6x
-         HjP303QKFxOPTU1Jyip2VJ6+ZLxo30OWgMddnGXl+jLbTWkR6JZtE643jkQ/gQdpeKFw
-         1DYgyWhlCVNKiWK+ebBOPKy4DYZhl2BN/RcJarepPO60NwFVK3S5f7f0D1dIR3sWuy+S
-         yF/A==
-X-Gm-Message-State: AAQBX9fj1Nhd4ihnbAnXm2q5pWv5ZUQGxlbxRwrhNQhH/O3Wtru5/ZPd
-        qSpiapdxEtxmTCB7/izKqlwP8g==
-X-Google-Smtp-Source: AKy350b4n91upcsHiFw4mMM5jXDaw2OhszvtsH9JuGgVEDjzxhGIe89Zf7kyk5l6dxyAR3t3Jdslww==
-X-Received: by 2002:adf:fd01:0:b0:2db:bdc2:f8da with SMTP id e1-20020adffd01000000b002dbbdc2f8damr2016695wrr.71.1680896956083;
-        Fri, 07 Apr 2023 12:49:16 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c458f00b003f03d483966sm9429551wmo.44.2023.04.07.12.49.14
+        d=1e100.net; s=20210112; t=1680898485;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z7SCtmUuova08XpClOEdES1aqS5+J17wNI7gmcPyoK4=;
+        b=frV/hzZEegNTy33+hF6a8OQINkUD/U0U0sB9d8WEBmmmY/2wRa0BnWIbDGKs/kJhHr
+         KS60XM3Cax9Z0fXx3FuHaYzxenCGZHfzBD7DrZwoS1tEFX1yCobinUEQaJkIxrkh8m2g
+         pesFto7EPnB4Yl5sr2ZOUKSTpjgafC3AQ3E8XnNQ3pFGnHjQmpaL1Dk5gd4B6bns6qvG
+         Fnk/HEuoeiYuv3d407eGQ/3WcC8h6soa6PZ4GSJ62pvS9nib9K0HrHI0CKmWlTy7o7ww
+         bk0j1FoV3TXgG97JK1O0WjcYuhstQBEUXmG4g4z8OQO4MHrsE2glJVzNejD3pXw/7Jak
+         Isjg==
+X-Gm-Message-State: AAQBX9eddJ5JWOwEBs3RfN2IUnp6zkKqSJa/sBlx7B1MW3z5teAKfBIi
+        WdzkonD41Uqu9K+A3inqZjnT4+fS6MyvyX/jzUw=
+X-Google-Smtp-Source: AKy350bTm58oK1v8nkBUE6MQuzF7QH1hQOOVp3LZ/OLYjhvlRZjViNAJISX5dLBeqzMLn22wyeEHFg==
+X-Received: by 2002:ac2:4d12:0:b0:4e9:aeaa:ddb5 with SMTP id r18-20020ac24d12000000b004e9aeaaddb5mr1030468lfi.14.1680898485587;
+        Fri, 07 Apr 2023 13:14:45 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id u3-20020ac243c3000000b004eaf6181a32sm842436lfl.75.2023.04.07.13.14.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 12:49:15 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bryan.odonoghue@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, stephan@gerhold.net
-Subject: [PATCH v9 5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
-Date:   Fri,  7 Apr 2023 20:49:05 +0100
-Message-Id: <20230407194905.611461-6-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230407194905.611461-1-bryan.odonoghue@linaro.org>
-References: <20230407194905.611461-1-bryan.odonoghue@linaro.org>
+        Fri, 07 Apr 2023 13:14:45 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v8 0/8] The great interconnecification fixation
+Date:   Fri, 07 Apr 2023 22:14:42 +0200
+Message-Id: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALJ5MGQC/3WNQQ7CIBREr2JYi0EolLryHsYFpdD+pIEKlWia3
+ t3f7kx0+SbzZhaSXQKXyeWwkOQKZIgBQR8PxA4m9I5Ch0w444JxrukcJ7D0ETOVlZDWWK073RD
+ styY72iYT7IBGeI4jhlNyHl77we2OPECeY3rvf0Vt6a/poiijworaiKpRUvnrCMGkeIqpJ9tMq
+ f+qNar6LBVTrOHef6vrun4ANZpEI/MAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680898484; l=7539;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=5+j0cKlSPZp/u3NMkZFp8pneHWZWJU/rjl7JwRNXyKA=;
+ b=z+42L+x1rph1X3uZrRXHqjnce6IJwJ3dzTMGs41rwbNrBldbXt83hwPctY+nf++8h93/9rbGEF6l
+ f4KbTEd1D3t2Y/VOxFIrTGaWmiSmOfg4agAk4s3ZelT0MPI6dZ/L
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -75,223 +85,178 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
+Hi!
 
-Tulip is paired with:
+v7 -> v8:
+- Rebase (dropping has_bus_pd, picked patches from v7)
 
-- wcn3660
-- smb1360 battery charger
-- 720p Truly NT35521 Panel
+- Clean up the QoS-setting functions [3/8]
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+- Only set the QoS registers once [4/8] - Georgi talked to some
+  Qualcomm folks and we concluded that it's "good enough" as they
+  should:tm: persist until a full reboot on "almost all" platforms
+
+- Move the intf clock enabling/disabling to correspond with /\ [5/8]
+
+- DO NOT switch to associating an interface clock with a given node
+  (instead of a provider), as it makes little sense with the changes
+  with [4/8] and the new iteration of [5/8]
+
+v7: https://lore.kernel.org/r/20230228-topic-qos-v7-0-815606092fff@linaro.org
+
+v6 -> v7 changelog:
+- Rebase on Johan's recent patches
+
+Link to v6: https://lore.kernel.org/r/20230228-topic-qos-v6-0-3c37a349656f@linaro.org
+
+v5 -> v6 changelog:
+- Completely rewrite the commit message of [1/9], I realized that there
+  was actually no issue with the present upstream setups and the only
+  drivers suffering from ghost votes were.. my own OOT drivers..
+  As a consequence of that, all fixes tags were dropped and the patch
+  has been kept, since it was deemed useful for newer SoCs that don't
+  distinguish ap_owned nodes.
+
+- Change the number of allowed bus_clocks from (0-2 in the previous
+  revision, 0-inf in the current upstream state) to {0, 2}. Scaling is
+  only possible with a pair of wake-sleep clocks, but some providers
+  don't do scaling at all (see 8996 A0NoC, 660 GNoC). Drop the cheeky
+  -1 / 0 / >0 checks from the previous revision. [7/9]
+
+- bus_clocks are now forced to be named "bus", "bus_a", as there is no
+  need for variance here - we don't do scaling on non-SMD RPM bus clocks.
+  [7/9]
+
+- The interface clocks are now only turned on when the associated bus
+  is running at a non-zero frequency [6/9] instead of being always on
+  and leaking power
+
+Tested on MSM8996 Kagura, SM6375 PDX225 (OOT), MSM8998 Maple (OOT)
+
+Link to v5: https://lore.kernel.org/linux-arm-msm/20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org/
+
+v4 -> v5 changelog:
+- Previously the "Always set QoS params on QNoC" contained part of what
+  should have been included in "make QoS INVALID default".. (very bad)
+  Fix it!
+
+- Drop negative offset and keep_alive, they will be resubmitted with new
+  icc driver submissions
+
+- use b4 this time.. hopefully the series gets to everybody now
+
+Link to v4: https://lore.kernel.org/linux-arm-msm/20230214143720.2416762-1-konrad.dybcio@linaro.org/
+
+v3 -> v4 changelog:
+- Drop "Always set QoS params on QNoC", it only causes issues.. this
+  can be investigated another day, as it's not necessary for operation
+
+- Drop "Add a way to always set QoS registers", same as /\
+
+- Add a way (and use it) to have no bus_clocks (the ones we set rate on),
+  as at least msm8996 has a bus (A0NoC) that doesn't have any and does
+  all the scaling through RPM requests
+
+- Promote 8996 icc to core_initcall
+
+- Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
+
+- Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
+
+Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
+
+v2 -> v3 changelog:
+- Drop "Don't set QoS params before non-zero bw is requested"
+
+- Rebase on next
+
+- [1/9] ("..make QoS INVALID default.."): remove unused define for
+  MODE_INVALID_VAL
+
+- Pick up tags
+
+v1 -> v2 changelog:
+- reorder "make QoS INVALID default", makes more sense to have it
+  before "Always set QoS params on QNoC"
+
+- Limit ap_owned-independent QoS setting to QNoC only
+
+- Add new patches for handling the 8996-and-friends clocks situation
+  and optional BIMC regardless-of-ap_owned QoS programming
+
+[1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
+[2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
+
+This series grew quite a bit bigger than the previous [1] attempt, so
+I decided to also add a cover letter.
+
+Link to v2: [2]
+
+It addresses a few things that were not quite right:
+
+- Setting QoS params before a "real" (non-zero) bandwidth request
+  makes little sense (since there's no data supposed to flow through
+  the bus, why would the QoS matter) and (at least newer) downstream
+  prevents that from happening. Do the same in Patch 1.
+
+- QNoC type buses expect to always have their QoS registers set as long
+  as there's a non-INVALID QoS mode set; ap_owned is not really a thing
+  on these anymore, Patch 3 handles that.
+
+- The recent MSM8996 boot fix was done quickly and not quite properly,
+  leading to possibly setting the aggregate bus rate on "normal"
+  hardware interface clocks; this series handles that by limiting the
+  number of bus_clocks to 2 (which is the maximum that makes sense,
+  anyway) and handling the rest as "intf_clocks", which are required
+  to access the   hardware at the other end. Patches 5-8 take care of
+  that and Patch 10 reverts the _optional moniker in clk_get_ to make
+  sure we always have the bus scaling clocks, as they're well, kind
+  of important ;)
+
+- Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
+  by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
+  always receive QoS programming, whereas BIMC on "older" SoCs cries
+  like a wild boar and crashes the platform when trying to do so
+  unconditionally. Patch 9 adds a way to take care of that for newer
+  SoCs (like SM6375)
+
+- QoS mode INVALID was assumed by developers before to be the default
+  ("I didn't specify any QoS settings, so the driver can't assume I
+  did.. right? right!?" - wrong, partial struct initialization led to
+  0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
+  that's the logical choice. This allows the "Always set QoS params
+  on QNoC" patch to work without setting tons of what-should-
+  -obviously-be-the-default values everywhere, as well as fixes older
+  drivers that set ap_owned = true but left the QoS mode field unset.
+  Patch 2 cleans that up.
+
+- Some nodes are physically connected over more than one channel
+  (usually DDR or other high-throughput paths). Patch 4 allows that
+  to be reflected in calculations. This will be required for at least
+  MSM8998 and SM6375 (which will be submitted soon after this lands)
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 183 ++++++++++++++++++
- 2 files changed, 184 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+Konrad Dybcio (8):
+      interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+      interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
+      interconnect: qcom: rpm: Drop unused parameters
+      interconnect: qcom: rpm: Set QoS registers only once
+      interconnect: qcom: rpm: Handle interface clocks
+      interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
+      interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
+      interconnect: qcom: msm8996: Promote to core_initcall
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index a7feb1609e0c2..f02d5ace0122d 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -31,6 +31,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-new file mode 100644
-index 0000000000000..951d01674b784
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-@@ -0,0 +1,183 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022-2023, Bryan O'Donoghue.
-+ *
-+ */
-+
-+/dts-v1/;
-+
-+#include "msm8939.dtsi"
-+#include "msm8939-pm8916.dtsi"
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-+
-+/ {
-+	model = "Sony Xperia M4 Aqua";
-+	compatible = "sony,kanuti-tulip", "qcom,msm8939";
-+
-+	qcom,board-id = <QCOM_BOARD_ID_MTP 0>;
-+	qcom,msm-id = <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>;
-+
-+	aliases {
-+		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-+		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	usb_id: usb-id {
-+		compatible = "linux,extcon-usb-gpio";
-+		id-gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-+		pinctrl-0 = <&usb_id_default>;
-+		pinctrl-names = "default";
-+	};
-+};
-+
-+&mdss {
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	usb_id_default: usb-id-default-state {
-+		pins = "gpio110";
-+		function = "gpio";
-+		bias-pull-up;
-+		drive-strength = <8>;
-+	};
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-+	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-+	vdd_l7-supply = <&pm8916_s4>;
-+
-+	pm8916_s3: s3 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1300000>;
-+	};
-+
-+	pm8916_s4: s4 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2100000>;
-+	};
-+
-+	pm8916_l2: l2 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	pm8916_l4: l4 {
-+		regulator-min-microvolt = <2050000>;
-+		regulator-max-microvolt = <2050000>;
-+	};
-+
-+	pm8916_l5: l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	pm8916_l6: l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+
-+	pm8916_l7: l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	pm8916_l8: l8 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	pm8916_l9: l9 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l10: l10 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l11: l11 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-system-load = <200000>;
-+		regulator-allow-set-load;
-+	};
-+
-+	pm8916_l12: l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l13: l13 {
-+		regulator-min-microvolt = <3075000>;
-+		regulator-max-microvolt = <3075000>;
-+	};
-+
-+	pm8916_l14: l14 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l15: l15 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l16: l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l17: l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	pm8916_l18: l18 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2700000>;
-+	};
-+};
-+
-+&sdhc_1 {
-+	pinctrl-0 = <&sdc1_default_state>;
-+	pinctrl-1 = <&sdc1_sleep_state>;
-+	pinctrl-names = "default", "sleep";
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	pinctrl-0 = <&sdc2_default_state>;
-+	pinctrl-1 = <&sdc2_sleep_state>;
-+	pinctrl-names = "default", "sleep";
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
-+	status = "okay";
-+};
-+
-+&usb {
-+	extcon = <&usb_id>, <&usb_id>;
-+	status = "okay";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&usb_id>;
-+};
-+
-+&wcnss {
-+	status = "okay";
-+};
-+
-+&wcnss_iris {
-+	compatible = "qcom,wcn3660";
-+};
+ drivers/interconnect/qcom/icc-rpm.c | 110 +++++++++++++++++++-----------------
+ drivers/interconnect/qcom/icc-rpm.h |  22 ++++++--
+ drivers/interconnect/qcom/msm8996.c |  35 +++++++-----
+ drivers/interconnect/qcom/sdm660.c  |  17 +++---
+ 4 files changed, 102 insertions(+), 82 deletions(-)
+---
+base-commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
+change-id: 20230228-topic-qos-5435cac88d89
+
+Best regards,
 -- 
-2.39.2
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
