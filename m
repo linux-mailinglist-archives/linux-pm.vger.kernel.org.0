@@ -2,111 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AC76DB683
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Apr 2023 00:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5EF6DB6CE
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Apr 2023 01:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjDGWgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Apr 2023 18:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S229589AbjDGXHI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Apr 2023 19:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjDGWge (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 18:36:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C295CA39
-        for <linux-pm@vger.kernel.org>; Fri,  7 Apr 2023 15:36:33 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1213666031D5;
-        Fri,  7 Apr 2023 23:36:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680906992;
-        bh=TOSfC5iqX1hP+7k4vzaoqsZU+XWCjjCVgx8w2Vk+KZ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EhYbmynsJH18iXuRuwbLx+FHeY/uiM5rXlmmGrmSb7zk35GHc1ZK3v7CVZ396+veP
-         fl9K7fBavxDDW+YYlCqTzUgL3FmgBPMyv4nuou0p8t0mmzSqMLsQpj30c6LNe6IVeo
-         Uv2qqzzJbtJh8iW2iP7INV/wUxX8n3mgQE0LbxJObMo2Ks8zfkxRW4efQyfkjh4cO9
-         NELzcah76zATTXfzeuGugZnPBqmb6EgqGzYsstR+V4jZqesxEri1fFwNMTXhvCDlT1
-         ZNsH6pKGcBt6VjAAdifO2ip0Si/5BLQRA0A/7cf7SaCgaezj+i4JwnHrAv2B5jajyU
-         s8pluspPcH6yw==
-Received: by mercury (Postfix, from userid 1000)
-        id DAABB1062734; Sat,  8 Apr 2023 00:36:29 +0200 (CEST)
-Date:   Sat, 8 Apr 2023 00:36:29 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-pm@vger.kernel.org, maccraft123mc@gmail.com, lee@kernel.org,
-        jiapeng.chong@linux.alibaba.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 0/2] Fixes for rk817_charger driver
-Message-ID: <20230407223629.lc3byhaeyrbi64re@mercury.elektranox.org>
-References: <20230407161827.127473-1-macroalpha82@gmail.com>
+        with ESMTP id S229561AbjDGXHH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 19:07:07 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88698E1A2;
+        Fri,  7 Apr 2023 16:06:37 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso47051209fac.12;
+        Fri, 07 Apr 2023 16:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680908791; x=1683500791;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IX63rEBC8yST4gwErZr+yYucTJmibL48v0X7LDgsSeI=;
+        b=k/OjhypfQ8SVpBAlqt9pNtAyNUPLbSyLPiBTFTv8uzeYVarnyyQYc3vS396YJOyz/k
+         w5pXWPKcaa/hDcjVlynRjZEujcmVfArwxlBrlvkctAX7OI53qTL44FoiqpLxLFaBiMjL
+         pgb94hKz2gJOLmvvWR/w9/8lYDevHpFJo/f1Pievnkw+FYImwzMVusWKbfj7C6Pf6xWX
+         GOJJgUhJdMbUeIvGeCBZ50MVXToe7W3Nujr10pBm6tYTSohmq3tnR//2inkBRpM28NVO
+         YxlW97raG2g9raDCHn0T2y05KxtJ0odDh9xdJJIQaiUR8Q8Kb0/UGnGcpUGxcjUzPPWi
+         5Jmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680908791; x=1683500791;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IX63rEBC8yST4gwErZr+yYucTJmibL48v0X7LDgsSeI=;
+        b=se1zUwp31BakflexBW6heNysnr5rEa/7Dgeqtu26cWQhrd+ydnYwN6zBn9nHwpjzja
+         UbcYVnWxPLJAP257azSZaNkJHZAQQE8Q0E7DLzkyp+Lrvm2WYtL4qHn9spn7BTJcH4oE
+         yLrnUOL3G/3qLop+FfBjvmhlSy1pGg442gLRzVSbx6rsjht8upMgKRDXi1qS89qv/2Kq
+         PlYvMrk3UBcVakfN3CTMEIX/J0oBX/F9h6XrrO5rtqHUTA+F/FLTEMfk31tsOI8sssXw
+         o4R/RDqDgqNGnYV1IxD5MEiBJeMA+EOPIA41Qb5+FmvrRpIPjFfYwsuWIAC6FLLYP3zh
+         P5Xw==
+X-Gm-Message-State: AAQBX9fwx5WtWJ9K6d9vSMk+il1SOJbMqQLAuCicigghWsS374im74oc
+        zAx2x01/pAuu6IgtG4JgMiqEW6hteDs=
+X-Google-Smtp-Source: AKy350ZOJ2Vc6ZERDWBz4XYhpAziCXkGoVQVZfpeHosNQaPExTS0rpW4+JmPDsBMkPcJuwN4JtA7DQ==
+X-Received: by 2002:a05:6870:f104:b0:180:3225:b33b with SMTP id k4-20020a056870f10400b001803225b33bmr2352149oac.34.1680908791249;
+        Fri, 07 Apr 2023 16:06:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v5-20020a0568301bc500b006a2fd720f82sm2086120ota.7.2023.04.07.16.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 16:06:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b88f2a0b-41fc-0cf7-5088-64edcd9dd927@roeck-us.net>
+Date:   Fri, 7 Apr 2023 16:06:28 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sxsfezd5sathlmi7"
-Content-Disposition: inline
-In-Reply-To: <20230407161827.127473-1-macroalpha82@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] power: supply: hwmon: constify pointers to
+ hwmon_channel_info
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
+ <20230407221250.xt2e7yuj62rlotkd@mercury.elektranox.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230407221250.xt2e7yuj62rlotkd@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 4/7/23 15:12, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Fri, Apr 07, 2023 at 05:03:26PM +0200, Krzysztof Kozlowski wrote:
+>> Statically allocated array of pointed to hwmon_channel_info can be
+>> made const for safety.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>> This depends on hwmon core patch:
+>> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+>>
+>> Therefore I propose this should also go via hwmon tree.
+>>
 
---sxsfezd5sathlmi7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am not going to apply patches for 10+ subsystems through the hwmon tree.
+This can only result in chaos. The dependent patch is available at
 
-Hi,
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 
-On Fri, Apr 07, 2023 at 11:18:25AM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
->=20
-> After using the driver for a few months I noticed a few issues that
-> this patch series seeks to address. Namely, there appears to be some
-> left over code that was used for debugging during development that is
-> no longer needed. Additionally, when the state of charge drops to 0
-> there is an issue with reading the value on boot because the columb
-> counter appears to hold a signed value.
->=20
-> With these fixes in place the battery driver appears to operate better
-> and without the odd bug of an unsigned integer overflow on the columb
-> counter.
->=20
-> Chris Morgan (2):
->   power: supply: Remove unneeded code in rk817_charger
->   power: supply: Fix low SOC bugs in rk817 driver
->=20
->  drivers/power/supply/rk817_charger.c | 48 ++++++++++++++++------------
->  1 file changed, 28 insertions(+), 20 deletions(-)
+or wait until after the next commit window to apply this patch.
 
-Thanks, queued.
+Thanks,
+Guenter
 
--- Sebastian
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: linux-hwmon@vger.kernel.org
+>> ---
+> 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> 
+> -- Sebastian
+> 
+>>   drivers/power/supply/power_supply_hwmon.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
+>> index a48aa4afb828..c97893d4c25e 100644
+>> --- a/drivers/power/supply/power_supply_hwmon.c
+>> +++ b/drivers/power/supply/power_supply_hwmon.c
+>> @@ -293,7 +293,7 @@ static const struct hwmon_ops power_supply_hwmon_ops = {
+>>   	.read_string	= power_supply_hwmon_read_string,
+>>   };
+>>   
+>> -static const struct hwmon_channel_info *power_supply_hwmon_info[] = {
+>> +static const struct hwmon_channel_info * const power_supply_hwmon_info[] = {
+>>   	HWMON_CHANNEL_INFO(temp,
+>>   			   HWMON_T_LABEL     |
+>>   			   HWMON_T_INPUT     |
+>> -- 
+>> 2.34.1
+>>
 
---sxsfezd5sathlmi7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQwmuQACgkQ2O7X88g7
-+ppcWA/0Duqw33fu1LJiAPhnjmwXuZin+BcasrBdx9/nKhrxU2u+CiOK44p1nbOI
-bOltb3Ym1nokdPze98bVHVWoOsDzN4F/CjyGYpxv/LM4RJ+R10QcRdVn69P7KlKL
-Qw2gkHugykTHmJFREeitn1UxXV030QArjZUecW3M1UK0fPw4pmuJM+l7fXSMxmHq
-MK76tctBbBtgmNI+if23t+3KuauVyDjBIE/hNwTkMCjYweYWI4aCCFvFs9/LxihI
-vMD1pKe4g6ejCacCd5b9PprJ0iKcCht33dRvQlP5se79YarUMil2FcLTNs66Y51h
-QfdTusZk8qTZA7oEndhk70TQIQtTZJYH6qx0n/AEzB8JLBN05pgBr3pIHwwfWkEd
-LEB9bDdBLRkUMq7arEpmgETygfn63VvFo2IhtwyizMuf/zSy4Y+luBTowl4dekcp
-oYcd/YdAbPd3r9Aa2lKumVxTqDCHpqe0k1MULVrlWkuZ10Qt/8L87g2PAk21itNf
-OXCCIRYedw7bAVxeHj/LKAGnNDNZ/yRa7AmaVhhNxmI85VdiUU00maBVVy/xLSer
-zJNfVwKc3WjoKtW1hdwbiB6XHnXQU3eqKKsZzPM4lpVYtnQ4QYk17mrx8NXU5Gj4
-LlNo6rkcZ9jZFjG4XxHqX2WJarnnx/L/C29xUCufSg8xgJYcig==
-=rMZ7
------END PGP SIGNATURE-----
-
---sxsfezd5sathlmi7--
