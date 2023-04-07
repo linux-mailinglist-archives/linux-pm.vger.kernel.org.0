@@ -2,82 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3039D6DB50E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 22:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FD86DB654
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Apr 2023 00:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjDGUPZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Apr 2023 16:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S229625AbjDGWM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Apr 2023 18:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjDGUPN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 16:15:13 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E492CA0B
-        for <linux-pm@vger.kernel.org>; Fri,  7 Apr 2023 13:14:58 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y20so55741850lfj.2
-        for <linux-pm@vger.kernel.org>; Fri, 07 Apr 2023 13:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680898496;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UK324XxVLyW7Zcb2CZ/1jAhmypGps1orFHLyigBwr5Y=;
-        b=yqZEBUvNVCoCG1kYbv6BCn4D0Qcr92VlfzKmglVvZYkEdbsKkM9eX6zrAes/n5toqv
-         Qu4xR1oXPF3iW2PlmWZM4PiNnoYT7pHivkuEumgtKq5oW0+xNraiZVR+iFd5Ap7YE0Md
-         UkYReMEbtTgol8JUCdn1e8AY4R+sRqVF/1vPdymDn8yog1HL/noqOd4oUik9koaXGWDM
-         aJxPdG1AYb7uanLSnaNK9gtfH0YsPqphnes0NrEHCEV34cS1XsFJH7f1pxDIx4dyQ3nS
-         Usmcqh5IhlWzI049CC/jJCuLBE7JkBk6R0LE1A9G8lLMyhYBGzmc+c9y9yqTy0CEw844
-         RMbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680898496;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UK324XxVLyW7Zcb2CZ/1jAhmypGps1orFHLyigBwr5Y=;
-        b=AyHK5/EtIbUPLpdKSyXXWGrgapU974dz1KoKCXPrLzeH+V0gBwkbgsM/Btpuscpc/l
-         W5GcgBD+lubjKj35AvlIXY5V6aBWHxj5eLti7Sgiv85YvgpWYxN0XlOjKuF0dkgBsM8d
-         Frs5JnzELNtmSiicYMO8mxXFqEc2fUMQzc4K9skyaQOnwMw9JR75xSCybjMmz2luUOQm
-         S0g5nlMcV6pdezugoWfkURb+wZ31kveBGZP0vOYR5UVtHZL/mDGJEmfxXE5ZAWKDmZke
-         wh59MkTudX8cO6WlMdw6alR4GNOrv4mgqN/LKBGDXXM0Mz/8Z7UrfkZASGicfh04Ypz9
-         +iKw==
-X-Gm-Message-State: AAQBX9e2dL1pkfoOeB/qXAw1UUjAMmlVRT50IHdFw2JulUFA4Plg5qrk
-        SSzLGbqu4bb8bBEthPTwbL7Zb/OTt1ROsH1YQqg=
-X-Google-Smtp-Source: AKy350ZqCC2EWpi54zjCAZha/wQjOAUazAPsrcEJ8ES8x2YGJmj/5Oaf+q9Y20lANUCgsRiqOL1KlA==
-X-Received: by 2002:ac2:48b1:0:b0:4db:513b:6ef4 with SMTP id u17-20020ac248b1000000b004db513b6ef4mr1437520lfg.11.1680898496200;
-        Fri, 07 Apr 2023 13:14:56 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u3-20020ac243c3000000b004eaf6181a32sm842436lfl.75.2023.04.07.13.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 13:14:55 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 07 Apr 2023 22:14:50 +0200
-Subject: [PATCH v8 8/8] interconnect: qcom: msm8996: Promote to
- core_initcall
+        with ESMTP id S229482AbjDGWM4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 18:12:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5C5CA06;
+        Fri,  7 Apr 2023 15:12:54 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 49CC666031D8;
+        Fri,  7 Apr 2023 23:12:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680905573;
+        bh=OPJye7DnMqvYT4X5PPg+ptLV0htYygit7gJuZ9US0xE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QkrJMLXuRtXS5BG0Hg2Htaz9x0Zsc7bFuEPRHS58enkmuEelE7u3Uj2z9HivNcL8h
+         QeH681j3s+oaTH8cAp3T/7r5+AooOT84psdSfBIKFSGFgCjQX3oXRUnj14MCnFGsag
+         QWhXt4VAXuecaSU1mtIAQHPOklGX9umo+qTUku9w/ROrmNG88jHc0eV0cvgzWgh9V6
+         FnoQW10vnXolDfEmeEEGKB8/RykPT3IFFkGFQjMJZtRsbfmp7RHXxYNVw4Zkpn1n+q
+         zg8b8ka0ozdh9qMZL3XzOwveFNLMLv/22ACL20aPL6THLWVujfCuLfbcnRQUBKT1ID
+         xvWRTGCCkDQaA==
+Received: by mercury (Postfix, from userid 1000)
+        id 27EEB1063103; Sat,  8 Apr 2023 00:12:50 +0200 (CEST)
+Date:   Sat, 8 Apr 2023 00:12:50 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] power: supply: hwmon: constify pointers to
+ hwmon_channel_info
+Message-ID: <20230407221250.xt2e7yuj62rlotkd@mercury.elektranox.org>
+References: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-qos-v8-8-ee696a2c15a9@linaro.org>
-References: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
-In-Reply-To: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680898484; l=1279;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=BYfX0jKxH/0PCjBpNTo0aggPX+DBVTo1e00pUoIo7lE=;
- b=Q3wauYfS7gq5URur71wgmqfygzW5MSoxMThsPbY1kwefMc+i7/CpNJfllJopgOxt5+m5bsnSWzun
- FU/S2NiNDMRstqmR5b2r2pmOwfx7MCLGGf7tcxHLHdcPc7OV9ijd
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rd7nj3bva35lr4pn"
+Content-Disposition: inline
+In-Reply-To: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,42 +57,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The interconnect driver is (or soon will be) vital to many other
-devices, as it's not a given that the bootloader will set up enough
-bandwidth for us or that the values we come into are reasonable.
 
-Promote the driver to core_initcall to ensure the consumers (i.e.
-most "meaningful" parts of the SoC) can probe without deferrals.
+--rd7nj3bva35lr4pn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/msm8996.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index dc9959a87df2..20340fb62fe6 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -2108,7 +2108,17 @@ static struct platform_driver qnoc_driver = {
- 		.sync_state = icc_sync_state,
- 	}
- };
--module_platform_driver(qnoc_driver);
-+static int __init qnoc_driver_init(void)
-+{
-+	return platform_driver_register(&qnoc_driver);
-+}
-+core_initcall(qnoc_driver_init);
-+
-+static void __exit qnoc_driver_exit(void)
-+{
-+	platform_driver_unregister(&qnoc_driver);
-+}
-+module_exit(qnoc_driver_exit);
- 
- MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
- MODULE_DESCRIPTION("Qualcomm MSM8996 NoC driver");
+On Fri, Apr 07, 2023 at 05:03:26PM +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be
+> made const for safety.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@=
+linaro.org/
+>=20
+> Therefore I propose this should also go via hwmon tree.
+>=20
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
 
--- 
-2.40.0
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
+-- Sebastian
+
+>  drivers/power/supply/power_supply_hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
+pply/power_supply_hwmon.c
+> index a48aa4afb828..c97893d4c25e 100644
+> --- a/drivers/power/supply/power_supply_hwmon.c
+> +++ b/drivers/power/supply/power_supply_hwmon.c
+> @@ -293,7 +293,7 @@ static const struct hwmon_ops power_supply_hwmon_ops =
+=3D {
+>  	.read_string	=3D power_supply_hwmon_read_string,
+>  };
+> =20
+> -static const struct hwmon_channel_info *power_supply_hwmon_info[] =3D {
+> +static const struct hwmon_channel_info * const power_supply_hwmon_info[]=
+ =3D {
+>  	HWMON_CHANNEL_INFO(temp,
+>  			   HWMON_T_LABEL     |
+>  			   HWMON_T_INPUT     |
+> --=20
+> 2.34.1
+>=20
+
+--rd7nj3bva35lr4pn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQwlV4ACgkQ2O7X88g7
++pqvBA//RGvJH9yu+zEp0cu+ZHkJQYBy6lNJBVX+33uLpxMpF6RJE3uRaXlayaRm
+fcWRhuP3Xn4MO+Bi467oXg97iIKGk5nRPoFVh4LoYz9fsLuW9L00p5lAkR0Q1jxM
+eoNDfAWlHXpwOw0IF7mVnRlEKuigLwFOciA8XmQxPnfLCQfK0aX4o+arHSYaYU6x
+ixsfyCjcvEpbd/25XuUOxEGuJ2Z5NYEzC5zdnj+aDPiKLY4wRCsBYDr/IsMt0ePH
+0pJMmqFzBUmPRoSIlLFmP2pbroj9TRCsfDyMRD4OltzkWzmmF5729D0MEX6S9MfP
+1H3StzhfPyIzv01clQkzTF+0Qc4LmKsexjU58y4a01H7DHCPUp3X8w3D2z9VbHmE
+q2AvzFPx4xmRpotK8RjZpS0Lx5MawwOeqe4G0iSgX9iIDviZ2ePlZQMJYhDsMgMv
+0ZGi0Ldh7qNhT+O9gmLfqdgH6/btZQtjBbSVOiBnPeH+BdCLcfaNE0PfVptEnkvB
+EwzoSQbrgmm14n/xaMBOV8UmubK55LwYvA7vYK/PxfUcFUdyq8SiE03QMHpTdeb9
+OutuHcbxKV+GU+TcllZREOskC8BwDaoGXHgA62BJ6VeIUWw7FtgGK+52IINQ2Vck
+6IdlN3UyduzvfGVggiAWjHLgdevWb33lle23I6YmXn6W4X67RJw=
+=LYJV
+-----END PGP SIGNATURE-----
+
+--rd7nj3bva35lr4pn--
