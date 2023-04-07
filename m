@@ -2,88 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A5C6DA5E1
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 00:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819466DA7D5
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 04:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjDFWg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Apr 2023 18:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S231176AbjDGCsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Apr 2023 22:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjDFWg4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 18:36:56 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E38A9757
-        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 15:36:52 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id m8so12374742wmq.5
-        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 15:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680820611; x=1683412611;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=skWX9V317pI7NFnUDRVjdiomu/IWGv9zO3PQr3O+0uk=;
-        b=jJgrKDCZPq1PQ1wu7w5F8v68QGssbbDfm573xRWw9vyrk0++cFgNOdWVe7UrNK2XgI
-         S82GTTZYB7E+30OH/XfjlMNOGdtXnNi3z3UeOURigvi+/lPvu0vkdazXXD4VKrdob/+d
-         90YU76FquqdagkLcvZ2QfLVFCocFAank4eE8dAF2q6MrbE4FmILp8i3+ALQmDff34JV7
-         HUg5p2/4HOp7THF8qBCnz9SrV2wQT6zx5jWzLPY4i2a+6FeRPp1XTPGMZAtTJqL7XRlj
-         3d/QEzYxT7p4cfSYcmF/hWIPVhja7LfbtYqgfjIdUj7DOTLBduZgWcmixWO2XR5s6J3k
-         8BAA==
+        with ESMTP id S230321AbjDGCsJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Apr 2023 22:48:09 -0400
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B94ED6
+        for <linux-pm@vger.kernel.org>; Thu,  6 Apr 2023 19:48:08 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-627ed1ac61cso379242b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 06 Apr 2023 19:48:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680820611; x=1683412611;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=skWX9V317pI7NFnUDRVjdiomu/IWGv9zO3PQr3O+0uk=;
-        b=yW+FkVZyjvPjv961dmfQvDSYDqXv3MgFKj/+v8vmizDLEi0SWyxBFy57fIqYgDPZX1
-         YHfO0SMo5CCob8VILDNloAv1c4bv+Ei5LFFp/bP76Z/6yd/0FsXCoPBMEWKj70UWcaR6
-         s+hPl8emhnVuKkHt5gPRv+yYRq5mO0QA2/EYufXVN7U4qSIH9MONyOhEFRLGG95ls0Pa
-         f/+6D5v0d9YgXPuaEHxI0KxCTQt22lsYdwzN14HloPeY/mFI7pmLJLZeIgig1VDn8fZM
-         R0o92YMqhhkV6NmhpF0D5YrMqTOFaNW+cDKEZetuEl+BU8pQz4/INrqjXUdz+skxLl/l
-         wObw==
-X-Gm-Message-State: AAQBX9egDYJCnzHz7yhQ6jX8LuddsC3Rps2KgEVyppuIfBWL+0vdnSch
-        wrm+5q8CS3t08u43fiSovVyUOQ==
-X-Google-Smtp-Source: AKy350bWXvtTUpNp9GTweEAhj6nDrtaEn4yUhBWLJ3Zerlt9BYOtC8MU31tkTPGRoxTkQ0C8h0yKxQ==
-X-Received: by 2002:a7b:c5c2:0:b0:3ed:c84c:7efe with SMTP id n2-20020a7bc5c2000000b003edc84c7efemr26055wmk.7.1680820610709;
-        Thu, 06 Apr 2023 15:36:50 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m19-20020a7bce13000000b003edcc2223c6sm2764839wmc.28.2023.04.06.15.36.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 15:36:50 -0700 (PDT)
-Message-ID: <af18c56b-3133-542e-541a-2589b3d3e5ed@linaro.org>
-Date:   Thu, 6 Apr 2023 23:36:49 +0100
+        d=1e100.net; s=20210112; t=1680835688; x=1683427688;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LEKF2ishCKn2YX7YX48VS1nRgPoxqb95NFnlr6xUF6Y=;
+        b=yNNbzdVxiFzTMYTnQr5E9+x3Kv0xG6o2wL25Y4rlC3z8jAg5vO8VH/oyjbNQzXRn8t
+         6woQMly3bQfCy5+5j/9XWzvftp7L3XI48mwc65eLi+Fi5Zq79ATuQbG+v04Q5RSdGbcU
+         x0+9sL7YmkVkgixarQU2V9ZaXgXGKS68tgSp92EKUXOEe9ZOeguhgpvrncRpXfevR928
+         haTrnNaR/UCT6fzWfNsKXUGi4xTabTJnWI6RKiAOboHIZ03tBSSuKd3LHYS+rRb8C17k
+         tcxIczmf00EorYH+CsvCeyakzFpbOOXTGVQy6PGZOIhehMnEIu22a4W63CQN0QrbpkTN
+         3RZw==
+X-Gm-Message-State: AAQBX9fQhltV6WJaAagQ6QbhLBiLHvJJ+HF98gHdMJ3N8hlwKad64qKL
+        SgtJxBGiP3PAQmhgS+Axw+i/smQRg5o=
+X-Google-Smtp-Source: AKy350Y1vADQJk8PsINpjka5Ne1hd7nNaxcGs1H7Xj7mwRosjP1rYTqtWMARkQD7BgaypvqXc1fAzA==
+X-Received: by 2002:a05:6a00:468a:b0:625:a08c:a8ba with SMTP id de10-20020a056a00468a00b00625a08ca8bamr1246633pfb.1.1680835688291;
+        Thu, 06 Apr 2023 19:48:08 -0700 (PDT)
+Received: from tgsp-ThinkPad-X280.. ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id r20-20020a62e414000000b0062602254895sm2077168pfh.10.2023.04.06.19.48.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 19:48:07 -0700 (PDT)
+From:   xiongxin <xiongxin@kylinos.cn>
+To:     xiongxin@kylinos.cn, rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org
+Subject: [v2] powercap: intel_rapl: Optimize rp->domains memory allocation
+Date:   Fri,  7 Apr 2023 10:47:59 +0800
+Message-Id: <20230407024759.2320858-1-xiongxin@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/3] drivers/thermal/qcom/tsens: Add ability to read and
- shift-in non-contiguous calibration data
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        dmitry.baryshkov@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
- <ZC7xSG7qVZ7vlOB7@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <ZC7xSG7qVZ7vlOB7@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/04/2023 17:20, Stephan Gerhold wrote:
->> Reviewed-by: Bryan O'Donoghue<bryan.odonoghue@linaro.org>
-> So with sensor hwid=10 disabled, I think this patch series is actually
-> not needed? 😄
+In the memory allocation of rp->domains in rapl_detect_domains(), there
+is an additional memory of struct rapl_domain allocated, optimize the
+code here to save sizeof(struct rapl_domain) bytes of memory.
 
-I can hardly be expected to remember back to January ..
+Test in Intel NUC (i5-1135G7).
 
-dropping
+Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+Tested-by: xiongxin <xiongxin@kylinos.cn>
+---
+
+v2: The extra memory will never be used, so can directly remove '+1'.
+
+ drivers/powercap/intel_rapl_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 8970c7b80884..a766d6e43c34 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1319,7 +1319,7 @@ static int rapl_detect_domains(struct rapl_package *rp, int cpu)
+ 	}
+ 	pr_debug("found %d domains on %s\n", rp->nr_domains, rp->name);
+ 
+-	rp->domains = kcalloc(rp->nr_domains + 1, sizeof(struct rapl_domain),
++	rp->domains = kcalloc(rp->nr_domains, sizeof(struct rapl_domain),
+ 			      GFP_KERNEL);
+ 	if (!rp->domains)
+ 		return -ENOMEM;
+-- 
+2.34.1
+
