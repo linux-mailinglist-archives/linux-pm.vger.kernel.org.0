@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2896DB500
+	by mail.lfdr.de (Postfix) with ESMTP id 828FA6DB4FF
 	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 22:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDGUOy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Apr 2023 16:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
+        id S229820AbjDGUOz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Apr 2023 16:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDGUOw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 16:14:52 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F3B1734
-        for <linux-pm@vger.kernel.org>; Fri,  7 Apr 2023 13:14:50 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z8so1410290lfb.12
-        for <linux-pm@vger.kernel.org>; Fri, 07 Apr 2023 13:14:49 -0700 (PDT)
+        with ESMTP id S229932AbjDGUOx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 16:14:53 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D67BBB5
+        for <linux-pm@vger.kernel.org>; Fri,  7 Apr 2023 13:14:51 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id h11so48737472lfu.8
+        for <linux-pm@vger.kernel.org>; Fri, 07 Apr 2023 13:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680898488;
+        d=linaro.org; s=google; t=1680898489;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3aCo6YWSWC7QDyDOgnSdKQprMmsQavo7dczvCShoPH0=;
-        b=B1QnkTPGvvIyEvodHBYuu9LL3xe40OdQRgBTwdVVM1iEc5BoNzebvBFN3e2/oxXg5q
-         cA0iMRDsD1CxGngS9MN+hNqQKl8MaTf1mdrHW6psnJAouLqolZkiAyu4k2KoSho3IQJP
-         hX9Dp8H59wOyJnYL8bqqwax6hNPdzX5c0BlI0tBMq++2uSH+0BxK4URNrX1syN6BCEau
-         DOYnHfK8OIaI0GoOQ+lQafgi55K+Vt1JuNpZqqtyV4WDFbYrrLKFY9bZ1b3I6eJ8b7cI
-         BlebXXH8a9E/5it8zIbvnGBfb/WugaP2oEjhA06OEzrSZnIsSK/dup66VuNl5O6C67Ea
-         CmGA==
+        bh=H3nsx7fTooCsHlb+iQOPq8i6PDjNQ7J7ivbonnB4f0g=;
+        b=Z8vc6jpcWix01rDMGNR5PCpgd+r96K1dnJUCfKV7qM4GZtoljfuq7IBcdUCo8ooyTU
+         m09IsKdPTF2AKqu3wDIoxrpIJ8iimjjuBgdfli5PSAJi4Tdz/NzUZ7PAlF7X4whGoxRO
+         Sy5JfXLxQdxKeD/S3e7nmrHx6iId8R8ukvPQLr6wNPkms9xuBl8ZMViBwX1TLxVjuI4V
+         GALzUti2PrVQRe0isUUqcBJHR7D6pSxQvB9wVtwHSrRLXGb5ga2HrKejmx/ZCkix8ww/
+         mMWnEHkPy6gLSUeb74HQOjDfgBZVmINA/OB7JUDSapX6vYWtGqZYoiq30nUyIvIMAej7
+         PGUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680898488;
+        d=1e100.net; s=20210112; t=1680898489;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3aCo6YWSWC7QDyDOgnSdKQprMmsQavo7dczvCShoPH0=;
-        b=Tp/1okZ8+DBc/+la7WaebrEihD5ZgeRg2YYC1W8QNHYsGzjVwiC8Rn7pmqDfvU0gm/
-         GkYAb42pJWhMk4q1kcVbYOy5j07ZFBW3+Pn/f0uK3yxrb+vpgkZJUa/Mg5tokK997HaH
-         39COYgaT4EI6QaONNH+xM81Dlc1J8oloaQsPU3TGBibx7sjeE51JDULoQ8rgssaaI+wU
-         802ZZPnyC1kVvc4ZLSIStY3sGGCZtLE6dy4AxJs2G5BI7M4WgCycuGgCOZHkLo1HgbD0
-         bWaqlCq28ZL4MJwtW7dHAkBzJD22rkW2Hg8GV8m/+Rz/212zWbdyyoNPNGFnWjq/tP0F
-         p6TQ==
-X-Gm-Message-State: AAQBX9ezPbG3RiKYHVU0Ps/01FEeACAQ63SGYeAQOa0uVBkLFmH2Ny/v
-        rFWWdudM3TpHy/ALI2S953UVnwxg5DJ65pcSPmc=
-X-Google-Smtp-Source: AKy350ZWAFUetM5TUyfwMXrFXqhTKAHsnvo3YH5ggDIek8UB9G5BzAnNUb9WIv9JDbv9Mbo+rQTHAw==
-X-Received: by 2002:a19:ac4c:0:b0:4db:3e1a:fc7 with SMTP id r12-20020a19ac4c000000b004db3e1a0fc7mr182lfc.31.1680898488054;
-        Fri, 07 Apr 2023 13:14:48 -0700 (PDT)
+        bh=H3nsx7fTooCsHlb+iQOPq8i6PDjNQ7J7ivbonnB4f0g=;
+        b=RJj3Y5aLzlwn1M6ahhS9p6dewcEvlB21z9q9rjCnbQnN+cTPVSOhAKymGQvNZtHQgI
+         US7mkTcIqK5VC8u2yQdLeeG4zO3ka1sd+jeFvPz1lfuVYLAScexSK/NxaXcOnG/6BFi1
+         fh44a2Ku+99B9GlibOw661y6TWrRDL5Th28ULh8So2bAqGhokjPh1DvmgXNyCSsJzaSU
+         cu/n/9katqABXZv0K2Ky7eJAj0Nj6I2tJJKLJ9FNXIug7iD2Yyta0wGL+0i7g4EmPWqx
+         ggsLwxUGpyBd+8pmE0qdSPfy3/EZGW/U7FlyblmcZFnvtBQbj/JXYol15qXdZ+AniOeN
+         Hmww==
+X-Gm-Message-State: AAQBX9eY2gJVWNByaFp6/Yh4Dw7FTzJZTv4muCk3D50Abpytd8zn0iIe
+        x7Bv/OB3w5SJGLKKtbtAFgGyhDINl7yTSkrYzsE=
+X-Google-Smtp-Source: AKy350Y7LUK3nfzendnh17J37dDFXjucugtvtpD8fmjaYFzQSoobFRG/vsggjzQ+EbasYiOGKXVpfg==
+X-Received: by 2002:ac2:447b:0:b0:4db:4fe8:fd0f with SMTP id y27-20020ac2447b000000b004db4fe8fd0fmr909089lfl.25.1680898489225;
+        Fri, 07 Apr 2023 13:14:49 -0700 (PDT)
 Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u3-20020ac243c3000000b004eaf6181a32sm842436lfl.75.2023.04.07.13.14.46
+        by smtp.gmail.com with ESMTPSA id u3-20020ac243c3000000b004eaf6181a32sm842436lfl.75.2023.04.07.13.14.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 13:14:47 -0700 (PDT)
+        Fri, 07 Apr 2023 13:14:48 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 07 Apr 2023 22:14:44 +0200
-Subject: [PATCH v8 2/8] interconnect: qcom: rpm: Rename icc provider
- num_clocks to num_bus_clocks
+Date:   Fri, 07 Apr 2023 22:14:45 +0200
+Subject: [PATCH v8 3/8] interconnect: qcom: rpm: Drop unused parameters
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-qos-v8-2-ee696a2c15a9@linaro.org>
+Message-Id: <20230228-topic-qos-v8-3-ee696a2c15a9@linaro.org>
 References: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
 In-Reply-To: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -69,11 +68,11 @@ Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Marijn Suijten <marijn.suijten@somainline.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680898484; l=3064;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680898484; l=2285;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=AL/5pHSAvV2vBdT049aGNYdnVcOJiOzItHlBogTY10o=;
- b=wcySxfPAttSxwn9WOps36nlx4KY+U5yuRwJOUN5PySwu0zk63hRzqg6cSXdop7Vb7O8irN7gk2oV
- ahgwNVKXA7+ESyhtSG/tyco/laQlr4+2aO6/nyR9yUJKzx5lancD
+ bh=yBC75Q6TJYtH1vX8QL0awOafuPHjdn2hOETxfU8AhgI=;
+ b=/scUAZfnDk4668871iclpkfz/2TI7qD1M2Yecgm/4Pk9iR0T4KISIAjnhu3EULS0UwQUZguCML7F
+ 1VbPKaQFBp3iVjwy0cty4n9Ihl/9mgDe+MLW6lysH+x5AHLXOnm7
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -85,91 +84,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In preparation for handling non-scaling clocks that we still have to
-enable, rename num_clocks to more descriptive num_bus_clocks.
+The QoS-setting functions do not care about the bandwidth values passed.
+Drop them.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 12 ++++++------
- drivers/interconnect/qcom/icc-rpm.h |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/interconnect/qcom/icc-rpm.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index ee3d09a6850e..8dce3dcff8da 100644
+index 8dce3dcff8da..7d62c0bf2722 100644
 --- a/drivers/interconnect/qcom/icc-rpm.c
 +++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -379,7 +379,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 			return ret;
- 	}
+@@ -50,7 +50,7 @@
+ #define NOC_QOS_MODE_FIXED_VAL		0x0
+ #define NOC_QOS_MODE_BYPASS_VAL		0x2
  
--	for (i = 0; i < qp->num_clks; i++) {
-+	for (i = 0; i < qp->num_bus_clks; i++) {
- 		/*
- 		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
- 		 * for other clocks.  If a platform doesn't set interconnect
-@@ -464,7 +464,7 @@ int qnoc_probe(struct platform_device *pdev)
- 
- 	for (i = 0; i < cd_num; i++)
- 		qp->bus_clks[i].id = cds[i];
--	qp->num_clks = cd_num;
-+	qp->num_bus_clks = cd_num;
- 
- 	qp->type = desc->type;
- 	qp->qos_offset = desc->qos_offset;
-@@ -494,11 +494,11 @@ int qnoc_probe(struct platform_device *pdev)
- 	}
- 
- regmap_done:
--	ret = devm_clk_bulk_get_optional(dev, qp->num_clks, qp->bus_clks);
-+	ret = devm_clk_bulk_get_optional(dev, qp->num_bus_clks, qp->bus_clks);
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(qp->num_clks, qp->bus_clks);
-+	ret = clk_bulk_prepare_enable(qp->num_bus_clks, qp->bus_clks);
- 	if (ret)
- 		return ret;
- 
-@@ -551,7 +551,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	icc_provider_deregister(provider);
- err_remove_nodes:
- 	icc_nodes_remove(provider);
--	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
-+	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
- 
- 	return ret;
+-static int qcom_icc_set_qnoc_qos(struct icc_node *src, u64 max_bw)
++static int qcom_icc_set_qnoc_qos(struct icc_node *src)
+ {
+ 	struct icc_provider *provider = src->provider;
+ 	struct qcom_icc_provider *qp = to_qcom_provider(provider);
+@@ -95,7 +95,7 @@ static int qcom_icc_bimc_set_qos_health(struct qcom_icc_provider *qp,
+ 				  mask, val);
  }
-@@ -563,7 +563,7 @@ int qnoc_remove(struct platform_device *pdev)
  
- 	icc_provider_deregister(&qp->provider);
- 	icc_nodes_remove(&qp->provider);
--	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
-+	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
- 
- 	return 0;
+-static int qcom_icc_set_bimc_qos(struct icc_node *src, u64 max_bw)
++static int qcom_icc_set_bimc_qos(struct icc_node *src)
+ {
+ 	struct qcom_icc_provider *qp;
+ 	struct qcom_icc_node *qn;
+@@ -150,7 +150,7 @@ static int qcom_icc_noc_set_qos_priority(struct qcom_icc_provider *qp,
+ 				  NOC_QOS_PRIORITY_P0_MASK, qos->prio_level);
  }
-diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index 689300a2fd4e..2436777820a4 100644
---- a/drivers/interconnect/qcom/icc-rpm.h
-+++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -23,7 +23,7 @@ enum qcom_icc_type {
- /**
-  * struct qcom_icc_provider - Qualcomm specific interconnect provider
-  * @provider: generic interconnect provider
-- * @num_clks: the total number of clk_bulk_data entries
-+ * @num_bus_clks: the total number of bus_clks clk_bulk_data entries
-  * @type: the ICC provider type
-  * @regmap: regmap for QoS registers read/write access
-  * @qos_offset: offset to QoS registers
-@@ -32,7 +32,7 @@ enum qcom_icc_type {
-  */
- struct qcom_icc_provider {
- 	struct icc_provider provider;
--	int num_clks;
-+	int num_bus_clks;
- 	enum qcom_icc_type type;
- 	struct regmap *regmap;
- 	unsigned int qos_offset;
+ 
+-static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
++static int qcom_icc_set_noc_qos(struct icc_node *src)
+ {
+ 	struct qcom_icc_provider *qp;
+ 	struct qcom_icc_node *qn;
+@@ -187,7 +187,7 @@ static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
+ 				  NOC_QOS_MODEn_MASK, mode);
+ }
+ 
+-static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
++static int qcom_icc_qos_set(struct icc_node *node)
+ {
+ 	struct qcom_icc_provider *qp = to_qcom_provider(node->provider);
+ 	struct qcom_icc_node *qn = node->data;
+@@ -196,11 +196,11 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
+ 
+ 	switch (qp->type) {
+ 	case QCOM_ICC_BIMC:
+-		return qcom_icc_set_bimc_qos(node, sum_bw);
++		return qcom_icc_set_bimc_qos(node);
+ 	case QCOM_ICC_QNOC:
+-		return qcom_icc_set_qnoc_qos(node, sum_bw);
++		return qcom_icc_set_qnoc_qos(node);
+ 	default:
+-		return qcom_icc_set_noc_qos(node, sum_bw);
++		return qcom_icc_set_noc_qos(node);
+ 	}
+ }
+ 
 
 -- 
 2.40.0
