@@ -2,232 +2,248 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C856DA91E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 08:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CE86DAA32
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 10:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbjDGGwk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Apr 2023 02:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S239782AbjDGIcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Apr 2023 04:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjDGGwj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 02:52:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6767AA0;
-        Thu,  6 Apr 2023 23:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680850357; x=1712386357;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bblOKHgLgzcxci/+70+IMRpI5HnZ8tzUg8G9DDXE6C8=;
-  b=kfGKEFvYrKxa3xjFRYiRXGiBQ1JtZETaG7y+h1Nd8p9FcH2HKBi19baK
-   cu6KB7qT2AlBWt97v3yEQl/jgidUvROHKwTC0a44gLF7FndUi4gFaV1SU
-   uzeWqvLp5ekOp+XBDYvWWgmA3auecFtmlzugGPfAY7fhirNPcITfemPjq
-   iwQoWSpRKP8NRACAbymynz3CnrxhZQzoPpeZJs7XYb6K79iXaKGpLfnwK
-   YBCPyA5fgK71d111uCogNWMcRiib03sQ59cMkIj5jtSm9/mOyA6ibmDHT
-   53+f6RTTYVYPN8Mm+dUseXF6V8/GWJaBNCEtgrsqMOI0o+P/xkVoJbbRG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="342945253"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="342945253"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:52:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="687435133"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="687435133"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Apr 2023 23:52:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkfxX-000SD4-1R;
-        Fri, 07 Apr 2023 06:52:31 +0000
-Date:   Fri, 07 Apr 2023 14:51:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bc6e567b38e395dae5fd5ff4b6be06c11a7d3edd
-Message-ID: <642fbd8d.Qcu6nYsxz7nS1qQv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S240270AbjDGIci (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 04:32:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 751C4AF0F;
+        Fri,  7 Apr 2023 01:32:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1EA341424;
+        Fri,  7 Apr 2023 01:32:20 -0700 (PDT)
+Received: from [10.34.100.129] (pierre123.nice.arm.com [10.34.100.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0A113F73F;
+        Fri,  7 Apr 2023 01:31:34 -0700 (PDT)
+Message-ID: <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
+Date:   Fri, 7 Apr 2023 10:31:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
+ high error
+Content-Language: en-US
+To:     Yang Shi <yang@os.amperecomputing.com>
+Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20230328193846.8757-1-yang@os.amperecomputing.com>
+ <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
+ <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
+ <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
+ <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bc6e567b38e395dae5fd5ff4b6be06c11a7d3edd  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+Hello Yang,
 
-elapsed time: 723m
+On 4/6/23 23:52, Yang Shi wrote:
+> 
+> 
+> On 4/5/23 10:57 AM, Pierre Gondois wrote:
+>>
+>>
+>> On 4/4/23 21:07, Yang Shi wrote:
+>>>
+>>>
+>>> On 3/29/23 11:43 AM, Rafael J. Wysocki wrote:
+>>>> On Tue, Mar 28, 2023 at 9:39 PM Yang Shi
+>>>> <yang@os.amperecomputing.com> wrote:
+>>>>> When testing CPPC cpufreq on our platform, we noticed the error may
+>>>>> be quite
+>>>>> high and the high error may happen quite often.  For example, on a
+>>>>> platform
+>>>>> with a maximum frequency of 2.8GHz when the CPUs were fully loaded
+>>>>> (100% load),
+>>>>> we saw cpuinfo_cur_freq may show 4GHz, it means the error is >
+>>>>> 40%.  And the
+>>>>> high error (> 1%) happened 256 times out of 2127 samples (sampled
+>>>>> every 3
+>>>>> seconds) in an approximate 2hrs test.
+>>>> The description above is a bit cryptic IMV.  For example, it is not
+>>>> particularly clear what "high error" means.
+>>>>
+>>>>> We tried to enlarge the delay, and tested with 100us, 1ms and
+>>>>> 10ms.  The
+>>>>> below is the results.
+>>>>>
+>>>>> 100us:
+>>>>> The highest error is 4GHz, 22 times out of 3623 samples
+>>>>>
+>>>>> 1ms:
+>>>>> The highest error is 3.3GHz, 3 times out of 2814 samples
+>>>>>
+>>>>> 10ms:
+>>>>> No high error anymore
+>>>>>
+>>>>> Increase the measurement delay in cppc_cpufreq_get_rate to 10ms to
+>>>>> avoid
+>>>>> high measurement errors.
+>>>>>
+>>>>> Signed-off-by: Yang Shi <yang@os.amperecomputing.com>
+>>>>> ---
+>>>>>     drivers/cpufreq/cppc_cpufreq.c | 2 +-
+>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c
+>>>>> b/drivers/cpufreq/cppc_cpufreq.c
+>>>>> index 022e3555407c..c2bf65448d3d 100644
+>>>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>>>> @@ -851,7 +851,7 @@ static unsigned int
+>>>>> cppc_cpufreq_get_rate(unsigned int cpu)
+>>>>>            if (ret)
+>>>>>                    return ret;
+>>>>>
+>>>>> -       udelay(2); /* 2usec delay between sampling */
+>>>>> +       mdelay(10); /* 10msec delay between sampling */
+>>>> This function can be called with interrupts off, so it cannot spin
+>>>> for 10 ms.
+>>>
+>>> Per Pierre's comment, the delay may still be ms. Is it still too long? A
+>>> quick look at the code shows cpufreq_quick_get() is the only caller with
+>>> irq off IIRC. So can we have another callback for it, for example,
+>>> get_quick() which does spin for shorter time (for example, keep 2us
+>>> delay). Then have ->get() callback use longer delay?
+>>
+>> -
+>> According to the same ACPI 6.5 s8.4.6.1.2.5 "Time Window Register"
+>> paragraph,
+>> and assuming we are in the 'Autonomous Selection is not enabled' case,
+>> the OS is supposed to write (not read) the delta between successive
+>> reads of the
+>> counter, so using this field as is would be bending the definition I
+>> think.
+>>
+>> -
+>> It is correct that the "Time Window Register" field specifies a value
+>> in ms,
+>> but it seems a long time to wait for with irqs off.
+> 
+> AFAIK, our platforms don't support "Time Window Register".
+> 
+>>
+>> -
+>> Theoretically, the perf/ref counters should accumulate to allow computing
+>> a correct frequency. Is it possible to know how these counters are
+>> accessed ?
+>> Is it through PCC channels and there is some undesired delay between the
+>> reads of the perf/ref counters ?
+> 
+> The counters are implemented via mmio instead of PCC channels. So the
+> cpc_read() calls should go to ACPI_ADR_SPACE_SYSTEM_MEMORY IIRC.
+> 
+>>
+>> -
+>> About making the delay:
+>>      max(cppc_cpufreq_get_transition_delay_us(), Time Winder Register)
+>> I think it would be good to know why the values of the counters
+>> don't accumulate correctly, ideally by getting a trace where a frequency
+>> above the maximum frequency is computed, and with the timestamps at which
+>> the counters are read.
+>> If the values are coming from PCC channels / the firmware, it might be
+>> difficult
+>> to get.
+> 
+> I wrote a bpftrace script to trace the below data:
+>       - The CPU number
+>       - The frequency
+>       - The start and end timestamp of the first cppc_get_perf_ctrs() call
+>       - The duration/latency of the first cppc_get_perf_ctrs() call
+>       - The start and end timestamp of the second cppc_get_perf_ctrs() call
+>       - The duration/latency of the second cppc_get_perf_ctrs() call
+> 
+> The typical logs look like below.
+> Good
+> CPU: 1
+> Freq: 2801485KHz
+> First:  2489382384  2489387084 4700ns
+> Second: 2489390824  2489394024  3200ns
+> --------------------------------------------------
+> CPU:    2
+> Freq:   2797956KHz
+> First:  2490406524  2490411204  4680ns
+> Second: 2490414764  2490417684  2920ns
+> 
+> Bad:
+> CPU:    55
+> Freq:   3969372KHz
+> First:  875659868  875721568  61700ns
+> Second: 875725148  875727708  2560ns
+> --------------------------------------------------
+> CPU: 65
+> Freq: 3829744KHz
+> First:  3854951136  3854995896 44760ns
+> Second: 3854999416  3855002696 3280ns
+> --------------------------------------------------
+> CPU: 21
+> Freq: 4279242KHz
+> First:  240834204  240910484 76280ns
+> Second: 240914264  240916944  2680ns
+> 
+> 
+> The first line is cpu number, the second line is frequency returned by
+> cppc_cpufreq_get_rate(), the third line is the start and end timestamps
+> and duration of the first cppc_get_perf_ctrs(), the fourth line is the
+> start and end timestamps and duration of the second cppc_get_perf_ctrs().
+> 
+> So per the log I think we can tell basically the longer the duration the
+> higher the error. The 2us delay is not long enough to offset the impact
+> from unexpected latency of reading the counters.
+> 
+> In the worst case the frequency is 4279242KHz, comparing 2800000KHz the
+> error is over 50%. So the delay should be 4ms ~ 5ms in order to offset
+> the impact from reading the counters if I do the math correctly.
+> 
+> Hope the trace data is helpful to diagnose the problem.
 
-configs tested: 152
-configs skipped: 7
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks for the data. I was thinking the following was happening:
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230403   gcc  
-alpha                randconfig-r021-20230403   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230403   gcc  
-arc                  randconfig-r016-20230403   gcc  
-arc                  randconfig-r031-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arc                  randconfig-r043-20230406   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r025-20230403   clang
-arm                  randconfig-r031-20230403   gcc  
-arm                  randconfig-r046-20230403   clang
-arm                  randconfig-r046-20230406   gcc  
-arm                           sama5_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230404   gcc  
-arm64        buildonly-randconfig-r006-20230403   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230403   clang
-arm64                randconfig-r015-20230403   gcc  
-arm64                randconfig-r033-20230403   clang
-csky                                defconfig   gcc  
-hexagon      buildonly-randconfig-r001-20230403   clang
-hexagon      buildonly-randconfig-r001-20230405   clang
-hexagon      buildonly-randconfig-r003-20230404   clang
-hexagon      buildonly-randconfig-r004-20230404   clang
-hexagon      buildonly-randconfig-r005-20230403   clang
-hexagon              randconfig-r006-20230403   clang
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r041-20230406   clang
-hexagon              randconfig-r045-20230403   clang
-hexagon              randconfig-r045-20230406   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230403   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                          randconfig-a011   clang
-i386                 randconfig-a012-20230403   gcc  
-i386                          randconfig-a012   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                          randconfig-a013   clang
-i386                 randconfig-a014-20230403   gcc  
-i386                          randconfig-a014   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                          randconfig-a015   clang
-i386                 randconfig-a016-20230403   gcc  
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r001-20230403   gcc  
-ia64         buildonly-randconfig-r004-20230403   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r024-20230403   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r026-20230403   gcc  
-loongarch            randconfig-r032-20230403   gcc  
-loongarch            randconfig-r036-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r035-20230403   gcc  
-microblaze   buildonly-randconfig-r002-20230404   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r003-20230405   gcc  
-mips         buildonly-randconfig-r005-20230403   gcc  
-mips         buildonly-randconfig-r006-20230405   gcc  
-mips                 randconfig-r011-20230403   clang
-mips                 randconfig-r023-20230403   clang
-mips                 randconfig-r033-20230403   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230403   gcc  
-openrisc     buildonly-randconfig-r002-20230405   gcc  
-openrisc             randconfig-r035-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r003-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230403   gcc  
-powerpc                          g5_defconfig   clang
-powerpc                   lite5200b_defconfig   clang
-powerpc                 mpc8315_rdb_defconfig   clang
-powerpc                      pcm030_defconfig   gcc  
-powerpc              randconfig-r005-20230403   clang
-powerpc              randconfig-r006-20230403   clang
-powerpc              randconfig-r013-20230403   gcc  
-powerpc              randconfig-r034-20230403   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r002-20230403   gcc  
-riscv        buildonly-randconfig-r004-20230405   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                randconfig-r042-20230406   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r006-20230404   clang
-s390                                defconfig   gcc  
-s390                 randconfig-r002-20230403   clang
-s390                 randconfig-r044-20230403   gcc  
-s390                 randconfig-r044-20230406   clang
-sh                               allmodconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                   randconfig-r001-20230403   gcc  
-sh                   randconfig-r003-20230403   gcc  
-sparc        buildonly-randconfig-r006-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r001-20230403   gcc  
-sparc                randconfig-r034-20230403   gcc  
-sparc64              randconfig-r022-20230403   gcc  
-sparc64              randconfig-r036-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64               randconfig-k001-20230403   gcc  
-x86_64               randconfig-r032-20230403   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r002-20230403   gcc  
-xtensa       buildonly-randconfig-r003-20230403   gcc  
+  cppc_get_perf_ctrs()[0]                    cppc_get_perf_ctrs()[1]
+/                    \                    /                         \
+ref[0]    delivered[0]                    ref[1]          delivered[1]
+   |            |                              |                  |
+   v            v                              v                  v
+----------------------------------------------------------------------> time
+    <-delta[0]-> <-------------2us------------> <----delta[1]---->
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+If delta[0] is really different from delta[1] like above, then the
+reference and delivered counters would have accumulated during different
+intervals, resulting in a wrong frequency.
+If more/less than 2us elapse between the two cppc_get_perf_ctrs() calls,
+then it shouldn't have any impact. So waiting ~10ms should theoretically
+not solve the issue.
+
+freq = ref_freq * (delivered[1] - delivered[0]) / (ref[1] - ref[0])
+
+If the counters are accessed through mmio, I don't see anything that would
+make delta[x] vary when calling cppc_get_perf_ctrs(), cf. cpc_read().
+Do you know if the address represents real counters or a place in memory
+representing something else ?
+
+Would it be possible to try setting the CPU frequency to one unique value
+and get a serie of values like:
+[timestamp, ref_counter_value, deliverd_counter_value]
+
+This would allow to check that the counters are accumulating at a valid
+pace. Also you said there were frequencies above the maximum value, but
+are there also frequencies below the minimum value ?
+
+Regards,
+Pierre
