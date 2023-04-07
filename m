@@ -2,128 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7309A6DAC29
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 13:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802F96DAC38
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Apr 2023 13:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240274AbjDGLXK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 7 Apr 2023 07:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S230412AbjDGL3N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 7 Apr 2023 07:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240260AbjDGLXJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 07:23:09 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F41D5FC8;
-        Fri,  7 Apr 2023 04:23:08 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-93434918b67so144120766b.0;
-        Fri, 07 Apr 2023 04:23:08 -0700 (PDT)
+        with ESMTP id S232228AbjDGL3K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Apr 2023 07:29:10 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA93A5E8;
+        Fri,  7 Apr 2023 04:28:49 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5047074939fso4297781a12.1;
+        Fri, 07 Apr 2023 04:28:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680866587;
+        d=1e100.net; s=20210112; t=1680866917;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H22T/yjbIlv40VndTuYM1BBNLs0U+57UTH8G/Ew4gkE=;
-        b=GTMxNU/diEWkCtEBWPAtaA7RzHM+kNXBwrTFJSU/gw8soImtql0akZ+sIxAigjc5QI
-         ffFU+83Eiu8n+VqPR+MBnglt/JQbV4gromJLe4znHZMGaSpBULTWKupA6Z0dG7E8EILD
-         P4lx3xPsAs47ub2qIPvD3LSpwPUpxoXF0DQhFc30IatsVl5fVpxMO+ImF+VTRVu2fJFf
-         yoO4oENmr3/71HsZMClN8h0kICWwjBQEPxGLQM3zZxDM/TasaJUB9g3FInmW2DYEQ3iw
-         zEJ6mB/NCpfEegAA/CQuYVsaXTtPWWwVQv1GOVWMm/w3ofYY5Io9FMjznrzgyeHQOOQP
-         olrg==
-X-Gm-Message-State: AAQBX9cFz8ERoEgbE3zBW0cd1xjpt/H7OAi6JH3ImNkYR8Lf0mV8LdUu
-        O35GgJCK/xE3ZEJaeSa8pwdZsmIMIwvzhclmc2Z3/oDF
-X-Google-Smtp-Source: AKy350bKkBb+ciOaOKgeVGyVXNHKVDb6UJJ3PWrBU+Bs7qJeaNH5l+o6jCCdOc5eZWP0WfJWJUyKamkqN1MtaEjOvXI=
-X-Received: by 2002:a50:a6d5:0:b0:4fb:2593:846 with SMTP id
- f21-20020a50a6d5000000b004fb25930846mr1283693edc.3.1680866587032; Fri, 07 Apr
- 2023 04:23:07 -0700 (PDT)
+        bh=877eU4ZABdImKgz+6f+4rhLkh0VZx+uXGk1JZRJ2xMM=;
+        b=Nh4LFBvowsfH27oCrGaml5BCCavOJR+xTC3vTCWR//2xDoD//qmxO9a4XqVSTVFWqt
+         g/dl+V3TAkIa+EJMba8WT5MiwaH+TmAeCAriK9Pxrqq9Gy5txDPxmIcXxlMUwFAvJHjM
+         VVGahWQB7nWPU6/RaMdxoMKA+s8oO4jve/cQ/L5TaLet7p30XrlFmPJIkYg6e9DqhTcv
+         nYKR4sD4foooNnCRN9OzCY4yDf+PFDfqifwttKTyEGS0LiZYio828LVowP7yDc3HFba+
+         rdPUVnav4zRf4SqVVGGbRTb4kbuNLP8K3Opef0p8N1vrkDupYrSaJ9AkKgvFXFKJWYOU
+         qYsw==
+X-Gm-Message-State: AAQBX9dywZtrBrb2wZfs5wWn53xy4lFAeO8v1lKsrB3dNDsTmxAqRzXn
+        lW1MGe8bMPuk3Ug2byAS7XuRG995F4+Gw0lZVfM=
+X-Google-Smtp-Source: AKy350bfBOd6xqzWl8iSO9i3cFeugti3HfJT5ir88UUP4c3CU6XW7zwLUPASgI37QYX9oTFxhvWYqm/wqaFJCUArLBM=
+X-Received: by 2002:a50:cd02:0:b0:4fa:71a2:982b with SMTP id
+ z2-20020a50cd02000000b004fa71a2982bmr853718edi.0.1680866916681; Fri, 07 Apr
+ 2023 04:28:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <8c788b8029b3a11f012915dad6154e7cc481f997.1680563899.git.viresh.kumar@linaro.org>
-In-Reply-To: <8c788b8029b3a11f012915dad6154e7cc481f997.1680563899.git.viresh.kumar@linaro.org>
+References: <20230325221935.3943-1-zeming@nfschina.com>
+In-Reply-To: <20230325221935.3943-1-zeming@nfschina.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 7 Apr 2023 13:22:55 +0200
-Message-ID: <CAJZ5v0h0d3pidPC8iK2LA36nVJEHXY_2et8G0fjjVnpbyGy5+Q@mail.gmail.com>
-Subject: Re: [PATCH V2] cpufreq: drivers with target_index() must set freq_table
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Yajun Deng <yajun.deng@linux.dev>, linux-kernel@vger.kernel.org
+Date:   Fri, 7 Apr 2023 13:28:25 +0200
+Message-ID: <CAJZ5v0gOrBep-gm-7npdkKSuw=CGhVOj3Se1orW=y1TLnzTE+w@mail.gmail.com>
+Subject: Re: [PATCH] base: power: main: remove unnecessary (void*) conversions
+To:     Li zeming <zeming@nfschina.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
         FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 1:39 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Fri, Mar 24, 2023 at 6:48 AM Li zeming <zeming@nfschina.com> wrote:
 >
-> Since the cpufreq core directly uses freq_table, for cpufreq drivers
-> that set their target_index() callback, make it mandatory for them to
-> set the same.
+> Pointer variables of void * type do not require type cast.
 >
-> Since this is set per policy and normally from policy->init(), do this
-> from cpufreq_table_validate_and_sort() which gets called right after
-> ->init().
->
-> Reported-by: Yajun Deng <yajun.deng@linux.dev>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Li zeming <zeming@nfschina.com>
 > ---
-> V2: Move declaration to cpufreq.h.
+>  drivers/base/power/main.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 >
->  drivers/cpufreq/cpufreq.c    | 5 +++++
->  drivers/cpufreq/freq_table.c | 7 ++++++-
->  include/linux/cpufreq.h      | 1 +
->  3 files changed, 12 insertions(+), 1 deletion(-)
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index c50139207794..f85f3515c258 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -679,7 +679,7 @@ static bool dpm_async_fn(struct device *dev, async_func_t func)
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6d8fd3b8dcb5..09131c54703f 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -73,6 +73,11 @@ static inline bool has_target(void)
->         return cpufreq_driver->target_index || cpufreq_driver->target;
->  }
->
-> +bool has_target_index(void)
-> +{
-> +       return !!cpufreq_driver->target_index;
-> +}
-> +
->  /* internal prototypes */
->  static unsigned int __cpufreq_get(struct cpufreq_policy *policy);
->  static int cpufreq_init_governor(struct cpufreq_policy *policy);
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index 90bfc27ed1ba..c4d4643b6ca6 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -355,8 +355,13 @@ int cpufreq_table_validate_and_sort(struct cpufreq_policy *policy)
+>  static void async_resume_noirq(void *data, async_cookie_t cookie)
 >  {
->         int ret;
+> -       struct device *dev = (struct device *)data;
+> +       struct device *dev = data;
+>         int error;
 >
-> -       if (!policy->freq_table)
-> +       if (!policy->freq_table) {
-> +               /* Freq table must be passed by drivers with target_index() */
-> +               if (has_target_index())
-> +                       return -EINVAL;
-> +
->                 return 0;
-> +       }
+>         error = device_resume_noirq(dev, pm_transition, true);
+> @@ -816,7 +816,7 @@ static int device_resume_early(struct device *dev, pm_message_t state, bool asyn
 >
->         ret = cpufreq_frequency_table_cpuinfo(policy, policy->freq_table);
->         if (ret)
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 65623233ab2f..541013487a0e 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -237,6 +237,7 @@ bool cpufreq_supports_freq_invariance(void);
->  struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy);
->  void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
->  void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
-> +bool has_target_index(void);
->  #else
->  static inline unsigned int cpufreq_get(unsigned int cpu)
+>  static void async_resume_early(void *data, async_cookie_t cookie)
 >  {
+> -       struct device *dev = (struct device *)data;
+> +       struct device *dev = data;
+>         int error;
+>
+>         error = device_resume_early(dev, pm_transition, true);
+> @@ -980,7 +980,7 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
+>
+>  static void async_resume(void *data, async_cookie_t cookie)
+>  {
+> -       struct device *dev = (struct device *)data;
+> +       struct device *dev = data;
+>         int error;
+>
+>         error = device_resume(dev, pm_transition, true);
+> @@ -1269,7 +1269,7 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
+>
+>  static void async_suspend_noirq(void *data, async_cookie_t cookie)
+>  {
+> -       struct device *dev = (struct device *)data;
+> +       struct device *dev = data;
+>         int error;
+>
+>         error = __device_suspend_noirq(dev, pm_transition, true);
+> @@ -1450,7 +1450,7 @@ static int __device_suspend_late(struct device *dev, pm_message_t state, bool as
+>
+>  static void async_suspend_late(void *data, async_cookie_t cookie)
+>  {
+> -       struct device *dev = (struct device *)data;
+> +       struct device *dev = data;
+>         int error;
+>
+>         error = __device_suspend_late(dev, pm_transition, true);
+> @@ -1727,7 +1727,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+>
+>  static void async_suspend(void *data, async_cookie_t cookie)
+>  {
+> -       struct device *dev = (struct device *)data;
+> +       struct device *dev = data;
+>         int error;
+>
+>         error = __device_suspend(dev, pm_transition, true);
 > --
 
-Applied as 6.4 material, thanks!
+Applied as 6.4 material with some edits in the subject and changelog, thanks!
