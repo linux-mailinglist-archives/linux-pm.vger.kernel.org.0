@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E566DCC6F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30696DCC76
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjDJU66 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 16:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S229945AbjDJU7I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 16:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjDJU64 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:58:56 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B26E6F;
-        Mon, 10 Apr 2023 13:58:55 -0700 (PDT)
+        with ESMTP id S229947AbjDJU7F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:59:05 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7521BE8;
+        Mon, 10 Apr 2023 13:59:01 -0700 (PDT)
 Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
  (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MlwJv-1qDJ3K0TsR-00j5dn; Mon, 10 Apr 2023 22:58:25 +0200
+ 1MBUVj-1pf4AQ2zol-00D3Ct; Mon, 10 Apr 2023 22:58:25 +0200
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -33,29 +33,29 @@ Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
         linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V2 2/6] dt-bindings: crypto: fsl-dcp: add imx6sl and imx6ull compatible
-Date:   Mon, 10 Apr 2023 22:57:59 +0200
-Message-Id: <20230410205803.45853-3-stefan.wahren@i2se.com>
+Subject: [PATCH V2 3/6] dt-bindings: imx-thermal: add imx6sll and imx6ul compatible
+Date:   Mon, 10 Apr 2023 22:58:00 +0200
+Message-Id: <20230410205803.45853-4-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230410205803.45853-1-stefan.wahren@i2se.com>
 References: <20230410205803.45853-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:u4UCiJkTnoSzdaA3kq33v+s/Pi1vopzInEGk01LNGa+mKCiScvd
- y165hMXMv0tjOC6jUzkbAG3kGIj24s7q8e3etyYqgt7COomH2Q/CZCWDD12B4MEnTskbY5G
- D8faRUTtU2l3pO8II9uZJjLIkz/RbZUqkn5gF9V+fSaIlWupGzn88cUBcuTI+poCo4gaoKH
- RKR5Dj/Wf57UwjIeklo4g==
-UI-OutboundReport: notjunk:1;M01:P0:+uG4vE/bgsA=;4t/3vismX//bq75J5wiQHANcPzt
- bBmsDvFYUbaH2USTbaQpZdbpV2XSpuywitpRLQ1OL1MN6i5qJD065KqLF5bcwNH/jKTqvWt8Z
- QtwjQSwsmvyE98AFy5OSEJ6ofcoTq3exO7rPMeozndW+hPIFRgJRFInKNXZOgOKvuWeUtgJSZ
- vR/bpPTe3i2MRkJmmVZgxvB0+RyT/tRjaZlRKOpnXscgIauKHcWQMIFG01RqyIj0eN/MNdk/u
- W9yL+0DyJ2n5jlpoJMZ4NI989JV3VV40TzdWoVYMt0f27SWkPxFq2e2wTiJ8Um42o+i96WgnK
- SLjDCMxGYAZ0EyDWxvLLZL9JsfQSmK8wJJTr6bEkMEq/UwzLivMxXzVFVjxvHBO+AhGgxr1G4
- +EBnRDMVkzF0eYlXHwA/Mh/eaHzqpihuqIaAnkscJXymtQQfTboGGSRaOmJz9ydBVFQ5HRKpl
- z+BCdC2CQGBOs6ZP/TJHPJ8A7+K8VmG7B4fem0mUXAZav3sHjS+Y73V0jHxsFnP+IwnHykpOJ
- 3yRUURSn0pF4IUtQVTJLHmGTXXKQr8WL09fM5Mdl0JdulLQZ0OIcCNNJI36kwqj10jt4stn4j
- A8xBvHG0DOXsezjdQgiS0ffAQ42xdRxIE4hnQq8PzKux+Cum3pqyXiDaa149XEzX9h/7T4Xjh
- e8vTOd4uXZhVldFrfhys0ogyLEmfVbJWTUvaZ5h7Cg==
+X-Provags-ID: V03:K1:8dNgJ+ctAsZfATtczzCYJdQw0jbKXFJ5ntlgxYBGKZMhVqbUsbD
+ btpJGg0y32cTDTIOW2j26MrZXuBmy1pLfqiBrEU41knHxGXpk28uVuVBOrQyzs1wyg2jZJV
+ 7ekOWa19ilga3RdzDH4sv0GvJ95Fo9PwiAG2JeCksPGYB72g2E2eaMmcXVnybKESbsWLFBH
+ SzEGYE5qQNuzYpJUvjmpw==
+UI-OutboundReport: notjunk:1;M01:P0:fy84CBLQy68=;jglXnytI3pSsomz7TWhCAfdrXzq
+ IVg4HEw6SRSdHFZWV5Qc1z3cFXaoV0VBQelwd3a3xZklwO05gdhPHMbBDQ56iL0uKbsAOi/wA
+ pYQ/W4ikkopjCXsOMv6LhTDypZqi0dzct5isH0y2izPK31XEQpAEfUnETD3U6lfcTmiMBvkVN
+ KhMWe0xi7UdydRjOhu9DWYjLTgY9rNcFVCTkVvXmi9FSVZkHuVPQU4flZWlA4PAp9R5R2hnI2
+ ZFPPCISKWn4hsfIanhxFjeJXLqrnxbHK7a3xf63yIASCRcMLFCD+Tatx5bGBnQrVjU04EgBh1
+ P1s9wWVcwu2XaGr6WLgSXXbb303Suf5UqVvQoFXaqb0SOPJn/EKn1gnLj8Uq513WjuAEwMPCo
+ 9GHiEW3sxHA8dhcUOU8IQNWhTb31YvXd9JkPE/YKekC0V5n7MnLk8uclXktdjiXiEzV4oBe+w
+ Asly3D+Rwa6z+mDZLA+idMjo4vkCM+AlgGYonBaprpalIXceTQ1cJxE/kTefFBvYdBKRnETNH
+ aJ6mPsf/inSRaFaekoR74d34rTJf9+2Gcw6sS3yDlKyuLc6gofmzwfPjeKTrf/Sm2+fW5G0oJ
+ L6sp7WAa9Eu0XBJG1IVCwBT9VPj+m/C3Yxnm2gflj+L3lgjzJ4vlRq7hhRgnesczVmed9DNtU
+ jJNGBXh4WwYthUbCFiizURcATcrAAjUKdCLACdhjYQ==
 X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
@@ -67,44 +67,40 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Currently the dtbs_check for imx6 generates warnings like this:
 
-'fsl,imx6sl-dcp' is not one of ['fsl,imx23-dcp', 'fsl,imx28-dcp']
-['fsl,imx6sl-dcp', 'fsl,imx28-dcp'] is too long
-
-or
-
-'fsl,imx6ull-dcp' is not one of ['fsl,imx23-dcp', 'fsl,imx28-dcp']
-['fsl,imx6ull-dcp', 'fsl,imx28-dcp'] is too long
+['fsl,imx6sll-tempmon', 'fsl,imx6sx-tempmon'] is too long
 
 So add them to the devicetree binding.
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- .../devicetree/bindings/crypto/fsl-dcp.yaml          | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/thermal/imx-thermal.yaml   | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/crypto/fsl-dcp.yaml b/Documentation/devicetree/bindings/crypto/fsl-dcp.yaml
-index 99be01539fcd..8dd36c2f76fd 100644
---- a/Documentation/devicetree/bindings/crypto/fsl-dcp.yaml
-+++ b/Documentation/devicetree/bindings/crypto/fsl-dcp.yaml
-@@ -11,9 +11,15 @@ maintainers:
+diff --git a/Documentation/devicetree/bindings/thermal/imx-thermal.yaml b/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+index b22c8b59d5c7..8902e9499c96 100644
+--- a/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+@@ -12,10 +12,16 @@ maintainers:
  
  properties:
    compatible:
 -    enum:
--      - fsl,imx23-dcp
--      - fsl,imx28-dcp
+-      - fsl,imx6q-tempmon
+-      - fsl,imx6sx-tempmon
+-      - fsl,imx7d-tempmon
 +    oneOf:
 +      - enum:
-+          - fsl,imx23-dcp
-+          - fsl,imx28-dcp
++          - fsl,imx6q-tempmon
++          - fsl,imx6sx-tempmon
++          - fsl,imx7d-tempmon
 +      - items:
 +          - enum:
-+              - fsl,imx6sl-dcp
-+              - fsl,imx6ull-dcp
-+          - const: fsl,imx28-dcp
++              - fsl,imx6sll-tempmon
++              - fsl,imx6ul-tempmon
++          - const: fsl,imx6sx-tempmon
  
-   reg:
-     maxItems: 1
+   interrupts:
+     description: |
 -- 
 2.34.1
 
