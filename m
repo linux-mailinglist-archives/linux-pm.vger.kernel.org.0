@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF5D6DCC59
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350406DCC5A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjDJUxt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 16:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S229879AbjDJUxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 16:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjDJUxp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:53:45 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE78211B
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d9so5625262wrb.11
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
+        with ESMTP id S229837AbjDJUxr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:53:47 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069EA10D7
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:45 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id d9so5625286wrb.11
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1681160023; x=1683752023;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zP0ai9WWz0txuIScl5+cGxEFfYcMtPVS0xCm4H0j7Sc=;
-        b=SwtFaLlLUJ8uK7PCs+p+9q2jmdDGcKVwq2VZsU/IWs58GUENqqElwlgMGZ8UaUJnBN
-         qhClHoISI+1Q+k54FGd0ILwM0AaILv4BEY6f6wGumB1/QaMe/E5yzf2QwGCRg6g0V+J4
-         +SYHG056WUkzc76xWr+JpQPIc/4TNc7EClWhBAgWxYnzci8x+cqaeyBmNSJNUt4jS7jr
-         yvw4SLUl/EV/lpVNbcPESPb+bwTB7k6RzUalSe2TW6D0WZyh1U5cf5ZMFO1caNcX3zop
-         nlJjUg9bm+RA2xIL2wNZGtGgntUmwIkGnHtrzTmATfu2Wit7szggjPGQqw28k1jsyxi0
-         il1Q==
+        bh=bkQUnOWLA+V2iTlaapxkS0DuXVJow8vrvqyKzHmwuBE=;
+        b=mSw0zD5otsKK5tmRq1nzEby61f1faooSdycceSRUQVSbqwQtQ3QNrRcjZiruaVhTX1
+         01z0EFsycSofwCc38R6wZMtBEmoO7U5lrSgky/sBpvvget+6owZTp3TaT9grVrgYEJxe
+         3IFHUkU/yH0MnYIux9ZZElCzeEEF7gId0w05Qshto+uJElSmGN/miERwnchMIKeSSDwb
+         2jADe8x34PHeZfU50+CCeeCYv5rTqPxvMnpPmPgrgFsO8MFdU9hSujx45zKX+kMvCVrE
+         dcJO2yuj8TD54nLGr8CpsZU02rvzY812iXt2q1vbZ4uCsX8NNW9mJ0zqF7mtQnfBiooT
+         jKyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1681160023; x=1683752023;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zP0ai9WWz0txuIScl5+cGxEFfYcMtPVS0xCm4H0j7Sc=;
-        b=CuDJqesQ6MrZBJ3OM2NUcs1CsjSroS6xDDzJwU+P1JfyBLLBHD1pAMHwr4FNmp+vb0
-         IBAnCtlJTDP58iYRpsdYvDEExfoCQCp3whay5aLZPyzf4TLTFXoYA1xtxsYCiEolOcpd
-         l6zbwNsSVsqpYV7TSnb6/TwKnDVrdiIncMQ/L460AaWJQnoCZGswfpbVkaJvUbx2he4P
-         kCT9BuhKmOXSDdS/L+uiDDEfaQgYjQsVJnW7/OL4wBul+ygdD+NQ24d4Riff1aX+0OFP
-         Z4R2zkOvoLbZlbdD11oHXvZ6Mualei8S4pA8yAJul+bV5Vf1eyIYsN9nAz/Tq/siBfTa
-         sVaQ==
-X-Gm-Message-State: AAQBX9cdeCjTYoLSfjbXsmdHtBUc5IgZajX7XdlgiwkfzhE3rtpwoMeY
-        wwVO4AvzGaWrAVfI5f6yYv+F8w==
-X-Google-Smtp-Source: AKy350ZlNr1Ggj7t/rY1NAQx6q6DjJGKetJtVt34ctysK9zRe75QqXeVNlKWq//6kKmGhE+P5XLt2w==
-X-Received: by 2002:a5d:544b:0:b0:2c5:3cd2:b8e with SMTP id w11-20020a5d544b000000b002c53cd20b8emr5478341wrv.1.1681160022744;
-        Mon, 10 Apr 2023 13:53:42 -0700 (PDT)
+        bh=bkQUnOWLA+V2iTlaapxkS0DuXVJow8vrvqyKzHmwuBE=;
+        b=kSbWwRR1FQVH+frRApV28dGTPFWF/0cMOH+xXWTp8heYpIFuw+d4HrWZlW+gemuztp
+         Zb4bxmS72lWIWIhQO7NksS5QRXYIjoBN5TRYFK2nahYIU+Tnhqw2fEGXoaJl6wqcHSe/
+         4X9uf6XDuKsj0xC/hPbNTFu4UflxHbQEGxH0gV+WQ/5mKhRoDo1G1TfSFJugUtv750Eg
+         Q8K3c0w6UDuCp/gPgsKTQcBbVzfbG3IBz5vMGpcXQag0sWMO1KL+lGYoP5OdJFIUwqpq
+         TCy/e97uO9EEvsnTbYylseyxeyiaaGUYo+UkFkdj1c6MaoVlhiBQEFPKVa8T2xuslPmo
+         tcIg==
+X-Gm-Message-State: AAQBX9eztgUCVtwwlpUv53xRQASCW2JS3L+crm5sqRXpTuZWB3Y6erXf
+        d5MtU8oa6Xo55VyYxgCObEOVpA==
+X-Google-Smtp-Source: AKy350bg2a4lxEjB/SUZECrf0UoKpqThrQonwo7vjEvFnpkEwzrg+Jh/9wFjd/+2RSeBjkpV2n70Tg==
+X-Received: by 2002:adf:e885:0:b0:2e4:506c:6483 with SMTP id d5-20020adfe885000000b002e4506c6483mr343276wrm.48.1681160023519;
+        Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
         by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:53:42 -0700 (PDT)
+        Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER)
-Subject: [PATCH v2 6/7] thermal/drivers/acpi: Make cross dev link optional by configuration
-Date:   Mon, 10 Apr 2023 22:53:04 +0200
-Message-Id: <20230410205305.1649678-7-daniel.lezcano@linaro.org>
+        linux-pm@vger.kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v2 7/7] thermal/drivers/intel_menlow: Make additionnal sysfs information optional
+Date:   Mon, 10 Apr 2023 22:53:05 +0200
+Message-Id: <20230410205305.1649678-8-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
 References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
@@ -71,127 +71,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ACPI thermal driver creates a link in the thermal zone device
-sysfs directory pointing to the device sysfs directory. At the same
-time, it creates a back pointer link from the device to the thermal
-zone device sysfs directory.
-
-From a generic perspective, having a device pointer in the sysfs
-thermal zone directory may make sense. But the opposite is not true as
-the same driver can be related to multiple thermal zones.
-
-The usage of these information is very specific to ACPI and it is
-questionable if they are really needed.
+The Menlon thermal driver creates specific files in the thermal zone
+sysfs class. It is specific to Menlon and these entries look debug
+code. It is probable these are not needed.
 
 Let's make the code optional and disable it by default.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/acpi/thermal.c | 62 ++++++++++++++++++++++++++++--------------
- 1 file changed, 42 insertions(+), 20 deletions(-)
+ drivers/thermal/intel/intel_menlow.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 5763db4528b8..70f1d28810f2 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -787,9 +787,44 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
- 	.critical = acpi_thermal_zone_device_critical,
- };
- 
-+#ifdef CONFIG_THERMAL_SYSFS_OBSOLETE_SINGULARITY
-+static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
-+{
-+	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-+	int ret;
-+	
-+	ret = sysfs_create_link(&tz->device->dev.kobj,
-+				&tzdev->kobj, "thermal_zone");
-+	if (ret)
-+		return ret;
-+
-+	ret = sysfs_create_link(&tzdev->kobj,
-+				   &tz->device->dev.kobj, "device");
-+	if (ret)
-+		sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-+
-+	return ret;
-+}
-+
-+static void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
-+{
-+	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-+	
-+	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-+	sysfs_remove_link(&tzdev->kobj, "device");
-+}
-+#else
-+static inline int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
-+{
-+	return 0;
-+}
-+static inline void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
-+{
-+}
-+#endif
-+
- static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- {
--	struct device *tzdev;
- 	int trips = 0;
+diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+index d720add918ff..d46dacea1b4d 100644
+--- a/drivers/thermal/intel/intel_menlow.c
++++ b/drivers/thermal/intel/intel_menlow.c
+@@ -374,6 +374,9 @@ static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+ 	struct intel_menlow_attribute *attr;
  	int result;
- 	acpi_status status;
-@@ -821,23 +856,15 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 	if (IS_ERR(tz->thermal_zone))
- 		return -ENODEV;
  
--	tzdev = thermal_zone_device(tz->thermal_zone);
--	
--	result = sysfs_create_link(&tz->device->dev.kobj,
--				   &tzdev->kobj, "thermal_zone");
-+	result = acpi_thermal_zone_sysfs_add(tz);
- 	if (result)
- 		goto unregister_tzd;
--
--	result = sysfs_create_link(&tzdev->kobj,
--				   &tz->device->dev.kobj, "device");
--	if (result)
--		goto remove_tz_link;
--
++	if (!IS_ENABLED(CONFIG_THERMAL_SYSFS_OBSOLETE_SINGULARITY))
++		return 0;
 +	
- 	status =  acpi_bus_attach_private_data(tz->device->handle,
- 					       tz->thermal_zone);
- 	if (ACPI_FAILURE(status)) {
- 		result = -ENODEV;
--		goto remove_dev_link;
-+		goto remove_links;
- 	}
- 
- 	result = thermal_zone_device_enable(tz->thermal_zone);
-@@ -851,10 +878,8 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 
- acpi_bus_detach:
- 	acpi_bus_detach_private_data(tz->device->handle);
--remove_dev_link:
--	sysfs_remove_link(&tzdev->kobj, "device");
--remove_tz_link:
--	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-+remove_links:
-+	acpi_thermal_zone_sysfs_remove(tz);
- unregister_tzd:
- 	thermal_zone_device_unregister(tz->thermal_zone);
- 
-@@ -863,10 +888,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 
- static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
- {
--	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
--	
--	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
--	sysfs_remove_link(&tzdev->kobj, "device");
-+	acpi_thermal_zone_sysfs_remove(tz);
- 	thermal_zone_device_unregister(tz->thermal_zone);
- 	tz->thermal_zone = NULL;
- 	acpi_bus_detach_private_data(tz->device->handle);
+ 	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
+ 	if (!attr)
+ 		return -ENOMEM;
 -- 
 2.34.1
 
