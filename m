@@ -2,55 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137C76DD2E2
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 08:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EF66DCBC1
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 21:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjDKGfA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 02:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        id S229702AbjDJTmI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 15:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDKGfA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 02:35:00 -0400
-Received: from zimbra-dc.paul-scerri.ch (dc.paul-scerri.ch [62.220.130.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40659D;
-        Mon, 10 Apr 2023 23:34:58 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra-dc.paul-scerri.ch (Postfix) with ESMTP id 01D4C5E2AB0;
-        Mon, 10 Apr 2023 22:04:32 +0200 (CEST)
-Received: from zimbra-dc.paul-scerri.ch ([127.0.0.1])
-        by localhost (zimbra-dc.paul-scerri.ch [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id X24hj2SPXlp2; Mon, 10 Apr 2023 22:04:31 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra-dc.paul-scerri.ch (Postfix) with ESMTP id CA730597736;
-        Mon, 10 Apr 2023 21:47:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra-dc.paul-scerri.ch
-Received: from zimbra-dc.paul-scerri.ch ([127.0.0.1])
-        by localhost (zimbra-dc.paul-scerri.ch [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vStYXekUpadl; Mon, 10 Apr 2023 21:47:19 +0200 (CEST)
-Received: from [185.169.4.108] (unknown [185.169.4.108])
-        by zimbra-dc.paul-scerri.ch (Postfix) with ESMTPSA id 4D50C5B21DF;
-        Mon, 10 Apr 2023 21:34:31 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229690AbjDJTmH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 15:42:07 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB3B1986
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:42:06 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o18so5406645wro.12
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681155725; x=1683747725;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QB7W0GXP1VzxhOdRLXF0y5oyjgK/ieF8BJXDgGfMNiM=;
+        b=tTuFtx8K05eMBqFEgo0xW7LwK/ASZJngLvc5VxCb5s3J2/VLac93xFdzLF3NCZAtIm
+         Fw/SV0wYMtKQ7KrbeCeNfsdCiwm7pn6h3FAmwAMTUWeEi58Z8fVlDyfP8c8nn40K4u7V
+         sZX+ayxtHIDOaxtt4XALJhzVhjt2t+R5Aa5gyFqKCCRZ5gzREFWN85JeSCZgF6h6vQxT
+         IqJwZm6fRlNsa7QuA/u0udKcFvyzEHs0rwPxV8flPlqiE5KdGDqeTUT09VyKgnUBSH0J
+         xqUaECdiR2GqDIw4XX7omq3W2Z1iC9nvviDwk3mEepeCe9QbzsU3Jl67ThLgVOUYURsp
+         b0Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681155725; x=1683747725;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QB7W0GXP1VzxhOdRLXF0y5oyjgK/ieF8BJXDgGfMNiM=;
+        b=rEJTTvpyX4blwCF0Qfw3baOFmb9tP9R6pxlQeyNMoAcPSrOrHz9U1JTp8ROPGJGcvr
+         VqP2NEJluHEin9cIBa/21Mz0JzuonpeyIhSWGGJIK/15MndHVEwegONZvh5KjcAz8tgb
+         OqdmdHFGtyHS/JSyvB21nqD2pYcgjZ8lN3TSuEJBPEXl8KkFwBaQndPZG2IjnqfpZiKv
+         OAOnOKtdtReghXgtDGQYrihVahszy0LVbBmk/hpl7Bc7IHVIW794jXHWd84NtdgJY+Tj
+         XwQY8/f2QXJDd/lpwj5uuFnuSq9o3wSK5Lt7vfkQTA3BxApWuWHwbbzMR0IkKiygEsT1
+         FJjA==
+X-Gm-Message-State: AAQBX9ec6ho8IudIANX68u6gsJbayCjcgU6/b2rxsVx19aKul2DQH15C
+        yialU/aGwHduXCBwfjgCzQYMlg==
+X-Google-Smtp-Source: AKy350YNT60EVSJ71IQxngPY6jRW+U6UDojuObfwFtal1MwDTVGPJfu8Yn/c4VjxZXCI1e/nab2mGQ==
+X-Received: by 2002:adf:e34c:0:b0:2e5:a86c:fe74 with SMTP id n12-20020adfe34c000000b002e5a86cfe74mr4990124wrj.51.1681155724951;
+        Mon, 10 Apr 2023 12:42:04 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:2611:592:3b9e:d2ae? ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
+        by smtp.googlemail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11844898wrs.16.2023.04.10.12.42.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 12:42:04 -0700 (PDT)
+Message-ID: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
+Date:   Mon, 10 Apr 2023 21:42:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re
-To:     Recipients <wiki@paul-scerri.ch>
-From:   "Maria-Elisabeth Schaeffler" <wiki@paul-scerri.ch>
-Date:   Mon, 10 Apr 2023 12:34:30 -0700
-Reply-To: mariaelisabeths457@gmail.com
-Message-Id: <20230410193431.4D50C5B21DF@zimbra-dc.paul-scerri.ch>
-X-Spam-Status: No, score=2.8 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/2] thermal: mediatek: change clk_prepare_enable to
+ devm_clk_get_enabled in mtk_thermal_probe
+Content-Language: en-US
+To:     =?UTF-8?B?6ZmI5bq3?= <void0red@hust.edu.cn>
+Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn,
+        error27@gmail.com, henry.yen@mediatek.com,
+        hust-os-kernel-patches@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
+        rui.zhang@intel.com, void0red@gmail.com
+References: <6e3c59c3-8ad0-9c53-62a4-7be6f55a7c02@linaro.org>
+ <20230403164610.3608082-1-void0red@hust.edu.cn>
+ <20230403164610.3608082-2-void0red@hust.edu.cn>
+ <7b1f01ae.3988f.18769458aaf.Coremail.void0red@hust.edu.cn>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <7b1f01ae.3988f.18769458aaf.Coremail.void0red@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Your email account has been selected for a donation of €1,700,000. Please contact for more information.
+On 10/04/2023 05:46, 陈康 wrote:
 
-Mrs Maria Elisabeth Schaeffler
-CEO SCHAEFFLER.
+[ ... ]
+
+>>   static int mtk_thermal_remove(struct platform_device *pdev)
+>> -- 
+>> 2.34.1
+> 
+> ping?
+
+Did you check the 'mtk_thermal_remove' function ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
