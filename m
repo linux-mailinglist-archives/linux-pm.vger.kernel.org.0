@@ -2,76 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EF66DCBC1
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 21:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C886DCBCC
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 21:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjDJTmI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 15:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S229701AbjDJTwE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 15:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjDJTmH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 15:42:07 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB3B1986
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:42:06 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id o18so5406645wro.12
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:42:06 -0700 (PDT)
+        with ESMTP id S229485AbjDJTwD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 15:52:03 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D5F1BF0
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:52:00 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id g5so8793989wrb.5
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681155725; x=1683747725;
+        d=linaro.org; s=google; t=1681156319; x=1683748319;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QB7W0GXP1VzxhOdRLXF0y5oyjgK/ieF8BJXDgGfMNiM=;
-        b=tTuFtx8K05eMBqFEgo0xW7LwK/ASZJngLvc5VxCb5s3J2/VLac93xFdzLF3NCZAtIm
-         Fw/SV0wYMtKQ7KrbeCeNfsdCiwm7pn6h3FAmwAMTUWeEi58Z8fVlDyfP8c8nn40K4u7V
-         sZX+ayxtHIDOaxtt4XALJhzVhjt2t+R5Aa5gyFqKCCRZ5gzREFWN85JeSCZgF6h6vQxT
-         IqJwZm6fRlNsa7QuA/u0udKcFvyzEHs0rwPxV8flPlqiE5KdGDqeTUT09VyKgnUBSH0J
-         xqUaECdiR2GqDIw4XX7omq3W2Z1iC9nvviDwk3mEepeCe9QbzsU3Jl67ThLgVOUYURsp
-         b0Pg==
+        bh=taWwTe6wScZ3G/J8fctKbIgQCcWpQ5BGQKWdQ0SkwQU=;
+        b=ahiGf8+XiIR4j7Od31UPEYNcuHdiFPpx5kFdggaXF3v3e4owxzG7/R2yvVVFsHj1iX
+         OPyXGvIp9l1AYmZYwISymshoequq1vBuMPcXrVJPISUFcu4DzB/AgCw8HojUsiAA2o/5
+         q8GreNulQY1z6cgTgpZD9CM6FtsyNmRelYMvY9ckG+shw2cYfL0e9yBQqgy/WNEVNPCV
+         TncakvHjGclIsiufR1Mr26ub+mIYvxqUkYRQNQNaskNN0kg4rtLiS+GeNir3FAtGQ15s
+         nR7BK1U6ERtutIKLTcqTUQAAi0dxUCqCaHMz66WHhKMpqGv/Q4pyHK8Qcqyi9jyZj72Q
+         bUGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681155725; x=1683747725;
+        d=1e100.net; s=20210112; t=1681156319; x=1683748319;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QB7W0GXP1VzxhOdRLXF0y5oyjgK/ieF8BJXDgGfMNiM=;
-        b=rEJTTvpyX4blwCF0Qfw3baOFmb9tP9R6pxlQeyNMoAcPSrOrHz9U1JTp8ROPGJGcvr
-         VqP2NEJluHEin9cIBa/21Mz0JzuonpeyIhSWGGJIK/15MndHVEwegONZvh5KjcAz8tgb
-         OqdmdHFGtyHS/JSyvB21nqD2pYcgjZ8lN3TSuEJBPEXl8KkFwBaQndPZG2IjnqfpZiKv
-         OAOnOKtdtReghXgtDGQYrihVahszy0LVbBmk/hpl7Bc7IHVIW794jXHWd84NtdgJY+Tj
-         XwQY8/f2QXJDd/lpwj5uuFnuSq9o3wSK5Lt7vfkQTA3BxApWuWHwbbzMR0IkKiygEsT1
-         FJjA==
-X-Gm-Message-State: AAQBX9ec6ho8IudIANX68u6gsJbayCjcgU6/b2rxsVx19aKul2DQH15C
-        yialU/aGwHduXCBwfjgCzQYMlg==
-X-Google-Smtp-Source: AKy350YNT60EVSJ71IQxngPY6jRW+U6UDojuObfwFtal1MwDTVGPJfu8Yn/c4VjxZXCI1e/nab2mGQ==
-X-Received: by 2002:adf:e34c:0:b0:2e5:a86c:fe74 with SMTP id n12-20020adfe34c000000b002e5a86cfe74mr4990124wrj.51.1681155724951;
-        Mon, 10 Apr 2023 12:42:04 -0700 (PDT)
+        bh=taWwTe6wScZ3G/J8fctKbIgQCcWpQ5BGQKWdQ0SkwQU=;
+        b=be7kR8IUxmbGWDMZYkfWncYbHPgCe9XfSPkUSAcnbEZfn5PW/uOLNSUbEjnNWHhX4Z
+         h2jKKB6NqVvPBXz3lXHkJkoSTfqKNerdW4ZnWCGj8vzslWCcxG8S0jVpPDXGb7+VT7pa
+         Unezyuqp3DL+cUQNc11huAImgwnizTTKfdlvxA7Aq/01pRtaaKx9tPe4DXQB1irZl5RB
+         B2SJYauRQo86qA4E74Il2HTQc84Mk4owihf56qft+eQDXbIOMiQFeQIAWHswJpUz6gos
+         SHl/9DxJQfpHIKC6iscYLeZYO3QIDhOVmk8JcTMcnqbwLIV2vc3lYTXt43+ox+wFRyEg
+         qqnA==
+X-Gm-Message-State: AAQBX9fovuIbsa1piEDodxL3GKZEqHAeHCyKzXFtz+i/BaZO0NfEZjHF
+        u2BKbonuIeHrQ5augukN5MIZFg==
+X-Google-Smtp-Source: AKy350YTQMgKrxdoT+dffU+cBpX25HAoMr6sq7alo7PPBJSJPU6mhT5W2NVr80wYbMoAD+oIYMZ6Bg==
+X-Received: by 2002:a5d:678c:0:b0:2ef:b6e6:5985 with SMTP id v12-20020a5d678c000000b002efb6e65985mr5467620wru.58.1681156318776;
+        Mon, 10 Apr 2023 12:51:58 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:2611:592:3b9e:d2ae? ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.googlemail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11844898wrs.16.2023.04.10.12.42.03
+        by smtp.googlemail.com with ESMTPSA id t5-20020a5d6905000000b002efb4f2d240sm8520224wru.87.2023.04.10.12.51.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 12:42:04 -0700 (PDT)
-Message-ID: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
-Date:   Mon, 10 Apr 2023 21:42:03 +0200
+        Mon, 10 Apr 2023 12:51:58 -0700 (PDT)
+Message-ID: <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
+Date:   Mon, 10 Apr 2023 21:51:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/2] thermal: mediatek: change clk_prepare_enable to
- devm_clk_get_enabled in mtk_thermal_probe
+Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
 Content-Language: en-US
-To:     =?UTF-8?B?6ZmI5bq3?= <void0red@hust.edu.cn>
-Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn,
-        error27@gmail.com, henry.yen@mediatek.com,
-        hust-os-kernel-patches@googlegroups.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
-        rui.zhang@intel.com, void0red@gmail.com
-References: <6e3c59c3-8ad0-9c53-62a4-7be6f55a7c02@linaro.org>
- <20230403164610.3608082-1-void0red@hust.edu.cn>
- <20230403164610.3608082-2-void0red@hust.edu.cn>
- <7b1f01ae.3988f.18769458aaf.Coremail.void0red@hust.edu.cn>
+To:     Di Shen <cindygm567@gmail.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org
+References: <20230320095620.7480-1-di.shen@unisoc.com>
+ <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
+ <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <7b1f01ae.3988f.18769458aaf.Coremail.void0red@hust.edu.cn>
+In-Reply-To: <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -84,19 +79,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/04/2023 05:46, 陈康 wrote:
+On 10/04/2023 04:09, Di Shen wrote:
+> Hi Lukasz,
+> Could you please apply this patch if there's no more comment? Thank you.
 
-[ ... ]
+Hi,
 
->>   static int mtk_thermal_remove(struct platform_device *pdev)
->> -- 
->> 2.34.1
-> 
-> ping?
+I take care of applying the patches. Give me some time to read the changes.
 
-Did you check the 'mtk_thermal_remove' function ?
-
-
+Thanks
+   -- Daniel
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
