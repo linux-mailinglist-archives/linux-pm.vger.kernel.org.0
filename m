@@ -2,57 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A032E6DCC21
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95866DCC50
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjDJU3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 16:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
+        id S229838AbjDJUxp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 16:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjDJU3f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:29:35 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28241712;
-        Mon, 10 Apr 2023 13:29:33 -0700 (PDT)
-Received: from localhost.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 68F883FAAE;
-        Mon, 10 Apr 2023 22:29:31 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        with ESMTP id S229836AbjDJUxk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:53:40 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275F92128
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:38 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id d9so5625094wrb.11
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681160017; x=1683752017;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgjQsE1Hdvwl1NpUaWmvVlqrPBksB4aMkQUF06EbqG0=;
+        b=GMbkVC5Odhohp4FRso5dq41lhdBBmwA0cCsSv1a/9GCDi+dGlj1xq07iL7kn4n0TDF
+         jMzdfCAvDiEBAbWfWTOJ28/rnuViok0d2ohjI6x3Zarbg/Q6qJFMOPy0b6wlmFPGeK+C
+         CUfQ3kR3yY03IQnrTOhxrvhYoyV9OKoyBqvvtfJJPjbDzSzTJOM7SQT28mIVUxyb3EZp
+         g/wy70BBo/Rhg2Gn8Uy19Xu2Tddy6CZE5DcSPdcZPT39MtdYE0jUqBczrVMxREVIxqPR
+         kxWKjRGAeJsOvmZOwKPXzRC0bP36mbDB6rVmh6WviMJ8nkDIg+qTqRNGHkwreBtp8N6+
+         3VlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681160017; x=1683752017;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wgjQsE1Hdvwl1NpUaWmvVlqrPBksB4aMkQUF06EbqG0=;
+        b=Cum4etmFMjEadim2FRZFSYbUcYc4/Et777jYRHXOhyITyU5GLGQGW2ixcG5UIcUwwa
+         r2ImfSPLRxiAZG5c8kyWJaSqSBVaKtTYpBnD9mO1IvRPb+DJG6ExGpz3MQ7oFjQfgD3k
+         CGm11Ht0ZJoBKz4rK9qMFqttmB0EKEoAAOXIdzr1os21MGj948w6TNfPUqRzmeKzxSGD
+         H2/tlzmnzr9O915rWSNFLcXTj0/nHbVm4JvPapbmAP/A5/KMYdqPxL7n3ig0eAEzIoYf
+         JviTH/FtwmIAzrfF9q9FtJ0Wsd888ZXggmzroejfmQ4cUUgdLAgr7qACIu9bNQTWitJv
+         X8/Q==
+X-Gm-Message-State: AAQBX9eEPbFYm11jA774aYYTbzq7/DIfq66xvMPw4HWyaFV4tURCo/ZR
+        28d4jLwLsq9B9KksX2SlZGVmaA==
+X-Google-Smtp-Source: AKy350b05mU+al6g2Ror4NodaOndG1msKWfJ52vGjmVkxmCNOvPO/YJaOzW6kKCeQSvoVCDsdSThzg==
+X-Received: by 2002:a5d:5510:0:b0:2ce:9877:84ae with SMTP id b16-20020a5d5510000000b002ce987784aemr8705347wrv.16.1681160017218;
+        Mon, 10 Apr 2023 13:53:37 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
+        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 13:53:36 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v4 3/5] dt-bindings: thermal: Use generic ADC node name in examples
-Date:   Mon, 10 Apr 2023 22:29:15 +0200
-Message-Id: <20230410202917.247666-4-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230410202917.247666-1-marijn.suijten@somainline.org>
-References: <20230410202917.247666-1-marijn.suijten@somainline.org>
+Subject: [PATCH v2 0/7] Thermal zone device structure encapsulation
+Date:   Mon, 10 Apr 2023 22:52:58 +0200
+Message-Id: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,69 +67,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update the examples to reflect a future requirement for the generic
-`channel` node name on ADC channel nodes, while conveying the board name
-of the channel in a label instead.
+The thermal zone device structure is defined in the exported thermal
+header include/linux/thermal.h
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- .../devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml | 4 ++--
- .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml   | 9 ++++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+Given the definition being public, the structure is exposed to the
+external components other than the thermal framework core code. It
+results the drivers are tampering the structure internals like taking
+the lock or changing the field values.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-index 8273ac55b63f..01253d58bf9f 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-@@ -124,8 +124,8 @@ examples:
-             #size-cells = <0>;
-             #io-channel-cells = <1>;
- 
--            /* Other propreties are omitted */
--            adc-chan@4c {
-+            /* Other properties are omitted */
-+            channel@4c {
-                 reg = <ADC5_XO_THERM_100K_PU>;
-             };
-         };
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-index 52ec18cf1eda..3c81def03c84 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-@@ -178,10 +178,11 @@ examples:
-             #io-channel-cells = <1>;
- 
-             /* Other properties are omitted */
--            conn-therm@4f {
-+            channel@4f {
-                 reg = <ADC5_AMUX_THM3_100K_PU>;
-                 qcom,ratiometric;
-                 qcom,hw-settle-time = <200>;
-+                label = "conn_therm";
-             };
-         };
- 
-@@ -217,16 +218,18 @@ examples:
-             #io-channel-cells = <1>;
- 
-             /* Other properties are omitted */
--            xo-therm@44 {
-+            channel@44 {
-                 reg = <PMK8350_ADC7_AMUX_THM1_100K_PU>;
-                 qcom,ratiometric;
-                 qcom,hw-settle-time = <200>;
-+                label = "xo_therm";
-             };
- 
--            conn-therm@147 {
-+            channel@147 {
-                 reg = <PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
-                 qcom,ratiometric;
-                 qcom,hw-settle-time = <200>;
-+                label = "conn_therm";
-             };
-         };
- 
+Obviously that is bad for several reasons as the drivers can hook the
+thermal framework behavior and makes very difficult the changes in the
+core code as external components depend on it directly.
+
+Moreover, the thermal trip points being reworked, we don't want the
+drivers to access the trips array directly in the thermal zone
+structure and doing assumptions on how they are organized.
+
+This series provides a second set of changes moving to the thermal
+zone device structure self-encapsulation.
+
+The ACPI and the Menlon drivers are using the thermal zone's device
+fields to create symlinks and new attributes in the sysfs thermal zone
+directory. These changes provide a hopefully temporary wrapper to
+access it in order to allow moving forward in the thermal zone device
+self-encapsulation and a Kconfig option to disable by default such a
+extra sysfs information.
+
+Changelog:
+	v2:
+	- Add the Kconfig option to remove specific attributes
+	- Add a thermal_zone_device() wrapper to access tz->device
+
+
+Daniel Lezcano (7):
+  thermal/drivers/intel_pch_thermal: Use thermal driver device to write
+    a trace
+  thermal/core: Encapsulate tz->device field
+  thermal/drivers/acpi: Use thermal_zone_device()
+  thermal/drivers/menlow: Use thermal_zone_device()
+  thermal/core: Prepare sanitizing thermal class sysfs content
+  thermal/drivers/acpi: Make cross dev link optional by configuration
+  thermal/drivers/intel_menlow: Make additionnal sysfs information
+    optional
+
+ drivers/acpi/thermal.c                    | 57 +++++++++++++++++------
+ drivers/thermal/Kconfig                   | 12 +++++
+ drivers/thermal/intel/intel_menlow.c      | 12 +++--
+ drivers/thermal/intel/intel_pch_thermal.c |  5 +-
+ drivers/thermal/thermal_core.c            |  6 +++
+ include/linux/thermal.h                   |  1 +
+ 6 files changed, 74 insertions(+), 19 deletions(-)
+
 -- 
-2.40.0
+2.34.1
 
