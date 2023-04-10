@@ -2,100 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98546DC561
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 11:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1866DC6A0
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 14:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjDJJy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 05:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S229872AbjDJML2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 08:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjDJJyP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 05:54:15 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CEE2697;
-        Mon, 10 Apr 2023 02:54:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=idQva2XK1FyZH3KdUFkp8hTV6xOLb5ams/pnb8zvKmU9rVOUqixVFSgLSEbmn7pg/B3yhsxB9mJzP2cAgcDrnlfppJoWVMWrybCgEpYxyiHrwBrYB3D5rdQtGKN8QFrucfiZiP5VGhGO2LmW9/Sq8hGYz8/lwsM5u6evfIPOKAiCoHe/hvzXzwU/hqluUFMmBQdvD47aXytP9DGBbZ+Q0OGH6xF+/msHTNYr/HDrcv9qBz1JtELNOdgFbjrY5iAbOOKFWuRci9k8g66OUAt+pprhaRp+BNyVqX3RaWGh+/UnXTiH2H8Pcmy8gjGf+2VcvIKlyXEfzQMhj/0bwHs6wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WVBp+WOwcNwhJTjY12nhx2kQyTcaRuI6EdTm7u/V+QU=;
- b=c1Yfh93x7OPguuQTO403inKPDVqp7Q94ZY28vG2F6RRVM34hEs7r2wym2zVfzFbdivFukfPmdKZvgPuP90ODpoMcACRQ3O2jGcNvGTJ4ydxANX3niVvV61HuLiQ/ce0f8yuqwt/t9kbIk2vzAGAAvqSjdVBJpQjvs90EmoyoLH2mLiDzn8v9he4DoBHvSK1eIf5OqPh/sZ74rq/rwWojgBfoPTaSekCR1fG6tr7V7PrckHKZ99uqq5/eWiHgzaNl+/tQ4ZPdQySnUTY3uujBh/F+LDy9jAwB4p56JPjeSQaZNsKgfANcZbq8vhK6NXorP2FNEbSX4ubxBZWe3MoyuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WVBp+WOwcNwhJTjY12nhx2kQyTcaRuI6EdTm7u/V+QU=;
- b=AXFsx2mVYJ3nGedKP/g5URCwKIKZR+oIVkr5DnTqpedmkb5dhx2t46otPrGa0+f5plUt+Mm0hstkPUxvKKflNJd5UIgXVvzwSqLROZczlg2s1uMTrtmM0HvBOdbnzHtcgspExtn8S6aQNmxN705F05sHEjDwKwE5tlTLzv3Kh8s=
-Received: from MW4PR02CA0024.namprd02.prod.outlook.com (2603:10b6:303:16d::9)
- by PH0PR12MB8176.namprd12.prod.outlook.com (2603:10b6:510:290::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
- 2023 09:54:10 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:16d:cafe::2a) by MW4PR02CA0024.outlook.office365.com
- (2603:10b6:303:16d::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
- Transport; Mon, 10 Apr 2023 09:54:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.21 via Frontend Transport; Mon, 10 Apr 2023 09:54:09 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 10 Apr
- 2023 04:54:01 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <joel@joelfernandes.org>,
-        <gautham.shenoy@amd.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH 2/2] amd_pstate: Add ->fast_switch() callback
-Date:   Mon, 10 Apr 2023 09:53:39 +0000
-Message-ID: <20230410095339.14923-1-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410095045.14872-1-wyes.karny@amd.com>
-References: <20230410095045.14872-1-wyes.karny@amd.com>
-MIME-Version: 1.0
+        with ESMTP id S229862AbjDJML0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 08:11:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE081B9;
+        Mon, 10 Apr 2023 05:11:25 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AAWg4Q002478;
+        Mon, 10 Apr 2023 12:11:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=oCX33MHJdVwOcqkM9x30iXp+//dYE8FJsaDB4GyktJM=;
+ b=pB7yvr+47tys5sMNhweB7ggoJT62VjE5Xek1+x+hPfOvVcfzwehDbuF6AkiZONlq0YZR
+ N22RBcMh4RpkgeEaKITffC11tzYLjwwTp/1ny28KlTYsd7RiH1QqsGRV1uDrJy0VBQjs
+ jSzQpwRfowuHR1dN8ZORCZsxvHj0+HQAO4FVyvuerNqvqOqpDBvA3gAfqe+wAfkS9hok
+ OqnKe3f0y8CG2DPVAgDs7FXcKlfxS/QA3dc7DRsYsJXmwJpNYdZqCDj+RISQX8kWgVsD
+ aL+CiKDl2FBbdfynVHty9fC9UwFzUAgfoaJluHm0HEVYwIIL9+Ja4yZ7UGjm53g0DYhs rQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj2txjm9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 12:11:19 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33A3v8aD003252;
+        Mon, 10 Apr 2023 12:11:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m191s7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 12:11:17 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33ACBEqZ24314374
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Apr 2023 12:11:14 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAE6520043;
+        Mon, 10 Apr 2023 12:11:14 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1052F20040;
+        Mon, 10 Apr 2023 12:11:13 +0000 (GMT)
+Received: from li-a1f1b24c-1ef0-11b2-a85c-b2994f3f6269.in.ibm.com (unknown [9.109.248.124])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Apr 2023 12:11:12 +0000 (GMT)
+From:   Korrapati Likhitha <likhitha@linux.ibm.com>
+To:     shuah@kernel.org, trenn@suse.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com,
+        Likhitha Korrapati <likhitha@linux.ibm.com>,
+        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+Subject: [PATCH v2] cpupower: Fix cpuidle_set to accept only numeric values for idle-set operation.
+Date:   Mon, 10 Apr 2023 17:40:54 +0530
+Message-Id: <20230410121054.61622-1-likhitha@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CZ-hDHT6yL7JfOG4XsZ-Hx98efbR4ymQ
+X-Proofpoint-ORIG-GUID: CZ-hDHT6yL7JfOG4XsZ-Hx98efbR4ymQ
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|PH0PR12MB8176:EE_
-X-MS-Office365-Filtering-Correlation-Id: d590cda1-7a4c-48a4-3ea4-08db39a98833
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DcTzcL+VUuiFmriZQVtctQzRCLS1DxMBCiTHzRp3F67VW9+vchq8ny7ogJNZ82TJFYEPBlzy+zK2t6Wgm01GwIpoWhE43x0sQEFlYlSQkBbDnymqqWfoHO/UHwn21vYRJMW+EeDpVAMzTqmy5ckr5sMrGm6kqNsbXj9juUAGqgXd345kSDNPpLeigZbfn62IRG+TbwWgYb3sFNAM2ULJwhV6eZxw8gv9B0G2TDH/isKajBJIuGgZAFtSdYrH1SAfi1KVlp9e1SdlW2Fm0CB7IeF3tmlh7Riw62RsXoncfd/T+MXldGVImCjBzsS9072HMuFkq/kp5g3u11UUneLK2P5W1ooJ6Im9vpJ45rtx1oUd+QV1WoY9r3uKXW+J6d9Te146g7N1Gm1/ZpjDUoSudKfxs+3HD+zXwjJd7S65OnQZSlPwbj3GibLluSu+fRMCLvCuOpc4f5Y4D4N1JzT1HkcZ9C4kqmHEGcwNnnauh3k4J/E49gCOK3mfxnanhT7ril4tn+4GdVjYs3Mp5uUbZBgbhA6WEE8lFhtoREq6PKffsoX+E+7h+PQu4kn+uI7p75S0Q2GygumPJ7YVMI4ljEipjFMenBZ/Z/CeBe1uHxiTZZGVvQbEMw9gRWx8uclb+59y2cHn4qohzWhPOCHBezZUFn4S1SGFruiWiDcbVoTpBIBVya43J0bNIzndU1yt3hcvwyjUxFZ1dNUSgZYlDYRbSoq3du6Kw9WAme8erqrk76Kj0+FByg8iHkYWa8BM
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(8936002)(6666004)(7696005)(40480700001)(40460700003)(44832011)(7416002)(5660300002)(86362001)(70206006)(8676002)(70586007)(4326008)(478600001)(110136005)(316002)(82310400005)(36860700001)(82740400003)(356005)(54906003)(81166007)(2906002)(1076003)(26005)(2616005)(83380400001)(47076005)(426003)(336012)(186003)(41300700001)(36756003)(16526019)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:54:09.8810
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d590cda1-7a4c-48a4-3ea4-08db39a98833
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8176
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_08,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ phishscore=0 spamscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0
+ adultscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100103
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,87 +83,175 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+From: Likhitha Korrapati <likhitha@linux.ibm.com>
 
-Schedutil normally calls the adjust_perf callback for drivers with
-adjust_perf callback available and fast_switch_possible flag set.
-However, when frequency invariance is disabled and schedutil tries to
-invoke fast_switch, and that callback is NULL, it schedules a kthread to
-invoke the target() callback, which could slow down the frequency
-update.
+For both the d and e options in 'cpupower idle_set' command, an
+atoi() conversion is done without checking if the input argument
+is all numeric. So, an atoi conversion is done on any character
+provided as input and the CPU idle_set operation continues with
+that integer value, which may not be what is intended or entirely
+correct.
 
-Prevent the frequency update slow down by implementing the fast_switch
-callback for amd_pstate.
+The output of cpuidle-set before patch is as follows:
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+[root@xxx cpupower]# cpupower idle-set -e 1$
+Idlestate 1 enabled on CPU 0
+[snip]
+Idlestate 1 enabled on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -e 11
+Idlestate 11 not available on CPU 0
+[snip]
+Idlestate 11 not available on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -d 12
+Idlestate 12 not available on CPU 0
+[snip]
+Idlestate 12 not available on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -d qw
+Idlestate 0 disabled on CPU 0
+[snip]
+Idlestate 0 disabled on CPU 47
+
+This patch adds a check for both d and e options in cpuidle-set.c
+to see that the idle_set value is all numeric before doing a
+string-to-int conversion.
+
+The output of cpuidle-set after the patch is as below:
+
+[root@xxx cpupower]# ./cpupower idle-set -e 1$
+Bad idle_set value: 1$. Integer expected
+
+[root@xxx cpupower]# ./cpupower idle-set -e 11
+Idlestate 11 not available on CPU 0
+[snip]
+Idlestate 11 not available on CPU 47
+
+[root@xxx cpupower]# ./cpupower idle-set -d 12
+Idlestate 12 not available on CPU 0
+[snip]
+Idlestate 12 not available on CPU 47
+
+[root@xxx cpupower]# ./cpupower idle-set -d qw
+Bad idle_set value: qw. Integer expected
+
+Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
+Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+Reported-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
 ---
- drivers/cpufreq/amd-pstate.c | 33 +++++++++++++++++++++++++++------
- 1 file changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 73c7643b2697..b3d594b35c65 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -422,9 +422,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
- 	return 0;
- }
+** changes since v1 [1] **
+
+- Addressed reviewed comments from v1.
+- Slightly reworded the commit for clarity.
+
+[1] https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
+
+ tools/power/cpupower/utils/cpuidle-set.c     | 25 ++++++++++++++++----
+ tools/power/cpupower/utils/helpers/helpers.h |  8 +++++++
+ tools/power/cpupower/utils/helpers/misc.c    | 17 +++++++++++++
+ 3 files changed, 45 insertions(+), 5 deletions(-)
+
+diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+index 46158928f9ad..1bfe16d27c2d 100644
+--- a/tools/power/cpupower/utils/cpuidle-set.c
++++ b/tools/power/cpupower/utils/cpuidle-set.c
+@@ -47,7 +47,12 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			idlestate = atoi(optarg);
++			if (is_stringnumeric(optarg))
++				idlestate = atoi(optarg);
++			else {
++				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
++				exit(EXIT_FAILURE);
++			}
+ 			break;
+ 		case 'e':
+ 			if (param) {
+@@ -56,7 +61,12 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			idlestate = atoi(optarg);
++			if (is_stringnumeric(optarg))
++				idlestate = atoi(optarg);
++			else {
++				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
++				exit(EXIT_FAILURE);
++			}
+ 			break;
+ 		case 'D':
+ 			if (param) {
+@@ -65,9 +75,14 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			latency = strtoull(optarg, &endptr, 10);
+-			if (*endptr != '\0') {
+-				printf(_("Bad latency value: %s\n"), optarg);
++			if (is_stringnumeric(optarg)) {
++				latency = strtoull(optarg, &endptr, 10);
++				if (*endptr != '\0') {
++					printf(_("Bad latency value: %s\n"), optarg);
++					exit(EXIT_FAILURE);
++				}
++			} else {
++				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
+ 				exit(EXIT_FAILURE);
+ 			}
+ 			break;
+diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+index 96e4bede078b..9977f0773986 100644
+--- a/tools/power/cpupower/utils/helpers/helpers.h
++++ b/tools/power/cpupower/utils/helpers/helpers.h
+@@ -208,3 +208,11 @@ void print_offline_cpus(void);
+ void print_speed(unsigned long speed, int no_rounding);
  
--static int amd_pstate_target(struct cpufreq_policy *policy,
--			     unsigned int target_freq,
--			     unsigned int relation)
-+static int amd_pstate_update_freq(struct cpufreq_policy *policy,
-+				  unsigned int target_freq, bool fast_switch)
- {
- 	struct cpufreq_freqs freqs;
- 	struct amd_cpudata *cpudata = policy->driver_data;
-@@ -443,14 +442,35 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
- 	des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
- 				     cpudata->max_freq);
- 
--	cpufreq_freq_transition_begin(policy, &freqs);
-+	WARN_ON(fast_switch && !policy->fast_switch_enabled);
-+	/*
-+	 * If fast_switch is desired, then there aren't any registered
-+	 * transition notifiers. See comment for
-+	 * cpufreq_enable_fast_switch().
-+	 */
-+	if (!fast_switch)
-+		cpufreq_freq_transition_begin(policy, &freqs);
- 	amd_pstate_update(cpudata, min_perf, des_perf,
--			  max_perf, false);
--	cpufreq_freq_transition_end(policy, &freqs, false);
-+			  max_perf, fast_switch);
-+	if (!fast_switch)
-+		cpufreq_freq_transition_end(policy, &freqs, false);
- 
- 	return 0;
- }
- 
-+static int amd_pstate_target(struct cpufreq_policy *policy,
-+			     unsigned int target_freq,
-+			     unsigned int relation)
-+{
-+	return amd_pstate_update_freq(policy, target_freq, false);
-+}
+ #endif /* __CPUPOWERUTILS_HELPERS__ */
 +
-+static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
-+				  unsigned int target_freq)
-+{
-+	return amd_pstate_update_freq(policy, target_freq, true);
-+}
++/*
++ * CPU idle-set
++ */
++int is_stringnumeric(char *arg);
++/*
++ * CPU idle-set
++ */
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index 9547b29254a7..8ec47c3c138e 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -4,6 +4,7 @@
+ #include <errno.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <ctype.h>
+ 
+ #include "helpers/helpers.h"
+ #include "helpers/sysfs.h"
+@@ -204,3 +205,19 @@ void print_speed(unsigned long speed, int no_rounding)
+ 		}
+ 	}
+ }
 +
- static void amd_pstate_adjust_perf(unsigned int cpu,
- 				   unsigned long _min_perf,
- 				   unsigned long target_perf,
-@@ -1228,6 +1248,7 @@ static struct cpufreq_driver amd_pstate_driver = {
- 	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
- 	.verify		= amd_pstate_verify,
- 	.target		= amd_pstate_target,
-+	.fast_switch    = amd_pstate_fast_switch,
- 	.init		= amd_pstate_cpu_init,
- 	.exit		= amd_pstate_cpu_exit,
- 	.suspend	= amd_pstate_cpu_suspend,
++/*
++ * is_stringnumeric
++ *
++ * To check if the given string has all numericals
++ */
++int is_stringnumeric(char *arg)
++{
++	size_t i = 0;
++
++	for (i = 0; arg[i] ; i++) {
++		if (!isdigit(arg[i]))
++			return 0;
++	}
++	return 1;
++}
 -- 
-2.34.1
+2.31.1
 
