@@ -2,100 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350406DCC5A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BB96DCC7F
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjDJUxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 16:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S229963AbjDJU7K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 16:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjDJUxr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:53:47 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069EA10D7
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:45 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id d9so5625286wrb.11
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681160023; x=1683752023;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bkQUnOWLA+V2iTlaapxkS0DuXVJow8vrvqyKzHmwuBE=;
-        b=mSw0zD5otsKK5tmRq1nzEby61f1faooSdycceSRUQVSbqwQtQ3QNrRcjZiruaVhTX1
-         01z0EFsycSofwCc38R6wZMtBEmoO7U5lrSgky/sBpvvget+6owZTp3TaT9grVrgYEJxe
-         3IFHUkU/yH0MnYIux9ZZElCzeEEF7gId0w05Qshto+uJElSmGN/miERwnchMIKeSSDwb
-         2jADe8x34PHeZfU50+CCeeCYv5rTqPxvMnpPmPgrgFsO8MFdU9hSujx45zKX+kMvCVrE
-         dcJO2yuj8TD54nLGr8CpsZU02rvzY812iXt2q1vbZ4uCsX8NNW9mJ0zqF7mtQnfBiooT
-         jKyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681160023; x=1683752023;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bkQUnOWLA+V2iTlaapxkS0DuXVJow8vrvqyKzHmwuBE=;
-        b=kSbWwRR1FQVH+frRApV28dGTPFWF/0cMOH+xXWTp8heYpIFuw+d4HrWZlW+gemuztp
-         Zb4bxmS72lWIWIhQO7NksS5QRXYIjoBN5TRYFK2nahYIU+Tnhqw2fEGXoaJl6wqcHSe/
-         4X9uf6XDuKsj0xC/hPbNTFu4UflxHbQEGxH0gV+WQ/5mKhRoDo1G1TfSFJugUtv750Eg
-         Q8K3c0w6UDuCp/gPgsKTQcBbVzfbG3IBz5vMGpcXQag0sWMO1KL+lGYoP5OdJFIUwqpq
-         TCy/e97uO9EEvsnTbYylseyxeyiaaGUYo+UkFkdj1c6MaoVlhiBQEFPKVa8T2xuslPmo
-         tcIg==
-X-Gm-Message-State: AAQBX9eztgUCVtwwlpUv53xRQASCW2JS3L+crm5sqRXpTuZWB3Y6erXf
-        d5MtU8oa6Xo55VyYxgCObEOVpA==
-X-Google-Smtp-Source: AKy350bg2a4lxEjB/SUZECrf0UoKpqThrQonwo7vjEvFnpkEwzrg+Jh/9wFjd/+2RSeBjkpV2n70Tg==
-X-Received: by 2002:adf:e885:0:b0:2e4:506c:6483 with SMTP id d5-20020adfe885000000b002e4506c6483mr343276wrm.48.1681160023519;
-        Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 7/7] thermal/drivers/intel_menlow: Make additionnal sysfs information optional
-Date:   Mon, 10 Apr 2023 22:53:05 +0200
-Message-Id: <20230410205305.1649678-8-daniel.lezcano@linaro.org>
+        with ESMTP id S229933AbjDJU7G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:59:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464D1BD9;
+        Mon, 10 Apr 2023 13:59:03 -0700 (PDT)
+Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N0nvJ-1qXbbO3SlR-00wikr; Mon, 10 Apr 2023 22:58:23 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        linux-imx@nxp.com, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V2 0/6] ARM: dts: imx6ull: Fix dtbs_check warnings
+Date:   Mon, 10 Apr 2023 22:57:57 +0200
+Message-Id: <20230410205803.45853-1-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:XdkOV61ksLSZtrlonvh6FpUglprFQYh8we1Z9a1smKkM61WGGKL
+ l9lfGj7qHDXOar1nDRo/Zpoacgv6qmrSB7uJpYJsBh4hSb/Zf+jhTpyhkHekdaCsEmUNP8K
+ 5nq4hI6eXuU3ctgDiajlXhWxzNBq7t8sIh8MlD52wcymz3z0BCBd+FKFLw3v1oT5wag+1CS
+ u+U2wJ8FFziHoEM5W8khg==
+UI-OutboundReport: notjunk:1;M01:P0:7vWcb7TeIFQ=;AhkpwLufc1X/9dgTkPUEPG0JE1P
+ 91acookKLxUcDdaSia2GmB+tzjFNap06FOlMBk6Evf2oZZK6XhNupAabmbo0STqSLzRpuCoxt
+ TPnXsg6F2iDW+FGIkjINax3Mb7HdbOIDkfLjf10eReWvPBxpC8jpa9citKVqObAkmTpQHzsaB
+ QTy2Ojk8r/HEvJ6p+5lC3JzxGoFXQhC5pm1T5IFcy+fJRmSGGXqzUURFVx3OWURJQZ7zbeHwN
+ AYji52Gy/ZiBQBkRgmrJ902oZ87W4EUbmgsQuf7a9FFrKCfg0oxgtaRmopXkQk6LIeXVkvlOT
+ Y0ZOpHgl3cZ4XJVKQcnQ71fqmW6gs8YQXP9GxIxFs/LT/3aaSX9sld+HhaY5VAnP5ITt0whji
+ EfEArolCSCmz5kJOYgoYv18tt7eqUxdY/VXzqV1Mnm7uPoHOVoqqe2uaAW77xnfrq2bWwOWrx
+ mzzkEj0TmeED3r79l93lYCJVW41LlpMlhIp+cZVSphTl0QlhfZzy1S31T49uJPfVcXYlAQt+k
+ zW9CCYQ4EKW0iQs4sFc8DY54rwSJMG8d/bg2xGzky1UCEtGOr5vm0rqddPckiS8iod4sfkAmL
+ mHOqHbpBZJdEzx2MTfRHJbauFLn2ML/PPH9cJx3zRl7ZCaQxdnD1/kq1Rw/pvOG0501CIBl9e
+ 2BdlKqKnVS16uDR7t4z4j44BB9ifmRZ2ysB3M6skWg==
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Menlon thermal driver creates specific files in the thermal zone
-sysfs class. It is specific to Menlon and these entries look debug
-code. It is probable these are not needed.
+This series tries to address some dtbs_check warnings on i.MX6ULL.
 
-Let's make the code optional and disable it by default.
+Changes in V2:
+- new patch to fix fsl-imx-uart warnings 
+- fixed GPC typo found by Fabio Estevam
+- keep enum in bindings as suggested by Krzysztof Kozlowski
+- make imx6ul GPT compatible to imx6sx
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/intel/intel_menlow.c | 3 +++
- 1 file changed, 3 insertions(+)
+Stefan Wahren (6):
+  dt-bindings: serial: fsl-imx-uart: add missing properties
+  dt-bindings: crypto: fsl-dcp: add imx6sl and imx6ull compatible
+  dt-bindings: imx-thermal: add imx6sll and imx6ul compatible
+  dt-bindings: imxgpt: add imx6ul compatible
+  ARM: dts: imx: Adjust dma-apbh node name
+  ARM: dts: imx6ul: Add clock and PGC node to GPC
 
-diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-index d720add918ff..d46dacea1b4d 100644
---- a/drivers/thermal/intel/intel_menlow.c
-+++ b/drivers/thermal/intel/intel_menlow.c
-@@ -374,6 +374,9 @@ static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
- 	struct intel_menlow_attribute *attr;
- 	int result;
- 
-+	if (!IS_ENABLED(CONFIG_THERMAL_SYSFS_OBSOLETE_SINGULARITY))
-+		return 0;
-+	
- 	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
- 	if (!attr)
- 		return -ENOMEM;
+ .../devicetree/bindings/crypto/fsl-dcp.yaml   | 12 ++++++---
+ .../bindings/serial/fsl-imx-uart.yaml         | 25 +++++++++++++++++++
+ .../bindings/thermal/imx-thermal.yaml         | 14 ++++++++---
+ .../devicetree/bindings/timer/fsl,imxgpt.yaml |  3 +++
+ arch/arm/boot/dts/imx23.dtsi                  |  2 +-
+ arch/arm/boot/dts/imx28.dtsi                  |  2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                |  2 +-
+ arch/arm/boot/dts/imx6sx.dtsi                 |  2 +-
+ arch/arm/boot/dts/imx6ul.dtsi                 | 14 ++++++++++-
+ arch/arm/boot/dts/imx7s.dtsi                  |  2 +-
+ 10 files changed, 65 insertions(+), 13 deletions(-)
+
 -- 
 2.34.1
 
