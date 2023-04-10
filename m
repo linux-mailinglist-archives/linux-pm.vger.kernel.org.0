@@ -2,256 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1866DC6A0
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 14:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23C06DCA4A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 19:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjDJML2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 08:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S230013AbjDJR75 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Apr 2023 13:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjDJML0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 08:11:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE081B9;
-        Mon, 10 Apr 2023 05:11:25 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AAWg4Q002478;
-        Mon, 10 Apr 2023 12:11:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=oCX33MHJdVwOcqkM9x30iXp+//dYE8FJsaDB4GyktJM=;
- b=pB7yvr+47tys5sMNhweB7ggoJT62VjE5Xek1+x+hPfOvVcfzwehDbuF6AkiZONlq0YZR
- N22RBcMh4RpkgeEaKITffC11tzYLjwwTp/1ny28KlTYsd7RiH1QqsGRV1uDrJy0VBQjs
- jSzQpwRfowuHR1dN8ZORCZsxvHj0+HQAO4FVyvuerNqvqOqpDBvA3gAfqe+wAfkS9hok
- OqnKe3f0y8CG2DPVAgDs7FXcKlfxS/QA3dc7DRsYsJXmwJpNYdZqCDj+RISQX8kWgVsD
- aL+CiKDl2FBbdfynVHty9fC9UwFzUAgfoaJluHm0HEVYwIIL9+Ja4yZ7UGjm53g0DYhs rQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj2txjm9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 12:11:19 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33A3v8aD003252;
-        Mon, 10 Apr 2023 12:11:17 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m191s7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 12:11:17 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33ACBEqZ24314374
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Apr 2023 12:11:14 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AAE6520043;
-        Mon, 10 Apr 2023 12:11:14 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1052F20040;
-        Mon, 10 Apr 2023 12:11:13 +0000 (GMT)
-Received: from li-a1f1b24c-1ef0-11b2-a85c-b2994f3f6269.in.ibm.com (unknown [9.109.248.124])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Apr 2023 12:11:12 +0000 (GMT)
-From:   Korrapati Likhitha <likhitha@linux.ibm.com>
-To:     shuah@kernel.org, trenn@suse.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com,
-        Likhitha Korrapati <likhitha@linux.ibm.com>,
-        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
-Subject: [PATCH v2] cpupower: Fix cpuidle_set to accept only numeric values for idle-set operation.
-Date:   Mon, 10 Apr 2023 17:40:54 +0530
-Message-Id: <20230410121054.61622-1-likhitha@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CZ-hDHT6yL7JfOG4XsZ-Hx98efbR4ymQ
-X-Proofpoint-ORIG-GUID: CZ-hDHT6yL7JfOG4XsZ-Hx98efbR4ymQ
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229862AbjDJR7w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 13:59:52 -0400
+X-Greylist: delayed 3637 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Apr 2023 10:59:51 PDT
+Received: from energy.go.ug (unknown [154.72.195.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB31981
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 10:59:50 -0700 (PDT)
+Received: from [192.168.10.4] (port=33825 helo=Exchange1.energy.go.ug)
+        by energy.go.ug with esmtps  (TLS1) tls TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+        (Exim 4.96)
+        (envelope-from <msmd@energy.go.ug>)
+        id 1plr8K-0002kt-0b;
+        Mon, 10 Apr 2023 16:00:32 +0300
+Received: from [45.80.158.229] (192.168.10.1) by Exchange1.energy.go.ug
+ (192.168.10.4) with Microsoft SMTP Server (TLS) id 15.0.847.32; Mon, 10 Apr
+ 2023 16:20:34 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_08,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- phishscore=0 spamscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0
- adultscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100103
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: GUTE NACHRICHTEN:
+To:     Recipients <msmd@energy.go.ug>
+From:   Maria Elisabeth Schaeffler <msmd@energy.go.ug>
+Date:   Mon, 10 Apr 2023 15:18:22 +0200
+Reply-To: <info.mariaelisabethschaeffler1@gmail.com>
+Message-ID: <2550b873-463c-453f-b83e-07679a5276bf@Exchange1.energy.go.ug>
+X-Originating-IP: [192.168.10.1]
+X-ClientProxiedBy: Exchange1.energy.go.ug (192.168.10.4) To
+ Exchange1.energy.go.ug (192.168.10.4)
+X-Sophos-OBS: success
+X-SASI-Version: Antispam-Engine: 5.1.1, AntispamData: 2023.4.10.153017
+X-SASI-RCODE: 200
+X-SASI-SpamProbability: 87%
+X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
+ BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
+ BODY_SIZE_500_599 0.000000, BODY_SIZE_7000_LESS 0.000000,
+ CTE_QUOTED_PRINTABLE 0.000000, FRAUD_WEBMAIL_R_NOT_F 0.100000,
+ FROM_NAME_PHRASE 0.000000, FROM_SAME_AS_TO_DOMAIN 0.000000,
+ MSGID_SAMEAS_FROM_HEX_844412 0.100000, NO_FUR_HEADER 0.000000,
+ OUTBOUND 0.000000, OUTBOUND_SOPHOS 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
+ SENDER_NO_AUTH 0.000000, URI_CLASS_SCAM_MAILTO 8.000000,
+ WEBMAIL_REPLYTO_NOT_FROM 0.500000, WEBMAIL_SOURCE 0.000000,
+ WEBMAIL_XOIP 0.000000, WEBMAIL_X_IP_HDR 0.000000, __CT 0.000000,
+ __CTE 0.000000, __CT_TEXT_PLAIN 0.000000, __FRAUD_SUBJ_ALLCAPS 0.000000,
+ __FRAUD_WEBMAIL_REPLYTO 0.000000, __FROM_DOMAIN_IN_RCPT 0.000000,
+ __FROM_NAME_NOT_IN_ADDR 0.000000, __HAS_FROM 0.000000, __HAS_MSGID 0.000000,
+ __HAS_REPLYTO 0.000000, __HAS_XOIP 0.000000, __HEADER_ORDER_FROM 0.000000,
+ __MIME_TEXT_P1 0.000000, __MIME_VERSION 0.000000,
+ __MSGID_HEX_844412 0.000000, __OUTBOUND_SOPHOS_FUR 0.000000,
+ __OUTBOUND_SOPHOS_FUR_IP 0.000000, __PHISH_SPEAR_SUBJECT 0.000000,
+ __PHISH_SPEAR_SUBJECT_CAPS 0.000000, __PHISH_SPEAR_SUBJ_SUBJECT 0.000000,
+ __REPLYTO_GMAIL 0.000000, __SANE_MSGID 0.000000, __SUBJECT_ALLCAPS 0.000000,
+ __SUBJECT_NOLC 0.000000, __SUBJ_SHORT 0.000000, __TO_DOMAIN_IN_FROM 0.000000,
+ __TO_DOMAIN_IN_MSGID 0.000000, __TO_HOST_IN_FROM 0.000000,
+ __TO_MALFORMED_2 0.000000, __TO_NAME 0.000000,
+ __TO_NAME_DIFF_FROM_ACC 0.000000, __TO_REAL_NAMES 0.000000,
+ __URI_CLASS_ANY 0.000000
+X-Spam-Status: Yes, score=7.2 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MAY_BE_FORGED,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_SORBS_WEB,SPF_FAIL,SPF_HELO_FAIL,
+        SUBJ_ALL_CAPS,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
+        *      [154.72.195.50 listed in dnsbl.sorbs.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [info.mariaelisabethschaeffler1[at]gmail.com]
+        *  0.0 SPF_HELO_FAIL SPF: HELO does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=helo;id=energy.go.ug;ip=154.72.195.50;r=lindbergh.monkeyblade.net]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.9 SPF_FAIL SPF: sender does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=msmd%40energy.go.ug;ip=154.72.195.50;r=lindbergh.monkeyblade.net]
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.5 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
+        *       failed
+        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
+        *  0.0 MAY_BE_FORGED Relay IP's reverse DNS does not resolve to IP
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Likhitha Korrapati <likhitha@linux.ibm.com>
+Hallo,
 
-For both the d and e options in 'cpupower idle_set' command, an
-atoi() conversion is done without checking if the input argument
-is all numeric. So, an atoi conversion is done on any character
-provided as input and the CPU idle_set operation continues with
-that integer value, which may not be what is intended or entirely
-correct.
-
-The output of cpuidle-set before patch is as follows:
-
-[root@xxx cpupower]# cpupower idle-set -e 1$
-Idlestate 1 enabled on CPU 0
-[snip]
-Idlestate 1 enabled on CPU 47
-
-[root@xxx cpupower]# cpupower idle-set -e 11
-Idlestate 11 not available on CPU 0
-[snip]
-Idlestate 11 not available on CPU 47
-
-[root@xxx cpupower]# cpupower idle-set -d 12
-Idlestate 12 not available on CPU 0
-[snip]
-Idlestate 12 not available on CPU 47
-
-[root@xxx cpupower]# cpupower idle-set -d qw
-Idlestate 0 disabled on CPU 0
-[snip]
-Idlestate 0 disabled on CPU 47
-
-This patch adds a check for both d and e options in cpuidle-set.c
-to see that the idle_set value is all numeric before doing a
-string-to-int conversion.
-
-The output of cpuidle-set after the patch is as below:
-
-[root@xxx cpupower]# ./cpupower idle-set -e 1$
-Bad idle_set value: 1$. Integer expected
-
-[root@xxx cpupower]# ./cpupower idle-set -e 11
-Idlestate 11 not available on CPU 0
-[snip]
-Idlestate 11 not available on CPU 47
-
-[root@xxx cpupower]# ./cpupower idle-set -d 12
-Idlestate 12 not available on CPU 0
-[snip]
-Idlestate 12 not available on CPU 47
-
-[root@xxx cpupower]# ./cpupower idle-set -d qw
-Bad idle_set value: qw. Integer expected
-
-Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
-Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
-Reported-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
-Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
----
-
-** changes since v1 [1] **
-
-- Addressed reviewed comments from v1.
-- Slightly reworded the commit for clarity.
-
-[1] https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
-
- tools/power/cpupower/utils/cpuidle-set.c     | 25 ++++++++++++++++----
- tools/power/cpupower/utils/helpers/helpers.h |  8 +++++++
- tools/power/cpupower/utils/helpers/misc.c    | 17 +++++++++++++
- 3 files changed, 45 insertions(+), 5 deletions(-)
-
-diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
-index 46158928f9ad..1bfe16d27c2d 100644
---- a/tools/power/cpupower/utils/cpuidle-set.c
-+++ b/tools/power/cpupower/utils/cpuidle-set.c
-@@ -47,7 +47,12 @@ int cmd_idle_set(int argc, char **argv)
- 				break;
- 			}
- 			param = ret;
--			idlestate = atoi(optarg);
-+			if (is_stringnumeric(optarg))
-+				idlestate = atoi(optarg);
-+			else {
-+				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
-+				exit(EXIT_FAILURE);
-+			}
- 			break;
- 		case 'e':
- 			if (param) {
-@@ -56,7 +61,12 @@ int cmd_idle_set(int argc, char **argv)
- 				break;
- 			}
- 			param = ret;
--			idlestate = atoi(optarg);
-+			if (is_stringnumeric(optarg))
-+				idlestate = atoi(optarg);
-+			else {
-+				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
-+				exit(EXIT_FAILURE);
-+			}
- 			break;
- 		case 'D':
- 			if (param) {
-@@ -65,9 +75,14 @@ int cmd_idle_set(int argc, char **argv)
- 				break;
- 			}
- 			param = ret;
--			latency = strtoull(optarg, &endptr, 10);
--			if (*endptr != '\0') {
--				printf(_("Bad latency value: %s\n"), optarg);
-+			if (is_stringnumeric(optarg)) {
-+				latency = strtoull(optarg, &endptr, 10);
-+				if (*endptr != '\0') {
-+					printf(_("Bad latency value: %s\n"), optarg);
-+					exit(EXIT_FAILURE);
-+				}
-+			} else {
-+				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
- 				exit(EXIT_FAILURE);
- 			}
- 			break;
-diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index 96e4bede078b..9977f0773986 100644
---- a/tools/power/cpupower/utils/helpers/helpers.h
-+++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -208,3 +208,11 @@ void print_offline_cpus(void);
- void print_speed(unsigned long speed, int no_rounding);
- 
- #endif /* __CPUPOWERUTILS_HELPERS__ */
-+
-+/*
-+ * CPU idle-set
-+ */
-+int is_stringnumeric(char *arg);
-+/*
-+ * CPU idle-set
-+ */
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index 9547b29254a7..8ec47c3c138e 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -4,6 +4,7 @@
- #include <errno.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <ctype.h>
- 
- #include "helpers/helpers.h"
- #include "helpers/sysfs.h"
-@@ -204,3 +205,19 @@ void print_speed(unsigned long speed, int no_rounding)
- 		}
- 	}
- }
-+
-+/*
-+ * is_stringnumeric
-+ *
-+ * To check if the given string has all numericals
-+ */
-+int is_stringnumeric(char *arg)
-+{
-+	size_t i = 0;
-+
-+	for (i = 0; arg[i] ; i++) {
-+		if (!isdigit(arg[i]))
-+			return 0;
-+	}
-+	return 1;
-+}
--- 
-2.31.1
-
+Ich bin Frau Maria Elisabeth Schaeffler, eine deutsche Wirtschaftsmagnatin, Investorin und Philanthropin. Ich bin der Vorsitzende von Wipro Limited. 25% meines persönlichen Vermögens werden für wohltätige Zwecke ausgegeben. Und ich habe auch versprochen, die restlichen 25% dieses Jahr an Einzelpersonen zu verschenken. Ich habe mich entschlossen, Ihnen 1.000.000,00 Euro zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen über: info.mariaelisabethschaeffler1@gmail.com
