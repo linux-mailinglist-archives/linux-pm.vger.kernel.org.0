@@ -2,99 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23C06DCA4A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 19:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93CD6DC988
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 18:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjDJR75 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Apr 2023 13:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S229973AbjDJQwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 12:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjDJR7w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 13:59:52 -0400
-X-Greylist: delayed 3637 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Apr 2023 10:59:51 PDT
-Received: from energy.go.ug (unknown [154.72.195.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB31981
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 10:59:50 -0700 (PDT)
-Received: from [192.168.10.4] (port=33825 helo=Exchange1.energy.go.ug)
-        by energy.go.ug with esmtps  (TLS1) tls TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
-        (Exim 4.96)
-        (envelope-from <msmd@energy.go.ug>)
-        id 1plr8K-0002kt-0b;
-        Mon, 10 Apr 2023 16:00:32 +0300
-Received: from [45.80.158.229] (192.168.10.1) by Exchange1.energy.go.ug
- (192.168.10.4) with Microsoft SMTP Server (TLS) id 15.0.847.32; Mon, 10 Apr
- 2023 16:20:34 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229887AbjDJQwe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 12:52:34 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5C4199E
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 09:52:32 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id q23so4378122ejz.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 09:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681145551;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eBs67X9hTZahV0d5thlLTSsdpyjHcz4nvl7+G074hsI=;
+        b=R6FF3Mk4AuqNRvUgA2tp9Qp7r7oxi9Ro88Kkze80fE4X1A7J+oDZidRFzIIJMGJMJF
+         o9FHxSQEm8H8skEaCy0tYUxJpKErpAnSaTB9VflmajV+LWoe8LT//noZ+w8TpXZ+tG4p
+         Gvd6Lt8WrI9BAmxKjtXL8P6p0GrT7qGEY3BFfMwDNNFbNjQ9U1qKNhGp0PcU92TpRpYD
+         jCQZNXoCHqcgrDdPVudNWeX+J6QLKirjk2YbfRnvKYyuZ8uobhoP2/fYkktqIvC+MMk2
+         PIkK6KFByIQ3ivqjy4Nk/RrEQRCmMg8mrjcMXw2/SQ96K1F/y3cpapk6gcJKJS2yG530
+         L0/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681145551;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eBs67X9hTZahV0d5thlLTSsdpyjHcz4nvl7+G074hsI=;
+        b=1INqWidgXsXVRc/Q8YTHkYYwj+NaNok1ENbDBQB04uXZNoF8FR1gwb055/IZMjnXJp
+         BWfkdFO8oiaVix0WUtNQUCth8WiFuuTyZtw8tuUlJX36q+SPztRSp6XRs32log4SgXyU
+         VItYuCWFlieoOi43JluobKUdwJUnH8uoLYEvsdNXL2LVcK+P2kBGLRqSdW5Jas/6+QE7
+         18g8E8dzKc17xAXBsrswnAKQu9FT45JU7+vatqQMF8mkaTnta1Rom9QEH2yzDi1RlsAB
+         i4+YOa+I+/Ey2mZuVgg12JiYmf73q07LpGp5DI5FgpiULSLZ4irgMrtJDBgywHm/oTrn
+         9PNQ==
+X-Gm-Message-State: AAQBX9fsvE7X4VNUKuLjbXnGuZ39zxFQLXkBO6oeGP2EhHQfFY8g9tzb
+        JCvUBV4AF6A6oG4Pps+j7wId3lBZM4mq+KYdGI83IQ==
+X-Google-Smtp-Source: AKy350ZguZqgdbZKMiOGO2jF6+EokSfXRDYG2x5kIv2H/AlfFVrHUXhtcqwNTQA5txtCoJxknPbwEA==
+X-Received: by 2002:a17:906:234f:b0:94a:798c:712f with SMTP id m15-20020a170906234f00b0094a798c712fmr4375005eja.49.1681145551413;
+        Mon, 10 Apr 2023 09:52:31 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:1a6c:6968:e633:48df? ([2a02:810d:15c0:828:1a6c:6968:e633:48df])
+        by smtp.gmail.com with ESMTPSA id ck13-20020a170906c44d00b0094a8b47d360sm1179864ejb.177.2023.04.10.09.52.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 09:52:30 -0700 (PDT)
+Message-ID: <81e9f590-4814-3b56-5cbf-8f22fb97275f@linaro.org>
+Date:   Mon, 10 Apr 2023 18:52:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: GUTE NACHRICHTEN:
-To:     Recipients <msmd@energy.go.ug>
-From:   Maria Elisabeth Schaeffler <msmd@energy.go.ug>
-Date:   Mon, 10 Apr 2023 15:18:22 +0200
-Reply-To: <info.mariaelisabethschaeffler1@gmail.com>
-Message-ID: <2550b873-463c-453f-b83e-07679a5276bf@Exchange1.energy.go.ug>
-X-Originating-IP: [192.168.10.1]
-X-ClientProxiedBy: Exchange1.energy.go.ug (192.168.10.4) To
- Exchange1.energy.go.ug (192.168.10.4)
-X-Sophos-OBS: success
-X-SASI-Version: Antispam-Engine: 5.1.1, AntispamData: 2023.4.10.153017
-X-SASI-RCODE: 200
-X-SASI-SpamProbability: 87%
-X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
- BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
- BODY_SIZE_500_599 0.000000, BODY_SIZE_7000_LESS 0.000000,
- CTE_QUOTED_PRINTABLE 0.000000, FRAUD_WEBMAIL_R_NOT_F 0.100000,
- FROM_NAME_PHRASE 0.000000, FROM_SAME_AS_TO_DOMAIN 0.000000,
- MSGID_SAMEAS_FROM_HEX_844412 0.100000, NO_FUR_HEADER 0.000000,
- OUTBOUND 0.000000, OUTBOUND_SOPHOS 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
- SENDER_NO_AUTH 0.000000, URI_CLASS_SCAM_MAILTO 8.000000,
- WEBMAIL_REPLYTO_NOT_FROM 0.500000, WEBMAIL_SOURCE 0.000000,
- WEBMAIL_XOIP 0.000000, WEBMAIL_X_IP_HDR 0.000000, __CT 0.000000,
- __CTE 0.000000, __CT_TEXT_PLAIN 0.000000, __FRAUD_SUBJ_ALLCAPS 0.000000,
- __FRAUD_WEBMAIL_REPLYTO 0.000000, __FROM_DOMAIN_IN_RCPT 0.000000,
- __FROM_NAME_NOT_IN_ADDR 0.000000, __HAS_FROM 0.000000, __HAS_MSGID 0.000000,
- __HAS_REPLYTO 0.000000, __HAS_XOIP 0.000000, __HEADER_ORDER_FROM 0.000000,
- __MIME_TEXT_P1 0.000000, __MIME_VERSION 0.000000,
- __MSGID_HEX_844412 0.000000, __OUTBOUND_SOPHOS_FUR 0.000000,
- __OUTBOUND_SOPHOS_FUR_IP 0.000000, __PHISH_SPEAR_SUBJECT 0.000000,
- __PHISH_SPEAR_SUBJECT_CAPS 0.000000, __PHISH_SPEAR_SUBJ_SUBJECT 0.000000,
- __REPLYTO_GMAIL 0.000000, __SANE_MSGID 0.000000, __SUBJECT_ALLCAPS 0.000000,
- __SUBJECT_NOLC 0.000000, __SUBJ_SHORT 0.000000, __TO_DOMAIN_IN_FROM 0.000000,
- __TO_DOMAIN_IN_MSGID 0.000000, __TO_HOST_IN_FROM 0.000000,
- __TO_MALFORMED_2 0.000000, __TO_NAME 0.000000,
- __TO_NAME_DIFF_FROM_ACC 0.000000, __TO_REAL_NAMES 0.000000,
- __URI_CLASS_ANY 0.000000
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MAY_BE_FORGED,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_SORBS_WEB,SPF_FAIL,SPF_HELO_FAIL,
-        SUBJ_ALL_CAPS,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
-        *      [154.72.195.50 listed in dnsbl.sorbs.net]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [info.mariaelisabethschaeffler1[at]gmail.com]
-        *  0.0 SPF_HELO_FAIL SPF: HELO does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=helo;id=energy.go.ug;ip=154.72.195.50;r=lindbergh.monkeyblade.net]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.9 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=msmd%40energy.go.ug;ip=154.72.195.50;r=lindbergh.monkeyblade.net]
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.5 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
-        *       failed
-        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
-        *  0.0 MAY_BE_FORGED Relay IP's reverse DNS does not resolve to IP
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 2/4] iterconnect: add clk-based icc provider support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230408234932.2363302-1-dmitry.baryshkov@linaro.org>
+ <20230408234932.2363302-3-dmitry.baryshkov@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230408234932.2363302-3-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hallo,
+On 09/04/2023 01:49, Dmitry Baryshkov wrote:
+> For some devices it is useful to export clocks as interconect providers,
 
-Ich bin Frau Maria Elisabeth Schaeffler, eine deutsche Wirtschaftsmagnatin, Investorin und Philanthropin. Ich bin der Vorsitzende von Wipro Limited. 25% meines persönlichen Vermögens werden für wohltätige Zwecke ausgegeben. Und ich habe auch versprochen, die restlichen 25% dieses Jahr an Einzelpersonen zu verschenken. Ich habe mich entschlossen, Ihnen 1.000.000,00 Euro zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen über: info.mariaelisabethschaeffler1@gmail.com
+typo
+
+> if the clock corresponds to bus bandwidth.
+> 
+> For example, on MSM8996 the cluster interconnect clock should be scaled
+> according to the cluster frequencies. Exporting it as an interconnect
+> allows one to properly describe this as the cluster bandwidth
+> requirements.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Subject: also typo
+
+Best regards,
+Krzysztof
+
