@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1566DCC54
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EDB6DCC56
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjDJUxr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 16:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
+        id S229746AbjDJUxs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 16:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjDJUxo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:53:44 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D2FE6C
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:41 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l26-20020a05600c1d1a00b003edd24054e0so4915411wms.4
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:41 -0700 (PDT)
+        with ESMTP id S229873AbjDJUxp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:53:45 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34FF210D
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:42 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v29so5552372wra.13
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681160020; x=1683752020;
+        d=linaro.org; s=google; t=1681160021; x=1683752021;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+VZk/Xuf/BecNwwdsFB/838vQVCvaje2TQnFopmd7IM=;
-        b=FxLeg2sTLVYKL6SFHQGx1FS/5j5eNFIakBq/wmiT/7z73ycZpRJOGN+zVK4lR2cyyC
-         wIBkdAHRc+p5/f9InR3Q7uSswONpKuDg0e55ZkON7Efl7JAQhwTXV5ExsDMUlTHgcatG
-         dox8L7LfD1XszOKEVApR/6iS6vIl3Cs8z15bNYqPgc+vw+YiRfQ7F9jTKm+FyP+sWfcx
-         mdTngflLgrvi+IZw7iCa30iJrdCHbr5luYlbDMiS5P4iOxWhCTu+0v7uzlnXejf3ewPv
-         8iSNvewqgw+hmJjaW2OnBwLuC97r80s9WDZm5i0QvZt1n4xpcCEzNiaF4ldhzyLPiVa0
-         BT2A==
+        bh=jPfklvntaSAZNSstWZb9c9xIuh7wy5gv7laC1WOc6HM=;
+        b=CNbSdHE8n1zV1HPzRdLK08lEvmMz/Kid8qJ/8adULTAra3QhdAdgSk4eHGV9zO7TmW
+         oWjrs4f3ETu6O+96aPhnZ6Q61+FIGxTq7P2q1LMH6BuLH1tGqL7J5m8hL2EJwYcfVPmB
+         6L3TFCl3sAP7+8wmSXHvX8cyCl6JXV+DnepvXSz7J7ts3uSUoAbB7roDO477PeGjZBrq
+         B6UhPUI7bSVGwpPMPNawVS5xr9xsTzHINTVbnfJfS+KYyCjmqQiqKMa7/B+XTVzindJW
+         i0Ly4fqWapIN5RdJQ67GyRLwIeA+K2atzBMK38N3Fu6RJZJUsMNs+X50dxpI0knuK8pN
+         hU1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681160020; x=1683752020;
+        d=1e100.net; s=20210112; t=1681160021; x=1683752021;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+VZk/Xuf/BecNwwdsFB/838vQVCvaje2TQnFopmd7IM=;
-        b=M7XiXIld9eIlCSLjd7qWNJ76kdKzCWq9BlEopdBgpGhbXqCgw/1CVMFGhehjiKYY0z
-         XPiwQh6wlhoANFD9bMQO/vDBK1LC3Mh4TfUEsayMK6eXn9o57lK436ND2qPLqXiC+OCg
-         pB2nJ30A7ZTGPdbymrCGf8OmW1YVYG/V/zAgznAa85OH5THJ88nAKKkCk4E+h+FCJgrj
-         RmrPG+z6rFX+zRM6JPHaWJe3wDC0ahwR5tEPothdo3FS1p7h8B9e1U0JK17i1Hu2PX7e
-         X89BX9pVDup0DtELIKKeWyLVo2rN2+KJ6a7XmS2ma0q/NPDlM5lKId8gdNLlsJCBKBMT
-         5GUA==
-X-Gm-Message-State: AAQBX9eHXqczLh2IjSuEjAXJH1CWp2RNJRsT7U+PQZ3+dvHE1XlCN9CE
-        eJcYH8p42fD4lmsp9lGNIc/1wg==
-X-Google-Smtp-Source: AKy350ZAg2sXku/us3SLa/ABKLmYyW0fS/CTYnxWdO5C7YlSREmAzH6R6thKVE6yeBcN/q2cJ/AASw==
-X-Received: by 2002:a05:600c:ce:b0:3f0:39ab:347c with SMTP id u14-20020a05600c00ce00b003f039ab347cmr5368542wmm.23.1681160020330;
-        Mon, 10 Apr 2023 13:53:40 -0700 (PDT)
+        bh=jPfklvntaSAZNSstWZb9c9xIuh7wy5gv7laC1WOc6HM=;
+        b=r1kBOpckYtVNvP4W2B3SZle2F5RyfKQytD8gmbvIK2kQ7x+ckfHMmCjW3kPJpnhCbq
+         xvakN3PaVxrTCMnBm7R4mAnQ1VhOe/KyE/lbTXi70gliGvRVeux7hl4XA5NxLrYlb93X
+         JW795MurDWYBFbWKsqNYS0SaCmtugoC6DHskIW1/1vFF9DwT6NnrkAlYhB+TGm7KwR7c
+         +tS6gPlMqP2zORpkFOzWF4SWnXGDhVQYN1vs9EI5ltkARAwpsauM/qnYvDjCtb6mEY9E
+         auwl2YY5T+9OBmY5EoRnAFgQS06eC9Tw0rkwDoDOVGAapL3xOfxlvRQDmdp9Cipk2Ym3
+         ftKg==
+X-Gm-Message-State: AAQBX9fKs2nG/o8w3Qa9RlRkd59AqBFkxLEy9lmR6xR6sXFtunWnmJDB
+        RJKUrhIj02v2JTRpuyRuV2EpIA==
+X-Google-Smtp-Source: AKy350aFfGmqz5nU83qM1fv+sU7tCyVxJ496+1K9KVy1xzlKLKyU5K5Dr7MTMmRg3cXmeAr5FguKsQ==
+X-Received: by 2002:adf:dec2:0:b0:2ca:175b:d850 with SMTP id i2-20020adfdec2000000b002ca175bd850mr5111363wrn.11.1681160021173;
+        Mon, 10 Apr 2023 13:53:41 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.39
+        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 10 Apr 2023 13:53:40 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER)
-Subject: [PATCH v2 3/7] thermal/drivers/acpi: Use thermal_zone_device()
-Date:   Mon, 10 Apr 2023 22:53:01 +0200
-Message-Id: <20230410205305.1649678-4-daniel.lezcano@linaro.org>
+        linux-pm@vger.kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v2 4/7] thermal/drivers/menlow: Use thermal_zone_device()
+Date:   Mon, 10 Apr 2023 22:53:02 +0200
+Message-Id: <20230410205305.1649678-5-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
 References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
@@ -77,59 +77,43 @@ content of the thermal zone device structure.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/acpi/thermal.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/thermal/intel/intel_menlow.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 255efa73ed70..5763db4528b8 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -789,6 +789,7 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+index 5a6ad0552311..d720add918ff 100644
+--- a/drivers/thermal/intel/intel_menlow.c
++++ b/drivers/thermal/intel/intel_menlow.c
+@@ -422,7 +422,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
  
- static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- {
-+	struct device *tzdev;
- 	int trips = 0;
- 	int result;
- 	acpi_status status;
-@@ -820,12 +821,14 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 	if (IS_ERR(tz->thermal_zone))
- 		return -ENODEV;
- 
-+	tzdev = thermal_zone_device(tz->thermal_zone);
-+	
- 	result = sysfs_create_link(&tz->device->dev.kobj,
--				   &tz->thermal_zone->device.kobj, "thermal_zone");
-+				   &tzdev->kobj, "thermal_zone");
+ 	result = intel_menlow_add_one_attribute("aux0", 0644,
+ 						aux0_show, aux0_store,
+-						&thermal->device, handle);
++						thermal_zone_device(thermal),
++						handle);
  	if (result)
- 		goto unregister_tzd;
+ 		return AE_ERROR;
  
--	result = sysfs_create_link(&tz->thermal_zone->device.kobj,
-+	result = sysfs_create_link(&tzdev->kobj,
- 				   &tz->device->dev.kobj, "device");
- 	if (result)
- 		goto remove_tz_link;
-@@ -849,7 +852,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- acpi_bus_detach:
- 	acpi_bus_detach_private_data(tz->device->handle);
- remove_dev_link:
--	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
-+	sysfs_remove_link(&tzdev->kobj, "device");
- remove_tz_link:
- 	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
- unregister_tzd:
-@@ -860,8 +863,10 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+@@ -436,7 +437,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
  
- static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
- {
-+	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-+	
- 	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
--	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
-+	sysfs_remove_link(&tzdev->kobj, "device");
- 	thermal_zone_device_unregister(tz->thermal_zone);
- 	tz->thermal_zone = NULL;
- 	acpi_bus_detach_private_data(tz->device->handle);
+ 	result = intel_menlow_add_one_attribute("aux1", 0644,
+ 						aux1_show, aux1_store,
+-						&thermal->device, handle);
++						thermal_zone_device(thermal),
++						handle);
+ 	if (result) {
+ 		intel_menlow_unregister_sensor();
+ 		return AE_ERROR;
+@@ -449,7 +451,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+ 
+ 	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
+ 						bios_enabled_show, NULL,
+-						&thermal->device, handle);
++						thermal_zone_device(thermal),
++						handle);
+ 	if (result) {
+ 		intel_menlow_unregister_sensor();
+ 		return AE_ERROR;
 -- 
 2.34.1
 
