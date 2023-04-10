@@ -2,98 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C886DCBCC
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 21:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA076DCBE7
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Apr 2023 22:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjDJTwE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 15:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S229805AbjDJUAV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 16:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDJTwD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 15:52:03 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D5F1BF0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:52:00 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id g5so8793989wrb.5
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 12:52:00 -0700 (PDT)
+        with ESMTP id S229785AbjDJUAU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 16:00:20 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BD41FC4
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:00:17 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id a3so769715ljr.11
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 13:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681156319; x=1683748319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=taWwTe6wScZ3G/J8fctKbIgQCcWpQ5BGQKWdQ0SkwQU=;
-        b=ahiGf8+XiIR4j7Od31UPEYNcuHdiFPpx5kFdggaXF3v3e4owxzG7/R2yvVVFsHj1iX
-         OPyXGvIp9l1AYmZYwISymshoequq1vBuMPcXrVJPISUFcu4DzB/AgCw8HojUsiAA2o/5
-         q8GreNulQY1z6cgTgpZD9CM6FtsyNmRelYMvY9ckG+shw2cYfL0e9yBQqgy/WNEVNPCV
-         TncakvHjGclIsiufR1Mr26ub+mIYvxqUkYRQNQNaskNN0kg4rtLiS+GeNir3FAtGQ15s
-         nR7BK1U6ERtutIKLTcqTUQAAi0dxUCqCaHMz66WHhKMpqGv/Q4pyHK8Qcqyi9jyZj72Q
-         bUGQ==
+        d=linaro.org; s=google; t=1681156816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NDUmxVAjrN5Lm56sfIfKZCJ3s39s5f7ghbzYII7MHLU=;
+        b=Xwk58mvNOAEThz0tCz/+DvXFoFZThEXonHnTDUVuCl2SOEfphJir0rbYJ25J0Kzr8F
+         ok7CndbCSGTngNsYMFoTxUWXRIf4NciNULHL9i4bWgml3sezCiV2QriGMMAjMLwL3n+f
+         fXYmE/xSWlxjY2jEzgfgtiLux4f3qpyNcnQkGydeo2Wqhu9n1mtsXkttj+oSGaMpErk/
+         nZGFWU20TkCpuvsYwmkwkbY/AobvVW4b90dpjWigh4gk91Bakdat9U6SboVej1W0GnSn
+         keTN8QXRB6vnH/qWFWCX0eqfRzhDs4LNpiMxaH/OVmFghZEq6ixTzHwe2600XL+V8Tm2
+         32og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681156319; x=1683748319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=taWwTe6wScZ3G/J8fctKbIgQCcWpQ5BGQKWdQ0SkwQU=;
-        b=be7kR8IUxmbGWDMZYkfWncYbHPgCe9XfSPkUSAcnbEZfn5PW/uOLNSUbEjnNWHhX4Z
-         h2jKKB6NqVvPBXz3lXHkJkoSTfqKNerdW4ZnWCGj8vzslWCcxG8S0jVpPDXGb7+VT7pa
-         Unezyuqp3DL+cUQNc11huAImgwnizTTKfdlvxA7Aq/01pRtaaKx9tPe4DXQB1irZl5RB
-         B2SJYauRQo86qA4E74Il2HTQc84Mk4owihf56qft+eQDXbIOMiQFeQIAWHswJpUz6gos
-         SHl/9DxJQfpHIKC6iscYLeZYO3QIDhOVmk8JcTMcnqbwLIV2vc3lYTXt43+ox+wFRyEg
-         qqnA==
-X-Gm-Message-State: AAQBX9fovuIbsa1piEDodxL3GKZEqHAeHCyKzXFtz+i/BaZO0NfEZjHF
-        u2BKbonuIeHrQ5augukN5MIZFg==
-X-Google-Smtp-Source: AKy350YTQMgKrxdoT+dffU+cBpX25HAoMr6sq7alo7PPBJSJPU6mhT5W2NVr80wYbMoAD+oIYMZ6Bg==
-X-Received: by 2002:a5d:678c:0:b0:2ef:b6e6:5985 with SMTP id v12-20020a5d678c000000b002efb6e65985mr5467620wru.58.1681156318776;
-        Mon, 10 Apr 2023 12:51:58 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:2611:592:3b9e:d2ae? ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.googlemail.com with ESMTPSA id t5-20020a5d6905000000b002efb4f2d240sm8520224wru.87.2023.04.10.12.51.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 12:51:58 -0700 (PDT)
-Message-ID: <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
-Date:   Mon, 10 Apr 2023 21:51:57 +0200
+        d=1e100.net; s=20210112; t=1681156816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NDUmxVAjrN5Lm56sfIfKZCJ3s39s5f7ghbzYII7MHLU=;
+        b=aAxMlpHhJKwtRoD/PW4vTm54H28niYzdJ01jXp1I33AODbpZ3sCRw82wG+8gmFJhiH
+         Jrl0OJ79nrn/BrSHjThzzTyvPtKsaEn04ZbTd3R50MJIDq5iKcpb44suTRqwTFYg45dh
+         hd+VFItsqUvpcUwk8RQ0K0C2Of0DebL+mqWWW17DE9uoVrSSrp3XP88FXdJ0pMpMPSqF
+         Z3zJ9WADCtWycy5MMSy3pdQJ2erm571FsTed18FobzULB49mafqpyt5EslZoRRYLNiR7
+         MAco1XAI7ys78oSPrSFgF7Diyl84XlrRrDuMeXcyd3jqi73tVLvJ4DX6OHYrgovPtKWl
+         ovyw==
+X-Gm-Message-State: AAQBX9cOD/j/tJj0CCd4lyrpFhamDu+KK7fM6Di0o9faANZjVQs7QJnI
+        PFiLK7aDnVfDHeJ5urLwOxH8Ng==
+X-Google-Smtp-Source: AKy350aY8e+m/utQRn0nylzqrQ0eVD9Obve+qoEOy7oznsYS3j1jDYePOZDcdEdNdlEgsYCmt211pA==
+X-Received: by 2002:a2e:a268:0:b0:2a0:5a99:65d8 with SMTP id k8-20020a2ea268000000b002a05a9965d8mr3507440ljm.18.1681156815839;
+        Mon, 10 Apr 2023 13:00:15 -0700 (PDT)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id z2-20020a2e8e82000000b002a7729eea3dsm973482ljk.88.2023.04.10.13.00.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 13:00:15 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v5 0/4] clk: qcom: msm8996: add support for the CBF clock
+Date:   Mon, 10 Apr 2023 23:00:10 +0300
+Message-Id: <20230410200014.432418-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
- not be reset
-Content-Language: en-US
-To:     Di Shen <cindygm567@gmail.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
-        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org
-References: <20230320095620.7480-1-di.shen@unisoc.com>
- <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
- <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/04/2023 04:09, Di Shen wrote:
-> Hi Lukasz,
-> Could you please apply this patch if there's no more comment? Thank you.
+On MSM8996 two CPU clusters are interconnected using the Core Bus
+Fabric (CBF). In order for the CPU clusters to function properly, it
+should be clocked following the core's frequencies to provide adequate
+bandwidth.
 
-Hi,
+Register CBF as a clock (required for CPU to boot) and add a tiny
+interconnect layer on top of it to let cpufreq/opp scale the CBF clock.
 
-I take care of applying the patches. Give me some time to read the changes.
+Changes since v4:
+- Fixed typos in commit messages
 
-Thanks
-   -- Daniel
+Changes since v3:
+- Dropped merged patches
+- Moved interconnect shim to drivers/interconnect/icc-clk.c
+
+Changes since v2:
+- Added interconnect-related bindings
+- Switched CPU and CBF clocks to RPM_SMD_XO_A_CLK_SRC
+
+Changes since v1:
+- Relicensed schema to GPL-2.0 + BSD-2-Clause (Krzysztof)
+- Changed clock driver to use parent_hws (Konrad)
+- Fixed indentation in CBF clock driver (Konrad)
+- Changed MODULE_LICENSE of CBF clock driver to GPL from GPL-v2
+- Switched CBF to use RPM_SMD_XO_CLK_SRC as one of the parents
+- Enabled RPM_SMD_XO_CLK_SRC on msm8996 platform and switch to it from
+  RPM_SMD_BB_CLK1 clock
+
+
+Dmitry Baryshkov (4):
+  dt-bindings: interconnect/msm8996-cbf: add defines to be used by CBF
+  interconnect: add clk-based icc provider support
+  clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
+  arm64: dts: qcom: msm8996: scale CBF clock according to the CPUfreq
+
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  51 ++++++
+ drivers/clk/qcom/Kconfig                      |   1 +
+ drivers/clk/qcom/clk-cbf-8996.c               |  59 +++++-
+ drivers/interconnect/Kconfig                  |   6 +
+ drivers/interconnect/Makefile                 |   2 +
+ drivers/interconnect/icc-clk.c                | 168 ++++++++++++++++++
+ .../interconnect/qcom,msm8996-cbf.h           |  12 ++
+ include/linux/interconnect-clk.h              |  22 +++
+ 8 files changed, 320 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/interconnect/icc-clk.c
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8996-cbf.h
+ create mode 100644 include/linux/interconnect-clk.h
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.30.2
 
