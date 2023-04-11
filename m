@@ -2,71 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF206DD3E6
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 09:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81E36DD46C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 09:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjDKHSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 03:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S229741AbjDKHls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 03:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjDKHSA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 03:18:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4819F2721;
-        Tue, 11 Apr 2023 00:17:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41ABDC14;
-        Tue, 11 Apr 2023 00:18:43 -0700 (PDT)
-Received: from [10.57.20.32] (unknown [10.57.20.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF05A3F73F;
-        Tue, 11 Apr 2023 00:17:56 -0700 (PDT)
-Message-ID: <da6af760-71b8-83e4-ad4e-8d5f3f62fcd9@arm.com>
-Date:   Tue, 11 Apr 2023 08:17:56 +0100
+        with ESMTP id S229836AbjDKHlr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 03:41:47 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF11709
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 00:41:47 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id B5F0F82BC5; Tue, 11 Apr 2023 08:40:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1681198849; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=c8ejZT3aVa9PT7Tx5erDTkhS2cTH1SQv+gGvk9NjrqzRlq2o+WHaJUCcqU/FVAWZP
+         TyoNm/FxUxpeG3bHrro89dvV62YWYSTNTKlICeJCXyKQquvNKNujeIv8ys3qETRrpX
+         Mno+0T7CYb/4ZQMp89FhAMnpjjNCborfPCDVQ5L+HdL+2J+mqLvCgMFO/QZEWysyaW
+         /eqAfhX1Qf4PSBfCx+eiisHa48DefS3qL8WuVYwF1L5KNelS3sUbFufmRAf55/I7cf
+         c1POK7HCxhJTKz0ureFt9DGpeiuANj9QC5qpqV9ECdkqSZ2UcoMNKIYkUxTJvvQndt
+         NvrA5ff04jePA==
+Received: by mail.lokoho.com for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 07:40:45 GMT
+Message-ID: <20230411074501-0.1.58.1ti4q.0.nzioq9arr2@lokoho.com>
+Date:   Tue, 11 Apr 2023 07:40:45 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-pm@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
- not be reset
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
-        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org,
-        Di Shen <cindygm567@gmail.com>
-References: <20230320095620.7480-1-di.shen@unisoc.com>
- <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
- <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
- <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dzie=C5=84 dobry,
+
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
+
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
-On 4/10/23 20:51, Daniel Lezcano wrote:
-> On 10/04/2023 04:09, Di Shen wrote:
->> Hi Lukasz,
->> Could you please apply this patch if there's no more comment? Thank you.
-> 
-> Hi,
-> 
-> I take care of applying the patches. Give me some time to read the changes.
-> 
-> Thanks
->    -- Daniel
-> 
-
-Thank you Daniel!
-
-Regards,
-Lukasz
+Pozdrawiam
+Adam Charachuta
