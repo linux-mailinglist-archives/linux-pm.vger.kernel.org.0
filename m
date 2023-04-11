@@ -2,44 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947866DD2F9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 08:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573BD6DD30A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 08:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjDKGhu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 02:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
+        id S230327AbjDKGlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 02:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjDKGht (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 02:37:49 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517821FC4;
-        Mon, 10 Apr 2023 23:37:44 -0700 (PDT)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        (user=void0red@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33B6ZWKa016709-33B6ZWKc016709
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 11 Apr 2023 14:35:32 +0800
-From:   Kang Chen <void0red@hust.edu.cn>
-To:     daniel.lezcano@linaro.org
-Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn,
-        error27@gmail.com, henry.yen@mediatek.com,
-        hust-os-kernel-patches@googlegroups.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
-        rui.zhang@intel.com, void0red@gmail.com, void0red@hust.edu.cn
-Subject: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
-Date:   Tue, 11 Apr 2023 14:35:31 +0800
-Message-Id: <20230411063531.3976354-2-void0red@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230411063531.3976354-1-void0red@hust.edu.cn>
-References: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
- <20230411063531.3976354-1-void0red@hust.edu.cn>
+        with ESMTP id S230322AbjDKGlC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 02:41:02 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51033359F
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 23:40:55 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2465e4f1954so588746a91.0
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 23:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681195255; x=1683787255;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P9E3QUvAQUl3o+y94u92fiPsX7FeUqAvp4hYEOQvbNI=;
+        b=bwSwwNrwlSHWxctuiILVq87IWdaCXi4nEQhZKXaFKHGDV/tZDxpAQPzI+p6nuAZ9oG
+         n1bGcDq6OmaIFf4BQ0LvKfD3Sci1+HNPwXeZR0+OBAbB4KcqUumNf/FomVxTcM5mTv+X
+         U+gGK4q/s7oHdLvaIguwGGZNi6Vu4uBzRO/7q8ZxfUuf4FlS/D26aoriZzdzM0kLOMLq
+         hIpZgKcLXDwwgf9rqcRDE5C68WH45Nzr5xchIIECs8/4QL8284IRb9FR0zfEF+yGY473
+         DhZNzPwfq6EM5wGOPi/L7GvR6Q36+NW1KHS4uhqNAkD6KpzaPr5t354cEGzZzKLmCtns
+         JxHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681195255; x=1683787255;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9E3QUvAQUl3o+y94u92fiPsX7FeUqAvp4hYEOQvbNI=;
+        b=Z3rfT1kycYDWop5/CjBlrWdbdwwX7HDgLXR1xOmPlvvmDxpvzAD3Obzqrr/6yigXmg
+         Rt2O39cipKD//KgnvuAdZF6YGd4QeE41h+SorOGP6vRAY9hBWn3Llnj8EjUcLYAYbI1Y
+         QI8vBx/RIo2tcO1sD++676EglHg/KBxB9Eo5Bzf4NQ065u+j2QqRIKeDouKvZEfBjRFk
+         RDl0xir8UQrQZfNY6dvRD/PFHo7LrCSKhnMTtpYoAU0Mw75+ut/yn40srbZYGBf3BEtS
+         txeTXpz4R1OHD4q1IXbAlw9rxS7zuCuNOfs3UNa1iuigdljJwMGNbcgn7Bi4drxO1DSj
+         9lkw==
+X-Gm-Message-State: AAQBX9dFAAODKH6aZG6atP86oObTH1mYORXTs8iXe2inmb+MkBbEjm1D
+        TjpJe+1JcG+Sw+/Ftia6fE0I1A==
+X-Google-Smtp-Source: AKy350bAlb+cDbia8QKfCMxPUZQ30JZAbWebYQ1BSofjHaVQ6jNlpGiW52J3dB+BLo3Ik/HcvQl1ug==
+X-Received: by 2002:a62:3802:0:b0:633:5c46:5a68 with SMTP id f2-20020a623802000000b006335c465a68mr9465898pfa.10.1681195254722;
+        Mon, 10 Apr 2023 23:40:54 -0700 (PDT)
+Received: from localhost ([122.172.85.8])
+        by smtp.gmail.com with ESMTPSA id d21-20020aa78155000000b0062e0010c6c1sm8836856pfn.164.2023.04.10.23.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 23:40:53 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 12:10:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, cocci@inria.fr,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [v2] cpufreq: sparc: Fix exception handling in two functions
+Message-ID: <20230411064051.qyioheeoectj2lv3@vireshk-i7>
+References: <b3cce5b3-2e68-180c-c293-74d4d9d4032c@web.de>
+ <2d125f3e-4de6-cfb4-2d21-6e1ec04bc412@web.de>
+ <20230403033529.x6n3ihhkypwizq3b@vireshk-i7>
+ <39342542-9353-6a7b-0aa9-f9c294b158cb@web.de>
+ <20230403230432.xeubpa3cc2gt4mw3@vireshk-i7>
+ <68b1988b-987f-fa2b-111e-b1b42f9767ab@web.de>
+ <20230409235511.7xxqdxsqtflrhifk@vireshk-i7>
+ <f9f40c8a-a392-27e3-b19c-c8985a163159@web.de>
+ <20230411033048.zwsijlyiksjcmgcc@vireshk-i7>
+ <e53bfa4f-c4b0-ee80-a64c-be8e9af76230@web.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: void0red@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <e53bfa4f-c4b0-ee80-a64c-be8e9af76230@web.de>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,108 +81,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-use devm_clk_get_enabled to do automatic resource management.
-Meanwhile, remove error handling labels in the probe function and
-the whole remove function.
+On 11-04-23, 08:15, Markus Elfring wrote:
+> >> The setting of the variables “cpufreq_us…_driver” influences the need
+> >> to reset them to null pointers for the desired exception handling,
+> >> doesn't it?
+> >
+> > This is what all should be done for these drivers I guess. There is no
+> > points doing the dance of {de}allocating resources unnecessarily.
+> 
+> Are you going to integrate your source code adjustment according to
+> reduced dynamic memory allocation?
 
-Signed-off-by: Kang Chen <void0red@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v3 -> v2: remove some useles func calls.
-v2 -> v1: init
+You can prepare and send a patch for this if you want, else I will do
+it.
 
-Notice the devm_clk_get_enabled do the clk_get and clk_prepare_enable
-at the same time.
-I'm not sure if this has any side effects in initialization.
-
- drivers/thermal/mediatek/auxadc_thermal.c | 48 +++++------------------
- 1 file changed, 10 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index 3372f7c29626..995837ce3ea2 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -1116,14 +1116,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	mt->conf = of_device_get_match_data(&pdev->dev);
- 
--	mt->clk_peri_therm = devm_clk_get(&pdev->dev, "therm");
--	if (IS_ERR(mt->clk_peri_therm))
--		return PTR_ERR(mt->clk_peri_therm);
--
--	mt->clk_auxadc = devm_clk_get(&pdev->dev, "auxadc");
--	if (IS_ERR(mt->clk_auxadc))
--		return PTR_ERR(mt->clk_auxadc);
--
- 	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(mt->thermal_base))
- 		return PTR_ERR(mt->thermal_base);
-@@ -1182,16 +1174,16 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_prepare_enable(mt->clk_auxadc);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+	mt->clk_auxadc = devm_clk_get_enabled(&pdev->dev, "auxadc");
-+	if (IS_ERR(mt->clk_auxadc)) {
-+		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", mt->clk_auxadc);
-+		return PTR_ERR(mt->clk_auxadc);
- 	}
- 
--	ret = clk_prepare_enable(mt->clk_peri_therm);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
--		goto err_disable_clk_auxadc;
-+	mt->clk_peri_therm = devm_clk_get_enabled(&pdev->dev, "therm");
-+	if (IS_ERR(mt->clk_peri_therm)) {
-+		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", mt->clk_peri_therm);
-+		return PTR_ERR(mt->clk_peri_therm);
- 	}
- 
- 	if (mt->conf->version != MTK_THERMAL_V1) {
-@@ -1215,38 +1207,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
- 					      &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
--	}
-+	if (IS_ERR(tzdev))
-+		return PTR_ERR(tzdev);
- 
- 	ret = devm_thermal_add_hwmon_sysfs(tzdev);
- 	if (ret)
- 		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
- 
- 	return 0;
--
--err_disable_clk_peri_therm:
--	clk_disable_unprepare(mt->clk_peri_therm);
--err_disable_clk_auxadc:
--	clk_disable_unprepare(mt->clk_auxadc);
--
--	return ret;
--}
--
--static int mtk_thermal_remove(struct platform_device *pdev)
--{
--	struct mtk_thermal *mt = platform_get_drvdata(pdev);
--
--	clk_disable_unprepare(mt->clk_peri_therm);
--	clk_disable_unprepare(mt->clk_auxadc);
--
--	return 0;
- }
- 
- static struct platform_driver mtk_thermal_driver = {
- 	.probe = mtk_thermal_probe,
--	.remove = mtk_thermal_remove,
- 	.driver = {
- 		.name = "mtk-thermal",
- 		.of_match_table = mtk_thermal_of_match,
 -- 
-2.34.1
-
+viresh
