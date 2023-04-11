@@ -2,71 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0096DE585
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 22:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513446DE596
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 22:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjDKULT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 16:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S229575AbjDKUUM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 16:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjDKULS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 16:11:18 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C459E4
-        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:10:52 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id l18so8702019wrb.9
-        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:10:52 -0700 (PDT)
+        with ESMTP id S229509AbjDKUUL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 16:20:11 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3740010F0
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:20:10 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so4980952wms.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681243842; x=1683835842;
+        d=linaro.org; s=google; t=1681244408; x=1683836408;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bfBfNskvypXUycnZQQ0UPCU28NArkIdiou+Ydxicj0o=;
-        b=pWrViBD+E9e0MWmsA1+vukbrbsswkhCWcgy5blFII47Agl40WoubaF0onbR5WWNb+5
-         nlly42UpmFY6l239REpsQoctNFzShcE6ldQA+dROxnYVQb5Fkum0vXDCuv69hy/xxzJg
-         hyuNc8a/oP/+6asFGRktWsGPu5WEc8Stj5KapqnkZqExVd3LsOylRDyN7NxmEeVTWNjY
-         yVUBybSB3VvQykjmr4dObDy/pOfDFHx43zNCpxMIRude8B8Po0q5CXF7qD7bVw+2qHkJ
-         7eyVTgDxerjP9VLsQmD4p5vnDZG5W33Rluc5MJBhvehVNcwbrcZxVQBxK5LCu1rzUDRI
-         f+eA==
+        bh=4VZTODIYwa2LLMwlK/e5EWHCk+R2wg+1paQIcIlxs2w=;
+        b=oZJnIqlHSfue/w6vkwGDSV0t3eV7u17CQKZ7YC4aIP5X9HDxh6+I4W8q/lrZIzhe35
+         Kdo77usH9syyoMQBzNMATRjH8ImAeRTamOEZLbV0yyyhiskRVy1+WgqyJxBcdgFNsSV6
+         JtEJKKHR7NZCDtQeAyv5sfuErx1LiBgIWDvnCoGgsYu10Dnj1E6EfjwGii8CQIf+GBLJ
+         8Xw5zKgc54Tv1TusAYRHXUUuHQR20Lhhbr92qb7op5p4ynS/4Bvxgz1XC8tGtnEWke6t
+         ovJtYnGCp4CAQD7xgE8dM9JTln9UTYoLrR8qLS6AzArV7ZS2M9ecs7jp5wuXbgBTZPHJ
+         tiyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681243842; x=1683835842;
+        d=1e100.net; s=20210112; t=1681244408; x=1683836408;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfBfNskvypXUycnZQQ0UPCU28NArkIdiou+Ydxicj0o=;
-        b=p61c39lsYspiPjWPav7JeSCiTmcMoNqx7kaMEyDv77kM3/azmP7zb0enVqvysjNfgx
-         jmKTskawtYsEFM9V3hzv5F7hKjvoVTrD+PDPh/LEUcp175Bs7/Z+aLxsu+rTRVSCVgxy
-         wwXDt2EhMwiW7PJ0Vhw7/fNe1K/4TSMICoGwgRb7yWP747ZSv+KqcnOVz9EyQ/w8xAFG
-         GPq9+HNlgMHct5sMQ44YaVcLWKPOPThxDSB6NoDEgYMoWIvQqHgUFxohbJ2zedqXp0pX
-         o2cv+1deWeNZqSfJ6dLAtSZW0GqgNAhn8nqsVVLa42W4IHWvSgBv2tPDDl4nEz4xeJLy
-         gkIg==
-X-Gm-Message-State: AAQBX9d5+aUzKbS+jJQM6U+vW2M3Ue7kEN3//TwXbqR3qAxFuZ9qCCP8
-        vOyeemU3bfk4obT3e+JAiucp3ray+E+bWHK11F8=
-X-Google-Smtp-Source: AKy350bErnFy1KNGoWttECgScLVSmo9W4x3uuYTwEuiy1WhRyf0XtReJP3N0dvfnok6jwB2COfkJXw==
-X-Received: by 2002:adf:ee85:0:b0:2ef:b123:46d9 with SMTP id b5-20020adfee85000000b002efb12346d9mr2995534wro.3.1681243842473;
-        Tue, 11 Apr 2023 13:10:42 -0700 (PDT)
+        bh=4VZTODIYwa2LLMwlK/e5EWHCk+R2wg+1paQIcIlxs2w=;
+        b=4922tel0/0NqqOScgP7n9+VB/V/3waCfYDiDq6OUvXr/l3cvWE/ceV1dMrG7s8X+mp
+         B/VMXtkJcURYxwAg+rek7wdktobR85cL93D7jKHLhTB0FtHkIQZuuijB2X8piy9RdbsA
+         Q7Mm+ayT10Bh1IeyG+oQFNkoNUXhqfdhMmfYF66CcFbmKvg7LhTLGRH7kBN2CV41CheB
+         XY2f5uRdVvDRkrBvPPG7cCKEdXxbTtvAJGGHPbmnSIIMqz9G638g+tX1FqCjRvguHH1T
+         wvd25sb8q+dPo/3SllFKKD4S3YSAzcKknFDhpFVVOs+NAgt5otfcjp2UqIvBeIiXtoUl
+         zvqQ==
+X-Gm-Message-State: AAQBX9dRPkMeXQj8UnFl5cbJYa7C90lRrijmphjKVmK96J3KsqJFT1+J
+        2r12eegEGYzrDs/88eX87G5c2A==
+X-Google-Smtp-Source: AKy350ZUblprExjuX6+jE5HBU86G18yD57JroHEF7F3UtgQLLmllv6bAVK1PzXBeo7F/H9vADM+avA==
+X-Received: by 2002:a05:600c:21c8:b0:3dc:4fd7:31f7 with SMTP id x8-20020a05600c21c800b003dc4fd731f7mr7587448wmj.41.1681244408526;
+        Tue, 11 Apr 2023 13:20:08 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:3227:36b8:19f8:5420? ([2a05:6e02:1041:c10:3227:36b8:19f8:5420])
-        by smtp.googlemail.com with ESMTPSA id g14-20020adff40e000000b002f3de0cd69bsm988900wro.59.2023.04.11.13.10.41
+        by smtp.googlemail.com with ESMTPSA id m21-20020a7bcb95000000b003ee4e99a8f6sm17904482wmi.33.2023.04.11.13.20.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 13:10:42 -0700 (PDT)
-Message-ID: <87119ec6-43e1-6062-93dc-be133fdeb88a@linaro.org>
-Date:   Tue, 11 Apr 2023 22:10:41 +0200
+        Tue, 11 Apr 2023 13:20:08 -0700 (PDT)
+Message-ID: <c2581726-3e02-104c-f2ac-55268470d2c8@linaro.org>
+Date:   Tue, 11 Apr 2023 22:20:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/7] thermal/drivers/intel_pch_thermal: Use thermal
- driver device to write a trace
+Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
 Content-Language: en-US
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Tim Zimmermann <tim@linux4.de>
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
 References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
- <20230410205305.1649678-2-daniel.lezcano@linaro.org>
- <CAJZ5v0gA2-WBOs6-N4iaaypdq4-P0JH+jLfOsaYi4GpdqorAcQ@mail.gmail.com>
+ <20230410205305.1649678-3-daniel.lezcano@linaro.org>
+ <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gA2-WBOs6-N4iaaypdq4-P0JH+jLfOsaYi4GpdqorAcQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,48 +75,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/04/2023 20:16, Rafael J. Wysocki wrote:
+On 11/04/2023 20:19, Rafael J. Wysocki wrote:
 > On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
 > <daniel.lezcano@linaro.org> wrote:
 >>
->> The pch_critical() callback accesses the thermal zone device structure
->> internals, it dereferences the thermal zone struct device and the 'type'.
->>
->> For the former, the driver related device should be use instead and
->> for the latter an accessor already exists. Use them instead of
->> accessing the internals.
->>
+>> There are still some drivers needing to play with the thermal zone
+>> device internals. That is not the best but until we can figure out if
+>> the information is really needed, let's encapsulate the field used in
+>> the thermal zone device structure, so we can move forward relocating
+>> the thermal zone device structure definition in the thermal framework
+>> private headers.
+> 
+> I'm not really sure why this is needed, so please explain.
+
+Some drivers are accessing tz->device, that implies they have the 
+knowledge of the thermal_zone_device structure but we want to 
+self-encapsulate this structure and reduce the scope of the structure to 
+the thermal core only.
+
+The ACPI and the Menlon drivers are the drivers accessing tz->device.
+
+By adding this wrapper, these drivers do no longer need the thermal zone 
+device structure definition.
+
 >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 >> ---
->>   drivers/thermal/intel/intel_pch_thermal.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>   drivers/thermal/thermal_core.c | 6 ++++++
+>>   include/linux/thermal.h        | 1 +
+>>   2 files changed, 7 insertions(+)
 >>
->> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
->> index dce50d239357..0de46057db2a 100644
->> --- a/drivers/thermal/intel/intel_pch_thermal.c
->> +++ b/drivers/thermal/intel/intel_pch_thermal.c
->> @@ -127,7 +127,10 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index c5025aca22ee..842f678c1c3e 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
+>>   }
+>>   EXPORT_SYMBOL_GPL(thermal_zone_device_id);
 >>
->>   static void pch_critical(struct thermal_zone_device *tzd)
->>   {
->> -       dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
->> +       struct pch_thermal_device *ptd = thermal_zone_device_priv(tzd);
+>> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
+>> +{
+>> +       return &tzd->device;
+>> +}
+>> +EXPORT_SYMBOL_GPL(thermal_zone_device);
 >> +
->> +       dev_dbg(&ptd->pdev->dev, "%s: critical temperature reached\n",
->> +               thermal_zone_device_type(tzd));
-> 
-> No, this just makes the code more complex than it is and the only
-> reason seems to be "cleanliness".
-> 
-> Something like
-> 
-> thermal_zone_dbg(tzd, "critical temperature reached\n");
-> 
-> would work, the above doesn't.  Sorry.
-
-Why not add a trace directly in handle_critical_trips() in 
-thermal_core.c and remove this one ?
-
+>>   /**
+>>    * thermal_zone_device_unregister - removes the registered thermal zone device
+>>    * @tz: the thermal zone device to remove
+>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+>> index 82ddb32f9876..87837094d549 100644
+>> --- a/include/linux/thermal.h
+>> +++ b/include/linux/thermal.h
+>> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
+>>   void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>>   const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+>>   int thermal_zone_device_id(struct thermal_zone_device *tzd);
+>> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
+>>
+>>   int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+>>                                       struct thermal_cooling_device *,
+>> --
+>> 2.34.1
+>>
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
