@@ -2,144 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660876DE44B
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 20:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0096DE585
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 22:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjDKSuD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 14:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        id S229690AbjDKULT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 16:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDKSuC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 14:50:02 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7038ED;
-        Tue, 11 Apr 2023 11:50:01 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id j17so13216129ejs.5;
-        Tue, 11 Apr 2023 11:50:01 -0700 (PDT)
+        with ESMTP id S229532AbjDKULS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 16:11:18 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C459E4
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:10:52 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id l18so8702019wrb.9
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681243842; x=1683835842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bfBfNskvypXUycnZQQ0UPCU28NArkIdiou+Ydxicj0o=;
+        b=pWrViBD+E9e0MWmsA1+vukbrbsswkhCWcgy5blFII47Agl40WoubaF0onbR5WWNb+5
+         nlly42UpmFY6l239REpsQoctNFzShcE6ldQA+dROxnYVQb5Fkum0vXDCuv69hy/xxzJg
+         hyuNc8a/oP/+6asFGRktWsGPu5WEc8Stj5KapqnkZqExVd3LsOylRDyN7NxmEeVTWNjY
+         yVUBybSB3VvQykjmr4dObDy/pOfDFHx43zNCpxMIRude8B8Po0q5CXF7qD7bVw+2qHkJ
+         7eyVTgDxerjP9VLsQmD4p5vnDZG5W33Rluc5MJBhvehVNcwbrcZxVQBxK5LCu1rzUDRI
+         f+eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681239000;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w+TaIaODjml5dEA7Y057pqtaYonpYR4Ushac5ObDGuw=;
-        b=YHwjGeBM16wwcHV/iUWUQ9GcYaTNJRSiqIPr9YQBIeLJv3VNrCfn+FSgRd4pYmrn1/
-         PtGsMrdssgMpJQ11Wzh8TyRV4zjCzjumfKDMDzRuQlCWdySDV4vk5E9GyXT8AzDdO8k+
-         qwrpEZ4nBEYVXmlKSHa6wa0CeQiVipMQfCE2FfNFHhIC049Lr5/iXUyI/oTkK72wrB2Y
-         yKAFJS6Xa0dRKtGLG8kpBroNSgK0BE+2XUNUDOoKMNIbK9vLt+qlAlBiwcBBCOhKlwnW
-         rxYOV3PSh/8ZVGpv76OQ095Jp89rhiq+Hu4O7VIO1PDTYWhXegmhIuM48TtLQV3/0PZ3
-         VBdA==
-X-Gm-Message-State: AAQBX9c0DNYUnAz4hW9FzqMVxh6n2LN+CH2g3qblRtKFTIE1BJwaiUAM
-        GcYEGiPjS90gpgmWb0IfXQRG2ulf0NBILobwz1Y=
-X-Google-Smtp-Source: AKy350Y4QeUKGLTjLx17+ABMp7zdmQh3Ej4SAzmDsCa7V9UXw4FcMgDxjc9C+90TOHCYmCgbY4uqxsaw22KxzEZR8EI=
-X-Received: by 2002:a17:907:8a0e:b0:94e:7ce:4d1f with SMTP id
- sc14-20020a1709078a0e00b0094e07ce4d1fmr1944566ejc.2.1681239000272; Tue, 11
- Apr 2023 11:50:00 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681243842; x=1683835842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bfBfNskvypXUycnZQQ0UPCU28NArkIdiou+Ydxicj0o=;
+        b=p61c39lsYspiPjWPav7JeSCiTmcMoNqx7kaMEyDv77kM3/azmP7zb0enVqvysjNfgx
+         jmKTskawtYsEFM9V3hzv5F7hKjvoVTrD+PDPh/LEUcp175Bs7/Z+aLxsu+rTRVSCVgxy
+         wwXDt2EhMwiW7PJ0Vhw7/fNe1K/4TSMICoGwgRb7yWP747ZSv+KqcnOVz9EyQ/w8xAFG
+         GPq9+HNlgMHct5sMQ44YaVcLWKPOPThxDSB6NoDEgYMoWIvQqHgUFxohbJ2zedqXp0pX
+         o2cv+1deWeNZqSfJ6dLAtSZW0GqgNAhn8nqsVVLa42W4IHWvSgBv2tPDDl4nEz4xeJLy
+         gkIg==
+X-Gm-Message-State: AAQBX9d5+aUzKbS+jJQM6U+vW2M3Ue7kEN3//TwXbqR3qAxFuZ9qCCP8
+        vOyeemU3bfk4obT3e+JAiucp3ray+E+bWHK11F8=
+X-Google-Smtp-Source: AKy350bErnFy1KNGoWttECgScLVSmo9W4x3uuYTwEuiy1WhRyf0XtReJP3N0dvfnok6jwB2COfkJXw==
+X-Received: by 2002:adf:ee85:0:b0:2ef:b123:46d9 with SMTP id b5-20020adfee85000000b002efb12346d9mr2995534wro.3.1681243842473;
+        Tue, 11 Apr 2023 13:10:42 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3227:36b8:19f8:5420? ([2a05:6e02:1041:c10:3227:36b8:19f8:5420])
+        by smtp.googlemail.com with ESMTPSA id g14-20020adff40e000000b002f3de0cd69bsm988900wro.59.2023.04.11.13.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 13:10:42 -0700 (PDT)
+Message-ID: <87119ec6-43e1-6062-93dc-be133fdeb88a@linaro.org>
+Date:   Tue, 11 Apr 2023 22:10:41 +0200
 MIME-Version: 1.0
-References: <20230330141314.1364083-1-wyes.karny@amd.com> <CAJZ5v0jxwuAnTVdnThGmHmptB7qeKc34-keUOdHcugeADYSL+w@mail.gmail.com>
- <ZCZ5zjw+O3gS6trx@bhagirati.amd.com> <CAJZ5v0iwmvnTFVKhox11gKxM8UBR+=748zPB0tr_O5mPBbkpiA@mail.gmail.com>
- <ZCazdI9puSXLd0D4@bhagirati.amd.com>
-In-Reply-To: <ZCazdI9puSXLd0D4@bhagirati.amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:49:49 +0200
-Message-ID: <CAJZ5v0hLaqCuZ69HJ5J4Cm0NBn0SUQ_4AiE5c5tPkho1Ek=ZuQ@mail.gmail.com>
-Subject: Re: [PATCH] amd-pstate: Fix amd_pstate mode switch
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org,
-        ray.huang@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexey Kardashevskiy <aik@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/7] thermal/drivers/intel_pch_thermal: Use thermal
+ driver device to write a trace
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Tim Zimmermann <tim@linux4.de>
+References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
+ <20230410205305.1649678-2-daniel.lezcano@linaro.org>
+ <CAJZ5v0gA2-WBOs6-N4iaaypdq4-P0JH+jLfOsaYi4GpdqorAcQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gA2-WBOs6-N4iaaypdq4-P0JH+jLfOsaYi4GpdqorAcQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 12:18 PM Wyes Karny <wyes.karny@amd.com> wrote:
->
-> On 31 Mar 11:11, Rafael J. Wysocki wrote:
-> > On Fri, Mar 31, 2023 at 8:12 AM Wyes Karny <wyes.karny@amd.com> wrote:
-> > >
-> > > Hi Rafael,
-> > >
-> > > On 30 Mar 20:19, Rafael J. Wysocki wrote:
-> > > > On Thu, Mar 30, 2023 at 4:13 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> > > > >
-> > > > > amd_pstate mode can be changed by writing the mode name to the `status`
-> > > > > sysfs. But some combinations are not working. Fix this issue by taking
-> > > > > care of the edge cases.
-> > > > >
-> > > > > Before the fix the mode change combination test fails:
-> > > > >
-> > > > >  #./pst_test.sh
-> > > > > Test passed: from: disable, to
-> > > > > Test passed: from: disable, to disable
-> > > > > Test failed: 1, From mode: disable, to mode: passive
-> > > > > Test failed: 1, From mode: disable, to mode: active
-> > > > > Test failed: 1, From mode: passive, to mode: active
-> > > > > Test passed: from: passive, to disable
-> > > > > Test failed: 1, From mode: passive, to mode: passive
-> > > > > Test failed: 1, From mode: passive, to mode: active
-> > > > > Test failed: 1, From mode: active, to mode: active
-> > > > > Test passed: from: active, to disable
-> > > > > Test failed: 1, From mode: active, to mode: passive
-> > > > > Test failed: 1, From mode: active, to mode: active
-> > > > >
-> > > > > After the fix test passes:
-> > > > >
-> > > > >  #./pst_test.sh
-> > > > > Test passed: from: disable, to
-> > > > > Test passed: from: disable, to disable
-> > > > > Test passed: from: disable, to passive
-> > > > > Test passed: from: disable, to active
-> > > > > Test passed: from: passive, to active
-> > > > > Test passed: from: passive, to disable
-> > > > > Test passed: from: passive, to passive
-> > > > > Test passed: from: passive, to active
-> > > > > Test passed: from: active, to active
-> > > > > Test passed: from: active, to disable
-> > > > > Test passed: from: active, to passive
-> > > > > Test passed: from: active, to active
-> > > > >
-> > > > > Fixes: abd61c08ef349 ("cpufreq: amd-pstate: add driver working mode switch support")
-> > > > >
-> > > > > Acked-by: Huang Rui <ray.huang@amd.com>
-> > > > > Reviewed-by: Alexey Kardashevskiy <aik@amd.com>
-> > > > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > > > >
-> > > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > > Cc: Mario Limonciello <mario.limonciello@amd.com>
-> > > > > Cc: Perry Yuan <Perry.Yuan@amd.com>
-> > > >
-> > > > This is all fine, but you need to tell me how it interacts with the
-> > > > amd-pstate changes in linux-next.
-> > > >
-> > > > Does it affect the code in linux-next at all or is it only for 6.3-rc?
-> > > >
-> > >
-> > > This is only for 6.3-rc.
-> > > The commit 3ca7bc818d8c ("cpufreq: amd-pstate: Add guided mode control
-> > > support via sysfs") in linux-next may not apply cleanly after this fix.
-> > > Please let me know if I need to rebase and send the guided mode patches [1].
-> > >
-> > > [1]: https://lore.kernel.org/linux-pm/20230307112740.132338-1-wyes.karny@amd.com/
-> >
-> > Well, instead, you please let me know how to resolve the merge
-> > conflict between the patch below and your series.
-> >
-> > Can I simply assume that the code added by commit 3ca7bc818d8c
-> > replaces the code modified by the $subject patch?
->
-> Yes, commit 3ca7bc818d8c replaces the whole `amd_pstate_update_status`
-> function with new implementation.
+On 11/04/2023 20:16, Rafael J. Wysocki wrote:
+> On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> The pch_critical() callback accesses the thermal zone device structure
+>> internals, it dereferences the thermal zone struct device and the 'type'.
+>>
+>> For the former, the driver related device should be use instead and
+>> for the latter an accessor already exists. Use them instead of
+>> accessing the internals.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/thermal/intel/intel_pch_thermal.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+>> index dce50d239357..0de46057db2a 100644
+>> --- a/drivers/thermal/intel/intel_pch_thermal.c
+>> +++ b/drivers/thermal/intel/intel_pch_thermal.c
+>> @@ -127,7 +127,10 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
+>>
+>>   static void pch_critical(struct thermal_zone_device *tzd)
+>>   {
+>> -       dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
+>> +       struct pch_thermal_device *ptd = thermal_zone_device_priv(tzd);
+>> +
+>> +       dev_dbg(&ptd->pdev->dev, "%s: critical temperature reached\n",
+>> +               thermal_zone_device_type(tzd));
+> 
+> No, this just makes the code more complex than it is and the only
+> reason seems to be "cleanliness".
+> 
+> Something like
+> 
+> thermal_zone_dbg(tzd, "critical temperature reached\n");
+> 
+> would work, the above doesn't.  Sorry.
 
-OK, thanks!
+Why not add a trace directly in handle_critical_trips() in 
+thermal_core.c and remove this one ?
 
-$subject patch has been queued up for 6.3-rc7, thanks!
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
