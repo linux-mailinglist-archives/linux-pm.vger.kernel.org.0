@@ -2,58 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04EF6DE3B3
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 20:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A1D6DE3BE
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 20:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjDKSQw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 14:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S229638AbjDKSTy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 14:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDKSQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 14:16:50 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F23E5263;
-        Tue, 11 Apr 2023 11:16:49 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id qb20so22216270ejc.6;
-        Tue, 11 Apr 2023 11:16:49 -0700 (PDT)
+        with ESMTP id S229498AbjDKSTx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 14:19:53 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8B4C37;
+        Tue, 11 Apr 2023 11:19:51 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so656770a12.1;
+        Tue, 11 Apr 2023 11:19:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681237008;
+        d=1e100.net; s=20210112; t=1681237190;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VxnsZJ+NacNo9ZhNTgIw4VHiynvz3ELZgFV4x0n8u0I=;
-        b=S8+e1enXbuCRUP+wMgn89cASSgYDBBqV+qu4a+YMn2OJbFfgMt190EWZyjVcijEIih
-         5ZNiN8jY/eVRBLyVZ4ISiR3Yl88P/GVs0DfO/wE6hosIKfL4ewPecALGmiVTWXIZ2THx
-         TiDFMTsEaVGe9wnhUjaAdENcufag0DdVPDnHxcknbP1DR0yrv7k8lzU7h/9ov35Xzeyn
-         YxlkyEKTmTMHAqHtIi+gpOEnCP8/BONS672xLmeLtgIXPqFcFgRak3qDEeRu3sqkhEzP
-         8ALnWdKOAKnUQxzkxgaBnfrCbSyGRxfVVJ6ZaAVPwO6TS9zdsb2LNhcGKBQKUojqow1w
-         /dNg==
-X-Gm-Message-State: AAQBX9cRvEEpfKEBtqexid+cEEfYbISvlAdMF+/SO0QdtzcHxSf/F8Mw
-        kMC8dNURhFqjkxgtrDmpCIkqWN3LbFvoncXJkso=
-X-Google-Smtp-Source: AKy350bhIyizUsvdp0JSQJsA/Oez7me+/eZW0854eJp1ZLKJL+u4qISAPVrYy6yg84yEtkcW6cqrXYPne2hLiPN6+qA=
-X-Received: by 2002:a17:907:1c9a:b0:94d:cf8c:1542 with SMTP id
- nb26-20020a1709071c9a00b0094dcf8c1542mr2632678ejc.2.1681237007848; Tue, 11
- Apr 2023 11:16:47 -0700 (PDT)
+        bh=RRFhel4vItei7jcN1xlLMvb+yM33VbvdduIMfttiDjw=;
+        b=h/gdDBrHU9yMtb38KXgn1j8HC5UUu9X8lArfue2KefL6dDhTFtMFNc/T4XnDf/ILhE
+         nfcLCGhTxysHXSklwLZQAgyknvwBmIJ26bHKhtDqWqxXu28PHNg1Qnxo8/LKbkIjhZi1
+         BQkDc+kJnx99v7E1ItfNvu6t5FZvby1vZsFw3KGv5IFnzHtapHhjKTajOCdfHQiRiNMi
+         Ama/WHuXW+VF9zhh1nWEJtxPmgIZofD+UrBjubWA9Fvok5ozs3O7xG1Y93O1QXB3qT4J
+         q21yTKue0EKapjZ6sDK6bFqAhpzIe7Pu2MOKwymbKL/+vR3Q0elK+rF5n2b1s1HbJLll
+         qW5w==
+X-Gm-Message-State: AAQBX9dBDCXll4TY9a1Yu9ZAEm1zIXwt4jPJu2SPcd7EAJZ0ZiK5/00u
+        LShVTbNPkCBo6V8KBbXM6kQU/QCG9MlmFnmalM4=
+X-Google-Smtp-Source: AKy350ajKXXZ83vvFNPQgzdQ1A+7MWTUTMxNwAASKo1/EsmCjDpqcwjCVOxmtof6xZsZugY6FUKkyZ1BNljgFOtMMgc=
+X-Received: by 2002:a05:6402:550b:b0:4fb:e069:77ac with SMTP id
+ fi11-20020a056402550b00b004fbe06977acmr104613edb.0.1681237189537; Tue, 11 Apr
+ 2023 11:19:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20230410205305.1649678-2-daniel.lezcano@linaro.org>
+References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20230410205305.1649678-3-daniel.lezcano@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:16:36 +0200
-Message-ID: <CAJZ5v0gA2-WBOs6-N4iaaypdq4-P0JH+jLfOsaYi4GpdqorAcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] thermal/drivers/intel_pch_thermal: Use thermal
- driver device to write a trace
+Date:   Tue, 11 Apr 2023 20:19:38 +0200
+Message-ID: <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     rafael@kernel.org, rui.zhang@intel.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Tim Zimmermann <tim@linux4.de>
+        Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
         FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,42 +60,51 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> The pch_critical() callback accesses the thermal zone device structure
-> internals, it dereferences the thermal zone struct device and the 'type'.
->
-> For the former, the driver related device should be use instead and
-> for the latter an accessor already exists. Use them instead of
-> accessing the internals.
->
+> There are still some drivers needing to play with the thermal zone
+> device internals. That is not the best but until we can figure out if
+> the information is really needed, let's encapsulate the field used in
+> the thermal zone device structure, so we can move forward relocating
+> the thermal zone device structure definition in the thermal framework
+> private headers.
+
+I'm not really sure why this is needed, so please explain.
+
+
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/thermal/intel/intel_pch_thermal.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  drivers/thermal/thermal_core.c | 6 ++++++
+>  include/linux/thermal.h        | 1 +
+>  2 files changed, 7 insertions(+)
 >
-> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
-> index dce50d239357..0de46057db2a 100644
-> --- a/drivers/thermal/intel/intel_pch_thermal.c
-> +++ b/drivers/thermal/intel/intel_pch_thermal.c
-> @@ -127,7 +127,10 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
->
->  static void pch_critical(struct thermal_zone_device *tzd)
->  {
-> -       dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
-> +       struct pch_thermal_device *ptd = thermal_zone_device_priv(tzd);
-> +
-> +       dev_dbg(&ptd->pdev->dev, "%s: critical temperature reached\n",
-> +               thermal_zone_device_type(tzd));
-
-No, this just makes the code more complex than it is and the only
-reason seems to be "cleanliness".
-
-Something like
-
-thermal_zone_dbg(tzd, "critical temperature reached\n");
-
-would work, the above doesn't.  Sorry.
-
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index c5025aca22ee..842f678c1c3e 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
 >  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_device_id);
 >
->  static struct thermal_zone_device_ops tzd_ops = {
+> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
+> +{
+> +       return &tzd->device;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_zone_device);
+> +
+>  /**
+>   * thermal_zone_device_unregister - removes the registered thermal zone device
+>   * @tz: the thermal zone device to remove
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 82ddb32f9876..87837094d549 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
+>  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>  const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+>  int thermal_zone_device_id(struct thermal_zone_device *tzd);
+> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
+>
+>  int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+>                                      struct thermal_cooling_device *,
 > --
+> 2.34.1
+>
