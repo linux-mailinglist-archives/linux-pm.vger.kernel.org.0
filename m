@@ -2,262 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DBD6DD5F9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 10:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7776DD61C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 11:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjDKIwD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 04:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S229484AbjDKJCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 05:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjDKIwA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 04:52:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE9C51724;
-        Tue, 11 Apr 2023 01:51:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F3E24B3;
-        Tue, 11 Apr 2023 01:52:40 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C31A63F73F;
-        Tue, 11 Apr 2023 01:51:54 -0700 (PDT)
-Message-ID: <d287eff6-77bd-693c-96d3-87d8981b7f96@arm.com>
-Date:   Tue, 11 Apr 2023 10:51:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
- high error
-Content-Language: en-US
-To:     Yang Shi <yang@os.amperecomputing.com>
-Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20230328193846.8757-1-yang@os.amperecomputing.com>
- <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
- <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
- <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
- <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
- <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
- <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229454AbjDKJCk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 05:02:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5789BE4E
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 02:02:39 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B6WoGn017447;
+        Tue, 11 Apr 2023 09:02:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=/9YOv71zL1nrd/HhdDDHs5nXwKJ3IA/QxmcaZVSFHdA=;
+ b=tgfMUiCsHzjYbP+Shm1kKg1MMJFnhqDLK9+V/Ubb0P2p2CdJcxmoBge7eTNho0p0PV6e
+ KcTPW4AeIEJye0J+8Oying00nn2568829ODlfKoRMCPBRlJ7NCp54b9pUyRdVxjSKrPC
+ th1xJq44UL96pZmLRnCSxE09qD9kj6Zh1bHZtJLBuBp3xxuQMpFrt2bzY1O/YdWkGGgA
+ KIVfWxVQ0xLMZ7kT/DpR5xoHbLHluA4LM8RwzwiRfD8UXN6fPzB0A306N9cMEdTNKaJz
+ j3h/WTavi4DTUgu8ByDXioNiudjrgmJpWVhrrkRJDCasWwxRoF/nT6U9bXANeCB4trJk bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvr78h6cf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 09:02:23 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33B8Upng013948;
+        Tue, 11 Apr 2023 09:02:23 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvr78h6bp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 09:02:22 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4B3uj026599;
+        Tue, 11 Apr 2023 09:02:21 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m19juk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 09:02:20 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33B92Ieq17302156
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Apr 2023 09:02:18 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8A2720043;
+        Tue, 11 Apr 2023 09:02:18 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B9D220040;
+        Tue, 11 Apr 2023 09:02:17 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.109.240.72])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Apr 2023 09:02:17 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 3/4] cpuidle: pseries: Mark ->enter() functions as
+ __cpuidle
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <20230406144535.3786008-3-mpe@ellerman.id.au>
+Date:   Tue, 11 Apr 2023 14:32:06 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Piggin <npiggin@gmail.com>, linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <0BA7072D-9B38-4F5A-B8E4-BB57CC97C354@linux.ibm.com>
+References: <20230406144535.3786008-1-mpe@ellerman.id.au>
+ <20230406144535.3786008-3-mpe@ellerman.id.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BvuAr5QX0LKRuthBsVJDr63AFEzfGAPU
+X-Proofpoint-ORIG-GUID: YzSZ8899gwS57Z6r8lh4hhlaxNuJioRf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_04,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 phishscore=0 adultscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=740 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304110080
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Yang,
 
->>>>
->>>> -
->>>> According to the same ACPI 6.5 s8.4.6.1.2.5 "Time Window Register"
->>>> paragraph,
->>>> and assuming we are in the 'Autonomous Selection is not enabled' case,
->>>> the OS is supposed to write (not read) the delta between successive
->>>> reads of the
->>>> counter, so using this field as is would be bending the definition I
->>>> think.
->>>>
->>>> -
->>>> It is correct that the "Time Window Register" field specifies a value
->>>> in ms,
->>>> but it seems a long time to wait for with irqs off.
->>>
->>> AFAIK, our platforms don't support "Time Window Register".
->>>
->>>>
->>>> -
->>>> Theoretically, the perf/ref counters should accumulate to allow
->>>> computing
->>>> a correct frequency. Is it possible to know how these counters are
->>>> accessed ?
->>>> Is it through PCC channels and there is some undesired delay between
->>>> the
->>>> reads of the perf/ref counters ?
->>>
->>> The counters are implemented via mmio instead of PCC channels. So the
->>> cpc_read() calls should go to ACPI_ADR_SPACE_SYSTEM_MEMORY IIRC.
->>>
->>>>
->>>> -
->>>> About making the delay:
->>>>       max(cppc_cpufreq_get_transition_delay_us(), Time Winder Register)
->>>> I think it would be good to know why the values of the counters
->>>> don't accumulate correctly, ideally by getting a trace where a
->>>> frequency
->>>> above the maximum frequency is computed, and with the timestamps at
->>>> which
->>>> the counters are read.
->>>> If the values are coming from PCC channels / the firmware, it might be
->>>> difficult
->>>> to get.
->>>
->>> I wrote a bpftrace script to trace the below data:
->>>        - The CPU number
->>>        - The frequency
->>>        - The start and end timestamp of the first cppc_get_perf_ctrs()
->>> call
->>>        - The duration/latency of the first cppc_get_perf_ctrs() call
->>>        - The start and end timestamp of the second
->>> cppc_get_perf_ctrs() call
->>>        - The duration/latency of the second cppc_get_perf_ctrs() call
->>>
->>> The typical logs look like below.
->>> Good
->>> CPU: 1
->>> Freq: 2801485KHz
->>> First:  2489382384  2489387084 4700ns
->>> Second: 2489390824  2489394024  3200ns
->>> --------------------------------------------------
->>> CPU:    2
->>> Freq:   2797956KHz
->>> First:  2490406524  2490411204  4680ns
->>> Second: 2490414764  2490417684  2920ns
->>>
->>> Bad:
->>> CPU:    55
->>> Freq:   3969372KHz
->>> First:  875659868  875721568  61700ns
->>> Second: 875725148  875727708  2560ns
->>> --------------------------------------------------
->>> CPU: 65
->>> Freq: 3829744KHz
->>> First:  3854951136  3854995896 44760ns
->>> Second: 3854999416  3855002696 3280ns
->>> --------------------------------------------------
->>> CPU: 21
->>> Freq: 4279242KHz
->>> First:  240834204  240910484 76280ns
->>> Second: 240914264  240916944  2680ns
->>>
->>>
->>> The first line is cpu number, the second line is frequency returned by
->>> cppc_cpufreq_get_rate(), the third line is the start and end timestamps
->>> and duration of the first cppc_get_perf_ctrs(), the fourth line is the
->>> start and end timestamps and duration of the second
->>> cppc_get_perf_ctrs().
->>>
->>> So per the log I think we can tell basically the longer the duration the
->>> higher the error. The 2us delay is not long enough to offset the impact
->>> from unexpected latency of reading the counters.
->>>
->>> In the worst case the frequency is 4279242KHz, comparing 2800000KHz the
->>> error is over 50%. So the delay should be 4ms ~ 5ms in order to offset
->>> the impact from reading the counters if I do the math correctly.
->>>
->>> Hope the trace data is helpful to diagnose the problem.
->>
->>
->> Thanks for the data. I was thinking the following was happening:
->>
->>   cppc_get_perf_ctrs()[0] cppc_get_perf_ctrs()[1]
->> /                    \ /                         \
->> ref[0]    delivered[0]                    ref[1] delivered[1]
->>    |            |                              |                  |
->>    v            v                              v                  v
->> ---------------------------------------------------------------------->
->> time
->>     <-delta[0]-> <-------------2us------------> <----delta[1]---->
->>
->> If delta[0] is really different from delta[1] like above, then the
->> reference and delivered counters would have accumulated during different
->> intervals, resulting in a wrong frequency.
+
+> On 06-Apr-2023, at 8:15 PM, Michael Ellerman <mpe@ellerman.id.au> wrote:
 > 
-> Yeah, it looks like so.
+> Code in the idle path is not allowed to be instrumented because RCU is
+> disabled, see commit 0e985e9d2286 ("cpuidle: Add comments about
+> noinstr/__cpuidle usage").
 > 
->> If more/less than 2us elapse between the two cppc_get_perf_ctrs() calls,
->> then it shouldn't have any impact. So waiting ~10ms should theoretically
->> not solve the issue.
+> Mark the cpuidle ->enter() callbacks as __cpuidle and use the
+> raw_local_irq_*() routines to ensure that is the case.
 > 
-> I'm not sure whether the 10ms delay really resolved the issue, but it
-> did reduce the magnitude of the error.
-> 
-> BTW, I don't see irq is disabled when reading cpuinfo_cur_freq, so it
-> looks like interrupts could easily result in the difference between
-> delta[0] and delta[1]. And it seems like the difference matters.
+> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> ---
 
-Ok, maybe disabling irqs would have an impact ?
+Thanks for the patch. With this patch (and others from the series)
+applied, I no longer observe the reported kernel warning while running
+ftrace selftests.
 
-> 
-> And the counters are accessed through an interconnect on our platform,
-> so the interconnect congestion may result in the difference as well.
-> 
->>
->> freq = ref_freq * (delivered[1] - delivered[0]) / (ref[1] - ref[0])
->>
->> If the counters are accessed through mmio, I don't see anything that
->> would
->> make delta[x] vary when calling cppc_get_perf_ctrs(), cf. cpc_read().
->> Do you know if the address represents real counters or a place in memory
->> representing something else ?
-> 
-> The address does represent real counters.
+For this and other patches in the series
 
-Oh ok, is it possible to know what is there ?
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
 
-> 
->>
->> Would it be possible to try setting the CPU frequency to one unique value
->> and get a serie of values like:
->> [timestamp, ref_counter_value, deliverd_counter_value]
-> 
-> Could you please elaborate regarding "setting the CPU frequency to one
-> unique value"? What value is unique?
-
-I meant having the CPUs using only on frequency. The following should work:
-cat /sys/devices/system/cpu/cpu[X]/cpufreq/scaling_min_freq > /sys/devices/system/cpu/cpu[X]/cpufreq/scaling_max_freq
-
-> 
->>
->> This would allow to check that the counters are accumulating at a valid
->> pace. Also you said there were frequencies above the maximum value, but
->> are there also frequencies below the minimum value ?
-> 
-> I've never seen the frequency below the minimum value.
-
-Maybe this is because the CPUs are running at their maximum frequency,
-so when the computed frequency is below the actual running frequency,
-it still doesn't go below the minimum frequency.
-Meaning that if the CPUs were limited to their lowest frequency (with
-the command above), maybe the get_rate() function would return values
-in a range [[1]:[2]]:
-- [1]: frequency below the lowest frequency
-- [2]: frequency above the lowest frequency, but below the maximum
-   frequency of 2.8GHz
-
-Would it be possible to do the following:
-
-# Shut down all the CPUs except the last one just to have less logs
-for i in /sys/devices/system/cpu/cpu[0-9]* ; do echo 0 > $i/online ; done
-
-cd /sys/kernel/debug/tracing
-
-# Add a kprobe to cppc_cpufreq_get_rate to get the computed freq
-echo 'r:myretprobe cppc_cpufreq_get_rate $retval:u32' >> /sys/kernel/debug/tracing/kprobe_events
-echo 1 > events/kprobes/enable
-
-# Setup ftrace to trace cppc_cpufreq_get_rate() calls
-# (and maybe see if something undesired happens in the call)
-echo function_graph > current_tracer
-echo funcgraph-abstime > trace_options
-echo cppc_cpufreq_get_rate > set_graph_function
-
-# Do the tracing
-echo 1 > tracing_on
-# Wait a bit for a call to cppc_cpufreq_get_rate() to happen
-echo 0 > tracing_on
-
-Also adding the following in cppc_perf_from_fbctrs() should allow
-tracking the counter values:
-trace_printk("get_cntrs: ref0=%lx ref1=%lx del0=%lx del1=%lx",
-     fb_ctrs_t0->reference, fb_ctrs_t1->reference,
-     fb_ctrs_t0->delivered, fb_ctrs_t1->delivered);
-
-Regards,
-Pierre
+- Sachin
