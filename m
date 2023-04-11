@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A1D6DE3BE
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 20:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD716DE3CB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 20:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjDKSTy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 14:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        id S229530AbjDKSX3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 14:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDKSTx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 14:19:53 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8B4C37;
-        Tue, 11 Apr 2023 11:19:51 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so656770a12.1;
-        Tue, 11 Apr 2023 11:19:51 -0700 (PDT)
+        with ESMTP id S229516AbjDKSX2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 14:23:28 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D40746BB;
+        Tue, 11 Apr 2023 11:23:27 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-947abd74b10so460874066b.2;
+        Tue, 11 Apr 2023 11:23:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681237190;
+        d=1e100.net; s=20210112; t=1681237406;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RRFhel4vItei7jcN1xlLMvb+yM33VbvdduIMfttiDjw=;
-        b=h/gdDBrHU9yMtb38KXgn1j8HC5UUu9X8lArfue2KefL6dDhTFtMFNc/T4XnDf/ILhE
-         nfcLCGhTxysHXSklwLZQAgyknvwBmIJ26bHKhtDqWqxXu28PHNg1Qnxo8/LKbkIjhZi1
-         BQkDc+kJnx99v7E1ItfNvu6t5FZvby1vZsFw3KGv5IFnzHtapHhjKTajOCdfHQiRiNMi
-         Ama/WHuXW+VF9zhh1nWEJtxPmgIZofD+UrBjubWA9Fvok5ozs3O7xG1Y93O1QXB3qT4J
-         q21yTKue0EKapjZ6sDK6bFqAhpzIe7Pu2MOKwymbKL/+vR3Q0elK+rF5n2b1s1HbJLll
-         qW5w==
-X-Gm-Message-State: AAQBX9dBDCXll4TY9a1Yu9ZAEm1zIXwt4jPJu2SPcd7EAJZ0ZiK5/00u
-        LShVTbNPkCBo6V8KBbXM6kQU/QCG9MlmFnmalM4=
-X-Google-Smtp-Source: AKy350ajKXXZ83vvFNPQgzdQ1A+7MWTUTMxNwAASKo1/EsmCjDpqcwjCVOxmtof6xZsZugY6FUKkyZ1BNljgFOtMMgc=
-X-Received: by 2002:a05:6402:550b:b0:4fb:e069:77ac with SMTP id
- fi11-20020a056402550b00b004fbe06977acmr104613edb.0.1681237189537; Tue, 11 Apr
- 2023 11:19:49 -0700 (PDT)
+        bh=9I88KzYwTfgVOVqx5a6cLuDweAMKwPiePasaGOIA6lM=;
+        b=6JRDkrkvkk9ccBd/OcR5ogEZRgHoU5ZRGAmUsBbUGry/PdxnDbbnoA4jzDTstdOU+N
+         pMUf4KhjaQ0gG+kKlmBaynFGokKy4AskBvUINQtTfiKihY8ygrD/ZFTNsxrqcg0jZumI
+         Lc+fa1rkKolKfNMqJsgLPU7ePNe3e74kOx+EHDjhP6rrSCqfcvmMK4x835FnmqQKCssK
+         PYAVfKXI8BQBW6nj5C7aCPa0h1V4R/AEDo+7rKem1l9Saa4HYARKx+GW1YqrCf0tPCXH
+         aaxsMIQ+qyVMhYbVRmilmejbGSCqbRe6bFhLWCzS8bMySw25tn+L7DZyNnWy6qJCgfCO
+         9WBw==
+X-Gm-Message-State: AAQBX9epto7ir9XYqFnpCSx+Uff2+tEwvO0Pk91z1sgKH86K3iBfvlQG
+        B5CHpodUsjzZ+6FjaScNQ9lHnV6asepSO1bGGYc=
+X-Google-Smtp-Source: AKy350bFx8QHLSD/DS4PKiAulmtCxS/55SK4IcirOWqY0s0FsUjPWKuZEaRzMiJ9Bl0ymLA2tMOt1hwxsRXWMYbW6HA=
+X-Received: by 2002:a50:9ee9:0:b0:504:efc0:9f97 with SMTP id
+ a96-20020a509ee9000000b00504efc09f97mr35595edf.3.1681237405932; Tue, 11 Apr
+ 2023 11:23:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-3-daniel.lezcano@linaro.org>
-In-Reply-To: <20230410205305.1649678-3-daniel.lezcano@linaro.org>
+References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-6-daniel.lezcano@linaro.org>
+In-Reply-To: <20230410205305.1649678-6-daniel.lezcano@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:19:38 +0200
-Message-ID: <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
+Date:   Tue, 11 Apr 2023 20:23:14 +0200
+Message-ID: <CAJZ5v0iOPsQKrnK3UsR+9vLhTf2jysTAEJD+71aeyfT8Gy1R1Q@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] thermal/core: Prepare sanitizing thermal class
+ sysfs content
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     rafael@kernel.org, rui.zhang@intel.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -60,51 +61,54 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> There are still some drivers needing to play with the thermal zone
-> device internals. That is not the best but until we can figure out if
-> the information is really needed, let's encapsulate the field used in
-> the thermal zone device structure, so we can move forward relocating
-> the thermal zone device structure definition in the thermal framework
-> private headers.
-
-I'm not really sure why this is needed, so please explain.
-
-
+> Some drivers are accessing the thermal zone device structure to create
+> specific entries in /sys/class/thermal regardless the documentation.
+>
+> It is questionable as the specific information should be in the
+> driver's sysfs directory, not the framework it is dealing with.
+>
+> It has been long time these specific attributes were added in the
+> thermal sysfs directory and are limited to the ACPI thermal driver and
+> the Menlon driver.
+>
+> It is probable those are not really needed, so in order to figure out
+> if that is the case, let's create a default option disabling the
+> attribute in order to prepare a definitive removal.
+>
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/thermal/thermal_core.c | 6 ++++++
->  include/linux/thermal.h        | 1 +
->  2 files changed, 7 insertions(+)
+>  drivers/thermal/Kconfig | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index c5025aca22ee..842f678c1c3e 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_device_id);
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 4cd7ab707315..cca4e5cf6f30 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -33,6 +33,18 @@ config THERMAL_STATISTICS
 >
-> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
-> +{
-> +       return &tzd->device;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device);
+>           If in doubt, say N.
+>
+> +config THERMAL_SYSFS_OBSOLETE_SINGULARITY
+> +       bool "Enable obsolete and undocumented sysfs extra information"
+
+I was talking about making an extra Kconfig option in the Menlow
+driver to make the extra sysfs stuff depend on.
+
+Throwing ACPI in the same bucket is a non-starter.
+
+> +       def_bool n
+> +       help
+> +         Enable sysfs extra information added in the thermal zone and
+> +         the driver specific sysfs directories. That could be a link
+> +         to the associated thermal zone as well as a link pointing to
+> +         the device from the thermal zone. By default those are
+> +         disabled and are candidate for removal, if you need these
+> +         information anyway, enable the option or upgrade the
+> +         userspace program using them.
 > +
->  /**
->   * thermal_zone_device_unregister - removes the registered thermal zone device
->   * @tz: the thermal zone device to remove
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 82ddb32f9876..87837094d549 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
->  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
->  const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
->  int thermal_zone_device_id(struct thermal_zone_device *tzd);
-> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
->
->  int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
->                                      struct thermal_cooling_device *,
+>  config THERMAL_EMERGENCY_POWEROFF_DELAY_MS
+>         int "Emergency poweroff delay in milli-seconds"
+>         default 0
 > --
 > 2.34.1
 >
