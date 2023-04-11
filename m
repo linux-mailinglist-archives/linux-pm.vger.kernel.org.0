@@ -2,68 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513446DE596
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 22:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D35F6DE5AE
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 22:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDKUUM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 16:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+        id S229504AbjDKUWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 16:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDKUUL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 16:20:11 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3740010F0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:20:10 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so4980952wms.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:20:10 -0700 (PDT)
+        with ESMTP id S229639AbjDKUWY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 16:22:24 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6D459E1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:21:55 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id s2so5523418wra.7
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 13:21:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681244408; x=1683836408;
+        d=linaro.org; s=google; t=1681244511; x=1683836511;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4VZTODIYwa2LLMwlK/e5EWHCk+R2wg+1paQIcIlxs2w=;
-        b=oZJnIqlHSfue/w6vkwGDSV0t3eV7u17CQKZ7YC4aIP5X9HDxh6+I4W8q/lrZIzhe35
-         Kdo77usH9syyoMQBzNMATRjH8ImAeRTamOEZLbV0yyyhiskRVy1+WgqyJxBcdgFNsSV6
-         JtEJKKHR7NZCDtQeAyv5sfuErx1LiBgIWDvnCoGgsYu10Dnj1E6EfjwGii8CQIf+GBLJ
-         8Xw5zKgc54Tv1TusAYRHXUUuHQR20Lhhbr92qb7op5p4ynS/4Bvxgz1XC8tGtnEWke6t
-         ovJtYnGCp4CAQD7xgE8dM9JTln9UTYoLrR8qLS6AzArV7ZS2M9ecs7jp5wuXbgBTZPHJ
-         tiyQ==
+        bh=DBsBC/Vn3Kv4ti4BzHA6RMnVNcTQWhiMWTwoU005B2U=;
+        b=CBdx+n88gINEI3enJaeUh+60J0/Wsii+tUzAfIcqPgi5BK52WCmHBRK4A7QGqI0PK0
+         JQOLWVATPcOGSjdj/OOA9wQDKMfESMz/3MP7LX2Np8qKd1ZDr6ckiPB1qn4sPlBSN9zd
+         lyL5Dow5RHRtPT/xURY4cdQCBstbI+UqUFvsb5QzScX9QQIHa78bY8qmfWati8AUM49h
+         VxVJkmQS7DN78A9oJHRVS2cJOeyiVUzx0Q4JRDnzO4FImfQMoSphX/Bu6+ILDbpHOYPL
+         32zB9Suehs8c78lBa24wu224sJ3+jlOzZQJidCdT2OoQ5sNCvSwYc8PnfdKYbU1SyMxz
+         +LIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681244408; x=1683836408;
+        d=1e100.net; s=20210112; t=1681244511; x=1683836511;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4VZTODIYwa2LLMwlK/e5EWHCk+R2wg+1paQIcIlxs2w=;
-        b=4922tel0/0NqqOScgP7n9+VB/V/3waCfYDiDq6OUvXr/l3cvWE/ceV1dMrG7s8X+mp
-         B/VMXtkJcURYxwAg+rek7wdktobR85cL93D7jKHLhTB0FtHkIQZuuijB2X8piy9RdbsA
-         Q7Mm+ayT10Bh1IeyG+oQFNkoNUXhqfdhMmfYF66CcFbmKvg7LhTLGRH7kBN2CV41CheB
-         XY2f5uRdVvDRkrBvPPG7cCKEdXxbTtvAJGGHPbmnSIIMqz9G638g+tX1FqCjRvguHH1T
-         wvd25sb8q+dPo/3SllFKKD4S3YSAzcKknFDhpFVVOs+NAgt5otfcjp2UqIvBeIiXtoUl
-         zvqQ==
-X-Gm-Message-State: AAQBX9dRPkMeXQj8UnFl5cbJYa7C90lRrijmphjKVmK96J3KsqJFT1+J
-        2r12eegEGYzrDs/88eX87G5c2A==
-X-Google-Smtp-Source: AKy350ZUblprExjuX6+jE5HBU86G18yD57JroHEF7F3UtgQLLmllv6bAVK1PzXBeo7F/H9vADM+avA==
-X-Received: by 2002:a05:600c:21c8:b0:3dc:4fd7:31f7 with SMTP id x8-20020a05600c21c800b003dc4fd731f7mr7587448wmj.41.1681244408526;
-        Tue, 11 Apr 2023 13:20:08 -0700 (PDT)
+        bh=DBsBC/Vn3Kv4ti4BzHA6RMnVNcTQWhiMWTwoU005B2U=;
+        b=GC0hDKnncTP4OGoEENFzIDWsy92lqaxcu4YuYuFGgsv1infbezMbIq+CLW21LXGr2z
+         5kjkgBmSrhTt+3mT0OwoJCHRx6ofDhqNZjzTeiPW89R4wgUl8ndoKKSlezWEQA0CDCL7
+         j7J6MsbMUKY7neuDH9frM7jC91LU3d7AyrLSD9r8rpY4qgJmihOepp0Dui3n/p5eA9Y0
+         oLTsRx/P7omHmKnTTrVNRNdS1cscEJxzEDUSpKuiWoUoUA2H4pwQgn+1BJwCHXAt34+m
+         YusatMxsGHZWoxEyOw4Ja3IZx1M4EofQ17e5SlRTgJzwrE9+NtBUTcpQgnAvW4qM6Tle
+         MdsQ==
+X-Gm-Message-State: AAQBX9cKxdqcJcw49i43ucwLLyClLVHIKFzK1SnqO1XWHsFxsNnTEUTa
+        DYKQoDbczTYOWbQuVxRsUZ0DLw==
+X-Google-Smtp-Source: AKy350ZeLdzIrvR50rHqr2eVAX5B/6o1f+h0LDKbiEM6pdRF4cvHOWcGRDAAy9uwHAU31RTwDQ9I/w==
+X-Received: by 2002:adf:f20b:0:b0:2d1:e517:4992 with SMTP id p11-20020adff20b000000b002d1e5174992mr2689390wro.69.1681244510653;
+        Tue, 11 Apr 2023 13:21:50 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:3227:36b8:19f8:5420? ([2a05:6e02:1041:c10:3227:36b8:19f8:5420])
-        by smtp.googlemail.com with ESMTPSA id m21-20020a7bcb95000000b003ee4e99a8f6sm17904482wmi.33.2023.04.11.13.20.07
+        by smtp.googlemail.com with ESMTPSA id s13-20020a5d510d000000b002d64fcb362dsm15338931wrt.111.2023.04.11.13.21.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 13:20:08 -0700 (PDT)
-Message-ID: <c2581726-3e02-104c-f2ac-55268470d2c8@linaro.org>
-Date:   Tue, 11 Apr 2023 22:20:07 +0200
+        Tue, 11 Apr 2023 13:21:50 -0700 (PDT)
+Message-ID: <f88a1c56-4078-63a2-ab52-69523c3fdcd8@linaro.org>
+Date:   Tue, 11 Apr 2023 22:21:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
+Subject: Re: [PATCH v2 6/7] thermal/drivers/acpi: Make cross dev link optional
+ by configuration
 Content-Language: en-US
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>
 References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
- <20230410205305.1649678-3-daniel.lezcano@linaro.org>
- <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
+ <20230410205305.1649678-7-daniel.lezcano@linaro.org>
+ <CAJZ5v0hqqPQ0xQqt3KgyQ5b-xTRjPicgkKgyo=+p7jgB9BuZaQ@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hqqPQ0xQqt3KgyQ5b-xTRjPicgkKgyo=+p7jgB9BuZaQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,67 +77,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/04/2023 20:19, Rafael J. Wysocki wrote:
+On 11/04/2023 20:26, Rafael J. Wysocki wrote:
 > On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
 > <daniel.lezcano@linaro.org> wrote:
 >>
->> There are still some drivers needing to play with the thermal zone
->> device internals. That is not the best but until we can figure out if
->> the information is really needed, let's encapsulate the field used in
->> the thermal zone device structure, so we can move forward relocating
->> the thermal zone device structure definition in the thermal framework
->> private headers.
-> 
-> I'm not really sure why this is needed, so please explain.
-
-Some drivers are accessing tz->device, that implies they have the 
-knowledge of the thermal_zone_device structure but we want to 
-self-encapsulate this structure and reduce the scope of the structure to 
-the thermal core only.
-
-The ACPI and the Menlon drivers are the drivers accessing tz->device.
-
-By adding this wrapper, these drivers do no longer need the thermal zone 
-device structure definition.
-
+>> The ACPI thermal driver creates a link in the thermal zone device
+>> sysfs directory pointing to the device sysfs directory. At the same
+>> time, it creates a back pointer link from the device to the thermal
+>> zone device sysfs directory.
+>>
+>>  From a generic perspective, having a device pointer in the sysfs
+>> thermal zone directory may make sense. But the opposite is not true as
+>> the same driver can be related to multiple thermal zones.
+>>
+>> The usage of these information is very specific to ACPI and it is
+>> questionable if they are really needed.
+>>
+>> Let's make the code optional and disable it by default.
+>>
 >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 >> ---
->>   drivers/thermal/thermal_core.c | 6 ++++++
->>   include/linux/thermal.h        | 1 +
->>   2 files changed, 7 insertions(+)
+>>   drivers/acpi/thermal.c | 62 ++++++++++++++++++++++++++++--------------
+>>   1 file changed, 42 insertions(+), 20 deletions(-)
 >>
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index c5025aca22ee..842f678c1c3e 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
->>   }
->>   EXPORT_SYMBOL_GPL(thermal_zone_device_id);
+>> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+>> index 5763db4528b8..70f1d28810f2 100644
+>> --- a/drivers/acpi/thermal.c
+>> +++ b/drivers/acpi/thermal.c
+>> @@ -787,9 +787,44 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+>>          .critical = acpi_thermal_zone_device_critical,
+>>   };
 >>
->> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
->> +{
->> +       return &tzd->device;
->> +}
->> +EXPORT_SYMBOL_GPL(thermal_zone_device);
->> +
->>   /**
->>    * thermal_zone_device_unregister - removes the registered thermal zone device
->>    * @tz: the thermal zone device to remove
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index 82ddb32f9876..87837094d549 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
->>   void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
->>   const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
->>   int thermal_zone_device_id(struct thermal_zone_device *tzd);
->> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
->>
->>   int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
->>                                       struct thermal_cooling_device *,
->> --
->> 2.34.1
->>
+>> +#ifdef CONFIG_THERMAL_SYSFS_OBSOLETE_SINGULARITY
+> 
+> It is OK to move the code to the separate functions below, but it is
+> not OK to make it depend on the Kconfig option above.
+> 
+> The extra sysfs things were added in different drivers for different
+> reasons.  Making them all depend on one Kconfig option is just wrong.
+
+Ok, I'll do the changes accordingly.
+
+Thanks for reviewing the series
+
+
+[ ... ]
+
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
