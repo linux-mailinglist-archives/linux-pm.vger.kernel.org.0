@@ -2,193 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAF86DE0E1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 18:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9086DE0FE
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 18:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjDKQVx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Apr 2023 12:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S229590AbjDKQbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 12:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjDKQVw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 12:21:52 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97C2A0;
-        Tue, 11 Apr 2023 09:21:48 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id jg21so21480794ejc.2;
-        Tue, 11 Apr 2023 09:21:48 -0700 (PDT)
+        with ESMTP id S229611AbjDKQbD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 12:31:03 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE13A40C8;
+        Tue, 11 Apr 2023 09:31:02 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id qb20so21447677ejc.6;
+        Tue, 11 Apr 2023 09:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681230661;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lUtdmO5RhKKGgsshDATRStPZUG/pJBx9W7yE7kfQ97o=;
+        b=iXUCz/YRwpooX0LJ2CjxCwvuEbzWNZ4HtNnVpxAgPs5447q73rfarFtpTI16t+Ac2p
+         UFMl7ZjnLq1SGC0AyYt218TSgbgdzq6KsyOL7cWaLKxh7jA19hdbbj8CUx1psTTFNBjm
+         APk7TbIA4ZpwvI3T91GSe9oHzuFKfdz+MiBm3suTqNF5fVoZ2X4IywASgQYKJql6H3pC
+         EmseqHXl+rtQPo8F2K8rPwjiEUZzt2RctOyBypvF6jHtB+zDIPXBW6Itsq6OQjQguEt9
+         0b3v/rnbFW132IRtFD78C29vbsjpA76n89ZX+5vgyk4guHEJOUzrO7b2kDhLLI/pYTlS
+         nUGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681230107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1681230661;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mA1URChDyWUe82wBxVnJj2Y9kjeuq+WNWY4WAjgdeNI=;
-        b=MG4pWeiTuoYoUHEU7RoLkK2d9yd+xnY/lWOGxoay/9jZ3+1Sf0tvsl1ybJTrwcTIZn
-         hEqXbXk3lmTTZlhRUDxgBdcZ2V7PVoAnd8sbcneJuSdxSPdU0cHl+PvI5ia7oHffQDi0
-         Buqdwpnv4+ANbiiBek3uHZ6FfsnXJnZG2agRPvz7TSs3WOT/fkQXu4YHzRVC21YPWtag
-         kUJIViMmkAcCSwEcO4R0jeikdQxGinEZt62QY2e46JbTXZuDNNcS4dfjvgnQRxnBCibf
-         jRf212Q6vxZSfLyBNIHMky/mjH8Mx++nD7RAX0gLPxzEqriK3usmfHCvUd0GPT9yYugz
-         Dwhw==
-X-Gm-Message-State: AAQBX9fweoJR7TBEDCToDKve1z1qcfJ5uxyzUsn29FG10ghitP4wMVtg
-        qoOzB2p+n07lLEKkpB/Dop4ZGZFhh4G/oV1AFdQ=
-X-Google-Smtp-Source: AKy350biFncVt62uiW3X/eNh6ohumixHlTCMeLBYhGhcEJ30rZpImbJwYmlIvX5i6Xb/3pVvOsCXtoHGbdbfXjVmwa8=
-X-Received: by 2002:a17:906:2981:b0:94b:ffe9:37fc with SMTP id
- x1-20020a170906298100b0094bffe937fcmr2556430eje.2.1681230107422; Tue, 11 Apr
- 2023 09:21:47 -0700 (PDT)
+        bh=lUtdmO5RhKKGgsshDATRStPZUG/pJBx9W7yE7kfQ97o=;
+        b=AmX75crRJEARPd47aYQkWsoJTTHQOSp6stPLEYsmzBA4SF60q1p+u8A9s3EqTeKjtP
+         Rm9ePTH3JV3EHk4IsQDvlty478EWj+sBC3dzfVaXJSiP7xeC48D7Edwd90M6e5CE4BIy
+         fx86tzZrrlg35/n+cuWUHFGOkgS+vKox/71QtgQZM9CtKfuoYdPN/0UDrsW0KlLl/X4p
+         4EQqcSFNXcEvDH5hz+cbP6wrRlBfQiluc2ASqs861t1nW0KTczQ5TiEPrfwflb0/a0K/
+         J3JHs+YukJt6eRRdH9eBkb6rwbNe2KWJOTalFmmP+xs0cRI/ZYb6xBCcgT6zcNIge31U
+         bZVg==
+X-Gm-Message-State: AAQBX9e+1V/UgOkox1d2q9GCBUPkm6L9feDTcXNLC701KE30N687vFj9
+        eN9RK+obB+E1VKCdO04GlmQ=
+X-Google-Smtp-Source: AKy350Y0D5VWkb/RTlDyKlVs1DqA2ctLjh5WfRAflgMMPA2Ussjc653GY5AnIU/MD3Zg2p/OupxyKQ==
+X-Received: by 2002:a17:906:31d9:b0:931:ad32:79ed with SMTP id f25-20020a17090631d900b00931ad3279edmr11576235ejf.12.1681230660970;
+        Tue, 11 Apr 2023 09:31:00 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id qk6-20020a1709077f8600b00948fd62a53asm6305718ejc.71.2023.04.11.09.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 09:31:00 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 18:30:58 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Johan Hovold <johan@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
+ usage
+Message-ID: <ZDWLQgttLR2dWbwd@orome>
+References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+ <Y9J4WAFyXyV/nqlG@orome>
+ <20230210131703.GF175687@linaro.org>
+ <Y+ZQC85TM+O8p8gQ@orome>
+ <365c469b-22f6-fb26-1872-5e9a5079af5d@linaro.org>
+ <Y+Ze4tAM6Jpszq/3@orome>
+ <c93d583d-e2b8-e8dd-cc94-cd77ecb2cab1@linaro.org>
 MIME-Version: 1.0
-References: <cover.1681186310.git.yu.c.chen@intel.com> <8f917ae09c7a09d1841824908107d6c79a6cd090.1681186310.git.yu.c.chen@intel.com>
-In-Reply-To: <8f917ae09c7a09d1841824908107d6c79a6cd090.1681186310.git.yu.c.chen@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 18:21:36 +0200
-Message-ID: <CAJZ5v0gGbREHrwSg48JfZX9tgNUr0GeYyejGfd80VjR8Wd9Ffw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] PM: hibernate: Do not get block device exclusively
- in test_resume mode
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yifan Li <yifan2.li@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ufNrFSjcZLO8PioW"
+Content-Disposition: inline
+In-Reply-To: <c93d583d-e2b8-e8dd-cc94-cd77ecb2cab1@linaro.org>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 6:23 AM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> The system refused to do a test_resume because it found that the
-> swap device has already been taken by someone else. Specificly,
 
-"Specifically" I suppose.
+--ufNrFSjcZLO8PioW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
-> do this check.
->
-> Steps to reproduce:
->  dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
->        awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
->  mkswap /swapfile
->  swapon /swapfile
->  swap-offset /swapfile
->  echo 34816 > /sys/power/resume_offset
->  echo test_resume > /sys/power/disk
->  echo disk > /sys/power/state
->
->  PM: Using 3 thread(s) for compression
->  PM: Compressing and saving image data (293150 pages)...
->  PM: Image saving progress:   0%
->  PM: Image saving progress:  10%
->  ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
->  ata1.00: configured for UDMA/100
->  ata2: SATA link down (SStatus 0 SControl 300)
->  ata5: SATA link down (SStatus 0 SControl 300)
->  ata6: SATA link down (SStatus 0 SControl 300)
->  ata3: SATA link down (SStatus 0 SControl 300)
->  ata4: SATA link down (SStatus 0 SControl 300)
->  PM: Image saving progress:  20%
->  PM: Image saving progress:  30%
->  PM: Image saving progress:  40%
->  PM: Image saving progress:  50%
->  pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
->  PM: Image saving progress:  60%
->  PM: Image saving progress:  70%
->  PM: Image saving progress:  80%
->  PM: Image saving progress:  90%
->  PM: Image saving done
->  PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
->  PM: S|
->  PM: hibernation: Basic memory bitmaps freed
->  PM: Image not found (code -16)
->
-> This is because when using the swapfile as the hibernation storage,
-> the block device where the swapfile is located has already been mounted
-> by the OS distribution(usually been mounted as the rootfs). This is not
+On Tue, Apr 11, 2023 at 12:48:25PM +0200, Daniel Lezcano wrote:
+>=20
+> Hi Thierry,
+>=20
+> did you have time to look at this ?
+>=20
+> This driver is the only one using get_thermal_instance() and I would like=
+ to
+> remove this function along with the thermal_core.h inclusion in this driv=
+er
 
-"usually mounted"
+Yeah, I've had work in progress patches for this for a few weeks but
+haven't had the time to test these much. I'd like to take a bit longer
+to test them before sending them out.
 
-> an issue for normal hibernation, because software_resume()->swsusp_check()
-> happens before the block device(rootfs) mount. But it is a problem for the
-> test_resume mode. Because when test_resume happens, the block device has
-> been mounted already.
->
-> Thus remove the FMODE_EXCL for test_resume mode. This would not be a
-> problem because in test_resume stage, the processes have already been
-> frozen, and the race condition described in
-> Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-> is unlikely to happen.
->
-> Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-> Reported-by: Yifan Li <yifan2.li@intel.com>
-> Suggested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  kernel/power/hibernate.c | 5 +++--
->  kernel/power/swap.c      | 5 +++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index aa551b093c3f..defc2257b052 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -688,18 +688,19 @@ static int load_image_and_restore(void)
->  {
->         int error;
->         unsigned int flags;
-> +       fmode_t mode = snapshot_test ? FMODE_READ : (FMODE_READ | FMODE_EXCL);
+Thierry
 
-fmode_t mode = FMODE_READ;
+--ufNrFSjcZLO8PioW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-if (snapshot_test)
-        mode |= FMODE_EXCL;
+-----BEGIN PGP SIGNATURE-----
 
-pretty please, and analogously below.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQ1i0IACgkQ3SOs138+
+s6F09Q/8Dqyk/Wx7nPG1vPtdEdx+ms6SMJ58mkrUxY0nPHtZP9C9lvOsytfI9XpC
+YVldrNNumV5zqtPAf2nJkdVLGcKCEZ6vASkDvhIRQ8l0dgNQBhLV8AqlafcC9KSd
+AbvXrK44I42sFtkyONdtgoNjrAAtPINrihcMn3VLFkplqv9dj7GRgVYAHbTS7KYB
+eyHz+QEHCINu2GiqUE9NcYjaPWxCp/KavY5zd/cQGotnibfJKC2z789SfcPvrN/m
+1M0KsexT0kFmp+D4D+G/AsMKmadSoUWi9adQrCFaLw7GXU0hn3ih/m6Pa5RRutu1
+35RwtnT9PfbWT3+F0KfNjYZFhwFiF/iFn/FUAEMQ2j3pCq8SmKXPA/bnuZMvfDVg
+nHCOmI0aUZ+VaAm1SYAlQCh4KOmJQxTu1ibPEOii/G0ccC5Nx6IxMMVeuzPNt85X
+YPXZbOvIB+Q1d6LdbsrP7uWEKmn68yN9Hz//r7FvSO1NS2rfbkC1Fm1OojREnKxT
+7K7YvtV7WbR1XeskwAsfmaTSnGxqoSdofEpCWcYgQgTkxxlSBww0pxvcqZ8+eQ6a
+MNyuDCzCCrcgHP0lrI/JlpMdS0ZUXc1lLm3m/P2aB+PjsFA/JsjBRwF3fSh+JjYD
+TVBRH7QE+8gd5hmUYClgBRjMRvvuk8g6NnGiTNrvlIKVmgB+xG8=
+=dsvd
+-----END PGP SIGNATURE-----
 
->
->         pm_pr_dbg("Loading hibernation image.\n");
->
->         lock_device_hotplug();
->         error = create_basic_memory_bitmaps();
->         if (error) {
-> -               swsusp_close(FMODE_READ | FMODE_EXCL);
-> +               swsusp_close(mode);
->                 goto Unlock;
->         }
->
->         error = swsusp_read(&flags);
-> -       swsusp_close(FMODE_READ | FMODE_EXCL);
-> +       swsusp_close(mode);
->         if (!error)
->                 error = hibernation_restore(flags & SF_PLATFORM_MODE);
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 36a1df48280c..0f699cd96a89 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1518,9 +1518,10 @@ int swsusp_check(void)
->  {
->         int error;
->         void *holder;
-> +       fmode_t mode = snapshot_test ? FMODE_READ : (FMODE_READ | FMODE_EXCL);
->
->         hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
-> -                                           FMODE_READ | FMODE_EXCL, &holder);
-> +                                           mode, &holder);
->         if (!IS_ERR(hib_resume_bdev)) {
->                 set_blocksize(hib_resume_bdev, PAGE_SIZE);
->                 clear_page(swsusp_header);
-> @@ -1547,7 +1548,7 @@ int swsusp_check(void)
->
->  put:
->                 if (error)
-> -                       blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
-> +                       blkdev_put(hib_resume_bdev, mode);
->                 else
->                         pr_debug("Image signature found, resuming\n");
->         } else {
-> --
+--ufNrFSjcZLO8PioW--
