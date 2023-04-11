@@ -2,145 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE796DCFE8
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 05:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873AC6DD031
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 05:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjDKDDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 23:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S229749AbjDKDbH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Apr 2023 23:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDKDCv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 23:02:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC092D6D;
-        Mon, 10 Apr 2023 20:02:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A187A6209E;
-        Tue, 11 Apr 2023 03:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA33DC433EF;
-        Tue, 11 Apr 2023 03:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681182169;
-        bh=W5LkOo7VObRorAOwM+Ysl+U3TaX0yQUWO6dGaS2s9/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e3UF/BZ1HAjWlEtz7VkRn9CMskyu9E3pWhCFv8dX+rD0WHM5TvoWMJOSojWd6ntPA
-         ywa0+1Vd1zQOH6mNDSWreD/s+oFdVDHbbFpjlbUikUQl4XBe4bZf7mbI8U6G6lPIhQ
-         HChDd563Gum1iJAVIq6EjBOKtyiZO2VcZ15ctRDv3tHCIGlLD2k1Q17+/PA6TLPZca
-         qyzonBkzId5V2HCtlAQIV/uLbchVJfjwsOL9RelF4pU2cg20P+Ird99MQX0lGhHMh8
-         kCcpOXFDb+c4P2bMnDfsiljROzSXHiDjbKD98aRtbtGtZz7xnXlBK5S4UMNzG49O2/
-         mOAfMORkyFA5w==
-Date:   Mon, 10 Apr 2023 20:06:30 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH v3 2/4] soc: qcom: rpmhpd: Do proper power off when state
- synced
-Message-ID: <20230411030630.z5nl5ynjl6wzp3bh@ripper>
-References: <20230327193829.3756640-1-abel.vesa@linaro.org>
- <20230327193829.3756640-3-abel.vesa@linaro.org>
+        with ESMTP id S229656AbjDKDbG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 23:31:06 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB77172C
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 20:31:04 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a524c999d9so3122315ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 20:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681183864; x=1683775864;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6ADmYS9mqbZyrMcltEWXh3K5aDlc5Z8KgWrgOoUl3zI=;
+        b=gGkUurv/wo/vQUfZv3sE+Xi4vbIzlG3n8x/gEn3SUgdq2j4i65ZjwSbQlZcOQRT4Af
+         YNVr2I1Ow72/OAKKMTLDD11+jW++DogBZsRL8uAsm828bH4GUGcsl8ST4FBcLsBUzoty
+         ZcEdoJu+LEbyg2M5ccBXDAd2mbdMrc6dhlvfs2EJXwk6yDUH2xdPSs7jPO+KDqveU99Q
+         fUt0K5g4iVFrjMGC481St1abs63lVy2tLYRpqhYgKmJU0RpuNMk9VuXlVOlLNt/5qW9A
+         dKZehyScjRCiHpxhBt1Ij6zOEKFvOBs0KTBccEtYo56afg8J2nMkz2SZw2gT1VuKlKs+
+         l3VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681183864; x=1683775864;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ADmYS9mqbZyrMcltEWXh3K5aDlc5Z8KgWrgOoUl3zI=;
+        b=4ja/BLjbMek2Dzeew99rOTZpzKwBSgaWW/1sI9UTcfPhTND6M7zbiIf9er6B5wlHC3
+         DCQjvAnIdk9XOpHBVC+ukOesiYr3WAVDoQBWqh68N933SuwEFm4t2Cvvc0FrS0PwtyfU
+         nXZWACNHS4KmZ6pgxHDdZeiy4lSPKyS/ejaHG6WI7/qmpWtCiy7af+kwBkEajWYFTc1m
+         IgANKL5Z4EA4VItGJ7CKxd/gjV6jeDL3cQPkRla8I0jI2/BRlzSkKTl3k9rz6TAds4w8
+         vzL0kgPPz27DoQ3sZ355UvJsLuv+dyVgOumvtRsg8XJuaSQ/JLx7Q1In5+j1V/yCSCeP
+         BvTA==
+X-Gm-Message-State: AAQBX9ek+yHiKzRMRXmhNLMbSxiiVlZaux4Ksb24j3e1x2fZ+gtKQcnW
+        AEF46ajil38NLrXqRJABRxDQMA==
+X-Google-Smtp-Source: AKy350bfGCkeIj8TeSGJgc/MzhgkeGbBT5l2AslwrZmk+OnQlaVVFh857DYvS6yyr3gsd8t7iKslkQ==
+X-Received: by 2002:a62:29c1:0:b0:624:7aac:ab7 with SMTP id p184-20020a6229c1000000b006247aac0ab7mr13232757pfp.18.1681183864202;
+        Mon, 10 Apr 2023 20:31:04 -0700 (PDT)
+Received: from localhost ([122.172.85.8])
+        by smtp.gmail.com with ESMTPSA id x5-20020aa79185000000b0062ddcad2cbesm8864100pfa.145.2023.04.10.20.30.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 20:30:52 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 09:00:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, cocci@inria.fr,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [v2] cpufreq: sparc: Fix exception handling in two functions
+Message-ID: <20230411033048.zwsijlyiksjcmgcc@vireshk-i7>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <b3cce5b3-2e68-180c-c293-74d4d9d4032c@web.de>
+ <2d125f3e-4de6-cfb4-2d21-6e1ec04bc412@web.de>
+ <20230403033529.x6n3ihhkypwizq3b@vireshk-i7>
+ <39342542-9353-6a7b-0aa9-f9c294b158cb@web.de>
+ <20230403230432.xeubpa3cc2gt4mw3@vireshk-i7>
+ <68b1988b-987f-fa2b-111e-b1b42f9767ab@web.de>
+ <20230409235511.7xxqdxsqtflrhifk@vireshk-i7>
+ <f9f40c8a-a392-27e3-b19c-c8985a163159@web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230327193829.3756640-3-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f9f40c8a-a392-27e3-b19c-c8985a163159@web.de>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:38:27PM +0300, Abel Vesa wrote:
-> Instead of aggregating different corner values on sync state callback,
-> call the genpd API for queuing up the power off. This will also mark the
-> domain as powered off in the debugfs genpd summary. Also, until sync
-> state has been reached, return busy on power off request, in order to
-> allow genpd core to know that the actual domain hasn't been powered of
-> from the "disable unused" late initcall.
+On 10-04-23, 15:08, Markus Elfring wrote:
+> >> @@ -337,21 +337,17 @@ static int __init us2e_freq_init(void)
+> >>  		driver->get = us2e_freq_get;
+> >>  		driver->exit = us2e_freq_cpu_exit;
+> >>  		strcpy(driver->name, "UltraSPARC-IIe");
+> >> -
+> >> -		cpufreq_us2e_driver = driver;
+> >
+> > This changes the behavior of the code here as "cpufreq_us2e_driver"
+> > is used in us2e_freq_cpu_exit(). If some failure occurs after a
+> > policy is initialized, and driver doesn't register successfully, then
+> > we won't set the frequency to the lowest index of the table anymore.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/soc/qcom/rpmhpd.c | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index f20e2a49a669..ec7926820772 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -649,8 +649,12 @@ static int rpmhpd_power_off(struct generic_pm_domain *domain)
->  	mutex_lock(&rpmhpd_lock);
->  
->  	ret = rpmhpd_aggregate_corner(pd, 0);
-> -	if (!ret)
-> -		pd->enabled = false;
-> +	if (!ret) {
-> +		if (!pd->state_synced)
-> +			ret = -EBUSY;
-> +		else
-> +			pd->enabled = false;
-> +	}
->  
->  	mutex_unlock(&rpmhpd_lock);
->  
-> @@ -810,10 +814,8 @@ static void rpmhpd_sync_state(struct device *dev)
->  {
->  	const struct rpmhpd_desc *desc = of_device_get_match_data(dev);
->  	struct rpmhpd **rpmhpds = desc->rpmhpds;
-> -	unsigned int corner;
->  	struct rpmhpd *pd;
->  	unsigned int i;
-> -	int ret;
->  
->  	mutex_lock(&rpmhpd_lock);
->  	for (i = 0; i < desc->num_pds; i++) {
-> @@ -822,14 +824,7 @@ static void rpmhpd_sync_state(struct device *dev)
->  			continue;
->  
->  		pd->state_synced = true;
-> -		if (pd->enabled)
-> -			corner = max(pd->corner, pd->enable_corner);
+> The setting of the variables “cpufreq_us…_driver” influences the need
+> to reset them to null pointers for the desired exception handling,
+> doesn't it?
 
-Note that the intent of this line is to lower the corner from max to
-either a requested performance_state or the lowest non-disabled corner.
-I don't think your solution maintains this behavior?
+This is what all should be done for these drivers I guess. There is no
+points doing the dance of {de}allocating resources unnecessarily.
 
-> -		else
-> -			corner = 0;
-> -
-> -		ret = rpmhpd_aggregate_corner(pd, corner);
-> -		if (ret)
-> -			dev_err(dev, "failed to sync %s\n", pd->res_name);
-> +		pm_genpd_queue_power_off(&pd->pd);
+diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
+index 92acbb25abb3..b31fb07f3f39 100644
+--- a/drivers/cpufreq/sparc-us2e-cpufreq.c
++++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
+@@ -20,7 +20,14 @@
+ #include <asm/asi.h>
+ #include <asm/timer.h>
 
-In the event that the power-domain has a single device attached, and no
-subdomains, wouldn't pm_genpd_queue_power_off() pass straight through
-all checks and turn off the power domain? Perhaps I'm just missing
-something?
+-static struct cpufreq_driver *cpufreq_us2e_driver;
++static struct cpufreq_driver cpufreq_us2e_driver = {
++       .name = "UltraSPARC-IIe",
++       .init = us2e_freq_cpu_init,
++       .verify = cpufreq_generic_frequency_table_verify,
++       .target_index = us2e_freq_target,
++       .get = us2e_freq_get,
++       .exit = us2e_freq_cpu_exit,
++};
 
-Regards,
-Bjorn
+ struct us2e_freq_percpu_info {
+        struct cpufreq_frequency_table table[6];
+@@ -300,9 +307,7 @@ static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
 
->  	}
->  	mutex_unlock(&rpmhpd_lock);
->  }
-> -- 
-> 2.34.1
-> 
+ static int us2e_freq_cpu_exit(struct cpufreq_policy *policy)
+ {
+-       if (cpufreq_us2e_driver)
+-               us2e_freq_target(policy, 0);
+-
++       us2e_freq_target(policy, 0);
+        return 0;
+ }
+
+@@ -319,39 +324,15 @@ static int __init us2e_freq_init(void)
+        impl  = ((ver >> 32) & 0xffff);
+
+        if (manuf == 0x17 && impl == 0x13) {
+-               struct cpufreq_driver *driver;
+-
+-               ret = -ENOMEM;
+-               driver = kzalloc(sizeof(*driver), GFP_KERNEL);
+-               if (!driver)
+-                       goto err_out;
+-
+                us2e_freq_table = kzalloc((NR_CPUS * sizeof(*us2e_freq_table)),
+                        GFP_KERNEL);
+                if (!us2e_freq_table)
+-                       goto err_out;
++                       return -ENOMEM;
+
+-               driver->init = us2e_freq_cpu_init;
+-               driver->verify = cpufreq_generic_frequency_table_verify;
+-               driver->target_index = us2e_freq_target;
+-               driver->get = us2e_freq_get;
+-               driver->exit = us2e_freq_cpu_exit;
+-               strcpy(driver->name, "UltraSPARC-IIe");
+-
+-               cpufreq_us2e_driver = driver;
+                ret = cpufreq_register_driver(driver);
+                if (ret)
+-                       goto err_out;
+-
+-               return 0;
++                       kfree(us2e_freq_table);
+
+-err_out:
+-               if (driver) {
+-                       kfree(driver);
+-                       cpufreq_us2e_driver = NULL;
+-               }
+-               kfree(us2e_freq_table);
+-               us2e_freq_table = NULL;
+                return ret;
+        }
+
+@@ -360,13 +341,8 @@ static int __init us2e_freq_init(void)
+
+ static void __exit us2e_freq_exit(void)
+ {
+-       if (cpufreq_us2e_driver) {
+-               cpufreq_unregister_driver(cpufreq_us2e_driver);
+-               kfree(cpufreq_us2e_driver);
+-               cpufreq_us2e_driver = NULL;
+-               kfree(us2e_freq_table);
+-               us2e_freq_table = NULL;
+-       }
++       cpufreq_unregister_driver(cpufreq_us2e_driver);
++       kfree(us2e_freq_table);
+ }
+
+ MODULE_AUTHOR("David S. Miller <davem@redhat.com>");
+
+-- 
+viresh
