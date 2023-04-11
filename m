@@ -2,77 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873AC6DD031
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 05:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791D26DD19F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 07:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDKDbH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Apr 2023 23:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S229722AbjDKFbJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 01:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjDKDbG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Apr 2023 23:31:06 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB77172C
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 20:31:04 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a524c999d9so3122315ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Apr 2023 20:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681183864; x=1683775864;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6ADmYS9mqbZyrMcltEWXh3K5aDlc5Z8KgWrgOoUl3zI=;
-        b=gGkUurv/wo/vQUfZv3sE+Xi4vbIzlG3n8x/gEn3SUgdq2j4i65ZjwSbQlZcOQRT4Af
-         YNVr2I1Ow72/OAKKMTLDD11+jW++DogBZsRL8uAsm828bH4GUGcsl8ST4FBcLsBUzoty
-         ZcEdoJu+LEbyg2M5ccBXDAd2mbdMrc6dhlvfs2EJXwk6yDUH2xdPSs7jPO+KDqveU99Q
-         fUt0K5g4iVFrjMGC481St1abs63lVy2tLYRpqhYgKmJU0RpuNMk9VuXlVOlLNt/5qW9A
-         dKZehyScjRCiHpxhBt1Ij6zOEKFvOBs0KTBccEtYo56afg8J2nMkz2SZw2gT1VuKlKs+
-         l3VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681183864; x=1683775864;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ADmYS9mqbZyrMcltEWXh3K5aDlc5Z8KgWrgOoUl3zI=;
-        b=4ja/BLjbMek2Dzeew99rOTZpzKwBSgaWW/1sI9UTcfPhTND6M7zbiIf9er6B5wlHC3
-         DCQjvAnIdk9XOpHBVC+ukOesiYr3WAVDoQBWqh68N933SuwEFm4t2Cvvc0FrS0PwtyfU
-         nXZWACNHS4KmZ6pgxHDdZeiy4lSPKyS/ejaHG6WI7/qmpWtCiy7af+kwBkEajWYFTc1m
-         IgANKL5Z4EA4VItGJ7CKxd/gjV6jeDL3cQPkRla8I0jI2/BRlzSkKTl3k9rz6TAds4w8
-         vzL0kgPPz27DoQ3sZ355UvJsLuv+dyVgOumvtRsg8XJuaSQ/JLx7Q1In5+j1V/yCSCeP
-         BvTA==
-X-Gm-Message-State: AAQBX9ek+yHiKzRMRXmhNLMbSxiiVlZaux4Ksb24j3e1x2fZ+gtKQcnW
-        AEF46ajil38NLrXqRJABRxDQMA==
-X-Google-Smtp-Source: AKy350bfGCkeIj8TeSGJgc/MzhgkeGbBT5l2AslwrZmk+OnQlaVVFh857DYvS6yyr3gsd8t7iKslkQ==
-X-Received: by 2002:a62:29c1:0:b0:624:7aac:ab7 with SMTP id p184-20020a6229c1000000b006247aac0ab7mr13232757pfp.18.1681183864202;
-        Mon, 10 Apr 2023 20:31:04 -0700 (PDT)
-Received: from localhost ([122.172.85.8])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa79185000000b0062ddcad2cbesm8864100pfa.145.2023.04.10.20.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 20:30:52 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 09:00:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [v2] cpufreq: sparc: Fix exception handling in two functions
-Message-ID: <20230411033048.zwsijlyiksjcmgcc@vireshk-i7>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <b3cce5b3-2e68-180c-c293-74d4d9d4032c@web.de>
- <2d125f3e-4de6-cfb4-2d21-6e1ec04bc412@web.de>
- <20230403033529.x6n3ihhkypwizq3b@vireshk-i7>
- <39342542-9353-6a7b-0aa9-f9c294b158cb@web.de>
- <20230403230432.xeubpa3cc2gt4mw3@vireshk-i7>
- <68b1988b-987f-fa2b-111e-b1b42f9767ab@web.de>
- <20230409235511.7xxqdxsqtflrhifk@vireshk-i7>
- <f9f40c8a-a392-27e3-b19c-c8985a163159@web.de>
+        with ESMTP id S229536AbjDKFbI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 01:31:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3CF1BF7;
+        Mon, 10 Apr 2023 22:31:07 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4AXWl008192;
+        Tue, 11 Apr 2023 05:30:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Qh7i/6UPVa9oSp61OPGQ5X/b9iECb5umhdviZt8OscM=;
+ b=RQbpHJ156GrJcEeejCfYCzWC21RIssj/rPa8+g82EPYplu+n7q3FONj/VKxXtaBV9kcA
+ Zlrs4otQONO+OSoqHOw7k95EaPInMqJMs5n6aJc+Qp2oNwQX0aQQvwjagIm4KjoRuUrB
+ mS7sa4Mis5WlBfX2K+YhpY9OuQ8Zm4hZfElENKrLA0f+XtYJd3NfQKPdlGdIvT3HY0QI
+ 1kbcaEwMfKfP6/LlpbS3GJ8rPKcO50jVzHSb43qnHU1lQnpI/wVisujr0jRpiwBerVdB
+ XDqKMrK4LKw46V0JFsDa4/cW0Y7+P/n2brH1zltVaXV+5AhQ3aWKfXtpc0nX38MOJt6t Vg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvmb3hhq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 05:30:58 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33B5Uv42020828
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 05:30:57 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 22:30:54 -0700
+Date:   Tue, 11 Apr 2023 11:00:50 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Chen Yu <yu.c.chen@intel.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/2] Fix test_resume failure by openning swap device
+ non-exclusively
+Message-ID: <20230411053050.GA4099424@hu-pkondeti-hyd.qualcomm.com>
+References: <cover.1681186310.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f9f40c8a-a392-27e3-b19c-c8985a163159@web.de>
+In-Reply-To: <cover.1681186310.git.yu.c.chen@intel.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IqrAYJ8pFJxLV_OXcWh9oDqdYd4e-3Gx
+X-Proofpoint-ORIG-GUID: IqrAYJ8pFJxLV_OXcWh9oDqdYd4e-3Gx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_02,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=828 suspectscore=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 adultscore=0 phishscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304110050
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,115 +76,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-04-23, 15:08, Markus Elfring wrote:
-> >> @@ -337,21 +337,17 @@ static int __init us2e_freq_init(void)
-> >>  		driver->get = us2e_freq_get;
-> >>  		driver->exit = us2e_freq_cpu_exit;
-> >>  		strcpy(driver->name, "UltraSPARC-IIe");
-> >> -
-> >> -		cpufreq_us2e_driver = driver;
-> >
-> > This changes the behavior of the code here as "cpufreq_us2e_driver"
-> > is used in us2e_freq_cpu_exit(). If some failure occurs after a
-> > policy is initialized, and driver doesn't register successfully, then
-> > we won't set the frequency to the lowest index of the table anymore.
+On Tue, Apr 11, 2023 at 08:18:43PM +0800, Chen Yu wrote:
+> test_resume does not work in current kernel when using swapfile for hibernation.
+> This is because the swap device should be openned non-exclusively in test_resume mode.
 > 
-> The setting of the variables “cpufreq_us…_driver” influences the need
-> to reset them to null pointers for the desired exception handling,
-> doesn't it?
+> Patch 1 is a preparation for patch 2 and it turns snapshot_test into a global variable.
+> Patch 2 opens swap device non-exclusively for test_resume mode, and exclusively for manual
+> hibernation resume.
+> 
+> Change since v1:
+> Turn snapshot_test into global variable and do not introduce parameters for swsusp_check()
+> nor load_image_and_restore().
+> 
+> 
+> Chen Yu (2):
+>   PM: hibernate: Turn snapshot_test into global variable
+>   PM: hibernate: Do not get block device exclusively in test_resume mode
+> 
+>  kernel/power/hibernate.c | 12 +++++++++---
+>  kernel/power/power.h     |  1 +
+>  kernel/power/swap.c      |  5 +++--
+>  3 files changed, 13 insertions(+), 5 deletions(-)
+> 
+Looks good to me.
 
-This is what all should be done for these drivers I guess. There is no
-points doing the dance of {de}allocating resources unnecessarily.
+I have verified test_resume on QEMU arm64 and it worked fine with
+these two patches included.
 
-diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
-index 92acbb25abb3..b31fb07f3f39 100644
---- a/drivers/cpufreq/sparc-us2e-cpufreq.c
-+++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
-@@ -20,7 +20,14 @@
- #include <asm/asi.h>
- #include <asm/timer.h>
-
--static struct cpufreq_driver *cpufreq_us2e_driver;
-+static struct cpufreq_driver cpufreq_us2e_driver = {
-+       .name = "UltraSPARC-IIe",
-+       .init = us2e_freq_cpu_init,
-+       .verify = cpufreq_generic_frequency_table_verify,
-+       .target_index = us2e_freq_target,
-+       .get = us2e_freq_get,
-+       .exit = us2e_freq_cpu_exit,
-+};
-
- struct us2e_freq_percpu_info {
-        struct cpufreq_frequency_table table[6];
-@@ -300,9 +307,7 @@ static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
-
- static int us2e_freq_cpu_exit(struct cpufreq_policy *policy)
- {
--       if (cpufreq_us2e_driver)
--               us2e_freq_target(policy, 0);
--
-+       us2e_freq_target(policy, 0);
-        return 0;
- }
-
-@@ -319,39 +324,15 @@ static int __init us2e_freq_init(void)
-        impl  = ((ver >> 32) & 0xffff);
-
-        if (manuf == 0x17 && impl == 0x13) {
--               struct cpufreq_driver *driver;
--
--               ret = -ENOMEM;
--               driver = kzalloc(sizeof(*driver), GFP_KERNEL);
--               if (!driver)
--                       goto err_out;
--
-                us2e_freq_table = kzalloc((NR_CPUS * sizeof(*us2e_freq_table)),
-                        GFP_KERNEL);
-                if (!us2e_freq_table)
--                       goto err_out;
-+                       return -ENOMEM;
-
--               driver->init = us2e_freq_cpu_init;
--               driver->verify = cpufreq_generic_frequency_table_verify;
--               driver->target_index = us2e_freq_target;
--               driver->get = us2e_freq_get;
--               driver->exit = us2e_freq_cpu_exit;
--               strcpy(driver->name, "UltraSPARC-IIe");
--
--               cpufreq_us2e_driver = driver;
-                ret = cpufreq_register_driver(driver);
-                if (ret)
--                       goto err_out;
--
--               return 0;
-+                       kfree(us2e_freq_table);
-
--err_out:
--               if (driver) {
--                       kfree(driver);
--                       cpufreq_us2e_driver = NULL;
--               }
--               kfree(us2e_freq_table);
--               us2e_freq_table = NULL;
-                return ret;
-        }
-
-@@ -360,13 +341,8 @@ static int __init us2e_freq_init(void)
-
- static void __exit us2e_freq_exit(void)
- {
--       if (cpufreq_us2e_driver) {
--               cpufreq_unregister_driver(cpufreq_us2e_driver);
--               kfree(cpufreq_us2e_driver);
--               cpufreq_us2e_driver = NULL;
--               kfree(us2e_freq_table);
--               us2e_freq_table = NULL;
--       }
-+       cpufreq_unregister_driver(cpufreq_us2e_driver);
-+       kfree(us2e_freq_table);
- }
-
- MODULE_AUTHOR("David S. Miller <davem@redhat.com>");
-
--- 
-viresh
+Thanks,
+Pavan
