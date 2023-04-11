@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438D36DDFD0
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 17:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC7A6DDFD4
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 17:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjDKPjf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 11:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S229437AbjDKPkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 11:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDKPjf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 11:39:35 -0400
+        with ESMTP id S229649AbjDKPka (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 11:40:30 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B601D110;
-        Tue, 11 Apr 2023 08:39:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1EFC469F;
+        Tue, 11 Apr 2023 08:40:25 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93718D75;
-        Tue, 11 Apr 2023 08:40:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0396D75;
+        Tue, 11 Apr 2023 08:41:09 -0700 (PDT)
 Received: from [10.57.20.231] (unknown [10.57.20.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDE873F73F;
-        Tue, 11 Apr 2023 08:39:29 -0700 (PDT)
-Message-ID: <9994acf8-e0bc-55ce-9012-e36ef3b8ddab@arm.com>
-Date:   Tue, 11 Apr 2023 17:39:23 +0200
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 693DC3F73F;
+        Tue, 11 Apr 2023 08:40:22 -0700 (PDT)
+Message-ID: <e7d7d337-b9bd-ad7f-ab5e-adb7e8236c19@arm.com>
+Date:   Tue, 11 Apr 2023 17:40:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 05/17] trace: energy_model: Add trace event for EM runtime
- modifications
+Subject: Re: [PATCH 10/17] PM: EM: Add runtime update interface to modify EM
+ power
 Content-Language: en-US
 To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, rafael@kernel.org
@@ -36,9 +36,9 @@ Cc:     dietmar.eggemann@arm.com, rui.zhang@intel.com,
         len.brown@intel.com, pavel@ucw.cz, ionela.voinescu@arm.com,
         rostedt@goodmis.org, mhiramat@kernel.org
 References: <20230314103357.26010-1-lukasz.luba@arm.com>
- <20230314103357.26010-6-lukasz.luba@arm.com>
+ <20230314103357.26010-11-lukasz.luba@arm.com>
 From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20230314103357.26010-6-lukasz.luba@arm.com>
+In-Reply-To: <20230314103357.26010-11-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
@@ -51,94 +51,82 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Hello Lukasz,
-Just a suggestion, maybe it would be good to trace the CPUs affected by
-the modification. It is possible to retrieve this information by going
-to /sys/kernel/debug/energy_model/xxx/cpus, but might be simpler when
-parsing a trace.
+
+On 3/14/23 11:33, Lukasz Luba wrote:
+> Add an interface which allows to modify EM power data at runtime.
+> The new power information is populated by the provided callback, which
+> is called for each performance state. The CPU frequencies' efficiency is
+> re-calculated since that might be affected as well. The old EM memory
+> is going to be freed later using RCU mechanism.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   include/linux/energy_model.h |   8 +++
+>   kernel/power/energy_model.c  | 109 +++++++++++++++++++++++++++++++++++
+>   2 files changed, 117 insertions(+)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index a616006a8130..e1772aa6c843 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -202,6 +202,8 @@ struct em_data_callback {
+>   
+>   struct em_perf_domain *em_cpu_get(int cpu);
+>   struct em_perf_domain *em_pd_get(struct device *dev);
+> +int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
+> +			      void *priv);
+>   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>   				struct em_data_callback *cb, cpumask_t *span,
+>   				bool microwatts);
+> @@ -382,6 +384,12 @@ static inline int em_pd_nr_perf_states(struct em_perf_domain *pd)
+>   {
+>   	return 0;
+>   }
+> +static inline
+> +int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
+> +			      void *priv)
+> +{
+> +	return -EINVAL;
+> +}
+>   #endif
+>   
+>   #endif
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 87962b877376..e0e8fba3d02b 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+
+[snip]
+
+> @@ -531,9 +628,21 @@ void em_dev_unregister_perf_domain(struct device *dev)
+>   
+>   	tmp = pd->runtime_table;
+>   
+> +	/*
+> +	 * Safely destroy runtime modifiable EM. By using the call
+> +	 * synchronize_rcu() we make sure we don't progress till last user
+> +	 * finished the RCU section and our update got applied.
+> +	 */
+>   	rcu_assign_pointer(pd->runtime_table, NULL);
+>   	synchronize_rcu();
+>   
+> +	/*
+> +	 * After the sync no updates will be in-flight, so free the old
+> +	 * memory.
+> +	 */
+> +	if (tmp->state != pd->table)
+> +		kfree(tmp->state);
+> +
+
+NIT: I think that the call 'kfree(pd->default_table->state)' which is done in
+the patch:
+   PM: EM: Refactor struct em_perf_domain and add default_table
+should be done here, otherwise this bit of memory is not freed.
 
 Regards,
 Pierre
 
-On 3/14/23 11:33, Lukasz Luba wrote:
-> The Energy Model (EM) supports runtime modifications. Track the changes
-> in order to do post-processing analysis. Don't use arrays in the trace
-> event, since they are not properly supported by the tools. Instead use
-> simple "unroll" with emitting the trace event for each EM array entry
-> with proper ID information. The older debugging mechanism which was
-> the simple debugfs which dumping the EM content won't be sufficient for
-> the modifiable EM purpose. This trace event mechanism would address the
-> needs.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->   include/trace/events/energy_model.h | 46 +++++++++++++++++++++++++++++
->   kernel/power/energy_model.c         |  3 ++
->   2 files changed, 49 insertions(+)
->   create mode 100644 include/trace/events/energy_model.h
-> 
-> diff --git a/include/trace/events/energy_model.h b/include/trace/events/energy_model.h
-> new file mode 100644
-> index 000000000000..f70babeb5dde
-> --- /dev/null
-> +++ b/include/trace/events/energy_model.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM energy_model
-> +
-> +#if !defined(_TRACE_ENERGY_MODEL_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_ENERGY_MODEL_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(em_perf_state,
-> +	TP_PROTO(const char *dev_name, int nr_perf_states, int state,
-> +		 unsigned long ps_frequency, unsigned long ps_power,
-> +		 unsigned long ps_cost, unsigned long ps_flags),
-> +
-> +	TP_ARGS(dev_name, nr_perf_states, state, ps_frequency, ps_power, ps_cost,
-> +		ps_flags),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, dev_name)
-> +		__field(int, num_states)
-> +		__field(int, state)
-> +		__field(unsigned long, frequency)
-> +		__field(unsigned long, power)
-> +		__field(unsigned long, cost)
-> +		__field(unsigned long, flags)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, dev_name);
-> +		__entry->num_states = nr_perf_states;
-> +		__entry->state = state;
-> +		__entry->frequency = ps_frequency;
-> +		__entry->power = ps_power;
-> +		__entry->cost = ps_cost;
-> +		__entry->flags = ps_flags;
-> +	),
-> +
-> +	TP_printk("dev_name=%s nr_perf_states=%d state=%d frequency=%lu power=%lu cost=%lu flags=%lu",
-> +		__get_str(name), __entry->num_states, __entry->state,
-> +		__entry->frequency, __entry->power, __entry->cost,
-> +		__entry->flags)
-> +);
-> +#endif /* _TRACE_ENERGY_MODEL_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 937e98a71ed5..3b778743ba89 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -17,6 +17,9 @@
->   #include <linux/sched/topology.h>
->   #include <linux/slab.h>
+
+>   	kfree(tmp);
 >   
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/energy_model.h>
-> +
->   /*
->    * Mutex serializing the registrations of performance domains and letting
->    * callbacks defined by drivers sleep.
+>   	kfree(dev->em_pd->table);
