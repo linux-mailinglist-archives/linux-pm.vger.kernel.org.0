@@ -2,116 +2,301 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D516DD677
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 11:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2956DD841
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Apr 2023 12:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjDKJUx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Apr 2023 05:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        id S229601AbjDKKsc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Apr 2023 06:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDKJUv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 05:20:51 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218D1FC1;
-        Tue, 11 Apr 2023 02:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681204850; x=1712740850;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rG97cuIKZfWarCKMEtGQ4BtW1PVd9E6YqLa6yI8Cg34=;
-  b=NgxTDwpYjhLLjxGj5B202GgPn6ZEvv0eQl0gIxS6PaNvP7ABGFlQ8TXh
-   NnlVgUWgb+N446r3LGi7M2bYbzu+biiRt5ANQvB0mtmiIpkko9l2a4Z5P
-   mezMhzRAdlZQ27LWObAFZ0zL2Q3sLynXyGtGnvGp0QyNXgBvwusOICG1l
-   mamOE3nIdUUvQxe8txx4cOI84ctfIyDUlF8+VYCr1UBWZw4/1IEtx/Pc1
-   Bc+EbZJBpnW6Nqd0CzzKx53QwEKtcYw5+XSnBYOh3feEOol4x/wapGrdy
-   dpkeXZgrMPiok/LUF02vE1Rbg+hzWptS14cui26xpUiMf/78jobQ5OfSK
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
-   d="asc'?scan'208";a="146441855"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 02:20:49 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 02:20:49 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 02:20:46 -0700
-Date:   Tue, 11 Apr 2023 10:20:31 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Mason Huo <mason.huo@starfivetech.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v1 2/3] cpufreq: dt-platdev: Add JH7110 SOC to the
- allowlist
-Message-ID: <20230411-rewire-outlook-a5fb631fb635@wendy>
-References: <20230411083257.16155-1-mason.huo@starfivetech.com>
- <20230411083257.16155-3-mason.huo@starfivetech.com>
+        with ESMTP id S229635AbjDKKsb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Apr 2023 06:48:31 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9833588
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 03:48:28 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id q29so6922542wrc.3
+        for <linux-pm@vger.kernel.org>; Tue, 11 Apr 2023 03:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681210107; x=1683802107;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SVDWJnAAwrepPupyFSVjoWUaB4nQWZPWtKMm3U8io/I=;
+        b=j3zDcU+iAPsrfADKIV+Gr7vETui9jC7A8eVxsZZFfekHSCqKr5qKn2cka4OmyI1MR8
+         bOjUAZp7lkvRFZYFUfUjp+T9sgjgpWNQCmynj/g05FUJjlT+YMGuni8BlbRvqW4loNJk
+         5BePMbkBj5b6sQSh7FNtvOPAvbKDwQ5KB2BAikOvZtfjltOEman03qRZRB94AmuSh4pP
+         OedN746i/TErka7/ygpzf0jURljow2rPwuMW4k0q/YFlWSf3vC++mDuckRaoySLkwe7K
+         ncoKhMwvPEo28Fmm0m71PeA0DgrKS0cgaeZ6n+s77D/iebA8x1CvTHYZJPVCSTipDZfe
+         qUng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681210107; x=1683802107;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SVDWJnAAwrepPupyFSVjoWUaB4nQWZPWtKMm3U8io/I=;
+        b=dBCE1CLQsZbHxg1vmxBLKWZWD1c5+HIIUZcKtnoU7GtXCCojI9Vz6jV2bt8MS/6ZHn
+         XngOWcZF2Sej/JojzMIIhXUKyaS8jqudU1cqDP6erOQtnbDq3jrmG8rRcGxLM3P6qhiM
+         I2JXIf4gTT5+KjEds9eozFyN5UBy5eWDd3amNE4xa338eJWNEOKkvByuNNGr/mmijr6K
+         TOPfJ+4Wo6BuP4F97fxNhz2TbIAr0alnYpujzfq1pXZOYN+PwkNXkJyOSPeMaAHXM2NN
+         NN20gY4AErwp8tjxUpCoM2uNgDTiqU6brLkRSQHdGG0mHwLx3z+p4OddQhVfdkWYW3TS
+         jqvA==
+X-Gm-Message-State: AAQBX9d/Ess8xrgtNxHtY12OyZr9fs5iJ1bFf8k2dGton6d918qWKhLW
+        ygqecokeupgx464+ARHrqVpH4g==
+X-Google-Smtp-Source: AKy350YDrTuMpbPE+jkPqv88NXCrKsMGooMWeJZ4PZE9iPbtrilSMNP5EAs7CfJQWp29ynGqvBXXcw==
+X-Received: by 2002:a5d:6a88:0:b0:2c5:4ca3:d56c with SMTP id s8-20020a5d6a88000000b002c54ca3d56cmr9487181wru.0.1681210106957;
+        Tue, 11 Apr 2023 03:48:26 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:2611:592:3b9e:d2ae? ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
+        by smtp.googlemail.com with ESMTPSA id m14-20020a5d6a0e000000b002f01cb41b0bsm6564780wru.60.2023.04.11.03.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 03:48:26 -0700 (PDT)
+Message-ID: <c93d583d-e2b8-e8dd-cc94-cd77ecb2cab1@linaro.org>
+Date:   Tue, 11 Apr 2023 12:48:25 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/DkWhqOrZbaY7lnw"
-Content-Disposition: inline
-In-Reply-To: <20230411083257.16155-3-mason.huo@starfivetech.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
+ usage
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Johan Hovold <johan@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+ <Y9J4WAFyXyV/nqlG@orome> <20230210131703.GF175687@linaro.org>
+ <Y+ZQC85TM+O8p8gQ@orome> <365c469b-22f6-fb26-1872-5e9a5079af5d@linaro.org>
+ <Y+Ze4tAM6Jpszq/3@orome>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <Y+Ze4tAM6Jpszq/3@orome>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---/DkWhqOrZbaY7lnw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 11, 2023 at 04:32:56PM +0800, Mason Huo wrote:
-> Add the compatible strings for supporting the generic
-> cpufreq driver on the StarFive JH7110 SoC.
->=20
-> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
-> ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufr=
-eq-dt-platdev.c
-> index e85703651098..a1ac955aa7e2 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -92,6 +92,7 @@ static const struct of_device_id allowlist[] __initcons=
-t =3D {
-> =20
->  	{ .compatible =3D "xlnx,zynq-7000", },
->  	{ .compatible =3D "xlnx,zynqmp", },
-> +	{ .compatible =3D "starfive,jh7110", },
+Hi Thierry,
 
-This struct looks to be in alphabetical order with a blank line between
-vendors.
+did you have time to look at this ?
 
---/DkWhqOrZbaY7lnw
-Content-Type: application/pgp-signature; name="signature.asc"
+This driver is the only one using get_thermal_instance() and I would 
+like to remove this function along with the thermal_core.h inclusion in 
+this driver
 
------BEGIN PGP SIGNATURE-----
+Thanks
+   -- Daniel
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDUmXwAKCRB4tDGHoIJi
-0q1CAP4hP0FaG1N8fWLK8YeBOG1dPrmqZ2GiASDCJ033kKDRsgEA+uyakkXQHuIE
-C3ejb+nnlELB4J8+dRseORPc4E0dQQM=
-=v6J5
------END PGP SIGNATURE-----
 
---/DkWhqOrZbaY7lnw--
+On 10/02/2023 16:12, Thierry Reding wrote:
+> On Fri, Feb 10, 2023 at 03:36:59PM +0100, Daniel Lezcano wrote:
+>> On 10/02/2023 15:09, Thierry Reding wrote:
+>>> On Fri, Feb 10, 2023 at 02:17:03PM +0100, Daniel Lezcano wrote:
+>>>> Hi Thierry,
+>>>>
+>>>> On Thu, Jan 26, 2023 at 01:55:52PM +0100, Thierry Reding wrote:
+>>>>> On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
+>>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>> does anyone know what is the purpose of the get_thermal_instance() usage in
+>>>>>> this code:
+>>>>>>
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
+>>>>>>
+>>>>>> The driver is using a function which is reserved for the thermal core. It
+>>>>>> should not.
+>>>>>>
+>>>>>> Is the following change ok ?
+>>>>>>
+>>>>>> diff --git a/drivers/thermal/tegra/soctherm.c
+>>>>>> b/drivers/thermal/tegra/soctherm.c
+>>>>>> index 220873298d77..5f552402d987 100644
+>>>>>> --- a/drivers/thermal/tegra/soctherm.c
+>>>>>> +++ b/drivers/thermal/tegra/soctherm.c
+>>>>>> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
+>>>>>> thermal_zone_device *tz, int trip
+>>>>>>    				continue;
+>>>>>>
+>>>>>>    			cdev = ts->throt_cfgs[i].cdev;
+>>>>>> -			if (get_thermal_instance(tz, cdev, trip_id))
+>>>>>> -				stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>>>> -			else
+>>>>>> +			stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>>>> +			if (!stc)
+>>>>>>    				continue;
+>>>>>>
+>>>>>>    			return throttrip_program(dev, sg, stc, temp);
+>>>>>> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
+>>>>>> *dev,
+>>>>>>    			continue;
+>>>>>>
+>>>>>>    		cdev = ts->throt_cfgs[i].cdev;
+>>>>>> -		if (get_thermal_instance(tz, cdev, trip))
+>>>>>> -			stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>>>> -		else
+>>>>>> +
+>>>>>> +		stc = find_throttle_cfg_by_name(ts, cdev->type);
+>>>>>> +		if (!stc)
+>>>>>>    			continue;
+>>>>>>
+>>>>>>    		ret = throttrip_program(dev, sg, stc, temperature);
+>>>>>
+>>>>> There's a small difference in behavior after applying this patch. Prior
+>>>>> to this I get (on Tegra210):
+>>>>>
+>>>>> 	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
+>>>>> 	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
+>>>>> 	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
+>>>>> 	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
+>>>>> 	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
+>>>>> 	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
+>>>>> 	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
+>>>>> 	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
+>>>>> 	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
+>>>>>
+>>>>> and after these changes, it turns into:
+>>>>>
+>>>>> 	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
+>>>>> 	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
+>>>>> 	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
+>>>>> 	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
+>>>>> 	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
+>>>>> 	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
+>>>>> 	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
+>>>>> 	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
+>>>>> 	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttle for pll to 103000
+>>>>> 	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when pll reaches 103000 mC
+>>>>> 	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
+>>>>> 	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttle for mem to 103000
+>>>>> 	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when mem reaches 103000 mC
+>>>>>
+>>>>> The "programming throttle ..." messages are something I've added locally
+>>>>> to trace what gets called. So it looks like for "pll" and "mem" thermal
+>>>>> zones, we now program trip points whereas we previously didn't.
+>>>>
+>>>> The DT descriptioni (tegra210.dtsi) says one thing and the implementation says
+>>>> something else.
+>>>>
+>>>> If we refer to the PLL description, there is one 'hot' trip point and
+>>>> one 'critical' trip point. No polling delay at all, so we need the
+>>>> interrupts.
+>>>>
+>>>> Logically, we should set the 'hot' trip point first, when the trip
+>>>> point is crossed, we setup the next trip point, which is the critical.
+>>>>
+>>>> With these two trip points, the first one will send a notification to
+>>>> the userspace and the second one will force a shutdown of the
+>>>> system. For both, no cooling device is expected.
+>>>
+>>> I think the intention here is to use the soctherm's built-in throttling
+>>> mechanism as a last resort measure to try and cool the system down. I
+>>> suppose that could count as "passive" cooling, so specifying it as the
+>>> cooling device for the "passive" trip point may be more appropriate.
+>>>
+>>> The throttling that happens here is quite severe, so we don't want it to
+>>> happen too early. I would expect that our "passive" trip point shouldn't
+>>> be a lot less than the "hot" temperature. I suspect that's the reason
+>>> why the "hot" trip point was reused for this.
+>>>
+>>> I'm also beginning to think that we should just not expose the soctherm
+>>> throttling as a cooling device and instead keep it internal to the
+>>> soctherm driver entirely.
+>>
+>> Yes, and perhaps separate it from the sensor driver.
+>>
+>> There is a similar hardware limiter for the qcom platform [1]. The
+>> description in the device tree is separated from the sensor and the binding
+>> has temperatures to begin the mitigation [2].
+> 
+> The hardware throttling is controlled using registers that are part of
+> the SOCTHERM block, so we can't separate it from the sensor driver. I
+> don't think that's much of a problem, though. The code for this already
+> exists in the current soctherm driver, so it's just a matter of removing
+> the cooling device registration code.
+> 
+>>
+>> There is no trip point associated as those are related to the in-kernel
+>> mitigation.
+>>
+>> If this mitigation is a heavy mitigation, above what the kernel is able to
+>> do with a passive cooling device. It would make sense to just have
+>> configured outside of the thermal zone.
+>>
+>> So the configuration would be something like:
+>>
+>> myperformance_limite {
+>> 	@ = <0x...>
+>> 	temperature_limit = 95000;
+>> };
+>>
+>> thermal_zone {
+>>
+>> 	cpu : {
+>> 		trips {
+>> 			alert {
+>> 			temperature = 90000;
+>> 			hysteresis = 2000;
+>> 			type = passive;
+>> 			};
+>>
+>> 			hot {
+>> 			temperature = 97000;
+>> 			type = hot;
+>> 			};
+>>
+>> 			critical {
+>> 			temperature = 100000;
+>> 			hysteresis = 2000;
+>> 			type = critical;
+>> 			};
+>>
+>> 			cooling-maps = <&cpu NO_LIMIT NO_LIMIT>;
+>> 		};
+>> 	}
+>> };
+>>
+>> The behavior will be a passive mitigation, if it fails the hardware limiter
+>> will take over, if that fails then hot sends a notification to the userspace
+>> (giving the opportunity to hotplug a cpu or kill a task or suspend), if that
+>> fails then shutdown.
+> 
+> Yeah, that's exactly what I had in mind.
+> 
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/qcom/lmh.c?h=thermal/bleeding-edge
+>>
+>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845.dtsi?h=thermal/bleeding-edge#n3922
+>>
+>> [ ... ]
+>>
+>>> On the DT side, I think most of the cooling maps can be cleaned up. We
+>>> can remove the entries for "critical" and "hot" trip points if the
+>>> driver unconditionally programs the automated throttling.
+>>
+>> You may want to keep the critical trip points at least. Even if the hardware
+>> limiter is certainly very effective, having the critical point is another
+>> fail safe allowing to gracefully shutdown the system before a wild hardware
+>> reset.
+> 
+> Yeah. What I meant was to remove only the cooling map entries for
+> critical and hot since they would be unused. We absolutely want to
+> keep the trip points themselves around to make sure the system will
+> forcefully shutdown as a last resort.
+> 
+> Thierry
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
