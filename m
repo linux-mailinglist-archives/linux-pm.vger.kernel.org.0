@@ -2,195 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C186DFE95
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Apr 2023 21:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03256DFF0E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Apr 2023 21:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDLTRH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Apr 2023 15:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S229962AbjDLTt4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Apr 2023 15:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjDLTRG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Apr 2023 15:17:06 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE695FC2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Apr 2023 12:17:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id gw13so7192701wmb.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Apr 2023 12:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681327023; x=1683919023;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JPqy9NofiPKg/4vHJj/WtlvhzS9v4H9kbl58UXMbQuE=;
-        b=Jpy2XD4NlDub++eB/sdm7Uc8d/TVzKRPTE2ZaxVIGQt3OODKiNGQeplX2yIeFdQq1b
-         7OcxziQZI0q+HJoYrg9wW4KplBKmAJkMmsi44toIY2omQq/2ChlnUwQobkrRYUmRjiqN
-         oyFXzLddfHqHhywZ0k0mU2E1EmdZ/8o57GXjcNcFCLfTPTChLlFYYd2olUtnohg/uGlK
-         mlBuFcS5t7vDgKeW4fCp5vD5tW+XOIcGRCmBg99jMQTCbresgITPNy7eDrnlCfHUE3/r
-         5MKkTsIioyB8IDnPPb9SobifKD+9iiSdsXokk7VuwMZ/rmEiMahaFxoL8jLxoWy1AEOj
-         xjbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681327023; x=1683919023;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPqy9NofiPKg/4vHJj/WtlvhzS9v4H9kbl58UXMbQuE=;
-        b=jEhaAvpECuCUdC2OvNxN5D+xkA+8N5anDEQqOlaP8qW7EOOiMNt2nQ+sCynBFjyife
-         3fYBCZ2O/zFlWL2bK1FRHOyuWdEg1bF3n2S3jdHQqqO2k2WnzvW5R2jYiVA7fdy6NeI5
-         YXpUpDJ5NZrz+wc257mVtWjotMF4QdDry59YqqIHK6d6Z+P8YX5WucrU1DzZW4/k7LON
-         jhIbtPz1Jr2iP2HEvdkWMMczTzB9YROo0/ZAJJbown69X2LTyrCl44rIbFVWCb6raYA3
-         cB5+DKcG2NjiTsbPNeWwgdVGdCv08/03g+PzfhEDNB9GvUmVwCdB2hGBv1dLl5WyvmFJ
-         URzg==
-X-Gm-Message-State: AAQBX9dEa6q/N+zHwdp+XeTvrbjnly6PSC/kYIjl9sfbqxkax0hdVAFW
-        r9Ig4Tk4FHzbzgPMQfYxnqAHDV94JgZWNLitOAc=
-X-Google-Smtp-Source: AKy350ZL4VgPzt43cnlTVFc5Uel/WGZIjdR9vAPkrTKeVbcjcFhzd5NJpbMHzJ80U2+2zy43osO9Ig==
-X-Received: by 2002:a05:600c:215a:b0:3f0:9cc5:27ec with SMTP id v26-20020a05600c215a00b003f09cc527ecmr2447602wml.41.1681327023126;
-        Wed, 12 Apr 2023 12:17:03 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6418:c878:b0e:d11b? ([2a05:6e02:1041:c10:6418:c878:b0e:d11b])
-        by smtp.googlemail.com with ESMTPSA id z1-20020a5d6541000000b002f02dbddc26sm9995496wrv.68.2023.04.12.12.17.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 12:17:02 -0700 (PDT)
-Message-ID: <cac6faa7-91ac-1fbb-8cdf-670422585cfc@linaro.org>
-Date:   Wed, 12 Apr 2023 21:17:02 +0200
+        with ESMTP id S229819AbjDLTto (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Apr 2023 15:49:44 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AD07AB7;
+        Wed, 12 Apr 2023 12:49:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KdMnlXX8ap9tVJDkJGUOwjLPIl+QeD3pGAqLCKlo6taZcw23wOqed1ejGPZY1c3sDcT53Jfhnxrlq83XdmyOhGnPDKkSdrw9nq26W2qNHsBu9KNw5bZEHQeN03xtik/LyzQoLw3A583VyQSXZqtosj9DA/rPScCs5+wi5hKMbav3G3agcnEGbLaaR1bJpnx0ECcf0+SOimeYyo9rEIDpM78qlizHS84ApG9FjWZjCfKd1iikZemmvGxrIebuCUlbeAZxgfShWQuzyuWbARA7oSqrEnSyGp1qFAXXBkhqNHb8wQwRK7k8QGWemlhaV6WO/cda0jtW4112/WFTufsEdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Jze6VODEdn8Ll9pM/C4zzNUmHbotNqnPcxPU6N5o74=;
+ b=ITGpcjipiVQuWusVfj3kZYSkQjrBmCS8v7O0GJffA+bD7YqDfT0vQUEz0XjOkYROEZi7yJpdyEij3jS3TrOSnSFJeP1hJKH5j9v2ee3EZEJgz2KT7EAma10pl0dHFJYhmlHEWokRcCLFyR9kksC2HPAEk8ga07U9Rtkop7jqknW+2g15DJSyCOUGCLxBH1bPtWQNb0kqoTGiRPKdv1QNrtC1Ui8ce1uv8Iw+IMBTa9t718kltLI3UGTSxLlHfGphKL7o6MjCF8TYP28nNvITPf+b3a/wqP0V527KneYbMUa/xjWkWH6mSL67NIVxS2fXR8z17wt1xiuqYIzqoMBftA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Jze6VODEdn8Ll9pM/C4zzNUmHbotNqnPcxPU6N5o74=;
+ b=44RJfxPHjT0GlB58t+qoJcTC6NF1HvYZZ7RmTUxB4hIn6oKg8XCCL1SvqI4L6YBwGbc+Ft2aAdtrhcju0YElaGvzCCCjtjvlpN29YHGFXGtX/0qa0+7AsmtOgzIp/SnG52KWa6UK/uEzngpnUW/qgLYTW8HKniFKcQ9FeJ71/JM=
+Received: from DM6PR07CA0048.namprd07.prod.outlook.com (2603:10b6:5:74::25) by
+ MN0PR12MB6003.namprd12.prod.outlook.com (2603:10b6:208:37f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 12 Apr
+ 2023 19:49:33 +0000
+Received: from DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:74:cafe::3d) by DM6PR07CA0048.outlook.office365.com
+ (2603:10b6:5:74::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
+ Transport; Wed, 12 Apr 2023 19:49:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT113.mail.protection.outlook.com (10.13.173.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.31 via Frontend Transport; Wed, 12 Apr 2023 19:49:33 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 12 Apr
+ 2023 14:49:32 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Box David E <david.e.box@intel.com>, <jstultz@google.com>,
+        <pavel@ucw.cz>, <svenva@chromium.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <Shyam-sundar.S-k@amd.com>, <rrangel@chromium.org>,
+        Jain Rajat <rajatja@google.com>, <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Wed, 12 Apr 2023 14:49:12 -0500
+Message-ID: <20230412194917.7164-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
- <20230410205305.1649678-3-daniel.lezcano@linaro.org>
- <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
- <c2581726-3e02-104c-f2ac-55268470d2c8@linaro.org>
- <CAJZ5v0i65XivddWvP9OSuXePwbeWYsgtOr_GB=BBN_jwsWarjQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0i65XivddWvP9OSuXePwbeWYsgtOr_GB=BBN_jwsWarjQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT113:EE_|MN0PR12MB6003:EE_
+X-MS-Office365-Filtering-Correlation-Id: 51a049b1-9fef-4098-2736-08db3b8f09cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8rQ4ST1g4quhSBCDhgG+/zVe5ttqKnJTN+y/xgdCz9PqB4GgzhwJnRk2wkX1gtD0TpqXm3tOMm6nawYwTvpB8TaVLFGJx1gvur6JROHYgw/C/GCA1sEYLXRZB7wZNatICsdnzgpH3QfzrLQXcdTexp0BhuBlNhq8nk/GG1qaKZTg1LyXtVsYH+QsleR4kbFzVfBsJ65sMCNYjh3ecGdqv+1C8qelHuaQmU17TnkXAS+X7ZoLq/VSG+oHh+QE6B940RC5y6PO5O9PQxqwAQII1t2GPAa1oyVnHlNgU4L7I2yBboF2OhlWa5V+S0UUo7/FcEJKmhpalhhpBZiaSypZnSQdk41zPCqT4j67QZ9dPYgIqDXfINScZySkj8+p7PM1gL3mhsya5gW91RGWJQlwPB5mkwczEnqh4pZ1U5htlks97DC03OISevPNKEID1deitr71OWU5yWouA00+sBHa3DrcynIVtjGJPrOaqKbnfwEIdExSIwHq3s9h59HGeG9oOEJN7M7fROfDnoE+TIJvbJCqqPa5DxuvKZNEeNlSID7ScBtG79V4W6Pg+aSGCossQwJdbWgU6kEisncZggbsF17U3+UcJ+0NMITq/AnTnM9ivXKF8OAJi7E5dWBzFzLe9FAPe5a+/6+myH6d975dc55L2yVAJWqXiiB376yr/SG3QgF1RIUwM+W+tfDIfL5+cb8FnydyWfxP/r4z5OlHPxqPsJsDHyNeowkcOq54y50=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(336012)(426003)(1076003)(26005)(40480700001)(70586007)(70206006)(36756003)(2906002)(6666004)(83380400001)(82310400005)(47076005)(7696005)(2616005)(186003)(16526019)(36860700001)(4326008)(40460700003)(44832011)(110136005)(54906003)(7416002)(86362001)(5660300002)(8676002)(8936002)(81166007)(478600001)(356005)(41300700001)(316002)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 19:49:33.3012
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51a049b1-9fef-4098-2736-08db3b8f09cc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6003
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/04/2023 20:56, Rafael J. Wysocki wrote:
-> On Tue, Apr 11, 2023 at 10:20 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 11/04/2023 20:19, Rafael J. Wysocki wrote:
->>> On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> There are still some drivers needing to play with the thermal zone
->>>> device internals. That is not the best but until we can figure out if
->>>> the information is really needed, let's encapsulate the field used in
->>>> the thermal zone device structure, so we can move forward relocating
->>>> the thermal zone device structure definition in the thermal framework
->>>> private headers.
->>>
->>> I'm not really sure why this is needed, so please explain.
->>
->> Some drivers are accessing tz->device, that implies they have the
->> knowledge of the thermal_zone_device structure but we want to
->> self-encapsulate this structure and reduce the scope of the structure to
->> the thermal core only.
->>
->> The ACPI and the Menlon drivers are the drivers accessing tz->device.
->>
->> By adding this wrapper, these drivers do no longer need the thermal zone
->> device structure definition.
-> 
-> So you want to move the definition of struct thermal_zone_device from
-> include/linux/thermal.h into a local header in drivers/thermal/ and
-> make it entirely local to the thermal core IIUC.
-> 
-> Which would be forcing the callers of
-> thermal_zone_device_register_with_trips() (and friends) to use
-> pointers to a data type that's not completely defined (from their
-> perspective), but they would still have access to the trips array
-> passed to that function.
-> 
-> That doesn't sound particularly consistent and what's the purpose of doing it?
-The first thing is prevent drivers tampering with the thermal core 
-structure internals, so moving the structures from 
-include/linux/thermal.h to drivers/thermal/thermal_core.h is one step to 
-this direction.
+An important part of validating that s0ix worked properly is to check how
+much of a cycle was spent in a hardware sleep state.
 
-As you point it, drivers can still do things with the trip arrays passed 
-as parameter. For that the idea is to do the same as:
+The reporting of hardware sleep is a mix of kernel messages and sysfs
+files that vary from vendor to vendor. Collecting this information
+requires extra information on the kernel command line or fetching from
+debugfs.
 
-https://lore.kernel.org/all/20230404075138.2914680-3-daniel.lezcano@linaro.org/
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
 
-So the array is an initialization data and it will stay private to the 
-thermal core code.
+Userspace can fetch this information and compare it against the duration
+of the cycle to allow determining residency percentages and flagging
+problems.
 
-In order to update the trip points, we add a 
-thermal_zone_device_trips_update() function which does a kmemdup, 
-pointer switch, kfree of the previous trips and a notification.
+Mario Limonciello (4):
+  PM: Add sysfs files to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
 
-I addressed that in response to your ACPI series questions:
-
-https://lore.kernel.org/all/38a5a6e0-2af8-8365-b20e-8494a4efcb0c@linaro.org/
-
-Does it make sense with this additional information ?
+ Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
+ drivers/platform/x86/amd/pmc.c        |  6 +--
+ drivers/platform/x86/intel/pmc/core.c | 16 ++++----
+ drivers/platform/x86/intel/pmc/core.h |  2 -
+ include/linux/suspend.h               |  8 ++++
+ kernel/power/main.c                   | 59 +++++++++++++++++++++------
+ 6 files changed, 95 insertions(+), 25 deletions(-)
 
 
->>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>> ---
->>>>    drivers/thermal/thermal_core.c | 6 ++++++
->>>>    include/linux/thermal.h        | 1 +
->>>>    2 files changed, 7 insertions(+)
->>>>
->>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->>>> index c5025aca22ee..842f678c1c3e 100644
->>>> --- a/drivers/thermal/thermal_core.c
->>>> +++ b/drivers/thermal/thermal_core.c
->>>> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(thermal_zone_device_id);
->>>>
->>>> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
->>>> +{
->>>> +       return &tzd->device;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(thermal_zone_device);
->>>> +
->>>>    /**
->>>>     * thermal_zone_device_unregister - removes the registered thermal zone device
->>>>     * @tz: the thermal zone device to remove
->>>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->>>> index 82ddb32f9876..87837094d549 100644
->>>> --- a/include/linux/thermal.h
->>>> +++ b/include/linux/thermal.h
->>>> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
->>>>    void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
->>>>    const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
->>>>    int thermal_zone_device_id(struct thermal_zone_device *tzd);
->>>> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
->>>>
->>>>    int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
->>>>                                        struct thermal_cooling_device *,
->>>> --
->>>> 2.34.1
->>>>
->>
->> --
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
->>
-
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
