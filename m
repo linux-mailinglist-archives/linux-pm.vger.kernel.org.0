@@ -2,135 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD74E6E0E51
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 15:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86826E1065
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 16:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjDMNRZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 09:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S229904AbjDMOwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 10:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjDMNRX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 09:17:23 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F5613E
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 06:17:22 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id o29so3148518wro.0
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 06:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1681391840; x=1683983840;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T9pQrW38n6jH3lAaxTQPjhAzjBmtv9LEC6ladjD0geM=;
-        b=S7JJaJQUgf3JJMM3lkyNLH6OBAtESwaKX10aoRHX2UHUKIe7kHl71MFD9fMexZwcVm
-         js9oqmJK84FHyccqwePq0s81Xs5Llc99VqL3yJa89LysqOxb1TZ+o3XkJccAr7UM5kHg
-         uYE3J2LaMLkTIOlZ25D49b24vuz3tJIRIxgV9XhWFJ75pXshAWWjwVgi91cKDUm/QrTP
-         a6NajHr9w2FG23SQm9u5M7KCsaQRpXgGnKAgUi+Aq/dVSLzNFaWS/L3gwCXtc1mnvZCX
-         bWuEGGuYFy4SoBkZ/rla4B0v5bSJLjOwo7OhIiJXgHBsDJ7e4xKuw4iYhYHaWO/va+B9
-         RYCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681391840; x=1683983840;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T9pQrW38n6jH3lAaxTQPjhAzjBmtv9LEC6ladjD0geM=;
-        b=TjfQqZb9Y+VOlq0p/ooWx+JqUy//i7x3mVfEmGyMPfaF0fdJUCoFjvkV673uJoyZYx
-         pVFH8c0+stVbbXu0lAw1nxVcWVISP9eT45ODSovaUvHQ4xtlQS/nkxE7+nADDS02yVRR
-         QqsOJ4fk8i4eR9QQPwOwEl7GXtdj3I3XABHZOkk0139tzyrUYHhboGbsQeYcYwr9Q2ID
-         I3tIyl37lLjkR4Yn9woXtHUdqhZDUFCGjyhlVBEZTTTUZeErFOk4wwfduDn25n49WcL1
-         5zh7k9yM9BPcb0uxgOhdrNnHo6lOZE6lo89GxTU6EgyFY75xj73+fcMi1PcHzgfu6z28
-         ZqNw==
-X-Gm-Message-State: AAQBX9coDIsusU5yzdgfWH99Zl9J+PSx9VDVNcLNpIKTTQRE7h8/jRka
-        GhoppUn6ag434+cPKrJOn1Ohqw==
-X-Google-Smtp-Source: AKy350ZyvWh6DeTmvqd0RAb8r3WiahK7Z/XKVX0rCaM+oS4kQ7JeGN7DdSu52htk6753FAxZuxYjsQ==
-X-Received: by 2002:adf:f04c:0:b0:2cf:e34c:a229 with SMTP id t12-20020adff04c000000b002cfe34ca229mr1797769wro.8.1681391840666;
-        Thu, 13 Apr 2023 06:17:20 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:814c:fc8a:da02:39ad])
-        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003f04646838esm1796400wmh.39.2023.04.13.06.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 06:17:20 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 4/4] arm64: dts: qcom: sa8775p: pmic: add the sdam_0 node
-Date:   Thu, 13 Apr 2023 15:17:05 +0200
-Message-Id: <20230413131705.3073911-5-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230413131705.3073911-1-brgl@bgdev.pl>
-References: <20230413131705.3073911-1-brgl@bgdev.pl>
+        with ESMTP id S229564AbjDMOwT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 10:52:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D0D99;
+        Thu, 13 Apr 2023 07:52:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B847263F45;
+        Thu, 13 Apr 2023 14:52:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6790DC4339B;
+        Thu, 13 Apr 2023 14:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681397537;
+        bh=QG9Ja6Qfdja3+F6aw1CtqZqw6k9MQzX8MhhvMSkoqxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AZURpi2bwBdV5kPciUgesKGZsSWm09HGKZW2sB6s/37Hig0Fg4lC6lNwxgFSWisgE
+         GP20+mS3rkZioj3dVnG+tpGUZLEMA1XZiBQ6el5iF3REiqkQYmmPdJUzkFr7k4hHcD
+         MhbAnLnxBJyeKIqpLEKg9ebIKMlR2PJ6McrEqfoTB7yTfzhzglf/Dy82wUF7C1qW9l
+         7IyCU5EdCKX476SshiOCjLyarFivvPnjBZXOseNMtjjQItfglcM7llqnIIP9q+dPdM
+         WzpTxLuNMf8SJJqK94R7iK3EiMoNzAFuu547JnrLBoIcEkq0ngKGmOBX88IUbWHbTr
+         WvlJ7QW67jVaA==
+Date:   Thu, 13 Apr 2023 16:52:08 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v6 8/9] PCI: tegra194: Add interconnect support in
+ Tegra234
+Message-ID: <ZDgXGCJQAHpLTw9S@lpieralisi>
+References: <20230411110002.19824-1-sumitg@nvidia.com>
+ <20230411110002.19824-9-sumitg@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411110002.19824-9-sumitg@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Parikshit Pareek <quic_ppareek@quicinc.com>
+On Tue, Apr 11, 2023 at 04:30:01PM +0530, Sumit Gupta wrote:
+> Add support to request DRAM bandwidth with Memory Interconnect
+> in Tegra234 SoC. The DRAM BW required for different modes depends
+> on speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
+> Currently, no latency is observed in data transfer with PCI as the
+> DRAM Freq is always set to max. But that results in high power
+> consumption. Now for Tegra234, we are enabling the dynamic scaling
+> of the DRAM Freq based on requests from Clients instead of running
+> at the max Freq always. This change does that for PCI MC client.
 
-Introduce sdam_0 node, which is to be used via nvmem for power on
-reasons during reboot. Add supported PoN reaons supported via sdam_0
-node.
+I am sorry but this is still unclear to me. The sentence above makes
+me think that you are *adding* latency to the data transfer trading
+it with lower power consumption; probably that's a wrong parsing of
+what you are saying - so please explain what you want to say
+with "no latency is observed" and whether this patch changes that
+(which is not allowed because that would count as a regression).
 
-Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Thanks,
+Lorenzo
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-index 5abdc239d3a6..49bf7b08f5b6 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-@@ -88,6 +88,14 @@ trip1 {
- 			};
- 		};
- 	};
-+
-+	reboot_reason {
-+		compatible = "nvmem-reboot-mode";
-+		nvmem-cells = <&reboot_reason>;
-+		nvmem-cell-names = "reboot-mode";
-+		mode-recovery = <0x01>;
-+		mode-bootloader = <0x02>;
-+	};
- };
- 
- &spmi_bus {
-@@ -133,6 +141,19 @@ pmm8654au_0_gpios: gpio@8800 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 		};
-+
-+		pmm8654au_0_sdam_0: nvram@7100 {
-+			compatible = "qcom,spmi-sdam";
-+			reg = <0x7100>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x7100 0x100>;
-+
-+			reboot_reason: reboot-reason@48 {
-+				reg = <0x48 0x1>;
-+				bits = <1 7>;
-+			};
-+		};
- 	};
- 
- 	pmm8654au_1: pmic@2 {
--- 
-2.37.2
-
+> 
+> Suggested-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-tegra194.c | 51 +++++++++++++++-------
+>  1 file changed, 35 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> index e6eec85480ca..4fdadc7b045f 100644
+> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/gpio.h>
+>  #include <linux/gpio/consumer.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> @@ -288,6 +289,7 @@ struct tegra_pcie_dw {
+>  	unsigned int pex_rst_irq;
+>  	int ep_state;
+>  	long link_status;
+> +	struct icc_path *icc_path;
+>  };
+>  
+>  static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
+> @@ -310,6 +312,27 @@ struct tegra_pcie_soc {
+>  	enum dw_pcie_device_mode mode;
+>  };
+>  
+> +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
+> +{
+> +	struct dw_pcie *pci = &pcie->pci;
+> +	u32 val, speed, width;
+> +
+> +	val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
+> +
+> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+> +
+> +	val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
+> +
+> +	if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
+> +		dev_err(pcie->dev, "can't set bw[%u]\n", val);
+> +
+> +	if (speed >= ARRAY_SIZE(pcie_gen_freq))
+> +		speed = 0;
+> +
+> +	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> +}
+> +
+>  static void apply_bad_link_workaround(struct dw_pcie_rp *pp)
+>  {
+>  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> @@ -453,18 +476,12 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+>  	struct tegra_pcie_dw *pcie = arg;
+>  	struct dw_pcie_ep *ep = &pcie->pci.ep;
+>  	struct dw_pcie *pci = &pcie->pci;
+> -	u32 val, speed;
+> +	u32 val;
+>  
+>  	if (test_and_clear_bit(0, &pcie->link_status))
+>  		dw_pcie_ep_linkup(ep);
+>  
+> -	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> -		PCI_EXP_LNKSTA_CLS;
+> -
+> -	if (speed >= ARRAY_SIZE(pcie_gen_freq))
+> -		speed = 0;
+> -
+> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> +	tegra_pcie_icc_set(pcie);
+>  
+>  	if (pcie->of_data->has_ltr_req_fix)
+>  		return IRQ_HANDLED;
+> @@ -950,9 +967,9 @@ static int tegra_pcie_dw_host_init(struct dw_pcie_rp *pp)
+>  
+>  static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
+>  {
+> -	u32 val, offset, speed, tmp;
+>  	struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
+>  	struct dw_pcie_rp *pp = &pci->pp;
+> +	u32 val, offset, tmp;
+>  	bool retry = true;
+>  
+>  	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
+> @@ -1023,13 +1040,7 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
+>  		goto retry_link;
+>  	}
+>  
+> -	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> -		PCI_EXP_LNKSTA_CLS;
+> -
+> -	if (speed >= ARRAY_SIZE(pcie_gen_freq))
+> -		speed = 0;
+> -
+> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> +	tegra_pcie_icc_set(pcie);
+>  
+>  	tegra_pcie_enable_interrupts(pp);
+>  
+> @@ -2233,6 +2244,14 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, pcie);
+>  
+> +	pcie->icc_path = devm_of_icc_get(&pdev->dev, "write");
+> +	ret = PTR_ERR_OR_ZERO(pcie->icc_path);
+> +	if (ret) {
+> +		tegra_bpmp_put(pcie->bpmp);
+> +		dev_err_probe(&pdev->dev, ret, "failed to get write interconnect\n");
+> +		return ret;
+> +	}
+> +
+>  	switch (pcie->of_data->mode) {
+>  	case DW_PCIE_RC_TYPE:
+>  		ret = devm_request_irq(dev, pp->irq, tegra_pcie_rp_irq_handler,
+> -- 
+> 2.17.1
+> 
