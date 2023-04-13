@@ -2,83 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888376E1202
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFDA6E128C
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjDMQQD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 12:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S229603AbjDMQlX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 12:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjDMQQB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:16:01 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE3869A
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:15:57 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id si1so8601711ejb.10
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:15:57 -0700 (PDT)
+        with ESMTP id S229671AbjDMQlU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:41:20 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFA6AF32
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:41:13 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id s12so6359928wrb.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681402555; x=1683994555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KBcMBYYWDgCNbn8m62BANAhlRwT5LGCaXgl9yX8eaYU=;
-        b=A2Ym5dOmOXuFeSBtKD7QsykA90vohpyqnppghJWzYEsGCrGCW5ztGiJxT+AUz3DOdU
-         1nfy8DjiAVQ0KKTinfsROdo5kVmDBwBWrmhYw59t/BIoI+icxZNgD0x6dHGgypvm3rio
-         Y8gZOniL2OfVxfZx0uAt28ympTR3KVUJAsJWkU61GhnK6reqW4uuYgYHUgZyDrWBgHFj
-         FZF9Nwdlm4zS29Y4xfZSyRU4LHy4skIEpACzrBznC3lE5ewut9iU9HB7lDRujy7TOCSI
-         7soH/gz088nVEGRvGfubwxh7VstcfYXNeZpDzQStvrcTrp85HHYzzPRWSNSo8634VqAo
-         7Yig==
+        d=gmail.com; s=20221208; t=1681404072; x=1683996072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1tfEPKp0YHzoTdFnLl04W9z5A7WO7SsXRhhDTfhF0Tg=;
+        b=Tf26MIz6QsWdn3u9biucHVNvpdpeoHfjt0DnhDmpSyjb58uF9heOnJm7aHLzpkru30
+         x2Xavp7VspzTJbytjzOyQ9hUIuzKl5qgn0Qj8nNzyg2jf3qAvwm+88fCLu1pvGco6NO3
+         eASOR4wFJRz1ma/JGbVjloQfwYO5nDK9MikSC+1v+mo8cN+exBj6YmjeWeTd+C5YaUmA
+         wxp4AFwKoWIdo1RZ63nzLB6uUJlX86cbgJ9p7epCQV19gfNAbsx57T2r5vwCXZDx+rSy
+         8QcAJQDrGt1ee+GpAQP1rWYiJg0N8pwxCiYUJszM83VLOjFWzBZU77Dim5BjtGtnb+SC
+         98rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681402555; x=1683994555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KBcMBYYWDgCNbn8m62BANAhlRwT5LGCaXgl9yX8eaYU=;
-        b=fMR7AED4bLd0mwyw9o/4l3cap7kQhQcFw+wZB7OLCEYNlmetxtgSuOvdGYFf6xUeQb
-         imvlN1Pu6n2mTfMxRdPTiwM+VF53BHQVhOXY56dXYL59sFuaED5H7MjTehUI/ADwvth0
-         IDaCQEXInr0tPj8MA+IlIVn6UfqzV6uJvxsf+3GqoQvLifRIeMHvDQvU5P4eJ6fWuRd6
-         LK5IPfh8vyn/RYDF/kJPck98ApZVXsyu31H0sas/1FsYHeWbR3+ZNHhBMA1pjFfQdhjD
-         Nqub5onM5rVbNJOl+efVz+RpDnb3UePAl1jbRwf7bv1Fk9B2ZXfesCZFf9wLLGavf7mn
-         wN6A==
-X-Gm-Message-State: AAQBX9eeLfTPGmS3OR+pT2WaHmdZPha0p6ksYqwukQeHUHMsm3Ki9pUa
-        8n9oB66YH3KiKb3o2ias1Fl1qw==
-X-Google-Smtp-Source: AKy350ZC3/htT9jKCMQHFZEYh7Dr4Lk8To/TD9Tv6JaBMpUmG2iswjq+xu2YFQksaS3IrBiwviSwIA==
-X-Received: by 2002:a17:906:a243:b0:94a:9683:7501 with SMTP id bi3-20020a170906a24300b0094a96837501mr3290082ejb.73.1681402555608;
-        Thu, 13 Apr 2023 09:15:55 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
-        by smtp.gmail.com with ESMTPSA id um9-20020a170906cf8900b0093034e71b94sm1176949ejb.65.2023.04.13.09.15.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 09:15:54 -0700 (PDT)
-Message-ID: <d6099154-032e-d4ff-5732-1be856fcebc0@linaro.org>
-Date:   Thu, 13 Apr 2023 18:15:53 +0200
+        d=1e100.net; s=20221208; t=1681404072; x=1683996072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1tfEPKp0YHzoTdFnLl04W9z5A7WO7SsXRhhDTfhF0Tg=;
+        b=VSyYGsLfo4NO0l+mIdj5s9FDqRoBv7pQoA2d4uqa8LstjH7y4k3LtmiroLjfGPHpsf
+         ANIiw1+ZHQ2NcRG6DAAFWYBimUnFX1L6otyflm2pc+chhqYGs+Yom8gyIx/cvaJd51az
+         +1tvjpylSnnMjUbPMRNJTiHayMvrgB4q5ce0Dk8Nto2koD2OY3x9Eavz4K6UzhnchO/l
+         54kui5fTivk8dh1zvLOAo0vxAwtsOjZeE4/IXIG+ldz3iaraNkRM3G1BzzJ+fSt+lr4O
+         ez2/lNnSa2gVYK4TyXvGoB+74pTAmkIax+wdLsr8uv/V+2pPslCY0hFHWcpwgnmJy4Ae
+         gFrQ==
+X-Gm-Message-State: AAQBX9cYJT0mqdg2AuBlw2vXTDplZz1DCEMAqBZLoZl37L/lAOGmsCm4
+        8ZknvaK+mX/vM3d2f8dIQRXp0syOWQw9OcOcHrqp6uxF
+X-Google-Smtp-Source: AKy350b7SJJHGI+y5mlYQw6V3Z3s/tmrg7v7uRNqcKbXPwJrkrHha0t+UERi/8IBVQcQcpIX+eBuukO06KTMsJ7m/uA=
+X-Received: by 2002:a5d:560d:0:b0:2e5:e0e8:9c8d with SMTP id
+ l13-20020a5d560d000000b002e5e0e89c8dmr537191wrv.13.1681404071692; Thu, 13 Apr
+ 2023 09:41:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sa8775p: pmic: add the sdam_0 node
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230413131705.3073911-1-brgl@bgdev.pl>
- <20230413131705.3073911-5-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230413131705.3073911-5-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20230413100941.115529-1-hdegoede@redhat.com>
+In-Reply-To: <20230413100941.115529-1-hdegoede@redhat.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Thu, 13 Apr 2023 09:40:44 -0700
+Message-ID: <CA+E=qVd70a2kJvfdPdssiwMwS0PHHb1C06sgK9G6MjQwG+C5+A@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: leds: Fix blink to LED on transition
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,40 +67,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/04/2023 15:17, Bartosz Golaszewski wrote:
-> From: Parikshit Pareek <quic_ppareek@quicinc.com>
-> 
-> Introduce sdam_0 node, which is to be used via nvmem for power on
-> reasons during reboot. Add supported PoN reaons supported via sdam_0
-> node.
-> 
-> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Apr 13, 2023 at 3:09=E2=80=AFAM Hans de Goede <hdegoede@redhat.com>=
+ wrote:
+>
+> When a battery's status changes from charging to full then
+> the charging-blink-full-solid trigger tries to change
+> the LED from blinking to solid/on.
+>
+> As is documented in include/linux/leds.h to deactivate blinking /
+> to make the LED solid a LED_OFF must be send:
+>
+> """
+>          * Deactivate blinking again when the brightness is set to LED_OF=
+F
+>          * via the brightness_set() callback.
+> """
+>
+> led_set_brighness() calls with a brightness value other then 0 / LED_OFF
+> merely change the brightness of the LED in its on state while it is
+> blinking.
+>
+> So power_supply_update_bat_leds() must first send a LED_OFF event
+> before the LED_FULL to disable blinking.
+>
+> Fixes: 6501f728c56f ("power_supply: Add new LED trigger charging-blink-so=
+lid-full")
+
+Wow, it's a commit from 2011 :)
+
+> Cc: Vasily Khoruzhick <anarsoul@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
+
 > ---
->  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> index 5abdc239d3a6..49bf7b08f5b6 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> @@ -88,6 +88,14 @@ trip1 {
->  			};
->  		};
->  	};
-> +
-> +	reboot_reason {
-
-No underscores in node names. This is almost always called reboot-mode.
-Please, do not use downstream naming and conventions.
-
-> +		compatible = "nvmem-reboot-mode";
-> +		nvmem-cells = <&reboot_reason>;
-> +		nvmem-cell-names = "reboot-mode";
-> +		mode-recovery = <0x01>;
-> +		mode-bootloader = <0x02>;
-> +	};
->  };
-Best regards,
-Krzysztof
-
+>  drivers/power/supply/power_supply_leds.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/sup=
+ply/power_supply_leds.c
+> index e2f554e4e4e6..c7db29d5fcb8 100644
+> --- a/drivers/power/supply/power_supply_leds.c
+> +++ b/drivers/power/supply/power_supply_leds.c
+> @@ -33,8 +33,9 @@ static void power_supply_update_bat_leds(struct power_s=
+upply *psy)
+>                 led_trigger_event(psy->charging_full_trig, LED_FULL);
+>                 led_trigger_event(psy->charging_trig, LED_OFF);
+>                 led_trigger_event(psy->full_trig, LED_FULL);
+> -               led_trigger_event(psy->charging_blink_full_solid_trig,
+> -                       LED_FULL);
+> +               /* Going from blink to LED on requires a LED_OFF event to=
+ stop blink */
+> +               led_trigger_event(psy->charging_blink_full_solid_trig, LE=
+D_OFF);
+> +               led_trigger_event(psy->charging_blink_full_solid_trig, LE=
+D_FULL);
+>                 break;
+>         case POWER_SUPPLY_STATUS_CHARGING:
+>                 led_trigger_event(psy->charging_full_trig, LED_FULL);
+> --
+> 2.39.1
+>
