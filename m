@@ -2,116 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174136E12BA
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925D66E14DE
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 21:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDMQt0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 12:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S229622AbjDMTKX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 15:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjDMQtZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:49:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1F93C11;
-        Thu, 13 Apr 2023 09:49:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C386F64020;
-        Thu, 13 Apr 2023 16:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FB3C433EF;
-        Thu, 13 Apr 2023 16:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681404550;
-        bh=PuPOEovLO0twQtnLYrf3MKJlFAcOQo0EcvYK1HRswxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C7hhCm38bpRkJJ6KFCHLT7wLpK1vC6fCLybkUi3sfmW8GH4svIHIeBVJgCz7P85NR
-         c6zEhQ8TkYKaDTd4DhA5qQKNdxz7R2YpH0DdEpchfSAof2DYYyG1H2WM2bDFiiqFWf
-         9gXauclJ/ZafAXehp48ctPi0WUmi2T3X8g0gEeDmcDBgSzKuFqboo4aamktInrs3Ms
-         CTjZSfS+pyhPpQo6fE+efF/PFkPhem/Rk6q8GS3HS1XqTDK740/mfL/VaLgckalMvp
-         sObJGb2LkG6C4e2jnTWvQ78WAQTJuoJHHPbUaQX0jXI+YTjNeu9uTCbNvFe7Jfm2/E
-         jSBdprs4nkI2Q==
-Date:   Thu, 13 Apr 2023 18:49:06 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Vignesh R <vigneshr@ti.com>, linux-omap@vger.kernel.org,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] i2c: omap: Improve error reporting for problems during
- .remove()
-Message-ID: <ZDgygggnMLfqn86W@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Vignesh R <vigneshr@ti.com>, linux-omap@vger.kernel.org,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-References: <20230402105518.2512541-1-u.kleine-koenig@pengutronix.de>
- <20230402225001.75a32147@aktux>
- <20230403054837.6lxyzznzntvw2drg@pengutronix.de>
- <20230403060404.GX7501@atomide.com>
- <ZC5qUU4JLI9Negyi@sai>
- <20230406082354.jwchbl5ir6p4gjw7@pengutronix.de>
+        with ESMTP id S229867AbjDMTKW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 15:10:22 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C067D81
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 12:10:21 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id w11so16658085pjh.5
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 12:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681413021; x=1684005021;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=oAvXQVhJg0TrCI/ueRE8GVeOdxEmIW6eLICGYrV8qmw=;
+        b=tMb34b3p8nS0PAQ8ikhEKqy9QPTlXrpXmKgTrsiAhRgYPvizWWWIy9/2kulVssyjeQ
+         dnX9PNDB7ByJSBGnELGDJ7gy0xUrpIgdhUK94hqTIpk0BTiLnECoQddz/FigwGazldMe
+         lyG0tSkmc0IYgxqc4m7gSo1t2smZ8ckLXMoZ8+un7jTtraoGJ6EjMRoXjcfXyFkJ3fb3
+         mw6AAZhf8tGFNPIHzI4CgDmCTRuqIdOpRgMCuCWtvBHGgwI0qjVQy1M0q2eQ+L3AuhbU
+         mR2CuZZkffLdXQj985qGifnZSx43sFRz+YrOYeHCB4S4Lc+Z6wcUXyTIFY0cnHkvWp2z
+         9aCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681413021; x=1684005021;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oAvXQVhJg0TrCI/ueRE8GVeOdxEmIW6eLICGYrV8qmw=;
+        b=Cl121eR98Q+Jk6NChqU11Af1zcdCF+DKzlodnoTO59LZ7wliHcQarGF1DCOWiNc6m/
+         w36iNOoy2exyMcAluGkU7ZKTrPWTBWuyrX8+sM56KszdE40wcuLnvV4XFC8W8COdJZin
+         JmPAXRXcDJ/QMX63OWua6HokusYPLDdf9RnQ9P+vCXIkMDlHDPYrEcrcmJ4Ceu7LNtDi
+         eInKGc0uFsQvREfSkm+1LpBxJFPu8uaYD4SOXKxwCC2f9L0X7niBcJT5q45SLPx0Mw95
+         /5t3rCOlTANarE0a0QEjyh5nsCw38uLkZrGuzol45wv8aFJorXENtB/fFaO2O7XsWtEC
+         W3CQ==
+X-Gm-Message-State: AAQBX9ff0M6NZZAc83BDY/aRX+PUVs9F8vqdbKOuytJDO/CdyUgiv151
+        pi4RdzLVKoPF+j3c5tA2uudhZaOU3xXMgJUfjcr3rCRx
+X-Google-Smtp-Source: AKy350atoGPyg5Y2rEbJjgMCVB9rWGe+XrwKByPd5M51iIGvXyWDl6iZcRq9siUSn7tbrAyohPdaWA==
+X-Received: by 2002:a17:902:fb46:b0:1a0:50bd:31bf with SMTP id lf6-20020a170902fb4600b001a050bd31bfmr39504plb.32.1681413021227;
+        Thu, 13 Apr 2023 12:10:21 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id jm10-20020a17090304ca00b001a55c2a42f6sm1812657plb.158.2023.04.13.12.10.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 12:10:20 -0700 (PDT)
+Message-ID: <6438539c.170a0220.91c0e.4056@mx.google.com>
+Date:   Thu, 13 Apr 2023 12:10:20 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rOVRl6TSD4jp04kC"
-Content-Disposition: inline
-In-Reply-To: <20230406082354.jwchbl5ir6p4gjw7@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.3-rc6-135-g5235219c59f8
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc6-135-g5235219c59f8)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc6-135-g5=
+235219c59f8)
 
---rOVRl6TSD4jp04kC
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc6-135-g5235219c59f8/
 
-On Thu, Apr 06, 2023 at 10:23:54AM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> If pm_runtime_get() fails in .remove() the driver used to return the
-> error to the driver core. The only effect of this (compared to returning
-> zero) is a generic warning that the error value is ignored.
->=20
-> So emit a better warning and return zero to suppress the generic (and
-> little helpful) message. Also disable runtime PM in the error case.
->=20
-> This prepares changing platform device remove callbacks to return void.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc6-135-g5235219c59f8
+Git Commit: 5235219c59f891671ed4d433bad3e0f493da644a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Applied to for-next, thanks!
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
---rOVRl6TSD4jp04kC
-Content-Type: application/pgp-signature; name="signature.asc"
+Warnings summary:
 
------BEGIN PGP SIGNATURE-----
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4MoIACgkQFA3kzBSg
-Kba2Lw//b0WwKrYovKtazbVC+UUuNWEz4QvZy7mWKWR/RQKE/NetcIRpvfB/pTcn
-oPfg5JL8lCJh1bTmy9MtEhrhgF+emj/i64pu+Tz+C/piU+S3flJgD2FcJMLhU1Lj
-QkusCw5o5+fNq9kyivRkVWR7aaD1aYQs4U0s0c1uZZaCT4uyM0lZUbLvRc+xDxA/
-4Rt+uQNJmABKKfVMWaL9JIjuh3h1uKqp/wWAMikG+Hwt/+43njYX6o/RJo7Tb97h
-uyj/br5FBCssQStMfZbCQS/gyr6qxdfzPlgCNGLEzJysiazmcSwb0rfYQpBI4olC
-jGtIC9kdd3ZUblhj/VxsvjUbzYy4THKiWoIQD13/pUpinloY68L217iRMTUY1J/3
-f+tPlkIBokjV3FpaULloQK5hbVyiRB5/WPRqbn+v/uSODGCbcvDScR0dzd/wpAZQ
-rECFyq/LEwWvKMNf67jXqqdw9sEzAW8rlT6VkohqWfmQW8D8t15t3qd+ySVmWHGY
-s50LP9GIG5u/IOGKKKmjBG2wwed068S/j+co+R0dXgMY0Vc1xTbhK57JFia7KOjA
-3hAx5OQLcf3To5/OQcV+wSIiFAQa9hUI0gjzHXvFXh4t7VSZG1poC+/W3A1UgVmh
-c0EZC0EN55NqZbm3gAN7nqkXWgsrliyLaMzC5vvaAp6MsF/vvjE=
-=6+gW
------END PGP SIGNATURE-----
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
---rOVRl6TSD4jp04kC--
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
