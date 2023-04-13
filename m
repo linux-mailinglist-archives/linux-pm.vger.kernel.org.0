@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106166E0E4C
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 15:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC716E0E4F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 15:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjDMNRX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 09:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S230493AbjDMNRY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 09:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjDMNRW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 09:17:22 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC9210EA
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 06:17:20 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so6154273wmq.5
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 06:17:20 -0700 (PDT)
+        with ESMTP id S230474AbjDMNRX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 09:17:23 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573B319AB
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 06:17:21 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id j16so1038706wms.0
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 06:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1681391838; x=1683983838;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1681391839; x=1683983839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W5fFOxM2M8ye7OTBHtbOgOjz+8frsv+eTncE5p8viM8=;
-        b=T9BU71wavViVUYBMTDE+hcbRAc77asym97Q+vAZdeQ0/tt/SvQZu4WFosGI0lp1zDI
-         /4ZUBDyrIVTMjE9tZRT6DXigjhxwaxshTBOZkuxX5shKdEzjR53fag+SEEJARuwGTak1
-         Fpob0YAdn9wBMUDHq8H+x7isdAAo/tSUCRx2JSBbs51pOVNhyCvuJjH5fD2j180PtURV
-         mwKhNEaZwq55CodUwD1Qt/2Y67nDCt5ZEmuWdTEOdLAtKhMzHGDQfKEGIsaAaomw+Hkw
-         C/D67FQB/eQa9XS0sDhRSP74aOQwzSYh67IZLOFwQEOzY3eU20/cjfRnHK9OKBo2YZvA
-         t/4w==
+        bh=ezwEzIUFbO/ibyCR5/pMZcXsF9FqrfvEohFgkMV09Iw=;
+        b=KRprAh3DeL1Jc7nUy6FhEObqRosjdbUrDp6a/kOhNPwwLCOL9pPjxfl2rVQ4WgqvQJ
+         DVXIJb2LtEUYCV/FrZsxwEG62SvKFy596HzAVgxmRRBKRIjgpI5kq1EzDbn+RucaX0+a
+         7KRgo/u/yVa9lFvgY80K/Mp5UIEUtRbNbKlQMQOr+vr4r5qEjrk4OAed3/R8ukU6n2AH
+         1ZmaEwkxdP2C9sRKHhYixYOx4cEVwjZrad9yzqlU42eshedOESYGmds0Wrn6DSdeR0he
+         IkSWUXOO3T+bProG7oQtR/VUu43EV4xKxg74fZ3QdCc+yiud17Z+o+geepprV5ujCtBn
+         4POw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681391838; x=1683983838;
+        d=1e100.net; s=20221208; t=1681391839; x=1683983839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W5fFOxM2M8ye7OTBHtbOgOjz+8frsv+eTncE5p8viM8=;
-        b=cpDQxvNwwpjDyUV45F4i/wawxmEDm+oabPOPIRzuIqT0+tQZAABaUiW9vpmUnaQ/H2
-         b/ycgX1JgrE2sxmuN061CkrYzx2lqobPLzMvpWcPu2vo6+5k9nXCZxhks8arUXnXUeJU
-         x+n426seYJ5UN7dhcoMkbvfG04+NvY3Qxpbh+m/7gFPojLki4KNQsiv+KFgXFRFxJCHr
-         LkH6RAPCVtn8xCc+hZmYw7DFuuaB26VhPqKDUJZKuCPtjWjs/bhyKNEzdEysgEpBXYFx
-         r9Q1DIn2uv5iNqIH2HTcIF9QPp7hWGvdEFAiNLlVM7p1sylPywsPheq7EJRhVxRi91BU
-         5EDg==
-X-Gm-Message-State: AAQBX9dEvR/D4HDHGvDeQSgTOfNuEjyG8yu54bnnZYSjsmGayTM2/5xp
-        WHV/tBKETsu38HXjtcW5sBz/1w==
-X-Google-Smtp-Source: AKy350YD+EK+uim1v734a2iSFmcFos4CRGtJzrjtuPy3971LpNkXMYN9/oHNtdckCkZvhe02C9ZFaw==
-X-Received: by 2002:a1c:7905:0:b0:3ef:5fe3:c57c with SMTP id l5-20020a1c7905000000b003ef5fe3c57cmr1420333wme.23.1681391838576;
-        Thu, 13 Apr 2023 06:17:18 -0700 (PDT)
+        bh=ezwEzIUFbO/ibyCR5/pMZcXsF9FqrfvEohFgkMV09Iw=;
+        b=bCqq6anM8sYnr/jaVfq/D+hVd2ruYNv0MThOesT+qVi/zY839o4YvPwhbbj62MczeZ
+         YZXG9MAgkrY0bW2FOM5FQyj1K5Ok+9KSDLzNKd5VvAZpEe+I4lkj7PhpXY+SOp53DMSG
+         umUBEvI0IfHtVhXT9yXomkZXeAN9SvlS07jvvfALKfeBvRXFDTs9iAN2PtAQ3TthQSxU
+         kNMxJePKoR6pea/GVT1wd3rG2/L6we9FAwlpsa317YQMjfhCB88xsTi0zZBdf0BrX+m/
+         axl7or0Xwr8oNb6sQAdmc/zjxz5ex2RtUjCisNlnhjtbQU894cdGLHSEUjTWpLVwXkaZ
+         +Azw==
+X-Gm-Message-State: AAQBX9fi9roTYdcslbF7fIIajGq1rqI0y4FPvR7FE0Q6FANi2p9CWMgb
+        Nsh7N7QYKOlrX77J6LLVScZ7/A==
+X-Google-Smtp-Source: AKy350bWxIfjBDcyPABvkA89eNMTbtHx+VEcdJvuWzTjduVU+no40TpXG4+L1FYXgzlIN1tTfoye9A==
+X-Received: by 2002:a7b:ce07:0:b0:3f0:373d:c32b with SMTP id m7-20020a7bce07000000b003f0373dc32bmr1788155wmc.30.1681391839664;
+        Thu, 13 Apr 2023 06:17:19 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:814c:fc8a:da02:39ad])
-        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003f04646838esm1796400wmh.39.2023.04.13.06.17.17
+        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003f04646838esm1796400wmh.39.2023.04.13.06.17.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 06:17:18 -0700 (PDT)
+        Thu, 13 Apr 2023 06:17:19 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,16 +62,16 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 2/4] arm64: defconfig: enable building the nvmem-reboot-mode module
-Date:   Thu, 13 Apr 2023 15:17:03 +0200
-Message-Id: <20230413131705.3073911-3-brgl@bgdev.pl>
+Subject: [PATCH 3/4] dt-bindings: power: reset: convert nvmem-reboot-mode bindings to YAML
+Date:   Thu, 13 Apr 2023 15:17:04 +0200
+Message-Id: <20230413131705.3073911-4-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230413131705.3073911-1-brgl@bgdev.pl>
 References: <20230413131705.3073911-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,27 +81,106 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-This module is used by the Qualcomm sa8775p platform for passing the
-reboot reason to the bootloader. Enable building it in the arm64
-defconfig as a module.
+Convert the DT binding document for nvmem-reboot-mode from .txt to YAML.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../power/reset/nvmem-reboot-mode.txt         | 26 ----------
+ .../power/reset/nvmem-reboot-mode.yaml        | 52 +++++++++++++++++++
+ 2 files changed, 52 insertions(+), 26 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index e1063ab32658..5bdc9cede807 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -614,6 +614,7 @@ CONFIG_POWER_RESET_QCOM_PON=m
- CONFIG_POWER_RESET_XGENE=y
- CONFIG_POWER_RESET_SYSCON=y
- CONFIG_SYSCON_REBOOT_MODE=y
-+CONFIG_NVMEM_REBOOT_MODE=m
- CONFIG_BATTERY_SBS=m
- CONFIG_BATTERY_BQ27XXX=y
- CONFIG_BATTERY_MAX17042=m
+diff --git a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.txt b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.txt
+deleted file mode 100644
+index 752d6126d5da..000000000000
+--- a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-NVMEM reboot mode driver
+-
+-This driver gets reboot mode magic value from reboot-mode driver
+-and stores it in a NVMEM cell named "reboot-mode". Then the bootloader
+-can read it and take different action according to the magic
+-value stored.
+-
+-Required properties:
+-- compatible: should be "nvmem-reboot-mode".
+-- nvmem-cells: A phandle to the reboot mode provided by a nvmem device.
+-- nvmem-cell-names: Should be "reboot-mode".
+-
+-The rest of the properties should follow the generic reboot-mode description
+-found in reboot-mode.txt
+-
+-Example:
+-	reboot-mode {
+-		compatible = "nvmem-reboot-mode";
+-		nvmem-cells = <&reboot_mode>;
+-		nvmem-cell-names = "reboot-mode";
+-
+-		mode-normal     = <0xAAAA5501>;
+-		mode-bootloader = <0xBBBB5500>;
+-		mode-recovery   = <0xCCCC5502>;
+-		mode-test       = <0xDDDD5503>;
+-	};
+diff --git a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+new file mode 100644
+index 000000000000..64a7d224c7dd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/nvmem-reboot-mode.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic NVMEM reboot mode driver
++
++maintainers:
++  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
++
++description: |
++  This driver gets the reboot mode magic value from the reboot-mode driver
++  and stores it in the NVMEM cell named "reboot-mode". The bootloader can
++  then read it and take different action according to the value.
++
++properties:
++  compatible:
++    const: nvmem-reboot-mode
++
++  nvmem-cells:
++    description: |
++      A phandle pointing to the nvmem-cells node where the vendor-specific
++      magic value representing the reboot mode is stored.
++    maxItems: 1
++
++  nvmem-cell-names:
++    items:
++      - const: reboot-mode
++
++patternProperties:
++  "^mode-.+":
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Vendor-specific mode value written to the mode register
++
++additionalProperties: false
++
++required:
++  - compatible
++  - nvmem-cells
++  - nvmem-cell-names
++
++examples:
++  - |
++    reboot-mode {
++        compatible = "nvmem-reboot-mode";
++        nvmem-cells = <&reboot_reason>;
++        nvmem-cell-names = "reboot-mode";
++        mode-recovery = <0x01>;
++        mode-bootloader = <0x02>;
++    };
++...
 -- 
 2.37.2
 
