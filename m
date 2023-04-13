@@ -2,64 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFDA6E128C
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1284A6E1293
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjDMQlX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 12:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S229773AbjDMQna (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 12:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjDMQlU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:41:20 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFA6AF32
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:41:13 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id s12so6359928wrb.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:41:13 -0700 (PDT)
+        with ESMTP id S229728AbjDMQn3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:43:29 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A19019
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:43:29 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-760a6703d90so2429539f.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681404072; x=1683996072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1tfEPKp0YHzoTdFnLl04W9z5A7WO7SsXRhhDTfhF0Tg=;
-        b=Tf26MIz6QsWdn3u9biucHVNvpdpeoHfjt0DnhDmpSyjb58uF9heOnJm7aHLzpkru30
-         x2Xavp7VspzTJbytjzOyQ9hUIuzKl5qgn0Qj8nNzyg2jf3qAvwm+88fCLu1pvGco6NO3
-         eASOR4wFJRz1ma/JGbVjloQfwYO5nDK9MikSC+1v+mo8cN+exBj6YmjeWeTd+C5YaUmA
-         wxp4AFwKoWIdo1RZ63nzLB6uUJlX86cbgJ9p7epCQV19gfNAbsx57T2r5vwCXZDx+rSy
-         8QcAJQDrGt1ee+GpAQP1rWYiJg0N8pwxCiYUJszM83VLOjFWzBZU77Dim5BjtGtnb+SC
-         98rQ==
+        d=linuxfoundation.org; s=google; t=1681404208; x=1683996208;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ekzkbuh/jPEC3nuF9C8mr0fHCUtO5IR37kdS+rbUHQ0=;
+        b=em2V8aqYDszVx4fyS1cMSYnEKFMDrbnDUKEDSzJ1n9Hmo/3v1WyKF2xEdcr20SZYqU
+         UvcTNPr2SDPMB30t2OlfIzAOGx8l9n1ydIOo6MbwzxweGVEC2JKPzc/af8LxpjvAeL6f
+         J5fXqEzP3eCG8EdsTs5YyiHlW49JqYFOoViNA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681404072; x=1683996072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1tfEPKp0YHzoTdFnLl04W9z5A7WO7SsXRhhDTfhF0Tg=;
-        b=VSyYGsLfo4NO0l+mIdj5s9FDqRoBv7pQoA2d4uqa8LstjH7y4k3LtmiroLjfGPHpsf
-         ANIiw1+ZHQ2NcRG6DAAFWYBimUnFX1L6otyflm2pc+chhqYGs+Yom8gyIx/cvaJd51az
-         +1tvjpylSnnMjUbPMRNJTiHayMvrgB4q5ce0Dk8Nto2koD2OY3x9Eavz4K6UzhnchO/l
-         54kui5fTivk8dh1zvLOAo0vxAwtsOjZeE4/IXIG+ldz3iaraNkRM3G1BzzJ+fSt+lr4O
-         ez2/lNnSa2gVYK4TyXvGoB+74pTAmkIax+wdLsr8uv/V+2pPslCY0hFHWcpwgnmJy4Ae
-         gFrQ==
-X-Gm-Message-State: AAQBX9cYJT0mqdg2AuBlw2vXTDplZz1DCEMAqBZLoZl37L/lAOGmsCm4
-        8ZknvaK+mX/vM3d2f8dIQRXp0syOWQw9OcOcHrqp6uxF
-X-Google-Smtp-Source: AKy350b7SJJHGI+y5mlYQw6V3Z3s/tmrg7v7uRNqcKbXPwJrkrHha0t+UERi/8IBVQcQcpIX+eBuukO06KTMsJ7m/uA=
-X-Received: by 2002:a5d:560d:0:b0:2e5:e0e8:9c8d with SMTP id
- l13-20020a5d560d000000b002e5e0e89c8dmr537191wrv.13.1681404071692; Thu, 13 Apr
- 2023 09:41:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681404208; x=1683996208;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ekzkbuh/jPEC3nuF9C8mr0fHCUtO5IR37kdS+rbUHQ0=;
+        b=LVd7fYDIRPmYBjxTbk+oHVReXoW0eTgeQM6IuJCFXuzDvo8D1fAlhYVzD4poAQMdyP
+         8x2CCkoA0esEYdbzDEMA5N2/bzT8u8irCcisVzGlSVi3LQU7pbUPioquz7whRteMdmfP
+         o1PmyiW5Waw2biK24FF93EpdPS4Ue0yvVgs07//VBRrmcuT2rVlXPQvUiB9+Tq37I/4U
+         ZTP/y2vznrqDvairmRMW122yFeY6vQT/29FNJ2LHhnOf3iRDbMsQ/esNcLwBVu4Wp8GL
+         UDrl+8P25afjfEmpAa9qBQdV67SARAJoGuZjEJgPnEILV9hNGL/R6Gaff4mgikqw4wyW
+         Y08Q==
+X-Gm-Message-State: AAQBX9eZdH26sNC2GPzGHudBE81HKcKtIvjVIXw2B1W6onj0iIionjJR
+        W0oq4OqOePPUw97/ZFOeQab4fA==
+X-Google-Smtp-Source: AKy350ahqOvmt3EVe12Q3J5oRDw6HTbVCdu/GJ8L/g4aJbsI1DwT+xBaDo5eYovj/dDyI4BgSi7dxQ==
+X-Received: by 2002:a05:6602:1496:b0:758:5653:353a with SMTP id a22-20020a056602149600b007585653353amr1349277iow.0.1681404208383;
+        Thu, 13 Apr 2023 09:43:28 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v11-20020a02cbab000000b0040f019ae7a6sm583358jap.95.2023.04.13.09.43.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 09:43:27 -0700 (PDT)
+Message-ID: <4ed23224-f418-3751-bf60-138a8b972d6c@linuxfoundation.org>
+Date:   Thu, 13 Apr 2023 10:43:27 -0600
 MIME-Version: 1.0
-References: <20230413100941.115529-1-hdegoede@redhat.com>
-In-Reply-To: <20230413100941.115529-1-hdegoede@redhat.com>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Thu, 13 Apr 2023 09:40:44 -0700
-Message-ID: <CA+E=qVd70a2kJvfdPdssiwMwS0PHHb1C06sgK9G6MjQwG+C5+A@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: leds: Fix blink to LED on transition
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] cpupower:Fix resource leaks in sysfs_get_enabled()
+To:     Hao Zeng <zenghao@kylinos.cn>, trenn@suse.com, shuah@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230413044602.3221453-1-zenghao@kylinos.cn>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230413044602.3221453-1-zenghao@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,64 +71,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 3:09=E2=80=AFAM Hans de Goede <hdegoede@redhat.com>=
- wrote:
->
-> When a battery's status changes from charging to full then
-> the charging-blink-full-solid trigger tries to change
-> the LED from blinking to solid/on.
->
-> As is documented in include/linux/leds.h to deactivate blinking /
-> to make the LED solid a LED_OFF must be send:
->
-> """
->          * Deactivate blinking again when the brightness is set to LED_OF=
-F
->          * via the brightness_set() callback.
-> """
->
-> led_set_brighness() calls with a brightness value other then 0 / LED_OFF
-> merely change the brightness of the LED in its on state while it is
-> blinking.
->
-> So power_supply_update_bat_leds() must first send a LED_OFF event
-> before the LED_FULL to disable blinking.
->
-> Fixes: 6501f728c56f ("power_supply: Add new LED trigger charging-blink-so=
-lid-full")
+On 4/12/23 22:46, Hao Zeng wrote:
+> The sysfs_get_enabled() opened file processor not closed,
+> may cause a file handle leak.
+> 
 
-Wow, it's a commit from 2011 :)
+Please add information how you found this problem?
 
-> Cc: Vasily Khoruzhick <anarsoul@gmail.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-
-Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
-
+> Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
 > ---
->  drivers/power/supply/power_supply_leds.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/sup=
-ply/power_supply_leds.c
-> index e2f554e4e4e6..c7db29d5fcb8 100644
-> --- a/drivers/power/supply/power_supply_leds.c
-> +++ b/drivers/power/supply/power_supply_leds.c
-> @@ -33,8 +33,9 @@ static void power_supply_update_bat_leds(struct power_s=
-upply *psy)
->                 led_trigger_event(psy->charging_full_trig, LED_FULL);
->                 led_trigger_event(psy->charging_trig, LED_OFF);
->                 led_trigger_event(psy->full_trig, LED_FULL);
-> -               led_trigger_event(psy->charging_blink_full_solid_trig,
-> -                       LED_FULL);
-> +               /* Going from blink to LED on requires a LED_OFF event to=
- stop blink */
-> +               led_trigger_event(psy->charging_blink_full_solid_trig, LE=
-D_OFF);
-> +               led_trigger_event(psy->charging_blink_full_solid_trig, LE=
-D_FULL);
->                 break;
->         case POWER_SUPPLY_STATUS_CHARGING:
->                 led_trigger_event(psy->charging_full_trig, LED_FULL);
-> --
-> 2.39.1
->
+>   tools/power/cpupower/lib/powercap.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+> index 0ce29ee4c2e4..a39ee1c89679 100644
+> --- a/tools/power/cpupower/lib/powercap.c
+> +++ b/tools/power/cpupower/lib/powercap.c
+> @@ -51,7 +51,7 @@ static int sysfs_get_enabled(char *path, int *mode)
+>   		close(fd);
+>   		return -1;
+>   	}> -
+> +	close(fd);
+
+The error path logic can be simplified with a goto to
+to handle the error path to close the file and return.
+
+>   	if (yes_no == '1') {
+>   		*mode = 1;
+>   		return 0;
+
+This path that returns 0 can be simplified as well to do
+return just once, after error path handling is done with
+a goto.
+
+Please send me v2 with the changes above with information
+on how you found the problem.
+
+thanks,
+-- Shuah
+
+thanks,
+-- Shuah
