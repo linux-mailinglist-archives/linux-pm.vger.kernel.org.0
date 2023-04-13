@@ -2,17 +2,17 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59286E0AC1
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABEA6E0ABF
 	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 11:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjDMJzK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 05:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        id S229888AbjDMJzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 05:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDMJzH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 05:55:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9865FF7
+        with ESMTP id S229989AbjDMJzG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 05:55:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0016199
         for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 02:54:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1681379662;
@@ -20,31 +20,31 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MBjkc5svHGlq0EL372TfPnKKhhNeHUhHI/qULoZdRvM=;
-        b=B+o3DRZ0uvLBuLY7siOqFzcsZQaGvC1zQuRwGumhM6og+uutBLSDLUp/E38MTremBflHcl
-        AXS72wgY8/f6Cz+s60nfoBPghfNQjBmnbaldM4UZootTkr2IBruYvAl96qd6SSnMruTnO1
-        TPIgZa8uILcGxhw8ZjbWnNtffp7S/sI=
+        bh=R/MPv68sOCq0EapGSENkE21QO+rlkSaK/3y1SR0FFHQ=;
+        b=hl43TREtnzcPP7T9FwIWHnC13cj7QM5D01DxW8taHDd+Z9M36KL5pTOn1Aq9PV+AhT33Ir
+        AzyjuGTNSUibXAk5biqMMtPMNYDdHCrpykEk5HQLhzsVi7QR59m7tAkphyHzJR8L6TvoFV
+        188uohH6k5e0jGkfeGoN+Xb9YuPvxmg=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-509-R0J1HMkfM1ehxGkJDfX45A-1; Thu, 13 Apr 2023 05:54:18 -0400
-X-MC-Unique: R0J1HMkfM1ehxGkJDfX45A-1
+ us-mta-418-qUmNkdHvORuUDuMmh4WfJA-1; Thu, 13 Apr 2023 05:54:19 -0400
+X-MC-Unique: qUmNkdHvORuUDuMmh4WfJA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3948A280A32C;
-        Thu, 13 Apr 2023 09:54:18 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 417373813F4A;
+        Thu, 13 Apr 2023 09:54:19 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.195.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 61DA7492C13;
-        Thu, 13 Apr 2023 09:54:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 696A2492C13;
+        Thu, 13 Apr 2023 09:54:18 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>, Marek Vasut <marex@denx.de>,
         laji Xiao <3252204392abc@gmail.com>, linux-pm@vger.kernel.org
-Subject: [PATCH 8/9] power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() + schedule()
-Date:   Thu, 13 Apr 2023 11:54:04 +0200
-Message-Id: <20230413095405.71685-9-hdegoede@redhat.com>
+Subject: [PATCH 9/9] power: supply: bq25890: Call power_supply_changed() after updating input current or voltage
+Date:   Thu, 13 Apr 2023 11:54:05 +0200
+Message-Id: <20230413095405.71685-10-hdegoede@redhat.com>
 In-Reply-To: <20230413095405.71685-1-hdegoede@redhat.com>
 References: <20230413095405.71685-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,31 +60,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use mod_delayed_work() instead of separate cancel_delayed_work_sync() +
-schedule_delayed_work() calls.
+The bq25892 model relies on external charger-type detection and once
+that is done the bq25890_charger code will update the input current
+and if pumpexpress is used also the input voltage.
 
+In this case, when the initial power_supply_changed() call is made
+from the interrupt handler, the input settings are 5V/0.5A which
+on many devices is not enough power to charge (while the device is on).
+
+On many devices the fuel-gauge relies in its external_power_changed
+callback to timely signal userspace about charging <-> discharging
+status changes. Add a power_supply_changed() call after updating
+the input current or voltage. This allows the fuel-gauge driver
+to timely recheck if the battery is charging after the new input
+settings have been applied and then it can immediately notify
+userspace about this.
+
+Fixes: 48f45b094dbb ("power: supply: bq25890: Support higher charging voltages through Pump Express+ protocol")
+Fixes: eab25b4f93aa ("power: supply: bq25890: On the bq25892 set the IINLIM based on external charger detection")
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/power/supply/bq27xxx_battery.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/power/supply/bq25890_charger.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 929e813b9c44..4296600e8912 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1083,10 +1083,8 @@ static int poll_interval_param_set(const char *val, const struct kernel_param *k
- 		return ret;
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index bfe08d7bfaf3..794512285629 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -775,6 +775,7 @@ static void bq25890_charger_external_power_changed(struct power_supply *psy)
+ 	}
  
- 	mutex_lock(&bq27xxx_list_lock);
--	list_for_each_entry(di, &bq27xxx_battery_devices, list) {
--		cancel_delayed_work_sync(&di->work);
--		schedule_delayed_work(&di->work, 0);
--	}
-+	list_for_each_entry(di, &bq27xxx_battery_devices, list)
-+		mod_delayed_work(system_wq, &di->work, 0);
- 	mutex_unlock(&bq27xxx_list_lock);
+ 	bq25890_field_write(bq, F_IINLIM, input_current_limit);
++	power_supply_changed(bq->charger);
+ }
  
- 	return ret;
+ static int bq25890_get_chip_state(struct bq25890_device *bq,
+@@ -1106,6 +1107,8 @@ static void bq25890_pump_express_work(struct work_struct *data)
+ 	dev_info(bq->dev, "Hi-voltage charging requested, input voltage is %d mV\n",
+ 		 voltage);
+ 
++	power_supply_changed(bq->charger);
++
+ 	return;
+ error_print:
+ 	bq25890_field_write(bq, F_PUMPX_EN, 0);
 -- 
 2.39.1
 
