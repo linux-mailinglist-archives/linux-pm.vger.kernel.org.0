@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2165D6E11E7
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888376E1202
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 18:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDMQM7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 12:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S230137AbjDMQQD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 12:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjDMQM5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:12:57 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4810A9759
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:12:53 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dm2so38856974ejc.8
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:12:53 -0700 (PDT)
+        with ESMTP id S229597AbjDMQQB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 12:16:01 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE3869A
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:15:57 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id si1so8601711ejb.10
+        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 09:15:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681402372; x=1683994372;
+        d=linaro.org; s=google; t=1681402555; x=1683994555;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ8yZnKo2ciUycy3fDWr4JbLsJRyFcG2ZUFoRMEKgTA=;
-        b=vxL/Q7QEmmjX98MNNirP0+3OsrDOlCx6l7A7c2jbrF3KkT4xeoRS3RJ04WJGZx/Tv9
-         Laru0Vso6Y7wEW8RSCLihGnULIXbRsZL4iLfrJiUe/rSpn65nToRY7OzXthKbrvOcJrF
-         hRGjKKHWLRZ0dgjFXZ/0ZfSgyEvx/Wr7Umxh/pyc/Tq/UInVpGBmnqZui/iibfIHqMzx
-         L+lqdhUWsasfbDv8wJoZk3sl+Otl19jfpyb/0gbV6pgm+CB3fm+/3b9NudHDgwa0HiAa
-         eRf2IoeeUx3bKqhUzB8jQBn6YfGMysQ6ykCrlYe+6vxMsntuN8X1o3/VArdBI2s7qoHo
-         yy9g==
+        bh=KBcMBYYWDgCNbn8m62BANAhlRwT5LGCaXgl9yX8eaYU=;
+        b=A2Ym5dOmOXuFeSBtKD7QsykA90vohpyqnppghJWzYEsGCrGCW5ztGiJxT+AUz3DOdU
+         1nfy8DjiAVQ0KKTinfsROdo5kVmDBwBWrmhYw59t/BIoI+icxZNgD0x6dHGgypvm3rio
+         Y8gZOniL2OfVxfZx0uAt28ympTR3KVUJAsJWkU61GhnK6reqW4uuYgYHUgZyDrWBgHFj
+         FZF9Nwdlm4zS29Y4xfZSyRU4LHy4skIEpACzrBznC3lE5ewut9iU9HB7lDRujy7TOCSI
+         7soH/gz088nVEGRvGfubwxh7VstcfYXNeZpDzQStvrcTrp85HHYzzPRWSNSo8634VqAo
+         7Yig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681402372; x=1683994372;
+        d=1e100.net; s=20221208; t=1681402555; x=1683994555;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ8yZnKo2ciUycy3fDWr4JbLsJRyFcG2ZUFoRMEKgTA=;
-        b=KsiQ+fbFhJh7RFvz5i/c+lJsJ4/anYsw63wD/qJzgC2gq3JfuCtykgJb1FWVp7Jt6O
-         m69qXwXIsmz9cyBpvyOPY/FmnhR5DHjaPDU6X1OmHZ4GcpYmJDMzTW+Jc89D8l7PV6gO
-         +RgoMgy4GBJBu+3fPZrj/TpVBf7lh2wjioFBiHRBrmYvvtmOJFHGe63JFp0+1zZF/USh
-         TlYpqo2QQrU94cwzun5RvINWbTupKmx1oF6I+S//1prF2XSNXUFen/m4i/kL0yWZvGMA
-         bK1z9LPr3urHFCeX7twtJIwdDLMavJxgxh/eicXk4Nh9rWCvFVWEaOGg9YFZEfxUcPxs
-         UKJw==
-X-Gm-Message-State: AAQBX9fZ4A3+576FQ7WtBUc8740TmhIqppLs8c853U7I5Cvdc8Wv0Ivi
-        E1FzoY7pT64eRJY2a4FB5u+FsA==
-X-Google-Smtp-Source: AKy350aEyp4aOnI97LGS1Pu9EbHMptg5RVMwyBXZj7K1XJdLcNsUbvBx7m6ittsOeRa80kimevxypg==
-X-Received: by 2002:a17:906:e82:b0:94e:68a5:b7b8 with SMTP id p2-20020a1709060e8200b0094e68a5b7b8mr3172478ejf.76.1681402371804;
-        Thu, 13 Apr 2023 09:12:51 -0700 (PDT)
+        bh=KBcMBYYWDgCNbn8m62BANAhlRwT5LGCaXgl9yX8eaYU=;
+        b=fMR7AED4bLd0mwyw9o/4l3cap7kQhQcFw+wZB7OLCEYNlmetxtgSuOvdGYFf6xUeQb
+         imvlN1Pu6n2mTfMxRdPTiwM+VF53BHQVhOXY56dXYL59sFuaED5H7MjTehUI/ADwvth0
+         IDaCQEXInr0tPj8MA+IlIVn6UfqzV6uJvxsf+3GqoQvLifRIeMHvDQvU5P4eJ6fWuRd6
+         LK5IPfh8vyn/RYDF/kJPck98ApZVXsyu31H0sas/1FsYHeWbR3+ZNHhBMA1pjFfQdhjD
+         Nqub5onM5rVbNJOl+efVz+RpDnb3UePAl1jbRwf7bv1Fk9B2ZXfesCZFf9wLLGavf7mn
+         wN6A==
+X-Gm-Message-State: AAQBX9eeLfTPGmS3OR+pT2WaHmdZPha0p6ksYqwukQeHUHMsm3Ki9pUa
+        8n9oB66YH3KiKb3o2ias1Fl1qw==
+X-Google-Smtp-Source: AKy350ZC3/htT9jKCMQHFZEYh7Dr4Lk8To/TD9Tv6JaBMpUmG2iswjq+xu2YFQksaS3IrBiwviSwIA==
+X-Received: by 2002:a17:906:a243:b0:94a:9683:7501 with SMTP id bi3-20020a170906a24300b0094a96837501mr3290082ejb.73.1681402555608;
+        Thu, 13 Apr 2023 09:15:55 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
-        by smtp.gmail.com with ESMTPSA id j14-20020a17090686ce00b0094a57f50d7csm1148558ejy.200.2023.04.13.09.12.50
+        by smtp.gmail.com with ESMTPSA id um9-20020a170906cf8900b0093034e71b94sm1176949ejb.65.2023.04.13.09.15.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 09:12:51 -0700 (PDT)
-Message-ID: <3e361a73-797f-41c7-1ead-ecafee3928e4@linaro.org>
-Date:   Thu, 13 Apr 2023 18:12:50 +0200
+        Thu, 13 Apr 2023 09:15:54 -0700 (PDT)
+Message-ID: <d6099154-032e-d4ff-5732-1be856fcebc0@linaro.org>
+Date:   Thu, 13 Apr 2023 18:15:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sa8775p: pmic: add the sdam_0 node
 Content-Language: en-US
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Sebastian Reichel <sre@kernel.org>,
@@ -71,9 +71,9 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         Parikshit Pareek <quic_ppareek@quicinc.com>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 References: <20230413131705.3073911-1-brgl@bgdev.pl>
- <20230413131705.3073911-2-brgl@bgdev.pl>
+ <20230413131705.3073911-5-brgl@bgdev.pl>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230413131705.3073911-2-brgl@bgdev.pl>
+In-Reply-To: <20230413131705.3073911-5-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,22 +89,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 13/04/2023 15:17, Bartosz Golaszewski wrote:
 > From: Parikshit Pareek <quic_ppareek@quicinc.com>
 > 
-> Remove the power on reasons with reboot from the pmm8654au_0_pon.
-> Instead, the PoN reaons should be part of different sdam_0 mode, to
-
-typo: reasons
-
-> be interoduced.
-
-introduced
-
-Anyway it does not say why. Are these power reasons not correct?
-
+> Introduce sdam_0 node, which is to be used via nvmem for power on
+> reasons during reboot. Add supported PoN reaons supported via sdam_0
+> node.
 > 
 > Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
 > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index 5abdc239d3a6..49bf7b08f5b6 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -88,6 +88,14 @@ trip1 {
+>  			};
+>  		};
+>  	};
+> +
+> +	reboot_reason {
 
+No underscores in node names. This is almost always called reboot-mode.
+Please, do not use downstream naming and conventions.
+
+> +		compatible = "nvmem-reboot-mode";
+> +		nvmem-cells = <&reboot_reason>;
+> +		nvmem-cell-names = "reboot-mode";
+> +		mode-recovery = <0x01>;
+> +		mode-bootloader = <0x02>;
+> +	};
+>  };
 Best regards,
 Krzysztof
 
