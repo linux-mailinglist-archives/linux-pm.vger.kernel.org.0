@@ -2,81 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D35C6E0619
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 06:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF506E0625
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Apr 2023 06:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjDMEqS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 00:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
+        id S229596AbjDMEvX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 00:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDMEqR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 00:46:17 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A7059F4;
-        Wed, 12 Apr 2023 21:46:13 -0700 (PDT)
-X-UUID: 88b58fc1a5574416af0bdbef49684799-20230413
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:1e4830ac-918e-4878-8fdf-8b271f98f3c4,IP:15,
-        URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-INFO: VERSION:1.1.22,REQID:1e4830ac-918e-4878-8fdf-8b271f98f3c4,IP:15,UR
-        L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:c9a9cdea-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:230413124607FPIJEWCS,BulkQuantity:0,Recheck:0,SF:44|38|24|17|19|102,
-        TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 88b58fc1a5574416af0bdbef49684799-20230413
-X-User: zenghao@kylinos.cn
-Received: from zdzh5-qitianm428-a376.. [(116.128.244.169)] by mailgw
-        (envelope-from <zenghao@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 821352072; Thu, 13 Apr 2023 12:46:04 +0800
-From:   Hao Zeng <zenghao@kylinos.cn>
-To:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Hao Zeng <zenghao@kylinos.cn>
-Subject: [PATCH] cpupower:Fix resource leaks in sysfs_get_enabled()
-Date:   Thu, 13 Apr 2023 12:46:02 +0800
-Message-Id: <20230413044602.3221453-1-zenghao@kylinos.cn>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S229535AbjDMEvX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 00:51:23 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABC24EFD;
+        Wed, 12 Apr 2023 21:51:22 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id o2so9534543uao.11;
+        Wed, 12 Apr 2023 21:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681361481; x=1683953481;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kGpfccEFlesihlPqD7G4pgrCSblH7OAQk2NFUzrS9uk=;
+        b=GF/Wy3m+NhO5Zn+rcy1va1rPn6eDR1FoxK7eLKhYmDSidCitNMI+GiFUWnYq9YM1a9
+         68egP8hz6WxR1K0CZx+UWHGMfHdoF9ZHaAF8YMobSNq4jctKr+78q0A03EQjN4TFXUqG
+         l0TpSDcmZGzCS7+tBmg3LeSK8uC98NQ8KLW1qC9/QRqJbJxjLBmzyf1QbqzQDAEUG4Be
+         lJqSkNxCUa3rQD7ufDJN65vCfkCyx8CsjCps3boEKApBUnN8AUXnwgmj+VMNQqrWpAJJ
+         NFoL/Bv8jeWdXSqTJLZqHiDWcC0VbaxkABkgQZQli5XQ87mf8KjwqluHwjnXF2JGbi41
+         7vmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681361481; x=1683953481;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kGpfccEFlesihlPqD7G4pgrCSblH7OAQk2NFUzrS9uk=;
+        b=hypPHqay6gAowoVY+P70gfXMu4qaw5qR53I5CpsO3yvAC5E7Q68F6gJKpMkChzUyQc
+         YLitpaOv1IF4bst217sKjnKUDzZ3tWgwlgILksa88uJZGlthqjIFEPET6uxbK+H8pM4X
+         HOjRLwoHWlC770Pmz4wDHvJRNSMrl2a3BTuurQPRy0+xOJTAr1jX/H50NUDdVOnVYLCq
+         ajjq97oXuN1ghLbZN1jcMPIfkdAOGe0N2kgkkz31fo9MUE6uS/ulHU9MiVqYALnSCqyB
+         gUL8xNxIb/SfPn63hGzSJSKTXassiD3tcQhC4Jh3RAXbnkqDdTq9NQSmdsmf57Crow5p
+         62zA==
+X-Gm-Message-State: AAQBX9fBHw2VCc1qAkxXZImMbW4FlL7aEpc4FcXWc25EpF2TkQeJIjoc
+        tbmejwKitMGWpt435JFU3FmDEwaEhej0zvn6O4c=
+X-Google-Smtp-Source: AKy350Zb2Jyb3W8YK59sNQdQfbMexJEutb2y35WUse23JPiAlEvVxLaPBZCtvPzaPZgarzNRlPny86/AlBJFTYQZwJI=
+X-Received: by 2002:a1f:2004:0:b0:40e:fee9:667a with SMTP id
+ g4-20020a1f2004000000b0040efee9667amr271520vkg.3.1681361481221; Wed, 12 Apr
+ 2023 21:51:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230320095620.7480-1-di.shen@unisoc.com> <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
+ <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com> <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
+In-Reply-To: <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
+From:   Di Shen <cindygm567@gmail.com>
+Date:   Thu, 13 Apr 2023 12:51:10 +0800
+Message-ID: <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
+Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, Di Shen <di.shen@unisoc.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
+        orsonzhai@gmail.com, rui.zhang@intel.com, amitk@kernel.org,
+        rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sysfs_get_enabled() opened file processor not closed,
-may cause a file handle leak.
+Thank you Daniel. Any comments would be appreciated!
 
-Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
----
- tools/power/cpupower/lib/powercap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-index 0ce29ee4c2e4..a39ee1c89679 100644
---- a/tools/power/cpupower/lib/powercap.c
-+++ b/tools/power/cpupower/lib/powercap.c
-@@ -51,7 +51,7 @@ static int sysfs_get_enabled(char *path, int *mode)
- 		close(fd);
- 		return -1;
- 	}
--
-+	close(fd);
- 	if (yes_no == '1') {
- 		*mode = 1;
- 		return 0;
--- 
-2.37.2
+Best regards,
+Di
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+On Tue, Apr 11, 2023 at 3:51=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 10/04/2023 04:09, Di Shen wrote:
+> > Hi Lukasz,
+> > Could you please apply this patch if there's no more comment? Thank you=
+.
+>
+> Hi,
+>
+> I take care of applying the patches. Give me some time to read the change=
+s.
+>
+> Thanks
+>    -- Daniel
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
