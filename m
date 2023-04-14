@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6FE6E1F22
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 11:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D1E6E1F2E
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 11:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjDNJUq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 05:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S230136AbjDNJVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 05:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNJUp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 05:20:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541475BB0;
-        Fri, 14 Apr 2023 02:20:44 -0700 (PDT)
+        with ESMTP id S229840AbjDNJU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 05:20:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D204183CF;
+        Fri, 14 Apr 2023 02:20:49 -0700 (PDT)
 Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
  (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N4Q8u-1qX8jH2Txu-011RQg; Fri, 14 Apr 2023 11:20:09 +0200
+ 1Md66H-1qMrKj1Fkh-00aFUl; Fri, 14 Apr 2023 11:20:10 +0200
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -32,28 +32,31 @@ Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V3 0/6] ARM: dts: imx6ull: Fix dtbs_check warnings
-Date:   Fri, 14 Apr 2023 11:19:41 +0200
-Message-Id: <20230414091947.7831-1-stefan.wahren@i2se.com>
+        linux-pm@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH V3 1/6] dt-bindings: serial: fsl-imx-uart: add missing properties
+Date:   Fri, 14 Apr 2023 11:19:42 +0200
+Message-Id: <20230414091947.7831-2-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230414091947.7831-1-stefan.wahren@i2se.com>
+References: <20230414091947.7831-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:hZO7aSeh19CFSzyt1wn7DMqe5u+cJwhytrJylrSjOxbVjlxhFzV
- la9Z3fIgiDi3HXXewf+iWVDf4Pz851OnoCQEvSb5U1Z6T/JbnJtn6509JsU9bXk4E2f73Ef
- idkUHyq/4w34eR6PgnFQW5/bKeNKaATggNeKkNp0hsQiQC9YVUxFvLYH4hX7ufHVEWZCc7f
- ImlrB1EGBnn1B6UTtL4Dg==
-UI-OutboundReport: notjunk:1;M01:P0:T4Ry70SW50U=;1kp/ghpYCyKpzAyHh/WjkyYii9z
- MdWawSyhF1XQp+hbp4dviq+AgQQSQcHMmidH8MYlIYxNpJ5Hfy8nnzfQbMC/Rc67v5PAUxD+3
- mz0mekv+1dw5uO/6dg23sxLuxOwYbt91EZhE3u4H+7sPWHGsc4xsuZSEFtc3e67h4HRFVYZJj
- gmUmb3QkIarRFcKpGoSJ2/9k3ODxKIM5MJrTQkUrKllA/Wf6sCb+W3m7nS6xvFeyy9v3ZTROO
- uBGJokHgL0baX01rquISsU8CXJIYWiPK0TlkI584uCP/AFx1pWwHeoNJ8DI0ooq4yJ173xKcM
- lEbDKocv9JydyPVw/7+c/1PT+CyhF/VMQZtg+0JKC1mcVhElXZ6oOKjHxqBLpepSv146pwlML
- KmvYDCVMnvLl1C45h7PCCdXMaFnEIlLDG91aq1ThdAb+kHATQBCMa5ncEhs1kFQpBiU1wD4hm
- 2oUVIdXYJJzAZ37wcW+jiU6lXZw1WKpeX1tw0GCUorGkSWs5KZcGPsOSHX1vrCjvWemW8/Q9a
- QtDpB1dgpQBiXl2YxjhTPGExek9qVOoYOrJ+T1e2+lAu9314F3egz1HZLWjj9jEOjH0oNc9ZG
- 7kBAyiwnDQd4aMfe0oVrLU6NwUuUdPHyvTsZO86Gotf8wL48Y4DI7TuwchKcEI4qvzAvRKB4h
- OKluAaiyw87XBKviGquCA1c988CSwh/+38QWukzfvw==
+X-Provags-ID: V03:K1:VioDRxv3cyE25EFn6APl9PQCkeERmtccGLpNoVTuhpxmR8Ryy+l
+ ooOfWTi9WlipRRAiIAowyL1kk7vengOZSu6gN0pXrJOIy+8GDBp2OZjBnzRqBL/zaOX7rJI
+ HBlzAn4RZHyYg6VadyIxbM64W+vF30iN6OsBIUT0BJwoYm5AWgkkPgdGZNc9MX7+MebE5k2
+ PymoQcrFqs87GTp6/mmAw==
+UI-OutboundReport: notjunk:1;M01:P0:Gz7UI4zls1o=;AZQrNr6kqGDd4YXjZZTdY2ohqZM
+ 268QJuWTF86x7E/+ijtB4EZ2+gDJPJGZt/MCvWh+aBgQLzxT+Qu1H8y1afAZlbilB8zc5K31B
+ NLVl4/3jj69Xmmw+uVb/M4Ce7J73T4Yj2Pv4hpECgXedhreKz5VHsNLrYAxnZIV2zNhUvmDCF
+ 5DR3+Pm9y/DnBGxrutHAnJe3PMKoRSTkxmClmX9k642OKYgx6JcFrSvl1tihJh/KjQcu5WF65
+ 3ZilVD/csUYMEFYKgNvZBvYIRQ6+0IBMVqQAjeD1Egdf3pfIpN6I/WKvvyGcQRl3y1/Kmyr2B
+ YK2I2L0qSsg1IAE4UgDScYpeVmhE8hi4EDSdjNEEYAEBz+z4sixne8A2xrb+wTytCAcSSa0GY
+ 5xoXOH503o0uZ8D/NnJpZWj8O3rSQtFNjWlsb57fmEjGN4U0ehHTcML+WMcAqlABvDw+FzG8z
+ SOnLVx9nSxvDBmeNjEzc/c80fO3Q+MYxDx1KpAXrp2SYOsBav+bGMGBymZ/Sq6SNLPAU0Y0F4
+ 9MVikikvgSZgpU++aPaGnmtN8QnjsGeZ/ofzfTT11NZvyayg54DTW9oRsOuaZWF90ekvVNHe3
+ IOhrjld7q6Y3Iy8AIu0EMrpBTcremcb9EeZX58RqdMj8leGY2xIx5+wawGrawsLJyjFsRdvlG
+ n6HbRB/Z/84083IgyxvCvtwxvTn9gdBRidSARojYEw==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,38 +66,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series tries to address some dtbs_check warnings on i.MX6ULL.
+Currently the dtbs_check for imx generates warnings like this:
 
-Changes in V3:
-- add Krzysztof's Reviewed-Bys
-- fix indentation in Patch 6 found by Krzysztof Kozlowski
+serial@7000c000: Unevaluated properties are not allowed
+('clock-names', 'clocks', 'dma-names', 'dmas' were unexpected)
 
-Changes in V2:
-- new patch to fix fsl-imx-uart warnings 
-- fixed GPC typo found by Fabio Estevam
-- keep enum in bindings as suggested by Krzysztof Kozlowski
-- make imx6ul GPT compatible to imx6sx
+So add the missing properties to the devicetree binding.
 
-Stefan Wahren (6):
-  dt-bindings: serial: fsl-imx-uart: add missing properties
-  dt-bindings: crypto: fsl-dcp: add imx6sl and imx6ull compatible
-  dt-bindings: imx-thermal: add imx6sll and imx6ul compatible
-  dt-bindings: imxgpt: add imx6ul compatible
-  ARM: dts: imx: Adjust dma-apbh node name
-  ARM: dts: imx6ul: Add clock and PGC node to GPC
-
- .../devicetree/bindings/crypto/fsl-dcp.yaml   | 12 ++++++---
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
  .../bindings/serial/fsl-imx-uart.yaml         | 25 +++++++++++++++++++
- .../bindings/thermal/imx-thermal.yaml         | 14 ++++++++---
- .../devicetree/bindings/timer/fsl,imxgpt.yaml |  3 +++
- arch/arm/boot/dts/imx23.dtsi                  |  2 +-
- arch/arm/boot/dts/imx28.dtsi                  |  2 +-
- arch/arm/boot/dts/imx6qdl.dtsi                |  2 +-
- arch/arm/boot/dts/imx6sx.dtsi                 |  2 +-
- arch/arm/boot/dts/imx6ul.dtsi                 | 14 ++++++++++-
- arch/arm/boot/dts/imx7s.dtsi                  |  2 +-
- 10 files changed, 65 insertions(+), 13 deletions(-)
+ 1 file changed, 25 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml b/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
+index 4cbe76e1715b..06f4b02b0550 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
+@@ -52,6 +52,24 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
++  clocks:
++    items:
++      - description: ipg clock
++      - description: per clock
++
++  clock-names:
++    items:
++      - const: ipg
++      - const: per
++
++  dmas:
++    maxItems: 2
++
++  dma-names:
++    items:
++      - const: rx
++      - const: tx
++
+   fsl,dte-mode:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description: |
+@@ -87,11 +105,15 @@ required:
+   - compatible
+   - reg
+   - interrupts
++  - clocks
++  - clock-names
+ 
+ unevaluatedProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/clock/imx5-clock.h>
++
+     aliases {
+         serial0 = &uart1;
+     };
+@@ -100,6 +122,9 @@ examples:
+         compatible = "fsl,imx51-uart", "fsl,imx21-uart";
+         reg = <0x73fbc000 0x4000>;
+         interrupts = <31>;
++        clocks = <&clks IMX5_CLK_UART1_IPG_GATE>,
++                 <&clks IMX5_CLK_UART1_PER_GATE>;
++        clock-names = "ipg", "per";
+         uart-has-rtscts;
+         fsl,dte-mode;
+     };
 -- 
 2.34.1
 
