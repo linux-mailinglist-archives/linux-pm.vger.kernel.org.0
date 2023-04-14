@@ -2,81 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4E36E21D1
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 13:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CEE6E1AFF
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 06:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjDNLMZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 07:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S229598AbjDNEOZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 00:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDNLMZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 07:12:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A576A7
-        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 04:12:23 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id bi22-20020a05600c3d9600b003f0ad935166so2204014wmb.4
-        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 04:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681470742; x=1684062742;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SEnulhA5VA3I1e5UG7ov0nIRMdi2PjIGPK3ZiIECZ0Y=;
-        b=hYaxh3J4LVdiZZ5grBlmO1PkwCItaOSHE9AcEhaKGDEXo6mHg6ZtWeai7jPoCYBCcu
-         nQ2yfZAm6Pl75BLd+colZl5waBpHA5AVORT1OAUZXUrt1MoU0hIkd//gCfUq8xoLQKMx
-         PXJZ962far8aZDjJgWE/Lst5AJVH47KAgPlrZ7p14WhwyGz2rXUENbUzR6cLN5ick+DK
-         ICle8tBpEPheM+b4CHXSKgEfYuKGvgfKDeFLggzDiTFcV7MtDk1IOVxvqf5T5LK+eraR
-         v0bxZYzJQcS2W9YG48YNsxEJTszWbalpBLhTAbukJ5VntykCnc0xmdemXf/p0qV9gfmI
-         3cZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681470742; x=1684062742;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEnulhA5VA3I1e5UG7ov0nIRMdi2PjIGPK3ZiIECZ0Y=;
-        b=W3EyF4znIzMCXi0mut+vZKiFAUCpPKPfz9nGSeDvsUZTeTrDTUOIgddXivJ+ZSU0lk
-         Dqp7U/DPuvja98h2NPBsXmGVuBOTq2hC5CCa7IUj2T93v18TBljGhhhR90xTPWJ3pAYZ
-         Y1K8FzPbf88+EzGrGIcwQEqr/eHzfx3hR1bjxMcZGJ9KpumLOyoeMn+FZRakf+0XpJdv
-         QFusFqLK+FPDKg1ZuWiwNT1wXyo772iIHIEzd+GT7z1HXScYZaWf/KNfLszHDS6HkYMC
-         YcUVor8qQRDD3MISqjvPNL5E4xB0muEJJt/NxGi0ts9XucflT3OIu6Ks3ngRRwgZjcBU
-         jUqw==
-X-Gm-Message-State: AAQBX9eyXA8wIPney3RMCmzBARc3H3t3aRcnIwyC9lrTJ5KePDWSP6D2
-        96Rc+Zq+4e2Ms/Z+dlDeNch/WKyMK/uoX0/0W4k=
-X-Google-Smtp-Source: AKy350Y7QQKo8+o2lhPzSw/tJZXziB6QYAhasXiaK08d856PPVmWZGdiR+beC4O0oOyBfWYQd99BCw==
-X-Received: by 2002:a1c:7209:0:b0:3f0:9565:3f3f with SMTP id n9-20020a1c7209000000b003f095653f3fmr4614563wmc.3.1681470742293;
-        Fri, 14 Apr 2023 04:12:22 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:7529:f7da:b8df:f1dd? ([2a05:6e02:1041:c10:7529:f7da:b8df:f1dd])
-        by smtp.googlemail.com with ESMTPSA id c11-20020a7bc84b000000b003ed2384566fsm4098856wml.21.2023.04.14.04.12.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 04:12:21 -0700 (PDT)
-Message-ID: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
-Date:   Fri, 14 Apr 2023 13:12:21 +0200
+        with ESMTP id S229540AbjDNEOX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 00:14:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9CE210B;
+        Thu, 13 Apr 2023 21:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681445660; x=1712981660;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ilHX1TUJOSQR7mRe4+AEDRbkMzycBg1B0YKXxtFmyHw=;
+  b=LchK71ymk2b8Tpsc5NIIb3YqngpYoKXaArF4MSbA/9ZciMU6OQ3wVexg
+   0kJs2Cthj2lRUfgIY6en6oKlRH17WC7GdoIF2UfL6b7eCAMQGb7G7tA0T
+   CxKeQoWOtyw9qotKYalk9Ylin0r4XPsF844z+z/ULu27l7W3do7jRakI1
+   KaByojNSSZvR8/tNC89PjgPPxzX1mNIJk9qQ5b0k5sIWyR+r0XD19LEhg
+   jfrQJN7Re1ST5UUsCS4H1yS3xCCEYZJOAaEwQQ/QNb8f1oUoRWW1GZVfU
+   LkAkk66uGtiA63u1Y/FR2ga246fQvA07uDB9vX8SMdy8x6tuvZrYFXZPZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="343138350"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="343138350"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 21:14:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="683194742"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="683194742"
+Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
+  by orsmga007.jf.intel.com with ESMTP; 13 Apr 2023 21:14:18 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>
+Cc:     Ye Bin <yebin10@huawei.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Yifan Li <yifan2.li@intel.com>, Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH v3 0/2] Fix test_resume failure by openning swap device non-exclusively
+Date:   Fri, 14 Apr 2023 20:10:11 +0800
+Message-Id: <cover.1681443714.git.yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
- not be reset
-Content-Language: en-US
-To:     Di Shen <cindygm567@gmail.com>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, Di Shen <di.shen@unisoc.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
-        orsonzhai@gmail.com, rui.zhang@intel.com, amitk@kernel.org,
-        rafael@kernel.org
-References: <20230320095620.7480-1-di.shen@unisoc.com>
- <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
- <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
- <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
- <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
- <da59b4ef-1532-1b3a-7a73-9a095d8c9390@linaro.org>
- <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +61,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/04/2023 10:40, Di Shen wrote:
-> We have discussed this question in patch-v1:
-> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com/
-> 
-> Simply put, we use the trip_temp in the Android System; set different
-> trip_temp for thermal control of different scenarios.
+test_resume does not work in current kernel when using swapfile for hibernation.
+This is because the swap device should be openned non-exclusively in test_resume mode.
 
-The changes are dealing with the trip points and trying to detect the 
-threshold. That part should be handled in the thermal core or thermal 
-trip side, not in the governor.
+Patch 1 is a preparation to turn snapshot_test into a global variable.
+Patch 2 is the fix to open swap device non-exclusively only for test_resume mode.
 
-AFAICT, if a trip point is changed, then the power allocator should be 
-reset, including the cdev state.
+Change since v2:
+Adjust the initialization of fmode and refine the commit message
+per Rafael's suggestion.
 
-It would be more convenient to add an ops to the governor ops structure 
-to reset the governor and then call it when a trip point is changed in 
-thermal_zone_set_trip()
+Change since v1:
+Turn snapshot_test into global variable and do not introduce parameters for swsusp_check()
+nor load_image_and_restore().
 
+Chen Yu (2):
+  PM: hibernate: Turn snapshot_test into global variable
+  PM: hibernate: Do not get block device exclusively in test_resume mode
+
+ kernel/power/hibernate.c | 15 ++++++++++++---
+ kernel/power/power.h     |  1 +
+ kernel/power/swap.c      |  8 ++++++--
+ 3 files changed, 19 insertions(+), 5 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.25.1
 
