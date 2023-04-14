@@ -2,58 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B046E2991
+	by mail.lfdr.de (Postfix) with ESMTP id 478F96E2992
 	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 19:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjDNRkd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 13:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S230287AbjDNRke (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 13:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjDNRk3 (ORCPT
+        with ESMTP id S230266AbjDNRk3 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 13:40:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF18476B3;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF50676B8;
         Fri, 14 Apr 2023 10:40:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 424D460F7C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5612661861;
         Fri, 14 Apr 2023 17:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AAE1FC433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE1F9C433EF;
         Fri, 14 Apr 2023 17:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1681494027;
-        bh=KnX+BTPv0+8jqkJOnDAbfaYuYSUpx1f3ylLfveceFwk=;
+        bh=xZEo2wsl+kZE8aeUuUpM7pC43UV2fFAHulQXDgQvjl0=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=E0XJW5VGyuxbtnkf9txeJkpA4iJ9/vyac6xtaDg6K5/JNM01kwbu0WbrkR8U84Ohv
-         KEJRiyFuCFrmKG4EeS4D6aTBQXx0J64LfTXckA+jjxnN/X1JeTP/d8Q9DjqK7e31Q0
-         GSH3Z9NWA5c1vUizJW81xagaZpaEdLzgs3FroqVvAlp1ntUn5EYDrsfBcrL87THgSx
-         A2spADPum02iKvjnNla5cPioM6YwCwoE52Ni19GyhDJuspVt5n+nm+wOilkF7fdVBt
-         0fxRQUJAFYMmhZbvcz6y27KUnPkudg+ZAt5ESKKblmXXKFyTyh5m2TzPCMchnGv7ey
-         IOjRIgVf/sYZQ==
+        b=TbhRBRNmUYrdVT8jjf2iBdov6gPTrgD/YITwVM70hZQGqjradXmPjy5Gfkjo3mw28
+         Aw73z9hiGTuJMuGAmYCZMJI9tmeT09879gcFrB4JPsqLB2Is+GmIR1znyHUIoF3l2v
+         udAkF3v853QUN3NUaSZyF1TWXX11Gv0du9MClV4LRdefoK966+UiWf3+1IX6nlnP1/
+         c6i5gMfU4PpMgImWFHHTSBycR6k97RagUNA+3EIHyhciMCs7lUXpPeDwT0AiItdW1O
+         CjdcZt5Ez/+C1/elvZnJsTfsmTsgrKAXL1rseRCgzjovgDv+AWJ9ALpG+hZYIGk9/x
+         GOKgZtMZRE/Jg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9160EE52441;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A3F05E29F3B;
         Fri, 14 Apr 2023 17:40:27 +0000 (UTC)
-Subject: Re: [GIT PULL] Thermal control fix for v6.3-rc7
+Subject: Re: [GIT PULL] Power management fix for v6.3-rc7
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0j9EZH-9DJzqGE+q=sB-y5FeZUv3k=X4BgkthSg-PFx3Q@mail.gmail.com>
-References: <CAJZ5v0j9EZH-9DJzqGE+q=sB-y5FeZUv3k=X4BgkthSg-PFx3Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jVJ+7XLZtv6YE0O0PUB9OSzf7c2qN=eESVHUCni8xjrQ@mail.gmail.com>
+References: <CAJZ5v0jVJ+7XLZtv6YE0O0PUB9OSzf7c2qN=eESVHUCni8xjrQ@mail.gmail.com>
 X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0j9EZH-9DJzqGE+q=sB-y5FeZUv3k=X4BgkthSg-PFx3Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.3-rc7
-X-PR-Tracked-Commit-Id: 117e4e5bd9d47b89777dbf6b37a709dcfe59520f
+X-PR-Tracked-Message-Id: <CAJZ5v0jVJ+7XLZtv6YE0O0PUB9OSzf7c2qN=eESVHUCni8xjrQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.3-rc7
+X-PR-Tracked-Commit-Id: 4654e9f9f43993eb9ce383fa7c88d14b052b8cc3
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d0b85e7e60b83348b022441de9047c60ff555bfa
-Message-Id: <168149402759.11053.2841087773125029174.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 4b992ead33cdd47723f606350efcf8a8cae4fe36
+Message-Id: <168149402766.11053.15235477289381160115.pr-tracker-bot@kernel.org>
 Date:   Fri, 14 Apr 2023 17:40:27 +0000
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 14 Apr 2023 15:56:40 +0200:
+The pull request you sent on Fri, 14 Apr 2023 15:57:49 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.3-rc7
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.3-rc7
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d0b85e7e60b83348b022441de9047c60ff555bfa
+https://git.kernel.org/torvalds/c/4b992ead33cdd47723f606350efcf8a8cae4fe36
 
 Thank you!
 
