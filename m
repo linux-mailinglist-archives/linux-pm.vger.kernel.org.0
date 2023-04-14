@@ -2,286 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10AA6E17F3
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 01:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2729E6E199B
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 03:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjDMXOG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 19:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S229599AbjDNBY3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Apr 2023 21:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjDMXOF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 19:14:05 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D697846A9
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 16:13:44 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id eo6-20020a05600c82c600b003ee5157346cso10960247wmb.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Apr 2023 16:13:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681427616; x=1684019616;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZF8rvg1z5XANVIBt+ONfTikNhwE8ybaWY9TqUuiseLs=;
-        b=h2tPn6d/Yo41LiRgzT5eH3i1q4UiJBoq9n+iQNY+pqcbUwZpAmNN/OBK7vMY0rbegX
-         tNlx1GtJjLlJMoT7P3c3VUTOUwgtr58boeVZ/HH8BoRebbQXPPwTEyrjVDRSciPf5728
-         EVgtpIPT+mWH26oT844S7KnNgjcbfTPDcLQcDq5w93LrL9OUStGAtWQs2oJyCOlMB1QT
-         ohR/zC7TOnL4Zxzxnj1dPzL/8tsQe/sQU/J+YKXPoLa3GYl6fQTSanLVpFCpOpQwe2Kr
-         Dem92Jc0cm58+amqk1sxqcUxr7gRpWsJlrtzvtek4GNibndgHfb750sgJO7O+OQ5qEVr
-         05Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427616; x=1684019616;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZF8rvg1z5XANVIBt+ONfTikNhwE8ybaWY9TqUuiseLs=;
-        b=K4QAmMSQd3qlLvrvN9yDC1RGDMOp2UBISwalf02Mg4kInzr2KRG+/IHndiWWRKfxeZ
-         k+ZAI2fzzL4cqhojVLBGwwl8nLoq4wiFZb3A6ahSD0c7CwBhiwQflLnPS9mTr070uOUP
-         fFo3xX3JOYI4h9yJ2d1lIlsaQ5NEKWAYjEBqXqMqo4V9lt7JdjmCQfg4K2qKoX0f0USz
-         //q3WQzVjf09WymCna4InQdcVEg+OPRna8R6J6zWIsDXobttP6Ri9/VTV+5pC+9JfqK0
-         Ta/+n8YVqBQAk+XBjzhP0gG3zP2QvnOVQj7j50V6jDik7pgaDj/DqzFNqL9LVDXgEJCC
-         Pfbg==
-X-Gm-Message-State: AAQBX9c4trZ47xSofkJfhpBg41rpXkBCAU1m+pZIZe928kFe2wV3niCt
-        bFrkk25sWL+aETcN93JGuTElGA==
-X-Google-Smtp-Source: AKy350bqdhKSwq5RaBwZeO+d7otFOJSHYreipwNsXOnW9lfHqFxRIvkJdNPyxXZQXXmshoGx/VPMtw==
-X-Received: by 2002:a7b:c3cc:0:b0:3ef:128d:7167 with SMTP id t12-20020a7bc3cc000000b003ef128d7167mr3057727wmj.13.1681427615924;
-        Thu, 13 Apr 2023 16:13:35 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:7529:f7da:b8df:f1dd])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b003f0ad98522bsm1831588wmq.28.2023.04.13.16.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 16:13:35 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC PATCH] thermal/core: Update the generic trip points
-Date:   Fri, 14 Apr 2023 01:13:18 +0200
-Message-Id: <20230413231318.143135-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229493AbjDNBY2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 21:24:28 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2077.outbound.protection.outlook.com [40.107.95.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A21F7;
+        Thu, 13 Apr 2023 18:24:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LpiHZrCwKBBHs9do9VtUZ1CvWcPaocGUAsMfGJC+C3DGgIVBJec99rx1URtYoz2LfYsm/oz22iLVXG+R3uAb8mXM7psOegVk8mGHR3nUhWxzPpe0DBcYPuSFOLHK+LE1jeHLrraupJ+wt0qn9a+orTI0tpebOW6zLDNNfLF4M/n5CERm2IVNZ6UkuD7mUjxJ7wCPlu/bxmYwi34OB2d0Lsqo53ihDCvaM5zL6UxuwHDKBoG4ofgxNvuQU2oaHq2HmpJjO0e2BZZNXAr5Yjrpg+8yvu7Amte7CN5k19Pml3H/r5cHVK9cCPF5zZFWNsshNRIvU/x8NrJ0srN8pmYCQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y4Lz7usC5ynPZjlDvVNFYAxXVojPa+WFoPELe1Zkg54=;
+ b=NRlX5jsDYlArYIEav7DvBxfAYUT8wwEoU91s+L4s7bHWOACeh7wk/gzKn8aDnCl1OsMirCsyWnGaZg8PU+elUOVDSAr7L+cMRkJ+DfRy6zTJyr05IV2lUYd1IVDVPGhaGDs1CD62DstRoKEKGdKMAKvfnWNAvCLd0TaqbyfTdzjbuDWq0/tQhweGozVhv7q7dfBVozTgFtiJTV1zghpQymSXPpy8vucavZbZEwXZRHSkSB1EO7bpSqs8yJQMRVpcOB8Lu5o8deQ88vK3Jefuwvh1xy2Rr3Uy+8Oozedodh5jgEncHmyq9au3lgqifX4nyRr23URs+yBMevrpZWBJVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y4Lz7usC5ynPZjlDvVNFYAxXVojPa+WFoPELe1Zkg54=;
+ b=cs3fGnXjRdSYu/qEzj4zcgHwGGw51YOaRIZT9P8tq2oQpyDUF+6rJ54Nxg2NNj8Vs1NIQodUkiCF2l/eYapvjTFVYZE92deXI4umeHRHqAZPDl1Y5E1JgjAwAIsb/uMdJRKwLz3s+Rfi6tRHBV0zLBW3aVI1YYbLRki4EJ7uM2A=
+Received: from DS7PR03CA0094.namprd03.prod.outlook.com (2603:10b6:5:3b7::9) by
+ DS7PR12MB5958.namprd12.prod.outlook.com (2603:10b6:8:7d::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.38; Fri, 14 Apr 2023 01:24:23 +0000
+Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b7:cafe::5f) by DS7PR03CA0094.outlook.office365.com
+ (2603:10b6:5:3b7::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.32 via Frontend
+ Transport; Fri, 14 Apr 2023 01:24:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.36 via Frontend Transport; Fri, 14 Apr 2023 01:24:23 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 13 Apr
+ 2023 20:24:18 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Box David E <david.e.box@intel.com>, <jstultz@google.com>,
+        <pavel@ucw.cz>, <svenva@chromium.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <Shyam-sundar.S-k@amd.com>, <rrangel@chromium.org>,
+        Jain Rajat <rajatja@google.com>, <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Thu, 13 Apr 2023 20:23:41 -0500
+Message-ID: <20230414012346.1946-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT019:EE_|DS7PR12MB5958:EE_
+X-MS-Office365-Filtering-Correlation-Id: 525cd1b5-f286-4898-54f7-08db3c86fb14
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6x+BtTnSsK0LTlFR42P31pyeKR4iPDHVoZmy7566HajdEOh4CgQcC2a6GAu2160Vn9nfXJz2tnrlpHqjK9gs0VM+2toeBKZufrEzsPA2M9yZy0OLfWuQoDPEKursy34VqpxYj4+8fufVGHmp20Rgp8AtaknUOz5zWjNqNc+99eWRDJGSPwFwsjLr2ePCBStUxbYpWIOC79zMgJjFlzl75IQdQIx3yXQJVBAIaj/gjME+DHXS2UiA9sWCBtqfGWX7lqv2cQGF8i7+s4aA6HBBqvDjoIF3sPCnU0r2mFlAHoAotodTH5Mop15TVfU8ZmZtG8TmOGFMRC1DtyLj/Kbdo2smEVRFBv1QEXBeoIfdcWTjb+ZU/Q6F4u5zeaU4T+gO1ca+kevoix3G4shw7vAt8rdvDm8LxbZVJwfqo3IuDXowrwjpH7YEe+88UfP6bFZUK3XY51dA1sq9xjq0dWCqEAGO8p/AUpXvjiY5veSM15br1Afh4RhDEORmYfnaWJNWuMVOoz81SaijWSHsYZntqvh/sjna0LwoJV/KLN2WwuAJniT1qbdXDg+DEtiCZZhPI0BRlewVokqaC2qwob6wpzr8SV3qxctXklRxW6tugM6Q4WLF73dSkpQSoK4pwHi2YmqOD7SMvysBfW+7j9KrwZredhDEwaEDa9RpNl8g5bj9NpjaI7isR9R5/sfm/EBFrQ9XJdN0c74EXC/jrhaDkf8bEkTZAitPxTW7x32vN5g=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(110136005)(478600001)(86362001)(426003)(336012)(44832011)(2616005)(8936002)(5660300002)(4326008)(70206006)(316002)(1076003)(47076005)(83380400001)(8676002)(7416002)(70586007)(40480700001)(2906002)(186003)(36860700001)(356005)(36756003)(54906003)(81166007)(26005)(82740400003)(82310400005)(40460700003)(16526019)(7696005)(6666004)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 01:24:23.7973
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 525cd1b5-f286-4898-54f7-08db3c86fb14
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5958
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-At this point, the generic trip points rework allows to create a
-thermal zone with a fixed number of trip points. This usage satisfy
-almost all of the existing drivers.
+An important part of validating that s0ix worked properly is to check how
+much of a cycle was spent in a hardware sleep state.
 
-A few remaining drivers have a mechanism where the firmware updates
-the trip points. But there is no such update mechanism for the generic
-trip points, thus those drivers can not be converted to the generic
-approach.
+The reporting of hardware sleep is a mix of kernel messages and sysfs
+files that vary from vendor to vendor. Collecting this information
+requires extra information on the kernel command line or fetching from
+debugfs.
 
-This patch provides a function 'thermal_zone_trips_update()' allowing
-to change the trip points of a thermal zone.
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
 
-At the same time, with the logic the trip points array is passed as a
-parameter to the thermal zone at creation time, we make our own
-private trip points array by copying the one passed as parameter.
+Userspace can fetch this information and compare it against the duration
+of the cycle to allow determining residency percentages and flagging
+problems.
 
-Note, no code has been found where the trip points update leads to a
-refresh of the trip points in sysfs, so it is very unlikey the number
-of trip points changes. However, for the sake of consistency it would
-be nicer to have the trip points being refreshed in sysfs also, but
-that could be done in a separate set of changes.
+Mario Limonciello (4):
+  PM: Add sysfs files to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c | 40 ++++++++----------
- drivers/thermal/thermal_core.h |  3 ++
- drivers/thermal/thermal_trip.c | 76 ++++++++++++++++++++++++++++++++++
- include/linux/thermal.h        |  4 ++
- 4 files changed, 100 insertions(+), 23 deletions(-)
+ Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
+ drivers/platform/x86/amd/pmc.c        |  6 +--
+ drivers/platform/x86/intel/pmc/core.c | 17 ++++----
+ drivers/platform/x86/intel/pmc/core.h |  4 +-
+ include/linux/suspend.h               |  8 ++++
+ kernel/power/main.c                   | 59 +++++++++++++++++++++------
+ 6 files changed, 98 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index afcd4197babd..3688b06401c8 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1224,32 +1224,11 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	/*
--	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
--	 * For example, shifting by 32 will result in compiler warning:
--	 * warning: right shift count >= width of type [-Wshift-count- overflow]
--	 *
--	 * Also "mask >> num_trips" will always be true with 32 bit shift.
--	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
--	 * mask >> 32 = 0x80000000
--	 * This will result in failure for the below condition.
--	 *
--	 * Check will be true when the bit 31 of the mask is set.
--	 * 32 bit shift will cause overflow of 4 byte integer.
--	 */
--	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
--		pr_err("Incorrect number of thermal trips\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	if (!ops) {
- 		pr_err("Thermal zone device ops not defined\n");
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
--		return ERR_PTR(-EINVAL);
--
- 	if (!thermal_class)
- 		return ERR_PTR(-ENODEV);
- 
-@@ -1283,8 +1262,22 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 	tz->ops = ops;
- 	tz->device.class = thermal_class;
- 	tz->devdata = devdata;
--	tz->trips = trips;
--	tz->num_trips = num_trips;
-+
-+	if (trips) {
-+		result = __thermal_zone_trips_update(tz, trips, num_trips, mask);
-+		if (result)
-+			goto remove_id;
-+	} else {
-+		/*
-+		 * Legacy trip point handling
-+		 */
-+		if ((!tz->ops->get_trip_type || !tz->ops->get_trip_temp) && num_trips) {
-+			result = -EINVAL;
-+			goto remove_id;
-+		}
-+
-+		tz->num_trips = num_trips;
-+	}
- 
- 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
- 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-@@ -1451,6 +1444,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	mutex_unlock(&tz->lock);
- 
- 	kfree(tz->tzp);
-+	kfree(tz->trips);
- 
- 	put_device(&tz->device);
- 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index d9182fb8dd11..9fc7d9e9debd 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -203,6 +203,9 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
- void __thermal_zone_set_trips(struct thermal_zone_device *tz);
- int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			    struct thermal_trip *trip);
-+int __thermal_zone_trips_update(struct thermal_zone_device *tz,
-+				struct thermal_trip *trips,
-+				int num_trips, int mask);
- int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
- 
- /* sysfs I/F */
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-index a12980a8bac5..e05384c3e557 100644
---- a/drivers/thermal/thermal_trip.c
-+++ b/drivers/thermal/thermal_trip.c
-@@ -227,3 +227,79 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
- 
- 	return 0;
- }
-+
-+int __thermal_zone_trips_update(struct thermal_zone_device *tz, struct thermal_trip *trips,
-+				int num_trips, int mask)
-+{
-+	struct thermal_trip *new_trips;
-+
-+	/*
-+	 * Legacy trip point handling is incompatible with this
-+	 * function
-+	 */
-+	if (tz->ops->get_trip_type || tz->ops->get_trip_temp) {
-+		pr_err("Legacy trip points use incompatible function '%s'\n", __func__);
-+		return -ENOSYS;
-+	}
-+	
-+	/*
-+	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
-+	 * For example, shifting by 32 will result in compiler warning:
-+	 * warning: right shift count >= width of type [-Wshift-count- overflow]
-+	 *
-+	 * Also "mask >> num_trips" will always be true with 32 bit shift.
-+	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
-+	 * mask >> 32 = 0x80000000
-+	 * This will result in failure for the below condition.
-+	 *
-+	 * Check will be true when the bit 31 of the mask is set.
-+	 * 32 bit shift will cause overflow of 4 byte integer.
-+	 */
-+	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
-+		pr_err("Incorrect number of thermal trips\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * New generic trip point handling
-+	 */
-+	if (num_trips > 0 && !trips) {
-+		pr_err("Inconsistent parameters\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Allocate our private trip points array structure
-+	 */
-+	new_trips = kmemdup(trips, sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!new_trips)
-+		return -ENOMEM;
-+	
-+	/*
-+	 * Newly allocated thermal zone will have the 'trips' field
-+	 * NULL, kfree() is immune against that
-+	 */
-+	kfree(tz->trips);
-+	tz->trips = new_trips;
-+	tz->num_trips = num_trips;
-+
-+	return 0;
-+}
-+
-+int thermal_zone_trips_update(struct thermal_zone_device *tz, struct thermal_trip *trips,
-+			      int num_trips, int mask)
-+{
-+	int ret;
-+
-+	mutex_lock(&tz->lock);
-+	ret = __thermal_zone_trips_update(tz, trips, num_trips, mask);
-+	mutex_unlock(&tz->lock);
-+
-+	if (ret)
-+		return ret;
-+
-+	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_trips_update);
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 3e8bedb21755..0ea2da5c33ac 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -216,6 +216,10 @@ int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
- 
- int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
- 
-+int thermal_zone_trips_update(struct thermal_zone_device *tz,
-+			      struct thermal_trip *trips,
-+			      int num_trips, int mask);
-+
- #ifdef CONFIG_THERMAL_ACPI
- int thermal_acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp);
- int thermal_acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp);
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
 -- 
 2.34.1
 
