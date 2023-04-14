@@ -2,119 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95DD6E27F4
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 18:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092B46E2887
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 18:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjDNQFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 12:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S229647AbjDNQlj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 12:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjDNQFG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 12:05:06 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E558C49F3
-        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 09:04:56 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 513EB5C0112;
-        Fri, 14 Apr 2023 12:04:56 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 14 Apr 2023 12:04:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1681488296; x=1681574696; bh=a5lNomHpahVlq1sve5nT/0QPm5y/Q+3RTiq
-        w7xirtls=; b=ltIyuuLqu537SnXo5+ZiBWcPnjOB5EuuKgSD0G3OItGJ5o9Pmwe
-        Ai+qlsXyWbhOw1+RXfXv7M2Luo81jlsX9nE2UYz9H7pfcKqUQUKcmIm9EX1EsUQg
-        APdSuIBpgT5pViW73jl3v3ZWrwdnfkqw4t6AtLv3x8/rlZW2HQD9wmYpOXf72H9V
-        MIKQ9LMpKHoHmbxRBcxHpbL5bjwlDJl7r4Wm9RPkzS6kEBYNwZPekrbYcujRfOI0
-        FIE8+J87rW4mKp+TmTqOGMeockkWcOMflXPuyXBjLeMtjFRfUnFCgPmw0YguDsbd
-        OAUpskQ42A9Y45VJ1tTeUggOQYOZhfx31jA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681488296; x=1681574696; bh=a5lNomHpahVlq1sve5nT/0QPm5y/Q+3RTiq
-        w7xirtls=; b=TmgaXMdc4JWfTWXMuNGPTjDlesdyPxMKYvKfxDdUx1QqSShdy6J
-        XCqQ0XGurzF/qFjmGrEfhaUZlzNVY56jWYFXBjJI175IIea8Kl2kel79r8G5FT3J
-        gi807VTLK8ky3uaMfK8ZyxtwZTXUGbpCt3vJw/IslYwXSTaCeoinEOpr7okX/W/0
-        +UURUDFEn8hZPakloJIYVVGeRo/3uQLtyughs83tJldol5hxEL3AF9iqbjN1Jhbg
-        7Bul+nImNkGqKlPpkVwX7SPVUGs5Uvhkj1LTEZe0iyqZ7c5xCABnhbNLTwXa27Kx
-        pneX0q3wjQfJHmI8M2cwPsGey12oYpuF2pg==
-X-ME-Sender: <xms:p3k5ZEsXVht3ONfqVYSwMIuieyhzRIu__B-JIBaoXDeQicIU1Q-a8w>
-    <xme:p3k5ZBdpr8dyzpSkPcGHcQx4ricy4EpUOrxLZItXmx3PikLZEiQE6eHX2eU7SVFQX
-    nkPD2fNB2kX_acSG3w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:p3k5ZPzArmg2z5xHWyDtDCI9MynaX0YitzhfkgrlV1UptnuBZDlFPQ>
-    <xmx:p3k5ZHP__Uj_g6M_Zu-dRt_e8yo26HdzViQ_cgdBfKj-6pEO4psdYw>
-    <xmx:p3k5ZE_a7rv11TcEz8cLBCuCRkkw6dN8T3XwNw7Cht8rMlQ53kZizA>
-    <xmx:qHk5ZIYfYjUDX4t51kR_Y0kfIKwOM5aT2Im4nNkB4rjvFNY8xi4syQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6D8EDB60089; Fri, 14 Apr 2023 12:04:55 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
-Mime-Version: 1.0
-Message-Id: <cb3e16f0-cdef-42da-8761-8e729578e108@app.fastmail.com>
-In-Reply-To: <20230412142539.brqexyi5kpac5ltr@pengutronix.de>
-References: <20221012140032.113363-1-u.kleine-koenig@pengutronix.de>
- <20230412142539.brqexyi5kpac5ltr@pengutronix.de>
-Date:   Fri, 14 Apr 2023 18:04:35 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Nishanth Menon" <nm@ti.com>,
-        "Santosh Shilimkar" <ssantosh@kernel.org>
-Cc:     "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Tony Lindgren" <tony@atomide.com>
-Subject: Re: [PATCH] soc: ti: smartreflex: Simplify getting the opam_sr pointer
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229479AbjDNQli (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 12:41:38 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6BE45
+        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 09:41:37 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7606d7cc9bdso6650339f.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 09:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1681490496; x=1684082496;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1KMGf0SzwXvFf5sUG5Xm6eIyrT5N7p2Kjq8aD/XELRY=;
+        b=Ku10yB4Ku0lbno78QD/FX+Uj6db8NV/QLSRmVXjeViXwr4SgIBI6cZNuMPl5aQsAJN
+         LAsULvH/+/tj65QDNJja0LoC4eES1CHJPe9B2MDQjsPtkIjJPub5QcHP0xrDwxuN2Gkd
+         Iy+Vhn2qWPD54qDn6HDeUPVTc/QAaYw9I1RZA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681490496; x=1684082496;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1KMGf0SzwXvFf5sUG5Xm6eIyrT5N7p2Kjq8aD/XELRY=;
+        b=ZHmpgkPGn4yaEXr9vm8L1qPj5O2MvhVuRVusEbjRQM+Ksv5g1lOBWdPNVDe7v5UWVX
+         +4NIcbDQKtoApgaNB2cahMNMAG+IvBulV/9GD4oIOo+xpl5P8ZftPxs44HZcigM1YmFq
+         NJ/H9ir8uhQA/VaicDubTKxsIuWXlxgi5/dtYxISWXDjb8E9ny4ri0rhfiBwZejBHDWC
+         kZPDv+bQ4frkSxjZjuZxVsXChDkgwfFEecnH/UlT92Pu0yqPgLLh01iAg2hj+9lFp1q5
+         Ilgy3spw1N3y5RjFxIrpGogFliJTHbmhak8NkhVnWPMll5QKazpb7bvMiQiDG7cNJPAW
+         NUAg==
+X-Gm-Message-State: AAQBX9fkNYVM8OjTTKqFwxAbffxsqALIV6zqGJIcUIcX2pGr1kuisgbZ
+        lO5pMChumHKdcMFzG6UWGZs4vE3TsW8u8kAs8Io=
+X-Google-Smtp-Source: AKy350YFoPwc0TzXcMOd6kW+eYPa3IaIbmv9ZNk6nEenRzBlPrOnRj9ZArc+SMmkbcZP0Vr1Bw5XBA==
+X-Received: by 2002:a05:6602:2e83:b0:760:478f:e436 with SMTP id m3-20020a0566022e8300b00760478fe436mr1650922iow.2.1681490496504;
+        Fri, 14 Apr 2023 09:41:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id k12-20020a056638140c00b0040894c572basm1311968jad.125.2023.04.14.09.41.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 09:41:35 -0700 (PDT)
+Message-ID: <4c04ae6d-f8db-0a2d-0bd5-97c4ec828a59@linuxfoundation.org>
+Date:   Fri, 14 Apr 2023 10:41:35 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] cpupower:Fix resource leaks in sysfs_get_enabled()
+To:     Hao Zeng <zenghao@kylinos.cn>
+Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230414030830.3829332-1-zenghao@kylinos.cn>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230414030830.3829332-1-zenghao@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 12, 2023, at 16:25, Uwe Kleine-K=C3=B6nig wrote:
-> Hello,
->
-> [Cc +=3D Tony Lindgren + Arnd Bergmann who did care about the last cha=
-nge
-> to this driver]
->
-> On Wed, Oct 12, 2022 at 04:00:32PM +0200, Uwe Kleine-K=C3=B6nig wrote:
->> The probe function stores the sr_info pointer using
->> platform_set_drvdata(). Use the corresponding platform_get_drvdata() =
-to
->> retrieve that pointer in the remove and shutdown functions.
->>=20
->> This simplifies these functions and makes error handling unnecessary.
->> This is a good thing as at least for .remove() returning an error code
->> doesn't have the desired effect.
->>=20
->> This is a preparation for making platform remove callbacks return voi=
-d.
->>=20
->> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->
-> This patch still applies to v6.3-rc1, but I didn't get any feedback
-> since 6 months now. I need this change to eventually make
-> platform_driver's remove callback return void.
+On 4/13/23 21:08, Hao Zeng wrote:
+> When the read return value is equal to 1, a file handle leak will occur
+> 
 
-Applied to the soc/drivers branch for 6.4 now.
+Would like a bit more information on how the error paths are
+redone, since memory leak isn't the only one that is fixed.
 
-     Arnd
+> Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
+> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>   tools/power/cpupower/lib/powercap.c | 19 ++++++++++---------
+>   1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
+> index 0ce29ee4c2e4..02ec5b0bff6b 100644
+> --- a/tools/power/cpupower/lib/powercap.c
+> +++ b/tools/power/cpupower/lib/powercap.c
+> @@ -40,7 +40,7 @@ static int sysfs_get_enabled(char *path, int *mode)
+>   {
+>   	int fd;
+>   	char yes_no;
+> -
+> +	int ret = 0;
+>   	*mode = 0;
+>   
+>   	fd = open(path, O_RDONLY);
+> @@ -48,17 +48,18 @@ static int sysfs_get_enabled(char *path, int *mode)
+>   		return -1;
+>   
+>   	if (read(fd, &yes_no, 1) != 1) {
+> -		close(fd);
+> -		return -1;
+> +		ret = -1;
+> +		goto err;
+>   	}
+>   
+> -	if (yes_no == '1') {
+> -		*mode = 1;
+> -		return 0;
+> -	} else if (yes_no == '0') {
+> -		return 0;
+> +	if (yes_no != '1' || yes_no != '0') {
+> +		ret = -1;
+> +		goto err;
+>   	}
+> -	return -1;
+> +	*mode = yes_no - '0';
+
+I am not seeing much value in changing the above paths.
+Leave them unchanged.
+
+> +err:
+> +	close(fd);
+> +	return ret;
+>   }
+>   
+>   int powercap_get_enabled(int *mode)
+
+thanks,
+-- Shuah
