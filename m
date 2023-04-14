@@ -2,33 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAA76E2572
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 16:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0306E2669
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 17:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjDNOSm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 10:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S229949AbjDNPHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 11:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjDNOSm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 10:18:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1153B7ED2;
-        Fri, 14 Apr 2023 07:18:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E3612F4;
-        Fri, 14 Apr 2023 07:19:23 -0700 (PDT)
-Received: from [10.57.19.153] (unknown [10.57.19.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FBB23F6C4;
-        Fri, 14 Apr 2023 07:18:36 -0700 (PDT)
-Message-ID: <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
-Date:   Fri, 14 Apr 2023 15:18:34 +0100
+        with ESMTP id S229704AbjDNPHE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 11:07:04 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464292136
+        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 08:07:02 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r20so2037849wra.5
+        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 08:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681484821; x=1684076821;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B5G4acQ0YYxhQvYnJSv+B5dVG1vy5noU+wXB8XCEGhs=;
+        b=xpW2qXtILthIrOadnsYwrhnn5SOUqlrhF+0hm97rQFBEOaO8efbMhQa06KjMS0erLm
+         bqqmi4B9lUNp+Vr7RTiADB8yKqvH+whmimfkPBP0WoJ2Qo6zaWCZMITv9/MAqak8kr4a
+         oWGYckWz609NEkxDwmNYM2//INiFr1mhCbe8Zz9PjGzSQRQE6q16UZj5YtVcXHXQucMw
+         rxMcNBvfSM2KbDXaggbENyuq3STprcbTsdUlhzhDMbcJfa2DiiP6ju9ph5y/gEf9PIFN
+         gjaDiWT8+qgizLjIqnaQI22xDfZhUmbRxAPmSYwhxn5EnSOmil7vLblbF9MQi5L1yX0r
+         4Osw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681484821; x=1684076821;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B5G4acQ0YYxhQvYnJSv+B5dVG1vy5noU+wXB8XCEGhs=;
+        b=BTCcUAXaLpJm7yqgU8BExvlOdDsfffOQgLdaoLqczdm5hEpVeddkeaxs7H7ONn/3An
+         RhMf0k03liHd1iE8i0WjB77z5W3iTixdK3a3SoO3ASKDXOtd3k7fe9CfcJK0tjXmkCYh
+         To26cjjhuhw2fK8cGyJ1zWo2JWhY32vm3OLJcUZSD0nOe6yLtZtB+BhuFzK5DeqEBM0v
+         gJ9/ZezCPvFvPXhkhDcadtv9ZHjGF6Jcgsr9TSGjnopd5wYUbMi8umaH30ZdDCPEe58s
+         RVa3Cwd/QM6oq1zUzHCwlETv+nrAt4WU/dOQsnX8cxbGWzUqCF4u5gRMnBK+gRkkGF1X
+         HmAQ==
+X-Gm-Message-State: AAQBX9dhtGWoRIhTHDc0+l3bWEBSTkDnDH/P6QjcYS0jTq9bgaU1oXSQ
+        EUkKyCZEq9TLvVHjpJ2S01AWMg==
+X-Google-Smtp-Source: AKy350Y3gDuNVPCX5TuJ6d74iqJqYpE2/bT5MRXOpciGEnoDcvv5+ZoaOBAph412EfPOLrbKItbQnQ==
+X-Received: by 2002:adf:ee87:0:b0:2ef:b8d1:9560 with SMTP id b7-20020adfee87000000b002efb8d19560mr4999490wro.30.1681484820527;
+        Fri, 14 Apr 2023 08:07:00 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:7529:f7da:b8df:f1dd? ([2a05:6e02:1041:c10:7529:f7da:b8df:f1dd])
+        by smtp.googlemail.com with ESMTPSA id g12-20020adffc8c000000b002f79ea6746asm754650wrr.94.2023.04.14.08.06.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 08:07:00 -0700 (PDT)
+Message-ID: <ce9b3b01-e496-9e02-5583-41893b7154c7@linaro.org>
+Date:   Fri, 14 Apr 2023 17:06:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
  not be reset
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
         jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
@@ -42,48 +71,66 @@ References: <20230320095620.7480-1-di.shen@unisoc.com>
  <da59b4ef-1532-1b3a-7a73-9a095d8c9390@linaro.org>
  <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
  <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+ <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 4/14/23 12:12, Daniel Lezcano wrote:
-> On 13/04/2023 10:40, Di Shen wrote:
->> We have discussed this question in patch-v1:
->> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com/
+On 14/04/2023 16:18, Lukasz Luba wrote:
+> 
+> 
+> On 4/14/23 12:12, Daniel Lezcano wrote:
+>> On 13/04/2023 10:40, Di Shen wrote:
+>>> We have discussed this question in patch-v1:
+>>> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com/
+>>>
+>>> Simply put, we use the trip_temp in the Android System; set different
+>>> trip_temp for thermal control of different scenarios.
 >>
->> Simply put, we use the trip_temp in the Android System; set different
->> trip_temp for thermal control of different scenarios.
+>> The changes are dealing with the trip points and trying to detect the 
+>> threshold. That part should be handled in the thermal core or thermal 
+>> trip side, not in the governor.
+>>
+>> AFAICT, if a trip point is changed, then the power allocator should be 
+>> reset, including the cdev state.
+>>
+>> It would be more convenient to add an ops to the governor ops 
+>> structure to reset the governor and then call it when a trip point is 
+>> changed in thermal_zone_set_trip()
+>>
+>>
 > 
-> The changes are dealing with the trip points and trying to detect the 
-> threshold. That part should be handled in the thermal core or thermal 
-> trip side, not in the governor.
-> 
-> AFAICT, if a trip point is changed, then the power allocator should be 
-> reset, including the cdev state.
-> 
-> It would be more convenient to add an ops to the governor ops structure 
-> to reset the governor and then call it when a trip point is changed in 
-> thermal_zone_set_trip()
-> 
-> 
+> Sounds reasonable to have a proper API and fwk handling this corner
+> case scenario.
+> Although, if there is a need for a 'easy-to-backport' fix for IPA only,
+> I agree with this patch, since it's straight forward to put in some
+> Android kernel. We can later fix the framework to handle this properly.
+> Anyway, both ways are OK to me.
 
-Sounds reasonable to have a proper API and fwk handling this corner
-case scenario.
-Although, if there is a need for a 'easy-to-backport' fix for IPA only,
-I agree with this patch, since it's straight forward to put in some
-Android kernel. We can later fix the framework to handle this properly.
-Anyway, both ways are OK to me.
+Unfortunately, we can not do the maintenance of the Linux kernel based 
+on an 'easy-to-backport' policy to Android.
 
-Regards,
-Lukasz
+This patch could be applied from-list to Android as a hotfix. But for 
+Linux the fix should be more elaborated. One solution is to add a 
+'reset' ops and call it from the trip point update function.
+
+Did you double check the issue is not impacting the other governors too ?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
