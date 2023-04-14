@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEABF6E23DE
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 14:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C896F6E23E4
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 14:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjDNM6D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 08:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S230332AbjDNM6E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 08:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjDNM6C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 08:58:02 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEA0269E;
-        Fri, 14 Apr 2023 05:57:36 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id he11-20020a05600c540b00b003ef6d684102so8198448wmb.3;
+        with ESMTP id S229847AbjDNM6D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 08:58:03 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11547B440;
+        Fri, 14 Apr 2023 05:57:37 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id eo6-20020a05600c82c600b003ee5157346cso11863124wmb.1;
         Fri, 14 Apr 2023 05:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681477054; x=1684069054;
+        d=gmail.com; s=20221208; t=1681477055; x=1684069055;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lZSnA9V82lqicVJGiNFqWTCI4618K2puWAelw0l2AMA=;
-        b=eGQKkP65wDojg6CW+4mQy90XuO5RjVA/nIqhc55r9E7GHARoNDdSczIP5Aba23zkno
-         BCSYC9Fo1Lj6vcTEiUo1FIrBK7b3cgYx8nlMXv6m7/gVAew4ibtRx3AUaN6kr3OLO5v2
-         kme0o7cG+d7oKiOR7TDNENGui1Kb1/VF/BQCzQKw0fRzb+VbxFIvUbSuUzGB8Cd+p1JC
-         F8Cv9oPKv50hoHKeofD6jEyvJFIjqPy+sVdOhLyhCVGZ74FeGNZdtwBXrJRKR2crqK+0
-         7a8Sq83vz9MVvkBEIXNdTv2SoUNiaEPvJIGrliL98jKmW45yql7v62q6wBm1HUkWRZKV
-         VkWQ==
+        bh=r9jnq8O0akNCWZMABiiTnkNejKYtKjmdQ2nEC4Lqzp0=;
+        b=cA8fDJ+JgnHhvSPxA06aLZSDb0khbYbV2M+mrSDtzvxjZY+5F2un5hx+d1r1q5ehlo
+         SnqifMdCJ8xHyJMiISIPIl5EwjzO0M9lWrQ31H1XMmoohjavupmRFaN5oBnSUcMGVFkH
+         I1aEtW41IzkThWHHCwLCFrlmPoFqN4amueFMULBGd37eVpcJJ2gUgP1EmEOmNSNhmCDC
+         Pn4NyU+YIUfMOSYR5vN1Pb2dG2XkTFqYtanXsATbmuWpUNaBe9xg60KZGRBQkJhot8f9
+         8b7ssQZDRopfldzitwj4t4sgJtNWH4yWBP/CtyJVT2vvp0WmsnwS+lmxuU2+Ur+pKnGw
+         oRSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681477054; x=1684069054;
+        d=1e100.net; s=20221208; t=1681477055; x=1684069055;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lZSnA9V82lqicVJGiNFqWTCI4618K2puWAelw0l2AMA=;
-        b=DRhnOtG9RtAumcxneeSx8JWt33/LozDXWWTarRBVgz+LxNpQu6jY7wC+ZdiwHbpYJ6
-         z8vjZQkbdUQ5+eSNRFbmc66e/7UJKN+GYYaUefAVlpwdWg5YLkEtge6OGNKkC1IjheXy
-         JLPKbp5OixhT72DUIjjt3cWFmAl4vgH3nPtH5yBB2kw1kRKZbAgkW2Kqc+W2+UfkUnQv
-         mxLPkG4Rle5Nm5ic5iIgAa8HXuiULxzVuPNNuPmTIMCZxUfqn5IY8HYImW3H+9gjghd5
-         TdgZoUdgR00PwD754/VaYGRkw7lNI2EzPXx5D95e3K2L0gwMoOlOsAhNP1iOj4YG5hRZ
-         zWlg==
-X-Gm-Message-State: AAQBX9ebZ71AGO6mVQWSYTt6qiZAMTLdy4CyRY5ae51Hxag1kF3vxevJ
-        jO89dQHqef5bj6ETMAjKrPs=
-X-Google-Smtp-Source: AKy350bunq95HazkEFvBWGKoHsHyRQ8ZmABKuw3+odFHdf4DWvKThsba/WB7Y+wEObgFe8YN2VHvmg==
-X-Received: by 2002:a05:600c:330a:b0:3f0:9fec:a5c2 with SMTP id q10-20020a05600c330a00b003f09feca5c2mr4330365wmp.15.1681477054560;
-        Fri, 14 Apr 2023 05:57:34 -0700 (PDT)
+        bh=r9jnq8O0akNCWZMABiiTnkNejKYtKjmdQ2nEC4Lqzp0=;
+        b=WLeBlr7Bf5K8vNY9QRDbK4HD9+VxMbb6+dRl/rXALE9HX0BfYpUpYBragdj1xCvPxS
+         CyftvVSJG/37Z3Qz1mcESIOASOrzgen54U/Heu1ecBzDFllSYS6k472KxAmuwOy03f5q
+         bI1DAInqAv/JbYauL92oc16kznxEDjUovZbpaAGV//NeoOXQEblYIRn9+8zAIPltLJ9G
+         vh3U2cIlgsovvDrNzzDSBCYZDD07z70WiY3G3iEiJIphHvbB47dCUIrPnade7x7zzr6W
+         2Z2N/rlFQWW1crOMfF0ChufGwgLq6jWCh/TSf22dxy6Qsi+nTWABBqBAy+gegKoKXGvU
+         YZzQ==
+X-Gm-Message-State: AAQBX9eFYDt1fEv/KLpRmHSv+/9BY+0oFv3tJAFK7RFzwh1J+AzZDW4T
+        GtrRPKQm+MUOX1mRYVojUok=
+X-Google-Smtp-Source: AKy350a9Rr1bUDeCJa6T9WaGvNXmh3sJHwl53o03Rjd5QeZNjD26b0HeTFHgqn0XQhSbUNS1f0ctBA==
+X-Received: by 2002:a7b:ce10:0:b0:3ed:2606:d236 with SMTP id m16-20020a7bce10000000b003ed2606d236mr4504790wmc.38.1681477055469;
+        Fri, 14 Apr 2023 05:57:35 -0700 (PDT)
 Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i4-20020a5d55c4000000b002f74578f494sm1130398wrw.41.2023.04.14.05.57.34
+        by smtp.gmail.com with ESMTPSA id k7-20020a05600c1c8700b003ee1acdaf95sm8033494wms.36.2023.04.14.05.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 05:57:34 -0700 (PDT)
+        Fri, 14 Apr 2023 05:57:35 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -58,9 +58,9 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
         Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 08/10] thermal: tegra: Minor stylistic cleanups
-Date:   Fri, 14 Apr 2023 14:57:19 +0200
-Message-Id: <20230414125721.1043589-9-thierry.reding@gmail.com>
+Subject: [PATCH 09/10] arm64: tegra: Rework SOCTHERM on Tegra132 and Tegra210
+Date:   Fri, 14 Apr 2023 14:57:20 +0200
+Message-Id: <20230414125721.1043589-10-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230414125721.1043589-1-thierry.reding@gmail.com>
 References: <20230414125721.1043589-1-thierry.reding@gmail.com>
@@ -78,50 +78,341 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-Fix up some whitespace (padding, identation) issues and reword an
-unreadable comment.
+The "heavy throttle" cooling device that SOCTHERM uses isn't a cooling
+device in the traditional sense. It's an automatic mechanism that cannot
+be actively controlled. Do not expose it as a cooling device and instead
+of tying it to a specific trip point, hard-code the temperature at which
+the automatic throttling will begin.
+
+While at it, clean up the trip point names to reflect the names used by
+the thermal device tree bindings.
 
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/thermal/tegra/soctherm.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi | 63 +++++-------------
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi | 83 +++++++-----------------
+ 2 files changed, 39 insertions(+), 107 deletions(-)
 
-diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-index b6e61393fb8f..ba93ea1486f6 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -1459,7 +1459,9 @@ static int soctherm_thermtrips_parse(struct tegra_soctherm *ts)
- 	ret = of_property_read_u32_array(ts->dev->of_node, "nvidia,thermtrips",
- 					 tlb, count);
- 	if (ret) {
--		dev_err(ts->dev, "invalid num ele: thermtrips:%d\n", ret);
-+		dev_err(ts->dev,
-+			"failed to read \"nvidia,thermtrips\" property: %d\n",
-+			ret);
- 		return ret;
- 	}
+diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+index 8b78be8f4f9d..11ebf7517df1 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+@@ -876,11 +876,10 @@ soctherm: thermal-sensor@700e2000 {
+ 		#thermal-sensor-cells = <1>;
  
-@@ -1756,7 +1758,7 @@ static void throttlectl_gpu_level_select(struct tegra_soctherm *ts,
- }
+ 		throttle-cfgs {
+-			throttle_heavy: heavy {
++			heavy {
+ 				nvidia,priority = <100>;
+ 				nvidia,cpu-throt-level = <TEGRA_SOCTHERM_THROT_LEVEL_HIGH>;
+-
+-				#cooling-cells = <2>;
++				temperature = <102000>;
+ 			};
+ 		};
+ 	};
+@@ -1136,114 +1135,84 @@ cpu-thermal {
+ 			polling-delay-passive = <1000>;
+ 			polling-delay = <0>;
  
- static int soctherm_oc_cfg_program(struct tegra_soctherm *ts,
--				      enum soctherm_throttle_id throt)
-+				   enum soctherm_throttle_id throt)
- {
- 	u32 r;
- 	struct soctherm_oc_cfg *oc = &ts->throt_cfgs[throt].oc_cfg;
-@@ -2048,8 +2050,9 @@ static int tegra_soctherm_probe(struct platform_device *pdev)
- 	soctherm_init(tegra);
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_CPU>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_CPU>;
  
- 	for (i = 0; i < soc->num_ttgs; ++i) {
--		struct tegra_thermctl_zone *zone =
--			devm_kzalloc(&pdev->dev, sizeof(*zone), GFP_KERNEL);
-+		struct tegra_thermctl_zone *zone;
+ 			trips {
+-				cpu_shutdown_trip {
++				critical {
+ 					temperature = <105000>;
+ 					hysteresis = <1000>;
+ 					type = "critical";
+ 				};
+ 
+-				cpu_throttle_trip: throttle-trip {
++				hot {
+ 					temperature = <102000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				map0 {
+-					trip = <&cpu_throttle_trip>;
+-					cooling-device = <&throttle_heavy 1 1>;
+-				};
+-			};
+ 		};
+ 
+ 		mem-thermal {
+ 			polling-delay-passive = <0>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_MEM>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_MEM>;
+ 
+ 			trips {
+-				mem_shutdown_trip {
++				critical {
+ 					temperature = <101000>;
+ 					hysteresis = <1000>;
+ 					type = "critical";
+ 				};
+-				mem_throttle_trip {
 +
-+		zone = devm_kzalloc(&pdev->dev, sizeof(*zone), GFP_KERNEL);
- 		if (!zone) {
- 			err = -ENOMEM;
- 			goto disable_clocks;
++				hot {
+ 					temperature = <99000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				/*
+-				 * There are currently no cooling maps,
+-				 * because there are no cooling devices.
+-				 */
+-			};
+ 		};
+ 
+ 		gpu-thermal {
+ 			polling-delay-passive = <1000>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_GPU>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_GPU>;
+ 
+ 			trips {
+-				gpu_shutdown_trip {
++				critical {
+ 					temperature = <101000>;
+ 					hysteresis = <1000>;
+ 					type = "critical";
+ 				};
+ 
+-				gpu_throttle_trip: throttle-trip {
++				hot {
+ 					temperature = <99000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				map0 {
+-					trip = <&gpu_throttle_trip>;
+-					cooling-device = <&throttle_heavy 1 1>;
+-				};
+-			};
+ 		};
+ 
+ 		pllx-thermal {
+ 			polling-delay-passive = <0>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_PLLX>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_PLLX>;
+ 
+ 			trips {
+-				pllx_shutdown_trip {
++				critical {
+ 					temperature = <105000>;
+ 					hysteresis = <1000>;
+ 					type = "critical";
+ 				};
+-				pllx_throttle_trip {
++
++				hot {
+ 					temperature = <99000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				/*
+-				 * There are currently no cooling maps,
+-				 * because there are no cooling devices.
+-				 */
+-			};
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+index 0e463b3cbe01..af5460c74184 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -1331,12 +1331,11 @@ soctherm: thermal-sensor@700e2000 {
+ 		#thermal-sensor-cells = <1>;
+ 
+ 		throttle-cfgs {
+-			throttle_heavy: heavy {
++			heavy {
+ 				nvidia,priority = <100>;
+ 				nvidia,cpu-throt-percent = <85>;
+ 				nvidia,gpu-throt-level = <TEGRA_SOCTHERM_THROT_LEVEL_HIGH>;
+-
+-				#cooling-cells = <2>;
++				temperature = <98500>;
+ 			};
+ 		};
+ 	};
+@@ -2032,73 +2031,53 @@ cpu-thermal {
+ 			polling-delay-passive = <1000>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_CPU>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_CPU>;
+ 
+ 			trips {
+-				cpu-shutdown-trip {
++				critical {
+ 					temperature = <102500>;
+ 					hysteresis = <0>;
+ 					type = "critical";
+ 				};
+ 
+-				cpu_throttle_trip: throttle-trip {
++				hot {
+ 					temperature = <98500>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				map0 {
+-					trip = <&cpu_throttle_trip>;
+-					cooling-device = <&throttle_heavy 1 1>;
+-				};
+-			};
+ 		};
+ 
+ 		mem-thermal {
+ 			polling-delay-passive = <0>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_MEM>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_MEM>;
+ 
+ 			trips {
+-				dram_nominal: mem-nominal-trip {
+-					temperature = <50000>;
+-					hysteresis = <1000>;
+-					type = "passive";
+-				};
+-
+-				dram_throttle: mem-throttle-trip {
+-					temperature = <70000>;
+-					hysteresis = <1000>;
+-					type = "active";
++				critical {
++					temperature = <103000>;
++					hysteresis = <0>;
++					type = "critical";
+ 				};
+ 
+-				mem-hot-trip {
++				hot {
+ 					temperature = <100000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 
+-				mem-shutdown-trip {
+-					temperature = <103000>;
+-					hysteresis = <0>;
+-					type = "critical";
++				emc_throttle_trip: passive {
++					temperature = <95000>;
++					hysteresis = <2000>;
++					type = "passive";
+ 				};
+ 			};
+ 
+ 			cooling-maps {
+-				dram-passive {
+-					cooling-device = <&emc 0 0>;
+-					trip = <&dram_nominal>;
+-				};
+-
+-				dram-active {
++				passive {
+ 					cooling-device = <&emc 1 1>;
+-					trip = <&dram_throttle>;
++					trip = <&emc_throttle_trip>;
+ 				};
+ 			};
+ 		};
+@@ -2107,58 +2086,42 @@ gpu-thermal {
+ 			polling-delay-passive = <1000>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_GPU>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_GPU>;
+ 
+ 			trips {
+-				gpu-shutdown-trip {
++				critical {
+ 					temperature = <103000>;
+ 					hysteresis = <0>;
+ 					type = "critical";
+ 				};
+ 
+-				gpu_throttle_trip: throttle-trip {
++				hot {
+ 					temperature = <100000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				map0 {
+-					trip = <&gpu_throttle_trip>;
+-					cooling-device = <&throttle_heavy 1 1>;
+-				};
+-			};
+ 		};
+ 
+ 		pllx-thermal {
+ 			polling-delay-passive = <0>;
+ 			polling-delay = <0>;
+ 
+-			thermal-sensors =
+-				<&soctherm TEGRA124_SOCTHERM_SENSOR_PLLX>;
++			thermal-sensors = <&soctherm TEGRA124_SOCTHERM_SENSOR_PLLX>;
+ 
+ 			trips {
+-				pllx-shutdown-trip {
++				critical {
+ 					temperature = <103000>;
+ 					hysteresis = <0>;
+ 					type = "critical";
+ 				};
+ 
+-				pllx-throttle-trip {
++				hot {
+ 					temperature = <100000>;
+ 					hysteresis = <1000>;
+ 					type = "hot";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-				/*
+-				 * There are currently no cooling maps,
+-				 * because there are no cooling devices.
+-				 */
+-			};
+ 		};
+ 	};
+ 
 -- 
 2.40.0
 
