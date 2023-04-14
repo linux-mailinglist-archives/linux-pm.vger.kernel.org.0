@@ -2,87 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985116E24E7
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 15:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAA76E2572
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 16:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjDNN6D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 09:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S229999AbjDNOSm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 10:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjDNN6C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 09:58:02 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD74FBB;
-        Fri, 14 Apr 2023 06:58:01 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id jg21so45431053ejc.2;
-        Fri, 14 Apr 2023 06:58:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681480680; x=1684072680;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9McAPUtQ4wyOQZnb9f0/u2YiMiGyJU422JGspd0jX2g=;
-        b=Cbr+ANfGYbbt/NvfhpY3db1rtk6MSxCea3gelp15ajOO/EhRSxPFuOSe2SVDPXoqAO
-         lTEqye+v9/JTnQZoULVYuFCkpijjwWgOmXPSeZ65KYaOn9wmBtyIf2643uX6fHn8cVjs
-         PF3m0gUmi7+XneBQJg9apq+uFldD0F5/taadxhDPq4xj7B9Yuee6ZLqOBgBYd4ZHkatu
-         xFuUv18e5dWzk90fAwviZNH1AoHxNG0WOXaRDfViIdV/hiEdjnnnMMrNz1+nWXHX59BS
-         dCzzkSh41v4WZ8hx0SiS9d0ckx6BeuR4gDRUhSbWbDRCveFTlcACDc1Os8LsOgHKibQp
-         QlBg==
-X-Gm-Message-State: AAQBX9cNNiuhyJdoz8KhOz7Urk5RUmkSxcnTs9YaGwQ5zfDzISm87+ON
-        W68VHKywvebdyyjG3jNJm6HAzdU3R+CGpwVHr9zXfgAP93o=
-X-Google-Smtp-Source: AKy350YtTO8PZixXKyq5XWALpgvl39l9Ru9+tNzYLKqbDk9wIw77y2O7ap4obkS529kQpjEnICT/W3GBDdr9y13wMnA=
-X-Received: by 2002:a17:906:37d3:b0:94e:fd2c:f829 with SMTP id
- o19-20020a17090637d300b0094efd2cf829mr358715ejc.2.1681480680130; Fri, 14 Apr
- 2023 06:58:00 -0700 (PDT)
+        with ESMTP id S229925AbjDNOSm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 10:18:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1153B7ED2;
+        Fri, 14 Apr 2023 07:18:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E3612F4;
+        Fri, 14 Apr 2023 07:19:23 -0700 (PDT)
+Received: from [10.57.19.153] (unknown [10.57.19.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FBB23F6C4;
+        Fri, 14 Apr 2023 07:18:36 -0700 (PDT)
+Message-ID: <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
+Date:   Fri, 14 Apr 2023 15:18:34 +0100
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Apr 2023 15:57:49 +0200
-Message-ID: <CAJZ5v0jVJ+7XLZtv6YE0O0PUB9OSzf7c2qN=eESVHUCni8xjrQ@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v6.3-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org,
+        Di Shen <cindygm567@gmail.com>
+References: <20230320095620.7480-1-di.shen@unisoc.com>
+ <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
+ <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
+ <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
+ <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
+ <da59b4ef-1532-1b3a-7a73-9a095d8c9390@linaro.org>
+ <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
+ <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.3-rc7
-
-with top-most commit 4654e9f9f43993eb9ce383fa7c88d14b052b8cc3
-
- amd-pstate: Fix amd_pstate mode switch
-
-on top of commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
-
- Linux 6.3-rc6
-
-to receive a power management fix for 6.3-rc7.
-
-Make the amd-pstate cpufreq driver take all of the possible combinations
-of the "old" and "new" status values correctly while changing the
-operation mode via sysfs (Wyes Karny).
-
-Thanks!
 
 
----------------
+On 4/14/23 12:12, Daniel Lezcano wrote:
+> On 13/04/2023 10:40, Di Shen wrote:
+>> We have discussed this question in patch-v1:
+>> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com/
+>>
+>> Simply put, we use the trip_temp in the Android System; set different
+>> trip_temp for thermal control of different scenarios.
+> 
+> The changes are dealing with the trip points and trying to detect the 
+> threshold. That part should be handled in the thermal core or thermal 
+> trip side, not in the governor.
+> 
+> AFAICT, if a trip point is changed, then the power allocator should be 
+> reset, including the cdev state.
+> 
+> It would be more convenient to add an ops to the governor ops structure 
+> to reset the governor and then call it when a trip point is changed in 
+> thermal_zone_set_trip()
+> 
+> 
 
-Wyes Karny (1):
-      amd-pstate: Fix amd_pstate mode switch
+Sounds reasonable to have a proper API and fwk handling this corner
+case scenario.
+Although, if there is a need for a 'easy-to-backport' fix for IPA only,
+I agree with this patch, since it's straight forward to put in some
+Android kernel. We can later fix the framework to handle this properly.
+Anyway, both ways are OK to me.
 
----------------
-
- drivers/cpufreq/amd-pstate.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Regards,
+Lukasz
