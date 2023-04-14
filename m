@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1CC6E24D5
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 15:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7E66E24E1
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 15:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjDNNzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 09:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S229794AbjDNN5J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 09:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjDNNzR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 09:55:17 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F09E56;
-        Fri, 14 Apr 2023 06:55:16 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id q23so36270950ejz.3;
-        Fri, 14 Apr 2023 06:55:16 -0700 (PDT)
+        with ESMTP id S229705AbjDNN5E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 09:57:04 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53ADDAD25;
+        Fri, 14 Apr 2023 06:56:53 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-94e8cdbc8ebso145259166b.2;
+        Fri, 14 Apr 2023 06:56:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681480515; x=1684072515;
+        d=1e100.net; s=20221208; t=1681480612; x=1684072612;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=E29rUimY6KHJCkSPS7CK4bBCLE3cMI8/M2AydXqPWoI=;
-        b=NeR82GZZabXuc3GPH1/eMO6cqPc/PtzqRbYdPfrShii7afOrzLb7EGcj/3tMtAElM6
-         SZdgcmH/OPTOZeeUY23ejFYrrLiQqxMSwofupu9SMj1KGu9EgXo/e+i3wHFoq/IsHKI2
-         342+M/rWlPwGwbqjUG0jZ0AiDT/w9Ml8UwJPbZ4a9706hWVHMPjpMFViSL9DCIybAJOi
-         HB4Be0yPzTMSRW6AIHhuFE8/Vq8TYiBXkFaKUgjJsi3j6wvUJXIcwRhV2CgD7Yk4u4IC
-         Ee9jZNGNRTW/2z/AeqNKjojFQXnEtNqurdB4s12wf8v/MKvImix4lU/crU5nY1EhQ4ZU
-         kGbw==
-X-Gm-Message-State: AAQBX9cPQjXjmOZHj3NpIsPc4oFPczNgNjbPRnPQXAq1ljbtyNYtTpEZ
-        lQ6XL3BK1VU84q0t2IPnk2XebUA4wbqf8YqoHbekZ6OGPF0=
-X-Google-Smtp-Source: AKy350aNsfNFxe6baQpYHFWdqtN2faHb0Y/dkSnmf8jKHylwMnYDnR8DPOanMX9nzReVZlfkdVoIlgv6BO2mUXeqvBo=
-X-Received: by 2002:a17:907:a409:b0:94e:7ce:4d1f with SMTP id
- sg9-20020a170907a40900b0094e07ce4d1fmr3159577ejc.2.1681480514929; Fri, 14 Apr
- 2023 06:55:14 -0700 (PDT)
+        bh=0bOEwGTl98moAzUqFvKFWIb6Loh6mr1V32EmboH3l9A=;
+        b=fE49pmr1+3Hl8g4lgmjlmNOKUY7c/TKGWGQv+Ry4iX3AgUZ9T6dXiJJiabmSwIB8zP
+         0TXriskpjRXR2ziu9atDIJ8RbJTkcFGWQNJxBiTPx64gz0BLQ4Am8DdSWsyBrQfHRAwa
+         vy+C1n/NaTIRAsC3l2ebE0lCWnHGec0vBGmJUeQBrEDRw4j8KAsLIERiiBLA79X+TwJq
+         GhEHuu1lqa+RMGu02NlYvt2RZhEiPpJSowxk4rDojrfJxlq787StQaQc3YG86RPf/G3R
+         MTCwx0OsPNfQKBoD1NCTZ/CjgXd06jLHwMF7wKzUw55iOqZQs8x/4523V1hKZw3Qf9HR
+         Fbig==
+X-Gm-Message-State: AAQBX9cmnySYRgaS1lHaBH/H1TRU3YIb6z0wNK2OLQwGN99IP+OY2GJp
+        7B57e9icLcqJYEnd5JudtY6RlVdexX3nQ0RgCIE=
+X-Google-Smtp-Source: AKy350b1aVA3LMIUWUKT/nUV8ETtU6j2DCW33hhtAn5L65SVKqzNVEwGAXX5BT+cXNEhemr1nO/9E7TYGoD4LqoODSM=
+X-Received: by 2002:a50:9e45:0:b0:4fa:3c0b:74b with SMTP id
+ z63-20020a509e45000000b004fa3c0b074bmr3122390ede.3.1681480611819; Fri, 14 Apr
+ 2023 06:56:51 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Apr 2023 15:55:04 +0200
-Message-ID: <CAJZ5v0jfYRyiMzu2S3KXueGvrux=5082SAsz81pN6zwDVvFDUA@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.3-rc7
+Date:   Fri, 14 Apr 2023 15:56:40 +0200
+Message-ID: <CAJZ5v0j9EZH-9DJzqGE+q=sB-y5FeZUv3k=X4BgkthSg-PFx3Q@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v6.3-rc7
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,39 +59,31 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.3-rc7
+ thermal-6.3-rc7
 
-with top-most commit a3babdb7a8f73c3d8965b245fe1b758b87538912
+with top-most commit 117e4e5bd9d47b89777dbf6b37a709dcfe59520f
 
- Merge branch 'acpi-x86'
+ thermal: intel: Avoid updating unsupported THERM_STATUS_CLEAR mask bits
 
 on top of commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
 
  Linux 6.3-rc6
 
-to receive ACPI fixes for 6.3-rc7.
+to receive a thermal control fix for 6.3-rc7.
 
-These add two ACPI-related quirks:
-
- - Add a quirk to force StorageD3Enable on AMD Picasso systems (Mario
-   Limonciello).
-
- - Add an ACPI IRQ override quirk for ASUS ExpertBook B1502CBA (Paul
-   Menzel).
+Modify the Intel thermal throttling code to avoid updating unsupported
+status clearing mask bits which causes the kernel to complain about
+unchecked MSR access (Srinivas Pandruvada).
 
 Thanks!
 
 
 ---------------
 
-Mario Limonciello (1):
-      ACPI: x86: utils: Add Picasso to the list for forcing StorageD3Enable
-
-Paul Menzel (1):
-      ACPI: resource: Skip IRQ override on ASUS ExpertBook B1502CBA
+Srinivas Pandruvada (1):
+      thermal: intel: Avoid updating unsupported THERM_STATUS_CLEAR mask bits
 
 ---------------
 
- drivers/acpi/resource.c  | 7 +++++++
- drivers/acpi/x86/utils.c | 1 +
- 2 files changed, 8 insertions(+)
+ drivers/thermal/intel/therm_throt.c | 73 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 66 insertions(+), 7 deletions(-)
