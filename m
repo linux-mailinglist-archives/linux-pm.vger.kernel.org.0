@@ -2,107 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB2A6E1A9F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 05:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998A36E1BFE
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 07:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjDNDJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Apr 2023 23:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S229650AbjDNFzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 01:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDNDJI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Apr 2023 23:09:08 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5401998;
-        Thu, 13 Apr 2023 20:09:06 -0700 (PDT)
-X-UUID: 12db5403e36046049364e194e7c8e264-20230414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:5ce2be2d-84dd-428d-ac01-1c1a80930b4b,IP:-32
-        768,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FIL
-        E:-32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
-X-CID-INFO: VERSION:1.1.22,REQID:5ce2be2d-84dd-428d-ac01-1c1a80930b4b,IP:-3276
-        8,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FILE:
-        -32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:nil,BulkID:nil,BulkQuantity:0,Recheck:
-        0,SF:nil,TC:nil,Content:nil,EDM:nil,IP:nil,URL:nil,File:nil,Bulk:nil,QS:ni
-        l,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 12db5403e36046049364e194e7c8e264-20230414
-X-User: zenghao@kylinos.cn
-Received: from zdzh5-qitianm428-a376.. [(116.128.244.169)] by mailgw
-        (envelope-from <zenghao@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1123143396; Fri, 14 Apr 2023 11:08:32 +0800
-From:   Hao Zeng <zenghao@kylinos.cn>
-To:     skhan@linuxfoundation.org
-Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hao Zeng <zenghao@kylinos.cn>
-Subject: [PATCH v2] cpupower:Fix resource leaks in sysfs_get_enabled()
-Date:   Fri, 14 Apr 2023 11:08:30 +0800
-Message-Id: <20230414030830.3829332-1-zenghao@kylinos.cn>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S229540AbjDNFze (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 01:55:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E423E2729;
+        Thu, 13 Apr 2023 22:55:32 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E41Uxw023924;
+        Fri, 14 Apr 2023 05:55:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=3Wh0prCU1ejq7nrX9crPczw2njNZBh3BqT7rNeT2G4U=;
+ b=BUlAbopZAyEcpNdiEk94IZpavyxAe7WBjB/seCVdoy07TtjOPmP4EExYWRs4drjgCvHL
+ O9YqSE4R7zdPN0jQ+0bfmeL4rRiILzOE8Eit10Uf0f8ouuFdOn7cnGnfshawQCsRL1Kr
+ wDOYc8acPf/B8GkOYvw1EVX027IhAfMsu+Rw889v/Dx+44mnwdFckjykVQs54/tnC7eC
+ z4rD4N9EqLfRbYeqU2b4IgUJ+j6ksKu6ot0OwZ+a7bQ38emxAcl9uZ48Apo2RjlCpPaU
+ hX/ZY+vvRZxUYKO+hzgv4y+Oss6JXgD+5QTCPiuPIhy22Xww/c6hL4cO4jG1DFxIbAzJ Jw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxbx5tmwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 05:55:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33E5tHPt024527
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 05:55:17 GMT
+Received: from hu-mkshah-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 13 Apr 2023 22:55:13 -0700
+From:   Maulik Shah <quic_mkshah@quicinc.com>
+To:     <andersson@kernel.org>, <ulf.hansson@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <wingers@google.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <sudeep.holla@arm.com>,
+        <jwerner@chromium.org>, <quic_lsrao@quicinc.com>,
+        <quic_rjendra@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>
+Subject: [PATCH v3 0/3] Use PSCI OS initiated mode for sc7280
+Date:   Fri, 14 Apr 2023 11:24:59 +0530
+Message-ID: <20230414055502.23920-1-quic_mkshah@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jHrnU84jJHbvG2hrkpNv43WBglTA1OvF
+X-Proofpoint-GUID: jHrnU84jJHbvG2hrkpNv43WBglTA1OvF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_02,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 mlxlogscore=836 malwarescore=0 bulkscore=0
+ spamscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the read return value is equal to 1, a file handle leak will occur
+Changes in v3:
+- Add new change to provide helper function dt_idle_pd_remove_topology()
+- Address ulf's comments for error handling
+- Add reviewed by ulf for devicetree change
 
-Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/power/cpupower/lib/powercap.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+Changes in v2:
+- Add new change to Move enabling OSI mode after power domains creation
+- Fix compatible string to domains-idle-states for cluster idle state.
+- Update cover letter with some more details on OSI and PC mode
+  comparision
 
-diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-index 0ce29ee4c2e4..02ec5b0bff6b 100644
---- a/tools/power/cpupower/lib/powercap.c
-+++ b/tools/power/cpupower/lib/powercap.c
-@@ -40,7 +40,7 @@ static int sysfs_get_enabled(char *path, int *mode)
- {
- 	int fd;
- 	char yes_no;
--
-+	int ret = 0;
- 	*mode = 0;
- 
- 	fd = open(path, O_RDONLY);
-@@ -48,17 +48,18 @@ static int sysfs_get_enabled(char *path, int *mode)
- 		return -1;
- 
- 	if (read(fd, &yes_no, 1) != 1) {
--		close(fd);
--		return -1;
-+		ret = -1;
-+		goto err;
- 	}
- 
--	if (yes_no == '1') {
--		*mode = 1;
--		return 0;
--	} else if (yes_no == '0') {
--		return 0;
-+	if (yes_no != '1' || yes_no != '0') {
-+		ret = -1;
-+		goto err;
- 	}
--	return -1;
-+	*mode = yes_no - '0';
-+err:
-+	close(fd);
-+	return ret;
- }
- 
- int powercap_get_enabled(int *mode)
+The dependency [2] is now merged in trustedfirmware project.
+
+Stats comparision between OSI and PC mode are captured at [3] with
+usecase
+details, where during multiple CPUs online the residency in cluster idle
+state is better with OSI and also inline with single CPU mode. In PC
+mode
+with multiple CPUs cluster idle state residency is dropping compare to
+single CPU mode.
+
+Recording of this meeting is also available at [4].
+
+This change adds power-domains for cpuidle states to use PSCI OS
+initiated mode for sc7280.
+
+This change depends on external project changes [1] & [2] which are
+under review/discussion to add PSCI os-initiated support in Arm Trusted
+Firmware.
+
+I can update here once the dependency are in and change is ready to
+merge.
+
+[1] https://review.trustedfirmware.org/q/topic:psci-osi
+[2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
+[3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
+[4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+
+Maulik Shah (3):
+  cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
+  cpuidle: psci: Move enabling OSI mode after power domains creation
+  arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
+
+ arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
+ drivers/cpuidle/cpuidle-psci-domain.c | 37 ++++------
+ drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
+ drivers/cpuidle/dt_idle_genpd.h       |  7 ++
+ 4 files changed, 116 insertions(+), 50 deletions(-)
+
 -- 
-2.37.2
+2.17.1
 
-
-No virus found
-		Checked by Hillstone Network AntiVirus
