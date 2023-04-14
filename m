@@ -2,133 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092B46E2887
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 18:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4070C6E2906
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Apr 2023 19:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDNQlj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Apr 2023 12:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S230316AbjDNRMn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Apr 2023 13:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNQli (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 12:41:38 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6BE45
-        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 09:41:37 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7606d7cc9bdso6650339f.1
-        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 09:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1681490496; x=1684082496;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1KMGf0SzwXvFf5sUG5Xm6eIyrT5N7p2Kjq8aD/XELRY=;
-        b=Ku10yB4Ku0lbno78QD/FX+Uj6db8NV/QLSRmVXjeViXwr4SgIBI6cZNuMPl5aQsAJN
-         LAsULvH/+/tj65QDNJja0LoC4eES1CHJPe9B2MDQjsPtkIjJPub5QcHP0xrDwxuN2Gkd
-         Iy+Vhn2qWPD54qDn6HDeUPVTc/QAaYw9I1RZA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681490496; x=1684082496;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1KMGf0SzwXvFf5sUG5Xm6eIyrT5N7p2Kjq8aD/XELRY=;
-        b=ZHmpgkPGn4yaEXr9vm8L1qPj5O2MvhVuRVusEbjRQM+Ksv5g1lOBWdPNVDe7v5UWVX
-         +4NIcbDQKtoApgaNB2cahMNMAG+IvBulV/9GD4oIOo+xpl5P8ZftPxs44HZcigM1YmFq
-         NJ/H9ir8uhQA/VaicDubTKxsIuWXlxgi5/dtYxISWXDjb8E9ny4ri0rhfiBwZejBHDWC
-         kZPDv+bQ4frkSxjZjuZxVsXChDkgwfFEecnH/UlT92Pu0yqPgLLh01iAg2hj+9lFp1q5
-         Ilgy3spw1N3y5RjFxIrpGogFliJTHbmhak8NkhVnWPMll5QKazpb7bvMiQiDG7cNJPAW
-         NUAg==
-X-Gm-Message-State: AAQBX9fkNYVM8OjTTKqFwxAbffxsqALIV6zqGJIcUIcX2pGr1kuisgbZ
-        lO5pMChumHKdcMFzG6UWGZs4vE3TsW8u8kAs8Io=
-X-Google-Smtp-Source: AKy350YFoPwc0TzXcMOd6kW+eYPa3IaIbmv9ZNk6nEenRzBlPrOnRj9ZArc+SMmkbcZP0Vr1Bw5XBA==
-X-Received: by 2002:a05:6602:2e83:b0:760:478f:e436 with SMTP id m3-20020a0566022e8300b00760478fe436mr1650922iow.2.1681490496504;
-        Fri, 14 Apr 2023 09:41:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k12-20020a056638140c00b0040894c572basm1311968jad.125.2023.04.14.09.41.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 09:41:35 -0700 (PDT)
-Message-ID: <4c04ae6d-f8db-0a2d-0bd5-97c4ec828a59@linuxfoundation.org>
-Date:   Fri, 14 Apr 2023 10:41:35 -0600
+        with ESMTP id S230312AbjDNRMl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Apr 2023 13:12:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA5A422F
+        for <linux-pm@vger.kernel.org>; Fri, 14 Apr 2023 10:12:39 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pnMyU-00038R-2n; Fri, 14 Apr 2023 19:12:38 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pnMyT-00BFRA-CU; Fri, 14 Apr 2023 19:12:37 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pnMyS-00DDlA-MH; Fri, 14 Apr 2023 19:12:36 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] power: reset: gpio-restart: Convert to platform remove callback returning void
+Date:   Fri, 14 Apr 2023 19:12:35 +0200
+Message-Id: <20230414171235.3670639-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] cpupower:Fix resource leaks in sysfs_get_enabled()
-To:     Hao Zeng <zenghao@kylinos.cn>
-Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230414030830.3829332-1-zenghao@kylinos.cn>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230414030830.3829332-1-zenghao@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1890; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=EgeEC2SEMp7ElwOwajFbe1ymLTTXJtLEpjuU/Mpl2Eg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkOYmC2xuLeV7EWXerVqiy0dwjmrpbHOhgzow8G CTStFfBRwqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZDmJggAKCRCPgPtYfRL+ TvFIB/9zQnxSVQGU7XH35axD2DXZjPmL+rWhQJb04660W9yJtN5vdyIi+7MNVXUyR8uGYdDaA/z Sm6TdlVx4Br8Kv8+/7WwoMVK83SC6/HeonN9VrGitR9y9lxc3xhOcbdykf7+tBIxeIQWj3cJYqF pKawzipfcmFMa7eox7SECPeY9kiDL4hk6NxQ77dqnWYrqZY33L6WV7++lUd9VsZuT3wwEplDTWY Hf7vTKmUgY/gE1Jtcno/TaBKAgfI5H9eRJFygMFeamx4J9zuMRyo7ZUBJ7RgQxJwYXbx7F5yCUy YqhpucLtD7X2T1Z2sZBI11ha4qPSkHKhjyhC/yfH9eDD7WDW
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/13/23 21:08, Hao Zeng wrote:
-> When the read return value is equal to 1, a file handle leak will occur
-> 
+Returning an error code from a remove callback makes the driver core
+emit a generic (and so little helpful) error message and after that the
+error code is ignored and the device unbound.
 
-Would like a bit more information on how the error paths are
-redone, since memory leak isn't the only one that is fixed.
+As gpio_restart_remove() already emits an error message, suppressing the
+generic error is no loss.
 
-> Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->   tools/power/cpupower/lib/powercap.c | 19 ++++++++++---------
->   1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-> index 0ce29ee4c2e4..02ec5b0bff6b 100644
-> --- a/tools/power/cpupower/lib/powercap.c
-> +++ b/tools/power/cpupower/lib/powercap.c
-> @@ -40,7 +40,7 @@ static int sysfs_get_enabled(char *path, int *mode)
->   {
->   	int fd;
->   	char yes_no;
-> -
-> +	int ret = 0;
->   	*mode = 0;
->   
->   	fd = open(path, O_RDONLY);
-> @@ -48,17 +48,18 @@ static int sysfs_get_enabled(char *path, int *mode)
->   		return -1;
->   
->   	if (read(fd, &yes_no, 1) != 1) {
-> -		close(fd);
-> -		return -1;
-> +		ret = -1;
-> +		goto err;
->   	}
->   
-> -	if (yes_no == '1') {
-> -		*mode = 1;
-> -		return 0;
-> -	} else if (yes_no == '0') {
-> -		return 0;
-> +	if (yes_no != '1' || yes_no != '0') {
-> +		ret = -1;
-> +		goto err;
->   	}
-> -	return -1;
-> +	*mode = yes_no - '0';
+Then convert to .remove_new() which is equivalent to returning 0
+unconditionally in .remove(). See commit 5c5a7680e67b ("platform:
+Provide a remove callback that returns no value") for its rational.
 
-I am not seeing much value in changing the above paths.
-Leave them unchanged.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/power/reset/gpio-restart.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-> +err:
-> +	close(fd);
-> +	return ret;
->   }
->   
->   int powercap_get_enabled(int *mode)
+diff --git a/drivers/power/reset/gpio-restart.c b/drivers/power/reset/gpio-restart.c
+index 5466eeea261c..28aa152c4869 100644
+--- a/drivers/power/reset/gpio-restart.c
++++ b/drivers/power/reset/gpio-restart.c
+@@ -105,7 +105,7 @@ static int gpio_restart_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int gpio_restart_remove(struct platform_device *pdev)
++static void gpio_restart_remove(struct platform_device *pdev)
+ {
+ 	struct gpio_restart *gpio_restart = platform_get_drvdata(pdev);
+ 	int ret;
+@@ -115,10 +115,7 @@ static int gpio_restart_remove(struct platform_device *pdev)
+ 		dev_err(&pdev->dev,
+ 				"%s: cannot unregister restart handler, %d\n",
+ 				__func__, ret);
+-		return -ENODEV;
+ 	}
+-
+-	return 0;
+ }
+ 
+ static const struct of_device_id of_gpio_restart_match[] = {
+@@ -128,7 +125,7 @@ static const struct of_device_id of_gpio_restart_match[] = {
+ 
+ static struct platform_driver gpio_restart_driver = {
+ 	.probe = gpio_restart_probe,
+-	.remove = gpio_restart_remove,
++	.remove_new = gpio_restart_remove,
+ 	.driver = {
+ 		.name = "restart-gpio",
+ 		.of_match_table = of_gpio_restart_match,
 
-thanks,
--- Shuah
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.39.2
+
