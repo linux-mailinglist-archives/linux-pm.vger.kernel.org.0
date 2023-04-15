@@ -2,76 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D1E6E3084
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Apr 2023 12:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B6C6E312E
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Apr 2023 13:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDOKPu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 15 Apr 2023 06:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S229938AbjDOLzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 15 Apr 2023 07:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDOKPt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Apr 2023 06:15:49 -0400
+        with ESMTP id S229623AbjDOLze (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Apr 2023 07:55:34 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71113C1E
-        for <linux-pm@vger.kernel.org>; Sat, 15 Apr 2023 03:15:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523354EED
+        for <linux-pm@vger.kernel.org>; Sat, 15 Apr 2023 04:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681553699;
+        s=mimecast20190719; t=1681559695;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dxAcJ+NKRe6YS4azcC2CWQaIQmOiHTvTa0qA2rj6h/c=;
-        b=JWjV/JY5qTohSvfJlPMpgaaWwk55oi7qPbk/kifDk8yMZ2uLaQ226pyZrodSxqusaoNxDb
-        XgtAYtkHeS5/pdibtJF9EWUqtV6iiezcKZtNXfPPSyG+UAakMT96DIvgh9JMK73qBG5OVe
-        I6yjq3mFIneWu+Ijj/B3v9FsUSZ0QdQ=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=g4bcTFJhp89gwlbELjscfHEtCVfUEvD/erElglQUSQk=;
+        b=IzhiJEjDgd4M7WubufPBqYUqhkllMzhhzafI70HYdmw3yCjiA+XSC1c1Ty07fRnfQtK59g
+        OEERMMcxEqlAkjFT0P77S6XnO+sTY7N0NwZTuS/0lCVZ0/lyZmEr+tJT3icFjP2SncTL0J
+        zz0q2fxaC5E0EAqndbdKpmbGpL0nZPo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-265-nfluJewXOKStliCWH1gA7g-1; Sat, 15 Apr 2023 06:14:58 -0400
-X-MC-Unique: nfluJewXOKStliCWH1gA7g-1
-Received: by mail-ej1-f69.google.com with SMTP id ue7-20020a170907c68700b009339c9c32ffso7474715ejc.5
-        for <linux-pm@vger.kernel.org>; Sat, 15 Apr 2023 03:14:58 -0700 (PDT)
+ us-mta-517-SKEOd00yMZ2q1nDV6H4W_Q-1; Sat, 15 Apr 2023 07:54:53 -0400
+X-MC-Unique: SKEOd00yMZ2q1nDV6H4W_Q-1
+Received: by mail-ed1-f70.google.com with SMTP id b60-20020a509f42000000b00504eca73d05so6173983edf.18
+        for <linux-pm@vger.kernel.org>; Sat, 15 Apr 2023 04:54:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681553696; x=1684145696;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1681559692; x=1684151692;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dxAcJ+NKRe6YS4azcC2CWQaIQmOiHTvTa0qA2rj6h/c=;
-        b=Io2R1sJf20AKkxVm9Pbo621wrnKfuJhHAcBdp8xReOBtiCXAVNZu4f+zB21tCZ+e6p
-         oOfNKZPkNQqQ1syJfY7imKiQfGtEeb2+rGmWcne1L1rJ39ocjFXb4bf7kMBW5bJ6oeRZ
-         Is8wNntnsOc4vy8rTSYrHcTnISCHDFpDayJ197kqsDMWSFYKYVPTHyDBOsEEgBiqWbpG
-         0maASvLZmZz9bt/ZhmsezRdTPSCTNsjogUY0yN5S+AojKxugswOGIyVZp7bbm/ABkd4N
-         EXWLo8kKZJa61kaP6/j1dWOAKVUP9QSlqArE4yDnLDZnOK7Pv3zYqfg0Gr18Ofn+o15U
-         6ODg==
-X-Gm-Message-State: AAQBX9c3m8FuFFhYNRMG72rOc8S6Y3LKJ2kQ3jIAKymswcQyLB8NR9xr
-        KYFC0YmXd5eX9ATir0KteuPBOts4ZF+CEY7IY4eEO3C1aWY9Y561sbNhW87R9/NiulsAlOlLKj0
-        YvtRVgFpdjTyEXCJcHhA=
-X-Received: by 2002:a17:906:b202:b0:94e:d688:c36d with SMTP id p2-20020a170906b20200b0094ed688c36dmr1649383ejz.38.1681553696784;
-        Sat, 15 Apr 2023 03:14:56 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bmW1F5AL/wTgRS1Sa1xGyOM2Vdh373U3/HmXDEAJ/nH+H/g+0cR0Fbh+aiBZ2uJH3X6C44NA==
-X-Received: by 2002:a17:906:b202:b0:94e:d688:c36d with SMTP id p2-20020a170906b20200b0094ed688c36dmr1649372ejz.38.1681553696468;
-        Sat, 15 Apr 2023 03:14:56 -0700 (PDT)
+        bh=g4bcTFJhp89gwlbELjscfHEtCVfUEvD/erElglQUSQk=;
+        b=BIxOngv3xXctqsb/8IYHjm3wBMVOh5YZ4D88VT9SbJI6T24oVWND2Uo76HTyLyNP9W
+         JLKgMEuFM3C8KNKt9HlVgIuMQMjZK2vgokYu4rF+/NXeSnKnkR/zl83c8ZJQfyXsHImL
+         Gt94nyGPEv9ghGgKTOZEEy4ENlCfQrPEMfSUcfhSAoEmrbDVYdteZekanUj+4orjoMvf
+         TuziVdFKV0S+Im4xl6OkOkckYedkN1tcmpTRVocF7tM84PeG0E2zjSRbuZ6utCmCwdsB
+         gQzQE5W3cvgWqCAlv3D+8wtH+U0wD8VXxb5Z5Z8Fr4cK8ft90p6mOGnWcNU5CGC/bBKS
+         VaKg==
+X-Gm-Message-State: AAQBX9eU0l3mW4vW3bo4wZfHO8YXFI5gzNdPzeiVtRRIAGwNXu2D3JWV
+        lgcZ0oBPMo1qC9iYkf6DVLpGXcaQmpbd0nGRddGkWDNfaOVcEKRl2UmGKqt+kKmtoSmpn6Md3px
+        o3hekyUbiCV4kCQwnqjQ=
+X-Received: by 2002:a17:906:53d9:b0:94a:7097:7893 with SMTP id p25-20020a17090653d900b0094a70977893mr1955766ejo.40.1681559692669;
+        Sat, 15 Apr 2023 04:54:52 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y2LH8n7cMQRgQwpvT27NOtKf5S63lRYGxzs2bmxAclfnY/xO2TJ+dTEQPmIIBm46fjE+q6sA==
+X-Received: by 2002:a17:906:53d9:b0:94a:7097:7893 with SMTP id p25-20020a17090653d900b0094a70977893mr1955744ejo.40.1681559692288;
+        Sat, 15 Apr 2023 04:54:52 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id ty25-20020a170907c71900b0092be625d981sm3609301ejc.91.2023.04.15.03.14.55
+        by smtp.gmail.com with ESMTPSA id gj19-20020a170906e11300b0094a83007249sm3798793ejb.16.2023.04.15.04.54.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Apr 2023 03:14:55 -0700 (PDT)
-Message-ID: <20bc1db5-61c9-13fd-2425-21025d025b67@redhat.com>
-Date:   Sat, 15 Apr 2023 12:14:55 +0200
+        Sat, 15 Apr 2023 04:54:51 -0700 (PDT)
+Message-ID: <74434b1e-e1a2-4b86-4f3b-8f9caf1bc9f7@redhat.com>
+Date:   Sat, 15 Apr 2023 13:54:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 0/9] power: supply: bq27xxx/bq25890 status update fixes
-Content-Language: en-US, nl
-To:     laji Xiao <3252204392abc@gmail.com>
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 9/9] power: supply: bq25890: Call power_supply_changed()
+ after updating input current or voltage
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>, laji Xiao <3252204392abc@gmail.com>,
+        linux-pm@vger.kernel.org
 References: <20230413095405.71685-1-hdegoede@redhat.com>
- <CALK_TxYc9t_uvMM9MbJyuU6dgcEA5Z_pQrjJgf6qXQbQSkc2Jw@mail.gmail.com>
+ <20230413095405.71685-10-hdegoede@redhat.com>
+Content-Language: en-US, nl
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CALK_TxYc9t_uvMM9MbJyuU6dgcEA5Z_pQrjJgf6qXQbQSkc2Jw@mail.gmail.com>
+In-Reply-To: <20230413095405.71685-10-hdegoede@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
@@ -84,65 +85,70 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-On 4/15/23 07:24, laji Xiao wrote:
-> The problem on the Ubuntu/Arch Linux/Alpine still exists. Android seems to have no problem
+On 4/13/23 11:54, Hans de Goede wrote:
+> The bq25892 model relies on external charger-type detection and once
+> that is done the bq25890_charger code will update the input current
+> and if pumpexpress is used also the input voltage.
+> 
+> In this case, when the initial power_supply_changed() call is made
+> from the interrupt handler, the input settings are 5V/0.5A which
+> on many devices is not enough power to charge (while the device is on).
+> 
+> On many devices the fuel-gauge relies in its external_power_changed
+> callback to timely signal userspace about charging <-> discharging
+> status changes. Add a power_supply_changed() call after updating
+> the input current or voltage. This allows the fuel-gauge driver
+> to timely recheck if the battery is charging after the new input
+> settings have been applied and then it can immediately notify
+> userspace about this.
+> 
+> Fixes: 48f45b094dbb ("power: supply: bq25890: Support higher charging voltages through Pump Express+ protocol")
+> Fixes: eab25b4f93aa ("power: supply: bq25890: On the bq25892 set the IINLIM based on external charger detection")
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/power/supply/bq25890_charger.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+> index bfe08d7bfaf3..794512285629 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -775,6 +775,7 @@ static void bq25890_charger_external_power_changed(struct power_supply *psy)
+>  	}
+>  
+>  	bq25890_field_write(bq, F_IINLIM, input_current_limit);
+> +	power_supply_changed(bq->charger);
 
-This was tested to successfully fix the userspace lag on a lenovo yoga book
-yb1-x90f (Android version) and a yb1-x91f (Windows version).
+Self NACK I just finished debugging a crash related to a race between
+external_power_changed() callbacks and these callbacks using the
+result of power_supply_register().
 
-I guess some extra work may be needed on the mipad2.
+Referring to the psy for which the external power has changed
+in external_power_changed() callbacks must always be done through
+the psy argument. More info in my series fixing these races when
+I'm done preparting the series.
 
-Perhaps you can take a look at the problem on the mipad2 yourself
-using these patches as guidance ?
+For now please don't merge this patch, note patches 1-8 are
+still fine. I'll post a v2 series later.
 
 Regards,
 
 Hans
 
 
-> 
-> Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> 于 2023年4月13日周四 17:54写道：
-> 
->     Hi all,
-> 
->     The main goal of this series is to fix userspace sometimes not
->     getting notified in a timely manner of charging <-> discharging
->     status changes, causing e.g. battery status icons to lag
->     and the lagging of updates also effects power_supply_leds.c .
-> 
->     While working on this I noticed a number of races surrounding
->     bq27xxx_battery_update(), so patches 1-4 fix those first.
-> 
->     Patches 5-9 take care of the status update lagging issues.
-> 
->     Regards,
-> 
->     Hans
-> 
-> 
->     Hans de Goede (9):
->       power: supply: bq27xxx: Fix bq27xxx_battery_update() race condition
->       power: supply: bq27xxx: Fix I2C IRQ race on remove
->       power: supply: bq27xxx: Fix poll_interval handling and races on remove
->       power: supply: bq27xxx: Add cache parameter to
->         bq27xxx_battery_current_and_status()
->       power: supply: bq27xxx: Move bq27xxx_battery_update() down
->       power: supply: bq27xxx: Ensure power_supply_changed() is called on
->         current sign changes
->       power: supply: bq27xxx: After charger plug in/out wait 0.5s for things
->         to stabilize
->       power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() +
->         schedule()
->       power: supply: bq25890: Call power_supply_changed() after updating
->         input current or voltage
-> 
->      drivers/power/supply/bq25890_charger.c     |   3 +
->      drivers/power/supply/bq27xxx_battery.c     | 181 +++++++++++----------
->      drivers/power/supply/bq27xxx_battery_i2c.c |   3 +-
->      include/linux/power/bq27xxx_battery.h      |   4 +
->      4 files changed, 107 insertions(+), 84 deletions(-)
-> 
->     -- 
->     2.39.1
-> 
+
+
+
+>  }
+>  
+>  static int bq25890_get_chip_state(struct bq25890_device *bq,
+> @@ -1106,6 +1107,8 @@ static void bq25890_pump_express_work(struct work_struct *data)
+>  	dev_info(bq->dev, "Hi-voltage charging requested, input voltage is %d mV\n",
+>  		 voltage);
+>  
+> +	power_supply_changed(bq->charger);
+> +
+>  	return;
+>  error_print:
+>  	bq25890_field_write(bq, F_PUMPX_EN, 0);
 
