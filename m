@@ -2,48 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B416E331A
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Apr 2023 20:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C996E331C
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Apr 2023 20:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjDOSYa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 15 Apr 2023 14:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S229796AbjDOSYe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 15 Apr 2023 14:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDOSY3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Apr 2023 14:24:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F62F1FF7
-        for <linux-pm@vger.kernel.org>; Sat, 15 Apr 2023 11:23:46 -0700 (PDT)
+        with ESMTP id S229546AbjDOSYd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Apr 2023 14:24:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2661E3C1E
+        for <linux-pm@vger.kernel.org>; Sat, 15 Apr 2023 11:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681583025;
+        s=mimecast20190719; t=1681583027;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2paejZ9FTiHh9qCuyzM6Jd7BdB0qMiCfyvw18AeYSno=;
-        b=JNrN49HMcyXZurSAsYRyTZFXdDiMWslGwon0FrWZNsHC69EJsJuZh4wS+8I3gRoIQE1soa
-        qr7EbeVc1qfiqlHeubAp0ezcu0tANOqlzA3BvN/Hkaw+hvUrDGZlqz0WoHB71JUFk+ezfn
-        V5IYsfOMxSExws8IFP/PQdrj94+3KdQ=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kAUjCOt6/1YhkCPGy/XqBtbFZ68SM6dnChJzq4cDP0U=;
+        b=EnJlZ5eJ6+xoeYq/82inMqcqt3zF3YgmaISKDjB2i5b3alPLMnNjL6mcgLL1+jLwQskqeK
+        a3UjTLVKdBaBQVYuiU+rinDXROEhgjp9yPCOETx+LKAwKpWNiqcL0TbRWQyjKbf0NGOKh5
+        AZb0JunAgPPstimheYc3TTalNAqAA3E=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-LZ6PJlhrMjOBorehlaWXkQ-1; Sat, 15 Apr 2023 14:23:43 -0400
-X-MC-Unique: LZ6PJlhrMjOBorehlaWXkQ-1
+ us-mta-652-Lvvf9SVINMWFMoYhGRVsSA-1; Sat, 15 Apr 2023 14:23:44 -0400
+X-MC-Unique: Lvvf9SVINMWFMoYhGRVsSA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D8505800B35;
-        Sat, 15 Apr 2023 18:23:42 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EBF908996E2;
+        Sat, 15 Apr 2023 18:23:43 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EB7A3BC88;
-        Sat, 15 Apr 2023 18:23:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 17D6B728FC;
+        Sat, 15 Apr 2023 18:23:42 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>, Marek Vasut <marex@denx.de>,
         laji Xiao <3252204392abc@gmail.com>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 00/10] power: supply: bq27xxx/bq25890 status update fixes
-Date:   Sat, 15 Apr 2023 20:23:31 +0200
-Message-Id: <20230415182341.86916-1-hdegoede@redhat.com>
+Subject: [PATCH v2 01/10] power: supply: bq27xxx: Fix bq27xxx_battery_update() race condition
+Date:   Sat, 15 Apr 2023 20:23:32 +0200
+Message-Id: <20230415182341.86916-2-hdegoede@redhat.com>
+In-Reply-To: <20230415182341.86916-1-hdegoede@redhat.com>
+References: <20230415182341.86916-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
@@ -57,56 +60,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+bq27xxx_battery_update() assumes / requires that it is only run once,
+not multiple times at the same time. But there are 3 possible callers:
 
-Here is v2 if my bq* status update fixes series
+1. bq27xxx_battery_poll() delayed_work item handler
+2. bq27xxx_battery_irq_handler_thread() I2C IRQ handler
+3. bq27xxx_battery_setup()
 
-Changes in v2:
-- Do not use bq->charger in bq25890_external_power_changed(),
-  because it may not be set yet (avoid NULL ptr deref on race)
-- Add "power: supply: bq24190: Call power_supply_changed()
-  after updating input current" to the series
+And there is no protection against these racing with each other,
+fix this race condition by making all callers take di->lock:
 
-The main goal of this series is to fix userspace sometimes not
-getting notified in a timely manner of charging <-> discharging
-status changes, causing e.g. battery status icons to lag
-and the lagging of updates also effects power_supply_leds.c .
+- Rename bq27xxx_battery_update() to bq27xxx_battery_update_unlocked()
 
-While working on this I noticed a number of races surrounding
-bq27xxx_battery_update(), so patches 1-4 fix those first.
+- Add new bq27xxx_battery_update() which takes di->lock and then calls
+  bq27xxx_battery_update_unlocked()
 
-Patches 5-10 take care of the status update lagging issues.
+- Make stale cache check code in bq27xxx_battery_get_property(), which
+  already takes di->lock directly to check the jiffies, call
+  bq27xxx_battery_update_unlocked() instead of messing with
+  the delayed_work item
 
-Regards,
+- Make bq27xxx_battery_update_unlocked() mod the delayed-work item
+  so that the next poll is delayed to poll_interval milliseconds after
+  the last update independent of the source of the update
 
-Hans
+Fixes: 740b755a3b34 ("bq27x00: Poll battery state")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/bq27xxx_battery.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-
-Hans de Goede (10):
-  power: supply: bq27xxx: Fix bq27xxx_battery_update() race condition
-  power: supply: bq27xxx: Fix I2C IRQ race on remove
-  power: supply: bq27xxx: Fix poll_interval handling and races on remove
-  power: supply: bq27xxx: Add cache parameter to
-    bq27xxx_battery_current_and_status()
-  power: supply: bq27xxx: Move bq27xxx_battery_update() down
-  power: supply: bq27xxx: Ensure power_supply_changed() is called on
-    current sign changes
-  power: supply: bq27xxx: After charger plug in/out wait 0.5s for things
-    to stabilize
-  power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() +
-    schedule()
-  power: supply: bq25890: Call power_supply_changed() after updating
-    input current or voltage
-  power: supply: bq24190: Call power_supply_changed() after updating
-    input current
-
- drivers/power/supply/bq24190_charger.c     |   1 +
- drivers/power/supply/bq25890_charger.c     |   3 +
- drivers/power/supply/bq27xxx_battery.c     | 181 +++++++++++----------
- drivers/power/supply/bq27xxx_battery_i2c.c |   3 +-
- include/linux/power/bq27xxx_battery.h      |   4 +
- 5 files changed, 108 insertions(+), 84 deletions(-)
-
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 5ff6f44fd47b..79aedf83cc8d 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1761,7 +1761,7 @@ static int bq27xxx_battery_read_health(struct bq27xxx_device_info *di)
+ 	return POWER_SUPPLY_HEALTH_GOOD;
+ }
+ 
+-void bq27xxx_battery_update(struct bq27xxx_device_info *di)
++static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
+ {
+ 	struct bq27xxx_reg_cache cache = {0, };
+ 	bool has_singe_flag = di->opts & BQ27XXX_O_ZERO;
+@@ -1800,6 +1800,16 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
+ 		di->cache = cache;
+ 
+ 	di->last_update = jiffies;
++
++	if (poll_interval > 0)
++		mod_delayed_work(system_wq, &di->work, poll_interval * HZ);
++}
++
++void bq27xxx_battery_update(struct bq27xxx_device_info *di)
++{
++	mutex_lock(&di->lock);
++	bq27xxx_battery_update_unlocked(di);
++	mutex_unlock(&di->lock);
+ }
+ EXPORT_SYMBOL_GPL(bq27xxx_battery_update);
+ 
+@@ -1810,9 +1820,6 @@ static void bq27xxx_battery_poll(struct work_struct *work)
+ 				     work.work);
+ 
+ 	bq27xxx_battery_update(di);
+-
+-	if (poll_interval > 0)
+-		schedule_delayed_work(&di->work, poll_interval * HZ);
+ }
+ 
+ static bool bq27xxx_battery_is_full(struct bq27xxx_device_info *di, int flags)
+@@ -1985,10 +1992,8 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 	struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
+ 
+ 	mutex_lock(&di->lock);
+-	if (time_is_before_jiffies(di->last_update + 5 * HZ)) {
+-		cancel_delayed_work_sync(&di->work);
+-		bq27xxx_battery_poll(&di->work.work);
+-	}
++	if (time_is_before_jiffies(di->last_update + 5 * HZ))
++		bq27xxx_battery_update_unlocked(di);
+ 	mutex_unlock(&di->lock);
+ 
+ 	if (psp != POWER_SUPPLY_PROP_PRESENT && di->cache.flags < 0)
 -- 
 2.39.1
 
