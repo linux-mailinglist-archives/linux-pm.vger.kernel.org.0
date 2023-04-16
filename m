@@ -2,315 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A6A6E3864
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Apr 2023 14:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB78D6E38AD
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Apr 2023 15:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjDPMuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 16 Apr 2023 08:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S230198AbjDPNfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 16 Apr 2023 09:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjDPMuj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 Apr 2023 08:50:39 -0400
-Received: from sonic311-30.consmr.mail.ir2.yahoo.com (sonic311-30.consmr.mail.ir2.yahoo.com [77.238.176.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85C126A6
-        for <linux-pm@vger.kernel.org>; Sun, 16 Apr 2023 05:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681649435; bh=ry1wdbINkSV09xVX5t7wSbuuNoW3ImeInKe2pM61If4=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Booa5Zq1c31RmSx4IxxAajr8qh23zdTe5Ey891xiJtQh6vvKujBID6m/nwGVBp3oTx2ZvncDPt7EytughQAevY/NPfuG04SwkPJ1xjT0lPX0jz8tsx7yxyxKVEdaoy2oactEO/3AxEShWMVdaIz3X0PrFS10spLuhYrb1BdKp8y8gl6YeWKxFP2oiApEPuQqMjcukVEjLn0YD6hgSywRqI8c35hG15Pu2At1Jpt5Ft3hiNp7X1+0hoDd/vlbEszAj0nOoGwT40eb+I+ftIsGhj8229hY+vT3jhHpobJxzLxQF/4SoPkkoK2fV5zTvP6VMa6f67Y6xKgHGBaXfnW2og==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681649435; bh=JZsoKNWI4cnMSZae9t0cYKAZRwaD4i8FPqcyhb7fhe8=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=qhYCbiqTlJl0EVUw5QtXfyq3xB1g7qlKJn9qMVZZFw3+9erKrFLXi/e4Fxj7hMgRctMKhLivc590+iC24248OpnUFXK9x6tsPbMg5PmdbM9zKoM8cRrT9vfMk2YJrdpIlDI449hhogoH4vfz/vq5NtffYANtmNpuYVhct4eXoOfheA1LJmN57cUvlJ0Ov9EP2CzC2LPacFEdE4Pn4bkHAsP2HpxDLAhIhovN31Mni9iWob2w7PkoCvZ2cUgn/Q8pmluRhYiHlkqefF7/TjwO+LUVNEtzXxVJhloC8qsYCvMxdRG9kl1ThqcNLdrghf3wO2HHxwS/1tqN6CKeGcgQ8A==
-X-YMail-OSG: uMj2UUMVM1m1Tq3bH_fanHXbh4FRSZokE4.ULpVOdVqKRY6KvKvxK5WbH6bq_7_
- BTvg2X9aIpDmsbftx2MT9TWJHtPmw6NaTSXapsrjuyTOXkgN3EzrzN5TQcwwAyyKI_LVFwPOGOo3
- lFcvWI_cZ.P0J2dCn.r221JdtWuBeUQiFEM1sXgoBOqC72PcCzepVDzIT9GG9IaqqNsOfq89g5RZ
- Lw0Vwfan.iVyqg5GieuzyUsLrmIsHgIpKq3a7vuXaRsXznXmxLcmLdZtv.p3YYB2h0YtFUDD4fta
- a7MusQK5uKkMCSJsgGPg69Nk1eLx0AEpOGsg0Pg5_LVXXh7o62hBvwLKfAq3la4V31wnXupFQCkR
- lqb4ATZ80.Ecgp8HqjbeTyLyNrhko7dADnGAfn7.n.gKgn57YTArKF1dLLsCSqnf7EWgWED5_ZmW
- y_gitdkvrr944L2emy8WagLycalRNz8hJ_P6Vp2uKrACV6TpUWGF.IxuZSz1cjnA1yNrt06eJBVf
- IJc6ZWlYc79jz03fKcciqNGdlPxwF3k21NRQ6Z79S3cuWKuUxVZNe7xeb.c7BWiFTJypFgwjKaLt
- NrRb6646CtswMxSSnRzJcXhatMxoRt7L1p.frmrjOcGCZY7KvnPbdbTBMc6MNlnzFBYvzWkj6LKg
- GO7JfnOyU2HNXZwNzaxi.wgYq0xlRRT5uS_rODnYEiUM6tJvaHc2F1yXK5EQSE6q0_oVbxFWoSRB
- Mx9TAxQhPS08w1rUL6x_t15dUk1TS6_LKpFTH3efSsYBzvpauMu4zAzUp6lmagQm1oXFC_o.LNs3
- LBBjy9aU7USIrYk0NT2VhDkIWpPAWmLT26XpPCVE0rl4t3wj9jHXjimWpJZIaiaz2XV47dba_LPS
- xuyrUqkAeZFeIIETa8X5NrdCgLKjB4pbALGPbEGM62fU5JD17aUqyS6GeAkswbr0NQ.ldARVwDS6
- if96jml3JbWm6Fxc41ONCyot0hWyL1vmGmo_AmtzLnjFequSKv1VFc.G2e4iww0.v0ZlhTIdLwV6
- Svq1s2DxQzENOy5vpEGgUBo5ytHQ3d4ei5.qacx8ONPO6nRw_1TDCcJUrmbXCDNyXRPDOKR41euw
- FPCT_bCvv2yBf7njmneXx8rcMmNg_lkxGtPHRTe3RZ_J6JlN_oC8fPdsejwjnQce1x9ZlaTjJ2Nj
- hKUjEACgRT5VBEJdOEzWmq.7qjUIPcc46sBxail_4ePgoqjobSCfFkdOZIK.CfRgelbHWB3zLtvL
- oFjHXvyQhSDmLYvVcRAidiaBy5pb.DvClP71N1CMcdPG5U02.l7Fe62RblDVRWEUnhStz4PYb_Ja
- anBgBE_gD_TvdNVfbjXHGhezgagoKYpnF0ycYqqlHF6jWKsDp_hxVYpdA76jimNaxR_TBfRp1vUW
- 3Ut5fvAhdHiwsjddorYqLp1AuLSo5u9fuDScvTmpmwe0L1TrlRyXSuEfsbo94Ob5QBZLGVONmQ12
- T5ZgAu9M7WIY9QKJHTVZ_C9d5GoyO.ySW5Ti7CCW5_lRRDIReY5F2.hj1CGwzq08Q.4hRDZ6nhNC
- 2N7ALIbQ1kZw6cgHcbTPRD.y.G3Ws1Vus.h96xtNo5KwRIZCeLTmrQsSBqZwzPIQUhruI7ig7R1C
- z_A4K8bQjhvP5dKhPIHFoOjmNRk7lSCp76sCxuztqPeiuY4WUB5fYOhxGVDfyUxSqlqubBgqUPo5
- MaJ1T1CkbcAbk8EDdiAZRriaP_mxNfObNrBfGBLDDlh3EPWzJ01aRl_2uicDsY8S12q1O.lZwlFz
- 71otxDUs0sdfathHEBHvDqnnm7Z7sAFnqr73sNuQaIum3bZuuEWm4Z7wEPQKUL.b6ZUVBNykpdfz
- w.kPKMUIMZMOOGgEl2MQ.YnutK2skxh9REancbLR8yumMrub0qClQmR3Mr7AD4El7C4F49KxAvce
- 7NGOPb653JbcHyO6IpCZVb79VFMU1RvHZFPCDe2p0ll1ge236Jxyh.kOvDlH03AVdwjG0QXRtYkl
- C8JbcwhHADeFlD.2MqiBeTVaetrHo_tRbbRrwcmWpYhabWpPsKser6EcFF8oLeFbBzpVI.616tDN
- y5.e2281.JTq2a5MpA3frgpdyb9ky9WF_nV6ec3.X7LDJbahmGjwrxlV9FOOA3DBQhX42ZbBMcv4
- b8bOURSOU2oen8Hvsy7Hycmeikl2kv98LH3laSAUAJNqYGqdX8q17ns_jUxCeWsmb0qiNatWctM6
- LVZK2DMECP8.mDmsI7pUFCqjpXeosAhFsjoXPUMOWuvDiz..sCPnUziN9vD2QVSO5J18GwlKAFJC
- ct93pLndcPmJ4Fnv5rlTQa0knerfSuFDKVKM2uA5WKLVZ6EsVSV3oBw--
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: c8ccb835-27b9-4f7b-a2f5-b718b209afcc
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ir2.yahoo.com with HTTP; Sun, 16 Apr 2023 12:50:35 +0000
-Received: by hermes--production-ir2-74cd8fc864-9w846 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e1e6b4a18b1a30b9efb33afa6a04eb6c;
-          Sun, 16 Apr 2023 12:50:34 +0000 (UTC)
-From:   Jakob Hauser <jahau@rocketmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        with ESMTP id S229458AbjDPNfe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 Apr 2023 09:35:34 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559C71BD4;
+        Sun, 16 Apr 2023 06:35:33 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so17407047a12.1;
+        Sun, 16 Apr 2023 06:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681652132; x=1684244132;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UynXzPPu/DGOhUY3vG4qGCml8HX6Ft9KW/3oejkLCWs=;
+        b=FQNN0sb6s9yNnP/CGoXFh3igu4xyIcgaeJPp6zA3NG4A1PMVyPf1FiU2k8/tbyBysw
+         FUA+sT19X6zNEqN5kLjgQN3rhf0r04wuIcsXCnlYPJ8p2jbLld2ihtpHCHBMr/sP5Ibe
+         49FN7FuuJdWJWH1ofPTtGKAsLruUWcXhAgzump0LmZcFONBwW/sTiu6XJySSG2LM23+O
+         ZykDfby1f6p+vgr++p6XK4BoVl6iT6q3cVnKZasmQcbnCuyYHEmh+nku5f2TeFJQ4AaU
+         FTQZ0TL74Bp5teic6O3yj/gN5ZDhi3WW8RzJxiwiYN8S+nrgNDkuAtsjOqsqMvqtBRPC
+         UNBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681652132; x=1684244132;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UynXzPPu/DGOhUY3vG4qGCml8HX6Ft9KW/3oejkLCWs=;
+        b=B5qgSQsRJ7WMZ3bYn+Cmiu6XvQn3IUD64QJh+Nhsem2kpM3RkNVAecRBFgzaY4ch1Z
+         Xn6xCoDKlT7nvuu+/KZ0ljfWp1ehoDlOWUMMIhngI5VNti6J2ERb+w/JXPP8i50BMPSf
+         g/lV8ANRcH+yrAkJCriT9AzQqQ7cp6LJWkN4pa/kHZtz+v2Wipis1IQJBfy83oabh7xL
+         QL9LTwuabmFCInRMPeNwEpQnArFcD8/VJd/U+r6oXbNYCA2TiEpiD82fyyIyE2B7DVj/
+         i94MtlZkav2be+shFW7nPxVCZ8j2K/S8jT7d8sxuEnvFG2+mv5G7Kw2O7JM9s3NMEjGN
+         PZoQ==
+X-Gm-Message-State: AAQBX9dupZ/7spCYS3VtMlZU1s44BX3FxGX5BRVrn42Fb64nVG0owRmm
+        0R+Qqq+H5004rcZJVLOhv0M=
+X-Google-Smtp-Source: AKy350asygcBIZsKMBeNku99Cbv7Vlr8EwyySMjH2lM0enYA55icjSyR1KmoiXcM+WoAFrj6uaFcyQ==
+X-Received: by 2002:a05:6402:254a:b0:506:771a:60d6 with SMTP id l10-20020a056402254a00b00506771a60d6mr9675333edb.1.1681652131760;
+        Sun, 16 Apr 2023 06:35:31 -0700 (PDT)
+Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 06:35:31 -0700 (PDT)
+From:   Artur Weber <aweber.kernel@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Beomho Seo <beomho.seo@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Jakob Hauser <jahau@rocketmail.com>
-Subject: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd, regulator and charger
-Date:   Sun, 16 Apr 2023 14:44:36 +0200
-Message-Id: <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1681646904.git.jahau@rocketmail.com>
-References: <cover.1681646904.git.jahau@rocketmail.com>
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH v2 00/12] Re-introduce Exynos4212 support and add Samsung Galaxy Tab 3 8.0 boards
+Date:   Sun, 16 Apr 2023 15:34:10 +0200
+Message-Id: <20230416133422.1949-1-aweber.kernel@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add device tree binding documentation for rt5033 multifunction device, voltage
-regulator and battery charger.
+This patches re-introduces the Exynos4212 platform and adds support
+for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
 
-Cc: Beomho Seo <beomho.seo@samsung.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
----
-The patch is based on linux-next (tag "next-20230413").
+ - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
+ - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
+ - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
 
- .../bindings/mfd/richtek,rt5033.yaml          | 90 +++++++++++++++++++
- .../power/supply/richtek,rt5033-charger.yaml  | 76 ++++++++++++++++
- .../regulator/richtek,rt5033-regulator.yaml   | 24 +++++
- 3 files changed, 190 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
+What works:
 
-diff --git a/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-new file mode 100644
-index 000000000000..158036a57291
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-@@ -0,0 +1,90 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/richtek,rt5033.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description:
-+  RT5033 is a multifunction device which includes battery charger, fuel gauge,
-+  flash LED current source, LDO and synchronous Buck converter for portable
-+  applications. It is interfaced to host controller using I2C interface. The
-+  battery fuel gauge uses a separate I2C bus.
-+
-+properties:
-+  compatible:
-+    const: richtek,rt5033
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  regulators:
-+    type: object
-+    $ref: /schemas/regulator/richtek,rt5033-regulator.yaml#
-+
-+  charger:
-+    type: object
-+    $ref: /schemas/power/supply/richtek,rt5033-charger.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@34 {
-+            compatible = "richtek,rt5033";
-+            reg = <0x34>;
-+
-+            interrupt-parent = <&msmgpio>;
-+            interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
-+
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int_default>;
-+
-+            regulators {
-+                safe_ldo_reg: safe_ldo {
-+                    regulator-name = "safe_ldo";
-+                    regulator-min-microvolt = <4900000>;
-+                    regulator-max-microvolt = <4900000>;
-+                    regulator-always-on;
-+                };
-+                ldo_reg: ldo {
-+                    regulator-name = "ldo";
-+                    regulator-min-microvolt = <2800000>;
-+                    regulator-max-microvolt = <2800000>;
-+                };
-+                buck_reg: buck {
-+                    regulator-name = "buck";
-+                    regulator-min-microvolt = <1200000>;
-+                    regulator-max-microvolt = <1200000>;
-+                };
-+            };
-+
-+            charger {
-+                compatible = "richtek,rt5033-charger";
-+                richtek,pre-microamp = <450000>;
-+                richtek,fast-microamp = <1000000>;
-+                richtek,eoc-microamp = <150000>;
-+                richtek,pre-threshold-microvolt = <3500000>;
-+                richtek,const-microvolt = <4350000>;
-+                extcon = <&muic>;
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-new file mode 100644
-index 000000000000..439e0b7962f3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 PIMC Battery Charger
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description:
-+  The battery charger of the multifunction device RT5033 has to be instantiated
-+  under sub-node named "charger" using the following format.
-+
-+properties:
-+  compatible:
-+    const: richtek,rt5033-charger
-+
-+  richtek,pre-microamp:
-+    description:
-+      Current of pre-charge mode. The pre-charge current levels are 350 mA to
-+      650 mA programmed by I2C per 100 mA.
-+    maxItems: 1
-+
-+  richtek,fast-microamp:
-+    description:
-+      Current of fast-charge mode. The fast-charge current levels are 700 mA
-+      to 2000 mA programmed by I2C per 100 mA.
-+    maxItems: 1
-+
-+  richtek,eoc-microamp:
-+    description:
-+      This property is end of charge current. Its level ranges from 150 mA to
-+      600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and 600 mA
-+      in 100 mA steps.
-+    maxItems: 1
-+
-+  richtek,pre-threshold-microvolt:
-+    description:
-+      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
-+      threshold voltage, the charger is in pre-charge mode with pre-charge current.
-+      Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
-+    maxItems: 1
-+
-+  richtek,const-microvolt:
-+    description:
-+      Battery regulation voltage of constant voltage mode. This voltage levels from
-+      3.65 V to 4.4 V by I2C per 0.025 V.
-+    maxItems: 1
-+
-+  extcon:
-+    description:
-+      Phandle to the extcon device.
-+    maxItems: 1
-+
-+required:
-+  - richtek,pre-microamp
-+  - richtek,fast-microamp
-+  - richtek,eoc-microamp
-+  - richtek,pre-threshold-microvolt
-+  - richtek,const-microvolt
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    charger {
-+        compatible = "richtek,rt5033-charger";
-+        richtek,pre-microamp = <450000>;
-+        richtek,fast-microamp = <1000000>;
-+        richtek,eoc-microamp = <150000>;
-+        richtek,pre-threshold-microvolt = <3500000>;
-+        richtek,const-microvolt = <4350000>;
-+        extcon = <&muic>;
-+    };
-diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
-new file mode 100644
-index 000000000000..66c8a0692e10
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/richtek,rt5033-regulator.yaml
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/richtek,rt5033-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 PIMC Voltage Regulator
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description:
-+  The regulators of RT5033 have to be instantiated under a sub-node named
-+  "regulators". For "safe_ldo" voltage there is only one value of 4.9 V. "ldo"
-+  voltage ranges from 1.2 V to 3.0 V in 0.1 V steps. "buck" voltage ranges from
-+  1.0 V to 3.0 V in 0.1 V steps.
-+
-+patternProperties:
-+  "^(safe_ldo|ldo|buck)$":
-+    type: object
-+    $ref: /schemas/regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+additionalProperties: false
+ - Display and backlight
+ - Touchscreen (without touchkeys)
+ - GPIO buttons, hall sensor
+ - WiFi and Bluetooth
+ - USB, fuel gauge, charging (partial)
+ - Accelerometer and magnetometer
+ - WiFi model only: light sensor
+
+Display panel bindings used by the Tab3 DTSI are added in a separate
+patchset - "[PATCH 0/3] Add Samsung S6D7AA0 panel controller driver":
+https://lore.kernel.org/all/20230416131632.31673-1-aweber.kernel@gmail.com/
+
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+
+Changed in v2:
+ - Added note about display panel bindings to cover letter and
+   Tab3 DTSI commit
+
+Artur Weber (12):
+  dt-bindings: soc: samsung: add Exynos4212 PMU compatible
+  dt-bindings: clock: add Exynos4212 clock compatible
+  ARM: exynos: Re-introduce Exynos4212 support
+  soc: samsung: Re-introduce Exynos4212 support
+  clk: samsung: Add Exynos4212 compatible to CLKOUT driver
+  clk: samsung: Re-add support for Exynos4212 CPU clock
+  Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
+  Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
+  ARM: dts: Move common Exynos4x12 definitions to exynos4x12.dtsi
+  ARM: dts: Re-introduce Exynos4212 DTSI
+  dt-bindings: arm: samsung: Add Samsung Galaxy Tab3 family boards
+  ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   10 +
+ .../bindings/clock/samsung,exynos-clock.yaml  |    1 +
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    3 +
+ arch/arm/boot/dts/Makefile                    |    3 +
+ arch/arm/boot/dts/exynos4212-tab3-3g8.dts     |   30 +
+ arch/arm/boot/dts/exynos4212-tab3-lte8.dts    |   43 +
+ arch/arm/boot/dts/exynos4212-tab3-wifi8.dts   |   25 +
+ arch/arm/boot/dts/exynos4212-tab3.dtsi        | 1175 +++++++++++++++++
+ arch/arm/boot/dts/exynos4212.dtsi             |  157 +++
+ arch/arm/boot/dts/exynos4412.dtsi             |  645 +--------
+ ...2-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} |    4 +-
+ arch/arm/boot/dts/exynos4x12.dtsi             |  665 ++++++++++
+ arch/arm/mach-exynos/Kconfig                  |    5 +
+ arch/arm/mach-exynos/common.h                 |    8 +
+ arch/arm/mach-exynos/exynos.c                 |    2 +
+ arch/arm/mach-exynos/firmware.c               |    8 +-
+ arch/arm/mach-exynos/pm.c                     |    2 +-
+ arch/arm/mach-exynos/suspend.c                |    4 +
+ drivers/clk/samsung/clk-exynos-clkout.c       |    3 +
+ drivers/clk/samsung/clk-exynos4.c             |   44 +-
+ .../media/platform/samsung/exynos4-is/Kconfig |    2 +-
+ .../platform/samsung/exynos4-is/fimc-core.c   |    2 +-
+ .../platform/samsung/exynos4-is/fimc-lite.c   |    2 +-
+ drivers/phy/samsung/Kconfig                   |    2 +-
+ drivers/soc/samsung/exynos-pmu.c              |    9 +
+ drivers/soc/samsung/exynos-pmu.h              |    2 +
+ drivers/soc/samsung/exynos4-pmu.c             |   13 +-
+ 27 files changed, 2213 insertions(+), 656 deletions(-)
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-3g8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-lte8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3.dtsi
+ create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
+ rename arch/arm/boot/dts/{exynos4412-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} (99%)
+ create mode 100644 arch/arm/boot/dts/exynos4x12.dtsi
+
 -- 
-2.39.2
+2.40.0
 
