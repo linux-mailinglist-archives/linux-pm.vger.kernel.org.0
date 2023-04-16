@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A628F6E380F
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Apr 2023 14:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7901D6E382C
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Apr 2023 14:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjDPMhJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 16 Apr 2023 08:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        id S230253AbjDPMmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 16 Apr 2023 08:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjDPMhF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 Apr 2023 08:37:05 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8382D40;
-        Sun, 16 Apr 2023 05:37:04 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id xd13so23346093ejb.4;
-        Sun, 16 Apr 2023 05:37:04 -0700 (PDT)
+        with ESMTP id S230215AbjDPMmV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 Apr 2023 08:42:21 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B75C1982
+        for <linux-pm@vger.kernel.org>; Sun, 16 Apr 2023 05:42:19 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u3so5275264ejj.12
+        for <linux-pm@vger.kernel.org>; Sun, 16 Apr 2023 05:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681648624; x=1684240624;
+        d=linaro.org; s=google; t=1681648937; x=1684240937;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VDa2GFtYkfWVlc8ZTMskD2bfRssb3+wPHR9VnWdgQkk=;
-        b=Ye4lxVUXva7hfPvirb5EICjV7mvCIR+LZoN3QkH/Aa9mcMNRKXRHXY7XX9YxfQiM4d
-         UHF+N75fqf6yWUywGE72iYA9LGogaxALspplCNngKKlCEiNB/KHmYLhX5s9kFNdrJlgm
-         Ps5No9KHIl4sEN/LvkdFDyEuljHQ2Yb4FiMA1QptZREt1Bp0QkaLum68LKPqGSisGWmj
-         02RcdFqsq/361uqczbuNL3um2U2cyI0NQiD7Oc40B1PwxsMYtEbKZYmC5yPD3d1E2/Ce
-         TzkSQIRiqBSrM/faDZ7/OC9IJha+EfIshOaH1OD3tv+CNbl5x1Wr5b1zwVnYnEvDen3x
-         FaoQ==
+        bh=3Stybf3H9Q45miG2lE4UZ2skOoton8ZUstQqbtnIu+I=;
+        b=NGT0AtxQb+GWXTEwUxWLwQnDvnLlI3pfnsRfizmW84NIuRsHvTHhRn9R3eioHmpgXz
+         vnqwp7YDdNb2q9mTkusj990j0bOCj62v17YX7rVOy0z+ig7nH6WhHKvPqB5FBe8Mso/J
+         NR/JsI8ha/nP2HbRhG4edc7ERoIXrXQaBljwyG6ScQifnYwycKYabnP+/54g7VzqvDsl
+         fTmcjlV3GJKzcvQQOzKUG6ObNhzYZBBuXB1lljTNpeAKXgMAr4O391eSLeSKOEtnUA8n
+         JRGSY/rKo2fB38hwLyF7u568/jDu0avnzZTmGk7bcnVrQMKBkxvRabGIphQBb8xDlEIi
+         dNIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681648624; x=1684240624;
+        d=1e100.net; s=20221208; t=1681648937; x=1684240937;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VDa2GFtYkfWVlc8ZTMskD2bfRssb3+wPHR9VnWdgQkk=;
-        b=Z1hVKdWL6mcmQiAcTWG7ZSqXu4ypa/OHCRM3SiGO1/SE0HUojNJdQTmW9OzR5nZAzU
-         yPy25ESlFFyu474/PVpYUe65AhBojgSp5I8ERpR2aQnlrTAzD+9CNUBmSYwuW9Mmgyak
-         RUm0zAvitYy4vumWkoUtPdd53TPHRqZeolzwiZDdQxqWJU/WzZuC7FqvfvDZnq49O2mF
-         Bz5ZpFYwDS0Q76y4PT0sFEPW5M9acX135DGNG99MQGk+AdSiyLDNdBus4lSHo2FwEaqX
-         HBCD5UM5OJIKoa9k16S8InRTM8XlQjjQ+iL1IYvU+wiobVfPf2LryMz/9k3W8+AVcGgq
-         6Ajw==
-X-Gm-Message-State: AAQBX9eJHJLJCH9GjNjX9G2Jrn27Nc5b0UMl2wwIo1HqvqMkxGGvGgup
-        yqnTGXBLnsaXXS0tDpo1z5s=
-X-Google-Smtp-Source: AKy350Z9RmwvdFDkqAGZQeSDhkrMeMTMfOfNN8b8VmhaRJ5qZRpnoXUSxR2zWJy9cKGKUWb33636uQ==
-X-Received: by 2002:a17:906:82c5:b0:93f:2256:fc05 with SMTP id a5-20020a17090682c500b0093f2256fc05mr4820249ejy.55.1681648624015;
-        Sun, 16 Apr 2023 05:37:04 -0700 (PDT)
-Received: from [192.168.50.244] (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id i3-20020a1709061e4300b0092b8c1f41ebsm4999772ejj.24.2023.04.16.05.37.01
+        bh=3Stybf3H9Q45miG2lE4UZ2skOoton8ZUstQqbtnIu+I=;
+        b=Hx32Ei9N5ZJgrFAq6AuyYALHiQH69yyRGDXFlmFnNuOqf1+cd1uGqXun1RZTzWFRG4
+         gHFFlCxY84EJGKX+yhCI97ksHEreKQs3Tn9fYS2Oc64SRZ/3kULJX8u6XC8B0iwy3JnK
+         7DfF1r1zZHDrI0tTCB0wd316q08kvTpa8nrt3x5iXJWPZJfkfA4LBPpiBWJUQXlnJdzV
+         ToHfaQ2Aw1EhfqyFZkmFAhfDKsYRnd/CanqJiq5OoveRBlP9u+GYLAvqj7JV0aSOh5kR
+         Y+1yi+XqNXZpOpwtZ/jCDt/fHNyf/ag2MP0/YPkb+c+tTJefvRCw2pk59R9YJrxow/kD
+         IASw==
+X-Gm-Message-State: AAQBX9fk+bDoghRvIqM2OpOWyrM5r2+xhUIw1G5sm/m1LVLfloR9HLXM
+        nxa8gnMfeVCnYDuamomPlDQAwg==
+X-Google-Smtp-Source: AKy350ZZACWSXc/ruWCfjbW+QzpyKWJt4AoW9nPZTPV9iuhQ5pbR9y/19DYYC0FEWFU7sykL/wTPMQ==
+X-Received: by 2002:a17:907:2c4f:b0:94a:5d16:a280 with SMTP id hf15-20020a1709072c4f00b0094a5d16a280mr4003531ejc.9.1681648937669;
+        Sun, 16 Apr 2023 05:42:17 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
+        by smtp.gmail.com with ESMTPSA id wz9-20020a170906fe4900b0094ee6b963e0sm3434174ejb.60.2023.04.16.05.42.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 05:37:03 -0700 (PDT)
-Message-ID: <8bb6e9a6-0143-3627-14c4-285ce2632070@gmail.com>
-Date:   Sun, 16 Apr 2023 14:37:01 +0200
+        Sun, 16 Apr 2023 05:42:17 -0700 (PDT)
+Message-ID: <e50f5980-b1f6-4495-08b7-7e3f4f78cc67@linaro.org>
+Date:   Sun, 16 Apr 2023 14:42:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
+ Thunderbird/102.10.0
 Subject: Re: [PATCH 00/12] Re-introduce Exynos4212 support and add Samsung
  Galaxy Tab 3 8.0 boards
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Artur Weber <aweber.kernel@gmail.com>
 Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         Rob Herring <robh+dt@kernel.org>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
@@ -83,76 +83,81 @@ References: <20230416101624.15866-1-aweber.kernel@gmail.com>
  <ba148e6c-1685-f6d4-458f-bbdf1dd674cf@linaro.org>
  <36287654-c6e6-f4bd-320c-866bef692d2f@gmail.com>
  <d0b2868f-cade-feb1-52cd-2aacd537c9c6@linaro.org>
-From:   Artur Weber <aweber.kernel@gmail.com>
-In-Reply-To: <d0b2868f-cade-feb1-52cd-2aacd537c9c6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <8bb6e9a6-0143-3627-14c4-285ce2632070@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8bb6e9a6-0143-3627-14c4-285ce2632070@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/04/2023 12:53, Krzysztof Kozlowski wrote:
-> On 16/04/2023 12:49, Artur Weber wrote:
->> On 16/04/2023 12:34, Krzysztof Kozlowski wrote:
->>> On 16/04/2023 12:26, Artur Weber wrote:
->>>> On 16/04/2023 12:16, Artur Weber wrote:
->>>>> This patches re-introduces the Exynos4212 platform and adds support
->>>>> for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
+On 16/04/2023 14:37, Artur Weber wrote:
+> On 16/04/2023 12:53, Krzysztof Kozlowski wrote:
+>> On 16/04/2023 12:49, Artur Weber wrote:
+>>> On 16/04/2023 12:34, Krzysztof Kozlowski wrote:
+>>>> On 16/04/2023 12:26, Artur Weber wrote:
+>>>>> On 16/04/2023 12:16, Artur Weber wrote:
+>>>>>> This patches re-introduces the Exynos4212 platform and adds support
+>>>>>> for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
+>>>>>>
+>>>>>>     - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
+>>>>>>     - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
+>>>>>>     - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
+>>>>>>
+>>>>>> What works:
+>>>>>>
+>>>>>>     - Display and backlight
+>>>>>>     - Touchscreen (without touchkeys)
+>>>>>>     - GPIO buttons, hall sensor
+>>>>>>     - WiFi and Bluetooth
+>>>>>>     - USB, fuel gauge, charging (partial)
+>>>>>>     - Accelerometer and magnetometer
+>>>>>>     - WiFi model only: light sensor
 >>>>>
->>>>>     - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
->>>>>     - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
->>>>>     - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
->>>>>
->>>>> What works:
->>>>>
->>>>>     - Display and backlight
->>>>>     - Touchscreen (without touchkeys)
->>>>>     - GPIO buttons, hall sensor
->>>>>     - WiFi and Bluetooth
->>>>>     - USB, fuel gauge, charging (partial)
->>>>>     - Accelerometer and magnetometer
->>>>>     - WiFi model only: light sensor
+>>>>> This patchset depends on "[PATCH 0/3] Add Samsung S6D7AA0 panel
+>>>>> controller driver" for the display panel support for the Samsung Galaxy
+>>>>> 3 8.0 boards.
 >>>>
->>>> This patchset depends on "[PATCH 0/3] Add Samsung S6D7AA0 panel
->>>> controller driver" for the display panel support for the Samsung Galaxy
->>>> 3 8.0 boards.
+>>>> Why? DTS and ARM code cannot depend on driver changes. Please rework
+>>>> your patchsets to remove any of such dependencies.
 >>>
->>> Why? DTS and ARM code cannot depend on driver changes. Please rework
->>> your patchsets to remove any of such dependencies.
+>>> Ah, that makes sense. I'll re-send the patchset in a second with the
+>>> panel node removed.
 >>
->> Ah, that makes sense. I'll re-send the patchset in a second with the
->> panel node removed.
+>> I am sorry, I don't understand. Why would you remove anything from DTS?
+>> Are bindings NAKed?
 > 
-> I am sorry, I don't understand. Why would you remove anything from DTS?
-> Are bindings NAKed?
+> The dependency display panel patchset introduces the panel and its 
+> bindings, which in turn are included in the Tab3 DTSI. It was submitted 
+> at roughly the same time as this series, and hasn't been fully reviewed 
+> or merged as of writing. (I have seen your comments on that patchset, 
+> and I will be addressing them shortly.) So the bindings haven't been 
+> explicitly ACKed yet (assuming you mean the Acked-by reply).
 
-The dependency display panel patchset introduces the panel and its 
-bindings, which in turn are included in the Tab3 DTSI. It was submitted 
-at roughly the same time as this series, and hasn't been fully reviewed 
-or merged as of writing. (I have seen your comments on that patchset, 
-and I will be addressing them shortly.) So the bindings haven't been 
-explicitly ACKed yet (assuming you mean the Acked-by reply).
+So there is no dependency. DTS is (and must be) independent of driver.
+You need to mention in the patch (under --- ) or cover letter that it
+uses new bindings which are documented under the given link.
 
-In response to:
+> 
+> In response to:
+> 
+>  > Please rework your patchsets to remove any of such dependencies.
+> 
+> I suggested that I could remove the panel node from the DTSI for the 
+> time being. The intent was to submit it in a separate patch later, once 
+> the display is reviewed/merged, and thus actually available in the 
+> kernel; this way, the two patches could be reviewed and merged separately.
 
- > Please rework your patchsets to remove any of such dependencies.
+No need, there is no dependency. Just remove such remarks from cover letter.
 
-I suggested that I could remove the panel node from the DTSI for the 
-time being. The intent was to submit it in a separate patch later, once 
-the display is reviewed/merged, and thus actually available in the 
-kernel; this way, the two patches could be reviewed and merged separately.
-
-I could instead wait for the display patchset to get reviewed/merged 
-first, then resubmit this series, if that's preferable.
-
-I apologize for the confusion.
 
 Best regards,
-Artur Weber
+Krzysztof
 
