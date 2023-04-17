@@ -2,140 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBC46E428D
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 10:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC80A6E4303
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 10:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjDQIZz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 04:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S229682AbjDQI7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 04:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjDQIZw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 04:25:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3755C5278
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 01:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681719896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UcXu6x56VatJHPoIi02+E+e45LAvk1jm28QAaFuNKY4=;
-        b=enTFoS6lkA0L5++/MgJsT6JEVAuq/ORtdnMaHG0NJx3h8DRIEOk7kA1nS+uccrJedHiDUq
-        AiIlRh/55fr/yLDsrv8/T0/to9/Ymy8KRcDQFnyktNhR8w10CwXrqgu26jDdpDt8WW9Ren
-        qcktzt0gvSElGRa+YnPgu8kg+oahv2E=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-209-8eifMu4GMfK--1ODHR-z2w-1; Mon, 17 Apr 2023 04:24:54 -0400
-X-MC-Unique: 8eifMu4GMfK--1ODHR-z2w-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50508242889so2441343a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 01:24:54 -0700 (PDT)
+        with ESMTP id S229478AbjDQI7h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 04:59:37 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B561FC3;
+        Mon, 17 Apr 2023 01:59:36 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50672fbf83eso13745144a12.0;
+        Mon, 17 Apr 2023 01:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681721974; x=1684313974;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wJafEGZLilXLck6GAd9V/sVhueR55spEo7I/YbebiPc=;
+        b=qfM932Zhr03+ycfBEcHVAQFqxldOI5utfQfmvV4OKB+GLgVI/Dhm4xkbQ2pHvpE2Gl
+         ikQtFMtQt3w6/hALMzB75albvSzCrfmVEGlR4osSuoM2SOPQSyHJOzk48iZ5E+l6AjAC
+         c47OoVO94sgR3sHKh2mVm7dWmAuloaSXXp93QJrhzmGukDm7PzSi211vL8PueM9L5FMR
+         bjJBNOapEyTPyiLi2rIVXsVRQtdZV7OhKaI8gwEGmYYNacJUxKm5GVB5c2fyfpCpsDGu
+         pvJbVqhWV2St4iipY3cjvj6QCJhW9aecJL56EYLAFWTJk57wY1sOiQ4/jBtPGywt/jRS
+         l4CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681719893; x=1684311893;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UcXu6x56VatJHPoIi02+E+e45LAvk1jm28QAaFuNKY4=;
-        b=CpvyyESRpTbCgDbyXTGoaNk7AeZXnCnPdHLOsf5P2+Nf6b2+vayZo8mQsnwmj0xaKG
-         5XYAO6yU9Q/MrhHTVWpv65mCcmQhSmQdhJc1PbsyJoU3IgHo+US4WTxVT3lnXcNmjw77
-         UOTymE3+bUZFEI1Ac1Vqw96GPBqRc0+meccyjzlKGzBKX7bX+ejDR5n0G3znw7tYK3wo
-         vhYL94PxEJT1kBWS9Sx58UI6Cb4rK5Q1pyeeJR5qBFaNkLlL1KEX5DhYGbR9W2pP5sY5
-         Ho9QPTo8blbNOQcV8iwFKRSdyT8I8MpQzO1duzq9m53KkGJDfOSZR2yKjIK7GK49Ajgg
-         x73Q==
-X-Gm-Message-State: AAQBX9f/z4g7p8e7ZLbgWAeDfTRlHJr9I16Xx2m4kCs9Za4BNGAA3NNN
-        5jpCGB/oSDADauDGzvvQNY0WHNWTNd61zo8VS4Wx5uIggYiXEWvq/Rhk7TMnF63o4VvILZ+0pPs
-        5AfVgyNH8pUEz2UQTe0c95HVXi5o=
-X-Received: by 2002:aa7:c155:0:b0:506:8edd:b883 with SMTP id r21-20020aa7c155000000b005068eddb883mr6453567edp.36.1681719893503;
-        Mon, 17 Apr 2023 01:24:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b4i65gxNLASOvBXz6lnH55FvdetEEPTPD6VrcxYPr+lNl+ZQCC+GMWZsfmqc1JZ9am8bk2vw==
-X-Received: by 2002:aa7:c155:0:b0:506:8edd:b883 with SMTP id r21-20020aa7c155000000b005068eddb883mr6453555edp.36.1681719893168;
-        Mon, 17 Apr 2023 01:24:53 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id l12-20020a056402344c00b00504803f4071sm5552136edc.44.2023.04.17.01.24.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 01:24:52 -0700 (PDT)
-Message-ID: <8a4f2454-809c-d773-42b2-e62fb057feb2@redhat.com>
-Date:   Mon, 17 Apr 2023 10:24:52 +0200
+        d=1e100.net; s=20221208; t=1681721974; x=1684313974;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wJafEGZLilXLck6GAd9V/sVhueR55spEo7I/YbebiPc=;
+        b=IfspAeYXvw47otxE04CBQ9+50z032uY7SJLiV5cj/b+pKoVWjhrpiAxjya9XAwaLyb
+         dC8BBI2cUTmwCPd4o1/UfeCx8FwkIpMN00rSVnbQyXqqHxRD3lUKQm0copAjoMoHSdE5
+         eAM1sm44SRMM/PocXrZbfwkZm42+L9WTvruiApOMVSBRApdJw7T74Xc+Db5pSSRHYo/m
+         0dfUV4Bl68yaPB0082RQeDQ4kQHZaa5hP+tWJZODmWjCdUwttSPGheUWAai2BmOylW4y
+         o5siycZTaUvABpxcUwiFurVSYJJwUaQr32NK+GMVRkAg7LWval/7ojCsOrt8SaYmPiIm
+         J3KA==
+X-Gm-Message-State: AAQBX9dXwXMWMqos33dlhFrl/WBfEEBAjshvn8Wdt7pBr/wL0q50VPwX
+        Sr/UXKTKNNgoPRUHsqyZu/+WjWMTgy4=
+X-Google-Smtp-Source: AKy350aa7Tqk9acCyMU93oK0d8443WM/hwBWH+1CqkPHUMe5MUiqGivxZLO5vsLKd771bc0fAATA9w==
+X-Received: by 2002:a05:6402:4413:b0:4af:7bdc:188e with SMTP id y19-20020a056402441300b004af7bdc188emr16893868eda.16.1681721974297;
+        Mon, 17 Apr 2023 01:59:34 -0700 (PDT)
+Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id c9-20020a056402100900b0050508605c1dsm5536595edu.37.2023.04.17.01.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 01:59:33 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 10:59:32 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 01/10] dt-bindings: thermal: tegra: Document throttle
+ temperature
+Message-ID: <ZD0KdAXyi0Ex1JOU@orome>
+References: <20230414125721.1043589-1-thierry.reding@gmail.com>
+ <20230414125721.1043589-2-thierry.reding@gmail.com>
+ <187d51b3-6fec-7a25-e472-3d9020c12db5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v9 0/4] Add vendor agnostic mechanism to report hardware
- sleep
-Content-Language: en-US, nl
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Box David E <david.e.box@intel.com>, jstultz@google.com,
-        pavel@ucw.cz, svenva@chromium.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Shyam-sundar.S-k@amd.com, rrangel@chromium.org,
-        Jain Rajat <rajatja@google.com>, linux-kernel@vger.kernel.org
-References: <20230414012346.1946-1-mario.limonciello@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230414012346.1946-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="n8oRERorzIEJ3aCU"
+Content-Disposition: inline
+In-Reply-To: <187d51b3-6fec-7a25-e472-3d9020c12db5@linaro.org>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Mario, et al.,
 
-On 4/14/23 03:23, Mario Limonciello wrote:
-> An important part of validating that s0ix worked properly is to check how
-> much of a cycle was spent in a hardware sleep state.
-> 
-> The reporting of hardware sleep is a mix of kernel messages and sysfs
-> files that vary from vendor to vendor. Collecting this information
-> requires extra information on the kernel command line or fetching from
-> debugfs.
-> 
-> To make this information more readily accessible introduce a new file in
-> suspend_stats that drivers can report into during their resume routine.
-> 
-> Userspace can fetch this information and compare it against the duration
-> of the cycle to allow determining residency percentages and flagging
-> problems.
-> 
-> Mario Limonciello (4):
->   PM: Add sysfs files to represent time spent in hardware sleep state
->   platform/x86/amd: pmc: Report duration of time in hw sleep state
->   platform/x86/intel/pmc: core: Always capture counters on suspend
->   platform/x86/intel/pmc: core: Report duration of time in HW sleep
->     state
-> 
->  Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
->  drivers/platform/x86/amd/pmc.c        |  6 +--
->  drivers/platform/x86/intel/pmc/core.c | 17 ++++----
->  drivers/platform/x86/intel/pmc/core.h |  4 +-
->  include/linux/suspend.h               |  8 ++++
->  kernel/power/main.c                   | 59 +++++++++++++++++++++------
->  6 files changed, 98 insertions(+), 25 deletions(-)
-> 
-> 
-> base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+--n8oRERorzIEJ3aCU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for working on this, this looks good to me:
+On Fri, Apr 14, 2023 at 11:47:56PM +0200, Krzysztof Kozlowski wrote:
+> On 14/04/2023 14:57, Thierry Reding wrote:
+> > From: Thierry Reding <treding@nvidia.com>
+> >=20
+> > Each throttling configuration needs to specify the temperature threshold
+> > at which it should start throttling. Previously this was tied to a given
+> > trip point as a cooling device and used the temperature specified for
+> > that trip point. This doesn't work well because the throttling mechanism
+> > is not a cooling device in the traditional sense.
+> >=20
+> > Instead, allow device trees to specify the throttle temperature in the
+> > throttle configuration directly so that the throttle doesn't need to be
+> > exposed as a cooling device.
+> >=20
+> > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> > ---
+> >  .../bindings/thermal/nvidia,tegra124-soctherm.yaml         | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-=
+soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-s=
+octherm.yaml
+> > index 4677ad6645a5..37dac851f486 100644
+> > --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-socther=
+m.yaml
+> > +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-socther=
+m.yaml
+>=20
+> File does not exist in next and no dependency is mentioned, so tricky to
+> review and figure out context. Without context the comment is:
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Apologies, I have a conversion series for these thermal bindings. I'll
+send those out first.
 
-For the series. Since this also touches kernel/power/main.c
-I think it would be best if the entire series is merged
-through the linux-pm tree and I'm fine with the pdx86 bits
-also getting merged through linux-pm.
+> > @@ -120,6 +120,13 @@ properties:
+> >                # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
+> >                - 3
+> > =20
+> > +          temperature:
+> > +            $ref: /schemas/types.yaml#/definitions/int32
+>=20
+> Use -millicelsius suffix instead:
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/pr=
+operty-units.yaml
 
-Rafael ?
+Okay.
 
-Regards,
+> > +            minimum: -273000
+> > +            maximum: 200000
+> > +            description: The temperature threshold (in millicelsius) t=
+hat,
+> > +              when crossed, will trigger the configured automatic thro=
+ttling.
+>=20
+> Don't you want some hysteresis? Or is it already using trips binding?
+> But in that case you should skip the $ref and maximum - they come from
+> thermal-zones, don't they?
 
-Hans
+We don't use a hysteresis at the moment, but checking the register
+documentation, there's indeed "up" and "down" thresholds, so we can add
+another property for that.
 
+This doesn't use the trips binding and in fact, one of the reasons for
+this change is because we want to make this separate from trip points.
+Trip points are usually associated with cooling devices and this
+throttling mechanism doesn't really fit that concept because it is an
+automatic mechanism that is triggered when a given temperature threshold
+is crossed, rather than a manually activated mechanism, which is what a
+cooling device would be.
 
+Thierry
 
+--n8oRERorzIEJ3aCU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQ9CnEACgkQ3SOs138+
+s6Hwgg//ej6HrQF29/A2wofCJYWnXGuIdDPJB6IthVMjhGD9+DzNne9c0CVxslRH
+5faMpw7E5yVvfE93O3sj35mmHcTxQacv1zKan6/4L8DL0kTEqPgB3I69zLCku1PH
+PHzxD/r+q+29GExtN0ZlWpyf1aNnHFfUR/xh2e2kXR2C8XqHmEJ56ZMx/2cDJs5x
+hCubIxoKaqu1XUABb/0l7Z/Q/3ng4jtioiuYcc+YIgROW9ag32QuEgeXjpOi2q+1
+zlgBYgRpGe0FD2LaIvusviJOQ9X/mj78gKBwoy5Oh5qZOU2BXLYvF5tLRIRgzaPC
+HEhBenV8ED0+DrisncOKH60pxAvGV0BPmPNr2mijH8iItyu6D9dTJLyYE6GTqR9i
+zBShzFhdjfHA+ETbjkIeA9+ca0vX5+o5ABMG9QR2Cdet/79H9oIR1pO7RJbE6Lz/
+oAz/gusDS55E8Fz09vPSInPI7gj8AD/FYnrKdALKd8GbY1C7ERn4H/LRcUEP+9Te
+JxvvBiKNovT3l4BprfflGFmkfP0iPDKhbDJT3AJl0fiy631VzkEN37LtwSZc8IQj
+cOYQcH6tQaldVNUNLVKesAL3xH51y1hGymNrDUpIqdB/OV6QloXjl9I+ZvE5vjuJ
+NjVkj+OS6NENoGVWJQz4WgMUdxJZMhCI8JjJBb2Xd6AYaljYiZo=
+=CWGp
+-----END PGP SIGNATURE-----
+
+--n8oRERorzIEJ3aCU--
