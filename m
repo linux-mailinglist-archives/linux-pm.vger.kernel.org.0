@@ -2,171 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087C26E3FEC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 08:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2056A6E415A
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 09:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjDQGj6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Apr 2023 02:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
+        id S229762AbjDQHkw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 03:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjDQGj5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 02:39:57 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233CE213A;
-        Sun, 16 Apr 2023 23:39:56 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C29A224E217;
-        Mon, 17 Apr 2023 14:39:46 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 14:39:46 +0800
-Received: from localhost.localdomain (183.27.97.249) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 14:39:45 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: [PATCH v2 3/3] riscv: dts: starfive: Add cpu scaling for JH7110 SoC
-Date:   Mon, 17 Apr 2023 14:39:42 +0800
-Message-ID: <20230417063942.3141-4-mason.huo@starfivetech.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417063942.3141-1-mason.huo@starfivetech.com>
-References: <20230417063942.3141-1-mason.huo@starfivetech.com>
+        with ESMTP id S229627AbjDQHku (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 03:40:50 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038DD3A99
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 00:40:24 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-504dfc87927so4487714a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 00:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681717220; x=1684309220;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jOuJf1Uk2XVzTeZs33zX+691srOKO1AbhUKqZP8jH3E=;
+        b=bD/FFEpVwIhN3pNSBZp3oeHUq+WS77cAz7PD/ZDAxvCN2FFkuT1Md8xPhUGKe3V14h
+         KG2U6A26i2gEjFiIYpxVVOSGJ6vCsoDHLqpw+wPcwir9uk39FZSJFROsp5b9vErKDybJ
+         fd2qa2dKD/pu+lZohU/reF67C6eliqsk7s6AdMgse9o7usfrvfePAr840Ucb+9KBgMNF
+         9MwSrl4L6QmFXSI53P5U/syh7tDQyfs8u+xFeKcV5EOZ3zJFkM+c6UkSUW089UdKRsUh
+         Wfi98fwzrmg0JUXmrM9uIl+Z5LnhsqdhR9shJ27fNa+ELDg4kk6iYumtkPvGzyywYlyn
+         WH9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681717220; x=1684309220;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOuJf1Uk2XVzTeZs33zX+691srOKO1AbhUKqZP8jH3E=;
+        b=C7+3HKqSkwqVgy50u6cI5FzPJMZb5rWyfKlGujlC0lA9HBwoxFNjePr55uOFLpi+H/
+         9jKbmqGUZ5CsShPi8g1PvNWNuC5GAmEi3GSygMatdHuuI6pWbT2rga+ScqP3/evLxA86
+         RrAM9HGb0AVwagw5+S9YCsKq08B6AdbL1bi2NVomgjgp5gVpBQOEja3/qkkLwVp7DJla
+         uzIAbK0qQrIQxKGXvBw4sFJHggTrkH43/5Rah8JIAQZDiP9QG8EfpSljka6j5H96x1y1
+         fy2Iu5VP6wjUwSgU8j0WMkE8IJL2rFnETB04uG21qOihOetFcn+r4j8ECxbF6zEIJLGH
+         bYPA==
+X-Gm-Message-State: AAQBX9eer5QNVwvcK3Rc2vrj4zAHpRlqZLx/O8jh9rnEfpgDEVRjXcFK
+        Gf5kK/88MCYNKlMOz+jcoWRwOQ==
+X-Google-Smtp-Source: AKy350Y85eczDG7Mw8aICC9OfwA8qtxoVQbiQnVpgM7S2lQj5ctUHXmf9vdwjdbGCteBPpkM0yTRwg==
+X-Received: by 2002:a05:6402:1645:b0:506:8d35:40b7 with SMTP id s5-20020a056402164500b005068d3540b7mr7121155edx.8.1681717219986;
+        Mon, 17 Apr 2023 00:40:19 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id c18-20020aa7c752000000b00501d73cfc86sm5527649eds.9.2023.04.17.00.40.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 00:40:19 -0700 (PDT)
+Message-ID: <c240cbef-1d9e-dc1b-b619-c22dacf8d41f@linaro.org>
+Date:   Mon, 17 Apr 2023 09:40:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.249]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V2 3/6] dt-bindings: imx-thermal: add imx6sll and imx6ul
+ compatible
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        linux-imx@nxp.com, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+References: <20230410205803.45853-1-stefan.wahren@i2se.com>
+ <20230410205803.45853-4-stefan.wahren@i2se.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230410205803.45853-4-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the operating-points-v2 to support cpu scaling on StarFive JH7110 SoC.
-It supports up to 4 cpu frequency loads.
+On 10/04/2023 22:58, Stefan Wahren wrote:
+> Currently the dtbs_check for imx6 generates warnings like this:
+> 
+> ['fsl,imx6sll-tempmon', 'fsl,imx6sx-tempmon'] is too long
+> 
+> So add them to the devicetree binding.
+> 
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
 
-Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
----
- .../jh7110-starfive-visionfive-2.dtsi         | 17 ++++++++++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      | 33 +++++++++++++++++++
- 2 files changed, 50 insertions(+)
+Applied, thanks
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-index cca1c8040801..b25e6d68ce53 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-@@ -227,3 +227,20 @@ &uart0 {
- 	pinctrl-0 = <&uart0_pins>;
- 	status = "okay";
- };
-+
-+&U74_1 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-+&U74_2 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-+&U74_3 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-+&U74_4 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 4c5fdb905da8..7eef88d2cedb 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -53,6 +53,9 @@ U74_1: cpu@1 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu1_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -79,6 +82,9 @@ U74_2: cpu@2 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu2_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -105,6 +111,9 @@ U74_3: cpu@3 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu3_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -131,6 +140,9 @@ U74_4: cpu@4 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu4_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -164,6 +176,27 @@ core4 {
- 		};
- 	};
- 
-+	cpu_opp: opp-table-0 {
-+			compatible = "operating-points-v2";
-+			opp-shared;
-+			opp-375000000 {
-+					opp-hz = /bits/ 64 <375000000>;
-+					opp-microvolt = <800000>;
-+			};
-+			opp-500000000 {
-+					opp-hz = /bits/ 64 <500000000>;
-+					opp-microvolt = <800000>;
-+			};
-+			opp-750000000 {
-+					opp-hz = /bits/ 64 <750000000>;
-+					opp-microvolt = <800000>;
-+			};
-+			opp-1500000000 {
-+					opp-hz = /bits/ 64 <1500000000>;
-+					opp-microvolt = <1040000>;
-+			};
-+	};
-+
- 	gmac0_rgmii_rxin: gmac0-rgmii-rxin-clock {
- 		compatible = "fixed-clock";
- 		clock-output-names = "gmac0_rgmii_rxin";
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
