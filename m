@@ -2,135 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D034C6E4C1B
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 16:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7B96E4D1F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 17:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjDQO42 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 10:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S230459AbjDQP2K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 11:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjDQO4U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 10:56:20 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2387B7EEB
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 07:55:53 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2f6401ce8f8so1000130f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 07:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1681743343; x=1684335343;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vVLpu463weUnMVF2zbdwbH3MNpH2/6HWhiak2FggVPg=;
-        b=D7o3l3xcWWlfo+EXUnDR08gc9zaDZak181rwXLSSGGskUajUsAkBRcBC76KHtJIX8g
-         NfcOJzAZlMKZ0GUfmsJP6dtOtpP02blCi8coTZr5ZdEBmJ4KDyfzIrys7zygH2rgWCu9
-         N7M0j3rY/XNH8cgh16sAb0AVsjJSZPdViJ1AIR/YM8foAEQV40hqTbr8MbotN+Hm/yN4
-         4TeSuCUnwTMg55dxWMt+UyCDWfXdbjqB+r+w9iVju830bGcDHc5MGVQ9ybFw/m9Z0XFd
-         LsyVc90FWbKgS/byLEGEohsfH2VzMolRPDMADoq4Ej64KsbLT3W/HAgDj5xzACtZZzPe
-         y1Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681743343; x=1684335343;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vVLpu463weUnMVF2zbdwbH3MNpH2/6HWhiak2FggVPg=;
-        b=Ac3S3UjmJ7FZxqCG4Q/aBI17g8acHEyAf/e8DQtGsWEP/MoUCAGUqV3Db111nQxdCk
-         6ukF1y0sHYhDOGTjO3qKeOA+0J5L6BgwIf8EnFTb754aZn1A8IS3VwVn7CauWFmsVfuY
-         e+59dgSv64oIFeyJ6/Nqb22aPr7YWm+5jaXbgImgLNi/pl3JFjR3Yp1hHYRFcU4zPBv/
-         XU8HX/QGXdobeBJCGJBGBAR6yaj30OVOBVvanLjDK0MhMCuNp5ozaQwQJXBLXcJR0YDw
-         UBX5ZT1EtIfVziCosUo3lVwOUFcfjMd5rmAbOSgg0TNIxYyxiO2E6nNVRmRJrW211HKf
-         73/A==
-X-Gm-Message-State: AAQBX9es3unz++M83D1KozfUzXpCeO2pnCl8A3e68Dj/xeySkQB6Pe4D
-        b/0NcOnfsES2ppSyspiBWXHICQ==
-X-Google-Smtp-Source: AKy350ZTjkqzUgTQGHGrJ9JuARTqLhAJbKksuC56qgRgq3evGrn857zKaOJqn9OLamzUI4n7teZ4bA==
-X-Received: by 2002:adf:e8c1:0:b0:2ef:1c8c:1113 with SMTP id k1-20020adfe8c1000000b002ef1c8c1113mr5931168wrn.9.1681743343288;
-        Mon, 17 Apr 2023 07:55:43 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:374a:ffae:fd26:4893])
-        by smtp.gmail.com with ESMTPSA id j15-20020a5d564f000000b002f7780eee10sm7998301wrw.59.2023.04.17.07.55.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 07:55:42 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sa8775p: pmic: add the sdam_0 node
-Date:   Mon, 17 Apr 2023 16:55:36 +0200
-Message-Id: <20230417145536.414490-4-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230417145536.414490-1-brgl@bgdev.pl>
-References: <20230417145536.414490-1-brgl@bgdev.pl>
+        with ESMTP id S229854AbjDQP2I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 11:28:08 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9840CB75D;
+        Mon, 17 Apr 2023 08:27:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k5xa7O+JPDJlegDo6O8S//lxqZ9kd6hyYkeRQJmGtFkOVYTuf8cnOrMG/Lnwl50/M61b7SX1vP2B2pky0WxLYwEQ0XxUKYyIFIlkqh+rTnBAbqARnMYjGius6FYUT8fc1CHzpmGouzaA8uWmQUOYhyLlhG8AQYf55wRmBm5mX3RSLbK29sIY3qoPKIESrai8HrlEtC/cWCxiDGjSYqyc7xFbDgoAwVuSxu460IqhMGmIvYRJxb2a/1TneUIlc3VOcfXXJ0fkleKXadHSE53fit1kRXTh8dkGargZZkM3koZeE4LT7Hmt5gE9Yu1FsVBlIxItsdPkBj6VSb08//eddQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lX7IzZ9NoGafkcLs9B6Bii7+0aRCJ+oL7qYtxqnKRdM=;
+ b=RbvjwWau21zzSvejfmLHoOyHBNe0ymGDf0faN5fPAiaW0UggemViU8y0uDAtD4C3I3qzTFcRBkM9m8iCYu0PHMIPXGUjK676knV001K+M52xGwLaQscqN2YOwZuQ0xMmlN19RtOhj1iAvkSi5DWj0IA1zlDXQ70H0i1CRA8aof1I6D4J17osojN4qnUzcaUIjqjAqCPBJFjSI3NlEnj5gSxMHvybQxgLsq2TBBHX9U3MMbOh4wapYFRz3dxWWXe8kBDVhIB5IO+t6LXNlVF4QT+I5UnatEXTOLjNru6Ny1IZgD9qgN/PEipR1sxONk1wMY9UnqxAVBwvtUHJKnE42Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lX7IzZ9NoGafkcLs9B6Bii7+0aRCJ+oL7qYtxqnKRdM=;
+ b=JCnAttsu3Pz0oGMdvQID100oC0GMTQYvH2dXfTKKTt4NciXm9kyb5dS4sbF89SrSQOGNeWYL2gWqIhhdsoz7A/SsWnZF8jcDM/crtStEUj6WVNNuEYz+hL8nzorYIEiilbhLChLdfkFQx5/fMkRg5sh0gEV6Nu+9YHyyL4PihRc=
+Received: from SJ0PR03CA0094.namprd03.prod.outlook.com (2603:10b6:a03:333::9)
+ by BL0PR12MB4931.namprd12.prod.outlook.com (2603:10b6:208:17e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 15:27:27 +0000
+Received: from CO1PEPF00001A5D.namprd05.prod.outlook.com
+ (2603:10b6:a03:333:cafe::b9) by SJ0PR03CA0094.outlook.office365.com
+ (2603:10b6:a03:333::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Mon, 17 Apr 2023 15:27:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A5D.mail.protection.outlook.com (10.167.241.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.14 via Frontend Transport; Mon, 17 Apr 2023 15:27:26 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
+ 2023 10:27:22 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Box David E <david.e.box@intel.com>, <jstultz@google.com>,
+        <pavel@ucw.cz>, <svenva@chromium.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        <rrangel@chromium.org>, Jain Rajat <rajatja@google.com>,
+        <hdegoede@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v10 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Mon, 17 Apr 2023 10:27:04 -0500
+Message-ID: <20230417152708.3599-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A5D:EE_|BL0PR12MB4931:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73329d16-f645-46e1-c2df-08db3f583fbc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XVtEeHKHYUvVEfIjqo77bQ1ENzsaQKhGKNH3wVmB1BxRYOjXOnrnlLFQHFFWyFv8tHQCK7ATyebI/SGtz1M+XAdBudFFMLf+K5KVmyPdowP+5QZ2JWBy74FZMBArz+lgMOZzkjF7+inAVxWp6hLVPAo/wQt4aaDWQfyZAh0vG/DshuYA1hlGSlFcmGBmajqq7m+QlpRsxoomXvdQbm+qmwgbgrlWpW1wsVXTTfY9epPqkP1v+wksP8U57nj1YF1E4zhAxWWqQciig1hI7UXFUtCCpsfGR371KLc3bJOaIoUq/SlXy8VmnFuac4o3lzTSEeIX01mBvo7KLcdKHFPQYN0Fyj9kfnX1r4MK9uh9BjyYw1IKPrlOXWNfVJ5LkSC5QDwSjmFe+E98Gm9mCXMehZ0lHW/MoAmauyswzm0IJzfqCTOFnac755tFlLjeSVB/VjRNUoBWfD1UYxqpSVDxhI0jCiDAZhXkblj/PPiqPTPVqTHsn6PJHUBBuXJrebzqlxZ6yNA2hEbcF1HnsViE0q3vi7+si4VrDY57O+N/VGf3GZAzNkf5zXO/4OkGqK1iDA7glO5MAGE13eacjW1+SI+EbxB0+TAkl+CgmDQuOrz4C544Nmg/xzS1czT9j6YsgFNhuETb5Ew19CKiu/UvJu8sJYGcA95GlQcIl364U9Z76ujwEQLg8SRIBHl53T0WqWuw3cFNu9hBHkxCiQ/FCn90aprcS3xY8sRm2CTJsKk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(8676002)(8936002)(40460700003)(44832011)(5660300002)(7416002)(2906002)(36756003)(82310400005)(86362001)(40480700001)(478600001)(7696005)(6666004)(54906003)(16526019)(186003)(2616005)(36860700001)(26005)(1076003)(70206006)(70586007)(82740400003)(83380400001)(316002)(81166007)(41300700001)(356005)(4326008)(6916009)(47076005)(426003)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 15:27:26.0501
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73329d16-f645-46e1-c2df-08db3f583fbc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A5D.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4931
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Parikshit Pareek <quic_ppareek@quicinc.com>
+An important part of validating that s0ix worked properly is to check how
+much of a cycle was spent in a hardware sleep state.
 
-Introduce sdam_0 node, which is to be used via nvmem for power on
-reasons during reboot. Add supported PoN reaons supported via sdam_0
-node.
+The reporting of hardware sleep is a mix of kernel messages and sysfs
+files that vary from vendor to vendor. Collecting this information
+requires extra information on the kernel command line or fetching from
+debugfs.
 
-Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-index 5abdc239d3a6..3c3b6287cd27 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-@@ -88,6 +88,14 @@ trip1 {
- 			};
- 		};
- 	};
-+
-+	reboot-mode {
-+		compatible = "nvmem-reboot-mode";
-+		nvmem-cells = <&reboot_reason>;
-+		nvmem-cell-names = "reboot-mode";
-+		mode-recovery = <0x01>;
-+		mode-bootloader = <0x02>;
-+	};
- };
- 
- &spmi_bus {
-@@ -133,6 +141,19 @@ pmm8654au_0_gpios: gpio@8800 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 		};
-+
-+		pmm8654au_0_sdam_0: nvram@7100 {
-+			compatible = "qcom,spmi-sdam";
-+			reg = <0x7100>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x7100 0x100>;
-+
-+			reboot_reason: reboot-reason@48 {
-+				reg = <0x48 0x1>;
-+				bits = <1 7>;
-+			};
-+		};
- 	};
- 
- 	pmm8654au_1: pmic@2 {
+Userspace can fetch this information and compare it against the duration
+of the cycle to allow determining residency percentages and flagging
+problems.
+
+v9->v10:
+ * Add tags
+ * Rebase on linux-pm/bleeding-edge as it will apply through this tree
+
+Mario Limonciello (4):
+  PM: Add sysfs files to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
+
+ Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
+ drivers/platform/x86/amd/pmc.c        |  6 +--
+ drivers/platform/x86/intel/pmc/core.c | 17 ++++----
+ drivers/platform/x86/intel/pmc/core.h |  4 +-
+ include/linux/suspend.h               |  8 ++++
+ kernel/power/main.c                   | 59 +++++++++++++++++++++------
+ 6 files changed, 98 insertions(+), 25 deletions(-)
+
+
+base-commit: 0962c5df83b088fad0c531257744fb7a1e83221c
 -- 
-2.37.2
+2.34.1
 
