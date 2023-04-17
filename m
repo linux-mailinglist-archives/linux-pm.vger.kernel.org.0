@@ -2,119 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519526E457E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 12:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8336E46B8
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 13:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjDQKpX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 06:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S230064AbjDQLov convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Apr 2023 07:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjDQKpW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 06:45:22 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34626A78;
-        Mon, 17 Apr 2023 03:44:21 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f1738d0d4cso3962175e9.1;
-        Mon, 17 Apr 2023 03:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681728206; x=1684320206;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Z+oplVmOeEOPgIqDyW1qIYFp0lFRq10T5/lljQHKoh4=;
-        b=fHyGwkwDAtNj0DlHlyzUivs6EQ96RzQOhVuP6N5dkutmEDOwUGklY/lxNlehpflUy7
-         RCd62MWviAhxTYZS52hjrQ71xno4y9jqfbhxt3Hs4Mdcu9pON3/1mtG8vpmZqmE93rSc
-         Tb9ck/xOVFxFKiM0Wz1Z70UmNgrft9ErZieucpP2Mcdgn78ksMQlzO/LezrV2Woffiz0
-         kJl7S2KtfS+COsO3Kvw8GdleE1ATC3ii2tbsoi7Ycu7uWpB0wjKLZ2xVilaYMJZ3bvWt
-         zV+Wa2SY60vwSeapI6zXZ1/XB62iNG9tEkmvGcjh59AGw4AgSKF4VPgTwio0IlpzZPAh
-         K3Ag==
+        with ESMTP id S230075AbjDQLou (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 07:44:50 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0670C468D;
+        Mon, 17 Apr 2023 04:43:53 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-94971337b10so94178066b.1;
+        Mon, 17 Apr 2023 04:43:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681728206; x=1684320206;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+oplVmOeEOPgIqDyW1qIYFp0lFRq10T5/lljQHKoh4=;
-        b=gkLn/SB3PCUQV3V+/QTtclXCvfhtGS+zIZs8Sxa2iDt3qQq7ct1KSu5lb1dXgBsNMb
-         O7OoWZAadX105pu8JNnPedP/2/gC7r/OKWeNsy5zh0wtLli3oGGAhKi6DiMAWRWoKtgb
-         oOEP473M+2kzDREqVq4PuFqMWWMkKuhEB6wJS3WHNJmgDp+ffaarxDu/oKYSQyDTXnxi
-         pBtk6tGoWrwqfb7LrQmiMljYfVkB/iWXepiTg+MI7WA0rxlv5NZrVfDmX8DFouBt12Qb
-         UMookRNxAVlskO8CrslhJgDhsGJkgkRyFY81ZI+ybjO+gdXat2QZ/Lmox3O4ZV+fDXPA
-         Ox7g==
-X-Gm-Message-State: AAQBX9fLUhCRnFzchtpTqKGCZVthiqUL7vDYKahl5iWo/edbAuOp8R7z
-        7JRxGeDF9F83jS3o0hIlw2U=
-X-Google-Smtp-Source: AKy350bd9dvxSELvJHpzUxOJ/agocGbgxies6qUeTX6tG3PuWYiJlTByTcqlSV22b766L4A0As52Hw==
-X-Received: by 2002:adf:de89:0:b0:2f5:8116:6458 with SMTP id w9-20020adfde89000000b002f581166458mr4935358wrl.66.1681728206141;
-        Mon, 17 Apr 2023 03:43:26 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o5-20020a5d58c5000000b002f47ae62fe0sm10246043wrf.115.2023.04.17.03.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 03:43:25 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 13:43:15 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Kang Chen <void0red@hust.edu.cn>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
-        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
-        daniel@makrotopia.org, dzm91@hust.edu.cn, henry.yen@mediatek.com,
-        hust-os-kernel-patches@googlegroups.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
-        rui.zhang@intel.com, void0red@gmail.com
-Subject: Re: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to
- devm_clk_get_enabled in mtk_thermal_probe
-Message-ID: <48ae0e2e-257d-4ad2-afbc-2eb4b48e516b@kili.mountain>
-References: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
- <20230411063531.3976354-1-void0red@hust.edu.cn>
- <20230411063531.3976354-2-void0red@hust.edu.cn>
- <4fed91ef.3c256.18783c407e3.Coremail.void0red@hust.edu.cn>
- <cfb7743b-03b0-96c4-fcc3-7095694f6fbb@linaro.org>
- <6108982E-A3DC-4B7E-829E-20BBAC9C503F@hust.edu.cn>
+        d=1e100.net; s=20221208; t=1681731763; x=1684323763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h0xbRy2dWY+Ae8oaE0laExl3v3+/apitb+s9bwbmh0o=;
+        b=lzipMSXAzZkynpErCFHdhM0x99DhtPxgFJbagdfPXHy0sAfKWqnHHrHEAPMbP6WwWP
+         D2ijEzom+/NtlYulBRsQ7srw2xZ48iJFjC6aAKn5Dspw1M4CYc8ndAgaeWWiP3qgxRQ0
+         hwwUIrvWmk1Rs9YpeF4RAP7hML8dn8QEGCzGnl9uCrnl53HpvqHUuecBIe7p+e21kuqU
+         Qz/o4N0TnCOx2YFlLd36R58UyrdRB7Gc0wTNsclDqc3HYG9wQPlTMTIcpZweSVCEEqCV
+         AbRQObPxgsX9w+53nZdXmgOZcnEK6Rhwe4rldNJtjWAXU0ZN+UYwjgQ2PA9zwzaZ+Rtz
+         HA1w==
+X-Gm-Message-State: AAQBX9cYJBNsmwvPRZAemTSEI8MZkIuxCmTTUxVoE2zVjH55yXe8E4+Y
+        u5PIaXhpZ9tIfcpW8KIYcLbyfa0erFp4HCvyvlQ=
+X-Google-Smtp-Source: AKy350bt3Bh1m6ing+3dnlcH8T1XzXu8NJhp6jMQip6y5cDD5gRGzvLKvuEJd3Dl7f3lJEEMR8ZNBSvfvZ8vITslh5A=
+X-Received: by 2002:a17:906:7a4e:b0:94e:d5d7:67eb with SMTP id
+ i14-20020a1709067a4e00b0094ed5d767ebmr8548849ejo.5.1681731762609; Mon, 17 Apr
+ 2023 04:42:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6108982E-A3DC-4B7E-829E-20BBAC9C503F@hust.edu.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230414012346.1946-1-mario.limonciello@amd.com> <8a4f2454-809c-d773-42b2-e62fb057feb2@redhat.com>
+In-Reply-To: <8a4f2454-809c-d773-42b2-e62fb057feb2@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 17 Apr 2023 13:42:31 +0200
+Message-ID: <CAJZ5v0h9YnitXBZK0SweMtAeaeDcb=mg_PinJfsG5Oc4dCxyMw@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] Add vendor agnostic mechanism to report hardware sleep
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Box David E <david.e.box@intel.com>, jstultz@google.com,
+        pavel@ucw.cz, svenva@chromium.org,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, Shyam-sundar.S-k@amd.com,
+        rrangel@chromium.org, Jain Rajat <rajatja@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 06:15:02PM +0800, Kang Chen wrote:
-> 
-> 
-> > 2023年4月17日 17:52，Daniel Lezcano <daniel.lezcano@linaro.org> 写道：
-> > 
-> > 
-> > Hi,
-> > 
-> > this patch does not apply:
-> > 
-> > Analyzing 9 messages in the thread
-> > Will use the latest revision: v3
-> > You can pick other revisions using the -vN flag
-> > Checking attestation on all messages, may take a moment...
-> > ---
-> >  [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
-> >    + Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >    + Link: https://lore.kernel.org/r/20230411063531.3976354-2-void0red@hust.edu.cn
-> > ---
-> > Total patches: 1 (cherrypicked: 2)
-> > ---
-> > Link: https://lore.kernel.org/r/20230411063531.3976354-1-void0red@hust.edu.cn
-> > Base: not specified
-> > Applying: thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
-> > error: patch failed: drivers/thermal/mediatek/auxadc_thermal.c:1182
-> > error: drivers/thermal/mediatek/auxadc_thermal.c: patch does not apply
-> > Patch failed at 0001 thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
-> Could you show me your work tree? I can apply it on mainline-6.3-rc7...
+On Mon, Apr 17, 2023 at 10:25 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi Mario, et al.,
+>
+> On 4/14/23 03:23, Mario Limonciello wrote:
+> > An important part of validating that s0ix worked properly is to check how
+> > much of a cycle was spent in a hardware sleep state.
+> >
+> > The reporting of hardware sleep is a mix of kernel messages and sysfs
+> > files that vary from vendor to vendor. Collecting this information
+> > requires extra information on the kernel command line or fetching from
+> > debugfs.
+> >
+> > To make this information more readily accessible introduce a new file in
+> > suspend_stats that drivers can report into during their resume routine.
+> >
+> > Userspace can fetch this information and compare it against the duration
+> > of the cycle to allow determining residency percentages and flagging
+> > problems.
+> >
+> > Mario Limonciello (4):
+> >   PM: Add sysfs files to represent time spent in hardware sleep state
+> >   platform/x86/amd: pmc: Report duration of time in hw sleep state
+> >   platform/x86/intel/pmc: core: Always capture counters on suspend
+> >   platform/x86/intel/pmc: core: Report duration of time in HW sleep
+> >     state
+> >
+> >  Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
+> >  drivers/platform/x86/amd/pmc.c        |  6 +--
+> >  drivers/platform/x86/intel/pmc/core.c | 17 ++++----
+> >  drivers/platform/x86/intel/pmc/core.h |  4 +-
+> >  include/linux/suspend.h               |  8 ++++
+> >  kernel/power/main.c                   | 59 +++++++++++++++++++++------
+> >  6 files changed, 98 insertions(+), 25 deletions(-)
+> >
+> >
+> > base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+>
+> Thank you for working on this, this looks good to me:
+>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>
+> For the series. Since this also touches kernel/power/main.c
+> I think it would be best if the entire series is merged
+> through the linux-pm tree and I'm fine with the pdx86 bits
+> also getting merged through linux-pm.
+>
+> Rafael ?
 
-Please write it against linux-next instead.
+That would be fine with me, but I've only got the [1/4].
 
-regards,
-dan carpenter
-
+Mario, can you please resend the series with CCs to linux-pm and with
+R-by from Hans?
