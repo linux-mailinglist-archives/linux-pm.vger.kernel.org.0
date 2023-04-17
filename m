@@ -2,107 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875E96E4724
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 14:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD56B6E49CC
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 15:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjDQMJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 08:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S229562AbjDQNW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 09:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjDQMJJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 08:09:09 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DB2619C
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 05:08:15 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id q23so54020685ejz.3
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 05:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681733292; x=1684325292;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RyjCqigehhRKiED+F7i3vp1+UnMWF7PX5LVbym+vBgo=;
-        b=eQ/pX6Pevn30y70TZq3BnGur7Qv7Y+QHdBV5HQbPhPQNMotYG22G/1W2bDgBpa1opH
-         0u16TrJwKJgvC2W2CCerev70jsUcGpTvdyy+TDCzzo0syb6024IEULDHSBzQtjEGSR2K
-         nnvz2qVv3wT5bWXKQF/YY4ka+HkgVVMYgYzTuxI9QwFVZHOo2GL3mStHWb7AxH8fAyLG
-         Gda8aFXZ3COmfANJaXtpuF7NtyV5RQC1R8i/toWNDAMr5D8tdZbv3M5tgADKJL1XzjND
-         qDiD4Wx0ttkvBPgkhCUQ/usDq2EeQPtDh/YlF+n2bVYDNJDBTEJrG7/fuW7Cx0Ew3hzI
-         imkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681733292; x=1684325292;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RyjCqigehhRKiED+F7i3vp1+UnMWF7PX5LVbym+vBgo=;
-        b=XPopLcTxyqAG+ga6H0Ci9m08NeWR0U+28Sc86LogqeL9CC/GQQinOycXm+Fd+tvSKp
-         AlEM/EmRTZ1UR0Z6dD7viYgO3xbkTUj+O1boyPh2/REsVyZ2Zu/xC1nZO+CsUGYz7Txs
-         u0sj6XZ5j3PkrRUoLKfLaGlnT44mKsisxSPLeii4TF2Z7e/RbvbqW0XfbQFMN2ncb1/u
-         BB2lTZhv5I5NopdHKBdsGd+z4hsTMoij3KHiLp+WOLBssla3LmCJmndfNI379lplyZFi
-         jqzPH3lN2hKOnBOcBgSDipiRW7cTKooe2VwDZS3v1/GEZ4A8fsS5xkVpQNYHRIiQ1s0F
-         59LA==
-X-Gm-Message-State: AAQBX9ew75O/F/74hCEgD1XRUfZhgMoVlkCzmloSwTIbbVMCvoCIqStC
-        yt19VYkKkPI7NNeBkCmJvMMOehGLN1vby7scjwo72XGh
-X-Google-Smtp-Source: AKy350Z9M8w8QtKoLzHMqZ92p1x/RdWw+D+90EtnaEBd1Rdy0qMwdeE+XVr5iDzYlUx2fn7cjTHsaw==
-X-Received: by 2002:a17:906:d9b:b0:93f:505b:9742 with SMTP id m27-20020a1709060d9b00b0093f505b9742mr7135280eji.65.1681733292530;
-        Mon, 17 Apr 2023 05:08:12 -0700 (PDT)
-Received: from [10.27.64.40] ([193.205.131.2])
-        by smtp.googlemail.com with ESMTPSA id gl17-20020a170906e0d100b0094f09cd4658sm3963255ejb.71.2023.04.17.05.08.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 05:08:12 -0700 (PDT)
-Message-ID: <dd0c6f67-99bd-afda-cbc7-797797b82f2b@linaro.org>
-Date:   Mon, 17 Apr 2023 14:08:09 +0200
+        with ESMTP id S229548AbjDQNW6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 09:22:58 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA50B0;
+        Mon, 17 Apr 2023 06:22:56 -0700 (PDT)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        (user=void0red@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33HCtsCs000971-33HCtsCt000971
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 17 Apr 2023 20:55:54 +0800
+From:   Kang Chen <void0red@hust.edu.cn>
+To:     error27@gmail.com
+Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, daniel.lezcano@linaro.org,
+        daniel@makrotopia.org, dzm91@hust.edu.cn, henry.yen@mediatek.com,
+        hust-os-kernel-patches@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
+        rui.zhang@intel.com, void0red@gmail.com, void0red@hust.edu.cn
+Subject: [PATCH v4 1/2] thermal: mediatek: use devm_of_iomap to avoid resource leak in mtk_thermal_probe
+Date:   Mon, 17 Apr 2023 20:55:32 +0800
+Message-Id: <20230417125533.3142236-1-void0red@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <48ae0e2e-257d-4ad2-afbc-2eb4b48e516b@kili.mountain>
+References: <48ae0e2e-257d-4ad2-afbc-2eb4b48e516b@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] thermal/drivers/intel/int340x: Add DLVR support
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230413213753.129962-1-srinivas.pandruvada@linux.intel.com>
- <5c21f6b7-8c7e-6e42-fe02-c8fd3ae64016@linaro.org>
- <CAJZ5v0ir+-MEYkPSZKFSyZ=iAnUbVXtk9jMZHdgpWM6LMQ10jA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0ir+-MEYkPSZKFSyZ=iAnUbVXtk9jMZHdgpWM6LMQ10jA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-FEAS-AUTH-USER: void0red@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/04/2023 12:16, Rafael J. Wysocki wrote:
-> Hi Daniel,
-> 
-> On Mon, Apr 17, 2023 at 12:00 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Rafael,
->>
->> do you want me to pick this patch ?
-> 
-> No, thank you.
-> 
-> You can generally assume that I will be applying patches for
-> thermal/intel/ and ACPI-related ones directly.
-> 
-> I may pick up thermal core patches too.
-> 
+Smatch reports:
+1. mtk_thermal_probe() warn: 'apmixed_base' from of_iomap() not released.
+2. mtk_thermal_probe() warn: 'auxadc_base' from of_iomap() not released.
 
-Ok, noted, thanks
+The original code forgets to release iomap resource when handling errors,
+fix it by switch to devm_of_iomap.
 
+Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
+Signed-off-by: Kang Chen <void0red@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v4 -> v3: no modify
+v3 -> v2: fix typo and put of_node in error handling
+v2 -> v1: use devm_of_iomap instead.
 
+ drivers/thermal/mediatek/auxadc_thermal.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index b6bb9eaafb74..dcc64237ea60 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -1212,7 +1212,12 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	auxadc_base = of_iomap(auxadc, 0);
++	auxadc_base = devm_of_iomap(&pdev->dev, auxadc, 0, NULL);
++	if (IS_ERR(auxadc_base)) {
++		of_node_put(auxadc);
++		return PTR_ERR(auxadc_base);
++	}
++
+ 	auxadc_phys_base = of_get_phys_base(auxadc);
+ 
+ 	of_node_put(auxadc);
+@@ -1228,7 +1233,12 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	apmixed_base = of_iomap(apmixedsys, 0);
++	apmixed_base = devm_of_iomap(&pdev->dev, apmixedsys, 0, NULL);
++	if (IS_ERR(apmixed_base)) {
++		of_node_put(apmixedsys);
++		return PTR_ERR(apmixed_base);
++	}
++
+ 	apmixed_phys_base = of_get_phys_base(apmixedsys);
+ 
+ 	of_node_put(apmixedsys);
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
