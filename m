@@ -2,147 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBB76E49BD
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 15:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755516E4AAB
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 16:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjDQNSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 09:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S230127AbjDQOEj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Apr 2023 10:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjDQNR6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 09:17:58 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E856E47
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 06:17:55 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dx24so20007655ejb.11
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 06:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681737474; x=1684329474;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1p6Wd3OtTb39EZ/VgEOJwXli/x4fybTyhed/6AFKfjw=;
-        b=LtUu9v4os64UQt6hsuF/O5RF3nj2ckXJExiBqGWB7p3yUY24SDVk73mzbkp8eQLNGN
-         Lrtol2kl4M+CDcsd7mHpsr/0DTrPZFq3jo1idYLl436ANsXrnOIRErLznBdZieCVPOpi
-         WEoIFApgx8Oe1koFzTCpGLUKtvN+jOXxi7P6tREtD2zvz+jtPWQkcoR+1UdMf8IQHO9Y
-         Y+kNPEjGVNUoEAWUF9GTIRmqV2IY33cE3xR65/B8/9etQmdBlpPwQj+7XS7jmLomjQHk
-         FlYi4m4pFG5exZq0eb/wmAMg3g1+mqqCJHx+KI9yV7IZPrLcJBETE99SD9JpR7I4YvMk
-         EGfw==
+        with ESMTP id S230410AbjDQOEf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 10:04:35 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BB993F2;
+        Mon, 17 Apr 2023 07:04:07 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-506a44cd9a0so122791a12.0;
+        Mon, 17 Apr 2023 07:04:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681737474; x=1684329474;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1p6Wd3OtTb39EZ/VgEOJwXli/x4fybTyhed/6AFKfjw=;
-        b=NUm8jcBhQIPiD7X0AQKi5Dr0LXEAPy97liU+iaLo4BM35CfFvkdbW4ce9k06wVC5vt
-         2qQYscuxavkQLqGxNYDKvsf30Bq0XUBGaa8SmbQSPkbTBTdYyvZ80CgLinNltHLdwv61
-         urbzfYiuuo53yShlMIN/P10+1lqWVyzsyTIb2mJ9dFXSyW+kV1X/94HF+gJLH0fnSP0W
-         7wdKsWcY1TzYmQAfX1Pg82Clnwikqoabemkj8OLbVkepkN3kpM0/MxbAckFZl2TjcrfB
-         o4A4PEwWB5CAQIcmPONzJko+iuwB4Yi1yjTZ2qJn1Au7h3WnFFldPzZvSEXUwghBE3Gx
-         4qWA==
-X-Gm-Message-State: AAQBX9fqeXVLOXJZzgYdunvzVZlH25ttYB3Jh33ZpbHz9t9NOVBdZo8B
-        zKaW9rC67OWKyp9y6lltxZTTow==
-X-Google-Smtp-Source: AKy350YOCgfeLR3XyUJHKCV7mX6kN/oFYItg9qSFTAdGHU4UW6fnrpmNywyvF3YxRYFzT4wFnwKVOg==
-X-Received: by 2002:a17:906:114a:b0:933:be1:8f4f with SMTP id i10-20020a170906114a00b009330be18f4fmr7644115eja.9.1681737473747;
-        Mon, 17 Apr 2023 06:17:53 -0700 (PDT)
-Received: from [10.27.64.40] ([193.205.131.2])
-        by smtp.googlemail.com with ESMTPSA id hu20-20020a170907a09400b0094f432f2429sm2617124ejc.109.2023.04.17.06.17.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 06:17:53 -0700 (PDT)
-Message-ID: <b09deeb1-31c8-ba08-86ce-614349f33b92@linaro.org>
-Date:   Mon, 17 Apr 2023 15:17:52 +0200
+        d=1e100.net; s=20221208; t=1681740229; x=1684332229;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HMGdkWPY4wn1qRFSgU+nnMTUSEo599lD2CAXxhYpTLI=;
+        b=a1rTOT1qX/Z8UcKdqK8WCTSzGyY770iQE6SpTciE0D8mOjTQAT3U/HZs/PO0GBuHVZ
+         tW/4uOLYaKcbprr2YrPTSEF4qv40AC41guqXmbVsEAWTtV6PmaHN3Q7JnXurUh4/6Lhf
+         m8tJpMd84+bELi6jxJthNwpGegq5xAgPEYtijiwvc17ce3WOKAuF+XkZuUWpWPfV+ZtU
+         HGnHX9zQPUc7CKLgPuKXmgBfwCJy1xGMxUlNP4EIeQU/0LeLLnv1kuIOfqbobBfLkuUj
+         +iIL269Yc5cXa2OnFbR0N62yyFIjaTYhMdXYmReefXwGR4R5n7Ormj7ZRkXG3Bayyqn3
+         cnag==
+X-Gm-Message-State: AAQBX9eIIu+b2PVux1EQHK+Igajtzuh425iFGh3sTxT4VLYbpS/Qpwfk
+        KEl9AW2aZBO/4MF89WZendeK41pkh7bJV//8vb7D1zBk
+X-Google-Smtp-Source: AKy350Y2btpVArGToWvIHtqD0EvlOz3NQ1/99RCPQ1qWMfJZbBfYxbCe4KdP+ScGBCEY261s9VplDdRcmUWDivOqrtE=
+X-Received: by 2002:a17:906:5d:b0:94e:d688:fc92 with SMTP id
+ 29-20020a170906005d00b0094ed688fc92mr10146132ejg.0.1681740228659; Mon, 17 Apr
+ 2023 07:03:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/6] Thermal zone device structure encapsulation
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230413114647.3878792-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230413114647.3878792-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <43723ee9-f786-b423-b2ce-f4c549581d49@gmail.com>
+In-Reply-To: <43723ee9-f786-b423-b2ce-f4c549581d49@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 17 Apr 2023 16:03:37 +0200
+Message-ID: <CAJZ5v0ij+kBOCdmAbZFGiPBG0HL3VuFm1-XwqhzHr_qSDhJ_zQ@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.4
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sun, Apr 16, 2023 at 4:20 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v6.4. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
+>
+> Best Regards,
+> Chanwoo Choi
+>
+>
+> The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+>
+>   Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.4
+>
+> for you to fetch changes up to 376b1446153ca67e7028e6b9555d9b17477f568b:
+>
+>   PM / devfreq: exynos-ppmu: Use devm_platform_get_and_ioremap_resource() (2023-04-04 00:09:32 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v6.4
+>
+> Detailed description for this pull request:
+> 1. Remove unneeded SRCU selection in Kconfig because it's always set from
+> devfreq core.
+>
+> 2. Fix minor updates of devfreq drivers
+> - Drop of_match_ptr macro from exynos-bus.c because this driver is always using
+> the DT table for driver probe.
+> - Use the preferred of_property_present instead of the low-level of_get_property
+> on exynos-bus.c
+> - Use devm_platform_get_and_ioream_resource on exyno-ppmu.c
+> ----------------------------------------------------------------
+>
+> Krzysztof Kozlowski (1):
+>       PM / devfreq: exyos-bus: drop of_match_ptr for ID table
+>
+> Paul E. McKenney (1):
+>       PM / devfreq: Remove "select SRCU"
+>
+> Rob Herring (1):
+>       PM / devfreq: exynos: Use of_property_present() for testing DT property presence
+>
+> Yang Li (1):
+>       PM / devfreq: exynos-ppmu: Use devm_platform_get_and_ioremap_resource()
+>
+>  drivers/devfreq/Kconfig             | 1 -
+>  drivers/devfreq/event/exynos-ppmu.c | 3 +--
+>  drivers/devfreq/exynos-bus.c        | 4 ++--
+>  3 files changed, 3 insertions(+), 5 deletions(-)
 
-Hi Rafael,
+Pulled and merged into the linux-next branch on linux-pm.git.
 
-I think I addressed your comments from V2.
-
-Is it fine if I merge this series in the thermal/bleeding-branch ?
-
-
-On 13/04/2023 13:46, Daniel Lezcano wrote:
-> The thermal zone device structure is defined in the exported thermal
-> header include/linux/thermal.h
-> 
-> Given the definition being public, the structure is exposed to the
-> external components other than the thermal framework core code. It
-> results the drivers are tampering the structure internals like taking
-> the lock or changing the field values.
-> 
-> Obviously that is bad for several reasons as the drivers can hook the
-> thermal framework behavior and makes very difficult the changes in the
-> core code as external components depend on it directly.
-> 
-> Moreover, the thermal trip points being reworked, we don't want the
-> drivers to access the trips array directly in the thermal zone
-> structure and doing assumptions on how they are organized.
-> 
-> This series provides a second set of changes moving to the thermal
-> zone device structure self-encapsulation.
-> 
-> The ACPI and the Menlon drivers are using the thermal zone's device
-> fields to create symlinks and new attributes in the sysfs thermal zone
-> directory. These changes provide a hopefully temporary wrapper to
-> access it in order to allow moving forward in the thermal zone device
-> self-encapsulation and a Kconfig option to disable by default such a
-> extra sysfs information.
-> 
-> Changelog:
-> 	v3:
-> 	- Split the Kconfig option to be driver related when disabling
->            the specific attributes
-> 	- Use the thermal zone's device wrapper to write a trace in
->            the pch intel driver
-> 	v2:
-> 	- Add the Kconfig option to remove specific attributes
-> 	- Add a thermal_zone_device() wrapper to access tz->device
-> 
-> Daniel Lezcano (6):
->    thermal/core: Encapsulate tz->device field
->    thermal/drivers/intel_pch_thermal: Use thermal driver device to write
->      a trace
->    thermal/drivers/acpi: Use thermal_zone_device()
->    thermal/drivers/menlow: Use thermal_zone_device()
->    thermal/drivers/acpi: Make cross dev link optional by configuration
->    thermal/drivers/intel_menlow: Make additionnal sysfs information
->      optional
-> 
->   drivers/acpi/Kconfig                      | 13 ++++++
->   drivers/acpi/thermal.c                    | 57 +++++++++++++++++------
->   drivers/thermal/intel/Kconfig             | 11 +++++
->   drivers/thermal/intel/intel_menlow.c      | 12 +++--
->   drivers/thermal/intel/intel_pch_thermal.c |  3 +-
->   drivers/thermal/thermal_core.c            |  6 +++
->   include/linux/thermal.h                   |  1 +
->   7 files changed, 84 insertions(+), 19 deletions(-)
-> 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks!
