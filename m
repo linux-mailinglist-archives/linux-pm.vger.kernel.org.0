@@ -2,151 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DD96E49DC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 15:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1859B6E4928
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 15:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjDQNZA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 09:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S231191AbjDQNDZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 09:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjDQNYf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 09:24:35 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A815FEB;
-        Mon, 17 Apr 2023 06:24:28 -0700 (PDT)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        (user=void0red@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33HCtsCs000971-33HCtsCu000971
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 17 Apr 2023 20:55:55 +0800
-From:   Kang Chen <void0red@hust.edu.cn>
-To:     error27@gmail.com
-Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, daniel.lezcano@linaro.org,
-        daniel@makrotopia.org, dzm91@hust.edu.cn, henry.yen@mediatek.com,
-        hust-os-kernel-patches@googlegroups.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
-        rui.zhang@intel.com, void0red@gmail.com, void0red@hust.edu.cn
-Subject: [PATCH v4 2/2] thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
-Date:   Mon, 17 Apr 2023 20:55:33 +0800
-Message-Id: <20230417125533.3142236-2-void0red@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230417125533.3142236-1-void0red@hust.edu.cn>
-References: <48ae0e2e-257d-4ad2-afbc-2eb4b48e516b@kili.mountain>
- <20230417125533.3142236-1-void0red@hust.edu.cn>
+        with ESMTP id S231258AbjDQNDL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 09:03:11 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EFC1025A
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 05:59:58 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id he11-20020a05600c540b00b003ef6d684102so11801968wmb.3
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 05:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1681736328; x=1684328328;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+MVzf8r/4s+B98TOSVIFBCcQmTeOnxbCDg8qGd1O2g=;
+        b=Qw3+fO+DNms8K56wL8s70n889hD+X3HzOhfr2FkVez8KSDwMuAvbZJ6/az6knoCYRO
+         WC5/jl0Xicoz9hT7MfXD8h1NXyK2JBbH1gLx6iV0deFFfX0Q2VIvb0mXk2TNHm9Ju3QI
+         HsEXwJAtir4qM7DcSsj7iT8Qjyl6VEh35HzCFVrFVOliKWLo2J5aC/FbNG4zhSXFJvVo
+         ghWHmHUd1yAbxuYE175hZWDu90XL2C0F/pqXB4Z7Iyo1Xs9FBoqpXt3S1Bun677QLY4h
+         RvL6o3kArQ9La2z5BDnKffqx6A6u3gxQXnPqavA34WnVlWAQWTseLP7iuJv6S7yjM1iG
+         ixvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681736328; x=1684328328;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B+MVzf8r/4s+B98TOSVIFBCcQmTeOnxbCDg8qGd1O2g=;
+        b=gg0Ti4o/c/lYv2mVkzAZrCdT0aTq4S1qXhXwiZGiYIE8ot8uVPiYcP1mlgOTo71y61
+         P/hKqRDWXDJN7+uoBTYqsucPq0HB9bKT4e1QUBQ1XWZuNPTDdapgFpOI6jorKfjA41QP
+         EuoE1gN9Lw7lAWN1octkA1fT7CEJEg18WOqBuITkFTXGf6e+OLJsOnnlbbLvNjjkN+UC
+         C4l1cBDRTeV9o8n/s3YawdqqibQ1BMpMU1YYeC1Tkh2pNu737XV6wnZkcebjWz7Uvu6V
+         /x6x/Z7GDfWv00kHFhVKd2ZVP4sq/mBRBFzylNZqNU5Fcs1Sskk3dHMVDByHjDdwXhmT
+         xtXA==
+X-Gm-Message-State: AAQBX9fYHN7eAQ0sC8pvRLEGOnBHhBb6+5w2LWBoz4YMYBzJPliesnYz
+        0fOgTPrfQOvNPXBFcYnmZQMyEQ==
+X-Google-Smtp-Source: AKy350Z2eV6AqL+dVKQQg8ekRMO3sImYABpWFD57wB0IsJLBBkAMxrq4zgrfOPdZN4P4MyAL/pMLaw==
+X-Received: by 2002:a1c:7304:0:b0:3f1:6f4a:a3ad with SMTP id d4-20020a1c7304000000b003f16f4aa3admr4528202wmb.2.1681736328321;
+        Mon, 17 Apr 2023 05:58:48 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:374a:ffae:fd26:4893])
+        by smtp.gmail.com with ESMTPSA id v21-20020a05600c471500b003ef5bb63f13sm15557546wmo.10.2023.04.17.05.58.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 05:58:47 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v4 0/5] arm64: dts: qcom: sa8775p: add more IOMMUs
+Date:   Mon, 17 Apr 2023 14:58:39 +0200
+Message-Id: <20230417125844.400782-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: void0red@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-use devm_clk_get_enabled to do automatic resource management.
-Meanwhile, remove error handling labels in the probe function and
-the whole remove function.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Signed-off-by: Kang Chen <void0red@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v4 -> v3: port to linux-next tree
-v3 -> v2: remove some useles func calls.
-v2 -> v1: init
+Add the GPU and PCIe IOMMUs for sa8775p platforms as well as the required
+GPU clock controller driver.
 
- drivers/thermal/mediatek/auxadc_thermal.c | 48 +++++------------------
- 1 file changed, 10 insertions(+), 38 deletions(-)
+NOTE: I didn't pick up Krzysztof's tag for patch 4/5 as the patch changed
+significantly.
 
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index dcc64237ea60..18c8cce960c3 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -1186,14 +1186,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	mt->conf = of_device_get_match_data(&pdev->dev);
- 
--	mt->clk_peri_therm = devm_clk_get(&pdev->dev, "therm");
--	if (IS_ERR(mt->clk_peri_therm))
--		return PTR_ERR(mt->clk_peri_therm);
--
--	mt->clk_auxadc = devm_clk_get(&pdev->dev, "auxadc");
--	if (IS_ERR(mt->clk_auxadc))
--		return PTR_ERR(mt->clk_auxadc);
--
- 	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(mt->thermal_base))
- 		return PTR_ERR(mt->thermal_base);
-@@ -1252,16 +1244,16 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_prepare_enable(mt->clk_auxadc);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+	mt->clk_auxadc = devm_clk_get_enabled(&pdev->dev, "auxadc");
-+	if (IS_ERR(mt->clk_auxadc)) {
-+		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", mt->clk_auxadc);
-+		return PTR_ERR(mt->clk_auxadc);
- 	}
- 
--	ret = clk_prepare_enable(mt->clk_peri_therm);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
--		goto err_disable_clk_auxadc;
-+	mt->clk_peri_therm = devm_clk_get_enabled(&pdev->dev, "therm");
-+	if (IS_ERR(mt->clk_peri_therm)) {
-+		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", mt->clk_peri_therm);
-+		return PTR_ERR(mt->clk_peri_therm);
- 	}
- 
- 	mtk_thermal_turn_on_buffer(mt, apmixed_base);
-@@ -1288,38 +1280,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
- 					      &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
--	}
-+	if (IS_ERR(tzdev))
-+		return PTR_ERR(tzdev);
- 
- 	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
- 	if (ret)
- 		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
- 
- 	return 0;
--
--err_disable_clk_peri_therm:
--	clk_disable_unprepare(mt->clk_peri_therm);
--err_disable_clk_auxadc:
--	clk_disable_unprepare(mt->clk_auxadc);
--
--	return ret;
--}
--
--static int mtk_thermal_remove(struct platform_device *pdev)
--{
--	struct mtk_thermal *mt = platform_get_drvdata(pdev);
--
--	clk_disable_unprepare(mt->clk_peri_therm);
--	clk_disable_unprepare(mt->clk_auxadc);
--
--	return 0;
- }
- 
- static struct platform_driver mtk_thermal_driver = {
- 	.probe = mtk_thermal_probe,
--	.remove = mtk_thermal_remove,
- 	.driver = {
- 		.name = "mtk-thermal",
- 		.of_match_table = mtk_thermal_of_match,
+v3 -> v4:
+- fix the adreno smmu compatibles
+- drop patches that are already in next
+
+v2 -> v3:
+- select QCOM_GDSC in Kconfig for the GPUCC module
+- the GPU SMMU is actually an adreno SMMU so describe it as such and
+  fix the DT
+- fix the mapped memory size for the PCIe SMMU
+
+v1 -> v2:
+- remove unused include in the GPUCC driver
+- remove unused clock from the GPUCC driver and make it compatible
+  with the generic QCom GPUCC bindings
+- put the new defconfig option in the right place (as per savedefconfig)
+  and make the GPUCC driver a module rather than built-in
+- describe the smmu clocks for sa8775p in dt-bindings
+
+Bartosz Golaszewski (5):
+  arm64: defconfig: enable the SA8775P GPUCC driver
+  arm64: dts: qcom: sa8775p: add the pcie smmu node
+  arm64: dts: qcom: sa8775p: add the GPU clock controller node
+  dt-bindings: iommu: arm,smmu: enable clocks for sa8775p Adreno SMMU
+  arm64: dts: qcom: sa8775p: add the GPU IOMMU node
+
+ .../devicetree/bindings/iommu/arm,smmu.yaml   |   6 +-
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 125 ++++++++++++++++++
+ arch/arm64/configs/defconfig                  |   1 +
+ 3 files changed, 130 insertions(+), 2 deletions(-)
+
 -- 
-2.34.1
+2.37.2
 
