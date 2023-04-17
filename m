@@ -2,81 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6E06E454B
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 12:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0A06E4485
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 12:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjDQKfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 06:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S229478AbjDQKA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 06:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjDQKfA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 06:35:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605C37DB6
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 03:34:00 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id fw30so10005011ejc.5
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 03:34:00 -0700 (PDT)
+        with ESMTP id S229547AbjDQKA6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 06:00:58 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15713619E
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 03:00:14 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id fy21so19608485ejb.9
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 03:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681727617; x=1684319617;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1681725607; x=1684317607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gcr5YmlYoVcdrEFDHra0XuIJQfELMbNwudSm2TRrzow=;
-        b=CrZL1KIEiGdjjZtqlDG5EDRCTpFK8SxM0rUTpln0lT1IHEjlA9ShsRsZEbZ66rqr9j
-         ixkJqIWD4Z2p1XKlrKzY79IdquQ17r5C+nx8nURyAULk12NeNYiyc07+CbNPtVhnFkw/
-         SYTmE5F9O1veqYGkOAX5j6WgsHNkDZB6KRgmmt2gKUCjwPHM5lhazq+zzjBbQZGrTUh+
-         KxXlsaMtXHJkEzdAznBoOQS0lPBnw4ncDM/GWF1Wo6kJI1WVpd68CPJl+BbCQqexZEVr
-         2PVpssNfJWfBAFK4Q6rQm2bmPfSQVN5NqE16j1o0xgw2F7KpU47kslfotAkWCmvmSAQg
-         3hOw==
+        bh=446AftO1YTpTO8Uak9Nkazo7M9V8oMKbp3yXw2eFLNc=;
+        b=PcNZLluVNkbT0NeE/kEPH+FWVuik2f57wqzwJPqbweqLU1E02iin4GGVo43iD+3xm6
+         uhZbURFjh7KKISrUqMZeobGpanaUW7VcFZ1xrSkhY5DQ3V1A5wzu/G3CZWIGZ9r5gTc/
+         FyGhWflV4k5pdTU5j3fqUQ4hzr7ZZ7OLCnA4dD9bJ4I1kMnQ+c0nJ8hY77eJdRXlfEqi
+         SZQQNaQVlvIa+ZSieAFjwk73Zk2sx2uqxFtvd6kH7ERRKb5u/qxa6LR1/vvnanzRaLCo
+         suOp2UN7mekZrgMmUa1efDJPGym3F2i1+nfgrAUuVFhCCnm/u5GJsSF9uU9CeWJI2isq
+         izhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681727617; x=1684319617;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1681725607; x=1684317607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gcr5YmlYoVcdrEFDHra0XuIJQfELMbNwudSm2TRrzow=;
-        b=NBcKvOXxhm+2OCMkjYet9zd2Yzig3jxFesLc11PQYQSTt5/851DcBGzDXa+tWcFGpK
-         LVnObkGjpecnZYzk5DTu/iYkXWORHovrBGtmSq49SVhFISVpRuvR30fzEsk5brtNE+Y6
-         L+8TaBPwQ/3NOAMbkgRBN+VvlDfnqDnUIvxpj6qeFsKavDw7Dcf7ftoUmBQ0w7SlxFQz
-         YRTWQ89f7mUoQpb51vGsSZXcipholrAFnvgYc+KJ+RY0+VgwqF7Z5B1F4L5jwdZYjWVu
-         UntD+S3LXFsffqlkN6P+4+3sbXBZm4/gHmrA6PeOZEzJt/HODpkFZRZYdJ0+NP+XHHUM
-         3XSA==
-X-Gm-Message-State: AAQBX9fW2R/QXqdjAC+DE4SQvHVUQislCSscbSih8Fxd+mJdT1XVZWhQ
-        2hXxSjSI411bKKur2tnuIE+gQD7t4rQ3nOS9mvYFu/yV
-X-Google-Smtp-Source: AKy350YsZx2nKFyEnXBZglFwnu+EZhMUrIcOvtxJAINOd9ys3x1JK5D6h749rW6LsTd/MCLy+Pzwlw==
-X-Received: by 2002:a17:906:e2d4:b0:94e:8d26:f610 with SMTP id gr20-20020a170906e2d400b0094e8d26f610mr6489616ejb.28.1681725167046;
-        Mon, 17 Apr 2023 02:52:47 -0700 (PDT)
+        bh=446AftO1YTpTO8Uak9Nkazo7M9V8oMKbp3yXw2eFLNc=;
+        b=cigC0ggq2+50W5Bg0eueJIzx0owmryJXrThkArxedKO8ogIa0wVyeoBUoYuBOtlYGA
+         flTOrZe4zQR6oFgXjr55mrNWZxjJ8PeWR2Nx1GofvHh82AoAtSq/wQH7FBD+BuWsQAn7
+         EttAG22DDcfyTFwQL2iPDHNq/wgvNLt8tBm+/6GMOUh4H1UMEiizCGcxBH9yljW3P0Nz
+         G8GJMfgNdIRytPu28PFvQkxnZpYIZYDYE+Zu7CTz4vHJ/qsPEEf+womUPD5bs7EvQ1Sz
+         RgbhVe5y2SVOQA6qi1Zsqya/C+0cP3QR3hKbesqyXhSicmB90ySUkyVE7aPcNUMKPa9d
+         HAVA==
+X-Gm-Message-State: AAQBX9cZmNCdG8y3aP8g4TgHuauTBxSruoDqVVKYt6qhVhr9dO3P1V5C
+        47rDgpHLAVWzpZYsBNxpz7B5CKsvRuE4Go32Vl3zd+5e
+X-Google-Smtp-Source: AKy350ZlEDF7aonnLtWmI4PM8tYmtl4evZih1Nk/uNb3aqc1grgywdMASk7z8VaVzJq6TRucfZn2KQ==
+X-Received: by 2002:a17:906:4c4a:b0:94e:4735:92f8 with SMTP id d10-20020a1709064c4a00b0094e473592f8mr6273016ejw.27.1681725606644;
+        Mon, 17 Apr 2023 03:00:06 -0700 (PDT)
 Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a170906530300b0093a0e5977e2sm6357961ejo.225.2023.04.17.02.52.44
+        by smtp.googlemail.com with ESMTPSA id y15-20020a170906524f00b0094e1026bc66sm6490180ejm.140.2023.04.17.03.00.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 02:52:46 -0700 (PDT)
-Message-ID: <cfb7743b-03b0-96c4-fcc3-7095694f6fbb@linaro.org>
-Date:   Mon, 17 Apr 2023 11:52:36 +0200
+        Mon, 17 Apr 2023 03:00:06 -0700 (PDT)
+Message-ID: <5c21f6b7-8c7e-6e42-fe02-c8fd3ae64016@linaro.org>
+Date:   Mon, 17 Apr 2023 11:59:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to
- devm_clk_get_enabled in mtk_thermal_probe
-To:     void0red@hust.edu.cn
-Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn,
-        error27@gmail.com, henry.yen@mediatek.com,
-        hust-os-kernel-patches@googlegroups.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
-        rui.zhang@intel.com, void0red@gmail.com
-References: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
- <20230411063531.3976354-1-void0red@hust.edu.cn>
- <20230411063531.3976354-2-void0red@hust.edu.cn>
- <4fed91ef.3c256.18783c407e3.Coremail.void0red@hust.edu.cn>
+Subject: Re: [PATCH v2] thermal/drivers/intel/int340x: Add DLVR support
 Content-Language: en-US
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230413213753.129962-1-srinivas.pandruvada@linux.intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4fed91ef.3c256.18783c407e3.Coremail.void0red@hust.edu.cn>
+In-Reply-To: <20230413213753.129962-1-srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,156 +75,326 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi,
+Hi Rafael,
 
-this patch does not apply:
-
-Analyzing 9 messages in the thread
-Will use the latest revision: v3
-You can pick other revisions using the -vN flag
-Checking attestation on all messages, may take a moment...
----
-   [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to 
-devm_clk_get_enabled in mtk_thermal_probe
-     + Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-     + Link: 
-https://lore.kernel.org/r/20230411063531.3976354-2-void0red@hust.edu.cn
----
-Total patches: 1 (cherrypicked: 2)
----
-  Link: 
-https://lore.kernel.org/r/20230411063531.3976354-1-void0red@hust.edu.cn
-  Base: not specified
-Applying: thermal: mediatek: change clk_prepare_enable to 
-devm_clk_get_enabled in mtk_thermal_probe
-error: patch failed: drivers/thermal/mediatek/auxadc_thermal.c:1182
-error: drivers/thermal/mediatek/auxadc_thermal.c: patch does not apply
-Patch failed at 0001 thermal: mediatek: change clk_prepare_enable to 
-devm_clk_get_enabled in mtk_thermal_probe
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
+do you want me to pick this patch ?
 
 
-
-On 15/04/2023 09:14, void0red@hust.edu.cn wrote:
+On 13/04/2023 23:37, Srinivas Pandruvada wrote:
+> Add support for DLVR (Digital Linear Voltage Regulator) attributes,
+> which can be used to control RFIM.
+> Here instead of "fivr" another directory "dlvr" is created with DLVR
+> attributes:
 > 
+> /sys/bus/pci/devices/0000:00:04.0/dlvr
+> ├── dlvr_freq_mhz
+> ├── dlvr_freq_select
+> ├── dlvr_hardware_rev
+> ├── dlvr_pll_busy
+> ├── dlvr_rfim_enable
+> └── dlvr_spread_spectrum_pct
+> └── dlvr_control_mode
+> └── dlvr_control_lock
 > 
+> Attributes
+> dlvr_freq_mhz (RO):
+> Current DLVR PLL frequency in MHz.
 > 
->> -----Original Messages-----
->> From: "Kang Chen" <void0red@hust.edu.cn>
->> Sent Time: 2023-04-11 14:35:31 (Tuesday)
->> To: daniel.lezcano@linaro.org
->> Cc: amitk@kernel.org, angelogioacchino.delregno@collabora.com, bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn, error27@gmail.com, henry.yen@mediatek.com, hust-os-kernel-patches@googlegroups.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org, rui.zhang@intel.com, void0red@gmail.com, void0red@hust.edu.cn
->> Subject: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
->>
->> use devm_clk_get_enabled to do automatic resource management.
->> Meanwhile, remove error handling labels in the probe function and
->> the whole remove function.
->>
->> Signed-off-by: Kang Chen <void0red@hust.edu.cn>
->> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
->> ---
->> v3 -> v2: remove some useles func calls.
->> v2 -> v1: init
->>
->> Notice the devm_clk_get_enabled do the clk_get and clk_prepare_enable
->> at the same time.
->> I'm not sure if this has any side effects in initialization.
->>
->>   drivers/thermal/mediatek/auxadc_thermal.c | 48 +++++------------------
->>   1 file changed, 10 insertions(+), 38 deletions(-)
->>
->> diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
->> index 3372f7c29626..995837ce3ea2 100644
->> --- a/drivers/thermal/mediatek/auxadc_thermal.c
->> +++ b/drivers/thermal/mediatek/auxadc_thermal.c
->> @@ -1116,14 +1116,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>   
->>   	mt->conf = of_device_get_match_data(&pdev->dev);
->>   
->> -	mt->clk_peri_therm = devm_clk_get(&pdev->dev, "therm");
->> -	if (IS_ERR(mt->clk_peri_therm))
->> -		return PTR_ERR(mt->clk_peri_therm);
->> -
->> -	mt->clk_auxadc = devm_clk_get(&pdev->dev, "auxadc");
->> -	if (IS_ERR(mt->clk_auxadc))
->> -		return PTR_ERR(mt->clk_auxadc);
->> -
->>   	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->>   	if (IS_ERR(mt->thermal_base))
->>   		return PTR_ERR(mt->thermal_base);
->> @@ -1182,16 +1174,16 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>   	if (ret)
->>   		return ret;
->>   
->> -	ret = clk_prepare_enable(mt->clk_auxadc);
->> -	if (ret) {
->> -		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
->> -		return ret;
->> +	mt->clk_auxadc = devm_clk_get_enabled(&pdev->dev, "auxadc");
->> +	if (IS_ERR(mt->clk_auxadc)) {
->> +		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", mt->clk_auxadc);
->> +		return PTR_ERR(mt->clk_auxadc);
->>   	}
->>   
->> -	ret = clk_prepare_enable(mt->clk_peri_therm);
->> -	if (ret) {
->> -		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
->> -		goto err_disable_clk_auxadc;
->> +	mt->clk_peri_therm = devm_clk_get_enabled(&pdev->dev, "therm");
->> +	if (IS_ERR(mt->clk_peri_therm)) {
->> +		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", mt->clk_peri_therm);
->> +		return PTR_ERR(mt->clk_peri_therm);
->>   	}
->>   
->>   	if (mt->conf->version != MTK_THERMAL_V1) {
->> @@ -1215,38 +1207,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>   
->>   	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>   					      &mtk_thermal_ops);
->> -	if (IS_ERR(tzdev)) {
->> -		ret = PTR_ERR(tzdev);
->> -		goto err_disable_clk_peri_therm;
->> -	}
->> +	if (IS_ERR(tzdev))
->> +		return PTR_ERR(tzdev);
->>   
->>   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
->>   	if (ret)
->>   		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
->>   
->>   	return 0;
->> -
->> -err_disable_clk_peri_therm:
->> -	clk_disable_unprepare(mt->clk_peri_therm);
->> -err_disable_clk_auxadc:
->> -	clk_disable_unprepare(mt->clk_auxadc);
->> -
->> -	return ret;
->> -}
->> -
->> -static int mtk_thermal_remove(struct platform_device *pdev)
->> -{
->> -	struct mtk_thermal *mt = platform_get_drvdata(pdev);
->> -
->> -	clk_disable_unprepare(mt->clk_peri_therm);
->> -	clk_disable_unprepare(mt->clk_auxadc);
->> -
->> -	return 0;
->>   }
->>   
->>   static struct platform_driver mtk_thermal_driver = {
->>   	.probe = mtk_thermal_probe,
->> -	.remove = mtk_thermal_remove,
->>   	.driver = {
->>   		.name = "mtk-thermal",
->>   		.of_match_table = mtk_thermal_of_match,
->> -- 
->> 2.34.1
+> dlvr_freq_select (RW):
+> Sets DLVR PLL clock frequency.
 > 
-> ping?
+> dlvr_hardware_rev (RO):
+> DLVR hardware revision.
+> 
+> dlvr_pll_busy (RO):
+> PLL can't accept frequency change when set.
+> 
+> dlvr_rfim_enable (RW):
+> 0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
+> 
+> dlvr_control_mode (RW):
+> Specifies how frequencies are spread. 0: Down spread, 1: Spread in Center.
+> 
+> dlvr_control_lock (RW):
+> 1: future writes are ignored.
+> 
+> dlvr_spread_spectrum_pct (RW)
+> A write to this register updates the DLVR spread spectrum percent value.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> v2
+> - Updated documentation
+> - Added dlvr_control_lock attribute
+> 
+>   .../driver-api/thermal/intel_dptf.rst         | 46 +++++++++-
+>   .../processor_thermal_device.c                |  3 +-
+>   .../processor_thermal_device.h                |  1 +
+>   .../processor_thermal_device_pci.c            |  2 +-
+>   .../int340x_thermal/processor_thermal_rfim.c  | 92 ++++++++++++++++++-
+>   5 files changed, 135 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+> index f5c193cccbda..9ab4316322a1 100644
+> --- a/Documentation/driver-api/thermal/intel_dptf.rst
+> +++ b/Documentation/driver-api/thermal/intel_dptf.rst
+> @@ -184,8 +184,9 @@ ABI.
+>   DPTF Processor thermal RFIM interface
+>   --------------------------------------------
+>   
+> -RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator)
+> -and DDR (Double Data Rate)frequencies to avoid RF interference with WiFi and 5G.
+> +RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator),
+> +DDR (Double Data Rate) and DLVR (Digital Linear Voltage Regulator)
+> +frequencies to avoid RF interference with WiFi and 5G.
+>   
+>   Switching voltage regulators (VR) generate radiated EMI or RFI at the
+>   fundamental frequency and its harmonics. Some harmonics may interfere
+> @@ -196,6 +197,15 @@ small % and shift away the switching noise harmonic interference from
+>   radio channels.  OEM or ODMs can use the driver to control SOC IVR
+>   operation within the range where it does not impact IVR performance.
+>   
+> +Some products use DLVR instead of FIVR as switching voltage regulator.
+> +In this case attributes of DLVR must be adjusted instead of FIVR.
+> +
+> +While shifting the frequencies additional clock noise can be introduced,
+> +which is compensated by adjusting Spread spectrum percent. This helps
+> +to reduce the clock noise to meet regulatory compliance. This spreading
+> +% increases bandwidth of signal transmission and hence reduces the
+> +effects of interference, noise and signal fading.
+> +
+>   DRAM devices of DDR IO interface and their power plane can generate EMI
+>   at the data rates. Similar to IVR control mechanism, Intel offers a
+>   mechanism by which DDR data rates can be changed if several conditions
+> @@ -264,6 +274,38 @@ DVFS attributes
+>   ``rfi_disable (RW)``
+>   	Disable DDR rate change feature
+>   
+> +DLVR attributes
+> +
+> +:file:`/sys/bus/pci/devices/0000\:00\:04.0/dlvr/`
+> +
+> +``dlvr_hardware_rev`` (RO)
+> +	DLVR hardware revision.
+> +
+> +``dlvr_freq_mhz`` (RO)
+> +	Current DLVR PLL frequency in MHz.
+> +
+> +``dlvr_freq_select`` (RW)
+> +	Sets DLVR PLL clock frequency. Once set, and enabled via
+> +	dlvr_rfim_enable, the dlvr_freq_mhz will show the current
+> +	DLVR PLL frequency.
+> +
+> +``dlvr_pll_busy`` (RO)
+> +	PLL can't accept frequency change when set.
+> +
+> +``dlvr_rfim_enable`` (RW)
+> +	0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
+> +
+> +``dlvr_spread_spectrum_pct`` (RW)
+> +	Sets DLVR spread spectrum percent value.
+> +
+> +``dlvr_control_mode`` (RW)
+> +        Specifies how frequencies are spread using spread spectrum.
+> +        0: Down spread,
+> +        1: Spread in the Center.
+> +
+> +``dlvr_control_lock`` (RW)
+> +    1: future writes are ignored.
+> +
+>   DPTF Power supply and Battery Interface
+>   ----------------------------------------
+>   
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index a1dc18be7609..3ca0a2f5937f 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -337,7 +337,8 @@ int proc_thermal_mmio_add(struct pci_dev *pdev,
+>   	}
+>   
+>   	if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
+> -	    feature_mask & PROC_THERMAL_FEATURE_DVFS) {
+> +	    feature_mask & PROC_THERMAL_FEATURE_DVFS ||
+> +	    feature_mask & PROC_THERMAL_FEATURE_DLVR) {
+>   		ret = proc_thermal_rfim_add(pdev, proc_priv);
+>   		if (ret) {
+>   			dev_err(&pdev->dev, "failed to add RFIM interface\n");
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index 7d52fcff4937..7acaa8f1b896 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -60,6 +60,7 @@ struct rapl_mmio_regs {
+>   #define PROC_THERMAL_FEATURE_FIVR	0x02
+>   #define PROC_THERMAL_FEATURE_DVFS	0x04
+>   #define PROC_THERMAL_FEATURE_MBOX	0x08
+> +#define PROC_THERMAL_FEATURE_DLVR	0x10
+>   
+>   #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
+>   int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index d71ee50e7878..8b260dd9221b 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -351,7 +351,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
+>   
+>   static const struct pci_device_id proc_thermal_pci_ids[] = {
+>   	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+> -	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+> +	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX | PROC_THERMAL_FEATURE_DLVR) },
+>   	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+>   	{ },
+>   };
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> index 92ed1213fe37..546b70434004 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> @@ -39,6 +39,29 @@ static const struct mmio_reg tgl_fivr_mmio_regs[] = {
+>   	{ 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
+>   };
+>   
+> +static const char * const dlvr_strings[] = {
+> +	"dlvr_spread_spectrum_pct",
+> +	"dlvr_control_mode",
+> +	"dlvr_control_lock",
+> +	"dlvr_rfim_enable",
+> +	"dlvr_freq_select",
+> +	"dlvr_hardware_rev",
+> +	"dlvr_freq_mhz",
+> +	"dlvr_pll_busy",
+> +	NULL
+> +};
+> +
+> +static const struct mmio_reg dlvr_mmio_regs[] = {
+> +	{ 0, 0x15A08, 5, 0x1F, 0}, /* dlvr_spread_spectrum_pct */
+> +	{ 0, 0x15A08, 1, 0x1, 5}, /* dlvr_control_mode */
+> +	{ 0, 0x15A08, 1, 0x1, 6}, /* dlvr_control_lock */
+> +	{ 0, 0x15A08, 1, 0x1, 7}, /* dlvr_rfim_enable */
+> +	{ 0, 0x15A08, 12, 0xFFF, 8}, /* dlvr_freq_select */
+> +	{ 1, 0x15A10, 2, 0x3, 30}, /* dlvr_hardware_rev */
+> +	{ 1, 0x15A10, 16, 0xFFFF, 0}, /* dlvr_freq_mhz */
+> +	{ 1, 0x15A10, 1, 0x1, 16}, /* dlvr_pll_busy */
+> +};
+> +
+>   /* These will represent sysfs attribute names */
+>   static const char * const dvfs_strings[] = {
+>   	"rfi_restriction_run_busy",
+> @@ -78,14 +101,16 @@ static ssize_t suffix##_show(struct device *dev,\
+>   	int ret;\
+>   \
+>   	proc_priv = pci_get_drvdata(pdev);\
+> -	if (table) {\
+> +	if (table == 1) {\
+>   		match_strs = (const char **)dvfs_strings;\
+>   		mmio_regs = adl_dvfs_mmio_regs;\
+> -	} else { \
+> +	} else if (table == 2) { \
+> +		match_strs = (const char **)dlvr_strings;\
+> +		mmio_regs = dlvr_mmio_regs;\
+> +	} else {\
+>   		match_strs = (const char **)fivr_strings;\
+>   		mmio_regs = tgl_fivr_mmio_regs;\
+>   	} \
+> -	\
+>   	ret = match_string(match_strs, -1, attr->attr.name);\
+>   	if (ret < 0)\
+>   		return ret;\
+> @@ -109,10 +134,13 @@ static ssize_t suffix##_store(struct device *dev,\
+>   	u32 mask;\
+>   \
+>   	proc_priv = pci_get_drvdata(pdev);\
+> -	if (table) {\
+> +	if (table == 1) {\
+>   		match_strs = (const char **)dvfs_strings;\
+>   		mmio_regs = adl_dvfs_mmio_regs;\
+> -	} else { \
+> +	} else if (table == 2) { \
+> +		match_strs = (const char **)dlvr_strings;\
+> +		mmio_regs = dlvr_mmio_regs;\
+> +	} else {\
+>   		match_strs = (const char **)fivr_strings;\
+>   		mmio_regs = tgl_fivr_mmio_regs;\
+>   	} \
+> @@ -147,6 +175,47 @@ RFIM_STORE(spread_spectrum_clk_enable, 0)
+>   RFIM_STORE(rfi_vco_ref_code, 0)
+>   RFIM_STORE(fivr_fffc_rev, 0)
+>   
+> +RFIM_SHOW(dlvr_spread_spectrum_pct, 2)
+> +RFIM_SHOW(dlvr_control_mode, 2)
+> +RFIM_SHOW(dlvr_control_lock, 2)
+> +RFIM_SHOW(dlvr_hardware_rev, 2)
+> +RFIM_SHOW(dlvr_freq_mhz, 2)
+> +RFIM_SHOW(dlvr_pll_busy, 2)
+> +RFIM_SHOW(dlvr_freq_select, 2)
+> +RFIM_SHOW(dlvr_rfim_enable, 2)
+> +
+> +RFIM_STORE(dlvr_spread_spectrum_pct, 2)
+> +RFIM_STORE(dlvr_rfim_enable, 2)
+> +RFIM_STORE(dlvr_freq_select, 2)
+> +RFIM_STORE(dlvr_control_mode, 2)
+> +RFIM_STORE(dlvr_control_lock, 2)
+> +
+> +static DEVICE_ATTR_RW(dlvr_spread_spectrum_pct);
+> +static DEVICE_ATTR_RW(dlvr_control_mode);
+> +static DEVICE_ATTR_RW(dlvr_control_lock);
+> +static DEVICE_ATTR_RW(dlvr_freq_select);
+> +static DEVICE_ATTR_RO(dlvr_hardware_rev);
+> +static DEVICE_ATTR_RO(dlvr_freq_mhz);
+> +static DEVICE_ATTR_RO(dlvr_pll_busy);
+> +static DEVICE_ATTR_RW(dlvr_rfim_enable);
+> +
+> +static struct attribute *dlvr_attrs[] = {
+> +	&dev_attr_dlvr_spread_spectrum_pct.attr,
+> +	&dev_attr_dlvr_control_mode.attr,
+> +	&dev_attr_dlvr_control_lock.attr,
+> +	&dev_attr_dlvr_freq_select.attr,
+> +	&dev_attr_dlvr_hardware_rev.attr,
+> +	&dev_attr_dlvr_freq_mhz.attr,
+> +	&dev_attr_dlvr_pll_busy.attr,
+> +	&dev_attr_dlvr_rfim_enable.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group dlvr_attribute_group = {
+> +	.attrs = dlvr_attrs,
+> +	.name = "dlvr"
+> +};
+> +
+>   static DEVICE_ATTR_RW(vco_ref_code_lo);
+>   static DEVICE_ATTR_RW(vco_ref_code_hi);
+>   static DEVICE_ATTR_RW(spread_spectrum_pct);
+> @@ -277,12 +346,22 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+>   			return ret;
+>   	}
+>   
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
+> +		ret = sysfs_create_group(&pdev->dev.kobj, &dlvr_attribute_group);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>   	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
+>   		ret = sysfs_create_group(&pdev->dev.kobj, &dvfs_attribute_group);
+>   		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
+>   			sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+>   			return ret;
+>   		}
+> +		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
+> +			sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
+> +			return ret;
+> +		}
+>   	}
+>   
+>   	return 0;
+> @@ -296,6 +375,9 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev)
+>   	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
+>   		sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+>   
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR)
+> +		sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
+> +
+>   	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
+>   		sysfs_remove_group(&pdev->dev.kobj, &dvfs_attribute_group);
+>   }
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
