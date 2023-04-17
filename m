@@ -2,206 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319276E4ABB
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 16:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDD16E4BB2
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 16:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjDQOF2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Apr 2023 10:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S230190AbjDQOjy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 10:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjDQOFY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 10:05:24 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED4CA5C9;
-        Mon, 17 Apr 2023 07:05:09 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5068638856dso297464a12.1;
-        Mon, 17 Apr 2023 07:05:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681740308; x=1684332308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o95qltEIxKaZ0GG79mFmfKBk2nk2vX2Uy1PRlh5e7Z0=;
-        b=HdRXDhTVLvaQnB/r4MR1TSANokIweohmdPUBfNHsJ3ymfcJd3piaYGq8qc8Spdk7uJ
-         I9osNcuewzR71uZAZWepIrNQAElW1u7WcI9jqLQW9z+tjhA1ZWLRfFcfH4Ls3OZULFu6
-         +jyDdpY0gBMnKZe87hepvLDeC7u9Q73K48Tkbpk1mcvtg9YufPOEsGNsAfxBhYOjqkSr
-         9D8m1qKZ+hhtqq3B5wB+2J6B/aAo9v/3miTQ2vETf+51Ievmnnkx43LdXLoGiWkZbpy+
-         MxrpBC13rem9ap7C2o2j9HIVBc2LWQTmtcKm/bESSd1w/OMaK7HX20N4Dj3dkwnSXbxj
-         xMgg==
-X-Gm-Message-State: AAQBX9cqSuWATQuOJdax6M7nKB1pO1Jk+84eXEj8ZBkYiGdU1prF8KQt
-        6oUoxUQdgVL4ZX55dZqTz20JzKtoAmTghQgbXFs=
-X-Google-Smtp-Source: AKy350avk3TTzF4MJyGXSX9VB16oBXss2iyHfymSu64jJ3Ijpc2D3D6w0wSWrTyJpd62u8Bc/zQRv4oqUieGI3fktik=
-X-Received: by 2002:a05:6402:34d2:b0:502:ffd:74a0 with SMTP id
- w18-20020a05640234d200b005020ffd74a0mr11963865edc.2.1681740307878; Mon, 17
- Apr 2023 07:05:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <a83c3a2d-8c67-9053-455d-c1cee3545f16@linaro.org>
-In-Reply-To: <a83c3a2d-8c67-9053-455d-c1cee3545f16@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 Apr 2023 16:04:56 +0200
-Message-ID: <CAJZ5v0jKnTw=9kygy-A=rrfgQTwLomiGSCm7wR3EP7TnBRo4Zw@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.4-rc1 #2
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S230355AbjDQOjq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 10:39:46 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9ABBBB7;
+        Mon, 17 Apr 2023 07:39:29 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 87E785C0134;
+        Mon, 17 Apr 2023 10:39:28 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 17 Apr 2023 10:39:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681742368; x=1681828768; bh=47
+        c10joXrSC6smqeymYuL6B/dgnBcNYu/wXLczUzxvY=; b=l6CZtui1XunEZtfBDf
+        jjluImFNB8dbdEd3aO57e8gxqvmhUSHBYmSppZ/iRm30iovpUiOxsz7NRdbbslaH
+        V1o6dtN1zExc97YmtCQ0oYK5/LVv4bm4/AuNstRkuegAfR5mxhyKBs0l3DGvulde
+        gEviA8MWFO4t5Qk9FHhjXkJxs2xlYDr/0+DDEVAFr99N62YzEEQeY42kXkgvtBFx
+        nlgR+a/rXvF3IUQ4hpVOGBZJ81FVaoJZkBQmcX4p/KPgfed6kwnnU34nfh6x4QXg
+        TRTPntriVfV70IZSB/G8ypMkXlzzrlq7rtrSrJGunNk/htouuLhLIx1NlpHDCjqY
+        s/ug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681742368; x=1681828768; bh=47c10joXrSC6s
+        mqeymYuL6B/dgnBcNYu/wXLczUzxvY=; b=a2BfTa1DW3CYLyZmvLzlAg+sbJQJE
+        AKf7esjVvLG1jBe5vX3xVqAaQ8EzWPaIgrBGXDQoS8d1g+IE41HIoaaEGyYBSFi/
+        O89knLsuZpapns1Td68OpAkxD+piEG1apKjNdRs+qgTQYXI/L4AuUiqxTNbsPX3X
+        k4pcDZ7GnIzOZGYnBOBr5v7rbvp2TLTE/LZcGe04AIkehmGCZ9t0PftpaP2/+Rye
+        Vz0oSTt0J0+liYG1v5j9Uo6f1zVKwlg5R15kgy5VAesDRQibW8pbhvUJyBywCPd2
+        wsMU9svyd/3DXACd1/63yildDNJZwULPwIRZFoC/AJSjvh/KigXAdPExA==
+X-ME-Sender: <xms:IFo9ZDt5D54t93c_r5GleKb8eHJbZmpKw54RHIXToLjRjlbH8bKaHw>
+    <xme:IFo9ZEe822eWFLFKmjM03hZ-e09x0q_aUOGpyiS7iDFUhjSLrn97ct1WLttJQgZ3K
+    4bY-urITJHwl5SK7Vc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:IFo9ZGxMi76KFncYw7pvAxPBkAHaJWUu0aJ3R2BPOuSuJdW8kVbRUw>
+    <xmx:IFo9ZCP-a6gJL1VFdAj6i2LVHPjIPYR5PWL2wEuX9ezdX77pW1jLkg>
+    <xmx:IFo9ZD9r1ppiiwLIp_p9Rr5J8K2fBu3ulgmbJ_Fgjmrc5fG2m0IwZg>
+    <xmx:IFo9ZJcXdueAD46DODLQniqwkQ-poMzBXn-Myh2I4YceDbqsWl1Wsg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 43545B60086; Mon, 17 Apr 2023 10:39:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <c74ba848-dccd-4d31-88ea-1788d0beac73@app.fastmail.com>
+In-Reply-To: <4c4e4a51-8afd-c6e2-91c6-090cc0382d9e@linaro.org>
+References: <20230413131705.3073911-1-brgl@bgdev.pl>
+ <20230413131705.3073911-3-brgl@bgdev.pl>
+ <4c4e4a51-8afd-c6e2-91c6-090cc0382d9e@linaro.org>
+Date:   Mon, 17 Apr 2023 16:38:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 2/4] arm64: defconfig: enable building the nvmem-reboot-mode module
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 11:49 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Sun, Apr 16, 2023, at 17:16, Krzysztof Kozlowski wrote:
+> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
+>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>> 
+>> This module is used by the Qualcomm sa8775p platform for passing the
+>> reboot reason to the bootloader. Enable building it in the arm64
+>> defconfig as a module.
+>> 
+>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
->
-> Hi Rafael,
->
-> please consider pulling the following changes, they are all from the
-> thermal/bleeding-edge which was then merged to thermal/linux-next
->
-> Thanks
->
->    -- Daniel
->
-> The following changes since commit 75f74a907164eaeb1bd5334b01504a84b2b63bf5:
->
->    Merge tag 'thermal-v6.4-rc1-1' of
-> ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
-> (2023-04-03 20:43:32 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.4-rc1-2
->
-> for you to fetch changes up to 3d439b1a2ad36c8b4ea151c8de25309d60d17407:
->
->    thermal/core: Alloc-copy-free the thermal zone parameters structure
-> (2023-04-07 18:36:28 +0200)
->
-> ----------------------------------------------------------------
-> - Do preparating cleaning and DT bindings for RK3588 support
->    (Sebastian Reichel)
->
-> - Add driver support for RK3588 (Finley Xiao)
->
-> - Use devm_reset_control_array_get_exclusive() for the Rockchip driver
->    (Ye Xingchen)
->
-> - Detect power gated thermal zones and return -EAGAIN when reading the
->    temperature (Mikko Perttunen)
->
-> - Remove thermal_bind_params structure as it is unused (Zhang Rui)
->
-> - Drop unneeded quotes in DT bindings allowing to run yamllint (Rob
->    Herring)
->
-> - Update the power allocator documentation according to the thermal
->    trace relocation (Lukas Bulwahn)
->
-> - Fix sensor 1 interrupt status bitmask for the Mediatek LVTS sensor
->    (Chen-Yu Tsai)
->
-> - Use the dev_err_probe() helper in the Amlogic driver (Ye Xingchen)
->
-> - Add AP domain support to LVTS thermal controllers for mt8195
->    (Balsam CHIHI)
->
-> - Remove buggy call to thermal_of_zone_unregister() (Daniel Lezcano)
->
-> - Make thermal_of_zone_[un]register() private to the thermal OF code
->    (Daniel Lezcano)
->
-> - Create a private copy of the thermal zone device parameters
->    structure when registering a thermal zone (Daniel Lezcano)
->
-> ----------------------------------------------------------------
-> Balsam CHIHI (2):
->        dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
-> controllers for mt8195
->        thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
->
-> Chen-Yu Tsai (1):
->        thermal/drivers/mediatek/lvts_thermal: Fix sensor 1 interrupt
-> status bitmask
->
-> Daniel Lezcano (3):
->        thermal/drivers/bcm2835: Remove buggy call to
-> thermal_of_zone_unregister
->        thermal/of: Unexport unused OF functions
->        thermal/core: Alloc-copy-free the thermal zone parameters structure
->
-> Finley Xiao (1):
->        thermal/drivers/rockchip: Support RK3588 SoC in the thermal driver
->
-> Lukas Bulwahn (1):
->        MAINTAINERS: adjust entry in THERMAL/POWER_ALLOCATOR after header
-> movement
->
-> Mikko Perttunen (1):
->        thermal/drivers/tegra-bpmp: Handle offline zones
->
-> Rob Herring (1):
->        dt-bindings: thermal: Drop unneeded quotes
->
-> Sebastian Reichel (6):
->        thermal/drivers/rockchip: Simplify getting match data
->        thermal/drivers/rockchip: Simplify clock logic
->        thermal/drivers/rockchip: Use dev_err_probe
->        thermal/drivers/rockchip: Simplify channel id logic
->        thermal/drivers/rockchip: Support dynamic sized sensor array
->        dt-bindings: rockchip-thermal: Support the RK3588 SoC compatible
->
-> Ye Xingchen (2):
->        thermal/drivers/rockchip: use
-> devm_reset_control_array_get_exclusive()
->        thermal: amlogic: Use dev_err_probe()
->
-> Zhang Rui (1):
->        thermal/core: Remove thermal_bind_params structure
->
->   Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml  |   2 +-
->   Documentation/devicetree/bindings/thermal/imx-thermal.yaml      |   4 +--
->   Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml    |   4 +--
->   Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml |   1 +
->   Documentation/driver-api/thermal/sysfs-api.rst                  |  40
-> -------------------------
->   MAINTAINERS                                                     |   2 +-
->   drivers/thermal/amlogic_thermal.c                               |   7
-> ++---
->   drivers/thermal/broadcom/bcm2835_thermal.c                      |   4 +--
->   drivers/thermal/mediatek/lvts_thermal.c                         | 100
-> +++++++++++++++++++++++++++++++++++++++++++++++---------------
->   drivers/thermal/rockchip_thermal.c                              | 324
-> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------------
->   drivers/thermal/tegra/tegra-bpmp-thermal.c                      |   9
-> +++++-
->   drivers/thermal/thermal_core.c                                  | 144
-> +++++++++++++++--------------------------------------------------------------------------
->   drivers/thermal/thermal_of.c                                    |   8
-> ++---
->   include/dt-bindings/thermal/mediatek,lvts-thermal.h             |  10
-> +++++++
->   include/linux/thermal.h                                         |  55
-> ----------------------------------
->   15 files changed, 358 insertions(+), 356 deletions(-)
->
-> --
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Pulled and pushed out, thanks!
+Applied, thanks!
+
+     Arnd
