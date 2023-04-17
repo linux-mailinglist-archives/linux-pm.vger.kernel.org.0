@@ -2,75 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC80A6E4303
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 10:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0896E4332
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Apr 2023 11:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjDQI7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 04:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S229627AbjDQJG0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 05:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDQI7h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 04:59:37 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B561FC3;
-        Mon, 17 Apr 2023 01:59:36 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50672fbf83eso13745144a12.0;
-        Mon, 17 Apr 2023 01:59:36 -0700 (PDT)
+        with ESMTP id S229540AbjDQJGZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 05:06:25 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF959170D;
+        Mon, 17 Apr 2023 02:06:23 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a5so5685798ejb.6;
+        Mon, 17 Apr 2023 02:06:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681721974; x=1684313974;
+        d=gmail.com; s=20221208; t=1681722382; x=1684314382;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wJafEGZLilXLck6GAd9V/sVhueR55spEo7I/YbebiPc=;
-        b=qfM932Zhr03+ycfBEcHVAQFqxldOI5utfQfmvV4OKB+GLgVI/Dhm4xkbQ2pHvpE2Gl
-         ikQtFMtQt3w6/hALMzB75albvSzCrfmVEGlR4osSuoM2SOPQSyHJOzk48iZ5E+l6AjAC
-         c47OoVO94sgR3sHKh2mVm7dWmAuloaSXXp93QJrhzmGukDm7PzSi211vL8PueM9L5FMR
-         bjJBNOapEyTPyiLi2rIVXsVRQtdZV7OhKaI8gwEGmYYNacJUxKm5GVB5c2fyfpCpsDGu
-         pvJbVqhWV2St4iipY3cjvj6QCJhW9aecJL56EYLAFWTJk57wY1sOiQ4/jBtPGywt/jRS
-         l4CQ==
+        bh=tRw++8DCsbGRpKEYAvR6c5N87LkuLbIZdhy/p3qR+is=;
+        b=OdcAo9gViulnTDbqdPTYCzAVE/krbdLJaDTSOSsz2UEKmR/QWJFG9DlfieG2lvMnxP
+         Q247aeezUz8ssIfDJ7F/F+uQZWocDRMAgDT3b4RQvmzJ9N4/3EOMESdOB4Pfg2K9syE3
+         7go/d449NALS5uwoONLWDRjEUqRDM1gN2yoMB/YS5w6l8BCudd6X91dl0hzApKX/rWTu
+         VDXLXsZWf8AuwFEJpoIAAOW5qMpgjTzPJvfEKFWoT/PF1ePvgMLgeCRz+2eIZCC9RSGC
+         m5vOm49lK/TkCDLcXM58yXAod1BXl5PP+pD4gagqflPU1RBgZp/osWgRu7ypGYx8czks
+         apVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681721974; x=1684313974;
+        d=1e100.net; s=20221208; t=1681722382; x=1684314382;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wJafEGZLilXLck6GAd9V/sVhueR55spEo7I/YbebiPc=;
-        b=IfspAeYXvw47otxE04CBQ9+50z032uY7SJLiV5cj/b+pKoVWjhrpiAxjya9XAwaLyb
-         dC8BBI2cUTmwCPd4o1/UfeCx8FwkIpMN00rSVnbQyXqqHxRD3lUKQm0copAjoMoHSdE5
-         eAM1sm44SRMM/PocXrZbfwkZm42+L9WTvruiApOMVSBRApdJw7T74Xc+Db5pSSRHYo/m
-         0dfUV4Bl68yaPB0082RQeDQ4kQHZaa5hP+tWJZODmWjCdUwttSPGheUWAai2BmOylW4y
-         o5siycZTaUvABpxcUwiFurVSYJJwUaQr32NK+GMVRkAg7LWval/7ojCsOrt8SaYmPiIm
-         J3KA==
-X-Gm-Message-State: AAQBX9dXwXMWMqos33dlhFrl/WBfEEBAjshvn8Wdt7pBr/wL0q50VPwX
-        Sr/UXKTKNNgoPRUHsqyZu/+WjWMTgy4=
-X-Google-Smtp-Source: AKy350aa7Tqk9acCyMU93oK0d8443WM/hwBWH+1CqkPHUMe5MUiqGivxZLO5vsLKd771bc0fAATA9w==
-X-Received: by 2002:a05:6402:4413:b0:4af:7bdc:188e with SMTP id y19-20020a056402441300b004af7bdc188emr16893868eda.16.1681721974297;
-        Mon, 17 Apr 2023 01:59:34 -0700 (PDT)
+        bh=tRw++8DCsbGRpKEYAvR6c5N87LkuLbIZdhy/p3qR+is=;
+        b=Av6nh+Uuu5PjAE46iOBnXbBXqG+dk+7HyjQF2Q9ToheE6Ai17ZscQgto5X8SVCGg2f
+         zTdZPu3Sg7TypyHKKFIIG2nDy044npru6HpSreW7lcIlg5MO0fvaJ+of+GuzPiczdJ8j
+         zfWKPyVjlzV4ZKPLLFyk8whfrQ90CO7C3VIzXpTRA9BfpLlSi5qFQUNS3RKVMRpFozlm
+         jfLHjIaK8zkyCSR60EZE5D43dmd7N+hd6vhHEQwiBpwxeqXTKNLtCeVwbSWxmZAAcbOB
+         1s24ebGz+1hVCCijp4WDKa2O57EPmP8QOt6niD9s64C2FTmoJsjb4OGbNQCM3H5Afynu
+         tn8g==
+X-Gm-Message-State: AAQBX9f1rAwdQ2Dyvg8gv3u+m3FWCWdIPZ0BOKcFYSTjuN08757RTnrj
+        JL76Ewgc66HBrz+NboMOQolAN+WeWjY=
+X-Google-Smtp-Source: AKy350ZK+YGWEv6Grr3hY2pQZOUcytskKThJXsUjLmFw8fe9hhjYsGOEj0Z/OgMhzz4761KptxN76Q==
+X-Received: by 2002:a17:907:1623:b0:94f:49a2:619a with SMTP id hb35-20020a170907162300b0094f49a2619amr4068267ejc.11.1681722381812;
+        Mon, 17 Apr 2023 02:06:21 -0700 (PDT)
 Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id c9-20020a056402100900b0050508605c1dsm5536595edu.37.2023.04.17.01.59.33
+        by smtp.gmail.com with ESMTPSA id qb37-20020a1709077ea500b0094ee0c9a6d0sm4820220ejc.184.2023.04.17.02.06.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 01:59:33 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 10:59:32 +0200
+        Mon, 17 Apr 2023 02:06:21 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 11:06:19 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 01/10] dt-bindings: thermal: tegra: Document throttle
- temperature
-Message-ID: <ZD0KdAXyi0Ex1JOU@orome>
+Subject: Re: [PATCH 09/10] arm64: tegra: Rework SOCTHERM on Tegra132 and
+ Tegra210
+Message-ID: <ZD0MC6AqgNtYUJ4a@orome>
 References: <20230414125721.1043589-1-thierry.reding@gmail.com>
- <20230414125721.1043589-2-thierry.reding@gmail.com>
- <187d51b3-6fec-7a25-e472-3d9020c12db5@linaro.org>
+ <20230414125721.1043589-10-thierry.reding@gmail.com>
+ <ed5f12fd-f1f8-9823-a32d-5782068dc790@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="n8oRERorzIEJ3aCU"
+        protocol="application/pgp-signature"; boundary="xwrNWjN09bPXOM+0"
 Content-Disposition: inline
-In-Reply-To: <187d51b3-6fec-7a25-e472-3d9020c12db5@linaro.org>
+In-Reply-To: <ed5f12fd-f1f8-9823-a32d-5782068dc790@linaro.org>
 User-Agent: Mutt/2.2.10 (2023-03-25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -83,101 +82,107 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---n8oRERorzIEJ3aCU
+--xwrNWjN09bPXOM+0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 14, 2023 at 11:47:56PM +0200, Krzysztof Kozlowski wrote:
+On Mon, Apr 17, 2023 at 10:15:11AM +0200, Daniel Lezcano wrote:
 > On 14/04/2023 14:57, Thierry Reding wrote:
 > > From: Thierry Reding <treding@nvidia.com>
 > >=20
-> > Each throttling configuration needs to specify the temperature threshold
-> > at which it should start throttling. Previously this was tied to a given
-> > trip point as a cooling device and used the temperature specified for
-> > that trip point. This doesn't work well because the throttling mechanism
-> > is not a cooling device in the traditional sense.
+> > The "heavy throttle" cooling device that SOCTHERM uses isn't a cooling
+> > device in the traditional sense. It's an automatic mechanism that cannot
+> > be actively controlled. Do not expose it as a cooling device and instead
+> > of tying it to a specific trip point, hard-code the temperature at which
+> > the automatic throttling will begin.
 > >=20
-> > Instead, allow device trees to specify the throttle temperature in the
-> > throttle configuration directly so that the throttle doesn't need to be
-> > exposed as a cooling device.
+> > While at it, clean up the trip point names to reflect the names used by
+> > the thermal device tree bindings.
 > >=20
 > > Signed-off-by: Thierry Reding <treding@nvidia.com>
 > > ---
-> >  .../bindings/thermal/nvidia,tegra124-soctherm.yaml         | 7 +++++++
-> >  1 file changed, 7 insertions(+)
+> >   arch/arm64/boot/dts/nvidia/tegra132.dtsi | 63 +++++-------------
+> >   arch/arm64/boot/dts/nvidia/tegra210.dtsi | 83 +++++++-----------------
+> >   2 files changed, 39 insertions(+), 107 deletions(-)
 > >=20
-> > diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-=
-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-s=
-octherm.yaml
-> > index 4677ad6645a5..37dac851f486 100644
-> > --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-socther=
-m.yaml
-> > +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-socther=
-m.yaml
+> > diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot=
+/dts/nvidia/tegra132.dtsi
+> > index 8b78be8f4f9d..11ebf7517df1 100644
+> > --- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+> > +++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
+> > @@ -876,11 +876,10 @@ soctherm: thermal-sensor@700e2000 {
+> >   		#thermal-sensor-cells =3D <1>;
+> >   		throttle-cfgs {
+> > -			throttle_heavy: heavy {
+> > +			heavy {
+> >   				nvidia,priority =3D <100>;
+> >   				nvidia,cpu-throt-level =3D <TEGRA_SOCTHERM_THROT_LEVEL_HIGH>;
+> > -
+> > -				#cooling-cells =3D <2>;
+> > +				temperature =3D <102000>;
+> >   			};
+> >   		};
+> >   	};
+> > @@ -1136,114 +1135,84 @@ cpu-thermal {
+> >   			polling-delay-passive =3D <1000>;
+> >   			polling-delay =3D <0>;
+> > -			thermal-sensors =3D
+> > -				<&soctherm TEGRA124_SOCTHERM_SENSOR_CPU>;
+> > +			thermal-sensors =3D <&soctherm TEGRA124_SOCTHERM_SENSOR_CPU>;
+> >   			trips {
+> > -				cpu_shutdown_trip {
+> > +				critical {
+> >   					temperature =3D <105000>;
+> >   					hysteresis =3D <1000>;
+> >   					type =3D "critical";
+> >   				};
+> > -				cpu_throttle_trip: throttle-trip {
+> > +				hot {
+> >   					temperature =3D <102000>;
+> >   					hysteresis =3D <1000>;
+> >   					type =3D "hot";
+> >   				};
+> >   			};
+> > -
+> > -			cooling-maps {
+> > -				map0 {
+> > -					trip =3D <&cpu_throttle_trip>;
+> > -					cooling-device =3D <&throttle_heavy 1 1>;
+> > -				};
+> > -			};
 >=20
-> File does not exist in next and no dependency is mentioned, so tricky to
-> review and figure out context. Without context the comment is:
+> If the hardware mitigation is 'heavy', don't you want to have DVFS acting
+> before hardware throttling ?
 
-Apologies, I have a conversion series for these thermal bindings. I'll
-send those out first.
+The throttling here is in fact some form of DVFS, but yes, generally we
+would likely want to have additional forms of DVFS before we reach this
+state. We could add CPU cooling devices and there's also a mechanism to
+throttle the DRAM frequency on certain boards.
 
-> > @@ -120,6 +120,13 @@ properties:
-> >                # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
-> >                - 3
-> > =20
-> > +          temperature:
-> > +            $ref: /schemas/types.yaml#/definitions/int32
->=20
-> Use -millicelsius suffix instead:
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/pr=
-operty-units.yaml
-
-Okay.
-
-> > +            minimum: -273000
-> > +            maximum: 200000
-> > +            description: The temperature threshold (in millicelsius) t=
-hat,
-> > +              when crossed, will trigger the configured automatic thro=
-ttling.
->=20
-> Don't you want some hysteresis? Or is it already using trips binding?
-> But in that case you should skip the $ref and maximum - they come from
-> thermal-zones, don't they?
-
-We don't use a hysteresis at the moment, but checking the register
-documentation, there's indeed "up" and "down" thresholds, so we can add
-another property for that.
-
-This doesn't use the trips binding and in fact, one of the reasons for
-this change is because we want to make this separate from trip points.
-Trip points are usually associated with cooling devices and this
-throttling mechanism doesn't really fit that concept because it is an
-automatic mechanism that is triggered when a given temperature threshold
-is crossed, rather than a manually activated mechanism, which is what a
-cooling device would be.
+But those are mostly orthogonal to this series. The goal here is to get
+rid of the throttling mechanism as a cooling device.
 
 Thierry
 
---n8oRERorzIEJ3aCU
+--xwrNWjN09bPXOM+0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQ9CnEACgkQ3SOs138+
-s6Hwgg//ej6HrQF29/A2wofCJYWnXGuIdDPJB6IthVMjhGD9+DzNne9c0CVxslRH
-5faMpw7E5yVvfE93O3sj35mmHcTxQacv1zKan6/4L8DL0kTEqPgB3I69zLCku1PH
-PHzxD/r+q+29GExtN0ZlWpyf1aNnHFfUR/xh2e2kXR2C8XqHmEJ56ZMx/2cDJs5x
-hCubIxoKaqu1XUABb/0l7Z/Q/3ng4jtioiuYcc+YIgROW9ag32QuEgeXjpOi2q+1
-zlgBYgRpGe0FD2LaIvusviJOQ9X/mj78gKBwoy5Oh5qZOU2BXLYvF5tLRIRgzaPC
-HEhBenV8ED0+DrisncOKH60pxAvGV0BPmPNr2mijH8iItyu6D9dTJLyYE6GTqR9i
-zBShzFhdjfHA+ETbjkIeA9+ca0vX5+o5ABMG9QR2Cdet/79H9oIR1pO7RJbE6Lz/
-oAz/gusDS55E8Fz09vPSInPI7gj8AD/FYnrKdALKd8GbY1C7ERn4H/LRcUEP+9Te
-JxvvBiKNovT3l4BprfflGFmkfP0iPDKhbDJT3AJl0fiy631VzkEN37LtwSZc8IQj
-cOYQcH6tQaldVNUNLVKesAL3xH51y1hGymNrDUpIqdB/OV6QloXjl9I+ZvE5vjuJ
-NjVkj+OS6NENoGVWJQz4WgMUdxJZMhCI8JjJBb2Xd6AYaljYiZo=
-=CWGp
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQ9DAsACgkQ3SOs138+
+s6FELg/+L3hpRpV39q61zhQbh/YoF7yUOFJNYif7YnBVic6Rl2wVaoV0v8bQhVcx
+h7qTUhSg4nTgwRHzOaPpfAbiTwch7a3hGHJJ9GV6Dpv/2DkGDDiFUur1l84EhX7A
+nNg3PzmbZiig4HRR5qpelCirAWq4iApIuq5AwDjrUScV3bAeVvQSLYQLddnx+/pZ
+kpg9K0XGggfOvgdtaYo2cIDWPTNJYwbSIPUAf2w7valVHb4JOGQlUznp9j+OnZTh
+sX8M9BZBNZ2ri3gB60KcQfWpsleiv49DWo7v7N/ZOtPSOAxLtFZXCvRLJv/0Q2xf
+IN3zCDwlSVw710XqoKAKhmEtYK7Dpj0rQN50UxXASygVr43jBbFH7gJ3E/4rGt6B
+iyZhL+2h4fwhPaPDQh7VZBHIh3iboO9wvGDl6Hjq3M1DxZ07T4HIGl9IrpM+oWDu
+x1fzlFkuDbuH6G8YSKOFn7Bki7BJwOREbTzCMtHdbVwti4mmwe24oPi9Ay8N7nca
+Dh4h0/8J5hfHZYQa8A+xwaMSlziXprZGDOys4tw21v8scj1xxwv/EXkBMncYE0ti
+0LLONmdhycrKY9DtBI6iSDsvRIGbzlTTHGIp3O3nnb74DHtZGx/95GN6GBIGXGp6
+tXFO5FO77thcrhbj3Bkm1Ax/bgFgdaSriA9p62DavTOhP/7lzDA=
+=xoD4
 -----END PGP SIGNATURE-----
 
---n8oRERorzIEJ3aCU--
+--xwrNWjN09bPXOM+0--
