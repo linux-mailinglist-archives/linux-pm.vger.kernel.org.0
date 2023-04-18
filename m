@@ -2,114 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5514E6E6E12
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 23:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4856E6E20
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 23:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjDRVZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 17:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S230523AbjDRV0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 17:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjDRVZB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 17:25:01 -0400
-Received: from sonic307-54.consmr.mail.ir2.yahoo.com (sonic307-54.consmr.mail.ir2.yahoo.com [87.248.110.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC4FB755
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 14:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681853093; bh=gdU7qqet/Ydr3tXK9bfNbFkuWA+0NWpwqLXc4xK5Tow=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VndfbIWGjeTGZv/9fny8Qspxcnl89QCJ1tVeVzp+5pZGGNqZ7B8fGyrpsT0XarhkHFHCez8L55sbf9uLoQHtn+WgeyqzypoSpGNMOdcLEJh57gI7IEFc5JSvolnPtbZI45xbz9/3IoJtn6L7gvLrPe/U29H7B5IpDd+xbl1pz6oFnhgVd+8lgYpUXjvln0ryTV6TEjJQMPUo/Op1RK7a4DQpcjtKINm5c9I2lHzm6L8ufiod2lLg7mc5LTv6hfgTo/JPcfLJgpsReiLnDn2FxmlsILuqihD9bnoKpBur6edwDcWpfD96tuuQIqix/kJdNTybV4hviia6NTlmtudUfQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681853093; bh=gYQxMuH/eHVu0WTkSRf2eXxd22ZMm6D+vJVurJ6Oobs=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WsQyUsh9qviSwoEP73Bw7L3rpE1oPDqqchnRU7CYexWeFbZrGcHeFJlr3Hv9DfJRMcohL4gCrNuWzrvKedAiQShRQOvznT989E8Zx3PPR6U/C53z2OwuW2nW8ro8/87boIv4AYjEJwzfbel3xSQlS3DUabydYAVvRYLIOkMqMNOmAbDFNc/GTTimPhbwiScjpqpwgdWThY8hHFSxS18aLrUudlTzUdKk+zWXokeeG3nH3F1YZ7/y5tLJtzNTgvfBcJAiXvGvKI0vHx8RrjpnzKb9iXt9on/abHeweD0bihkb8JJPUZ37gz/cH23+LUROhqkWC2G0YFeQIvvEO3HC1w==
-X-YMail-OSG: AAOw1xUVM1kBgtadGQ1pt5_ztt8tI9OXA96HYvxTh5lYgGD6oOgv6rknNpLFZek
- bIwbiy442xM10Hsb4ZxuTtz7N0mycF1u9WMN0t9lR0vNO9ZxXJly8htydY2NH5bOrjfDkEEz_Ci2
- hH6e2i.mT7xyAlpibz4ome6crIM_6cqKp1yr6mchi3PEDHwT8YDwLBRWU91Kz645As0vY7LevkpN
- YWEuTcTJUiNhakjVlfnmEQNDb8Pj7poguWC632jKMxzz6P5ecJoRqc7Ujc10WBwVhUGWohwEkJ4V
- umsVa9qKsH9h5CNSgjTm.cc4sQn2yW6VyNgfH4amwfuqcJrakQkrmCQ8lqKj2MpGFX99u8ndvRan
- V.pbAHnEgQxo__RPGP9bSzWw2s5renDAnLtNSlRQ4a5I4JdAlBwtKOMPXESz8leydO5z8yOlS2Nf
- MzKhgg0pWP6EHE4u_Jl9pyKdoIbZMYr94TK5t8NGwgy.SmmaJyVm8pC4jLrvz5StG7uf29WgF2mP
- odK44TAB8YhxsxNfGyEsPn76Ck4ZF6j0JEmb46gkj3m.y8t0zRy1Phxq6mBF.PuvKk9vGRyhCYuG
- BTdsOz7l_vpbVQWLe5s9XXXf.qCvHKAIQrlZFEFzCawYY994neNYy95e7ly3bPoDq4JYaymDqfZd
- arfW458Q48X5KnpnnZiuCZ8XxIUVQ0q.OXY1lMNtzTwPfQnp88LgQGc8a.UOFEvEoZ6xZ6UW9USE
- FC46bv4qhu9eLvYKQdQQzICogbyxPS1tdBWyWwln2PpgomOyuqdV6NHZd1ImBVGUwsDvDwBweEzd
- BuQw2iBz0nKB8DTS6NO8.AFpbOz_xoFmXbtFdkWX.GCbd8sxtp.nJM76SsYLC.1uklJuEJHpDThe
- wLWRstSrmrdlUVLsjj5wh6Sybbf0ulaS1fI86npAqF8CFltUUFt0TdRkEjFMX65HrBgWDdhzYZq.
- trzPrJB3hBqsKeP.97_0nuHvmb1woPYOA_sp12OGYulndTFUo4lNt7klDn_2UUcJC2YPzXfIbqCt
- FCVa5LowS0eCYALlQuQafU1AzT0dMITwgtjfAOdVpyvQeDRdqD1WEz2mD4TVhy9nL6H5K5WdLz8A
- M9_urPpHzV9enNkajSLZ1ueBszgFxHEKLoqQSv5Ziasv6hAWFseP3g.xkTndoNnBaxMXCp.MeJCz
- nZvnFz4_hywbQZSbmgaf8vIZkhbFxeip42xPIr.GfZYVCy5EVny40efjnRdJoQXCh.tyzJCmKxVe
- 5.1KxXSr0bWkcTj0eZ88PHcLA2Hu6CIT3D5y.7epkz0vE3vA.5.UasuK_htf7tOQJQgANXC5S1YY
- miVBikkU7M7tpwjDI.WwQK5ucmPPiDVjzTfWD_bejH5zmInh_bWZw_EP9WRh6PkqkHKlirrhibVH
- IEUWHAOUtLtKpV7uq1FGuLHfztiJHmDFWO5rVf28.t1ixAsczMyRf0tgCZ5ZKdmJE4LvKjmxLw1I
- tIufarPiSHGPmaFnkbUaXJ2yBPY6LIchBZ0aO6YsX4BMCeatT8HZP8enMn9rMEsDcTDVF0atsnvp
- 9unC4D0ZeFWP31gsBDAIneQBt6LVMsEGjWmH4vFS1ZX5xWxa9xMrLG7tAcc3r1mScTUyeDc41FGH
- 5IGU7o8T.xFkOqQB13zgUAsL6BeNfvMHP4ApAuGWfwHRcB4RdpGw0ZLpPNyguETbfVYxGIGnEz21
- .QAT4PIMNH6Dx7H8oPRgW8n3PUOVYpOl4Mwo01E.fmp.e07EtkwYjRXpvn3J67bsn_XYT_hRyBx9
- xNdxqL3yiIYaz7eAD4vyXY352FBnDlIFtoMaqfyms0lwl3ZEsmIyd8WvMYT14u.cWC5jVrXVztHa
- RlScZqMzTE7.X_8RExy7vleVLRNLziJgqzuJpAEJekW16K403QxVi70SvnP2dJ_zlY2DIVmiolot
- JgfENXf5Cmio6pLsZu8..GZIXvbTMmLx8tZicYuclDOcreLbjW4gC.lNsQYwgdL.5w637XSp3hdN
- MIKRVt9ik06_oqR6ShSnfkVx931xD1N7RySdYVLDXKU5a.gmi3D_SceKS3SOeungnNEcW6mYcJIK
- RbmlW9rzeUxbdyElRFqD8F.lldxS9uuv6HakIGFvV9U2GoMlKb6CScmkGLT5Mj4K62Kf2VkUoTUZ
- IZwZSG0tGdGLUWpFnSGaG_.thSpZU7Z2WCxVlYVONEcnQlgKRFAKrI3EodGO.Gq3dBH7bsZFpHHi
- xnITIbFeCsxjPMBrKHXlK0JpYKJwgiKQcjyD3xnjbvhwcrDY1mj.ZU50qKBxu1kRp6YOHuuji7aU
- A6PQ5KcuOpFf0gSGnKj45CC9OZngCZFPq
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 96fd7f1b-8654-4342-bdf4-fbff36d6f360
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Tue, 18 Apr 2023 21:24:53 +0000
-Received: by hermes--production-ir2-74cd8fc864-j696l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 00cb710563690d82660d89732d517195;
-          Tue, 18 Apr 2023 21:24:52 +0000 (UTC)
-Message-ID: <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
-Date:   Tue, 18 Apr 2023 23:24:50 +0200
+        with ESMTP id S229978AbjDRV0a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 17:26:30 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044B9A253
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 14:26:21 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id w1so5310132plg.6
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 14:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681853180; x=1684445180;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+s3EMqZAeyfOHYoph3seGkEJzZXej12XSlXLHkkYBNw=;
+        b=MM/90q9iXuzAGW3/dYvSO/bJkysM3aWDt7nP6GOyHsMN/S3wSENGfUPx9cTDREvyEt
+         voXoH+wWQVX3cvhy67QeEfiFem/zBQ/aZCB2BNM7P/JSRv2iWfGce3p8dOvYhru2EaNG
+         oEBtk85cMBooy2Kosr3XHdI2kk9Hvdv5vvkq7GHc8yQWNuxporWIvx32aqW34VB7jok4
+         U1rHrcIiZDBIPORFQ/Xs/AI6A/Jhh8eWUhNrnHpongbKrn7/x0+2IkCYD8V6pDEWdx5S
+         /FxCxCdpz2Yzy5EBrgS1D7qa1ysQh2UPoxMgb5CVxQuJ7Dqio3SIWWxlJxMlnSHiQeP/
+         cC1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681853180; x=1684445180;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+s3EMqZAeyfOHYoph3seGkEJzZXej12XSlXLHkkYBNw=;
+        b=QP+unJRROqQIey98yZojWZEWo8sNa9BtwSN5LpGd1FRzQ6gKLno1FTNWI0snODETjM
+         19EDpvfZFH/T9snAQeEziCi8Fv8K+Errg/LZW0JnY+XbITSPsSaHlrohdzTg3ZfkWOR4
+         50HbNRaWFmhPJc2F2TPXZ61u1SFhMBgvOaAecOuT5UDMAMfDPqqUikkYG/7WLwuyGsso
+         sO/Uf72m8251/3IpbZkTNfVN/zM/WDaQjgacM6xle1dSOHtQYWx40KYhf6IqH6QWKYQQ
+         hmXvv9IQADZaMP+RNzvEGACqr4JI1VZwwBBvSgbqXXe+pYb0No9xqIE8uBY7cn7A7lcX
+         uUrg==
+X-Gm-Message-State: AAQBX9e79dsA++skzMnlujkEaSbYYtzrTQ8W2yltVCdAlDuZ8s7xzyfH
+        r9jO98lR5qgJlX7KEjohWaMl+aBmTqwNcoFNrjWUCtTm
+X-Google-Smtp-Source: AKy350Z4LXhQHYuLOq2sow/Zp7GTEltU/bkT4+JBlnIeBLgHXTK0wA67HMeNy6TBmqdwWzHXw8uiNA==
+X-Received: by 2002:a05:6a20:3946:b0:ef:b472:ccb6 with SMTP id r6-20020a056a20394600b000efb472ccb6mr1220960pzg.39.1681853180500;
+        Tue, 18 Apr 2023 14:26:20 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a15-20020a63d20f000000b0051b7e3546acsm6834015pgg.22.2023.04.18.14.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 14:26:20 -0700 (PDT)
+Message-ID: <643f0afc.630a0220.9fec2.edd3@mx.google.com>
+Date:   Tue, 18 Apr 2023 14:26:20 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
- lowercase
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1681646904.git.jahau@rocketmail.com>
- <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
- <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.3-rc7-158-ga55dbec19157
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 43 runs,
+ 2 regressions (v6.3-rc7-158-ga55dbec19157)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+pm/testing baseline: 43 runs, 2 regressions (v6.3-rc7-158-ga55dbec19157)
 
-On 16.04.23 20:32, Krzysztof Kozlowski wrote:
-> On 16/04/2023 14:44, Jakob Hauser wrote:
->> Lowercase is preferred for node names.
-> 
-> This will break all existing users. In-tree and out-of-tree. Where is
-> the binding update?
+Regressions Summary
+-------------------
 
-In my reply to Rob's comments in v1 I was pointing out that this will 
-affect an existing driver. There was no reaction.
+platform                     | arch  | lab             | compiler | defconf=
+ig          | regressions
+-----------------------------+-------+-----------------+----------+--------=
+------------+------------
+imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig | 1          =
 
-As far as I can see, there is no in-tree usage yet. Though I can't tell 
-about out-of-tree usage. Although if there is, adding the rt5033-charger 
-driver might already causes the need for changes.
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
+ig          | 1          =
 
-Well, to stay on the safe side, I'll drop this patch in v3 and will 
-change the bindings (patch 9) back to uppercase.
 
-Kind regards,
-Jakob
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.3-rc7=
+-158-ga55dbec19157/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.3-rc7-158-ga55dbec19157
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      a55dbec19157d83e21eb1b8f0cf5a8195d405005 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig          | regressions
+-----------------------------+-------+-----------------+----------+--------=
+------------+------------
+imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/643eff2a2284d354342e85f2
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc7-158-ga55db=
+ec19157/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc7-158-ga55db=
+ec19157/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230414.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/643eff2a2284d354342e85f7
+        failing since 81 days (last pass: v6.1-rc8-156-g0a9e32afe717, first=
+ fail: acpi-6.2-rc6-146-g628c61874ffd)
+
+    2023-04-18T20:35:30.388592  + set +x
+    2023-04-18T20:35:30.388841  [   13.056920] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+930137_1.5.2.3.1>
+    2023-04-18T20:35:30.495994  / # #
+    2023-04-18T20:35:30.597809  export SHELL=3D/bin/sh
+    2023-04-18T20:35:30.598285  #
+    2023-04-18T20:35:30.699683  / # export SHELL=3D/bin/sh. /lava-930137/en=
+vironment
+    2023-04-18T20:35:30.700152  =
+
+    2023-04-18T20:35:30.801462  / # . /lava-930137/environment/lava-930137/=
+bin/lava-test-runner /lava-930137/1
+    2023-04-18T20:35:30.802104  =
+
+    2023-04-18T20:35:30.805186  / # /lava-930137/bin/lava-test-runner /lava=
+-930137/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig          | regressions
+-----------------------------+-------+-----------------+----------+--------=
+------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
+ig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/643f0212b255d1cd042e8622
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc7-158-ga55db=
+ec19157/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
+-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc7-158-ga55db=
+ec19157/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
+-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230414.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/643f0212b255d1cd042e8=
+623
+        failing since 0 day (last pass: v6.3-rc6-135-g5235219c59f8, first f=
+ail: v6.3-rc7-153-gbc538c8be4bd) =
+
+ =20
