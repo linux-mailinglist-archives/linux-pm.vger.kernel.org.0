@@ -2,119 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDC26E622C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 14:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65856E6519
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 14:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjDRMas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 08:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S229972AbjDRM5U convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 18 Apr 2023 08:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjDRMah (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 08:30:37 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFFAC150
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 05:30:15 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94eee951c70so232852566b.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 05:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681821012; x=1684413012;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RebJ7KlFGR0siwm86EnWjSWViyEw3vNqJd5Fx0fargE=;
-        b=k3rBsl8R6I0HUCPUtWmkwwHa+e/z8pHzk0R2ccAZV/j1MR8yHhrOp6+nakU++RBlOE
-         oZ294IzekZCd1ikt+zahhPJh6+D3BSTUdQ55qFFwg6L9CyM5NlusLR9boEHOyrO5J6d7
-         4u0bJUCGZCEFDdJabe+uOqJSo5gTFcjpW3St9LClsEnucWhWBR7kpmvqUJLGK2v9lD4U
-         O/DxYDMOz0XGh6v1PkxXAiYeXbw1xGg2FN4G4zY7IcwCIvdzKD9pFOgz0xjM3vf1M19F
-         HQitsfLoO/LlpA9sC5mg1ORedYHgrX6k/4+JdvkgcR/f9cUdDmcUt8ARabKBOtEYaz1v
-         93SQ==
+        with ESMTP id S229504AbjDRM5T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 08:57:19 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D373581;
+        Tue, 18 Apr 2023 05:57:18 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5067716f9e7so582832a12.0;
+        Tue, 18 Apr 2023 05:57:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681821012; x=1684413012;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RebJ7KlFGR0siwm86EnWjSWViyEw3vNqJd5Fx0fargE=;
-        b=dIZUx0TsuyncUYZ+uHf6TRwldPd6zt4FuTDi1ZFKLQHEv+70QKTdJECzIUNgK0Bn1M
-         u/CAKwCu1xfR/3QMV1KFyJ51Lm824vj3s7EhTid2lAkj/tW8egc0++skQbAp8ZZkTfAe
-         OqmCc9T0KWFftuvU+hNI+mXKUa6YoG4c9Har0cJTeOHUMawMvpbMlu8X6XfySw6ou/SE
-         NHD4funZkQuHqHD/50LBzDncHvKJ0D71YUhRGokM+8yUto7toN/sUZqrR4WyvLYu6IB2
-         SZBTwrX3lPE0S1CkgxeR8s+Pj2F/yr6tlqQubDZZ0n86ZDyg1j2zK0v2FMSoFoDbGFp6
-         Yj5A==
-X-Gm-Message-State: AAQBX9fKek4PkZEhwIj/EimLxm/lUm4FcOPz6BXX8kWXeJdDU1HwQx1Q
-        yILBNbYLOuYcxyLEwzYRlJYQHg==
-X-Google-Smtp-Source: AKy350YfhlmHlX4w/RB2R+FFmHcIcze1lh7/khJZjO6qYv8P8AseVca5DA+ke0RMIVkCXuUL7N9wig==
-X-Received: by 2002:aa7:c6ce:0:b0:506:741e:5c1b with SMTP id b14-20020aa7c6ce000000b00506741e5c1bmr1796854eds.12.1681821011855;
-        Tue, 18 Apr 2023 05:30:11 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id d12-20020a50fe8c000000b00504c33675cesm7010724edt.35.2023.04.18.05.30.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 05:30:11 -0700 (PDT)
-Message-ID: <d0071447-8521-1a71-6978-7a0f7f6f7d41@linaro.org>
-Date:   Tue, 18 Apr 2023 14:30:10 +0200
+        d=1e100.net; s=20221208; t=1681822637; x=1684414637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o7EH+OiQQWS3SSmVWRfh6k6IhcaxgkbEID60apQt6+E=;
+        b=PVqEirSWOCUi8HZdnZrD4zI3GKCMp3b5Kym3GOUKFYchEkplTl7AxiNDVo+aRkHzl3
+         0h2EJAwzkmtFyQurMeleM/CwEJ9juaPs5ATKujiwUcgcwosrWcvuxMM580YCrbqC/qNi
+         skOHTaUWw8ojNWEuv38UoFYZUhK3lTAz4SzZJqFYa54gw1d4/I9L4XEinuUqw+ozjZ0n
+         JMV+90Cfd2SCuWyVKNTJNewr0YJ7osz/CAYd34Wlh+pVomLY0SO3MQIa9ofvuxqVGKhL
+         79N8nIy3ua1pg5jI9XwvBTR4hXHDRm1wfLkDvd29DwPmFv0UHGa+0jmExjWo+iyfhfsG
+         yuSQ==
+X-Gm-Message-State: AAQBX9fNO99PCyKooTehtwCU7VMCLKJQbBsRq6WWQqv8cCkq9cNj63s0
+        43hBkoOHS84Zgvy5CnxFVtULyLE/hNAeYU6vB+8=
+X-Google-Smtp-Source: AKy350YcISS/PquK9G1zrP4kh7Hc7lKIaI1otJM07VGdGGwnWApG2qhYMDdnuFyynrQZ6TQon16a+qaeftwSYRWpg2U=
+X-Received: by 2002:a05:6402:2692:b0:506:6c2a:528f with SMTP id
+ w18-20020a056402269200b005066c2a528fmr15872373edd.4.1681822636603; Tue, 18
+ Apr 2023 05:57:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 4/6] dt-bindings: power: supply: add MAX77659 charger
- binding
-Content-Language: en-US
-To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
- <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
- <5ba4295f-1197-913c-b1eb-a23798c3badf@linaro.org>
- <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
- <1e1fb90a-43c0-3b0a-ab7a-8ca3ce8b02ed@linaro.org>
- <MN2PR03MB51977056C2DC014B0BC7D40F8B9D9@MN2PR03MB5197.namprd03.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MN2PR03MB51977056C2DC014B0BC7D40F8B9D9@MN2PR03MB5197.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230418113459.12860-1-sumitg@nvidia.com> <20230418113459.12860-2-sumitg@nvidia.com>
+In-Reply-To: <20230418113459.12860-2-sumitg@nvidia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 18 Apr 2023 14:57:05 +0200
+Message-ID: <CAJZ5v0iMcVZMd3YpEC++BZzCwOM2ocYQuK98tm9gQq0fjO41gg@mail.gmail.com>
+Subject: Re: [Patch 1/6] cpufreq: use correct unit when verify cur freq
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     viresh.kumar@linaro.org, rafael@kernel.org,
+        ionela.voinescu@arm.com, mark.rutland@arm.com,
+        sudeep.holla@arm.com, lpieralisi@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, vsethi@nvidia.com, sdonthineni@nvidia.com,
+        sanjayc@nvidia.com, ksitaraman@nvidia.com, bbasu@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/04/2023 11:41, Arslanbenzer, Zeynep wrote:
->>>> No, use suffixes for common units.
->>>
->>> Hi Krzysztof,
->>>
->>> Thank you for your review. The possible register values of the fast charge safety timer are described in the datasheet as follows. I was undecided about using the common unit, second, as it may affect the comprehensibility of the code. Of course, I can use second as the common unit if you think it's more appropriate.
->>
->> This is quite common property, so I do not understand why this one driver should have it written differently. I understand that parsing
->> 0/1/2/3 is easier for the machine than 0/3/5/7 but it is not easier for humans.
-> 
-> I referenced property-units.yaml for common units.
-> 
-> As I understood hours and minutes are not common units in Linux for time so I cannot use them as suffixes. Therefore, I thought I had to use "seconds" instead of "hours" or "minutes". I am totally fine if I can use " adi,fast-charge-timer-hours" and "adi,topoff-timer-minutes". 
+On Tue, Apr 18, 2023 at 1:35 PM Sumit Gupta <sumitg@nvidia.com> wrote:
+>
+> From: Sanjay Chandrashekara <sanjayc@nvidia.com>
+>
+> cpufreq_verify_current_freq checks if the frequency returned by
+> the hardware has a slight delta with the valid frequency value
+> last set and returns "policy->cur" if the delta is within "1 MHz".
+> In the comparison, "policy->cur" is in "kHz" but it's compared
+> against HZ_PER_MHZ. So, the comparison range becomes "1 GHz".
+> Fix this by comparing against KHZ_PER_MHZ instead of HZ_PER_MHZ.
+>
+> Fixes: f55ae08c8987 ("cpufreq: Avoid unnecessary frequency updates due to mismatch")
+> Signed-off-by: Sanjay Chandrashekara <sanjayc@nvidia.com>
+> [ sumit gupta: Commit message update ]
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 8b0509f89f1b..6b52ebe5a890 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1732,7 +1732,7 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
+>                  * MHz. In such cases it is better to avoid getting into
+>                  * unnecessary frequency updates.
+>                  */
+> -               if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
+> +               if (abs(policy->cur - new_freq) < KHZ_PER_MHZ)
+>                         return policy->cur;
+>
+>                 cpufreq_out_of_sync(policy, new_freq);
+> --
 
-Wrap your replies to match mailing list style.
-
-Yeah... indeed... because it should not be in DTS in the first place.
-It's not a property of the hardware, so the same as with other drivers -
-we don't store it in DT. Check other maxim drivers.
-
-> 
->>
->>>
->>> 0b00 = Timer disabled
->>> 0b01 = 3 hours
->>> 0b10 = 5 hours
->>> 0b11 = 7 hours
-Best regards,
-Krzysztof
-
+So this is a fix that can be applied separately from the rest of the
+series, isn't it?
