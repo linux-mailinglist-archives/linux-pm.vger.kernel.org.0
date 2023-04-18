@@ -2,307 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6A26E6007
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 13:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDC26E622C
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 14:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjDRLin (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 07:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S231544AbjDRMas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 08:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjDRLil (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 07:38:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B8793F8
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 04:38:17 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94a34e3526fso663055566b.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 04:38:17 -0700 (PDT)
+        with ESMTP id S231607AbjDRMah (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 08:30:37 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFFAC150
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 05:30:15 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94eee951c70so232852566b.3
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 05:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681817896; x=1684409896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2WGHQ4pweNGFtMFZrNERPvaF8bW/gfHqLJ3MdOLvojw=;
-        b=3mZQM680g0A4oB1bUKqA10kScudEElxU2M7gQ1uvBHeX69gO2MxAZ0Agmm4SNRZbqk
-         qdK9Lx2i/qXcIaueNhcKnXaR312LCujuN6wB9Q1E7S1a+2LThlnsIUIFv+N2x0wNub46
-         9iDZEsBM1xd9gjcERF8PzUh8ev8oEK9IFLwn6SiTFZ5/DABvohDm9FKNxE9gVshIPqtR
-         UqBS9/6ZfdEM/U/8fbEsR5MuKdMyA5v9HksOhXKPnKDd7/POMnjecbKl4AxlwKcBmEX2
-         Nz68Fj4vDLcEmPq3lhtW5m9au0njJiEi4yCJv+aS70X+p8b2aYD//l4P4fvHBOinGBT4
-         cZKw==
+        d=linaro.org; s=google; t=1681821012; x=1684413012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RebJ7KlFGR0siwm86EnWjSWViyEw3vNqJd5Fx0fargE=;
+        b=k3rBsl8R6I0HUCPUtWmkwwHa+e/z8pHzk0R2ccAZV/j1MR8yHhrOp6+nakU++RBlOE
+         oZ294IzekZCd1ikt+zahhPJh6+D3BSTUdQ55qFFwg6L9CyM5NlusLR9boEHOyrO5J6d7
+         4u0bJUCGZCEFDdJabe+uOqJSo5gTFcjpW3St9LClsEnucWhWBR7kpmvqUJLGK2v9lD4U
+         O/DxYDMOz0XGh6v1PkxXAiYeXbw1xGg2FN4G4zY7IcwCIvdzKD9pFOgz0xjM3vf1M19F
+         HQitsfLoO/LlpA9sC5mg1ORedYHgrX6k/4+JdvkgcR/f9cUdDmcUt8ARabKBOtEYaz1v
+         93SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681817896; x=1684409896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2WGHQ4pweNGFtMFZrNERPvaF8bW/gfHqLJ3MdOLvojw=;
-        b=iDvLuBhwIymna6/vLtjEVUDsa9eEJtt5N/H5VD5Nad388uiskp3DQc2p8sgkqPo6aB
-         MQajVwRHdkka0AZI3t+L0IwgcSPoURA4zSY6cs4TaDPFyJISJFFw9ZARAsOqySTEb2yz
-         S0ao9ERJbAnCWrlbqa67NU1b/1+kOMEmDw7wpOgw8axNsbcyH8E6GUn2kxNG/P71sU3k
-         FdA0SbCyrUm1U4cmK9nfxKeYD8+XYwnu9If4qGevVdroFJ3TtDLOoIZjcn/ZZNKITvt2
-         TGwlSmuDG/utlY+f5msyQzUzUYWVLZWqWE3eL/6KaQXwbla9u3BebS/zaSYYIkvUJf8s
-         W8sQ==
-X-Gm-Message-State: AAQBX9ehPxCzOZR8hV85bAxWU97ID5SSIbw3ENGs2BxS7NSyfjfazYt1
-        kDY497CjA5+Rx8H/lhUm4W/2RYbeKZc6nAg528/EUA==
-X-Google-Smtp-Source: AKy350bxplDJsnCYTxx+swlOy0CuJ8Mz3uz9/H8MY7xPsfi1oVIkmtQZ/ETJiRYiVhn57K0pafXhmOVzHZQ3zZIpUz8=
-X-Received: by 2002:aa7:db97:0:b0:501:d43e:d1e5 with SMTP id
- u23-20020aa7db97000000b00501d43ed1e5mr1682237edt.2.1681817895745; Tue, 18 Apr
- 2023 04:38:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681821012; x=1684413012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RebJ7KlFGR0siwm86EnWjSWViyEw3vNqJd5Fx0fargE=;
+        b=dIZUx0TsuyncUYZ+uHf6TRwldPd6zt4FuTDi1ZFKLQHEv+70QKTdJECzIUNgK0Bn1M
+         u/CAKwCu1xfR/3QMV1KFyJ51Lm824vj3s7EhTid2lAkj/tW8egc0++skQbAp8ZZkTfAe
+         OqmCc9T0KWFftuvU+hNI+mXKUa6YoG4c9Har0cJTeOHUMawMvpbMlu8X6XfySw6ou/SE
+         NHD4funZkQuHqHD/50LBzDncHvKJ0D71YUhRGokM+8yUto7toN/sUZqrR4WyvLYu6IB2
+         SZBTwrX3lPE0S1CkgxeR8s+Pj2F/yr6tlqQubDZZ0n86ZDyg1j2zK0v2FMSoFoDbGFp6
+         Yj5A==
+X-Gm-Message-State: AAQBX9fKek4PkZEhwIj/EimLxm/lUm4FcOPz6BXX8kWXeJdDU1HwQx1Q
+        yILBNbYLOuYcxyLEwzYRlJYQHg==
+X-Google-Smtp-Source: AKy350YfhlmHlX4w/RB2R+FFmHcIcze1lh7/khJZjO6qYv8P8AseVca5DA+ke0RMIVkCXuUL7N9wig==
+X-Received: by 2002:aa7:c6ce:0:b0:506:741e:5c1b with SMTP id b14-20020aa7c6ce000000b00506741e5c1bmr1796854eds.12.1681821011855;
+        Tue, 18 Apr 2023 05:30:11 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id d12-20020a50fe8c000000b00504c33675cesm7010724edt.35.2023.04.18.05.30.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 05:30:11 -0700 (PDT)
+Message-ID: <d0071447-8521-1a71-6978-7a0f7f6f7d41@linaro.org>
+Date:   Tue, 18 Apr 2023 14:30:10 +0200
 MIME-Version: 1.0
-References: <20230405100907.53740-1-bchihi@baylibre.com>
-In-Reply-To: <20230405100907.53740-1-bchihi@baylibre.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Tue, 18 Apr 2023 13:37:41 +0200
-Message-ID: <CAGuA+orohjh8YrO18jAntZif-OyYOkzMQEAOjC8_X2wUqEfckw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/6] dt-bindings: power: supply: add MAX77659 charger
+ binding
+Content-Language: en-US
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+ <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
+ <5ba4295f-1197-913c-b1eb-a23798c3badf@linaro.org>
+ <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
+ <1e1fb90a-43c0-3b0a-ab7a-8ca3ce8b02ed@linaro.org>
+ <MN2PR03MB51977056C2DC014B0BC7D40F8B9D9@MN2PR03MB5197.namprd03.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MN2PR03MB51977056C2DC014B0BC7D40F8B9D9@MN2PR03MB5197.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 12:09=E2=80=AFPM <bchihi@baylibre.com> wrote:
->
-> From: Balsam CHIHI <bchihi@baylibre.com>
->
-> Add AP Domain thermal zones for the mt8195 and
-> specify the targeted temperature thresholds.
->
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
->
-> ---
-> This patch squashes and replaces
->
-> [PATCH 3/4] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-> https://lore.kernel.org/all/20230307154524.118541-4-bchihi@baylibre.com/
->
-> and
->
-> [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain temperature thres=
-holds
-> https://lore.kernel.org/all/20230307154524.118541-5-bchihi@baylibre.com/
->
-> of the series
->
-> [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-> https://lore.kernel.org/all/20230307154524.118541-1-bchihi@baylibre.com/
-> ---
-> ---
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 180 +++++++++++++++++++++++
->  1 file changed, 180 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt8195.dtsi
-> index 972c5b86ddae..75da456c512b 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -2909,5 +2909,185 @@ map0 {
->                                 };
->                         };
->                 };
-> +
-> +               vpu0-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_VPU0>;
-> +
-> +                       trips {
-> +                               vpu0_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               vpu0_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               vpu1-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_VPU1>;
-> +
-> +                       trips {
-> +                               vpu1_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               vpu1_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               gpu0-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_GPU0>;
-> +
-> +                       trips {
-> +                               gpu0_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               gpu0_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               gpu1-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_GPU1>;
-> +
-> +                       trips {
-> +                               gpu1_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               gpu1_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               vdec-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_VDEC>;
-> +
-> +                       trips {
-> +                               vdec_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               vdec_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               img-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_IMG>;
-> +
-> +                       trips {
-> +                               img_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               img_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               infra-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_INFRA>;
-> +
-> +                       trips {
-> +                               infra_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               infra_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               cam0-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_CAM0>;
-> +
-> +                       trips {
-> +                               cam0_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               cam0_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               cam1-thermal {
-> +                       polling-delay =3D <1000>;
-> +                       polling-delay-passive =3D <250>;
-> +                       thermal-sensors =3D <&lvts_ap MT8195_AP_CAM1>;
-> +
-> +                       trips {
-> +                               cam1_alert: trip-alert {
-> +                                       temperature =3D <85000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "passive";
-> +                               };
-> +
-> +                               cam1_crit: trip-crit {
-> +                                       temperature =3D <100000>;
-> +                                       hysteresis =3D <2000>;
-> +                                       type =3D "critical";
-> +                               };
-> +                       };
-> +               };
->         };
->  };
-> --
-> 2.34.1
->
+On 18/04/2023 11:41, Arslanbenzer, Zeynep wrote:
+>>>> No, use suffixes for common units.
+>>>
+>>> Hi Krzysztof,
+>>>
+>>> Thank you for your review. The possible register values of the fast charge safety timer are described in the datasheet as follows. I was undecided about using the common unit, second, as it may affect the comprehensibility of the code. Of course, I can use second as the common unit if you think it's more appropriate.
+>>
+>> This is quite common property, so I do not understand why this one driver should have it written differently. I understand that parsing
+>> 0/1/2/3 is easier for the machine than 0/3/5/7 but it is not easier for humans.
+> 
+> I referenced property-units.yaml for common units.
+> 
+> As I understood hours and minutes are not common units in Linux for time so I cannot use them as suffixes. Therefore, I thought I had to use "seconds" instead of "hours" or "minutes". I am totally fine if I can use " adi,fast-charge-timer-hours" and "adi,topoff-timer-minutes". 
 
-Hello Matthias,
+Wrap your replies to match mailing list style.
 
-Is there any news about this patch?
+Yeah... indeed... because it should not be in DTS in the first place.
+It's not a property of the hardware, so the same as with other drivers -
+we don't store it in DT. Check other maxim drivers.
 
+> 
+>>
+>>>
+>>> 0b00 = Timer disabled
+>>> 0b01 = 3 hours
+>>> 0b10 = 5 hours
+>>> 0b11 = 7 hours
 Best regards,
-Balsam
+Krzysztof
+
