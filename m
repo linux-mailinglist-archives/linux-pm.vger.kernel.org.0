@@ -2,122 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772F06E5A05
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 09:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DB86E5A1C
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 09:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjDRHE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 03:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
+        id S230244AbjDRHJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 03:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjDRHE6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 03:04:58 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DB198E
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 00:04:56 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id xi5so70553860ejb.13
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 00:04:56 -0700 (PDT)
+        with ESMTP id S229655AbjDRHJf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 03:09:35 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905871BFD
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 00:09:33 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fy21so27604630ejb.9
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 00:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681801494; x=1684393494;
+        d=linaro.org; s=google; t=1681801772; x=1684393772;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2WhHYJYuhXskgCt8P+rWi6MuOTcoPNUz8qBRPdqCUvo=;
-        b=kfEJdGpu4mcY9/ND1iACqI3ApTNBoJQgxiYe4R8Bt0ggC5waO4AOTmqsksRsiIl69z
-         WkOmFKzjWW+M6QEnLPLY5GPtfwclJVQQEGpwIicK0i29UWm3KUF8w7dYqnaBehQSWfBO
-         rcczfJ7SUQ7LxoiNsWQ+4X0LwnztqHRN9JuQeZsEpk7IeEYDfwWgouW7GLL9+MEV0kZj
-         VE122snZI2xMLFfHPNZcSVOoh3qlJ4+JN7QziFK6eWCw+SU/7yUnWDni7yyv+6XnxwMk
-         tltoMjBhRmOndobU5tChMPE7XsKLnjR+odVvpt1vuR9GQ1rSX/b6vL2TXFiPSe0omv5q
-         NsOw==
+        bh=dqMfJus3L0V4CyqoNejxJugqIJ1uzJrSENoG5X9s2es=;
+        b=kFY3dQGNsxc32413uTKo3YYtXO1uo0wqJ9v3pELM+0DKD0eFCTHEgXAQE38mHy1TTL
+         zC1iVLEJXjk6xMfzWygTXPCavXcmH/0dfY2bgNZ7r5F5vxzMAUPLPsW2HqAGOAMx/rpX
+         tIUOkORAfvCNOQnADkn3PCcTq2jzvntvhonX3ihrkb0BBP+adrSp+V+SmXRrFi+blHJv
+         4nfgiqq49/6NpKbjA2wQORNFAze4GyWB02a+1IxGURXBJoFxmYAjl5hemtgRL01NW3b3
+         eTDs1TAiKjSptXmbxJM3cXtFAhz07CepQufWWWvsfHD7a3098RaAMNtYpBgrQdQWzUxU
+         ObMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681801494; x=1684393494;
+        d=1e100.net; s=20221208; t=1681801772; x=1684393772;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WhHYJYuhXskgCt8P+rWi6MuOTcoPNUz8qBRPdqCUvo=;
-        b=YWYJvjz8YotL6JxO0JYmqaRFGKQzwv6CrXx2rj22jXQvaX1A0cjK11NKJMyKK08zlb
-         xl7LDqsVTgryES7/DTNdkojvjpXoOFePcDSnt5Lryy72bd/+sN7da0dJCd89B9EcIgv8
-         t35jI+FQM489FzcIHY2C1WQ/WBQENKQPKH226yW/w2t/e9D9917TOAR/kW7zT5ff+1SR
-         ScoOPnKdCXqX6VNdfd1lf9FEfKb/zH5CaxCwmp5DV1glSe9t4BDBWCAf37/NbnaZfFdv
-         47D6m8D1fKN0nAOl87xFbewjBJidjvjLZNA1Fu/ljIsInVMPzIdaIOJW3LUuZa4XXRsl
-         5N8A==
-X-Gm-Message-State: AAQBX9fjO6oUK/paCHpNfXMzmcc1+IgcBZ9cmToJ+sxdkr59Gi7mIMIj
-        69aIw4MnMkfyB698mZahIAJ/cQ==
-X-Google-Smtp-Source: AKy350bvvxWv0MaXOCX/mRjN7rgY+3X62SrGNyVxmEt7DdeR0qfPOUZz9zMNRmA6wBR9oNJjW7Xbtg==
-X-Received: by 2002:a17:907:1701:b0:933:3a22:8513 with SMTP id le1-20020a170907170100b009333a228513mr11209930ejc.53.1681801494526;
-        Tue, 18 Apr 2023 00:04:54 -0700 (PDT)
+        bh=dqMfJus3L0V4CyqoNejxJugqIJ1uzJrSENoG5X9s2es=;
+        b=LeC+xri5hxeUvjlJ5YpsQ8E1Z5oa94wOtvSYzgxchXaQzZEH0KPfV+7j4KBCAuPADC
+         InfB2Ydhq7DiMThs+irYAYtcVe19eAdwCnXAFR8v3MxZlYQkPB5vmGuso/Hhvm9HpamH
+         bM6bL8bDOMHioh7vWdaOKEwS1gHpkIjSXr0tj4XKEmXtX8hG/GdMWLgmjZsg941kY//8
+         vJ85RV96ReEFpSF1hJH6A2lWA3it7JjRWYm1OqJ2UnXS3VD32Rg7YOQn4sbieS8Uqne1
+         pilXcoS1olaIglCMxutWF+G8MEVt1YLt3gYCjRv8NvoYuA5g222/PXv7mD+JunaBHfdj
+         NX9w==
+X-Gm-Message-State: AAQBX9d4JudcdcpPgdwwFpMIPKTyvIGPkzmZqs7Znxge8CaMfWLTB3Qw
+        gA1y4Iu+m4MxSlj0LNM4fpCUUw==
+X-Google-Smtp-Source: AKy350ZGZ/VpT5OUrMXdnOaMJ4x+Z8GPooB3COD1bqfek+cE8WIKQde6hNPA3G9felheu0+s90+oHg==
+X-Received: by 2002:a17:906:73d3:b0:94f:80d6:b825 with SMTP id n19-20020a17090673d300b0094f80d6b825mr4972685ejl.19.1681801772040;
+        Tue, 18 Apr 2023 00:09:32 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id gb32-20020a170907962000b0094f34fe27c6sm4122421ejc.170.2023.04.18.00.04.53
+        by smtp.gmail.com with ESMTPSA id gx18-20020a1709068a5200b0094f16a3ea9csm4768239ejc.117.2023.04.18.00.09.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 00:04:54 -0700 (PDT)
-Message-ID: <6d24511a-69dd-e99c-09d2-53cc3e80bd5e@linaro.org>
-Date:   Tue, 18 Apr 2023 09:04:52 +0200
+        Tue, 18 Apr 2023 00:09:31 -0700 (PDT)
+Message-ID: <1e1fb90a-43c0-3b0a-ab7a-8ca3ce8b02ed@linaro.org>
+Date:   Tue, 18 Apr 2023 09:09:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
+Subject: Re: [PATCH 4/6] dt-bindings: power: supply: add MAX77659 charger
+ binding
 Content-Language: en-US
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230413131705.3073911-1-brgl@bgdev.pl>
- <20230413131705.3073911-2-brgl@bgdev.pl>
- <3e361a73-797f-41c7-1ead-ecafee3928e4@linaro.org>
- <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+ <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
+ <5ba4295f-1197-913c-b1eb-a23798c3badf@linaro.org>
+ <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+In-Reply-To: <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/04/2023 06:39, Shazad Hussain wrote:
-> 
-> 
-> On 4/13/2023 9:42 PM, Krzysztof Kozlowski wrote:
->> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
->>> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+On 17/04/2023 23:43, Arslanbenzer, Zeynep wrote:
+>> On 20/12/2022 14:22, Zeynep Arslanbenzer wrote:
+>>> This patch adds device tree binding documentation for MAX77659 charger.
+>>
+>> Do not use "This commit/patch".
+>> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst*L95__;>Iw!!A3Ni8CS0y2Y!-AnHmIThbB5Q88_dFdveEmsXlsfflRXDabf6RVE5ySRusMxP24NEfAr8RCsu26LTvoaIIMvEDr2YxDECrGlMwR8-ywvoR62rXB0W$ 
+>>
 >>>
->>> Remove the power on reasons with reboot from the pmm8654au_0_pon.
->>> Instead, the PoN reaons should be part of different sdam_0 mode, to
+>>> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>>
+>>> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>>
+>>> ---
+>>>  .../power/supply/adi,max77659-charger.yaml    | 42 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  1 +
+>>>  2 files changed, 43 insertions(+)
+>>>  create mode 100644 
+>>> Documentation/devicetree/bindings/power/supply/adi,max77659-charger.ya
+>>> ml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.
+>>> yaml 
+>>> b/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.
+>>> yaml
+>>> new file mode 100644
+>>> index 000000000000..24f8b5a2bd84
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77659-char
+>>> +++ ger.yaml
+>>> @@ -0,0 +1,42 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
+>>> +---
+>>> +$id: 
+>>> +https://urldefense.com/v3/__http://devicetree.org/schemas/power/suppl
+>>> +y/adi,max77659-charger.yaml*__;Iw!!A3Ni8CS0y2Y!-AnHmIThbB5Q88_dFdveEm
+>>> +sXlsfflRXDabf6RVE5ySRusMxP24NEfAr8RCsu26LTvoaIIMvEDr2YxDECrGlMwR8-ywv
+>>> +oR5rKUR11$
+>>> +$schema: 
+>>> +https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.y
+>>> +aml*__;Iw!!A3Ni8CS0y2Y!-AnHmIThbB5Q88_dFdveEmsXlsfflRXDabf6RVE5ySRusM
+>>> +xP24NEfAr8RCsu26LTvoaIIMvEDr2YxDECrGlMwR8-ywvoRy_yWWBS$
+>>> +
+>>> +title: Battery charger for MAX77659 PMIC from ADI.
 >>
->> typo: reasons
+>> Drop full stop.
 >>
->>> be interoduced.
+>>> +
+>>> +maintainers:
+>>> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>>
+>>> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>>
+>>> +
+>>> +description: |
+>>> +  This module is part of the MAX77659 MFD device. For more details
+>>> +  see Documentation/devicetree/bindings/mfd/adi,max77659.yaml.
+>>> +
+>>> +  The charger is represented as a sub-node of the PMIC node on the device tree.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: adi,max77659-charger
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  adi,fast-charge-timer:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: Fast-charge safety timer value (in hours).
 >>
->> introduced
->>
->> Anyway it does not say why. Are these power reasons not correct?
->>
+>> No, use suffixes for common units.
 > 
 > Hi Krzysztof,
-> Since sm8350 the PMIC PON peripheral was split into PON_HLOS and PON_PBS
-> to avoid security concerns with HLOS APPS being able to trigger a PMIC
-> WARM_RESET unilaterally. When the split occurred, the spare registers
-> ended up in PON_PBS, not PON_HLOS. Thus at that time, we moved to using
-> an SDAM register for Linux “reboot reason” configuration. And bootloader
-> also SDAM register to get these reboot region data to get into
-> bootloader/edl, so to have this working we need to use SDAM.
+> 
+> Thank you for your review. The possible register values of the fast charge safety timer are described in the datasheet as follows. I was undecided about using the common unit, second, as it may affect the comprehensibility of the code. Of course, I can use second as the common unit if you think it's more appropriate.
 
-The explanation of their correctness should be in commit msg.
+This is quite common property, so I do not understand why this one
+driver should have it written differently. I understand that parsing
+0/1/2/3 is easier for the machine than 0/3/5/7 but it is not easier for
+humans.
+
+> 
+> 0b00 = Timer disabled 
+> 0b01 = 3 hours 
+> 0b10 = 5 hours 
+> 0b11 = 7 hours
+> 
+>>
+>>> +
+>>> +  adi,fast-charge-microamp:
+>>> +    description: Fast-charge constant current value.
+>>
+>>> +
+>>> +  adi,topoff-timer:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: Top-Off timer value (in minutes).
+>>
+>> No, use suffixes for common units.
+> 
+> Similar case:
+> 
+> 0b000 = 0 minutes 
+> 0b001 = 5 minutes 
+> 0b010 = 10 minutes 
+> 0b011 = 15 minutes 
+> 0b100 = 20 minutes 
+> 0b101 = 25 minutes 
+> 0b110 = 30 minutes 
+> 0b111 = 35 minutes
+
+Come on, this is easy to parse. Divide by 5 and where is the code
+complexity?
 
 Best regards,
 Krzysztof
