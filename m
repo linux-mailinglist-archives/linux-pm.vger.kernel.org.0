@@ -2,112 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47AE6E688B
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 17:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAE46E6914
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 18:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDRPrU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 18 Apr 2023 11:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S230523AbjDRQNl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 12:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDRPrT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 11:47:19 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9969B6A78;
-        Tue, 18 Apr 2023 08:47:18 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-94a342f4c8eso123189466b.0;
-        Tue, 18 Apr 2023 08:47:18 -0700 (PDT)
+        with ESMTP id S229984AbjDRQNk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 12:13:40 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A798D9015
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 09:13:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id dx24so30578262ejb.11
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 09:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681834417; x=1684426417;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yAv9XfH/Gcbn1WieuwEvWfpJNF3KgicHWHVmjLoU5QE=;
+        b=MOZwPa2rZB8kg7oVKePNVH/IS83tGzcDvxbHwZxW5aRMpXwgvke/oJZec/7r9KPsY3
+         /E8Ce3dkKnCCrUxgibxQN16BRAxOMC4RmGaeBGabXCiF6zMrlK47/JZpIeI8/5JmPZEz
+         NZ4yPoOe1Ry1UEt9Z2sG5hi5WriW2nMsXn+bTnPUjiF+harlrfN+Bk5hrpjjz9JiQzPF
+         xuVCtk/vM5L0Fra6G3Uc4z4BB8VZNTYHoJVlJ+8BBbADzpoS09u48P0ahanKIlzrgM/S
+         JQlgY4PfvsdS+AjVCjQ4jZvDcqZQ513NQrJip4eUyPIJkhoQJVnoFbej9rJYei4K9HYu
+         AP5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681832837; x=1684424837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/C5xzvKXqZCUa27kLtUoyGZHoFI/e2eInwPXH6CQKpg=;
-        b=GF8/a8V3xSJ+OKGlN/dIVkefG2Q6gJSjp1AQrwz2Fs+QeHeDqnf4btM+spe3bocixx
-         yezFRJMUBgymyxJOyGsYDliA12ptp9WvXkfSp3Sf8pB2iLG6hxFRKxZ9evnphNkmrwOm
-         dQx+lqrNaPP7m9fOx9/LijHI5s+9HJQfEZnrvM+XqOPTwp2cVcESoFz5/Mx/CAR9wVyx
-         70NKjLEgQIwlTqF0BwYH1w2e4wSowX6UZzI4iGD1IEC2GQHO67X0LToISJ3QgO5AISFh
-         yzxPBb2BCHYLW/I4XBjN2RmC+4Hr4UNOaTyEbCnl1YOiXCNxuYn7Doa9CyS2vPvzXM+3
-         +8Xg==
-X-Gm-Message-State: AAQBX9eSea+GVfvKl5LGlbZlYZ4oDiYfOyRarFiCBRHcGJorHKB2GB+T
-        b3vpNFZivIQ1kRCK83MIqJ7eEHe9NkaZAMQZZAw=
-X-Google-Smtp-Source: AKy350bR1pRIrCDZkJlL+PMiZMWZJeYK2qJ+XLvLIYMJTyiImERuWcqTTASca8hy0sWmGrAGieeqdZl5XqmIPznM90w=
-X-Received: by 2002:a17:906:7a45:b0:94e:9235:d77e with SMTP id
- i5-20020a1709067a4500b0094e9235d77emr11000217ejo.3.1681832837131; Tue, 18 Apr
- 2023 08:47:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681834417; x=1684426417;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yAv9XfH/Gcbn1WieuwEvWfpJNF3KgicHWHVmjLoU5QE=;
+        b=emdxzK/lpJ+jyCBgeImCpryL3aN9ZClEosEWUcdOGZxUcw9Bs2RZ8FUVNzrBGOoaDH
+         qs4fn8au+xxKP/bMO9BldgQ52QyjjqownnNGhPsOutmQb2hjAOL3t4w2uU0DW0nvozmn
+         EWynCHU3SDcZBd+tjugDRKT0SPIv/c0oSQmkpSb1HMB7oK9atdgboKPrkxQbwu6W+bmF
+         g5UzOc0Gh8w6jQcKRnPzehF1XZh8CYJJFpKVtDzpJXcze9FGdgXFqzCbqFssN28lhoFf
+         aNae9jKHK6Vwu9HLJL1ruEaJE55i7RuWI2u9wOROwAoNh1MkurtbYrcZQoEnsy3flm+Y
+         8kEQ==
+X-Gm-Message-State: AAQBX9d38+kB/Zo+9svJ2Ug5Jel3e3qvcXx3Fooo/BpbkbFPHtf6/sVC
+        v+NWgzwA+W8fLZ0R4BsS6Rg4GA==
+X-Google-Smtp-Source: AKy350byU7g05KQNnXaqyBGpF+lgnwfZRRpo4F2yMSsK2H8utAP+tW7wFMY1VbL1Ti9JpKY1Kq+r0Q==
+X-Received: by 2002:a17:907:9197:b0:94f:553:6fd6 with SMTP id bp23-20020a170907919700b0094f05536fd6mr10080280ejb.24.1681834417139;
+        Tue, 18 Apr 2023 09:13:37 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id xd10-20020a170907078a00b0095328ce9c8bsm729247ejb.67.2023.04.18.09.13.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 09:13:36 -0700 (PDT)
+Message-ID: <df267337-f258-4fbc-0fdb-ddfe31761ffa@linaro.org>
+Date:   Tue, 18 Apr 2023 18:13:35 +0200
 MIME-Version: 1.0
-References: <20230418113459.12860-1-sumitg@nvidia.com> <20230418113459.12860-2-sumitg@nvidia.com>
- <CAJZ5v0iMcVZMd3YpEC++BZzCwOM2ocYQuK98tm9gQq0fjO41gg@mail.gmail.com> <05feec0c-c94a-a0e7-3636-1927f6621cb9@nvidia.com>
-In-Reply-To: <05feec0c-c94a-a0e7-3636-1927f6621cb9@nvidia.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 18 Apr 2023 17:47:06 +0200
-Message-ID: <CAJZ5v0hU1rDrkqHzKG=NiFmSNh+-8gQWLWOXsMKrhg8BOO1V_g@mail.gmail.com>
-Subject: Re: [Patch 1/6] cpufreq: use correct unit when verify cur freq
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org,
-        ionela.voinescu@arm.com, mark.rutland@arm.com,
-        sudeep.holla@arm.com, lpieralisi@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com, sdonthineni@nvidia.com,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, bbasu@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 01/10] dt-bindings: thermal: tegra: Document throttle
+ temperature
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20230414125721.1043589-1-thierry.reding@gmail.com>
+ <20230414125721.1043589-2-thierry.reding@gmail.com>
+ <187d51b3-6fec-7a25-e472-3d9020c12db5@linaro.org> <ZD0KdAXyi0Ex1JOU@orome>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZD0KdAXyi0Ex1JOU@orome>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 3:32 PM Sumit Gupta <sumitg@nvidia.com> wrote:
->
->
->
-> On 18/04/23 18:27, Rafael J. Wysocki wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Tue, Apr 18, 2023 at 1:35 PM Sumit Gupta <sumitg@nvidia.com> wrote:
-> >>
-> >> From: Sanjay Chandrashekara <sanjayc@nvidia.com>
-> >>
-> >> cpufreq_verify_current_freq checks if the frequency returned by
-> >> the hardware has a slight delta with the valid frequency value
-> >> last set and returns "policy->cur" if the delta is within "1 MHz".
-> >> In the comparison, "policy->cur" is in "kHz" but it's compared
-> >> against HZ_PER_MHZ. So, the comparison range becomes "1 GHz".
-> >> Fix this by comparing against KHZ_PER_MHZ instead of HZ_PER_MHZ.
-> >>
-> >> Fixes: f55ae08c8987 ("cpufreq: Avoid unnecessary frequency updates due to mismatch")
-> >> Signed-off-by: Sanjay Chandrashekara <sanjayc@nvidia.com>
-> >> [ sumit gupta: Commit message update ]
-> >> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> >> ---
-> >>   drivers/cpufreq/cpufreq.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >> index 8b0509f89f1b..6b52ebe5a890 100644
-> >> --- a/drivers/cpufreq/cpufreq.c
-> >> +++ b/drivers/cpufreq/cpufreq.c
-> >> @@ -1732,7 +1732,7 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
-> >>                   * MHz. In such cases it is better to avoid getting into
-> >>                   * unnecessary frequency updates.
-> >>                   */
-> >> -               if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
-> >> +               if (abs(policy->cur - new_freq) < KHZ_PER_MHZ)
-> >>                          return policy->cur;
-> >>
-> >>                  cpufreq_out_of_sync(policy, new_freq);
-> >> --
-> >
-> > So this is a fix that can be applied separately from the rest of the
-> > series, isn't it?
->
-> Yes.
+On 17/04/2023 10:59, Thierry Reding wrote:
+> On Fri, Apr 14, 2023 at 11:47:56PM +0200, Krzysztof Kozlowski wrote:
+>> On 14/04/2023 14:57, Thierry Reding wrote:
+>>> From: Thierry Reding <treding@nvidia.com>
+>>>
+>>> Each throttling configuration needs to specify the temperature threshold
+>>> at which it should start throttling. Previously this was tied to a given
+>>> trip point as a cooling device and used the temperature specified for
+>>> that trip point. This doesn't work well because the throttling mechanism
+>>> is not a cooling device in the traditional sense.
+>>>
+>>> Instead, allow device trees to specify the throttle temperature in the
+>>> throttle configuration directly so that the throttle doesn't need to be
+>>> exposed as a cooling device.
+>>>
+>>> Signed-off-by: Thierry Reding <treding@nvidia.com>
+>>> ---
+>>>  .../bindings/thermal/nvidia,tegra124-soctherm.yaml         | 7 +++++++
+>>>  1 file changed, 7 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
+>>> index 4677ad6645a5..37dac851f486 100644
+>>> --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
+>>> +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
+>>
+>> File does not exist in next and no dependency is mentioned, so tricky to
+>> review and figure out context. Without context the comment is:
+> 
+> Apologies, I have a conversion series for these thermal bindings. I'll
+> send those out first.
+> 
+>>> @@ -120,6 +120,13 @@ properties:
+>>>                # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
+>>>                - 3
+>>>  
+>>> +          temperature:
+>>> +            $ref: /schemas/types.yaml#/definitions/int32
+>>
+>> Use -millicelsius suffix instead:
+>> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+> 
+> Okay.
+> 
+>>> +            minimum: -273000
+>>> +            maximum: 200000
+>>> +            description: The temperature threshold (in millicelsius) that,
+>>> +              when crossed, will trigger the configured automatic throttling.
+>>
+>> Don't you want some hysteresis? Or is it already using trips binding?
+>> But in that case you should skip the $ref and maximum - they come from
+>> thermal-zones, don't they?
+> 
+> We don't use a hysteresis at the moment, but checking the register
+> documentation, there's indeed "up" and "down" thresholds, so we can add
+> another property for that.
+> 
+> This doesn't use the trips binding and in fact, one of the reasons for
+> this change is because we want to make this separate from trip points.
+> Trip points are usually associated with cooling devices and this
+> throttling mechanism doesn't really fit that concept because it is an
+> automatic mechanism that is triggered when a given temperature threshold
+> is crossed, rather than a manually activated mechanism, which is what a
+> cooling device would be.
 
-So applied as 6.4 material.
+OK, I just wasn't sure if the binding already includes trips, which
+would mean you should use existing 'temperature' property.
+
+In such case, I think it's better to switch to property with common unit
+- millicelsius, either low/high ranges or with hysteresis.
+
+Best regards,
+Krzysztof
+
