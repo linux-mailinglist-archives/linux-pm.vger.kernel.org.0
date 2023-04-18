@@ -2,246 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74BB6E6DAC
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 22:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5514E6E6E12
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 23:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbjDRUsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 16:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S232884AbjDRVZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 17:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjDRUsa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 16:48:30 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9A2183
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 13:48:27 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2a8baeac4d1so21287461fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 13:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681850906; x=1684442906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNwxn7R3RC0Mn5I/0czxoNzHSIGSOJyF/CObdh+ww64=;
-        b=J1q4mU0mtcCp+gqTWSS4C6bpd4cupq8q6sAEwQfqiFGPLQAPMSyiHy/uYXZT4F9SRZ
-         AtqC+bEjUfoAg81CcnbkU/ovGrOwFX1o8CX8ZRuQtzxpxIu3oz3S025ofBgKe0709mTc
-         2/PWQ8ijlH2cSxALOas5Bb/hG60plEe09kKqqb7XpL+/UD41M5DelghqzAf8NbL5CDqX
-         xfzDLiGkY+r/xvkF/y37bVFo92E56lG2b8FLIQrHqpgZkSz4wDf2h+TN/0gzerhzEGm6
-         BwDlAwMJY2mR4ilSTxODWOL0MO+RvNWQl90UuVlwgHYuoAWmn+opAdafmeqaGg5+imo6
-         posA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681850906; x=1684442906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNwxn7R3RC0Mn5I/0czxoNzHSIGSOJyF/CObdh+ww64=;
-        b=XtroAiraTyimRCxVWFjaUrhfR28ac0CIq8lOWeG0fE5fm82gYs3Ii9RFnpf1c27D11
-         4dEQ3ZlBazfQ7fRsEUox/FEzKXZfCrPdotEy5Cq9+K0a7X+4ZEfXpKz4J8CbGAi86aBU
-         onb1TG0PMWQ2dXK/UeXFGItt32xIYIDmO4FOf7Ziz5W5MbAewOEac7TKgp3eaB3e1Sv6
-         3ycy3EtowcPBRjdpwo20xz5Wv2zbwZl5b/OuuCSMwT7PRq6E4hlGz/0PBM9I/taFJrac
-         hhFAGxQXlRxk09e3mI9sLkkL2Lsfe78HA+5pVmKevdnLAgSVLUafAC7g0wWMTz2PQQCk
-         S9Wg==
-X-Gm-Message-State: AAQBX9fx+L+EzBMqyfa2rul1wscbSq0IdI/D+BmpETQFMcc7EEZlZXtU
-        edqoEp5gH0hdlbsjAYaOzgxcFw==
-X-Google-Smtp-Source: AKy350Y0rp9M04y2mgcsfCadZ2RsHQeKO2g8fIO9Z9SyLGPsCtSR3WQdzlGY3R8UACvAURNVFgwfYw==
-X-Received: by 2002:ac2:4155:0:b0:4e8:44a5:6018 with SMTP id c21-20020ac24155000000b004e844a56018mr3426540lfi.44.1681850906209;
-        Tue, 18 Apr 2023 13:48:26 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id a14-20020ac2520e000000b004cc8196a308sm2475903lfl.98.2023.04.18.13.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 13:48:25 -0700 (PDT)
-Message-ID: <0d071242-5851-7311-694a-b5b437a3a276@linaro.org>
-Date:   Tue, 18 Apr 2023 22:48:23 +0200
+        with ESMTP id S231373AbjDRVZB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 17:25:01 -0400
+Received: from sonic307-54.consmr.mail.ir2.yahoo.com (sonic307-54.consmr.mail.ir2.yahoo.com [87.248.110.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC4FB755
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 14:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681853093; bh=gdU7qqet/Ydr3tXK9bfNbFkuWA+0NWpwqLXc4xK5Tow=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VndfbIWGjeTGZv/9fny8Qspxcnl89QCJ1tVeVzp+5pZGGNqZ7B8fGyrpsT0XarhkHFHCez8L55sbf9uLoQHtn+WgeyqzypoSpGNMOdcLEJh57gI7IEFc5JSvolnPtbZI45xbz9/3IoJtn6L7gvLrPe/U29H7B5IpDd+xbl1pz6oFnhgVd+8lgYpUXjvln0ryTV6TEjJQMPUo/Op1RK7a4DQpcjtKINm5c9I2lHzm6L8ufiod2lLg7mc5LTv6hfgTo/JPcfLJgpsReiLnDn2FxmlsILuqihD9bnoKpBur6edwDcWpfD96tuuQIqix/kJdNTybV4hviia6NTlmtudUfQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681853093; bh=gYQxMuH/eHVu0WTkSRf2eXxd22ZMm6D+vJVurJ6Oobs=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WsQyUsh9qviSwoEP73Bw7L3rpE1oPDqqchnRU7CYexWeFbZrGcHeFJlr3Hv9DfJRMcohL4gCrNuWzrvKedAiQShRQOvznT989E8Zx3PPR6U/C53z2OwuW2nW8ro8/87boIv4AYjEJwzfbel3xSQlS3DUabydYAVvRYLIOkMqMNOmAbDFNc/GTTimPhbwiScjpqpwgdWThY8hHFSxS18aLrUudlTzUdKk+zWXokeeG3nH3F1YZ7/y5tLJtzNTgvfBcJAiXvGvKI0vHx8RrjpnzKb9iXt9on/abHeweD0bihkb8JJPUZ37gz/cH23+LUROhqkWC2G0YFeQIvvEO3HC1w==
+X-YMail-OSG: AAOw1xUVM1kBgtadGQ1pt5_ztt8tI9OXA96HYvxTh5lYgGD6oOgv6rknNpLFZek
+ bIwbiy442xM10Hsb4ZxuTtz7N0mycF1u9WMN0t9lR0vNO9ZxXJly8htydY2NH5bOrjfDkEEz_Ci2
+ hH6e2i.mT7xyAlpibz4ome6crIM_6cqKp1yr6mchi3PEDHwT8YDwLBRWU91Kz645As0vY7LevkpN
+ YWEuTcTJUiNhakjVlfnmEQNDb8Pj7poguWC632jKMxzz6P5ecJoRqc7Ujc10WBwVhUGWohwEkJ4V
+ umsVa9qKsH9h5CNSgjTm.cc4sQn2yW6VyNgfH4amwfuqcJrakQkrmCQ8lqKj2MpGFX99u8ndvRan
+ V.pbAHnEgQxo__RPGP9bSzWw2s5renDAnLtNSlRQ4a5I4JdAlBwtKOMPXESz8leydO5z8yOlS2Nf
+ MzKhgg0pWP6EHE4u_Jl9pyKdoIbZMYr94TK5t8NGwgy.SmmaJyVm8pC4jLrvz5StG7uf29WgF2mP
+ odK44TAB8YhxsxNfGyEsPn76Ck4ZF6j0JEmb46gkj3m.y8t0zRy1Phxq6mBF.PuvKk9vGRyhCYuG
+ BTdsOz7l_vpbVQWLe5s9XXXf.qCvHKAIQrlZFEFzCawYY994neNYy95e7ly3bPoDq4JYaymDqfZd
+ arfW458Q48X5KnpnnZiuCZ8XxIUVQ0q.OXY1lMNtzTwPfQnp88LgQGc8a.UOFEvEoZ6xZ6UW9USE
+ FC46bv4qhu9eLvYKQdQQzICogbyxPS1tdBWyWwln2PpgomOyuqdV6NHZd1ImBVGUwsDvDwBweEzd
+ BuQw2iBz0nKB8DTS6NO8.AFpbOz_xoFmXbtFdkWX.GCbd8sxtp.nJM76SsYLC.1uklJuEJHpDThe
+ wLWRstSrmrdlUVLsjj5wh6Sybbf0ulaS1fI86npAqF8CFltUUFt0TdRkEjFMX65HrBgWDdhzYZq.
+ trzPrJB3hBqsKeP.97_0nuHvmb1woPYOA_sp12OGYulndTFUo4lNt7klDn_2UUcJC2YPzXfIbqCt
+ FCVa5LowS0eCYALlQuQafU1AzT0dMITwgtjfAOdVpyvQeDRdqD1WEz2mD4TVhy9nL6H5K5WdLz8A
+ M9_urPpHzV9enNkajSLZ1ueBszgFxHEKLoqQSv5Ziasv6hAWFseP3g.xkTndoNnBaxMXCp.MeJCz
+ nZvnFz4_hywbQZSbmgaf8vIZkhbFxeip42xPIr.GfZYVCy5EVny40efjnRdJoQXCh.tyzJCmKxVe
+ 5.1KxXSr0bWkcTj0eZ88PHcLA2Hu6CIT3D5y.7epkz0vE3vA.5.UasuK_htf7tOQJQgANXC5S1YY
+ miVBikkU7M7tpwjDI.WwQK5ucmPPiDVjzTfWD_bejH5zmInh_bWZw_EP9WRh6PkqkHKlirrhibVH
+ IEUWHAOUtLtKpV7uq1FGuLHfztiJHmDFWO5rVf28.t1ixAsczMyRf0tgCZ5ZKdmJE4LvKjmxLw1I
+ tIufarPiSHGPmaFnkbUaXJ2yBPY6LIchBZ0aO6YsX4BMCeatT8HZP8enMn9rMEsDcTDVF0atsnvp
+ 9unC4D0ZeFWP31gsBDAIneQBt6LVMsEGjWmH4vFS1ZX5xWxa9xMrLG7tAcc3r1mScTUyeDc41FGH
+ 5IGU7o8T.xFkOqQB13zgUAsL6BeNfvMHP4ApAuGWfwHRcB4RdpGw0ZLpPNyguETbfVYxGIGnEz21
+ .QAT4PIMNH6Dx7H8oPRgW8n3PUOVYpOl4Mwo01E.fmp.e07EtkwYjRXpvn3J67bsn_XYT_hRyBx9
+ xNdxqL3yiIYaz7eAD4vyXY352FBnDlIFtoMaqfyms0lwl3ZEsmIyd8WvMYT14u.cWC5jVrXVztHa
+ RlScZqMzTE7.X_8RExy7vleVLRNLziJgqzuJpAEJekW16K403QxVi70SvnP2dJ_zlY2DIVmiolot
+ JgfENXf5Cmio6pLsZu8..GZIXvbTMmLx8tZicYuclDOcreLbjW4gC.lNsQYwgdL.5w637XSp3hdN
+ MIKRVt9ik06_oqR6ShSnfkVx931xD1N7RySdYVLDXKU5a.gmi3D_SceKS3SOeungnNEcW6mYcJIK
+ RbmlW9rzeUxbdyElRFqD8F.lldxS9uuv6HakIGFvV9U2GoMlKb6CScmkGLT5Mj4K62Kf2VkUoTUZ
+ IZwZSG0tGdGLUWpFnSGaG_.thSpZU7Z2WCxVlYVONEcnQlgKRFAKrI3EodGO.Gq3dBH7bsZFpHHi
+ xnITIbFeCsxjPMBrKHXlK0JpYKJwgiKQcjyD3xnjbvhwcrDY1mj.ZU50qKBxu1kRp6YOHuuji7aU
+ A6PQ5KcuOpFf0gSGnKj45CC9OZngCZFPq
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 96fd7f1b-8654-4342-bdf4-fbff36d6f360
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Tue, 18 Apr 2023 21:24:53 +0000
+Received: by hermes--production-ir2-74cd8fc864-j696l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 00cb710563690d82660d89732d517195;
+          Tue, 18 Apr 2023 21:24:52 +0000 (UTC)
+Message-ID: <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
+Date:   Tue, 18 Apr 2023 23:24:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 2/5] arm64: dts: qcom: sa8775p: add the pcie smmu node
-Content-Language: en-US
-To:     Eric Chanudet <echanude@redhat.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Sebastian Reichel <sre@kernel.org>,
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
+ lowercase
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>
-References: <20230417125844.400782-1-brgl@bgdev.pl>
- <20230417125844.400782-3-brgl@bgdev.pl>
- <20230418165224.vmok75fwcjqdxspe@echanude>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230418165224.vmok75fwcjqdxspe@echanude>
-Content-Type: text/plain; charset=UTF-8
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1681646904.git.jahau@rocketmail.com>
+ <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
+ <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Krzysztof,
 
+On 16.04.23 20:32, Krzysztof Kozlowski wrote:
+> On 16/04/2023 14:44, Jakob Hauser wrote:
+>> Lowercase is preferred for node names.
+> 
+> This will break all existing users. In-tree and out-of-tree. Where is
+> the binding update?
 
-On 18.04.2023 18:52, Eric Chanudet wrote:
-> On Mon, Apr 17, 2023 at 02:58:41PM +0200, Bartosz Golaszewski wrote:
->> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>
->> Add the PCIe SMMU node for sa8775p platforms.
->>
->> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 74 +++++++++++++++++++++++++++
->>  1 file changed, 74 insertions(+)
-> 
-> Hi Bartosz,
-> 
-> Adding Shazad.
-> 
-> I upgraded to the meta Shazad mentioned in v2[1], but I still get a
-> synchronous external abort on reboot:
-Taking a look at downstream, looks like:
+In my reply to Rob's comments in v1 I was pointing out that this will 
+affect an existing driver. There was no reaction.
 
-- it's marked as dma-coherent
-- it expects interconnects (MAS_PCIE[01]<->SLV_EBI1)
+As far as I can see, there is no in-tree usage yet. Though I can't tell 
+about out-of-tree usage. Although if there is, adding the rt5033-charger 
+driver might already causes the need for changes.
 
-Perhaps that's worth looking into
+Well, to stay on the safe side, I'll drop this patch in v3 and will 
+change the bindings (patch 9) back to uppercase.
 
-Konrad
-
-> 
-> [    8.285500] arm-smmu 15200000.iommu: disabling translation
-> 4      12.145913 Injecting instruction/data abort to VM 3, original ESR_EL2 = 0x93800047, fault VA = 0xffff80000a080000, fault IPA = 0x15200000, ELR_EL2 = 0xffffae99a42c96e4
-> [    8.310145] Internal error: synchronous external abort: 0000000096000010 [#1] PREEMPT SMP
-> [    8.316561] Modules linked in: qcom_pon crct10dif_ce gpucc_sa8775p i2c_qcom_geni spi_geni_qcom ufs_qcom phy_qcom_qmp_ufs socinfo fuse ipv6
-> [    8.331284] CPU: 4 PID: 1 Comm: systemd-shutdow Not tainted 6.3.0-rc7-next-20230417-00014-g93340f644112 #136
-> [    8.341365] Hardware name: Qualcomm SA8775P Ride (DT)
-> [    8.346555] pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    8.353705] pc : arm_smmu_device_shutdown+0x64/0x154
-> [    8.358815] lr : arm_smmu_device_shutdown+0x3c/0x154
-> [    8.363915] sp : ffff80000805bc00
-> [    8.367322] x29: ffff80000805bc00 x28: ffff69c250ca0000 x27: 0000000000000000
-> [    8.374643] x26: ffffae99a53357f8 x25: 0000000000000001 x24: ffffae99a60d5028
-> [    8.381963] x23: ffff69c2516ab890 x22: ffffae99a614e218 x21: ffff69c251668c10
-> [    8.389283] x20: ffff69c2516ab810 x19: ffff69c251479a80 x18: 0000000000000006
-> [    8.396603] x17: 0000000000000014 x16: 0000000000000030 x15: ffff80000805b5d0
-> [    8.403923] x14: 0000000000000000 x13: ffffae99a5ce1a28 x12: 00000000000005eb
-> [    8.411243] x11: 00000000000001f9 x10: ffffae99a5d39a28 x9 : ffffae99a5ce1a28
-> [    8.418563] x8 : 00000000ffffefff x7 : ffffae99a5d39a28 x6 : 80000000fffff000
-> [    8.425884] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
-> [    8.433204] x2 : 0000000000000000 x1 : ffff80000a080000 x0 : 0000000000000001
-> [    8.440524] Call trace:
-> [    8.443039]  arm_smmu_device_shutdown+0x64/0x154
-> [    8.447784]  platform_shutdown+0x24/0x34
-> [    8.451821]  device_shutdown+0x150/0x258
-> [    8.455857]  kernel_restart+0x40/0xc0
-> [    8.459623]  __do_sys_reboot+0x1f0/0x274
-> [    8.463656]  __arm64_sys_reboot+0x24/0x30
-> [    8.467778]  invoke_syscall+0x48/0x114
-> [    8.471633]  el0_svc_common+0x40/0xf4
-> [    8.475397]  do_el0_svc+0x3c/0x9c
-> [    8.478806]  el0_svc+0x2c/0x84
-> [    8.481947]  el0t_64_sync_handler+0xf4/0x120
-> [    8.486334]  el0t_64_sync+0x190/0x194
-> [    8.490100] Code: f9400404 b50005e4 f9400661 52800020 (b9000020) 
-> [    8.496361] ---[ end trace 0000000000000000 ]---
-> 
-> [1] https://lore.kernel.org/linux-arm-kernel/24804682-6ead-03b1-8b21-3ac413187c4a@quicinc.com/
-> 
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->> index 2343df7e0ea4..a23175352a20 100644
->> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->> @@ -809,6 +809,80 @@ apps_smmu: iommu@15000000 {
->>  				     <GIC_SPI 891 IRQ_TYPE_LEVEL_HIGH>;
->>  		};
->>  
->> +		pcie_smmu: iommu@15200000 {
->> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
->> +			reg = <0x0 0x15200000 0x0 0x80000>;
->> +			#iommu-cells = <2>;
->> +			#global-interrupts = <2>;
->> +
->> +			interrupts = <GIC_SPI 920 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 921 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 925 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 926 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 927 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 928 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 950 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 951 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 954 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 955 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 885 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 886 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 887 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 888 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 842 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 843 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 844 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 845 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 847 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 802 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 806 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 807 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 808 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 809 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 812 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 813 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 814 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 837 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 838 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 839 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 854 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 855 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 791 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 792 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 794 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 795 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 796 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 639 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 640 IRQ_TYPE_LEVEL_HIGH>;
->> +		};
->> +
->>  		intc: interrupt-controller@17a00000 {
->>  			compatible = "arm,gic-v3";
->>  			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
->> -- 
->> 2.37.2
->>
-> 
+Kind regards,
+Jakob
