@@ -2,69 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAF46E5F57
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 13:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F7A6E5FEC
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 13:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjDRLHu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 07:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S230318AbjDRLf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 07:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjDRLHs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 07:07:48 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9C79023
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 04:07:39 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-246f856d751so1283698a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 04:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681816059; x=1684408059;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zDmdnYkrRsVLcM/fIF2OxJcDEalGG6RopeRGnFvRntc=;
-        b=VRpxTimAgMA56gLQ08ehSoedum/znkkhlByUD5h84MBsVKyG/yElvGEWdqiDnLcRtl
-         6pk42sjIAs9nLDyFnFtFpJWd+YXAnyFhQrkUXprpWdiXphYeunthiJtJEgWfmqiAdPh2
-         QrZn6L69g4XfpYGbbfIx0dqqQSyHhiLFDm1wmDJOCCKQ02KfvInvnwEYTzHAuBcVXUMZ
-         CqMOuLDpKNm1CTSIg6ZbJAZ5w9l94VBxG2XdK/6NNUmE5N/YLo84KIaWHNat5NF8pbp9
-         y2YgbwhG78kRzBms7cutK3lt7yELzK6xIgCuc4ivUq4UDumAPcSXOZ6ZnyTTw8hyMeli
-         8TWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681816059; x=1684408059;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zDmdnYkrRsVLcM/fIF2OxJcDEalGG6RopeRGnFvRntc=;
-        b=YLqZMLBr6/Blyd4ZQzWStSr9dglkJ8BG/PwT8hdYTwYJdrf1qK8XIyjy1UIMAm6VJQ
-         n5BpcROx9EXGHQPN2581XSOv2oMd9ek91u40hGkTYNwC7/fei5S6VMuBAYqtPSmffIB0
-         YAmIHVCLLeXhF+YFatc4y6+0DqdYoU56zT9tLipTk1x07z8kt7uOJkEP/6nb/nK8ANeu
-         t0+Jze5AojODKJRvMzRFPMxoho+AN1eQZIF62cjV2G/3jqzzkGkETm5EmfbbRWDBoXAI
-         9WVgs/CPnQFNOeT+cYgdmSHRavEqQ2JeCXZPL/UCbkDKPcu2GHWd1CSR5WQwlnPShgz5
-         Q1Yw==
-X-Gm-Message-State: AAQBX9e23d89FV4yS1fRU7RGp4qYA3Iv7pkPFYN5/XvssBGK767PQ+V8
-        kzws9yYp/JB2nJJ0y9MXGURIu+/WU8Kh5Jlwc5NE3uXQ
-X-Google-Smtp-Source: AKy350bk2kE9DZ7peqM5TjNellA3JddUKi8e00P5pWDv+0U0J6Vakmn0h5LRpump9eDUd9YRWJ9gJw==
-X-Received: by 2002:a17:90b:2251:b0:247:3c8e:dc1f with SMTP id hk17-20020a17090b225100b002473c8edc1fmr1636870pjb.19.1681816058820;
-        Tue, 18 Apr 2023 04:07:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id gw7-20020a17090b0a4700b002349608e80csm8519246pjb.47.2023.04.18.04.07.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 04:07:38 -0700 (PDT)
-Message-ID: <643e79fa.170a0220.8b7bc.2c46@mx.google.com>
-Date:   Tue, 18 Apr 2023 04:07:38 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230253AbjDRLf2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 07:35:28 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BF31713;
+        Tue, 18 Apr 2023 04:35:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ANJ4XgoT6V86Tv9n+mIfL2LfOshy8Aq1GELWEJFuymWKDB4KudSLsfj+oeW+wqKc5dXfB4Z8fhmlOBIoBmMKBa0qxGKb4QChIKxY7WgG0rA+1FjPMkIEcLxVYBRTBuiv9QFZYTxh88/U6OwPlq0W/9cvYDoylqrEeaLnHGZfhefIW/ReXiNHt6XlMexc53caMBvH415hxTWjyVIgkzx6DS5mtrspDGgBu+w+sNUP6/sO08+HS+IFfDuA6p0qhIi45pSryDH35ddQPFrBCjVTkk6vQaV6yREDx00JUmkGKKVKNyUYm7466nulLu9aR9yYOTsAAKF6fBNPPXcIqiMshA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1rlalZ4WigH/v+i2a2I2HwqhljC7aMXGN7wsDQyCVTY=;
+ b=JA/+MNq4NiJ1rCJVU0fWRTcFRChlVyxCE2+zi6gIH8fZXqkyDAIyu7maeHGXv0/UDT4QpDVKGhhDtgWfdbLD4XvwzCYGM7U6WZtn9mC//bc5tCO4uIcJzo0r/13pXi1XeFeQKaBOocWOJIYmkZWk34ebHBeOfvlV70ZTX4mEFbc/itFyUk7Vr66GFvfwlfMKwwJyBHnAOpdyWAQ/Wghs59Jg6fGP5FrnYiBwje7YLZ8l6lAW4Y47x4SjNa6inWucJQdB35AMbAy8Eu+tK5CrCU8siN3diBU7ugtykONLgNhcpwFonugcV4muHkV3VZ4L09NMsPXmjFm+U3mQ5PC/zA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1rlalZ4WigH/v+i2a2I2HwqhljC7aMXGN7wsDQyCVTY=;
+ b=OkStxcaWWHjiL6YqZFiRFVnllJCCFlFgLtypRp6ro3GG3II+DZ/zzqd6EedVLkfxuYK/jubeu4FEcJ5wkc8jbtwIhXXR6yr0HvdPrKlrIshXrj5AIkkbsbgwD82qKuSoj5Ffq2Tw6iR/B8cqWKE0ejGJmI0jOi6j3VT4aP1z11OQ7mfsYk36XARlUKb0oiw8X202aFqXLly7h1Ql1Kh/HfCZH5EPTUEV/ZPcuhxeKt/rF0OLtTHqmIEhaFNLGi4jZCcdoz9ZYkzApTdPsyWgUXlsMKi9Rx/2/CcFd7t1RXiRcg9wmWrtp6lwNV2wFdDwX4PJgAbE5NY7CdD0NLrjGw==
+Received: from BN0PR02CA0033.namprd02.prod.outlook.com (2603:10b6:408:e5::8)
+ by BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 11:35:24 +0000
+Received: from BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e5:cafe::f9) by BN0PR02CA0033.outlook.office365.com
+ (2603:10b6:408:e5::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.47 via Frontend
+ Transport; Tue, 18 Apr 2023 11:35:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT077.mail.protection.outlook.com (10.13.177.232) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 11:35:23 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 18 Apr 2023
+ 04:35:18 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Tue, 18 Apr 2023 04:35:18 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Tue, 18 Apr 2023 04:35:13 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <ionela.voinescu@arm.com>, <mark.rutland@arm.com>,
+        <sudeep.holla@arm.com>, <lpieralisi@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
+        <sdonthineni@nvidia.com>, <sanjayc@nvidia.com>,
+        <ksitaraman@nvidia.com>, <bbasu@nvidia.com>, <sumitg@nvidia.com>
+Subject: [Patch 0/6] CPPC_CPUFREQ improvements for Tegra241
+Date:   Tue, 18 Apr 2023 17:04:53 +0530
+Message-ID: <20230418113459.12860-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.3-rc7-153-gbc538c8be4bd
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 43 runs,
- 2 regressions (v6.3-rc7-153-gbc538c8be4bd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT077:EE_|BN9PR12MB5115:EE_
+X-MS-Office365-Filtering-Correlation-Id: 023b8b46-5602-48b5-3cec-08db4000ffe9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GAcF1SFX95nxGzcZn5KCe6dcONgrVOk1uxjzmkGKARNOq1XDvffMF3oQOu2Q7woS5ZIaHci2br7UjcaXEz8hcPMgiR8G71UCh4At4CVGHlQRL4+cLsto2nyCb0p+IvOGNLa0GYBXsJbcofOk0Ut2aG66ReF0dAg59T33FUMO07i3+Dcc+HTH6JCL61xYG+QMbuWEtqWffokBHiJVQR4uJN7vYi3W0AjPtoyNUqg1RsPrjy0skDHYrEUEZ8sCE4JmK3/B0tggDvceFPpdtbvaWVpJeT8U7YS6zoL5WaM5FKh94hzrXHqrGq3eHa2xAoEn3qzh1/UBK9cqIcX6mpTe0ogYa6oPr6yyTVjZT/oA4GXUwQnd/2xJsvHkIgXoCuoM7ZHHjhcftijsBViyu9BGy3y59VnZn+IZvja6F4H0mk6SI9Ewm27k5HRPVAPBQwL/4n3xrRJf6Kd9GCRm0zV0D+A0XYEf+EgOIK0gUvQeXNA/JfsNWCQAPE4uKQ3/B8m3qNRo6RXbp1zneru/kjWSwVlSUN4DePUjxegA4ylgq5a9qMnaDgLap0UeCW2hjLNvQi6VxCs7JsLo32nFcx++fVx+GPDTPQaYN640XQYJq+ssdYpj9c86StTQYzOvFx7cOviQHieh031uF4crOXUGA/8IlQgi4eIpvhU9JfZjFYpfoSb7R1SoliKMrd4EDcEaAOM+npGhUql72bWZWjbOQCYOBsdhZRtnYDGu7f31QvshwR0QK65RhW8nfI8yosWO5fAPsgRsRUH0OBBwba8xHHJ49RJ7Xtg2w9EITsKnHb8=
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199021)(36840700001)(40470700004)(46966006)(36756003)(8936002)(8676002)(40460700003)(5660300002)(7416002)(2906002)(4744005)(82310400005)(86362001)(40480700001)(34020700004)(478600001)(7696005)(6666004)(54906003)(110136005)(186003)(107886003)(2616005)(36860700001)(1076003)(70586007)(70206006)(26005)(41300700001)(356005)(82740400003)(316002)(7636003)(83380400001)(4326008)(47076005)(426003)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 11:35:23.8679
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 023b8b46-5602-48b5-3cec-08db4000ffe9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5115
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,120 +108,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 43 runs, 2 regressions (v6.3-rc7-153-gbc538c8be4bd)
+This patch series contains improvements and changes needed to get a
+stable value of current CPU frequency from "cpuinfo_cur_freq" sysfs
+node in Tegra241 SoC. All the CPU's in Tegra241 implement the ARM
+Activity Monitor Unit (AMU). On reading the sysfs node, the frequency
+value is re-constructed using AMU counters.
 
-Regressions Summary
--------------------
+Sanjay Chandrashekara (1):
+  cpufreq: use correct unit when verify cur freq
 
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
+Sumit Gupta (5):
+  cpufreq: CPPC: make workaround apply code generic
+  irqchip/gicv3: Export arm_smccc_get_soc_id_xx funcs
+  cpufreq: CPPC: update sampling window for Tegra241
+  arm64: cpufeature: Export get_cpu_with_amu_feat func
+  cpufreq: CPPC: use wq to read amu counters on target cpu
 
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
+ arch/arm64/kernel/cpufeature.c |  1 +
+ drivers/cpufreq/cppc_cpufreq.c | 99 +++++++++++++++++++++++++++++-----
+ drivers/cpufreq/cpufreq.c      |  2 +-
+ drivers/firmware/smccc/smccc.c |  2 +
+ 4 files changed, 89 insertions(+), 15 deletions(-)
 
+-- 
+2.17.1
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.3-rc7=
--153-gbc538c8be4bd/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.3-rc7-153-gbc538c8be4bd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      bc538c8be4bd17479f88f2e1a78d5b76b5523319 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/643e6f034aa96f8ff92e8677
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc7-153-gbc538=
-c8be4bd/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc7-153-gbc538=
-c8be4bd/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230414.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/643e6f034aa96f8ff92e867c
-        failing since 80 days (last pass: v6.1-rc8-156-g0a9e32afe717, first=
- fail: acpi-6.2-rc6-146-g628c61874ffd)
-
-    2023-04-18T10:20:30.175260  + set +x
-    2023-04-18T10:20:30.175445  [   13.000201] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-928949_1.5.2.3.1>
-    2023-04-18T10:20:30.283243  / # #
-    2023-04-18T10:20:30.384753  export SHELL=3D/bin/sh
-    2023-04-18T10:20:30.385168  #
-    2023-04-18T10:20:30.486482  / # export SHELL=3D/bin/sh. /lava-928949/en=
-vironment
-    2023-04-18T10:20:30.486986  =
-
-    2023-04-18T10:20:30.588379  / # . /lava-928949/environment/lava-928949/=
-bin/lava-test-runner /lava-928949/1
-    2023-04-18T10:20:30.589090  =
-
-    2023-04-18T10:20:30.592868  / # /lava-928949/bin/lava-test-runner /lava=
--928949/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/643e70f338233e5ceb2e85ef
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.3-rc7-153-gbc538=
-c8be4bd/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
--h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.3-rc7-153-gbc538=
-c8be4bd/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
--h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230414.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/643e70f338233e5ceb2e8=
-5f0
-        new failure (last pass: v6.3-rc6-135-g5235219c59f8) =
-
- =20
