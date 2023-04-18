@@ -2,173 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FEB6E6C6C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 20:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC50E6E6D9C
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 22:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjDRSxk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 14:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        id S230465AbjDRUmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 16:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjDRSxj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 14:53:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADDE6A61
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 11:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681843971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o4q26ABv2/Y5RAzDDx8RD/8AFgBKYQFZsCzr/rugvk8=;
-        b=FlSsgIxU4ZrQ8kYlGZdShWzrGYO7yVuH40uhnFSi8CdRzdB7SId7AXvV9WNNKRNEI0Stny
-        Cy+Yjm2aza2/T+1b/c36kg9Gzplxx6XzmN/STsXLH4n9fMSyezqg3h3zHkDW5+yjrayvK/
-        ZcGqI1dXV/UxJZBlNy6nsmVBweCYdv4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-319-YN9SrawPPOWfgtvIJQPCkw-1; Tue, 18 Apr 2023 14:52:50 -0400
-X-MC-Unique: YN9SrawPPOWfgtvIJQPCkw-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-506b0b75731so928516a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 11:52:50 -0700 (PDT)
+        with ESMTP id S230326AbjDRUmw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 16:42:52 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E75FDA
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 13:42:49 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id w1so5291606plg.6
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 13:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681850569; x=1684442569;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=aMylopIdACvf3cihCzzjJ37/pMBX735qkH3WV7hdVck=;
+        b=DOQyasOWs6zUT66gHsdpsLLiGt2BdZyrnuPMGYQDsuhc9h0yygKzan73M7OsnqodNC
+         TEGTu4FVxxQxNT5Vm7KSGl5qKqScpKNhC+Un8+WeBFmHfnzdwWCDwT52frO/lvjYAgFW
+         lWsMlyuR+nTuFK1x04fv/xcbiRufa0vvfx90JplC/DNdKZxxIdZ5/QBB0tijWCpCAxj1
+         lrQNxy4i0GV0acT7ZxdUSQ0FveSUY/8r7U6on8zj/DefTbmsFnfW0i4inqfWnkCctUTg
+         3es5WJaXSRtfa/HOBgLeTnX1U/yznGoW+NUFi1lrJwOEoe1jNKBUdnkRxMvWRjCBQh6b
+         NksQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681843968; x=1684435968;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4q26ABv2/Y5RAzDDx8RD/8AFgBKYQFZsCzr/rugvk8=;
-        b=NSRIae7lAdBVDNVT/bBHzmM9Z2WF67TyS47Hh09IhB+dwQ9Vs8lFhIaEV7A7QnkyYV
-         DBLp84fon0uEKLOnB2yAI15suOw3rRaueuwv3hx5t0pSx6yuyqQkKNSsIING3cegn+Q9
-         oWLc/0hQuBUuZOTMnAFigdr8Wc/X3iw1vRhRzAnw7GH+ESjJVwJHeXH5E466ehpddQVU
-         LiebBpQ2yR/U9VBff2kXii4EC9LzHkgiUBBPdtHXdq2mwwYiwDZ2fZqXXY0RzxGb4UKH
-         hjCANCDC8lTK1HQyBGzJ+Cwqq1JA7lnnutpCDL56NUB+fnAPIUi54ha8M/LSbKDiI4TF
-         Uq2Q==
-X-Gm-Message-State: AAQBX9cFE8MAQmpX+ybLtFQAsSW+CsZoMw+aiX0ldzB1FfqTo7zobiol
-        qZwDcjlQvgP82VjJGn8JY2fMr8EgiDIlczuYRkDrUcJ+2MVhAAMnigx2vs8geoFbtEeqq5aggCA
-        3I1rRvDuuErvkPeWEvLQ=
-X-Received: by 2002:aa7:c254:0:b0:506:7695:ed16 with SMTP id y20-20020aa7c254000000b005067695ed16mr3191150edo.40.1681843968739;
-        Tue, 18 Apr 2023 11:52:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bhpWrgNiiVqWrLbEgkWEqxKW66/OXpTa/bs71fA5UhD45v7cY0TRH+LlcsJ/Qy+aeKugb/jA==
-X-Received: by 2002:aa7:c254:0:b0:506:7695:ed16 with SMTP id y20-20020aa7c254000000b005067695ed16mr3191140edo.40.1681843968471;
-        Tue, 18 Apr 2023 11:52:48 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa7cfc9000000b00506b2af49fbsm1631558edy.81.2023.04.18.11.52.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 11:52:47 -0700 (PDT)
-Message-ID: <c9f28fda-ed4d-f746-241e-589473f44ec9@redhat.com>
-Date:   Tue, 18 Apr 2023 20:52:47 +0200
+        d=1e100.net; s=20221208; t=1681850569; x=1684442569;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aMylopIdACvf3cihCzzjJ37/pMBX735qkH3WV7hdVck=;
+        b=E0fM9uF24ZDsGfMAclbM45beJ16tdE07gz0Q/glUQIGPscQWTeuoCqrbCc8fHZsGU5
+         o5no0A8guTgE5QtVC+PQgSV2c893Ff9sg7La58n98n7Y6ix/jHysmm6jdZieK91GhAb6
+         DcGVFH8ep5h9W54FkmP0JWOujgupS5bgPNEumtaytvRryJpag6d1af3fr9KTFTPNbhzH
+         XKcls3JQ/3vvWDVhpIkLvch3gyBW8SwI1kpDhZf42Gs0/WUe5OG8enZz/t0V3EmjWX18
+         ogYe0ipHerpRov/dEk1RwCEiegekIlra5HpkcbF6sU4ZjIrDaAjfnV2jJfN+g6tnTjQU
+         5y/w==
+X-Gm-Message-State: AAQBX9dw9GhVTtHfg0cARQsdjOjibSV59jCJDAzCI0jX5K++bWSz40cz
+        EbdP8BzbdGoLW/Hp3tvgDmt0pg==
+X-Google-Smtp-Source: AKy350bwaJ4Ndw3xqdtf09W17dZNddLRhGDK7yFAx4ZH0tnmeGG4ipy4AMhNRGAF58evKgdQxs5J7w==
+X-Received: by 2002:a05:6a21:998c:b0:ef:a696:993a with SMTP id ve12-20020a056a21998c00b000efa696993amr1071436pzb.22.1681850568737;
+        Tue, 18 Apr 2023 13:42:48 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r11-20020a65498b000000b004e28be19d1csm9270645pgs.32.2023.04.18.13.42.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 13:42:48 -0700 (PDT)
+Message-ID: <643f00c8.650a0220.9093b.5422@mx.google.com>
+Date:   Tue, 18 Apr 2023 13:42:48 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/9] power: supply: bq27xxx/bq25890 status update fixes
-Content-Language: en-US, nl
-To:     laji Xiao <3252204392abc@gmail.com>
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-References: <20230413095405.71685-1-hdegoede@redhat.com>
- <CALK_TxYc9t_uvMM9MbJyuU6dgcEA5Z_pQrjJgf6qXQbQSkc2Jw@mail.gmail.com>
- <20bc1db5-61c9-13fd-2425-21025d025b67@redhat.com>
- <CALK_Txax-vdMVZPJDdQpu1rY+dHhUhr5AxfqJgA+kk3ESKaPSA@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CALK_Txax-vdMVZPJDdQpu1rY+dHhUhr5AxfqJgA+kk3ESKaPSA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.3-rc7-158-ga55dbec19157
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.3-rc7-158-ga55dbec19157)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc7-158-ga=
+55dbec19157)
 
-On 4/18/23 19:12, laji Xiao wrote:
-> Hi,
-> 
-> I try use the command "watch -n 0.5 cat /sys/class/power_supply/bq27520-0/status", the charging status can be updated normally, although it responds a bit slowly, it takes 1-2 seconds. But at least the charging status can be updated:)
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+3-rc7-158-ga55dbec19157/
 
-That is good.
+Tree: pm
+Branch: testing
+Git Describe: v6.3-rc7-158-ga55dbec19157
+Git Commit: a55dbec19157d83e21eb1b8f0cf5a8195d405005
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> In addition, what is the progress of MI PAD2's sound card?
+Warnings Detected:
 
-There is no progress, I have no time to work on this.
+arc:
 
-The work on the power_supply status issue was the result of other work which I was doing which happened to hit the same issue.
+arm64:
 
-Regards,
+arm:
 
-Hans
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
+Warnings summary:
 
-> Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> 于 2023年4月15日周六 18:15写道：
-> 
->     Hi,
-> 
->     On 4/15/23 07:24, laji Xiao wrote:
->     > The problem on the Ubuntu/Arch Linux/Alpine still exists. Android seems to have no problem
-> 
->     This was tested to successfully fix the userspace lag on a lenovo yoga book
->     yb1-x90f (Android version) and a yb1-x91f (Windows version).
-> 
->     I guess some extra work may be needed on the mipad2.
-> 
->     Perhaps you can take a look at the problem on the mipad2 yourself
->     using these patches as guidance ?
-> 
->     Regards,
-> 
->     Hans
-> 
-> 
->     >
->     > Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com> <mailto:hdegoede@redhat.com <mailto:hdegoede@redhat.com>>> 于 2023年4月13日周四 17:54写道：
->     >
->     >     Hi all,
->     >
->     >     The main goal of this series is to fix userspace sometimes not
->     >     getting notified in a timely manner of charging <-> discharging
->     >     status changes, causing e.g. battery status icons to lag
->     >     and the lagging of updates also effects power_supply_leds.c .
->     >
->     >     While working on this I noticed a number of races surrounding
->     >     bq27xxx_battery_update(), so patches 1-4 fix those first.
->     >
->     >     Patches 5-9 take care of the status update lagging issues.
->     >
->     >     Regards,
->     >
->     >     Hans
->     >
->     >
->     >     Hans de Goede (9):
->     >       power: supply: bq27xxx: Fix bq27xxx_battery_update() race condition
->     >       power: supply: bq27xxx: Fix I2C IRQ race on remove
->     >       power: supply: bq27xxx: Fix poll_interval handling and races on remove
->     >       power: supply: bq27xxx: Add cache parameter to
->     >         bq27xxx_battery_current_and_status()
->     >       power: supply: bq27xxx: Move bq27xxx_battery_update() down
->     >       power: supply: bq27xxx: Ensure power_supply_changed() is called on
->     >         current sign changes
->     >       power: supply: bq27xxx: After charger plug in/out wait 0.5s for things
->     >         to stabilize
->     >       power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() +
->     >         schedule()
->     >       power: supply: bq25890: Call power_supply_changed() after updating
->     >         input current or voltage
->     >
->     >      drivers/power/supply/bq25890_charger.c     |   3 +
->     >      drivers/power/supply/bq27xxx_battery.c     | 181 +++++++++++----------
->     >      drivers/power/supply/bq27xxx_battery_i2c.c |   3 +-
->     >      include/linux/power/bq27xxx_battery.h      |   4 +
->     >      4 files changed, 107 insertions(+), 84 deletions(-)
->     >
->     >     --
->     >     2.39.1
->     >
-> 
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
