@@ -2,74 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3CB6E58EF
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 07:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772F06E5A05
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 09:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjDRF7k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 01:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S230252AbjDRHE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 03:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjDRF7f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 01:59:35 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0D255BA
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id q23so60759112ejz.3
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
+        with ESMTP id S229514AbjDRHE6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 03:04:58 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DB198E
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 00:04:56 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id xi5so70553860ejb.13
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 00:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=h2u+IvYIbnFxxtQG/ZtOJXOGODtmHZE6DE2kphmV5deUhBtI5SSl5ZpPS81I4DoyvM
-         cL/QsMoq/nZ79QoTUVBpjigDCpbkhNV4ihdOYSWAZCOke9dA/QR1VB/koOlQ9LVEDYMX
-         XtbtlwSc8k7WA+c3R6xpugIUkMv4IcvxiBX5jugHOkE6bIQRd6XIP4bPoYTYUOtLJ8cY
-         jqOSy7VahCSY+50nHqKMLAvtMY0jgSKZG9RLZ0VM4rlX3dlYAIwPmpAZEs5sdE1jKPzt
-         sUSa+Yt3rvdogEL685HX9OzzgKvbxUuLxSFiR0ubii95w3DTWRmDDneYGKBqJn2l6obd
-         7Bag==
+        d=linaro.org; s=google; t=1681801494; x=1684393494;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2WhHYJYuhXskgCt8P+rWi6MuOTcoPNUz8qBRPdqCUvo=;
+        b=kfEJdGpu4mcY9/ND1iACqI3ApTNBoJQgxiYe4R8Bt0ggC5waO4AOTmqsksRsiIl69z
+         WkOmFKzjWW+M6QEnLPLY5GPtfwclJVQQEGpwIicK0i29UWm3KUF8w7dYqnaBehQSWfBO
+         rcczfJ7SUQ7LxoiNsWQ+4X0LwnztqHRN9JuQeZsEpk7IeEYDfwWgouW7GLL9+MEV0kZj
+         VE122snZI2xMLFfHPNZcSVOoh3qlJ4+JN7QziFK6eWCw+SU/7yUnWDni7yyv+6XnxwMk
+         tltoMjBhRmOndobU5tChMPE7XsKLnjR+odVvpt1vuR9GQ1rSX/b6vL2TXFiPSe0omv5q
+         NsOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20221208; t=1681801494; x=1684393494;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=RYeLsDTIHMovYEd/cAxlCwoY7oxOlGko30lYE9DHxmnZzRB0PiUKrYyEORAqD58dcj
-         KNR9Am4H08YwjDWgUKOF+vbSrxLd8PK03InWtzttoQsejwQ+Cpv8KlDoUONGF2ZBOOFw
-         3ThNfJBgO2wgQxG96HkS0Wmx7BxpFHda9ATKtZWA2+MsM5MRfN0Qk083NaUO9j8Avd+2
-         S9wXNJdWuE5U4Jx5cBNwX5VexluKu5oS7iT0Vu9/gW7R/7h+vZsl023AjAwXwv1H8rTW
-         NTjIZvzoepvKOf2HKnI7dNY3pPmIzycchgKe8BJz45uXB3dke9+LvGMZmrI7dcPrsYGU
-         kS6Q==
-X-Gm-Message-State: AAQBX9cVhXkTV4t8pQvAW/PXaP6OYbslizwy3+IPmBgECBNxRE4ts2A1
-        rntdOdjGRG93+tNbx9u7e1llIgJiWjVGjcEIAGFCfs7Rmc4YI7gd
-X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
-X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
- v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
- 2023 22:59:10 -0700 (PDT)
+        bh=2WhHYJYuhXskgCt8P+rWi6MuOTcoPNUz8qBRPdqCUvo=;
+        b=YWYJvjz8YotL6JxO0JYmqaRFGKQzwv6CrXx2rj22jXQvaX1A0cjK11NKJMyKK08zlb
+         xl7LDqsVTgryES7/DTNdkojvjpXoOFePcDSnt5Lryy72bd/+sN7da0dJCd89B9EcIgv8
+         t35jI+FQM489FzcIHY2C1WQ/WBQENKQPKH226yW/w2t/e9D9917TOAR/kW7zT5ff+1SR
+         ScoOPnKdCXqX6VNdfd1lf9FEfKb/zH5CaxCwmp5DV1glSe9t4BDBWCAf37/NbnaZfFdv
+         47D6m8D1fKN0nAOl87xFbewjBJidjvjLZNA1Fu/ljIsInVMPzIdaIOJW3LUuZa4XXRsl
+         5N8A==
+X-Gm-Message-State: AAQBX9fjO6oUK/paCHpNfXMzmcc1+IgcBZ9cmToJ+sxdkr59Gi7mIMIj
+        69aIw4MnMkfyB698mZahIAJ/cQ==
+X-Google-Smtp-Source: AKy350bvvxWv0MaXOCX/mRjN7rgY+3X62SrGNyVxmEt7DdeR0qfPOUZz9zMNRmA6wBR9oNJjW7Xbtg==
+X-Received: by 2002:a17:907:1701:b0:933:3a22:8513 with SMTP id le1-20020a170907170100b009333a228513mr11209930ejc.53.1681801494526;
+        Tue, 18 Apr 2023 00:04:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id gb32-20020a170907962000b0094f34fe27c6sm4122421ejc.170.2023.04.18.00.04.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 00:04:54 -0700 (PDT)
+Message-ID: <6d24511a-69dd-e99c-09d2-53cc3e80bd5e@linaro.org>
+Date:   Tue, 18 Apr 2023 09:04:52 +0200
 MIME-Version: 1.0
-Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
- 22:59:10 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1992@gmail.com>
-Date:   Mon, 17 Apr 2023 22:59:10 -0700
-Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
+Content-Language: en-US
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230413131705.3073911-1-brgl@bgdev.pl>
+ <20230413131705.3073911-2-brgl@bgdev.pl>
+ <3e361a73-797f-41c7-1ead-ecafee3928e4@linaro.org>
+ <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear,
+On 18/04/2023 06:39, Shazad Hussain wrote:
+> 
+> 
+> On 4/13/2023 9:42 PM, Krzysztof Kozlowski wrote:
+>> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
+>>> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>>
+>>> Remove the power on reasons with reboot from the pmm8654au_0_pon.
+>>> Instead, the PoN reaons should be part of different sdam_0 mode, to
+>>
+>> typo: reasons
+>>
+>>> be interoduced.
+>>
+>> introduced
+>>
+>> Anyway it does not say why. Are these power reasons not correct?
+>>
+> 
+> Hi Krzysztof,
+> Since sm8350 the PMIC PON peripheral was split into PON_HLOS and PON_PBS
+> to avoid security concerns with HLOS APPS being able to trigger a PMIC
+> WARM_RESET unilaterally. When the split occurred, the spare registers
+> ended up in PON_PBS, not PON_HLOS. Thus at that time, we moved to using
+> an SDAM register for Linux “reboot reason” configuration. And bootloader
+> also SDAM register to get these reboot region data to get into
+> bootloader/edl, so to have this working we need to use SDAM.
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+The explanation of their correctness should be in commit msg.
 
-Mrs. Mariam Kouame
+Best regards,
+Krzysztof
+
