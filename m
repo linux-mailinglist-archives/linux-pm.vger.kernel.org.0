@@ -2,104 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219B76E57EB
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 05:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0D86E57F1
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 05:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjDRDxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Apr 2023 23:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S229654AbjDRD6N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Apr 2023 23:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjDRDxM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 23:53:12 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41B33C30
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 20:53:11 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a66e7a52d3so8785815ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 20:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681789991; x=1684381991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UB6ieBFEuIZztgRulEtiKmJ0O9/UlCo5NZGoGL1i4vw=;
-        b=dRCnvZecuMcnPoMp706cWVVRApc7gnUhMkQqEWnbr442qYxccgHDhUHDeO7KxhzuM0
-         AUHdDjoDOA+sKWD6WW7mUyKzychnzoH2kxjbbRuqT72oWZahoYgUwNrdLVuatyu3yISa
-         myvoc23p/LaWnCEnZigUIDU4cAE0IogmN/I4/RNpnEzYi81SyA6ebopCJUt0H6fOQqtH
-         +01tgmMD3UNR9l88vbjW9qVx0Y6GBHXJE64XVyWhXTlZI0NZ8y7X4IXlbCyZarxQu3hX
-         Fv5YQJqN/HsT3UF2pzOnEWjz8Rgt6CsoWjb6Un8Y6ZgBRPe0vtWgOcGGDYbxC8fxYB6V
-         XFcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681789991; x=1684381991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UB6ieBFEuIZztgRulEtiKmJ0O9/UlCo5NZGoGL1i4vw=;
-        b=Xzd7Xu5PxX6rTdnsjJEsyslHgsnMxx4tzxPn5oUhTRog2NPe8N+NAuQOBZ3aDLr6+3
-         Tj93rHmeeafVp1UV7DV3pJNp1hZmrtDo7kGWCikhDN4gkUCmjoYwX+dnXu1CZiffI1B0
-         5bzbztkKYelbQNn7fSXHds3PQW02zxsMRXdWO8JZYjK2TvPRaH5Jdqieo/CFdRzXVwxf
-         jQ/Jtnpk44x+0kOQBjWmMYDpf3DwmXxsUH/+c8R6OgdgEbUNt1ATwf1WAqUgLk7hfapl
-         bJ3bcXg0x+uE9iv6968q7a2h8NqR6JqPKXi0ct2MK+AviLvYgSf1UdiMpOSzSP3VGAy4
-         VR2w==
-X-Gm-Message-State: AAQBX9cuibSKwY/S/4ezAnJvKMZcPpm9tpWYWbOQ77YEfdTn50jzVovQ
-        ZMRiSDCH3SmQf0CSZ0rItQaqdA==
-X-Google-Smtp-Source: AKy350Y/0RnVwSJT7DaVAqt0HLO71OI3v6IV6VXk6elbnvwwCdypp3Eg/sgMU3B5ifSqTlk0NodVNA==
-X-Received: by 2002:a17:903:2cc:b0:1a6:b52a:b00b with SMTP id s12-20020a17090302cc00b001a6b52ab00bmr860967plk.29.1681789991223;
-        Mon, 17 Apr 2023 20:53:11 -0700 (PDT)
-Received: from localhost ([122.172.85.8])
-        by smtp.gmail.com with ESMTPSA id iw18-20020a170903045200b001960706141fsm8492807plb.149.2023.04.17.20.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 20:53:10 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 09:23:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Chenggang Wang <wangchenggang@vivo.com>
-Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal/drivers/cpuidle_cooling: Delete unmatched
- comments
-Message-ID: <20230418035307.f6p2jp3nxgfyebns@vireshk-i7>
-References: <1681789108-28130-1-git-send-email-wangchenggang@vivo.com>
+        with ESMTP id S229604AbjDRD6L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Apr 2023 23:58:11 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC37B421B
+        for <linux-pm@vger.kernel.org>; Mon, 17 Apr 2023 20:58:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VgNoJlQ_1681790286;
+Received: from 30.97.48.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgNoJlQ_1681790286)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Apr 2023 11:58:06 +0800
+Message-ID: <cf5ef608-078e-3f46-a6b7-9a8ec2bf8e15@linux.alibaba.com>
+Date:   Tue, 18 Apr 2023 11:58:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681789108-28130-1-git-send-email-wangchenggang@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/6] power: supply: sc27xx: Fix external_power_changed
+ race
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     laji Xiao <3252204392abc@gmail.com>, linux-pm@vger.kernel.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+References: <20230415160734.70475-1-hdegoede@redhat.com>
+ <20230415160734.70475-5-hdegoede@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230415160734.70475-5-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-04-23, 11:38, Chenggang Wang wrote:
-> The function no longer returns a value, synchronize the comments.
+
+
+On 4/16/2023 12:07 AM, Hans de Goede wrote:
+> sc27xx_fgu_external_power_changed() dereferences data->battery,
+> which gets sets in ab8500_btemp_probe() like this:
 > 
-> Signed-off-by: wangchenggang@vivo.com
+> 	data->battery = devm_power_supply_register(dev, &sc27xx_fgu_desc,
+>                                                     &fgu_cfg);
+> 
+> As soon as devm_power_supply_register() has called device_add()
+> the external_power_changed callback can get called. So there is a window
+> where sc27xx_fgu_external_power_changed() may get called while
+> data->battery has not been set yet leading to a NULL pointer dereference.
+> 
+> Fixing this is easy. The external_power_changed callback gets passed
+> the power_supply which will eventually get stored in data->battery,
+> so sc27xx_fgu_external_power_changed() can simply directly use
+> the passed in psy argument which is always valid.
+> 
+> After this change sc27xx_fgu_external_power_changed() is reduced to just
+> "power_supply_changed(psy);" and it has the same prototype. While at it
+> simply replace it with making the external_power_changed callback
+> directly point to power_supply_changed.
+> 
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+Looks good to me. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
 > ---
->  drivers/thermal/cpuidle_cooling.c | 3 ---
->  1 file changed, 3 deletions(-)
+> Note this has been compile tested only
+> ---
+>   drivers/power/supply/sc27xx_fuel_gauge.c | 9 +--------
+>   1 file changed, 1 insertion(+), 8 deletions(-)
 > 
-> diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
-> index 4f41102..7779739 100644
-> --- a/drivers/thermal/cpuidle_cooling.c
-> +++ b/drivers/thermal/cpuidle_cooling.c
-> @@ -236,9 +236,6 @@ static int __cpuidle_cooling_register(struct device_node *np,
->   *
->   * This function is in charge of creating a cooling device per cpuidle
->   * driver and register it to the thermal framework.
-> - *
-> - * Return: zero on success, or negative value corresponding to the
-> - * error detected in the underlying subsystems.
->   */
->  void cpuidle_cooling_register(struct cpuidle_driver *drv)
->  {
-
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
--- 
-viresh
+> diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/supply/sc27xx_fuel_gauge.c
+> index 632977f84b95..bd23c4d9fed4 100644
+> --- a/drivers/power/supply/sc27xx_fuel_gauge.c
+> +++ b/drivers/power/supply/sc27xx_fuel_gauge.c
+> @@ -733,13 +733,6 @@ static int sc27xx_fgu_set_property(struct power_supply *psy,
+>   	return ret;
+>   }
+>   
+> -static void sc27xx_fgu_external_power_changed(struct power_supply *psy)
+> -{
+> -	struct sc27xx_fgu_data *data = power_supply_get_drvdata(psy);
+> -
+> -	power_supply_changed(data->battery);
+> -}
+> -
+>   static int sc27xx_fgu_property_is_writeable(struct power_supply *psy,
+>   					    enum power_supply_property psp)
+>   {
+> @@ -774,7 +767,7 @@ static const struct power_supply_desc sc27xx_fgu_desc = {
+>   	.num_properties		= ARRAY_SIZE(sc27xx_fgu_props),
+>   	.get_property		= sc27xx_fgu_get_property,
+>   	.set_property		= sc27xx_fgu_set_property,
+> -	.external_power_changed	= sc27xx_fgu_external_power_changed,
+> +	.external_power_changed	= power_supply_changed,
+>   	.property_is_writeable	= sc27xx_fgu_property_is_writeable,
+>   	.no_thermal		= true,
+>   };
