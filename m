@@ -2,107 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CFB6E6982
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 18:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA0B6E6A37
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 18:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjDRQ2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 12:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S232326AbjDRQxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 12:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjDRQ2l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 12:28:41 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E356DA7;
-        Tue, 18 Apr 2023 09:28:38 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6a5f7d10dd5so635892a34.0;
-        Tue, 18 Apr 2023 09:28:38 -0700 (PDT)
+        with ESMTP id S231591AbjDRQxU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 12:53:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF60E172D
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 09:52:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681836744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m4XuvKNkvXzZc1+3hTfEGj/qcp3I6s5wJfqCgvZMlpk=;
+        b=B7LBEiNVOEeIBRPhRlxHqKPtY1XNZZTXPXqHnNDesjVy6kD/dyZBYxrY0v97nSoWIeMpqF
+        XKb7xlNQZHJlVM5QJCZj1p6TVob7YjwJFrol3ktwxRgA/sjJrI1B2CwJCBDb7EW7AaRP2G
+        qfLVyIOwy/K0WI02rYgFB7+zpumg9zc=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-370-xtWa4chJP1CReWO88QTW0A-1; Tue, 18 Apr 2023 12:52:23 -0400
+X-MC-Unique: xtWa4chJP1CReWO88QTW0A-1
+Received: by mail-qv1-f72.google.com with SMTP id g17-20020a0cd7d1000000b005b47df84f6eso13052431qvj.0
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 09:52:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681835318; x=1684427318;
+        d=1e100.net; s=20221208; t=1681836742; x=1684428742;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jTdlBH7gDMe1gwvvIrce6g7Kee26bgpxsr6cq5gCaQM=;
-        b=IQ6ZtEC4puIKE94yBiaFXY9lvvBWMvyr4WKHUr9yIg3rqnA2EoH+zfAKqLjGQU0Npf
-         k9Xz0YKXTZG4cejTPyZl5N8XrRAiDiZMa2H2yMPOWH55T853n4XzkG6Hxovi0RM7K65f
-         gpW7ECdZ0ZfxS2WS5Ftt14bwrWZBzwngAz6O1PG5yAfPER2fTWPUX3WPxhb9MEUZmW5m
-         yOz8wfeT9A6R5uJZVi3BJDtFuMVOPBDOIe0aQkhCEqDRUoWjhiPqzC2ajUDUiOCpfvmw
-         TwBa0vY4rLZ65SxfiBFP9IXZkctid678vocz8kXBF0b87Fmdwv6IgTFRAAtyybZsAhkM
-         hXkA==
-X-Gm-Message-State: AAQBX9eCfCqtkBYlbkoVFozbfqqNfyjyYpucTOpVuffI9B4T9zJi1zxI
-        cVHMKOmw3OSUyngCksbplJq3yF8Oig==
-X-Google-Smtp-Source: AKy350ZFkf368usk4zZSQ/xerYs5DI4VOYXV+JxF5CSCs1hhDwPdmg4CpIlRzCupHO97xwwOs5n1Dw==
-X-Received: by 2002:a9d:7b45:0:b0:6a5:fdec:e1 with SMTP id f5-20020a9d7b45000000b006a5fdec00e1mr1075466oto.16.1681835318049;
-        Tue, 18 Apr 2023 09:28:38 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l23-20020a9d7a97000000b006864b5f4650sm5788490otn.46.2023.04.18.09.28.37
+        bh=m4XuvKNkvXzZc1+3hTfEGj/qcp3I6s5wJfqCgvZMlpk=;
+        b=GtYIrvPyXOgpr9BKNswhDTMiSnwjj2D87CnfhKpmUp3PBuiOOt6rwqzvaIakouqZJ7
+         SEzX8P7k9PzW4mJF5VFR4XieHwUMmIR1mo8VANpbUx+zLHMkdp3YRLVNKFlVMBT+VOEj
+         SCTIK4Qro1Ns5KmNPdmLs+Eorh7vvjkap7eDkoEU0QRE70BCqZTqPDQZbSFhBBfAaQBz
+         CM/Fa+ZbeeoD3WDaIz+qFrLRW5AEULuesn+MtoUjH3UXQUg5NSKn8sIbKMrioni4RoEM
+         tfygc+ZLm0yqkU3u8ETnF3PLgjbcdYKf3ACFlrtmMZ4wja93XlqGkGu7Xs/HvJYNpwGQ
+         5pZw==
+X-Gm-Message-State: AAQBX9e9BUKhL77hlMjcBUqYaztfMYgLZEu/zTsmvFXUpYkwnBItzNNJ
+        uat18ypRdVGhjgD2z2Y8Xc8N5RJUj9xOwS1FdHf2wSRNCm69kWFaAmrATvBdmKMgUprDXOgF1BK
+        q5Y54lSmEIZ8BFA2ezXo=
+X-Received: by 2002:ac8:5c09:0:b0:3e4:db8e:93a3 with SMTP id i9-20020ac85c09000000b003e4db8e93a3mr1051618qti.7.1681836742453;
+        Tue, 18 Apr 2023 09:52:22 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b8iSTRAO2qFyeWH4GJpl/wFRinI09KrBbA/lx+iW+RGd1xxBPEiWih2p3z6gxdbX7FlxYBMQ==
+X-Received: by 2002:ac8:5c09:0:b0:3e4:db8e:93a3 with SMTP id i9-20020ac85c09000000b003e4db8e93a3mr1051594qti.7.1681836742197;
+        Tue, 18 Apr 2023 09:52:22 -0700 (PDT)
+Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
+        by smtp.gmail.com with ESMTPSA id a145-20020ae9e897000000b0074d02ac1c19sm2468991qkg.15.2023.04.18.09.52.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 09:28:37 -0700 (PDT)
-Received: (nullmailer pid 1811524 invoked by uid 1000);
-        Tue, 18 Apr 2023 16:28:36 -0000
-Date:   Tue, 18 Apr 2023 11:28:36 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 18 Apr 2023 09:52:21 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 12:52:24 -0400
+From:   Eric Chanudet <echanude@redhat.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] thermal: mediatek: Use of_address_to_resource()
-Message-ID: <20230418162836.GG1764573-robh@kernel.org>
-References: <20230319163231.226738-1-robh@kernel.org>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>
+Subject: Re: [PATCH v4 2/5] arm64: dts: qcom: sa8775p: add the pcie smmu node
+Message-ID: <20230418165224.vmok75fwcjqdxspe@echanude>
+References: <20230417125844.400782-1-brgl@bgdev.pl>
+ <20230417125844.400782-3-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230319163231.226738-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230417125844.400782-3-brgl@bgdev.pl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 11:32:31AM -0500, Rob Herring wrote:
-> Replace of_get_address() and of_translate_address() calls with single
-> call to of_address_to_resource().
+On Mon, Apr 17, 2023 at 02:58:41PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Add the PCIe SMMU node for sa8775p platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/thermal/mediatek/auxadc_thermal.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 74 +++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
 
-Ping!
+Hi Bartosz,
+
+Adding Shazad.
+
+I upgraded to the meta Shazad mentioned in v2[1], but I still get a
+synchronous external abort on reboot:
+
+[    8.285500] arm-smmu 15200000.iommu: disabling translation
+4      12.145913 Injecting instruction/data abort to VM 3, original ESR_EL2 = 0x93800047, fault VA = 0xffff80000a080000, fault IPA = 0x15200000, ELR_EL2 = 0xffffae99a42c96e4
+[    8.310145] Internal error: synchronous external abort: 0000000096000010 [#1] PREEMPT SMP
+[    8.316561] Modules linked in: qcom_pon crct10dif_ce gpucc_sa8775p i2c_qcom_geni spi_geni_qcom ufs_qcom phy_qcom_qmp_ufs socinfo fuse ipv6
+[    8.331284] CPU: 4 PID: 1 Comm: systemd-shutdow Not tainted 6.3.0-rc7-next-20230417-00014-g93340f644112 #136
+[    8.341365] Hardware name: Qualcomm SA8775P Ride (DT)
+[    8.346555] pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    8.353705] pc : arm_smmu_device_shutdown+0x64/0x154
+[    8.358815] lr : arm_smmu_device_shutdown+0x3c/0x154
+[    8.363915] sp : ffff80000805bc00
+[    8.367322] x29: ffff80000805bc00 x28: ffff69c250ca0000 x27: 0000000000000000
+[    8.374643] x26: ffffae99a53357f8 x25: 0000000000000001 x24: ffffae99a60d5028
+[    8.381963] x23: ffff69c2516ab890 x22: ffffae99a614e218 x21: ffff69c251668c10
+[    8.389283] x20: ffff69c2516ab810 x19: ffff69c251479a80 x18: 0000000000000006
+[    8.396603] x17: 0000000000000014 x16: 0000000000000030 x15: ffff80000805b5d0
+[    8.403923] x14: 0000000000000000 x13: ffffae99a5ce1a28 x12: 00000000000005eb
+[    8.411243] x11: 00000000000001f9 x10: ffffae99a5d39a28 x9 : ffffae99a5ce1a28
+[    8.418563] x8 : 00000000ffffefff x7 : ffffae99a5d39a28 x6 : 80000000fffff000
+[    8.425884] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+[    8.433204] x2 : 0000000000000000 x1 : ffff80000a080000 x0 : 0000000000000001
+[    8.440524] Call trace:
+[    8.443039]  arm_smmu_device_shutdown+0x64/0x154
+[    8.447784]  platform_shutdown+0x24/0x34
+[    8.451821]  device_shutdown+0x150/0x258
+[    8.455857]  kernel_restart+0x40/0xc0
+[    8.459623]  __do_sys_reboot+0x1f0/0x274
+[    8.463656]  __arm64_sys_reboot+0x24/0x30
+[    8.467778]  invoke_syscall+0x48/0x114
+[    8.471633]  el0_svc_common+0x40/0xf4
+[    8.475397]  do_el0_svc+0x3c/0x9c
+[    8.478806]  el0_svc+0x2c/0x84
+[    8.481947]  el0t_64_sync_handler+0xf4/0x120
+[    8.486334]  el0t_64_sync+0x190/0x194
+[    8.490100] Code: f9400404 b50005e4 f9400661 52800020 (b9000020) 
+[    8.496361] ---[ end trace 0000000000000000 ]---
+
+[1] https://lore.kernel.org/linux-arm-kernel/24804682-6ead-03b1-8b21-3ac413187c4a@quicinc.com/
 
 > 
-> diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-> index ab730f9552d0..c8a3acaf56c1 100644
-> --- a/drivers/thermal/mediatek/auxadc_thermal.c
-> +++ b/drivers/thermal/mediatek/auxadc_thermal.c
-> @@ -897,14 +897,12 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index 2343df7e0ea4..a23175352a20 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -809,6 +809,80 @@ apps_smmu: iommu@15000000 {
+>  				     <GIC_SPI 891 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
 >  
->  static u64 of_get_phys_base(struct device_node *np)
->  {
-> -	u64 size64;
-> -	const __be32 *regaddr_p;
-> +	struct resource res;
->  
-> -	regaddr_p = of_get_address(np, 0, &size64, NULL);
-> -	if (!regaddr_p)
-> +	if (of_address_to_resource(np, 0, &res))
->  		return OF_BAD_ADDR;
->  
-> -	return of_translate_address(np, regaddr_p);
-> +	return res.start;
->  }
->  
->  static int mtk_thermal_extract_efuse_v1(struct mtk_thermal *mt, u32 *buf)
+> +		pcie_smmu: iommu@15200000 {
+> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+> +			reg = <0x0 0x15200000 0x0 0x80000>;
+> +			#iommu-cells = <2>;
+> +			#global-interrupts = <2>;
+> +
+> +			interrupts = <GIC_SPI 920 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 921 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 925 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 926 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 927 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 928 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 950 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 951 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 954 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 955 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 885 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 886 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 887 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 888 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 842 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 843 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 844 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 845 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 847 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 802 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 806 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 807 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 808 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 809 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 812 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 813 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 814 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 837 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 838 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 839 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 854 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 855 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 791 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 792 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 794 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 795 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 796 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 639 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 640 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+>  		intc: interrupt-controller@17a00000 {
+>  			compatible = "arm,gic-v3";
+>  			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
 > -- 
-> 2.39.2
+> 2.37.2
 > 
+
+-- 
+Eric Chanudet
+
