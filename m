@@ -2,170 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0796E5EA7
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 12:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C706E5EFF
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 12:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjDRKYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 06:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S230521AbjDRKiT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 06:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjDRKYF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 06:24:05 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97622902A
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 03:23:51 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b62d2f729so1301599b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 03:23:51 -0700 (PDT)
+        with ESMTP id S230342AbjDRKiS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 06:38:18 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF4EE49
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 03:38:16 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b733fd00bso1155598b3a.0
+        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 03:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681813431; x=1684405431;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eYNhea+/zB4CxtCeDnVb9v0HM4zMAkhmmLs+48g4bIU=;
-        b=RpB5l9N/AEzXc26sclkqo+6UpTRGny1TLKCyWW4Rt1uVFrBI/0W4YHapeLB5i/Okqf
-         FW6SMUe1RGyY5Lqj76bRz7V3WYATp2zqbIbC0x2vlWJILYEnEgzH41Il1w+4ayr2xhE7
-         hoCYplI/bgWDJq6SBv8n3bjfpja4QN0ImzdXpg07Q6HuPi6oWUdHKjFpVBb5wn6jUuEr
-         LR9rhmJUv5pYX3Zn6TLFAf9Ohmfc91d5pCtQhgXKLc5L6BHYPPc/tnYjc99QH/tssQJj
-         XTA6dU7F0TlOFSIhScN46SLpOk5h/otwdsR83nCPBrn6cOxZVWqwPFTpipiSd8NAWlXy
-         XLIg==
+        d=linaro.org; s=google; t=1681814296; x=1684406296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yBtopcpVhz9eBMQtYuRsTFTrwcJpD9PK5zOo4afuwW4=;
+        b=OLj4qlWf5iQxuoOmQfVXJWvwBrwo4/kbTL61IveT1xBOR/BdXpam6si3KQsdGoXn5P
+         u0JC1PWHKFXln6VU2CR1lP19XwNDnoDoN+Pvx6kGjzpjSYx69veEPB1fZNr0zOw68fMU
+         VAC2cv2S2PpdxBQTCU0AxUyWYkJEnKQmkl8n1jgzfnNI+xSD5kSzSjYRh63xfuyXv79b
+         on1Gg53zzux2+T8Nup9HSeCag+zwmKw8TXl1Uh2VowuMmlyR/tKOTJwR00L8IRWyZrdO
+         6lGP6vMYBD5v291t0QGGlTO/urPUhe7IDw2UDe0HvKRqBrq8NrpTgSl3O5d/NKIRtMO2
+         mIhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681813431; x=1684405431;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eYNhea+/zB4CxtCeDnVb9v0HM4zMAkhmmLs+48g4bIU=;
-        b=S0fIxWS9IeNN0uESNK4VqkjG6ALX3QE9UgIDBUWgw3OiTtN8LK9+9rIvor8i/cRJ7Y
-         FhzQj80UpA+fQcNCI9asZv+TJQY119uBI0Wt+qOIPmlnn1KtQPRUhuf1NHkTyR0rNMaX
-         7RdIkdO0B4CtHBVAtwXWp59CsFBaTin2YUIKdZSsXYxWq475YQOr08jDlkwDShBWJrjF
-         kHDvSuwtjCz2tY6aAEJnsJSmsr4xzSPHk5nUQ5awHu6zxETaV/ouJ5jUMLkRbjAbr6wu
-         uEWDMTW8pBmFQZBpR1ntW9+5FGCoHHFAlOO+xqoK+60G4Uw/9m+7jAK628lcSd3r9OCC
-         e6Sg==
-X-Gm-Message-State: AAQBX9eEfW84jo2/LO95qslq/eXSDlrJ88awjWAKIpE7uyg/2c4GiGGH
-        6PelaQ2BqdvDpfqLsQKJ8qfB1w==
-X-Google-Smtp-Source: AKy350byN4BbhHXwYGRkZNdLhIVLrZSXmc1QpVZ5uwRu1sQoGOIBKjyq8pUEQc19Grmkl2IoM51z8Q==
-X-Received: by 2002:a05:6a00:1892:b0:63b:859f:f094 with SMTP id x18-20020a056a00189200b0063b859ff094mr15133397pfh.20.1681813431037;
-        Tue, 18 Apr 2023 03:23:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h1-20020a62b401000000b005ccbe5346ebsm8973622pfn.163.2023.04.18.03.23.50
+        d=1e100.net; s=20221208; t=1681814296; x=1684406296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yBtopcpVhz9eBMQtYuRsTFTrwcJpD9PK5zOo4afuwW4=;
+        b=XmF4fwTkxB8kfFkUOzq1sreFl762TUr8nq8+9fL2aBK32ueoKlkawV1a0f/uF++E9T
+         yky5rabUjBsqmBz4kRbnResiLWVKuIpX46axXWzCTp3Frs2+KRxGquqoJbnAPvc+6G2D
+         uwsBXbpat3HYejL58e64awJLW2yDFhTS1s0RAt7qCKcqWrltdVHl/swokZwsOQ+PxEaY
+         w0Bo6p+hxWF/X+a/IkQOzwglS4pXBws0k1EFNNTjo1YO2F7e0+pGQrsKuzJELq7k+hKZ
+         6+YYQQVa2zUY8smNu8qPEj9KW3hdI70gD9GZup0x0iI+wPKIha7RzevaZOxPay26JKGu
+         IOyg==
+X-Gm-Message-State: AAQBX9dAdT8x/b6AKkkjPd6hWdaTXowY9l4+U05BQ2U8j/EYCqfFURyu
+        /BUBnwzGZbP1881Ood1zj1Cbmg==
+X-Google-Smtp-Source: AKy350YmoUouJLJncpUhqAHIl1VHEwB0iKOrdoz7B4rih6xNXtKSQCSwhjsMF2ycCJxHdrapjFJIxw==
+X-Received: by 2002:a05:6a00:2d88:b0:63b:8792:f288 with SMTP id fb8-20020a056a002d8800b0063b8792f288mr12523385pfb.31.1681814296388;
+        Tue, 18 Apr 2023 03:38:16 -0700 (PDT)
+Received: from localhost ([122.172.85.8])
+        by smtp.gmail.com with ESMTPSA id n9-20020aa79049000000b0062ddcad2cbesm9285886pfo.145.2023.04.18.03.38.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 03:23:50 -0700 (PDT)
-Message-ID: <643e6fb6.620a0220.e6736.3162@mx.google.com>
-Date:   Tue, 18 Apr 2023 03:23:50 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 18 Apr 2023 03:38:15 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 16:08:13 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, rafael@kernel.org,
+        jonathanh@nvidia.com, robh+dt@kernel.org, lpieralisi@kernel.org,
+        helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v6 6/9] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Message-ID: <20230418103813.z77tdq5i2iqj6mgn@vireshk-i7>
+References: <20230411110002.19824-1-sumitg@nvidia.com>
+ <20230411110002.19824-7-sumitg@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.3-rc7-153-gbc538c8be4bd
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.3-rc7-153-gbc538c8be4bd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411110002.19824-7-sumitg@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.3-rc7-153-gb=
-c538c8be4bd)
+On 11-04-23, 16:29, Sumit Gupta wrote:
+> Add support to use OPP table from DT in Tegra194 cpufreq driver.
+> Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
+> Cross check the OPP's present in DT against the LUT from BPMP-FW
+> and enable only those DT OPP's which are present in LUT also.
+> 
+> The OPP table in DT has CPU Frequency to bandwidth mapping where
+> the bandwidth value is per MC channel. DRAM bandwidth depends on the
+> number of MC channels which can vary as per the boot configuration.
+> This per channel bandwidth from OPP table will be later converted by
+> MC driver to final bandwidth value by multiplying with number of
+> channels before sending the request to BPMP-FW.
+> 
+> If OPP table is not present in DT, then use the LUT from BPMP-FW
+> directy as the CPU frequency table and not do the DRAM frequency
+> scaling which is same as the current behavior.
+> 
+> Now, as the CPU Frequency table is being controlling through OPP
+> table in DT. Keeping fewer entries in the table will create less
+> frequency steps and can help to scale fast to high frequencies
+> when required.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/cpufreq/tegra194-cpufreq.c | 156 ++++++++++++++++++++++++++---
+>  1 file changed, 143 insertions(+), 13 deletions(-)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-3-rc7-153-gbc538c8be4bd/
+Applied. Thanks.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.3-rc7-153-gbc538c8be4bd
-Git Commit: bc538c8be4bd17479f88f2e1a78d5b76b5523319
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+viresh
