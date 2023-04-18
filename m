@@ -2,122 +2,222 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC6D6E6602
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 15:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621AD6E6615
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 15:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjDRNdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 09:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S230407AbjDRNid convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 18 Apr 2023 09:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjDRNdD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 09:33:03 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF1C10C0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 06:32:52 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f174cf526aso10356905e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 06:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681824771; x=1684416771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0Aq3Nd4jMdfAR3KI1AWe8WTAyHvr67utxQYkTtLldt0=;
-        b=v7kNjL7LKX9niN5Xue8ikJnWBDrtm0XVLtHOxdvZy90cSRzm5VZ/1vWHikT4VdFu/P
-         i5QVBtfkWWtv8emxmNaiZsLZlQbQkTe/Ue5z6NsCz300mHrERcs6ebUpcWpvg749zy4l
-         jUq7I28kjHW3Sry/O405flDY6bwGyeaZpVUUaGvq8slXQZDvYCAzJNEuPubrCrEFGU3R
-         smoaKHT/fxwUBbkmYgrpEZ2mg8uu0Bpgm7p5eBlkzr7CzB0TOvqSpthr3U0WEL3MFovR
-         qTjZlGJfWK8vflQ/wNV6gRiLYddpfgUTMREdyifwgkP+ocQausvMgj4axUrDtrDrpKEx
-         ezqg==
+        with ESMTP id S230033AbjDRNic (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 09:38:32 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E718C76BE;
+        Tue, 18 Apr 2023 06:38:30 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-94f161ee14fso44036566b.0;
+        Tue, 18 Apr 2023 06:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681824771; x=1684416771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Aq3Nd4jMdfAR3KI1AWe8WTAyHvr67utxQYkTtLldt0=;
-        b=U11ELBk5pRgYjhFeU1qWUbxNkkgROadEH3FoC+M23stUMcXuXEw5uevmnbgCxBVU6S
-         1PSdCV0lMmGJj8bD6bX73B0U8lzP0oTTL0lKcR7ZaMxzVcvzPzsLZkMkn8yH7R+iR9Iz
-         4B8/E/+twOG9ukQpxSs2Tj0jcm+cAeStBajziCEKFyPKcjSxyd8KYfcXkpHM1HZ+qFtO
-         X3CaGli05VybSrC177iY5dUnEXJxvqGRdukGcj8ARZ5Sl4upRX5wQ4f9pWDPuOTXwRpH
-         pOQUa2EzoTFL/nB42e/kPIrmzrfBMMOPsSrzdVcPQCBS6z3tnb94fH+ZshggnQ6vBq2c
-         eWDA==
-X-Gm-Message-State: AAQBX9fmJHSar/sYquWbHIanpidh3R8yvbBNrnmzXA+hMENvz7uZkig0
-        WrJ3cp3FVHqINkSLBOWGIrON3A==
-X-Google-Smtp-Source: AKy350Ypz3bNF+Gog3Q+ZFf+kExMFZuNRn07Jb3XMx9YombBMVJkADD4UHvJI5BGq2hd8TNAqyW0Sw==
-X-Received: by 2002:a5d:44ce:0:b0:2f1:d97f:5711 with SMTP id z14-20020a5d44ce000000b002f1d97f5711mr1635126wrr.30.1681824771135;
-        Tue, 18 Apr 2023 06:32:51 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t16-20020a7bc3d0000000b003f1692ebd0asm9738705wmj.3.2023.04.18.06.32.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 06:32:50 -0700 (PDT)
-Message-ID: <40bbbda0-92b9-5e94-8a94-ba053c8a0301@linaro.org>
-Date:   Tue, 18 Apr 2023 15:32:47 +0200
+        d=1e100.net; s=20221208; t=1681825109; x=1684417109;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mwewGy9LaTkUu8wcsC7k9mG2Kvb92vDbhG2D69lhsoM=;
+        b=JmvMPrHM2HgoMaNIzRLaynOPkn2wZgiWWgRpfH5T/Eb2O8m6+hhRps3Zqs205obwGh
+         h83lkQ6MwB+Q3Kj55LrqfFiSs6+n+z+j2XzM6IaFZFnRIPjhlOWoXyu+htgprm90N5sy
+         FYzKeIGK4w8WUCMjcliDDU1o/tzXkh6QN1vGE/Ao/NXp68/j7qo1n2Bd3BS64anMBbJ9
+         3GenNEQXgAenWCU/C8qRzFsmx43Oc5f/ENqvMwMKKQwwy7SmzcTfKogl2lGxe0oUMzVW
+         S/8QswOtIhBMHQ2kYMUMXNaQo4pRjKmAys0cz/q0UlBE3NI89/Jgo4Y/Jk1vhBYrgZvx
+         GH4Q==
+X-Gm-Message-State: AAQBX9evVwx198ZtYA6nSkGaDOBPCWUHnFxUo6bGY+Mo7/s3hokvkdI4
+        ANqq4zAcfYnLAa/sa1YHLIu09Soe4vmSDfv7M0I=
+X-Google-Smtp-Source: AKy350aNuO3YOywcpBu+2omv9Du3sqUWvljqNyZxsgxVAyUKm1XDnyqv1N1ELt/0kq9+RK51TLoB/lg0a9Du0Mquzb8=
+X-Received: by 2002:a17:906:24f:b0:931:4285:ea1d with SMTP id
+ 15-20020a170906024f00b009314285ea1dmr12535566ejl.5.1681825109277; Tue, 18 Apr
+ 2023 06:38:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] thermal/drivers/cpuidle_cooling: Delete unmatched
- comments
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Chenggang Wang <wangchenggang@vivo.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1681789108-28130-1-git-send-email-wangchenggang@vivo.com>
- <20230418035307.f6p2jp3nxgfyebns@vireshk-i7>
- <CAJZ5v0gZFU8Lreto8fDYa9PYUo=ZiNLr21FFSbYxMcsAc0hA=Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gZFU8Lreto8fDYa9PYUo=ZiNLr21FFSbYxMcsAc0hA=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413114647.3878792-1-daniel.lezcano@linaro.org> <20230413114647.3878792-6-daniel.lezcano@linaro.org>
+In-Reply-To: <20230413114647.3878792-6-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 18 Apr 2023 15:38:18 +0200
+Message-ID: <CAJZ5v0jqB18c1u-eqcEiXW+fOH=nX=Uu3xi5sp2F9udsFUrYew@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] thermal/drivers/acpi: Make cross dev link optional
+ by configuration
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/04/2023 15:30, Rafael J. Wysocki wrote:
-> On Tue, Apr 18, 2023 at 5:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>
->> On 18-04-23, 11:38, Chenggang Wang wrote:
->>> The function no longer returns a value, synchronize the comments.
->>>
->>> Signed-off-by: wangchenggang@vivo.com
->>> ---
->>>   drivers/thermal/cpuidle_cooling.c | 3 ---
->>>   1 file changed, 3 deletions(-)
->>>
->>> diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
->>> index 4f41102..7779739 100644
->>> --- a/drivers/thermal/cpuidle_cooling.c
->>> +++ b/drivers/thermal/cpuidle_cooling.c
->>> @@ -236,9 +236,6 @@ static int __cpuidle_cooling_register(struct device_node *np,
->>>    *
->>>    * This function is in charge of creating a cooling device per cpuidle
->>>    * driver and register it to the thermal framework.
->>> - *
->>> - * Return: zero on success, or negative value corresponding to the
->>> - * error detected in the underlying subsystems.
->>>    */
->>>   void cpuidle_cooling_register(struct cpuidle_driver *drv)
->>>   {
->>
->> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
-> Daniel, are you going to pick up this one?
+On Thu, Apr 13, 2023 at 1:47 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The ACPI thermal driver creates a link in the thermal zone device
+> sysfs directory pointing to the device sysfs directory. At the same
+> time, it creates a back pointer link from the device to the thermal
+> zone device sysfs directory.
+>
+> From a generic perspective, having a device pointer in the sysfs
+> thermal zone directory may make sense. But the opposite is not true as
+> the same driver can be related to multiple thermal zones.
+>
+> The usage of these information is very specific to ACPI and it is
+> questionable if they are really needed.
+>
+> Let's make the code optional and disable it by default. If it hurts,
+> we will revert this change.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/acpi/Kconfig   | 13 +++++++++
+>  drivers/acpi/thermal.c | 62 ++++++++++++++++++++++++++++--------------
+>  2 files changed, 55 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index ccbeab9500ec..7df4e18f06ef 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -336,6 +336,19 @@ config ACPI_THERMAL
+>           To compile this driver as a module, choose M here:
+>           the module will be called thermal.
+>
+> +config ACPI_THERMAL_SYSFS_ADDON
+> +       bool "Enable thermal sysfs addon"
+> +       depends on ACPI_THERMAL
+> +       def_bool n
+> +       help
+> +        Enable sysfs extra information added in the thermal zone and
+> +        the driver specific sysfs directories. That could be a link
+> +        to the associated thermal zone as well as a link pointing to
+> +        the device from the thermal zone. By default those are
+> +        disabled and are candidate for removal, if you need these
+> +        information anyway, enable the option or upgrade the
+> +        userspace program using them.
+> +
 
-Yes
+I don't think that the Kconfig option is appropriate and the help text
+above isn't really helpful.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>  config ACPI_PLATFORM_PROFILE
+>         tristate
+>
+> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+> index 5763db4528b8..30fe189d04f8 100644
+> --- a/drivers/acpi/thermal.c
+> +++ b/drivers/acpi/thermal.c
+> @@ -787,9 +787,44 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+>         .critical = acpi_thermal_zone_device_critical,
+>  };
+>
+> +#ifdef CONFIG_ACPI_THERMAL_SYSFS_ADDON
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I agree with moving the code in question to separate functions, but I
+don't agree with putting it under the Kconfig option.
 
+> +static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
+> +{
+> +       struct device *tzdev = thermal_zone_device(tz->thermal_zone);
+> +       int ret;
+> +
+> +       ret = sysfs_create_link(&tz->device->dev.kobj,
+> +                               &tzdev->kobj, "thermal_zone");
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = sysfs_create_link(&tzdev->kobj,
+> +                                  &tz->device->dev.kobj, "device");
+> +       if (ret)
+> +               sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+> +
+> +       return ret;
+> +}
+> +
+> +static void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
+> +{
+> +       struct device *tzdev = thermal_zone_device(tz->thermal_zone);
+> +
+> +       sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+> +       sysfs_remove_link(&tzdev->kobj, "device");
+> +}
+> +#else
+> +static inline int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
+> +{
+> +       return 0;
+> +}
+> +static inline void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
+> +{
+> +}
+> +#endif
+> +
+>  static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>  {
+> -       struct device *tzdev;
+>         int trips = 0;
+>         int result;
+>         acpi_status status;
+> @@ -821,23 +856,15 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>         if (IS_ERR(tz->thermal_zone))
+>                 return -ENODEV;
+>
+> -       tzdev = thermal_zone_device(tz->thermal_zone);
+> -
+> -       result = sysfs_create_link(&tz->device->dev.kobj,
+> -                                  &tzdev->kobj, "thermal_zone");
+> +       result = acpi_thermal_zone_sysfs_add(tz);
+>         if (result)
+>                 goto unregister_tzd;
+> -
+> -       result = sysfs_create_link(&tzdev->kobj,
+> -                                  &tz->device->dev.kobj, "device");
+> -       if (result)
+> -               goto remove_tz_link;
+> -
+> +
+>         status =  acpi_bus_attach_private_data(tz->device->handle,
+>                                                tz->thermal_zone);
+>         if (ACPI_FAILURE(status)) {
+>                 result = -ENODEV;
+> -               goto remove_dev_link;
+> +               goto remove_links;
+>         }
+>
+>         result = thermal_zone_device_enable(tz->thermal_zone);
+> @@ -851,10 +878,8 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>
+>  acpi_bus_detach:
+>         acpi_bus_detach_private_data(tz->device->handle);
+> -remove_dev_link:
+> -       sysfs_remove_link(&tzdev->kobj, "device");
+> -remove_tz_link:
+> -       sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+> +remove_links:
+> +       acpi_thermal_zone_sysfs_remove(tz);
+>  unregister_tzd:
+>         thermal_zone_device_unregister(tz->thermal_zone);
+>
+> @@ -863,10 +888,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>
+>  static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
+>  {
+> -       struct device *tzdev = thermal_zone_device(tz->thermal_zone);
+> -
+> -       sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+> -       sysfs_remove_link(&tzdev->kobj, "device");
+> +       acpi_thermal_zone_sysfs_remove(tz);
+>         thermal_zone_device_unregister(tz->thermal_zone);
+>         tz->thermal_zone = NULL;
+>         acpi_bus_detach_private_data(tz->device->handle);
+> --
+> 2.34.1
+>
