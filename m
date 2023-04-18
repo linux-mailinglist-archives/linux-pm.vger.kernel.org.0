@@ -2,61 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F4C6E5DC2
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 11:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE156E5E0A
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Apr 2023 11:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjDRJoJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Apr 2023 05:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S231434AbjDRJzn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Apr 2023 05:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjDRJoB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 05:44:01 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8E61BD6
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 02:44:00 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a8a77f2e6fso18951401fa.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Apr 2023 02:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681811038; x=1684403038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l2LMbqz6wH8w60oclmV6uXVVb8iyR/SHLVOrQfQu5n4=;
-        b=wG+IKMn0J81Q85iLIDHTC0YAFhqDdS8tsiOF75ljf6BHnjZsDbafzV3nSJXp0PC56O
-         hpDuwbm2sJgSBouOkRHbvM7xfqxRMm0k3GiVipJa9QK7QUG5Rt+0gV226P/QtO/oOuu0
-         22JEwj0Eh8tCPdc8LAMh1MeCYYmAVWDRhahWTR/SWJCvHRfI7pwu5MP43pQxqkBs4l0k
-         4SWXa8GLepongw7rSaoLtbiINSDxQnztcS3l7z8CusPC1q9q/SVzibU7lSb6DkKpCK96
-         2+QFKROWuG+aMTSrYv2OGZAIIOSwutcTTWldBKLJ/eDDnnxd58e7sqFj1AFdmqWF5uw4
-         nbmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681811038; x=1684403038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l2LMbqz6wH8w60oclmV6uXVVb8iyR/SHLVOrQfQu5n4=;
-        b=Wy4g+LKkiQrCJx5G3GcQVjc5kcOzmJOg5Ra1c1gSuZLBa86Su6ZoJJgMJd59XULpIQ
-         TS9Tke8L7DeGFU7QTHUiSx6BNe0KC39RIvQZTLpo08MgJUEsiF7gBZ02Kfl686rbqB53
-         NRM8WFfyMd3M8nQGOHVioSe4V1rOpYBwzY5akEpJf+98WRozu+02MnWwkPV5m3/X2vJK
-         8iKMnxwA0Ts7/oEhbYM0BVkOCJ7FyD+XpO8/zMiD6ZcQh33osBnNJHSsLT5sZxbudKso
-         XuOyS9jY3XpWpSG/CeEDnSCzwLIjzDSi9uMjTe0m5qXv7OQso9JZlFh1mYB++WF00IHp
-         f5kw==
-X-Gm-Message-State: AAQBX9f8JpRQTZ3mZlGYv1jULEG6qa1hfsg7fWx+YzFRLG9UO135ywkZ
-        W7CtaUxdeMSRCrZ0Yh/0dMePgg==
-X-Google-Smtp-Source: AKy350bMMt96DgjDZhelJgwdeH91GqmXc2epqbLnaBdJ6rmoJqtReem1n9MIx8T5neOs4RY5uDia5Q==
-X-Received: by 2002:ac2:5ec2:0:b0:4ed:b9b6:fc46 with SMTP id d2-20020ac25ec2000000b004edb9b6fc46mr2509904lfq.41.1681811038405;
-        Tue, 18 Apr 2023 02:43:58 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id n3-20020ac242c3000000b004eb09081d77sm2319615lfl.91.2023.04.18.02.43.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 02:43:58 -0700 (PDT)
-Message-ID: <a17c21b7-9c0a-2458-735c-ac3b16ed337f@linaro.org>
-Date:   Tue, 18 Apr 2023 11:43:56 +0200
+        with ESMTP id S231172AbjDRJzi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Apr 2023 05:55:38 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B940C7;
+        Tue, 18 Apr 2023 02:55:06 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I8lAFv028173;
+        Tue, 18 Apr 2023 09:54:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9MNYTWJnVX4ToZwrdikCP8x2UjqgSoVQz3bfG1l0798=;
+ b=DvJWHfuo/X0ipclGHa1Mno5fXpqniawailplmc/tb1t3/+D9WXcuG/r+dc6PDd+AngRq
+ PbCPTsSrJZgrxjt4u0oH0sOneCQPLWLSX59IhptKYfEblZEBBeo8aB28JZcQvpSn6wsZ
+ XtuBEH3MbeHsxLyc6i1ZB9IAJACue5RsXIiHuTXNCAfxMvpiOSpG/upT+6Ow/9WKuqod
+ ozt/OhEv8Nyau5p3ywJnkHdJ36YH+UTRnaPHiH7HO9wJ5v8iwU3hgOwQ5gDxrZQ3vzzv
+ PIC05EkGRelzNazWRG42LS4euaMBb4oq3VmvZZ/3nHB4yVoNJQMPdhLOWiIJMgDTQ3kI pw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1nk4gfnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 09:54:52 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33I9sps0027999
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 09:54:51 GMT
+Received: from [10.218.19.109] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
+ 2023 02:54:44 -0700
+Message-ID: <12f13183-c381-25f7-459e-62e0c2b19498@quicinc.com>
+Date:   Tue, 18 Apr 2023 15:24:40 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
 Subject: Re: [PATCH 1/4] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
 Content-Language: en-US
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Sebastian Reichel <sre@kernel.org>,
@@ -66,23 +55,39 @@ To:     Shazad Hussain <quic_shazhuss@quicinc.com>,
         Bjorn Andersson <andersson@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         Parikshit Pareek <quic_ppareek@quicinc.com>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 References: <20230413131705.3073911-1-brgl@bgdev.pl>
  <20230413131705.3073911-2-brgl@bgdev.pl>
  <3e361a73-797f-41c7-1ead-ecafee3928e4@linaro.org>
  <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+ <a17c21b7-9c0a-2458-735c-ac3b16ed337f@linaro.org>
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+In-Reply-To: <a17c21b7-9c0a-2458-735c-ac3b16ed337f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: OUOSSZ3POk8lnWGVILgZtZ22ahS1OCSE
+X-Proofpoint-GUID: OUOSSZ3POk8lnWGVILgZtZ22ahS1OCSE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_06,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180085
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,45 +96,53 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 18.04.2023 06:39, Shazad Hussain wrote:
+On 4/18/2023 3:13 PM, Konrad Dybcio wrote:
 > 
 > 
-> On 4/13/2023 9:42 PM, Krzysztof Kozlowski wrote:
->> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
->>> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+> On 18.04.2023 06:39, Shazad Hussain wrote:
+>>
+>>
+>> On 4/13/2023 9:42 PM, Krzysztof Kozlowski wrote:
+>>> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
+>>>> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>>>
+>>>> Remove the power on reasons with reboot from the pmm8654au_0_pon.
+>>>> Instead, the PoN reaons should be part of different sdam_0 mode, to
 >>>
->>> Remove the power on reasons with reboot from the pmm8654au_0_pon.
->>> Instead, the PoN reaons should be part of different sdam_0 mode, to
+>>> typo: reasons
+>>>
+>>>> be interoduced.
+>>>
+>>> introduced
+>>>
+>>> Anyway it does not say why. Are these power reasons not correct?
+>>>
 >>
->> typo: reasons
+>> Hi Krzysztof,
+>> Since sm8350 the PMIC PON peripheral was split into PON_HLOS and PON_PBS
+>> to avoid security concerns with HLOS APPS being able to trigger a PMIC
+>> WARM_RESET unilaterally. When the split occurred, the spare registers
+>> ended up in PON_PBS, not PON_HLOS. Thus at that time, we moved to using
+>> an SDAM register for Linux “reboot reason” configuration. And bootloader
+>> also SDAM register to get these reboot region data to get into
+>> bootloader/edl, so to have this working we need to use SDAM.
 >>
->>> be interoduced.
->>
->> introduced
->>
->> Anyway it does not say why. Are these power reasons not correct?
->>
+> Does that imply all PMICs following the PMK8350 scheme (separate HLOS and
+> PBS) should direct reboot mode writes to SDAM?
 > 
-> Hi Krzysztof,
-> Since sm8350 the PMIC PON peripheral was split into PON_HLOS and PON_PBS
-> to avoid security concerns with HLOS APPS being able to trigger a PMIC
-> WARM_RESET unilaterally. When the split occurred, the spare registers
-> ended up in PON_PBS, not PON_HLOS. Thus at that time, we moved to using
-> an SDAM register for Linux “reboot reason” configuration. And bootloader
-> also SDAM register to get these reboot region data to get into
-> bootloader/edl, so to have this working we need to use SDAM.
-> 
-Does that imply all PMICs following the PMK8350 scheme (separate HLOS and
-PBS) should direct reboot mode writes to SDAM?
+> Konrad
 
-Konrad
+Yes, that's what the expectation is with bootloader using SDAM as well.
+
+>>>>
+>>>> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>> ---
 >>>
->>> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
->>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>> ---
+>>> Best regards,
+>>> Krzysztof
+>>>
 >>
->> Best regards,
->> Krzysztof
->>
-> 
-> -Shazad
+>> -Shazad
+
+-Shazad
