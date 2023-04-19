@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5F66E7579
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Apr 2023 10:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119966E758A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Apr 2023 10:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbjDSIkH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Apr 2023 04:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S232608AbjDSInB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Apr 2023 04:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjDSIkG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Apr 2023 04:40:06 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D1772A4
-        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:40:04 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id xd13so45681810ejb.4
-        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:40:04 -0700 (PDT)
+        with ESMTP id S232041AbjDSInA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Apr 2023 04:43:00 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDED87EDD
+        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:42:58 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id fy21so36642182ejb.9
+        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893603; x=1684485603;
+        d=linaro.org; s=google; t=1681893777; x=1684485777;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=22bAOLCz/Hy85xNiRLfskrgiPMdU7+7siODBKDyg0pM=;
-        b=Roj6MyT9vIcHinFEsCO2tp5BU2nLbWl5k4IXdVB6bc+f7ht4jujN6z1Bmxd9qQ8qn2
-         zFtB1wqbtsQ27dsrF9B5aagcbpMvEYG8vwTwCO5VIueFo2JjRNY1Gu4HL747upNNJuyz
-         HKF08W5gs/S+XpR7VCZsrSWmDzq0PZbwV0X0NTDRAYUn39hxCKgPumQkrxJtDt3gOk0j
-         vzLcwOFqPodX16rUDhNyEzInj6L39Kdsg93yQ1sZn5lpzFwy9U7bVPDx9ove2XxNyPo7
-         xsV79+2rVWIu2BARwcEa9yzoXurcaUk8k1+wK4H9Xd3BX3rL52Hm4dHvc+nKwrezfPv5
-         H+Kw==
+        bh=lutJ4X10eErUILwsgkdH5WmRxdvwhCW95FNaPAQ5mOk=;
+        b=XbNu4/AzTzgi+SMPQbP1NKUwDL7qbs11pGCy3FlTuVDrB/tkONF99YDMYrFTgCJZay
+         nm5867HkR9801Y9X4hWeCqe5CmHroUf2Kod7fd6qsN23Y3EvR3dPJTyVNo5HqhYYBcVR
+         ow/fFAOkxWUXfF5523e1xd0js0doDLYk5AsAAauarp+XpDTLOL7ddupMCOJDOLcKyyJW
+         VKN/GmVEio11aMHMf6KZHD+hTmMh/J/l9EklGPyax9AsgN+DieOlu7SErLZf7z91Abtp
+         i6BtWpdkeIzo2AI05bfzBuwZM621bN+jpV6+sdeQv6nfbvQDKk25ymPadmRcAShLFdJt
+         pi5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893603; x=1684485603;
+        d=1e100.net; s=20221208; t=1681893777; x=1684485777;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=22bAOLCz/Hy85xNiRLfskrgiPMdU7+7siODBKDyg0pM=;
-        b=TeA5KzHS6P94idtzNjJ9A/Jo2rGerOmK+gzVIN6THE2QLPm31u4eygsZPBXW0/e3FT
-         +TQrI5wrhf9r2Gr3opjpxSnOIk+ptM35tyVMvhAEtwG679AcRG+Y3V2mOLy5PNftjiAx
-         DcR0vBTqTMJIDMKCayAt/dWaFAei6kFmGrzrrzaybynVQFmgntoJhVY/9gLd7NzEBL1L
-         0b0DqU2JYG0uGcfCg/ZUm7AQKjsrFEMZqUkChrinnTI+L6WmbBpev/XiblAe7bhsOGIt
-         LNERL5eAc89RU8KUmBVdAjacudsGxsMsxVDXa0GJiZzSgFFADEdHDSWO6v7ZMGrwV+Vu
-         GEew==
-X-Gm-Message-State: AAQBX9dcZYEV4K65SbylEkX3TzN2Kaywx0Dh76DMxBn2nL69MsVEao20
-        0EGnxrFnHDdHre9hEzA3VAAL0g==
-X-Google-Smtp-Source: AKy350b+cfnZW26IV+4t/7ysLlAr1MEF2r2CKzPqtzi5Sg7f4/mQ3aCj9ZIau1Rp/s/ffwbV1c+uHg==
-X-Received: by 2002:a17:906:80d4:b0:94f:247d:44d2 with SMTP id a20-20020a17090680d400b0094f247d44d2mr12482285ejx.5.1681893602752;
-        Wed, 19 Apr 2023 01:40:02 -0700 (PDT)
+        bh=lutJ4X10eErUILwsgkdH5WmRxdvwhCW95FNaPAQ5mOk=;
+        b=B+JplzoMf88md5lnMq3yT76mBg52B3tBZGyCwVut8qcb1BHkpPNfyehn/DJRQsDDvz
+         AyTsxQ3Mqh9kkYVUxJwhQ5l4yZXOVtiuml+4Khe3yoymIxaNRA18kKxzHGk5Qyqs/VtN
+         8EDG9V8A9OGxpj2ZBjis84JniAby5LSE7E4uwfzeSXocg9yKVsaSs0RNKozRZKZ37FeG
+         MxHn6OE3CsR77ItAAREsnyt2YX5j8x0JbXJJBXL1hjDp1ahdCt66JM8QI5AM/ACiRC8N
+         C3tmKel9qMrfFhi3OG6O/NAtn5GVjUKQ7wWxzpfyF5+b3aL0fhfi4ZYdeCQA76+nVudQ
+         dE0Q==
+X-Gm-Message-State: AAQBX9dLIOwtS4bywyVPmEIAE+lXCr4RZxXXWDkVeUUDe+cEzR/qkrrR
+        nJSR7WJEgFLnF5zATEWqy+3BjA==
+X-Google-Smtp-Source: AKy350YJCPwQqKeOuuIlGNWHxL0ygBdn8cM/uUi2NRApm7KlPPSaGoSd3IH6gCkL818yCt8UV4dZCw==
+X-Received: by 2002:a17:906:70d1:b0:94e:e859:8721 with SMTP id g17-20020a17090670d100b0094ee8598721mr17212622ejk.22.1681893777250;
+        Wed, 19 Apr 2023 01:42:57 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170906038100b0094f5f6ba306sm4636696eja.41.2023.04.19.01.40.01
+        by smtp.gmail.com with ESMTPSA id ww1-20020a170907084100b0094f2a03486esm5871556ejb.224.2023.04.19.01.42.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:40:02 -0700 (PDT)
-Message-ID: <f80fcbeb-f916-63da-a5c3-f80f6315f3e0@linaro.org>
-Date:   Wed, 19 Apr 2023 10:40:01 +0200
+        Wed, 19 Apr 2023 01:42:56 -0700 (PDT)
+Message-ID: <a638055a-97c2-49ce-f301-45d0ce897df4@linaro.org>
+Date:   Wed, 19 Apr 2023 10:42:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
- lowercase
+Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
+ regulator and charger
 Content-Language: en-US
 To:     Jakob Hauser <jahau@rocketmail.com>
 Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -71,11 +71,11 @@ Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
 References: <cover.1681646904.git.jahau@rocketmail.com>
- <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
- <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
- <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
+ <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
+ <5b41b54c-88d0-3666-9db2-9cbb90ba8183@linaro.org>
+ <acb209ce-7cb6-9a07-c913-9931b980c8c7@rocketmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
+In-Reply-To: <acb209ce-7cb6-9a07-c913-9931b980c8c7@rocketmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,30 +88,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/04/2023 23:24, Jakob Hauser wrote:
-> Hi Krzysztof,
-> 
-> On 16.04.23 20:32, Krzysztof Kozlowski wrote:
->> On 16/04/2023 14:44, Jakob Hauser wrote:
->>> Lowercase is preferred for node names.
->>
->> This will break all existing users. In-tree and out-of-tree. Where is
->> the binding update?
-> 
-> In my reply to Rob's comments in v1 I was pointing out that this will 
-> affect an existing driver. There was no reaction.
-> 
-> As far as I can see, there is no in-tree usage yet. Though I can't tell 
-> about out-of-tree usage. Although if there is, adding the rt5033-charger 
-> driver might already causes the need for changes.
-> 
-> Well, to stay on the safe side, I'll drop this patch in v3 and will 
-> change the bindings (patch 9) back to uppercase.
-> 
+On 18/04/2023 23:37, Jakob Hauser wrote:
 
-Your v1 binding patch did not explain that you document existing ABI, so
-you got comments like for a new binding. This is not really new binding,
-is it?
+>>> +properties:
+>>> +  compatible:
+>>> +    const: richtek,rt5033-charger
+>>> +
+>>> +  richtek,pre-microamp:
+>>> +    description:
+>>> +      Current of pre-charge mode. The pre-charge current levels are 350 mA to
+>>> +      650 mA programmed by I2C per 100 mA.
+>>
+>> minimum:
+>> maximum:
+>> multipleOf: 100
+>>
+>> Same for other cases.
+> 
+> The "multipleOf: 100" doesn't seen appropriate to me when the choice is 
+> 350, 450, 550, 650. Those are not multiples of 100. It's more of a step 
+> size. I didn't find a general property for step size. Listing them as 
+> "enum" would be another possibility, I guess, but not an elegant one. 
+> Especially for property "richtek,const-microvolt" there are 30 
+> possibilities.
+
+Ahh, right. You can use enum here and min/max for other cases, where
+multipleOf cannot be used.
+
+>>> +  richtek,eoc-microamp:
+>>> +    description:
+>>> +      This property is end of charge current. Its level ranges from 150 mA to
+>>> +      600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and 600 mA
+>>> +      in 100 mA steps.
+>>> +    maxItems: 1
+> 
+> Here are two different step sizes. The first few are 50 mA steps (150, 
+> 200, 250, 300 mA) and then it changes to 100 mA steps (300, 400, 500, 
+> 600 mA). How to deal with that? Again I guess "enum" would be a 
+> possibility, but again not a nice one.
+
+enum
 
 Best regards,
 Krzysztof
