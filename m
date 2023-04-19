@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86C66E7552
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Apr 2023 10:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54F66E7555
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Apr 2023 10:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjDSIeK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Apr 2023 04:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S232662AbjDSIeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Apr 2023 04:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbjDSIeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Apr 2023 04:34:05 -0400
+        with ESMTP id S232664AbjDSIeI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Apr 2023 04:34:08 -0400
 Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D450FB77A
-        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:33:52 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so1010313wmq.5
-        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:33:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A4C17C
+        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:33:53 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f09b9ac51dso85856555e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893231; x=1684485231;
+        d=linaro.org; s=google; t=1681893232; x=1684485232;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+VZk/Xuf/BecNwwdsFB/838vQVCvaje2TQnFopmd7IM=;
-        b=kqvD1wS2ErlZOZ6LzMudKMXG1HyAcYSdSjNuc9Q7/X77eZsJZrqSJ9UTIYC9BrbQL+
-         16yHHMVnkp4q/IDBDhzxYxKbnMXKDx4ozH0u/Zp7yZ2JJFcG8v49cejsci+mpqcqm6rc
-         oUfIKrC9B94LztB3abF0hG2JCwhek+fpVUQkQhzjrY1BHQ+2De9Vlo7S1xlGn1/4b/R4
-         zO7nIKc5swbfbIY0fEZleTCRfWe9oYsHQnihzI+wZcAGaHu6wUwLIoYZ9sqWjobfWSre
-         g+mROweYTMthRhMT47bU3t66balndfeg2Aibs0WdAPgf86TN6bFCHBsr0qyVHobCKMjB
-         zkXg==
+        bh=jPfklvntaSAZNSstWZb9c9xIuh7wy5gv7laC1WOc6HM=;
+        b=CO5jbBs58eoibeB500jlo8tkaZUwialhUILZ/mxzasCOkfacYHjPZn/iSVXhKoUO91
+         bTPTsV0xmV4SVP/B2qJARLMp5mzmlaGf3Dx9vLeA3oUdYxhsAZfO0peVQqrFU8L6bCbW
+         GxXVeZp1g0WHFjRq+jkuJEyLXajzQQRcMUmUz5PHuoCMN+++vqyG2V1CmbgTl/LfbdJ+
+         T9pPZrhPf+qD5YxS0JFAjcbtdydgCNjsiVr1MBjjDnRhVVlKKmy0j/WAKk+Z5f5SvF1N
+         RhEFhWmKE1zf/ScN8YfXNkqGqBSCWj25EQkCs91/ZbDK4vK3ADWNJRU6Iz7sXr5G8Hk5
+         aEjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893231; x=1684485231;
+        d=1e100.net; s=20221208; t=1681893232; x=1684485232;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+VZk/Xuf/BecNwwdsFB/838vQVCvaje2TQnFopmd7IM=;
-        b=V/GZulC+zk8GRh/2heLKV0ICnpiobGmf/Ue1E72q5nM/i/uB5643QRhVudSCXfXaXD
-         CYaRepke7f/avujc8D8tG/LLFfzZOoXR5SXyispL/tLTZd7Cq6HvAcmGhXuiPyL0+eeE
-         /Xs4sfVNvtD5zYsr1eNnbdzQvdKBZbr/U0Q4WnI0e1ScRKT1QTZNksdJJWDApplzPPnn
-         RPgC8bzHIumIGN8tNsaae5VwemUmutNxe1ZLSZ2B3BBheIYbMR1JDG/YSV3xUL7uRX0I
-         orYH+VsVURSdcJONSzLmUwL7BHTMMYBAnuDvjYmDla3sy2h7oKsjva5a0TUae88kwvh6
-         e/Jg==
-X-Gm-Message-State: AAQBX9fhkFgbCL590kRf2RtdYS5VPrrFydQpxAisbIHtWrcz273HxI4L
-        9T53ajCFN2IScycEAt66QcDnqg==
-X-Google-Smtp-Source: AKy350bhWuv8l4xbkOG83XJs5OTDFxSQo6hP86nRCvWtzPSnGTDj6JV9qccrOBzrmbTmGm5aW0p66Q==
-X-Received: by 2002:a1c:f719:0:b0:3f0:a9b1:81e0 with SMTP id v25-20020a1cf719000000b003f0a9b181e0mr15260941wmh.19.1681893231030;
+        bh=jPfklvntaSAZNSstWZb9c9xIuh7wy5gv7laC1WOc6HM=;
+        b=kIXvN4VekfF7czWvSHVL9/JAMzrx5LnulSHRKERmVeHbFGLj3ha7hGuz5qvUhPdc90
+         SQYWrJZJSeMwuHl0lDYnAEOJGW+9OIewJLcRlbya1i3ObbtHmlaLnQJzhTvUJzKB3X9A
+         aKnYJ1K7/UqPc/nkPxwS2OpztvT34oAGeiAwYAWY1C3H2xM1Afk2TTKUDY2wvIwcHP+A
+         g8J/DZye01i4OToCcbnW/W42Yio+m90Uma1nnvOWmOHlgfNyY4tLvNC38F55msff5wxb
+         DobXxsV4auOF3NLsFwxyn7FTaIbamxa+av96Y1T5TlrcRhWWpNzMP5jNQRKpRUfsR2A9
+         oCjg==
+X-Gm-Message-State: AAQBX9fSq8f7IzarG+u26xfB6i3uhHatDAylPYJ/BwvUDSPUpvifw3qX
+        4ZgsTBSdW1lfbR7c50sJn07Vsg==
+X-Google-Smtp-Source: AKy350Z7VqYlBRj/RFO8d6zcdWtuIqi5exUOJhOIPSy4PJYAZ2EtITGlQNN9EX6k459/d0eIqVr/Eg==
+X-Received: by 2002:a5d:4573:0:b0:2ef:bac1:9c48 with SMTP id a19-20020a5d4573000000b002efbac19c48mr1406536wrc.6.1681893231938;
         Wed, 19 Apr 2023 01:33:51 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a794:9fb2:29fb:606d])
-        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.50
+        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 01:33:50 -0700 (PDT)
+        Wed, 19 Apr 2023 01:33:51 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER)
-Subject: [PATCH v4 3/6] thermal/drivers/acpi: Use thermal_zone_device()
-Date:   Wed, 19 Apr 2023 10:33:40 +0200
-Message-Id: <20230419083343.505780-4-daniel.lezcano@linaro.org>
+        linux-pm@vger.kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v4 4/6] thermal/drivers/menlow: Use thermal_zone_device()
+Date:   Wed, 19 Apr 2023 10:33:41 +0200
+Message-Id: <20230419083343.505780-5-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419083343.505780-1-daniel.lezcano@linaro.org>
 References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,59 +78,43 @@ content of the thermal zone device structure.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/acpi/thermal.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/thermal/intel/intel_menlow.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 255efa73ed70..5763db4528b8 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -789,6 +789,7 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+index 5a6ad0552311..d720add918ff 100644
+--- a/drivers/thermal/intel/intel_menlow.c
++++ b/drivers/thermal/intel/intel_menlow.c
+@@ -422,7 +422,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
  
- static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- {
-+	struct device *tzdev;
- 	int trips = 0;
- 	int result;
- 	acpi_status status;
-@@ -820,12 +821,14 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 	if (IS_ERR(tz->thermal_zone))
- 		return -ENODEV;
- 
-+	tzdev = thermal_zone_device(tz->thermal_zone);
-+	
- 	result = sysfs_create_link(&tz->device->dev.kobj,
--				   &tz->thermal_zone->device.kobj, "thermal_zone");
-+				   &tzdev->kobj, "thermal_zone");
+ 	result = intel_menlow_add_one_attribute("aux0", 0644,
+ 						aux0_show, aux0_store,
+-						&thermal->device, handle);
++						thermal_zone_device(thermal),
++						handle);
  	if (result)
- 		goto unregister_tzd;
+ 		return AE_ERROR;
  
--	result = sysfs_create_link(&tz->thermal_zone->device.kobj,
-+	result = sysfs_create_link(&tzdev->kobj,
- 				   &tz->device->dev.kobj, "device");
- 	if (result)
- 		goto remove_tz_link;
-@@ -849,7 +852,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- acpi_bus_detach:
- 	acpi_bus_detach_private_data(tz->device->handle);
- remove_dev_link:
--	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
-+	sysfs_remove_link(&tzdev->kobj, "device");
- remove_tz_link:
- 	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
- unregister_tzd:
-@@ -860,8 +863,10 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+@@ -436,7 +437,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
  
- static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
- {
-+	struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-+	
- 	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
--	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
-+	sysfs_remove_link(&tzdev->kobj, "device");
- 	thermal_zone_device_unregister(tz->thermal_zone);
- 	tz->thermal_zone = NULL;
- 	acpi_bus_detach_private_data(tz->device->handle);
+ 	result = intel_menlow_add_one_attribute("aux1", 0644,
+ 						aux1_show, aux1_store,
+-						&thermal->device, handle);
++						thermal_zone_device(thermal),
++						handle);
+ 	if (result) {
+ 		intel_menlow_unregister_sensor();
+ 		return AE_ERROR;
+@@ -449,7 +451,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+ 
+ 	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
+ 						bios_enabled_show, NULL,
+-						&thermal->device, handle);
++						thermal_zone_device(thermal),
++						handle);
+ 	if (result) {
+ 		intel_menlow_unregister_sensor();
+ 		return AE_ERROR;
 -- 
 2.34.1
 
