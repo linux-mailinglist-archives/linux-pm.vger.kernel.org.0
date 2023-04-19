@@ -2,61 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518EA6E744E
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Apr 2023 09:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52626E754C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Apr 2023 10:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjDSHtu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Apr 2023 03:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S232631AbjDSId4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Apr 2023 04:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjDSHtq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Apr 2023 03:49:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2370E132;
-        Wed, 19 Apr 2023 00:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681890585; x=1713426585;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1JAl5eOMO9iDI3YtcwnQJ7Ut9F3DDr//yESFeU4hB9M=;
-  b=Pnjjl/rp4x8seUoUOK2Im94M4KnhdZu6j3r0ycUY6/4Nwga+qAiqclJg
-   lh5E6JuP/snhKOsU7t1c0FNrKBaAJwn3npNeFlPXp+IGz3/41HNQSG2cf
-   L3GJhIBLMm2H1YYwYOlQQ0zoRoDxDU4+pSJjmOBEUY2SQUX8gA5Nif+rj
-   4KFE+IhiBBo1EVcwdwVsOiElCE3XJfK15PtNEJDTzBqg3ypt4pkwWd5T7
-   4kd+4kw3za7wRX9eKkYCDLu2RPnz2dCSgKZBlq3CVSSYeNLytKRKpaONB
-   dVZCT4EipIstf0Jw8Q39yDO1oQ3MOhpe0Sja1K86+CUdLSMYI39X3ruHX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431659652"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="431659652"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 00:49:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684893831"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="684893831"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 00:49:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pp2ZR-000eh8-1i;
-        Wed, 19 Apr 2023 07:49:41 +0000
-Date:   Wed, 19 Apr 2023 15:49:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 7124d7671af0facf115d70f9d1fadde0d768d325
-Message-ID: <643f9cf4.MyQvn+pKrx4qQMmJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232493AbjDSIdz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Apr 2023 04:33:55 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55116448A
+        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:33:49 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so1010228wmq.5
+        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 01:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681893228; x=1684485228;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C41B6yV2DJm6e0BljcJPziM6mJfMowYxUum5pceV41s=;
+        b=uUjaFebkViAcB5GlgI0TxnmKtBjlyHFn/R6izh0Gg+8XmTOW3wCws0gJS6syvgTReO
+         1Za8uNuElZNYpk6Rz+PG0VE+lsVTmRQ/uSCIm6aP06da6p9hWElRYATrvDPejdDM4nwm
+         sOQmMbIj8491eDvxH44mDH6a4Dg9o5X1cjUf4Lu9SQBvNzU4wp3y9jtAG7MpdCBwZ3O6
+         /TtvcXiGR0trp+DS6vhvIojBWAzpvLR+S0Gmg8F4pHcE12STOK4FHPpzOLBXFxN+ml6s
+         UyCqlMLqoBP5CZepRpDMWTMcsO2mlrDlNkFSNlKmKtZVQCl+ecC7pFB/IzaHy2y8JwX7
+         2NMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681893228; x=1684485228;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C41B6yV2DJm6e0BljcJPziM6mJfMowYxUum5pceV41s=;
+        b=DJVuVowJiGI5b26+6/BwYriyudZKLVhJfnDBoXuJ3iZxkzcGAXRiXJ9LPm4gHx/GsM
+         P1VbZKJSTQF9eCX7Qc5qJZvZ/hPA5ZRJSCwT3Vo6VpWmwT1hhlFFSsVJ51HpzXoSPrNg
+         VQkQ+IA8/w8I+ydIFJ1RRu+FoP6N7W94YZ2tn/7QMQu5aKOqisNdF9DNr4KDhjgk2tYX
+         my4Jfb6c1LYCb7LMC+E1Pi8PC9YizfU34adKy7LoK3DUsZjqUwQgxG+NJidPYZR9KSBh
+         Ov1HJG/eWuD81e7+FlaLW+3IT2yhZB2P865lbcX0SdgTTTJeflHtjDkW5rSepNRiA5KX
+         C5vg==
+X-Gm-Message-State: AAQBX9coguKVAnKFBWD3bFRbP+KlTi0bYost1xNiKQYBOYY/M3798g56
+        3+Ibz/0XKWyQl65j7vWTCdZ1EQ==
+X-Google-Smtp-Source: AKy350ZALBs5FVUlKysuCSOzozRkBp5mf5W7ytrLdB4Oj6YB4nBUU3r4ksnFVSFjUFX7w2g1lNBD3A==
+X-Received: by 2002:a05:600c:2184:b0:3f1:82a0:1993 with SMTP id e4-20020a05600c218400b003f182a01993mr21210wme.21.1681893227757;
+        Wed, 19 Apr 2023 01:33:47 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a794:9fb2:29fb:606d])
+        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 01:33:47 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/6] Thermal zone device structure encapsulation
+Date:   Wed, 19 Apr 2023 10:33:37 +0200
+Message-Id: <20230419083343.505780-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,153 +68,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 7124d7671af0facf115d70f9d1fadde0d768d325  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+The thermal zone device structure is defined in the exported thermal
+header include/linux/thermal.h
 
-elapsed time: 727m
+Given the definition being public, the structure is exposed to the
+external components other than the thermal framework core code. It
+results the drivers are tampering the structure internals like taking
+the lock or changing the field values.
 
-configs tested: 134
-configs skipped: 12
+Obviously that is bad for several reasons as the drivers can hook the
+thermal framework behavior and makes very difficult the changes in the
+core code as external components depend on it directly.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Moreover, the thermal trip points being reworked, we don't want the
+drivers to access the trips array directly in the thermal zone
+structure and doing assumptions on how they are organized.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230416   gcc  
-alpha                randconfig-r023-20230416   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r015-20230416   gcc  
-arc                  randconfig-r043-20230416   gcc  
-arc                  randconfig-r043-20230417   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r021-20230417   gcc  
-arm                  randconfig-r022-20230416   clang
-arm                  randconfig-r026-20230416   clang
-arm                  randconfig-r046-20230416   clang
-arm                  randconfig-r046-20230417   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230416   clang
-arm64                randconfig-r012-20230416   gcc  
-arm64                randconfig-r014-20230417   clang
-arm64                randconfig-r016-20230416   gcc  
-arm64                randconfig-r032-20230416   clang
-arm64                randconfig-r036-20230417   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230416   gcc  
-hexagon              randconfig-r014-20230416   clang
-hexagon              randconfig-r025-20230416   clang
-hexagon              randconfig-r041-20230416   clang
-hexagon              randconfig-r041-20230417   clang
-hexagon              randconfig-r045-20230416   clang
-hexagon              randconfig-r045-20230417   clang
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230417   gcc  
-i386                 randconfig-a002-20230417   gcc  
-i386                 randconfig-a003-20230417   gcc  
-i386                 randconfig-a004-20230417   gcc  
-i386                 randconfig-a005-20230417   gcc  
-i386                 randconfig-a006-20230417   gcc  
-i386                 randconfig-a011-20230417   clang
-i386                 randconfig-a012-20230417   clang
-i386                 randconfig-a013-20230417   clang
-i386                 randconfig-a014-20230417   clang
-i386                 randconfig-a015-20230417   clang
-i386                 randconfig-a016-20230417   clang
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r005-20230418   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230417   gcc  
-ia64                 randconfig-r031-20230416   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230417   gcc  
-loongarch            randconfig-r013-20230416   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r006-20230418   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r024-20230416   gcc  
-m68k                 randconfig-r035-20230416   gcc  
-microblaze           randconfig-r001-20230417   gcc  
-microblaze           randconfig-r003-20230416   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r003-20230419   clang
-mips                 randconfig-r005-20230416   gcc  
-mips                 randconfig-r012-20230417   gcc  
-mips                 randconfig-r016-20230417   gcc  
-mips                 randconfig-r026-20230417   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230417   gcc  
-openrisc             randconfig-r015-20230417   gcc  
-openrisc             randconfig-r033-20230417   gcc  
-openrisc             randconfig-r034-20230416   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230419   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r002-20230418   gcc  
-powerpc      buildonly-randconfig-r003-20230418   gcc  
-powerpc              randconfig-r032-20230417   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230419   gcc  
-riscv                randconfig-r042-20230416   gcc  
-riscv                randconfig-r042-20230417   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230416   gcc  
-s390                 randconfig-r044-20230417   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r001-20230419   gcc  
-sh                   randconfig-r013-20230417   gcc  
-sh                   randconfig-r024-20230417   gcc  
-sh                   randconfig-r033-20230416   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230419   gcc  
-sparc                randconfig-r004-20230417   gcc  
-sparc                randconfig-r021-20230416   gcc  
-sparc                randconfig-r031-20230417   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230417   gcc  
-x86_64               randconfig-a002-20230417   gcc  
-x86_64               randconfig-a003-20230417   gcc  
-x86_64               randconfig-a004-20230417   gcc  
-x86_64               randconfig-a005-20230417   gcc  
-x86_64               randconfig-a006-20230417   gcc  
-x86_64               randconfig-a011-20230417   clang
-x86_64               randconfig-a012-20230417   clang
-x86_64               randconfig-a013-20230417   clang
-x86_64               randconfig-a014-20230417   clang
-x86_64               randconfig-a015-20230417   clang
-x86_64               randconfig-a016-20230417   clang
-x86_64               randconfig-r025-20230417   clang
-x86_64               randconfig-r035-20230417   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r003-20230417   gcc  
-xtensa               randconfig-r006-20230416   gcc  
+This series provides a second set of changes moving to the thermal
+zone device structure self-encapsulation.
+
+The ACPI and the Menlon drivers are using the thermal zone's device
+fields to create symlinks and new attributes in the sysfs thermal zone
+directory. These changes provide a hopefully temporary wrapper to
+access it in order to allow moving forward in the thermal zone device
+self-encapsulation and a Kconfig option to disable by default such a
+extra sysfs information.
+
+Changelog:
+	v4:
+	- Encapsulate extra sysfs information inside a function for
+          ACPI but remove the Kconfig option
+	- Encapsulate extra sysfs information inside a function,
+          create the stubs and put that conditionnal to a Kconfig
+          option for Menlow
+	v3:
+	- Split the Kconfig option to be driver related when disabling
+          the specific attributes
+	- Use the thermal zone's device wrapper to write a trace in
+          the pch intel driver
+	v2:
+	- Add the Kconfig option to remove specific attributes
+	- Add a thermal_zone_device() wrapper to access tz->device
+
+Daniel Lezcano (6):
+  thermal/core: Encapsulate tz->device field
+  thermal/drivers/intel_pch_thermal: Use thermal driver device to write
+    a trace
+  thermal/drivers/acpi: Use thermal_zone_device()
+  thermal/drivers/menlow: Use thermal_zone_device()
+  thermal/drivers/acpi: Move to dedicated function sysfs extra attr
+    creation
+  thermal/drivers/intel_menlow: Make additionnal sysfs information
+    optional
+
+ drivers/acpi/thermal.c                    | 47 +++++++++++++++--------
+ drivers/thermal/intel/Kconfig             | 11 ++++++
+ drivers/thermal/intel/intel_menlow.c      | 18 +++++++--
+ drivers/thermal/intel/intel_pch_thermal.c |  3 +-
+ drivers/thermal/thermal_core.c            |  6 +++
+ include/linux/thermal.h                   |  1 +
+ 6 files changed, 67 insertions(+), 19 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
