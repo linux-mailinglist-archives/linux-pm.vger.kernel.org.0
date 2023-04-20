@@ -2,77 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CC76E9E00
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 23:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70336E9EBA
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 00:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbjDTVkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Apr 2023 17:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S232136AbjDTWXu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Apr 2023 18:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbjDTVkI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 17:40:08 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870CD30F1
-        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 14:40:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-2fa36231b1cso635010f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 14:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682026805; x=1684618805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OiKofJxLpzcK1POL74XTZyiqo6DoCaEtr8igEFYC4N0=;
-        b=V2dH4vpRLVU0oUQozrZ4aUjCxexgGCk8qrGT1JSJH0oX+TF30NsX/XeVSEbTU7IV9G
-         gUHhi5fTlDrKtuyn46BrT4Wf7XpVbtRVLzcpKEz1jvyiyjhXRIpVr7NRTunj+nyomeYc
-         159R2BOM9Y9Lfk+uKZzCb+4kZW5K1sAgAygsHH2lAC4aLnRxWXWV6TCkJCYIIGGPwtC2
-         qjF1Nh5tiT8x2zjqMcYTYXo6rLkNg0dO0QvtVD6Rxrl+pMKFcsKLOIi4tW/W+R/lTYX1
-         MAV9op715wtaX08kXJ/4AuacKyNZIfeZ//ntFQf/3PPJKjvlVMZ2spOyrMuqbWCtruwA
-         y40g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682026805; x=1684618805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OiKofJxLpzcK1POL74XTZyiqo6DoCaEtr8igEFYC4N0=;
-        b=lR3JK1/shnGl+A5sQiQklbSGKyFhGBdahL4Ad64bGK0laEM8w5fenJDWV5WvidspgA
-         yjKZ9zu7hUPvm3fXtyQ2Ie3FtXKRxPBveW8zfu9HO+79EtrokJtWX5I0x7RD0w3sXUc/
-         GvRFx4EcwRW8UAaOyJ1g4vOnfUMQG5eICJXUezs/hqpsEmABMhmx4BDOTx6yBSP+tvQN
-         MTOi8+jXi9cmVMAU+DvfTT8dwvhFXY6rSsbgk33IPxi0t7i/ZTikmAHCbP9p19E42oop
-         FfurvvoDG7xadR2KEp6Ia+aP/pIG1rxgnhHQntgvrtJG5X6KfmKNWWhXC773G+b9b1nf
-         zzAw==
-X-Gm-Message-State: AAQBX9do4y9oHjeVGxxYFcvVCbKnox7hTxeDIidNPh/rtv/s4MQenp/j
-        sRGrHd8x/23O2SJGvz6I5lthgbAPfAeE7eQtYl4=
-X-Google-Smtp-Source: AKy350aKUvhXcbdvVhj8HlnP8pqn62/PVNayCFHM8SljUDL0UqCy2dveIPqqaObMyOoz9TxPqKtM/Q==
-X-Received: by 2002:a5d:6182:0:b0:303:2702:6d66 with SMTP id j2-20020a5d6182000000b0030327026d66mr676582wru.63.1682026804799;
-        Thu, 20 Apr 2023 14:40:04 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:4599:1915:621d:5b00? ([2a05:6e02:1041:c10:4599:1915:621d:5b00])
-        by smtp.googlemail.com with ESMTPSA id bi26-20020a05600c3d9a00b003eddc6aa5fasm2701860wmb.39.2023.04.20.14.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 14:40:04 -0700 (PDT)
-Message-ID: <bcc96406-3f74-b79b-3f75-0c3bd88c5eea@linaro.org>
-Date:   Thu, 20 Apr 2023 23:40:03 +0200
+        with ESMTP id S232801AbjDTWXr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 18:23:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCF030F2
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 15:23:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78C4064C4B
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 22:23:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA813C433A4
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 22:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682029420;
+        bh=TK78CSVwe2MVKl/Akspq+ZTZzHADfto5V/d7VPTH/qQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=P7lTXaA2BCb4gT3s/9AOGpOYXpvQe0w275Ge3A2uZ5QnmgfpLAoQmJ8L7DZAuJ2Ux
+         KyIofP1+sRAueqK5VRacBXqZFOMWto+QmDC3NfVf95jZrUGfbTr6omP1j3MenDnQ2B
+         wI/RsAcIqWKvnGSLc5qKDaBktidbgDtCfkGN4pZtR+ikpFhiNQkC42HQaYlUyMQfpM
+         xWq1dffis2dfel4bTxe9UC5chQi4W4BqJJNBDX4QWIGQ0WAMWy+s4oLpS8iABqwEhG
+         1BA6ukTjel/O7+tL/AH0KBDlKql5oXqOKY/MQke8PTbQQ1+JWkad65YyK0brPDoOPL
+         BiDYYbMe6V26g==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-50506ac462bso1379750a12.3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 15:23:40 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dGcVgWv1RglN36UFxqDVDnFuQZIoXQDTPO0dlLhwJwPcTxPI0m
+        afjXRKpMgw3T95+xRgH62tzLxUCR/ibeJy3dMJE+Ww==
+X-Google-Smtp-Source: AKy350YRvc1c5/x9Ju6w2w31NCvB0mLlC9kkPyAzm+txB1+HHBy7WJqF48Tkb4o2CdB63r+Jw/WxLenE4GJSH2atRUA=
+X-Received: by 2002:a17:906:a18c:b0:928:796d:71e8 with SMTP id
+ s12-20020a170906a18c00b00928796d71e8mr438986ejy.3.1682029419018; Thu, 20 Apr
+ 2023 15:23:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 6/6] thermal/drivers/intel_menlow: Make additionnal
- sysfs information optional
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
- <20230419083343.505780-7-daniel.lezcano@linaro.org>
- <CAJZ5v0gi4j=kJBnXCotQ8_+t39CzOFSBie9Yc6x8BV=TYxsjPQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gi4j=kJBnXCotQ8_+t39CzOFSBie9Yc6x8BV=TYxsjPQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Fri, 21 Apr 2023 03:53:28 +0530
+X-Gmail-Original-Message-ID: <CAHLCerPBnvp_XD-ZR79nZBzdbBEiYZFuLfUpAQtuopgZ8GC=ZQ@mail.gmail.com>
+Message-ID: <CAHLCerPBnvp_XD-ZR79nZBzdbBEiYZFuLfUpAQtuopgZ8GC=ZQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: correct unit address
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,30 +71,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/04/2023 19:24, Rafael J. Wysocki wrote:
+On Thu, Apr 20, 2023 at 12:54=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Match unit-address to first reg entry.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ ... ]
+Acked-by: Amit Kucheria <amitk@kernel.org>
 
-> After looking at it once more, I think that this driver isn't really
-> functional without the additional sysfs attributes, so if
-> CONFIG_INTEL_MENLOW_SYSFS_ADDON is set, the driver effectively becomes
-> dead code.
-> 
-> That's rather unfortunate and I'm not sure how to deal with it ATM.
-> 
-> I can queue up the rest of the series for 6.4-rc1 (in which case it
-> will be pushed in the second half of the merge window), but this
-> particular patch requires more thought IMV.
-
-I'm fine if you drop this one from the series.
-
-Thanks for looking at it more deeply
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/=
+Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index b6452ed78802..d9aa54c11663 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -328,7 +328,7 @@ examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+>      // Example 1 (new calbiration data: for pre v1 IP):
+> -    thermal-sensor@900000 {
+> +    thermal-sensor@4a9000 {
+>          compatible =3D "qcom,msm8916-tsens", "qcom,tsens-v0_1";
+>          reg =3D <0x4a9000 0x1000>, /* TM */
+>                <0x4a8000 0x1000>; /* SROT */
+> @@ -358,7 +358,7 @@ examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+>      // Example 1 (legacy: for pre v1 IP):
+> -    tsens1: thermal-sensor@900000 {
+> +    tsens1: thermal-sensor@4a9000 {
+>             compatible =3D "qcom,msm8916-tsens", "qcom,tsens-v0_1";
+>             reg =3D <0x4a9000 0x1000>, /* TM */
+>                   <0x4a8000 0x1000>; /* SROT */
+> --
+> 2.34.1
+>
