@@ -2,66 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA306E8A47
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 08:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AA16E8A8F
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 08:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjDTGV6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 20 Apr 2023 02:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        id S233683AbjDTGln (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Apr 2023 02:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233880AbjDTGVw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 02:21:52 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A57C55A6
-        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 23:21:48 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334467968"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="334467968"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 23:21:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="685234061"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="685234061"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 23:21:47 -0700
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
-        by linux.intel.com (Postfix) with ESMTP id 71186580D1E;
-        Wed, 19 Apr 2023 23:21:46 -0700 (PDT)
-Message-ID: <fc93972a2f5eb21bf8b03f9bcf4109ba090ffc4a.camel@gmail.com>
-Subject: Re: [PATCH 2/7] intel_idle: cleanup 'intel_idle_init_cstates_icpu()'
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Date:   Thu, 20 Apr 2023 09:21:45 +0300
-In-Reply-To: <23589d6f490edf87faaa998a2a3f9898832a593c.camel@intel.com>
-References: <20230419143947.1342730-1-dedekind1@gmail.com>
-         <20230419143947.1342730-3-dedekind1@gmail.com>
-         <23589d6f490edf87faaa998a2a3f9898832a593c.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        with ESMTP id S233469AbjDTGlm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 02:41:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50869F;
+        Wed, 19 Apr 2023 23:41:41 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K5ORex029612;
+        Thu, 20 Apr 2023 06:41:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MkwLPhcXNE7rKgBs4lGpG3L+FtxzGE6kaVUZYN01psA=;
+ b=b03E0RQIc5eDMnAeYdTzoH7UtHSXzGIZelGy8K8OH/Nh3fRrRzIqk4RqyRrlbJgiBtBq
+ i1In4SDG1+/l8RMldRaZzNYmYnz0UP14N9MYKysHBbyWfSM6znMUalg3r3NEj7dMpUXD
+ XgzbjFYndgKAZcbOkY+a4DldjUrN1dqPKeXdvf3S7tY6C2hPxJEdkXDc2DnFtP7Up68v
+ DEN+BKzeeaQsfTRwwaM6STCq6OcVoLCfXvqLIljx50RUq3shh5UpFKWdvTPDD1Qa966o
+ zA8vVUleyA6AojacSK5f1gK/wssCVWj1fiD0pinOEvCNICSxsVmya7SfD80jv49RkYPA gw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2nn817hw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 06:41:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33K6fWTf031983
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 06:41:32 GMT
+Received: from [10.216.56.220] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 19 Apr
+ 2023 23:41:27 -0700
+Message-ID: <647f915e-b08a-1bc9-2082-70140521a644@quicinc.com>
+Date:   Thu, 20 Apr 2023 12:11:22 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 2/3] cpuidle: psci: Move enabling OSI mode after power
+ domains creation
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <andersson@kernel.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <wingers@google.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <sudeep.holla@arm.com>,
+        <jwerner@chromium.org>, <quic_lsrao@quicinc.com>,
+        <quic_rjendra@quicinc.com>
+References: <20230414055502.23920-1-quic_mkshah@quicinc.com>
+ <20230414055502.23920-3-quic_mkshah@quicinc.com>
+ <CAPDyKFo5UhOca-DvOKOZWcBrcK8ONdSO8-M=8fE6kkwkPuoCww@mail.gmail.com>
+Content-Language: en-US
+From:   "Maulik Shah (mkshah)" <quic_mkshah@quicinc.com>
+In-Reply-To: <CAPDyKFo5UhOca-DvOKOZWcBrcK8ONdSO8-M=8fE6kkwkPuoCww@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jI25yhL8WYhwE9m6jERkG-YkoLoZfoSm
+X-Proofpoint-GUID: jI25yhL8WYhwE9m6jERkG-YkoLoZfoSm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_03,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=886
+ bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304200053
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2023-04-20 at 01:28 +0000, Zhang, Rui wrote:
-> > Make the code be more consistent and easier to read by using only the
-> > 2nd way after
-> 
-> >  the been done.
-> 
-> is this a typo?
+Hi Ulf,
 
-Yes, some sort of editing leftover, will adjust, thanks.
+On 4/18/2023 1:42 PM, Ulf Hansson wrote:
+> O
+>
+>          /* Bail out if not using the hierarchical CPU topology. */
+>          if (!pd_count)
+> -               goto no_pd;
+> +               goto remove_pd;
+> We should return 0 here instead, right?
+right. will fix in next revision.
+>>          /* Link genpd masters/subdomains to model the CPU topology. */
+>>          ret = dt_idle_pd_init_topology(np);
+>>          if (ret)
+>> -               goto remove_pd;
+>> +               goto remove_pd_topology;
+> This looks wrong to me. Shouldn't we continue to goto the "remove_pd"
+> label for this error path?
+We should need to remove already added subdomains via 
+of_genpd_add_subdomain() if one of them fails.
+So this look ok to me.
+>
+>> +
+>> +       /* let's try to enable OSI. */
+>> +       ret = psci_set_osi_mode(use_osi);
+>> +       if (ret)
+>> +               goto remove_pd_topology;
+>>
+>>          pr_info("Initialized CPU PM domain topology using %s mode\n",
+>>                  use_osi ? "OSI" : "PC");
+>>          return 0;
+>>
+>> -put_node:
+>> -       of_node_put(node);
+>> +remove_pd_topology:
+>> +       dt_idle_pd_remove_topology(np);
+>>   remove_pd:
+>>          psci_pd_remove();
+>> +put_node:
+>> +       of_node_put(node);
+> This of_node_put() should only be called if we break the
+> "for_each_child_of_node" loop above because of an error, I think.
+> Perhaps it's cleaner to just move this within the loop?
+yes will move inside loop.
 
-Artem.
+Thanks,
+Maulik
