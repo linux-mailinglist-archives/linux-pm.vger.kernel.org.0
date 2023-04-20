@@ -2,101 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7D06E8A9D
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 08:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10196E8AF8
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 09:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjDTGrZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Apr 2023 02:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S233948AbjDTHKy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Apr 2023 03:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDTGrZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 02:47:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9E269E
-        for <linux-pm@vger.kernel.org>; Wed, 19 Apr 2023 23:47:24 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="410886309"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="410886309"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 23:47:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="691788727"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="691788727"
-Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga002.jf.intel.com with ESMTP; 19 Apr 2023 23:47:22 -0700
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rui Zhang <rui.zhang@intel.com>,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>,
-        Artem Bityutskiy <dedekind1@gmail.com>
-Subject: [PATCH v2 6/7] intel_idle: do not sprinkle module parameters definitions around
-Date:   Thu, 20 Apr 2023 09:47:21 +0300
-Message-Id: <20230420064721.1981956-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230419143947.1342730-7-dedekind1@gmail.com>
-References: <20230419143947.1342730-7-dedekind1@gmail.com>
+        with ESMTP id S233933AbjDTHKx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 03:10:53 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B099E76;
+        Thu, 20 Apr 2023 00:10:49 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 09E7A24E270;
+        Thu, 20 Apr 2023 15:10:47 +0800 (CST)
+Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
+ 2023 15:10:46 +0800
+Received: from [192.168.125.89] (113.72.144.253) by EXMBX067.cuchost.com
+ (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
+ 2023 15:10:45 +0800
+Message-ID: <6ce407ab-0d2a-323f-61df-44b2ed8eb0ca@starfivetech.com>
+Date:   Thu, 20 Apr 2023 15:10:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 3/3] riscv: dts: starfive: Add cpu scaling for JH7110
+ SoC
+To:     Conor Dooley <conor@kernel.org>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230417063942.3141-1-mason.huo@starfivetech.com>
+ <20230417063942.3141-4-mason.huo@starfivetech.com>
+ <20230418-talcum-unthread-618a5bd2758a@spud>
+Content-Language: en-US
+From:   Mason Huo <mason.huo@starfivetech.com>
+In-Reply-To: <20230418-talcum-unthread-618a5bd2758a@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.253]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX067.cuchost.com
+ (172.16.6.67)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-This is a cleanup which improves code consistency. Move the 'force_irq_on'
-module parameter variable and definition to the same place where we have
-variables and definitions for other module parameters.
 
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+On 2023/4/19 1:28, Conor Dooley wrote:
+> Hey Mason,
+> 
+> Just one minor comment in passing..
+> 
+> On Mon, Apr 17, 2023 at 02:39:42PM +0800, Mason Huo wrote:
+>> Add the operating-points-v2 to support cpu scaling on StarFive JH7110 SoC.
+>> It supports up to 4 cpu frequency loads.
+>> 
+>> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         | 17 ++++++++++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 33 +++++++++++++++++++
+>>  2 files changed, 50 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index cca1c8040801..b25e6d68ce53 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -227,3 +227,20 @@ &uart0 {
+>>  	pinctrl-0 = <&uart0_pins>;
+>>  	status = "okay";
+>>  };
+>> +
+>> +&U74_1 {
+>> +	cpu-supply = <&vdd_cpu>;
+>> +};
+>> +
+>> +&U74_2 {
+>> +	cpu-supply = <&vdd_cpu>;
+>> +};
+>> +
+>> +&U74_3 {
+>> +	cpu-supply = <&vdd_cpu>;
+>> +};
+>> +
+>> +&U74_4 {
+>> +	cpu-supply = <&vdd_cpu>;
+>> +};
+>> +
+> 
+> Applying: riscv: dts: starfive: Add cpu scaling for JH7110 SoC
+> /stuff/linux/.git/rebase-apply/patch:30: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> 
+> Cheers,
+> Conor.
+> 
+Hi Conor,
 
-Changelog
- * v2
-   - Mention 'XSTATE' and 'IBRS' flags in the 'force_irq_on' commentary
-     (feedback from Rui Zhang).
+Will fix it soon.
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index bff0d17aeda4..35bd284f7763 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -68,6 +68,7 @@ static struct cpuidle_driver intel_idle_driver = {
- static int max_cstate = CPUIDLE_STATE_MAX - 1;
- static unsigned int disabled_states_mask;
- static unsigned int preferred_states_mask;
-+static bool force_irq_on __read_mostly;
- 
- static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
- 
-@@ -1838,9 +1839,6 @@ static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
- 	return true;
- }
- 
--static bool force_irq_on __read_mostly;
--module_param(force_irq_on, bool, 0444);
--
- static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- {
- 	int cstate;
-@@ -2157,3 +2155,9 @@ MODULE_PARM_DESC(states_off, "Mask of disabled idle states");
-  */
- module_param_named(preferred_cstates, preferred_states_mask, uint, 0444);
- MODULE_PARM_DESC(preferred_cstates, "Mask of preferred idle states");
-+/*
-+ * Debugging option that forces the driver to enter all C-states with
-+ * interrupts enabled. Does not apply to C-states with
-+ * 'CPUIDLE_FLAG_INIT_XSTATE' and 'CPUIDLE_FLAG_IBRS' flags.
-+ */
-+module_param(force_irq_on, bool, 0444);
--- 
-2.38.1
-
+Thanks
+Mason
