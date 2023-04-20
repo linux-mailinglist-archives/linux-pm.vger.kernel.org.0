@@ -2,62 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10196E8AF8
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 09:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778096E8B50
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 09:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbjDTHKy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Apr 2023 03:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S234039AbjDTHYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Apr 2023 03:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbjDTHKx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 03:10:53 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B099E76;
-        Thu, 20 Apr 2023 00:10:49 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 09E7A24E270;
-        Thu, 20 Apr 2023 15:10:47 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
- 2023 15:10:46 +0800
-Received: from [192.168.125.89] (113.72.144.253) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
- 2023 15:10:45 +0800
-Message-ID: <6ce407ab-0d2a-323f-61df-44b2ed8eb0ca@starfivetech.com>
-Date:   Thu, 20 Apr 2023 15:10:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 3/3] riscv: dts: starfive: Add cpu scaling for JH7110
- SoC
-To:     Conor Dooley <conor@kernel.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Rob Herring" <robh+dt@kernel.org>,
+        with ESMTP id S234048AbjDTHYl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 03:24:41 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3074C2C
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 00:24:33 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id b16so4275588ejz.3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 00:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681975472; x=1684567472;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UeE1oPaPoCHu6Xt7NpLmY+t44SfRyPfj0/UTyohxLM8=;
+        b=B6RsF49XoExRgE22W6/kqV0IWJUJFUYhRinWcd9jbCRbzV9jrX6wPT3Sd9UffCjB9G
+         NNRHcUfzZ7Yq7C+Z8yVfTIKyMLk4yw2uf3HsF/4PcU+KmavBEzbg8i1y/mo/IorlCOb8
+         FQkSxRNokmqsLskqrtMg+xAh5hgrSDQX9ZTYadkusQaQwJcgv02H5TJA2mLHlIFU5FgA
+         xKOfM4qZwVDJ0MUdYvqPLePNZITyr34erDkiC5Jg0fz1DffB6xDgHYIdNKeGTCYUbYha
+         9qKB7CAZNm9ZYYsef8Ki49ANxhTTIWQKoKZyXVcU3FEkqVs4P0HLPYooNhkkw4uFNjFI
+         oMYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681975472; x=1684567472;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UeE1oPaPoCHu6Xt7NpLmY+t44SfRyPfj0/UTyohxLM8=;
+        b=iFVzC9KzuufpsrEXp5SVpAdeQJGWbg3jnyiEvl7QHhpbIBiX2dLftmRaI9BSLYgNtX
+         hRoRhX5ZeJXZi3bBXyiQMXsQOjMvLRTkVU4emjs7yYYFuhcGEkjkunG50Nvlk1swE8wW
+         QJml4HS2bMSNbSAbyf8D4HdgJy5eLkqRFLEXsNPZ98UcRNTutY2duNiJXztpMyUzpxbp
+         doEa/LHdLkjlGCl7oNBY/ChC7IHQBq7B4+o2dvVdXUP92QpYg4kFHjdb+eQZJOYyhEXW
+         n35EFL1JYaq8shtCEmoYVaXGXqvCaTBCflLamYT4/lYuI7dWsHYmXBZRSsPKW1d8EvXn
+         CvvA==
+X-Gm-Message-State: AAQBX9dFhhmS4pD6JLe20/NfSl0D3vEfCw5WRzK9i9Yk7A1LXZQwamoz
+        RXClU0IIR5Hc9gvy1CII3JSZAQ==
+X-Google-Smtp-Source: AKy350bZ9uh+yzDNBiXCTHa6fAMploSnigzOJLxJbL5XoLrMQoytcA7HV9j1DJomq/lGyjke3CB/AQ==
+X-Received: by 2002:a17:906:304c:b0:946:c1d2:8b5d with SMTP id d12-20020a170906304c00b00946c1d28b5dmr5282179ejd.17.1681975471702;
+        Thu, 20 Apr 2023 00:24:31 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id y21-20020a170906471500b0094f663bced2sm415784ejq.33.2023.04.20.00.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 00:24:31 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20230417063942.3141-1-mason.huo@starfivetech.com>
- <20230417063942.3141-4-mason.huo@starfivetech.com>
- <20230418-talcum-unthread-618a5bd2758a@spud>
-Content-Language: en-US
-From:   Mason Huo <mason.huo@starfivetech.com>
-In-Reply-To: <20230418-talcum-unthread-618a5bd2758a@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.253]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: thermal: qcom-tsens: correct unit address
+Date:   Thu, 20 Apr 2023 09:24:29 +0200
+Message-Id: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,60 +78,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Match unit-address to first reg entry.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 2023/4/19 1:28, Conor Dooley wrote:
-> Hey Mason,
-> 
-> Just one minor comment in passing..
-> 
-> On Mon, Apr 17, 2023 at 02:39:42PM +0800, Mason Huo wrote:
->> Add the operating-points-v2 to support cpu scaling on StarFive JH7110 SoC.
->> It supports up to 4 cpu frequency loads.
->> 
->> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-2.dtsi         | 17 ++++++++++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 33 +++++++++++++++++++
->>  2 files changed, 50 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> index cca1c8040801..b25e6d68ce53 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> @@ -227,3 +227,20 @@ &uart0 {
->>  	pinctrl-0 = <&uart0_pins>;
->>  	status = "okay";
->>  };
->> +
->> +&U74_1 {
->> +	cpu-supply = <&vdd_cpu>;
->> +};
->> +
->> +&U74_2 {
->> +	cpu-supply = <&vdd_cpu>;
->> +};
->> +
->> +&U74_3 {
->> +	cpu-supply = <&vdd_cpu>;
->> +};
->> +
->> +&U74_4 {
->> +	cpu-supply = <&vdd_cpu>;
->> +};
->> +
-> 
-> Applying: riscv: dts: starfive: Add cpu scaling for JH7110 SoC
-> /stuff/linux/.git/rebase-apply/patch:30: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> 
-> Cheers,
-> Conor.
-> 
-Hi Conor,
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index b6452ed78802..d9aa54c11663 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -328,7 +328,7 @@ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     // Example 1 (new calbiration data: for pre v1 IP):
+-    thermal-sensor@900000 {
++    thermal-sensor@4a9000 {
+         compatible = "qcom,msm8916-tsens", "qcom,tsens-v0_1";
+         reg = <0x4a9000 0x1000>, /* TM */
+               <0x4a8000 0x1000>; /* SROT */
+@@ -358,7 +358,7 @@ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     // Example 1 (legacy: for pre v1 IP):
+-    tsens1: thermal-sensor@900000 {
++    tsens1: thermal-sensor@4a9000 {
+            compatible = "qcom,msm8916-tsens", "qcom,tsens-v0_1";
+            reg = <0x4a9000 0x1000>, /* TM */
+                  <0x4a8000 0x1000>; /* SROT */
+-- 
+2.34.1
 
-Will fix it soon.
-
-Thanks
-Mason
