@@ -2,407 +2,268 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE02E6E98FC
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 18:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A5D6E993A
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 18:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjDTQB0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Apr 2023 12:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S231811AbjDTQJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Apr 2023 12:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDTQBZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 12:01:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B492E94;
-        Thu, 20 Apr 2023 09:01:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CB171480;
-        Thu, 20 Apr 2023 09:02:06 -0700 (PDT)
-Received: from [10.57.22.141] (unknown [10.57.22.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA4B43F6C4;
-        Thu, 20 Apr 2023 09:01:20 -0700 (PDT)
-Message-ID: <cc32f950-ea78-87cb-e708-6d42d1e58cc8@arm.com>
-Date:   Thu, 20 Apr 2023 18:01:15 +0200
+        with ESMTP id S231234AbjDTQJm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 12:09:42 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2041.outbound.protection.outlook.com [40.107.101.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C2F1FE3;
+        Thu, 20 Apr 2023 09:09:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eK5JT7I0gzQtbl1doPVqw06JOx2vfvc1JB8WmZ3UQUtow+XEDw0TcmRdGL9zaknOY/aO9R9xAXW6krgbhIPC2nCexB+sCZgqMJeSAnVBmnXxKXJtaz9JZYricnccuQbMBuKQh9ZKawp9vwyS5e5ijdka8aqEilRuDCV1mYqBxVyLOpRDVJ2eB1GtERpINui25myuuVakKW1UNmdw+HEkJ6vxrl5WjhCV2CkGMe6FIhbLz0UPo2BsbBRvLpTHwFrHl8xB3Jkyy1P200EwLyUF+hr+YBX1Hf/nuG1nErCHvcp65uABYROtqZrteTT0wQ+XCbDEyPomQHMoRomaZ65pRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lTXgIaNngcAwMOszYsNX76rLqGFHrwP2kk7EkBlSVEU=;
+ b=MNTdRL4rJhwpTEBwxTRukov4IZUNUq+h8Trm56QGt8D+a1nJRXAlRUO73z/rRmnHx9wwtfgfwW4t+RIvudlkb0X/GslSdlOygVp0UyzX7mxd+tGIcBzyvIz4ztTNKPs3b13gCyWwcFMcwklowWDr+ih9BjaDdx/z+0QvQXc1qHvkR5ZjoDxERZGL4Pg7+1xZ9Q0XhPEWpj2RDn+cH2jiyOKM9kdE/V3cnuEG6cApuBA4cZ0Od3LHvlSe0ylksgyPyST7uOGe2j5C2QoqZYTUAzvnuCtoL7jKXBLpEkyVQNXgtVKqcw8g0I9f9sAtbI2JcVqEGGao12Z7jkO1dFwmuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lTXgIaNngcAwMOszYsNX76rLqGFHrwP2kk7EkBlSVEU=;
+ b=ENCWfFBcikZflK1ze0QGyk7Sf0q5jJnEbGN8PQTGtBqxQpjLkizEzhyM5fkJHK91YJLbwnaUieR9dHL7OqKAkw/g1MDRuxowZXlamZC3YYdKOaOzzKsoQ/R724U/153+ZGNHAEP5zFgpz3LkywqafMjoN6Xbkp0odKiy6V1oofY=
+Received: from MW4PR04CA0345.namprd04.prod.outlook.com (2603:10b6:303:8a::20)
+ by IA1PR12MB7757.namprd12.prod.outlook.com (2603:10b6:208:422::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Thu, 20 Apr
+ 2023 16:09:38 +0000
+Received: from CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8a:cafe::61) by MW4PR04CA0345.outlook.office365.com
+ (2603:10b6:303:8a::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.23 via Frontend
+ Transport; Thu, 20 Apr 2023 16:09:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT096.mail.protection.outlook.com (10.13.175.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.25 via Frontend Transport; Thu, 20 Apr 2023 16:09:38 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 20 Apr
+ 2023 11:09:36 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <rafael@kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Len Brown <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
+Subject: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
+Date:   Thu, 20 Apr 2023 11:09:23 -0500
+Message-ID: <20230420160923.14127-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
- high error
-To:     Yang Shi <yang@os.amperecomputing.com>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>
-Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20230328193846.8757-1-yang@os.amperecomputing.com>
- <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
- <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
- <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
- <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
- <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
- <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
- <d287eff6-77bd-693c-96d3-87d8981b7f96@arm.com>
- <7b57e680-0ba3-0b8b-851e-7cc369050386@os.amperecomputing.com>
- <a2924821-80b9-e68f-3ae4-7a2c989afc88@arm.com>
- <1ce09fd7-0c1d-fc46-ce12-01b25fbd4afd@os.amperecomputing.com>
-Content-Language: en-US
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <1ce09fd7-0c1d-fc46-ce12-01b25fbd4afd@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT096:EE_|IA1PR12MB7757:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec947bcf-fc6a-417e-879a-08db41b9a445
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8pxM2e8JlF4ZSZqyJCghBaCfYTxgQQcLH04ICwegbP5Ofg7NyKVnuODqVnzgmIIhFCiUtK3zx5H0CjM/i4G2tk2riKLFab2g9pyq6tnYw7cSH26BjKvtG+/wevAMyKOtJtpsuIpBkU/EGYX1zuKsj3bQOgfeh+2NRM2u0FK88KbunJXI34KmpYSnO/q25IsW8euxDSntiI30+fFepnP1bT9mdLboSPfAKagRGlEGa+pX6+3OwCVx0+PeWaZrSlXlPiMw62rXVjUeOQaqeDp71o0SY0ETINY9w0OT0pWA9LWkKq9+gVEBw9ZOIyDIYh/Hd9dwOc8MMt9iv9eiEEtl8JLoJX2hGDAFkpNseS1NiNPwqhbEx835yyWV3Ux3Vp++dUCv4GL5b8/gP7pFU/6z98/Yr1QT0FBXlONF7QNggVheetung4/5mOUOUQce2Z7skrh1c1DMzbGQrMmh8dxnd9UhrzagAlHbdHSEpTrFt18n85DUwCRURtXWqBC2aiVilpEQpAhsVFlpc58PN0aRBGMw7woPqfg+z2IT/Tmg2pXMpxuP49g5n3EiZ1giVKX3qiAvn4wcqIH+Jnn5pM/Kyzxzvo84ajB0lp/NGJZTO459Zt+ruw036qs6AcBFsDuP4l/mRV1kwO22FCgZZMpbOK8m2+ClsWPhxX7gvvYFp4Hm+0DhIO1VxEzDoEUShx0jM9X1eov6Bd41wYgJfa3ibNr1RNeQX1jE2/a3l93NefI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(136003)(346002)(47530400004)(451199021)(40470700004)(46966006)(36840700001)(36756003)(186003)(70586007)(4326008)(110136005)(54906003)(316002)(70206006)(45080400002)(478600001)(7696005)(6666004)(8936002)(82310400005)(8676002)(5660300002)(41300700001)(44832011)(82740400003)(356005)(86362001)(40480700001)(2906002)(81166007)(336012)(52230400001)(426003)(2616005)(36860700001)(26005)(1076003)(16526019)(40460700003)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 16:09:38.2426
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec947bcf-fc6a-417e-879a-08db41b9a445
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7757
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+When utilizing the Microsoft _DSM there are six calls which correspond
+to the following states:
 
->>
->> You say that the cause of this is a congestion in the interconnect. I
->> don't
->> see a way to check that right now.
->> However your trace is on the CPU0, so maybe all the other cores were
->> shutdown
->> in your test. If this is the case, do you think a congestion could
->> happen with
->> only one CPU ?
-> 
-> No, other CPUs were not shut down in my test. I just ran "yes" on all
-> cores except CPU 0, then ran the reading freq script. Since all other
-> cores are busy, so the script should be always running on CPU 0.
-> 
-> Since the counters, memory and other devices are on the interconnect, so
-> the congestion may be caused by plenty of factors IIUC.
+1) Idle (Screen on)
+2) Idle (Screen off)
+3) Low Power
+4) Modern Standby
 
-+Ionela
+Currently Linux compresses these and treats this as two states:
 
-Ionela pointed me to the following patch-set, which seems realated:
-https://lore.kernel.org/all/20230418113459.12860-5-sumitg@nvidia.com/
+1) Awake
+2) s2idle
 
-One thing that we didn't check I believe is and that Ionela pointed out
-is that we don't know whether we are accessing the present CPU or a remote
-CPU'AMUs. In the latter case there would be IPIs and possible delays in
-waking up/accessing the remote CPU).
+That is when the system has woken from s2idle from a pure ACPI event
+the _DSM state is still Modern Standby at this time, and so some
+firmware will not run other code that communicates with the EC.
 
-> 
->>
->> Just 2 other comments:
->> a-
->> It might be interesting to change the order in which cpc registers are
->> read
->> just to see if it has an impact, but even if it has, I m not sure how
->> this
->> could be exploitable.
->> Just in case, I mean doing that, but I think that b. might be better
->> to try.
->>
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index c51d3ccb4cca..479b55006020 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -1350,8 +1350,8 @@ int cppc_get_perf_ctrs(int cpunum, struct
->> cppc_perf_fb_ctrs *perf_fb_ctrs)
->>                  }
->>          }
->>
->> -       cpc_read(cpunum, delivered_reg, &delivered);
->>          cpc_read(cpunum, reference_reg, &reference);
->> +       cpc_read(cpunum, delivered_reg, &delivered);
->>          cpc_read(cpunum, ref_perf_reg, &ref_perf);
->>
->>          /*
->>
->> b-
->> In the trace that you shared, the cpc_read() calls in the fist
->> cppc_get_perf_ctrs() calls seem to always take a bit more time than in
->> the
->> second cppc_get_perf_ctrs() call.
->> Would it be possible to collect traces similar as above with 3 or 4
->> calls to
->> cppc_get_perf_ctrs() instead of 2 ? It would allow to check whether in
->> the first
->> call, accessing the cpc registers takes more time than in the
->> following calls,
->> due to cache misses or other reasons.
-> 
-> Cache miss? The counters should be not cached and reading the counters
-> should not hit cache IIUC.
+To fix this, track the active state in the s2idle code and ensure that
+"Modern Standby enter" is called after the ACPI SCI has been processed
+from `acpi_s2idle_wake` and every time that the system is woken up call
+"Modern Standby exit".
 
-Yes you are correct, what I said is copmletely wrong.
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/acpi/x86/s2idle.c | 85 +++++++++++++++++++++++++++++++--------
+ 1 file changed, 69 insertions(+), 16 deletions(-)
 
-> 
->> Ideally statistics on the result would be the best, or if you have a
->> trace.dat
->> to share containing a trace with multiple cppc_cpufreq_get_rate() calls.
-> 
-> Tried option b, I managed to get histogram:
-> 
-> @hist_first_ns[cat]:
-> [4K, 8K)          112321
-> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [8K, 16K)            212
-> |                                                    |
-> [16K, 32K)            25
-> |                                                    |
-> [32K, 64K)            59
-> |                                                    |
-> [64K, 128K)            6
-> |                                                    |
-> [128K, 256K)           9
-> |                                                    |
-> 
-> @hist_second_ns[cat]:
-> [2K, 4K)          112590
-> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [4K, 8K)               4
-> |                                                    |
-> [8K, 16K)              0
-> |                                                    |
-> [16K, 32K)            15
-> |                                                    |
-> [32K, 64K)            18
-> |                                                    |
-> [64K, 128K)            1
-> |                                                    |
-> [128K, 256K)           4
-> |                                                    |
-> 
-> The "first" means the first cppc_get_perf_ctrs() call. But the bpftrace
-> script can't tell the second, the third and the fourth, so all them are
-> shown as "second". Anyway it seems fine. We can tell the first read took
-> longer than the later ones for the most time.
-> 
-> And a typical func_graph trace shows:
-> 
-> # tracer: function_graph
-> #
-> #     TIME        CPU  DURATION                  FUNCTION CALLS
-> #      |          |     |   |                     |   |   | |
->    4447.171333 |     0)               |  cppc_cpufreq_get_rate
-> [cppc_cpufreq]() {
->    4447.171334 |     0)               |    cpufreq_cpu_get() {
->    4447.171334 |     0)   1.060 us    | _raw_read_lock_irqsave();
->    4447.171336 |     0)   0.560 us    | _raw_read_unlock_irqrestore();
->    4447.171337 |     0)   3.480 us    | }
->    4447.171338 |     0)   0.400 us    | cpufreq_cpu_put();
->    4447.171338 |     0)               |    cppc_get_perf_ctrs() {
->    4447.171339 |     0)   0.720 us    | cpc_read.isra.0();
->    4447.171341 |     0)   0.700 us    | cpc_read.isra.0();
->    4447.171342 |     0)   0.380 us    | cpc_read.isra.0();
->    4447.171342 |     0)   0.600 us    | cpc_read.isra.0();
->    4447.171343 |     0)   4.900 us    | }
->    4447.171344 |     0)               |    __delay() {
->    4447.171344 |     0)   0.540 us    | arch_timer_evtstrm_available();
->    4447.171346 |     0)   2.420 us    | }
->    4447.171347 |     0)               |    cppc_get_perf_ctrs() {
->    4447.171347 |     0)   0.540 us    | cpc_read.isra.0();
->    4447.171348 |     0)   0.520 us    | cpc_read.isra.0();
->    4447.171349 |     0)   0.400 us    | cpc_read.isra.0();
->    4447.171350 |     0)   0.440 us    | cpc_read.isra.0();
->    4447.171350 |     0)   3.660 us    | }
->    4447.171351 |     0)               |    __delay() {
->    4447.171351 |     0)   0.400 us    | arch_timer_evtstrm_available();
->    4447.171353 |     0)   2.400 us    | }
->    4447.171353 |     0)               |    cppc_get_perf_ctrs() {
->    4447.171354 |     0)   0.540 us    | cpc_read.isra.0();
->    4447.171355 |     0)   0.540 us    | cpc_read.isra.0();
->    4447.171356 |     0)   0.380 us    | cpc_read.isra.0();
->    4447.171356 |     0)   0.420 us    | cpc_read.isra.0();
->    4447.171357 |     0)   3.640 us    | }
->    4447.171357 |     0)               |    __delay() {
->    4447.171358 |     0)   0.380 us    | arch_timer_evtstrm_available();
->    4447.171360 |     0)   2.380 us    |    }
->    4447.171360 |     0)               |    cppc_get_perf_ctrs() {
->    4447.171361 |     0)   0.520 us    |      cpc_read.isra.0();
->    4447.171361 |     0)   0.520 us    |      cpc_read.isra.0();
->    4447.171362 |     0)   0.400 us    |      cpc_read.isra.0();
->    4447.171363 |     0)   0.440 us    |      cpc_read.isra.0();
->    4447.171364 |     0)   3.640 us    |    }
->    4447.171364 |     0)   0.520 us    |    cppc_cpufreq_perf_to_khz
-> [cppc_cpufreq]();
->    4447.171365 |     0) + 34.240 us   |  }
-> 
-> It also shows the first reading typically took longer than the later
-> ones. The second, the third and the fourth actually took almost same time.
-> 
-> I also tried to read perf_fb_ctrs_t0 twice (so total 3 reads, 2 for t0,
-> 1 for t1, 2us delay between each read), but I didn't see noticeable
-> improvement. 4 reads (2 for t0, 2 for t1) does show some noticeable
-> improvement.
-> 
+diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
+index e499c60c4579..1772d981c5e9 100644
+--- a/drivers/acpi/x86/s2idle.c
++++ b/drivers/acpi/x86/s2idle.c
+@@ -59,6 +59,7 @@ static int lps0_dsm_func_mask;
+ 
+ static guid_t lps0_dsm_guid_microsoft;
+ static int lps0_dsm_func_mask_microsoft;
++static int lps0_dsm_state;
+ 
+ /* Device constraint entry structure */
+ struct lpi_device_info {
+@@ -320,6 +321,44 @@ static void lpi_check_constraints(void)
+ 	}
+ }
+ 
++static bool acpi_s2idle_vendor_amd(void)
++{
++	return boot_cpu_data.x86_vendor == X86_VENDOR_AMD;
++}
++
++static const char *acpi_sleep_dsm_state_to_str(unsigned int state)
++{
++	if (lps0_dsm_func_mask_microsoft || !acpi_s2idle_vendor_amd()) {
++		switch (state) {
++		case ACPI_LPS0_SCREEN_OFF:
++			return "screen off";
++		case ACPI_LPS0_SCREEN_ON:
++			return "screen on";
++		case ACPI_LPS0_ENTRY:
++			return "lps0 entry";
++		case ACPI_LPS0_EXIT:
++			return "lps0 exit";
++		case ACPI_LPS0_MS_ENTRY:
++			return "lps0 ms entry";
++		case ACPI_LPS0_MS_EXIT:
++			return "lps0 ms exit";
++		};
++	} else {
++		switch (state) {
++		case ACPI_LPS0_SCREEN_ON_AMD:
++			return "screen on";
++		case ACPI_LPS0_SCREEN_OFF_AMD:
++			return "screen off";
++		case ACPI_LPS0_ENTRY_AMD:
++			return "lps0 entry";
++		case ACPI_LPS0_EXIT_AMD:
++			return "lps0 exit";
++		}
++	}
++
++	return "unknown";
++}
++
+ static void acpi_sleep_run_lps0_dsm(unsigned int func, unsigned int func_mask, guid_t dsm_guid)
+ {
+ 	union acpi_object *out_obj;
+@@ -331,13 +370,13 @@ static void acpi_sleep_run_lps0_dsm(unsigned int func, unsigned int func_mask, g
+ 					rev_id, func, NULL);
+ 	ACPI_FREE(out_obj);
+ 
+-	acpi_handle_debug(lps0_device_handle, "_DSM function %u evaluation %s\n",
+-			  func, out_obj ? "successful" : "failed");
+-}
+-
+-static bool acpi_s2idle_vendor_amd(void)
+-{
+-	return boot_cpu_data.x86_vendor == X86_VENDOR_AMD;
++	lps0_dsm_state = func;
++	if (pm_debug_messages_on) {
++		acpi_handle_info(lps0_device_handle,
++				"%s transitioned to state %s\n",
++				 out_obj ? "Successfully" : "Failed to",
++				 acpi_sleep_dsm_state_to_str(lps0_dsm_state));
++	}
+ }
+ 
+ static int validate_dsm(acpi_handle handle, const char *uuid, int rev, guid_t *dsm_guid)
+@@ -487,9 +526,6 @@ int acpi_s2idle_prepare_late(void)
+ 	if (lps0_dsm_func_mask_microsoft > 0) {
+ 		acpi_sleep_run_lps0_dsm(ACPI_LPS0_ENTRY,
+ 				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
+-		/* modern standby entry */
+-		acpi_sleep_run_lps0_dsm(ACPI_LPS0_MS_ENTRY,
+-				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
+ 	}
+ 
+ 	list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
+@@ -513,6 +549,28 @@ void acpi_s2idle_check(void)
+ 	}
+ }
+ 
++bool lps0_s2idle_wake(void)
++{
++	if (!lps0_device_handle || sleep_no_lps0)
++		goto out;
++
++	/* avoid running on the first go through the s2idle loop */
++	if (lps0_dsm_func_mask_microsoft > 0) {
++		int target;
++
++		if (lps0_dsm_state == ACPI_LPS0_ENTRY ||
++		    lps0_dsm_state == ACPI_LPS0_MS_EXIT)
++			target = ACPI_LPS0_MS_ENTRY;
++		else
++			target = ACPI_LPS0_MS_EXIT;
++		acpi_sleep_run_lps0_dsm(target,
++					lps0_dsm_func_mask_microsoft,
++					lps0_dsm_guid_microsoft);
++	}
++out:
++	return acpi_s2idle_wake();
++}
++
+ void acpi_s2idle_restore_early(void)
+ {
+ 	struct acpi_s2idle_dev_ops *handler;
+@@ -524,11 +582,6 @@ void acpi_s2idle_restore_early(void)
+ 		if (handler->restore)
+ 			handler->restore();
+ 
+-	/* Modern standby exit */
+-	if (lps0_dsm_func_mask_microsoft > 0)
+-		acpi_sleep_run_lps0_dsm(ACPI_LPS0_MS_EXIT,
+-				lps0_dsm_func_mask_microsoft, lps0_dsm_guid_microsoft);
+-
+ 	/* LPS0 exit */
+ 	if (lps0_dsm_func_mask > 0)
+ 		acpi_sleep_run_lps0_dsm(acpi_s2idle_vendor_amd() ?
+@@ -555,7 +608,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
+ 	.prepare = acpi_s2idle_prepare,
+ 	.prepare_late = acpi_s2idle_prepare_late,
+ 	.check = acpi_s2idle_check,
+-	.wake = acpi_s2idle_wake,
++	.wake = lps0_s2idle_wake,
+ 	.restore_early = acpi_s2idle_restore_early,
+ 	.restore = acpi_s2idle_restore,
+ 	.end = acpi_s2idle_end,
 
-Thanks for the new data.
+base-commit: 7124d7671af0facf115d70f9d1fadde0d768d325
+-- 
+2.34.1
 
->>
->> Example of code where we do 4 calls to cppc_get_perf_ctrs():
->>
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c
->> b/drivers/cpufreq/cppc_cpufreq.c
->> index 022e3555407c..6370f2f0bdad 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -853,6 +853,20 @@ static unsigned int
->> cppc_cpufreq_get_rate(unsigned int cpu)
->>
->>          udelay(2); /* 2usec delay between sampling */
->>
->> +       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->> +       if (ret)
->> +               return ret;
->> +
->> +       udelay(2); /* 2usec delay between sampling */
->> +
->> +       /* Do a third call. */
->> +       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->> +       if (ret)
->> +               return ret;
->> +
->> +       udelay(2); /* 2usec delay between sampling */
->> +
->> +       /* Do a fourth call. */
->>          ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->>          if (ret)
->>                  return ret;
->>
->>>
->>> The above trace data shows some cpc reading took a little bit longer
->>> than usual. I suspected it was caused by interconnect congestion.
->>>
->>>
->>> So it looks like IRQ is the major contributing factor of high error
->>> (4xxxxxx KHz), interconnect congestion is the major contributing factor
->>> of low error (3xxxxxx KHz).
->>>
->>> So I did the below test:
->>> 1. Disable IRQ: The high errors were gone (> 3700000KHz), but low errors
->>> were still seen.
->>> 2.10us delay: The high errors were still seen.
->>> 3. Disable IRQ + 10us delay: all the errors were gone.
->>>
->>> I think the test result also supports the tracing data.
->>>
->>>
->>> I also got some confusion about calling cppc_cpufreq_get_rate() with irq
->>> disabled. Rafael thought 10ms delay is too long because the function may
->>> be called with irq disabled. But a deeper look at the function shows it
->>> should *NOT* be called with irq disabled at all.
->>>
->>> First, if pcc channel is used, cpc reading may take over 100ms, it is
->>> way larger the proposed 10ms delay.
->>> Second, reading from cpc channel needs to take a semaphore, so it may
->>> sleep. But sleep with IRQ disabled is not allowed.
->>
->> Yes right, however the semaphore is not taken in between the sequence of
->> cpc_read() calls in cppc_get_perf_ctrs(). So maybe the change below
->> should
->> be acceptable:
-> 
-> Yeah, we should be able to find a smaller irq disable section.
-> 
->>
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index c51d3ccb4cca..105a7e2ffffa 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -1315,6 +1315,7 @@ int cppc_get_perf_ctrs(int cpunum, struct
->> cppc_perf_fb_ctrs *perf_fb_ctrs)
->>          struct cppc_pcc_data *pcc_ss_data = NULL;
->>          u64 delivered, reference, ref_perf, ctr_wrap_time;
->>          int ret = 0, regs_in_pcc = 0;
->> +       unsigned long flags;
->>
->>          if (!cpc_desc) {
->>                  pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
->> @@ -1350,10 +1351,14 @@ int cppc_get_perf_ctrs(int cpunum, struct
->> cppc_perf_fb_ctrs *perf_fb_ctrs)
->>                  }
->>          }
->>
->> +       local_irq_save(flags);
->> +
->>          cpc_read(cpunum, delivered_reg, &delivered);
->>          cpc_read(cpunum, reference_reg, &reference);
->>          cpc_read(cpunum, ref_perf_reg, &ref_perf);
->>
->> +       local_irq_restore(flags);
->> +
-> 
-> cpc_read_ffh() would return -EPERM if irq is disabled.
-> 
-> So, the irq disabling must happen for mmio only in cpc_read(), for example:
-
-I thought the issue was that irqs could happen in between cpc_read() functions,
-the patch below would not cover it. If the frequency is more accurate
-with this patch, I think I don't understand something.
-
-(asking for more information)
-Just to check, the core/perf counters are AMUs and the other CPPC registers
-are mmio right ? Is it possible to know the CPPC registers that are
-implemented on your platform ?
-Also is it possible which platform you are using ?
-
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index c51d3ccb4cca..f3c92d844074 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -982,6 +982,7 @@ static int cpc_read(int cpu, struct
-> cpc_register_resource *reg_res, u64 *val)
->           void __iomem *vaddr = NULL;
->           int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
->           struct cpc_reg *reg = &reg_res->cpc_entry.reg;
-> +       unsigned long flags;
-> 
->           if (reg_res->type == ACPI_TYPE_INTEGER) {
->                   *val = reg_res->cpc_entry.int_value;
-> @@ -1015,6 +1016,7 @@ static int cpc_read(int cpu, struct
-> cpc_register_resource *reg_res, u64 *val)
->                   return
-> acpi_os_read_memory((acpi_physical_address)reg->address,
->                                   val, reg->bit_width);
-> 
-> +       local_irq_save(flags);
->           switch (reg->bit_width) {
->           case 8:
->                   *val = readb_relaxed(vaddr);
-> @@ -1029,10 +1031,12 @@ static int cpc_read(int cpu, struct
-> cpc_register_resource *reg_res, u64 *val)
->                   *val = readq_relaxed(vaddr);
->                   break;
->           default:
-> +               local_irq_restore(flags);
->                   pr_debug("Error: Cannot read %u bit width from PCC for
-> ss: %d\n",
->                            reg->bit_width, pcc_ss_id);
->                   return -EFAULT;
->           }
-> +       local_irq_restore(flags);
-> 
->           return 0;
->    }
-> 
->>          /*
->>           * Per spec, if ctr_wrap_time optional register is
->> unsupported, then the
->>           * performance counters are assumed to never wrap during the
->> lifetime of
->>
->>> Third, if the counters are implemented by AMU, cpc_read_ffh() needs to
->>> send IPI so it requires IRQ enabled.
->>
->> If I'm not mistaken, the CPU calling cpc_read_ffh() might have IRQs
->> disabled,
->> it should not prevent it to send IPIs no ?
-> 
-> It can't work with irq disabled. The comment in counters_read_on_cpu()
-> says "Abort call on counterless CPU or when interrupts are disabled -
-> can lead to deadlock in smp sync call."
-> 
-> 
-> And it just returns -EPERM and raise a warning if irq is disabled.
-
-Ok right,
-
-Regards,
-Piere
