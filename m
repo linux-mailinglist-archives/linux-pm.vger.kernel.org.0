@@ -2,529 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12626E9D6D
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 22:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264976E9DBD
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Apr 2023 23:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbjDTUth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Apr 2023 16:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S232671AbjDTVQj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Apr 2023 17:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbjDTUtg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 16:49:36 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20719.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::719])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2610B;
-        Thu, 20 Apr 2023 13:49:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cDs6zJkhPX1sy0QsaNicNcl/1tGJKmiG63VO9z3EkxuqNLRCGiHf4gc5l9FW3NRV9bDJKDy/YPcuBgSTmeLqHY2u/IpLN7RFCFXhsvJs93wNzI7ybXs8QKo90ZHoVw7GxxenVH3KHvoEPwSXza+HKmHLjgFMdaBXR384IxtGT84pZthqxGwhPBKN6Oc8aimNKymGuO+ryneS9+DHDw4nwjqzbl0/JY4d5h37z8/f133vaKy0SOlczTjFOjz8b3IpV3DMVdp/EJGm7oJ5s5fy8Rx1Vh3Ls9YUy/omSGXLuBDagcmMO0716D+JdLOoXT6dewGMOYASpejGuJw2EwS73g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B6aE0jiuGjCOv+9Ouh90tabdQTbRM2Gy33BMSNmz6v4=;
- b=bn6aG5JsMlXHoEih7vCLszUYYAHQutFdYrZzOOJkpSuaalLztMM3iJxMReBjSbF69oBe8QkLYtto/oGBjCf1vxNJyOZ7v8XRwxEag8FqbR2/0RNT6B57jFX2bOB1O6BZ5fY7MCIwInVAGc1cFVlLGRLJeYkwKMYSDiEpJSk0yyjpEAUcRBM8XIW7UmGYf1bbvw4pqC3Z/ixkJpdPeY3mG7G6iApN+F5jqkYJWJ1HftiRswPrwSLer97YYlq/A9vEWXWYsVhD7c2ANrDJ2MHx31AlGVB2lCZ4ar3Ov3QH5d8Q24a99xZJ3UdQaB7MJpoCf79/drlnwExh/N5zbvzQFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B6aE0jiuGjCOv+9Ouh90tabdQTbRM2Gy33BMSNmz6v4=;
- b=fRXNYcVussvaCm4cpL2ffv3Yq7pUnFRGTwncbB0LxAVxJ+bA5Mr+/WN5tP2moHyOF20MP33L4h0H7CI/DKsXkGbhyNQbltdXR2YeBkwlw+YMQTaCv6Ums17XNVd7HYppq6p/EDVscYo64Fg5xcZgdOnyUdJGFSvyCuzEnXI5hqI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from BL3PR01MB7027.prod.exchangelabs.com (2603:10b6:208:35a::9) by
- SA0PR01MB6218.prod.exchangelabs.com (2603:10b6:806:d8::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.11; Thu, 20 Apr 2023 20:49:30 +0000
-Received: from BL3PR01MB7027.prod.exchangelabs.com
- ([fe80::6df9:7381:4788:cc3a]) by BL3PR01MB7027.prod.exchangelabs.com
- ([fe80::6df9:7381:4788:cc3a%5]) with mapi id 15.20.6340.011; Thu, 20 Apr 2023
- 20:49:29 +0000
-Message-ID: <f0fd057e-95cb-4a85-00fc-9eb25ef7b9b3@os.amperecomputing.com>
-Date:   Thu, 20 Apr 2023 13:49:24 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
- high error
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>
-Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20230328193846.8757-1-yang@os.amperecomputing.com>
- <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
- <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
- <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
- <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
- <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
- <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
- <d287eff6-77bd-693c-96d3-87d8981b7f96@arm.com>
- <7b57e680-0ba3-0b8b-851e-7cc369050386@os.amperecomputing.com>
- <a2924821-80b9-e68f-3ae4-7a2c989afc88@arm.com>
- <1ce09fd7-0c1d-fc46-ce12-01b25fbd4afd@os.amperecomputing.com>
- <cc32f950-ea78-87cb-e708-6d42d1e58cc8@arm.com>
-From:   Yang Shi <yang@os.amperecomputing.com>
-In-Reply-To: <cc32f950-ea78-87cb-e708-6d42d1e58cc8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR13CA0053.namprd13.prod.outlook.com
- (2603:10b6:610:b2::28) To BL3PR01MB7027.prod.exchangelabs.com
- (2603:10b6:208:35a::9)
+        with ESMTP id S232636AbjDTVQi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Apr 2023 17:16:38 -0400
+Received: from sonic303-21.consmr.mail.ir2.yahoo.com (sonic303-21.consmr.mail.ir2.yahoo.com [77.238.178.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A265263
+        for <linux-pm@vger.kernel.org>; Thu, 20 Apr 2023 14:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682025392; bh=2cXD0H+8C9TOtE0twf5ja4IdtSpWhQNZkSsdMMaF/VM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=OjucL3hrhsflPim8zDNL4lf0T/RsaUHpe6vPDRY5WHffHd6aSpqTTWxkZxITfvNCG0TKyrtGnrJ3pYFTffv365B/Qys04SYqdLIBtBTdAkvMFFoBf+n3LMhINkPZ5eX173GsM95slPOwbquDf1H0XWQuxcObzt5Gpu7QFj9B+lYKAW9LtENAGlCfVCSAgv0tmkhtMxEP7wdR1drgvUjNysT5wE/Zmu5V0g2SSZrP8iyp3a/cS4A8IX3ubwK0QvjksYrEDe0MNyxNlQ1FlysoS4f1OP1QHGozKGNbSCHoqqFYYxo8mQzoHTWczCgiKgxnUaajVtCoZRFgKg1lrCsmig==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682025392; bh=HH7xdCwOqAI5AFLL3G6I8A7z31zNEqVCCfdhdFiTqZu=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WcYHuItzaBR1AGDmSm/ptmUdyou3mb+HfNsbtvKkJLmwJP2HcXVhk73T6+DREEgRi8/Bo81FnWl+EaFxsAngSw+BBSg19L0vtc4SI5W4t6mWzd8MqL/5hx24UgrUmq3M4eZ9vsXBnlKV/g4WUjHROqq39GP9AZkCbuqAsS2BLAh9e0/9LNqYLVQSVkCWNsWpcim0//TPx0B7wKIhDTJzZ2m5qLeT+Zkdqjxh1CkXVBRE2CkTKaq0wZnQiX+H4gZxT5b/oE3hCoy/SlfyAO/uUAVBLwc7D5R79mMsk3lEANTM+xTXZ5d6ZZ1NhbzOOotAC6k7mOp00w2RLw+7qzSzLg==
+X-YMail-OSG: qoECEQ8VM1lXh.TorHFnYRdwnJ81IpfmNe_v9Ur1yauaTEoKvXltaIyhD89XHhU
+ GKFHpbcMOX8KCZ31bumc7TU2ndZI_L_zWasrJMLEIdf5N5obvAtVTJlTZe1MVdNnAJgp4BiufGSs
+ FZKf3QdOSMUJtLn95UT7jSzjZvk0W0t33E4oO_qIvsVvDmq_3TrRNQmGvQpB5UifT2JElP.X3rpx
+ 2wOsBFFGs.AUWsMGyX0lBFFzdcORln6qzuI3U_eRJcEg25KhdWXg5jFV0hEtt97zemQx9JcbQ9AX
+ z2bXNpEQ1fUWf0YcLCG1p49N_5nULlKhMZM9CMs497zJZombO7c4JYjIx.enVAPB1X2zAKEFscFD
+ AkaZXQ4E0SYqp04rdqshzbbBi0IFSjUdc6sumTG6OtuqSYZ3.iy9L4zIL4_7yuIOE1fw.LEl9DIf
+ 0NtANVk1ul9Pc9lcQMBGFEsN8IZL3iQN5Xb5WVGeYkj7nCrKrMD5vPvfLufEAbtT8tdCYg1M3sjF
+ FgJxPgawictFqgCwQX5diKmUNe5w5iS6H5_RU64mTP4Mtg5j7ao_1.WIydY5WId_0TkZCx9yFPuX
+ m6BLBJ_Th3wVrEK1xClA58KbAKEeIv.MV8gYzYWRCZXh7iO0sgQ725.unebLCzs2yhHus52DI5.h
+ XHy37PqG8vQa_5UWSUkqhUyYLXjWCGBRIBZ4gCw4v9scGLLjdrG1leK91pWtXXTpKeyEpSzNMcOa
+ Tw9RJc0Ua7Thd9eHNMJyyFdF6.cY3.VMrdt01avFPpdPO3dhwhEpgWJSkzhXFuLOB3ApDkf2m8kv
+ zOCMtS8BJK1s.KxOt6Zu8NCSzY1sJbLE1qb04qA2tGZXWAMX.pKPni8QWPc4IX1s3okR9hcLfMcU
+ mrS6vUuYpGKy5gaORbeQ3C1fHKaJme.apHsIFARcEd.BwzX5kaqAvddDGlv0xbta8d17EqBzgXlm
+ hiq6MQHpLF5e3JmSGBjHBY.aCdook6JB7NMr5YlUf1Wl5AeKtCgXedqT81xhWmFt9t2NIHOSVhKx
+ yTUmoRE.4iD_jbBE0_A2mItLlicOzizSpqnNDnHAZBaIMOxLVs3fUXr06ogXrg.mH9K8gEd1e6Dw
+ FxfqP14LMCXZ.EOoUnSudg0jre5uD1FxcCv12sKBB4nWnkUgE9b0G1Gqsj8u1I1cWDtfM0O6bYpM
+ FiAxqmA2PAcPt2XHrWIWvO3LzpDMbRyitnUqci7Y4wm70TyWT73ZaaNfntG3x9TmI5.z_ArAzXO4
+ rk5IdZECpqtX9p52NlvNYsmz0845LJFry4FyfrkhgnNh5Sx8vW0QnyVIsZ22is6rLOe7GpeW30VF
+ 54Ae6m0HUY_ezbFc_a6SxbmxFDRZbitgrv30SlAQF21SzexgJEZDjOAx0ScXR.KF.m__t7e9Jk5.
+ fTZ3CDNbhIHjBY.6HZXNLWt4D9tjP9HepnhqGNrqoHNZ84bHF9UAe54vMeqjv2QfB6zCW626jjf1
+ 7JL4KdNU2CKQHE.k5V9nHN.INXD_y2AAiReBVLQtG2DPwRY7X.5NUxn4pRVMmlK1OnWcARMnZmXu
+ fPnzOCh8u4znxMPkyBBMjAjiGLD7EOk3k6iE8.AbbtGHsttvD8UIWykLrh2nePEvf21yPUuL_TiW
+ oZB9byKtcKE44kUXHvpmoadZBXh7I2siPjcs9sBFfJBJRgD0VLn787qXA4.SnuD..XojJZMHVZ6f
+ i2jB07Q0pFzG9mD0nHss_3j5dT.D3iGl5P5oqfjkANk1XLom96aGeXDxC9qInmo27HQxK.3vsgYn
+ qeZNlf.MMiV5JypxHjrFAheUJvzwIxKxUxkanBA6mTDktgjw97AHWZDSnL20c38lZVCOduLLm6Je
+ eDJmX8zw.2di3LK1WTf3z4E9tfmU07jSBeOb9X54fr2Id.Wv6RGRmAQcJXbhTe1yjXHtveHSP2B4
+ qrf6d1nTlAGnYtL3v.ME8ZtjwQwANV_wp6LLfrAsHruS437i843Vr.Mpxl4TnJfpOIPpuihf348n
+ cYVNlyHaESdBpMqUxNtGICJNW9vka8rJjKwfIOEg.XwYNNRYEOx8bRsXKjSOSWBM9o07Gi0R3Aox
+ xRDmpMl6timkIHrhfXlRie1nw8mwTrbr1lgYPLzpcCHX9ksdpIrI2u7xhWOaqc_gI1PupskF0zz7
+ RElXhkKFGmrvKxDROPZoLr7iewHMDcSbKfX1_rKDHqIBUygP6sFnmnPImDbZgipALz_ZwNimPDb.
+ N3XuunSzmc3.DzjwcqYqSJv1oifhaR6VZZSpwR.enLqmQHtZjje7SWq55zoYaWq8lEpy8Eqglrgd
+ JafHZEt43jPpmhEObNowP1aueOqVwadw-
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 0d8dffc6-73dc-4a25-936a-6821c4513787
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ir2.yahoo.com with HTTP; Thu, 20 Apr 2023 21:16:32 +0000
+Received: by hermes--production-ir2-74cd8fc864-jl5bm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a7d5ee9a0540dd2923f65aa81657ee83;
+          Thu, 20 Apr 2023 21:16:28 +0000 (UTC)
+Message-ID: <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
+Date:   Thu, 20 Apr 2023 23:16:26 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL3PR01MB7027:EE_|SA0PR01MB6218:EE_
-X-MS-Office365-Filtering-Correlation-Id: eeeb5a36-d248-4180-e3bf-08db41e0bc6f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IwddvB9TeXbEIu6iQicondN9iEjqEKrWpGjIHvE+y4kT0VY1n4liNpnYgFRwnNa7eEXeBTwzgUG3DwW9g7dtBawcyfH8aNmghyUQvmdnZupwAWIyGn0ZoD4lPWD1SgP91aXqSdeGDh0XR7EriHL0/c+ixVv/8izbJZ8AGgMjwpU2nDEoxp9/XrmK/hippdV61tLbn5krMjIRnTKh4WhjqEV7G7Bx0LfTo4V8/plRAfZXSCN4JuqVUIYl1f4xSPGNgdPcP8R/S6w63UyYp1MpyzwSHdfkPleoEATipRdq/+WetmXYAF2d5JtLfZGAkGFZyJYTTAUjdLgt4fiRjpRiosG1jB9tt8k1rqkn02bXBpg3Ounu36KJYh9Fpjaa3dSRbDujU0TwFDMZGb/ZLQRQVepf/XZkIPYAvZRarj97wPaaWi072VqBEdE5cLro2KJvklGtYSu+sOjVZcSPCeVsjIDT4uvsnZeFC5kbZFIK3w6Wm46W4JFZN9LmTWNOSjbn3V65SY04NXEbdzHoUX1P5X6IAx7sYBWinGZ122AA1Tt1cPxn56WGYImaWmbItpLtEFO5Kvx/IOK8VLPNC+XSFy+qaJehq6sSgxob+7GVwhMVKAx+TDCER7Ah/afU4Nd2Fn063JHobztNQV1sz9NZgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR01MB7027.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(136003)(366004)(376002)(346002)(396003)(451199021)(110136005)(52116002)(186003)(6666004)(6486002)(966005)(86362001)(6506007)(6512007)(53546011)(26005)(31686004)(2616005)(478600001)(4326008)(66556008)(66946007)(66476007)(83380400001)(316002)(38350700002)(38100700002)(8676002)(8936002)(2906002)(66899021)(30864003)(41300700001)(5660300002)(31696002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjRCd0Z4RGJ3ZUlLcTdGV29yTFMrNFg4dEh5NWVQc0VpWGRZaWZXUTR2SGd2?=
- =?utf-8?B?bjF0SW05cEpkOVk3cmJHVExGNnh2emZ3TElEVTdWd3NRZFA4QkVVenJlT3BY?=
- =?utf-8?B?UW91QkF0OUh5OHhBeUJsL3dCQUt4c3RvLy9PTW5xeXhORzZYai9qQkk1aklK?=
- =?utf-8?B?NWJ3cTVGZ1RVZCtnQWZiK1R2SEVoTDQ2NjJuMWJUQU5DOThRRExKNko0T3FJ?=
- =?utf-8?B?SmpoZCtsUm96cFhaa2c4dkJ6MFkxTDRkMmg4eGF4cVJ6UE9pdmtnRy9WU0hl?=
- =?utf-8?B?OU93SHN0ekdyOXFNUkpGbEhhdFBidVMxUXc2emNRaWVuUEtZOHREU2VnRHZh?=
- =?utf-8?B?VS9LT1VGNWd6QldUNDZCUWtNdzlrUndsN1JMVkFvVkNHdVB3OFJ3SXhWNVhs?=
- =?utf-8?B?TjBVSTQyZVNoVVpzVENyL0Q2cW5TTEVRMW83VkxjWEpIZ1NSa205WDBESVdG?=
- =?utf-8?B?TVM1ZmRGd09zK3ViRWNTazJxdTQ1MnU5MVRtN2tyZmtQUnd5dksvenVkVHE3?=
- =?utf-8?B?TUNDQW9uc3JNRVhpeW5QMCtOYlpISkVWdzJ6dU1ndTc3SVMxQ0hrYTFoYU42?=
- =?utf-8?B?UUhHdnVObjQzVTFYMGhkOEQ3Z3BSWE91U21WVS9ibTNRVGVERXBLWXhvdFgw?=
- =?utf-8?B?N3J6bllDNXcyQVpHd3NtM0N6ODk4ZWY4RkJBL2RWVXdsR0J3K1VIUUtqVkZp?=
- =?utf-8?B?eVAxWGswVllOc2puNFZzczFIaXRlcktMNzl5S2trMkdjdWRtZnk2OHF6Ump3?=
- =?utf-8?B?YnBXNnRkT3FDeHFHbmJDek04b09VY2dzTlVFYlJZcGs2MXB1UGpJakVRbVp5?=
- =?utf-8?B?N1JOTVJzRDM0cmIrSzNPYS9WSnNsUVBYbXNGYVVFSTBZa01uamRiejVyT2Iw?=
- =?utf-8?B?enBmMTdmL2JoOFFkem5rbmg4VGsyamtvUkdzZmh4TDdwQ0ROVXJDSnhDNWxT?=
- =?utf-8?B?UU01UkQzSlRJa0VSK003NWErOE9LVDViZ21DYjcwcUd1OWFLeWJNV1F3T0lR?=
- =?utf-8?B?c1oxNkd2UUlsUHozNFV6eFVxQ2VyWU9seDVBSFhoSlZiZ1NWQkxmbFNuckdE?=
- =?utf-8?B?QklRWTBmMFVrdEpQQWozTXYweUM3VDYxY3lKZ2g4RnVwMXlpalRHdXM2ZkhG?=
- =?utf-8?B?L0pVREJ4Q0plVkNCR3hGSWJ3ditoVDZpa01wRjNwbmV0alQrL3NnYTR1VUww?=
- =?utf-8?B?Mk9JRXVYODhvTi9ubFhXa0NKdlV4V3VFa091WmE2OUFiNnZOVXc5RHZLckUy?=
- =?utf-8?B?MDBiWE11d2d3MjNUUnlLaytaUlNFTk9RdzlGU1k2RmNZeFZLOHFUY3laeW9Y?=
- =?utf-8?B?Qk9nQXljNDNQY25URXBxN0Y1Um5pcnpFY01KUkhtbTNqWFMyVlVTQnVsSDJY?=
- =?utf-8?B?NkhJZG5Na2hBSzJZTENjVVROM0cvWUdJOURTcnFsUnZTOWxMWVFxWjNhaUtX?=
- =?utf-8?B?YVpzd2M3TTlIbnJMVUEzNlJ0YXpEYUkra0pJZ0dDUDlMQTEwck9GT0I4d3VD?=
- =?utf-8?B?Uk5FTURJUjhFRGhiaFVvNFZvdTVEYmhuVnhBcG1pNTZ3MzFseEFLVXpsSWc5?=
- =?utf-8?B?aGNMMERxUEQxTnFMNm5hMkJoK0RSK3l0bVFQNlUwTlp5dGtjUlo2amZDWEFh?=
- =?utf-8?B?bUo5c0Q5YTBMcTBOeU1rZzhWVVBtUTQwZmFnTW1PK1k2M21wdDdzdVJycTZC?=
- =?utf-8?B?b0RYeVk5SnZqQlcyeHh4MzFpS1ovRjl4SWRjWC9ucitEOHRrSysxRXpqNXFI?=
- =?utf-8?B?cEJQZFMwLzRqV3NMTldyMkFqSXkyODlJeEF4WkpiTXE3UTVFMjhTVWhCZXN4?=
- =?utf-8?B?MExlcmlYNkw5cnlzMDVwU1cwckJhVCtGWUVUV1NmbUF1ZXA4Rkg2cVdrMm1Z?=
- =?utf-8?B?NUVXQ2lZU0Q2K0FYREJOTTJCSCszeld6ZW1ZQW5OeEpjYTNUVTEwYmtPYU5I?=
- =?utf-8?B?L0VNZzRsU2lCVHhrTCttWk5ETGZoMUFnaURNTVYvN1FOMCtpbWtDNitvdi9F?=
- =?utf-8?B?U1BkL2dEUWY3dGhZL0hySkhQaURZV0Mya09oajJnYWxrdm1NdnRZZGt4WkU5?=
- =?utf-8?B?V2d0T1pUZFRVOE5OeHpPZjhXUEEyaCt4ZmJGeE5hZ1ZaanR0L3BJSE1TQkR3?=
- =?utf-8?B?d1hqL2FZbXJldThYK3YrNlhKeTdkODZpdGVmVW1IbDZibVU5TXVtUktwWTR1?=
- =?utf-8?Q?1M8iB8Q6F6xcE5f5IHL6d5I=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eeeb5a36-d248-4180-e3bf-08db41e0bc6f
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR01MB7027.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 20:49:29.6107
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rJj+o8xo90Ys1UkGox0zrKpz57T6wE67oERVXVi6FdULbEL1msEuU0T9vE8dkFlHl+/dlfEJj19PKBmozAjauI8ZUllU9NGDJsabGX2thjM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR01MB6218
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
+ regulator and charger
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1681646904.git.jahau@rocketmail.com>
+ <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
+ <CACRpkdZEtG=OjTECDO=SvFk89MqL10sKKMOABPEs-xxYv1hmqw@mail.gmail.com>
+ <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 4/20/23 9:01 AM, Pierre Gondois wrote:
->
->>>
->>> You say that the cause of this is a congestion in the interconnect. I
->>> don't
->>> see a way to check that right now.
->>> However your trace is on the CPU0, so maybe all the other cores were
->>> shutdown
->>> in your test. If this is the case, do you think a congestion could
->>> happen with
->>> only one CPU ?
->>
->> No, other CPUs were not shut down in my test. I just ran "yes" on all
->> cores except CPU 0, then ran the reading freq script. Since all other
->> cores are busy, so the script should be always running on CPU 0.
->>
->> Since the counters, memory and other devices are on the interconnect, so
->> the congestion may be caused by plenty of factors IIUC.
->
-> +Ionela
->
-> Ionela pointed me to the following patch-set, which seems realated:
-> https://lore.kernel.org/all/20230418113459.12860-5-sumitg@nvidia.com/
-
-Thanks for the information. I think we do have the similar syndrome. But 
-I'm not sure how their counters are implemented, we may not have similar 
-root cause.
-
->
-> One thing that we didn't check I believe is and that Ionela pointed out
-> is that we don't know whether we are accessing the present CPU or a 
-> remote
-> CPU'AMUs. In the latter case there would be IPIs and possible delays in
-> waking up/accessing the remote CPU).
->
->>
->>>
->>> Just 2 other comments:
->>> a-
->>> It might be interesting to change the order in which cpc registers are
->>> read
->>> just to see if it has an impact, but even if it has, I m not sure how
->>> this
->>> could be exploitable.
->>> Just in case, I mean doing that, but I think that b. might be better
->>> to try.
->>>
->>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->>> index c51d3ccb4cca..479b55006020 100644
->>> --- a/drivers/acpi/cppc_acpi.c
->>> +++ b/drivers/acpi/cppc_acpi.c
->>> @@ -1350,8 +1350,8 @@ int cppc_get_perf_ctrs(int cpunum, struct
->>> cppc_perf_fb_ctrs *perf_fb_ctrs)
->>>                  }
->>>          }
->>>
->>> -       cpc_read(cpunum, delivered_reg, &delivered);
->>>          cpc_read(cpunum, reference_reg, &reference);
->>> +       cpc_read(cpunum, delivered_reg, &delivered);
->>>          cpc_read(cpunum, ref_perf_reg, &ref_perf);
->>>
->>>          /*
->>>
->>> b-
->>> In the trace that you shared, the cpc_read() calls in the fist
->>> cppc_get_perf_ctrs() calls seem to always take a bit more time than in
->>> the
->>> second cppc_get_perf_ctrs() call.
->>> Would it be possible to collect traces similar as above with 3 or 4
->>> calls to
->>> cppc_get_perf_ctrs() instead of 2 ? It would allow to check whether in
->>> the first
->>> call, accessing the cpc registers takes more time than in the
->>> following calls,
->>> due to cache misses or other reasons.
->>
->> Cache miss? The counters should be not cached and reading the counters
->> should not hit cache IIUC.
->
-> Yes you are correct, what I said is copmletely wrong.
->
->>
->>> Ideally statistics on the result would be the best, or if you have a
->>> trace.dat
->>> to share containing a trace with multiple cppc_cpufreq_get_rate() 
->>> calls.
->>
->> Tried option b, I managed to get histogram:
->>
->> @hist_first_ns[cat]:
->> [4K, 8K)          112321
->> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
->> [8K, 16K)            212
->> |                                                    |
->> [16K, 32K)            25
->> |                                                    |
->> [32K, 64K)            59
->> |                                                    |
->> [64K, 128K)            6
->> |                                                    |
->> [128K, 256K)           9
->> |                                                    |
->>
->> @hist_second_ns[cat]:
->> [2K, 4K)          112590
->> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
->> [4K, 8K)               4
->> |                                                    |
->> [8K, 16K)              0
->> |                                                    |
->> [16K, 32K)            15
->> |                                                    |
->> [32K, 64K)            18
->> |                                                    |
->> [64K, 128K)            1
->> |                                                    |
->> [128K, 256K)           4
->> |                                                    |
->>
->> The "first" means the first cppc_get_perf_ctrs() call. But the bpftrace
->> script can't tell the second, the third and the fourth, so all them are
->> shown as "second". Anyway it seems fine. We can tell the first read took
->> longer than the later ones for the most time.
->>
->> And a typical func_graph trace shows:
->>
->> # tracer: function_graph
->> #
->> #     TIME        CPU  DURATION                  FUNCTION CALLS
->> #      |          |     |   |                     |   |   | |
->>    4447.171333 |     0)               |  cppc_cpufreq_get_rate
->> [cppc_cpufreq]() {
->>    4447.171334 |     0)               |    cpufreq_cpu_get() {
->>    4447.171334 |     0)   1.060 us    | _raw_read_lock_irqsave();
->>    4447.171336 |     0)   0.560 us    | _raw_read_unlock_irqrestore();
->>    4447.171337 |     0)   3.480 us    | }
->>    4447.171338 |     0)   0.400 us    | cpufreq_cpu_put();
->>    4447.171338 |     0)               |    cppc_get_perf_ctrs() {
->>    4447.171339 |     0)   0.720 us    | cpc_read.isra.0();
->>    4447.171341 |     0)   0.700 us    | cpc_read.isra.0();
->>    4447.171342 |     0)   0.380 us    | cpc_read.isra.0();
->>    4447.171342 |     0)   0.600 us    | cpc_read.isra.0();
->>    4447.171343 |     0)   4.900 us    | }
->>    4447.171344 |     0)               |    __delay() {
->>    4447.171344 |     0)   0.540 us    | arch_timer_evtstrm_available();
->>    4447.171346 |     0)   2.420 us    | }
->>    4447.171347 |     0)               |    cppc_get_perf_ctrs() {
->>    4447.171347 |     0)   0.540 us    | cpc_read.isra.0();
->>    4447.171348 |     0)   0.520 us    | cpc_read.isra.0();
->>    4447.171349 |     0)   0.400 us    | cpc_read.isra.0();
->>    4447.171350 |     0)   0.440 us    | cpc_read.isra.0();
->>    4447.171350 |     0)   3.660 us    | }
->>    4447.171351 |     0)               |    __delay() {
->>    4447.171351 |     0)   0.400 us    | arch_timer_evtstrm_available();
->>    4447.171353 |     0)   2.400 us    | }
->>    4447.171353 |     0)               |    cppc_get_perf_ctrs() {
->>    4447.171354 |     0)   0.540 us    | cpc_read.isra.0();
->>    4447.171355 |     0)   0.540 us    | cpc_read.isra.0();
->>    4447.171356 |     0)   0.380 us    | cpc_read.isra.0();
->>    4447.171356 |     0)   0.420 us    | cpc_read.isra.0();
->>    4447.171357 |     0)   3.640 us    | }
->>    4447.171357 |     0)               |    __delay() {
->>    4447.171358 |     0)   0.380 us    | arch_timer_evtstrm_available();
->>    4447.171360 |     0)   2.380 us    |    }
->>    4447.171360 |     0)               |    cppc_get_perf_ctrs() {
->>    4447.171361 |     0)   0.520 us    |      cpc_read.isra.0();
->>    4447.171361 |     0)   0.520 us    |      cpc_read.isra.0();
->>    4447.171362 |     0)   0.400 us    |      cpc_read.isra.0();
->>    4447.171363 |     0)   0.440 us    |      cpc_read.isra.0();
->>    4447.171364 |     0)   3.640 us    |    }
->>    4447.171364 |     0)   0.520 us    | cppc_cpufreq_perf_to_khz
->> [cppc_cpufreq]();
->>    4447.171365 |     0) + 34.240 us   |  }
->>
->> It also shows the first reading typically took longer than the later
->> ones. The second, the third and the fourth actually took almost same 
->> time.
->>
->> I also tried to read perf_fb_ctrs_t0 twice (so total 3 reads, 2 for t0,
->> 1 for t1, 2us delay between each read), but I didn't see noticeable
->> improvement. 4 reads (2 for t0, 2 for t1) does show some noticeable
->> improvement.
->>
->
-> Thanks for the new data.
->
->>>
->>> Example of code where we do 4 calls to cppc_get_perf_ctrs():
->>>
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c
->>> b/drivers/cpufreq/cppc_cpufreq.c
->>> index 022e3555407c..6370f2f0bdad 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>> @@ -853,6 +853,20 @@ static unsigned int
->>> cppc_cpufreq_get_rate(unsigned int cpu)
->>>
->>>          udelay(2); /* 2usec delay between sampling */
->>>
->>> +       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->>> +       if (ret)
->>> +               return ret;
->>> +
->>> +       udelay(2); /* 2usec delay between sampling */
->>> +
->>> +       /* Do a third call. */
->>> +       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->>> +       if (ret)
->>> +               return ret;
->>> +
->>> +       udelay(2); /* 2usec delay between sampling */
->>> +
->>> +       /* Do a fourth call. */
->>>          ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->>>          if (ret)
->>>                  return ret;
->>>
->>>>
->>>> The above trace data shows some cpc reading took a little bit longer
->>>> than usual. I suspected it was caused by interconnect congestion.
->>>>
->>>>
->>>> So it looks like IRQ is the major contributing factor of high error
->>>> (4xxxxxx KHz), interconnect congestion is the major contributing 
->>>> factor
->>>> of low error (3xxxxxx KHz).
->>>>
->>>> So I did the below test:
->>>> 1. Disable IRQ: The high errors were gone (> 3700000KHz), but low 
->>>> errors
->>>> were still seen.
->>>> 2.10us delay: The high errors were still seen.
->>>> 3. Disable IRQ + 10us delay: all the errors were gone.
->>>>
->>>> I think the test result also supports the tracing data.
->>>>
->>>>
->>>> I also got some confusion about calling cppc_cpufreq_get_rate() 
->>>> with irq
->>>> disabled. Rafael thought 10ms delay is too long because the 
->>>> function may
->>>> be called with irq disabled. But a deeper look at the function 
->>>> shows it
->>>> should *NOT* be called with irq disabled at all.
->>>>
->>>> First, if pcc channel is used, cpc reading may take over 100ms, it is
->>>> way larger the proposed 10ms delay.
->>>> Second, reading from cpc channel needs to take a semaphore, so it may
->>>> sleep. But sleep with IRQ disabled is not allowed.
->>>
->>> Yes right, however the semaphore is not taken in between the 
->>> sequence of
->>> cpc_read() calls in cppc_get_perf_ctrs(). So maybe the change below
->>> should
->>> be acceptable:
->>
->> Yeah, we should be able to find a smaller irq disable section.
->>
->>>
->>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->>> index c51d3ccb4cca..105a7e2ffffa 100644
->>> --- a/drivers/acpi/cppc_acpi.c
->>> +++ b/drivers/acpi/cppc_acpi.c
->>> @@ -1315,6 +1315,7 @@ int cppc_get_perf_ctrs(int cpunum, struct
->>> cppc_perf_fb_ctrs *perf_fb_ctrs)
->>>          struct cppc_pcc_data *pcc_ss_data = NULL;
->>>          u64 delivered, reference, ref_perf, ctr_wrap_time;
->>>          int ret = 0, regs_in_pcc = 0;
->>> +       unsigned long flags;
->>>
->>>          if (!cpc_desc) {
->>>                  pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
->>> @@ -1350,10 +1351,14 @@ int cppc_get_perf_ctrs(int cpunum, struct
->>> cppc_perf_fb_ctrs *perf_fb_ctrs)
->>>                  }
->>>          }
->>>
->>> +       local_irq_save(flags);
->>> +
->>>          cpc_read(cpunum, delivered_reg, &delivered);
->>>          cpc_read(cpunum, reference_reg, &reference);
->>>          cpc_read(cpunum, ref_perf_reg, &ref_perf);
->>>
->>> +       local_irq_restore(flags);
->>> +
->>
->> cpc_read_ffh() would return -EPERM if irq is disabled.
->>
->> So, the irq disabling must happen for mmio only in cpc_read(), for 
->> example:
->
-> I thought the issue was that irqs could happen in between cpc_read() 
-> functions,
-> the patch below would not cover it. If the frequency is more accurate
-> with this patch, I think I don't understand something.
-
-Yeah, you are correct. The irq disabling window has to cover all the 
-cpc_read(). I didn't test with this patch. My test was done conceptually 
-with:
-
-disable irq
-cppc_get_perf_ctrs(t0)
-udelay(2)
-cppc_get_perf_ctrs(t1)
-enable irq
-
-But this will break cpc_read_ffh().
-
->
-> (asking for more information)
-> Just to check, the core/perf counters are AMUs and the other CPPC 
-> registers
-> are mmio right ? Is it possible to know the CPPC registers that are
-> implemented on your platform ?
-
-AFAIK, the perf counters are implemented by AMU and accessed via mmio, 
-the other CPPC registers are implemented by PCC.
-
-> Also is it possible which platform you are using ?
-
-Ampere One
-
->
->>
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index c51d3ccb4cca..f3c92d844074 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -982,6 +982,7 @@ static int cpc_read(int cpu, struct
->> cpc_register_resource *reg_res, u64 *val)
->>           void __iomem *vaddr = NULL;
->>           int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
->>           struct cpc_reg *reg = &reg_res->cpc_entry.reg;
->> +       unsigned long flags;
->>
->>           if (reg_res->type == ACPI_TYPE_INTEGER) {
->>                   *val = reg_res->cpc_entry.int_value;
->> @@ -1015,6 +1016,7 @@ static int cpc_read(int cpu, struct
->> cpc_register_resource *reg_res, u64 *val)
->>                   return
->> acpi_os_read_memory((acpi_physical_address)reg->address,
->>                                   val, reg->bit_width);
->>
->> +       local_irq_save(flags);
->>           switch (reg->bit_width) {
->>           case 8:
->>                   *val = readb_relaxed(vaddr);
->> @@ -1029,10 +1031,12 @@ static int cpc_read(int cpu, struct
->> cpc_register_resource *reg_res, u64 *val)
->>                   *val = readq_relaxed(vaddr);
->>                   break;
->>           default:
->> +               local_irq_restore(flags);
->>                   pr_debug("Error: Cannot read %u bit width from PCC for
->> ss: %d\n",
->>                            reg->bit_width, pcc_ss_id);
->>                   return -EFAULT;
->>           }
->> +       local_irq_restore(flags);
->>
->>           return 0;
->>    }
->>
->>>          /*
->>>           * Per spec, if ctr_wrap_time optional register is
->>> unsupported, then the
->>>           * performance counters are assumed to never wrap during the
->>> lifetime of
->>>
->>>> Third, if the counters are implemented by AMU, cpc_read_ffh() needs to
->>>> send IPI so it requires IRQ enabled.
->>>
->>> If I'm not mistaken, the CPU calling cpc_read_ffh() might have IRQs
->>> disabled,
->>> it should not prevent it to send IPIs no ?
->>
->> It can't work with irq disabled. The comment in counters_read_on_cpu()
->> says "Abort call on counterless CPU or when interrupts are disabled -
->> can lead to deadlock in smp sync call."
->>
->>
->> And it just returns -EPERM and raise a warning if irq is disabled.
->
-> Ok right,
->
-> Regards,
-> Piere
-
+SGkgTGludXMhDQoNCk9uIDIwLjA0LjIzIDEwOjAzLCBMaW51cyBXYWxsZWlqIHdyb3RlOg0K
+PiBPbiBUaHUsIEFwciAyMCwgMjAyMyBhdCA5OjU54oCvQU0gTGludXMgV2FsbGVpaiA8bGlu
+dXMud2FsbGVpakBsaW5hcm8ub3JnPiB3cm90ZToNCj4+DQo+PiBIaSBKYWtvYiwNCj4+DQo+
+PiB0aGFua3MgZm9yIHlvdXIgcGF0Y2ghDQo+Pg0KPj4gVGhlIGZvbGxvd2luZyBjYXVnaHQg
+bXkgZXllOg0KPj4NCj4+IE9uIFN1biwgQXByIDE2LCAyMDIzIGF0IDI6NTDigK9QTSBKYWtv
+YiBIYXVzZXIgPGphaGF1QHJvY2tldG1haWwuY29tPiB3cm90ZToNCj4+DQo+Pj4gQWRkIGRl
+dmljZSB0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgcnQ1MDMzIG11bHRpZnVuY3Rp
+b24gZGV2aWNlLCB2b2x0YWdlDQo+Pj4gcmVndWxhdG9yIGFuZCBiYXR0ZXJ5IGNoYXJnZXIu
+DQo+Pj4NCj4+PiBDYzogQmVvbWhvIFNlbyA8YmVvbWhvLnNlb0BzYW1zdW5nLmNvbT4NCj4+
+PiBDYzogQ2hhbndvbyBDaG9pIDxjdzAwLmNob2lAc2Ftc3VuZy5jb20+DQo+Pj4gU2lnbmVk
+LW9mZi1ieTogSmFrb2IgSGF1c2VyIDxqYWhhdUByb2NrZXRtYWlsLmNvbT4NCj4+PiAtLS0N
+Cj4+PiBUaGUgcGF0Y2ggaXMgYmFzZWQgb24gbGludXgtbmV4dCAodGFnICJuZXh0LTIwMjMw
+NDEzIikuDQo+PiAoLi4uKQ0KPj4+IC0tLSAvZGV2L251bGwNCj4+PiArKysgYi9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcG93ZXIvc3VwcGx5L3JpY2h0ZWsscnQ1MDMz
+LWNoYXJnZXIueWFtbA0KPj4gKC4uLikNCj4+PiArICByaWNodGVrLHByZS1taWNyb2FtcDoN
+Cj4+PiArICAgIGRlc2NyaXB0aW9uOg0KPj4+ICsgICAgICBDdXJyZW50IG9mIHByZS1jaGFy
+Z2UgbW9kZS4gVGhlIHByZS1jaGFyZ2UgY3VycmVudCBsZXZlbHMgYXJlIDM1MCBtQSB0bw0K
+Pj4+ICsgICAgICA2NTAgbUEgcHJvZ3JhbW1lZCBieSBJMkMgcGVyIDEwMCBtQS4NCj4+PiAr
+ICAgIG1heEl0ZW1zOiAxDQo+Pj4gKw0KPj4+ICsgIHJpY2h0ZWssZmFzdC1taWNyb2FtcDoN
+Cj4+PiArICAgIGRlc2NyaXB0aW9uOg0KPj4+ICsgICAgICBDdXJyZW50IG9mIGZhc3QtY2hh
+cmdlIG1vZGUuIFRoZSBmYXN0LWNoYXJnZSBjdXJyZW50IGxldmVscyBhcmUgNzAwIG1BDQo+
+Pj4gKyAgICAgIHRvIDIwMDAgbUEgcHJvZ3JhbW1lZCBieSBJMkMgcGVyIDEwMCBtQS4NCj4+
+PiArICAgIG1heEl0ZW1zOiAxDQo+Pj4gKw0KPj4+ICsgIHJpY2h0ZWssZW9jLW1pY3JvYW1w
+Og0KPj4+ICsgICAgZGVzY3JpcHRpb246DQo+Pj4gKyAgICAgIFRoaXMgcHJvcGVydHkgaXMg
+ZW5kIG9mIGNoYXJnZSBjdXJyZW50LiBJdHMgbGV2ZWwgcmFuZ2VzIGZyb20gMTUwIG1BIHRv
+DQo+Pj4gKyAgICAgIDYwMCBtQS4gQmV0d2VlbiAxNTAgbUEgYW5kIDMwMCBtQSBpbiA1MCBt
+QSBzdGVwcywgYmV0d2VlbiAzMDAgbUEgYW5kIDYwMCBtQQ0KPj4+ICsgICAgICBpbiAxMDAg
+bUEgc3RlcHMuDQo+Pj4gKyAgICBtYXhJdGVtczogMQ0KPj4+ICsNCj4+PiArICByaWNodGVr
+LHByZS10aHJlc2hvbGQtbWljcm92b2x0Og0KPj4+ICsgICAgZGVzY3JpcHRpb246DQo+Pj4g
+KyAgICAgIFZvbHRhZ2Ugb2YgcHJlLWNoYXJnZSBtb2RlLiBJZiB0aGUgYmF0dGVyeSB2b2x0
+YWdlIGlzIGJlbG93IHRoZSBwcmUtY2hhcmdlDQo+Pj4gKyAgICAgIHRocmVzaG9sZCB2b2x0
+YWdlLCB0aGUgY2hhcmdlciBpcyBpbiBwcmUtY2hhcmdlIG1vZGUgd2l0aCBwcmUtY2hhcmdl
+IGN1cnJlbnQuDQo+Pj4gKyAgICAgIEl0cyBsZXZlbHMgYXJlIDIuMyBWIHRvIDMuOCBWIHBy
+b2dyYW1tZWQgYnkgSTJDIHBlciAwLjEgVi4NCj4+PiArICAgIG1heEl0ZW1zOiAxDQo+Pj4g
+Kw0KPj4+ICsgIHJpY2h0ZWssY29uc3QtbWljcm92b2x0Og0KPj4+ICsgICAgZGVzY3JpcHRp
+b246DQo+Pj4gKyAgICAgIEJhdHRlcnkgcmVndWxhdGlvbiB2b2x0YWdlIG9mIGNvbnN0YW50
+IHZvbHRhZ2UgbW9kZS4gVGhpcyB2b2x0YWdlIGxldmVscyBmcm9tDQo+Pj4gKyAgICAgIDMu
+NjUgViB0byA0LjQgViBieSBJMkMgcGVyIDAuMDI1IFYuDQo+Pj4gKyAgICBtYXhJdGVtczog
+MQ0KPj4NCj4+IFRoZXNlIGFyZSB2ZXJ5IGdlbmVyaWMgY3VycmVudHMgYW5kIHZvbHRhZ2Vz
+LCBhbmQgdGhlaXIgdXNhZ2UgaXMgd2VsbCBrbm93bg0KPj4gYW5kIGdlbmVyaWMuIFNvIHRo
+ZXkgc2hvdWxkIG5vdCBiZSBwcmVmaXhlZCAicmljaHRlaywiLg0KPj4NCj4+IFVzZSB0aGUg
+cHJvcGVydGllcyBhbHJlYWR5IGRlZmluZWQgaW4NCj4+IERvY3VtZW50YXRpb24vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9wb3dlci9zdXBwbHkvYmF0dGVyeS55YW1sDQo+PiBmb3IgdGhlc2U6
+DQo+Pg0KPj4gcHJlY2hhcmdlLWN1cnJlbnQtbWljcm9hbXANCj4+IGNvbnN0YW50LWNoYXJn
+ZS1jdXJyZW50LW1heC1taWNyb2FtcA0KPj4gY2hhcmdlLXRlcm0tY3VycmVudC1taWNyb2Ft
+cA0KPj4gcHJlY2hhcmdlLXVwcGVyLWxpbWl0LW1pY3Jvdm9sdA0KPj4gY29uc3RhbnQtY2hh
+cmdlLXZvbHRhZ2UtbWF4LW1pY3Jvdm9sdA0KPj4NCj4+IFBsZWFzZSBkb3VibGUtY2hlY2ss
+IEkgdGhpbmsgdGhvc2UgYXJlIHRoZSBvbmVzIHlvdSBuZWVkLg0KPj4NCj4+IFBlcmhhcHMg
+aXQgaXMgcG9zc2libGUgdG8ganVzdCAkcmVmIHRoZXNlIHByb3BlcnRpZXMgZGlyZWN0bHkg
+YW5kIGFkZA0KPj4gdGhlIGFkZGl0aW9uYWwgcmVzdHJpY3Rpb25zIG9uIHRvcC4NCj4gDQo+
+IE9uIHNlY29uZCB0aG91Z2h0LCB0aGVzZSBhcmUgcmVhbGx5IHdlaXJkIHByb3BlcnRpZXMg
+dG8gaGF2ZSBvbiB0aGUNCj4gKmNoYXJnZXIqIGlzbid0IGl0Pw0KPiANCj4gSXQgaXMgcmVh
+bGx5ICpiYXR0ZXJ5KiByZXN0cmljdGlvbnMuDQo+IA0KPiBBIGNoYXJnZXIgY2FuIGNoYXJn
+ZSBtYW55IGRpZmZlcmVudCBiYXR0ZXJpZXMgd2l0aCBkaWZmZXJlbnQgQ0MvQ1YNCj4gc2V0
+dGluZ3MuDQo+IA0KPiBJIHRoaW5rIHlvdXIgY2hhcmdlciBzaG91bGQgY29udGFpbiBhIHBo
+YW5kbGUgdG8gYSBiYXR0ZXJ5IGFuZCB0aGUgYmF0dGVyeQ0KPiBub2RlIHNob3VsZCBjb250
+YWluIHRoZXNlIGxpbWl0cy4NCj4gDQo+ICAgIG1vbml0b3JlZC1iYXR0ZXJ5Og0KPiAgICAg
+ICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3BoYW5kbGUNCj4gICAg
+ICBkZXNjcmlwdGlvbjogcGhhbmRsZSB0byBiYXR0ZXJ5IG5vZGUNCj4gDQo+IFRoZW4geW91
+IGNhbiBqdXN0IHVzZSB0aGUgc3RhbmRhcmQgYmF0dGVyeSBiaW5kaW5ncyBmb3IgdGhlc2Ug
+cHJvcGVydGllcw0KPiBvbiB0aGUgYmF0dGVyeS4NCj4gDQo+IFNlZSBmb3IgZXhhbXBsZToN
+Cj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3N1cHBseS9zdGVy
+aWNzc29uLGFiODUwMC1jaGFyZ2VyLnlhbWwNCj4gDQo+IFRoZXJlIHdpbGwgYmUgZHJpdmVy
+IGNoYW5nZXMgbmVlZGVkIHRvbywgYnV0IHRoaXMgd2lsbCBiZSB3YXkgY2xlYW5lci4NCj4g
+DQo+IFlvdXJzLA0KPiBMaW51cyBXYWxsZWlqDQoNClRoZXNlIGFyZSBpbnRlcmVzdGluZyBo
+aW50cyENCg0KSSB3YXMgZmlyc3QgYSBiaXQgY29uZnVzZWQgYnkgdGhlIHRlcm0gImJhdHRl
+cnkiLiBJIGFzc29jaWF0ZWQgdGhhdCB0ZXJtIA0Kd2l0aCB0aGUgZHJpdmVyICJydDUwMzMt
+YmF0dGVyeSIuIEJ1dCBJIHRoaW5rIHRoYXQgdGhvdWdodCB3YXMgd3JvbmcuIA0KVGhlIGRy
+aXZlciAicnQ1MDMzLWJhdHRlcnkiIGlzIGp1c3QgdGhlIGZ1ZWwgZ2F1Z2UuDQoNCkhhcmR3
+YXJlLXdpc2UsIHRoZSBtZmQgKGluY2wuIGNoYXJnZXIpIGFuZCBmdWVsIGdhdWdlIGFyZSBv
+biBkaWZmZXJlbnQgDQpJMkMgbGluZXMuIFRoZXJlZm9yZSwgdGhlIGRpZmZlcmVudCBkcml2
+ZXJzIGFjY2VzcyBkaWZmZXJlbnQgcmVnaXN0ZXJzLg0KDQpDaGFyZ2VyIHJlZ2lzdGVyczoN
+Cmh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL3Y2LjMtcmM3L2luY2x1
+ZGUvbGludXgvbWZkL3J0NTAzMy1wcml2YXRlLmgjTDEzLUwyMw0KDQpGdWVsIGdhdWdlIHJl
+Z2lzdGVyczoNCmh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL3Y2LjMt
+cmM3L2luY2x1ZGUvbGludXgvbWZkL3J0NTAzMy1wcml2YXRlLmgjTDIxNS1MMjQzDQoNClRo
+ZSB0aGluZ3MgYmVpbmcgc2V0IG9yIHJlYWQgaW4gdGhvc2UgcmVnaXN0ZXJzIGtpbmQgb2Yg
+ZGV0ZXJtaW5lIHdoaWNoIA0KdGhpbmdzIGFyZSBkb25lIGluIHdoaWNoIGRyaXZlci4NCg0K
+VGhlIHByb3BlcnRpZXMgd2UgdGFsayBhYm91dCBoZXJlIGFyZSB0aGUgc2V0dGluZ3MgZm9y
+IHRoZSBjaGFyZ2VyLiBUaGV5IA0KdGVsbCB0aGUgY2hhcmdlciBob3cgaXQgc2hvdWxkIGJl
+aGF2ZS4gSXQgbWFrZXMgc2Vuc2UgdG8gcHJvY2VzcyB0aG9zZSANCnNldHRpbmdzIHdpdGhp
+biB0aGUgY2hhcmdlciBkcml2ZXIuIFRoZSBmdWVsIGdhdWdlLCBvbiB0aGUgb3RoZXIgaGFu
+ZCwgDQpyZXR1cm5zIGluZm9ybWF0aW9uIGxpa2UgYWN0dWFsIHZvbHRhZ2UgYW5kIHBlcmNl
+bnRhZ2UuDQoNClRoZSBvbmx5IHRoaW5nIHRoYXQgc2VlbXMgbm90IHBsYWNlZCB3ZWxsIGlz
+IHRoZSAic3RhdHVzIiBwcm9wZXJ0eSBsaWtlIA0KY2hhcmdpbmcvZGlzY2hhcmdpbmcvbm90
+LWNoYXJnaW5nL2V0Yy4gQXQgUlQ1MDMzIHRoaXMgaW5mb3JtYXRpb24gaXMgDQp3aXRoaW4g
+dGhlIGNoYXJnZXIgcmVnaXN0ZXIuIFVzZXJzcGFjZSBsYXllciAiVVBvd2VyIiBleHBlY3Rz
+IHRoaXMgZnJvbSANCnRoZSAiYmF0dGVyeSIgZGV2aWNlLiBQYXRjaCA4IG9mIHRoaXMgc2Vy
+aWVzIHYyIGNhcnJpZXMgdGhhdCBwcm9wZXJ0eSANCmZyb20gdGhlIGNoYXJnZXIgb3ZlciB0
+byB0aGUgZnVlbCBnYXVnZS4gVGhvdWdoIHRoaXMgaXMgYSBiaXQgb2YgYSANCnF1aXJrLiBB
+bmQgaXQgY3JlYXRlcyBkZXBlbmRlbmNpZXMgYmV0d2VlbiB0d28gZHJpdmVycyB3aGljaCBh
+Y3R1YWxseSANCndvdWxkIGJlIGluZGVwZW5kZW50IGZyb20gZWFjaCBvdGhlci4NCg0KLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCkJhY2sgdG8gdGhlIHRvcGljLiBX
+aGVuIHdlIHRhbGsgYWJvdXQgImJhdHRlcnkiIGhlcmUsIGl0IHNlZW1zIHRvIG1lIA0KdGhh
+dCBpdCdzIGFib3V0IHRoZSByZXByZXNlbnRhdGlvbiBpbiB0aGUgZGV2aWNldHJlZS4NCg0K
+Q3VycmVudGx5IGl0IGlzOg0KDQogICAgIHBtaWNAMzQgew0KICAgICAgICAgY29tcGF0aWJs
+ZSA9ICJyaWNodGVrLHJ0NTAzMyI7DQogICAgICAgICAuLi4uDQogICAgICAgICBjaGFyZ2Vy
+IHsNCiAgICAgICAgICAgICBjb21wYXRpYmxlID0gInJpY2h0ZWsscnQ1MDMzLWNoYXJnZXIi
+Ow0KICAgICAgICAgICAgIHJpY2h0ZWsscHJlLW1pY3JvYW1wID0gPDQ1MDAwMD47DQogICAg
+ICAgICAgICAgcmljaHRlayxmYXN0LW1pY3JvYW1wID0gPDEwMDAwMDA+Ow0KICAgICAgICAg
+ICAgIHJpY2h0ZWssZW9jLW1pY3JvYW1wID0gPDE1MDAwMD47DQogICAgICAgICAgICAgcmlj
+aHRlayxwcmUtdGhyZXNob2xkLW1pY3Jvdm9sdCA9IDwzNTAwMDAwPjsNCiAgICAgICAgICAg
+ICByaWNodGVrLGNvbnN0LW1pY3Jvdm9sdCA9IDw0MzUwMDAwPjsNCiAgICAgICAgICAgICBl
+eHRjb24gPSA8Jm11aWM+Ow0KICAgICAgICAgfTsNCiAgICAgfTsNCg0KQWNjb3JkaW5nIHRv
+IHlvdXIgcmVtYXJrcywgdGhlIHByb3BlcnRpZXMgY291bGQgYmUgIm91dHNvdXJjZWQiIGlu
+dG8gYQ0KYmF0dGVyeSBub2RlLiAoQnR3LiBJIGhhdmUgZG91YmxlLWNoZWNrZWQgdGhlIHBy
+b3BlcnR5IG5hbWVzLikNCg0KICAgICBiYXR0ZXJ5OiBiYXR0ZXJ5IHsNCiAgICAgICAgIGNv
+bXBhdGlibGUgPSAic2ltcGxlLWJhdHRlcnkiOw0KICAgICAgICAgcHJlY2hhcmdlLWN1cnJl
+bnQtbWljcm9hbXAgPSA8NDUwMDAwPjsNCiAgICAgICAgIGNvbnN0YW50LWNoYXJnZS1jdXJy
+ZW50LW1heC1taWNyb2FtcCA9IDwxMDAwMDAwPjsNCiAgICAgICAgIGNoYXJnZS10ZXJtLWN1
+cnJlbnQtbWljcm9hbXAgPSA8MTUwMDAwPjsNCiAgICAgICAgIHByZWNoYXJnZS11cHBlci1s
+aW1pdC1taWNyb3ZvbHQgPSA8MzUwMDAwMD47DQogICAgICAgICBjb25zdGFudC1jaGFyZ2Ut
+dm9sdGFnZS1tYXgtbWljcm92b2x0ID0gPDQzNTAwMDA+Ow0KICAgICB9Ow0KDQogICAgIHBt
+aWNAMzQgew0KICAgICAgICAgY29tcGF0aWJsZSA9ICJyaWNodGVrLHJ0NTAzMyI7DQogICAg
+ICAgICAuLi4uDQogICAgICAgICBjaGFyZ2VyIHsNCiAgICAgICAgICAgICBjb21wYXRpYmxl
+ID0gInJpY2h0ZWsscnQ1MDMzLWNoYXJnZXIiOw0KICAgICAgICAgICAgIG1vbml0b3JlZC1i
+YXR0ZXJ5ID0gPCZiYXR0ZXJ5PjsNCiAgICAgICAgICAgICBleHRjb24gPSA8Jm11aWM+Ow0K
+ICAgICAgICAgfTsNCiAgICAgfTsNCg0KUGVyc29uYWxseSBJIHdvdWxkIGNob29zZSB0aGUg
+Y3VycmVudCBpbXBsZW1lbnRhdGlvbiBmb3IgdHdvIHJlYXNvbnMgDQoocG9zc2libHkgd2Vh
+ayBvbmVzKToNCg0KMSkgVGhlIG9yaWdpbmFsIGF1dGhvciBvZiB0aGUgZHJpdmVyIGFuZCBk
+b2N1bWVudGF0aW9uIGlzIEJlb21obyBTZW8uIEkgDQp0cmllZCB0byBwcmVzZXJ2ZSB0aGUg
+b3JpZ2luYWwgc3RydWN0dXJlIGFzIGZhciBhcyBwb3NzaWJsZS4gVGhpcyBpcyANCnByb2Jh
+Ymx5IHJhdGhlciBhIHF1ZXN0aW9uIG9mIGVkaXRpbmcgdGhhbiBhIHRlY2huaWNhbCBvbmUu
+DQoNCjIpIEF0IGxlYXN0IGluIG15IG1pbmQgaXQncyBzdGlsbCB0aGUgc2V0dXAgZm9yIHRo
+ZSBjaGFyZ2VyLiBJdCBzZXRzIHVwIA0KYSB0aGUgY2hhcmdpbmcgYmVoYXZpb3Igb2YgYSBj
+ZXJ0YWluIGNvbnN1bWVyIGRldmljZS4gQW5kIHRoZSBjaG9pY2Ugb2YgDQp0aGVpciB2YWx1
+ZXMgaXMgbGltaXRlZCB0byB0aGUgaGFyZHdhcmUgb2YgdGhlIGNoYXJnZXIuIEFjY29yZGlu
+Z2x5IHRoZSANCmR0LWJpbmRpbmdzIHdvdWxkIHNheSB3aGF0IHRoZSBjaGFyZ2VyIGhhcmR3
+YXJlIGlzIGNhcGFibGUgdG8gZG8uIA0KVGhlcmVmb3JlIEknZCBzYXkgaXQncyByZWFzb25h
+YmxlIHRvIGhhdmUgdGhvc2UgdmFsdWVzIGluIHRoZSBjaGFyZ2VyIA0Kbm9kZSBhbmQgdXNl
+IHZlbmRvciBwcm9wZXJ0aWVzLg0KDQpJIGFncmVlIHRvIHlvdSB0aGF0IGFjdHVhbGx5IHRo
+ZSBwaHlzaWNhbCBiYXR0ZXJ5IGlzIGRldGVybWluaW5nIGhvdyANCnRoZXNlIHZhbHVlcyBz
+aG91bGQgYmUgc2V0LiBJbiB0aGUgZW5kLCBhcyBmYXIgYXMgSSBjYW4gc2VlLCBpdCBpcyBh
+IA0KcmVwcmVzZW50YXRpb24gdGhpbmcgaW4gdGhlIGRldmljZXRyZWUuIEF0IGxlYXN0IGlu
+IG91ciBjYXNlIGhlcmUuDQoNCk5vdCBzdXJlIGhvdyB0byBwcm9jZWVkIGhlcmUuIEkgd291
+bGQgc3RpY2sgdG8gdGhlIGN1cnJlbnQgDQppbXBsZW1lbnRhdGlvbi4gSWYgc29tZW9uZSBz
+dHJvbmdseSBwcmVmZXJzIHRoZSAiYmF0dGVyeSIgcmVwcmVzZW50YXRpb24gDQpzdHlsZSwg
+SSdtIG9wZW4gdG8gc3dpdGNoIHRvIHRoaXMuDQoNCkhvd2V2ZXIsIEknbSBub3Qgc3VyZSBo
+b3cgdGhlIGR0LWJpbmRpbmdzIHdvdWxkIGxvb2sgbGlrZSBpbiB0aGF0IGNhc2UuIA0KVGhv
+c2UgYmF0dGVyeSBwcm9wZXJ0aWVzIHdvdWxkIG5vdCBiZSBwYXJ0IG9mIHRoZSBSVDUwMzMg
+bm9kZSwgdGh1cyB0aGV5IA0KYmFzaWNhbGx5IHdvdWxkIG5vdCBiZSBwYXJ0IG9mIHRoZSBS
+VDUwMzMgZG9jdW1lbnRhdGlvbi4gQWdhaW4gSSB0aGluayANCml0IG1ha2VzIHNlbnNlIHRv
+IGhhbmRsZSB0aG9zZSBwcm9wZXJ0aWVzIHdpdGhpbiB0aGUgY2hhcmdlciBub2RlIGFzIA0K
+ImNoYXJnZXIgc2V0dGluZ3MiIHByb3BlcnRpZXMuDQoNCktpbmQgcmVnYXJkcywNCkpha29i
+DQo=
