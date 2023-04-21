@@ -2,130 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC446EA39D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 08:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5BA6EA47E
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 09:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjDUGQp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Apr 2023 02:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S230047AbjDUHSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Apr 2023 03:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjDUGQJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Apr 2023 02:16:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E54083FB;
-        Thu, 20 Apr 2023 23:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682057768; x=1713593768;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9eud3u4+mkWYwqeIwbUATFLc797StiR+cc7u4K8A5yo=;
-  b=iNTXjqf62jINq1Bbc2UZSl+sAiOFhcMeC/Ww0D9M+hYez0YIqpn3Hk77
-   lr/SxkiUKk1ar1olel9MonmJHip+n4xTZ5n8P08yrc8oL7sF8RizQcUXC
-   xrR/G55JcGYyzdYzExZcXyqd6axmcmcOpTq2kis0Fad1uo42fvgz23Nvo
-   QuSyp8qeF+oceCNVnhRTYbiHLAYfjPfra/3VaSvQa8Z9CX2Ky+6ExpVeG
-   ji2+feeezhlfOtLQDC1F9WuEphd1ow85HG683wDdTCXqoTSUEBObEOrMw
-   vikN2q4b5wf1OhkzzQrEfy8fGnGgH9zorNr4NvHfwR8MVir/MfgcHbkRP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="330124513"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="330124513"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 23:16:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021816705"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="1021816705"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Apr 2023 23:16:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppk3w-000gNW-34;
-        Fri, 21 Apr 2023 06:16:04 +0000
-Date:   Fri, 21 Apr 2023 14:15:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        Shyam-sundar.S-k@amd.com,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
-Message-ID: <202304211425.SUKWdyf7-lkp@intel.com>
-References: <20230420160923.14127-1-mario.limonciello@amd.com>
+        with ESMTP id S230253AbjDUHR7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Apr 2023 03:17:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC2DE69
+        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 00:17:34 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so9676923a12.0
+        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 00:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682061442; x=1684653442;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D8FJvP1BD0tDx6NIZl+M/d1F52rRHkvVZml0FlFOiDU=;
+        b=LxyhVBykO2Nl4UGUEb6e3uAz1gyBZ4HLLnAE9gBSTjurD1v1Xu2xlZApBnF8PIYn7O
+         +yB9vskucWQiMNiNjvt8HrWhgypU34cDUvbiKT18Qs6+uo+U5byjg+vqqFObYImfd616
+         0fZzoiE4w8ZP4LOweQ/pb73ah0EYQByoM5x8GtT898SPBFhsHSkV3DLA4SeZAS4I9PmX
+         DOQBKP3PXvcLe1j7abvR2Zi4gEdDyT6aaUBaTUUAUn6Mla0sKTAA38EMAfkmYNMkBczC
+         GZjcRb38/2yQJaCm0LCmsn2EUxbGs8AEpUugS4U/P9+oljecA5Y5357n8TTgrxvNL9ER
+         vLGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682061442; x=1684653442;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D8FJvP1BD0tDx6NIZl+M/d1F52rRHkvVZml0FlFOiDU=;
+        b=MDEkO9oi5h3cLh76k/y8p0sZ+B9rB6/bvahW+kSuZr38/gxHC6EXwHp95JctS0a49I
+         sTh1n18quaFM07rJbO9MIwQfLmGPfK3jbX8RhclCi5TGFV/mtEC7ZWCoulnZrMDWcZnl
+         scBDS9M963yqfiRZUjuGEsOIjKqhqhGWkN8dmdlWoEUZxEsXkiiphZj5CSbT8GGdmJOO
+         UqzhgZVnVPzYpm3QKVWtZY2JPuuigh7Sf7gPwcxLSaTiKmNa7n7XBDiy8oYL3yVhrdJX
+         McEykAF77bCuvynvZ482d9NIuXKnm06cY1QW6g6itH8CMiX93TVp12Tkb6gqNbCsM4Ft
+         Xx6g==
+X-Gm-Message-State: AAQBX9cgsUkj8AJZ/HDIcIqsxCYrjIZn5LnDjDY/8v6fJZSkMO6ixKGI
+        Ly1wd7Q6UcgaYQqhzqA8jDuG3w==
+X-Google-Smtp-Source: AKy350YC3h8J32Hjg0FT3P4ttM41Elc3cqf0pgTVnfqTnoNqiv7mnOlDEsmhPWN2tSmQx7H6mieNZQ==
+X-Received: by 2002:a05:6402:4306:b0:4bf:b2b1:84d8 with SMTP id m6-20020a056402430600b004bfb2b184d8mr8906008edc.19.1682061442438;
+        Fri, 21 Apr 2023 00:17:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:668b:1e57:3caa:4d06? ([2a02:810d:15c0:828:668b:1e57:3caa:4d06])
+        by smtp.gmail.com with ESMTPSA id d21-20020aa7c1d5000000b005027d31615dsm1525564edp.62.2023.04.21.00.17.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 00:17:22 -0700 (PDT)
+Message-ID: <9ce1e719-9bfe-cba3-ed8d-fe9dcd1abc8a@linaro.org>
+Date:   Fri, 21 Apr 2023 09:17:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420160923.14127-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v13 1/2] thermal: loongson-2: add thermal management
+ support
+To:     zhuyinbo <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230221095355.9799-1-zhuyinbo@loongson.cn>
+ <1af930f6-51ae-c986-3eeb-556b2fa34047@linaro.org>
+ <070bd997-b70b-ede1-fe71-dcf410aa3c1a@loongson.cn>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <070bd997-b70b-ede1-fe71-dcf410aa3c1a@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Mario,
+On 21/04/2023 04:00, zhuyinbo wrote:
+> 
+> 
+> 在 2023/4/20 下午11:54, Krzysztof Kozlowski 写道:
+>> On 21/02/2023 10:53, Yinbo Zhu wrote:
+>>> This patch adds the support for Loongson-2 thermal sensor controller,
+>>> which can support maximum 4 sensors, each sensor contains a sampling
+>>> register and a control register. The sampling register is used to obtain
+>>> the temperature in real time, the control register GATE field is used to
+>>> set the threshold of high or low temperature, when the input temperature
+>>> is higher than the high temperature threshold or lower than the low
+>>> temperature threshold, an interrupt will occur.
+>>>
+>>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>> ---
+>>> Change in v13:
+>>> 		1. Add a description about that how works the sensor.
+>>> 		2. Drop the COMPILE_TEST.
+>>
+>> Why? We want to compile test. We really, really want.
+>>
+> 
+> I noted a commit "8df4ef3eaa62b" that accoring to Daniel's reminder.
 
-kernel test robot noticed the following build warnings:
+The commit is for OF! That's not the case here. Your driver is limited
+to chosen ARCH.
 
-[auto build test WARNING on 7124d7671af0facf115d70f9d1fadde0d768d325]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
-base:   7124d7671af0facf115d70f9d1fadde0d768d325
-patch link:    https://lore.kernel.org/r/20230420160923.14127-1-mario.limonciello%40amd.com
-patch subject: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230421/202304211425.SUKWdyf7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
-        git checkout e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211425.SUKWdyf7-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/x86/s2idle.c:552:6: warning: no previous prototype for 'lps0_s2idle_wake' [-Wmissing-prototypes]
-     552 | bool lps0_s2idle_wake(void)
-         |      ^~~~~~~~~~~~~~~~
-
-
-vim +/lps0_s2idle_wake +552 drivers/acpi/x86/s2idle.c
-
-   551	
- > 552	bool lps0_s2idle_wake(void)
-   553	{
-   554		if (!lps0_device_handle || sleep_no_lps0)
-   555			goto out;
-   556	
-   557		/* avoid running on the first go through the s2idle loop */
-   558		if (lps0_dsm_func_mask_microsoft > 0) {
-   559			int target;
-   560	
-   561			if (lps0_dsm_state == ACPI_LPS0_ENTRY ||
-   562			    lps0_dsm_state == ACPI_LPS0_MS_EXIT)
-   563				target = ACPI_LPS0_MS_ENTRY;
-   564			else
-   565				target = ACPI_LPS0_MS_EXIT;
-   566			acpi_sleep_run_lps0_dsm(target,
-   567						lps0_dsm_func_mask_microsoft,
-   568						lps0_dsm_guid_microsoft);
-   569		}
-   570	out:
-   571		return acpi_s2idle_wake();
-   572	}
-   573	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
