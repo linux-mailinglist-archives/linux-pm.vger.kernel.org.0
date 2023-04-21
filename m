@@ -2,206 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87406EA6CA
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 11:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BD56EAB47
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 15:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjDUJUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Apr 2023 05:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S232072AbjDUNLS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Apr 2023 09:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjDUJUX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Apr 2023 05:20:23 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C24119
-        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 02:20:21 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5529f3b8623so5095027b3.2
-        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 02:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682068820; x=1684660820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NhFBbTnrvqR6mDfvWnCP3LyOJMAtBUaFpuunhT+4e7o=;
-        b=r4wR+IdH7jTYl36uiLsjBKZrp9iQ9mcyzeIWA44aVLaBmlLsWoIZ7cP5hlZ8NO+ORj
-         WwePE2341vBNNZfHqIIYHIt4CnJ1AReRi+ypauq6Ze6bIMn1FBRrqj0HKlN7+8utv+us
-         65eqT3H25qcKogf2NRKY226L/5xLzPtveVD0yR3NPgucuGdo67xvDMxbWy/JPqVh4TQY
-         BKt+MKQZ4yxIzYH92REUq3Bp8LWpIkty+/4kMy5sjswYVAU7inR0jYbcGgbeHmJpEz15
-         UxxVsLDklf5Un6UshQfEqSW3wL0SH6Ox3Jbt+T7xAFMexIrEsKsVu6hlR+tqCiDe5RnE
-         ZjrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682068820; x=1684660820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NhFBbTnrvqR6mDfvWnCP3LyOJMAtBUaFpuunhT+4e7o=;
-        b=DLP1iaWeDz/gTWCFJiD9m6vApEgUW7T7Dfmc5NGFMa29WmxXv0FjCwbEW2StMA9dbj
-         tuUC4tFMeNjs9ZJTpQ8kqFDc107vGMv2UldcOX1/8qfIMxWysF9+s2M5bozKcnjIb76U
-         hXJX9Z7ruXhejKsVkVKDBgm6bSetwpLnf24vE7KEcUgaJGl6TkDSFtv9EFEkssvnTefB
-         gX0WTIFjNXX1g6kNRSdzoiR4+jAiyTqupV90/SdaUSjmJKiBva5pZp/1g7DiVtrKNOhR
-         GXpuLUektuzI51UpEZw0FdvCznCrYN5KOaJW78GrSe4OdMaC+CsE+eNA7XJAZh2WPkmt
-         1/1Q==
-X-Gm-Message-State: AAQBX9eTj3wtC+DqrinIfKFwCubaiQqlBb+/L4vhJp5a6n0cdsou7GgR
-        ZrjQbU2wmSic9VyXLWIlLzoLde6adeEYCVtTN4F+jw==
-X-Google-Smtp-Source: AKy350Y4W5hG73IZ75W6wgz54If12e+2sonMIXOyKihzzRuCVU/aZi/kzOyU8POiZSBlgrP8DzO4b6g85DAQW7VxLG8=
-X-Received: by 2002:a81:910b:0:b0:54f:b994:e258 with SMTP id
- i11-20020a81910b000000b0054fb994e258mr1362753ywg.4.1682068820563; Fri, 21 Apr
- 2023 02:20:20 -0700 (PDT)
+        with ESMTP id S231696AbjDUNLR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Apr 2023 09:11:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4A4B750;
+        Fri, 21 Apr 2023 06:11:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9138D61A9C;
+        Fri, 21 Apr 2023 13:11:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A74CC4339B;
+        Fri, 21 Apr 2023 13:11:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682082675;
+        bh=fuTSAqbVEd9buIfFBFfg+J1YHj2u5uvDc5//j3NdIOI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LqKPffYvsNsBPXHdjwU/UnrPe9NMR/kkKGCkogjo+pqWAi6u9aGiYjZhbmUzXE1cg
+         +cuv5dUNVsVTgn5AXPeFUXiHaFHLLyhJ8mGtBWh+ojcZT48RG2FzrVMkfYqFd96jfv
+         Iuufs8gjpkWdofw9kPVUX5IL9jwaeUK+yV12Et45YTHPtvkmR+l4+sUqIc0Qx08QeA
+         STr1UJDtzXieLTJR93hfllr7V3TBdTPxCYdZy1+2VCbMKgAB2u1gljthgVv83UuLwx
+         /BsXZgDKO9TzMEhgta+LNWP/dK9amRgJqAFtM6Anayz96LP5JY2dObekgJ3YId5Z5x
+         hN6BP4fcf2eVA==
+Date:   Fri, 21 Apr 2023 15:11:06 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v6 8/9] PCI: tegra194: Add interconnect support in
+ Tegra234
+Message-ID: <ZEKLaveXizeptIIh@lpieralisi>
+References: <20230411110002.19824-1-sumitg@nvidia.com>
+ <20230411110002.19824-9-sumitg@nvidia.com>
+ <ZDgXGCJQAHpLTw9S@lpieralisi>
+ <7ce0a62a-546e-8b01-abe7-598012a6ac2d@nvidia.com>
 MIME-Version: 1.0
-References: <cover.1681646904.git.jahau@rocketmail.com> <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
- <CACRpkdZEtG=OjTECDO=SvFk89MqL10sKKMOABPEs-xxYv1hmqw@mail.gmail.com>
- <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com> <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
-In-Reply-To: <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 21 Apr 2023 11:20:09 +0200
-Message-ID: <CACRpkdaYaE+1GKNv5SczC+Xn8UuBonZcW4RSdbsU53HWTR_tTg@mail.gmail.com>
-Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
- regulator and charger
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ce0a62a-546e-8b01-abe7-598012a6ac2d@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jakob,
+On Fri, Apr 14, 2023 at 04:24:02PM +0530, Sumit Gupta wrote:
+> 
+> 
+> On 13/04/23 20:22, Lorenzo Pieralisi wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Tue, Apr 11, 2023 at 04:30:01PM +0530, Sumit Gupta wrote:
+> > > Add support to request DRAM bandwidth with Memory Interconnect
+> > > in Tegra234 SoC. The DRAM BW required for different modes depends
+> > > on speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
+> > > Currently, no latency is observed in data transfer with PCI as the
+> > > DRAM Freq is always set to max. But that results in high power
+> > > consumption. Now for Tegra234, we are enabling the dynamic scaling
+> > > of the DRAM Freq based on requests from Clients instead of running
+> > > at the max Freq always. This change does that for PCI MC client.
+> > 
+> > I am sorry but this is still unclear to me. The sentence above makes
+> > me think that you are *adding* latency to the data transfer trading
+> > it with lower power consumption; probably that's a wrong parsing of
+> > what you are saying - so please explain what you want to say
+> > with "no latency is observed" and whether this patch changes that
+> > (which is not allowed because that would count as a regression).
+> > 
+> > Thanks,
+> > Lorenzo
+> > 
+> 
+> Rephrased as below. Please suggest if it is clear now.
+> 
+> Add support to request DRAM bandwidth with Memory Interconnect in
+> Tegra234 SoC. The DRAM BW required for different modes depends on
+> speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
+> Currently, the DRAM freq is always set to max but that results in
+> higher power consumption. Memory Interconnect feature adds capability
+> for MC clients to request BW and scale the DRAM freq dynamically to
+> provide the requested BW.
 
-On Thu, Apr 20, 2023 at 11:16=E2=80=AFPM Jakob Hauser <jahau@rocketmail.com=
-> wrote:
-> > On Thu, Apr 20, 2023 at 9:59=E2=80=AFAM Linus Walleij <linus.walleij@li=
-naro.org> wrote:
+What does "Memory Interconnect" stand for ?
 
-> > On second thought, these are really weird properties to have on the
-> > *charger* isn't it?
-> >
-> > It is really *battery* restrictions.
-> >
-> > A charger can charge many different batteries with different CC/CV
-> > settings.
+Is that HW technology or a Linux framework (or both) ?
 
-(...)
-> I was first a bit confused by the term "battery". I associated that term
-> with the driver "rt5033-battery". But I think that thought was wrong.
-> The driver "rt5033-battery" is just the fuel gauge.
+What does MC stand for ?
 
-Yeah that is a different thing altogether, it should be named
-rt5033-fuel-gauge if I could turn back time, I would review it
-and say this, perhaps the confusion can be fixed. Mistakes
-were made.
+Update the commit log below accordingly.
 
-> The properties we talk about here are the settings for the charger. They
-> tell the charger how it should behave. It makes sense to process those
-> settings within the charger driver.
+"Add support to request DRAM bandwidth with Memory Interconnect
+in Tegra234 SoC.
 
-It may make sense to *parse* this in the charger driver, by
-following the monitored-battery phandle to inspect the battery
-properties and get the information you need.
+The DRAM BW required for different modes depends on the link
+speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
 
-The architecture of any Linux driver does not really concern
-the DT bindings, the bindings should reflect the hardware.
-The hardware has a charger, and the charger is monitoring
-a battery, so it needs to be its own DT node.
+Currently, the DRAM frequency is always set to the maximum available
+but that results in the highest power consumption.
 
-> The fuel gauge, on the other hand,
-> returns information like actual voltage and percentage.
+The Memory Interconnect feature adds the capability for MC clients to
+request bandwidth and therefore scale DRAM frequency dynamically
+depending on the required link speed so that the DRAM energy consumption
+can be optimized".
 
-The fuel gauge should probably have a phandle to the same
-battery for compleness sake, but may not need it. If it ever needs
-any battery properties, it should definately have that.
+With that:
 
-> According to your remarks, the properties could be "outsourced" into a
-> battery node. (Btw. I have double-checked the property names.)
->
->      battery: battery {
->          compatible =3D "simple-battery";
->          precharge-current-microamp =3D <450000>;
->          constant-charge-current-max-microamp =3D <1000000>;
->          charge-term-current-microamp =3D <150000>;
->          precharge-upper-limit-microvolt =3D <3500000>;
->          constant-charge-voltage-max-microvolt =3D <4350000>;
->      };
->
->      pmic@34 {
->          compatible =3D "richtek,rt5033";
->          ....
->          charger {
->              compatible =3D "richtek,rt5033-charger";
->              monitored-battery =3D <&battery>;
->              extcon =3D <&muic>;
->          };
->      };
+Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
 
-Yups this is how it should look :)
-
-> Personally I would choose the current implementation for two reasons
-> (possibly weak ones):
-
-The device tree binding isn't any "implementation", and make sure
-to not go into the trap that DT bindings should be done to be
-convenient for any specific Linux driver to use.
-
-> 2) At least in my mind it's still the setup for the charger. It sets up
-> a the charging behavior of a certain consumer device. And the choice of
-> their values is limited to the hardware of the charger. Accordingly the
-> dt-bindings would say what the charger hardware is capable to do.
-> Therefore I'd say it's reasonable to have those values in the charger
-> node and use vendor properties.
->
-> I agree to you that actually the physical battery is determining how
-> these values should be set. In the end, as far as I can see, it is a
-> representation thing in the devicetree. At least in our case here.
-
-The DT bindings should reflect the hardware, and not what some
-or any driver "would like to see" (to make its life easier...)
-
-As these things are programmed into registers, clearly the
-hardware is adoptable for different batteries, and the purpose
-of these registers is to support different batteries. Ergo: they
-belong in a battery node.
-
-> Not sure how to proceed here. I would stick to the current
-> implementation. If someone strongly prefers the "battery" representation
-> style, I'm open to switch to this.
-
-Again this is not an implementation but a hardware description.
-
-It should use a phandle to a montored-battery and follow that to
-read the battery properties.
-
-> However, I'm not sure how the dt-bindings would look like in that case.
-
-Just like you sketched above, just reuse simple-battery if the battery
-is hardcoded into the platform, such as soldered in or has a form
-factor such that no different battery can be fitted.
-
-> Those battery properties would not be part of the RT5033 node, thus they
-> basically would not be part of the RT5033 documentation. Again I think
-> it makes sense to handle those properties within the charger node as
-> "charger settings" properties.
-
-Why?
-
-This is like saying that the number of pixels on your monitor should
-be part of the graphics card DT node as "configuration". And we
-clearly do not do that.
-
-Yours,
-Linus Walleij
+> 
+> Thank you,
+> Sumit Gupta
+> 
+> > > 
+> > > Suggested-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > > Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> > > ---
+> > >   drivers/pci/controller/dwc/pcie-tegra194.c | 51 +++++++++++++++-------
+> > >   1 file changed, 35 insertions(+), 16 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > > index e6eec85480ca..4fdadc7b045f 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > > @@ -14,6 +14,7 @@
+> > >   #include <linux/delay.h>
+> > >   #include <linux/gpio.h>
+> > >   #include <linux/gpio/consumer.h>
+> > > +#include <linux/interconnect.h>
+> > >   #include <linux/interrupt.h>
+> > >   #include <linux/iopoll.h>
+> > >   #include <linux/kernel.h>
+> > > @@ -288,6 +289,7 @@ struct tegra_pcie_dw {
+> > >        unsigned int pex_rst_irq;
+> > >        int ep_state;
+> > >        long link_status;
+> > > +     struct icc_path *icc_path;
+> > >   };
+> > > 
+> > >   static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
+> > > @@ -310,6 +312,27 @@ struct tegra_pcie_soc {
+> > >        enum dw_pcie_device_mode mode;
+> > >   };
+> > > 
+> > > +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
+> > > +{
+> > > +     struct dw_pcie *pci = &pcie->pci;
+> > > +     u32 val, speed, width;
+> > > +
+> > > +     val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
+> > > +
+> > > +     speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+> > > +     width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+> > > +
+> > > +     val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
+> > > +
+> > > +     if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
+> > > +             dev_err(pcie->dev, "can't set bw[%u]\n", val);
+> > > +
+> > > +     if (speed >= ARRAY_SIZE(pcie_gen_freq))
+> > > +             speed = 0;
+> > > +
+> > > +     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> > > +}
+> > > +
+> > >   static void apply_bad_link_workaround(struct dw_pcie_rp *pp)
+> > >   {
+> > >        struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > > @@ -453,18 +476,12 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+> > >        struct tegra_pcie_dw *pcie = arg;
+> > >        struct dw_pcie_ep *ep = &pcie->pci.ep;
+> > >        struct dw_pcie *pci = &pcie->pci;
+> > > -     u32 val, speed;
+> > > +     u32 val;
+> > > 
+> > >        if (test_and_clear_bit(0, &pcie->link_status))
+> > >                dw_pcie_ep_linkup(ep);
+> > > 
+> > > -     speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> > > -             PCI_EXP_LNKSTA_CLS;
+> > > -
+> > > -     if (speed >= ARRAY_SIZE(pcie_gen_freq))
+> > > -             speed = 0;
+> > > -
+> > > -     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> > > +     tegra_pcie_icc_set(pcie);
+> > > 
+> > >        if (pcie->of_data->has_ltr_req_fix)
+> > >                return IRQ_HANDLED;
+> > > @@ -950,9 +967,9 @@ static int tegra_pcie_dw_host_init(struct dw_pcie_rp *pp)
+> > > 
+> > >   static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
+> > >   {
+> > > -     u32 val, offset, speed, tmp;
+> > >        struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
+> > >        struct dw_pcie_rp *pp = &pci->pp;
+> > > +     u32 val, offset, tmp;
+> > >        bool retry = true;
+> > > 
+> > >        if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
+> > > @@ -1023,13 +1040,7 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
+> > >                goto retry_link;
+> > >        }
+> > > 
+> > > -     speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> > > -             PCI_EXP_LNKSTA_CLS;
+> > > -
+> > > -     if (speed >= ARRAY_SIZE(pcie_gen_freq))
+> > > -             speed = 0;
+> > > -
+> > > -     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+> > > +     tegra_pcie_icc_set(pcie);
+> > > 
+> > >        tegra_pcie_enable_interrupts(pp);
+> > > 
+> > > @@ -2233,6 +2244,14 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
+> > > 
+> > >        platform_set_drvdata(pdev, pcie);
+> > > 
+> > > +     pcie->icc_path = devm_of_icc_get(&pdev->dev, "write");
+> > > +     ret = PTR_ERR_OR_ZERO(pcie->icc_path);
+> > > +     if (ret) {
+> > > +             tegra_bpmp_put(pcie->bpmp);
+> > > +             dev_err_probe(&pdev->dev, ret, "failed to get write interconnect\n");
+> > > +             return ret;
+> > > +     }
+> > > +
+> > >        switch (pcie->of_data->mode) {
+> > >        case DW_PCIE_RC_TYPE:
+> > >                ret = devm_request_irq(dev, pp->irq, tegra_pcie_rp_irq_handler,
+> > > --
+> > > 2.17.1
+> > > 
