@@ -2,60 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A6F6EA602
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 10:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E87406EA6CA
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Apr 2023 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjDUIkG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Apr 2023 04:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
+        id S231354AbjDUJUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Apr 2023 05:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDUIkF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Apr 2023 04:40:05 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3227DA8
-        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 01:40:04 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b990eb5dc6bso717059276.3
-        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 01:40:04 -0700 (PDT)
+        with ESMTP id S229879AbjDUJUX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Apr 2023 05:20:23 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C24119
+        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 02:20:21 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5529f3b8623so5095027b3.2
+        for <linux-pm@vger.kernel.org>; Fri, 21 Apr 2023 02:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682066404; x=1684658404;
+        d=linaro.org; s=google; t=1682068820; x=1684660820;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qL0okSa4fl6lT5SbV7TFqePH64FBhd3DGjES0eamFSE=;
-        b=Qpk8ZataXeh6Lpruso/poC5TcoVd23rkjv2FDUCwLKKOaGiBPrraz+DGZJTQLmPHF4
-         kh1vXa72yCScc0w2DXOlfD7lgiK+PCUX+iAutpv+qs+S2PytpXj7yTymonyhnrqa6rvk
-         uIGDTGh09p0Fq38xmoHCQ9dMQ0r9pHpRM72+l5AQpHMecBIPq8FNaGFMKFzTdcswPcxg
-         zrB8W/H9o70fbwgZxuZGX8xDhf3jUgsHCPolhK89i7joS6jtq/xlf4RNl687/bIOC1py
-         7PX245qgUmJS0jpwOmDR+nFjFTyn9VIAIfwAsVlBTXNSWmnEMZZt365hqt/hrQC6rj/c
-         VAYg==
+        bh=NhFBbTnrvqR6mDfvWnCP3LyOJMAtBUaFpuunhT+4e7o=;
+        b=r4wR+IdH7jTYl36uiLsjBKZrp9iQ9mcyzeIWA44aVLaBmlLsWoIZ7cP5hlZ8NO+ORj
+         WwePE2341vBNNZfHqIIYHIt4CnJ1AReRi+ypauq6Ze6bIMn1FBRrqj0HKlN7+8utv+us
+         65eqT3H25qcKogf2NRKY226L/5xLzPtveVD0yR3NPgucuGdo67xvDMxbWy/JPqVh4TQY
+         BKt+MKQZ4yxIzYH92REUq3Bp8LWpIkty+/4kMy5sjswYVAU7inR0jYbcGgbeHmJpEz15
+         UxxVsLDklf5Un6UshQfEqSW3wL0SH6Ox3Jbt+T7xAFMexIrEsKsVu6hlR+tqCiDe5RnE
+         ZjrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682066404; x=1684658404;
+        d=1e100.net; s=20221208; t=1682068820; x=1684660820;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qL0okSa4fl6lT5SbV7TFqePH64FBhd3DGjES0eamFSE=;
-        b=lT2x0mqO8+sczhn0OAAYs46UGE6Mr0hF/w1V91UD/YezdGwGF1HqzAun0wHyCyxUUE
-         T/yH8KmfA/JYYztmHZCTZFCEcpf6k30bexP24riRug6qmyaEw4V4R4PFeNmo6c2dhD+C
-         WXF6+xBk9BzXiXBauk72Jek6P8TNdnN9qb9JsYc+vPeMsy6fya7hNwOUO7/iQwCCos+G
-         GG6BNapiqPLbjAYSq3Ndr1MMVpszEUmN8E8A3mPDP/Wp8vge+3LIIgnkryjLFJyNP5oy
-         TpZr3QuI5+anhQv9QbmBmtLPrySbgQtuukALM35ZV9TuTUFiwxb4TPYA72a0sSXIvUbf
-         d7Rg==
-X-Gm-Message-State: AAQBX9eTWkamjjqu/sCHLs3StEYSIpnCf9VEAGILmqOjTXXeHAN6YswM
-        hoTeMTCkuFtakVU7SOdtpan+H9v7+D+0TRD16suqUQ==
-X-Google-Smtp-Source: AKy350b4e4o4eZVGwhgIvELH9pcw0I+hmwxNQXjNUszL4CT4NIjib5Vxc6Jiqvkv09xn6Vn6K67K0jnv1GMQZ970m7A=
-X-Received: by 2002:a25:da0e:0:b0:b96:d843:33a with SMTP id
- n14-20020a25da0e000000b00b96d843033amr1683140ybf.54.1682066404106; Fri, 21
- Apr 2023 01:40:04 -0700 (PDT)
+        bh=NhFBbTnrvqR6mDfvWnCP3LyOJMAtBUaFpuunhT+4e7o=;
+        b=DLP1iaWeDz/gTWCFJiD9m6vApEgUW7T7Dfmc5NGFMa29WmxXv0FjCwbEW2StMA9dbj
+         tuUC4tFMeNjs9ZJTpQ8kqFDc107vGMv2UldcOX1/8qfIMxWysF9+s2M5bozKcnjIb76U
+         hXJX9Z7ruXhejKsVkVKDBgm6bSetwpLnf24vE7KEcUgaJGl6TkDSFtv9EFEkssvnTefB
+         gX0WTIFjNXX1g6kNRSdzoiR4+jAiyTqupV90/SdaUSjmJKiBva5pZp/1g7DiVtrKNOhR
+         GXpuLUektuzI51UpEZw0FdvCznCrYN5KOaJW78GrSe4OdMaC+CsE+eNA7XJAZh2WPkmt
+         1/1Q==
+X-Gm-Message-State: AAQBX9eTj3wtC+DqrinIfKFwCubaiQqlBb+/L4vhJp5a6n0cdsou7GgR
+        ZrjQbU2wmSic9VyXLWIlLzoLde6adeEYCVtTN4F+jw==
+X-Google-Smtp-Source: AKy350Y4W5hG73IZ75W6wgz54If12e+2sonMIXOyKihzzRuCVU/aZi/kzOyU8POiZSBlgrP8DzO4b6g85DAQW7VxLG8=
+X-Received: by 2002:a81:910b:0:b0:54f:b994:e258 with SMTP id
+ i11-20020a81910b000000b0054fb994e258mr1362753ywg.4.1682068820563; Fri, 21 Apr
+ 2023 02:20:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230415160734.70475-1-hdegoede@redhat.com> <20230415160734.70475-2-hdegoede@redhat.com>
-In-Reply-To: <20230415160734.70475-2-hdegoede@redhat.com>
+References: <cover.1681646904.git.jahau@rocketmail.com> <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
+ <CACRpkdZEtG=OjTECDO=SvFk89MqL10sKKMOABPEs-xxYv1hmqw@mail.gmail.com>
+ <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com> <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
+In-Reply-To: <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 21 Apr 2023 10:39:53 +0200
-Message-ID: <CACRpkdYxvhWjC_OiZSNaPqW1b52=yYT0iOLmGf+_OY4A97Xm-g@mail.gmail.com>
-Subject: Re: [PATCH 1/6] power: supply: ab8500: Fix external_power_changed race
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        laji Xiao <3252204392abc@gmail.com>, linux-pm@vger.kernel.org
+Date:   Fri, 21 Apr 2023 11:20:09 +0200
+Message-ID: <CACRpkdaYaE+1GKNv5SczC+Xn8UuBonZcW4RSdbsU53HWTR_tTg@mail.gmail.com>
+Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
+ regulator and charger
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,34 +82,126 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 6:07=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
- wrote:
+Hi Jakob,
 
-> ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
-> which gets sets in ab8500_btemp_probe() like this:
->
->         di->btemp_psy =3D devm_power_supply_register(dev, &ab8500_btemp_d=
-esc,
->                                                    &psy_cfg);
->
-> As soon as devm_power_supply_register() has called device_add()
-> the external_power_changed callback can get called. So there is a window
-> where ab8500_btemp_external_power_changed() may get called while
-> di->btemp_psy has not been set yet leading to a NULL pointer dereference.
->
-> Fixing this is easy. The external_power_changed callback gets passed
-> the power_supply which will eventually get stored in di->btemp_psy,
-> so ab8500_btemp_external_power_changed() can simply directly use
-> the passed in psy argument which is always valid.
->
-> And the same applies to ab8500_fg_external_power_changed().
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+On Thu, Apr 20, 2023 at 11:16=E2=80=AFPM Jakob Hauser <jahau@rocketmail.com=
+> wrote:
+> > On Thu, Apr 20, 2023 at 9:59=E2=80=AFAM Linus Walleij <linus.walleij@li=
+naro.org> wrote:
 
-Oh sweet!
-Thanks for fixing this Hans.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > On second thought, these are really weird properties to have on the
+> > *charger* isn't it?
+> >
+> > It is really *battery* restrictions.
+> >
+> > A charger can charge many different batteries with different CC/CV
+> > settings.
+
+(...)
+> I was first a bit confused by the term "battery". I associated that term
+> with the driver "rt5033-battery". But I think that thought was wrong.
+> The driver "rt5033-battery" is just the fuel gauge.
+
+Yeah that is a different thing altogether, it should be named
+rt5033-fuel-gauge if I could turn back time, I would review it
+and say this, perhaps the confusion can be fixed. Mistakes
+were made.
+
+> The properties we talk about here are the settings for the charger. They
+> tell the charger how it should behave. It makes sense to process those
+> settings within the charger driver.
+
+It may make sense to *parse* this in the charger driver, by
+following the monitored-battery phandle to inspect the battery
+properties and get the information you need.
+
+The architecture of any Linux driver does not really concern
+the DT bindings, the bindings should reflect the hardware.
+The hardware has a charger, and the charger is monitoring
+a battery, so it needs to be its own DT node.
+
+> The fuel gauge, on the other hand,
+> returns information like actual voltage and percentage.
+
+The fuel gauge should probably have a phandle to the same
+battery for compleness sake, but may not need it. If it ever needs
+any battery properties, it should definately have that.
+
+> According to your remarks, the properties could be "outsourced" into a
+> battery node. (Btw. I have double-checked the property names.)
+>
+>      battery: battery {
+>          compatible =3D "simple-battery";
+>          precharge-current-microamp =3D <450000>;
+>          constant-charge-current-max-microamp =3D <1000000>;
+>          charge-term-current-microamp =3D <150000>;
+>          precharge-upper-limit-microvolt =3D <3500000>;
+>          constant-charge-voltage-max-microvolt =3D <4350000>;
+>      };
+>
+>      pmic@34 {
+>          compatible =3D "richtek,rt5033";
+>          ....
+>          charger {
+>              compatible =3D "richtek,rt5033-charger";
+>              monitored-battery =3D <&battery>;
+>              extcon =3D <&muic>;
+>          };
+>      };
+
+Yups this is how it should look :)
+
+> Personally I would choose the current implementation for two reasons
+> (possibly weak ones):
+
+The device tree binding isn't any "implementation", and make sure
+to not go into the trap that DT bindings should be done to be
+convenient for any specific Linux driver to use.
+
+> 2) At least in my mind it's still the setup for the charger. It sets up
+> a the charging behavior of a certain consumer device. And the choice of
+> their values is limited to the hardware of the charger. Accordingly the
+> dt-bindings would say what the charger hardware is capable to do.
+> Therefore I'd say it's reasonable to have those values in the charger
+> node and use vendor properties.
+>
+> I agree to you that actually the physical battery is determining how
+> these values should be set. In the end, as far as I can see, it is a
+> representation thing in the devicetree. At least in our case here.
+
+The DT bindings should reflect the hardware, and not what some
+or any driver "would like to see" (to make its life easier...)
+
+As these things are programmed into registers, clearly the
+hardware is adoptable for different batteries, and the purpose
+of these registers is to support different batteries. Ergo: they
+belong in a battery node.
+
+> Not sure how to proceed here. I would stick to the current
+> implementation. If someone strongly prefers the "battery" representation
+> style, I'm open to switch to this.
+
+Again this is not an implementation but a hardware description.
+
+It should use a phandle to a montored-battery and follow that to
+read the battery properties.
+
+> However, I'm not sure how the dt-bindings would look like in that case.
+
+Just like you sketched above, just reuse simple-battery if the battery
+is hardcoded into the platform, such as soldered in or has a form
+factor such that no different battery can be fitted.
+
+> Those battery properties would not be part of the RT5033 node, thus they
+> basically would not be part of the RT5033 documentation. Again I think
+> it makes sense to handle those properties within the charger node as
+> "charger settings" properties.
+
+Why?
+
+This is like saying that the number of pixels on your monitor should
+be part of the graphics card DT node as "configuration". And we
+clearly do not do that.
 
 Yours,
 Linus Walleij
