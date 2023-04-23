@@ -2,92 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBBE6EBDF6
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Apr 2023 10:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A9D6EBE12
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Apr 2023 10:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjDWIZt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Apr 2023 04:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S229526AbjDWImC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Apr 2023 04:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjDWIZs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Apr 2023 04:25:48 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB2F1993
-        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 01:25:46 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-504dfc87927so5564478a12.0
-        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 01:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682238345; x=1684830345;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qETio9rQ+I+ApbmjseQZz+b4a2GrMopfzyspvxvfmDI=;
-        b=CNlnud9ixhpA7rN5EkdFypqZA/9EHtbHo0dnoloz/zm9AmQu9Q7dFAPSj4qpSWmA20
-         LojHlppqQf6E2hQUooLbrCEqRzfDtZLvo/byw7QN4ujUSkjLnpmj3Ejl9UP4EoVVkVJJ
-         5js84TxfRY5fzJBR9v7M6CZkkJz11L7tpmtrEsbML+0/W5NrrY2NHnQV0Y86EoVyi4tG
-         dFteiFaIqHvaV4yAmni+nFeReHPTtKmlzPNBhQyj4eEC6dYOPxKpOgh7Fesd9EpWlnIp
-         bB7P6hgsKucCZU2KN3vOd2+7LnBC+WlY/jANPYX1BQ0wf8f8O0Bm1xBwgY0eYj70aW5E
-         hD9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682238345; x=1684830345;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qETio9rQ+I+ApbmjseQZz+b4a2GrMopfzyspvxvfmDI=;
-        b=kIXhLOYsxKcOOrQ5t0ujhnmU4vPVnts+xH1PfxlYn8bQM59hpP48XAzawhg3L5xP2D
-         SJkyivn3GobhfLJN8Y86WskaUTt2S46M31ouMws+G5W4Ombz1rjEfDX8ZAE/k5Pj/tpo
-         ht0IdHcw5wnA4csHp791pyQycMqLJ24f3X8z2mkHlkPIv09Lg37HGGh8/MTvbULAOAm+
-         xXVIGbW0a+EiCtNTJapACh+Ghwsp5z7phfbMv6G83O7vnf8F377BBLEQJ8MLYfy7YaJo
-         th6u4WfRMa/FmorABz3Ew4OoA2UtwPwEvh4WwOzbip8fMKYLb3NbEAUpbghnCPUE3ORN
-         RNIA==
-X-Gm-Message-State: AAQBX9c7u9dJrsnpQsQuhgo4/VniUPScXI9Dbo5zUoVi4dJyXgjf3aUj
-        XdoMdfJIRllUkct541HP97VRiQ==
-X-Google-Smtp-Source: AKy350a52plHENuAAwWUdq2bp/DaP8sNnY6cqie/09b6KCgt6I5FlFz697CL/6UK2AIp1gEeHdBZUg==
-X-Received: by 2002:a05:6402:74c:b0:506:976e:5242 with SMTP id p12-20020a056402074c00b00506976e5242mr8618775edy.25.1682238344819;
-        Sun, 23 Apr 2023 01:25:44 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5d52:d466:d57f:118c? ([2a02:810d:15c0:828:5d52:d466:d57f:118c])
-        by smtp.gmail.com with ESMTPSA id p21-20020a056402075500b0050684020babsm3464665edy.27.2023.04.23.01.25.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Apr 2023 01:25:44 -0700 (PDT)
-Message-ID: <80c6cfbd-5661-ba39-2193-c6ae8eba3648@linaro.org>
-Date:   Sun, 23 Apr 2023 10:25:42 +0200
+        with ESMTP id S229441AbjDWImB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Apr 2023 04:42:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9241BC2
+        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 01:42:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A053060C2A
+        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 08:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0940DC433D2
+        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 08:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682239320;
+        bh=JLFjmXRGy0ivUEuNYMjf0buFKBninMb9oeGcnwrrF9c=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=jHAmA1DJrMRfPpS10V6Nll6emrJQDYe00XqLtLgOLdmxuVMBvdR2kEf757AmJ0AJq
+         DgbLySNQ24xRUCNe3gjb7iRMCwi1S92jp5meNfwenaNx7kBYnIuikl7joHUA1G5ga5
+         d3JzDnpBevYafcECzqEFXuA3QA5a7VS+f3GvNWh1ajiiUyYJ1MK4E7/V0axKYgmZow
+         6kNtXFgs1jgxLohNu0AS2qd9VAGxG0xee9HieBfwfMx3f8hxldDC/f3TKzo2J1sjAg
+         Y454+5o4zxyGKUEZsh1IDM/N7fbdIg90mVhAQX4g+qZOfoz8EO2b4BYJThvpT2UUv8
+         wisqPv8QNDvOg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id DB6A3C43143; Sun, 23 Apr 2023 08:41:59 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217361] AMD P-state driver is too aggressive by default
+Date:   Sun, 23 Apr 2023 08:41:59 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ahmedmohsin6@gmail.com
+X-Bugzilla-Status: REJECTED
+X-Bugzilla-Resolution: INVALID
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217361-137361-SNVkRKRhws@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217361-137361@https.bugzilla.kernel.org/>
+References: <bug-217361-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 12/12] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0
- boards
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230416133422.1949-1-aweber.kernel@gmail.com>
- <20230416133422.1949-13-aweber.kernel@gmail.com>
- <9aba4c1d-93f3-7613-6fb5-0591a281ec0a@linaro.org>
- <5818b5be-f9cc-8009-e2a4-1049d84a944d@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5818b5be-f9cc-8009-e2a4-1049d84a944d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,51 +70,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/04/2023 15:50, Artur Weber wrote:
-> Hi,
-> 
-> thank you for the review.
-> 
-> On 16/04/2023 20:26, Krzysztof Kozlowski wrote:
->> On 16/04/2023 15:34, Artur Weber wrote:
->> [...]
->>> +
->>> +		backlight: backlight@2c {
->>> +			compatible = "ti,lp8556";
->>
->> You need to convert bindings to DT schema first. I don't accept any new
->> usages of TXT bindings anymore, sorry.
->>
-> 
-> I'll be taking a look at the conversion (will likely submit it as a
-> separate patchset, since I've been looking into some minor driver-side
-> changes there as well...), although I have one question - who should I
-> list as the bindings maintainer ("maintainers" field in YAML format)? Is
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217361
 
-Anyone who has interest in the device/driver, like driver maintainer,
-device developers, you erc.
+--- Comment #4 from ahmedmohsin6@gmail.com ---
+(In reply to Artem S. Tashkinov from comment #3)
+> You're using the "powersave" governor which keeps the CPU at the lowest
+> performance at all times.
+>=20
+> Please switch to ondemand or schedutil
 
-> this someone specific for that subsystem, or the author of the driver,
-> or someone else? (It's worth noting that there isn't a maintainer listed
-> for the lp855x driver in the MAINTAINERS file.)
-> Documentation/devicetree/bindings/writing-schema.rst doesn't really
-> mention anything about this.
-> 
->>> +&bus_acp {
->>
->> Order label/phandle overrides by name, so acp before dmc.
->>
-> 
-> Out of curiosity - should I order the children of the / node 
+Is this change intended then? Powersave mode in acpi_cpufreq wasn't this
+lowest. I'd like to save battery since I'm on a laptop.
 
-Yes.
+--=20
+You may reply to this email to add a comment.
 
-> or the
-> pinctrl nodes by name as well?
-
-These are usually by pin name.
-
-
-Best regards,
-Krzysztof
-
+You are receiving this mail because:
+You are the assignee for the bug.=
