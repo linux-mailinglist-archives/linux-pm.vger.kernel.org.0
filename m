@@ -2,69 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87ED6EBE52
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Apr 2023 11:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2C26EBE6D
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Apr 2023 12:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjDWJqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Apr 2023 05:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        id S229643AbjDWKGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Apr 2023 06:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjDWJqs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Apr 2023 05:46:48 -0400
+        with ESMTP id S229453AbjDWKGe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Apr 2023 06:06:34 -0400
 Received: from sonic308-17.consmr.mail.ir2.yahoo.com (sonic308-17.consmr.mail.ir2.yahoo.com [77.238.178.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47DA1FEF
-        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 02:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682243204; bh=OcYa52vQ8WeJe4+ms4WziRNK4p5jlYgdUzE9iJMV0sE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=uCvLg6y7SnMkOjHBNkDHfhnaFf0MKxMlkTqESnRbzRNVYmBP7otR+yoMYrRpjSONy2V+x0EyOVOjgN071pKba84ufyXUdqEDPxyMcTDC93+vepR/C4moEsLq1On+aCOIWlXmJi1SxhpcbrEpSyXadOhtTtyEi5A+9G3dm3oFG4/ZkSlycqn+Envn58NoggkanTk/6qm0Q35y0T0b8lRvKSJzDEjmIiNkqbVMDe/7LlL2P20DEf+r/3IJDSThNHMPYtkTwKcHsV8LQds5xQOLPQUDLWDKah1ot6L1JCRc6aIduoVibFNUew5Gx7jUziguKRHX/fL5i5FCCGq/B1rxog==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682243204; bh=/pPdbPiI5+CqQI+RDxa5x11I9VUAQ8EPEnGsBKBepOt=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=oFk2rrcpNYM+3bWp98639gM3+TjvnQMKKXw32S95vd93FsHyvMP3wTNd8R0wJDq2qJL7aEVV2KRt+ooytV0jEqylI5TIw47yewPwFVmj5ISTlP3w0oPe8Lmw4bMLprjHBmHWlAorXfLmLvAEvIx3MpHf7oN1k6al9UA4Z/pizSCBTkx7/m0+qCDIrZUODKj0EoNB79jo+AnClS3ZPaIetKLoGuviFVKgiYVgaz9peyevafWZcrxbAGa9GC04MycvUdApK++nmB+UEAr09B2pz3/FZ/NLFGoMnNynCVTKFA6plwrV1wJvCO0125TALs13YCETtvFOEJq8XQTcdK9pKQ==
-X-YMail-OSG: k2IJ99QVM1n1V2Ra_ZGhIccEcFwmfKO7u6r2A8WDqsSj6e4mzJqMLDOoYKGRH3j
- Ignw55X8nsin2xNUlMXreS5aIlBwJx.OAKb_baW_RCfo_kA1oc4tiwhwscG_eXcCU15NZQ.nIPxr
- xBHjaBRbWlhC_UAcx_5Bhupp3Kz2NasBOIVPrY22OI10ApzNMcVqByKX04s4xlmh40p0qql9WAWU
- Sffyj_9ct7VWJzeKlAKgKSLkbc.DepHsaOEvDMbtOEl32HYTiazLivfsJHeH2WyvGH4DF7YFXrgi
- ytI9LxIft2SSU8vDXGkaXxftsDXbGplMnXKm2NUmPcqTlRUWoRakmGd7cmG_PibDbtvdu7MjRvY.
- 7VIHayVl667MgbN9IAHKVrKCp_koubciRtY22PWin5LZgodGV3govOGo8W_Z1b_zs.dOZ8KB_jaG
- bwgiDTBPb9WpACjW0ydJPCaGX2E_kZMllDDcb_5KzvonefcGYFPw.Q6q8.XQ4wRsa7JI4G6nRboF
- HN9B2.MXkUyYZzuqghBi.8gXTWUvZ6FdmcTs93Bk3IpznedczhhH3QDq53zu4NHu8DMnvuHxLiLU
- ciAuEkR5AK38ikhBCsaIX8uBSI7_njc5PYDF1xoXEs5DCcMEvcBl8v9Z4xfs.ubO5Xm8eqoXkx.H
- KnbSBkG_B7pshab6QJaen.GalhrDhBExXTjve2JzeZUFuRZ33EAU7qSOWFj6v5D.2FcrDjXNPDBl
- pnMbW61JuBlcntHPnDYabqTgMQF3b9xGCA69xBCbkElRHovVB0HJDGw.k.aycjzOrXE6H4X2mSyl
- 7L2V8BUbN6xpt6f.VKyWmOW3hdaggljdSgf5yGKmesYVzDMIu4W8q9nzf2nvw.Zz71RP.RnYGXSa
- zq6olK4WN869p_li7a4OAL6q41aiOMcxNv83Z5.oXLBwgMYluUyUfYCnkjevdTBfHeYRWGTEwBTx
- MdVgyifK9aNoMyO8BWBnOd891lcABoqPJ5vZhf6aJd5wud._KdsGHfy25tvusGt6TaByi5CM4Vqm
- UnB2ltc2CCyugCWiSnTWLhpA_DBW0PAdHnb0yT8FZ4762brpzlbO1Pa4_oub0O1hoX1OEVfVGQXo
- edYNPco9q_df3aO.mzQHVPjeLzVZiZts68Mfaw2iiNpcV28LP6p5Ic7aoGHPP_WqgOwxQxKzCdNU
- PUUh1UFFNNT3H2R9STNP6bfZx1R6u3PJE3krXIy4VPnI5Gm2wArO91x.zTLYGKdIaB18JCSM8dki
- OcwzYourRhC4bMl9VDnddcJyk737mAiia0Cq.MDbS3IuTLC5FQnxz3Coi4mi0mWdX8ucVJAJWFj9
- _cC5_Z0RC3LE6JOgxrsjvUjMOV.ZmiYF75Woj_PSR_iBdHmMNixeyt.WS.9erAaD.j9_UW7oCJwq
- Vij0CGH0By5PjEsJfp_6HCTOSxIZV3eLycJE1aSdelHZUs0C.pN2erSboAzRyLNBE7NlMDKYg.U5
- C4B7rV2gpSe8pTAp9K4EeUKReRCxtC8hq.qQE3DQ24LQC4ATVfn8UzZRrQlsKVeqbc3.Rj.0YMPv
- njZLltNOpcYfdTUKp3o2w7EuYN3HsJiE6CHqo6nkjfQvYrSrS0ieZ4e_C7OEHX5xYVhn20iYBA41
- 4JgdSFAmOMKRHUsqwi9TlzSD3um2OB9PfI_buMaHszl64wJsR.uMem.hgB3k7vw4k3zfcF.majLt
- vufrWHINHenfGh_DNvUJUNy4ellfNJiOE3pbSuOZRCkhGZf.GV8QuflIlI7_bmMET0HaU67kpkwJ
- 0R83fdftKJPWEo3947SKdOHn1JQERpkMtXiKMC8.czrY30LY5pY2s2kxzIAE..blzE334sKIVm41
- uwh1_eMaddYOTZLELjeUZEQNfrdKQntTWn_5Z_SCphHMeGVtCnmInZSbqHOGDIUgBNdUECP3GD_g
- GK2IopXbjqxZbpdiVOrTUPrjvGhOPHlnYkcthLexL3TuC9xEuYAca36HLcs7B8FPdvTw30wJgf8.
- 1cmebVYEz2WeZULGoko8cLg3HTPf3oLbph5WQl61WId6bg9AXyX4JwTN4nIGFHjXWqUsdrg0bdck
- sOJkCxx0NA0fr.n.4CIS9Q6pngJLERSc4NtJgeixuo5G1vX2a6zE9k1kwoo1STkYH4OZW82Ji6PH
- yGoo4nUFRFMd6lKXyDmj7yUv9GcQtI9H1GKXJqSCEFHTXSkD7wC2MU4Bd76oj6bhgl0wTlJ5LS8e
- C0DDrNtvUGF5FxIWIfMQOlqsIHHK6ak.ne5zTzYlgLAWWeNxHeIdI6wg1mqz8LJ1mdmf1OM8.BNi
- 7kxAmog3HOTKYzprMH4Qw8puPGrU-
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409CB19B0
+        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 03:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682244389; bh=5pjubYAY/uRxOgObplB/laEbRdxxw0a2Ir9iuIUr8J4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lhtWZWy1Dshb4wJtDq7Gqnd5GBv9nDQnQfRUd4zW+m9BR+g9cYdEAaGCVZjUyg8/bw9+HT+rFT0U1yJlPfJNbWfMGVXJ1jQwy9yfYj8iUXN9mC9TNVNM5CRmGh8NCwlB3iiDA+yABTY6JbMWWSB9N93kxq+QOSjGnNhbxmcs/JwhrRj1x49XDVqDfNYf/nktQbNQxEOL+irOif9xLE3OUpo8gXuEz0jMXsRGMQ4sFwYRbcy60E7Z5uGfXquvcr78omU0AjxmrvAbEQkQMoWuC3euKYp8xBwuoOTgqUnYnqlRMSSi7w9a94JVinsLN+3vvfUzbUySpmxG8OlQTQ9Nyg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682244389; bh=JGchxXkGTHwgiB+6Fn2hiLWEt53/+wpX6SHktT6DnoL=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=JMHKCgyexNLgvdTZmcI1iUeClH+bdRC57BOuUYbVJ9eL8ueOe7Tib48o9IzIieEKgsI/IC8RJLypaSSKYo/1ipj09IzGZI6Y9LW/Uz0vCegVenGlxfwkSTcnu+zv7u9FOukT6YCKcVG2WU28tyRsq3sy4sHzYHK5OwT5XomnGYYqZ589hpOaXTTkoVdgieTj5bF0cfGTnasexCETb71LJCPBsLz1PDXMYz5SSGgLngJOh1J+XMr+1QdT9dPltNZPR9UHO9n7FYprS9GwBroCdz2VC7ZTdHtqDsDh8yW61Cbt+rke3Ky6TZZL/nrA9H+DMhoiHz1WxuEQnU1mw1b7hw==
+X-YMail-OSG: mL6UzEMVM1nExaUTdbwHCbe34ozNBP.4OPARC8SYAqajuV9R_cG6SFuqwJls4DB
+ TIuNbc4Pvzk47Jb2smo5xKhdo7AuJOx_WzfLOCcDJSFclPvU4LOrqE7HTw.SLL6iAxigS7whE5fI
+ RmatvvB09N8DN3dOmPpYCy6fbsCevxN9ebjMaYeSZQ3Lj25HXcV9l6QqOBvRif4pWsFXc3hBLJje
+ YJU8AWykvh5sNVuIiNYSdtD1mvm1zy9NmwHszrMvg3V8haalyeOR1kdMGtETk8tMWxMTRB8dgNkc
+ RKsa8DQEjCitUoUtN73zJoSN8vFLRMG8tMFAOQ38EaNmSsim3QFD2McOOCMnRqKLxmd.uhj7fSIG
+ Bc5iDr0UA3qZhJQqwr4VNu6kIr_sJRKwqW0v4dxWnnBM59Pjto41MuTAFzqw2iO8sqAb8Fupondn
+ r4l6sHrMvVn0I0cTrTPZ6pXuP01LSznPjU8PPzFesiznghtvNWTEZIqIdAHxxbEmh_WeeDgBRTNl
+ GeoGeUbTnROjy7FXDXqgELcPdNvnDq05wjXuFUnfmgdtc_3yLYJ7is0veXA6vslMC551pi2hk5ug
+ 3UxIyd706p1kqNjgosw4DlLWhEPkgPfAirG3znQ_uM7E6yiZV68lo9XQ.vaPi5F6mwznpN0.XvFt
+ QiFu75Nr_sJEZpw6bulCi3aWISMz0IBL_aCyyKyn5KuDiVKAL.Q_zXoE6uo_beJzuTApdkw3OcFp
+ jxTdlT0GJYn94fBEEA5owD0yqXxKVUebakf4hZ3kWfDGNTrHgYjOih77rlOHPTQNOEYCRwmTgnGK
+ K8SLRMY6G1qf2C2sGO0fmPbgEItr0Uu6VIdEPw3pbwJ56C.BLXhG978xTrsUam38mYAKAB6sh_I7
+ 7nWSEldn8X7HrcHDd5lTFRqofDxCMkkdWnLz2CaNuzhZwKSPH5BzG4Qg.0d6mM1gmOxmJfw6HNH8
+ 2cHNGY0KL0KS1X89XQD5I254TDondLrx0tQob1K6lsPNpcn7TK_6bwfM2TGEhBMRERTVP4ZQsjED
+ E3_6SiH3r9BgGTyhgddn0r0Iwj5_9zxh0.coCOrEH.VKkT8U6Dj90eRTiuqhhBcutuvZFVsS6M0P
+ rW4C9QxhqKYmqkluLPTe1z9g4fCKJLOg9yz4WeW4ojI27N4sQcw5QeOKoJYNuJ6QJRsf7QabtdSv
+ ukwCr83pSQJxlnQuhsE_74wKx71q9CcgX4LPoNne.o1j5LQ4U5jIvAHnnDJYO77SclSK2wTO.ViN
+ sgjV8t6lPGe9pViembUqPrsjIyeyI_5T5jBy8tQGGraxVVR9H.RUNvLsYV_FHwNWkEdvVhcv9X_k
+ lCbtaFnM2I96yu_ko5cuEi1CHaaXq4CqC3fevcpAqpicqAwmcBPB1rCaeg17uc7GFFY_j0MLNjBG
+ BSNVkKRU9IVANBQDzkg5m2tueTTvQ5YenJUlR3hK_ZpfWEhfVWftGMcj7D3AF6uXIYsCicIlWkAI
+ 4PzRVxPeAdTaL2vi2jkfew5iBw_dOnO_VQTm1VH04M4jImDgYS3os40xr2r0lwHbvQ2hiAPGhKpZ
+ 75R.bLPilrsv9P25cGMcYGhteiWKV8SHYiUDpWacHRnwQJyWsKtiyfhZjNa5gAbc9PUDWhc.QLDw
+ CGaBkBm.gWYbvvQVWZOnJu.AO3OaBLhDndmEnVIJana2e4ZD_gzvPdBKPSRF_OoK7X_9t5LcOIgH
+ TjV948H2QNfaEUmvAPEAMZ7WdmAP0bjTwmXMbEeGkwDuEX_gwdwI5Dn..FavDgUMY6Ujlg2K01HI
+ 4IKuP3cZKcsYYj4Bi_YFuUFW3.bPepByKYttQk4Fj9K6MbQDxKv53pTyZn0DEbiovqh4OfK8VAWs
+ dn4pKOR9ct.f8oYngl_S7DS2P0Z2uwbcvTEG9KnSfgVCl3Qs2pAPAdY54YGXmhEMi.6Qn.3Rkah.
+ u4UcpGR4xekdi4DJuOBVXCqhLQOkzVlPAwgjDDBT1eIvUOqoD4oiesyjt2IumIV1iCBeWAbig5nt
+ UpslA3TcbY97DqrmZFR.hUlmcj1jxTCFSJUmkVGFYbuiOdPrus0qJ9gy0MVAbMLfd1rP2_2tKP2V
+ BEAjl5bQ6G4sv81MV4Gfu7Zze2NWNBxEit0HSaBDsqsK_P2tkirfgzxgehlYt9Gv9hnJ5mrHxrz8
+ O_NX6iTomuOMYazxGG7dUCnKklgZJNXglWp3DlNs3c5ZgBu1giFkQ.BWZ5w4CVMKFLEytd.x7acu
+ _NgUukauPIwg8OhRD0uBVAmWzMOFpOzZ0UhMsu6i5uvIqeQ_eor_q2ck1gVMz0Sbm2nNHrU4JZh_
+ d7c_l9_3KPLXfhJTYBQjT3PvkPckJ1w--
 X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 1a952371-5450-4346-ad4d-349de2415052
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sun, 23 Apr 2023 09:46:44 +0000
-Received: by hermes--production-ir2-74cd8fc864-d5c78 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c8c0720dde66fb34599bc20c5da29528;
-          Sun, 23 Apr 2023 09:46:39 +0000 (UTC)
-Message-ID: <15a1ad2b-c07b-7470-6c4b-2c8feab667c5@rocketmail.com>
-Date:   Sun, 23 Apr 2023 11:46:37 +0200
+X-Sonic-ID: 39baf6d9-8f6f-4e9a-999f-207ab846cbef
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sun, 23 Apr 2023 10:06:29 +0000
+Received: by hermes--production-ir2-74cd8fc864-j696l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID cf55e9604defa8ed06dee28732abd972;
+          Sun, 23 Apr 2023 09:55:54 +0000 (UTC)
+Message-ID: <07c93b21-1c96-4bd4-9af2-53b76da14fde@rocketmail.com>
+Date:   Sun, 23 Apr 2023 11:55:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 8/9] power: supply: rt5033_battery: Adopt status
- property from charger
+Subject: Re: [PATCH v2 6/9] power: supply: rt5033_charger: Add RT5033 charger
+ device driver
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Beomho Seo <beomho.seo@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Stephan Gerhold <stephan@gerhold.net>,
@@ -75,11 +75,11 @@ Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1681646904.git.jahau@rocketmail.com>
- <23260904aab2566faf86d2ac01a31e7f1e024e66.1681646904.git.jahau@rocketmail.com>
+References: <665d8906ea7b84e0a248315e8395a80007b8bafb.1681646904.git.jahau@rocketmail.com>
+ <202304230924.lqgvPwZ0-lkp@intel.com>
 Content-Language: en-US
 From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <23260904aab2566faf86d2ac01a31e7f1e024e66.1681646904.git.jahau@rocketmail.com>
+In-Reply-To: <202304230924.lqgvPwZ0-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
@@ -95,83 +95,91 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Sebastian,
 
-I noticed a small mistake in patch 8.
-
-On 16.04.23 14:44, Jakob Hauser wrote:
-> The rt5033-battery fuelgauge can't get a status by itself. The rt5033-charger
-> can, let's get this value.
+On 23.04.23 03:22, kernel test robot wrote:
+> Hi Jakob,
 > 
-> Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
-> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> ---
->   drivers/power/supply/rt5033_battery.c | 24 ++++++++++++++++++++++++
->   1 file changed, 24 insertions(+)
+> kernel test robot noticed the following build warnings:
 > 
-> diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
-> index 5c04cf305219..48d4cccce4f6 100644
-> --- a/drivers/power/supply/rt5033_battery.c
-> +++ b/drivers/power/supply/rt5033_battery.c
-> @@ -12,6 +12,26 @@
->   #include <linux/mfd/rt5033-private.h>
->   #include <linux/mfd/rt5033.h>
->   
-> +static int rt5033_battery_get_status(struct i2c_client *client)
-> +{
-> +	struct power_supply *charger;
-> +	union power_supply_propval val;
-> +	int ret;
-> +
-> +	charger = power_supply_get_by_name("rt5033-charger");
-> +	if (!charger)
-> +		return -ENODEV;
-> +
-> +	ret = power_supply_get_property(charger, POWER_SUPPLY_PROP_STATUS, &val);
-> +	if (ret) {
-> +		power_supply_put(charger);
-> +		return POWER_SUPPLY_STATUS_UNKNOWN;
-> +	}
-> +
-> +	power_supply_put(charger);
-> +	return val.intval;
-> +}
-> +
+> [auto build test WARNING on lee-mfd/for-mfd-next]
+> [also build test WARNING on next-20230421]
+> [cannot apply to sre-power-supply/for-next broonie-regulator/for-next linus/master lee-mfd/for-mfd-fixes v6.3-rc7]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jakob-Hauser/mfd-rt5033-Fix-chip-revision-readout/20230416-214502
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+> patch link:    https://lore.kernel.org/r/665d8906ea7b84e0a248315e8395a80007b8bafb.1681646904.git.jahau%40rocketmail.com
+> patch subject: [PATCH v2 6/9] power: supply: rt5033_charger: Add RT5033 charger device driver
+> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230423/202304230924.lqgvPwZ0-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/0fbd385f9a1acd55a8d943560428b9d783f8047f
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Jakob-Hauser/mfd-rt5033-Fix-chip-revision-readout/20230416-214502
+>          git checkout 0fbd385f9a1acd55a8d943560428b9d783f8047f
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/xen/ drivers/power/supply/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304230924.lqgvPwZ0-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/power/supply/rt5033_charger.c:26:10: warning: variable 'state' is uninitialized when used here [-Wuninitialized]
+>                     return state;
+>                            ^~~~~
+>     drivers/power/supply/rt5033_charger.c:23:11: note: initialize the variable 'state' to silence this warning
+>             int state;
+>                      ^
+>                       = 0
+>     1 warning generated.
+> 
+> 
+> vim +/state +26 drivers/power/supply/rt5033_charger.c
+> 
+>      18	
+>      19	static int rt5033_get_charger_state(struct rt5033_charger *charger)
+>      20	{
+>      21		struct regmap *regmap = charger->rt5033->regmap;
+>      22		unsigned int reg_data;
+>      23		int state;
+>      24	
+>      25		if (!regmap)
+>    > 26			return state;
+>      27	
+>      28		regmap_read(regmap, RT5033_REG_CHG_STAT, &reg_data);
+>      29	
+>      30		switch (reg_data & RT5033_CHG_STAT_MASK) {
+>      31		case RT5033_CHG_STAT_DISCHARGING:
+>      32			state = POWER_SUPPLY_STATUS_DISCHARGING;
+>      33			break;
+>      34		case RT5033_CHG_STAT_CHARGING:
+>      35			state = POWER_SUPPLY_STATUS_CHARGING;
+>      36			break;
+>      37		case RT5033_CHG_STAT_FULL:
+>      38			state = POWER_SUPPLY_STATUS_FULL;
+>      39			break;
+>      40		case RT5033_CHG_STAT_NOT_CHARGING:
+>      41			state = POWER_SUPPLY_STATUS_NOT_CHARGING;
+>      42			break;
+>      43		default:
+>      44			state = POWER_SUPPLY_STATUS_UNKNOWN;
+>      45		}
+>      46	
+>      47		return state;
+>      48	}
+>      49	
+> 
 
-If the rt5033-charger driver is not available, this function returns 
-"-ENODEV". Instead of an error, in fact the status node in sysfs just 
-reports "-19" then. Userspace layer UPower makes status "unknown" out of 
-this.
-
-An error message would spam dmesg anyway, as it would be issued every 
-time the battery gets polled by UPower, which is quite regularly. The 
-scenario of a missing rt5033-charger driver is not unlikely for devices 
-where it's not yet implemented in the devicetree or in the configs of 
-the compiled kernel. For the displayed battery icon, UPower assumes 
-"discharging" for a single battery in "unknown" state.
-
-It makes more sense to return "POWER_SUPPLY_STATUS_UNKNOWN" right away. 
-I'll change that line in v3.
-
->   static int rt5033_battery_get_capacity(struct i2c_client *client)
->   {
->   	struct rt5033_battery *battery = i2c_get_clientdata(client);
-> @@ -84,6 +104,9 @@ static int rt5033_battery_get_property(struct power_supply *psy,
->   	case POWER_SUPPLY_PROP_CAPACITY:
->   		val->intval = rt5033_battery_get_capacity(battery->client);
->   		break;
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +		val->intval = rt5033_battery_get_status(battery->client);
-> +		break;
->   	default:
->   		return -EINVAL;
->   	}
-> @@ -96,6 +119,7 @@ static enum power_supply_property rt5033_battery_props[] = {
->   	POWER_SUPPLY_PROP_VOLTAGE_OCV,
->   	POWER_SUPPLY_PROP_PRESENT,
->   	POWER_SUPPLY_PROP_CAPACITY,
-> +	POWER_SUPPLY_PROP_STATUS,
->   };
->   
->   static const struct regmap_config rt5033_battery_regmap_config = {
+Here as well I'll change "return state;" into "return 
+POWER_SUPPLY_STATUS_UNKNOWN;". If the driver fails to get the regmap, 
+the status is "unknown".
 
 Kind regards,
 Jakob
