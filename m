@@ -2,184 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2C26EBE6D
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Apr 2023 12:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A86B6EBF98
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Apr 2023 14:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjDWKGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Apr 2023 06:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S229548AbjDWMxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Apr 2023 08:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDWKGe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Apr 2023 06:06:34 -0400
-Received: from sonic308-17.consmr.mail.ir2.yahoo.com (sonic308-17.consmr.mail.ir2.yahoo.com [77.238.178.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409CB19B0
-        for <linux-pm@vger.kernel.org>; Sun, 23 Apr 2023 03:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682244389; bh=5pjubYAY/uRxOgObplB/laEbRdxxw0a2Ir9iuIUr8J4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lhtWZWy1Dshb4wJtDq7Gqnd5GBv9nDQnQfRUd4zW+m9BR+g9cYdEAaGCVZjUyg8/bw9+HT+rFT0U1yJlPfJNbWfMGVXJ1jQwy9yfYj8iUXN9mC9TNVNM5CRmGh8NCwlB3iiDA+yABTY6JbMWWSB9N93kxq+QOSjGnNhbxmcs/JwhrRj1x49XDVqDfNYf/nktQbNQxEOL+irOif9xLE3OUpo8gXuEz0jMXsRGMQ4sFwYRbcy60E7Z5uGfXquvcr78omU0AjxmrvAbEQkQMoWuC3euKYp8xBwuoOTgqUnYnqlRMSSi7w9a94JVinsLN+3vvfUzbUySpmxG8OlQTQ9Nyg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682244389; bh=JGchxXkGTHwgiB+6Fn2hiLWEt53/+wpX6SHktT6DnoL=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=JMHKCgyexNLgvdTZmcI1iUeClH+bdRC57BOuUYbVJ9eL8ueOe7Tib48o9IzIieEKgsI/IC8RJLypaSSKYo/1ipj09IzGZI6Y9LW/Uz0vCegVenGlxfwkSTcnu+zv7u9FOukT6YCKcVG2WU28tyRsq3sy4sHzYHK5OwT5XomnGYYqZ589hpOaXTTkoVdgieTj5bF0cfGTnasexCETb71LJCPBsLz1PDXMYz5SSGgLngJOh1J+XMr+1QdT9dPltNZPR9UHO9n7FYprS9GwBroCdz2VC7ZTdHtqDsDh8yW61Cbt+rke3Ky6TZZL/nrA9H+DMhoiHz1WxuEQnU1mw1b7hw==
-X-YMail-OSG: mL6UzEMVM1nExaUTdbwHCbe34ozNBP.4OPARC8SYAqajuV9R_cG6SFuqwJls4DB
- TIuNbc4Pvzk47Jb2smo5xKhdo7AuJOx_WzfLOCcDJSFclPvU4LOrqE7HTw.SLL6iAxigS7whE5fI
- RmatvvB09N8DN3dOmPpYCy6fbsCevxN9ebjMaYeSZQ3Lj25HXcV9l6QqOBvRif4pWsFXc3hBLJje
- YJU8AWykvh5sNVuIiNYSdtD1mvm1zy9NmwHszrMvg3V8haalyeOR1kdMGtETk8tMWxMTRB8dgNkc
- RKsa8DQEjCitUoUtN73zJoSN8vFLRMG8tMFAOQ38EaNmSsim3QFD2McOOCMnRqKLxmd.uhj7fSIG
- Bc5iDr0UA3qZhJQqwr4VNu6kIr_sJRKwqW0v4dxWnnBM59Pjto41MuTAFzqw2iO8sqAb8Fupondn
- r4l6sHrMvVn0I0cTrTPZ6pXuP01LSznPjU8PPzFesiznghtvNWTEZIqIdAHxxbEmh_WeeDgBRTNl
- GeoGeUbTnROjy7FXDXqgELcPdNvnDq05wjXuFUnfmgdtc_3yLYJ7is0veXA6vslMC551pi2hk5ug
- 3UxIyd706p1kqNjgosw4DlLWhEPkgPfAirG3znQ_uM7E6yiZV68lo9XQ.vaPi5F6mwznpN0.XvFt
- QiFu75Nr_sJEZpw6bulCi3aWISMz0IBL_aCyyKyn5KuDiVKAL.Q_zXoE6uo_beJzuTApdkw3OcFp
- jxTdlT0GJYn94fBEEA5owD0yqXxKVUebakf4hZ3kWfDGNTrHgYjOih77rlOHPTQNOEYCRwmTgnGK
- K8SLRMY6G1qf2C2sGO0fmPbgEItr0Uu6VIdEPw3pbwJ56C.BLXhG978xTrsUam38mYAKAB6sh_I7
- 7nWSEldn8X7HrcHDd5lTFRqofDxCMkkdWnLz2CaNuzhZwKSPH5BzG4Qg.0d6mM1gmOxmJfw6HNH8
- 2cHNGY0KL0KS1X89XQD5I254TDondLrx0tQob1K6lsPNpcn7TK_6bwfM2TGEhBMRERTVP4ZQsjED
- E3_6SiH3r9BgGTyhgddn0r0Iwj5_9zxh0.coCOrEH.VKkT8U6Dj90eRTiuqhhBcutuvZFVsS6M0P
- rW4C9QxhqKYmqkluLPTe1z9g4fCKJLOg9yz4WeW4ojI27N4sQcw5QeOKoJYNuJ6QJRsf7QabtdSv
- ukwCr83pSQJxlnQuhsE_74wKx71q9CcgX4LPoNne.o1j5LQ4U5jIvAHnnDJYO77SclSK2wTO.ViN
- sgjV8t6lPGe9pViembUqPrsjIyeyI_5T5jBy8tQGGraxVVR9H.RUNvLsYV_FHwNWkEdvVhcv9X_k
- lCbtaFnM2I96yu_ko5cuEi1CHaaXq4CqC3fevcpAqpicqAwmcBPB1rCaeg17uc7GFFY_j0MLNjBG
- BSNVkKRU9IVANBQDzkg5m2tueTTvQ5YenJUlR3hK_ZpfWEhfVWftGMcj7D3AF6uXIYsCicIlWkAI
- 4PzRVxPeAdTaL2vi2jkfew5iBw_dOnO_VQTm1VH04M4jImDgYS3os40xr2r0lwHbvQ2hiAPGhKpZ
- 75R.bLPilrsv9P25cGMcYGhteiWKV8SHYiUDpWacHRnwQJyWsKtiyfhZjNa5gAbc9PUDWhc.QLDw
- CGaBkBm.gWYbvvQVWZOnJu.AO3OaBLhDndmEnVIJana2e4ZD_gzvPdBKPSRF_OoK7X_9t5LcOIgH
- TjV948H2QNfaEUmvAPEAMZ7WdmAP0bjTwmXMbEeGkwDuEX_gwdwI5Dn..FavDgUMY6Ujlg2K01HI
- 4IKuP3cZKcsYYj4Bi_YFuUFW3.bPepByKYttQk4Fj9K6MbQDxKv53pTyZn0DEbiovqh4OfK8VAWs
- dn4pKOR9ct.f8oYngl_S7DS2P0Z2uwbcvTEG9KnSfgVCl3Qs2pAPAdY54YGXmhEMi.6Qn.3Rkah.
- u4UcpGR4xekdi4DJuOBVXCqhLQOkzVlPAwgjDDBT1eIvUOqoD4oiesyjt2IumIV1iCBeWAbig5nt
- UpslA3TcbY97DqrmZFR.hUlmcj1jxTCFSJUmkVGFYbuiOdPrus0qJ9gy0MVAbMLfd1rP2_2tKP2V
- BEAjl5bQ6G4sv81MV4Gfu7Zze2NWNBxEit0HSaBDsqsK_P2tkirfgzxgehlYt9Gv9hnJ5mrHxrz8
- O_NX6iTomuOMYazxGG7dUCnKklgZJNXglWp3DlNs3c5ZgBu1giFkQ.BWZ5w4CVMKFLEytd.x7acu
- _NgUukauPIwg8OhRD0uBVAmWzMOFpOzZ0UhMsu6i5uvIqeQ_eor_q2ck1gVMz0Sbm2nNHrU4JZh_
- d7c_l9_3KPLXfhJTYBQjT3PvkPckJ1w--
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 39baf6d9-8f6f-4e9a-999f-207ab846cbef
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sun, 23 Apr 2023 10:06:29 +0000
-Received: by hermes--production-ir2-74cd8fc864-j696l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID cf55e9604defa8ed06dee28732abd972;
-          Sun, 23 Apr 2023 09:55:54 +0000 (UTC)
-Message-ID: <07c93b21-1c96-4bd4-9af2-53b76da14fde@rocketmail.com>
-Date:   Sun, 23 Apr 2023 11:55:52 +0200
+        with ESMTP id S230336AbjDWMxD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Apr 2023 08:53:03 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5962B10D0;
+        Sun, 23 Apr 2023 05:53:02 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso5970371a12.1;
+        Sun, 23 Apr 2023 05:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682254381; x=1684846381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iytNL3ionK0y40hikstW/BCZlPf3T/1Wm7ZwrV0sJlw=;
+        b=mxFY2HrILM2cerTaYDSv71GR+WQ2TxeE3y9At9pEM0MB96S0zeycHmvj5b2o2Nyfah
+         8Hl6doywdvO32gzAWuXTOUT7U2gYPyaTtw08w4VvSPX7Ciu6zck0aaLKatWWicqz0szb
+         IRmEldsEp1zTkz495xH/zXysU/vFiKUiGzyvNn7aSQE7K0RkI0v9udqJrqic2TQ2bNwn
+         cZcriicgvgEM8HKLukppbCVWxS5Wztoc8HBi9T6Hpy8HogBf7Dg3UEEfv1/j8RSxD1GD
+         S2VJGecIOyRBelHB9ALxDbN5CJd5KkrmJEWVjCMVNimtYnhkWEcLruPlcm57ib1JZTC1
+         Cjng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682254381; x=1684846381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iytNL3ionK0y40hikstW/BCZlPf3T/1Wm7ZwrV0sJlw=;
+        b=HwVlsVKpHYSVNm7yqFgG+1kXXHQzQCQsYHt3X13aKd+lvpjVAIE1FGo00XVvLVKKcF
+         Cf4GtwMpNteY3p0El13f6u1JdK3nm5P5uBJc9wuxFfkj359cB+5FqHNvzkQvDijIbxrk
+         PCHEYFNnxq9uYG3vK5bm+HIBOb/yMfmY8gavF7hizcN4jOez/suFDslH+yMBiWhhBCGz
+         pojp5xJMhurlbcTA2iAtLnaqtbUgLGdnaRQ076U6rFcWgzk3B64OXTKLLExKWi1ASWka
+         jHgwNQ6YVmaXDmWkUdlOWlAhNm56cMjZXxkUQwtJRMRX+fE/OKLOPkgh5iX85aRAYHfb
+         zqUg==
+X-Gm-Message-State: AAQBX9frco1oStuokQmgCdyJreA1J/fWUoFKK6W4Yg9jvzSQKgX+Lp9k
+        uZFBKGkgkoKynOkuN8sDwSo=
+X-Google-Smtp-Source: AKy350bSWYI/SvP558yd57KKjIp5PRfYPqiEM6lRUyYP8OmlVk45UlwzWUqDELXx4SoaZLUxhRnKcA==
+X-Received: by 2002:a05:6402:641:b0:504:921b:825 with SMTP id u1-20020a056402064100b00504921b0825mr9276422edx.36.1682254380636;
+        Sun, 23 Apr 2023 05:53:00 -0700 (PDT)
+Received: from [192.168.50.244] (83.11.224.11.ipv4.supernova.orange.pl. [83.11.224.11])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b00501d73cfc86sm3847476edu.9.2023.04.23.05.52.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Apr 2023 05:53:00 -0700 (PDT)
+Message-ID: <c717e975-092a-5090-89de-ec08237388a3@gmail.com>
+Date:   Sun, 23 Apr 2023 14:52:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 6/9] power: supply: rt5033_charger: Add RT5033 charger
- device driver
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <665d8906ea7b84e0a248315e8395a80007b8bafb.1681646904.git.jahau@rocketmail.com>
- <202304230924.lqgvPwZ0-lkp@intel.com>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 12/12] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0
+ boards
 Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <202304230924.lqgvPwZ0-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Henrik Grimler <henrik@grimler.se>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230416133422.1949-1-aweber.kernel@gmail.com>
+ <20230416133422.1949-13-aweber.kernel@gmail.com> <ZEBN2AciChG03FpM@L14.lan>
+From:   Artur Weber <aweber.kernel@gmail.com>
+In-Reply-To: <ZEBN2AciChG03FpM@L14.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+Hi,
 
-On 23.04.23 03:22, kernel test robot wrote:
-> Hi Jakob,
+On 19/04/2023 22:23, Henrik Grimler wrote:
+>> +	memory@40000000 {
+>> +		device_type = "memory";
+>> +
+>> +		/* Technically 2GB, but last 1GB is flaky, so we ignore it for now */
+>> +		reg = <0x40000000 0x3FC00000>;
 > 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on lee-mfd/for-mfd-next]
-> [also build test WARNING on next-20230421]
-> [cannot apply to sre-power-supply/for-next broonie-regulator/for-next linus/master lee-mfd/for-mfd-fixes v6.3-rc7]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jakob-Hauser/mfd-rt5033-Fix-chip-revision-readout/20230416-214502
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-> patch link:    https://lore.kernel.org/r/665d8906ea7b84e0a248315e8395a80007b8bafb.1681646904.git.jahau%40rocketmail.com
-> patch subject: [PATCH v2 6/9] power: supply: rt5033_charger: Add RT5033 charger device driver
-> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230423/202304230924.lqgvPwZ0-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/0fbd385f9a1acd55a8d943560428b9d783f8047f
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Jakob-Hauser/mfd-rt5033-Fix-chip-revision-readout/20230416-214502
->          git checkout 0fbd385f9a1acd55a8d943560428b9d783f8047f
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/xen/ drivers/power/supply/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304230924.lqgvPwZ0-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/power/supply/rt5033_charger.c:26:10: warning: variable 'state' is uninitialized when used here [-Wuninitialized]
->                     return state;
->                            ^~~~~
->     drivers/power/supply/rt5033_charger.c:23:11: note: initialize the variable 'state' to silence this warning
->             int state;
->                      ^
->                       = 0
->     1 warning generated.
-> 
-> 
-> vim +/state +26 drivers/power/supply/rt5033_charger.c
-> 
->      18	
->      19	static int rt5033_get_charger_state(struct rt5033_charger *charger)
->      20	{
->      21		struct regmap *regmap = charger->rt5033->regmap;
->      22		unsigned int reg_data;
->      23		int state;
->      24	
->      25		if (!regmap)
->    > 26			return state;
->      27	
->      28		regmap_read(regmap, RT5033_REG_CHG_STAT, &reg_data);
->      29	
->      30		switch (reg_data & RT5033_CHG_STAT_MASK) {
->      31		case RT5033_CHG_STAT_DISCHARGING:
->      32			state = POWER_SUPPLY_STATUS_DISCHARGING;
->      33			break;
->      34		case RT5033_CHG_STAT_CHARGING:
->      35			state = POWER_SUPPLY_STATUS_CHARGING;
->      36			break;
->      37		case RT5033_CHG_STAT_FULL:
->      38			state = POWER_SUPPLY_STATUS_FULL;
->      39			break;
->      40		case RT5033_CHG_STAT_NOT_CHARGING:
->      41			state = POWER_SUPPLY_STATUS_NOT_CHARGING;
->      42			break;
->      43		default:
->      44			state = POWER_SUPPLY_STATUS_UNKNOWN;
->      45		}
->      46	
->      47		return state;
->      48	}
->      49	
-> 
+> Comment says 1GB but you are skipping 1GB+4MB.  Is the entire region
+> flaky or perhaps just the 4MB region in the middle?
 
-Here as well I'll change "return state;" into "return 
-POWER_SUPPLY_STATUS_UNKNOWN;". If the driver fails to get the regmap, 
-the status is "unknown".
+I copied the memory bank configuration from downstream: according to
+boot logs and ATAG data from the stock bootloader, there are two memory
+regions: one starting at 0x40000000 (size: 1020M) and one starting at
+0x80000000 (size: 1024M). Here, only the first bank is added, since the
+second one doesn't work.
 
-Kind regards,
-Jakob
+I tried changing the size of this first bank to the full 1024M, and it
+seems to be booting fine; still, I'd rather leave this at the same size
+as claimed by downstream and ATAG.
+
+The second memory bank (anything past 0x80000000) doesn't work, as
+downstream has some weird special behavior regarding it: that region
+contains "page holes", and there's a check that discards every second
+page frame in that region[1][2]. That also means my comment is incorrect
+- indeed, 2GB of memory are passed to the kernel, but the second 1GB is
+effectively halved, leaving us with 1.5GB. (That's an oversight on my
+part - I wasn't aware of this when writing the DTS initially, and only
+checked this more in-depth now.)
+
+I'm not sure if there's a way to re-create this behavior in mainline;
+the closest thing I can think of is making a separate entry in reg for
+each of the working pages, but that would leave us with hundreds of
+lines, which is not ideal... so it's much easier to just leave it unused
+for now.
+
+Best regards
+Artur Weber
+
+[1]
+https://github.com/gr8nole/android_kernel_samsung_smdk4x12/blob/786b1473b93aabf40c18a2dca035503cce5ecac7/arch/arm/mm/init.c#L413-L414
+[2]
+https://github.com/gr8nole/android_kernel_samsung_smdk4x12/blob/786b1473b93aabf40c18a2dca035503cce5ecac7/arch/arm/mach-exynos/include/mach/memory.h#L30-L38
