@@ -2,278 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D5E6EDE4A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Apr 2023 10:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAE36EDF0F
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Apr 2023 11:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbjDYIkc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Apr 2023 04:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S231428AbjDYJU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Apr 2023 05:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234027AbjDYIkE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Apr 2023 04:40:04 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E92C146F8
-        for <linux-pm@vger.kernel.org>; Tue, 25 Apr 2023 01:38:13 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so40988248a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 25 Apr 2023 01:38:13 -0700 (PDT)
+        with ESMTP id S233271AbjDYJU5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Apr 2023 05:20:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BBA4C2B
+        for <linux-pm@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-958bb7731a9so558863866b.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682411837; x=1685003837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pJCGkPHoGSFZY63Jqk/nlt1gBwH2vblI+IkzLVWvpyw=;
-        b=qwfqHUkBa7MLPI/9HCXNiZc76W0GkP5Ath0jV1H3+r0utDr49cmvw5UBWdJ69LgKbI
-         kQAEOU9N2BqTGmrCaEK/vo0+T2JHyTap65Pq9oze1UpbpGCFnftJil9yx/8njN5kiEbS
-         2raHHC5Ci+xvifegJ4Syjenb6nDAyBcRf6fmloy9SGRJxifER74ESVUGSoWIpG65im6w
-         jV4TwQDS+0Kjl6VkVvcV5v48L3ufniarmCglJzgwvS2qUkPUC3pk6xZkn7eyc6w5vfhh
-         9ttyNT8VXpKD+/vNpQmAWEcvpBd3hq2oWqHDW8GxTuOLilBbBEvdAIYMmqXhQLvGRmOP
-         IfdA==
+        d=linaro.org; s=google; t=1682414449; x=1685006449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
+        b=wOvkX2oC5ZHyFMdylx8IkrryNZeg23DU/Ch9AChLKbcB/sx0DFV8Yb/H7vUSsHm/ay
+         6vKeAhZHqi4KvKzBL9RsojhjUK4oU8lb+V+mupjRsr3d4Ozv9ezhvySx+DHEhqR+hjMA
+         gaiJOqLYT51c8eBo6o+cG8x82KOH/6WDLxVffZqZup0JrvMaRV4XDFiPQxHmTy81GMpM
+         QIfjcv/pPcyMi1TiLUVU+h31xU2FfOzqmTSR6PnZ45uP7vvaFC3j0EA3bBbvXBOdzaR3
+         fHRbyuMSy1Dp046zUXSSm/0Gjosdxp/aEC/NPYM4X7lNjpFDITb7o57bkR9W209v9XtR
+         w4rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682411837; x=1685003837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pJCGkPHoGSFZY63Jqk/nlt1gBwH2vblI+IkzLVWvpyw=;
-        b=hd/oBdzKqXXLEnFSA3HohF/2i85hNPGOspo/6IAqwk/sbJaZTkEmMpwXS9yLpddaif
-         njFq/38BkG9Yf/J2eYYdNnbN6u+d3s1dzJQuKrUgyLuL5yDN8q7gLXcFa7L24hHl2nZd
-         eyu2z9CpsQUMObaHcWiuVzGhy2fgqUQCwYKg/pwpzE3CO1E7qbiRTHqLhPDiKnQfCJhu
-         LJS91tnDDr+UDH1O2pR2mj6sQ0eCPOtOzp+7Yur6d39L13/rZ/Ymsr86KlPKxgv4gnl2
-         2ixHZG5W9TBB/MGGGqbuT4YXmx0ykF9cVYFn1sDapzTT8n0AEih2JtJQgdMEvDkgnPgM
-         FX0Q==
-X-Gm-Message-State: AAQBX9ci7wPZSS/JtCEr66+q54xOFzyzpRjVjBiRJsf9L2dHavkqEvsP
-        jt1GE0cz9mgaOjIv+RHI0P8TDJia1DutxVNtoUa5sg==
-X-Google-Smtp-Source: AKy350ZzCimN5VBMy4odr40aNaphS9WPL5s1QsFomwpin6cX6Jv2A3zwror5ZbdEtmZc6/prsBRh7o0cC4Z0CxnVDwY=
-X-Received: by 2002:aa7:c84d:0:b0:504:b11e:8cfb with SMTP id
- g13-20020aa7c84d000000b00504b11e8cfbmr15104412edt.13.1682411837571; Tue, 25
- Apr 2023 01:37:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682414449; x=1685006449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
+        b=KBBOY930YMbDihVI+ol7DCrEHPSEK4P/KhQQuTF68Li2JWoiiXJVkSU2orEwk7YIPg
+         IMaeBUGZzWBcVAyPdXROkOWI4ZQzQ14bQMDqsA8taP/yBjKHucvALxRIo0fmKS9OsvUX
+         oGVzSufgxPvqRamXIiPVGKDV1rItpns0XkRQw0q3avQEKMmxtkXUAWgjbhSLMMhqTRBd
+         ZMBCeZXvzBsTwQTq3sy47dczehsBUbQrmSkz19QjINBvA7KDb2SCatyypauA/Gb2wYs6
+         7lfTeoxUGNQYEoG4iZtwJ8nZwxJbkGOPZ5Asl6lcSoRPPHpyLhNOCTvadzJYg+gunA4v
+         CuKg==
+X-Gm-Message-State: AAQBX9cAm7TVenZJKE7OlyIkf1T/OlLF6U+R3V8KxdXk9yF0tO9Exx/c
+        5mtWNQSJ+km4524vjIxWm7vE5Q==
+X-Google-Smtp-Source: AKy350YuXymrw7So4UOjZjef+iEPyi/CshywTQ5AjTJZJr/4WaSMcccmVMSSXrgcRBO0CsBCTlwDVg==
+X-Received: by 2002:a17:907:b9d9:b0:94f:1a23:2f1c with SMTP id xa25-20020a170907b9d900b0094f1a232f1cmr14815686ejc.50.1682414449568;
+        Tue, 25 Apr 2023 02:20:49 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170906828b00b0094f23480619sm6620286ejx.172.2023.04.25.02.20.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 02:20:48 -0700 (PDT)
+Message-ID: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
+Date:   Tue, 25 Apr 2023 11:20:46 +0200
 MIME-Version: 1.0
-References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
- <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
- <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
- <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
- <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com> <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano>
-In-Reply-To: <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Tue, 25 Apr 2023 10:36:41 +0200
-Message-ID: <CAGuA+ooRGAjXONtXi9G_jTwxrHG0=OerAfK2b3mo0Z+RhPW4Wg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Brian Norris <briannorris@chromium.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        soc@kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
+ <20230424152933.48b2ede1@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424152933.48b2ede1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 12:21=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> On Tue, Mar 28, 2023 at 02:20:24AM +0200, Balsam CHIHI wrote:
-> > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> > >
-> > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@baylibre=
-.com> wrote:
-> > > >
-> > > > Hi Chen-Yu,
-> > > >
-> > > > I suspect the bug comes from incorrect calibration data offsets for=
- AP
-> > > > Domain because you confirm that MCU Domain probe runs without issue=
-s.
-> > > > Is it possible to test something for us to confirm this theory (i
-> > > > don't have an mt8192 board on hand now), when you have the time of
-> > > > course?
-> > > > We would like to test AP Domain's calibration data offsets with a
-> > > > working one, for example :
-> > > >
-> > > >  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D =
-{
-> > > >                 {
-> > > > -               .cal_offset =3D { 0x25, 0x28 },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_VPU0 },
-> > > >                         { .dt_id =3D MT8192_AP_VPU1 }
-> > > > @@ -1336,7 +1336,7 @@ static const struct lvts_ctrl_data
-> [..]
-> > > >
-> > > > This example is tested and works for mt8195,
-> > > > (all sensors use the same calibration data offset for testing purpo=
-ses).
-> > > >
-> > > > Thank you in advance for your help.
-> > >
-> > > The MCU ones are still tripping though. If I change all of them to 0x=
-04,
-> > > then nothing trips. There's also a bug in the interrupt handling code
-> > > that needs to be dealt with.
-> > >
-> > > AFAICT the calibration data is stored differently. If you look at Chr=
-omeOS's
-> > > downstream v5.10 driver, you'll see mt6873_efuse_to_cal_data() for MT=
-8192,
-> > > and mt8195_efuse_to_cal_data() for MT8195. The difference sums up to:
-> > > MT8195 has all data sequentially stored, while MT8192 has most data s=
-tored
-> > > in lower 24 bits of each 32-bit word, and the highest 8 bits are then=
- used
-> > > to pack data for the remaining sensors.
-> > >
-> > > Regards
-> > > ChenYu
-> >
-> > Hi Chen-Yu Tsai,
-> >
-> > Thank you very much for helping me testing this suggestion.
-> >
-> > Indeed, calibration data is stored differently in the mt8192 compared t=
-o mt8195.
-> > So, the mt8192's support will be delayed for now, to allow further debu=
-gging.
-> >
-> > In the mean time, we will only continue to upstream the remaining
-> > mt8195's source code, so it will get full LVTS support.
-> > A new series will be submitted soon.
->
-> Hi Balsam,
->
-> like Chen-Yu mentioned, the calibration data is stored with 4 byte alignm=
-ent for
-> MT8192, but the data that is split between non-contiguous bytes is for th=
-e
-> thermal controllers (called Resistor-Capacitor Calibration downstream) no=
-t the
-> sensors. The controller calibration isn't currently handled in this drive=
-r (and
-> downstream it also isn't used, since a current value is read from the con=
-troller
-> instead), so we can just ignore those.
->
-> The patch below adjusts the addresseses for the sensors and gives me reas=
-onable
-> reads, so the machine no longer reboots. Can you integrate it into your s=
-eries?
->
-> Thanks,
-> N=C3=ADcolas
->
+On 25/04/2023 00:29, Jakub Kicinski wrote:
+> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
+>> Thanks a lot for your continued work. I can't merge any of this at
+>> the moment since the upstream merge window just opened, but I'm
+>> happy to take this all through the soc tree for 6.5, provided we
+>> get the sufficient Acks from the subsystem maintainers. Merging
+>> it through each individual tree would take a lot longer, so I
+>> hope we can avoid that.
+> 
+> Is there a dependency between the patches?
 
-Hello N=C3=ADcolas,
-
-Thank you very much for your help!
-I really appreciate it.
-Yes, of course I will integrate your fix to the series immediately.
+I didn't get entire patchset and cover letter does not mention
+dependencies, but usually there shouldn't be such. Maybe for the next
+versions this should be split per subsystem?
 
 Best regards,
-Balsam
+Krzysztof
 
-> From 4506f03b806f3eeb89887bac2c1c86d61da97281 Mon Sep 17 00:00:00 2001
-> From: =3D?UTF-8?q?N=3DC3=3DADcolas=3D20F=3D2E=3D20R=3D2E=3D20A=3D2E=3D20P=
-rado?=3D
->  <nfraprado@collabora.com>
-> Date: Mon, 24 Apr 2023 17:42:42 -0400
-> Subject: [PATCH] thermal/drivers/mediatek/lvts_thermal: Fix calibration
->  offsets for MT8192
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
->
-> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->  drivers/thermal/mediatek/lvts_thermal.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
-diatek/lvts_thermal.c
-> index b6956c89d557..f8afbc2ac190 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -1261,7 +1261,7 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_d=
-ata_ctrl[] =3D {
->
->  static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] =3D {
->         {
-> -               .cal_offset =3D { 0x04, 0x07 },
-> +               .cal_offset =3D { 0x04, 0x08 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_MCU_BIG_CPU0 },
->                         { .dt_id =3D MT8192_MCU_BIG_CPU1 }
-> @@ -1271,7 +1271,7 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
-data_ctrl[] =3D {
->                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
->         },
->         {
-> -               .cal_offset =3D { 0x0d, 0x10 },
-> +               .cal_offset =3D { 0x0c, 0x10 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_MCU_BIG_CPU2 },
->                         { .dt_id =3D MT8192_MCU_BIG_CPU3 }
-> @@ -1281,7 +1281,7 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
-data_ctrl[] =3D {
->                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
->         },
->         {
-> -               .cal_offset =3D { 0x16, 0x19, 0x1c, 0x1f },
-> +               .cal_offset =3D { 0x14, 0x18, 0x1c, 0x20 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_MCU_LITTLE_CPU0 },
->                         { .dt_id =3D MT8192_MCU_LITTLE_CPU1 },
-> @@ -1296,7 +1296,7 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
-data_ctrl[] =3D {
->
->  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D {
->                 {
-> -               .cal_offset =3D { 0x25, 0x28 },
-> +               .cal_offset =3D { 0x24, 0x28 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_AP_VPU0 },
->                         { .dt_id =3D MT8192_AP_VPU1 }
-> @@ -1306,7 +1306,7 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_d=
-ata_ctrl[] =3D {
->                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
->         },
->         {
-> -               .cal_offset =3D { 0x2e, 0x31 },
-> +               .cal_offset =3D { 0x2c, 0x30 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_AP_GPU0 },
->                         { .dt_id =3D MT8192_AP_GPU1 }
-> @@ -1316,7 +1316,7 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_d=
-ata_ctrl[] =3D {
->                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
->         },
->         {
-> -               .cal_offset =3D { 0x37, 0x3a },
-> +               .cal_offset =3D { 0x34, 0x38 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_AP_INFRA },
->                         { .dt_id =3D MT8192_AP_CAM },
-> @@ -1326,7 +1326,7 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_d=
-ata_ctrl[] =3D {
->                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
->         },
->         {
-> -               .cal_offset =3D { 0x40, 0x43, 0x46 },
-> +               .cal_offset =3D { 0x3c, 0x40, 0x44 },
->                 .lvts_sensor =3D {
->                         { .dt_id =3D MT8192_AP_MD0 },
->                         { .dt_id =3D MT8192_AP_MD1 },
-> --
-> 2.40.0
