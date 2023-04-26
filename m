@@ -2,64 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432A46EF401
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 14:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F12F6EF57F
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 15:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240717AbjDZMIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Apr 2023 08:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S241219AbjDZN1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Apr 2023 09:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240644AbjDZMIy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 08:08:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0335BF3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 05:08:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Q5yMM22wyz4xMs;
-        Wed, 26 Apr 2023 22:08:47 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     peterz@infradead.org, npiggin@gmail.com, linux-pm@vger.kernel.org
-In-Reply-To: <20230406144535.3786008-1-mpe@ellerman.id.au>
-References: <20230406144535.3786008-1-mpe@ellerman.id.au>
-Subject: Re: [PATCH 1/4] powerpc/64: Mark prep_irq_for_idle() __cpuidle
-Message-Id: <168251050530.3973805.3959525808657719536.b4-ty@ellerman.id.au>
-Date:   Wed, 26 Apr 2023 22:01:45 +1000
+        with ESMTP id S241179AbjDZN10 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 09:27:26 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00B0659F
+        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 06:27:13 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f09b4a156eso47829775e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 06:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682515632; x=1685107632;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xNLBoeGm0DGvn60lh6VTKng50f10ssXE+mPMmGjHlY0=;
+        b=Jyvm5UfmNO+PVsVp8ST7r9Z8VYKIm6lc4lXwlfanlf/je09SZ+5J4ZdyFCz7fVqOQs
+         V2HrnOKbXl4QKHs0VdQmceE9gpG0iMWpyFC3fnl/xJ5OiQcStA4aqpaUJQ0XnVZR2F5Y
+         71vgD4QFa2hso5yBt7q1P3uJknSGg2YLgacwa4Vc2KPIrIDHGW9RIcj7c0xgL/yAe926
+         hfE5SzRHYoXER4MSiPOh4vDvaJFh2AH3GMOuQGnJ1QtzeFLKIvf5UxctUQiGgNAh2TZL
+         8IcO5xrZRECBN4e51bvppBMrETt2VqVSiXlR8jNi98/QV5ABF9TH1VVJJGQvjZ9SOd9W
+         gc+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682515632; x=1685107632;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xNLBoeGm0DGvn60lh6VTKng50f10ssXE+mPMmGjHlY0=;
+        b=OQC3aPocgUkE1f8m6iLRQziMW7oCBxruIFDG12Lm7pVULuXSozsaUISgEyS6IMUnJ7
+         bAb8SDidvwDBIsLAs4awq+M6xiBoyjtNOsP9NHZrZRDe7BeWzvlWb77EWV0gxcrBqwDm
+         QsL9MIEALrIGRkjRfgq0EQdQ/Wylee9yWjrOIGhpBqqA+WiVPvQSaeGFCGP+IR9lCjMA
+         SzcZrmeU53iKQkqZw4BfUcg95yb7L0DENLnRfvOHz9OsjrUpDhF67qdF3YTn2++k28ed
+         S6rAafTqwG7FQpnXFmg4fIg7+GclWtyOiKIwkGzfuyrvx4/wlROpdTfHjWllEv0n1hMv
+         ZDBg==
+X-Gm-Message-State: AAQBX9f+xECB5B0iel5Xd2Vhcr2HvmNk3ba1o9nYltIhdphMPb2dhwWd
+        yJpkXv3iNIVmxZSfZo7dDAJoQ8iWhbtuxLQOhpND9w==
+X-Google-Smtp-Source: AKy350bUF6F5y/p2qsJGdH8ETViHNt6OWWv1GlxnfKf1+6yPtlboJ8kvQxNHapIilrlphDiIe9Lq/Q==
+X-Received: by 2002:a1c:4c16:0:b0:3f1:9a5a:b444 with SMTP id z22-20020a1c4c16000000b003f19a5ab444mr10645939wmf.15.1682515632020;
+        Wed, 26 Apr 2023 06:27:12 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id iz14-20020a05600c554e00b003f175954e71sm21482213wmb.32.2023.04.26.06.27.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 06:27:11 -0700 (PDT)
+Message-ID: <da974b57-9eb5-9380-2eaa-174e1b6280b2@linaro.org>
+Date:   Wed, 26 Apr 2023 15:27:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Missing signoff in the thermal tree
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <c7a60bcd-f7f3-49df-a209-7b6e7c3ce753@sirena.org.uk>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <c7a60bcd-f7f3-49df-a209-7b6e7c3ce753@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 07 Apr 2023 00:45:32 +1000, Michael Ellerman wrote:
-> Code in the idle path is not allowed to be instrumented because RCU is
-> disabled, see commit 0e985e9d2286 ("cpuidle: Add comments about
-> noinstr/__cpuidle usage").
+On 26/04/2023 13:35, Mark Brown wrote:
+> Commit
 > 
-> Mark prep_irq_for_idle() __cpuidle, which is equivalent to noinstr, to
-> enforce that.
+>    2912d341800bb ("thermal/drivers/cpuidle_cooling: Delete unmatched comments")
 > 
-> [...]
+> in the thermal treee is missing a Signed-off-by from its author.
 
-Applied to powerpc/next.
+Actually the Signed-off is not missing but there is the email only.
 
-[1/4] powerpc/64: Mark prep_irq_for_idle() __cpuidle
-      https://git.kernel.org/powerpc/c/7640854d966449e5befeff02c45c799cfc3d4fcf
-[2/4] powerpc/64: Don't call trace_hardirqs_on() in prep_irq_for_idle()
-      https://git.kernel.org/powerpc/c/6fee130204650515af80c2786176da0fe7e94482
-[3/4] cpuidle: pseries: Mark ->enter() functions as __cpuidle
-      https://git.kernel.org/powerpc/c/88990745c934b14359e526033c5bc1daaf15267c
-[4/4] powerpc/pseries: Always inline functions called from cpuidle
-      https://git.kernel.org/powerpc/c/18b5e7170a33a985dc842ab24a690fa6ff0f50e4
+Signed-off-by: wangchenggang@vivo.com
 
-cheers
+which is the same as the author name
+
+Author: Chenggang Wang <wangchenggang@vivo.com>
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
