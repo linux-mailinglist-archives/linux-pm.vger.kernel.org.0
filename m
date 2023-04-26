@@ -2,237 +2,571 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACE46EEA2D
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 00:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADB36EEBF4
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 03:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjDYWDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Apr 2023 18:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S239076AbjDZBdN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Apr 2023 21:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbjDYWDo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Apr 2023 18:03:44 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECBDDE;
-        Tue, 25 Apr 2023 15:03:43 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PI2fBe006265;
-        Tue, 25 Apr 2023 18:03:33 -0400
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3q4cg7wgjh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 18:03:33 -0400
+        with ESMTP id S239075AbjDZBdL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Apr 2023 21:33:11 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2115.outbound.protection.outlook.com [40.107.220.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D1816F1A;
+        Tue, 25 Apr 2023 18:33:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gr+rlxFueD+5K/y1PaPtSoo+hDIYDk2YmOih/KUSlpAlg3FMNz0fgoka6jIsNYlxV+QJ41IfXHe8y2n1p2Wm9XOlBRCxy5gdd3W/490dAUbO6zQO9JAMC2irMwY/Do3JrsZhYlYeXQaa/ZProlOCOyLrK+GDw16r8MHj1PhbVW2yOBLeZB1ugubE9wT2zDZRtcVbNamrIYwnP8XiWLogcXcay9AJ3qu0uWIIJUHdpJvEiojA0zGr/a4xCL+fwT5tOpYzgvMBYWmYBZiYJgnwgQV+84WALrWz9ZOAGJ18iQrpGBQKqxcCt69Gxyqp4eCIcLRQaF3WWdQgbBZQNbUYPA==
+ b=UldPrLt623sO5m/gugfDw2uGVdcE7Ib+hXbIwY34jpdjmRe4Ophfz2beqNLO8lb7fMtxiGOjPGDw8YGXrMtX0Qj9kmfv9U7mEyzRB/BC0bm0Y9EswlWyhp2h9ZfD/JUqQX3Re+2yQJJAhu/zwZxlu7KBUp/NV8BKmyksQk1vu2D0h9ywGnvH20IlA6Y48ATkaAh2ZTr9EeEkxBSGYjhAv1j6pKJTRfZUTRNIu9fhYG1ZW+gBvCA/q5l2RAZyP9jMDtbQ8wanJz0rFRuWE1V7wYfF4VJ/j72PXXoCIcSYP1guKZtliCQ6QAG6njbA2EHXkjft1J4Waa73HlHInBOThw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VEPT3Q4AcvH8yF/0CwRfDdTbQJA8PDCeT/mOh1FQwRE=;
- b=Bac0p0WRl5dL5qLYfagKQQs7rw6k8xc+1DvEDKHl3dA+ndri+DFiA29OXdkS8+I7nA7nj595Zhsvs8g6PWOyQbLUMmED6WsXFQK7b/JSvfIwoI0ahj80SQ7CJr9ubUH7Ro35V+oReTq2kZAmseaH88dgsC6an988173duWWEz/2eBhCn3T0u/x5uW8yRMw5s6POCJpDWCRXQNNWjwrlm8NSiXrmL1TTLZXmkfT1RDPkFBqNbz3biotWq3QuFDD/LHecglABSCK8WvKVE5+weP3w9B5fjueuK7qrNMtGRwyg9VhcfOUhgGxZrLXG9K/+yeyw3TWL3dRDiu+eJsCcbfA==
+ bh=Zll4pc/rQ1rrm+04OOI9twQiIMjKnW7YjQJTBuTA0yk=;
+ b=VbBgvMhqZDzeSaPq5ATiDzmMo6PjKUayl5Y/cL3fsHKDO5/DALMTVyHl+vHOdm42qwrll/ecr8c7zXSkIWYzWLraCe9PXOaMgTXW2FRgKD8VoqkqwENI9AUgM68ZdKnUL9fAjy2iXczMBE67IRPhamOn4Y2C1V6F3sgQk+OMfRTbQUKNVsfjc64MaTb0vtoCcJSAq0hY0i0tK/tpb1fidcfdU9gcRLkRXZ0x46qqIvmUrHKMkQbEWiSdZvThQEn3V/89nxcOGoVubzqWSTUd+0tv9rq8lZA57Rxp0RJISMSYb+nLhP/z5la90tpL54aej3tQjFYqIsMixDs2DWT5QQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VEPT3Q4AcvH8yF/0CwRfDdTbQJA8PDCeT/mOh1FQwRE=;
- b=9kI04BtRtPOplYj7xgx/UH3lI9NtzUyL8aAyAJniloxHR7wiNuycufoQ/JBRE44rXuBkPzxHZZqbYbhQjuD3tXWApNsPjJ6orbAfAkJ3M6RwFVhVvQxxvhB9xkXLCoVtIZJXdiawW1T0zfISBdtRy4Yu/2m0TDLB9P8HpCCNTyE=
-Received: from MN2PR03MB5197.namprd03.prod.outlook.com (2603:10b6:208:1f0::18)
- by MN2PR03MB5342.namprd03.prod.outlook.com (2603:10b6:208:1ea::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
- 2023 22:03:24 +0000
-Received: from MN2PR03MB5197.namprd03.prod.outlook.com
- ([fe80::c8df:77bc:8e3c:f92b]) by MN2PR03MB5197.namprd03.prod.outlook.com
- ([fe80::c8df:77bc:8e3c:f92b%5]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
- 22:03:24 +0000
-From:   "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-To:     Lee Jones <lee@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v2 8/8] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
- Support
-Thread-Topic: [PATCH v2 8/8] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
- Support
-Thread-Index: AQHZXINeEVIC3kkykUqcpgTtpflY8a8TThwAgCZDlXCAAMt/AIACYz0Q
-Date:   Tue, 25 Apr 2023 22:03:24 +0000
-Message-ID: <MN2PR03MB51973EDD4FEDA00200B61C6A8B649@MN2PR03MB5197.namprd03.prod.outlook.com>
-References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
- <20230322055628.4441-9-Zeynep.Arslanbenzer@analog.com>
- <20230330123136.GF434339@google.com>
- <DM6PR03MB519577728975E086D8EB20F38B669@DM6PR03MB5195.namprd03.prod.outlook.com>
- <20230424085942.GA8035@google.com>
-In-Reply-To: <20230424085942.GA8035@google.com>
-Accept-Language: en-US
+ bh=Zll4pc/rQ1rrm+04OOI9twQiIMjKnW7YjQJTBuTA0yk=;
+ b=bUkXHx8bz0BqK2rT1xiSbCnM/zY+7DpB+5vcYKoyIyveGZNjQdid3P8XvtXfdIWcJxNEoARfBlI5hkUzk5R7yPqtXQpAPRmvtfbgt9WZlgOE56CkmEdDrUc75H+DS16z+cQ+2gSQqL90dR6jlFgDtOYY0YNbz1dgSRy6ijBP06A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from BL3PR01MB7027.prod.exchangelabs.com (2603:10b6:208:35a::9) by
+ BYAPR01MB3958.prod.exchangelabs.com (2603:10b6:a02:91::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.19; Wed, 26 Apr 2023 01:33:00 +0000
+Received: from BL3PR01MB7027.prod.exchangelabs.com
+ ([fe80::6df9:7381:4788:cc3a]) by BL3PR01MB7027.prod.exchangelabs.com
+ ([fe80::6df9:7381:4788:cc3a%5]) with mapi id 15.20.6340.020; Wed, 26 Apr 2023
+ 01:32:59 +0000
+Message-ID: <06ca8066-fce6-d3cf-db37-584c3666f7df@os.amperecomputing.com>
+Date:   Tue, 25 Apr 2023 18:32:55 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+From:   Yang Shi <yang@os.amperecomputing.com>
+Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
+ high error
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>, viresh.kumar@linaro.org,
+        scott@os.amperecomputing.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
+ <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
+ <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
+ <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
+ <d287eff6-77bd-693c-96d3-87d8981b7f96@arm.com>
+ <7b57e680-0ba3-0b8b-851e-7cc369050386@os.amperecomputing.com>
+ <a2924821-80b9-e68f-3ae4-7a2c989afc88@arm.com>
+ <1ce09fd7-0c1d-fc46-ce12-01b25fbd4afd@os.amperecomputing.com>
+ <cc32f950-ea78-87cb-e708-6d42d1e58cc8@arm.com>
+ <f0fd057e-95cb-4a85-00fc-9eb25ef7b9b3@os.amperecomputing.com>
+ <ZEZrnWUc2y0w9yY8@arm.com>
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jZW1WNWJtVndMbUZ5YzJ4aGJtSmxibnBsY2x4aGNIQmtZWFJoWEhKdllX?=
- =?utf-8?B?MXBibWRjTURsa09EUTVZall0TXpKa015MDBZVFF3TFRnMVpXVXRObUk0TkdK?=
- =?utf-8?B?aE1qbGxNelZpWEcxelozTmNiWE5uTFdaa05UUmxaV0ZtTFdVellqUXRNVEZs?=
- =?utf-8?B?WkMxaVpqUTFMVFpqT1RRMk5tUmpNRGt4T1Z4aGJXVXRkR1Z6ZEZ4bVpEVTBa?=
- =?utf-8?B?V1ZpTVMxbE0ySTBMVEV4WldRdFltWTBOUzAyWXprME5qWmtZekE1TVRsaWIy?=
- =?utf-8?B?UjVMblI0ZENJZ2MzbzlJalU0T1RJaUlIUTlJakV6TXpJMk9UTXpPREF4TWpV?=
- =?utf-8?B?NE1qRTJNeUlnYUQwaWRsaHFkVmxEUm05SU9GRmFNekExWldaeGEyWlRSMmgy?=
- =?utf-8?B?TDFsQlBTSWdhV1E5SWlJZ1ltdzlJakFpSUdKdlBTSXhJaUJqYVQwaVkwRkJR?=
- =?utf-8?B?VUZGVWtoVk1WSlRVbFZHVGtOblZVRkJSVzlEUVVGQlZFRmlSeTkzV0daYVFW?=
- =?utf-8?B?VjVha3QwYkM4cmJqUkZWRXROY1RKWUx6Wm1aMUZFUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVWhCUVVGQlJHRkJVVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVVkJRVkZCUWtGQlFVRlRha1ZZZUhkQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZLTkVGQlFVSm9RVWRSUVdGUlFtWkJTRTFCV2xGQ2Fr?=
- =?utf-8?B?RklWVUZqWjBKc1FVWTRRV05CUW5sQlJ6aEJZV2RDYkVGSFRVRmtRVUo2UVVZ?=
- =?utf-8?B?NFFWcG5RbWhCUjNkQlkzZENiRUZHT0VGYVowSjJRVWhOUVdGUlFqQkJSMnRC?=
- =?utf-8?B?WkdkQ2JFRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlJVRkJRVUZCUVVGQlFVRm5RVUZCUVVGQmJtZEJRVUZIUlVGYVFVSndRVVk0?=
- =?utf-8?B?UVdOM1FteEJSMDFCWkZGQ2VVRkhWVUZZZDBKM1FVaEpRV0ozUW5GQlIxVkJX?=
- =?utf-8?B?WGRDTUVGSVRVRllkMEl3UVVkclFWcFJRbmxCUkVWQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVkZCUVVGQlFVRkJRVUZEUVVGQlFVRkJRMlZCUVVGQldW?=
- =?utf-8?B?RkNhMEZIYTBGWWQwSjZRVWRWUVZsM1FqRkJTRWxCV2xGQ1prRklRVUZqWjBK?=
- =?utf-8?B?MlFVZHZRVnBSUW1wQlNGRkJZM2RDWmtGSVVVRmhVVUpzUVVoSlFVMW5RVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVKQlFVRkJRVUZCUVVGQlNVRkJRVUZC?=
- =?utf-8?Q?QUE9PSIvPjwvbWV0YT4=3D?=
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR03MB5197:EE_|MN2PR03MB5342:EE_
-x-ms-office365-filtering-correlation-id: dcc25c49-502d-4867-9768-08db45d8e411
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VBRsP9w+bbVnzjWZOiZ/eCIhA11bYEzjKSjvCq24PJpdMJpog9IgRkzdiOFSxdG+sJCyCB/joIrATXkwDG8+fgwIOijjlnAc1WIwpkGeCdJYQfk7+Abw0TfTiO3tRZ66x7aiNL0BdztbSgNXm64nA36E/nywF5pRm1T90at4YhetZMUuEIQlDLNPAcr/onPamCuCn1/z0Xxw2nKRkBBtQFj1Tlb0F+8y19lI7UtV4Ndi/3CkAHCnUaNeQTwbtMKFvaC1Ej/kznNb11onHygve+7XOiAF1F0vLlGsH5o+QecuP+b6v/W/brjxOZOEJb3i5k0AnQYmc9shquNR/v+aolL+zN8D28ASqSD9v/uv4IzD7MsXCgUdZI9ZFXMd+sw5WteS6t47nyiQxAHWNIuve4kj4kqw+ERf6TnM9otrSNvIAA0VNUbur0KJDvNdL6pY2LBnA6WB7uAjWJZyT3bBR04SHMFZvy3siktxnh366geMl01ArN32U5WQZYyjwekg6p32UmqIdQtMBa0Req/Cs1HUJ6pHe9uuN5iDxUPjaG4i/bt39mVJ9sw20i9Yndw5cJAVCGGR8A/2T3w4yNCJLID6LZ/KSIvtLv22SL4LgC50VWz3DG9tw1vyOfA/iQ6M
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR03MB5197.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(451199021)(478600001)(54906003)(86362001)(186003)(26005)(9686003)(6506007)(55016003)(33656002)(71200400001)(4326008)(6916009)(64756008)(66556008)(316002)(66446008)(66476007)(66946007)(76116006)(2906002)(38100700002)(41300700001)(8676002)(122000001)(38070700005)(7696005)(5660300002)(8936002)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L3p5V2tMQ2dkTVNGNVZpNGttY04ybmhuNkFGN2tXMFdUVUZXQytWYmdhVkVW?=
- =?utf-8?B?SW5pTVpYMWlpczJjMjJwbDFmam5qQ012ME13V05mNHVZa3lheENEcmF0YUlJ?=
- =?utf-8?B?Zi81OHNGM0w4SEllNlEvV3RCR1lwdVBlU0trTzcxanhKS3IrSTE5RkY5UVJj?=
- =?utf-8?B?M1JHNWNuSTVnU2g4ZUxRUTNzR1MwM2RJT3lIYXBOY0xiUTBSQzI5UDFWWkxY?=
- =?utf-8?B?QTFidnAwV2psYVpNdktTSzRsUzM0V3JScG9PQjJtTDZUa1NVS3BXUkpSL1Nu?=
- =?utf-8?B?U0ZYYmdOdmVncDZqVWNJSlUxMzlZVFhTQ0E2enI1cEMvKzhJd2JTb2RIZTlE?=
- =?utf-8?B?ajZZVytoaFhkM0pDRkJPVTZENmFIc0labFdnWThVWUZMNllzMEMyYmppVllX?=
- =?utf-8?B?VzhiMVVZWDVCZWRIak1vVktFOXkzczh4Ky9pYXptTE0vWUNtbjV1YWRpbjFO?=
- =?utf-8?B?UWc2NzBtTGlXQ3NIQld6eVJVbnZwSlVOR2tHRmR4VDR0clRhaWQ0SGIwRytw?=
- =?utf-8?B?aDFaa081L3FFcUw2YlpzMVd3YThCU1JOTUFaSHd6VGNSb2M5d1hPR2xSdHFS?=
- =?utf-8?B?OTNZdXdRcWpGRHAvampBQS82bzhHWW9XK0NiKzZTdWZ5cExtazJDaFk5VEF4?=
- =?utf-8?B?Uk4yK3JmaHFCWXlwRW91MFo1SGFzYzZ3Q0NxdktPNklQT2hWOU5oZWVFNS9Q?=
- =?utf-8?B?M2NqQ0Rjc0ZNMDc3OTZtQUozdmkvdW1NaVk3Y2RQWXZnMEdkTTNha1pwcUp2?=
- =?utf-8?B?Y3QrYUVnZjBYUVI2WXJpdHdvRlNMdlJ3V2dKWUdFb0NyUEQ4djZ6K0ptTzVZ?=
- =?utf-8?B?MittVWFxT05RbHdRZ0IzeTNUTld4dGorYTRvYlZyVW5UdmM2RHNNVzMvdFR3?=
- =?utf-8?B?Mm1qTjJ3KzZBYXRIaVMxblQ5cTQ3amp0Q1hGdlR0bUE3Qms5T2V0N1BDYWRi?=
- =?utf-8?B?Q1kzR1I3R3ArdytaK0owNGw1YlhYNytMdkh1SFFhbTlRRnJjT2NyRkI2UXBs?=
- =?utf-8?B?QUcvanZjZ1JMaUJNb2lsaW4yZjdFUjgwNmFzUzVRaW9YRElHd3B4aFpNWlhM?=
- =?utf-8?B?Zmluc0JHYkFWNFdKT21uclBjOVBmSEs2R2VYa0oybDRpci83TXh0RlRCOWpt?=
- =?utf-8?B?YmxJVVBFTmlNcmsxM2NzNklNaTYxMC9IeDBRNWFTaGI3ZlZ4WGVJT2w0ZXlR?=
- =?utf-8?B?dFFQUCtlZlZwbGI3WE14NjRJVzRrRWx6TXlZODhyOGFkK3M3Zkh6R0pMYkV4?=
- =?utf-8?B?Ynl2U3VCRWFnVk9JWjkzbGpCcUN5M1plZzhKaXM1M01HbEN1R2I3ckFCTUUy?=
- =?utf-8?B?UFJKUzFpajlQREN1WFY5dkVrQnMvRXhBdFgwK20wQ1p2NDlMOHRVSFZxcmhZ?=
- =?utf-8?B?QThBRHpjbnRGbGxpZFRna2R2QlRPbzdMcS92b2hUN1BIRzduWDlvdHZKZFlM?=
- =?utf-8?B?L3QwdjNxTVdkSGgrTHd5bXl5N1RvbGZyUXdhai84bVJ0dVF3WTJDRzltUTg2?=
- =?utf-8?B?bnZRY1RURnBwVVdhRmxWcVFaYUxLbzg4bFhtNUxYQ0UzUmxHZFY3ZlhtVTlq?=
- =?utf-8?B?bHdwdlE2NjU4djlVUE8yaWJFQ3hybzVWRWFiVnUzWmZQczBJOUpsQWxKRVps?=
- =?utf-8?B?NUZBYzFoL2xOUFJQZFQ5TXNqelZST3hIMXc0VTF5RUYrRWtQTUtWNU5XRzB0?=
- =?utf-8?B?MkJDem5BUGJsR2E4MHQ5V3RvZms3S0c3TTFuNlgyZEhBdEROdkQ4SUM3eStI?=
- =?utf-8?B?dDcyQUhvOTMzTDVhZU5SVGVWNUhlaG9NSDZ1T1ZLcUJKRVRzeXBpYjlLTnV4?=
- =?utf-8?B?VzA0WjZFeXA4amE4bmp0dHJrMmk3bGJ5K0tQcDlvTnR3ZXhDS3J5Y0xCdlZn?=
- =?utf-8?B?MHNqUFR1UjlSY3FaY0VFZkZUcVFHck53ejBiUzBFVExodTErKytjU0lyUlg2?=
- =?utf-8?B?MElzUjJyN2JpanE4emtoemYxaGIxNXBWSi94M3J0S251cUhVZ1F3ME9BWmU1?=
- =?utf-8?B?LytkUWFFNVRNb1BIc0RxYTV1SkpxakdyTmxCTmYzcDV6Nk9SNHNqZVVQL0NB?=
- =?utf-8?B?OU9CWDB2WXIzOG9kc1NHUEpZUGtJZXVHam9BRUlYQk5nQTM0QzFxcDdSMlBS?=
- =?utf-8?B?aG9ONFRSMlEvMkdWbXNKNnp0TGpadHhDY3JSSTh1ekNPcGpyZlJubE9KSHJw?=
- =?utf-8?B?aGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+In-Reply-To: <ZEZrnWUc2y0w9yY8@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0P223CA0011.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:610:116::26) To BL3PR01MB7027.prod.exchangelabs.com
+ (2603:10b6:208:35a::9)
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL3PR01MB7027:EE_|BYAPR01MB3958:EE_
+X-MS-Office365-Filtering-Correlation-Id: db064acc-b4eb-424b-d980-08db45f62b44
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bVIsqV5YCxlAmQ1ZKR0qGkUhOkHJWnfhtIH0VADd9+Rxw9YSMP2SXANqyjx2jih58OyRAGA9CNm2T8/uZB//Els615RYOgyYWdTB08wtPrvzhYKMKmrh/RCClnaXwukCBIH1U+riRUrc1WWEUOCh4Wp3bud3ODMHFFSWas/H3tc0Vxfh2DfsaDQ+n7nXL7QqzS43vBRyZ8c8GZ544WqMu8+2rvMlgGfLG6OFgpQgvmZcaV3+cwWjYg/5zHaUsGt66Kgnl6uI4jChrhWEGRR/8uJ30UOYP5HZLmmhZ/8Gh8lcx5640KtFofAHCFOdKIrBRPTWos+trj4GhFC497cQjrmmdTYrscK8I13mD8vuOLRcfhBt27jRiijnaqVkkWZSqivwIFNs+SLc0yW+AvmSqB5Z2RDUcC0hJnoULz/wa2EJmtzi8gpCAv1MfrJA6M81jGDk1HOv4F5syVabIhnJPDn+s1AM+pyN+DzEZFyQu06AbxMYz0OamZjM+ykw/K1XUT4DUHwdBN/RU5ClwlWqtPlkZuL10MNQIBWrScYqa2Ud7nT9B09DxKMd96FDZPhxiCKKEi39O4Ge7+F/HseCndAll35LcIq3TELm3ZKoWHcHXaOpiAJnoZ0G7sSYJBqpCWG8Bzw6fwKnQ69vX/tjdA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR01MB7027.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39850400004)(396003)(366004)(376002)(346002)(451199021)(52116002)(53546011)(26005)(6506007)(6512007)(8676002)(8936002)(316002)(6916009)(4326008)(54906003)(66946007)(66476007)(66556008)(6486002)(41300700001)(478600001)(966005)(6666004)(5660300002)(38350700002)(38100700002)(31686004)(86362001)(2906002)(30864003)(2616005)(66899021)(31696002)(186003)(83380400001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWo5SVdpYU1LNlV1RHRaUHVJaTJwcytuTSs1WHNIUjRzcUJmQ3JpcmhVenRm?=
+ =?utf-8?B?clZjWFlVOEwzODhlQTErK2QyK1JZbCtWcEZnRHYwcVo5WWs2WlBaZU1RWFpq?=
+ =?utf-8?B?dWpUdzFDY2tNYkJ6SUVYcG5UUm5EVUZjRnVFRmZFajBNNnVlVEhiUENqQVZ6?=
+ =?utf-8?B?Sjh6KzBzSDhpTTJUNDU5b0k4UWJ3SCt6bkxRaWZwZVpLTSs1M3U0QmU0Y2VL?=
+ =?utf-8?B?ekV3b3dyd1IrNXQ2MlZvS1ZXTW5YK3hEWGF4OHNLT3BnTUJmOXhsaGNwdGNx?=
+ =?utf-8?B?UGxNc2VTNkFBNXFqRERTd2RGOEl3eElMMW10ajZ1QTNpWUl2WTdFT2hwZlpL?=
+ =?utf-8?B?NjRNTkRzZ2JHaTlzVDByV0pxSWtpbnVucElud0p3ZkZiY0l5K2pHSzgxanBM?=
+ =?utf-8?B?VlZ5TFgxeTRpcEJqMmp3VGN1ZXVKTGJjRkY3SmVybzNLS0JXQ2krcjlmeEtE?=
+ =?utf-8?B?RzNKcFlPekFDWDhZT0s2bFo1aHJsY0R0NkplZXVkYXBMQ1BsVHVaRlBYZVdP?=
+ =?utf-8?B?T2NXT3ZWRzRkYmxBM3dKRFBLNit6OHpEb3ZPWVQ1VWNmc09rUVZPSWFFNllU?=
+ =?utf-8?B?OC9wM0tpSkNmQXVTUm5OSTYwSzkyNWRvVUVydHhMcHh4S3RlWUZRU3htNDE2?=
+ =?utf-8?B?U251MWtzb01QTG9CRXVLYkE3M3RPVUZpN3BpMU9CNkZsRXM0YXpNRFY4dnQ0?=
+ =?utf-8?B?SGRiaU5yQjZtWEZyZGlML0FlWXFUV2N5S0FqY1VPbENIOXFtWnc1V0NQTTJV?=
+ =?utf-8?B?VkdZNFZOSFh2c2ZJWXFXMWhKTzUwWjgvSmtJd1NRaUhCYTBWaDMxMjAvMWdq?=
+ =?utf-8?B?MlBzNmt5K1JMVThEczRWc1pmbmZNTzZIRU53eTVHUlBRcTQxVUFWa1NpWkdP?=
+ =?utf-8?B?SHAyL0lieXF4UEdvT3FrOWxxSlN2V0NRMXFadTY4bnFWUCtMZktmcVhIRVVD?=
+ =?utf-8?B?WGtNZVd2dENETy9UcHN5L2k5ZWdQckJCcUFHaWdGQ2ViVG9Xamh4dytSUFRB?=
+ =?utf-8?B?WWZYWHBwU1lnbDhRSHpWTFRac0J6Wk1sMlh3bjF0a2tkN0JldCtMWHQzWHFG?=
+ =?utf-8?B?VTJ1R3NkQW1SNW1vSVpxdjZkZms0L1U4VWNCVW44QVlKOHN5K0t5d0h3WVpX?=
+ =?utf-8?B?dEJRWjFRODdrK1NEckNubGdmRFBuMVFneERpTjdMZ1RuTjZ4T3I2M1Z0c3d2?=
+ =?utf-8?B?ZStoc1hQL3VXRHFWSGFYNWlGTVFBT2FvSDlJUmxJWXNTY2lrdC9rN0I2OU10?=
+ =?utf-8?B?aHFlaHQ4ajY3eG1xYlY1V1B6N2h3blhVS3NQNHl0aGtucXpLdVVRVU9kaGcz?=
+ =?utf-8?B?blRWT0VNOEQxK2tVcHpHQ1lPMnBLeUZ2UEpBcFUzdXNXZmpNTi9SUHZ6KytO?=
+ =?utf-8?B?RTdsVkRhWXJQcHdkS3VlLzRwaERUVzQ3SmZ6TmhRWmRLWU5wZHB1NU1IdHJt?=
+ =?utf-8?B?dWE0M3B5TVVKZk5EWXR2dFlrelQwT2dtaVpmZUJPTUdPVzdLNnc2a0svb3Er?=
+ =?utf-8?B?VXVyNDRvc1B5WWpYU0pWZVU0Tmt0d1o0bzlNNk45bzcyZ1ZWRVRWdjlHYmRH?=
+ =?utf-8?B?bU1UanhJeVIvNW1MZmd3cWNVOHBZNnJmalNDUkJnNUJEMnQ4Zkd4MVpEcVR3?=
+ =?utf-8?B?Nm9yTVpCRlBjeWFUbnBWM0svOWQ4WGhBU3gvRUJRVlUyYUN1UFRkZDdPTmdh?=
+ =?utf-8?B?VktnZ2lnK3dxc2pQV3FXRno2eTliU01IUElKWnZVbzlHZjBHaGpVOVJNSXRw?=
+ =?utf-8?B?Z05xMEZiMW9LOFFnMVB0RDl6eS9yS1ltYnIvb3JEVHpqNzU2ekdWQWIrZG9a?=
+ =?utf-8?B?UG90MkNteFNPQ3VvRXdRelBPNU5qYzRqQ052RG11UmY2blU5Nkh0eGM4dW5W?=
+ =?utf-8?B?cjBqekl6bW5SSlZuYUZsSEFBb05kMzRJMTJlL3RaUlVJYXB5QU9QVmsvUjVQ?=
+ =?utf-8?B?THFLMDVENHhWY0gzSEZkNGU5b1JNMmpZWmY1eWlRc3U5MXZHMGFjMndydU9L?=
+ =?utf-8?B?TFlNZk0yaWZST01BWklISDhNWFVhQWFXWU5tVXR0azVwdHd4M2k4OGhzM3Jv?=
+ =?utf-8?B?Q2xxUDU4SUFYL2tRODRsVTcvYjcxeEFvNWsrRE1DY3ZGemozTmFQRmp2Yld5?=
+ =?utf-8?B?TTgwYlpaTnJIc0JrUE0yZ293Tjc4MGdpWjlqV3B5Tkl2ZW1SbVRyNUQvMlVp?=
+ =?utf-8?Q?Zw5JqQzMOBjugqBGA1Sf+J4=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db064acc-b4eb-424b-d980-08db45f62b44
+X-MS-Exchange-CrossTenant-AuthSource: BL3PR01MB7027.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR03MB5197.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcc25c49-502d-4867-9768-08db45d8e411
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Apr 2023 22:03:24.4549
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 01:32:59.5284
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jvTKlgisYQe/pvN72ZEfhjuCvGHyH1MS6scwF8rZfszaRRjuIBBelFufuSbJj5GbtyHX0C+FxCkP0zqNec7/oYBdIW2RFafBHftx0UbJKwE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB5342
-X-Proofpoint-GUID: jP8rP53CXuxN0dQlDV_QaiceIT5GM1Qm
-X-Proofpoint-ORIG-GUID: jP8rP53CXuxN0dQlDV_QaiceIT5GM1Qm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_08,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 suspectscore=0
- adultscore=0 bulkscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
- spamscore=0 mlxlogscore=740 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304250197
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H9ZG9n7YfYDg7dLvFYXJ2aNaLMRa/NAad/4ZTxfK3BEZ+jJ2kGvltOl4YJ4P6iQNM5r79d+wrr9osvf3w31GvFZwvnU+xFJO9On2W1yG0q0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB3958
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gTW9uLCAyNCBBcHIgMjAyMywgTGVlIEpvbmVzIHdyb3RlOg0KPg0KPk9uIFN1biwgMjMgQXBy
-IDIwMjMsIEFyc2xhbmJlbnplciwgWmV5bmVwIHdyb3RlOg0KPg0KPj4gT24gVGh1LCAzMCBNYXIg
-MjAyMywgTGVlIEpvbmVzIHdyb3RlOg0KPj4gDQo+PiA+T24gV2VkLCAyMiBNYXIgMjAyMywgWmV5
-bmVwIEFyc2xhbmJlbnplciB3cm90ZToNCj4+ID4NCj4+ID4+IE1GRCBkcml2ZXIgZm9yIE1BWDc3
-NjQzL01BWDc3NjU0L01BWDc3NjU4L01BWDc3NjU5IHRvIGVuYWJsZSBpdHMgDQo+PiA+PiBzdWIN
-Cj4+ID4NCj4+ID5QbGVhc2UgZHJvcCBhbGwgcmVmZXJlbmNlcyB0byAnTUZEJy4NCj4+ID4NCj4+
-ID5XaGF0IGFyZSB0aGVzZSBkZXZpY2VzLCByZWFsbHk/ICBJIHN1c3BlY3QgdGhleSBhcmUgUE1J
-Q3M/DQo+PiA+DQo+PiA+PiBkZXZpY2VzLg0KPj4gPj4NCj4+ID4+IFRoZSBNQVg3NzY0MyBpcyBh
-IG11bHRpLWZ1bmN0aW9uIGRldmljZXMuIEl0IGluY2x1ZGVzIHJlZ3VsYXRvci4NCj4+ID4+DQo+
-PiA+PiBUaGUgTUFYNzc2NTQgaXMgYSBtdWx0aS1mdW5jdGlvbiBkZXZpY2VzLiBJdCBpbmNsdWRl
-cyByZWd1bGF0b3IgYW5kIA0KPj4gPj4gY2hhcmdlci4NCj4+ID4+DQo+PiA+PiBUaGUgTUFYNzc2
-NTggaXMgYSBtdWx0aS1mdW5jdGlvbiBkZXZpY2VzLiBJdCBpbmNsdWRlcyByZWd1bGF0b3IsIA0K
-Pj4gPj4gY2hhcmdlciBhbmQgYmF0dGVyeS4NCj4+ID4+DQo+PiA+PiBUaGUgTUFYNzc2NTkgaXMg
-YSBtdWx0aS1mdW5jdGlvbiBkZXZpY2VzLiBJdCBpbmNsdWRlcyByZWd1bGF0b3IgYW5kIA0KPj4g
-Pj4gY2hhcmdlci4NCj4+ID4+DQo+PiA+PiBTaWduZWQtb2ZmLWJ5OiBOdXJldHRpbiBCb2x1Y3Ug
-PE51cmV0dGluLkJvbHVjdUBhbmFsb2cuY29tPg0KPj4gPj4gU2lnbmVkLW9mZi1ieTogWmV5bmVw
-IEFyc2xhbmJlbnplciA8WmV5bmVwLkFyc2xhbmJlbnplckBhbmFsb2cuY29tPg0KPj4gPj4gLS0t
-DQo+PiA+PiAgZHJpdmVycy9tZmQvS2NvbmZpZyAgICAgICAgICB8ICAxNSArKw0KPj4gPj4gIGRy
-aXZlcnMvbWZkL01ha2VmaWxlICAgICAgICAgfCAgIDEgKw0KPj4gPj4gIGRyaXZlcnMvbWZkL21h
-eDc3NjU4LmMgICAgICAgfCA0NDggKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysN
-Cj4+ID4+ICBpbmNsdWRlL2xpbnV4L21mZC9tYXg3NzY1OC5oIHwgIDg4ICsrKysrKysNCj4+ID4+
-ICA0IGZpbGVzIGNoYW5nZWQsIDU1MiBpbnNlcnRpb25zKCspICBjcmVhdGUgbW9kZSAxMDA2NDQg
-DQo+PiA+PiBkcml2ZXJzL21mZC9tYXg3NzY1OC5jICBjcmVhdGUgbW9kZSAxMDA2NDQgDQo+PiA+
-PiBpbmNsdWRlL2xpbnV4L21mZC9tYXg3NzY1OC5oDQo+PiA+Pg0KPj4gPj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvbWZkL0tjb25maWcgYi9kcml2ZXJzL21mZC9LY29uZmlnIGluZGV4DQo+PiA+PiA4
-YjkzODU2ZGU0MzIuLjdiNGJlN2ZiODY2MiAxMDA2NDQNCj4+ID4+IC0tLSBhL2RyaXZlcnMvbWZk
-L0tjb25maWcNCj4+ID4+ICsrKyBiL2RyaXZlcnMvbWZkL0tjb25maWcNCj4+ID4+IEBAIC04MjEs
-NiArODIxLDIxIEBAIGNvbmZpZyBNRkRfTUFYNzc2NTANCj4+ID4+ICAJICB0aGUgZm9sbG93aW5n
-IGZ1bmN0aW9uYWxpdGllcyBvZiB0aGUgZGV2aWNlOiBHUElPLCByZWd1bGF0b3IsDQo+PiA+PiAg
-CSAgY2hhcmdlciwgTEVELCBvbmtleS4NCj4+ID4+DQo+PiA+PiArY29uZmlnIE1GRF9NQVg3NzY1
-OA0KPj4gPj4gKwl0cmlzdGF0ZSAiQW5hbG9nIERldmljZXMgTUFYNzc2NDMvTUFYNzc2NTQvTUFY
-Nzc2NTgvTUFYNzc2NTkgUE1JQyBTdXBwb3J0Ig0KPj4gPj4gKwlkZXBlbmRzIG9uIEkyQw0KPj4g
-Pj4gKwlkZXBlbmRzIG9uIE9GDQo+PiA+PiArCXNlbGVjdCBNRkRfQ09SRQ0KPj4gPj4gKwlzZWxl
-Y3QgUkVHTUFQX0kyQw0KPj4gPj4gKwlzZWxlY3QgUkVHTUFQX0lSUQ0KPj4gPj4gKwloZWxwDQo+
-PiA+PiArCSAgU2F5IFkgaGVyZSB0byBhZGQgc3VwcG9ydCBmb3IgQW5hbG9nIERldmljZXMNCj4+
-ID4+ICsJICBNQVg3NzY0My9NQVg3NzY1NC9NQVg3NzY1OC9NQVg3NzY1OSBQb3dlciBNYW5hZ2Vt
-ZW50IElDLg0KPj4gPg0KPj4gPiJNQVg3NzZ4eCBzZXJpZXMiPw0KPj4gDQo+PiBBcyBJIHJlYWxp
-emVkIGxhdGVyLCBtYXg3NzYyMCwgbWF4Nzc2NTAsIG1heDc3Njg2LCBhbmQgbWF4Nzc2OTMgZHJp
-dmVycyB3ZXJlIG1lcmdlZCB0byBMaW51eCBiZWZvcmUgb3VyIHBhdGNoLiBUaGV5IGFyZSBhbHNv
-IFBNSUMgZGV2aWNlcyBhbmQgb3VyIHBhdGNoIGRvZXMgbm90IGNvdmVyIHRoZW0uIFRoZXJlZm9y
-ZSwgSSB0aGluayBpdCB3b3VsZCBub3QgYmUgYXBwcm9wcmlhdGUgdG8gdXNlIE1BWDc3Nnh4Lg0K
-Pg0KPlBlcmhhcHMgeW91IGNhbiBjb21lIHVwIHdpdGggc29tZXRoaW5nIGEgbGl0dGxlIG1vcmUg
-c2NhbGFibGUgdGhlbi4NCj4NCj5XaGF0IGlmIHlvdSBhZGRlZCBzdXBwb3J0IGZvciBhbm90aGVy
-IDEwIGRldmljZXM/DQo+DQpGb3Igbm93LCB3ZSBoYXZlIG5vIHBsYW5zIHRvIGFkZCBhbnkgbmV3
-IGRldmljZSBzdXBwb3J0IHRvIHRoaXMgZHJpdmVyLiBXZSBuYW1lZCB0aGUgZHJpdmVyIG1heDc3
-NjU4IGJlY2F1c2UgaXQgaGFzIHRoZSBtb3N0IGluY2x1c2l2ZSBmZWF0dXJlIGFtb25nIHRoZSBz
-dXBwb3J0ZWQgZGV2aWNlcy4gV2UgY2FuIHNob3J0ZW4gaXQgdG8gTUFYNzc2NDMvNTQvNTgvNTkg
-b3IganVzdCB0eXBlIG1heDc3NjU4IGluIEtjb25maWcgYW5kIHNwZWNpZnkgb3RoZXIgc3VwcG9y
-dGVkIGRldmljZXMgaW4gdGhlIGRldmljZSB0cmVlLiBXb3VsZCBvbmUgb2YgdGhlc2UgYmUgYSBt
-b3JlIHN1aXRhYmxlIHNvbHV0aW9uPw0KDQpCZXN0IHJlZ2FyZHMsDQpaZXluZXANCg==
+
+
+On 4/24/23 4:44 AM, Ionela Voinescu wrote:
+> Hey,
+>
+> On Thursday 20 Apr 2023 at 13:49:24 (-0700), Yang Shi wrote:
+>> On 4/20/23 9:01 AM, Pierre Gondois wrote:
+>>>>> You say that the cause of this is a congestion in the interconnect. I
+>>>>> don't
+>>>>> see a way to check that right now.
+>>>>> However your trace is on the CPU0, so maybe all the other cores were
+>>>>> shutdown
+>>>>> in your test. If this is the case, do you think a congestion could
+>>>>> happen with
+>>>>> only one CPU ?
+>>>> No, other CPUs were not shut down in my test. I just ran "yes" on all
+>>>> cores except CPU 0, then ran the reading freq script. Since all other
+>>>> cores are busy, so the script should be always running on CPU 0.
+>>>>
+>>>> Since the counters, memory and other devices are on the interconnect, so
+>>>> the congestion may be caused by plenty of factors IIUC.
+>>> +Ionela
+>>>
+>>> Ionela pointed me to the following patch-set, which seems realated:
+>>> https://lore.kernel.org/all/20230418113459.12860-5-sumitg@nvidia.com/
+>> Thanks for the information. I think we do have the similar syndrome. But I'm
+>> not sure how their counters are implemented, we may not have similar root
+>> cause.
+> Yes, my bad, I did not get the chance to read this full thread before
+> talking with Pierre. In your case you have AMUs accessed via MMIO and in that
+> case they are accessed though FFH (IPIs and system registers). The root
+> cause is indeed different.
+
+Yeah, but it seems like using larger delay could mitigate both issues.
+
+>>> One thing that we didn't check I believe is and that Ionela pointed out
+>>> is that we don't know whether we are accessing the present CPU or a
+>>> remote
+>>> CPU'AMUs. In the latter case there would be IPIs and possible delays in
+>>> waking up/accessing the remote CPU).
+>>>
+>>>>> Just 2 other comments:
+>>>>> a-
+>>>>> It might be interesting to change the order in which cpc registers are
+>>>>> read
+>>>>> just to see if it has an impact, but even if it has, I m not sure how
+>>>>> this
+>>>>> could be exploitable.
+>>>>> Just in case, I mean doing that, but I think that b. might be better
+>>>>> to try.
+>>>>>
+>>>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>>>> index c51d3ccb4cca..479b55006020 100644
+>>>>> --- a/drivers/acpi/cppc_acpi.c
+>>>>> +++ b/drivers/acpi/cppc_acpi.c
+>>>>> @@ -1350,8 +1350,8 @@ int cppc_get_perf_ctrs(int cpunum, struct
+>>>>> cppc_perf_fb_ctrs *perf_fb_ctrs)
+>>>>>                   }
+>>>>>           }
+>>>>>
+>>>>> -       cpc_read(cpunum, delivered_reg, &delivered);
+>>>>>           cpc_read(cpunum, reference_reg, &reference);
+>>>>> +       cpc_read(cpunum, delivered_reg, &delivered);
+>>>>>           cpc_read(cpunum, ref_perf_reg, &ref_perf);
+>>>>>
+>>>>>           /*
+>>>>>
+>>>>> b-
+>>>>> In the trace that you shared, the cpc_read() calls in the fist
+>>>>> cppc_get_perf_ctrs() calls seem to always take a bit more time than in
+>>>>> the
+>>>>> second cppc_get_perf_ctrs() call.
+>>>>> Would it be possible to collect traces similar as above with 3 or 4
+>>>>> calls to
+>>>>> cppc_get_perf_ctrs() instead of 2 ? It would allow to check whether in
+>>>>> the first
+>>>>> call, accessing the cpc registers takes more time than in the
+>>>>> following calls,
+>>>>> due to cache misses or other reasons.
+>>>> Cache miss? The counters should be not cached and reading the counters
+>>>> should not hit cache IIUC.
+>>> Yes you are correct, what I said is copmletely wrong.
+>>>
+>>>>> Ideally statistics on the result would be the best, or if you have a
+>>>>> trace.dat
+>>>>> to share containing a trace with multiple
+>>>>> cppc_cpufreq_get_rate() calls.
+>>>> Tried option b, I managed to get histogram:
+>>>>
+>>>> @hist_first_ns[cat]:
+>>>> [4K, 8K)          112321
+>>>> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+>>>> [8K, 16K)            212
+>>>> |                                                    |
+>>>> [16K, 32K)            25
+>>>> |                                                    |
+>>>> [32K, 64K)            59
+>>>> |                                                    |
+>>>> [64K, 128K)            6
+>>>> |                                                    |
+>>>> [128K, 256K)           9
+>>>> |                                                    |
+>>>>
+>>>> @hist_second_ns[cat]:
+>>>> [2K, 4K)          112590
+>>>> |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+>>>> [4K, 8K)               4
+>>>> |                                                    |
+>>>> [8K, 16K)              0
+>>>> |                                                    |
+>>>> [16K, 32K)            15
+>>>> |                                                    |
+>>>> [32K, 64K)            18
+>>>> |                                                    |
+>>>> [64K, 128K)            1
+>>>> |                                                    |
+>>>> [128K, 256K)           4
+>>>> |                                                    |
+>>>>
+>>>> The "first" means the first cppc_get_perf_ctrs() call. But the bpftrace
+>>>> script can't tell the second, the third and the fourth, so all them are
+>>>> shown as "second". Anyway it seems fine. We can tell the first read took
+>>>> longer than the later ones for the most time.
+>>>>
+>>>> And a typical func_graph trace shows:
+>>>>
+>>>> # tracer: function_graph
+>>>> #
+>>>> #     TIME        CPU  DURATION                  FUNCTION CALLS
+>>>> #      |          |     |   |                     |   |   | |
+>>>>     4447.171333 |     0)               |  cppc_cpufreq_get_rate
+>>>> [cppc_cpufreq]() {
+>>>>     4447.171334 |     0)               |    cpufreq_cpu_get() {
+>>>>     4447.171334 |     0)   1.060 us    | _raw_read_lock_irqsave();
+>>>>     4447.171336 |     0)   0.560 us    | _raw_read_unlock_irqrestore();
+>>>>     4447.171337 |     0)   3.480 us    | }
+>>>>     4447.171338 |     0)   0.400 us    | cpufreq_cpu_put();
+>>>>     4447.171338 |     0)               |    cppc_get_perf_ctrs() {
+>>>>     4447.171339 |     0)   0.720 us    | cpc_read.isra.0();
+>>>>     4447.171341 |     0)   0.700 us    | cpc_read.isra.0();
+>>>>     4447.171342 |     0)   0.380 us    | cpc_read.isra.0();
+>>>>     4447.171342 |     0)   0.600 us    | cpc_read.isra.0();
+>>>>     4447.171343 |     0)   4.900 us    | }
+>>>>     4447.171344 |     0)               |    __delay() {
+>>>>     4447.171344 |     0)   0.540 us    | arch_timer_evtstrm_available();
+>>>>     4447.171346 |     0)   2.420 us    | }
+>>>>     4447.171347 |     0)               |    cppc_get_perf_ctrs() {
+>>>>     4447.171347 |     0)   0.540 us    | cpc_read.isra.0();
+>>>>     4447.171348 |     0)   0.520 us    | cpc_read.isra.0();
+>>>>     4447.171349 |     0)   0.400 us    | cpc_read.isra.0();
+>>>>     4447.171350 |     0)   0.440 us    | cpc_read.isra.0();
+>>>>     4447.171350 |     0)   3.660 us    | }
+>>>>     4447.171351 |     0)               |    __delay() {
+>>>>     4447.171351 |     0)   0.400 us    | arch_timer_evtstrm_available();
+>>>>     4447.171353 |     0)   2.400 us    | }
+>>>>     4447.171353 |     0)               |    cppc_get_perf_ctrs() {
+>>>>     4447.171354 |     0)   0.540 us    | cpc_read.isra.0();
+>>>>     4447.171355 |     0)   0.540 us    | cpc_read.isra.0();
+>>>>     4447.171356 |     0)   0.380 us    | cpc_read.isra.0();
+>>>>     4447.171356 |     0)   0.420 us    | cpc_read.isra.0();
+>>>>     4447.171357 |     0)   3.640 us    | }
+>>>>     4447.171357 |     0)               |    __delay() {
+>>>>     4447.171358 |     0)   0.380 us    | arch_timer_evtstrm_available();
+>>>>     4447.171360 |     0)   2.380 us    |    }
+>>>>     4447.171360 |     0)               |    cppc_get_perf_ctrs() {
+>>>>     4447.171361 |     0)   0.520 us    |      cpc_read.isra.0();
+>>>>     4447.171361 |     0)   0.520 us    |      cpc_read.isra.0();
+>>>>     4447.171362 |     0)   0.400 us    |      cpc_read.isra.0();
+>>>>     4447.171363 |     0)   0.440 us    |      cpc_read.isra.0();
+>>>>     4447.171364 |     0)   3.640 us    |    }
+>>>>     4447.171364 |     0)   0.520 us    | cppc_cpufreq_perf_to_khz
+>>>> [cppc_cpufreq]();
+>>>>     4447.171365 |     0) + 34.240 us   |  }
+>>>>
+>>>> It also shows the first reading typically took longer than the later
+>>>> ones. The second, the third and the fourth actually took almost same
+>>>> time.
+>>>>
+> Do you happen to know if this is still the case if the delay in between
+> the two cppc_get_perf_ctrs() calls is larger (a few ms)?
+
+Do you mean whether the first reading takes longer if larger delay is 
+used? If so, then yes. It should be not related to the delay.
+
+>>>> I also tried to read perf_fb_ctrs_t0 twice (so total 3 reads, 2 for t0,
+>>>> 1 for t1, 2us delay between each read), but I didn't see noticeable
+>>>> improvement. 4 reads (2 for t0, 2 for t1) does show some noticeable
+>>>> improvement.
+>>>>
+> I'm not sure I understand this. t0, t1? Can you expand on the sequence
+> of reads here? Are you reading the same counter multiple times instead
+> of reading all counters multiple times?
+
+t0 means perf_fb_ctrs_t0, t1 means perf_fb_ctrs_t1. The above experiment 
+actually does 4 reads (2 for perf_fb_ctrs_t0, 2 for perf_fb_ctrs_t1), 
+but just use the 2nd (perf_fb_ctrs_t0) result and the 4th 
+(perf_fb_ctrs_t1) result to do the calculation.
+
+>>> Thanks for the new data.
+>>>
+>>>>> Example of code where we do 4 calls to cppc_get_perf_ctrs():
+>>>>>
+>>>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c
+>>>>> b/drivers/cpufreq/cppc_cpufreq.c
+>>>>> index 022e3555407c..6370f2f0bdad 100644
+>>>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>>>> @@ -853,6 +853,20 @@ static unsigned int
+>>>>> cppc_cpufreq_get_rate(unsigned int cpu)
+>>>>>
+>>>>>           udelay(2); /* 2usec delay between sampling */
+>>>>>
+>>>>> +       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>>>> +       if (ret)
+>>>>> +               return ret;
+>>>>> +
+>>>>> +       udelay(2); /* 2usec delay between sampling */
+>>>>> +
+>>>>> +       /* Do a third call. */
+>>>>> +       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>>>> +       if (ret)
+>>>>> +               return ret;
+>>>>> +
+>>>>> +       udelay(2); /* 2usec delay between sampling */
+>>>>> +
+>>>>> +       /* Do a fourth call. */
+>>>>>           ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>>>>           if (ret)
+>>>>>                   return ret;
+>>>>>
+>>>>>> The above trace data shows some cpc reading took a little bit longer
+>>>>>> than usual. I suspected it was caused by interconnect congestion.
+>>>>>>
+>>>>>>
+>>>>>> So it looks like IRQ is the major contributing factor of high error
+>>>>>> (4xxxxxx KHz), interconnect congestion is the major
+>>>>>> contributing factor
+>>>>>> of low error (3xxxxxx KHz).
+>>>>>>
+>>>>>> So I did the below test:
+>>>>>> 1. Disable IRQ: The high errors were gone (> 3700000KHz),
+>>>>>> but low errors
+>>>>>> were still seen.
+>>>>>> 2.10us delay: The high errors were still seen.
+>>>>>> 3. Disable IRQ + 10us delay: all the errors were gone.
+>>>>>>
+>>>>>> I think the test result also supports the tracing data.
+>>>>>>
+>>>>>>
+>>>>>> I also got some confusion about calling
+>>>>>> cppc_cpufreq_get_rate() with irq
+>>>>>> disabled. Rafael thought 10ms delay is too long because the
+>>>>>> function may
+>>>>>> be called with irq disabled. But a deeper look at the
+>>>>>> function shows it
+>>>>>> should *NOT* be called with irq disabled at all.
+>>>>>>
+>>>>>> First, if pcc channel is used, cpc reading may take over 100ms, it is
+>>>>>> way larger the proposed 10ms delay.
+>>>>>> Second, reading from cpc channel needs to take a semaphore, so it may
+>>>>>> sleep. But sleep with IRQ disabled is not allowed.
+>>>>> Yes right, however the semaphore is not taken in between the
+>>>>> sequence of
+>>>>> cpc_read() calls in cppc_get_perf_ctrs(). So maybe the change below
+>>>>> should
+>>>>> be acceptable:
+>>>> Yeah, we should be able to find a smaller irq disable section.
+>>>>
+>>>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>>>> index c51d3ccb4cca..105a7e2ffffa 100644
+>>>>> --- a/drivers/acpi/cppc_acpi.c
+>>>>> +++ b/drivers/acpi/cppc_acpi.c
+>>>>> @@ -1315,6 +1315,7 @@ int cppc_get_perf_ctrs(int cpunum, struct
+>>>>> cppc_perf_fb_ctrs *perf_fb_ctrs)
+>>>>>           struct cppc_pcc_data *pcc_ss_data = NULL;
+>>>>>           u64 delivered, reference, ref_perf, ctr_wrap_time;
+>>>>>           int ret = 0, regs_in_pcc = 0;
+>>>>> +       unsigned long flags;
+>>>>>
+>>>>>           if (!cpc_desc) {
+>>>>>                   pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+>>>>> @@ -1350,10 +1351,14 @@ int cppc_get_perf_ctrs(int cpunum, struct
+>>>>> cppc_perf_fb_ctrs *perf_fb_ctrs)
+>>>>>                   }
+>>>>>           }
+>>>>>
+>>>>> +       local_irq_save(flags);
+>>>>> +
+>>>>>           cpc_read(cpunum, delivered_reg, &delivered);
+>>>>>           cpc_read(cpunum, reference_reg, &reference);
+>>>>>           cpc_read(cpunum, ref_perf_reg, &ref_perf);
+>>>>>
+>>>>> +       local_irq_restore(flags);
+>>>>> +
+>>>> cpc_read_ffh() would return -EPERM if irq is disabled.
+>>>>
+>>>> So, the irq disabling must happen for mmio only in cpc_read(), for
+>>>> example:
+>>> I thought the issue was that irqs could happen in between cpc_read()
+>>> functions,
+>>> the patch below would not cover it. If the frequency is more accurate
+>>> with this patch, I think I don't understand something.
+>> Yeah, you are correct. The irq disabling window has to cover all the
+>> cpc_read(). I didn't test with this patch. My test was done conceptually
+>> with:
+>>
+>> disable irq
+>> cppc_get_perf_ctrs(t0)
+>> udelay(2)
+>> cppc_get_perf_ctrs(t1)
+>> enable irq
+>>
+>> But this will break cpc_read_ffh().
+> Can you not disable IRQs in cppc_get_perf_ctrs() only if the registers
+> are CPC_IN_SYSTEM_MEMORY? Only spanning the reads of the delivered
+> register and the reference register, which should have minimal delay in
+> between?
+>
+> As in:
+>
+> if (CPC_IN_SYSTEM_MEMORY(delivered_reg) &&
+>      CPC_IN_SYSTEM_MEMORY(reference_reg))
+> 	...
+>
+> This will and should not affect FFH - the fix for that would have to be
+> different.
+
+It won't work, right? The problem is cppc_get_perf_ctrs() calls 
+cpc_read()s to read delivered and reference respectively, we just can 
+tell whether they are CPC_IN_SYSTEM_MEMORY in cpc_read() instead of in 
+cppc_get_perf_ctrs(). So the resulting code should conceptually look like:
+
+disable irq
+read delivered
+enable irq
+
+disable irq
+read reference
+enable irq
+
+But there still may be interrupts between the two reads. We actually want:
+
+disable irq
+read delivered
+read reference
+enable irq
+
+>>> (asking for more information)
+>>> Just to check, the core/perf counters are AMUs and the other CPPC
+>>> registers
+>>> are mmio right ? Is it possible to know the CPPC registers that are
+>>> implemented on your platform ?
+>> AFAIK, the perf counters are implemented by AMU and accessed via mmio, the
+>> other CPPC registers are implemented by PCC.
+>>
+> Usually there is an implementation defined rate of sync between the CPU
+> counters and the values available through the memory mapped interface.
+> Is it possible that some inaccuracies are introduced by that as well, in
+> case there is a sync in between the two counter (delivered and reference)
+> reads?
+
+AFAIK, the counter values are available through the memory mapped 
+interface immediately, there's no coarser rate of synchronization.
+
+>
+> Hope it helps,
+> Ionela.
+>
+>>> Also is it possible which platform you are using ?
+>> Ampere One
+>>
+>>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>>> index c51d3ccb4cca..f3c92d844074 100644
+>>>> --- a/drivers/acpi/cppc_acpi.c
+>>>> +++ b/drivers/acpi/cppc_acpi.c
+>>>> @@ -982,6 +982,7 @@ static int cpc_read(int cpu, struct
+>>>> cpc_register_resource *reg_res, u64 *val)
+>>>>            void __iomem *vaddr = NULL;
+>>>>            int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+>>>>            struct cpc_reg *reg = &reg_res->cpc_entry.reg;
+>>>> +       unsigned long flags;
+>>>>
+>>>>            if (reg_res->type == ACPI_TYPE_INTEGER) {
+>>>>                    *val = reg_res->cpc_entry.int_value;
+>>>> @@ -1015,6 +1016,7 @@ static int cpc_read(int cpu, struct
+>>>> cpc_register_resource *reg_res, u64 *val)
+>>>>                    return
+>>>> acpi_os_read_memory((acpi_physical_address)reg->address,
+>>>>                                    val, reg->bit_width);
+>>>>
+>>>> +       local_irq_save(flags);
+>>>>            switch (reg->bit_width) {
+>>>>            case 8:
+>>>>                    *val = readb_relaxed(vaddr);
+>>>> @@ -1029,10 +1031,12 @@ static int cpc_read(int cpu, struct
+>>>> cpc_register_resource *reg_res, u64 *val)
+>>>>                    *val = readq_relaxed(vaddr);
+>>>>                    break;
+>>>>            default:
+>>>> +               local_irq_restore(flags);
+>>>>                    pr_debug("Error: Cannot read %u bit width from PCC for
+>>>> ss: %d\n",
+>>>>                             reg->bit_width, pcc_ss_id);
+>>>>                    return -EFAULT;
+>>>>            }
+>>>> +       local_irq_restore(flags);
+>>>>
+>>>>            return 0;
+>>>>     }
+>>>>
+>>>>>           /*
+>>>>>            * Per spec, if ctr_wrap_time optional register is
+>>>>> unsupported, then the
+>>>>>            * performance counters are assumed to never wrap during the
+>>>>> lifetime of
+>>>>>
+>>>>>> Third, if the counters are implemented by AMU, cpc_read_ffh() needs to
+>>>>>> send IPI so it requires IRQ enabled.
+>>>>> If I'm not mistaken, the CPU calling cpc_read_ffh() might have IRQs
+>>>>> disabled,
+>>>>> it should not prevent it to send IPIs no ?
+>>>> It can't work with irq disabled. The comment in counters_read_on_cpu()
+>>>> says "Abort call on counterless CPU or when interrupts are disabled -
+>>>> can lead to deadlock in smp sync call."
+>>>>
+>>>>
+>>>> And it just returns -EPERM and raise a warning if irq is disabled.
+>>> Ok right,
+>>>
+>>> Regards,
+>>> Piere
+
