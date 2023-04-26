@@ -2,113 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99896EF801
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 17:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71AA6EF8A6
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 18:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241033AbjDZPxG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Apr 2023 11:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S233330AbjDZQqQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Apr 2023 12:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240511AbjDZPxF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 11:53:05 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2055.outbound.protection.outlook.com [40.107.93.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABCB6A66;
-        Wed, 26 Apr 2023 08:53:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ezm7lkAIAWk6k2KqZIXJi9MfQEDjMQhdmeCnZoMP1ko6efvr6uzbW/VqKgLtvo/YUFblovFqPRHJOsCsVg2hqCMe2tr2bQtFreVT8EzAPtUUSwLz/ch+rq2/2j2rFyW2nI5kFskBBGhZ/qe2Is1TiZr+8Qfn1RqznmA+LWqX44KzQZm7H2jR63U3Bd0SBsgkuy/MBJNJK5QfGa3KrYDbzucU04wRsYMGELg/enCXdQ3M9We2nkkVQDehbXG/GeBHJDmjzmNPKyvUKPA0j6l0PqvsHfR79P1ICEwX9ppUamNIMfocfpUSwEfkS7BufAQXnE5vb8ToiUjHt8qNa7ybcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VfQGorfHCp+/ehmc0DLMIsf8gl6tewCw2t3qxX2o5No=;
- b=GnlivIf5FEMKTrgKwSP5SoN/v0kb2CrbfglnRwzyhVhLuUyVs/ldSyd/ofEnWrmFYhehuDHFF1Ncr/7fOxLE6JfKJtk7SRCTm0CVP/sjAa/TvN0ZieLirv/7tpQB/MvgWOpc3sHpf4X+viWaYw7vfw4TMG8Aiz/94BtAW57jQrNZ/WpLPJ0rsfFj+c6vp5OlcahA9yiYvKDHKXQGO87PpEodlICzlHBN+rYlW8AeQPWtKaQR6zV84qcarX52PwEUBzUTU5T6MtLAWj2pzzyAC68oXtN9Bkzh6ZBnubhnnwFs/nOlfK9LFHWzK/JCRu+v04idnbdCbjhqGsMeGBltdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VfQGorfHCp+/ehmc0DLMIsf8gl6tewCw2t3qxX2o5No=;
- b=di8RsTSLAbn9MRi1wD48/1JgWCO2J0jw9iazWjEg9J9xSdGMax0CJ13fw6kvzu90tVK6/TiuLyTFFRvU/oxhMpyUYQ/ZHGbnikiH+Zl1rac8VHd2B+Ryxb8VQbHwviakQtfDgEQdxId+RdNIdRX3KpgOVsDA414Ewq9KelvPSHXXe3hvrDCfB6KQJ3EamDxaURVX5flBBrJZkIVvKdm9rflu8eTlm4ByeecsaLxUbrlCPuMaSlOCogOXXhqesvcZyeJYbhhzvMuFXVNulKjj1IuvSdBIdEsNZS8rvj04akjhRIvtUvWtbWDJ6b+jroRrSIExor8WreI+SygeDaPSGg==
-Received: from DS7PR03CA0138.namprd03.prod.outlook.com (2603:10b6:5:3b4::23)
- by MW4PR12MB7431.namprd12.prod.outlook.com (2603:10b6:303:225::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Wed, 26 Apr
- 2023 15:52:59 +0000
-Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b4:cafe::e) by DS7PR03CA0138.outlook.office365.com
- (2603:10b6:5:3b4::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21 via Frontend
- Transport; Wed, 26 Apr 2023 15:52:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.21 via Frontend Transport; Wed, 26 Apr 2023 15:52:58 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 26 Apr 2023
- 08:52:49 -0700
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 26 Apr
- 2023 08:52:42 -0700
-Message-ID: <0d0ce727-d801-1c63-253d-815f324fac24@nvidia.com>
-Date:   Wed, 26 Apr 2023 21:22:39 +0530
+        with ESMTP id S233361AbjDZQqP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 12:46:15 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFACC7D9B;
+        Wed, 26 Apr 2023 09:46:08 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 3ab12c2c96f2f176; Wed, 26 Apr 2023 18:46:06 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 05D5269D34E;
+        Wed, 26 Apr 2023 18:46:06 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <len.brown@intel.com>
+Subject: [PATCH v1] thermal: intel: menlow: Get rid of this driver
+Date:   Wed, 26 Apr 2023 18:46:05 +0200
+Message-ID: <2704255.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Patch 6/6] cpufreq: CPPC: use wq to read amu counters on target
- cpu
-Content-Language: en-US
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-CC:     <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <mark.rutland@arm.com>, <sudeep.holla@arm.com>,
-        <lpieralisi@kernel.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
-        <sdonthineni@nvidia.com>, <sanjayc@nvidia.com>,
-        <ksitaraman@nvidia.com>, <bbasu@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-References: <20230418113459.12860-1-sumitg@nvidia.com>
- <20230418113459.12860-7-sumitg@nvidia.com> <ZEY+kENTxCvHlhvK@arm.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <ZEY+kENTxCvHlhvK@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT003:EE_|MW4PR12MB7431:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7633815-4c6c-474d-cfc5-08db466e4f26
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yO1vBOZy7s9/1fm5o29yEJCV0ONu/6/d52LuD8InuP01gF5NqspnbZlr91GWL+crREmxHZjAwOmGAyN6106mngBhW0UXtT14hWMItrco8pLYoP3GAJULqyT2EnwSE8yokzVTQg5Tx6MyR2vuKrEr9Y6jX8Suk6CFLdp7C1mhH5xIGAHTBVKaVZRfoGTLmG3Rr866Z7Cu/lndvHbMELihRCcEIFsYzxO/DObRSOn9gYDkaDyL26Ymsdy7Pb7RX3IOhPLqYS7Cz5HAhzK5KPc5NWy1ZVHDkaecgPpZ/lbttWa/aSdrCtsehgZsgZ30upCetu+VZLphI7PZyRIat9ZvmR1cnaenO3KSnShoXPrBgAAR5hHxRViqF0X9UvUCmicYhxcuvGoafbmejPySpIoQVhB1O5+4zLpdaKPsfVrkp+/9mS6zwYtAylGMmyCZUsTl7mDOaiVfnXiGqoqrKHLiKDGIxU/0WqHI8pNxLx8SjYvaZbDhK7aSaVno4SPOYMZDr/OlKGe9Ng2MmYxu2vm0OxWHla1vcClXd+582scR5ZM72zZQyRPa6KcET9qBsD0kAWAL82iYtWIW+NURCQ/07Gs7vfAp5aVdbUIV+bATn3IrpsIRDBNKuK/RT5lVVNrPjBPLv8f6D8z+VxZKm9g0lHntMyjs0nFB5Z1lujj9zUAmskDrO8XwWlZnDLce9Zd7U6hrCTW0a73SIyb9AxalLYNFyzKrQW1x6sqeXiTCaRGbr5WflJR9k9rkwTH0HxAVe0H74sXO/eJ32K6CySPxzpcsQ4BfwZAzr9hOkd3yNNXH62GIahRilXNX+9eb7DqQ
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(46966006)(36840700001)(40470700004)(53546011)(2906002)(7636003)(107886003)(6666004)(426003)(26005)(336012)(54906003)(316002)(2616005)(16576012)(34020700004)(16526019)(186003)(40460700003)(36860700001)(36756003)(31696002)(41300700001)(31686004)(966005)(47076005)(8936002)(82310400005)(478600001)(86362001)(70586007)(4326008)(6916009)(8676002)(356005)(70206006)(83380400001)(40480700001)(82740400003)(5660300002)(7416002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 15:52:58.9941
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7633815-4c6c-474d-cfc5-08db466e4f26
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7431
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfedugedguddtfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeelveehhfettdefuedvfeefteefjeejudffudfhtdegjeduvdeugfetveehieffieenucffohhmrghinheprghtthhrrdhnrghmvgenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhn
+ thgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,178 +52,577 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ionela,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thankyou for the inputs.
+According to my information, there are no active users of this driver in
+the field.
 
-On 24/04/23 14:02, Ionela Voinescu wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> Hi Sumit,
-> 
-> Thank you for the patches!
-> 
-> On Tuesday 18 Apr 2023 at 17:04:59 (+0530), Sumit Gupta wrote:
->> ARM cores which implement the Activity Monitor Unit (AMU)
->> use Functional Fixed Hardware (FFH) to map AMU counters to
->> Delivered_Counter and Reference_Counter registers. Each
->> sysreg is read separately with a smp_call_function_single
->> call. So, total four IPI's are used, one per register.
->> Due to this, the AMU's core counter and constant counter
->> sampling can happen at a non-consistent time interval if
->> an IPI is handled late. This results in unstable frequency
->> value from "cpuinfo_cur_req" node sometimes. To fix, queue
->> work on target CPU to read all counters synchronously in
->> sequence. This helps to remove the inter-IPI latency and
->> make sure that both the counters are sampled at a close
->> time interval.
->> Without this change we observed that the re-generated value
->> of CPU Frequency from AMU counters sometimes deviates by
->> ~25% as the counters are read at non-determenistic time.
->> Currently, kept the change specific to Tegra241. It can be
->> applied to other SoC's having AMU if same issue is observed.
->>
-> 
-> To be honest I never liked the need for IPIs but it was the most
-> generic solution I could find for an FFH implementation that does not
-> assume a dependency between different reads, which is usecase specific.
-> 
-> Also, for any kind of caching of the counters I'd have to introduce some
-> logic that would assume we'd always have two consecutive reads - one for
-> the cycle counter and one for the constant counter, and there should be no
-> update between them. And then there's the problem of potentially returning
-> the same values if there's no update between two sets of reads.
-> 
-> The only feasible idea based on caching would be to piggy back on the
-> frequency invariance engine (FIE) which computes a performance scale
-> factor on the tick which can be translated to frequency. But the
-> frequency obtained would be an average frequency for the past 4ms, which
-> can in turn be at up to 4ms old (or more, if the CPU was idle).
-> 
-> Would something like this work for you?
-> 
-> This could also help with a similar issue described at [1] - not an IPI
-> related issue, but an issue with similar symptoms.
-> 
-> [1] https://lore.kernel.org/lkml/20230328193846.8757-1-yang@os.amperecomputing.com/
-> 
-> Thanks,
-> Ionela.
-> 
+Moreover, it does some really questionable things and gets in the way of
+thermal core improvements, so drop it.
 
-I think yes that will help as it will increase the time period and also
-remove the IPI's ?
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/intel/Kconfig        |    9 
+ drivers/thermal/intel/Makefile       |    1 
+ drivers/thermal/intel/intel_menlow.c |  521 -----------------------------------
+ 3 files changed, 531 deletions(-)
 
-One thing I am not sure is whether there can be any impact when CPU is
-IDLE w.r.t. the delta between the frequency set and get from the counters.
+Index: linux-pm/drivers/thermal/intel/intel_menlow.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/intel_menlow.c
++++ /dev/null
+@@ -1,521 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- *  Intel menlow Driver for thermal management extension
+- *
+- *  Copyright (C) 2008 Intel Corp
+- *  Copyright (C) 2008 Sujith Thomas <sujith.thomas@intel.com>
+- *  Copyright (C) 2008 Zhang Rui <rui.zhang@intel.com>
+- *
+- *  This driver creates the sys I/F for programming the sensors.
+- *  It also implements the driver for intel menlow memory controller (hardware
+- *  id is INT0002) which makes use of the platform specific ACPI methods
+- *  to get/set bandwidth.
+- */
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/acpi.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/pci.h>
+-#include <linux/pm.h>
+-#include <linux/slab.h>
+-#include <linux/thermal.h>
+-#include <linux/types.h>
+-#include <linux/units.h>
+-
+-MODULE_AUTHOR("Thomas Sujith");
+-MODULE_AUTHOR("Zhang Rui");
+-MODULE_DESCRIPTION("Intel Menlow platform specific driver");
+-MODULE_LICENSE("GPL v2");
+-
+-/*
+- * Memory controller device control
+- */
+-
+-#define MEMORY_GET_BANDWIDTH "GTHS"
+-#define MEMORY_SET_BANDWIDTH "STHS"
+-#define MEMORY_ARG_CUR_BANDWIDTH 1
+-#define MEMORY_ARG_MAX_BANDWIDTH 0
+-
+-static void intel_menlow_unregister_sensor(void);
+-
+-/*
+- * GTHS returning 'n' would mean that [0,n-1] states are supported
+- * In that case max_cstate would be n-1
+- * GTHS returning '0' would mean that no bandwidth control states are supported
+- */
+-static int memory_get_max_bandwidth(struct thermal_cooling_device *cdev,
+-				    unsigned long *max_state)
+-{
+-	struct acpi_device *device = cdev->devdata;
+-	acpi_handle handle = device->handle;
+-	unsigned long long value;
+-	struct acpi_object_list arg_list;
+-	union acpi_object arg;
+-	acpi_status status = AE_OK;
+-
+-	arg_list.count = 1;
+-	arg_list.pointer = &arg;
+-	arg.type = ACPI_TYPE_INTEGER;
+-	arg.integer.value = MEMORY_ARG_MAX_BANDWIDTH;
+-	status = acpi_evaluate_integer(handle, MEMORY_GET_BANDWIDTH,
+-				       &arg_list, &value);
+-	if (ACPI_FAILURE(status))
+-		return -EFAULT;
+-
+-	if (!value)
+-		return -EINVAL;
+-
+-	*max_state = value - 1;
+-	return 0;
+-}
+-
+-static int memory_get_cur_bandwidth(struct thermal_cooling_device *cdev,
+-				    unsigned long *value)
+-{
+-	struct acpi_device *device = cdev->devdata;
+-	acpi_handle handle = device->handle;
+-	unsigned long long result;
+-	struct acpi_object_list arg_list;
+-	union acpi_object arg;
+-	acpi_status status = AE_OK;
+-
+-	arg_list.count = 1;
+-	arg_list.pointer = &arg;
+-	arg.type = ACPI_TYPE_INTEGER;
+-	arg.integer.value = MEMORY_ARG_CUR_BANDWIDTH;
+-	status = acpi_evaluate_integer(handle, MEMORY_GET_BANDWIDTH,
+-				       &arg_list, &result);
+-	if (ACPI_FAILURE(status))
+-		return -EFAULT;
+-
+-	*value = result;
+-	return 0;
+-}
+-
+-static int memory_set_cur_bandwidth(struct thermal_cooling_device *cdev,
+-				    unsigned long state)
+-{
+-	struct acpi_device *device = cdev->devdata;
+-	acpi_handle handle = device->handle;
+-	struct acpi_object_list arg_list;
+-	union acpi_object arg;
+-	acpi_status status;
+-	unsigned long long temp;
+-	unsigned long max_state;
+-
+-	if (memory_get_max_bandwidth(cdev, &max_state))
+-		return -EFAULT;
+-
+-	if (state > max_state)
+-		return -EINVAL;
+-
+-	arg_list.count = 1;
+-	arg_list.pointer = &arg;
+-	arg.type = ACPI_TYPE_INTEGER;
+-	arg.integer.value = state;
+-
+-	status =
+-	    acpi_evaluate_integer(handle, MEMORY_SET_BANDWIDTH, &arg_list,
+-				  &temp);
+-
+-	pr_info("Bandwidth value was %ld: status is %d\n", state, status);
+-	if (ACPI_FAILURE(status))
+-		return -EFAULT;
+-
+-	return 0;
+-}
+-
+-static const struct thermal_cooling_device_ops memory_cooling_ops = {
+-	.get_max_state = memory_get_max_bandwidth,
+-	.get_cur_state = memory_get_cur_bandwidth,
+-	.set_cur_state = memory_set_cur_bandwidth,
+-};
+-
+-/*
+- * Memory Device Management
+- */
+-static int intel_menlow_memory_add(struct acpi_device *device)
+-{
+-	int result = -ENODEV;
+-	struct thermal_cooling_device *cdev;
+-
+-	if (!device)
+-		return -EINVAL;
+-
+-	if (!acpi_has_method(device->handle, MEMORY_GET_BANDWIDTH))
+-		goto end;
+-
+-	if (!acpi_has_method(device->handle, MEMORY_SET_BANDWIDTH))
+-		goto end;
+-
+-	cdev = thermal_cooling_device_register("Memory controller", device,
+-					       &memory_cooling_ops);
+-	if (IS_ERR(cdev)) {
+-		result = PTR_ERR(cdev);
+-		goto end;
+-	}
+-
+-	device->driver_data = cdev;
+-	result = sysfs_create_link(&device->dev.kobj,
+-				&cdev->device.kobj, "thermal_cooling");
+-	if (result)
+-		goto unregister;
+-
+-	result = sysfs_create_link(&cdev->device.kobj,
+-				&device->dev.kobj, "device");
+-	if (result) {
+-		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+-		goto unregister;
+-	}
+-
+- end:
+-	return result;
+-
+- unregister:
+-	thermal_cooling_device_unregister(cdev);
+-	return result;
+-
+-}
+-
+-static void intel_menlow_memory_remove(struct acpi_device *device)
+-{
+-	struct thermal_cooling_device *cdev;
+-
+-	if (!device)
+-		return;
+-
+-	cdev = acpi_driver_data(device);
+-	if (!cdev)
+-		return;
+-
+-	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+-	sysfs_remove_link(&cdev->device.kobj, "device");
+-	thermal_cooling_device_unregister(cdev);
+-}
+-
+-static const struct acpi_device_id intel_menlow_memory_ids[] = {
+-	{"INT0002", 0},
+-	{"", 0},
+-};
+-
+-static struct acpi_driver intel_menlow_memory_driver = {
+-	.name = "intel_menlow_thermal_control",
+-	.ids = intel_menlow_memory_ids,
+-	.ops = {
+-		.add = intel_menlow_memory_add,
+-		.remove = intel_menlow_memory_remove,
+-		},
+-};
+-
+-/*
+- * Sensor control on menlow platform
+- */
+-
+-#define THERMAL_AUX0 0
+-#define THERMAL_AUX1 1
+-#define GET_AUX0 "GAX0"
+-#define GET_AUX1 "GAX1"
+-#define SET_AUX0 "SAX0"
+-#define SET_AUX1 "SAX1"
+-
+-struct intel_menlow_attribute {
+-	struct device_attribute attr;
+-	struct device *device;
+-	acpi_handle handle;
+-	struct list_head node;
+-};
+-
+-static LIST_HEAD(intel_menlow_attr_list);
+-static DEFINE_MUTEX(intel_menlow_attr_lock);
+-
+-/*
+- * sensor_get_auxtrip - get the current auxtrip value from sensor
+- * @handle: Object handle
+- * @index : GET_AUX1/GET_AUX0
+- * @value : The address will be fill by the value
+- */
+-static int sensor_get_auxtrip(acpi_handle handle, int index,
+-							unsigned long long *value)
+-{
+-	acpi_status status;
+-
+-	if ((index != 0 && index != 1) || !value)
+-		return -EINVAL;
+-
+-	status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
+-				       NULL, value);
+-	if (ACPI_FAILURE(status))
+-		return -EIO;
+-
+-	return 0;
+-}
+-
+-/*
+- * sensor_set_auxtrip - set the new auxtrip value to sensor
+- * @handle: Object handle
+- * @index : GET_AUX1/GET_AUX0
+- * @value : The value will be set
+- */
+-static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
+-{
+-	acpi_status status;
+-	union acpi_object arg = {
+-		ACPI_TYPE_INTEGER
+-	};
+-	struct acpi_object_list args = {
+-		1, &arg
+-	};
+-	unsigned long long temp;
+-
+-	if (index != 0 && index != 1)
+-		return -EINVAL;
+-
+-	status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
+-				       NULL, &temp);
+-	if (ACPI_FAILURE(status))
+-		return -EIO;
+-	if ((index && value < temp) || (!index && value > temp))
+-		return -EINVAL;
+-
+-	arg.integer.value = value;
+-	status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
+-				       &args, &temp);
+-	if (ACPI_FAILURE(status))
+-		return -EIO;
+-
+-	/* do we need to check the return value of SAX0/SAX1 ? */
+-
+-	return 0;
+-}
+-
+-#define to_intel_menlow_attr(_attr)	\
+-	container_of(_attr, struct intel_menlow_attribute, attr)
+-
+-static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
+-			char *buf, int idx)
+-{
+-	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
+-	unsigned long long value;
+-	int result;
+-
+-	result = sensor_get_auxtrip(attr->handle, idx, &value);
+-	if (result)
+-		return result;
+-
+-	return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
+-}
+-
+-static ssize_t aux0_show(struct device *dev,
+-			 struct device_attribute *dev_attr, char *buf)
+-{
+-	return aux_show(dev, dev_attr, buf, 0);
+-}
+-
+-static ssize_t aux1_show(struct device *dev,
+-			 struct device_attribute *dev_attr, char *buf)
+-{
+-	return aux_show(dev, dev_attr, buf, 1);
+-}
+-
+-static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
+-			 const char *buf, size_t count, int idx)
+-{
+-	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
+-	int value;
+-	int result;
+-
+-	/*Sanity check; should be a positive integer */
+-	if (!sscanf(buf, "%d", &value))
+-		return -EINVAL;
+-
+-	if (value < 0)
+-		return -EINVAL;
+-
+-	result = sensor_set_auxtrip(attr->handle, idx,
+-				    celsius_to_deci_kelvin(value));
+-	return result ? result : count;
+-}
+-
+-static ssize_t aux0_store(struct device *dev,
+-			  struct device_attribute *dev_attr,
+-			  const char *buf, size_t count)
+-{
+-	return aux_store(dev, dev_attr, buf, count, 0);
+-}
+-
+-static ssize_t aux1_store(struct device *dev,
+-			  struct device_attribute *dev_attr,
+-			  const char *buf, size_t count)
+-{
+-	return aux_store(dev, dev_attr, buf, count, 1);
+-}
+-
+-/* BIOS can enable/disable the thermal user application in dabney platform */
+-#define BIOS_ENABLED "\\_TZ.GSTS"
+-static ssize_t bios_enabled_show(struct device *dev,
+-				 struct device_attribute *attr, char *buf)
+-{
+-	acpi_status status;
+-	unsigned long long bios_enabled;
+-
+-	status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
+-	if (ACPI_FAILURE(status))
+-		return -ENODEV;
+-
+-	return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
+-}
+-
+-static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+-					  void *store, struct device *dev,
+-					  acpi_handle handle)
+-{
+-	struct intel_menlow_attribute *attr;
+-	int result;
+-
+-	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
+-	if (!attr)
+-		return -ENOMEM;
+-
+-	sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
+-	attr->attr.attr.name = name;
+-	attr->attr.attr.mode = mode;
+-	attr->attr.show = show;
+-	attr->attr.store = store;
+-	attr->device = dev;
+-	attr->handle = handle;
+-
+-	result = device_create_file(dev, &attr->attr);
+-	if (result) {
+-		kfree(attr);
+-		return result;
+-	}
+-
+-	mutex_lock(&intel_menlow_attr_lock);
+-	list_add_tail(&attr->node, &intel_menlow_attr_list);
+-	mutex_unlock(&intel_menlow_attr_lock);
+-
+-	return 0;
+-}
+-
+-static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+-						void *context, void **rv)
+-{
+-	acpi_status status;
+-	acpi_handle dummy;
+-	struct thermal_zone_device *thermal;
+-	int result;
+-
+-	result = acpi_bus_get_private_data(handle, (void **)&thermal);
+-	if (result)
+-		return 0;
+-
+-	/* _TZ must have the AUX0/1 methods */
+-	status = acpi_get_handle(handle, GET_AUX0, &dummy);
+-	if (ACPI_FAILURE(status))
+-		return (status == AE_NOT_FOUND) ? AE_OK : status;
+-
+-	status = acpi_get_handle(handle, SET_AUX0, &dummy);
+-	if (ACPI_FAILURE(status))
+-		return (status == AE_NOT_FOUND) ? AE_OK : status;
+-
+-	result = intel_menlow_add_one_attribute("aux0", 0644,
+-						aux0_show, aux0_store,
+-						&thermal->device, handle);
+-	if (result)
+-		return AE_ERROR;
+-
+-	status = acpi_get_handle(handle, GET_AUX1, &dummy);
+-	if (ACPI_FAILURE(status))
+-		goto aux1_not_found;
+-
+-	status = acpi_get_handle(handle, SET_AUX1, &dummy);
+-	if (ACPI_FAILURE(status))
+-		goto aux1_not_found;
+-
+-	result = intel_menlow_add_one_attribute("aux1", 0644,
+-						aux1_show, aux1_store,
+-						&thermal->device, handle);
+-	if (result) {
+-		intel_menlow_unregister_sensor();
+-		return AE_ERROR;
+-	}
+-
+-	/*
+-	 * create the "dabney_enabled" attribute which means the user app
+-	 * should be loaded or not
+-	 */
+-
+-	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
+-						bios_enabled_show, NULL,
+-						&thermal->device, handle);
+-	if (result) {
+-		intel_menlow_unregister_sensor();
+-		return AE_ERROR;
+-	}
+-
+-	return AE_OK;
+-
+- aux1_not_found:
+-	if (status == AE_NOT_FOUND)
+-		return AE_OK;
+-
+-	intel_menlow_unregister_sensor();
+-	return status;
+-}
+-
+-static void intel_menlow_unregister_sensor(void)
+-{
+-	struct intel_menlow_attribute *pos, *next;
+-
+-	mutex_lock(&intel_menlow_attr_lock);
+-	list_for_each_entry_safe(pos, next, &intel_menlow_attr_list, node) {
+-		list_del(&pos->node);
+-		device_remove_file(pos->device, &pos->attr);
+-		kfree(pos);
+-	}
+-	mutex_unlock(&intel_menlow_attr_lock);
+-
+-	return;
+-}
+-
+-static int __init intel_menlow_module_init(void)
+-{
+-	int result = -ENODEV;
+-	acpi_status status;
+-	unsigned long long enable;
+-
+-	if (acpi_disabled)
+-		return result;
+-
+-	/* Looking for the \_TZ.GSTS method */
+-	status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &enable);
+-	if (ACPI_FAILURE(status) || !enable)
+-		return -ENODEV;
+-
+-	/* Looking for ACPI device MEM0 with hardware id INT0002 */
+-	result = acpi_bus_register_driver(&intel_menlow_memory_driver);
+-	if (result)
+-		return result;
+-
+-	/* Looking for sensors in each ACPI thermal zone */
+-	status = acpi_walk_namespace(ACPI_TYPE_THERMAL, ACPI_ROOT_OBJECT,
+-				     ACPI_UINT32_MAX,
+-				     intel_menlow_register_sensor, NULL, NULL, NULL);
+-	if (ACPI_FAILURE(status)) {
+-		acpi_bus_unregister_driver(&intel_menlow_memory_driver);
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit intel_menlow_module_exit(void)
+-{
+-	acpi_bus_unregister_driver(&intel_menlow_memory_driver);
+-	intel_menlow_unregister_sensor();
+-}
+-
+-module_init(intel_menlow_module_init);
+-module_exit(intel_menlow_module_exit);
+Index: linux-pm/drivers/thermal/intel/Kconfig
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/Kconfig
++++ linux-pm/drivers/thermal/intel/Kconfig
+@@ -103,15 +103,6 @@ config INTEL_TCC_COOLING
+ 	  on how fast the setting takes effect, and how much the CPU frequency
+ 	  is reduced.
+ 
+-config INTEL_MENLOW
+-	tristate "Thermal Management driver for Intel menlow platform"
+-	depends on ACPI_THERMAL
+-	help
+-	  ACPI thermal management enhancement driver on
+-	  Intel Menlow platform.
+-
+-	  If unsure, say N.
+-
+ config INTEL_HFI_THERMAL
+ 	bool "Intel Hardware Feedback Interface"
+ 	depends on NET
+Index: linux-pm/drivers/thermal/intel/Makefile
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/Makefile
++++ linux-pm/drivers/thermal/intel/Makefile
+@@ -13,5 +13,4 @@ obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) +=
+ obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
+ obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
+ obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
+-obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
+ obj-$(CONFIG_INTEL_HFI_THERMAL) += intel_hfi.o
 
-Thank you,
-Sumit Gupta
 
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   drivers/cpufreq/cppc_cpufreq.c | 53 +++++++++++++++++++++++++++-------
->>   1 file changed, 43 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index 5e6a132a525e..52b93ac6225e 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -46,6 +46,8 @@ static bool boost_supported;
->>   /* default 2usec delay between sampling */
->>   static unsigned int sampling_delay_us = 2;
->>
->> +static bool get_rate_use_wq;
->> +
->>   static void cppc_check_hisi_workaround(void);
->>   static void cppc_nvidia_workaround(void);
->>
->> @@ -99,6 +101,12 @@ struct cppc_freq_invariance {
->>   static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
->>   static struct kthread_worker *kworker_fie;
->>
->> +struct feedback_ctrs {
->> +     u32 cpu;
->> +     struct cppc_perf_fb_ctrs fb_ctrs_t0;
->> +     struct cppc_perf_fb_ctrs fb_ctrs_t1;
->> +};
->> +
->>   static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
->>   static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->>                                 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
->> @@ -851,28 +859,44 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->>        return (reference_perf * delta_delivered) / delta_reference;
->>   }
->>
->> +static int cppc_get_perf_ctrs_sync(void *fb_ctrs)
->> +{
->> +     struct feedback_ctrs *ctrs = fb_ctrs;
->> +     int ret;
->> +
->> +     ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t0));
->> +     if (ret)
->> +             return ret;
->> +
->> +     udelay(sampling_delay_us);
->> +
->> +     ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t1));
->> +     if (ret)
->> +             return ret;
->> +
->> +     return ret;
->> +}
->> +
->>   static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->>   {
->> -     struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
->>        struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->>        struct cppc_cpudata *cpu_data = policy->driver_data;
->> +     struct feedback_ctrs fb_ctrs = {0};
->>        u64 delivered_perf;
->>        int ret;
->>
->>        cpufreq_cpu_put(policy);
->> +     fb_ctrs.cpu = cpu;
->>
->> -     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
->> -     if (ret)
->> -             return ret;
->> -
->> -     udelay(sampling_delay_us);
->> -
->> -     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
->> +     if (get_rate_use_wq)
->> +             ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_sync, &fb_ctrs, false);
->> +     else
->> +             ret = cppc_get_perf_ctrs_sync(&fb_ctrs);
->>        if (ret)
->>                return ret;
->>
->> -     delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
->> -                                            &fb_ctrs_t1);
->> +     delivered_perf = cppc_perf_from_fbctrs(cpu_data, &(fb_ctrs.fb_ctrs_t0),
->> +                                            &(fb_ctrs.fb_ctrs_t1));
->>
->>        return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
->>   }
->> @@ -953,7 +977,16 @@ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu)
->>
->>   static void cppc_nvidia_workaround(void)
->>   {
->> +     int cpu;
->> +
->>        sampling_delay_us = 25;
->> +
->> +#ifdef CONFIG_ARM64_AMU_EXTN
->> +     cpu = get_cpu_with_amu_feat();
->> +
->> +     if (cpu < nr_cpu_ids)
->> +             get_rate_use_wq = true;
->> +#endif
->>   }
->>
->>   static void cppc_check_hisi_workaround(void)
->> --
->> 2.17.1
->>
+
