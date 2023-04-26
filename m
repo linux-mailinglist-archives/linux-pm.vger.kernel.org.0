@@ -2,157 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CEF6EFC26
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 23:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD596EFDF4
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 01:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233516AbjDZVGx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Apr 2023 17:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S233922AbjDZXUg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Apr 2023 19:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239984AbjDZVGv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 17:06:51 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0922707
-        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 14:06:47 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54fc1824f0bso87609307b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 14:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682543207; x=1685135207;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8C6tKrbT51GaZnl8zer1AnBo8yNRgpprgLkj0av5l+E=;
-        b=Kh7TmG3JlHQoPDgJrxEspZSpUN+36yUdamiO43UnPnWU5WHRHExsZuq1crpHQPMIXw
-         zzWzXMlOi38Xx4my+77mCqHvk7/X81J/7WthQKZt0CHx/5a1ohrap/HzGWEDQbQACJTb
-         YhsFcjssiyz48P8HUQnvmRDVNrO8n5ZicePPH1S7Zj9YadbExO7GDrfEmhV8+JMdHi44
-         dS/U1Lzmekv6Z1Px+wN/pWN5LwOrRpCZPrnqoQccfnfTFROZXP698w5QlH4NBcZahcI9
-         Av/WtFSCGNW/WXdsMcqPPizaCNJVu9G6mBZV0Jx9mGGkKSo+tGaTmr2RPFnSQVsLEyzh
-         SKbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682543207; x=1685135207;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8C6tKrbT51GaZnl8zer1AnBo8yNRgpprgLkj0av5l+E=;
-        b=P+LFIuKx2lmbZmG84M0nH2ZksCUXyqn/mnrAoFpg7cpol7qsI9C0QMKv49wzXHtjbb
-         Hp5jzppLEdnC30kpmY7lar2MfLXUT1ubxlpNBTn2bRGzJWWokfOUeBMO+WPPgrBWdFxt
-         S2zFXPfbGx+MR8bAUrfybVb/Qi2ACU3eoZ0VLF35NJXDb4e8lFhatFmXqD+FmMrqgZFw
-         pfjTVKQ7S8EkTq5HxEM3OjPIJnC3HM6IrDihJzg6EVJItnr42TzDNIznV8XRIg1CLuiK
-         hX1gouWtLinEDMNFd+nym4uEtV2yYNAoDtqg8VGuVwGZbroz7lezPHIVBx4NHHCa7Sck
-         1r6w==
-X-Gm-Message-State: AAQBX9c3X5uF8iIC/cNxtDNIYcrXTcw/m89sDvZW88Bg+QXK3VVV/VZ6
-        4M2nEtbpVcEn+CCiJGwdL7+n4iEnekwD90oGVWJi+A==
-X-Google-Smtp-Source: AKy350bnHkFKck7ScHLySUohS3TGug3PuU6k1b4WHzFwKnH0/14BD/IU48R1JEuMfUGu5baNdUtxQXCsghQML3QSaV8=
-X-Received: by 2002:a81:5d02:0:b0:54f:8b56:bb3 with SMTP id
- r2-20020a815d02000000b0054f8b560bb3mr13933284ywb.5.1682543207061; Wed, 26 Apr
- 2023 14:06:47 -0700 (PDT)
+        with ESMTP id S233605AbjDZXUf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 19:20:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13EE35B6;
+        Wed, 26 Apr 2023 16:20:33 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 160856602E0E;
+        Thu, 27 Apr 2023 00:20:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682551232;
+        bh=Dey1VOUTEwTL6Sl2f26EKC7VLJF2yfDPr0/B4iTsk+c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PiwtnYoGHuqxptvgNLvgHXQx445i09BhdsipGOGAjX/cWTRLSZ07A50kQaD32jsmt
+         msu/BY7f+3YxnAZxl4RxDwuLDuAMEvHMjZ7u3bpHu03O0S+F2oCNcxqSesXBnG/eM5
+         Yg3oYKYH136JURJs6iMuHlPiYZDp7NAw0HAZMLPHlE/U/S0bUl3JBBRkNNyJtGshqI
+         Tsaczz57ydyC+9E4wNae3hnurW9cuBGsztaJUy6/4ZtoSGAtCCBgcgLtoidf84cMiX
+         GlRDDiqzqAAS+mzssxQkdeo8xkhV+iuGhSpRQvsdvc7cL8GDJn85Z3ecfJEzET0LdY
+         RqT/xvZVLPjbw==
+Date:   Wed, 26 Apr 2023 19:20:25 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Balsam CHIHI <bchihi@baylibre.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, daniel.lezcano@linaro.org,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+Message-ID: <28e50e45-53cf-4a34-a81c-10f1faab2d4e@notapiano>
+References: <20230307163413.143334-1-bchihi@baylibre.com>
+ <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+ <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
+ <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
+ <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
+ <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com>
+ <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano>
+ <CAGXv+5E0rzByZBn91d60MQ7P0=GbAQUH=PK9EYDu3Upr33td6A@mail.gmail.com>
+ <CAGuA+oo0w8n9zEKdd1UfYx+F08wK4CcUGqRbBi4C-xNYp+vtDA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <CACRpkdarANFQ7-p=-Pi_iuk6L=PfSLDsD3_w4dEVqarwXkEGMQ@mail.gmail.com> <b5396ef5-3fed-4e98-8f37-a9cd4473bddc@sirena.org.uk>
-In-Reply-To: <b5396ef5-3fed-4e98-8f37-a9cd4473bddc@sirena.org.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 26 Apr 2023 23:06:35 +0200
-Message-ID: <CACRpkdaZvKoFuDHP0Cd1MuayKtnBjCG5wmWPjwq3pccCrb-P9A@mail.gmail.com>
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Brian Norris <briannorris@chromium.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Le Moal <damien.lemoal@opensource.wdc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        netdev@vger.kernel.org, soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGuA+oo0w8n9zEKdd1UfYx+F08wK4CcUGqRbBi4C-xNYp+vtDA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 11:02=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
-ote:
-> On Wed, Apr 26, 2023 at 10:56:53PM +0200, Linus Walleij wrote:
->
-> > This is a big patch set and the improvement to the ARM kernel it
-> > brings is great, so I am a bit worried about over-review stalling the
-> > merged. If there start to be nitpicky comments I would prefer that
-> > we merge it and let minor comments and "nice-to-haves" be
-> > addressed in-tree during the development cycle.
->
-> I'm really not enthusiastic about the SPI bindings being merged as-is.
+On Tue, Apr 25, 2023 at 01:28:39PM +0200, Balsam CHIHI wrote:
+> On Tue, Apr 25, 2023 at 12:00 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+> >
+> > On Tue, Apr 25, 2023 at 6:21 AM Nícolas F. R. A. Prado
+> > <nfraprado@collabora.com> wrote:
+> > >
+> > > On Tue, Mar 28, 2023 at 02:20:24AM +0200, Balsam CHIHI wrote:
+> > > > On Sat, Mar 25, 2023 at 5:33 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
+> > > > >
+> > > > > On Wed, Mar 22, 2023 at 8:48 PM Balsam CHIHI <bchihi@baylibre.com> wrote:
+[..]
+> > > >
+> > > > Hi Chen-Yu Tsai,
+> > > >
+> > > > Thank you very much for helping me testing this suggestion.
+> > > >
+> > > > Indeed, calibration data is stored differently in the mt8192 compared to mt8195.
+> > > > So, the mt8192's support will be delayed for now, to allow further debugging.
+> > > >
+> > > > In the mean time, we will only continue to upstream the remaining
+> > > > mt8195's source code, so it will get full LVTS support.
+> > > > A new series will be submitted soon.
+> > >
+> > > Hi Balsam,
+> > >
+> > > like Chen-Yu mentioned, the calibration data is stored with 4 byte alignment for
+> > > MT8192, but the data that is split between non-contiguous bytes is for the
+> > > thermal controllers (called Resistor-Capacitor Calibration downstream) not the
+> > > sensors. The controller calibration isn't currently handled in this driver (and
+> > > downstream it also isn't used, since a current value is read from the controller
+> > > instead), so we can just ignore those.
+> > >
+> > > The patch below adjusts the addresseses for the sensors and gives me reasonable
+> > > reads, so the machine no longer reboots. Can you integrate it into your series?
+> >
+> > Not sure what I got wrong, but on my machine the VPU0 and VPU1 zone interrupts
+> > are still tripping excessively. The readings seem normal though. Specifically,
+> > it's bits 16 and 17 that are tripping.
+> >
+> 
+> Hi Chen-Yu,
+> 
+> Thank you for testing!
+> 
+> As the readings are normal that proves that calibration data offsets
+> are correct.
+> would you like that I send the v2 of series to add mt8192 support?
+> Then we could deal with the interrupts later in a separate fix,
+> because the interrupt code in common for both SoC (mt8192 and mt8195)?
+> 
+> Does Nícolas also have tripping interrupts?
+> On my side, I've got no interrupts tripping on mt8195.
+> 
+> Any other suggestions (a question for everyone)?
 
-Agree, the bindings are more important than the code IMO,
-they tend to get written in stone.
+Hi,
 
-Yours,
-Linus Walleij
+sorry for the delay.
+
+Indeed the interrupts are constantly tripping on mt8192 here as well.
+
+I do not see the same bits as Chen-Yu mentioned however, I see
+
+LVTS_MONINTSTS = 0x08070000
+
+which corresponds to
+
+	Hot threshold on sense point 3
+	high to normal offset on sense point 2
+	high offset on sense point 2
+	low offset on sense point 2
+
+and it's the same on all controllers and domains here, which is weird. I noticed
+we have offset interrupts enabled even though we don't configure the values for
+those, but even after disabling them and clearing the status register, the
+interrupts keep triggering and the status is the same, so for some reason
+LVTS_MONINT doesn't seem to be honored.
+
+I also tried using the filtered mode instead of immediate for the sensors, and
+that together with disabling the extra interrupts, got me a zeroed
+LVTS_MONINTSTS. However no interrupts seem to be triggered at all (nor
+LVTS_MONINTSTS updated) when the temperature goes over the configured one in
+LVTS_HTHRE.
+
+I tried the driver on mt8195 (Tomato chromebook) as well, and it has the same
+LVTS_MONINTSTS = 0x08070000
+even though the interrupts aren't being triggered, but in fact I don't see them
+triggering over the threshold either, so I suspect the irq number might be
+incorrectly described in the DT there.
+
+Do either of you have it working correctly on mt8195?
+
+Anyway, I'll keep digging and reply here when I find a solution.
+
+Thanks,
+Nícolas
