@@ -2,100 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F12F6EF57F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 15:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6BA6EF67E
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Apr 2023 16:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241219AbjDZN1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Apr 2023 09:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S232584AbjDZOck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Apr 2023 10:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241179AbjDZN10 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 09:27:26 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00B0659F
-        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 06:27:13 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f09b4a156eso47829775e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Apr 2023 06:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682515632; x=1685107632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xNLBoeGm0DGvn60lh6VTKng50f10ssXE+mPMmGjHlY0=;
-        b=Jyvm5UfmNO+PVsVp8ST7r9Z8VYKIm6lc4lXwlfanlf/je09SZ+5J4ZdyFCz7fVqOQs
-         V2HrnOKbXl4QKHs0VdQmceE9gpG0iMWpyFC3fnl/xJ5OiQcStA4aqpaUJQ0XnVZR2F5Y
-         71vgD4QFa2hso5yBt7q1P3uJknSGg2YLgacwa4Vc2KPIrIDHGW9RIcj7c0xgL/yAe926
-         hfE5SzRHYoXER4MSiPOh4vDvaJFh2AH3GMOuQGnJ1QtzeFLKIvf5UxctUQiGgNAh2TZL
-         8IcO5xrZRECBN4e51bvppBMrETt2VqVSiXlR8jNi98/QV5ABF9TH1VVJJGQvjZ9SOd9W
-         gc+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682515632; x=1685107632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNLBoeGm0DGvn60lh6VTKng50f10ssXE+mPMmGjHlY0=;
-        b=OQC3aPocgUkE1f8m6iLRQziMW7oCBxruIFDG12Lm7pVULuXSozsaUISgEyS6IMUnJ7
-         bAb8SDidvwDBIsLAs4awq+M6xiBoyjtNOsP9NHZrZRDe7BeWzvlWb77EWV0gxcrBqwDm
-         QsL9MIEALrIGRkjRfgq0EQdQ/Wylee9yWjrOIGhpBqqA+WiVPvQSaeGFCGP+IR9lCjMA
-         SzcZrmeU53iKQkqZw4BfUcg95yb7L0DENLnRfvOHz9OsjrUpDhF67qdF3YTn2++k28ed
-         S6rAafTqwG7FQpnXFmg4fIg7+GclWtyOiKIwkGzfuyrvx4/wlROpdTfHjWllEv0n1hMv
-         ZDBg==
-X-Gm-Message-State: AAQBX9f+xECB5B0iel5Xd2Vhcr2HvmNk3ba1o9nYltIhdphMPb2dhwWd
-        yJpkXv3iNIVmxZSfZo7dDAJoQ8iWhbtuxLQOhpND9w==
-X-Google-Smtp-Source: AKy350bUF6F5y/p2qsJGdH8ETViHNt6OWWv1GlxnfKf1+6yPtlboJ8kvQxNHapIilrlphDiIe9Lq/Q==
-X-Received: by 2002:a1c:4c16:0:b0:3f1:9a5a:b444 with SMTP id z22-20020a1c4c16000000b003f19a5ab444mr10645939wmf.15.1682515632020;
-        Wed, 26 Apr 2023 06:27:12 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id iz14-20020a05600c554e00b003f175954e71sm21482213wmb.32.2023.04.26.06.27.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 06:27:11 -0700 (PDT)
-Message-ID: <da974b57-9eb5-9380-2eaa-174e1b6280b2@linaro.org>
-Date:   Wed, 26 Apr 2023 15:27:10 +0200
+        with ESMTP id S241417AbjDZOcj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Apr 2023 10:32:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43DA449D;
+        Wed, 26 Apr 2023 07:32:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 269D160FFF;
+        Wed, 26 Apr 2023 14:32:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9186C433D2;
+        Wed, 26 Apr 2023 14:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682519556;
+        bh=ktz/8GLqpT56U4gXrVOtMd/vE5Ej8x9fgSw4ZRKKRzQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DWZUNmrp1J9T6wNU1LEPJCjB+nApZmfTZ04NMqqug6Y6YiRzcUhqf2OkhtWrJKAKL
+         2DQX9k7HxknJDrAjHxV0O8AdGQOdx1oRZJpJIRgRiYsEWpqMonm6ffFVwAY2Jj2jt8
+         rf0MSMcNZ1nBa1f0JvNdy5fZHPrr10LBvsHupZ1bBtiq21JexplffLnKNEWOS+OB7p
+         Y1HZIV5w23IM5ZYWqoMJNAdB09YCxL5P3s4R/HFARtYUvm451mdcVoIV5chtAurXEZ
+         9PdDBQuaTepgyyAVYEM2YMlB7XRDcK8E+7C9gni+l0Cj2OHPnKObUTg82dOYAr+lS+
+         QoZ/k3B9/24xg==
+Date:   Wed, 26 Apr 2023 15:32:31 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 8/8] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
+ Support
+Message-ID: <20230426143231.GP50521@google.com>
+References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
+ <20230322055628.4441-9-Zeynep.Arslanbenzer@analog.com>
+ <20230330123136.GF434339@google.com>
+ <DM6PR03MB519577728975E086D8EB20F38B669@DM6PR03MB5195.namprd03.prod.outlook.com>
+ <20230424085942.GA8035@google.com>
+ <MN2PR03MB51973EDD4FEDA00200B61C6A8B649@MN2PR03MB5197.namprd03.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Missing signoff in the thermal tree
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <c7a60bcd-f7f3-49df-a209-7b6e7c3ce753@sirena.org.uk>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <c7a60bcd-f7f3-49df-a209-7b6e7c3ce753@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <MN2PR03MB51973EDD4FEDA00200B61C6A8B649@MN2PR03MB5197.namprd03.prod.outlook.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/04/2023 13:35, Mark Brown wrote:
-> Commit
-> 
->    2912d341800bb ("thermal/drivers/cpuidle_cooling: Delete unmatched comments")
-> 
-> in the thermal treee is missing a Signed-off-by from its author.
+On Tue, 25 Apr 2023, Arslanbenzer, Zeynep wrote:
 
-Actually the Signed-off is not missing but there is the email only.
+> On Mon, 24 Apr 2023, Lee Jones wrote:
+> >
+> >On Sun, 23 Apr 2023, Arslanbenzer, Zeynep wrote:
+> >
+> >> On Thu, 30 Mar 2023, Lee Jones wrote:
+> >> 
+> >> >On Wed, 22 Mar 2023, Zeynep Arslanbenzer wrote:
+> >> >
+> >> >> MFD driver for MAX77643/MAX77654/MAX77658/MAX77659 to enable its 
+> >> >> sub
+> >> >
+> >> >Please drop all references to 'MFD'.
+> >> >
+> >> >What are these devices, really?  I suspect they are PMICs?
+> >> >
+> >> >> devices.
+> >> >>
+> >> >> The MAX77643 is a multi-function devices. It includes regulator.
+> >> >>
+> >> >> The MAX77654 is a multi-function devices. It includes regulator and 
+> >> >> charger.
+> >> >>
+> >> >> The MAX77658 is a multi-function devices. It includes regulator, 
+> >> >> charger and battery.
+> >> >>
+> >> >> The MAX77659 is a multi-function devices. It includes regulator and 
+> >> >> charger.
+> >> >>
+> >> >> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> >> >> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> >> >> ---
+> >> >>  drivers/mfd/Kconfig          |  15 ++
+> >> >>  drivers/mfd/Makefile         |   1 +
+> >> >>  drivers/mfd/max77658.c       | 448 +++++++++++++++++++++++++++++++++++
+> >> >>  include/linux/mfd/max77658.h |  88 +++++++
+> >> >>  4 files changed, 552 insertions(+)  create mode 100644 
+> >> >> drivers/mfd/max77658.c  create mode 100644 
+> >> >> include/linux/mfd/max77658.h
+> >> >>
+> >> >> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig index
+> >> >> 8b93856de432..7b4be7fb8662 100644
+> >> >> --- a/drivers/mfd/Kconfig
+> >> >> +++ b/drivers/mfd/Kconfig
+> >> >> @@ -821,6 +821,21 @@ config MFD_MAX77650
+> >> >>  	  the following functionalities of the device: GPIO, regulator,
+> >> >>  	  charger, LED, onkey.
+> >> >>
+> >> >> +config MFD_MAX77658
+> >> >> +	tristate "Analog Devices MAX77643/MAX77654/MAX77658/MAX77659 PMIC Support"
+> >> >> +	depends on I2C
+> >> >> +	depends on OF
+> >> >> +	select MFD_CORE
+> >> >> +	select REGMAP_I2C
+> >> >> +	select REGMAP_IRQ
+> >> >> +	help
+> >> >> +	  Say Y here to add support for Analog Devices
+> >> >> +	  MAX77643/MAX77654/MAX77658/MAX77659 Power Management IC.
+> >> >
+> >> >"MAX776xx series"?
+> >> 
+> >> As I realized later, max77620, max77650, max77686, and max77693 drivers were merged to Linux before our patch. They are also PMIC devices and our patch does not cover them. Therefore, I think it would not be appropriate to use MAX776xx.
+> >
+> >Perhaps you can come up with something a little more scalable then.
+> >
+> >What if you added support for another 10 devices?
+> >
+> For now, we have no plans to add any new device support to this driver. We named the driver max77658 because it has the most inclusive feature among the supported devices. We can shorten it to MAX77643/54/58/59 or just type max77658 in Kconfig and specify other supported devices in the device tree. Would one of these be a more suitable solution?
 
-Signed-off-by: wangchenggang@vivo.com
-
-which is the same as the author name
-
-Author: Chenggang Wang <wangchenggang@vivo.com>
+The former looks like a nice middle-ground.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Lee Jones [李琼斯]
