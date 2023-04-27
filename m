@@ -2,125 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C726F0D7D
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 22:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C076F0EE9
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 01:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344053AbjD0Uxw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Apr 2023 16:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S1344421AbjD0Xam (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Apr 2023 19:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjD0Uxv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 16:53:51 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55B4E56
-        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 13:53:47 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f173af665fso60079425e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 13:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682628826; x=1685220826;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xD786TZT7B+/3S4wzJgEnZTLWsTRx10unO92/z5CZGc=;
-        b=azCUsh6921oUgHNRyfqO5FxwrJoviUyl7ZwWzqkMETiUgEFKwDsNBbFg8S1Gt0NXTb
-         IGJS/yps0R6b3f3LrWeXIFIpH/68i+amTZYzApkLKMjRZi2M2vywnpPubCuI+G9DWxil
-         d520ZYFUy8llub9eQ9lomnW9eCqPwOx8UmXUejcTJuXzYG6bLXLh4100x614KXVrZnNE
-         LpSc8qHZMAN6UrZCgZvOpjA6Btf1nvCFoRhUOhtIs2nqH44oQTk0Q3ZSsKw1CNfsV/0t
-         XoTO+m7tIBeKEh6Sf/H/mN81A7CsU8nY5JbJhXvxU4Ddnu45W65pc+VyAYwG5dyWn+8k
-         d60A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682628826; x=1685220826;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xD786TZT7B+/3S4wzJgEnZTLWsTRx10unO92/z5CZGc=;
-        b=Zr7QSFOQKCra2QviNNdXKSLD8KBnwR02D7gUHeyfMLDn078lsn687IfQTNGjr9s3mJ
-         OKZBzODnTppVqW5nlXXkDOtJWBijzOExIFAmWkKJC+CJ9EGMsfYzNfICE9wIukSXjXFX
-         FasaN3J9zOkRunMnSMub7zhlhUrtEn0nkb1ys+U/twvLUkB9mYn5s1gVHc49iX7M4o/E
-         BlzJWVh/jxF+kfG3Vsbj0WitzOInK47RYLLXD83Lm6F+VTW7j3PGf6vUs6ENkHjs6xzz
-         OPyCCzetQDCVeZtoVWADRDiqKydtJtIAPWT2zxCSvnbRFoSxpgW0X8hInOsYjZv8TeAA
-         A7AA==
-X-Gm-Message-State: AC+VfDxugg7BN6qjUun6jcae9u1U6MUYsOx5FwuOyzxn3vJjps903wtH
-        0KQpTpbXWOUxAY6AYWZsL1BBQA==
-X-Google-Smtp-Source: ACHHUZ5s+2AVbZ7GKUo6usOUQ4yRJYhHyyrpGJYDTK9r1qH0dGog9PlLpihu9NJZ9VsCjwEgfuZVUQ==
-X-Received: by 2002:a7b:c7d0:0:b0:3f1:75b3:60df with SMTP id z16-20020a7bc7d0000000b003f175b360dfmr2300008wmk.41.1682628826054;
-        Thu, 27 Apr 2023 13:53:46 -0700 (PDT)
-Received: from [172.23.3.48] ([31.221.30.162])
-        by smtp.googlemail.com with ESMTPSA id h15-20020a05600c314f00b003f1978bbcd6sm23530408wmo.3.2023.04.27.13.53.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 13:53:45 -0700 (PDT)
-Message-ID: <93fcee42-0157-52e2-d694-83307f0eadaf@linaro.org>
-Date:   Thu, 27 Apr 2023 22:53:43 +0200
+        with ESMTP id S1344408AbjD0Xak (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 19:30:40 -0400
+Received: from sonic302-21.consmr.mail.ir2.yahoo.com (sonic302-21.consmr.mail.ir2.yahoo.com [87.248.110.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AA94221
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 16:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682638234; bh=QWU7WG5Ap+y18KPgl+TxRsGemwGKK4+kExfJODBoYZI=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=YEfUd+/xCRltMZuqzYLNqawuZcy54BdnvUg+s1mgDuezEPE4KwH+jeOIchdaO7aY0hITSkfcpnvUoMunW89siSvYVHowlXoKX+pWByDrXSoTokH2pqnVfnkjCwK13B+rHezItqUbXaYujclY+invKfi842V+uyS6EFN+gLboy269nHy3fw8aM9rD4VbjDUvjQhgU1vi5NoKmx3ODF0NbxbHUhBCaGiXHmAth2u+YxmDCrC4VNitMmBTTZEJlji1kSptmmWYSFAAGEVrDB2tSKwjUpIWJCfuSPYkjUr8t1rCNKwgXKeLlxeUCDP6oyMuuvrjV5Yqc4/F/Y318fRe4eA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682638234; bh=tkfUbPyOqymWI/j8UFJ6+mhWy1cSEZAqSNaysdUcSwo=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=bkf/2LGJufQsQijNlgVzL5sjbCEegwJGeBV/ErbW3/pzyU/K2j5ADeAEae6ePcFEqmq9l8PMBHyB0M1RytiHgB/KZJJ63QJETs0fppSJMCkP56O7Vb6px00x38qL3eiuLvsRMzCbUKSBZGskTaXP8MYlki/B00wjkbQmttrWH1koSdd3eLli0bw8dkKPxVI3q60j3wDAgjK02FEzFlOTFkDD6k5DiSiWZNdF4wKvDisJ43fyrU7P+Kunr1LLWv1gFDihv6BMOuarkUFKGsqX8Ayl4mzW8usDzzyickcfqRAU4a/91mW/vDwF874KeX5mN0DztwP2AAaeu1pnKUUqgQ==
+X-YMail-OSG: UMcGdgYVM1k6pSWwj25SC_.KB_7rFPLz.AnW2YwIMQCuwcKJBCcpUcdQ72MRxek
+ zjiVv9ZMHBvLdxYdsOSxcfyFJ0J0417OxwHdQsI8G9O51YMU0ZcfBlQ7BCfAh4Ew2QRwm5UB5_8C
+ C.HxzcH1vkAInL.K9CaI9Kjfua4S_a7Tjkd1yDKPND.Y0UCJdGf1fMeweGYdS3NyfpQnEqSY76Js
+ bjKuwGiTYFZxgrsNNJjKzinlOaFRNVqI606Df2qYhtL8hLm6HDhn0JbnqMBagjC2ak6Lh5BE6t_g
+ 5.T_iK07lLXd.yvCjcuGEZItKVx4pVlZccEd0qXIPKQIexcf029fdQFyMr.4VQgDU34fU19UiOh4
+ RvrBXAogIXppZcpjM9z1c3G0CyzHMFysG6JL0GcPHbTOIzjV8R01fEgzS2Ew19zPeHET9ojis.AT
+ dwgfjcJImObc_tPc6vDQ0oQnhuysMn_whoElVFEDgSlwHYvU2CQw2gKnFB4ZKIubMVu0gXTHGoT5
+ 1ivqZ6Ib4IrV5xf_Z8tfIGxUbXsSLIWr2Q3y3mmx7LspXVHQ.9aXCnaU6mqp8EJHMWJ6KjucXd7W
+ rvicKrSL3b932OoSDaXVjy46xDDGPzF8_GsWYgLuMoMq.S3DabsnPMV0icZklF.NUYE12hUnWD0i
+ bGWeeP3XKBRQvzL7TPJfx_HAjQghP5zz5FPM.frUHbyho6Ab4EATX.FHLBqCO66fbyif8AyvIJPm
+ XpcRvJHC_CTDhUh.sfkYRGsp6HvZD9yIiBppeg2q1BBScQmLn4CS8IkFHy0cIfWWLPT1E1e4iTRg
+ BxErCRLI5TwpAhaO9d9yqqCnUdt2rgq8hK0ZAyuw..5OBsPNRW4e6pBQQWjRMBAK6iFebVAg_vnQ
+ sqHmpHaQHoY6s3eQvzIlvJ4JgDy9ANuTZQDAt46Gs74S6Z.GNPCBhKDihIhZovQ_VsojuPnyMObQ
+ 6Wz5vIkdNgrn2TNtz0m5F4D930Ck9ucSqBiUrrZ9OxVU9hDu3ahpUQKdn1e..qOjC1NZLTJ1ZDx9
+ 1AJm6RofT9y60TgMHXswtYgDeHCr_2v.1Ap5q71WsbiNsPu2B8g0F0j1.yzC.9zk.5vc3EkNTZNM
+ xBe.4ny1jlvNQxZ39RFunV9T3_V9QcbGiLWZGdNEc2qkqkRqrCEOMAXWcJSsLp_bHN7j3SsQ8_DW
+ I72kUUM_Zgm3PBJQM7_fit3iws1hoJu1k0ua65r00G4Wigh2eIcjKr09yAMGMzU1wWT.EiQBNCK9
+ z7gT_4V.eD89CDJP5L.2NBNVnaFGoXKrBe5xhi.XJAMsNDnQtdBQuUfHObrIqlTsDtgN6679VrJA
+ WJ5pNFqlg2XABV4lLjHXy26c7YW0ZAeph_DtfSeuj9CYfA0atdBxihoO6_xM60CtGqZkIPJT6veB
+ jh3j0uollhsvmHPTlHnlB263e_aG0C_MovmRQw9c8RZNtsZ97lJ9oRPgY0SvdLvmx2EGtHIYA4Re
+ sxrJEY6hQydrI14KXhkoAYqV.f9EDJSjPEPkU5otBPhjFSMOcllX60Ih_XNtFqDkbTGTy9TFmA.1
+ WWRTuQKStkoLf6yWzVaBGfm9gAYxJ.xCoAsNbzKzdp.Rf_urjEFlU4r4zegGWQMisOu3a5ntPw3k
+ dlLe0xwA2BLUYFbeMVUb_TaIsnUHNkMWhjYHC6dpdrXRM_Ji290.Gu8BeoC0lijoshYn8_4THxgQ
+ pfNmMI8rrbRgV0vxFk5cDZ8EF3e7Ec1YPcA4NM_VKODyPZj85uybM9TQjua1BTcWR4bDQTiLzozF
+ qeOsMu5VIHNgK4CQNufIn2wv08n29JqM_xe6g7sqYyV0uZAufMt4yWzsTGtTYLHPe2QVuYeuJ_Ip
+ IK9111JAfSfj34830LmSNwmFUzydSD4p7w3UEmqBF6bih3AKjqI0RFyalQEB018lzZOcX3eCxWMQ
+ 4w1DUyhQZTVzhzSS_DWiwBgTbgnHPXHxjPMvE7TI9Am1ibHZTwEicR.8uAfljni70EHetKIXMnrN
+ nS_PJVJa78tyGbMGdEI18KyPV5mo1vjTA5udGRRkit1NMlhqDrlPPjWXlorrlt9Y4mrTwzo6rhh.
+ FbXoUOgs0nqGHfqMcOh.QgCZooJAqKRB.oK69ryz6YRnkGLB8bGfM2xUHhq.XQyF5epa6pYS3fzq
+ mlgRi5BlaSjWlWekvuDhDyLJMtOtVMZkU61QjCvROWybXBKxeEd59J4oDSX6o4H37qNlSmWgp7oI
+ 5IBAt0IOu7cvs5p4WuNCCs7mh50pZ4Mj3Vzc4k0lxtWLw26aPzYiHyUvhR5bF6TXIMbnw353HXnf
+ KCP10vDhYW8eS
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: d61f458e-2c7b-4a84-b0da-19202c2b4c9f
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ir2.yahoo.com with HTTP; Thu, 27 Apr 2023 23:30:34 +0000
+Received: by hermes--production-ir2-74cd8fc864-9w846 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 912b1d1a256b22e43f453e00130c1256;
+          Thu, 27 Apr 2023 23:30:32 +0000 (UTC)
+From:   Jakob Hauser <jahau@rocketmail.com>
+To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jakob Hauser <jahau@rocketmail.com>
+Subject: [PATCH v3 0/8] Add RT5033 charger device driver
+Date:   Fri, 28 Apr 2023 01:30:03 +0200
+Message-Id: <cover.1682636929.git.jahau@rocketmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 0/6] Thermal zone device structure encapsulation
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
- <CAJZ5v0jKRew48KNXXBJjENxpOhEE5jxwfAcmiuu_4nvhQL-FGA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jKRew48KNXXBJjENxpOhEE5jxwfAcmiuu_4nvhQL-FGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1682636929.git.jahau.ref@rocketmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/04/2023 19:23, Rafael J. Wysocki wrote:
-> On Wed, Apr 19, 2023 at 10:33 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> The thermal zone device structure is defined in the exported thermal
->> header include/linux/thermal.h
->>
->> Given the definition being public, the structure is exposed to the
->> external components other than the thermal framework core code. It
->> results the drivers are tampering the structure internals like taking
->> the lock or changing the field values.
->>
->> Obviously that is bad for several reasons as the drivers can hook the
->> thermal framework behavior and makes very difficult the changes in the
->> core code as external components depend on it directly.
->>
->> Moreover, the thermal trip points being reworked, we don't want the
->> drivers to access the trips array directly in the thermal zone
->> structure and doing assumptions on how they are organized.
->>
->> This series provides a second set of changes moving to the thermal
->> zone device structure self-encapsulation.
->>
->> The ACPI and the Menlon drivers are using the thermal zone's device
->> fields to create symlinks and new attributes in the sysfs thermal zone
->> directory. These changes provide a hopefully temporary wrapper to
->> access it in order to allow moving forward in the thermal zone device
->> self-encapsulation and a Kconfig option to disable by default such a
->> extra sysfs information.
->>
+This patchset adds the charger driver "rt5033-charger". It is part of the
+multifunction device rt5033. The patchset is based on an older version by
+Beomho Seo of March 2015. For more information on the history and setup of
+the patchset see the cover sheet of version v1, there is a link further down
+below the changelog.
 
-[ ... ]
+The patchset is still based on next-20230413.
 
-> Patches [4/6] and [6/6] were superseded by the Menlow driver removal.
-> 
-> I've applied the rest as 6.4-rc material, with some subject
-> adjustments and after removing some trailing white space in a few
-> places.
+Changes in v3:
+ - Drobbed v2 patch 5 "regulator: rt5033: Change regulator names to lowercase".
+   It affects an existing driver, therefore the uppercase node names are
+   tolerable.
+ - Patch 5: In function rt5033_get_charger_state() after "if (!regmap)"
+   changed "return state" to "return POWER_SUPPLY_STATUS_UNKNOWN". If the
+   regmap isn't available, the status is unknown.
+ - Patch 5: Changed function rt5033_charger_dt_init() to the devicetree
+   "battery" node readout style.
+ - Patch 5: Added dev_err() messages if the values are out of range in the
+   init functions rt5033_init_const_charge(), rt5033_init_fast_charge() and
+   rt5033_init_pre_charge().
+ - Patch 5: In function rt5033_charger_probe() moved rt5033_charger_dt_init()
+   and rt5033_charger_reg_init() behind devm_power_supply_register() because
+   the power supply needs to be initiated to read out the "battery" node.
+ - Patch 7: In function rt5033_battery_get_status() after "if (!charger)"
+   changed "return -ENODEV" to "return POWER_SUPPLY_STATUS_UNKNOWN". If the
+   charger isn't available, the status is unknown.
+ - Changes on patch 8 are described in that patch below the commit message.
 
+v1: https://lore.kernel.org/linux-pm/cover.1677620677.git.jahau@rocketmail.com/T/#t
+v2: https://lore.kernel.org/linux-pm/cover.1681646904.git.jahau@rocketmail.com/T/#t
 
-Thanks!
+The result of the patchset v3 can be seen at:
+https://github.com/Jakko3/linux/blob/rt5033-charger_v3/drivers/power/supply/rt5033_charger.c
+
+Jakob Hauser (7):
+  mfd: rt5033: Fix chip revision readout
+  mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
+  mfd: rt5033: Apply preparatory changes before adding rt5033-charger
+    driver
+  power: supply: rt5033_charger: Add RT5033 charger device driver
+  power: supply: rt5033_charger: Add cable detection and USB OTG supply
+  power: supply: rt5033_battery: Adopt status property from charger
+  dt-bindings: Add rt5033 mfd, regulator and charger
+
+Stephan Gerhold (1):
+  mfd: rt5033: Drop rt5033-battery sub-device
+
+ .../bindings/mfd/richtek,rt5033.yaml          | 105 +++
+ .../power/supply/richtek,rt5033-charger.yaml  |  63 ++
+ drivers/mfd/rt5033.c                          |   8 +-
+ drivers/power/supply/Kconfig                  |   8 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/rt5033_battery.c         |  24 +
+ drivers/power/supply/rt5033_charger.c         | 725 ++++++++++++++++++
+ include/linux/mfd/rt5033-private.h            |  64 +-
+ include/linux/mfd/rt5033.h                    |  10 +-
+ 9 files changed, 981 insertions(+), 27 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+ create mode 100644 drivers/power/supply/rt5033_charger.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.39.2
 
