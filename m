@@ -2,77 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5556F064F
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 15:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECDA6F06FD
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 16:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243444AbjD0NEy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Apr 2023 09:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S243673AbjD0OIy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Apr 2023 10:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243517AbjD0NEy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 09:04:54 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEA030C5
-        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 06:04:53 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b99e0ffbabbso5991569276.1
-        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 06:04:53 -0700 (PDT)
+        with ESMTP id S243481AbjD0OIx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 10:08:53 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ACD10D2
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 07:08:51 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-506b20efd4cso14441922a12.3
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 07:08:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682600692; x=1685192692;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z9OtUw5qfuvq5waaIwQtysg67SaToj9SLYSO+4dneqU=;
-        b=L5wpu/BuUroCNQV4C1VSRaFoCvTuRrtLUHYof/hcujgvKWjNOXqiccK7WMlgEzFkxs
-         DJPv6f8rRpR8FYCR9jW8KCJaGnXqTvcRptpXruV5n1p4eZ8xeVRK0XWsuYnsf3D3L0du
-         GGPmCtR4FmaAjFVuEg91QVTp/vpXfW9oJVVxG2FD2/9m3l2fmFR+tfA27vfjiXEidsUN
-         QfjS37+p1UZDYEGw38Uh7A1OPVzEY+csbImGowk1mmg3d7IXtyewGzOqIuwNpzbDggYR
-         Gev6qesLIgvsb1M0O8TxdDdXenxWDTU66TYbSttZ/brSylyywIFIkJFA1EYsnRN0F5y4
-         /0fg==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682604529; x=1685196529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EDVPbB4cbDPN+tvnZTEmrx6KIXqzDTSeZfB1ppLbXmg=;
+        b=QBwSHc3Dz3srMXZNvIyh//l7YRkzVarnD5Y+5t1vcWgEbZwzXMbzaTO0lnUTS6+rOK
+         5yYcV2jgESD9U1YrMtEWVk2AmJnY2DLZNvecgCFSeqXyZ9jAyP7amUdlCuNRgDl7t3u9
+         Z+yuYOb7ICthH7KX/9PChM4j+ZqDFIFRPgmrAc+ljU0gUpW0mUhAf1k91TIhJWEZiHC3
+         ync5MzexAnw7JIfmV1W8oXZWYSefwr23F2r34WCJYgHhX+G0Qe6lW9lUgYoHE1J8LGTf
+         B277Z3Ls4kG/ZWLY3q48xBRYMe8AQiPIeILMQ2XMlm+nkZfifwu2qTn05Y4ztwvmF1HY
+         ZMUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682600692; x=1685192692;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z9OtUw5qfuvq5waaIwQtysg67SaToj9SLYSO+4dneqU=;
-        b=kKhUcSSGSIbBKHildK/b8CmlHD131nhfivZLoDlAIqKOrb12XbhcV7E6jl8IW25b05
-         0UPqs5QkxvwwdJI6ghzuTdmxjujqHeTmHD3dYEtsdVEqrdbldtMJnp1eMKETP9LyE0iN
-         n7wMZwXGFxb79NI/vBtxfVsWBB4OsZUd2NaU9DkATp50Bv4IUrE4xTdyTYdWFIBeAj66
-         6Hq+FFNyCpHb2qip0fEDaCPUID7pNlvVi0T0Zl8OW/Rq0Q0I9Wfg+Aq0aDc4ubCCiT1n
-         76fnuejZm2SNTnwfQ4RYugLdYCG7rMlqaLBdL+aBLjeBwPFvpIRV0lgXioghlU3LTyXK
-         s9Wg==
-X-Gm-Message-State: AC+VfDwipS5Pcs96IVlOft8dYsRnrTBJtyHGco0FFk0y79ep9//s3bvs
-        jVZ7Dhek1ziw3m1wUa8hczl+UxhrR8M/k3Gx+RA=
-X-Google-Smtp-Source: ACHHUZ5DQL8F6m07PXfZcEq52NdSMjX4QXj80+DOLwR2NJsUFwg50kTZsrlMP8oUNOOfC8Xta22dnSZWSCUm/C+IV3E=
-X-Received: by 2002:a81:a1d6:0:b0:556:2699:f3c9 with SMTP id
- y205-20020a81a1d6000000b005562699f3c9mr1083042ywg.27.1682600692562; Thu, 27
- Apr 2023 06:04:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682604529; x=1685196529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EDVPbB4cbDPN+tvnZTEmrx6KIXqzDTSeZfB1ppLbXmg=;
+        b=hpNU+SuFqzDW7myOasXC2gbdmOhgPEkPC1+THWjt6s+4HElv9SxvY7R/l4cZqaNal7
+         /4s8yP0l0+isABjYK0Rz5ITlpzlIVjuTkM43/1zwNceRie2HIuR2VMpSt20/8FLvqwYc
+         h0Qykblzjn2pOQ4OpLzi+LhYyrvCq/kb8uv5/HflfoTU73JADfY2qkFEqfQ9TjHiTyuc
+         LD8O/l/BmuzFCOR/yMnAozcHdZSJIKdzCCOvZnnIZKFcE6x0GuyTwp+w7RO01Ag343ol
+         bS4NAr5bB+VnJFqWELooi+bwtvnZ2573n+al+rw+VSPLaWGFxUpiO8JUhtufb38BOJR1
+         TQvA==
+X-Gm-Message-State: AC+VfDxDNh4xAARz6hcwjR5iNPm2p7F2jSsLtSe7lfnRl8r0ykE7rY8V
+        wavTxmon+fmltHr7kIXnE1acDLYZoV6JjbQOnjYILA==
+X-Google-Smtp-Source: ACHHUZ7CEMh3fwxTQ4zHqXl5d3SwmPzb30WFXBGaftLZN2Lus97dMKq7+b5aHGMhdHRItwoZAx2Ky4I6Ret8wXSjlo8=
+X-Received: by 2002:a05:6402:18c:b0:509:ee5c:6bf1 with SMTP id
+ r12-20020a056402018c00b00509ee5c6bf1mr1753567edv.1.1682604529555; Thu, 27 Apr
+ 2023 07:08:49 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:4393:b0:34b:d28b:fa30 with HTTP; Thu, 27 Apr 2023
- 06:04:52 -0700 (PDT)
-Reply-To: wormer.amos@aol.com
-From:   Wormer Amos <fatimamuhammad5689@gmail.com>
-Date:   Thu, 27 Apr 2023 13:04:52 +0000
-Message-ID: <CA+QAR6UwXa3M2NFdN3Ji=CmDT-qEtPjhzMX52w=MrRvons1J_g@mail.gmail.com>
-Subject: MORE INFO
-To:     undisclosed-recipients:;
+References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+ <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
+ <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
+ <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
+ <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com>
+ <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano> <CAGXv+5E0rzByZBn91d60MQ7P0=GbAQUH=PK9EYDu3Upr33td6A@mail.gmail.com>
+ <CAGuA+oo0w8n9zEKdd1UfYx+F08wK4CcUGqRbBi4C-xNYp+vtDA@mail.gmail.com> <28e50e45-53cf-4a34-a81c-10f1faab2d4e@notapiano>
+In-Reply-To: <28e50e45-53cf-4a34-a81c-10f1faab2d4e@notapiano>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Thu, 27 Apr 2023 16:08:13 +0200
+Message-ID: <CAGuA+oprz06WS0reC1Edqr1fMn-TjSrCgoO_M54JYQ4x8UnTOg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, daniel.lezcano@linaro.org,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, Alexandre Bailon <abailon@baylibre.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello best friend. i kindly wanted to know if you're capable for investment
-project in
-your country. i
-need a serious partnership with good background, kindly reply
-me to discuss details immediately. i will appreciate you to contact me
-on this email.
+On Thu, Apr 27, 2023 at 1:20=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> On Tue, Apr 25, 2023 at 01:28:39PM +0200, Balsam CHIHI wrote:
+> > On Tue, Apr 25, 2023 at 12:00=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.o=
+rg> wrote:
+> > >
+> > > On Tue, Apr 25, 2023 at 6:21=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+> > > <nfraprado@collabora.com> wrote:
+> > > >
+> > > > On Tue, Mar 28, 2023 at 02:20:24AM +0200, Balsam CHIHI wrote:
+> > > > > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chrom=
+ium.org> wrote:
+> > > > > >
+> > > > > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@ba=
+ylibre.com> wrote:
+> [..]
+> > > > >
+> > > > > Hi Chen-Yu Tsai,
+> > > > >
+> > > > > Thank you very much for helping me testing this suggestion.
+> > > > >
+> > > > > Indeed, calibration data is stored differently in the mt8192 comp=
+ared to mt8195.
+> > > > > So, the mt8192's support will be delayed for now, to allow furthe=
+r debugging.
+> > > > >
+> > > > > In the mean time, we will only continue to upstream the remaining
+> > > > > mt8195's source code, so it will get full LVTS support.
+> > > > > A new series will be submitted soon.
+> > > >
+> > > > Hi Balsam,
+> > > >
+> > > > like Chen-Yu mentioned, the calibration data is stored with 4 byte =
+alignment for
+> > > > MT8192, but the data that is split between non-contiguous bytes is =
+for the
+> > > > thermal controllers (called Resistor-Capacitor Calibration downstre=
+am) not the
+> > > > sensors. The controller calibration isn't currently handled in this=
+ driver (and
+> > > > downstream it also isn't used, since a current value is read from t=
+he controller
+> > > > instead), so we can just ignore those.
+> > > >
+> > > > The patch below adjusts the addresseses for the sensors and gives m=
+e reasonable
+> > > > reads, so the machine no longer reboots. Can you integrate it into =
+your series?
+> > >
+> > > Not sure what I got wrong, but on my machine the VPU0 and VPU1 zone i=
+nterrupts
+> > > are still tripping excessively. The readings seem normal though. Spec=
+ifically,
+> > > it's bits 16 and 17 that are tripping.
+> > >
+> >
+> > Hi Chen-Yu,
+> >
+> > Thank you for testing!
+> >
+> > As the readings are normal that proves that calibration data offsets
+> > are correct.
+> > would you like that I send the v2 of series to add mt8192 support?
+> > Then we could deal with the interrupts later in a separate fix,
+> > because the interrupt code in common for both SoC (mt8192 and mt8195)?
+> >
+> > Does N=C3=ADcolas also have tripping interrupts?
+> > On my side, I've got no interrupts tripping on mt8195.
+> >
+> > Any other suggestions (a question for everyone)?
+>
+> Hi,
+>
+> sorry for the delay.
+>
+> Indeed the interrupts are constantly tripping on mt8192 here as well.
+>
+> I do not see the same bits as Chen-Yu mentioned however, I see
+>
+> LVTS_MONINTSTS =3D 0x08070000
+>
+> which corresponds to
+>
+>         Hot threshold on sense point 3
+>         high to normal offset on sense point 2
+>         high offset on sense point 2
+>         low offset on sense point 2
+>
+> and it's the same on all controllers and domains here, which is weird. I =
+noticed
+> we have offset interrupts enabled even though we don't configure the valu=
+es for
+> those, but even after disabling them and clearing the status register, th=
+e
+> interrupts keep triggering and the status is the same, so for some reason
+> LVTS_MONINT doesn't seem to be honored.
+>
+> I also tried using the filtered mode instead of immediate for the sensors=
+, and
+> that together with disabling the extra interrupts, got me a zeroed
+> LVTS_MONINTSTS. However no interrupts seem to be triggered at all (nor
+> LVTS_MONINTSTS updated) when the temperature goes over the configured one=
+ in
+> LVTS_HTHRE.
+>
+> I tried the driver on mt8195 (Tomato chromebook) as well, and it has the =
+same
+> LVTS_MONINTSTS =3D 0x08070000
+> even though the interrupts aren't being triggered, but in fact I don't se=
+e them
+> triggering over the threshold either, so I suspect the irq number might b=
+e
+> incorrectly described in the DT there.
+>
+> Do either of you have it working correctly on mt8195?
+>
+> Anyway, I'll keep digging and reply here when I find a solution.
 
-Thanks and awaiting for your quick response,
+Hi N=C3=ADcolas,
 
-Wormer,
+Thank your for your time testing and investigating the interrupt issues!
+
+I only have an mt8195 based board (i1200-demo), and I could not
+trigger any interrupt on it.
+I whish that MediaTek could reply to this thread to give us more
+information (I avoid disclosing MediaTek's internal information).
+And now, it's clear that mt8192 interrupts does work at least (but not
+properly, may be we could fix it at driver level).
+
+It's been a couple of days since I sent a v2 of the series that adds
+LVTS support for mt8192 SoC (+ Suspend and Resume, + Doc update):
+"https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/".
+I wish that it will be applied very soon, then we could patch the core driv=
+er.
+
+My colleagues "Alexandre Mergnat (amergnat@baylibre.com)" and
+"Alexandre Bailon (abailon@baylibre.com)" are now part of this
+project.
+Please let them know of future information.
+
+Thanks again for suggesting solutions!
+
+Best regards,
+Balsam
+
+>
+> Thanks,
+> N=C3=ADcolas
