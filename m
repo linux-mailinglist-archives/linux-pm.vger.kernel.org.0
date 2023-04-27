@@ -2,131 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4AE6F0AC2
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 19:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F3E6F0B16
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 19:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243737AbjD0RXy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 27 Apr 2023 13:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S244226AbjD0RlT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 27 Apr 2023 13:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244098AbjD0RXx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 13:23:53 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1549E1;
-        Thu, 27 Apr 2023 10:23:45 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso251648166b.0;
-        Thu, 27 Apr 2023 10:23:45 -0700 (PDT)
+        with ESMTP id S244281AbjD0RlQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 13:41:16 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E87459C7
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 10:40:51 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-94f161ee14fso246308266b.0
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 10:40:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682616224; x=1685208224;
+        d=1e100.net; s=20221208; t=1682617231; x=1685209231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bTP6a1svEFt7abENC6zMHAYb3w6MJh1QQije0TuLlWg=;
-        b=Q//gNQB1mbsSgvZxX7ZbOHqiLYsnnT2JmOx7m3SS7o3FI2u3qCSFYyeuDukQ61AD3k
-         rlZ2EEfYeqcCiGKOMrB7J0YZggtDD4wWwYV5Cncp5BJdgvVZ+MFDV5YX7OIFgL9gPD0l
-         ql03LR5mmstihwA545j5p8tWC98joGOdKFQljTznkTHmcQUkgl0fGKl2DwDaVcStcYG8
-         UnRXO5XRf6uKSzbG0Xo2R5MdIPlGyXrF7RgQtLr8Kku385aXKT1knPvrn9SlisRlB511
-         YLodC6XET3uD41uvQUm6GsNEg8c1s/5+ofcUWH24XhMDuWQOjr0ZTbxwxBZkR98cWKpV
-         o8Rw==
-X-Gm-Message-State: AC+VfDwOaXYvnRLVKH9mXcY4x9kCysWreNMHyEa3WSo/UR+zFvLLiZWf
-        +b15LXoIGj6AdxmOZ/d9LNRNODZ/QElcnWLUlzY=
-X-Google-Smtp-Source: ACHHUZ485dQluQHN4run1SAAMDSnNxSG6T1tkQu1Rp6Zfkxp/1f927W3m4kcbh1mQ1P6tLO4gZLHu7N7D2lh42LTgf8=
-X-Received: by 2002:a17:906:2211:b0:94e:d5d7:67eb with SMTP id
- s17-20020a170906221100b0094ed5d767ebmr2250405ejs.5.1682616224026; Thu, 27 Apr
- 2023 10:23:44 -0700 (PDT)
+        bh=6aRlmezdTamuZ8jYFboeGaWQiLdC5hVv/Nih5s87XPg=;
+        b=PQa+435RitDHoA+x51fFLV5AOLCNSDBNLobvNc+EA7O0KKZQeV5jSaym+IkjRzMozA
+         C6zDYK2TyZmsOcnVBj8BM0+dFqi/p34wHMU3k4yW4yRQokq8Xcsa+RXpE5T7Bb54DoKx
+         iqQ7Z8YXLkcJm8a6vYYt09l8o9rOdKQif+dorQCU157rEOa649ZLA9Fe3jCs64Vv+Qfw
+         Wqi03Ka73MD1+4bdoAztsaucXEk3o/+8Q1xbFMyjugtHzmgJ6UjbsHRGC1dOSXgQWit5
+         qHZwKh2VoFWcFBhdbEs/U67macqrHYqQIidgk/R6ejGCYikmp7p4Gyo+NgOb5J0ftyUe
+         WYmg==
+X-Gm-Message-State: AC+VfDwOX2rSjbHNTXybL00VDC/zaOXqjTGHzuqvbjcMip5ukrnREYiz
+        oyw9aS7hMPK7xFmeJQsIiMHOQoJibokmAB//iH5liCbM
+X-Google-Smtp-Source: ACHHUZ5C1F7IUPWcOK1SRMFQJQ+XoWjt5QXKHdN631owmx0M910Tj40bmlufyq06+YeQ0lsuuAB2NWf/zIKEvMuj0eE=
+X-Received: by 2002:a17:906:738a:b0:94e:9235:d77d with SMTP id
+ f10-20020a170906738a00b0094e9235d77dmr2359983ejl.0.1682617231555; Thu, 27 Apr
+ 2023 10:40:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20230419083343.505780-1-daniel.lezcano@linaro.org>
+References: <20230419143947.1342730-1-dedekind1@gmail.com>
+In-Reply-To: <20230419143947.1342730-1-dedekind1@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Apr 2023 19:23:32 +0200
-Message-ID: <CAJZ5v0jKRew48KNXXBJjENxpOhEE5jxwfAcmiuu_4nvhQL-FGA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] Thermal zone device structure encapsulation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
+Date:   Thu, 27 Apr 2023 19:40:20 +0200
+Message-ID: <CAJZ5v0ipBh2_NDn5K73ksfJ=accMAVD_5ou0Z8UH-qaJOHJABA@mail.gmail.com>
+Subject: Re: [PATCH 0/7] misc intel_idle cleanups
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 10:33 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Wed, Apr 19, 2023 at 4:40 PM Artem Bityutskiy <dedekind1@gmail.com> wrote:
 >
-> The thermal zone device structure is defined in the exported thermal
-> header include/linux/thermal.h
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 >
-> Given the definition being public, the structure is exposed to the
-> external components other than the thermal framework core code. It
-> results the drivers are tampering the structure internals like taking
-> the lock or changing the field values.
+> These are misc. clean-up and minor improvement patches for 'intel_idle'. The
+> common theme in them is improving the 'intel_idle_init_cstates_icpu()' function
+> and things around it.
 >
-> Obviously that is bad for several reasons as the drivers can hook the
-> thermal framework behavior and makes very difficult the changes in the
-> core code as external components depend on it directly.
+> The patches are against the 'linux-pm' tree, the 'linux-next' branch.
 >
-> Moreover, the thermal trip points being reworked, we don't want the
-> drivers to access the trips array directly in the thermal zone
-> structure and doing assumptions on how they are organized.
+> Artem Bityutskiy (7):
+>   intel_idle: use pr_info instead of printk
+>   intel_idle: cleanup 'intel_idle_init_cstates_icpu()'
+>   intel_idle: further 'intel_idle_init_cstates_icpu()' cleanup
+>   intel_idle: improve C-state flags handling robustness
+>   intel_idle: fix confusing message
+>   intel_idle: do not sprinkle module parameters definitions around
+>   intel_idle: mark few variables as '__read_mostly'
 >
-> This series provides a second set of changes moving to the thermal
-> zone device structure self-encapsulation.
+>  drivers/idle/intel_idle.c | 58 ++++++++++++++++++++++++---------------
+>  1 file changed, 36 insertions(+), 22 deletions(-)
 >
-> The ACPI and the Menlon drivers are using the thermal zone's device
-> fields to create symlinks and new attributes in the sysfs thermal zone
-> directory. These changes provide a hopefully temporary wrapper to
-> access it in order to allow moving forward in the thermal zone device
-> self-encapsulation and a Kconfig option to disable by default such a
-> extra sysfs information.
->
-> Changelog:
->         v4:
->         - Encapsulate extra sysfs information inside a function for
->           ACPI but remove the Kconfig option
->         - Encapsulate extra sysfs information inside a function,
->           create the stubs and put that conditionnal to a Kconfig
->           option for Menlow
->         v3:
->         - Split the Kconfig option to be driver related when disabling
->           the specific attributes
->         - Use the thermal zone's device wrapper to write a trace in
->           the pch intel driver
->         v2:
->         - Add the Kconfig option to remove specific attributes
->         - Add a thermal_zone_device() wrapper to access tz->device
->
-> Daniel Lezcano (6):
->   thermal/core: Encapsulate tz->device field
->   thermal/drivers/intel_pch_thermal: Use thermal driver device to write
->     a trace
->   thermal/drivers/acpi: Use thermal_zone_device()
->   thermal/drivers/menlow: Use thermal_zone_device()
->   thermal/drivers/acpi: Move to dedicated function sysfs extra attr
->     creation
->   thermal/drivers/intel_menlow: Make additionnal sysfs information
->     optional
->
->  drivers/acpi/thermal.c                    | 47 +++++++++++++++--------
->  drivers/thermal/intel/Kconfig             | 11 ++++++
->  drivers/thermal/intel/intel_menlow.c      | 18 +++++++--
->  drivers/thermal/intel/intel_pch_thermal.c |  3 +-
->  drivers/thermal/thermal_core.c            |  6 +++
->  include/linux/thermal.h                   |  1 +
->  6 files changed, 67 insertions(+), 19 deletions(-)
->
-> --
 
-Patches [4/6] and [6/6] were superseded by the Menlow driver removal.
-
-I've applied the rest as 6.4-rc material, with some subject
-adjustments and after removing some trailing white space in a few
-places.
+Applied as 6.4-rc material with patch updates taken into account.
 
 Thanks!
