@@ -2,233 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECDA6F06FD
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 16:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6766C6F09F7
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Apr 2023 18:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243673AbjD0OIy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Apr 2023 10:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S243864AbjD0Qgb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Apr 2023 12:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243481AbjD0OIx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 10:08:53 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ACD10D2
-        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 07:08:51 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-506b20efd4cso14441922a12.3
-        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 07:08:51 -0700 (PDT)
+        with ESMTP id S243284AbjD0Qgb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Apr 2023 12:36:31 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F0949EF
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 09:36:29 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-2f6401ce8f8so5516370f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 27 Apr 2023 09:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682604529; x=1685196529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EDVPbB4cbDPN+tvnZTEmrx6KIXqzDTSeZfB1ppLbXmg=;
-        b=QBwSHc3Dz3srMXZNvIyh//l7YRkzVarnD5Y+5t1vcWgEbZwzXMbzaTO0lnUTS6+rOK
-         5yYcV2jgESD9U1YrMtEWVk2AmJnY2DLZNvecgCFSeqXyZ9jAyP7amUdlCuNRgDl7t3u9
-         Z+yuYOb7ICthH7KX/9PChM4j+ZqDFIFRPgmrAc+ljU0gUpW0mUhAf1k91TIhJWEZiHC3
-         ync5MzexAnw7JIfmV1W8oXZWYSefwr23F2r34WCJYgHhX+G0Qe6lW9lUgYoHE1J8LGTf
-         B277Z3Ls4kG/ZWLY3q48xBRYMe8AQiPIeILMQ2XMlm+nkZfifwu2qTn05Y4ztwvmF1HY
-         ZMUQ==
+        d=ventanamicro.com; s=google; t=1682613387; x=1685205387;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1E1TWVyqrbpkDmXEhMTPIQIWAldDkDry5PT9gSgTT70=;
+        b=NSYz7qPcyQvzoxSx7yU0bJe8WIITUpjpQ7PinGv6EEt7O+CFRVLhAL/9YJCAxtc20X
+         nT26mtM1xTfQ6f9EteL3RDAzi64rKgCl6w6tOF1cXPj3i4w0OLtSghnKioJJviHZGgvu
+         m8pLoprFcOjkoeALw+ufQq3R1AADOsgMoVySIVyTpHPAtdpfc5DvG4gTVybewhvWEE4z
+         9lq4VbFJtBRrPXyXzcdOqkT3XeNPY5pUJMzTGofETIzPxEdxpPPcg8tPmhQ3BjGIXOa3
+         qN3n6uUpQabQ5MYmJnUs8ToN/j+U2zRX7UHKYuLPLfHhaPKe0fOIvMZNmiUuAScmlvA8
+         hYWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682604529; x=1685196529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EDVPbB4cbDPN+tvnZTEmrx6KIXqzDTSeZfB1ppLbXmg=;
-        b=hpNU+SuFqzDW7myOasXC2gbdmOhgPEkPC1+THWjt6s+4HElv9SxvY7R/l4cZqaNal7
-         /4s8yP0l0+isABjYK0Rz5ITlpzlIVjuTkM43/1zwNceRie2HIuR2VMpSt20/8FLvqwYc
-         h0Qykblzjn2pOQ4OpLzi+LhYyrvCq/kb8uv5/HflfoTU73JADfY2qkFEqfQ9TjHiTyuc
-         LD8O/l/BmuzFCOR/yMnAozcHdZSJIKdzCCOvZnnIZKFcE6x0GuyTwp+w7RO01Ag343ol
-         bS4NAr5bB+VnJFqWELooi+bwtvnZ2573n+al+rw+VSPLaWGFxUpiO8JUhtufb38BOJR1
-         TQvA==
-X-Gm-Message-State: AC+VfDxDNh4xAARz6hcwjR5iNPm2p7F2jSsLtSe7lfnRl8r0ykE7rY8V
-        wavTxmon+fmltHr7kIXnE1acDLYZoV6JjbQOnjYILA==
-X-Google-Smtp-Source: ACHHUZ7CEMh3fwxTQ4zHqXl5d3SwmPzb30WFXBGaftLZN2Lus97dMKq7+b5aHGMhdHRItwoZAx2Ky4I6Ret8wXSjlo8=
-X-Received: by 2002:a05:6402:18c:b0:509:ee5c:6bf1 with SMTP id
- r12-20020a056402018c00b00509ee5c6bf1mr1753567edv.1.1682604529555; Thu, 27 Apr
- 2023 07:08:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682613387; x=1685205387;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1E1TWVyqrbpkDmXEhMTPIQIWAldDkDry5PT9gSgTT70=;
+        b=CbGZJCdewHI5XQ5QiDznvogNSjr7HOaHLmmqVlPCaet6+UnnLNkSKnWBd8AyWcZoqp
+         D6YLZoUvejaHesMySWqSoBFda+t6y0BkApQlKlzZBCabh9MM+qZwMkAho1GCfAry9+RK
+         CQOE+wYFeBBQMGlwGVBGSnb4EXERWXyAho/31b9oo8yegswbb+Ja9neoa5MZju6MC5Od
+         vlvQqfKjbm0RfqJhOS+bpCqH2XXG/Ahg+MUdpDw3l1DdjteEi+MAS0pAa4C3pHjmS6xW
+         MesJfqCOdhq5L4Hv5MFq4haBDxUsx7Dj9B+LuHIChSoVo0SfOb++5+ogni0i6yqXDYt0
+         W5Iw==
+X-Gm-Message-State: AC+VfDyMURobXW1zYSgDIyWjXVj0OoO5h8mC37chbWLLOYNmpnyJbAGV
+        OrlKEOmB+DADZQmt18x9u9eOjQ==
+X-Google-Smtp-Source: ACHHUZ4xsPKpQls0bBSSBx3gYhbqy4FQ4MGkOPAIfQVqHHI0/nNYIX6RdMzy+RNSfnAwyUGQMZrBvA==
+X-Received: by 2002:a5d:5492:0:b0:304:a984:7cb5 with SMTP id h18-20020a5d5492000000b00304a9847cb5mr1884886wrv.50.1682613387546;
+        Thu, 27 Apr 2023 09:36:27 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id b2-20020adff902000000b00304aba2cfcbsm2600200wrr.7.2023.04.27.09.36.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 09:36:26 -0700 (PDT)
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+Cc:     "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        'Atish Patra ' <atishp@atishpatra.org>,
+        'Mark Rutland ' <mark.rutland@arm.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        'Albert Ou ' <aou@eecs.berkeley.edu>,
+        'Palmer Dabbelt ' <palmer@dabbelt.com>,
+        'Will Deacon ' <will@kernel.org>,
+        'Daniel Lezcano ' <daniel.lezcano@linaro.org>,
+        'Paul Walmsley ' <paul.walmsley@sifive.com>,
+        'Anup Patel ' <anup@brainfault.org>
+Subject: [PATCH v2] RISC-V: Align SBI probe implementation with spec
+Date:   Thu, 27 Apr 2023 18:36:26 +0200
+Message-Id: <20230427163626.101042-1-ajones@ventanamicro.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
- <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
- <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
- <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
- <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com>
- <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano> <CAGXv+5E0rzByZBn91d60MQ7P0=GbAQUH=PK9EYDu3Upr33td6A@mail.gmail.com>
- <CAGuA+oo0w8n9zEKdd1UfYx+F08wK4CcUGqRbBi4C-xNYp+vtDA@mail.gmail.com> <28e50e45-53cf-4a34-a81c-10f1faab2d4e@notapiano>
-In-Reply-To: <28e50e45-53cf-4a34-a81c-10f1faab2d4e@notapiano>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Thu, 27 Apr 2023 16:08:13 +0200
-Message-ID: <CAGuA+oprz06WS0reC1Edqr1fMn-TjSrCgoO_M54JYQ4x8UnTOg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, Alexandre Bailon <abailon@baylibre.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 1:20=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> On Tue, Apr 25, 2023 at 01:28:39PM +0200, Balsam CHIHI wrote:
-> > On Tue, Apr 25, 2023 at 12:00=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.o=
-rg> wrote:
-> > >
-> > > On Tue, Apr 25, 2023 at 6:21=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
-> > > <nfraprado@collabora.com> wrote:
-> > > >
-> > > > On Tue, Mar 28, 2023 at 02:20:24AM +0200, Balsam CHIHI wrote:
-> > > > > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chrom=
-ium.org> wrote:
-> > > > > >
-> > > > > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@ba=
-ylibre.com> wrote:
-> [..]
-> > > > >
-> > > > > Hi Chen-Yu Tsai,
-> > > > >
-> > > > > Thank you very much for helping me testing this suggestion.
-> > > > >
-> > > > > Indeed, calibration data is stored differently in the mt8192 comp=
-ared to mt8195.
-> > > > > So, the mt8192's support will be delayed for now, to allow furthe=
-r debugging.
-> > > > >
-> > > > > In the mean time, we will only continue to upstream the remaining
-> > > > > mt8195's source code, so it will get full LVTS support.
-> > > > > A new series will be submitted soon.
-> > > >
-> > > > Hi Balsam,
-> > > >
-> > > > like Chen-Yu mentioned, the calibration data is stored with 4 byte =
-alignment for
-> > > > MT8192, but the data that is split between non-contiguous bytes is =
-for the
-> > > > thermal controllers (called Resistor-Capacitor Calibration downstre=
-am) not the
-> > > > sensors. The controller calibration isn't currently handled in this=
- driver (and
-> > > > downstream it also isn't used, since a current value is read from t=
-he controller
-> > > > instead), so we can just ignore those.
-> > > >
-> > > > The patch below adjusts the addresseses for the sensors and gives m=
-e reasonable
-> > > > reads, so the machine no longer reboots. Can you integrate it into =
-your series?
-> > >
-> > > Not sure what I got wrong, but on my machine the VPU0 and VPU1 zone i=
-nterrupts
-> > > are still tripping excessively. The readings seem normal though. Spec=
-ifically,
-> > > it's bits 16 and 17 that are tripping.
-> > >
-> >
-> > Hi Chen-Yu,
-> >
-> > Thank you for testing!
-> >
-> > As the readings are normal that proves that calibration data offsets
-> > are correct.
-> > would you like that I send the v2 of series to add mt8192 support?
-> > Then we could deal with the interrupts later in a separate fix,
-> > because the interrupt code in common for both SoC (mt8192 and mt8195)?
-> >
-> > Does N=C3=ADcolas also have tripping interrupts?
-> > On my side, I've got no interrupts tripping on mt8195.
-> >
-> > Any other suggestions (a question for everyone)?
->
-> Hi,
->
-> sorry for the delay.
->
-> Indeed the interrupts are constantly tripping on mt8192 here as well.
->
-> I do not see the same bits as Chen-Yu mentioned however, I see
->
-> LVTS_MONINTSTS =3D 0x08070000
->
-> which corresponds to
->
->         Hot threshold on sense point 3
->         high to normal offset on sense point 2
->         high offset on sense point 2
->         low offset on sense point 2
->
-> and it's the same on all controllers and domains here, which is weird. I =
-noticed
-> we have offset interrupts enabled even though we don't configure the valu=
-es for
-> those, but even after disabling them and clearing the status register, th=
-e
-> interrupts keep triggering and the status is the same, so for some reason
-> LVTS_MONINT doesn't seem to be honored.
->
-> I also tried using the filtered mode instead of immediate for the sensors=
-, and
-> that together with disabling the extra interrupts, got me a zeroed
-> LVTS_MONINTSTS. However no interrupts seem to be triggered at all (nor
-> LVTS_MONINTSTS updated) when the temperature goes over the configured one=
- in
-> LVTS_HTHRE.
->
-> I tried the driver on mt8195 (Tomato chromebook) as well, and it has the =
-same
-> LVTS_MONINTSTS =3D 0x08070000
-> even though the interrupts aren't being triggered, but in fact I don't se=
-e them
-> triggering over the threshold either, so I suspect the irq number might b=
-e
-> incorrectly described in the DT there.
->
-> Do either of you have it working correctly on mt8195?
->
-> Anyway, I'll keep digging and reply here when I find a solution.
+sbi_probe_extension() is specified with "Returns 0 if the given SBI
+extension ID (EID) is not available, or 1 if it is available unless
+defined as any other non-zero value by the implementation."
+Additionally, sbiret.value is a long. Fix the implementation to
+ensure any nonzero long value is considered a success, rather
+than only positive int values.
 
-Hi N=C3=ADcolas,
+Fixes: b9dcd9e41587 ("RISC-V: Add basic support for SBI v0.2")
+Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+v2:
+  - Added Fixes tag and Conor's r-b
 
-Thank your for your time testing and investigating the interrupt issues!
+ arch/riscv/include/asm/sbi.h        |  2 +-
+ arch/riscv/kernel/cpu_ops.c         |  2 +-
+ arch/riscv/kernel/sbi.c             | 17 ++++++++---------
+ arch/riscv/kvm/main.c               |  2 +-
+ drivers/cpuidle/cpuidle-riscv-sbi.c |  2 +-
+ drivers/perf/riscv_pmu_sbi.c        |  2 +-
+ 6 files changed, 13 insertions(+), 14 deletions(-)
 
-I only have an mt8195 based board (i1200-demo), and I could not
-trigger any interrupt on it.
-I whish that MediaTek could reply to this thread to give us more
-information (I avoid disclosing MediaTek's internal information).
-And now, it's clear that mt8192 interrupts does work at least (but not
-properly, may be we could fix it at driver level).
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index 945b7be249c1..119355485703 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -296,7 +296,7 @@ int sbi_remote_hfence_vvma_asid(const struct cpumask *cpu_mask,
+ 				unsigned long start,
+ 				unsigned long size,
+ 				unsigned long asid);
+-int sbi_probe_extension(int ext);
++long sbi_probe_extension(int ext);
+ 
+ /* Check if current SBI specification version is 0.1 or not */
+ static inline int sbi_spec_is_0_1(void)
+diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
+index 8275f237a59d..eb479a88a954 100644
+--- a/arch/riscv/kernel/cpu_ops.c
++++ b/arch/riscv/kernel/cpu_ops.c
+@@ -27,7 +27,7 @@ const struct cpu_operations cpu_ops_spinwait = {
+ void __init cpu_set_ops(int cpuid)
+ {
+ #if IS_ENABLED(CONFIG_RISCV_SBI)
+-	if (sbi_probe_extension(SBI_EXT_HSM) > 0) {
++	if (sbi_probe_extension(SBI_EXT_HSM)) {
+ 		if (!cpuid)
+ 			pr_info("SBI HSM extension detected\n");
+ 		cpu_ops[cpuid] = &cpu_ops_sbi;
+diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+index 5c87db8fdff2..015ce8eef2de 100644
+--- a/arch/riscv/kernel/sbi.c
++++ b/arch/riscv/kernel/sbi.c
+@@ -581,19 +581,18 @@ static void sbi_srst_power_off(void)
+  * sbi_probe_extension() - Check if an SBI extension ID is supported or not.
+  * @extid: The extension ID to be probed.
+  *
+- * Return: Extension specific nonzero value f yes, -ENOTSUPP otherwise.
++ * Return: 1 or an extension specific nonzero value if yes, 0 otherwise.
+  */
+-int sbi_probe_extension(int extid)
++long sbi_probe_extension(int extid)
+ {
+ 	struct sbiret ret;
+ 
+ 	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_PROBE_EXT, extid,
+ 			0, 0, 0, 0, 0);
+ 	if (!ret.error)
+-		if (ret.value)
+-			return ret.value;
++		return ret.value;
+ 
+-	return -ENOTSUPP;
++	return 0;
+ }
+ EXPORT_SYMBOL(sbi_probe_extension);
+ 
+@@ -665,26 +664,26 @@ void __init sbi_init(void)
+ 	if (!sbi_spec_is_0_1()) {
+ 		pr_info("SBI implementation ID=0x%lx Version=0x%lx\n",
+ 			sbi_get_firmware_id(), sbi_get_firmware_version());
+-		if (sbi_probe_extension(SBI_EXT_TIME) > 0) {
++		if (sbi_probe_extension(SBI_EXT_TIME)) {
+ 			__sbi_set_timer = __sbi_set_timer_v02;
+ 			pr_info("SBI TIME extension detected\n");
+ 		} else {
+ 			__sbi_set_timer = __sbi_set_timer_v01;
+ 		}
+-		if (sbi_probe_extension(SBI_EXT_IPI) > 0) {
++		if (sbi_probe_extension(SBI_EXT_IPI)) {
+ 			__sbi_send_ipi	= __sbi_send_ipi_v02;
+ 			pr_info("SBI IPI extension detected\n");
+ 		} else {
+ 			__sbi_send_ipi	= __sbi_send_ipi_v01;
+ 		}
+-		if (sbi_probe_extension(SBI_EXT_RFENCE) > 0) {
++		if (sbi_probe_extension(SBI_EXT_RFENCE)) {
+ 			__sbi_rfence	= __sbi_rfence_v02;
+ 			pr_info("SBI RFENCE extension detected\n");
+ 		} else {
+ 			__sbi_rfence	= __sbi_rfence_v01;
+ 		}
+ 		if ((sbi_spec_version >= sbi_mk_version(0, 3)) &&
+-		    (sbi_probe_extension(SBI_EXT_SRST) > 0)) {
++		    sbi_probe_extension(SBI_EXT_SRST)) {
+ 			pr_info("SBI SRST extension detected\n");
+ 			pm_power_off = sbi_srst_power_off;
+ 			sbi_srst_reboot_nb.notifier_call = sbi_srst_reboot;
+diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+index 41ad7639a17b..c923c113a129 100644
+--- a/arch/riscv/kvm/main.c
++++ b/arch/riscv/kvm/main.c
+@@ -75,7 +75,7 @@ static int __init riscv_kvm_init(void)
+ 		return -ENODEV;
+ 	}
+ 
+-	if (sbi_probe_extension(SBI_EXT_RFENCE) <= 0) {
++	if (!sbi_probe_extension(SBI_EXT_RFENCE)) {
+ 		kvm_info("require SBI RFENCE extension\n");
+ 		return -ENODEV;
+ 	}
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index be383f4b6855..c6b599167036 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -613,7 +613,7 @@ static int __init sbi_cpuidle_init(void)
+ 	 * 2) SBI HSM extension is available
+ 	 */
+ 	if ((sbi_spec_version < sbi_mk_version(0, 3)) ||
+-	    sbi_probe_extension(SBI_EXT_HSM) <= 0) {
++	    !sbi_probe_extension(SBI_EXT_HSM)) {
+ 		pr_info("HSM suspend not available\n");
+ 		return 0;
+ 	}
+diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+index 70cb50fd41c2..4f3ac296b3e2 100644
+--- a/drivers/perf/riscv_pmu_sbi.c
++++ b/drivers/perf/riscv_pmu_sbi.c
+@@ -924,7 +924,7 @@ static int __init pmu_sbi_devinit(void)
+ 	struct platform_device *pdev;
+ 
+ 	if (sbi_spec_version < sbi_mk_version(0, 3) ||
+-	    sbi_probe_extension(SBI_EXT_PMU) <= 0) {
++	    !sbi_probe_extension(SBI_EXT_PMU)) {
+ 		return 0;
+ 	}
+ 
+-- 
+2.39.2
 
-It's been a couple of days since I sent a v2 of the series that adds
-LVTS support for mt8192 SoC (+ Suspend and Resume, + Doc update):
-"https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/".
-I wish that it will be applied very soon, then we could patch the core driv=
-er.
-
-My colleagues "Alexandre Mergnat (amergnat@baylibre.com)" and
-"Alexandre Bailon (abailon@baylibre.com)" are now part of this
-project.
-Please let them know of future information.
-
-Thanks again for suggesting solutions!
-
-Best regards,
-Balsam
-
->
-> Thanks,
-> N=C3=ADcolas
