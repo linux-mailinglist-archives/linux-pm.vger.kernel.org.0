@@ -2,54 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576C16F16E4
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 13:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997A66F1A9B
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 16:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjD1Lhn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 28 Apr 2023 07:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S229977AbjD1OjS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Apr 2023 10:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjD1Lhl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 07:37:41 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221F59FB;
-        Fri, 28 Apr 2023 04:37:40 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-94f59fbe2cbso280472866b.1;
-        Fri, 28 Apr 2023 04:37:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682681859; x=1685273859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pQiAdmvtnwSb14cjiMRaVpHdjTkVg4P9ZJ6La/hDMEU=;
-        b=YnHhrlJqThjMfhttHi0UKColRYCW+VNH+8p6WSzKrTdmsPidLH4qPE5Hf4JmzVIt4Q
-         y1s4+4Zw2yxrR782iDd/4VWVj9aBXfjjPvxnwY3dICQzFLrVzhWJy4ovBkpKbNJyGXiL
-         TN8Cyf3Bn2wAZzhR6wLC0wSxNkLQDIfswekCC64zo8+ycVu5EdubwcptkVh7WiYW6b16
-         +X30/5JkPKn28A4xmNMKsVtotqzBwabEaWrEwenNJ5JrumD8l/EGM0SHc4OkOaCpJepg
-         Mz4QIQqR9E43VpX4q3YD2Szub6z4GXlhP9e2KfIKFZPB6/6j2wrj5HhWh5EsBsRJa6vP
-         twrg==
-X-Gm-Message-State: AC+VfDyCOrcM9rXELEraPCPcDZAcglJ7In1ZgZ9UyYgk/0idiM3iU49a
-        hur45jVbu3TK04DMh506wOjBrhNEUuDcl6efY0w=
-X-Google-Smtp-Source: ACHHUZ7b83N+99IjPNrm9q4SfjsN0/3pu7yue2W8TTat+5Di3COuETAjaTyh9pN0yPc4hXwcjAl94wgjwcrGshwc6vQ=
-X-Received: by 2002:a17:906:7a51:b0:94e:63ae:5b9b with SMTP id
- i17-20020a1709067a5100b0094e63ae5b9bmr2033742ejo.7.1682681858835; Fri, 28 Apr
- 2023 04:37:38 -0700 (PDT)
+        with ESMTP id S229580AbjD1OjR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 10:39:17 -0400
+Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [IPv6:2001:41d0:203:375::3b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DD949E2
+        for <linux-pm@vger.kernel.org>; Fri, 28 Apr 2023 07:39:14 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 16:39:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
+        t=1682692751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bMx6OTRIJwaSYCgtTQhYpKMdrEpNqX+maRQV25Yjn0g=;
+        b=AmxHRRunYY0A/ohh8FCgGb2ps0vCoSGpStqPEPESelyx9uq6sjy0EkiJVSAC1P+YWsKwmF
+        wuRwETVk6yL6MwZMdWkEfW1wawGFnRcL4rv/9w88VBB1Z6BTHt9zuqd8I2NE0S4YVeS4N0
+        kVDZ9X01BzPTKZbUChoF+5bZ+DGzvRE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Henrik Grimler <henrik@grimler.se>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
+Message-ID: <ZEvaixFJGk/Nr1m2@L14.lan>
+References: <cover.1682636929.git.jahau@rocketmail.com>
+ <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
 MIME-Version: 1.0
-References: <20230428070314.225560-1-wangyouwan@126.com>
-In-Reply-To: <20230428070314.225560-1-wangyouwan@126.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Apr 2023 13:37:26 +0200
-Message-ID: <CAJZ5v0jT0tiwQtTpg-YeptVYq_t80o0nW3O7d9OBDmAxdv8=Dw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: create cooling device based on ACPI
-To:     wangyouwan@126.com
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,44 +61,232 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 9:19 AM <wangyouwan@126.com> wrote:
->
-> From: youwan Wang <wangyouwan@126.com>
->
-> When using the "scpi_cpufreq" driver, an error
-> occurs:cpufreq_cooling: OF node not available for cpu*.
-> The current computer motherboard is using ACPI firmware.
-> Go to see that the error is caused by calling the
-> "of_cpufreq_cooling_register" interface.
-> comment:create cpufreq cooling device based on DT.
->
-> Signed-off-by: youwan Wang <wangyouwan@126.com>
+Hi Jakob,
+
+One question inline.
+
+On Fri, Apr 28, 2023 at 01:30:11AM +0200, Jakob Hauser wrote:
+> Add device tree binding documentation for rt5033 multifunction device, voltage
+> regulator and battery charger.
+> 
+> Cc: Beomho Seo <beomho.seo@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6b52ebe5a890..3418c68959d5 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1528,8 +1528,13 @@ static int cpufreq_online(unsigned int cpu)
->         if (cpufreq_driver->ready)
->                 cpufreq_driver->ready(policy);
->
-> -       if (cpufreq_thermal_control_enabled(cpufreq_driver))
-> +       if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
-> +#ifdef CONFIG_ACPI
-> +               policy->cdev = cpufreq_cooling_register(policy);
-> +#else
->                 policy->cdev = of_cpufreq_cooling_register(policy);
-> +#endif
+> The patch is based on next-20230413.
+> 
+> The drivers for rt5033 (mfd) and rt5033-regulator are existing. Whereas the
+> the driver rt5033-charger is new in this patchset.
+> 
+> The extcon phandle is still there, as I didn't know what Rob meant by
+> "standard connector bindings".
+> 
+> Changes in v3:
+>  - Removed redundant "documentation" in the commit title.
+>  - Squashed regulator into the mfd binding.
+>  - Restored the regulator node names to uppercase because it is an existing
+>    driver.
+>  - In the charger binding replaced the vendor properties by "battery" node
+>    style. Accodringly updated the example in the mfd.
+> 
+>  .../bindings/mfd/richtek,rt5033.yaml          | 105 ++++++++++++++++++
+>  .../power/supply/richtek,rt5033-charger.yaml  |  63 +++++++++++
+>  2 files changed, 168 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+> new file mode 100644
+> index 000000000000..ee704914201f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/richtek,rt5033.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RT5033 Power Management Integrated Circuit
+> +
+> +maintainers:
+> +  - Jakob Hauser <jahau@rocketmail.com>
+> +
+> +description:
+> +  RT5033 is a multifunction device which includes battery charger, fuel gauge,
+> +  flash LED current source, LDO and synchronous Buck converter for portable
+> +  applications. It is interfaced to host controller using I2C interface. The
+> +  battery fuel gauge uses a separate I2C bus.
+> +
+> +properties:
+> +  compatible:
+> +    const: richtek,rt5033
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  regulators:
+> +    description:
+> +      The regulators of RT5033 have to be instantiated under a sub-node named
+> +      "regulators". For SAFE_LDO voltage there is only one value of 4.9 V. LDO
 
-Please avoid adding #ifdefs like this in random places.
+Is only 4.9 V valid for SAFE_LDO? If I am reading driver found in
+vendor kernel for SM-A500F it seems to to allow values between 3.3 and
+4.95 V [1]. Same range is also written in the devicetree for the
+device [2].
 
-Moreover, what if the kernel supports ACPI and the platform is DT-based?
+[1] https://github.com/msm8916-mainline/linux-downstream/blob/SM-A500F/drivers/regulator/rt5033_regulator.c#L109-L114
+[2] https://github.com/msm8916-mainline/linux-downstream/blob/SM-A500F/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-a5u-eur-r01.dtsi#L148-L149
 
-> +       }
->
->         pr_debug("initialization complete\n");
->
-> --
+Best regards,
+Henrik Grimler
+
+> +      voltage ranges from 1.2 V to 3.0 V in 0.1 V steps. BUCK voltage ranges
+> +      from 1.0 V to 3.0 V in 0.1 V steps.
+> +    type: object
+> +    patternProperties:
+> +      "^(SAFE_LDO|LDO|BUCK)$":
+> +        type: object
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +        unevaluatedProperties: false
+> +    additionalProperties: false
+> +
+> +  charger:
+> +    type: object
+> +    $ref: /schemas/power/supply/richtek,rt5033-charger.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    battery: battery {
+> +        compatible = "simple-battery";
+> +        precharge-current-microamp = <450000>;
+> +        constant-charge-current-max-microamp = <1000000>;
+> +        charge-term-current-microamp = <150000>;
+> +        precharge-upper-limit-microvolt = <3500000>;
+> +        constant-charge-voltage-max-microvolt = <4350000>;
+> +    };
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@34 {
+> +            compatible = "richtek,rt5033";
+> +            reg = <0x34>;
+> +
+> +            interrupt-parent = <&msmgpio>;
+> +            interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&pmic_int_default>;
+> +
+> +            regulators {
+> +                safe_ldo_reg: SAFE_LDO {
+> +                    regulator-name = "SAFE_LDO";
+> +                    regulator-min-microvolt = <4900000>;
+> +                    regulator-max-microvolt = <4900000>;
+> +                    regulator-always-on;
+> +                };
+> +                ldo_reg: LDO {
+> +                    regulator-name = "LDO";
+> +                    regulator-min-microvolt = <2800000>;
+> +                    regulator-max-microvolt = <2800000>;
+> +                };
+> +                buck_reg: BUCK {
+> +                    regulator-name = "BUCK";
+> +                    regulator-min-microvolt = <1200000>;
+> +                    regulator-max-microvolt = <1200000>;
+> +                };
+> +            };
+> +
+> +            charger {
+> +                compatible = "richtek,rt5033-charger";
+> +                monitored-battery = <&battery>;
+> +                extcon = <&muic>;
+> +            };
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+> new file mode 100644
+> index 000000000000..bf08e8db365e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RT5033 PIMC Battery Charger
+> +
+> +maintainers:
+> +  - Jakob Hauser <jahau@rocketmail.com>
+> +
+> +description:
+> +  The battery charger of the multifunction device RT5033 has to be instantiated
+> +  under sub-node named "charger" using the following format.
+> +
+> +properties:
+> +  compatible:
+> +    const: richtek,rt5033-charger
+> +
+> +  monitored-battery:
+> +    description: |
+> +      Phandle to the monitored battery according to battery.yaml. The battery
+> +      node needs to contain five parameters.
+> +
+> +      precharge-current-microamp:
+> +      Current of pre-charge mode. The pre-charge current levels are 350 mA
+> +      to 650 mA programmed by I2C per 100 mA.
+> +
+> +      constant-charge-current-max-microamp:
+> +      Current of fast-charge mode. The fast-charge current levels are 700 mA
+> +      to 2000 mA programmed by I2C per 100 mA.
+> +
+> +      charge-term-current-microamp:
+> +      This property is end of charge current. Its level ranges from 150 mA
+> +      to 600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and
+> +      600 mA in 100 mA steps.
+> +
+> +      precharge-upper-limit-microvolt:
+> +      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
+> +      threshold voltage, the charger is in pre-charge mode with pre-charge
+> +      current. Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
+> +
+> +      constant-charge-voltage-max-microvolt:
+> +      Battery regulation voltage of constant voltage mode. This voltage levels
+> +      from 3.65 V to 4.4 V by I2C per 0.025 V.
+> +
+> +  extcon:
+> +    description:
+> +      Phandle to the extcon device.
+> +    maxItems: 1
+> +
+> +required:
+> +  - monitored-battery
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    charger {
+> +        compatible = "richtek,rt5033-charger";
+> +        monitored-battery = <&battery>;
+> +        extcon = <&muic>;
+> +    };
+> -- 
+> 2.39.2
+> 
