@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9714B6F148D
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 11:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49686F148F
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 11:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345812AbjD1Jwh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Apr 2023 05:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S1345729AbjD1Jwp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Apr 2023 05:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345704AbjD1JwR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 05:52:17 -0400
+        with ESMTP id S1345790AbjD1Jwf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 05:52:35 -0400
 Received: from out0-216.mail.aliyun.com (out0-216.mail.aliyun.com [140.205.0.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FE85B95;
-        Fri, 28 Apr 2023 02:52:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047207;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.STCEPKJ_1682675519;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STCEPKJ_1682675519)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248BA10E7;
+        Fri, 28 Apr 2023 02:52:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047204;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---.STCEPMn_1682675524;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STCEPMn_1682675524)
           by smtp.aliyun-inc.com;
-          Fri, 28 Apr 2023 17:52:00 +0800
+          Fri, 28 Apr 2023 17:52:05 +0800
 From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
@@ -25,15 +25,14 @@ Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
         "Kees Cook" <keescook@chromium.org>,
         "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Len Brown" <len.brown@intel.com>, "Pavel Machek" <pavel@ucw.cz>,
+        "Pavel Machek" <pavel@ucw.cz>,
         "Thomas Gleixner" <tglx@linutronix.de>,
         "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
         "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-pm@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>
-Subject: [PATCH RFC 07/43] x86/acpi: Adapt assembly for PIE support
-Date:   Fri, 28 Apr 2023 17:50:47 +0800
-Message-Id: <8b90798cb41604b2e2d47c8fcbb67913daafd85d.1682673543.git.houwenlong.hwl@antgroup.com>
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-pm@vger.kernel.org>
+Subject: [PATCH RFC 09/43] x86/power/64: Adapt assembly for PIE support
+Date:   Fri, 28 Apr 2023 17:50:49 +0800
+Message-Id: <b93623c94be2633a90b3abfc6a7ea6c1703f7a9a.1682673543.git.houwenlong.hwl@antgroup.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
@@ -60,82 +59,31 @@ Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
 Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 Cc: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/kernel/acpi/wakeup_64.S | 31 ++++++++++++++++---------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
+ arch/x86/power/hibernate_asm_64.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/acpi/wakeup_64.S b/arch/x86/kernel/acpi/wakeup_64.S
-index d5d8a352eafa..fe688bd87d72 100644
---- a/arch/x86/kernel/acpi/wakeup_64.S
-+++ b/arch/x86/kernel/acpi/wakeup_64.S
-@@ -17,7 +17,7 @@
- 	 * Hooray, we are in Long 64-bit mode (but still running in low memory)
- 	 */
- SYM_FUNC_START(wakeup_long64)
--	movq	saved_magic, %rax
-+	movq	saved_magic(%rip), %rax
- 	movq	$0x123456789abcdef0, %rdx
- 	cmpq	%rdx, %rax
- 	je	2f
-@@ -33,14 +33,14 @@ SYM_FUNC_START(wakeup_long64)
- 	movw	%ax, %es
- 	movw	%ax, %fs
- 	movw	%ax, %gs
--	movq	saved_rsp, %rsp
-+	movq	saved_rsp(%rip), %rsp
+diff --git a/arch/x86/power/hibernate_asm_64.S b/arch/x86/power/hibernate_asm_64.S
+index 0a0539e1cc81..1d96a119d29d 100644
+--- a/arch/x86/power/hibernate_asm_64.S
++++ b/arch/x86/power/hibernate_asm_64.S
+@@ -39,7 +39,7 @@ SYM_FUNC_START(restore_registers)
+ 	movq	%rax, %cr4;  # turn PGE back on
  
--	movq	saved_rbx, %rbx
--	movq	saved_rdi, %rdi
--	movq	saved_rsi, %rsi
--	movq	saved_rbp, %rbp
-+	movq	saved_rbx(%rip), %rbx
-+	movq	saved_rdi(%rip), %rdi
-+	movq	saved_rsi(%rip), %rsi
-+	movq	saved_rbp(%rip), %rbp
+ 	/* We don't restore %rax, it must be 0 anyway */
+-	movq	$saved_context, %rax
++	leaq	saved_context(%rip), %rax
+ 	movq	pt_regs_sp(%rax), %rsp
+ 	movq	pt_regs_bp(%rax), %rbp
+ 	movq	pt_regs_si(%rax), %rsi
+@@ -70,7 +70,7 @@ SYM_FUNC_START(restore_registers)
+ SYM_FUNC_END(restore_registers)
  
--	movq	saved_rip, %rax
-+	movq	saved_rip(%rip), %rax
- 	ANNOTATE_RETPOLINE_SAFE
- 	jmp	*%rax
- SYM_FUNC_END(wakeup_long64)
-@@ -51,7 +51,7 @@ SYM_FUNC_START(do_suspend_lowlevel)
- 	xorl	%eax, %eax
- 	call	save_processor_state
- 
+ SYM_FUNC_START(swsusp_arch_suspend)
 -	movq	$saved_context, %rax
 +	leaq	saved_context(%rip), %rax
  	movq	%rsp, pt_regs_sp(%rax)
  	movq	%rbp, pt_regs_bp(%rax)
  	movq	%rsi, pt_regs_si(%rax)
-@@ -70,13 +70,14 @@ SYM_FUNC_START(do_suspend_lowlevel)
- 	pushfq
- 	popq	pt_regs_flags(%rax)
- 
--	movq	$.Lresume_point, saved_rip(%rip)
-+	leaq	.Lresume_point(%rip), %rax
-+	movq	%rax, saved_rip(%rip)
- 
--	movq	%rsp, saved_rsp
--	movq	%rbp, saved_rbp
--	movq	%rbx, saved_rbx
--	movq	%rdi, saved_rdi
--	movq	%rsi, saved_rsi
-+	movq	%rsp, saved_rsp(%rip)
-+	movq	%rbp, saved_rbp(%rip)
-+	movq	%rbx, saved_rbx(%rip)
-+	movq	%rdi, saved_rdi(%rip)
-+	movq	%rsi, saved_rsi(%rip)
- 
- 	addq	$8, %rsp
- 	movl	$3, %edi
-@@ -88,7 +89,7 @@ SYM_FUNC_START(do_suspend_lowlevel)
- 	.align 4
- .Lresume_point:
- 	/* We don't restore %rax, it must be 0 anyway */
--	movq	$saved_context, %rax
-+	leaq	saved_context(%rip), %rax
- 	movq	saved_context_cr4(%rax), %rbx
- 	movq	%rbx, %cr4
- 	movq	saved_context_cr3(%rax), %rbx
 -- 
 2.31.1
 
