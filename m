@@ -2,48 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C7A6F1241
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 09:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9714B6F148D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 11:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345438AbjD1HT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Apr 2023 03:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S1345812AbjD1Jwh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Apr 2023 05:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345485AbjD1HTW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 03:19:22 -0400
-X-Greylist: delayed 918 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 00:19:08 PDT
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2EAB4203;
-        Fri, 28 Apr 2023 00:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=3n/5p
-        i3UktdMdOC7PL3+qtIEfToIjoCQnLGC8cIVVEc=; b=MvcPxGPuqb1gxBynrMeoR
-        cNvLwi6VPUcS3QQW0k1sadnaNmHESh2tfqqY04tAl/f9li6iKslx8YgkCflzwB7H
-        IRkmgsHc6TaARjo//iNkZyeXKJjjWpZ2T2FMRXQDYxorQMYREWr6mkqxl5prrnLH
-        q7tWnqD6XmVTHDqge/IMYg=
-Received: from king.lan (unknown [103.163.180.43])
-        by zwqz-smtp-mta-g3-1 (Coremail) with SMTP id _____wBn7_i0b0tkcltkAA--.5787S2;
-        Fri, 28 Apr 2023 15:03:18 +0800 (CST)
-From:   wangyouwan@126.com
-To:     rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        youwan Wang <wangyouwan@126.com>
-Subject: [PATCH] cpufreq: create cooling device based on ACPI
-Date:   Fri, 28 Apr 2023 15:03:14 +0800
-Message-Id: <20230428070314.225560-1-wangyouwan@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1345704AbjD1JwR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 05:52:17 -0400
+Received: from out0-216.mail.aliyun.com (out0-216.mail.aliyun.com [140.205.0.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FE85B95;
+        Fri, 28 Apr 2023 02:52:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047207;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.STCEPKJ_1682675519;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STCEPKJ_1682675519)
+          by smtp.aliyun-inc.com;
+          Fri, 28 Apr 2023 17:52:00 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
+        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <len.brown@intel.com>, "Pavel Machek" <pavel@ucw.cz>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-pm@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: [PATCH RFC 07/43] x86/acpi: Adapt assembly for PIE support
+Date:   Fri, 28 Apr 2023 17:50:47 +0800
+Message-Id: <8b90798cb41604b2e2d47c8fcbb67913daafd85d.1682673543.git.houwenlong.hwl@antgroup.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBn7_i0b0tkcltkAA--.5787S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF1kWry8Zw1kWw13KF47XFb_yoWkZwb_Cr
-        9Ygr9rXr45C3WIqF13Gr40vFn0vw47Wr1xXF10qa9xtFyUArZakr4kXr1UXrWrGw4rGF9r
-        AryjyF4Skr1UGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRKZX3UUUUU==
-X-Originating-IP: [103.163.180.43]
-X-CM-SenderInfo: 5zdqw5prxzt0a6rslhhfrp/1tbi5RhfFVpD+ETrDwAAs2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,39 +48,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: youwan Wang <wangyouwan@126.com>
+From: Thomas Garnier <thgarnie@chromium.org>
 
-When using the "scpi_cpufreq" driver, an error
-occurs:cpufreq_cooling: OF node not available for cpu*.
-The current computer motherboard is using ACPI firmware.
-Go to see that the error is caused by calling the
-"of_cpufreq_cooling_register" interface.
-comment:create cpufreq cooling device based on DT.
+From: Thomas Garnier <thgarnie@chromium.org>
 
-Signed-off-by: youwan Wang <wangyouwan@126.com>
+Change the assembly code to use only relative references of symbols for the
+kernel to be PIE compatible.
+
+Signed-off-by: Thomas Garnier <thgarnie@chromium.org>
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Cc: Kees Cook <keescook@chromium.org>
 ---
- drivers/cpufreq/cpufreq.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/kernel/acpi/wakeup_64.S | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 6b52ebe5a890..3418c68959d5 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1528,8 +1528,13 @@ static int cpufreq_online(unsigned int cpu)
- 	if (cpufreq_driver->ready)
- 		cpufreq_driver->ready(policy);
+diff --git a/arch/x86/kernel/acpi/wakeup_64.S b/arch/x86/kernel/acpi/wakeup_64.S
+index d5d8a352eafa..fe688bd87d72 100644
+--- a/arch/x86/kernel/acpi/wakeup_64.S
++++ b/arch/x86/kernel/acpi/wakeup_64.S
+@@ -17,7 +17,7 @@
+ 	 * Hooray, we are in Long 64-bit mode (but still running in low memory)
+ 	 */
+ SYM_FUNC_START(wakeup_long64)
+-	movq	saved_magic, %rax
++	movq	saved_magic(%rip), %rax
+ 	movq	$0x123456789abcdef0, %rdx
+ 	cmpq	%rdx, %rax
+ 	je	2f
+@@ -33,14 +33,14 @@ SYM_FUNC_START(wakeup_long64)
+ 	movw	%ax, %es
+ 	movw	%ax, %fs
+ 	movw	%ax, %gs
+-	movq	saved_rsp, %rsp
++	movq	saved_rsp(%rip), %rsp
  
--	if (cpufreq_thermal_control_enabled(cpufreq_driver))
-+	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
-+#ifdef CONFIG_ACPI
-+		policy->cdev = cpufreq_cooling_register(policy);
-+#else
- 		policy->cdev = of_cpufreq_cooling_register(policy);
-+#endif
-+	}
+-	movq	saved_rbx, %rbx
+-	movq	saved_rdi, %rdi
+-	movq	saved_rsi, %rsi
+-	movq	saved_rbp, %rbp
++	movq	saved_rbx(%rip), %rbx
++	movq	saved_rdi(%rip), %rdi
++	movq	saved_rsi(%rip), %rsi
++	movq	saved_rbp(%rip), %rbp
  
- 	pr_debug("initialization complete\n");
+-	movq	saved_rip, %rax
++	movq	saved_rip(%rip), %rax
+ 	ANNOTATE_RETPOLINE_SAFE
+ 	jmp	*%rax
+ SYM_FUNC_END(wakeup_long64)
+@@ -51,7 +51,7 @@ SYM_FUNC_START(do_suspend_lowlevel)
+ 	xorl	%eax, %eax
+ 	call	save_processor_state
  
+-	movq	$saved_context, %rax
++	leaq	saved_context(%rip), %rax
+ 	movq	%rsp, pt_regs_sp(%rax)
+ 	movq	%rbp, pt_regs_bp(%rax)
+ 	movq	%rsi, pt_regs_si(%rax)
+@@ -70,13 +70,14 @@ SYM_FUNC_START(do_suspend_lowlevel)
+ 	pushfq
+ 	popq	pt_regs_flags(%rax)
+ 
+-	movq	$.Lresume_point, saved_rip(%rip)
++	leaq	.Lresume_point(%rip), %rax
++	movq	%rax, saved_rip(%rip)
+ 
+-	movq	%rsp, saved_rsp
+-	movq	%rbp, saved_rbp
+-	movq	%rbx, saved_rbx
+-	movq	%rdi, saved_rdi
+-	movq	%rsi, saved_rsi
++	movq	%rsp, saved_rsp(%rip)
++	movq	%rbp, saved_rbp(%rip)
++	movq	%rbx, saved_rbx(%rip)
++	movq	%rdi, saved_rdi(%rip)
++	movq	%rsi, saved_rsi(%rip)
+ 
+ 	addq	$8, %rsp
+ 	movl	$3, %edi
+@@ -88,7 +89,7 @@ SYM_FUNC_START(do_suspend_lowlevel)
+ 	.align 4
+ .Lresume_point:
+ 	/* We don't restore %rax, it must be 0 anyway */
+-	movq	$saved_context, %rax
++	leaq	saved_context(%rip), %rax
+ 	movq	saved_context_cr4(%rax), %rbx
+ 	movq	%rbx, %cr4
+ 	movq	saved_context_cr3(%rax), %rbx
 -- 
-2.25.1
+2.31.1
 
