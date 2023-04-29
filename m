@@ -2,120 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77A16F1F24
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Apr 2023 22:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3DA6F21EC
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Apr 2023 03:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjD1UKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Apr 2023 16:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S230304AbjD2BTz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Apr 2023 21:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjD1UKu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 16:10:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E056926B1;
-        Fri, 28 Apr 2023 13:10:49 -0700 (PDT)
-Received: from notapiano (unknown [194.36.25.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1E58866032CF;
-        Fri, 28 Apr 2023 21:10:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682712648;
-        bh=b5em7hgy8DNSPO5+mn/VtcgYEzm4w56x9wJfr+VO8D4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mOYtKibkW1pr8UXj77mTOfkBfTEHE2oP6mK91rL1sLuM5uyyvweODtM13BjoCDbqq
-         FFlgX6LUhK6MPAje3n1giNCCJZ6nK4Jzn282wQtxAY3Vs3fUeYfiB0HcI4kr75L+QD
-         dtA550hoHvFG0YaRobuOVtopR1PCjQlRpnP/TYL21qS0vVL4cseX7YVT1gXlGIHQJY
-         Cm5igPAjkdFstwIoKSWNP0DM2AqJnoDgW3xoW0u7vuXjWkqqJnBXPphbruh4q3VzOf
-         EYiQtcnpkVuoWrFv54pwSmzpmg18h9OujEAIIqdPwFmu+14kVVWc/OuZiWOp4YltMr
-         20V+GcMJtpdWw==
-Date:   Fri, 28 Apr 2023 16:10:38 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     bchihi@baylibre.com
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com,
-        amergnat@baylibre.com, khilman@baylibre.com
-Subject: Re: [PATCH v2 3/5] thermal/drivers/mediatek/lvts_thermal: Add mt8192
- support
-Message-ID: <37680c5e-e61c-410b-b48d-829914200e4a@notapiano>
-References: <20230425133052.199767-1-bchihi@baylibre.com>
- <20230425133052.199767-4-bchihi@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230425133052.199767-4-bchihi@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S1347078AbjD2BTw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Apr 2023 21:19:52 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C4A2703;
+        Fri, 28 Apr 2023 18:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682731191; x=1714267191;
+  h=date:from:to:cc:subject:message-id;
+  bh=22QTXEBjFpcAg5cFO3GhkzejLOG8U0S6Ny4DPU7VWhc=;
+  b=fAnL3Jy4lUcbCMWdqnd4LylvRfJRMTVpGnFP6aRQHO9yDSDuV/a14P0P
+   PXc7eE3xSFBxopTlZDTy47ih4nJQUP5vhRM/EGIpe3mXRsF9pYFI0x88o
+   8aX+YNLtvcjLP7qA2LhIWY1dpGev01Y1oCqtRZZhU611/Zi6lIcHTUkEp
+   O41S1sMXeFb7Ly3CqkruqaB9F/so2Cra2uEGAXAbCswvJ/LUPL6q0I02H
+   SncbYH3sasgFGu/QO4Bdv2St69znvCd9eLB6THL9eEv5cFYuWPvgyoI2m
+   FxCNiSNXEFeIfRAOOURn866FBjnj7adO20Pfl8MyPx7mNtHSbxzPMumFt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="328231890"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="328231890"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 18:19:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819206961"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="819206961"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2023 18:19:49 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psZFc-0000n5-1t;
+        Sat, 29 Apr 2023 01:19:48 +0000
+Date:   Sat, 29 Apr 2023 09:19:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 7e40823f061f58eb79b868914b702b613acf2da2
+Message-ID: <20230429011927.J3bgB%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 03:30:50PM +0200, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add LVTS Driver support for MT8192.
-> 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> Co-developed-by : Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->  drivers/thermal/mediatek/lvts_thermal.c | 92 +++++++++++++++++++++++++
->  1 file changed, 92 insertions(+)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 5ea8a9d569ea6..8df7b4c72a658 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-[..]
-> +static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
-> +	{
-> +		.cal_offset = { 0x04, 0x08 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU0 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 7e40823f061f58eb79b868914b702b613acf2da2  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-Hi Balsam,
+elapsed time: 726m
 
-during the investigation I did to fix the interrupt issues I mentioned in v1, I
-noticed that the threshold interrupts (hot, hot to normal, cold), only trigger
-when the controller is configured to filtered mode. In immediate mode the
-threshold interrupts are not triggered.
+configs tested: 103
+configs skipped: 8
 
-So I say we add
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-               .mode = LVTS_MSR_FILTERED_MODE,
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230428   gcc  
+alpha        buildonly-randconfig-r003-20230428   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r023-20230428   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r006-20230428   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230428   gcc  
+arc                           tb10x_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230428   clang
+arm                           stm32_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r033-20230428   clang
+csky         buildonly-randconfig-r004-20230428   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r016-20230428   clang
+hexagon              randconfig-r025-20230428   clang
+hexagon              randconfig-r041-20230428   clang
+hexagon              randconfig-r045-20230428   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r006-20230428   gcc  
+ia64                 randconfig-r026-20230428   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r015-20230428   gcc  
+m68k                 randconfig-r036-20230428   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r011-20230428   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230428   gcc  
+openrisc             randconfig-r004-20230428   gcc  
+openrisc             randconfig-r012-20230428   gcc  
+openrisc                       virt_defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r002-20230428   gcc  
+parisc               randconfig-r021-20230428   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     kmeter1_defconfig   clang
+powerpc                 mpc8315_rdb_defconfig   clang
+powerpc              randconfig-r022-20230428   gcc  
+powerpc              randconfig-r024-20230428   gcc  
+powerpc              randconfig-r032-20230428   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r005-20230428   clang
+riscv                randconfig-r042-20230428   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230428   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230428   gcc  
+sh                   randconfig-r014-20230428   gcc  
+sparc                               defconfig   gcc  
+sparc64      buildonly-randconfig-r001-20230428   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
 
-for all the controllers here. Same for MT8195, although I guess that'd be better
-done in a separate series. And I haven't had time to test more on MT8195 to see
-if I can get any interrupts there.
-
-One issue with filtered mode is that the data read is often not ready (valid bit
-unset), so most of the time it returns -EAGAIN. But I think that should be easy
-to address by reading with a timeout (equal to the measurement interval we
-already know), instead of a single time, if on filtered mode.
-
-I'll also try to review the other commits in this series, though that'll have to
-wait for next week.
-
-Thanks,
-Nícolas
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
