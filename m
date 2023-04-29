@@ -2,120 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CB56F254E
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Apr 2023 17:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0206F255D
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Apr 2023 18:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjD2Pzq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Apr 2023 11:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S229471AbjD2Q6u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Apr 2023 12:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjD2Pzp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Apr 2023 11:55:45 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DC7172E;
-        Sat, 29 Apr 2023 08:55:44 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94f0dd117dcso146462966b.3;
-        Sat, 29 Apr 2023 08:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682783743; x=1685375743;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TxvGvkws6v3OUPVKHHB+9cC8k2VhJOwpUtI24BtY69g=;
-        b=REYv5IGmxp2EXyq8ER51sGhzE/vJ8B13FZucXizKVVauZ2+kxdXZrsbWRxGiSyw9vY
-         mKasHYVY5c5pCmWaY5LlkET5nfRS718JeXly2SPQYhCV2slCyqdhsHj48MIZVoGUzkPq
-         ZgsNaog2b1xuhmY2gebCZ49QMwXmFjKt9yW1vJqbiX32rit3XriwHMgwOsIZ1XXjDnUp
-         7zGiX1xTBBEcV7zShZw2HjZesYzYfHtf3xnx1YNBUeQmJP6BSR0dRF02DQN7teRAOkzS
-         UoXP2vVvFV6Euyh8Yz12CbC7D5p7rRHeUxKlx5rSfyN6iRGkVetF0bzrP7WpVunUyuvw
-         7iew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682783743; x=1685375743;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TxvGvkws6v3OUPVKHHB+9cC8k2VhJOwpUtI24BtY69g=;
-        b=RW56g2/5XMmJcnTDNCUfCHJWJK+R1cAxjgV+j/MD9IyJf8P6nnz/zir0CkJSP+R7I7
-         ftMv6MddX2AUmBzr0zgp/E8rITsVKa9Gq2uVMY1+YsWaK8oJD4OlckkTA+/L8ckZpHQE
-         I1U+5Kp1TFgNdlHji1F973r45yVPURlXXYlkB4iDRiEIwrmoVxymnEjCkwcIlGlzkIMA
-         U7tVLvlHp1ImaNwNI4lxcq4RFCxH2w41iFt816Y4O96wc5vMyg48hRLepmfWSVoN6/uA
-         y8YvcoP/wN2hTQ1BPymrCEmZJHRfT69KvBax9DucsZb/Kz0Hz/fpliM27KdmzY+BTVio
-         5rMQ==
-X-Gm-Message-State: AC+VfDzXni+fvzMIXPdjxle648KuT5je6PLpASppB+LZTnodSEdBlEQ2
-        Rvl9JQL/uPWi7/xbD4XgjoQ=
-X-Google-Smtp-Source: ACHHUZ5dT/PeCwnQSBGn49wK0jIxYcMU3RAAAEX/X4fj13wWXTPrHhe6nJQLWFRONNoSzGgOljix5A==
-X-Received: by 2002:a17:906:dc93:b0:94f:1ac0:850b with SMTP id cs19-20020a170906dc9300b0094f1ac0850bmr9028611ejc.71.1682783743147;
-        Sat, 29 Apr 2023 08:55:43 -0700 (PDT)
-Received: from [192.168.50.244] (83.8.115.30.ipv4.supernova.orange.pl. [83.8.115.30])
-        by smtp.gmail.com with ESMTPSA id sg9-20020a170907a40900b00959aba150c3sm8040932ejc.50.2023.04.29.08.55.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Apr 2023 08:55:42 -0700 (PDT)
-Message-ID: <712cd0a7-fdb9-059a-90b7-5c3b6a08fd5b@gmail.com>
-Date:   Sat, 29 Apr 2023 17:55:40 +0200
+        with ESMTP id S229441AbjD2Q6t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Apr 2023 12:58:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD921711;
+        Sat, 29 Apr 2023 09:58:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B70860A28;
+        Sat, 29 Apr 2023 16:58:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1E9C433EF;
+        Sat, 29 Apr 2023 16:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682787527;
+        bh=9BhF2nTSCjFB0Gy5eknXva4Setavuky5AbLH1KVB80Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UnK32S/UWo+TgFV/6KDuj6qZV3V+W7tG5+NPpk2T1Fp/nFV4zT5vWHkddTQcrFsXm
+         3JQ47E/+SCDkCFp5FjRLmvnH0v+VUTxmAxJgSQC43+JKKP6Kq7Ca6aCwmFAWtNmbXc
+         w49kCIZh8mv4xKYOqVrlJhNRzgweTGN8bha8yjwoFsXjPvrFNanxBuc0h4bBlRZbaa
+         W5VMVP+M54aHEXrXfJbc0DboL7Pa6NczCzJ0NWLoxGpbocMzmu9xhU3OABN3Co1HlB
+         wFsn356wPNBhKYwa2kEARkROb5TkyIjvFWAtrzyw573iFqLNBEMXXbXtEcsKl14WRQ
+         nAKHbPhIm1cNQ==
+Received: by mercury (Postfix, from userid 1000)
+        id C80EF1066F41; Sat, 29 Apr 2023 18:58:43 +0200 (CEST)
+Date:   Sat, 29 Apr 2023 18:58:43 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.4
+Message-ID: <20230429165843.uobwenl6dy7x3vtr@mercury.elektranox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 03/12] ARM: exynos: Re-introduce Exynos4212 support
-Content-Language: en-US
-To:     Henrik Grimler <henrik@grimler.se>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230416133422.1949-1-aweber.kernel@gmail.com>
- <20230416133422.1949-4-aweber.kernel@gmail.com> <ZEBN8ImTp/tRdej+@L14.lan>
-From:   Artur Weber <aweber.kernel@gmail.com>
-In-Reply-To: <ZEBN8ImTp/tRdej+@L14.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="td2ublvuvzdey55r"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/04/2023 22:24, Henrik Grimler wrote:
->>  	/*
->>  	 * The second parameter of SMC_CMD_CPU1BOOT command means CPU id.
->> +	 * But, Exynos4212 has only one secondary CPU so second parameter
->> +	 * isn't used for informing secure firmware about CPU id.
->>  	 */
->> +	if (soc_is_exynos4212())
->> +		cpu = 0;
-> 
-> Is it necessary to set cpu = 0?  Are there any obvious issues without
-> it (like second cpu not being brought up)?
 
-Just tested this; looks like it's required here, without it the second
-core fails to start up:
+--td2ublvuvzdey55r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[    0.064277] smp: Bringing up secondary CPUs ...
-[    1.067163] CPU1: failed to boot: -110
-[    1.069683] smp: Brought up 1 node, 1 CPU
-[    1.072470] SMP: Total of 1 processors activated (48.00 BogoMIPS).
+Hi Linus,
 
-SBOOT on my tablet claims the version is T310XXSBQB2, so it should match
-with the one you checked.
+Not much this time, since I was super busy in this cycle. The pull
+contains two merges. I had to merge in 6.3-rc3 for the ACPI
+axp288_charger fix and my 6.3 power-supply fixes branch for the
+rk817 fixes (as mentioned in the merge commit). I did not manage
+to generate a proper diff stat for that, so the below one contains
+the 6.3 fixes patches you already queued.
 
-Best regards
-Artur Weber
+Thanks,
+
+-- Sebastian
+
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.4
+
+for you to fetch changes up to baba1315a74d12772d4940a05d58dc03e6ec0635:
+
+  power: supply: rk817: Fix low SOC bugs (2023-04-08 00:30:05 +0200)
+
+----------------------------------------------------------------
+power supply and reset changes for the v6.4 series
+
+- power-supply core support for automatic handling of constant
+  battery data supplied by firmware
+- generic-adc-battery: major cleanup
+- axp288_charger: fix ACPI issues on x86 Android tablets
+- rk817: cleanup and fix handling for low state of charge
+
+----------------------------------------------------------------
+Chris Morgan (2):
+      power: supply: rk817: Drop unneeded debugging code
+      power: supply: rk817: Fix low SOC bugs
+
+Denis Arefev (1):
+      power: supply: axp288_fuel_gauge: Added check for negative values
+
+Grant Grundler (1):
+      power: supply: cros_usbpd: reclassify "default case!" as debug
+
+Hans de Goede (1):
+      power: supply: axp288_charger: Use alt usb-id extcon on some x86 android tablets
+
+Hermes Zhang (1):
+      power: supply: bq256xx: Support to disable charger
+
+Jiapeng Chong (1):
+      power: supply: rk817: Fix unsigned comparison with less than zero
+
+Krzysztof Kozlowski (7):
+      power: supply: rt9455_charger: mark OF related data as maybe unused
+      power: supply: twl4030_charger: mark OF related data as maybe unused
+      power: supply: lp8727_charger: mark OF related data as maybe unused
+      power: supply: ltc4162-l-charger: mark OF related data as maybe unused
+      power: supply: bq24257_charger: mark OF related data as maybe unused
+      power: supply: bq25890_charger: mark OF related data as maybe unused
+      power: reset: qcom-pon: drop of_match_ptr for ID table
+
+Rob Herring (1):
+      power: supply: charger-manager: Use of_property_read_bool() for boolean properties
+
+Sebastian Reichel (16):
+      dt-bindings: power: supply: adc-battery: add binding
+      power: supply: core: auto-exposure of simple-battery data
+      power: supply: generic-adc-battery: convert to managed resources
+      power: supply: generic-adc-battery: fix unit scaling
+      power: supply: generic-adc-battery: drop jitter delay support
+      power: supply: generic-adc-battery: drop charge now support
+      power: supply: generic-adc-battery: drop memory alloc error message
+      power: supply: generic-adc-battery: use simple-battery API
+      power: supply: generic-adc-battery: simplify read_channel logic
+      power: supply: generic-adc-battery: add temperature support
+      power: supply: generic-adc-battery: add DT support
+      power: supply: generic-adc-battery: update copyright info
+      power: supply: generic-adc-battery: improve error message
+      power: supply: generic-adc-battery: style fixes
+      Merge tag 'v6.3-rc3'
+      Merge tag 'for-v6.3-rc'
+
+Zheng Wang (2):
+      power: supply: bq24190: Fix use after free bug in bq24190_remove due to race condition
+      power: supply: da9150: Fix use after free bug in da9150_charger_remove due to race condition
+
+ .../bindings/power/supply/adc-battery.yaml         |  70 ++++++
+ drivers/power/reset/qcom-pon.c                     |   2 +-
+ drivers/power/supply/axp288_charger.c              |  15 +-
+ drivers/power/supply/axp288_fuel_gauge.c           |   2 +
+ drivers/power/supply/bq24190_charger.c             |   1 +
+ drivers/power/supply/bq24257_charger.c             |   2 +-
+ drivers/power/supply/bq256xx_charger.c             |  40 ++++
+ drivers/power/supply/bq25890_charger.c             |   2 +-
+ drivers/power/supply/charger-manager.c             |   2 +-
+ drivers/power/supply/cros_usbpd-charger.c          |   2 +-
+ drivers/power/supply/da9150-charger.c              |   1 +
+ drivers/power/supply/generic-adc-battery.c         | 245 ++++++---------------
+ drivers/power/supply/lp8727_charger.c              |   2 +-
+ drivers/power/supply/ltc4162-l-charger.c           |   2 +-
+ drivers/power/supply/power_supply_core.c           | 179 +++++++++++++--
+ drivers/power/supply/power_supply_sysfs.c          |  23 +-
+ drivers/power/supply/rk817_charger.c               |  46 ++--
+ drivers/power/supply/rt9455_charger.c              |   2 +-
+ drivers/power/supply/twl4030_charger.c             |   2 +-
+ include/linux/power/generic-adc-battery.h          |  23 --
+ include/linux/power_supply.h                       |   8 +
+ 21 files changed, 415 insertions(+), 256 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/adc-battery.yaml
+ delete mode 100644 include/linux/power/generic-adc-battery.h
+
+--td2ublvuvzdey55r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRNTL8ACgkQ2O7X88g7
++pogNA/8CWq8enJWIft8JV9mn3HW1jykXqkoEy2ZOW+wZYlVHMhNKHtTd8HHQvPt
+beTsctR7x4fpG+LFH20D8tYBRNftPmH/MSlGqyamF+wQEJnqZ+YJx8u0p8yCl3aR
+ynkI7FGmHTbRkA04k5coT9XyYYNdx+/tYCAWHGNXBf/hh6n39O1+QL0HAEvB6Ytx
+LOzp9L10EvKSKSqeOVtdqdmSKbqggXVMRLcS5O/2ETW/cLeMloNsxCt2YNpgkouR
+uKkY05ZFdXyFokkDETi36N8luT6r+3qYXErRI1aJ18dAwKRtbSTiv7sgY4n1Q9xI
+YVMdgJgNe5+OxC4NbP9mdefKqxxqrFeusqLqRKy5dBRSOBA/0Qa3mgNY3E8T/E/q
+9cAn/vpDzhobn3kcJU+xSw90YZ5z2z337ntbiIfWEE/3657oFy2NCxQFvk1WuVWY
++rf0ftBXnLIXr10PhNHs/kYSqy6R90UmGA9htjiWPRB6SxOGHUHneZTbdIRbRr7y
+LY5l6EON+tucec3UTi+t5fUOBiDYhDoPD0crK5DNO5ae6YX8dxM6YwSLY7O/G8mT
+KTaqYwRj5vnkCEp/lOoHhLYEP6uS1MHp8WTgvk3CXeDQb+hF+1vaWEjkcha+27wT
+p+SJfbi0jkL7PFolzIq8/bYZaElI7n1I6oIyF7C1BXEqF0RjtSs=
+=wyeU
+-----END PGP SIGNATURE-----
+
+--td2ublvuvzdey55r--
