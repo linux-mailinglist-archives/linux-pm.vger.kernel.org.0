@@ -2,52 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C887C6F2628
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Apr 2023 22:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C0E6F2743
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Apr 2023 02:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjD2UHF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Apr 2023 16:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S231785AbjD3Aw1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Apr 2023 20:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjD2UHF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Apr 2023 16:07:05 -0400
+        with ESMTP id S231781AbjD3AwZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Apr 2023 20:52:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504771BE4;
-        Sat, 29 Apr 2023 13:07:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29512194;
+        Sat, 29 Apr 2023 17:52:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCCE8611F6;
-        Sat, 29 Apr 2023 20:07:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9749C433D2;
-        Sat, 29 Apr 2023 20:07:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4D3F61261;
+        Sun, 30 Apr 2023 00:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A3C3C433EF;
+        Sun, 30 Apr 2023 00:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682798823;
-        bh=3Tk09UQ1hIbxVg7uFnuOI3FKwaPBq7Zi+L3y4wmvTr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qTeFnrRK16KIUWJZEiqYJ34YnUmXoCbXCEtVa7ei5dlYVRtVyokrWX1D6vHVCGHFC
-         vVEo7d02AqFk2g7g8aPiEW7AvybvcKkP75Z8dyE/E7MeBMJqwmD/S/XdGSMonxHP7Z
-         YlPbKKYXzzmmxtzU3o9Xjggv/YXJWIx6kHn9R4mtk7ZVGcyhIeLXiBsE+P64nsJ9wx
-         fG0uEYYhMQm5j1dmZPZ64DfAD5dJZsQFFlNogi1WAr2wKLCVjzsYNxbM8E6BNMaFfE
-         InwGUOjIl2i+13W4y3OWg11Rw+0Q33rBv1pp1wwO/PZbXN3Eacj9+Bs3CbXzGnUbgV
-         STZznZC6/agig==
-Received: by mercury (Postfix, from userid 1000)
-        id EA42E1066F88; Sat, 29 Apr 2023 22:06:59 +0200 (CEST)
-Date:   Sat, 29 Apr 2023 22:06:59 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        s=k20201202; t=1682815943;
+        bh=rkvelM1w5rEYXzPvUAQIPM+5ezm5R+M3PCcNjwO5hBA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=rz3o5n0FqiS58rQ7A5NJ6+rEYf8FeWdx3mcYOmUKtsBAO+feO0R1jHx6Cl48rBm5C
+         Jl14DZd1O2bEwPRzRU5EG03vCu+3GI2rdKAl+aJLj2c3w4DgzmRoK7cEMuD77oDSSr
+         NhdXC3VfvTIZFkINnswND2tp8bOdVaPjz6oaM2exv/KAAMtHADnJgpOGZj/ftfHojk
+         0/zEl7v+8tUHpIfQK6k1BKU24xeHX5QGRbiSQXqhX2m7kxG3fwC5jpDd5XvkL1rHgx
+         t5btJ/gZDrXBBCsDg2me9teDjtnrU0TeCeKmGHrdfpFBcCDOZMAFVWeMfqOnU1bCy6
+         4l6Q+8nb5L9XA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C71EC43158;
+        Sun, 30 Apr 2023 00:52:23 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 6.4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230429165843.uobwenl6dy7x3vtr@mercury.elektranox.org>
+References: <20230429165843.uobwenl6dy7x3vtr@mercury.elektranox.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230429165843.uobwenl6dy7x3vtr@mercury.elektranox.org>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.4
+X-PR-Tracked-Commit-Id: baba1315a74d12772d4940a05d58dc03e6ec0635
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 17d4ded2fc9d4f0b7c3c74ed9f80420c59d36e0b
+Message-Id: <168281594304.341.14349219432692177673.pr-tracker-bot@kernel.org>
+Date:   Sun, 30 Apr 2023 00:52:23 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 13/43] power: reset: Add a driver for the ep93xx reset
-Message-ID: <20230429200659.36utkzfevcj45qce@mercury.elektranox.org>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-14-nikita.shubin@maquefel.me>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t4qfw5plufhgux5w"
-Content-Disposition: inline
-In-Reply-To: <20230424123522.18302-14-nikita.shubin@maquefel.me>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,160 +60,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Sat, 29 Apr 2023 18:58:43 +0200:
 
---t4qfw5plufhgux5w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.4
 
-Hi,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/17d4ded2fc9d4f0b7c3c74ed9f80420c59d36e0b
 
-On Mon, Apr 24, 2023 at 03:34:29PM +0300, Nikita Shubin wrote:
-> Implement the reset behaviour of the various EP93xx SoCS in drivers/power=
-/reset.
->=20
-> It used to be located in arch/arm/mach-ep93xx.
->=20
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> ---
+Thank you!
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
-
--- Sebastian
-
->  drivers/power/reset/Kconfig          | 10 +++++
->  drivers/power/reset/Makefile         |  1 +
->  drivers/power/reset/ep93xx-restart.c | 65 ++++++++++++++++++++++++++++
->  3 files changed, 76 insertions(+)
->  create mode 100644 drivers/power/reset/ep93xx-restart.c
->=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 8c87eeda0fec..2a61afbb047b 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -75,6 +75,16 @@ config POWER_RESET_BRCMSTB
->  	  Say Y here if you have a Broadcom STB board and you wish
->  	  to have restart support.
-> =20
-> +config POWER_RESET_EP93XX
-> +	bool "Cirrus EP93XX reset driver" if COMPILE_TEST
-> +	depends on MFD_SYSCON
-> +	default ARCH_EP93XX
-> +	help
-> +	  This driver provides restart support for Cirrus EP93XX SoC.
-> +
-> +	  Say Y here if you have a Cirrus EP93XX SoC and you wish
-> +	  to have restart support.
-> +
->  config POWER_RESET_GEMINI_POWEROFF
->  	bool "Cortina Gemini power-off driver"
->  	depends on ARCH_GEMINI || COMPILE_TEST
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index d763e6735ee3..61f4e11619b2 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_POWER_RESET_ATC260X) +=3D atc260x-poweroff.o
->  obj-$(CONFIG_POWER_RESET_AXXIA) +=3D axxia-reset.o
->  obj-$(CONFIG_POWER_RESET_BRCMKONA) +=3D brcm-kona-reset.o
->  obj-$(CONFIG_POWER_RESET_BRCMSTB) +=3D brcmstb-reboot.o
-> +obj-$(CONFIG_POWER_RESET_EP93XX) +=3D ep93xx-restart.o
->  obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) +=3D gemini-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
-> diff --git a/drivers/power/reset/ep93xx-restart.c b/drivers/power/reset/e=
-p93xx-restart.c
-> new file mode 100644
-> index 000000000000..0dab09d4fd3c
-> --- /dev/null
-> +++ b/drivers/power/reset/ep93xx-restart.c
-> @@ -0,0 +1,65 @@
-> +// SPDX-License-Identifier: (GPL-2.0)
-> +/*
-> + * Cirrus EP93xx SoC reset driver
-> + *
-> + * Copyright (C) 2021 Nikita Shubin <nikita.shubin@maquefel.me>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/notifier.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +
-> +#include <linux/soc/cirrus/ep93xx.h>
-> +
-> +#define EP93XX_SYSCON_DEVCFG_SWRST	BIT(31)
-> +
-> +static int ep93xx_restart_handle(struct notifier_block *this,
-> +				 unsigned long mode, void *cmd)
-> +{
-> +	/* Issue the reboot */
-> +	ep93xx_devcfg_set_clear(EP93XX_SYSCON_DEVCFG_SWRST, 0x00);
-> +	ep93xx_devcfg_set_clear(0x00, EP93XX_SYSCON_DEVCFG_SWRST);
-> +
-> +	mdelay(1000);
-> +
-> +	pr_emerg("Unable to restart system\n");
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int ep93xx_reboot_probe(struct platform_device *pdev)
-> +{
-> +	struct notifier_block *res_han;
-> +	struct device *dev =3D &pdev->dev;
-> +	int err;
-> +
-> +	res_han =3D devm_kzalloc(&pdev->dev, sizeof(*res_han), GFP_KERNEL);
-> +	if (!res_han)
-> +		return -ENOMEM;
-> +
-> +	res_han->notifier_call =3D ep93xx_restart_handle;
-> +	res_han->priority =3D 128;
-> +
-> +	err =3D register_restart_handler(res_han);
-> +	if (err)
-> +		dev_err(dev, "can't register restart notifier (err=3D%d)\n", err);
-> +
-> +	return err;
-> +}
-> +
-> +static const struct of_device_id ep93xx_reboot_of_match[] =3D {
-> +	{
-> +		.compatible =3D "cirrus,ep9301-reboot",
-> +	},
-> +	{}
-> +};
-> +
-> +static struct platform_driver ep93xx_reboot_driver =3D {
-> +	.probe =3D ep93xx_reboot_probe,
-> +	.driver =3D {
-> +		.name =3D "ep9301-reboot",
-> +		.of_match_table =3D ep93xx_reboot_of_match,
-> +	},
-> +};
-> +builtin_platform_driver(ep93xx_reboot_driver);
-> --=20
-> 2.39.2
->=20
-
---t4qfw5plufhgux5w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRNeOAACgkQ2O7X88g7
-+pqywA/9EILO3MqSurbHWBGdc+ayGbftXXbSnmG4gl9oYirO1rBghdyTgYBlbqpj
-pZHpqgsaGMEyjfu8oXTt6kml6HJaTqMgeyrRUnwmKsj2li9DI36ogO/Zan62cqGW
-Z1p3FK41y0aAvmzB0EFlt6az9GGo5oPXwOgjvUD3GOaJKPaHorZAu1fBRhAsAPaE
-1MWcGEI7NPz9VSBnx0yCxbTpBEFpD2yEfjqHgLjaNlgKtCwYWEFJLOqDuWqUsQWB
-vL6mHcbRwAKsuVv9VsBDpHS4Tbhu8WTEd9Qb6tJFa6MDeEws49/TNAL5ag5ygT69
-WJpS7THCeoggj+mu7mr1XX6G1BDCoPIZ06/QEB32mxYKS/FvyME85GwP+Zj5PUyI
-c6Cf0nOBp7i9/ZE4hUY/JDRn6YGFR27RpasYnguurXx0vuEyep0oEJrM62NZ/mKm
-48MeA3jyySCCjXD2AqJoR1bYD1N1gZFKILxstRQq2DDKkO/mKsV7a5R/J7eUrkym
-ZkX9XcswQkzvkaCgU19SFrszODA3DZ4HHPo+yq3yGeucK5qxNfa60sew1IvYS7zG
-CweZiHVGBqBC9BPDBP/LKkQLEqIdHxs9U2YIbQQngZ20SFljhguWJty/1/pT2nwH
-7Q25/3vGVRklve4tMYSDOtY4M3S2RQBXwaauMztqh0kOZQZT/48=
-=5rTD
------END PGP SIGNATURE-----
-
---t4qfw5plufhgux5w--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
