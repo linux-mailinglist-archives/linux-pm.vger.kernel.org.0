@@ -2,72 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186DC6F2F05
-	for <lists+linux-pm@lfdr.de>; Mon,  1 May 2023 09:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71C06F2F1A
+	for <lists+linux-pm@lfdr.de>; Mon,  1 May 2023 09:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjEAHOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 May 2023 03:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
+        id S229737AbjEAHV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 May 2023 03:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbjEAHOi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 May 2023 03:14:38 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B04E69
-        for <linux-pm@vger.kernel.org>; Mon,  1 May 2023 00:14:35 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94a342f7c4cso449196166b.0
-        for <linux-pm@vger.kernel.org>; Mon, 01 May 2023 00:14:35 -0700 (PDT)
+        with ESMTP id S229861AbjEAHV1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 May 2023 03:21:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E588BE73
+        for <linux-pm@vger.kernel.org>; Mon,  1 May 2023 00:21:25 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-958bb7731a9so458641966b.0
+        for <linux-pm@vger.kernel.org>; Mon, 01 May 2023 00:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682925274; x=1685517274;
+        d=linaro.org; s=google; t=1682925684; x=1685517684;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DOIEOJwuj8TEMRgeiaU4r+H9yeZtqNC0bcB1IKwq4kE=;
-        b=KaCBOZy7LEgRlOe0HwTpG9hakIxTnOph05EL1M6UI9kqs3oG2e/l9MopbSwHn0THEc
-         8GXcajKjcPlqxhnao5QI8w+rVhznZuBurT3lZbFlT4Nm4H+LziBbKf9ZuJ1FvqJ1YZNh
-         BWYIaX/gLZ4kJGG11Hk7uuBNU+wY9TjFMXyY1vwNIz/JyQi5AGCO3YftonakEzIpuTzb
-         Jhc+7TID/mFr7nECm1WNyPEey6zWFXCgLfsZknLn0/btMmfBPlhylKkrY4oe//ECn5gE
-         lEs6Y5uqduOdDTpPwDHd9jlX2YF8SN0erfwC/m2NOSPYDkePFh6+IGpy0oGTOnQ+ZdFQ
-         jaQg==
+        bh=dVepgCs67QhYF+S64LwI1sds6PcYZ4iqkhDG4bO/TQk=;
+        b=Lt4G/nF6/vWSm70/OJY9L8lReXHWAXuoU2nTlVM5M0iX7otJ/oUOLEbFE3NHeQEu9k
+         5McUSTNOiR4Q/p7p9Yjagk7HpBL1xpEINFyHozBz8ZwVlMuRPH9v1s1oWpQGVdb2vEV6
+         +IdDb2u1+WQco+ELwRCF/8eO9+4NJ3Kwc5uhxtsobLYJPTPcl71eeMsaD6BoTkyu1AEf
+         GLtNdHfQgWX3xS7rB8KQMkyqoYdNtQp96Ea49guBF8fmtvXxGC6ps5qdknpybWRRVHD6
+         oLuO0UQ1tFI9uTKHXU6lftF0gLaXY4rapOx/VrNY5LjvPTJffHRR1meq+lKzFW9a/dP5
+         4oSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682925274; x=1685517274;
+        d=1e100.net; s=20221208; t=1682925684; x=1685517684;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DOIEOJwuj8TEMRgeiaU4r+H9yeZtqNC0bcB1IKwq4kE=;
-        b=NEpJkJ8fm36TMW1BldmzUXgvtSDH9oflgZajTHG2GuOd0NX9woL/ygr1jbzzM0xXUa
-         ZCyecjklekRbi459aXq5shjXLBJs5iMNT0g/rz5mpcbJ9DHDk1SRIoMYgBrg+fTf0QB+
-         hubHGJSvlC6D38qW0efg8jKOYRZ1GlMhTpF+HCh4N5yNztwVWFo7U0ewoGulLUy5CmzK
-         09HrFX++Mf32Gq5TyZlX/rqrwag78ruGTbNFoOHLono7q2C59LAQ5PTH3qaj6Bq9HNHF
-         oDgyI/xQCaUjuM8dU/GuzdFqxNnQhUxr1amW/c6zdXPlBV5BHCu6MEhcHOmQts1aa2/B
-         fjEw==
-X-Gm-Message-State: AC+VfDyGsy7o5k08JeGiMTbujg8Se9/I89xuievW2xOQz0J/eCf5O6fs
-        Y6oKUI3N3njfv9CihpuY/sbsEA==
-X-Google-Smtp-Source: ACHHUZ5WoGI/FJ2sX8tq8Y8KioKjeUqed/v9qHagAiQbmJP7XHEag4uekCPI/9iKh5WlZkmmzqn9Dw==
-X-Received: by 2002:a17:906:dc92:b0:94e:ec0f:455 with SMTP id cs18-20020a170906dc9200b0094eec0f0455mr15220138ejc.54.1682925274356;
-        Mon, 01 May 2023 00:14:34 -0700 (PDT)
+        bh=dVepgCs67QhYF+S64LwI1sds6PcYZ4iqkhDG4bO/TQk=;
+        b=WdnrbD18oMlFtqRSjPs1UvRBP/gW+pBpjz6a7zoti1LGizrTfqZN6JyCIzxBbTDoIo
+         /NPA1CJw3NYL1A4gryHCmOVjyNGVP9jib4G3uVScBCPKFzrDxfiagrVt30P8WhWGeOMo
+         1UiQu6EoDqf0TKsLk6izATE9t/BEX7Q+p3MHJU68cE2duX+hW+7saPnUvcyYoZ9UhuN3
+         xG7mGougmp4LcGryg6j/sm/r4z0xQpQzoyxD7xZSmriccPL6qymrKn72ezgHRFwCQDmU
+         Xx1VNbzOzvqlAsP39KGjJhq0MvRa+i+7ea3KFsP7nDmMqIkRC3KLXQkryoFYIHtyk4Gk
+         YkAw==
+X-Gm-Message-State: AC+VfDwuDedlNmo4Tz370j2c1tJqkw5gdm8UXQOqu4GxnhHFwqSzqycr
+        1tjvQl5CeolF4dnhIDeMefH/RQ==
+X-Google-Smtp-Source: ACHHUZ4+mJdUdaGf/klmpEAOu8cRfGyWI064D3ANXCd+js1/C+fb9SATKA4qJcXoaajnxZfbb2zbug==
+X-Received: by 2002:a17:907:970d:b0:90b:53f6:fd8b with SMTP id jg13-20020a170907970d00b0090b53f6fd8bmr13404942ejc.31.1682925684312;
+        Mon, 01 May 2023 00:21:24 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
-        by smtp.gmail.com with ESMTPSA id ia10-20020a170907a06a00b00961277a426dsm3287444ejc.205.2023.05.01.00.14.33
+        by smtp.gmail.com with ESMTPSA id gn2-20020a1709070d0200b009545230e682sm14276029ejc.91.2023.05.01.00.21.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 00:14:33 -0700 (PDT)
-Message-ID: <f449aa76-b3df-5a30-2b82-eaf3faeb1072@linaro.org>
-Date:   Mon, 1 May 2023 09:14:32 +0200
+        Mon, 01 May 2023 00:21:23 -0700 (PDT)
+Message-ID: <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
+Date:   Mon, 1 May 2023 09:21:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add thermal zone nodes
+Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
 Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+To:     Jakob Hauser <jahau@rocketmail.com>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Praveenkumar I <quic_ipkumar@quicinc.com>
-References: <cover.1682682753.git.quic_varada@quicinc.com>
- <1bda63e18f7257f60cc1082b423aca129abfa3b0.1682682753.git.quic_varada@quicinc.com>
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1682636929.git.jahau@rocketmail.com>
+ <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1bda63e18f7257f60cc1082b423aca129abfa3b0.1682682753.git.quic_varada@quicinc.com>
+In-Reply-To: <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,31 +88,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/04/2023 16:52, Varadarajan Narayanan wrote:
-> This patch adds thermal zone nodes for the various
-> sensors present in IPQ9574
+On 28/04/2023 01:30, Jakob Hauser wrote:
+> Add device tree binding documentation for rt5033 multifunction device, voltage
+> regulator and battery charger.
 > 
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
->  1 file changed, 208 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 7cd5bdb..a7cb2b4c 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -947,6 +947,214 @@
->  		};
->  	};
->  
-> +	thermal_zones: thermal-zones {
-> +		tsens_tz_sensor3 {
+> Cc: Beomho Seo <beomho.seo@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 
-No underscores in node names.
 
-Don't invent your own names, use the ones we already have everywhere.
+(...)
 
+> +
+> +required:
+> +  - monitored-battery
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    charger {
+> +        compatible = "richtek,rt5033-charger";
+> +        monitored-battery = <&battery>;
+> +        extcon = <&muic>;
+
+
+Everything up to here looked ok, but extcon is not a hardware property.
+Please do not mix adding missing bindings for existing device with
+adding new properties. You should use connector for the USB port.
 
 Best regards,
 Krzysztof
