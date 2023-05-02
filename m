@@ -2,125 +2,363 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94FE6F3D92
-	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 08:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F606F3EC0
+	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 10:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbjEBGgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 May 2023 02:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
+        id S233745AbjEBIFE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 May 2023 04:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbjEBGgf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 02:36:35 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF3B30EF
-        for <linux-pm@vger.kernel.org>; Mon,  1 May 2023 23:36:32 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9619095f479so332412666b.1
-        for <linux-pm@vger.kernel.org>; Mon, 01 May 2023 23:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683009391; x=1685601391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YEihoYElpiA1xR8/uoGmOyLMqKO0DpcNQ2I0d88KJzY=;
-        b=xGqj/xlzMXdk4R2wQNsjPm2d6UP+IXIGS3ezzL4b0hINtAp5LS+wWsYVX4dQ4GtSmd
-         jTqNGLYHkrm5sZR+VZAmKn1lRFbHCBSzLrLLMybnSIx8XqxpgSTYjLImVB1jC7acvELZ
-         z09bboJRl3PTObri32XKFvp9J17UVNj5wWqmhl2odhfh5scUyC7kf+1L2gyMF7LHpTB4
-         4mhN4lIarimyDWQrxyl4MPBk/J+ciiSRQuNFqRvZz3m+aOkPHSLv0c0pQabjT1dHILwo
-         +3cwr5Huto+VxcRicSI715bf6tsgbt4QTYfXXI59tJstIiyJZBLNBJZV05a5QcsW0Sb6
-         LYeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683009391; x=1685601391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YEihoYElpiA1xR8/uoGmOyLMqKO0DpcNQ2I0d88KJzY=;
-        b=LvC++DIYYLQkwXU+OqdGcj8+r6Ab4G90sWubVOjg5uWPioxH3b6+qVq46J5YFoEGnJ
-         OefxUMIbfOnn6+GLNh/ktIY8EENK/f4CnFKMy8mjp6myr4VMG4zPKs6sZ3x0DS1NcONX
-         G8sQuQ6STsd6cwKEx8kpwVMNJ83DH4/4Y85mOTlrgeok+m7JDrk1xD6MuiJHwNWMrN6b
-         0XjssvtWM2wKt7EWb+fPmtQFDjRPu+MzqRbkz+wYpFqARqAknh1RhaqIpQisrLAUb7r/
-         GRTXg4VzBmTNxMAXJOrgP4fcFBrjmB4l8aCdTPdsXyEFoD+uYZ65aiu45gQBX3Ogm/Ca
-         AfUw==
-X-Gm-Message-State: AC+VfDxLsRfa/5jfCvSu9KPb2T4k/InTAsFUhktfunfIrDVTtvNvuymU
-        6kMBtS1RlTwTnngFIMiHw+fhqG9Vb86vWkbjY0c=
-X-Google-Smtp-Source: ACHHUZ4Skvp/4abrSsBYGQDALtzu6bFNcxFkgFuUA4v0JLgczKgKwpmnwqF4FYwIye4/qQBhlXJ7Hw==
-X-Received: by 2002:a17:907:701:b0:961:800b:3f5b with SMTP id xb1-20020a170907070100b00961800b3f5bmr5035623ejb.20.1683009391264;
-        Mon, 01 May 2023 23:36:31 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id lh21-20020a170906f8d500b0094eeab34ad5sm15643867ejb.124.2023.05.01.23.36.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 23:36:30 -0700 (PDT)
-Message-ID: <07c36d46-76c0-1bad-a124-55b96aff8347@linaro.org>
-Date:   Tue, 2 May 2023 08:36:28 +0200
+        with ESMTP id S233729AbjEBIFB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 04:05:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7875449E;
+        Tue,  2 May 2023 01:04:59 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3427loBA015750;
+        Tue, 2 May 2023 08:04:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=qcppdkim1;
+ bh=Wwm9DE/KjzOB4GGIfiFTmouYOCBj5Hbw47wN2154+40=;
+ b=G8CCF1LisWskr4v88wTEJwfQWnWZn1rMWiXynVCGchMX1mzWjqCyeLFCgK+pZvSL6/yq
+ W+pQzrgYMGBu8RJ81Xu5umU7xBubTcKcQUr8EoESUR3E07+6kU2kjHZVPaMAfXk+Xxr7
+ O53rcPFpO050hrDuEgISNGN7Li9GTMnNCFYVGEKikUUC8CinMZDeb6P6io3fdUIcLEc1
+ MyGvIVgExxV8XcxMZAb27ObBctFo5CA9jWs3cg1fgHBBn5hsxvVky+gn2XWbvZ8U7Zit
+ enVZjjM0nqdZNl7Yuyva75vIFVpUsqGPpMkHHlTkVJIdWClirBmd+07gayFuXuMz3jz7 yA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qahhk9g98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 08:04:51 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34284o9f028517
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 2 May 2023 08:04:50 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 2 May 2023 01:04:45 -0700
+Date:   Tue, 2 May 2023 13:34:41 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add thermal zone nodes
+Message-ID: <20230502080440.GA26126@varda-linux.qualcomm.com>
+References: <cover.1682682753.git.quic_varada@quicinc.com>
+ <1bda63e18f7257f60cc1082b423aca129abfa3b0.1682682753.git.quic_varada@quicinc.com>
+ <CAA8EJpq0RXGf8_oBa_XF0+nOg31ouMUVJ3LhNRh_HtmgJvCJHQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/8] regulator: max77658: Add ADI MAX77643/54/58/59
- Regulator Support
-Content-Language: en-US
-To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
- <20230322055628.4441-3-Zeynep.Arslanbenzer@analog.com>
- <ce89857a-53b3-d63b-c1ad-5d28fd7d8f80@linaro.org>
- <MN2PR03MB5197DF4EEA50D6CB5DF311098B6F9@MN2PR03MB5197.namprd03.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MN2PR03MB5197DF4EEA50D6CB5DF311098B6F9@MN2PR03MB5197.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA8EJpq0RXGf8_oBa_XF0+nOg31ouMUVJ3LhNRh_HtmgJvCJHQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: eGiewxL5nQp5kl7PnE8UPH9_xPk1YdxO
+X-Proofpoint-GUID: eGiewxL5nQp5kl7PnE8UPH9_xPk1YdxO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305020070
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/05/2023 08:32, Arslanbenzer, Zeynep wrote:
-> On Wed, 22 Mar 2023, Krzysztof Kozlowski wrote:
->> On 22/03/2023 06:56, Zeynep Arslanbenzer wrote:
->>> Regulator driver for ADI MAX77643/MAX77654/MAX77658/MAX77659.
->>>
->>> MAX77643/MAX77659 has 1 LDO regulator.
->>> MAX77654/MAX77658 has two LDO regulators.
->>>
->>> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
->>> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
->>
->>
->>
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static const struct platform_device_id max77658_regulator_id[] = {
->>> +	{ "max77643-regulator" },
->>> +	{ "max77654-regulator" },
->>> +	{ "max77658-regulator" },
->>> +	{ "max77659-regulator" },
->>
->> Why do you need so many entries? They do not differ.
-> 
-> They are slightly different. Just MAX77659 and MAX77643 regulators have exactly the same features. MAX77659 and MAX77643 have 1 LDO regulator but others have 2 and the voltage base of the MAX77654 regulators is different from others. Should I use the same entry for the MAX77643 and MAX77659?
+On Fri, Apr 28, 2023 at 10:49:34PM +0300, Dmitry Baryshkov wrote:
+> On Fri, 28 Apr 2023 at 17:53, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > This patch adds thermal zone nodes for the various
+> > sensors present in IPQ9574
+> >
+> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 208 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > index 7cd5bdb..a7cb2b4c 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > @@ -947,6 +947,214 @@
+> >                 };
+> >         };
+> >
+> > +       thermal_zones: thermal-zones {
+> > +               tsens_tz_sensor3 {
+>
+> Please provide sensible names for all thermal zones. Please follow the
+> examples in other DT files.
 
-Wrap your email replies, it's difficult to read and reply.
+Ok.
 
-Your driver does not choose regulators based on these compatibles. Your
-of_device_id table claims all devices are fully compatible and do not
-differ from regulators point of view. If they are different, you should
-encode the difference. If not, use only one entry in of_device_id (only
-of_device_id, not bindings).
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 3>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+>
+> Can it really go up to 125 °C?
 
-Best regards,
-Krzysztof
+The SoC product requirement is 120°C. It is capable of 125°C.
+This was tested inside a thermal chamber and ensured that it
+hits 125°C and system reboots at that temperature.
 
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+>
+> Please provide also a passive trip point, so that the passive cooling
+> can be engaged.
+
+The linux kernel cannot take any steps to initiate cooling for
+components other than the 4 CPU cores. The f/w that runs on these
+IP blocks have to take steps to initiate cooling. Additionally,
+the passive temperature for the non-cpu sensors are not
+characterised yet and I don't have the values now.
+
+We have these nodes to be able to read the temperature of the
+other blocks via the sysfs entry /sys/devices/virtual/thermal/*/temp
+Have given the critical trip point so that the setup is rebooted
+if the critical temperature is reached.
+
+Have given passive trip point for the CPU core related thermal
+nodes (tsens_tz_sensor10, tsens_tz_sensor11, tsens_tz_sensor12
+and tsens_tz_sensor13).
+
+If this is not acceptable, please let me know. Will remove the
+non-cpu nodes and post a patch with just the CPU entries.
+
+Thanks
+Varada
+
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor4 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 4>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor5 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 5>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor6 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 6>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor7 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 7>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor8 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 8>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor9 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 9>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor10 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 10>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor11 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 11>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor12 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 12>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor13 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 13>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor14 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 14>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor15 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 15>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +       };
+> > +
+> >         timer {
+> >                 compatible = "arm,armv8-timer";
+> >                 interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> > --
+> > 2.7.4
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry
