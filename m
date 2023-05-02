@@ -2,376 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D49F6F3F58
-	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 10:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3706F408E
+	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 12:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbjEBIjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 May 2023 04:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S233619AbjEBKAS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 May 2023 06:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbjEBIjm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 04:39:42 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAA549E8
-        for <linux-pm@vger.kernel.org>; Tue,  2 May 2023 01:39:39 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9e2f227640so2071115276.3
-        for <linux-pm@vger.kernel.org>; Tue, 02 May 2023 01:39:39 -0700 (PDT)
+        with ESMTP id S229457AbjEBKAR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 06:00:17 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB4830F6;
+        Tue,  2 May 2023 03:00:16 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3062db220a3so1258772f8f.0;
+        Tue, 02 May 2023 03:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683016778; x=1685608778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xQYzzCPoXqswlpvIFD6WRnJfdsdZ7oE3ts+Rlv8RaJc=;
-        b=JCYSJJycOh3uM3e1Pr69ENYHONt+EDeJ1G0216dirbDHn9z2Sp+bxDrP7VXakiMrXc
-         GJbWhGinBB3SufaTvEuBbZghU3g7Ac55Z26LjCBRnr6nkxnxAi+fgQNMrj0n40YKt0IC
-         KuzZM2Ww44iMf76utY5TImcOMS5YM0yDt8I6ugtPm12pnf0XhuX6gXmj3+TKzIqchddG
-         peVrV07kn7PywtYF5GhN3zfRqdOj3snooHwRTqkHoIDKGaZQgzPvvjtv1D2kTS3By9he
-         rtgGrmezHux9aZIytkYPbe5nf8NvKTONiI+arBnjh+DPvf0B8eoFE+QqQETYWeeEnNux
-         zK0Q==
+        d=gmail.com; s=20221208; t=1683021614; x=1685613614;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DMr9gvF8Pl9mIUWgrETUJDIt0vnyiOv1BE24SgG6Lto=;
+        b=WmA9DGCkjPvr6YFIxM5TUvWVN9FipEkQlHdb5kpX4aVH4FkFW7QTYZ39MqtjtBmfG2
+         +2dM7q8RVXvK7XC+TDSTqEBr+Ud9C5b7EakwQrExotdSZC93eWfv4Y/78ui5QG63BCbP
+         vNCt8OjkdNfvDrwsDM3R8HPiZWh+gWAw5DBR1eJO0BxiW69xF4bwbFqkWyWRExLeBfEG
+         GgCAYrm09/Wq8gus+GTJVU63oeXsiuX1KXF6acCdxWw/wFZHhkloAfg45A70JHE954Ua
+         Erb38k+WOrmrQvpt+8tdaZtHCeOsoEeGmc51OWO9nXiiW+Iokuq+8oV06/XNtWb8OHsi
+         ATbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683016778; x=1685608778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xQYzzCPoXqswlpvIFD6WRnJfdsdZ7oE3ts+Rlv8RaJc=;
-        b=HqGMU5B+VTkvtuJ/yRdl/uGOSwpnJIXiFWSs8xB79Os0Hu59jfhf7QbOkQLON/Tzxr
-         qapIWGAikDfWL7G7+sow839uWNgOCYbk4J3yCfyTlg8uh2VwSERoGGF+fvde6OhY1YXJ
-         eOiJohASsmZbkO8IuBbQy1OWcT0etbB/I9ohg2OrGY7NZ5EueAEDo16V5LLcTnnBwcPY
-         +ny+00fzCmDKE/rF1JtooMSlqceI4mRwd8tYlG25Vcd9E0TYWmw6R/hs75MqOa6b6gvJ
-         nJqsimDNtYUB4nBlUEOxoxtWG/esVLWDoSPE949F56DPdYZ1Wo1+bLkRaWO/9HsE/xeO
-         WQvg==
-X-Gm-Message-State: AC+VfDyw/ZevDQ01YzdrZTcuW7yADD0yScqb7wCWxGfRZQCGkpDiYWe3
-        1CwYp50Z07X3howTS6iCI7IR3t7SFPintzSNh7hHYw==
-X-Google-Smtp-Source: ACHHUZ5iTF/W04H0/7bScMxDWwW9LvBeXxThecO2SmLhQIi3VwlMDIRkkFwvEHZDl2GYHRMgIZ4LdcbNkrrLD1QTe+w=
-X-Received: by 2002:a25:6813:0:b0:b9a:63a2:dc6c with SMTP id
- d19-20020a256813000000b00b9a63a2dc6cmr15309161ybc.53.1683016778500; Tue, 02
- May 2023 01:39:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683021614; x=1685613614;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DMr9gvF8Pl9mIUWgrETUJDIt0vnyiOv1BE24SgG6Lto=;
+        b=giX6l6dOcdpyKAPRJitvy1v3NpBqashxsfnM4pFEnlHGKR/sm9opwoYi+hoLgSBFmm
+         QBWqo+GR9iDnLRcGKxMNELCLDCp/oguY3NLvB9wU/lQ60JkFPKC5KBp960NM/ACMrwuc
+         oPUJGrMFEQdRvgmOlkcPqh4QgXXDenNI7QpDOzuQpOxjolf6S6gdOhGd52ylh7qyCDHK
+         LUqFo6HCL8tzP7xtlORKF/oFtP4pHC/qqZyfxeNl7E4zr+hUXzWJ5ZbMBiaF9Z670NTs
+         pbcEEFqK99czf7QKMBHrPBERwH9epcG60IEPSgtnos0/Gx+rHrfWQEIlC4OQ3yasmveB
+         IIww==
+X-Gm-Message-State: AC+VfDx53nFddMuH11rbuYBDmolmx5wmNNKn9OmT4njRFkT2n8YjlSVJ
+        ObZrrUhY5eRWxwGF+iPOPi8=
+X-Google-Smtp-Source: ACHHUZ5nXwHh+CHAxSN7hBDo8xJZZF/pzllxqaFgnSIb6mXPfrPJBzKX0RwxiNFr6M626CDjvd3NDw==
+X-Received: by 2002:a5d:4fcc:0:b0:306:32c4:7e7b with SMTP id h12-20020a5d4fcc000000b0030632c47e7bmr2951475wrw.41.1683021614402;
+        Tue, 02 May 2023 03:00:14 -0700 (PDT)
+Received: from [192.168.0.91] ([84.76.164.7])
+        by smtp.gmail.com with ESMTPSA id t15-20020adfe10f000000b00304832cd960sm20629439wrz.10.2023.05.02.03.00.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 03:00:12 -0700 (PDT)
+Message-ID: <c1986b45-b8cd-6c1c-7758-086dc943c7e0@gmail.com>
+Date:   Tue, 2 May 2023 12:00:10 +0200
 MIME-Version: 1.0
-References: <cover.1682682753.git.quic_varada@quicinc.com> <1bda63e18f7257f60cc1082b423aca129abfa3b0.1682682753.git.quic_varada@quicinc.com>
- <CAA8EJpq0RXGf8_oBa_XF0+nOg31ouMUVJ3LhNRh_HtmgJvCJHQ@mail.gmail.com> <20230502080440.GA26126@varda-linux.qualcomm.com>
-In-Reply-To: <20230502080440.GA26126@varda-linux.qualcomm.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 2 May 2023 11:39:27 +0300
-Message-ID: <CAA8EJpoHMdNFFu4rX2O_N64TV62uAEj4tZqRLpWP8WZrf-PQhQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add thermal zone nodes
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] thermal/drivers/mediatek/lvts_thermal: Handle IRQ on
+ all controllers
+Content-Language: en-US, ca-ES, es-ES
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20230428195347.3832687-1-nfraprado@collabora.com>
+ <20230428195347.3832687-2-nfraprado@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230428195347.3832687-2-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2 May 2023 at 11:04, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Fri, Apr 28, 2023 at 10:49:34PM +0300, Dmitry Baryshkov wrote:
-> > On Fri, 28 Apr 2023 at 17:53, Varadarajan Narayanan
-> > <quic_varada@quicinc.com> wrote:
-> > >
-> > > This patch adds thermal zone nodes for the various
-> > > sensors present in IPQ9574
-> > >
-> > > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++=
-++++++++++
-> > >  1 file changed, 208 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/=
-dts/qcom/ipq9574.dtsi
-> > > index 7cd5bdb..a7cb2b4c 100644
-> > > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > > @@ -947,6 +947,214 @@
-> > >                 };
-> > >         };
-> > >
-> > > +       thermal_zones: thermal-zones {
-> > > +               tsens_tz_sensor3 {
-> >
-> > Please provide sensible names for all thermal zones. Please follow the
-> > examples in other DT files.
->
-> Ok.
->
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 3>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> >
-> > Can it really go up to 125 =C2=B0C?
->
-> The SoC product requirement is 120=C2=B0C. It is capable of 125=C2=B0C.
-> This was tested inside a thermal chamber and ensured that it
-> hits 125=C2=B0C and system reboots at that temperature.
-
-ack
-
->
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> >
-> > Please provide also a passive trip point, so that the passive cooling
-> > can be engaged.
->
-> The linux kernel cannot take any steps to initiate cooling for
-> components other than the 4 CPU cores. The f/w that runs on these
-> IP blocks have to take steps to initiate cooling. Additionally,
-> the passive temperature for the non-cpu sensors are not
-> characterised yet and I don't have the values now.
->
-> We have these nodes to be able to read the temperature of the
-> other blocks via the sysfs entry /sys/devices/virtual/thermal/*/temp
-> Have given the critical trip point so that the setup is rebooted
-> if the critical temperature is reached.
->
-> Have given passive trip point for the CPU core related thermal
-> nodes (tsens_tz_sensor10, tsens_tz_sensor11, tsens_tz_sensor12
-> and tsens_tz_sensor13).
-
-That's the point why we asked for the logical names for the sensors,
-like we have on the other platforms. Otherwise it is very hard to
-understand what is going on.
-
->
-> If this is not acceptable, please let me know. Will remove the
-> non-cpu nodes and post a patch with just the CPU entries.
-
-This is perfectly fine. Please take a look at other DTSI files.
-
->
-> Thanks
-> Varada
->
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor4 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 4>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor5 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 5>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor6 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 6>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor7 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 7>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor8 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 8>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor9 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 9>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor10 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 10>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <120000>;
-> > > +                                       hysteresis =3D <10000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +
-> > > +                               cpu-passive {
-> > > +                                       temperature =3D <110000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "passive";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor11 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 11>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <120000>;
-> > > +                                       hysteresis =3D <10000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +
-> > > +                               cpu-passive {
-> > > +                                       temperature =3D <110000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "passive";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor12 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 12>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <120000>;
-> > > +                                       hysteresis =3D <10000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +
-> > > +                               cpu-passive {
-> > > +                                       temperature =3D <110000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "passive";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor13 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 13>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <120000>;
-> > > +                                       hysteresis =3D <10000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +
-> > > +                               cpu-passive {
-> > > +                                       temperature =3D <110000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "passive";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor14 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 14>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               tsens_tz_sensor15 {
-> > > +                       polling-delay-passive =3D <0>;
-> > > +                       polling-delay =3D <0>;
-> > > +                       thermal-sensors =3D <&tsens 15>;
-> > > +
-> > > +                       trips {
-> > > +                               cpu-critical {
-> > > +                                       temperature =3D <125000>;
-> > > +                                       hysteresis =3D <1000>;
-> > > +                                       type =3D "critical";
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +       };
-> > > +
-> > >         timer {
-> > >                 compatible =3D "arm,armv8-timer";
-> > >                 interrupts =3D <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | I=
-RQ_TYPE_LEVEL_LOW)>,
-> > > --
-> > > 2.7.4
-> > >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
 
 
+On 28/04/2023 21:53, Nícolas F. R. A. Prado wrote:
+> There is a single IRQ handler for each LVTS thermal domain, and it is
+> supposed to check each of its underlying controllers for the origin of
+> the interrupt and clear its status. However due to a typo, only the
+> first controller was ever being handled, which resulted in the interrupt
+> never being cleared when it happened on the other controllers. Add the
+> missing index so interrupts are handled for all controllers.
+> 
+> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
 
---=20
-With best wishes
-Dmitry
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+> 
+>   drivers/thermal/mediatek/lvts_thermal.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index d0a3f95b7884..56b24c5b645f 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -449,7 +449,7 @@ static irqreturn_t lvts_irq_handler(int irq, void *data)
+>   
+>   	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+>   
+> -		aux = lvts_ctrl_irq_handler(lvts_td->lvts_ctrl);
+> +		aux = lvts_ctrl_irq_handler(&lvts_td->lvts_ctrl[i]);
+>   		if (aux != IRQ_HANDLED)
+>   			continue;
+>   
