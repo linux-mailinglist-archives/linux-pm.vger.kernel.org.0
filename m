@@ -2,87 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712C36F4223
-	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 13:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A326F4647
+	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 16:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233742AbjEBK75 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 May 2023 06:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S234449AbjEBOpb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 May 2023 10:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbjEBK7q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 06:59:46 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E06E49F0
-        for <linux-pm@vger.kernel.org>; Tue,  2 May 2023 03:59:44 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5083bd8e226so5579743a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 02 May 2023 03:59:44 -0700 (PDT)
+        with ESMTP id S234100AbjEBOpa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 10:45:30 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95691716
+        for <linux-pm@vger.kernel.org>; Tue,  2 May 2023 07:45:28 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-559de1d36a9so48321567b3.1
+        for <linux-pm@vger.kernel.org>; Tue, 02 May 2023 07:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683025182; x=1685617182;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VdDZqOttphOYv9U+1zrZaT0zA9hRSu+yE6K9FwESJIc=;
-        b=ERNh5lp7qwxuvqIuM07/VEe2lkVVyPlwoh0NrOMBXEPTjUwo0lzFR8WGDgvOEXSj+Q
-         W/Fqy3pxlfIWyKLfeUQKXJ3X7Vyc3GEXtIPcpWI2VQwHRcCNpTyWVOkKTwbHL8blCZ+Y
-         OiYw3a6J7eEEJ+5sbu5vj/JTa84yUCBOssMHtevwVVMrGNv+ZZxk7iKB2lJASfWC2Ywv
-         LFYqfzGBbJ8B6ncMiRhP4znXf9IW0sZv7vNjhWIEcdhwxS/64MxfOoprk1rye2PojNEc
-         s1h5xDFupsopUgmrnUuP5B2mo2sGKJmgXuinSqqdPzJKrud8J0ArBonk8GBlVoInTQD/
-         8p0g==
+        d=linaro.org; s=google; t=1683038728; x=1685630728;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NTBZ86MIa71wdhLiJNVYf2ScZ/YF/VVN/KJT6PzGP/s=;
+        b=aH8mipMhXlRPfGIt53xIx10PTcU3921Ln8uaf4xgONWzNjnyaKGggUn0eeDFyvNUuc
+         m4AsQOW00J89ts1hmJZOtdSWkyL3fjjaOc8ocENdqM9/QdDvCVZoj75hCsqXmGP0rJp7
+         qfzaDRWbJH+B3tU2nzN9o1SLkc4BnivrfRJWNOjbPnhxQJFwdr0UjecDM7XzRqdpjjRo
+         ssNvflVz9IN5Y9g55II4YpFpKsamUpM3dFIZHHxjW+jMQ5g5y1eE2JOh53eF8OHQkCBB
+         soWjSiJ5sebGVHuIb1DMdRHQDzufOniOpmXX3pxNYoqABWMl2Szp0e754m+a+srIgA9C
+         3NvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683025182; x=1685617182;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VdDZqOttphOYv9U+1zrZaT0zA9hRSu+yE6K9FwESJIc=;
-        b=CaHEAmoYZ0fIxcCLHcEYKIk0BahOtFGfrxHr1twCMRYjhKcHgV49ibmCW8GytuIfoF
-         467qEzp10mNokYvbu1jDPCAfxY4CBGXOgvoZB2wtxonaoT8PEqex0NuRnWahxANbK/1v
-         M327AnB988zRdEfeU5b6oa/4PRV6A1Jv8Oy7KU0XinytSf7K7QWBsuGHLiq/M/H57y5k
-         5prt1j3svdNgYB6nzmTk3YDtm36/1Itg16pwgtbQ6UWqDLE7CUYlrG7ZjUsa0RksAofo
-         YsWpSXyD2pEpe4jquXyPLydbBEU1MfNPAC6YWJDJBaBzYqmcw6GrAkobHxxaWeZRKTg7
-         9/NQ==
-X-Gm-Message-State: AC+VfDxe62uCJSvFcyqQgfxacnaPCfmcdQVOEPE+pVTKPY+3cOWWWqlV
-        /He7PNYfqOCLlZr3Tt86GBvHAQ==
-X-Google-Smtp-Source: ACHHUZ72mUrm5HA31mQawpD3/IrgOPhq7juHhvyRzwMQfL7RY+YIilMqz9yIbzWwF3xOMPT6aAsYUQ==
-X-Received: by 2002:a05:6402:18d:b0:506:741e:5c14 with SMTP id r13-20020a056402018d00b00506741e5c14mr7398805edv.30.1683025182695;
-        Tue, 02 May 2023 03:59:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170906a18400b0094f1d0bad81sm15853265ejy.139.2023.05.02.03.59.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 03:59:42 -0700 (PDT)
-Message-ID: <a0f4252d-7f27-6dd9-dea0-f8d242011f70@linaro.org>
-Date:   Tue, 2 May 2023 12:59:40 +0200
+        d=1e100.net; s=20221208; t=1683038728; x=1685630728;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NTBZ86MIa71wdhLiJNVYf2ScZ/YF/VVN/KJT6PzGP/s=;
+        b=RijrvqZZQ1hHGJjYDwT8KOZUdq1hu4Mz0RN7iY0z43HdONCgvTj0vfVXiqFHfWD/VX
+         28vdFYn1UvxiqzMPsGt72vh44WIx4bk3W7TMKGCiUdAt2La5yjjdLtJPM/77Oflefs9c
+         J3/S2RP66a16ErwCqf9qvtr2TVJosVzThPMKM09+vEaww6/I4uO6phNlwkMPasrRRDvH
+         36MukQJf5uu8YWBC8haAtLmXXwyhqb5GElJ6Kjtc9ol2FrtOfCyDs7K2nw1HN1A99Qz3
+         F5YAn7u+tkctVQGnj08H9NK+MC2YXdvaY6eZr+jdWZ1gFW8CLdKegJMLANl50Evp42ZJ
+         E3Qg==
+X-Gm-Message-State: AC+VfDyoeEv295fg5xiLMlWJMtSXiPcHHNeJBAMBMZh3dHdWgm08PAhL
+        9W9FkfXkWE2G+OKJ33oaGcIvhCTYgjWdQ5HG5BLqMd3D47hG4Qbk
+X-Google-Smtp-Source: ACHHUZ5qZiUNmAsvaStVmdKd0XzydKOgSQ/xrcQAJSaGleuVOqeU2KmB/hNCXa6HhLhV9h8ddsC+a2OyqkzhSp6TSew=
+X-Received: by 2002:a25:ac93:0:b0:b99:860a:87d6 with SMTP id
+ x19-20020a25ac93000000b00b99860a87d6mr18240890ybi.35.1683038727829; Tue, 02
+ May 2023 07:45:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
-Content-Language: en-US
-To:     Jakob Hauser <jahau@rocketmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1682636929.git.jahau@rocketmail.com>
- <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
- <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
- <e9d75e57-bdea-593d-7b05-136c9ad2e2fe@rocketmail.com>
- <14daa006-5260-81a8-8ba0-4122e0c0509a@rocketmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <14daa006-5260-81a8-8ba0-4122e0c0509a@rocketmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230424110933.3908-1-quic_mkshah@quicinc.com> <20230424110933.3908-3-quic_mkshah@quicinc.com>
+In-Reply-To: <20230424110933.3908-3-quic_mkshah@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 2 May 2023 16:44:52 +0200
+Message-ID: <CAPDyKFowJheraoMdJSyhdXB_FcT1oeiAwqrF8eGLC3FNVqhzCg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] cpuidle: psci: Move enabling OSI mode after power
+ domains creation
+To:     andersson@kernel.org, Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     dianders@chromium.org, swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,83 +70,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/05/2023 23:16, Jakob Hauser wrote:
-> Hi Krzysztof,
-> 
-> On 01.05.23 19:35, Jakob Hauser wrote:
->> On 01.05.23 09:21, Krzysztof Kozlowski wrote:
->>> On 28/04/2023 01:30, Jakob Hauser wrote:
->>>> Add device tree binding documentation for rt5033 multifunction 
->>>> device, voltage
->>>> regulator and battery charger.
->>>>
->>>> Cc: Beomho Seo <beomho.seo@samsung.com>
->>>> Cc: Chanwoo Choi <cw00.choi@samsung.com>
->>>> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
->>>
->>>
->>> (...)
->>>
->>>> +
->>>> +required:
->>>> +  - monitored-battery
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    charger {
->>>> +        compatible = "richtek,rt5033-charger";
->>>> +        monitored-battery = <&battery>;
->>>> +        extcon = <&muic>;
->>>
->>>
->>> Everything up to here looked ok, but extcon is not a hardware property.
->>> Please do not mix adding missing bindings for existing device with
->>> adding new properties. You should use connector for the USB port.
->>>
-> 
-> ...
-> 
->> And how to set up the rt5033-charger to retrieve the information of the 
->> extcon/muic driver in that case?
->>
-> 
-> ...
-> 
-> To add more context:
-> According to my understanding, the extcon subsystem provides three ways 
-> to get an extcon device [3]:
-> - by name
-> - by devicetree node
-> - by phandle
-> 
-> For rt5033-charger, the extcon device name can be different depending on 
-> the consumer device. For the node I wouldn't know how to get from the 
-> charger/mfd node to the extcon node, I don't see a direct relation in 
-> case of rt5033-charger (it's no parent node or something like that). 
-> Therefore I chose the third option: phandle.
-> 
-> In the rt5033-charger driver, the location of the 
-> extcon_get_edev_by_phandle() call is shown in link [4], it gets added in 
-> patch 6.
-> 
+On Mon, 24 Apr 2023 at 13:10, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+>
+> A switch from OSI to PC mode is only possible if all CPUs other than the
+> calling one are OFF, either through a call to CPU_OFF or not yet booted.
+>
+> Currently OSI mode is enabled before power domains are created. In cases
+> where CPUidle states are not using hierarchical CPU topology the bail out
+> path tries to switch back to PC mode which gets denied by firmware since
+> other CPUs are online at this point and creates inconsistent state as
+> firmware is in OSI mode and Linux in PC mode.
+>
+> This change moves enabling OSI mode after power domains are created,
+> this would makes sure that hierarchical CPU topology is used before
+> switching firmware to OSI mode.
+>
+> Fixes: 70c179b49870 ("cpuidle: psci: Allow PM domain to be initialized even if no OSI mode")
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 
-Hi Jakob,
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-I am currently busy, so I won't be able to help you and dig in your
-reply. I will get to you a bit later (or maybe Rob will help here).
+Bjorn, can you pick up this series for 6.4-rc[n]? Moreover, I think it
+would be a good idea to tag both patch 1 and patch 2 for stable
+kernels.
 
-However please check if ports graph does not solve your case:
-https://lore.kernel.org/all/20230501121111.1058190-6-bryan.odonoghue@linaro.org/
+Kind regards
+Uffe
 
-It is already used for orientation and usb-role-switch (which should
-solve the need for extcon, AFAIR).
-
-If it does not help, ping me again, and I'll try to get to you a bit later.
-
-Apologies for this, just very busy times. :)
-
-Best regards,
-Krzysztof
-
+> ---
+>  drivers/cpuidle/cpuidle-psci-domain.c | 39 +++++++++------------------
+>  1 file changed, 13 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index c2d6d9c3c930..b88af1262f1a 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -120,20 +120,6 @@ static void psci_pd_remove(void)
+>         }
+>  }
+>
+> -static bool psci_pd_try_set_osi_mode(void)
+> -{
+> -       int ret;
+> -
+> -       if (!psci_has_osi_support())
+> -               return false;
+> -
+> -       ret = psci_set_osi_mode(true);
+> -       if (ret)
+> -               return false;
+> -
+> -       return true;
+> -}
+> -
+>  static void psci_cpuidle_domain_sync_state(struct device *dev)
+>  {
+>         /*
+> @@ -152,15 +138,12 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+>  {
+>         struct device_node *np = pdev->dev.of_node;
+>         struct device_node *node;
+> -       bool use_osi;
+> +       bool use_osi = psci_has_osi_support();
+>         int ret = 0, pd_count = 0;
+>
+>         if (!np)
+>                 return -ENODEV;
+>
+> -       /* If OSI mode is supported, let's try to enable it. */
+> -       use_osi = psci_pd_try_set_osi_mode();
+> -
+>         /*
+>          * Parse child nodes for the "#power-domain-cells" property and
+>          * initialize a genpd/genpd-of-provider pair when it's found.
+> @@ -170,33 +153,37 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+>                         continue;
+>
+>                 ret = psci_pd_init(node, use_osi);
+> -               if (ret)
+> -                       goto put_node;
+> +               if (ret) {
+> +                       of_node_put(node);
+> +                       goto exit;
+> +               }
+>
+>                 pd_count++;
+>         }
+>
+>         /* Bail out if not using the hierarchical CPU topology. */
+>         if (!pd_count)
+> -               goto no_pd;
+> +               return 0;
+>
+>         /* Link genpd masters/subdomains to model the CPU topology. */
+>         ret = dt_idle_pd_init_topology(np);
+>         if (ret)
+>                 goto remove_pd;
+>
+> +       /* let's try to enable OSI. */
+> +       ret = psci_set_osi_mode(use_osi);
+> +       if (ret)
+> +               goto remove_pd;
+> +
+>         pr_info("Initialized CPU PM domain topology using %s mode\n",
+>                 use_osi ? "OSI" : "PC");
+>         return 0;
+>
+> -put_node:
+> -       of_node_put(node);
+>  remove_pd:
+> +       dt_idle_pd_remove_topology(np);
+>         psci_pd_remove();
+> +exit:
+>         pr_err("failed to create CPU PM domains ret=%d\n", ret);
+> -no_pd:
+> -       if (use_osi)
+> -               psci_set_osi_mode(false);
+>         return ret;
+>  }
+>
+> --
+> 2.17.1
+>
