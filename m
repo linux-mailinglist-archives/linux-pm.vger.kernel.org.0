@@ -2,44 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08396F4195
-	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 12:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68736F41AD
+	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 12:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbjEBK22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 May 2023 06:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S234012AbjEBKcw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 May 2023 06:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbjEBK1n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 06:27:43 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF5559B;
-        Tue,  2 May 2023 03:26:20 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ptnD7-0004cs-4G; Tue, 02 May 2023 12:26:17 +0200
-Message-ID: <0fd55257-5b26-1969-18b7-97b39c3f620b@leemhuis.info>
-Date:   Tue, 2 May 2023 12:26:16 +0200
+        with ESMTP id S234023AbjEBKcD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 06:32:03 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBE75273;
+        Tue,  2 May 2023 03:30:15 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-956ff2399b1so747256666b.3;
+        Tue, 02 May 2023 03:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683023414; x=1685615414;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yoz9JAbN5f+BVMAIJU5OP6UpMSWt3PXfSC9zASQ8+H0=;
+        b=qPJ2Hw6amNfB8lmXOrdvIl9FoT5xySIqwZYWNum7nfccE3LyonUmxVC4xvOcGkIACz
+         307kXPO/NEqxiW/gL534TetAjXFMoxa712gCWzKQ9ryZyTyQGMomA1FstyAd9rudnxDJ
+         7fxgC6AH+COjiSwLoolMULeoK+VOXPx+4clNKCXfmDkRZ6m4hSGBl+TNH9oRewB4vJ7s
+         GGDFrB5+hrF9djGr072zaTtShx1WWAkMkalYHIxnaA/YwcHurRqoQVgEEGcgHzSDCIV5
+         TcF93MCyDjYjmn8HxsAncCUR7fkPNCJmvVqGqCCZtOSZA9/R8phHp/VwRwXcb4ea7wMM
+         ejrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683023414; x=1685615414;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yoz9JAbN5f+BVMAIJU5OP6UpMSWt3PXfSC9zASQ8+H0=;
+        b=gcGVJyfRTWBVUL0f08RkYXuHH1NBWUH2YB1Fis8XfVFwAEUOJ6nW8mBf0E4Tqt5G9G
+         mQFCADBwfhiHM9W2KtheliLn1y3HFPOQw8PymzWvCfoCzjyT9XVIViN4nB54JOr4MvA8
+         wXS83Ruckb1wHrZ/RFl4JUDfQ3VFkcFYmxq6ecu7SDq7xLrOG6uc6htPylPAWIs/oyD1
+         eOAfAy6ubMwuXULdHicAsC1Q+hug630Og1h7tnwcJARt+E2FG4bdy3PKt16xnoJcOIS2
+         Cmg3rFVPAtlvLlYDYReNGJU8PCIHVfBB2Vjcq3+q+gdU4duyv5kS6p8U8NiNDU7py5T3
+         U0Jg==
+X-Gm-Message-State: AC+VfDzGE23YqpQJwx3aKVBw+jdUi1sU9M7Mgbcm/k0qSvIwZ/XPYKWr
+        MMR+2tSB+gGzqUMa+PzqksU=
+X-Google-Smtp-Source: ACHHUZ6YZ5pgw9VrLJ2fqMsSEx0tEiCLwIYXUGSFpKeEuP8/APOwu3MjFq79vENWW/sdJ/Brfn0IHw==
+X-Received: by 2002:a17:907:94cc:b0:948:b9ea:3302 with SMTP id dn12-20020a17090794cc00b00948b9ea3302mr15065573ejc.1.1683023413633;
+        Tue, 02 May 2023 03:30:13 -0700 (PDT)
+Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170906c40d00b0094aa087578csm16154555ejz.171.2023.05.02.03.30.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 03:30:13 -0700 (PDT)
+Date:   Tue, 2 May 2023 12:30:11 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: tegra194: Fix an error handling path in
+ tegra194_cpufreq_probe()
+Message-ID: <ZFDmMydAy4CiJjfQ@orome>
+References: <30b17e2219abc3a9a137d28bb51e53732bba5103.1682428267.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217386 - intel_powerclamp null pointer dereference
- in Linux 6.3.x
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683023180;0714f1ef;
-X-HE-SMSGID: 1ptnD7-0004cs-4G
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gK1WG8+Pg3vMnVql"
+Content-Disposition: inline
+In-Reply-To: <30b17e2219abc3a9a137d28bb51e53732bba5103.1682428267.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -47,123 +79,68 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
+--gK1WG8+Pg3vMnVql
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
+On Tue, Apr 25, 2023 at 03:11:19PM +0200, Christophe JAILLET wrote:
+> If the probe needs to be deferred, some resources still need to be
+> released. So branch to the error handling path instead of returning
+> directly.
+>=20
+> Fixes: f41e1442ac5b ("cpufreq: tegra194: add OPP support and set bandwidt=
+h")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested-only
+> ---
+>  drivers/cpufreq/tegra194-cpufreq.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra19=
+4-cpufreq.c
+> index c8d03346068a..36dad5ea5947 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -686,8 +686,10 @@ static int tegra194_cpufreq_probe(struct platform_de=
+vice *pdev)
+> =20
+>  	/* Check for optional OPPv2 and interconnect paths on CPU0 to enable IC=
+C scaling */
+>  	cpu_dev =3D get_cpu_device(0);
+> -	if (!cpu_dev)
+> -		return -EPROBE_DEFER;
+> +	if (!cpu_dev) {
+> +		err =3D -EPROBE_DEFER;
+> +		goto err_free_res;
+> +	}
 
-Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-not CCed them in mails like this.
+I think ultimately it'd be better to try get_cpu_device(0) earlier so
+that we don't do all that work upfront before we fail. However, it looks
+like there's some other improvements that could be done in that area, so
+this looks like a good fix in the meantime:
 
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217386 :
+Acked-by: Thierry Reding <treding@nvidia.com>
 
->  Risto A. Paju 2023-05-01 09:49:03 UTC
-> 
-> Created attachment 304199 [details]
-> dmesg-6.3.1
-> 
-> I use intel_powerclamp on a Thinkpad X220i via a custom script for
-> thermal management, and it triggers a kernel bug in Linux 6.3.0 and
-> 6.3.1. The script has a part
-> 
-> awk something > /sys/class/thermal/cooling_device4/cur_state
-> 
-> and the awk process hangs, with the null pointer bug reported in dmesg.
-> 
-> The script has worked fine for years, and for now I've switched back to
-> the 6.2 series for this laptop.
-> 
-> [tag] [reply] [−]
-> Private
-> Comment 1 Risto A. Paju 2023-05-01 12:23:15 UTC
-> 
-> The affected CPU is an i3-2310M. I tested the same on a newer Intel
-> laptop with an i5-7300HQ, and there's no sign of the bug there.
+--gK1WG8+Pg3vMnVql
+Content-Type: application/pgp-signature; name="signature.asc"
 
-From the dmesg:
+-----BEGIN PGP SIGNATURE-----
 
-> [   16.495596] Oops: 0002 [#1] PREEMPT SMP PTI
-> [   16.496084] CPU: 0 PID: 2792 Comm: awk Not tainted 6.3.1 #2
-> [   16.496589] Hardware name: LENOVO 428737G/428737G, BIOS 8DET76WW (1.46 ) 06/21/2018
-> [   16.497095] RIP: 0010:idle_inject_set_duration+0x6/0x20
-> [   16.497607] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
-> [   16.498824] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
-> [   16.499461] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
-> [   16.500103] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
-> [   16.500752] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
-> [   16.501405] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
-> [   16.502071] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
-> [   16.502745] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
-> [   16.503421] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.504095] CR2: 0000000000000044 CR3: 000000010f94c006 CR4: 00000000000606f0
-> [   16.504783] Call Trace:
-> [   16.505456]  <TASK>
-> [   16.506124]  powerclamp_set_cur_state+0x56/0x200 [intel_powerclamp]
-> [   16.506810]  cur_state_store+0x74/0xd0
-> [   16.507497]  kernfs_fop_write_iter+0x128/0x1c0
-> [   16.508193]  vfs_write+0x2be/0x3f0
-> [   16.508897]  ksys_write+0x5a/0xe0
-> [   16.509794]  do_syscall_64+0x3b/0x90
-> [   16.510607]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [   16.511444] RIP: 0033:0x7fe4948c0be0
-> [   16.512247] Code: 40 00 48 8b 15 49 c2 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 80 3d 01 4a 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
-> [   16.514025] RSP: 002b:00007ffc045bd0d8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-> [   16.515180] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe4948c0be0
-> [   16.516346] RDX: 0000000000000002 RSI: 0000562bc4d50990 RDI: 0000000000000001
-> [   16.517543] RBP: 00007fe49499e780 R08: 0000000000000007 R09: 0000562bc4d46da0
-> [   16.518751] R10: 00007fe4947d5f50 R11: 0000000000000202 R12: 0000000000000002
-> [   16.519977] R13: 0000562bc4d50990 R14: 0000000000000002 R15: 00007fe494999d60
-> [   16.521234]  </TASK>
-> [   16.522479] Modules linked in: 
-> [...]
-> [   16.534416] CR2: 0000000000000044
-> [   16.536059] ---[ end trace 0000000000000000 ]---
-> [   16.537819] RIP: 0010:idle_inject_set_duration+0x6/0x20
-> [   16.537827] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
-> [   16.543180] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
-> [   16.543189] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
-> [   16.543193] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
-> [   16.549435] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
-> [   16.551087] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
-> [   16.551091] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
-> [   16.554264] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
-> [   16.554270] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.554281] CR2: 0000560363a98298 CR3: 000000010f94c006 CR4: 00000000000606f0
-> [   17.635258] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=2842 'X'
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRQ5jMACgkQ3SOs138+
+s6G2Wg//TRLHO0MURhGFW5IfnB5xXcvKaHVeurXxBdRWI4KuA8CQv5+2plHnEci6
+BlU7+GHpOB+3Ch+bfnUVuhFN4WleYecoD69FS9GxwLaYukg7R7ynqVhYX/tccT1w
+lzkZFUzYqrJMxY4ZAKMD14PmnY7tm/DFQO8Ht7Iu1DWKCRVZTd1udfXpqw4z8spc
+ndm1uxVz3d2ojvkhevIWOpHYpsCXgbzYMasi1lHpbui/RGUyr6JE1L2CY23+Ne4s
+KcF/QrhXWRXs6+s40Xi7rQrAgtj/evq0wOlly/YGLBtP4mKpQB1T/o8MlF0NfW3x
+iQoKEAfBIbmOYodXCYjrZvj8ftq7pOtQbzXWW67wzjOxyDuXc/j2XVodHdoDtJ+0
+VSabbpTT+RQsXDM61RxBqeH56mXl6TpJaBLL/reh6BVRESmTPfaqXOkw12BXLYhZ
+IHDOfbuXvHAT1fhJjOWj2yxiqOhwcsIJVIyQlrBfUIjjf1AKOkaUGgiO4jffHjSG
+uYyglby74dbDWqLXnotxaMpSNRSCY94kxEw99p2MtsAb/HTOzCpw2SX/PGBePjwI
+XJCyZ54FOIBBvi+0LBZhjbDitkbILO0zvPZ6etx99jFC2ZRndIqLks22WO/B0h34
+mHYcuakHBmhjbnPK+Yt8YbNQtgUo2O401FTHT/Cm78Y5vYybem4=
+=WBsp
+-----END PGP SIGNATURE-----
 
-
-See the ticket for more details.
-
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v6.2..v6.3
-https://bugzilla.kernel.org/show_bug.cgi?id=217386
-#regzbot title: pm: thermal: intel_powerclamp null pointer dereference
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+--gK1WG8+Pg3vMnVql--
