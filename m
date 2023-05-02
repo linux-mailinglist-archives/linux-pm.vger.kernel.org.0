@@ -2,85 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3706F408E
-	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 12:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08396F4195
+	for <lists+linux-pm@lfdr.de>; Tue,  2 May 2023 12:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjEBKAS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 May 2023 06:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S234042AbjEBK22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 May 2023 06:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBKAR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 06:00:17 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB4830F6;
-        Tue,  2 May 2023 03:00:16 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3062db220a3so1258772f8f.0;
-        Tue, 02 May 2023 03:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683021614; x=1685613614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DMr9gvF8Pl9mIUWgrETUJDIt0vnyiOv1BE24SgG6Lto=;
-        b=WmA9DGCkjPvr6YFIxM5TUvWVN9FipEkQlHdb5kpX4aVH4FkFW7QTYZ39MqtjtBmfG2
-         +2dM7q8RVXvK7XC+TDSTqEBr+Ud9C5b7EakwQrExotdSZC93eWfv4Y/78ui5QG63BCbP
-         vNCt8OjkdNfvDrwsDM3R8HPiZWh+gWAw5DBR1eJO0BxiW69xF4bwbFqkWyWRExLeBfEG
-         GgCAYrm09/Wq8gus+GTJVU63oeXsiuX1KXF6acCdxWw/wFZHhkloAfg45A70JHE954Ua
-         Erb38k+WOrmrQvpt+8tdaZtHCeOsoEeGmc51OWO9nXiiW+Iokuq+8oV06/XNtWb8OHsi
-         ATbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683021614; x=1685613614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DMr9gvF8Pl9mIUWgrETUJDIt0vnyiOv1BE24SgG6Lto=;
-        b=giX6l6dOcdpyKAPRJitvy1v3NpBqashxsfnM4pFEnlHGKR/sm9opwoYi+hoLgSBFmm
-         QBWqo+GR9iDnLRcGKxMNELCLDCp/oguY3NLvB9wU/lQ60JkFPKC5KBp960NM/ACMrwuc
-         oPUJGrMFEQdRvgmOlkcPqh4QgXXDenNI7QpDOzuQpOxjolf6S6gdOhGd52ylh7qyCDHK
-         LUqFo6HCL8tzP7xtlORKF/oFtP4pHC/qqZyfxeNl7E4zr+hUXzWJ5ZbMBiaF9Z670NTs
-         pbcEEFqK99czf7QKMBHrPBERwH9epcG60IEPSgtnos0/Gx+rHrfWQEIlC4OQ3yasmveB
-         IIww==
-X-Gm-Message-State: AC+VfDx53nFddMuH11rbuYBDmolmx5wmNNKn9OmT4njRFkT2n8YjlSVJ
-        ObZrrUhY5eRWxwGF+iPOPi8=
-X-Google-Smtp-Source: ACHHUZ5nXwHh+CHAxSN7hBDo8xJZZF/pzllxqaFgnSIb6mXPfrPJBzKX0RwxiNFr6M626CDjvd3NDw==
-X-Received: by 2002:a5d:4fcc:0:b0:306:32c4:7e7b with SMTP id h12-20020a5d4fcc000000b0030632c47e7bmr2951475wrw.41.1683021614402;
-        Tue, 02 May 2023 03:00:14 -0700 (PDT)
-Received: from [192.168.0.91] ([84.76.164.7])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfe10f000000b00304832cd960sm20629439wrz.10.2023.05.02.03.00.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 03:00:12 -0700 (PDT)
-Message-ID: <c1986b45-b8cd-6c1c-7758-086dc943c7e0@gmail.com>
-Date:   Tue, 2 May 2023 12:00:10 +0200
+        with ESMTP id S233867AbjEBK1n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 May 2023 06:27:43 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF5559B;
+        Tue,  2 May 2023 03:26:20 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ptnD7-0004cs-4G; Tue, 02 May 2023 12:26:17 +0200
+Message-ID: <0fd55257-5b26-1969-18b7-97b39c3f620b@leemhuis.info>
+Date:   Tue, 2 May 2023 12:26:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] thermal/drivers/mediatek/lvts_thermal: Handle IRQ on
- all controllers
-Content-Language: en-US, ca-ES, es-ES
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217386 - intel_powerclamp null pointer dereference
+ in Linux 6.3.x
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230428195347.3832687-1-nfraprado@collabora.com>
- <20230428195347.3832687-2-nfraprado@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230428195347.3832687-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683023180;0714f1ef;
+X-HE-SMSGID: 1ptnD7-0004cs-4G
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,36 +47,123 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
-On 28/04/2023 21:53, Nícolas F. R. A. Prado wrote:
-> There is a single IRQ handler for each LVTS thermal domain, and it is
-> supposed to check each of its underlying controllers for the origin of
-> the interrupt and clear its status. However due to a typo, only the
-> first controller was ever being handled, which resulted in the interrupt
-> never being cleared when it happened on the other controllers. Add the
-> missing index so interrupts are handled for all controllers.
-> 
-> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developers don't keep an eye on it, I decided to forward it by mail.
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
+not CCed them in mails like this.
 
-> ---
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217386 :
+
+>  Risto A. Paju 2023-05-01 09:49:03 UTC
 > 
->   drivers/thermal/mediatek/lvts_thermal.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Created attachment 304199 [details]
+> dmesg-6.3.1
 > 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index d0a3f95b7884..56b24c5b645f 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -449,7 +449,7 @@ static irqreturn_t lvts_irq_handler(int irq, void *data)
->   
->   	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
->   
-> -		aux = lvts_ctrl_irq_handler(lvts_td->lvts_ctrl);
-> +		aux = lvts_ctrl_irq_handler(&lvts_td->lvts_ctrl[i]);
->   		if (aux != IRQ_HANDLED)
->   			continue;
->   
+> I use intel_powerclamp on a Thinkpad X220i via a custom script for
+> thermal management, and it triggers a kernel bug in Linux 6.3.0 and
+> 6.3.1. The script has a part
+> 
+> awk something > /sys/class/thermal/cooling_device4/cur_state
+> 
+> and the awk process hangs, with the null pointer bug reported in dmesg.
+> 
+> The script has worked fine for years, and for now I've switched back to
+> the 6.2 series for this laptop.
+> 
+> [tag] [reply] [−]
+> Private
+> Comment 1 Risto A. Paju 2023-05-01 12:23:15 UTC
+> 
+> The affected CPU is an i3-2310M. I tested the same on a newer Intel
+> laptop with an i5-7300HQ, and there's no sign of the bug there.
+
+From the dmesg:
+
+> [   16.495596] Oops: 0002 [#1] PREEMPT SMP PTI
+> [   16.496084] CPU: 0 PID: 2792 Comm: awk Not tainted 6.3.1 #2
+> [   16.496589] Hardware name: LENOVO 428737G/428737G, BIOS 8DET76WW (1.46 ) 06/21/2018
+> [   16.497095] RIP: 0010:idle_inject_set_duration+0x6/0x20
+> [   16.497607] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
+> [   16.498824] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
+> [   16.499461] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
+> [   16.500103] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
+> [   16.500752] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
+> [   16.501405] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
+> [   16.502071] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
+> [   16.502745] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
+> [   16.503421] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.504095] CR2: 0000000000000044 CR3: 000000010f94c006 CR4: 00000000000606f0
+> [   16.504783] Call Trace:
+> [   16.505456]  <TASK>
+> [   16.506124]  powerclamp_set_cur_state+0x56/0x200 [intel_powerclamp]
+> [   16.506810]  cur_state_store+0x74/0xd0
+> [   16.507497]  kernfs_fop_write_iter+0x128/0x1c0
+> [   16.508193]  vfs_write+0x2be/0x3f0
+> [   16.508897]  ksys_write+0x5a/0xe0
+> [   16.509794]  do_syscall_64+0x3b/0x90
+> [   16.510607]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [   16.511444] RIP: 0033:0x7fe4948c0be0
+> [   16.512247] Code: 40 00 48 8b 15 49 c2 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 80 3d 01 4a 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
+> [   16.514025] RSP: 002b:00007ffc045bd0d8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
+> [   16.515180] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe4948c0be0
+> [   16.516346] RDX: 0000000000000002 RSI: 0000562bc4d50990 RDI: 0000000000000001
+> [   16.517543] RBP: 00007fe49499e780 R08: 0000000000000007 R09: 0000562bc4d46da0
+> [   16.518751] R10: 00007fe4947d5f50 R11: 0000000000000202 R12: 0000000000000002
+> [   16.519977] R13: 0000562bc4d50990 R14: 0000000000000002 R15: 00007fe494999d60
+> [   16.521234]  </TASK>
+> [   16.522479] Modules linked in: 
+> [...]
+> [   16.534416] CR2: 0000000000000044
+> [   16.536059] ---[ end trace 0000000000000000 ]---
+> [   16.537819] RIP: 0010:idle_inject_set_duration+0x6/0x20
+> [   16.537827] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
+> [   16.543180] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
+> [   16.543189] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
+> [   16.543193] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
+> [   16.549435] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
+> [   16.551087] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
+> [   16.551091] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
+> [   16.554264] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
+> [   16.554270] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.554281] CR2: 0000560363a98298 CR3: 000000010f94c006 CR4: 00000000000606f0
+> [   17.635258] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=2842 'X'
+
+
+See the ticket for more details.
+
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.2..v6.3
+https://bugzilla.kernel.org/show_bug.cgi?id=217386
+#regzbot title: pm: thermal: intel_powerclamp null pointer dereference
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
