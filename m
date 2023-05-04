@@ -2,108 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816E26F6222
-	for <lists+linux-pm@lfdr.de>; Thu,  4 May 2023 01:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3D56F626C
+	for <lists+linux-pm@lfdr.de>; Thu,  4 May 2023 02:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjECXi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 May 2023 19:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S229536AbjEDAtD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 May 2023 20:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjECXi5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 May 2023 19:38:57 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F13900E;
-        Wed,  3 May 2023 16:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683157136; x=1714693136;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=T+3WkbkI2Doib/EI0wr80Wr5AoN/X5W//IkbnMxJR1s=;
-  b=eViJIy11jqQjFhWgluEzGYSG1nxEamEbBstu7L+3KA73mYVbEwW8VfyD
-   2IbrJIBQ3umjUPFarlhcSPQ0W3hkfQRrDGkCLTGQRBgx7luUE8y2SZs5S
-   yetkd1uJb7AfAHm9IhFEqTv72yLhH43twUrOKqqmZBjv4voz6MiyYLLYX
-   DfZFYH2eBdYm30u/9U5mCrDRVOrloc+tjcrBHfQolXbBpDjl4UvyjeZTm
-   Q7HBq8FeNo56kaFlLZJ6Xp4gjIbHKbuVHxUK2oucbopsVt3WJs7rijeia
-   wMDjy3ILok+qXXfAiBa95YSr+1QBHOo1NlAKMRHUahNe4MUwy83YwSCPe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="329151689"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="329151689"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 16:38:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="766341008"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="766341008"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga004.fm.intel.com with ESMTP; 03 May 2023 16:38:55 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Risto A . Paju" <teknohog@iki.fi>, stable@kernel.org
-Subject: [PATCH] thermal: intel: powerclamp: Fix NULL pointer access issue
-Date:   Wed,  3 May 2023 16:38:50 -0700
-Message-Id: <20230503233850.1918041-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229441AbjEDAtC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 May 2023 20:49:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B6799;
+        Wed,  3 May 2023 17:49:01 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6AF1866029DE;
+        Thu,  4 May 2023 01:48:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683161340;
+        bh=fb9qzuGOPKwdGOlOltLWR82xaBQN6heDuW2S3Fru+/U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UKGB6Kw3vKZDXwfQqPEvvC3UVMVo3BMhPuyYlP6olq/3B2Db2zOjpns1Chy6Pewtb
+         +80HIQei65zowdbNqRbIJgeQvEw4uWmcp9I47y0x3HN3+dPxB4Bqo/a7QIObzDf+dy
+         E4jYD7NnzwCEfar9Ijacx5y57G78loqTdS01qCuhUEKgOnAKnLYjyNVVKKZGSOandk
+         dyvs4Sy6qXAKKNCow4PJoAAn8Tb+3XLi9KD7M0/RIf+FJxxBsSm8layenuR15l9jXX
+         92lucnOuUYLtlFGAAjRJll3l1ymikA2lkJrJ4UZTSqSoLyICp7Lx8XYOZEKTXipRZG
+         9EVyauRRKEodw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kernel@collabora.com, Alexandre Mergnat <amergnat@baylibre.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/6] thermal/drivers/mediatek/lvts_thermal: Fixes to the interrupt handling
+Date:   Wed,  3 May 2023 20:48:46 -0400
+Message-Id: <20230504004852.627049-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the cur_state for the powerclamp cooling device is set to the default
-minimum state of 0, without setting first to cur_state > 0, this results
-in NULL pointer access.
 
-This NULL pointer access happens in the powercap core idle-inject function
-idle_inject_set_duration() as there is no NULL check for idle_inject_device
-pointer. This pointer must be allocated by calling idle_inject_register()
-or idle_inject_register_full().
+Fixes in the interrupt handling of the LVTS thermal driver noticed while
+testing it on the Spherion Chromebook (mt8192-asurada-spherion) with the
+MT8192 support series [1].
 
-In the function powerclamp_set_cur_state(), idle_inject_device pointer is
-allocated only when the cur_state > 0. But setting 0 without changing to
-any other state, idle_inject_set_duration() will be called with a NULL
-idle_inject_device pointer.
+These are standalone fixes and don't depend on anything else.
 
-To address this just return from powerclamp_set_cur_state(), if the
-current cooling device state is same as the last one. Since the powerup
-default cooling device state is 0, changing the state to 0 again here
-will return without calling idle_inject_set_duration().
+While version 1 fixed the interrupt storms that were happening, after
+doing some more testing I realized that interrupts still weren't
+correctly working when crossing thermal trip points, so I've added a
+couple more commits to get that fixed on version 2.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Fixes: 8526eb7fc75a ("thermal: intel: powerclamp: Use powercap idle-inject feature")
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=217386
-Tested-by: Risto A. Paju <teknohog@iki.fi>
-Cc: stable@kernel.org
----
-This issue is can be reproduced from 6.3-rc1 kernel.
+[1] https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/
 
- drivers/thermal/intel/intel_powerclamp.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Thanks,
+Nícolas
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 91fc7e239497..36243a3972fd 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -703,6 +703,10 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
- 
- 	new_target_ratio = clamp(new_target_ratio, 0UL,
- 				(unsigned long) (max_idle - 1));
-+
-+	if (powerclamp_data.target_ratio == new_target_ratio)
-+		goto exit_set;
-+
- 	if (!powerclamp_data.target_ratio && new_target_ratio > 0) {
- 		pr_info("Start idle injection to reduce power\n");
- 		powerclamp_data.target_ratio = new_target_ratio;
+Changes in v2:
+- Added commits 3, 5, 6 to get working interrupts when crossing thermal
+  trip points
+- Updated commit 4 with interrupt flags for the offset
+
+Nícolas F. R. A. Prado (6):
+  thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
+  thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate mode
+  thermal/drivers/mediatek/lvts_thermal: Use offset threshold for IRQ
+  thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
+  thermal/drivers/mediatek/lvts_thermal: Don't leave threshold zeroed
+  thermal/drivers/mediatek/lvts_thermal: Manage threshold between
+    sensors
+
+ drivers/thermal/mediatek/lvts_thermal.c | 142 ++++++++++++++++++------
+ 1 file changed, 110 insertions(+), 32 deletions(-)
+
 -- 
-2.25.1
+2.40.1
 
