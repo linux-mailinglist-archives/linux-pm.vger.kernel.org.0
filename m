@@ -2,84 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7906F6537
-	for <lists+linux-pm@lfdr.de>; Thu,  4 May 2023 08:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBDF6F682B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 May 2023 11:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjEDGrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 May 2023 02:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S230178AbjEDJTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 May 2023 05:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEDGrU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 May 2023 02:47:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187EC2122;
-        Wed,  3 May 2023 23:47:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C134520525;
-        Thu,  4 May 2023 06:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683182837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vDagaQFzsZ+X9GWKn/xT7J4aIc1OKvEyKIFhHwtPMgk=;
-        b=PVeZjaFbt6TEPGutiClK7mau8SsTl9qV+Zaf0LFyE7LCPv8DKTliYaRpLIPIWFJGiMaPjy
-        y360f90sT+3lNAEyyTef67i9giIktruSWud2X5+PVZgUl3t1Yw3lRnbpccisDQR6p2/BCy
-        3BGvidXrLOhG5NHzfJs88UU7oCDiVqk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683182837;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vDagaQFzsZ+X9GWKn/xT7J4aIc1OKvEyKIFhHwtPMgk=;
-        b=sumPTD+CaqYiz4s6NignUXOfxyjCdIK70MU9UHLPzPjdxfNcdXuo3w/XAJWcG9ljMWpXXb
-        BgvKuSK4CwvIlxCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8B7EF139C3;
-        Thu,  4 May 2023 06:47:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id X26lIPVUU2THeQAAMHmgww
-        (envelope-from <trenn@suse.de>); Thu, 04 May 2023 06:47:17 +0000
-From:   Thomas Renninger <trenn@suse.de>
-To:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        gautham.shenoy@amd.com, Wyes Karny <wyes.karny@amd.com>
-Subject: Re: [PATCH] cpupower: Make TSC read per CPU for Mperf monitor
-Date:   Thu, 04 May 2023 08:47:17 +0200
-Message-ID: <4480921.LvFx2qVVIh@work.fritz.box>
-In-Reply-To: <20230504062544.601566-1-wyes.karny@amd.com>
-References: <20230504062544.601566-1-wyes.karny@amd.com>
+        with ESMTP id S229923AbjEDJS7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 May 2023 05:18:59 -0400
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354434686;
+        Thu,  4 May 2023 02:18:55 -0700 (PDT)
+X-QQ-mid: bizesmtpipv603t1683191906tesa
+Received: from localhost ( [255.251.132.4])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 04 May 2023 17:18:24 +0800 (CST)
+X-QQ-SSF: 0140000000000090C000000A0000000
+X-QQ-FEAT: vqhsT3OOnzQrJGtKCXS1pBcMKUMmDAjRfxQG/B6ZO/lWYFwgO+2Y2O7Nj4C5U
+        hOuwigMdoftTB6SuFpHto05XEDV5S23KOJ3BOGlsuK+f1kR4V2ecsKb2uC7U92bw45zmVDs
+        5/4vnrT05DyXcfzc8h8KP+Oizt6Nfp9/KCxPAxem/ukx7eycB6kUEgSc3ioOx/ruKj+l7dM
+        taLLl6jbSB0CsxH1Q/S3pgszqZah34fwyxi5koDec+b4YTNl/TdOGCQNouZpGRKvwrQs38j
+        MM2bi2ZkgdpdeqHhKyyFKp2DJncghKq1SJVIclSjX/ELo5g9/df6I7JMy9DiUMxWZI0WCuc
+        O+zAaoKzTnjQ8ABSvdctz04dzAzSNvCLtQIeZ9a
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 7082002643039706499
+Date:   Thu, 4 May 2023 17:18:24 +0800
+From:   Wang Honghui <honghui.wang@ucas.com.cn>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] strcut: Correct spelling mistakes in comments
+Message-ID: <A393097506CB918E+ZFN4YOkubdwQvONz@TP-P15V>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpipv:ucas.com.cn:qybglogicsvrgz:qybglogicsvrgz5a-2
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_ILLEGAL_IP,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Donnerstag, 4. Mai 2023 08:25:44 CEST Wyes Karny wrote:
-> This technique improves C0 percentage calculation in Mperf monitor.
+Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 
-I very much like this patch.
-Would be nice to see it queued up if Shuah is ok with it.
+strcut: Correct spelling mistakes in comments.
 
-Thanks for this one!
+---
+ kernel/power/snapshot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-     Thomas
-
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..b27affb7503f 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -398,7 +398,7 @@ struct mem_zone_bm_rtree {
+ 	unsigned int blocks;		/* Number of Bitmap Blocks     */
+ };
+ 
+-/* strcut bm_position is used for browsing memory bitmaps */
++/* struct bm_position is used for browsing memory bitmaps */
+ 
+ struct bm_position {
+ 	struct mem_zone_bm_rtree *zone;
+-- 
+2.34.1
 
