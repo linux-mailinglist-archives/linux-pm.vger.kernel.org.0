@@ -2,239 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77886F7DC0
-	for <lists+linux-pm@lfdr.de>; Fri,  5 May 2023 09:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAEC6F80AC
+	for <lists+linux-pm@lfdr.de>; Fri,  5 May 2023 12:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjEEHZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 May 2023 03:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S231448AbjEEKS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 May 2023 06:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjEEHZc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 May 2023 03:25:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B66417FD4;
-        Fri,  5 May 2023 00:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683271525; x=1714807525;
-  h=date:from:to:cc:subject:message-id;
-  bh=3ztxBcgx4LiBQmX7pOrAqblQwgqlugbM0UjwSE3OCkw=;
-  b=QiOS8lO/6dKgnG92XHQ03AldRuXzVshaQwR4+XF8bxw/5XsonvWk0oBz
-   hiNqin7AwcTzwTUHc9qAG90hb0SvwT7kufjpxqKySL5mjCw5Chw3oTdKh
-   6VE2BiB9swmwg+y89+9HudYmMIJmVQqlXYpKAUNN/e2g69PzworC6BuyH
-   Wt6zzwYGM5Z5euiTcVQiQgMyXsNCa3LdCYJat5TB5TRrr8P9GzniK0yaR
-   h+nV73gfvich7GGADmgCgSZaFyEGEQ1J4sWzF6B822HAryRJXHetVPUKE
-   Qwn5YSgNvP2OU3cGm4n4s+fynkKw9M4mVylerhaCPHeL7TVorrZAA8QfU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412376611"
-X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="412376611"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 00:25:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="1027335628"
-X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="1027335628"
-Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 May 2023 00:25:06 -0700
-Received: from kbuild by fe5d646e317d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pupoP-0000LF-2j;
-        Fri, 05 May 2023 07:25:05 +0000
-Date:   Fri, 05 May 2023 15:24:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 4b99907a5a3dc8b8bfa91bf4dbde0e59371cab64
-Message-ID: <20230505072417.iXFCR%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231200AbjEEKS6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 May 2023 06:18:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DE818854;
+        Fri,  5 May 2023 03:18:56 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3458uUqo009519;
+        Fri, 5 May 2023 10:18:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=L3toYGN2IeYTp4IXuzuFszzQE7VcZSvRPCNJ4OBU574=;
+ b=mr+KRxQIRJLbqzy9uTjAhwNabGEKhmlEgsDZicDwOR1xY/tGVLldzOkSXotfwnH2S9Xg
+ j6iB7luBzKH7pQ8WGb4rwfDs3Ij575axSVZl3AeZV3aOmixfl0Ol71wAF9tiykGAPgMm
+ E3vUuzszOFjErdJOpuLGTjRcIea41vrgKZ8wOBs/ExZtsWgaNsNQF8RHozjDqohXOH50
+ low7BtwbBew6jbNutxIkoFyL5lZ+fF4GZeP5GzmOwlvuKMqiPV4J0TwFD9c9WsYJgfi5
+ ykA+ONfYW8unXYlVXR2BEFHUsIYIrwd9rA0Be6VH5IPljN/tSQA927Oia/umFxfvzakI Rw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcwdeg923-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 10:18:11 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345AIAwp014339
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 10:18:10 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 5 May 2023 03:18:05 -0700
+Date:   Fri, 5 May 2023 15:48:01 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: tsens: Add ipq9574 compatible
+Message-ID: <20230505101800.GA10918@varda-linux.qualcomm.com>
+References: <cover.1682682753.git.quic_varada@quicinc.com>
+ <3c6f7510d175ba5a3c81730b010f6c421b2fbf2d.1682682753.git.quic_varada@quicinc.com>
+ <16443d11-7948-d224-cfef-b6c1b5c3d60d@linaro.org>
+ <20230503071055.GB1087@varda-linux.qualcomm.com>
+ <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
+ <20230504045757.GA13434@varda-linux.qualcomm.com>
+ <1b449a78-b57e-7e1e-0261-d35a5a2582a6@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1b449a78-b57e-7e1e-0261-d35a5a2582a6@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: U3NJxz7c26qb5CSQdr631xF7hqiJ0Fva
+X-Proofpoint-GUID: U3NJxz7c26qb5CSQdr631xF7hqiJ0Fva
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_16,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 malwarescore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305050084
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 4b99907a5a3dc8b8bfa91bf4dbde0e59371cab64  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On Thu, May 04, 2023 at 08:22:44AM +0200, Krzysztof Kozlowski wrote:
+> On 04/05/2023 06:57, Varadarajan Narayanan wrote:
+> > On Wed, May 03, 2023 at 09:42:28AM +0200, Krzysztof Kozlowski wrote:
+> >> On 03/05/2023 09:10, Varadarajan Narayanan wrote:
+> >>> On Mon, May 01, 2023 at 09:08:49AM +0200, Krzysztof Kozlowski wrote:
+> >>>> On 28/04/2023 16:52, Varadarajan Narayanan wrote:
+> >>>>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> >>>>>
+> >>>>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
+> >>>>>
+> >>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> >>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
+> >>>>>  1 file changed, 3 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >>>>> index d1ec963..8e2208c 100644
+> >>>>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >>>>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >>>>> @@ -66,6 +66,7 @@ properties:
+> >>>>>        - description: v2 of TSENS with combined interrupt
+> >>>>>          enum:
+> >>>>>            - qcom,ipq8074-tsens
+> >>>>> +          - qcom,ipq9574-tsens
+> >>>>
+> >>>> Your drive change indicates they are compatible, so make them
+> >>>> compatible. 9574 followed by 8074.
+> >>>
+> >>> Not able to understand. You want IPQ9574 to use "qcom,ipq8074-tsens"
+> >>> instead of adding a "qcom,ipq9574-tsens" and no need to add an extra
+> >>> entry to the driver like
+> >>
+> >> Assuming the devices are really compatible, which your driver change
+> >> suggests, I want to use two compatibles. 9574 followed by 8074 fallback,
+> >> just like we do for all Qualcomm IP blocks. Then as you said - no need
+> >> for driver change.
+> >
+> > With schema like this
+> > 	items:
+> > 	  - enum:
+> > 	      - qcom,ipq8074-tsens
+> > 	      - qcom,ipq9574-tsens
+> > and DTS as
+> > 	compatible = "qcom,ipq9574-tsens", "qcom,ipq8074-tsens";
+>
+> This file (and many others) shows you how to encode it in the DT schema
+>
+> https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
 
-elapsed time: 721m
+Thanks for the pointer.
+Will rework and post.
 
-configs tested: 162
-configs skipped: 12
+-Varada
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230501   gcc  
-alpha                randconfig-r025-20230502   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r001-20230430   gcc  
-arc                                 defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                 nsimosci_hs_smp_defconfig   gcc  
-arc                  randconfig-r036-20230504   gcc  
-arc                  randconfig-r043-20230430   gcc  
-arc                  randconfig-r043-20230501   gcc  
-arc                  randconfig-r043-20230502   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                      footbridge_defconfig   gcc  
-arm                  randconfig-r002-20230430   clang
-arm                  randconfig-r002-20230501   clang
-arm                  randconfig-r011-20230501   gcc  
-arm                  randconfig-r026-20230502   clang
-arm                  randconfig-r046-20230430   gcc  
-arm                  randconfig-r046-20230501   gcc  
-arm                  randconfig-r046-20230502   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230501   gcc  
-arm64                randconfig-r015-20230501   clang
-csky         buildonly-randconfig-r002-20230430   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230502   gcc  
-csky                 randconfig-r012-20230502   gcc  
-csky                 randconfig-r023-20230502   gcc  
-csky                 randconfig-r032-20230504   gcc  
-hexagon      buildonly-randconfig-r005-20230430   clang
-hexagon              randconfig-r001-20230430   clang
-hexagon              randconfig-r005-20230502   clang
-hexagon              randconfig-r006-20230501   clang
-hexagon              randconfig-r015-20230430   clang
-hexagon              randconfig-r015-20230502   clang
-hexagon              randconfig-r041-20230430   clang
-hexagon              randconfig-r041-20230501   clang
-hexagon              randconfig-r041-20230502   clang
-hexagon              randconfig-r045-20230430   clang
-hexagon              randconfig-r045-20230501   clang
-hexagon              randconfig-r045-20230502   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r006-20230501   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230501   gcc  
-i386                 randconfig-a002-20230501   gcc  
-i386                 randconfig-a003-20230501   gcc  
-i386                 randconfig-a004-20230501   gcc  
-i386                 randconfig-a005-20230501   gcc  
-i386                 randconfig-a006-20230501   gcc  
-i386                 randconfig-a011-20230501   clang
-i386                 randconfig-a012-20230501   clang
-i386                 randconfig-a013-20230501   clang
-i386                 randconfig-a014-20230501   clang
-i386                 randconfig-a015-20230501   clang
-i386                 randconfig-a016-20230501   clang
-i386                 randconfig-r012-20230501   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r036-20230502   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                 randconfig-r006-20230430   gcc  
-m68k                 randconfig-r013-20230501   gcc  
-m68k                 randconfig-r016-20230502   gcc  
-microblaze   buildonly-randconfig-r001-20230501   gcc  
-microblaze   buildonly-randconfig-r006-20230430   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-mips                      maltaaprp_defconfig   clang
-mips                 randconfig-r004-20230502   gcc  
-mips                        vocore2_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r034-20230502   gcc  
-nios2                randconfig-r035-20230502   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230502   gcc  
-parisc               randconfig-r005-20230430   gcc  
-parisc               randconfig-r013-20230502   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                    amigaone_defconfig   gcc  
-powerpc                      bamboo_defconfig   gcc  
-powerpc                       ebony_defconfig   clang
-powerpc                      katmai_defconfig   clang
-powerpc                     mpc512x_defconfig   clang
-powerpc              randconfig-r013-20230430   clang
-powerpc              randconfig-r014-20230430   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r003-20230430   clang
-riscv        buildonly-randconfig-r003-20230501   clang
-riscv        buildonly-randconfig-r004-20230430   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r031-20230502   clang
-riscv                randconfig-r033-20230504   clang
-riscv                randconfig-r042-20230430   clang
-riscv                randconfig-r042-20230501   clang
-riscv                randconfig-r042-20230502   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r005-20230501   clang
-s390                                defconfig   gcc  
-s390                 randconfig-r011-20230502   gcc  
-s390                 randconfig-r012-20230430   clang
-s390                 randconfig-r014-20230501   clang
-s390                 randconfig-r022-20230502   gcc  
-s390                 randconfig-r032-20230502   clang
-s390                 randconfig-r044-20230430   clang
-s390                 randconfig-r044-20230501   clang
-s390                 randconfig-r044-20230502   gcc  
-sh                               allmodconfig   gcc  
-sh                          r7780mp_defconfig   gcc  
-sh                   randconfig-r004-20230430   gcc  
-sh                   randconfig-r011-20230430   gcc  
-sh                           se7619_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sh                           sh2007_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230430   gcc  
-sparc                randconfig-r003-20230502   gcc  
-sparc                randconfig-r035-20230504   gcc  
-sparc64              randconfig-r005-20230501   gcc  
-sparc64              randconfig-r016-20230430   gcc  
-sparc64              randconfig-r016-20230501   gcc  
-sparc64              randconfig-r031-20230504   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230501   gcc  
-x86_64               randconfig-a002-20230501   gcc  
-x86_64               randconfig-a003-20230501   gcc  
-x86_64               randconfig-a004-20230501   gcc  
-x86_64               randconfig-a005-20230501   gcc  
-x86_64               randconfig-a006-20230501   gcc  
-x86_64               randconfig-a011-20230501   clang
-x86_64               randconfig-a012-20230501   clang
-x86_64               randconfig-a013-20230501   clang
-x86_64               randconfig-a014-20230501   clang
-x86_64               randconfig-a015-20230501   clang
-x86_64               randconfig-a016-20230501   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa               randconfig-r033-20230502   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> > 'make dtbs_check' gives the following error
+> >
+> > arch/arm64/boot/dts/qcom/ipq9574-rdp433.dtb: thermal-sensor@4a9000: compatible: 'oneOf' conditional failed, one must be fixed:
+> >         ['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
+> >
+> > To fix the above error, I have to change the schema as
+> >
+> > 	items:
+> > 	  - enum:
+> > 	      - qcom,ipq8074-tsens
+> > 	      - qcom,ipq9574-tsens
+> > 	  - const: qcom,tsens-v2-combined-int
+>
+> This is not what we talked about.
+>
+> Best regards,
+> Krzysztof
+>
