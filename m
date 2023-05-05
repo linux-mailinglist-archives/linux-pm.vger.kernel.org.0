@@ -2,85 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460EE6F8BB9
-	for <lists+linux-pm@lfdr.de>; Fri,  5 May 2023 23:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66B06F8CA6
+	for <lists+linux-pm@lfdr.de>; Sat,  6 May 2023 01:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233700AbjEEV6x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 May 2023 17:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S230527AbjEEXJ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 May 2023 19:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjEEV6w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 May 2023 17:58:52 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616575244;
-        Fri,  5 May 2023 14:58:44 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-192cd5579faso1972067fac.1;
-        Fri, 05 May 2023 14:58:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683323923; x=1685915923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hbgIOnkpYCYYpEoxomNQGFoUuvsXx9duXQwywtiwyZ4=;
-        b=EWQeF/a4c8L0Ifk5Oow3iEB50abgoJcYPi8bjHKPjCQO2G3rphvvbDId9825s8yOSc
-         +siXkNgCjmvpu6SKHOc9raDtwEMPYqumrFnl7R28s7V/bDxGo0ywbkfS3OmrfKfAoCjQ
-         CscOnjGhC9tbIiH31d8B3JQghWODocALBVO/eUe9En6W3GIK0aIlLFDjsw9opup4EsHF
-         Jhmdew+FXOLvKZ8q6zGRSna09EOQcL1xweOdcKbPLuNQTJmXvzc71JTBg1mC9ww22mBV
-         WStmUfNoTaWqpurCHWhyLhBHWbts29umnVqmVIzXdgVx1sJ+HrBV//ZpQmPh2paU6zdX
-         S7iA==
-X-Gm-Message-State: AC+VfDyQE73R+WnXD5M5kxf4UEW0m67doV5598/I0fz6T5yyHy8HJ+c/
-        ol4Mq2ViUuxsMnDj1nou+w==
-X-Google-Smtp-Source: ACHHUZ5OymvDRj77K/L2WzILHBdu6s//tHlq/nfzZShylPCvd7YmeQDLnFN7vYge8apcmW2hecM1mQ==
-X-Received: by 2002:a05:6808:4394:b0:38e:25f1:ddcd with SMTP id dz20-20020a056808439400b0038e25f1ddcdmr1269717oib.20.1683323923587;
-        Fri, 05 May 2023 14:58:43 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f11-20020a4ae60b000000b00547372059afsm1487720oot.4.2023.05.05.14.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 14:58:42 -0700 (PDT)
-Received: (nullmailer pid 3633776 invoked by uid 1000);
-        Fri, 05 May 2023 21:58:41 -0000
-Date:   Fri, 5 May 2023 16:58:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     Praveenkumar I <quic_ipkumar@quicinc.com>,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        thara.gopinath@gmail.com, devicetree@vger.kernel.org,
-        amitk@kernel.org, andersson@kernel.org, daniel.lezcano@linaro.org,
-        agross@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v1 1/4] dt-bindings: thermal: tsens: Add ipq9574
- compatible
-Message-ID: <168332392113.3633716.4128640191394678480.robh@kernel.org>
-References: <cover.1683027347.git.quic_varada@quicinc.com>
- <cbf916e31b00e0e0599a3012a84a4740df89f4e0.1683027347.git.quic_varada@quicinc.com>
+        with ESMTP id S229681AbjEEXJ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 May 2023 19:09:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0AD3C27;
+        Fri,  5 May 2023 16:09:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 083AF64089;
+        Fri,  5 May 2023 23:09:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E06EC433D2;
+        Fri,  5 May 2023 23:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683328195;
+        bh=mXw9zNMy/vcWygWO+q0RxSEPXTN5AIfnE0Kge2powyU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nPd4Rl+8NrMd3AdqO3cYS5efsxQkx6NKNmiss+u2Bg50EH6ySrj2EGbf69JJZi1jL
+         VM39cUq4ZhY91v0k4JyIqTJl22p36bUxiOsP3OhePkbfdIBN02mLGKeWDLBARwGNp4
+         uttN+9X8WVQEuWxj2H4Q08u2b50jFWRD/BG8hFJoF0WRNQHkUgZRXgFLc8VXDO/2za
+         Aghkmz5xPY6KU5F1mEwsDDW0Dz2ZKL+4fo2CAFDTJ9o+P15ctKKHq+hpsvcKsJeTUH
+         CE6JnmuxK1Ja76yzoqQASquBxHEQVChhW6xnslyKbQIzG8moMFyWrgAgKQEJt8TTor
+         EzrCJkPT87aPg==
+Date:   Fri, 5 May 2023 23:09:53 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com, gmazyland@gmail.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
+        mingo@kernel.org, x86@kernel.org, herbert@gondor.apana.org.au,
+        ardb@kernel.org, dan.j.williams@intel.com, bernie.keany@intel.com,
+        charishma1.gairuboyina@intel.com,
+        lalithambika.krishnakumar@intel.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 08/12] x86/PM/keylocker: Restore internal wrapping key
+ on resume from ACPI S3/4
+Message-ID: <ZFWMwQc4NKg7ueqG@gmail.com>
+References: <20220112211258.21115-1-chang.seok.bae@intel.com>
+ <20230410225936.8940-1-chang.seok.bae@intel.com>
+ <20230410225936.8940-9-chang.seok.bae@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cbf916e31b00e0e0599a3012a84a4740df89f4e0.1683027347.git.quic_varada@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230410225936.8940-9-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Apr 10, 2023 at 03:59:32PM -0700, Chang S. Bae wrote:
+> +/*
+> + * This flag is set with IWKey load. When the key restore fails, it is
+> + * reset. This restore state is exported to the crypto library, then AES-KL
+> + * will not be used there. So, the feature is soft-disabled with this flag.
+> + */
+> +static bool valid_kl;
+> +
+> +bool valid_keylocker(void)
+> +{
+> +	return valid_kl;
+> +}
+> +EXPORT_SYMBOL_GPL(valid_keylocker);
 
-On Wed, 03 May 2023 10:15:59 +0530, Varadarajan Narayanan wrote:
-> From: Praveenkumar I <quic_ipkumar@quicinc.com>
-> 
-> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
-> 
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+It would be simpler to export this bool directly.
 
-Acked-by: Rob Herring <robh@kernel.org>
+> +	if (status & BIT(0))
+> +		return 0;
+> +	else
+> +		return -EBUSY;
+[...]
+> +		pr_info("x86/keylocker: Enabled.\n");
+> +		return;
+> +	} else {
+> +		int rc;
 
+The kernel coding style usually doesn't use 'else' after a return.
+
+- Eric
