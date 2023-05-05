@@ -2,160 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAEC6F80AC
-	for <lists+linux-pm@lfdr.de>; Fri,  5 May 2023 12:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C419D6F8149
+	for <lists+linux-pm@lfdr.de>; Fri,  5 May 2023 13:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjEEKS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 May 2023 06:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S229904AbjEELM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 May 2023 07:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjEEKS6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 May 2023 06:18:58 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DE818854;
-        Fri,  5 May 2023 03:18:56 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3458uUqo009519;
-        Fri, 5 May 2023 10:18:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=L3toYGN2IeYTp4IXuzuFszzQE7VcZSvRPCNJ4OBU574=;
- b=mr+KRxQIRJLbqzy9uTjAhwNabGEKhmlEgsDZicDwOR1xY/tGVLldzOkSXotfwnH2S9Xg
- j6iB7luBzKH7pQ8WGb4rwfDs3Ij575axSVZl3AeZV3aOmixfl0Ol71wAF9tiykGAPgMm
- E3vUuzszOFjErdJOpuLGTjRcIea41vrgKZ8wOBs/ExZtsWgaNsNQF8RHozjDqohXOH50
- low7BtwbBew6jbNutxIkoFyL5lZ+fF4GZeP5GzmOwlvuKMqiPV4J0TwFD9c9WsYJgfi5
- ykA+ONfYW8unXYlVXR2BEFHUsIYIrwd9rA0Be6VH5IPljN/tSQA927Oia/umFxfvzakI Rw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcwdeg923-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 10:18:11 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345AIAwp014339
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 10:18:10 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 5 May 2023 03:18:05 -0700
-Date:   Fri, 5 May 2023 15:48:01 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: tsens: Add ipq9574 compatible
-Message-ID: <20230505101800.GA10918@varda-linux.qualcomm.com>
-References: <cover.1682682753.git.quic_varada@quicinc.com>
- <3c6f7510d175ba5a3c81730b010f6c421b2fbf2d.1682682753.git.quic_varada@quicinc.com>
- <16443d11-7948-d224-cfef-b6c1b5c3d60d@linaro.org>
- <20230503071055.GB1087@varda-linux.qualcomm.com>
- <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
- <20230504045757.GA13434@varda-linux.qualcomm.com>
- <1b449a78-b57e-7e1e-0261-d35a5a2582a6@linaro.org>
+        with ESMTP id S229553AbjEELM5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 May 2023 07:12:57 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B121A106;
+        Fri,  5 May 2023 04:12:56 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f1763ee8f8so11221425e9.1;
+        Fri, 05 May 2023 04:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683285175; x=1685877175;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ijXnLFs/E46BZ9vNzrvv52u6Szz+pPucPk3iNgQDX0=;
+        b=ktYmbTRAlaZPDQsuTHy/0W24MvI1iC67ZUpDtDkZ9YSlqzbJBWP+0kFoH8q3O4qUut
+         VM98hi2uHsFbz/a0TfWfO7KvfyYzl17T7JQzv6CKZmpSJ0F1+rUE3+8BcLPCasHpRYBh
+         w3+xRL+jvzEaqldrTuZFIITUxQJF8VKhNY10/FJ3qtw7usjlZkbrZUAEo1vviX7GohaY
+         5KKPw12O6XNmC6HTyUrMnlnnG+8ZbqEy6bBgQvW67d6vp4NcGNVms7IDdScdHK7wbMIz
+         1yO76Y4+hDmJbQFYJkb/AMHKBQEFiuadthz9Nyn15POXLgi9VcW19GgSdXDTnt49g9KG
+         6fcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683285175; x=1685877175;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ijXnLFs/E46BZ9vNzrvv52u6Szz+pPucPk3iNgQDX0=;
+        b=CJgXVotR4N9zO4J6gTg+gzp3eT/xh9yYxuNOKWPrPjb7XQspcjBh72QjgnjxzA+vFc
+         NMmfZ64YTFPrDPzBoDR0ZB7aW5SJTPGcjtVy5DYNIuTwNdiH8MuFFURWt9HRROp8MxGz
+         5k5WrwKIZd00pytBK85HQYrKb8pAASvas+KWKghtlIl7JxjvOpPiClSRRHjImvUKPTbn
+         cDh+1hN3JyOUwc0uVon0WmvP5lf5R9frL/hPYkdj2XA5PIn8WNAii8P6nYsawgZGzzwT
+         KyOMrUJ7DvZ4nD2B3GwyxmwQreiWSyDRNkzSmxdXlgpaZ6Esg27uhGkl4UzO9F5NTEG2
+         f76A==
+X-Gm-Message-State: AC+VfDznxBFe2po3j/W2hUAAhDmvb82jgsAMc1HTsv2YXFpPBEiTkzMX
+        bSBvAmLI9w8qiqmNIUytOWo=
+X-Google-Smtp-Source: ACHHUZ7VBqUiJxZux5Zvw1CbWJkUScVvhwDiZ8l56Xhc08qtgy5n+5w+8QOylGPS6kQyJv2SQvxZfw==
+X-Received: by 2002:adf:f188:0:b0:306:37ac:ef8e with SMTP id h8-20020adff188000000b0030637acef8emr1077455wro.56.1683285174620;
+        Fri, 05 May 2023 04:12:54 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id g11-20020adff40b000000b002c8476dde7asm2054187wro.114.2023.05.05.04.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 04:12:53 -0700 (PDT)
+Date:   Fri, 5 May 2023 12:12:52 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 145e5cddfe8b4bf607510b2dcf630d95f4db420f
+Message-ID: <1c8aade0-5859-40f3-b6af-5211d1f6a941@lucifer.local>
+References: <20230505024758.umVTa%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1b449a78-b57e-7e1e-0261-d35a5a2582a6@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: U3NJxz7c26qb5CSQdr631xF7hqiJ0Fva
-X-Proofpoint-GUID: U3NJxz7c26qb5CSQdr631xF7hqiJ0Fva
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_16,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 mlxlogscore=999 malwarescore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2305050084
+In-Reply-To: <20230505024758.umVTa%lkp@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 04, 2023 at 08:22:44AM +0200, Krzysztof Kozlowski wrote:
-> On 04/05/2023 06:57, Varadarajan Narayanan wrote:
-> > On Wed, May 03, 2023 at 09:42:28AM +0200, Krzysztof Kozlowski wrote:
-> >> On 03/05/2023 09:10, Varadarajan Narayanan wrote:
-> >>> On Mon, May 01, 2023 at 09:08:49AM +0200, Krzysztof Kozlowski wrote:
-> >>>> On 28/04/2023 16:52, Varadarajan Narayanan wrote:
-> >>>>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >>>>>
-> >>>>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
-> >>>>>
-> >>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>>>> ---
-> >>>>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
-> >>>>>  1 file changed, 3 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>>>> index d1ec963..8e2208c 100644
-> >>>>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>>>> @@ -66,6 +66,7 @@ properties:
-> >>>>>        - description: v2 of TSENS with combined interrupt
-> >>>>>          enum:
-> >>>>>            - qcom,ipq8074-tsens
-> >>>>> +          - qcom,ipq9574-tsens
-> >>>>
-> >>>> Your drive change indicates they are compatible, so make them
-> >>>> compatible. 9574 followed by 8074.
-> >>>
-> >>> Not able to understand. You want IPQ9574 to use "qcom,ipq8074-tsens"
-> >>> instead of adding a "qcom,ipq9574-tsens" and no need to add an extra
-> >>> entry to the driver like
-> >>
-> >> Assuming the devices are really compatible, which your driver change
-> >> suggests, I want to use two compatibles. 9574 followed by 8074 fallback,
-> >> just like we do for all Qualcomm IP blocks. Then as you said - no need
-> >> for driver change.
-> >
-> > With schema like this
-> > 	items:
-> > 	  - enum:
-> > 	      - qcom,ipq8074-tsens
-> > 	      - qcom,ipq9574-tsens
-> > and DTS as
-> > 	compatible = "qcom,ipq9574-tsens", "qcom,ipq8074-tsens";
+On Fri, May 05, 2023 at 10:47:58AM +0800, kernel test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> branch HEAD: 145e5cddfe8b4bf607510b2dcf630d95f4db420f  Add linux-next specific files for 20230504
 >
-> This file (and many others) shows you how to encode it in the DT schema
+> Error/Warning reports:
 >
-> https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
+> https://lore.kernel.org/oe-kbuild-all/202304102354.Q4VOXGTE-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202304220119.94Pw6YsD-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202304230014.YbScpx20-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202304250419.YtCLtUhG-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202305042329.Gyk53keD-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202305050237.1cQ4fBKs-lkp@intel.com
+>
+> Error/Warning: (recently discovered and may have been fixed)
+>
+> arch/um/drivers/harddog_user.c:6:10: fatal error: stdio.h: No such file or directory
+> drivers/accel/habanalabs/gaudi/gaudi.c:117:19: warning: unused variable 'gaudi_irq_name' [-Wunused-const-variable]
+> drivers/base/regmap/regcache-maple.c:113:23: warning: 'lower_index' is used uninitialized [-Wuninitialized]
+> drivers/base/regmap/regcache-maple.c:113:36: warning: 'lower_last' is used uninitialized [-Wuninitialized]
+> drivers/bluetooth/btnxpuart.c:1332:34: warning: unused variable 'nxpuart_of_match_table' [-Wunused-const-variable]
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6339:6: warning: no previous prototype for 'amdgpu_dm_connector_funcs_force' [-Wmissing-prototypes]
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6395:21: warning: variable 'count' set but not used [-Wunused-but-set-variable]
+> drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:494:13: warning: variable 'j' set but not used [-Wunused-but-set-variable]
+> drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c:48:38: warning: unused variable 'golden_settings_gc_9_4_3' [-Wunused-const-variable]
+> drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:62: warning: wrong kernel-doc identifier on line:
+> drivers/gpu/drm/i915/i915_pmu.h:41: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> drivers/gpu/drm/i915/i915_request.h:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> drivers/gpu/drm/i915/i915_vma.h:145: warning: expecting prototype for i915_vma_offset(). Prototype was for i915_vma_size() instead
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+> mm/gup.c:2813:14: error: implicit declaration of function 'folio_fast_pin_allowed'; did you mean 'folio_test_pinned'? [-Werror=implicit-function-declaration]
+> mm/gup.c:2813:7: error: call to undeclared function 'folio_fast_pin_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 
-Thanks for the pointer.
-Will rework and post.
+The folio_fast_pin_allowed() declaration should be fixed in v9 of the series that introduced it [1].
 
--Varada
+[1]:https://lore.kernel.org/all/cover.1683235180.git.lstoakes@gmail.com/
 
-> > 'make dtbs_check' gives the following error
-> >
-> > arch/arm64/boot/dts/qcom/ipq9574-rdp433.dtb: thermal-sensor@4a9000: compatible: 'oneOf' conditional failed, one must be fixed:
-> >         ['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
-> >
-> > To fix the above error, I have to change the schema as
-> >
-> > 	items:
-> > 	  - enum:
-> > 	      - qcom,ipq8074-tsens
-> > 	      - qcom,ipq9574-tsens
-> > 	  - const: qcom,tsens-v2-combined-int
->
-> This is not what we talked about.
->
-> Best regards,
-> Krzysztof
->
+> phy-mtk-hdmi-mt8195.c:(.text+0x186): undefined reference to `__floatundidf'
+> riscv64-linux-ld: phy-mtk-hdmi-mt8195.c:(.text+0x198): undefined reference to `__ltdf2'
+> riscv64-linux-ld: phy-mtk-hdmi-mt8195.c:(.text+0x1b8): undefined reference to `__gedf2'
+
+[snip]
