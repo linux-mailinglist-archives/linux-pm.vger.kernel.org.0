@@ -2,276 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2396F909D
-	for <lists+linux-pm@lfdr.de>; Sat,  6 May 2023 10:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB676F9145
+	for <lists+linux-pm@lfdr.de>; Sat,  6 May 2023 12:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjEFIgK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 May 2023 04:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S231675AbjEFKsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 May 2023 06:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFIgK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 May 2023 04:36:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC2E659F;
-        Sat,  6 May 2023 01:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683362168; x=1714898168;
-  h=date:from:to:cc:subject:message-id;
-  bh=+GAyhS8rOCjpR96ucmfnR3s22x5B9ZLcQ6I4c0R2EsI=;
-  b=WaGGbX+Ly9iCDahGoQ/9xI04T8fRxzMzeNA++zXhVhPBzZODwBEO6Mx5
-   GgsJk3fbC9FheHmlvauPWiQUWcHsV62vwVAkfxLVrXSi2vPqnnNII6h54
-   wDFnBOoKbe8mSccOyBbChxBIzZyGuq2aqt6K+GzEsjxC467PniGEgOScz
-   eAi0tiOQyVt1j0DA5enBSe0AknJvmWRiLVXZCKRdWLgwMqHhlom9sAqRG
-   dtRNOgnP6vvnnLBAiR7CoNUefUDuMiT8Vm6VeEhKM8IHFsE42Td0lWBOk
-   r85mKx9K4U61WfZBSH7r7WgU7j4+cFf4v+qTMZacZG6B9cfaNar0FHb5B
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="352416132"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="352416132"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 01:36:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="762759788"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="762759788"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 May 2023 01:36:06 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pvDOf-00003t-2N;
-        Sat, 06 May 2023 08:36:05 +0000
-Date:   Sat, 06 May 2023 16:35:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 170e7b17571df81a831d1018a6ffa58fe6d7eeb9
-Message-ID: <20230506083512.5Bfw2%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231343AbjEFKsg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 May 2023 06:48:36 -0400
+Received: from sonic313-20.consmr.mail.ir2.yahoo.com (sonic313-20.consmr.mail.ir2.yahoo.com [77.238.179.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307A144A0
+        for <linux-pm@vger.kernel.org>; Sat,  6 May 2023 03:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683370112; bh=34POWJfYWl8FSDgSOXM7AEN6MSN18FWEKbOGON9u4j8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Zutrm/IV9A1MpuFwX9SN0Jr7OogIyb54kRnrHDqSZMb7HXbooZfbtOLR7kCQbwVTxWXBpZMDiYecISoYGoZrTiJCnF20oCK/RcS4qwfPAU5x6Z4WDrwuBIrUUADU0JsdmR9s0llG7byw9RSBhioiAeEd3SAn/wC7NfLbspdYTFhWUlZG7FxA9C6eckMR0JSXEhbYUJurt5aivQJkfhL0OjTX7Lw/CnTe/qbhqHYYBY/ZGHf8g/TdLvKZb72I6Q5mNRXooecCvaytD33biX6QQmbwdmHmTjTcmOsLd/r6yzyTpHn0yebgoSbF7vNzXpJ8Otq2r4saoSTJjir27ixvNg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683370112; bh=TIWkndNT70CXVpf6Mu0SgJ7Uwic1X4aMTtTtqzRqMNH=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=RVmAEPRFn6Gi6U5t8V3KOsUhIiRADO+mdwPi/pawvcK/3DRTymnK1JOOQrrxnG12dh2cRR7P1HaRfLFfutC3yAQWTKssZQM+IUjgi0M5Twbv7su7CLuSMKMvNKFYfb+AOmY9S8msD93TQD7WkFnf46JEIjQbSof5axYkDyY6V0D6fowPgGDZVXKqn7wPM3doBtiFXc3/53v7PdQjTCdKUTQcfKXf4p7tQS5zbSgdnps5pUoiHYTo0ekrMNTMD4fSgZ9FZp2q/pAXfmMc96DrRycVA03mj3EXwYNBke9wZgGHRl/H6iRbgSwTnBRwkSnoWDxnUwC+7V8GRN3MSoU+3w==
+X-YMail-OSG: CIBSjdkVM1kniNdyxwVcFNGw.KZ13EWraHHyR7IJgWxBLDDRck5.HssO5C5kwXu
+ q_XSn6djpihEoRrLVipaiPbgXJqtW3p0xPYMklY.MwqnTLT3cCXh3UvRnePp2IVVXCXVfBkP95FP
+ J5fTV6RWybkqR0_LAzkaMay9ZmOeq.cUDKUHfaWssl4Wmcd7LcJSxujXy9HSbxVVfrjiUTtmylmw
+ 867RAX9y6KFsqQSBg93xheo9cddjkoD3U1_3y.jLKvjFtoD0ohlonV5HiDt1t8kk8Mc.UJeuKX07
+ o4KXWBgENp7cYfn1.cKwBl8VEYG0wPIeRT4oHxuSLp.TOizu9OeGzr2c1_gHqlMzHATavbxhRPi5
+ RRzgGumlM7RKVkj7VHjj4NcgDKl1ZRFbQAI3gUc316.BDS9y4_b7TIfkhDnf7bvXA4CvQzId0Hc0
+ soAZdXpxkMG4WginqbqhWfakRmxcl6uO2dBG4DFxvZ4314Hqo145k0G0RukwOWeY5tQWnlHwsy0I
+ 4iauBktQOZJpU24zvcCvVi3N7UwW00Wmxera3WntaeqlwCtZJJ15DQ4CpVbilFlGcB2HT4U.jW4K
+ cI0GiWoqB70TvUrWFZroErTRHAJXKS9_kjTiovW0WQoPHgcFxFU.5hiK.4sN4LV0xg5L_GGvzPbN
+ SJWHsyDzB5VMpnfLspM8sYn1VEui.ZGWd76.vvqdyIJBttGaWW3v4aEQ0v6CaEMQHRNn_xpx6OY6
+ AjaZIafEgqIyEbXIVAu28bOk9SpqEacn8uONqMKL0el18BjXHRAoC2E1.wI5yRh0J7rD.e.swaXv
+ riBtVxyrXD3FMqJ9iGORGt4kZ9J5G32THeRxegzbwIdEvv0ZfOoK0owQNfwdBbDP8_nvzCBZab3N
+ 3OhnFKDao0Dwkq7WsS8FvacD6fENjGE0hO4rQawE5W8hlqjzEurHVKMi0L0JSwW1bjby0O6rR65a
+ z0B2saLBOnvLlfLyQGJ6907mEUqigLIHJKvBf6W9liLuM7mtzWUvKPFTVP87QjYZT65LLNx0x6MP
+ 8HTgHwkTHcIKLU1yGlklibv9x2Vc6jbbNq6B0JbHjyfvPiCTc.uut4xCwCYx.2.7lWPPovya7opn
+ tXqJPr8gEL49xZq0CuY1DIsTSa6FGHCTBzVNG0whneb6ZpPrASli95qBNKOrg0._.38A3iU3x_xX
+ 2GP2gw8VMSGLn1ZymKYlfteN7cnFQJazumALNjtZ3GrQBDCFvUBLHm_9MdBDTVBTU8KsBSFkwc_.
+ V3DVkQqArVaaJTOIALfNuuCoG2cR.lxZFk0eWqPBiCjliv1IODE49c71z.zF8DOrEdbGJaxw9DVp
+ Q7aQZG.oOLE2zdosFdPWLydj9JyZEsUWyCl4bSvGkJjz2opj6yS3ykvB2woBpkjK0BpdSzGbkTkB
+ Zs5.pmwQFXBO9UNJsxyP7nLd7f2NYtvR6PstAqCSVhtYzgtd_RS_9f0BngVe9D_TFc9GWwcj9IAH
+ gcmLYzrzvpt4.ZdNpEV4lQiMY_.ZrncA79Dp9ADr0MQHkQfJw67miVWmEyoR7MGkQ3wpPurYYXsK
+ Pg_Sxu50mN6arYB7_jQY8oBMe6CwJHCwe9RowVqLATXP03w7KdQrgyWpYr.kmLdwPPqAadgBbHp6
+ IC_B0m_FGT6x.yJNY2RpBmF7QdblTr8yveyX92LU2D_T5umjSCKcmaXXVK_gp3GvA80fSCQlmyWB
+ AqH.AGC51mXqm4f4fWyMYUjXxpUjDOgY.mpdjHps0.n5q1PfGQmYIp7g28zjwr0rr9Gqpj.2ZLvj
+ oU.9V0b0RyiBvRuW4anmRk1LK.YgBKkTGq30RVIIPs.UnYl6Yzl1notaIM8RrtSoddufmFqdJO7i
+ OxyORgRPue1DUT5wvJ69H9Mkel7K86_LrJ46X.XUaFquSKOuSdjF5T5QNjN2rzZxhTOrPtH9NnAd
+ cJE2SI.K0_dji1YuHIz._rKurnVjRtbhGBZrA9Xx3lhtI_KjlYmzG4.A_CskzjXFORH3TUuPX_Vm
+ U7ORxVFgLibsj9GV4CbywEDyKpjsh1PK4FCDRz96hkQT6ENeTpwN9ZIdB51yXKllPxal4tcQoypB
+ Ft6R_FpNYYn_InDkEnx4Lbn9dw.Pg3iv.6Q5fIBBWYD4drTUeXW_xkJmHuD8F3lJHUQcN7qAvj67
+ 4e.ObN3tBUSwYDdcBL5FYXfxJ3TQC0C8pe9GpuD1zRNYZVJNKiPQxdfOY1uG1.Jp86iA4qPNdxy8
+ nSsb_uBQKQtLTViKgCDxv4hraWHK7Ge5oFbsv5g1kMdOZeUJZtI8tEQ07UaT.5xMWqsPi6ijhO7M
+ Hbd32BsJUAZUz_ctqsyMgfs6K
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 5c1a8a68-86df-492d-aee9-94ebdef5cd72
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ir2.yahoo.com with HTTP; Sat, 6 May 2023 10:48:32 +0000
+Received: by hermes--production-ir2-74cd8fc864-db5p9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9a7e9e2dbdf1abecded434fe1bb5c8d4;
+          Sat, 06 May 2023 10:48:28 +0000 (UTC)
+Message-ID: <295bb56a-bd40-abe2-4469-c38827ea3069@rocketmail.com>
+Date:   Sat, 6 May 2023 12:48:26 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1682636929.git.jahau@rocketmail.com>
+ <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
+ <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
+ <e9d75e57-bdea-593d-7b05-136c9ad2e2fe@rocketmail.com>
+ <14daa006-5260-81a8-8ba0-4122e0c0509a@rocketmail.com>
+ <a0f4252d-7f27-6dd9-dea0-f8d242011f70@linaro.org>
+ <73c02d98-c306-5e9d-2737-ff2d4a7393d1@rocketmail.com>
+ <20230505201334.GA3459327-robh@kernel.org>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <20230505201334.GA3459327-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 170e7b17571df81a831d1018a6ffa58fe6d7eeb9  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+Hi Rob,
 
-elapsed time: 725m
+On 05.05.23 22:13, Rob Herring wrote:
+> On Wed, May 03, 2023 at 09:33:49PM +0200, Jakob Hauser wrote:
+>> Hi Krzysztof, Hi all,
+>>
+>> On 02.05.23 12:59, Krzysztof Kozlowski wrote:
+>> ...
+>>> Apologies for this, just very busy times. :)
+>>>
+>>
+>> Thanks for letting me know. Take the time you need.
+>>
+>> Writing towards the list:
+>>
+>> I think there is a misunderstanding here.
+>>
+>> The connector node provides information about the installed USB hardware.
+>> E.g. property "usb-role-switch" means "Indicates that the device is capable
+>> of assigning the USB data role (USB host or USB device) for a given USB
+>> connector [...]" [5]. To my understanding, in relation with a port node this
+>> actually says that this port has this capability. This is not relevant to
+>> the rt5033-charger driver.
+>>
+>> The rt5033-charger driver needs to pair with the extcon chip because it
+>> needs the information about *external* connectors being attached [6].
+>>
+>> Extcon devices like SM5502 or SM5504 are real hardware. I'm not adding new
+>> properties. The way of getting an excton device from the devicetree by
+>> phandle is part of the extcon subsystem:
+>>   - function to get the excton device by phandle: [7]
+>>   - line that's looking for the property "extcon": [8]
+> 
+> extcon as a binding is inadequate for handling the increasing
+> complexities of connectors. Whether we need another property to link
+> things to connector nodes, perhaps.
 
-configs tested: 199
-configs skipped: 15
+Thanks for clarifying.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>> The connector node is the wrong approach, as far as I can tell on my current
+>> state of knowledge. It doesn't provide the information needed by the
+>> rt5033-charger driver.
+> 
+> What information is that?
+> 
+> You need information from the DT or run-time information from the
+> 'extcon chip driver'? In the latter case, I'd expect the charger driver
+> to get its connector node (either TBD phandle or search the DT if
+> there's only 1 possible connector), and from that get the driver
+> controlling the connector.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r003-20230505   gcc  
-alpha        buildonly-randconfig-r006-20230502   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230505   gcc  
-alpha                randconfig-r014-20230502   gcc  
-alpha                randconfig-r031-20230501   gcc  
-alpha                randconfig-r034-20230430   gcc  
-alpha                randconfig-r036-20230502   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r003-20230501   gcc  
-arc          buildonly-randconfig-r006-20230430   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r011-20230505   gcc  
-arc                  randconfig-r015-20230502   gcc  
-arc                  randconfig-r023-20230505   gcc  
-arc                  randconfig-r043-20230430   gcc  
-arc                  randconfig-r043-20230501   gcc  
-arc                  randconfig-r043-20230504   gcc  
-arc                  randconfig-r043-20230505   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r002-20230430   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r005-20230505   clang
-arm                  randconfig-r015-20230430   gcc  
-arm                  randconfig-r046-20230430   gcc  
-arm                  randconfig-r046-20230501   gcc  
-arm                  randconfig-r046-20230504   clang
-arm                  randconfig-r046-20230505   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r002-20230505   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r002-20230430   gcc  
-arm64                randconfig-r015-20230504   gcc  
-arm64                randconfig-r016-20230502   gcc  
-arm64                randconfig-r023-20230430   clang
-arm64                randconfig-r024-20230430   clang
-arm64                randconfig-r026-20230430   clang
-csky         buildonly-randconfig-r005-20230501   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r024-20230501   gcc  
-csky                 randconfig-r036-20230430   gcc  
-hexagon      buildonly-randconfig-r001-20230505   clang
-hexagon      buildonly-randconfig-r003-20230502   clang
-hexagon              randconfig-r013-20230430   clang
-hexagon              randconfig-r013-20230504   clang
-hexagon              randconfig-r014-20230501   clang
-hexagon              randconfig-r016-20230501   clang
-hexagon              randconfig-r016-20230504   clang
-hexagon              randconfig-r035-20230501   clang
-hexagon              randconfig-r041-20230430   clang
-hexagon              randconfig-r041-20230501   clang
-hexagon              randconfig-r041-20230504   clang
-hexagon              randconfig-r041-20230505   clang
-hexagon              randconfig-r045-20230430   clang
-hexagon              randconfig-r045-20230501   clang
-hexagon              randconfig-r045-20230504   clang
-hexagon              randconfig-r045-20230505   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230501   gcc  
-i386                 randconfig-a002-20230501   gcc  
-i386                 randconfig-a003-20230501   gcc  
-i386                 randconfig-a004-20230501   gcc  
-i386                 randconfig-a005-20230501   gcc  
-i386                 randconfig-a006-20230501   gcc  
-i386                 randconfig-a011-20230501   clang
-i386                 randconfig-a012-20230501   clang
-i386                 randconfig-a013-20230501   clang
-i386                 randconfig-a014-20230501   clang
-i386                 randconfig-a015-20230501   clang
-i386                 randconfig-a016-20230501   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230430   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r014-20230505   gcc  
-loongarch            randconfig-r015-20230501   gcc  
-loongarch            randconfig-r024-20230505   gcc  
-loongarch            randconfig-r031-20230502   gcc  
-loongarch            randconfig-r034-20230502   gcc  
-loongarch            randconfig-r036-20230501   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r003-20230504   gcc  
-m68k                 randconfig-r004-20230430   gcc  
-m68k                 randconfig-r006-20230504   gcc  
-m68k                 randconfig-r024-20230502   gcc  
-m68k                 randconfig-r034-20230501   gcc  
-microblaze           randconfig-r001-20230430   gcc  
-microblaze           randconfig-r012-20230504   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230502   gcc  
-mips                 randconfig-r003-20230505   clang
-mips                 randconfig-r011-20230504   clang
-mips                 randconfig-r012-20230505   gcc  
-nios2        buildonly-randconfig-r002-20230502   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r004-20230504   gcc  
-nios2                randconfig-r013-20230505   gcc  
-openrisc     buildonly-randconfig-r004-20230430   gcc  
-openrisc     buildonly-randconfig-r006-20230505   gcc  
-openrisc             randconfig-r003-20230501   gcc  
-openrisc             randconfig-r006-20230501   gcc  
-openrisc             randconfig-r011-20230430   gcc  
-openrisc             randconfig-r022-20230502   gcc  
-openrisc             randconfig-r022-20230505   gcc  
-openrisc             randconfig-r026-20230502   gcc  
-openrisc             randconfig-r035-20230502   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r002-20230504   gcc  
-parisc               randconfig-r003-20230430   gcc  
-parisc               randconfig-r004-20230505   gcc  
-parisc               randconfig-r011-20230502   gcc  
-parisc               randconfig-r032-20230430   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r001-20230501   gcc  
-powerpc              randconfig-r001-20230504   clang
-powerpc              randconfig-r013-20230501   clang
-powerpc              randconfig-r021-20230430   clang
-powerpc              randconfig-r023-20230502   gcc  
-powerpc              randconfig-r031-20230430   gcc  
-powerpc              randconfig-r033-20230501   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230505   gcc  
-riscv                randconfig-r013-20230502   gcc  
-riscv                randconfig-r014-20230430   clang
-riscv                randconfig-r015-20230505   clang
-riscv                randconfig-r032-20230501   gcc  
-riscv                randconfig-r035-20230430   gcc  
-riscv                randconfig-r042-20230430   clang
-riscv                randconfig-r042-20230501   clang
-riscv                randconfig-r042-20230504   gcc  
-riscv                randconfig-r042-20230505   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r001-20230501   clang
-s390         buildonly-randconfig-r004-20230502   gcc  
-s390         buildonly-randconfig-r005-20230502   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r021-20230502   gcc  
-s390                 randconfig-r022-20230501   clang
-s390                 randconfig-r023-20230501   clang
-s390                 randconfig-r025-20230430   clang
-s390                 randconfig-r033-20230502   clang
-s390                 randconfig-r044-20230430   clang
-s390                 randconfig-r044-20230501   clang
-s390                 randconfig-r044-20230504   gcc  
-s390                 randconfig-r044-20230505   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r002-20230501   gcc  
-sh                   randconfig-r006-20230430   gcc  
-sh                   randconfig-r025-20230502   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r005-20230501   gcc  
-sparc                randconfig-r005-20230504   gcc  
-sparc                randconfig-r033-20230430   gcc  
-sparc64      buildonly-randconfig-r003-20230430   gcc  
-sparc64              randconfig-r011-20230501   gcc  
-sparc64              randconfig-r012-20230430   gcc  
-sparc64              randconfig-r012-20230501   gcc  
-sparc64              randconfig-r016-20230505   gcc  
-sparc64              randconfig-r021-20230505   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230501   gcc  
-x86_64               randconfig-a002-20230501   gcc  
-x86_64               randconfig-a003-20230501   gcc  
-x86_64               randconfig-a004-20230501   gcc  
-x86_64               randconfig-a005-20230501   gcc  
-x86_64               randconfig-a006-20230501   gcc  
-x86_64               randconfig-a011-20230501   clang
-x86_64               randconfig-a012-20230501   clang
-x86_64               randconfig-a013-20230501   clang
-x86_64               randconfig-a014-20230501   clang
-x86_64               randconfig-a015-20230501   clang
-x86_64               randconfig-a016-20230501   clang
-x86_64               randconfig-r004-20230501   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r005-20230430   gcc  
-xtensa               randconfig-r001-20230505   gcc  
-xtensa               randconfig-r022-20230430   gcc  
-xtensa               randconfig-r025-20230501   gcc  
-xtensa               randconfig-r026-20230501   gcc  
-xtensa               randconfig-r026-20230505   gcc  
+Yes, the latter case: run-time information from the 'extcon chip driver'.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Hm, so I need to add a connector node below the extcon node, search for 
+that connector and go one level up to get the extcon. In the specific 
+case that's an unnecessary detour, I'm not too happy about it :/ Though 
+I understand that in a broader perspective the connector thing can be 
+more stringent.
+
+I'll prepare something like this for v4 then...
+
+Kind regard,
+Jakob
