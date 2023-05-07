@@ -2,72 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D286F9336
-	for <lists+linux-pm@lfdr.de>; Sat,  6 May 2023 18:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FAD6F97DC
+	for <lists+linux-pm@lfdr.de>; Sun,  7 May 2023 11:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjEFQ7V convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 6 May 2023 12:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S230452AbjEGJLO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 May 2023 05:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEFQ7T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 May 2023 12:59:19 -0400
-Received: from mail.bpip.go.id (unknown [103.166.134.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738281A1D1;
-        Sat,  6 May 2023 09:59:16 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.bpip.go.id (Postfix) with ESMTP id CEBD3B4D8E7;
-        Sat,  6 May 2023 12:05:20 +0700 (WIB)
-Received: from mail.bpip.go.id ([127.0.0.1])
-        by localhost (mail.bpip.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id nKiCZa1fOzq3; Sat,  6 May 2023 12:05:20 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.bpip.go.id (Postfix) with ESMTP id 5FE8CAADE39;
-        Sat,  6 May 2023 11:25:52 +0700 (WIB)
-X-Amavis-Modified: Mail body modified (using disclaimer) - mail.bpip.go.id
-X-Virus-Scanned: amavisd-new at bpip.go.id
-Received: from mail.bpip.go.id ([127.0.0.1])
-        by localhost (mail.bpip.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PIEuU13uYGBU; Sat,  6 May 2023 11:25:52 +0700 (WIB)
-Received: from [103.167.91.37] (unknown [103.167.91.37])
-        by mail.bpip.go.id (Postfix) with ESMTPSA id 960C1BCC72B;
-        Sat,  6 May 2023 08:34:27 +0700 (WIB)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230381AbjEGJLN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 May 2023 05:11:13 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423475240
+        for <linux-pm@vger.kernel.org>; Sun,  7 May 2023 02:11:11 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94ef0a8546fso549880466b.1
+        for <linux-pm@vger.kernel.org>; Sun, 07 May 2023 02:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683450670; x=1686042670;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WJVeF+6z9/ggAVBD2uz3HdoqI651ez6nvvs/Z94Hn3E=;
+        b=ge34Tv1nacy0JlU4TMCDkcjgWKAcwLxMPJ2dqttvd5QDmlGBDNjo3SDaU8jS089GVp
+         97aXexc5Ub/WBVBLBKqwau9eKg4cPpITPJiu9XBXVv4sWtFkODGN+fZRYn0+Lwj78Wr9
+         fOCcWeplDjReFtG1ZWY+8Gg2ComYyfme+ZItmqx1XGp1d+YGrInfxG3ssasguj6Cmj4I
+         UTuYDaGVfumJ4RzEE9sZ+/IqtW0M5spGQAofcgx5AzDbXSrirbcMKLuMiR+Wcl3xBsCV
+         HiX+k/H4PkUKmHdfKesGyx5UbqayeiVibn5DjwZLthhz+4P6ExoNcTFTN5AuH7Pamixs
+         JCxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683450670; x=1686042670;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WJVeF+6z9/ggAVBD2uz3HdoqI651ez6nvvs/Z94Hn3E=;
+        b=VkF0w5MeOCIuAal3kaCRqsnesBz1s/QzV6O/IUAoQ04mLNaZABA8LsxgSOrApOwcMZ
+         /HWxlBXKwFpSnAQsTXY/tu4trUThMej66s13BxmuKCa/y2iKRJc6mU2acfghti+83C6n
+         hNPvb5nHl9+e24363859BuWt8ca/+BePNnHYPZvg1wxdx5bUJXAedfzl6fTvWRYAaSkk
+         RBb9jjXl8OB5XZQuncWxCuzSMbYPyKNd8294uUAgMz+/aMAs9cEGesro5fxUyswTnw4p
+         yVqZrJ8KzgcM36Nu2MTVztBx5NLdruBzI67FiHicu7Ajg36gQv0P/3WOu1I7zMjnMo+g
+         Zmjw==
+X-Gm-Message-State: AC+VfDwEnq0RIfPhvHt1/X+t6M7zZA+pjt7cHpmIb7z6VAqmSY1OhEyL
+        BX8en+Qhg1qx+y7M+PpxLKM6Zg==
+X-Google-Smtp-Source: ACHHUZ56Cj45M5bkDI2Qkj+cfrrqHrRXimMDzax69r9LP0DJegFaXQGg0XWQuxCR+n66BEZ9LerK4Q==
+X-Received: by 2002:a17:907:6d01:b0:957:29e5:1695 with SMTP id sa1-20020a1709076d0100b0095729e51695mr5594140ejc.65.1683450669593;
+        Sun, 07 May 2023 02:11:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:183b:950f:b4d5:135a? ([2a02:810d:15c0:828:183b:950f:b4d5:135a])
+        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b00965ec1faf27sm3024164ejb.74.2023.05.07.02.11.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 02:11:08 -0700 (PDT)
+Message-ID: <10b32e55-4d28-5405-035e-c73a514c95e4@linaro.org>
+Date:   Sun, 7 May 2023 11:11:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Letzte Erinnerung
-To:     Recipients <persuratan@bpip.go.id>
-From:   "Qatar Foundation" <persuratan@bpip.go.id>
-Date:   Fri, 05 May 2023 18:34:23 -0700
-Reply-To: qf.qatarcares.org@gmail.com
-Message-Id: <20230506013427.960C1BCC72B@mail.bpip.go.id>
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,NIXSPAM_IXHASH,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [103.167.91.37 listed in zen.spamhaus.org]
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [103.166.134.2 listed in wl.mailspike.net]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [Patch v7 1/8] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+Content-Language: en-US
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, helgaas@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+References: <20230424131337.20151-1-sumitg@nvidia.com>
+ <20230424131337.20151-2-sumitg@nvidia.com>
+ <7c6c6584-204a-ada1-d669-2e8bef50e5e5@linaro.org>
+ <3071273b-b03b-5fc8-ffa1-9b18311a3a5d@nvidia.com>
+ <5ab9687e-756d-f94b-b085-931d4ea534c1@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5ab9687e-756d-f94b-b085-931d4ea534c1@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sehr geehrter Begünstigter,
+On 24/04/2023 17:21, Sumit Gupta wrote:
+> 
+> 
+> On 24/04/23 20:30, Sumit Gupta wrote:
+>>
+>>
+>> On 24/04/23 19:18, Krzysztof Kozlowski wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> On 24/04/2023 15:13, Sumit Gupta wrote:
+>>>> Add Interconnect framework support to dynamically set the DRAM
+>>>> bandwidth from different clients. Both the MC and EMC drivers are
+>>>> added as ICC providers. The path for any request is:
+>>>>   MC-Client[1-n] -> MC -> EMC -> EMEM/DRAM
+>>>>
+>>> Thank you for your patch. There is something to discuss/improve.
+>>>
+>>>
+>>>> +static int tegra_emc_interconnect_init(struct tegra186_emc *emc)
+>>>> +{
+>>>> +     struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
+>>>> +     const struct tegra_mc_soc *soc = mc->soc;
+>>>> +     struct icc_node *node;
+>>>> +     int err;
+>>>> +
+>>>> +     emc->provider.dev = emc->dev;
+>>>> +     emc->provider.set = tegra_emc_icc_set_bw;
+>>>> +     emc->provider.data = &emc->provider;
+>>>> +     emc->provider.aggregate = soc->icc_ops->aggregate;
+>>>> +     emc->provider.xlate = tegra_emc_of_icc_xlate;
+>>>> +     emc->provider.get_bw = tegra_emc_icc_get_init_bw;
+>>>> +
+>>>> +     icc_provider_init(&emc->provider);
+>>>> +
+>>>> +     /* create External Memory Controller node */
+>>>> +     node = icc_node_create(TEGRA_ICC_EMC);
+>>>> +     if (IS_ERR(node)) {
+>>>> +             err = PTR_ERR(node);
+>>>> +             goto err_msg;
+>>>> +     }
+>>>> +
+>>>> +     node->name = "External Memory Controller";
+>>>> +     icc_node_add(node, &emc->provider);
+>>>> +
+>>>> +     /* link External Memory Controller to External Memory (DRAM) */
+>>>> +     err = icc_link_create(node, TEGRA_ICC_EMEM);
+>>>> +     if (err)
+>>>> +             goto remove_nodes;
+>>>> +
+>>>> +     /* create External Memory node */
+>>>> +     node = icc_node_create(TEGRA_ICC_EMEM);
+>>>> +     if (IS_ERR(node)) {
+>>>> +             err = PTR_ERR(node);
+>>>> +             goto remove_nodes;
+>>>> +     }
+>>>> +
+>>>> +     node->name = "External Memory (DRAM)";
+>>>> +     icc_node_add(node, &emc->provider);
+>>>> +
+>>>> +     err = icc_provider_register(&emc->provider);
+>>>> +     if (err)
+>>>> +             goto remove_nodes;
+>>>> +
+>>>> +     return 0;
+>>>> +
+>>>> +remove_nodes:
+>>>> +     icc_nodes_remove(&emc->provider);
+>>>> +err_msg:
+>>>> +     dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
+>>>> +
+>>>> +     return err;
+>>>> +}
+>>>> +
+>>>>   static int tegra186_emc_probe(struct platform_device *pdev)
+>>>>   {
+>>>> +     struct tegra_mc *mc = dev_get_drvdata(pdev->dev.parent);
+>>>>        struct mrq_emc_dvfs_latency_response response;
+>>>>        struct tegra_bpmp_message msg;
+>>>>        struct tegra186_emc *emc;
+>>>> @@ -236,6 +339,29 @@ static int tegra186_emc_probe(struct 
+>>>> platform_device *pdev)
+>>>>        debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, 
+>>>> emc->debugfs.root,
+>>>>                            emc, &tegra186_emc_debug_max_rate_fops);
+>>>>
+>>>> +     if (mc && mc->soc->icc_ops) {
+>>>> +             /*
+>>>> +              * Initialize the ICC even if BPMP-FW doesn't support 
+>>>> 'MRQ_BWMGR_INT'.
+>>>> +              * Use the flag 'mc->bwmgr_mrq_supported' within MC 
+>>>> driver and return
+>>>> +              * EINVAL instead of passing the request to BPMP-FW 
+>>>> later when the BW
+>>>> +              * request is made by client with 'icc_set_bw()' call.
+>>>> +              */
+>>>> +             err = tegra_emc_interconnect_init(emc);
+>>>> +             if (err)
+>>>> +                     goto put_bpmp;
+>>>> +
+>>>> +             if (tegra_bpmp_mrq_is_supported(emc->bpmp, 
+>>>> MRQ_BWMGR_INT)) {
+>>>> +                     mc->bwmgr_mrq_supported = true;
+>>>> +
+>>>> +                     /*
+>>>> +                      * MC driver probe can't get BPMP reference as 
+>>>> it gets probed
+>>>> +                      * earlier than BPMP. So, save the BPMP ref got 
+>>>> from the EMC
+>>>> +                      * DT node in the mc->bpmp and use it in MC's 
+>>>> icc_set hook.
+>>>> +                      */
+>>>> +                     mc->bpmp = emc->bpmp;
+>>>
+>>> This (and ()) are called without any locking. You register first the
+>>> interconnect, so set() callback can be used, right? Then set() could be
+>>> called anytime between tegra_emc_interconnect_init() and assignment
+>>> above. How do you synchronize these?
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+>> Currently, the tegra234_mc_icc_set() has NULL check. So, it will give 
+>> this error.
+>>   if (!mc->bpmp) {
 
-Sie wurden ausgewählt,  (995.000,00 €) von Katar Foundation zu erhalten, antworten Sie bitte mit Ihrem vollständigen Namen und Ihrer Adresse, um weitere Informationen zu erhalten. E-mail:qf.qatarcares.org@gmail.com
+How does it solve concurrent accesses and re-ordering of instructions by
+compiler or CPU?
 
-Mit Freundlichen Grüßen,
-Herr Rashid Al-Naimi.
-Chief Executive Officer der Qatar Foundation Endowment.
-(null)
+>>           dev_err(mc->dev, "BPMP reference NULL\n");
+>>           return -ENOENT;
+>>   }
+>>
+>> To fix, we can do the below change and swap the order. Please let me 
+>> know if this sounds fine ?
+>>   if (mc && mc->soc->icc_ops) {
+>>           if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
+>>                   mc->bwmgr_mrq_supported = true;
+>>                   mc->bpmp = emc->bpmp;
+>>           }
+>>
+>>           err = tegra_emc_interconnect_init(emc);
+>>           if (err)
+>>                   goto put_bpmp;
+>>
+>>   }
+> Sorry, replied too soon. Missed setting "mc->bpmp" to NULL. Sharing new 
+> proposed change. Please let me know if this looks OK.
+> 
+>   if (mc && mc->soc->icc_ops) {
+>      if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
+>              mc->bwmgr_mrq_supported = true;
+>              mc->bpmp = emc->bpmp;
+>      }
+> 
+>      err = tegra_emc_interconnect_init(emc);
+>      if (err) {
+>              mc->bpmp = NULL;
+>              goto put_bpmp;
+
+Sorry, I didn't check the code. I assume you should do it...
+
+Best regards,
+Krzysztof
+
