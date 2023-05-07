@@ -2,62 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4C66F9B92
-	for <lists+linux-pm@lfdr.de>; Sun,  7 May 2023 22:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808A96F9BB4
+	for <lists+linux-pm@lfdr.de>; Sun,  7 May 2023 23:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjEGUki (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 May 2023 16:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
+        id S231861AbjEGVLf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 May 2023 17:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjEGUkg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 May 2023 16:40:36 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A0B6A6D
-        for <linux-pm@vger.kernel.org>; Sun,  7 May 2023 13:40:33 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec8149907aso4369890e87.1
-        for <linux-pm@vger.kernel.org>; Sun, 07 May 2023 13:40:33 -0700 (PDT)
+        with ESMTP id S229716AbjEGVLe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 May 2023 17:11:34 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE5100F2;
+        Sun,  7 May 2023 14:11:33 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2ac7707e34fso44529741fa.1;
+        Sun, 07 May 2023 14:11:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683492032; x=1686084032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1683493891; x=1686085891;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gEobT5d9kdcRp8dixdijtxMKVPc5uyxDMFTSv3z+3hw=;
-        b=p7wBaVX8KcmhGljoYijHz2tFbfgc/9/cuVs5i5XvZJ65xSOAyJRDxfdEkzpOkEHu8u
-         6cFUuD3L9Yfxks5JSar3QArBkbRyBhgf6mj+fSjcE9kJaFvwchfMC8paEpXk+2I56UyV
-         X7QsSR50fuIYK8ayYmzjXgHqVgVD/5dGkDbAOwDuY1LsTZ8gvpn/GMN4016lPmJ5D72l
-         9nrBW6wKb+yZvbx7W7yCajLozhxs7tozRxhAikQmReAwwv34c4BZceCjccVKqYzsVgD2
-         oKtIqKHWbLpUF+rR681DkcyMOKjklhxkLZpHvLEpI9tIavcrBWjGJ/nl07JszfhX8OJh
-         3Q+Q==
+        bh=NQ4wLJjYk0xbWAICQf5Qqk2+0cmn7o5zLqWACRjv/RE=;
+        b=XuQRMcRHAXVeRo/tjDPQEDrxwmyqSS8ATManSb8DXaEINhjOuaQ+3a8BrPAXc/ZiKE
+         2vFKPoFrwa7vaQ/oBTM6G7CH3BSucIiGohszbMCCwPO8LM6p7vB6P15rwwHP0Y9ezaK3
+         m6JORm22/vbsK3+0I+rllafMb3Z6y0q+W7MttMqADkRiMvAUaus91WN13wjocVkbSc87
+         QPA4XpUs49uUFhoVRtZcyaKleyLJ7JJVAc9jxlowJifbnR1rymolFqwLRZwcpB69riHN
+         HE4MMKrFt03Sc6Sg0tFlKAch22enSc6taV+6HzM5p/IYqNDnmtpID6/2CJz/+GAkyAbL
+         mWSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683492032; x=1686084032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1683493891; x=1686085891;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gEobT5d9kdcRp8dixdijtxMKVPc5uyxDMFTSv3z+3hw=;
-        b=gGG2+YY/Sfh3lGuju4VsSpHTrStymJS/IKKPWHBhGQUSI1r3Rd00eybG4PGTX89IaZ
-         wJ2sfzSkyJ38gUv+vwjaK2WFVeJLVsupyyNl5J1s09OhRdHl7LSb4gXYI4BvBBQtdGbr
-         Nq2suOdqIxne4vPPCW03CD4U+rRaWk45Ie1kbcBxS6autJccpLCBrY4e9ErJYv7Ye4r9
-         0QF3oSG0DUPklwWbwAnUInqqpmjhRsvwVRj3GLjsQlN3kR8rMeALAZJJgNlZtxLp/zqI
-         U3biz0i6JAqj0S1PzvGzjIRDfznf1sCLu6/k3v75TnYHFrjet8D/Z4yHMXlFJDQLhWe8
-         X3gQ==
-X-Gm-Message-State: AC+VfDzeLsp+WBah4WGGIx+gasNRIABQ0WpVAv15EW4xlmsNT49ZzFbm
-        SoeoIgoL2HZId7ppOgybyiRGVA==
-X-Google-Smtp-Source: ACHHUZ6DUWb0v7gajAvrjJqzDjwveiMcMITjQKezCfJuXDL/DxFW+VI2hAem/FWaxmDWdKsNBfoJAg==
-X-Received: by 2002:ac2:558d:0:b0:4e1:36a:eda5 with SMTP id v13-20020ac2558d000000b004e1036aeda5mr2120141lfg.30.1683492032191;
-        Sun, 07 May 2023 13:40:32 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id 10-20020ac2568a000000b004e9b307d2c8sm1073669lfr.238.2023.05.07.13.40.31
+        bh=NQ4wLJjYk0xbWAICQf5Qqk2+0cmn7o5zLqWACRjv/RE=;
+        b=kB7Chd4hprmLEyYKLhd1rqwGXEqIjjqnA9T3PXSI+pJP33VMr/Eyx7GoU8CqCf5HzE
+         5nNbOnTQhKM4bcSwvK3IVTO06b6FFKQ/marI99KAQyEqhiaxXNFoHlWWkYe1sXqEElFf
+         4d+u6mFP1xwBKLj9OF5CF0L/0DBZH/zPVT7yUclLguCEhHC6bUAWVtyYQDg7ZajbNZRO
+         QQXTl17jU9sxpDHXQNexofk80aZwhMpbYZp2FPFGg4E4KAzjFG1T3XTdMZh2OOjeI3BM
+         NgvqUsfT48UcaJt//GOMqEvQ6Tv4yRdD8zM0hc7+TfPdb1Sb9KXFwiprHMnobay0rF4l
+         nbng==
+X-Gm-Message-State: AC+VfDzE9WtaCQ3zp1vNEEANL4XUIjN5M2IP5JxDwp1B3Zq1UbPTNAEX
+        eYgGx9m52+xgtamOZZyO4ms=
+X-Google-Smtp-Source: ACHHUZ7s0YF8/MfPt0sSPY/bfKSLDUpfncfX3Bo34sClYSBDbaaOiG70+Juh3LYnmMgEhFQIF68p9Q==
+X-Received: by 2002:a2e:b051:0:b0:2ac:8bc1:9cb1 with SMTP id d17-20020a2eb051000000b002ac8bc19cb1mr2349188ljl.42.1683493891055;
+        Sun, 07 May 2023 14:11:31 -0700 (PDT)
+Received: from [192.168.0.108] (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
+        by smtp.googlemail.com with ESMTPSA id q6-20020a2e9686000000b002a9f966f4b3sm930876lji.26.2023.05.07.14.11.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 13:40:31 -0700 (PDT)
-Message-ID: <33d373fa-91cc-2ab6-b59b-34967dff1109@linaro.org>
-Date:   Sun, 7 May 2023 23:40:31 +0300
+        Sun, 07 May 2023 14:11:30 -0700 (PDT)
+Message-ID: <1e02c292-f3c6-f67d-0e25-d22a00bcf6ad@gmail.com>
+Date:   Mon, 8 May 2023 00:11:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
 Subject: Re: [PATCH 3/6] thermal/drivers/qcom/tsens-v0_1: Add support for
  MSM8226
-Content-Language: en-GB
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
@@ -71,119 +70,29 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230507201225.89694-1-matti.lehtimaki@gmail.com>
  <20230507201225.89694-4-matti.lehtimaki@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230507201225.89694-4-matti.lehtimaki@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <33d373fa-91cc-2ab6-b59b-34967dff1109@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
+In-Reply-To: <33d373fa-91cc-2ab6-b59b-34967dff1109@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/05/2023 23:12, Matti Lehtimäki wrote:
-> The MSM8226 TSENS IP has 6 thermal sensors in a TSENS v0.1 block.
-> The thermal sensors use non-standard slope values.
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Note, the driver from 3.10 also provides custom data for non-calibrated 
-mode. We can either ignore that (in the hope that all devices leaving 
-the factory are calibrated), or fix it in the manner close to 8x74.
-
+On 7.5.2023 23.40, Dmitry Baryshkov wrote:
+> On 07/05/2023 23:12, Matti Lehtimäki wrote:
+>> The MSM8226 TSENS IP has 6 thermal sensors in a TSENS v0.1 block.
+>> The thermal sensors use non-standard slope values.
 > 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
->   drivers/thermal/qcom/tsens-v0_1.c | 27 ++++++++++++++++++++++++++-
->   drivers/thermal/qcom/tsens.c      |  3 +++
->   drivers/thermal/qcom/tsens.h      |  2 +-
->   3 files changed, 30 insertions(+), 2 deletions(-)
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > 
-> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-> index e89c6f39a3ae..ad57ab94546b 100644
-> --- a/drivers/thermal/qcom/tsens-v0_1.c
-> +++ b/drivers/thermal/qcom/tsens-v0_1.c
-> @@ -243,6 +243,18 @@ static int calibrate_8974(struct tsens_priv *priv)
->   	return 0;
->   }
->   
-> +static int __init init_8226(struct tsens_priv *priv)
-> +{
-> +	priv->sensor[0].slope = 2901;
-> +	priv->sensor[1].slope = 2846;
-> +	priv->sensor[2].slope = 3038;
-> +	priv->sensor[3].slope = 2955;
-> +	priv->sensor[4].slope = 2901;
-> +	priv->sensor[5].slope = 2846;
-> +
-> +	return init_common(priv);
-> +}
-> +
->   static int __init init_8939(struct tsens_priv *priv) {
->   	priv->sensor[0].slope = 2911;
->   	priv->sensor[1].slope = 2789;
-> @@ -258,7 +270,7 @@ static int __init init_8939(struct tsens_priv *priv) {
->   	return init_common(priv);
->   }
->   
-> -/* v0.1: 8916, 8939, 8974, 9607 */
-> +/* v0.1: 8226, 8916, 8939, 8974, 9607 */
->   
->   static struct tsens_features tsens_v0_1_feat = {
->   	.ver_major	= VER_0_1,
-> @@ -313,6 +325,19 @@ static const struct tsens_ops ops_v0_1 = {
->   	.get_temp	= get_temp_common,
->   };
->   
-> +static const struct tsens_ops ops_8226 = {
-> +	.init		= init_8226,
-> +	.calibrate	= tsens_calibrate_common,
-> +	.get_temp	= get_temp_common,
-> +};
-> +
-> +struct tsens_plat_data data_8226 = {
-> +	.num_sensors	= 6,
-> +	.ops		= &ops_8226,
-> +	.feat		= &tsens_v0_1_feat,
-> +	.fields	= tsens_v0_1_regfields,
-> +};
-> +
->   static const struct tsens_ops ops_8916 = {
->   	.init		= init_common,
->   	.calibrate	= calibrate_8916,
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 8020ead2794e..eb33a8bf0488 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -1095,6 +1095,9 @@ static const struct of_device_id tsens_table[] = {
->   	}, {
->   		.compatible = "qcom,mdm9607-tsens",
->   		.data = &data_9607,
-> +	}, {
-> +		.compatible = "qcom,msm8226-tsens",
-> +		.data = &data_8226,
->   	}, {
->   		.compatible = "qcom,msm8916-tsens",
->   		.data = &data_8916,
-> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> index dba9cd38f637..433eba370998 100644
-> --- a/drivers/thermal/qcom/tsens.h
-> +++ b/drivers/thermal/qcom/tsens.h
-> @@ -635,7 +635,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp);
->   extern struct tsens_plat_data data_8960;
->   
->   /* TSENS v0.1 targets */
-> -extern struct tsens_plat_data data_8916, data_8939, data_8974, data_9607;
-> +extern struct tsens_plat_data data_8226, data_8916, data_8939, data_8974, data_9607;
->   
->   /* TSENS v1 targets */
->   extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
+> Note, the driver from 3.10 also provides custom data for non-calibrated mode. We can either ignore that (in the hope that all devices leaving the factory are calibrated), or fix it in the manner close to 8x74.
 
--- 
-With best wishes
-Dmitry
-
+That is true, 3.10 kernel does support non-calibrated mode. I can add support for that in a new version if that is wanted.
