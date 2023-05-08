@@ -2,205 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92CA6FB942
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 23:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7789E6FB9CD
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 23:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbjEHVSv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 17:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S233235AbjEHVe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 17:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjEHVSg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 17:18:36 -0400
-Received: from sonic312-26.consmr.mail.ir2.yahoo.com (sonic312-26.consmr.mail.ir2.yahoo.com [77.238.178.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CCC46A1
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 14:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683580713; bh=27b+1IMgCf5mpsg63z+6nJNfhOzMk8w9cAd03AJE9YI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=MURgF0Csap+WiM0hlT5N7aaNkcRGyjWv5nW47f920mbJ5FoohRXQu5i2qq+ZDFaATpZN6mFeo8bQSvd7Hpje00R031NePFEe95MiCzcxuju6pqe4Ui7DmcOjlmrayEO8T3mvAN+iAHKw2IwfmrUxijKFcTZoW1Pvl/vil1U3xSB9U5ZsH0p1yYspxU+Opwf2rNqH6hu9zvL12spD2kSIoEFFh/UDxDuoU1GfXT7Ox0H/PwgYBUXM04N58UdjH3yEBCn4YEykyAsQGaHvCecV8CBSJtCjKj3L9FH6HLAnoiv4N/pwo+7Fit42OTC7LkmB/VeD6WR4RWv9SUy/nrEEdQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683580713; bh=MDRFjs8sp4ntsJes64IkcJ6MAEWFp/KvMlDRgCaMErV=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Xb3XwIpVM/MIVgd8uhvek1l9ihlqFxEvc0Yn2ky1dCjZRFNkPx60XxB7vNk3OSwwGmasqnDBMHhXruTCmp2TXbPfDh+U4ip1yuR/HV2OVBDly8cVfZUbGqHByElktciwhuds1HPFjXXh0rQBAY0DhZHMNJL0osu+zoJ/Nrjms1NXeMbLAeuipxehuyVxwhufuP5Mh4P6MzKIuNs7ZeepnJBwMBaSDTdOzeGGxXuWMsRVfBi2otop2D+YV5kgD7hmYsFgYCYR+KQRAsxw0P4FDzb04YpqTiPTWOe78iy2SAFpvsdfWBVtsSvGz/t2kTwf212p+jvUG2g5x9xNy3qfDw==
-X-YMail-OSG: Ts1PdjkVM1nMPD3JPHz11WsxZT658QLVdgWDPVxBE7pQtAR1fagqIPwA.WLEA7t
- l1QwqsG5Yu4rqwVAA6n9r.gXj7Nl_1LQlfK5UnDRAl70XWGqLd4mBDJNFBd2.w6HTHO8C2r9xnqd
- FxkBDKv4xB0NWBwmHPsNOdr.68dqUNZTDcqYjcg6jpEtdPrFsZIopRK9JnOpf0IW5hiPEvSvP6Cu
- 5fQlsOGsF24vf5PBwUKcsZL5riiYmEzoNFGtJELYGfL8GsTySwBk3FLd6GYLbeKoz50xX.7zOP0X
- 2WXLp4J9P.BqBaisHrAx61w9mWIjey7684ATUDMasDjS5jexPyjh.qCkOFVcNBtz4_c00lAHrxBY
- ASx4eME3rkFIV05tXepTcnLKJeKRfhG_0JlUk650_d5OMo7QAk3y5ceL9H9chZQuom18Zzjz1TqH
- qmxFVPLNa6MxrA47ioXTw__MW4U_dCoHSAMFrD1P1uXmmTen8vYHHIAmPD5yOL_N3beUve4I0FaC
- sKoNuIVtTaz2_imSyEcgGR5JbKUWlCv6GuKCrrZyD.snPM3mFqVEk1JZjYzDmsc79fzoVD1_Ykbv
- ARaTpoSGPh0JHYeV620CPCEKlcLvrrmA9FPepiHe9nCpVwxuwsjYmFrKM5upptG0W7G30xUtS7n_
- UMZbK6M4ZX5PgPTromduMgxxjkaU2l208MXPZhQv2PWRyb.nVGw.v_IDJptf5y_K1ekd.TU9xThj
- OTFURCy9uCNCZlWhCKny6StDSkxkx6uuVnJG5uDes_Mcb28E.Ba4e.OOAIx0Rgp3L6Otbjxb0GOw
- iluqk0U2.Fx03hnvnrVVCIeScKRRpulPNasny57an5OxFLid7gzxi_wxIlOBThmRi_IHY.JWC2Yx
- R5HF39rYq7LJ2mkd7TtxI_d2GMZsI_7XUSZQF8NmqIzigmUP5840b8Uhw3tqsEnPrDpvOkgejgBH
- JaW6JAzB7Q4sqENhPafPEXuI.EHu5oUvdPjzP5RJnAaQr2Ml680QPgQtN6ObdHK_IVyTkh1_Puis
- qQki6NNO3NUSMo8iw8Q8iyBOLOuJvqShVxwKVhQ30F2u0.Q9lVW2Ne9aTjP0f4M_AnVonnhtydNJ
- .BqpIUjY2YN_TG8qC8itB4ae3xTmMQ6e7CUdVOuQ_WQPcpiqLHsdv35HX7rgTbsA.VhNEuyvaEAo
- XeGBtxpT.HPb2ajC.OjBQ.xkIE1V93iHbYGQ3eUBY1_pm3OKmJksPl4PIAA3WsIN3UGwtLCXzocK
- 34TFaZybEc5z2OOgxdYRsuMnOr5ysaOsmdcK6_LUOb5aDG5mUSXs7sR.cfh108HWXkPlxfM6Ywzr
- R5lcZ9Cfd9wMKFNGzHusfY1HjTMRpeESjaZWzg0kJz5kF2eCB4Vee1Dt85rHpFBXEFxYGBhpeP3w
- htBCmXnm9pd1yVvvXhBoiZgyJgS6UQf7IpbNmvlFfa44avFpXIy2OxS4jrmytORRkxq4l2QhxPFQ
- 3fRVOptnOKgNUW0MBl.jf8BR5QBNapRFX5Fx5Al3royQlRUA2NQC2sDlfExihYihxzfACxv9JufX
- HMGQVahq9al4DFlt2ZPkTOIBd48aqohHyeBo_R4P6A75HacWVBJM.9AyNDjBuDd0FU.AI57NAjDr
- ALyWDpL_v4W7NdM3I3cx4bHzKzM9lt4oSv39E269IzBHZbj7TZ4GDA_jYoOKcSMPGirhzkzAGAgF
- b.sRa0JcFR_wAYNMbvOonj4djnUTP8.H3otJ52RDKZvzKQEvmsHemY5aKbNM8AAHWalWsFXxu4go
- mJyiIUwZjL3CM.272ySZPblUC6qIyl.9r.r_QOaBCkvBPyRICLrGkDaCytFZ1a9Hpqie0Du_YhYt
- NR7jSMyA8u5bWZqZH39xbuuEcHI0Uo.lccEstohYEqqoGBEwDol5P8Hl1Rm7mszp99_eAcI0UXos
- 68xwgZQyRGrf.FR1Ha3tCR3gZSklhKzZnsgqlNZdMhf3eHY1yDWP5CFhK2n1ajQXDPFrQtNK92hg
- ID4nK7ndv5_bRsBzfUeo9gdGF9Eagf5pom3lWJwFk.dfza.4Qz44eEwbVHPhmJT10UumUbpfW3oQ
- izDtMjQOImOIaXeXetAF7rpkO0.RRQ096k4DmqYVDw1JSVypY8yCy3xr9FDPq5qfdkFgUGPD6iXq
- 3mRIIxSCqWV6pybSM1wUUvADn70hmUHzHbGWox4o2wNpvbWSzyvsxCOSSbgi8dUQqtv01lP84wA4
- vHOVZNzJ9TkmuI9X9VhCkc.AoPG_IEVVb5c04dMlZBHX80_yOL5jqOylGQzmyLXkqbNuLUxKJhHJ
- sXOO9MlM-
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: ee6f087c-f5cd-41f7-bba5-7c04bfdcf2aa
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Mon, 8 May 2023 21:18:33 +0000
-Received: by hermes--production-ir2-74cd8fc864-w4pg2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 67ddbaef5e74928d8488c962890c86c8;
-          Mon, 08 May 2023 21:18:30 +0000 (UTC)
-Message-ID: <899d6604-7b15-ac37-c624-987a2bb7875e@rocketmail.com>
-Date:   Mon, 8 May 2023 23:18:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 7/8] power: supply: rt5033_battery: Adopt status
- property from charger
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230506155435.3005-1-jahau@rocketmail.com>
- <20230506155435.3005-8-jahau@rocketmail.com>
- <20230508113518.nfwchl5wusmnkjp6@mercury.elektranox.org>
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <20230508113518.nfwchl5wusmnkjp6@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232428AbjEHVe5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 17:34:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D705CC;
+        Mon,  8 May 2023 14:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=2UuvzVvkJajpSRztAlbWQE/ujN4VBnGx7txBk9UwFEs=; b=KneIF4sIX1hMULcaWZ2QHQseOH
+        2g0MVeiYasQ3hb/DQWVc4LIuYtwArZXQukDYTNn/60vn84poNQxzfX6ZYJLkO4eWYGtQRAq2h2if7
+        1894SeywnNYoNqO1A9CSpliV+NkbiPjv6Rom4KvFbtpdGVg/i2TvfxseNX1MI0sW5lLGPu6uib8QL
+        0wwd0wZNbkIK7JYS+DMjGeOheRRV+VgJ5lNgvkRCjwiFQnXIXuWyrJt8l9ZDM5i2yvADD/aH9eTE0
+        i815ZD49VHy76hKDbEfOVg6wb4QNuyqYz7jN8xcax6kBKY+xyMIOjjXvRDB2G5XrKbcmHnQ1gWnOA
+        wgjAfVxQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pw8UY-00EW3h-Pu; Mon, 08 May 2023 21:33:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 64B4130026A;
+        Mon,  8 May 2023 23:33:48 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 273602482941B; Mon,  8 May 2023 23:33:48 +0200 (CEST)
+Message-ID: <20230508211951.901961964@infradead.org>
+User-Agent: quilt/0.66
+Date:   Mon, 08 May 2023 23:19:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     bigeasy@linutronix.de
+Cc:     mark.rutland@arm.com, maz@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        jgross@suse.com, boris.ostrovsky@oracle.com,
+        daniel.lezcano@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        rafael@kernel.org, peterz@infradead.org, longman@redhat.com,
+        boqun.feng@gmail.com, pmladek@suse.com, senozhatsky@chromium.org,
+        rostedt@goodmis.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jstultz@google.com,
+        sboyd@kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [RFC][PATCH 0/9] local_clock() vs noinstr
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+Hi all!
 
-On 08.05.23 13:35, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Sat, May 06, 2023 at 05:54:34PM +0200, Jakob Hauser wrote:
->> The rt5033-battery fuelgauge can't get a status by itself. The rt5033-charger
->> can, let's get this value.
->>
->> Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
->> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
->> ---
->>   drivers/power/supply/rt5033_battery.c | 24 ++++++++++++++++++++++++
->>   1 file changed, 24 insertions(+)
->>
->> diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
->> index 5c04cf305219..a6520716d813 100644
->> --- a/drivers/power/supply/rt5033_battery.c
->> +++ b/drivers/power/supply/rt5033_battery.c
->> @@ -12,6 +12,26 @@
->>   #include <linux/mfd/rt5033-private.h>
->>   #include <linux/mfd/rt5033.h>
->>   
->> +static int rt5033_battery_get_status(struct i2c_client *client)
->> +{
->> +	struct power_supply *charger;
->> +	union power_supply_propval val;
->> +	int ret;
->> +
->> +	charger = power_supply_get_by_name("rt5033-charger");
->> +	if (!charger)
->> +		return POWER_SUPPLY_STATUS_UNKNOWN;
->> +
->> +	ret = power_supply_get_property(charger, POWER_SUPPLY_PROP_STATUS, &val);
->> +	if (ret) {
->> +		power_supply_put(charger);
->> +		return POWER_SUPPLY_STATUS_UNKNOWN;
->> +	}
-> 
-> struct rt5033_battery *battery = i2c_get_clientdata(client);
-> ret = power_supply_get_property_from_supplier(battery->psy, POWER_SUPPLY_PROP_STATUS, &val);
-> if (ret)
->      val.intval = POWER_SUPPLY_STATUS_UNKNOWN;
+A recent commit of mine marked local_clock() as noinstr.
 
-I don't think this works. There is no direct relationship between 
-rt5033-charger and rt5033-battery. They operate independently from each 
-other.
+  776f22913b8e ("sched/clock: Make local_clock() noinstr")
 
-I had a short try and the status property of rt5033-battery was "unknown".
+Sadly both me and objtool missed the fact that this is subly broken; but
+Sebastian tripped over it [*]:
 
-Just for the record, the full function I tried was:
+| vmlinux.o: warning: objtool: native_sched_clock+0x97: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
+| vmlinux.o: warning: objtool: kvm_clock_read+0x22: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
+| vmlinux.o: warning: objtool: local_clock+0xb4: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
 
-static int rt5033_battery_get_status(struct i2c_client *client)
-{
-         struct rt5033_battery *battery = i2c_get_clientdata(client);
-         union power_supply_propval val;
-         int ret;
+Specifically, local_clock() (and many of the sched_clock() implementation is
+relies upon) use preempt_{dis,en}able_notrace() which obviously calls out to
+schedule().
 
-         ret = power_supply_get_property_from_supplier(battery->psy,
-                                              POWER_SUPPLY_PROP_STATUS,
-                                              &val);
-         if (ret)
-                 val.intval = POWER_SUPPLY_STATUS_UNKNOWN;
+Now, noinstr code *should* never trigger this and already run in
+non-preemptible code. Specifically entry code should have IRQs disabled while
+__cpuidle code should have preemption disabled.
 
-         return val.intval;
-}
+So while it is mostly harmless, I figured it wouldn't be too hard to clean this
+up a little -- but that was ~10 patches. Anyway, here goes...
 
-Later on I added a read-out of the "ret" value. It is "-19". I guess 
-that's the "return -ENODEV;" from function 
-power_supply_get_property_from_supplier(). [2]
+Compile tested only on x86_64/s390/arm64 -- I've just fed it to the
+robots.
 
-[2] 
-https://github.com/torvalds/linux/blob/v6.4-rc1/drivers/power/supply/power_supply_core.c#L397-L421
+---
+ arch/arm64/include/asm/arch_timer.h    |  8 +----
+ arch/arm64/include/asm/io.h            | 12 +++----
+ arch/loongarch/include/asm/loongarch.h |  2 +-
+ arch/loongarch/kernel/time.c           |  6 ++--
+ arch/s390/include/asm/timex.h          | 13 +++++---
+ arch/s390/kernel/time.c                | 11 ++++++-
+ arch/x86/kernel/kvmclock.c             |  4 +--
+ arch/x86/kernel/tsc.c                  | 38 ++++++++++++++++-----
+ arch/x86/xen/time.c                    |  3 +-
+ drivers/clocksource/arm_arch_timer.c   | 60 ++++++++++++++++++++++++++--------
+ drivers/clocksource/hyperv_timer.c     |  4 +--
+ drivers/cpuidle/cpuidle.c              |  8 ++---
+ drivers/cpuidle/poll_state.c           |  4 +--
+ include/clocksource/hyperv_timer.h     |  4 +--
+ include/linux/rbtree_latch.h           |  2 +-
+ include/linux/sched/clock.h            | 17 +++++++++-
+ include/linux/seqlock.h                | 15 +++++----
+ kernel/printk/printk.c                 |  2 +-
+ kernel/sched/clock.c                   | 19 +++++++----
+ kernel/time/sched_clock.c              | 24 ++++++++++----
+ kernel/time/timekeeping.c              |  4 +--
+ 21 files changed, 176 insertions(+), 84 deletions(-)
 
->> +
->> +	power_supply_put(charger);
->> +	return val.intval;
->> +}
->> +
->>   static int rt5033_battery_get_capacity(struct i2c_client *client)
->>   {
->>   	struct rt5033_battery *battery = i2c_get_clientdata(client);
->> @@ -84,6 +104,9 @@ static int rt5033_battery_get_property(struct power_supply *psy,
->>   	case POWER_SUPPLY_PROP_CAPACITY:
->>   		val->intval = rt5033_battery_get_capacity(battery->client);
->>   		break;
->> +	case POWER_SUPPLY_PROP_STATUS:
->> +		val->intval = rt5033_battery_get_status(battery->client);
->> +		break;
->>   	default:
->>   		return -EINVAL;
->>   	}
->> @@ -96,6 +119,7 @@ static enum power_supply_property rt5033_battery_props[] = {
->>   	POWER_SUPPLY_PROP_VOLTAGE_OCV,
->>   	POWER_SUPPLY_PROP_PRESENT,
->>   	POWER_SUPPLY_PROP_CAPACITY,
->> +	POWER_SUPPLY_PROP_STATUS,
->>   };
->>   
->>   static const struct regmap_config rt5033_battery_regmap_config = {
->> -- 
->> 2.39.2
->>
-> 
-> Otherwise LGTM.
-> 
-> -- Sebastian
 
-Kind regards,
-Jakob
+* https://lkml.kernel.org/r/20230309072724.3F6zRkvw@linutronix.de
+  TL;DR: PREEMPT_DYNAMIC=n PREEMPT=y DEBUG_ENTRY=y
+
