@@ -2,73 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AEFD6FB2F8
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 16:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402566FB2FF
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 16:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbjEHOcn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 10:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
+        id S234494AbjEHOdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 10:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234443AbjEHOcZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 10:32:25 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E35106
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 07:31:45 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96622bca286so406955966b.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 07:31:45 -0700 (PDT)
+        with ESMTP id S234572AbjEHOdL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 10:33:11 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D7B65AC
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 07:32:42 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso7063280a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 07:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683556283; x=1686148283;
+        d=linaro.org; s=google; t=1683556334; x=1686148334;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HnRnnpVFS9BxjWyWHWjOuy6tpS6xB8wewMJVF6G4ggs=;
-        b=Qhxuh9HICDBbK2ZhKX7IpiDVsXuTKbiNMpPiY4EG8mGqNG2kchhQQcWvTcKJy/UYoc
-         PXNHCwKZ/E4D+pBFf9eB+dneL/x/wMaAiF+WD11VFkgEPXEMCI59f6mXUaoc65BTczzM
-         HMMPYPzuV/GmGcMIuaq/pp0/MPcgQffRRDohlM9KhbqnRknmyGpv8UaKxdC9YYVhTcro
-         Ro07nFlqrt/zNoLCa9kEECULsQYXJVG7CLVegm9magTFlYC1uuqofCUBrEubJEhOnzSO
-         uIe9erd6Lxf1e+A3hA90uSXR20hTAWjVD3aMn+Rbw3OGkYmJpYyWveACvWNHM+lt27hi
-         OJSg==
+        bh=rEv+z5GVdo2fQSYihfhkSqRDiOLayeUJlpv8lAfiwYM=;
+        b=Kaf9fWxY6VO630xBlmIB0J1+uTcjZtM4DCx4GNCDMfcSuetv/mBM/pBJGw9ncMz1M5
+         qY/P7/UpMLSzessGqJTNY4ZWuU7Ot/3GgKzhH6AT2J8eSXNT7kGbIcG1Y2UB9usLWrzx
+         f8985Zy4yMLH0qHxkFvcyND/1cwi3X2eSx43vth7pRpTN26ZWKPD05HuMUWtdf3X0agA
+         d2NCAsnxqp+U6TZ1Pd5wJqWAzaTGbJwYaAZp/nuU81G/V+e3ZjT3HBtGTuQLPwqc0wJ5
+         /0hkl1Bw/QpGEVrunLyA0PNH/h95r6HN1dTUzHUOopZb2eEBIGAP/NizByct99GIYkAd
+         GvWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683556283; x=1686148283;
+        d=1e100.net; s=20221208; t=1683556334; x=1686148334;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HnRnnpVFS9BxjWyWHWjOuy6tpS6xB8wewMJVF6G4ggs=;
-        b=bgWPRuihuISwaWzndeP5lv3htQ/ZCJ4VygKjm5/Pjf4O53m8hr4Ox6+Ay830qX2y81
-         HSCnEmEomdn6NoWxnOe/vr9JKfkCNh3xfbRRjBu7jbrgROe9xtlP/80IBQ//AKJuQH/O
-         rddhmYZ3R187zvyASGrSUpu9mFyGUD7SO2UZOgkxXEAWKiuvznUvgUB8Vo8J1JLlLriC
-         lVqhMxRv+qvhrNgi4ZAQ9ZICAcw9k2BUkrFAD4Uh/B/GGdeO6GVipDYCIe4WEpCMuSl/
-         653z81M5d/14DmijUqLKqX9AONlEBQ0o1IqJPA6aObZq/n/hB9Fcy7e6L0jcO9pOgvWM
-         YTgg==
-X-Gm-Message-State: AC+VfDwUBCm9SwurWPRVZoeDqzBkaR1rsji6vBfOmEpgULiJYLcQdQYe
-        /HChBorsvJbM5xthACFQcdWB5A==
-X-Google-Smtp-Source: ACHHUZ6l2MUXliu1Uv4qYZgZTGtBJINS3oSzGHiUogbgJZUH/Ub5yhnE8qcMRSjr5Ci/dlDb38lcIg==
-X-Received: by 2002:a17:907:868b:b0:961:57fb:10c1 with SMTP id qa11-20020a170907868b00b0096157fb10c1mr9298898ejc.63.1683556283270;
-        Mon, 08 May 2023 07:31:23 -0700 (PDT)
+        bh=rEv+z5GVdo2fQSYihfhkSqRDiOLayeUJlpv8lAfiwYM=;
+        b=Q6vgot+VrqO4nChOd269ZXVN/KLXvwcZgX8QXFeRVZjm/65W26UIxxUCohCkkfPMGM
+         t8zN5dycfzOnjwJA0KSgMEML1URls9IPwPdh0oYJHKC8Y/VncYL74aqon6aq7DwXyk47
+         ic6hakpuUYuSevwkMMxKgqfeLsL4df3WXDdRhZGCjTqFWPy+plU1yEI/4AiMIHWsgCrL
+         kVXoC1T2fKNwmp0kmOZMZYgacH42EtDIoo8x9LByjeZptIMbI8KazItUWm5sGGn+HbPM
+         Llj8Rzsj1zEEXizgWKlFCRCn07A10mKWeTBjpNDfviqv0Nu8fvSr98vXk4gLz/yO5gM0
+         JYsA==
+X-Gm-Message-State: AC+VfDxTYJ+2RsJz0AZPeWAjO+JWgXmTuTMvQHdeWlfIyUcbOAgU1dv5
+        YPYv0zNBxiefZBnNL7xlcrE9p2DGk+mlLDJChLs=
+X-Google-Smtp-Source: ACHHUZ77Q52W7qX/Tx9LySY6H2jF/m5IuGtO1D9kQCz/B/KU3e37fc6N+T2OpiLHlJ8HaPUpTRAWmg==
+X-Received: by 2002:aa7:d659:0:b0:508:14f2:399c with SMTP id v25-20020aa7d659000000b0050814f2399cmr9763316edr.10.1683556333872;
+        Mon, 08 May 2023 07:32:13 -0700 (PDT)
 Received: from krzk-bin ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id de25-20020a1709069bd900b0096664376ec9sm51253ejc.55.2023.05.08.07.31.14
+        by smtp.gmail.com with ESMTPSA id j14-20020a50ed0e000000b0050bc4600d38sm6129103eds.79.2023.05.08.07.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 07:31:15 -0700 (PDT)
-Date:   Mon, 8 May 2023 16:31:13 +0200
+        Mon, 08 May 2023 07:32:04 -0700 (PDT)
+Date:   Mon, 8 May 2023 16:31:59 +0200
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Cc:     robh+dt@kernel.org, sre@kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>,
-        linux-pm@vger.kernel.org, lee@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        broonie@kernel.org, linux-kernel@vger.kernel.org,
-        lgirdwood@gmail.com
-Subject: Re: [PATCH v3 4/7] dt-bindings: power: supply: max77658: Add ADI
- MAX77658 Battery
-Message-ID: <20230508143113.ichsezawrlxobujk@krzk-bin>
+Cc:     robh+dt@kernel.org, sre@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Nurettin Bolucu <Nurettin.Bolucu@analog.com>, lee@kernel.org,
+        linux-pm@vger.kernel.org, lgirdwood@gmail.com
+Subject: Re: [PATCH v3 6/7] dt-bindings: mfd: max77658: Add ADI MAX77658
+Message-ID: <20230508143159.xr3zrlsgtilxd7ha@krzk-bin>
 References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-5-Zeynep.Arslanbenzer@analog.com>
+ <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230508131045.9399-5-Zeynep.Arslanbenzer@analog.com>
+In-Reply-To: <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,15 +74,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 08 May 2023 16:10:42 +0300, Zeynep Arslanbenzer wrote:
-> Add ADI MAX77658 power supply devicetree document.
+On Mon, 08 May 2023 16:10:44 +0300, Zeynep Arslanbenzer wrote:
+> Add ADI MAX77658 devicetree document.
 > 
 > Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
->  .../power/supply/adi,max77658-battery.yaml    | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
+>  .../devicetree/bindings/mfd/adi,max77658.yaml | 160 ++++++++++++++++++
+>  1 file changed, 160 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77658.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -92,10 +90,19 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
 
-doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml: Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/mfd/adi,max77658.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/power/supply/adi,max77658-charger.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: pmic@48: charger: False schema does not allow {'compatible': ['adi,max77658-charger'], 'monitored-battery': [[2]], 'adi,input-current-limit-microamp': [[475000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: pmic@48: fuel-gauge: False schema does not allow {'compatible': ['adi,max77658-battery'], 'monitored-battery': [[2]], 'adi,valrt-min-microvolt': [[0]], 'adi,valrt-max-microvolt': [[5100000]], 'adi,ialrt-min-microamp': [[4294962296]], 'adi,ialrt-max-microamp': [[5000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: /example-0/i2c/pmic@48/charger: failed to match any schema with compatible: ['adi,max77658-charger']
+Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: /example-0/i2c/pmic@48/fuel-gauge: failed to match any schema with compatible: ['adi,max77658-battery']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: pmic@40: charger: False schema does not allow {'compatible': ['adi,max77659-charger'], 'monitored-battery': [[2]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: /example-1/i2c/pmic@40/charger: failed to match any schema with compatible: ['adi,max77659-charger']
 
-See https://patchwork.ozlabs.org/patch/1778410
+See https://patchwork.ozlabs.org/patch/1778414
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.
