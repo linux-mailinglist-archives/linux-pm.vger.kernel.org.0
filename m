@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A326F6FB544
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 18:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E886FB539
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 18:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbjEHQhq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 12:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S234265AbjEHQhh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 12:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbjEHQhi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 12:37:38 -0400
+        with ESMTP id S234256AbjEHQhe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 12:37:34 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0B96E9A;
-        Mon,  8 May 2023 09:37:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4026A68
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 09:37:32 -0700 (PDT)
 Received: from mercury (195-23-45-170.net.novis.pt [195.23.45.170])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 773B5660563B;
-        Mon,  8 May 2023 17:37:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3AAE46603283;
+        Mon,  8 May 2023 17:37:30 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683563852;
-        bh=vcmfL6fa26+uv3p8sjY6y3BGVWfx6diz9FJorLd91Cc=;
+        s=mail; t=1683563850;
+        bh=SB3m52QouABeP4O6nD1ltP+DS95dkfei67Audxhqbzc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N69ZAaKWBmsLvDqXuNkVnTsY6dpRIw2R70zrj5+H7T5ZI+pxE3yP+OnYDGF5/TXGP
-         53xFA8MR0ArfnMxh9+XCbdZDFUoKnLG9V4R2bZ/kSLeEC5k/J6ZvzzyUyEHjXLv47p
-         d739UGLhQBpD/imjD1ZcBk4fvduiaD0iSWHuAqE0/Lzh7eHVchP7Nnj2IObvUveg49
-         6TgjQOAVt2FbAT+jtRFAwk7mewb7hmrA3MD+YuyebeiY8zwIORQc1Uf2t3pOv6ahzc
-         HztJbjR3mu0i6bRGmkxJKtnZ6KvZEdbBBf6QJEIzDgkXkdJSCo11ATgGP45FKQTP/G
-         eAv7Csm8Qk7Yw==
+        b=HwAF8La3rsTS9oCls2lNksQFX4eCUujPGqJPp735d7DrzMerqhfdiBr1ZncxQVcq/
+         X1V+fJhYh6DOjaj3Ql74UHUiVzyNa2UfdtwCpleIgwMKk+YOa38/XXm1S/zFW03ggB
+         XKQyNAYsUfBcpIX/YrEzDw5k2VF4Sz4i+CWwwpcIns+WVLbWS9adL9vjxn4vu1DyAr
+         aKS1uLh1oBI7IsM0dAF/8P/3vVrsqRSdaxTomBBcK6bYx1TbKwY2iQi4O8+XkKyOu/
+         S5xjYqo2ZDRxLL6mon0k/Kxh9Q8K81+CJBOOPUMLBz+c8ap/Iz+ytCk4afHa0ImTbH
+         HLyTA31bYOGqQ==
 Received: by mercury (Postfix, from userid 1000)
-        id CE5011067062; Mon,  8 May 2023 14:43:59 +0200 (CEST)
-Date:   Mon, 8 May 2023 14:43:59 +0200
+        id 071021067074; Mon,  8 May 2023 15:09:46 +0200 (CEST)
+Date:   Mon, 8 May 2023 15:09:45 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: rk817: Simplify an error message
-Message-ID: <20230508124359.hl7kwixxforqexnl@mercury.elektranox.org>
-References: <a9c0820c5af6b315ef3b3c2fd8d7be44008b0086.1681577370.git.christophe.jaillet@wanadoo.fr>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     laji Xiao <3252204392abc@gmail.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] power: supply: Fix external_power_changed race in
+ several drivers
+Message-ID: <20230508130945.okud2hn47jplrlaw@mercury.elektranox.org>
+References: <20230415160734.70475-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lq2ocncfggcksedr"
+        protocol="application/pgp-signature"; boundary="qzu24yx6zlmbvfra"
 Content-Disposition: inline
-In-Reply-To: <a9c0820c5af6b315ef3b3c2fd8d7be44008b0086.1681577370.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230415160734.70475-1-hdegoede@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,64 +56,96 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---lq2ocncfggcksedr
+--qzu24yx6zlmbvfra
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Hans,
 
-On Sat, Apr 15, 2023 at 06:49:55PM +0200, Christophe JAILLET wrote:
-> dev_err_probe() already display the error code. There is no need to
-> duplicate it explicitly in the error message.
+On Sat, Apr 15, 2023 at 06:07:28PM +0200, Hans de Goede wrote:
+> I hit this issue where a Lenovo Yoga Book yb1-x90f would hang on boot
+> every couple of boots.
 >=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+> The problem was that bq25890_charger_external_power_changed() dereferences
+> bq->charger, which gets sets in bq25890_power_supply_init() like this:
+>    =20
+>   bq->charger =3D devm_power_supply_register(bq->dev, &bq->desc, &psy_cfg=
+);
+>    =20
+> As soon as devm_power_supply_register() has called device_add()
+> the external_power_changed callback can get called. So there is a window
+> where bq25890_charger_external_power_changed() may get called while
+> bq->charger has not been set yet leading to a NULL pointer dereference.
+>=20
+> This race hits on the yb1-x90f when the cht_wcove_pwrsrc (extcon) psy is
+> done with detecting the charger, which happens to exactly hit the window:
+>=20
+>       BUG: kernel NULL pointer dereference, address: 0000000000000018
+>       <snip>
+>       RIP: 0010:__power_supply_is_supplied_by+0xb/0xb0
+>       <snip>
+>       Call Trace:
+>        <TASK>
+>        __power_supply_get_supplier_property+0x19/0x50
+>        class_for_each_device+0xb1/0xe0
+>        power_supply_get_property_from_supplier+0x2e/0x50
+>        bq25890_charger_external_power_changed+0x38/0x1b0 [bq25890_charger]
+>        __power_supply_changed_work+0x30/0x40
+>        class_for_each_device+0xb1/0xe0
+>        power_supply_changed_work+0x5f/0xe0
+>       <snip>
+>=20
+> This series fixes this issue in the bq25890 + 3 other drivers with
+> the same issue. Patches 5-6 are small cleanup patches for 2 other
+> drivers which I audited for the same issue.
 
-Thanks, queued.
+Thanks, I queued the first 4 patches to my fixes branch and the 2
+cleanups to for-next.
 
 -- Sebastian
 
->  drivers/power/supply/rk817_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hans de Goede (6):
+>   power: supply: ab8500: Fix external_power_changed race
+>   power: supply: axp288_fuel_gauge: Fix external_power_changed race
+>   power: supply: bq25890: Fix external_power_changed race
+>   power: supply: sc27xx: Fix external_power_changed race
+>   power: supply: max17042_battery: Refactor
+>     max17042_external_power_changed()
+>   power: supply: twl4030_madc_battery: Refactor
+>     twl4030_madc_bat_ext_changed()
 >=20
-> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
-rk817_charger.c
-> index 1a2143641e66..8328bcea1a29 100644
-> --- a/drivers/power/supply/rk817_charger.c
-> +++ b/drivers/power/supply/rk817_charger.c
-> @@ -1134,7 +1134,7 @@ static int rk817_charger_probe(struct platform_devi=
-ce *pdev)
->  					    &bat_info);
->  	if (ret) {
->  		return dev_err_probe(dev, ret,
-> -				     "Unable to get battery info: %d\n", ret);
-> +				     "Unable to get battery info\n");
->  	}
-> =20
->  	if ((bat_info->charge_full_design_uah <=3D 0) ||
+>  drivers/power/supply/ab8500_btemp.c         | 6 ++----
+>  drivers/power/supply/ab8500_fg.c            | 6 ++----
+>  drivers/power/supply/axp288_fuel_gauge.c    | 2 +-
+>  drivers/power/supply/bq25890_charger.c      | 2 +-
+>  drivers/power/supply/max17042_battery.c     | 7 +------
+>  drivers/power/supply/sc27xx_fuel_gauge.c    | 9 +--------
+>  drivers/power/supply/twl4030_madc_battery.c | 8 +-------
+>  7 files changed, 9 insertions(+), 31 deletions(-)
+>=20
 > --=20
-> 2.34.1
+> 2.39.1
 >=20
 
---lq2ocncfggcksedr
+--qzu24yx6zlmbvfra
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRY7o8ACgkQ2O7X88g7
-+prG9hAAmn4pxl5HZ4OqQt18Tgu7ZNPcNtFpreppljXLJ6rPXcfSUk4mz9SlYhG4
-s+ck3MZY+gGfYRQD03zzymgsmTs6kmx6Tt+G3g3wb/QhjRfn3ltJfJWdP3DAJGyC
-XzQ7bfX3d4q+m8GQlLDBJgvjHrOCzsGOkI8iixEr+909kSkPYcfszQ9dBWfd/qj6
-DMedjPrTOAsjKyAnbSqmnSCBw8lERFwjRZrdI5S7ii3eCmMuOhe01FkDaVRPlfX/
-s845/VzJyhHTxTcoYx6V6jY6FgKqsXzMJn5HUYm0QdkVAI3pHDUhHapZz7+yDQg5
-xRLOUvzhbHX6si5QHTiIFhaxvZW7QdILfuMOj/30PHITb0aanmZc9mNEctKGwdX8
-ywOd4eGfrTBaF1HPGQXb+29h0JHSQ0znMMC/eCs2R3rDphu3rK7Zkx27poSUMw6C
-V5A5PAy9plyvmOSXyR2PiQhYvVw/XXeU9OIlsi4w7pWIA7bnZuI+HNKz9KaEuqIT
-LQWZivk7aMBHQjzoy5e1qnLRdubvsyEuQt469G2vci7J6gFUpc2ucaAUDMk/0aDQ
-ARtbyZiU4+qyZbhawrCetQy0x2gBQ0eDxDNfuAnvAAbe2j/5L2bF1HMD51t5izYX
-/jGyVpq5yfZ1lHx0BeStBJWOBPeVeQjBomCpveTPPYzq5RQtC9k=
-=TBBs
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRY9JUACgkQ2O7X88g7
++prMCw//UVITfJiL5L9R6omlJccJBFqzG111AJ98Qy4sZlyfFo6zLlQ53kh2vpk8
+tBZEoCwno0XGWXChxEhbpBBa/s0FKKHUz0Gi4scWZtTS3k8As0ZAFi9d+whFAjQa
+hJXIwGMeUl4YxEcDRc7z+ihOiT6pwx218ktqf9ohjcf8n95F030uZY3wLvxssRJd
+AJEQWa/hyCZrswTHVyInPbutBYLWZplVU7+QTw9AdIkshyvseSUcJZc59xwDwv0S
+oBOuu99xvLNx2a8NUDpvK7+k6hI5smtjUeA0de8InYNs+bRcS4g3hD62nHqKKC0w
+gq+bDXONd3VdCuzv+GUZ9sEaNgLZhxk4zLUURs4rTGFKoGVB1JpeeiIMQFRI6aSw
+8stWI3sO3gZuf3IRWR5i6A0OWyNSV3Z24GZgeMj+5fKW0LJ8DUUfw8FReIGyl/Ht
+/XEpUgUhOKzetA1Dk+MyJwNr0YQ4yxDHo8yIwdFCC4GLqHLGWSOSeHDsUBekhkTC
+/v6f87MMwX1KTF5P1NE+ADWaJW/Ml7ahIZrLSaIydZyaE1A7x4qPHnqfI8qT/bly
+ObZ87yzbdXoj3YJRApxLsz20QoXwm1Blj/sq4o8lq5jUF5lcYBT0+Mw2FXchPFKW
+H6PMt2GtU7NWMjvOTL3Ig3osnwTb0qBXi1RuZiuejeepbfphF4A=
+=RCWT
 -----END PGP SIGNATURE-----
 
---lq2ocncfggcksedr--
+--qzu24yx6zlmbvfra--
