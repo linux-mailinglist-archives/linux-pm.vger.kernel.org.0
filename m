@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462D46FB828
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 22:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104FB6FB830
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 22:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233520AbjEHUKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 16:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S229986AbjEHUPY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 16:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233756AbjEHUKe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 16:10:34 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D5D72A6
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 13:09:16 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96598a7c5e0so795329566b.3
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 13:09:16 -0700 (PDT)
+        with ESMTP id S229457AbjEHUPX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 16:15:23 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3B85597
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 13:15:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96652cb7673so278564666b.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 13:15:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683576554; x=1686168554;
+        d=linaro.org; s=google; t=1683576920; x=1686168920;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tilR7eyPaDKEFXHCAqnTp+peGY1z0Ib18E1yaXftr+k=;
-        b=kLvcOmZnUfc3lYK73I3j/sJ37SaQ2AvWCWDQAYKxemg4GisEiYgcTdaPc5qO5KULVT
-         2FsTFnFbs37Quiah2pT9yQpLv2tIAMSwWBOEJekzchIAL/FVr+ZpMmn2iNw4j7+8pcU6
-         5ghIx2WoU+AfrP+BbbbAbREhcU0gvdVc0uDFLoTktslwS3KWSZ68fHdZ8UwDmWE7+FqT
-         KsKeQ35ZoMMS93/r/cWtPN492IBjzuX4hiotR3qwKcuShGY+2JlMr7pB4jSVAOsILYqO
-         7DI6xxpa7ALbN87TPC72FISOIrMqqkRJC7d/Nt33Wktgzx2jrbP7VW4ED5bTxJpTpZHF
-         ezvA==
+        bh=5Fp0lSNEvHbBfUsd7/thKvbF7+DN0vBYq4suwmKpz0s=;
+        b=fQ7RYvPAfMSJUAbnPH7fbxrYfTWWtigb67IP/v3cLddi+ev+BlaziqfBFYqGy/W2Kc
+         FCa2x3BwjQv0cYoS26x1BaiFaWojHD3Tpo7rUFZrQiHoBTQlKib2AULAkckbj6bcfkvb
+         ycO5x+JqChLv9gzpWQl1qVQdEM+vT1DO6WcPY6dU5TT8dnGm7Wip6K1LNC5nd+hynAk3
+         wS6yvucNHz6VxtUom0fZZ+cuWJ++n5sBr63ToaFQoVSNTHRLc2tHSfmFep6N3rEhqtcv
+         p2Xmrt2TXFUPQouTh9bxNtsuPUOBuveUgHOKw+m9qPIIQR37u5XaUCgbzxBEj6Bmvgy9
+         EvQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683576554; x=1686168554;
+        d=1e100.net; s=20221208; t=1683576920; x=1686168920;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tilR7eyPaDKEFXHCAqnTp+peGY1z0Ib18E1yaXftr+k=;
-        b=CgLhKw51Iujw6rdw+FQHV0Vzqx0ia/jKB9uqCfKOE+I0GyARgP+TI11R3khl5pCvq1
-         yPExhIKA372H13qlbc1uvMigczC/HbKSYFESOcVtOjqTlzLE1SL0oJHUoz5OqgFFdmZS
-         ePp/Q4In7hb4WUM2BoFGKG+fU7c8LatXIwW5OPnFUUqCzSI7b51nm186fEYOg+tX6Dh2
-         J4wZGsE7fnijP2MYIyC7jcRwVKpahgAuJGV9qycO2zAgPiNFgrrW7+uTp2sNLO6ljHfC
-         TIBK/y5nQSdNBJ3s3wJNxiMJBj81w/q5bQ7HxAKAOBlXPoZQwECHR3LPptyy2HCMPKKi
-         QKMw==
-X-Gm-Message-State: AC+VfDz2h1hs/AbSMNdTIY/xnPqOuLo3uoxpMHMpCbibJJ5GyG6gztZY
-        MdUz2aY7lbas78aMMUBOd++V9g==
-X-Google-Smtp-Source: ACHHUZ7qA+TErGF3BPAA0chiAVjVMmr2+vphSynvtmJf+T2ZuSJt2mJzItnXIZvlFzlNxEijNfT1vw==
-X-Received: by 2002:a17:907:2d12:b0:969:98eb:3fdd with SMTP id gs18-20020a1709072d1200b0096998eb3fddmr1734857ejc.3.1683576553748;
-        Mon, 08 May 2023 13:09:13 -0700 (PDT)
+        bh=5Fp0lSNEvHbBfUsd7/thKvbF7+DN0vBYq4suwmKpz0s=;
+        b=lDbC7rOoaxzWwZFpXrpBJj4Rmqe5azmptTSaHNtzwht35j1UXcwMNwMVn+XAEHizO9
+         aMHGb4Hw4X8SidFSgvuv8zAvusN2U71Uq+zvHgAaocw6Vbl5IPNnzxZcGRkisAR5t5sW
+         bJwkKvsLN0xa5d4vfvfhVJCo8+S98VAzCA8zKSGya0Rb1hxYKBlQ0uqbQa5YH49BYkv/
+         /rCXOC7YvUOMyBexXRaj1WxaPOfXOsy4lbGFfkL60Dy1I0n/+0Rm/jri3pmTsKdrjzFp
+         spKiocAAUYUXcUhMdhVhetVNYZAP/GEPPSoAt1mhNL/XRbjc8TQBADTrtbP7FzR4GGXS
+         Ehkw==
+X-Gm-Message-State: AC+VfDxrLqcQG31QaT0XUDufMIWDXaFjkpmXEnIAojxo6rq6eVQH93cz
+        m04+9vkvDvLpFnWYZdplAahYMw==
+X-Google-Smtp-Source: ACHHUZ5R6ysml0hd5vtloBaetd6BnppKyn20LpxcrNkZ2bjYr+tMGScPnPJhJrH7S9Jmou0hgwxpqg==
+X-Received: by 2002:a17:907:86a3:b0:966:187:ce40 with SMTP id qa35-20020a17090786a300b009660187ce40mr9132438ejc.4.1683576920531;
+        Mon, 08 May 2023 13:15:20 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
-        by smtp.gmail.com with ESMTPSA id jx6-20020a170907760600b00958434d4ecesm402734ejc.13.2023.05.08.13.09.12
+        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b008f89953b761sm401299ejc.3.2023.05.08.13.15.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 13:09:13 -0700 (PDT)
-Message-ID: <7636f1c7-ce54-af9f-03c8-aa124dd26561@linaro.org>
-Date:   Mon, 8 May 2023 22:09:11 +0200
+        Mon, 08 May 2023 13:15:14 -0700 (PDT)
+Message-ID: <a718233d-1389-93c2-fba2-c6051310febe@linaro.org>
+Date:   Mon, 8 May 2023 22:15:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 7/7] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
+Subject: Re: [PATCH v3 5/7] power: supply: max77658: Add ADI MAX77658 Battery
  Support
 Content-Language: en-US
 To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
@@ -65,9 +65,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org,
         Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-8-Zeynep.Arslanbenzer@analog.com>
+ <20230508131045.9399-6-Zeynep.Arslanbenzer@analog.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508131045.9399-8-Zeynep.Arslanbenzer@analog.com>
+In-Reply-To: <20230508131045.9399-6-Zeynep.Arslanbenzer@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,127 +81,111 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
-> MFD driver for MAX77643/54/58/59 to enable its sub
-> devices.
+> Battery driver for ADI MAX77658.
 > 
-> The MAX77643 is a multi-function devices. It includes
-> regulator.
-> 
-> The MAX77654 is a multi-function devices. It includes
-> regulator and charger.
-> 
-> The MAX77658 is a multi-function devices. It includes
-> regulator, charger and battery.
-> 
-> The MAX77659 is a multi-function devices. It includes
-> regulator and charger.
+> The MAX77658 is an ultra-low power fuel gauge which implements the Maxim ModelGauge m5 EZ algorithm.
 > 
 > Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
->  drivers/mfd/Kconfig          |  13 ++
->  drivers/mfd/Makefile         |   1 +
->  drivers/mfd/max77658.c       | 426 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/max77658.h |  80 +++++++
->  4 files changed, 520 insertions(+)
->  create mode 100644 drivers/mfd/max77658.c
->  create mode 100644 include/linux/mfd/max77658.h
+>  drivers/power/supply/Kconfig            |   7 +
+>  drivers/power/supply/Makefile           |   1 +
+>  drivers/power/supply/max77658-battery.c | 633 ++++++++++++++++++++++++
+>  3 files changed, 641 insertions(+)
+>  create mode 100644 drivers/power/supply/max77658-battery.c
 > 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 8b93856de432..aa1630a6d33a 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -821,6 +821,19 @@ config MFD_MAX77650
->  	  the following functionalities of the device: GPIO, regulator,
->  	  charger, LED, onkey.
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 4b68bbb1e2a8..f9556f4b9e35 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -572,6 +572,13 @@ config CHARGER_MAX77658
+>  	  Say Y to enable support for the battery charger control of
+>  	  MAX77654/58/59 PMIC.
 >  
+> +config BATTERY_MAX77658
+> +	tristate "Analog Devices MAX77658 battery driver"
+> +	depends on MFD_MAX77658
+> +	help
+> +	  Say Y to enable support for the battery control of
+> +	  MAX77658 PMIC.
+> +
+>  config CHARGER_MAX77693
+>  	tristate "Maxim MAX77693 battery charger driver"
+>  	depends on MFD_MAX77693
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index af4bd6e5969f..e5a425d333a7 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -77,6 +77,7 @@ obj-$(CONFIG_CHARGER_MAX14577)	+= max14577_charger.o
+>  obj-$(CONFIG_CHARGER_DETECTOR_MAX14656)	+= max14656_charger_detector.o
+>  obj-$(CONFIG_CHARGER_MAX77650)	+= max77650-charger.o
+>  obj-$(CONFIG_CHARGER_MAX77658)	+= max77658-charger.o
+> +obj-$(CONFIG_BATTERY_MAX77658)	+= max77658-battery.o
+>  obj-$(CONFIG_CHARGER_MAX77693)	+= max77693_charger.o
+>  obj-$(CONFIG_CHARGER_MAX77976)	+= max77976_charger.o
+>  obj-$(CONFIG_CHARGER_MAX8997)	+= max8997_charger.o
+> diff --git a/drivers/power/supply/max77658-battery.c b/drivers/power/supply/max77658-battery.c
+> new file mode 100644
+> index 000000000000..4948ef227db1
+> --- /dev/null
+> +++ b/drivers/power/supply/max77658-battery.c
+> @@ -0,0 +1,633 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (c) 2023 Analog Devices, Inc.
+> + * ADI battery driver for the MAX77658
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/mfd/max77658.h>
+> +#include <linux/module.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/regmap.h>
+> +
+> +/* Default value for SALRT min threshold, in percent */
+> +#define MAX77658_SALRT_MIN_DEFAULT	1
+> +/* Default value for SALRT max threshold, in percent */
+> +#define MAX77658_SALRT_MAX_DEFAULT	99
+> +
+> +#define MAX77658_IALRTTH_RESOLUTION	8567
+> +#define MAX77658_CURRENT_RESOLUTION	33487
+> +#define MAX77658_VOLTAGE_RESOLUTION	78125
+> +#define MAX77658_FG_DELAY		1000
+> +#define MAX77658_BATTERY_FULL		100
+> +#define MAX77658_BATTERY_LOW		40
+> +#define MAX77658_BATTERY_CRITICAL	10
+> +#define MAX77658_MAXMINVOLT_STEP	20000
+> +#define MAX77658_VALRTTH_STEP		20000
+> +#define MAX77658_VEMPTY_VE_STEP		10000
+> +#define MAX77658_POWER_STEP		17100
+> +
+> +#define MAX77658_REG_STATUS		0x00
+> +#define MAX77658_REG_VALRTTH		0x01
+> +#define MAX77658_REG_TALRTTH		0x02
+> +#define MAX77658_REG_SALRTTH		0x03
+> +#define MAX77658_REG_CONFIG		0x1D
+> +#define MAX77658_REG_DEVNAME		0x21
+> +#define MAX77658_REG_VEMPTY		0x3A
+> +#define MAX77658_REG_AVGPOWER		0xB3
+> +#define MAX77658_REG_IALRTTH		0xB4
+> +#define MAX77658_REG_CONFIG2		0xBB
+> +#define MAX77658_REG_TEMP		0x08
+> +#define MAX77658_REG_VCELL		0x09
+> +#define MAX77658_REG_CURRENT		0x0A
+> +#define MAX77658_REG_AVGCURRENT		0x0B
+> +#define MAX77658_REG_AVGVCELL		0x19
+> +#define MAX77658_REG_MAXMINTEMP		0x1A
+> +#define MAX77658_REG_MAXMINVOLT		0x1B
+> +#define MAX77658_REG_MAXMINCURR		0x1C
+> +#define MAX77658_REG_REPSOC		0x06
+> +#define MAX77658_REG_TTE		0x11
+> +#define MAX77658_REG_TTF		0x20
 
-...
-			glbl1_chip, &max77658->irqc_glbl1);
-> +}
-> +
-> +static int max77658_i2c_probe(struct i2c_client *client,
-> +			      const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max77658_dev *max77658;
-> +	const struct mfd_cell *cells;
-> +	struct i2c_client *fuel;
-> +	int ret, n_devs;
-> +
-> +	max77658 = devm_kzalloc(dev, sizeof(*max77658), GFP_KERNEL);
-> +	if (!max77658)
-> +		return -ENOMEM;
-> +
-> +	i2c_set_clientdata(client, max77658);
-> +	max77658->irq = client->irq;
-> +
-> +	max77658->id  = (enum max77658_ids)device_get_match_data(dev);
-
-Double space -> One space.
-
-> +	if (!max77658->id)
-> +		max77658->id  = (enum max77658_ids)id->driver_data;
-> +
-> +	if (!max77658->id)
-> +		return -EINVAL;
-> +
-> +	max77658->regmap = devm_regmap_init_i2c(client,
-> +						&max77658_regmap_config);
-> +	if (IS_ERR(max77658->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(max77658->regmap),
-> +				     "Failed to initialize regmap\n");
-> +
-> +	fuel = i2c_new_dummy_device(client->adapter, I2C_ADDR_FUEL_GAUGE);
-> +	if (IS_ERR(fuel))
-> +		return dev_err_probe(dev, PTR_ERR(fuel),
-> +				     "Failed to create I2C device[0x%Xh]\n",
-> +				      I2C_ADDR_FUEL_GAUGE);
-
-Where do you free "fuel" instance?
-
-> +
-> +	i2c_set_clientdata(fuel, max77658);
-> +
-> +	max77658->regmap_fg = devm_regmap_init_i2c(fuel,
-> +						   &max77658_regmap_config_fg);
-> +	if (IS_ERR(max77658->regmap_fg))
-> +		return dev_err_probe(dev,
-> +				     PTR_ERR(max77658->regmap_fg),
-> +				     "Failed to initialize I2C device[0x%Xh]\n",
-> +				     I2C_ADDR_FUEL_GAUGE);
-> +
-> +	ret = max77658_pmic_irq_init(dev);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to initialize IRQ\n");
-> +
-> +	switch (max77658->id) {
-> +	case ID_MAX77643:
-> +		cells = max77643_devs;
-> +		n_devs = ARRAY_SIZE(max77643_devs);
-> +		break;
-> +	case ID_MAX77654:
-> +		cells = max77654_devs;
-> +		n_devs = ARRAY_SIZE(max77654_devs);
-> +		break;
-> +	case ID_MAX77658:
-> +		cells = max77658_devs;
-> +		n_devs = ARRAY_SIZE(max77658_devs);
-> +		break;
-> +	case ID_MAX77659:
-> +		cells = max77659_devs;
-> +		n_devs = ARRAY_SIZE(max77659_devs);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = devm_mfd_add_devices(dev, -1, cells, n_devs,  NULL, 0, NULL);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to add sub-devices\n");
-> +
-> +	return device_init_wakeup(dev, true);
-> +}
+This is max17055 or very close one. Don't duplicate drivers. Entire
+driver should be merged to existing one, e.g. max17042.
 
 Best regards,
 Krzysztof
