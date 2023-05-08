@@ -2,62 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489206FB7D1
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 21:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C036FB7D8
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 21:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbjEHTzt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 15:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S233731AbjEHT5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 15:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbjEHTzq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 15:55:46 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D2E7A94
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 12:55:22 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so52236211a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 12:55:22 -0700 (PDT)
+        with ESMTP id S233548AbjEHT5j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 15:57:39 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8634C02
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 12:57:31 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc34b98edso7741518a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 12:57:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683575715; x=1686167715;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=linaro.org; s=google; t=1683575849; x=1686167849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=T6K8tZRHm3ktbeHIa7Lnv7wLaqb40G7qOij8yLE39M0=;
-        b=HFQbA/Rp4/5v4RTxWhltNJ+enPCVmZ0mOdENcDnhdh75dD7SDjs9AS2C+A1dDEGEDM
-         czgk20ZOaoEl+dmKGAWJ4hdxgsCNct9v2VHGNxrj8x/nfG2MdRHyErmkRfPI60itdcQD
-         eduWo+/Egv3YtARV2Rkt5jitJxjbD5RrE7aFkG0RHCKeVB5LQNn/AWoWywuvFPMiUhAH
-         gVCJN/zV+acQANIH3o83420zdctQZtpNl5uYi8SBi4L19BayPTcrXBEOtRWxwiC6s3Sj
-         c2tRnOCGz++7c4MseTyioH63xRs2Jdy52lUPFemSRlSQcgsvnWrsGaYPPuGJnpOAuiCy
-         AsZQ==
+        bh=fqNm4Pg9q9JTG5RmbcPMzT/Gazj/RL9lVE9lFqNGM3U=;
+        b=T6Uhg1KtnlUklTu35/psIniaI61w47RSVLU2iwxcKhG0mynpdvAwlOAAeXMde7wMRk
+         eFKPjHl8cZiiNeaKnVrP1RA0i4SfwXEwf3b9HxXmkaZQwvYQ8pVYvvMnoQeUd2ND6+ks
+         mY/4pbH4YmXkbh6GcOBgw4HjO8vkMb2yi0Me0GJ56Hrg3hs0g8Cvk5Veuv46NJ4FuOBS
+         6WwVczqguUaFa0qJQfFfhScq4a2Ogal5COXlqE08qMY7GJNF+dE3kuHeJ52yK9xGqhEg
+         ogvlAXTMNq3ZL+Z+U8O1+uJOpsuXtL2QxCcr7P7JZ1/Bz37fobBhff7BCPH35kheU4ye
+         ChBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683575715; x=1686167715;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20221208; t=1683575849; x=1686167849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T6K8tZRHm3ktbeHIa7Lnv7wLaqb40G7qOij8yLE39M0=;
-        b=HFcQbaPDHmTmflzFn4v49aH7kzRwRTXIMdTPBkYc9XJVBinQnjapmQ0lJEhEysxIH5
-         VNHJZ0K9CHDu0cTKzbJ/Oqr6NpHrKdSoxianFbyMXDnkXJopraSFwjPDLPkEYVE9aADL
-         uDxAGqV4oNo4+Ye1dCqAGjiRo6i2dGRPdD/FX524z0KZxoFdIK7j0NCqhVXb8jiZVB2K
-         rUlHCVp1egP2d8t6mjFW6l2sQVlzkWNdxIhfNVXfWPYkPXB8/IWSDT+qGeRH592bOSS9
-         e4LyrHZ+mFO2SaU2LQ6IaiNVTcAAHQi+imbXXTzAtmsuDoL6VDWxuXHOCBwMaJLM7oLD
-         lVeA==
-X-Gm-Message-State: AC+VfDzVcCeprwM01O9NMAF0EUEpjoJemQMO2D55vDKanB/whCXIaYCc
-        IYbX9bJ1bkOy0rfVMBZ5ZmKI4g==
-X-Google-Smtp-Source: ACHHUZ7Jjn3I+hqyy58I0ppJxc2pCFSnM+O7DU4Mz6qp5o5RVfk+JoJq3v6bNCtOXITFMgbwEPsHsQ==
-X-Received: by 2002:a50:ed95:0:b0:50d:a804:423 with SMTP id h21-20020a50ed95000000b0050da8040423mr3155042edr.10.1683575714964;
-        Mon, 08 May 2023 12:55:14 -0700 (PDT)
+        bh=fqNm4Pg9q9JTG5RmbcPMzT/Gazj/RL9lVE9lFqNGM3U=;
+        b=Er9Q4lC8tu6mTCKAqHHbPYNMh82SzhfxFG34d+x49kcKt5OsacvlaFoAekrZX7yTJm
+         fZtDELiD0la0dQL0ewJdULM4k9OzL1kDzP3oZV/WPetXmjygF6bV8iJOsSa5h78+25EA
+         zu1FqsIYF0bUJiiFAg5A7LZTbFvsiw4foPlnYPRBvWv2kOHN0HNWjRG6Mzc9efDqLo+A
+         OZQgImLr9ut2oOujzHdXa9TX0DVR6CMdTb9amDbmNNz16+OstVCYktg+prMWCNAQeUpF
+         HcxPpTQ0cnbuXS213GbsnvKcx6muW6tlgYKNadkaBZP+mHDUZGsMNyJV8vUTfTQJKRL3
+         mY0g==
+X-Gm-Message-State: AC+VfDztbwbiFMvGwp1lq7onUL0GUAJy6LMtCftuExIC1mlUpwe79Kpt
+        ZrENz9wBkmtkXWaeDzmz2CwWpQ==
+X-Google-Smtp-Source: ACHHUZ4hoGGr9y5oAQC/lbiqhDVCDTnjY7U6xLJ6pwta2U48lXqaMQ/4DfaYmZv1q/RCCgW4o0eXAA==
+X-Received: by 2002:a17:907:25c3:b0:933:868:413a with SMTP id ae3-20020a17090725c300b009330868413amr9144234ejc.15.1683575849436;
+        Mon, 08 May 2023 12:57:29 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa7d613000000b0050488d1d376sm6461191edr.0.2023.05.08.12.55.13
+        by smtp.gmail.com with ESMTPSA id jl21-20020a17090775d500b00965b5540ad7sm386558ejc.17.2023.05.08.12.57.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 12:55:14 -0700 (PDT)
-Message-ID: <186bc2b0-21e6-9fae-a273-ec71268bf95c@linaro.org>
-Date:   Mon, 8 May 2023 21:55:13 +0200
+        Mon, 08 May 2023 12:57:28 -0700 (PDT)
+Message-ID: <04e8e974-c09b-bfcd-85f7-07f9f3fc868c@linaro.org>
+Date:   Mon, 8 May 2023 21:57:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/7] dt-bindings: power: supply: max77658: Add ADI
- MAX77654/58/59 Charger
+Subject: Re: [PATCH v3 5/7] power: supply: max77658: Add ADI MAX77658 Battery
+ Support
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
         lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
@@ -66,9 +65,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org,
         Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-3-Zeynep.Arslanbenzer@analog.com>
- <222ed4ee-4122-7ea8-5d94-69976f247599@linaro.org>
-In-Reply-To: <222ed4ee-4122-7ea8-5d94-69976f247599@linaro.org>
+ <20230508131045.9399-6-Zeynep.Arslanbenzer@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508131045.9399-6-Zeynep.Arslanbenzer@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,64 +80,223 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/05/2023 21:45, Krzysztof Kozlowski wrote:
-> On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
->> Add ADI MAX77654/58/59 power supply devicetree document.
->>
->> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
->> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
->> ---
->>  .../power/supply/adi,max77658-charger.yaml    | 53 +++++++++++++++++++
->>  1 file changed, 53 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml b/Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
->> new file mode 100644
->> index 000000000000..1b487d82cdbf
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
->> @@ -0,0 +1,53 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/adi,max77658-charger.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Battery charger for MAX77658 PMICs family from ADI
->> +
->> +maintainers:
->> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
->> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
->> +
->> +description: |
->> +  This module is part of the MAX77658 MFD device. For more details
->> +  see Documentation/devicetree/bindings/mfd/adi,max77658.yaml.
->> +
->> +  The charger is represented as a sub-node of the PMIC node on the device tree.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - adi,max77654-charger
->> +      - adi,max77658-charger
->> +      - adi,max77659-charger
+On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
+> Battery driver for ADI MAX77658.
 > 
-> What are the differences between them? Driver suggests they are
-> compatible. Your match data is empty there.
+> The MAX77658 is an ultra-low power fuel gauge which implements the Maxim ModelGauge m5 EZ algorithm.
 > 
->> +
->> +  adi,input-current-limit-microamp:
->> +    description: Input current limit value.
+> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  drivers/power/supply/Kconfig            |   7 +
+>  drivers/power/supply/Makefile           |   1 +
+>  drivers/power/supply/max77658-battery.c | 633 ++++++++++++++++++++++++
+>  3 files changed, 641 insertions(+)
+>  create mode 100644 drivers/power/supply/max77658-battery.c
 > 
-> Your description is an exact copy of property name. That's not helpful.
-> What do you limit? Total current? Charging current? Top-off current?
-> 
-> You have default value, why it is not here? minimum/maximum?
-> 
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 4b68bbb1e2a8..f9556f4b9e35 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -572,6 +572,13 @@ config CHARGER_MAX77658
+>  	  Say Y to enable support for the battery charger control of
+>  	  MAX77654/58/59 PMIC.
+>  
+> +config BATTERY_MAX77658
+> +	tristate "Analog Devices MAX77658 battery driver"
+> +	depends on MFD_MAX77658
+> +	help
+> +	  Say Y to enable support for the battery control of
+> +	  MAX77658 PMIC.
+> +
+>  config CHARGER_MAX77693
+>  	tristate "Maxim MAX77693 battery charger driver"
+>  	depends on MFD_MAX77693
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index af4bd6e5969f..e5a425d333a7 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -77,6 +77,7 @@ obj-$(CONFIG_CHARGER_MAX14577)	+= max14577_charger.o
+>  obj-$(CONFIG_CHARGER_DETECTOR_MAX14656)	+= max14656_charger_detector.o
+>  obj-$(CONFIG_CHARGER_MAX77650)	+= max77650-charger.o
+>  obj-$(CONFIG_CHARGER_MAX77658)	+= max77658-charger.o
+> +obj-$(CONFIG_BATTERY_MAX77658)	+= max77658-battery.o
+>  obj-$(CONFIG_CHARGER_MAX77693)	+= max77693_charger.o
+>  obj-$(CONFIG_CHARGER_MAX77976)	+= max77976_charger.o
+>  obj-$(CONFIG_CHARGER_MAX8997)	+= max8997_charger.o
+> diff --git a/drivers/power/supply/max77658-battery.c b/drivers/power/supply/max77658-battery.c
+> new file mode 100644
+> index 000000000000..4948ef227db1
+> --- /dev/null
+> +++ b/drivers/power/supply/max77658-battery.c
+> @@ -0,0 +1,633 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (c) 2023 Analog Devices, Inc.
+> + * ADI battery driver for the MAX77658
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/mfd/max77658.h>
+> +#include <linux/module.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/regmap.h>
+> +
+> +/* Default value for SALRT min threshold, in percent */
+> +#define MAX77658_SALRT_MIN_DEFAULT	1
+> +/* Default value for SALRT max threshold, in percent */
+> +#define MAX77658_SALRT_MAX_DEFAULT	99
+> +
+> +#define MAX77658_IALRTTH_RESOLUTION	8567
+> +#define MAX77658_CURRENT_RESOLUTION	33487
+> +#define MAX77658_VOLTAGE_RESOLUTION	78125
+> +#define MAX77658_FG_DELAY		1000
+> +#define MAX77658_BATTERY_FULL		100
+> +#define MAX77658_BATTERY_LOW		40
+> +#define MAX77658_BATTERY_CRITICAL	10
+> +#define MAX77658_MAXMINVOLT_STEP	20000
+> +#define MAX77658_VALRTTH_STEP		20000
+> +#define MAX77658_VEMPTY_VE_STEP		10000
+> +#define MAX77658_POWER_STEP		17100
+> +
+> +#define MAX77658_REG_STATUS		0x00
+> +#define MAX77658_REG_VALRTTH		0x01
+> +#define MAX77658_REG_TALRTTH		0x02
+> +#define MAX77658_REG_SALRTTH		0x03
+> +#define MAX77658_REG_CONFIG		0x1D
+> +#define MAX77658_REG_DEVNAME		0x21
+> +#define MAX77658_REG_VEMPTY		0x3A
+> +#define MAX77658_REG_AVGPOWER		0xB3
+> +#define MAX77658_REG_IALRTTH		0xB4
+> +#define MAX77658_REG_CONFIG2		0xBB
+> +#define MAX77658_REG_TEMP		0x08
+> +#define MAX77658_REG_VCELL		0x09
+> +#define MAX77658_REG_CURRENT		0x0A
+> +#define MAX77658_REG_AVGCURRENT		0x0B
+> +#define MAX77658_REG_AVGVCELL		0x19
+> +#define MAX77658_REG_MAXMINTEMP		0x1A
+> +#define MAX77658_REG_MAXMINVOLT		0x1B
+> +#define MAX77658_REG_MAXMINCURR		0x1C
+> +#define MAX77658_REG_REPSOC		0x06
+> +#define MAX77658_REG_TTE		0x11
+> +#define MAX77658_REG_TTF		0x20
+> +
+> +#define MAX77658_BIT_STATUS_BR		BIT(15)
+> +#define MAX77658_BIT_STATUS_SMX		BIT(14)
+> +#define MAX77658_BIT_STATUS_TMX		BIT(13)
+> +#define MAX77658_BIT_STATUS_VMX		BIT(12)
+> +#define MAX77658_BIT_STATUS_BI		BIT(11)
+> +#define MAX77658_BIT_STATUS_SMN		BIT(10)
+> +#define MAX77658_BIT_STATUS_TMN		BIT(9)
+> +#define MAX77658_BIT_STATUS_VMN		BIT(8)
+> +#define MAX77658_BIT_STATUS_POR		BIT(2)
+> +#define	MAX77658_BIT_CONFIG_AEN		BIT(2)
 
-BTW,  this is duplicating constant-charge-current-max-microamp. If it
-has different meaning, you need to explain this in description, not just
-say what property name is saying.
+Odd indentation
+
+(...)
+
+> +}
+> +
+> +static void max77658_fg_parse_dt(struct max77658_fg *max77658_fg)
+> +{
+> +	struct device *dev = max77658_fg->dev;
+> +	int ret;
+> +
+> +	ret = device_property_read_u32(dev, "adi,valrt-min-microvolt",
+> +				       &max77658_fg->volt_min_uv);
+> +	if (ret) {
+> +		dev_dbg(dev,
+> +			"Could not read adi,valrt-min-microvolt DT property\n");
+> +		max77658_fg->volt_min_uv = 0;
+
+So you have defaults? DT binding is missing them
+
+> +	}
+> +
+> +	ret = device_property_read_u32(dev, "adi,valrt-max-microvolt",
+> +				       &max77658_fg->volt_max_uv);
+> +	if (ret) {
+> +		dev_dbg(dev,
+> +			"Could not read adi,valrt-max-microvolt DT property\n");
+> +		max77658_fg->volt_max_uv = 5100000;
+
+Ditto
+
+> +	}
+> +
+> +	ret = device_property_read_u32(dev, "adi,ialrt-min-microamp",
+> +				       &max77658_fg->curr_min_ma);
+> +	if (ret) {
+> +		dev_dbg(dev,
+> +			"Could not read adi,ialrt-min-microamp DT property\n");
+> +		max77658_fg->curr_min_ma = MAX77658_IALRTTH_RESOLUTION * (-128);
+
+Ditto
+
+> +	}
+> +
+> +	ret = device_property_read_u32(dev, "adi,ialrt-max-microamp",
+> +				       &max77658_fg->curr_max_ma);
+> +	if (ret) {
+> +		dev_dbg(dev,
+> +			"Could not read adi,ialrt-max-microamp DT property\n");
+> +		max77658_fg->curr_max_ma = MAX77658_IALRTTH_RESOLUTION * 127;
+
+Ditto
+
+
+> +	}
+> +}
+> +
+> +static int max77658_fg_probe(struct platform_device *pdev)
+> +{
+> +	struct max77658_dev *max77658 = dev_get_drvdata(pdev->dev.parent);
+> +	struct power_supply_battery_info *info;
+> +	struct power_supply_config fg_cfg = {};
+> +	struct device *dev = &pdev->dev;
+> +	struct max77658_fg *fg;
+> +	int ret = 0;
+> +
+> +	fg = devm_kzalloc(&pdev->dev, sizeof(*fg), GFP_KERNEL);
+> +	if (!fg)
+> +		return -ENOMEM;
+> +
+> +	fg->dev = &pdev->dev;
+> +	fg->regmap = max77658->regmap_fg;
+> +
+> +	fg->psy_batt_d.name = "max77658-battery";
+> +	fg->psy_batt_d.type = POWER_SUPPLY_TYPE_BATTERY;
+> +	fg->psy_batt_d.get_property = max77658_fg_get_property;
+> +	fg->psy_batt_d.set_property = max77658_fg_set_property;
+> +	fg->psy_batt_d.properties = max77658_fg_battery_props;
+> +	fg->psy_batt_d.property_is_writeable = max77658_property_is_writeable;
+> +	fg->psy_batt_d.num_properties = ARRAY_SIZE(max77658_fg_battery_props);
+> +	fg_cfg.drv_data = fg;
+> +
+> +	INIT_DELAYED_WORK(&fg->work, max77658_fg_work);
+> +	ret = devm_add_action(&pdev->dev, max77658_stop_work, fg);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "Error in setting delayed work\n");
+> +
+> +	fg->battery = devm_power_supply_register(dev, &fg->psy_batt_d,
+> +						 &fg_cfg);
+> +	if (IS_ERR(fg->battery))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(fg->battery),
+> +				     "Failed to register battery\n");
+> +
+> +	fg->battery->of_node = of_get_child_by_name(dev->parent->of_node,
+> +						    "fuel-gauge");
+> +
+> +	if (!fg->battery->of_node)
+> +		dev_err(dev,
+> +			"of_get_child_by_name\n");
+
+Same problems a previous patch...
 
 Best regards,
 Krzysztof
