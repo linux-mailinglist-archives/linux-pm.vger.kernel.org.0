@@ -2,55 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DB46FB4A8
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 18:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629276FB52D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 18:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjEHQFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 12:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        id S234148AbjEHQfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 12:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbjEHQE5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 12:04:57 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2F855B6
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 09:04:56 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4ecb137af7eso5329225e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 09:04:55 -0700 (PDT)
+        with ESMTP id S234114AbjEHQfa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 12:35:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0487E5BA9
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 09:35:29 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so9079750a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 09:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683561894; x=1686153894;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z+Jhe48VXAoN+8wGaqTOooemilYAfgL+ZuJTPfMlkfg=;
-        b=TTypQOY+hHf3wO324ueVxAch2AT6S/ea9n9ojC3nDAJa//ZeKbhvoDg9Qc6oiJRs/z
-         EurZywZXEK3V8VIIoX6hdy6T2zvDXKlu6pVryNV22xBgwSZeuC9mZCU+fFy+5kZMuJna
-         9az+ATyULir7gLKnRp2k/d+4kKVXBYAio/SfehztA5iphcnl54J5VV9iYQnKQgQF1CXw
-         AgoaNxA9azUsNz5Cl39fQhsY8eiCBQjywtpQC0FibEPnXsa0CqP2C1GTXbGqJ2Ziqcbe
-         43RVpkZUR6+c+FNXZeJpUaitMFsF517n+vQiu+kmjoUFVSpN1mMg3EwAUYyxqLfANO1U
-         Jn+w==
+        d=linaro.org; s=google; t=1683563727; x=1686155727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUEcs1Xi1xeQy3sb8mO7FcLmtClbP8Nvb3I3pqaSRzk=;
+        b=uxj7FzIQt2huhDQKebHOAM0KoBjTNYYtsr5GTdJFWqy4cuXaBspKqAN7C/32SDFPaE
+         e5wgqnBude0Ntl5qIJvM2Nj1mrjkEtgIyXqkg0lXVu6Ur/6GMn6ypcBQSFTmpcYHLExw
+         x0IDah4hQnOm+g3xYGldP7RK3gsqqlNgvU4Cek3uDioS3NaXTR3q6hxgosGGrGAa4sqp
+         cxEoSEZVhCK0ZAxbUHVTiIOtnaq3syB91qDsoftb+GRA4xLJp7c6JtGNTsMWfbaNMPUG
+         cwJ4GjCrX/IEsEWvuPkkgon29lGSQKGfyLuD69qRaH6422/GPrajcJBlTGBFZQb3a+h6
+         f4cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683561894; x=1686153894;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z+Jhe48VXAoN+8wGaqTOooemilYAfgL+ZuJTPfMlkfg=;
-        b=R1nrRUmTguHFXH99ro2oW5c1UIv+7y0519pJHuLTLhCWNI03SpeM2ppCTc70VBWX8o
-         rS8rAbeKLP4dTs8II8eOTY0YsD+oYVYlfvoNYjAy7aQsXlafoktPRLv3E400hNUyOJUW
-         M/YQW3RSimGX2gann2NjFauImOOHbu9oW0VaOhDg0yrELHA9CXY6k/FZz6dAwzbxrZlL
-         84/cSkKhFVKsbBQgfo1haiBvmiXFZJMW91PPaV9Os6T/WEwjza662cjoyelE3Yv5hvek
-         cuun/64jf+TtM1++/Nuteuhxk1NaD0K4pw///nbLxpn13HpbMiKXUSvNsh/9yHjXHltZ
-         YkQw==
-X-Gm-Message-State: AC+VfDyCt8AUTzPLkRRGiePRTvSH+pJj/nPIBwNKjWyt9o14KnHhXGIm
-        F7iZ1vSh0E4qlUVZ0V1+Ekog2Q==
-X-Google-Smtp-Source: ACHHUZ5+5DsVvjw0JvnA7oomUxPS+m38axatsdA/piUWxUQ3chP4cbNENEf1Gzs+rCD6LYZbeco5uA==
-X-Received: by 2002:a19:f007:0:b0:4ed:b061:18ee with SMTP id p7-20020a19f007000000b004edb06118eemr2697395lfc.22.1683561894413;
-        Mon, 08 May 2023 09:04:54 -0700 (PDT)
-Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
-        by smtp.gmail.com with ESMTPSA id h3-20020ac25963000000b004eff4ea8dd3sm32372lfp.76.2023.05.08.09.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 09:04:53 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
+        d=1e100.net; s=20221208; t=1683563727; x=1686155727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUEcs1Xi1xeQy3sb8mO7FcLmtClbP8Nvb3I3pqaSRzk=;
+        b=iuiDSobc02IjHncR/zUDrncluC0Z4tqvSV1J4ZZiddKXiz0lXOBuXL+mqaZ5FqYc+z
+         qGHI8iG6kNS9HtM4U1EJoCR4fxvMHGD/x3GYl2M5E2Al/PPZkJEnuc6Pe/oN5eE5D2L2
+         09PtPmx221rQ8xwQKSpFjG7JeyCXaj8HFYefcWCPuWLzlJhREMLsj6fdM4Sjx63jAa/l
+         X949MLEwNoA10XRryU6GmaNu7CGxv/d/arEhpmgXC+rj+zNRLoDqbYVJLzRjM32Zkefy
+         Vn6VTmheNFACaHfAdVGjXU/uhuAi9+0WiNPY6ZD/HM3wNYxDkT4Q2GUKLEM/cgNnO3aq
+         Y3eQ==
+X-Gm-Message-State: AC+VfDwJVNYQg5rkx73BQmBPIxtJi8qbLuzmbi1EpCTNNw5mN2uToRw9
+        7ylHK7PxC3lY92OLMlgExqLmsQ==
+X-Google-Smtp-Source: ACHHUZ6JxK1GLPRkiwjpCYkPcMT+crbT6/Dx1pkt5m2S3nIS0wjuRzuTyipDzsrF9lzIoDU7ldHjoQ==
+X-Received: by 2002:a17:907:96a3:b0:94e:d17f:eacf with SMTP id hd35-20020a17090796a300b0094ed17feacfmr10203368ejc.23.1683563727469;
+        Mon, 08 May 2023 09:35:27 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id ml18-20020a170906cc1200b0094f124a37c4sm184504ejb.18.2023.05.08.09.35.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 09:35:26 -0700 (PDT)
+Message-ID: <8880cccc-aed2-1517-eb41-60ac43c3bef1@linaro.org>
+Date:   Mon, 8 May 2023 18:35:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 5/6] ARM: dts: qcom: apq8074-dragonboard: add onboard
+ leds
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -59,17 +67,15 @@ To:     Sebastian Reichel <sre@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 6/6] ARM: dts: qcom: apq8074-dragonboard: enable coincell charger
-Date:   Mon,  8 May 2023 19:04:46 +0300
-Message-Id: <20230508160446.2374438-7-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230508160446.2374438-1-dmitry.baryshkov@linaro.org>
 References: <20230508160446.2374438-1-dmitry.baryshkov@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+ <20230508160446.2374438-6-dmitry.baryshkov@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508160446.2374438-6-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,32 +83,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable coincell charger for the coin battery which can be installed on
-the APQ8074 dragonboard.
+On 08/05/2023 18:04, Dmitry Baryshkov wrote:
+> The dragonboard as three LEDs: red, green and blue. Add corresponding
+> description.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../arm/boot/dts/qcom-apq8074-dragonboard.dts | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+> index 630180edecfd..07db6451f273 100644
+> --- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+> +++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/input/input.h>
+> +#include <dt-bindings/leds/common.h>
+>  #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>  #include "qcom-msm8974.dtsi"
+>  #include "qcom-pm8841.dtsi"
+> @@ -69,6 +70,29 @@ msm_keys_default: pm8941-gpio-keys-state {
+>          };
+>  };
+>  
+> +&pm8941_lpg {
+> +        qcom,power-source = <1>;
+> +	status = "okay";
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8074-dragonboard.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+Broken indentation.
 
-diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-index 07db6451f273..93a059641957 100644
---- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-+++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-@@ -58,6 +58,12 @@ eeprom: eeprom@52 {
- 	};
- };
- 
-+&pm8941_coincell {
-+	qcom,rset-ohms = <2100>;
-+	qcom,vset-millivolts = <3000>;
-+	status = "okay";
-+};
-+
- &pm8941_gpios {
-         msm_keys_default: pm8941-gpio-keys-state {
- 		pins = "gpio5", "gpio23";
--- 
-2.39.2
+
+
+Best regards,
+Krzysztof
 
