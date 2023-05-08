@@ -2,217 +2,278 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3206FB649
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 20:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44FA6FB667
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 20:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbjEHSSZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 14:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S232429AbjEHSrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 14:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbjEHSSX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 14:18:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EEC5FC3;
-        Mon,  8 May 2023 11:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683569902; x=1715105902;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=TIN/MAliZopfaCQKVBcTP0iU6r1xj4aAiotVNkUmmFM=;
-  b=VZ9aUYB/YJN42OGVBCVU6Lt4w3T5bbGREbSL0B4AWxNqHm0Tq1cD6Dpy
-   GU1hw6IqQZL/IXoFLefwpFQ0mzKmT7M65heKYQUBA0dyh0yRu0CrSRCUh
-   a9tJAOpEXeCWJ2MNimVcVH5+80Eli9Qerv9kbYnoCThu93GOQmc9Bcd/i
-   IfzldBNJpc6s9KG+kOmXXxPu8ZRvdLEPkFegqiui0S6ixyGUfTdDjxHuT
-   BYfP7VQjO8ev3a6lF2uxxYMzaioTA3jUxwaKy6ZXDKzkVKCHSOA6+SuCS
-   1K/YUGdVvLPWoGxNpjrLazxOpbsKnPmsi/BMWb/xCG+oeQUbpG7ydH20Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="415283495"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="415283495"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 11:18:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788205487"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="788205487"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2023 11:18:21 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 11:18:20 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 11:18:20 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 8 May 2023 11:18:20 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 8 May 2023 11:18:20 -0700
+        with ESMTP id S229492AbjEHSrB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 14:47:01 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10olkn2013.outbound.protection.outlook.com [40.92.40.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620F659F7
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 11:46:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ICUtO9Od3VavMYKE5CCOJCa+8mt9WbzCjzLXXyRzcg1rGkLs4mBI3projtuFZ3OfNXt1vkr3bv37/NcwjxGltptNDRyK7Pi/z0vVF6vXx5Pigc/jZOaZF645EKfF3w6DW1sdIiJv6c0PGAfBL9smUXtwUMFzfgohJKWlQpT3NslCOFgYPPUA9gsVJLa2Ho5ZgMRL+QFVTG0TTlGbj7ln0auJTE3H/MbQ006krcAFmpuKhzB3sZzx0kGISA6Vk/Ox2N6xHp5/0/AYxh5+5Fg6WNnfEjOrQhBzg1xGjVASxQrcDsPVsBmscYycT5K3dEh7AeXYw3Xwjg0uA+vns+D/Zw==
+ b=Xk7MCguC6MZ93RKtJTvvARClslJumjKojLOBxdwFg8cyf+9sV69jT5rmyiT+Pnc1xmg/cRoCQ5jlkq6lBuQtvHD4TmoHCV2dWIfSckb6T7u1tsbtrXr4CKHRC8dJCOQl43yiYA5p4Pp5kMC2RVfKsnGGLuUy7eXLURR/HbfcxJhXEpzgl8Mk1fhZMlhJTIwVUSGFHN+mekUhulVo9PF/6vKiP159X3in4aNRJGAiksm/8PZpjvJ2UAYSIOxOl7qlt5Qr45sW6PV4M/QgFsJ7UtEMn7DbEXGZLq2rgmQ2+imN07XmlU0PSVgn481IXTdwnR6fGIqwmND1w2lZ4zewQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SkNDIzoeRWzvDRpB+jvfwQXIV6RGKmlT3qRuCr6FZS8=;
- b=YhToZ/S18PuLp+wusk47s9/yaD4IpGN80yrTtfaScX4bhnoJ1fvmmpOAplPGoczwmM0g/4cGtBuvtnhGDUiwhmbdM+hxEHtx20q8j8QkJ9+wDiW20y1nyM5oyj68nrW9EmAOXH3fKjbqG7cIRmzQF8QgI2Z1UlhUrp+j5zftpVNUxakJmmTWwsuBlPu4WVM100KA/4Es841EB95OqPG1qJpSbKrOBg6bQPVLGAiitks94xZKbtKxzMFr7PJMumevWn/Zi73kbl8g8WQLQ/WoEb2Oj4TssN2OMwK8WgW1XUnDwz/eMR+aiZl3wbaUof1+w1z986L6SbQ67OUZJYxwNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by DS0PR11MB7997.namprd11.prod.outlook.com (2603:10b6:8:125::14) with
+ bh=xPZwkBAG4gyb1jECRYfbZzvv26gWXsN+3KlOfpyyj/I=;
+ b=WKMAvYPUnF6DkvDM1MJjvpFnES1VZV7gJ1kiooNNJLAlG36UjJzUvx8zWtLmZtNXlpISOyJvHLUNvfJb3u1CfTM/PH0xvrCrYzX6dVKHwCJ6m12xI7jsQiVpLwjA7yTKz68rul+rcJHSc9Uol9pCQblw3wVppVzoPyCj+2rg0MsGyQKP9J02VBnCU2dWtr05cL6eYOwFUmElSr6cyx/k+qHug7KZ/ML90xqEfpq6nHbiUkOfDu78EZ3Ez17jJ3DmZWarRsKpp/CvmbQzgFifKfWyJEnFyouoVgZCBqKlztTNBJ78M96Uwd7lZILG0FXharbhaCVKvlvMejP9K7gxMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xPZwkBAG4gyb1jECRYfbZzvv26gWXsN+3KlOfpyyj/I=;
+ b=rO3LETKUC1tig8qapr+1wbFEGbjoJIO/XjMGUWO5ywZamFBx9svScSV/qwjhcXjJwmIWQMD4Edd77SabwM0RkRPEeWk8w79lwQgYFskX94Lyv+Gbi3RNcxDLAvCt2e6zmH7RkufmjxKkEf8ZR/lsem9Q0b545PMDnCZHFlpBIj8bz008IJ0MtDfPGPlxsWwg665MSiZHnUpj6TaruuXxti4rDhOoufAHULuvUMFYpaTlzaRU3/Nq8y/Q3mYJ/hYrVFaauxPWf5rI81CE860RuMyyn0+pDpvXhda1dOGkUYzaq6Y2NU0XyimbJ9qSVAOoNVdErWP1sRq6izV169tq8Q==
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com (2603:10b6:805:f9::31)
+ by DM6PR06MB3914.namprd06.prod.outlook.com (2603:10b6:5:8b::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 18:18:17 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::cfb2:e73:907d:cb77]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::cfb2:e73:907d:cb77%5]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 18:18:17 +0000
-Message-ID: <90ce2028-dfdb-9b9a-24a6-9f9210cedbcb@intel.com>
-Date:   Mon, 8 May 2023 11:18:14 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 08/12] x86/PM/keylocker: Restore internal wrapping key
- on resume from ACPI S3/4
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <dm-devel@redhat.com>, <gmazyland@gmail.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <tglx@linutronix.de>, <bp@suse.de>,
-        <mingo@kernel.org>, <x86@kernel.org>,
-        <herbert@gondor.apana.org.au>, <ardb@kernel.org>,
-        <dan.j.williams@intel.com>, <bernie.keany@intel.com>,
-        <charishma1.gairuboyina@intel.com>,
-        <lalithambika.krishnakumar@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>
-References: <20220112211258.21115-1-chang.seok.bae@intel.com>
- <20230410225936.8940-1-chang.seok.bae@intel.com>
- <20230410225936.8940-9-chang.seok.bae@intel.com> <ZFWMwQc4NKg7ueqG@gmail.com>
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <ZFWMwQc4NKg7ueqG@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR10CA0010.namprd10.prod.outlook.com
- (2603:10b6:a03:255::15) To PH0PR11MB4855.namprd11.prod.outlook.com
- (2603:10b6:510:41::12)
+ 2023 18:46:57 +0000
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::c4b8:5076:f9e6:114a]) by SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::c4b8:5076:f9e6:114a%6]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 18:46:57 +0000
+Date:   Mon, 8 May 2023 13:46:53 -0500
+From:   Chris Morgan <macromorgan@hotmail.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [bug report] power: supply: Add charger driver for Rockchip RK817
+Message-ID: <SN6PR06MB534254918F9D84F996BFD2ACA5719@SN6PR06MB5342.namprd06.prod.outlook.com>
+References: <dc0bb0f8-212d-4be7-be69-becd2a3f9a80@kili.mountain>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc0bb0f8-212d-4be7-be69-becd2a3f9a80@kili.mountain>
+X-TMN:  [YJJa+PGDTlCwxWAPZUIaLp23oOTmTEBX]
+X-ClientProxiedBy: DS7PR03CA0351.namprd03.prod.outlook.com
+ (2603:10b6:8:55::16) To SN6PR06MB5342.namprd06.prod.outlook.com
+ (2603:10b6:805:f9::31)
+X-Microsoft-Original-Message-ID: <ZFlDnb/jjQRT0+e6@wintermute.localhost.fail>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|DS0PR11MB7997:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed718c69-7605-49d8-9f41-08db4ff09883
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: SN6PR06MB5342:EE_|DM6PR06MB3914:EE_
+X-MS-Office365-Filtering-Correlation-Id: bc0b9c04-973e-4166-1f9b-08db4ff4997d
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7DrBZnYs+qp2unAhOBMmdr4D1jWBo2YkCjfxaZHwHHDxP8Y6ccsMc4aErUcEIiYlwQF9WEchInPUG85DD7sWAxsP1bxlbATgYQ65YGaZ87xWAacJyPRuYdCoxG+4DwsihTsZPhCAbnJ1mrH92vR2Z1TUhskqnum8A9V83CZTbp87WUQ7bgcBr7tRtvCye3Qxi5OjblMp3wLcnYbcUsDBDYCAiwgE/ZlzILwmyuv9oR8Z0eh3fM71TzHJ3RMc6NBiXABYVuZbyXIXk9uPzYZark5LYZuTaVrpe4gKo4Ie2CFYDrtCU/OcjnLBW2EwlsT15x08z9MuZ2h7xJF4ZL9w8btC/Vn7kfUwU6yKrobwFZ1Wls/JyMRYcUk2qPM7KYriNY7iuykvzT8LncGkNNWqnAeG9nnAfwRxXp8MCGqXOG/bBeyvrIMgtKaFHr4eD60F1dz3ao/zIPnAAfP7wQXpS2eYWCLBgCJxs4ssMloyjadSCm3PqEQbhGOM1eDWrIIP25e8EesW5C8Ns+2ZzXKyarhAhk6gmynk42QCk48jDIrMwckB2wXLzDzIxLm7VSVbIbe3R5FeJkwKN1X4OZWiuXMSt54qqPy3hTnmN2zpWCk2M80nXA9Uye/NJXRI4ARwZapNT3b7nB322mMms1GlrA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199021)(8676002)(8936002)(5660300002)(2906002)(7416002)(82960400001)(36756003)(38100700002)(478600001)(6486002)(6666004)(54906003)(31686004)(83380400001)(2616005)(53546011)(186003)(26005)(6512007)(86362001)(6916009)(4326008)(31696002)(66946007)(6506007)(316002)(66476007)(66556008)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 7QNO/w3Xqoe956Chgk/YL1q0QiIj8dZ6HoDGjQGtSL88X9+0ePhrlwQgdIyTlkSXsLVQYJo8p5QeX1HbJj1byNt0+Fvx/jHFtA9W+GQmt5oZN8z8jP4XFc5pp3IETrafJlkyisoiGPQwo3uazJxp3LwnfUBoNqkAImWQStWYhChWGwSMWmnUzD538YdT7zBYmroTgWGtyW8D8wrhZbGtCQSmYddBzjBPkG2KW396ZVNU9zFVtyDPuJsCf2jKZOV62GYd/Al0GpiSFMeRpAQ2BHm/BbWi+DR2vkGcmN4id1pCIhURq2ng/vy7vgk5mgN8ZkUpv79HJ6XVOmEq5SB5RJ7nKPE3nQqbNjEXxBV3o5AnunR6doWQtZ6RPV9Xc7ncbl7oJHF6EguW241QkUFmemw3oq1FO62no0A2td8c6fc/DvUGqfqCZRQENcM5wMqtvMfvdCRLmTBsM5umTZAN9LyyJltGfyHxiyY0pnDwnLgvAFmjJEKdbW0YgorAsp4fXldiDcKWG9sNsUoxmjN/tWECuXyQFSiPjgTUgidgwDmSm9/P3P9US6DRTCvn3gGYXYTmZuOLsAci5oUdK5NDJLxdBP5NzFePM0bvbw6Dfncg7bQ7p3ehS7zQ+ejT0uAw
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VlhNeTBicnd3dXdidXdtWEdqK09HUkpJWkIvM0FwSWVIUzM1M2xUNWY5UUZF?=
- =?utf-8?B?bmw2aGlpcGVpbnpJVU1VVEp5WFIwWEF0d2tBaERObWpXS1lEMmk2Z2gxNWk2?=
- =?utf-8?B?WHJXVTZ1QWt4SU1JdUg2OEZ0cHhsN25pVVNQc1dFbEFMTkdUeEtDOUluaFFr?=
- =?utf-8?B?cjZYUUlLUjMwaWhpdkZSRzVOU0QxMXJPVEdSNHN3anNhUkowR0pKU3Q0Ri9T?=
- =?utf-8?B?L0RCdTB1WDFuTThHWFBPS3VEdDdORHpjMlBxWmUzWXFTclRhbGZwcXZOYlJV?=
- =?utf-8?B?djBqcWxwcnhEQXlQMWxScXlkeGRlM0NTbS9nMXNJQUZBb2wrZmx0QmFadVVB?=
- =?utf-8?B?L0hEVUgrZElISG9MMlR6bE52YkJtWGp4clB4OUh1YlhlYzYwN3gxbjUwNm5w?=
- =?utf-8?B?VDlWSjVoYm50UlE1SzlqaVVNcThPTytNc0lPTHBNeHExcTRSODVjYnQydEpx?=
- =?utf-8?B?b1F4UzBWREgxelc1OHhKdmRIK0xHNXZMYWJJWWU1djR2NERjYmtlODJZV1Ft?=
- =?utf-8?B?NTZWSHdBQmMwOS9od0k5a3llRi9tbzFxYXpEVkxzUVFLOHJlQmFTUmNobngw?=
- =?utf-8?B?UzFPZkkxNVoxcy9oL1lKdnUxRkpQa1hyb09GNVJTMVFPcEpLWHkvbnNZU28z?=
- =?utf-8?B?RlV6OTgxcDhiYW43UG5mR1F4SUV5N1RCKzBQdmlocjA0VmlTWktoSnRSdGlW?=
- =?utf-8?B?Y3pTaTZ4Q0wxdE9Qb1I1TUFHNXpxaWFTZHV4NFI1TTBVKytDbnVseDExUGVD?=
- =?utf-8?B?Z1hqYTFsOVRCYlQ1Mk9DbDVDMUZ2TFo3WTNlTmhMRFNZTEkxdDl6YXUzOEZ5?=
- =?utf-8?B?WEhHNmpIWW5ac2NMWEdmc0dGeldGMUdJbytTS0RBYXBjWGRzQi9ZQjA5UHQ2?=
- =?utf-8?B?S1lCdGdQOWR5aDNyUWJ4NkE4QlJ6UUwyYUVNQkEzbXdCSmVNNVN4ZHZwZEhI?=
- =?utf-8?B?SmlheTBVaFRkemdlbmdjcUFCZkdzN1BOdkFzemhzcFhLbjkvQ2djY2cyRG1v?=
- =?utf-8?B?UjhJM0pRaXhlTVQ0elBNK0xoUEZnQlk0Nks2Mnpuc1k3SWFPLzFPMHlWWVJv?=
- =?utf-8?B?SGxoK3k0VXEzRTZabHMvQUdtTlptZ1NWZk15Y3h0TlBkK0ova3RxRlhSOFJq?=
- =?utf-8?B?ZUtMUUwrN0d4TENoaDc5RlRWSzJoK2lwQmRRcnV6Q1JNeDFqczFMaG5jOE9N?=
- =?utf-8?B?QjY3cE9QWms1TitkQ2ZMVjZ4S05LOXVmNUFhWmNMZGYrVlpsaStheEs2MmRH?=
- =?utf-8?B?bEx2L2x5bnFDeTA3UGdHcDZPRlNZRTA0L3RhM2tGSUFTYngvTE1UZGt2RWFo?=
- =?utf-8?B?K29UdEk4YTFEbnJzS256WXJWOHZiMk81c0pETlJLYzQ5dVJTRS9XYnY4Qm5x?=
- =?utf-8?B?eFRyTWh2ZnpvUUhYUDNwb3I4dHFsengyQzVoRlVZQ1lDdWhHZm9JVy80RWJP?=
- =?utf-8?B?bStMQzhhT3Q1ZUU0Qks5U3dPeXU1SmVYOG9yMnlyMVdFQy9ra05ISmlKR1JS?=
- =?utf-8?B?UVJkRjBzemJuVVdLS2VJYm9jaDVGOVdUeUxMQXl2cHU0U0FuNTBya1V4WUFo?=
- =?utf-8?B?MGt4REJEZElhMFpMOURzd0o1SGY4RVdMSmhkMWxLakpHWEVmSEtZeUI1bVNk?=
- =?utf-8?B?SVVlSnVnZlEzZjBXMWtaOXd1OTBKY1VYeVE0TjdRSDZCVnlGdUwzcTZqTUZ5?=
- =?utf-8?B?TS9vRk9WSXIvUDRkbDh6dEE4TWRycWxtcmdTTDd5Mko5bFFVR2dvYlhqM0x4?=
- =?utf-8?B?bERZMlBhdUMvOUxFbkUzeWpJZ2ZhLzNwM0NWZjRUTE9EbngzbTd2OFhIL1B3?=
- =?utf-8?B?bHdEb0ZQdFYydks3YlcrZm5semErTWFtVW5Kdy9BSFRpS3pNaFlHMFZlUUxx?=
- =?utf-8?B?VkYyNFovVVdqdGw0SGsxbEN2ZktmeTNYczdjbkRFazVlRi92NDRDNUx2VFZR?=
- =?utf-8?B?VnkyTmhOOTA0ZkU0NnhFQjVTd0JJdHM3ZlhmSFV2bUoxeXlmazB0ekJRMkM0?=
- =?utf-8?B?YmpacTc2VnE1dEZrNmt1Yk5ZUTdkVGY3cGhFb0tSREpsbm9JT2hMMUQ1blFm?=
- =?utf-8?B?MXRwaTVEVEpoVzJpaTRUMnpSbFZxUVNZeEMrUGw4Ynl1dEVXY0ZOZnUvNzFL?=
- =?utf-8?B?SUdUQlpmbVpiVTNKWTJkSVllUDk5NzhXMy9jNGJ5VGh3VnNHZklYblU0cDE2?=
- =?utf-8?B?MlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed718c69-7605-49d8-9f41-08db4ff09883
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3PUC5eW8Eh/Z8qF5gPovbtV4en6d9bOeFRXpkl5d0yZsjhJM8rtTocoUNAdd?=
+ =?us-ascii?Q?y7yAxblkdwksFRL+nAuUKQ1OSQlvsdq16swSEyddQPXHxT2hnV+pz6hi5CAZ?=
+ =?us-ascii?Q?VbN+TRZ5HsFjq/ceF0ByBy5QSR+C8kNdz6wsZ6SS8Nwf/5at9i7+IRl4O57A?=
+ =?us-ascii?Q?ERaH2H5gWlVDC/bUZ/NclMkRI6JhsnCfdGgAjBSkF/qv4Ahun0si50y/J6GB?=
+ =?us-ascii?Q?wUnEYI15rS0ex0Cj0+MCVRd+dEo8m7teOE2IeLNDqvMWvkWjUCAAR63uaE3u?=
+ =?us-ascii?Q?rQOVGJZzZciPF9+nvp1jN9EaT06ysJdCEjG2htm+cbAw4tzw66oFLUpy45fz?=
+ =?us-ascii?Q?sAS9xil6svo1Utfaegul8x74yhE7QZlKbOrKK/BDtI2O7xpcU/qeB4MqQ/z8?=
+ =?us-ascii?Q?8CPWY/AvXwtBwLDRLC6NG8iDII85dGiTTgK6xQdOZPMcTmyc+qmJmEzslAES?=
+ =?us-ascii?Q?fuPFvpXk9QIv7qIxZ++XMYOG3lRok6AiG5R7bbLx1DqaB3m+LxQIOVacqKs/?=
+ =?us-ascii?Q?du0OqDzBUC2Iu7AaT0VUcDhnjjcC7yboYLkKY6ddEl4d6lbj9LPlgzodPPTu?=
+ =?us-ascii?Q?yEkYJc1USk6xpvH+4LiUztArUoherx+19/j74e49Q+LOb6cUcbxmpm/2jgDi?=
+ =?us-ascii?Q?LdXovaucbuOHpInL74Qq25lNXbqADImDm2DwZKIeSx5x04nZLmFGQfjjw+9a?=
+ =?us-ascii?Q?CR65vBA0pwltsoalPjCYBmlKR3i7ges+d0cDiAPtP8kPUn7OtgvrPe9+AITv?=
+ =?us-ascii?Q?OylkyOJPSHC55/EKM+z7hWnUBm+yM9gk8dpOKG/dsqgirM/UO5K4Zwkit1m4?=
+ =?us-ascii?Q?xWIU4Cv/BFN5k4DFa7webOQadxXrmrc1asWYOZCrFdmjsnha0/Cfn/5RQe8F?=
+ =?us-ascii?Q?MCsGOuNZKm0XGNGdVaqKTA4X6LT8nqg0tRpWjBusAVnomoVBv39+s/eBLM5i?=
+ =?us-ascii?Q?Us01O8YT+5X7fdq4S6KpeyyKFguNw5nOIYbvRm06k0543E5oydGspFbslgUK?=
+ =?us-ascii?Q?7KEyLIEnSFvizD/2zvEUrvko1n8T5Y+bR3lPvkqHgNPYQavBxR0HOKhAd/zg?=
+ =?us-ascii?Q?0TewbGuWnh8aeNl6YTmloXRGlGn2jkTgX19JJ7lWRLfmxPvu5mlhhg+ZUf+M?=
+ =?us-ascii?Q?nmrzFLzhS+m8aE80qsZAr9Prt/E7v9fQKeeSIrsmsq1FHJ2UK07ik7afkSz5?=
+ =?us-ascii?Q?5zIFOtGXOnPAz+9/HHsyy0jIOmu23+HHLIViwg=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-89723.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc0b9c04-973e-4166-1f9b-08db4ff4997d
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR06MB5342.namprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 18:18:17.5017
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 18:46:57.6419
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qf0vl5voZ3upq7glWWubEEZaC6H3/fZrTIMGNdm+Lx2Ta6M7pBZDdml3Aeib6B3RDy9XeFcCQa3Rfnc7NxZASy4fGdp7OvH9H1DCY7Vi+dE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7997
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR06MB3914
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/5/2023 4:09 PM, Eric Biggers wrote:
-> On Mon, Apr 10, 2023 at 03:59:32PM -0700, Chang S. Bae wrote:
->> +/*
->> + * This flag is set with IWKey load. When the key restore fails, it is
->> + * reset. This restore state is exported to the crypto library, then AES-KL
->> + * will not be used there. So, the feature is soft-disabled with this flag.
->> + */
->> +static bool valid_kl;
->> +
->> +bool valid_keylocker(void)
->> +{
->> +	return valid_kl;
->> +}
->> +EXPORT_SYMBOL_GPL(valid_keylocker);
+On Thu, May 04, 2023 at 01:58:31PM +0300, Dan Carpenter wrote:
+> Hello Chris Morgan,
 > 
-> It would be simpler to export this bool directly.
-
-Yeah, but this wrapper is for code encapsulation. The code outside of 
-the core code is not allowed to overwrite the value.
-
-Perhaps, it is better to export it only with the AES-KL module:
-
-#if IS_MODULE(CONFIG_CRYPTO_AES_KL)
-EXPORT_SYMBOL_GPL(valid_keylocker);
-#endif
-
-
->> +	if (status & BIT(0))
->> +		return 0;
->> +	else
->> +		return -EBUSY;
-> [...]
->> +		pr_info("x86/keylocker: Enabled.\n");
->> +		return;
->> +	} else {
->> +		int rc;
+> The patch 11cb8da0189b: "power: supply: Add charger driver for
+> Rockchip RK817" from Aug 26, 2022, leads to the following Smatch
+> static checker warning:
 > 
-> The kernel coding style usually doesn't use 'else' after a return.
+> drivers/power/supply/rk817_charger.c:1198 rk817_charger_probe()
+> warn: inconsistent refcounting 'node->kobj.kref.refcount.refs.counter':
+>   inc on: 1088,1105,1115,1124,1130,1136,1146,1160,1166,1170,1177,1186,1193
+>   dec on: 1067
+> 
+> drivers/power/supply/rk817_charger.c
+>     1048 static int rk817_charger_probe(struct platform_device *pdev)
+>     1049 {
+>     1050         struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
+>     1051         struct rk817_charger *charger;
+>     1052         struct device_node *node;
+>     1053         struct power_supply_battery_info *bat_info;
+>     1054         struct device *dev = &pdev->dev;
+>     1055         struct power_supply_config pscfg = {};
+>     1056         int plugin_irq, plugout_irq;
+>     1057         int of_value;
+>     1058         int ret;
+>     1059 
+>     1060         node = of_get_child_by_name(dev->parent->of_node, "charger");
+>     1061         if (!node)
+>     1062                 return -ENODEV;
+>     1063 
+>     1064         charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
+>     1065         if (!charger) {
+>     1066                 of_node_put(node);
+> 
+> This error path calls of_node_put() but probably they all should.
 
-Yeah, right. Will fix up.
+Thank you for pointing this out. So I should probably just add a "goto"
+that puts the node at the end, and direct every error to this? Just
+want to confirm.
 
-Thanks,
-Chang
+> 
+>     1067                 return -ENOMEM;
+>     1068         }
+>     1069 
+>     1070         charger->rk808 = rk808;
+>     1071 
+>     1072         charger->dev = &pdev->dev;
+>     1073         platform_set_drvdata(pdev, charger);
+>     1074 
+>     1075         rk817_bat_calib_vol(charger);
+>     1076 
+>     1077         pscfg.drv_data = charger;
+>     1078         pscfg.of_node = node;
+>     1079 
+>     1080         /*
+>     1081          * Get sample resistor value. Note only values of 10000 or 20000
+>     1082          * microohms are allowed. Schematic for my test implementation (an
+>     1083          * Odroid Go Advance) shows a 10 milliohm resistor for reference.
+>     1084          */
+>     1085         ret = of_property_read_u32(node, "rockchip,resistor-sense-micro-ohms",
+>     1086                                    &of_value);
+>     1087         if (ret < 0) {
+>     1088                 return dev_err_probe(dev, ret,
+>     1089                                      "Error reading sample resistor value\n");
+>     1090         }
+>     1091         /*
+>     1092          * Store as a 1 or a 2, since all we really use the value for is as a
+>     1093          * divisor in some calculations.
+>     1094          */
+>     1095         charger->res_div = (of_value == 20000) ? 2 : 1;
+>     1096 
+>     1097         /*
+>     1098          * Get sleep enter current value. Not sure what this value is for
+>     1099          * other than to help calibrate the relax threshold.
+>     1100          */
+>     1101         ret = of_property_read_u32(node,
+>     1102                                    "rockchip,sleep-enter-current-microamp",
+>     1103                                    &of_value);
+>     1104         if (ret < 0) {
+>     1105                 return dev_err_probe(dev, ret,
+>     1106                                      "Error reading sleep enter cur value\n");
+>     1107         }
+>     1108         charger->sleep_enter_current_ua = of_value;
+>     1109 
+>     1110         /* Get sleep filter current value */
+>     1111         ret = of_property_read_u32(node,
+>     1112                                    "rockchip,sleep-filter-current-microamp",
+>     1113                                    &of_value);
+>     1114         if (ret < 0) {
+>     1115                 return dev_err_probe(dev, ret,
+>     1116                                      "Error reading sleep filter cur value\n");
+>     1117         }
+>     1118 
+>     1119         charger->sleep_filter_current_ua = of_value;
+>     1120 
+>     1121         charger->bat_ps = devm_power_supply_register(&pdev->dev,
+>     1122                                                      &rk817_bat_desc, &pscfg);
+>     1123         if (IS_ERR(charger->bat_ps))
+>     1124                 return dev_err_probe(dev, -EINVAL,
+>     1125                                      "Battery failed to probe\n");
+>     1126 
+>     1127         charger->chg_ps = devm_power_supply_register(&pdev->dev,
+>     1128                                                      &rk817_chg_desc, &pscfg);
+>     1129         if (IS_ERR(charger->chg_ps))
+>     1130                 return dev_err_probe(dev, -EINVAL,
+>     1131                                      "Charger failed to probe\n");
+>     1132 
+>     1133         ret = power_supply_get_battery_info(charger->bat_ps,
+>     1134                                             &bat_info);
+>     1135         if (ret) {
+>     1136                 return dev_err_probe(dev, ret,
+>     1137                                      "Unable to get battery info: %d\n", ret);
+>     1138         }
+>     1139 
+>     1140         if ((bat_info->charge_full_design_uah <= 0) ||
+>     1141             (bat_info->voltage_min_design_uv <= 0) ||
+>     1142             (bat_info->voltage_max_design_uv <= 0) ||
+>     1143             (bat_info->constant_charge_voltage_max_uv <= 0) ||
+>     1144             (bat_info->constant_charge_current_max_ua <= 0) ||
+>     1145             (bat_info->charge_term_current_ua <= 0)) {
+>     1146                 return dev_err_probe(dev, -EINVAL,
+>     1147                                      "Required bat info missing or invalid\n");
+>     1148         }
+>     1149 
+>     1150         charger->bat_charge_full_design_uah = bat_info->charge_full_design_uah;
+>     1151         charger->bat_voltage_min_design_uv = bat_info->voltage_min_design_uv;
+>     1152         charger->bat_voltage_max_design_uv = bat_info->voltage_max_design_uv;
+>     1153 
+>     1154         /*
+>     1155          * Has to run after power_supply_get_battery_info as it depends on some
+>     1156          * values discovered from that routine.
+>     1157          */
+>     1158         ret = rk817_battery_init(charger, bat_info);
+>     1159         if (ret)
+>     1160                 return ret;
+>     1161 
+>     1162         power_supply_put_battery_info(charger->bat_ps, bat_info);
+>     1163 
+>     1164         plugin_irq = platform_get_irq(pdev, 0);
+>     1165         if (plugin_irq < 0)
+>     1166                 return plugin_irq;
+>     1167 
+>     1168         plugout_irq = platform_get_irq(pdev, 1);
+>     1169         if (plugout_irq < 0)
+>     1170                 return plugout_irq;
+>     1171 
+>     1172         ret = devm_request_threaded_irq(charger->dev, plugin_irq, NULL,
+>     1173                                         rk817_plug_in_isr,
+>     1174                                         IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+>     1175                                         "rk817_plug_in", charger);
+>     1176         if (ret) {
+>     1177                 return dev_err_probe(&pdev->dev, ret,
+>     1178                                       "plug_in_irq request failed!\n");
+>     1179         }
+>     1180 
+>     1181         ret = devm_request_threaded_irq(charger->dev, plugout_irq, NULL,
+>     1182                                         rk817_plug_out_isr,
+>     1183                                         IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+>     1184                                         "rk817_plug_out", charger);
+>     1185         if (ret) {
+>     1186                 return dev_err_probe(&pdev->dev, ret,
+>     1187                                      "plug_out_irq request failed!\n");
+>     1188         }
+>     1189 
+>     1190         ret = devm_delayed_work_autocancel(&pdev->dev, &charger->work,
+>     1191                                            rk817_charging_monitor);
+>     1192         if (ret)
+>     1193                 return ret;
+>     1194 
+>     1195         /* Force the first update immediately. */
+>     1196         mod_delayed_work(system_wq, &charger->work, 0);
+>     1197 
+> --> 1198         return 0;
+>     1199 }
+> 
+> regards,
+> dan carpenter
