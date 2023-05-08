@@ -2,119 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC6D6FA0FB
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 09:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6746FA13E
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjEHH1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 03:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S233535AbjEHHmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 03:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbjEHH1q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 03:27:46 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0CA1FCA;
-        Mon,  8 May 2023 00:27:45 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QFCSl1kRQz18LGH;
-        Mon,  8 May 2023 15:23:35 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 15:27:42 +0800
-Message-ID: <2ab0ddbb-f9a4-8963-b066-d9a93b5f01b3@huawei.com>
-Date:   Mon, 8 May 2023 15:27:42 +0800
+        with ESMTP id S233466AbjEHHmg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 03:42:36 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FA11A4A5
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 00:42:29 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id vvVppzG33MVk3vvVppHiv1; Mon, 08 May 2023 09:42:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1683531747;
+        bh=40maiApoVL/VucoidkRFV2whGpUtUx6B9fd6pg++S/k=;
+        h=From:To:Cc:Subject:Date;
+        b=D2QwQF0t8cox0Q93u6udOg/olj4OPRQGaaAENj0UmMDsvgDLzBWCH3cE6bmbAyuKQ
+         bvLaFuAkqOKH/UwLzQFofyuseYHHIh+TA+MUVCaSVTLx3TuPKXWqOKJxZC0ATO2BT2
+         vKTMCE0F86h72lgVM7tUmYr/WN8a5SEcOBm0uRCqRXO4M2AoejHdP3KuiwPRxS1LSX
+         KYzGSXcJDCZdTAc1gETCk/6dLjZMtrDBzat/2hCe9ugYjAYQbwk9URoZkw+oFwSFE/
+         i7zzY14k74ruBB3uDB9LpJ1EGsrC5cMGm3VsQnqTkymlqiIpnnZTC8xLjPOM+VDF7B
+         iWBgEmEjapEZg==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 08 May 2023 09:42:27 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] PM / devfreq: Reorder fields in 'struct devfreq_dev_status'
+Date:   Mon,  8 May 2023 09:42:15 +0200
+Message-Id: <6b1611f1440c8b73feb475723ad25f390cad3480.1683531691.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 03/12] mm: page_alloc: move set_zone_contiguous() into
- mm_init.c
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20230508071200.123962-1-wangkefeng.wang@huawei.com>
- <20230508071200.123962-4-wangkefeng.wang@huawei.com>
- <87jzxj9u0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <87jzxj9u0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Group some variables based on their sizes to reduce holes.
+On x86_64, this shrinks the size of 'struct devfreq_dev_status' from 72 to
+64 bytes.
+
+This structure is used both to allocate static variables or is embedded in
+some other structures. In both cases, reducing its size is nice to have.
+
+Moreover, the whole structure now fits in a single cache line on x86_64.
+
+Finally, it makes the order of code match the order of the above kernel
+doc.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Using pahole
+
+Before:
+======
+struct devfreq_dev_profile {
+	long unsigned int          initial_freq;         /*     0     8 */
+	unsigned int               polling_ms;           /*     8     4 */
+	enum devfreq_timer         timer;                /*    12     4 */
+	bool                       is_cooling_device;    /*    16     1 */
+
+	/* XXX 7 bytes hole, try to pack */
+
+	int                        (*target)(struct device *, long unsigned int *, u32); /*    24     8 */
+	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    32     8 */
+	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    40     8 */
+	void                       (*exit)(struct device *); /*    48     8 */
+	long unsigned int *        freq_table;           /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	unsigned int               max_state;            /*    64     4 */
+
+	/* size: 72, cachelines: 2, members: 10 */
+	/* sum members: 61, holes: 1, sum holes: 7 */
+	/* padding: 4 */
+	/* last cacheline: 8 bytes */
+};
 
 
-On 2023/5/8 15:12, Huang, Ying wrote:
-> Kefeng Wang <wangkefeng.wang@huawei.com> writes:
-> 
->> set_zone_contiguous() is only used in mm init/hotplug, and
->> clear_zone_contiguous() only used in hotplug, move them from
->> page_alloc.c to the more appropriate file.
->>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> ---
->>   include/linux/memory_hotplug.h |  3 --
->>   mm/internal.h                  |  7 +++
->>   mm/mm_init.c                   | 74 +++++++++++++++++++++++++++++++
->>   mm/page_alloc.c                | 79 ----------------------------------
->>   4 files changed, 81 insertions(+), 82 deletions(-)
->>
-...
->>   
->> +/*
->> + * Check that the whole (or subset of) a pageblock given by the interval of
->> + * [start_pfn, end_pfn) is valid and within the same zone, before scanning it
->> + * with the migration of free compaction scanner.
->> + *
->> + * Return struct page pointer of start_pfn, or NULL if checks were not passed.
->> + *
->> + * It's possible on some configurations to have a setup like node0 node1 node0
->> + * i.e. it's possible that all pages within a zones range of pages do not
->> + * belong to a single zone. We assume that a border between node0 and node1
->> + * can occur within a single pageblock, but not a node0 node1 node0
->> + * interleaving within a single pageblock. It is therefore sufficient to check
->> + * the first and last page of a pageblock and avoid checking each individual
->> + * page in a pageblock.
->> + *
->> + * Note: the function may return non-NULL struct page even for a page block
->> + * which contains a memory hole (i.e. there is no physical memory for a subset
->> + * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
->> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
->> + * even though the start pfn is online and valid. This should be safe most of
->> + * the time because struct pages are still initialized via init_unavailable_range()
->> + * and pfn walkers shouldn't touch any physical memory range for which they do
->> + * not recognize any specific metadata in struct pages.
->> + */
->> +struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
->> +				     unsigned long end_pfn, struct zone *zone)
-> 
-> __pageblock_pfn_to_page() is also called by compaction code too (e.g.,
-> isolate_freepages_range() -> pageblock_pfn_to_page() ->
-> __pageblock_pfn_to_page()).
-> 
-> So, it is used not only by initialization and hotplug?
-> 
+After:
+=====
+struct devfreq_dev_profile {
+	long unsigned int          initial_freq;         /*     0     8 */
+	unsigned int               polling_ms;           /*     8     4 */
+	enum devfreq_timer         timer;                /*    12     4 */
+	int                        (*target)(struct device *, long unsigned int *, u32); /*    16     8 */
+	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    24     8 */
+	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    32     8 */
+	void                       (*exit)(struct device *); /*    40     8 */
+	long unsigned int *        freq_table;           /*    48     8 */
+	unsigned int               max_state;            /*    56     4 */
+	bool                       is_cooling_device;    /*    60     1 */
 
-I should drop the move of this function, thanks for your reminder.
+	/* size: 64, cachelines: 1, members: 10 */
+	/* padding: 3 */
+};
+---
+ include/linux/devfreq.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> Best Regards,
-> Huang, Ying
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index 7fd704bb8f3d..d312ffbac4dd 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -108,7 +108,6 @@ struct devfreq_dev_profile {
+ 	unsigned long initial_freq;
+ 	unsigned int polling_ms;
+ 	enum devfreq_timer timer;
+-	bool is_cooling_device;
+ 
+ 	int (*target)(struct device *dev, unsigned long *freq, u32 flags);
+ 	int (*get_dev_status)(struct device *dev,
+@@ -118,6 +117,8 @@ struct devfreq_dev_profile {
+ 
+ 	unsigned long *freq_table;
+ 	unsigned int max_state;
++
++	bool is_cooling_device;
+ };
+ 
+ /**
+-- 
+2.34.1
+
