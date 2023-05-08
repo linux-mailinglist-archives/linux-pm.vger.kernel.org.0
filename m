@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104FB6FB830
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 22:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6006FB839
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 22:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjEHUPY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 16:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S232580AbjEHUWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 16:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEHUPX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 16:15:23 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3B85597
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 13:15:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96652cb7673so278564666b.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 13:15:22 -0700 (PDT)
+        with ESMTP id S229452AbjEHUWe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 16:22:34 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44153C1B
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 13:22:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-965e4be7541so731487566b.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 13:22:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683576920; x=1686168920;
+        d=linaro.org; s=google; t=1683577352; x=1686169352;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Fp0lSNEvHbBfUsd7/thKvbF7+DN0vBYq4suwmKpz0s=;
-        b=fQ7RYvPAfMSJUAbnPH7fbxrYfTWWtigb67IP/v3cLddi+ev+BlaziqfBFYqGy/W2Kc
-         FCa2x3BwjQv0cYoS26x1BaiFaWojHD3Tpo7rUFZrQiHoBTQlKib2AULAkckbj6bcfkvb
-         ycO5x+JqChLv9gzpWQl1qVQdEM+vT1DO6WcPY6dU5TT8dnGm7Wip6K1LNC5nd+hynAk3
-         wS6yvucNHz6VxtUom0fZZ+cuWJ++n5sBr63ToaFQoVSNTHRLc2tHSfmFep6N3rEhqtcv
-         p2Xmrt2TXFUPQouTh9bxNtsuPUOBuveUgHOKw+m9qPIIQR37u5XaUCgbzxBEj6Bmvgy9
-         EvQw==
+        bh=o9p8sbbgU2nilbnlP81YasUbZB4uSHNla9W07vOiVuk=;
+        b=gOTqOEm+mZGsJLVKVNSPiI+wK/x1/Xtnq83AHMG2oQTtLK1OpNmDfXqZvguOX5q9YV
+         eeA70G67Q42cbv5efp3n8yR9/4ugw9poDZsYRggTA06kf9klBB+J5BzLapDEr87tEE5C
+         QomCbi57zXd0CGCPdUESP3jmTQLXJK9SnWCWmsQ4D42pJrTjatnPLuR3g1uMxxgt8Qsw
+         n4duUUfE6yYpDZm2/bCVI5fPai42+6HqtXBAgDJD0MvNOAX0XRls9aEGV83T7nk+ipnP
+         aFhIT8F0Tra5O9xXGIJtWLVVOVl+//5XTqe18/e3FR/ronYuYdQYqQoB6HovUge7LeF+
+         FJ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683576920; x=1686168920;
+        d=1e100.net; s=20221208; t=1683577352; x=1686169352;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Fp0lSNEvHbBfUsd7/thKvbF7+DN0vBYq4suwmKpz0s=;
-        b=lDbC7rOoaxzWwZFpXrpBJj4Rmqe5azmptTSaHNtzwht35j1UXcwMNwMVn+XAEHizO9
-         aMHGb4Hw4X8SidFSgvuv8zAvusN2U71Uq+zvHgAaocw6Vbl5IPNnzxZcGRkisAR5t5sW
-         bJwkKvsLN0xa5d4vfvfhVJCo8+S98VAzCA8zKSGya0Rb1hxYKBlQ0uqbQa5YH49BYkv/
-         /rCXOC7YvUOMyBexXRaj1WxaPOfXOsy4lbGFfkL60Dy1I0n/+0Rm/jri3pmTsKdrjzFp
-         spKiocAAUYUXcUhMdhVhetVNYZAP/GEPPSoAt1mhNL/XRbjc8TQBADTrtbP7FzR4GGXS
-         Ehkw==
-X-Gm-Message-State: AC+VfDxrLqcQG31QaT0XUDufMIWDXaFjkpmXEnIAojxo6rq6eVQH93cz
-        m04+9vkvDvLpFnWYZdplAahYMw==
-X-Google-Smtp-Source: ACHHUZ5R6ysml0hd5vtloBaetd6BnppKyn20LpxcrNkZ2bjYr+tMGScPnPJhJrH7S9Jmou0hgwxpqg==
-X-Received: by 2002:a17:907:86a3:b0:966:187:ce40 with SMTP id qa35-20020a17090786a300b009660187ce40mr9132438ejc.4.1683576920531;
-        Mon, 08 May 2023 13:15:20 -0700 (PDT)
+        bh=o9p8sbbgU2nilbnlP81YasUbZB4uSHNla9W07vOiVuk=;
+        b=IemmnB524V76Xtygb6jq5Kpz20eY/T4OzD6UMaWfmHVCooKFL5nAzbsp4+g3SUpFSY
+         yGm/l86+RoHCI37R/zFIFR5tRRyOYA3tEPQ7kEtsAAuXOz1qUUfrt1/Upj1bYfyv3vCE
+         X0+AlCYVThzizPvwlguPJYjOLJPOxdKSnyXwH7OJKJt55NaQHrzUDZDPbsB+3119K2GO
+         owa94Zj84yEFqB+q4dIWBI06N6gEyalDH2+umCYF1ZkPT9Yuru1qPf6NErlCQxkS2eTW
+         U1lvomE/7Nkwx7YzeLSUQQwWh9zHLKS/AIpOzstlLtVvQD7PON9D7U40p96PqKsODzhl
+         uN2w==
+X-Gm-Message-State: AC+VfDxYsvLygPnke1L89ZxghNuBt3GrAfkk/cmZ3E+eLTYTAKlxhbDJ
+        wTNrsiq02HTM/YSm344J9+kH4A==
+X-Google-Smtp-Source: ACHHUZ4YYd7EtlDPU+uVGzoZq9nt0hMyB7x08rbvKeuLpekdrE9lOzpUyueQY8dazhg3/T001VXj8Q==
+X-Received: by 2002:a17:907:a41e:b0:965:e556:8f6d with SMTP id sg30-20020a170907a41e00b00965e5568f6dmr10793430ejc.63.1683577352113;
+        Mon, 08 May 2023 13:22:32 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
-        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b008f89953b761sm401299ejc.3.2023.05.08.13.15.10
+        by smtp.gmail.com with ESMTPSA id 13-20020a170906300d00b009659cdb2f98sm402301ejz.23.2023.05.08.13.22.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 13:15:14 -0700 (PDT)
-Message-ID: <a718233d-1389-93c2-fba2-c6051310febe@linaro.org>
-Date:   Mon, 8 May 2023 22:15:08 +0200
+        Mon, 08 May 2023 13:22:31 -0700 (PDT)
+Message-ID: <f0915bf5-992e-c6eb-e9f5-21980aa3cec0@linaro.org>
+Date:   Mon, 8 May 2023 22:22:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 5/7] power: supply: max77658: Add ADI MAX77658 Battery
- Support
+Subject: Re: [PATCH v3 3/7] power: supply: max77658: Add ADI MAX77654/58/59
+ Charger Support
 Content-Language: en-US
 To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
         lee@kernel.org, robh+dt@kernel.org,
@@ -65,14 +65,14 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org,
         Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-6-Zeynep.Arslanbenzer@analog.com>
+ <20230508131045.9399-4-Zeynep.Arslanbenzer@analog.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508131045.9399-6-Zeynep.Arslanbenzer@analog.com>
+In-Reply-To: <20230508131045.9399-4-Zeynep.Arslanbenzer@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,111 +81,24 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
-> Battery driver for ADI MAX77658.
+> Charger driver for ADI MAX77654/58/59.
 > 
-> The MAX77658 is an ultra-low power fuel gauge which implements the Maxim ModelGauge m5 EZ algorithm.
+> The MAX77654/58/59 charger is Smart Power Selector Li+/Li-Poly Charger.
 > 
 > Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
 >  drivers/power/supply/Kconfig            |   7 +
 >  drivers/power/supply/Makefile           |   1 +
->  drivers/power/supply/max77658-battery.c | 633 ++++++++++++++++++++++++
->  3 files changed, 641 insertions(+)
->  create mode 100644 drivers/power/supply/max77658-battery.c
+>  drivers/power/supply/max77658-charger.c | 844 ++++++++++++++++++++++++
+>  3 files changed, 852 insertions(+)
+>  create mode 100644 drivers/power/supply/max77658-charger.c
 > 
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 4b68bbb1e2a8..f9556f4b9e35 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -572,6 +572,13 @@ config CHARGER_MAX77658
->  	  Say Y to enable support for the battery charger control of
->  	  MAX77654/58/59 PMIC.
->  
-> +config BATTERY_MAX77658
-> +	tristate "Analog Devices MAX77658 battery driver"
-> +	depends on MFD_MAX77658
-> +	help
-> +	  Say Y to enable support for the battery control of
-> +	  MAX77658 PMIC.
-> +
->  config CHARGER_MAX77693
->  	tristate "Maxim MAX77693 battery charger driver"
->  	depends on MFD_MAX77693
-> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index af4bd6e5969f..e5a425d333a7 100644
-> --- a/drivers/power/supply/Makefile
-> +++ b/drivers/power/supply/Makefile
-> @@ -77,6 +77,7 @@ obj-$(CONFIG_CHARGER_MAX14577)	+= max14577_charger.o
->  obj-$(CONFIG_CHARGER_DETECTOR_MAX14656)	+= max14656_charger_detector.o
->  obj-$(CONFIG_CHARGER_MAX77650)	+= max77650-charger.o
->  obj-$(CONFIG_CHARGER_MAX77658)	+= max77658-charger.o
-> +obj-$(CONFIG_BATTERY_MAX77658)	+= max77658-battery.o
->  obj-$(CONFIG_CHARGER_MAX77693)	+= max77693_charger.o
->  obj-$(CONFIG_CHARGER_MAX77976)	+= max77976_charger.o
->  obj-$(CONFIG_CHARGER_MAX8997)	+= max8997_charger.o
-> diff --git a/drivers/power/supply/max77658-battery.c b/drivers/power/supply/max77658-battery.c
-> new file mode 100644
-> index 000000000000..4948ef227db1
-> --- /dev/null
-> +++ b/drivers/power/supply/max77658-battery.c
-> @@ -0,0 +1,633 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (c) 2023 Analog Devices, Inc.
-> + * ADI battery driver for the MAX77658
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/delay.h>
-> +#include <linux/mfd/max77658.h>
-> +#include <linux/module.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/power_supply.h>
-> +#include <linux/regmap.h>
-> +
-> +/* Default value for SALRT min threshold, in percent */
-> +#define MAX77658_SALRT_MIN_DEFAULT	1
-> +/* Default value for SALRT max threshold, in percent */
-> +#define MAX77658_SALRT_MAX_DEFAULT	99
-> +
-> +#define MAX77658_IALRTTH_RESOLUTION	8567
-> +#define MAX77658_CURRENT_RESOLUTION	33487
-> +#define MAX77658_VOLTAGE_RESOLUTION	78125
-> +#define MAX77658_FG_DELAY		1000
-> +#define MAX77658_BATTERY_FULL		100
-> +#define MAX77658_BATTERY_LOW		40
-> +#define MAX77658_BATTERY_CRITICAL	10
-> +#define MAX77658_MAXMINVOLT_STEP	20000
-> +#define MAX77658_VALRTTH_STEP		20000
-> +#define MAX77658_VEMPTY_VE_STEP		10000
-> +#define MAX77658_POWER_STEP		17100
-> +
-> +#define MAX77658_REG_STATUS		0x00
-> +#define MAX77658_REG_VALRTTH		0x01
-> +#define MAX77658_REG_TALRTTH		0x02
-> +#define MAX77658_REG_SALRTTH		0x03
-> +#define MAX77658_REG_CONFIG		0x1D
-> +#define MAX77658_REG_DEVNAME		0x21
-> +#define MAX77658_REG_VEMPTY		0x3A
-> +#define MAX77658_REG_AVGPOWER		0xB3
-> +#define MAX77658_REG_IALRTTH		0xB4
-> +#define MAX77658_REG_CONFIG2		0xBB
-> +#define MAX77658_REG_TEMP		0x08
-> +#define MAX77658_REG_VCELL		0x09
-> +#define MAX77658_REG_CURRENT		0x0A
-> +#define MAX77658_REG_AVGCURRENT		0x0B
-> +#define MAX77658_REG_AVGVCELL		0x19
-> +#define MAX77658_REG_MAXMINTEMP		0x1A
-> +#define MAX77658_REG_MAXMINVOLT		0x1B
-> +#define MAX77658_REG_MAXMINCURR		0x1C
-> +#define MAX77658_REG_REPSOC		0x06
-> +#define MAX77658_REG_TTE		0x11
-> +#define MAX77658_REG_TTF		0x20
 
-This is max17055 or very close one. Don't duplicate drivers. Entire
-driver should be merged to existing one, e.g. max17042.
+Actually, with small differences (register map differs by few offsets)
+this is max77650 charger. Several fields are exactly the same.
+
+Please merge it with existing drivers.
 
 Best regards,
 Krzysztof
