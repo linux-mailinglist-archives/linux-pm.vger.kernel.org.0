@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6B26FB7E3
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 22:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462D46FB828
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 22:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjEHUCX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 16:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
+        id S233520AbjEHUKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 16:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjEHUCW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 16:02:22 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6057044B2
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 13:02:14 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9661047f8b8so501016166b.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 13:02:14 -0700 (PDT)
+        with ESMTP id S233756AbjEHUKe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 16:10:34 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D5D72A6
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 13:09:16 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96598a7c5e0so795329566b.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 13:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683576133; x=1686168133;
+        d=linaro.org; s=google; t=1683576554; x=1686168554;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lAtYseLpXxuBkVxFlbQ8laerKtW1IS2FwFjnYIf67Ew=;
-        b=HrbuCNqRpGjYUk98SN1qVGL7DcEPo8uLKF7tJOUQYAXRJIlclZT2/8zUA81YeCGZGa
-         5lxcnMX6CYataSzjiwHpRvFjYHExxSYyn/lREd4L26wJxN4Qo9a8XWbASAIVakgCtGzf
-         ZAaEdfLnknO5gnH4p2gbmxstXjJI5+IlpUYmivhhvawZsVBXCks8ZU4PgnDkmwpc7JeT
-         Ih/bSh/PsDGTzH0dW9w71qKAzE1YiBzgMXFHPrlF9DFhmb31mqmz1D06HVPk17l28KwP
-         I4r+iF6OPnnXSGIOTEMUsRZAS2At06NP8qQGH95CzT6WprAGbzNHotDv4RB7cjimEdV9
-         3fiQ==
+        bh=tilR7eyPaDKEFXHCAqnTp+peGY1z0Ib18E1yaXftr+k=;
+        b=kLvcOmZnUfc3lYK73I3j/sJ37SaQ2AvWCWDQAYKxemg4GisEiYgcTdaPc5qO5KULVT
+         2FsTFnFbs37Quiah2pT9yQpLv2tIAMSwWBOEJekzchIAL/FVr+ZpMmn2iNw4j7+8pcU6
+         5ghIx2WoU+AfrP+BbbbAbREhcU0gvdVc0uDFLoTktslwS3KWSZ68fHdZ8UwDmWE7+FqT
+         KsKeQ35ZoMMS93/r/cWtPN492IBjzuX4hiotR3qwKcuShGY+2JlMr7pB4jSVAOsILYqO
+         7DI6xxpa7ALbN87TPC72FISOIrMqqkRJC7d/Nt33Wktgzx2jrbP7VW4ED5bTxJpTpZHF
+         ezvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683576133; x=1686168133;
+        d=1e100.net; s=20221208; t=1683576554; x=1686168554;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lAtYseLpXxuBkVxFlbQ8laerKtW1IS2FwFjnYIf67Ew=;
-        b=U1Iyg7ZPLBdDEsXH5R3NjDEstaLZFygbXrYkyx1B7vGiZenGHgbmvoz4oRLL9DlBJ0
-         g5jOAlKlE83csyxWAfyooq1z4D5fnJn1hIYYwVjK42180CsUNwOnrcCBtMQ51qdgNCI0
-         gtW/2GdfpZyo/J+GzRMTQvqVj0cb7G3dAeHlx5SAyRRDUngv1MeZ+bfeD+0kuC+m2HAG
-         +Cdi9wfOfwTynv3nkmYrQJFSfft7DUPZtgCRv7nBlf65Qqnk9BxHaWWTt2pRBlHdFd2G
-         v0vR3ne4vyGGI8+RgYzuVbm9oLrWefT0cyW8bsp9HJ8g6rrUtfiY/Z6GMAHvtp0o03ba
-         jeNg==
-X-Gm-Message-State: AC+VfDxij/O45Tp7L5vIUMpPDVfpfCToNqgcke+ZwC0Vgg4Bc0O/4tU2
-        UBbWYtC23cnOGM7V/I6LAllssQ==
-X-Google-Smtp-Source: ACHHUZ6VNPRKEgr7OuCdHtimURoftvfdyzlJfcJSBfAQGPgaV7H8oz4a1Kp6taoPOYmL7Bq/1nOfiQ==
-X-Received: by 2002:a17:907:97ce:b0:94e:4523:b0d8 with SMTP id js14-20020a17090797ce00b0094e4523b0d8mr9960088ejc.73.1683576132774;
-        Mon, 08 May 2023 13:02:12 -0700 (PDT)
+        bh=tilR7eyPaDKEFXHCAqnTp+peGY1z0Ib18E1yaXftr+k=;
+        b=CgLhKw51Iujw6rdw+FQHV0Vzqx0ia/jKB9uqCfKOE+I0GyARgP+TI11R3khl5pCvq1
+         yPExhIKA372H13qlbc1uvMigczC/HbKSYFESOcVtOjqTlzLE1SL0oJHUoz5OqgFFdmZS
+         ePp/Q4In7hb4WUM2BoFGKG+fU7c8LatXIwW5OPnFUUqCzSI7b51nm186fEYOg+tX6Dh2
+         J4wZGsE7fnijP2MYIyC7jcRwVKpahgAuJGV9qycO2zAgPiNFgrrW7+uTp2sNLO6ljHfC
+         TIBK/y5nQSdNBJ3s3wJNxiMJBj81w/q5bQ7HxAKAOBlXPoZQwECHR3LPptyy2HCMPKKi
+         QKMw==
+X-Gm-Message-State: AC+VfDz2h1hs/AbSMNdTIY/xnPqOuLo3uoxpMHMpCbibJJ5GyG6gztZY
+        MdUz2aY7lbas78aMMUBOd++V9g==
+X-Google-Smtp-Source: ACHHUZ7qA+TErGF3BPAA0chiAVjVMmr2+vphSynvtmJf+T2ZuSJt2mJzItnXIZvlFzlNxEijNfT1vw==
+X-Received: by 2002:a17:907:2d12:b0:969:98eb:3fdd with SMTP id gs18-20020a1709072d1200b0096998eb3fddmr1734857ejc.3.1683576553748;
+        Mon, 08 May 2023 13:09:13 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
-        by smtp.gmail.com with ESMTPSA id ca21-20020a170906a3d500b00965a52d2bf6sm373253ejb.88.2023.05.08.13.02.11
+        by smtp.gmail.com with ESMTPSA id jx6-20020a170907760600b00958434d4ecesm402734ejc.13.2023.05.08.13.09.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 13:02:12 -0700 (PDT)
-Message-ID: <9b629b5e-9d49-98a0-abca-75e68abf425b@linaro.org>
-Date:   Mon, 8 May 2023 22:02:11 +0200
+        Mon, 08 May 2023 13:09:13 -0700 (PDT)
+Message-ID: <7636f1c7-ce54-af9f-03c8-aa124dd26561@linaro.org>
+Date:   Mon, 8 May 2023 22:09:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 6/7] dt-bindings: mfd: max77658: Add ADI MAX77658
+Subject: Re: [PATCH v3 7/7] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
+ Support
 Content-Language: en-US
 To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
         lee@kernel.org, robh+dt@kernel.org,
@@ -64,9 +65,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org,
         Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
+ <20230508131045.9399-8-Zeynep.Arslanbenzer@analog.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
+In-Reply-To: <20230508131045.9399-8-Zeynep.Arslanbenzer@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,203 +81,127 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
-> Add ADI MAX77658 devicetree document.
+> MFD driver for MAX77643/54/58/59 to enable its sub
+> devices.
+> 
+> The MAX77643 is a multi-function devices. It includes
+> regulator.
+> 
+> The MAX77654 is a multi-function devices. It includes
+> regulator and charger.
+> 
+> The MAX77658 is a multi-function devices. It includes
+> regulator, charger and battery.
+> 
+> The MAX77659 is a multi-function devices. It includes
+> regulator and charger.
 > 
 > Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
->  .../devicetree/bindings/mfd/adi,max77658.yaml | 160 ++++++++++++++++++
->  1 file changed, 160 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+>  drivers/mfd/Kconfig          |  13 ++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/max77658.c       | 426 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max77658.h |  80 +++++++
+>  4 files changed, 520 insertions(+)
+>  create mode 100644 drivers/mfd/max77658.c
+>  create mode 100644 include/linux/mfd/max77658.h
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/adi,max77658.yaml b/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
-> new file mode 100644
-> index 000000000000..4d6d87cd4b52
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
-> @@ -0,0 +1,160 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/adi,max77658.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MAX77643/54/58/59 PMIC from ADI
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  MAX77643, MAX77654, MAX77658 and MAX77659 devices are a family of ADI PMICs
-> +  providing battery charging and power supply solutions for
-> +  low-power applications.
-> +
-> +  MAX77643 is a Power Management IC with 1 LDO regulator.
-> +
-> +  MAX77654 is a Power Management IC with 2 LDO regulators and 1 charger.
-> +
-> +  MAX77658 is a Power Management IC with 2 LDO regulators, 1 charger
-> +  and 1 fuel gauge.
-> +
-> +  MAX77659 is a Power Management IC with 1 LDO regulator and 1 charger.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max77643
-> +      - adi,max77654
-> +      - adi,max77658
-> +      - adi,max77659
-> +
-> +  reg:
-> +    items:
-> +      - enum: [0x40, 0x48]
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  charger:
-> +    $ref: /schemas/power/supply/adi,max77658-charger.yaml
-> +
-> +  fuel-gauge:
-> +    $ref: /schemas/power/supply/adi,max77658-battery.yaml
-> +
-> +  regulators:
-> +    type: object
-> +
-> +    description:
-> +      The regulators is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +    patternProperties:
-> +      "^LDO[01]$":
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 8b93856de432..aa1630a6d33a 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -821,6 +821,19 @@ config MFD_MAX77650
+>  	  the following functionalities of the device: GPIO, regulator,
+>  	  charger, LED, onkey.
+>  
 
-lowercase
-
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml
-> +        additionalProperties: false
-> +        description:
-> +          LDO regulator
+...
+			glbl1_chip, &max77658->irqc_glbl1);
+> +}
 > +
-> +        properties:
-> +          regulator-always-on: true
-> +          regulator-boot-on: true
+> +static int max77658_i2c_probe(struct i2c_client *client,
+> +			      const struct i2c_device_id *id)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct max77658_dev *max77658;
+> +	const struct mfd_cell *cells;
+> +	struct i2c_client *fuel;
+> +	int ret, n_devs;
+> +
+> +	max77658 = devm_kzalloc(dev, sizeof(*max77658), GFP_KERNEL);
+> +	if (!max77658)
+> +		return -ENOMEM;
+> +
+> +	i2c_set_clientdata(client, max77658);
+> +	max77658->irq = client->irq;
+> +
+> +	max77658->id  = (enum max77658_ids)device_get_match_data(dev);
 
-Why nothing else is allowed? You have different voltages, so how can you
-configure their constraints if you do not allow them to be configured?
-Drop all properties and use unevaluatedProperties..
+Double space -> One space.
+
+> +	if (!max77658->id)
+> +		max77658->id  = (enum max77658_ids)id->driver_data;
+> +
+> +	if (!max77658->id)
+> +		return -EINVAL;
+> +
+> +	max77658->regmap = devm_regmap_init_i2c(client,
+> +						&max77658_regmap_config);
+> +	if (IS_ERR(max77658->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(max77658->regmap),
+> +				     "Failed to initialize regmap\n");
+> +
+> +	fuel = i2c_new_dummy_device(client->adapter, I2C_ADDR_FUEL_GAUGE);
+> +	if (IS_ERR(fuel))
+> +		return dev_err_probe(dev, PTR_ERR(fuel),
+> +				     "Failed to create I2C device[0x%Xh]\n",
+> +				      I2C_ADDR_FUEL_GAUGE);
+
+Where do you free "fuel" instance?
 
 > +
-> +    additionalProperties: false
+> +	i2c_set_clientdata(fuel, max77658);
 > +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - adi,max77643
-> +              - adi,max77654
-> +              - adi,max77658
+> +	max77658->regmap_fg = devm_regmap_init_i2c(fuel,
+> +						   &max77658_regmap_config_fg);
+> +	if (IS_ERR(max77658->regmap_fg))
+> +		return dev_err_probe(dev,
+> +				     PTR_ERR(max77658->regmap_fg),
+> +				     "Failed to initialize I2C device[0x%Xh]\n",
+> +				     I2C_ADDR_FUEL_GAUGE);
 > +
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - const: 0x48
+> +	ret = max77658_pmic_irq_init(dev);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to initialize IRQ\n");
 > +
-> +    else:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - const: 0x40
-
- - if:
-    ...
-
-    then:
-      properties:
-        regulators:
-          properties:
-            LDO1: false
-
-
+> +	switch (max77658->id) {
+> +	case ID_MAX77643:
+> +		cells = max77643_devs;
+> +		n_devs = ARRAY_SIZE(max77643_devs);
+> +		break;
+> +	case ID_MAX77654:
+> +		cells = max77654_devs;
+> +		n_devs = ARRAY_SIZE(max77654_devs);
+> +		break;
+> +	case ID_MAX77658:
+> +		cells = max77658_devs;
+> +		n_devs = ARRAY_SIZE(max77658_devs);
+> +		break;
+> +	case ID_MAX77659:
+> +		cells = max77659_devs;
+> +		n_devs = ARRAY_SIZE(max77659_devs);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-
-Put required before allOf.
-
+> +	ret = devm_mfd_add_devices(dev, -1, cells, n_devs,  NULL, 0, NULL);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to add sub-devices\n");
 > +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    battery: battery-cell {
-> +      compatible = "simple-battery";
-> +      alert-celsius = <0 100>;
-> +      constant-charge-current-max-microamp = <15000>;
-> +    };
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      pmic@48 {
-> +        compatible = "adi,max77658";
-> +        reg = <0x48>;
-> +        interrupt-parent = <&gpio>;
-> +        interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-> +        charger {
-> +          compatible = "adi,max77658-charger";
-> +          monitored-battery = <&battery>;
-> +          adi,input-current-limit-microamp = <475000>;
-> +        };
-> +        regulators {
-> +          LDO0 {
-> +            regulator-boot-on;
-> +            regulator-always-on;
-> +          };
-> +          LDO1 {
-> +            regulator-boot-on;
-> +            regulator-always-on;
-> +          };
-> +        };
-> +        fuel-gauge {
-> +          compatible = "adi,max77658-battery";
-> +          monitored-battery = <&battery>;
-> +          adi,valrt-min-microvolt = <0>;
-> +          adi,valrt-max-microvolt = <5100000>;
-> +          adi,ialrt-min-microamp = <(-5000)>;
-> +          adi,ialrt-max-microamp = <5000>;
-> +        };
-> +      };
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      pmic@40 {
-> +        compatible = "adi,max77659";
-> +        reg = <0x40>;
-> +        interrupt-parent = <&gpio>;
-> +        interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-> +        charger {
-> +          compatible = "adi,max77659-charger";
-> +          monitored-battery = <&battery>;
-> +        };
-> +        regulators {
-> +          LDO0 {
-> +            regulator-boot-on;
-> +            regulator-always-on;
-> +          };
-> +        };
-> +      };
-> +    };
+> +	return device_init_wakeup(dev, true);
+> +}
 
 Best regards,
 Krzysztof
