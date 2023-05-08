@@ -2,114 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AC96F9D62
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 03:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B3F6F9F0F
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 07:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbjEHB0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 May 2023 21:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S232095AbjEHFdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 01:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEHB0R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 May 2023 21:26:17 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3542E12C;
-        Sun,  7 May 2023 18:26:14 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6ab087111faso69987a34.3;
-        Sun, 07 May 2023 18:26:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683509173; x=1686101173;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E0WGVqQd3crr5/xk4aA5GRbZA5RzgIzcfwtNz3kKyK8=;
-        b=i5lHy7cFZsT2/NY/PJhYi7WA1mLt73CE8/CRULYBQoKXMYKNXCKWdXjt/ku909QoBp
-         YLgRxqWthu5uvWirLJ5wiCPYqiujHGURLHJi3qbmE+O+xOWkwJD3vpf0GIySdl9ug5Yj
-         Zp6X5EWROXsf/ooXEesgl8C2cy7Kz00962Ejtx7tuJdMntEJF3l7i75aHPGzbTJOjGns
-         vNXPOy1saILyQbdbjQ4ssnkV0Iu5KdmINCjvrtTtkqFV5ADZiKHCc+xgo5+trN3Z4OU/
-         rVwECx9N5ODSiy6FDck+ghLod9twK5lVQx9OMjoUOTge+fLFsA0n+9OnBbXo4XhXyVqR
-         bfLA==
-X-Gm-Message-State: AC+VfDxwyjJzptc8zaiSZWULu7RY+UaCw+X+DMdKkIF8jQzO+B4/Swhq
-        iRviDSw+8ODnnVGaCesIkg==
-X-Google-Smtp-Source: ACHHUZ6H9eBYio6qGDMOwk8cjb89NYIm3MN/qp2X9z0JKWHk2TFOrWQVDdy1An/FopnsmcrTn/TLiQ==
-X-Received: by 2002:a9d:7acf:0:b0:6aa:e821:88eb with SMTP id m15-20020a9d7acf000000b006aae82188ebmr2194275otn.4.1683509173213;
-        Sun, 07 May 2023 18:26:13 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05683022ed00b006a4244d2a7asm3592444otc.9.2023.05.07.18.26.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 18:26:12 -0700 (PDT)
-Received: (nullmailer pid 3860869 invoked by uid 1000);
-        Mon, 08 May 2023 01:26:11 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229662AbjEHFdN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 01:33:13 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9F54215;
+        Sun,  7 May 2023 22:33:12 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3483qlWX026342;
+        Mon, 8 May 2023 05:33:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=VkvDDVJrK9S46H6yY0ph0De5aLl557gpBIHEwGCqXBw=;
+ b=Qvioty+tRlDzhLIkLD4EFx7IwuJehc774La2vPmDr1ahwRIyT0eGRcTXnzXFqSCc24ir
+ +RznxkBKFw0AqRygfFIG5U/7WJVHZCGlKC29mErKl4WvJFer2kxK0mhjqwkj/yWPdHdZ
+ oT832ZnA8Gr91661oB1Y9sNhRCaOjZyT0A27Jbd9hRQxBUcHTqtpRjsuOlH7VmwpXhpL
+ 2gQ6r7W76WlW1HpRHMG8ao2M2mtwg0a5pzyK6mnGrBj9n14uPXbaffI/TI2V9pnP/hR1
+ DMP0Amk123/mRgKwkbnrzh321Q23l7Eo/gSiVqNIPgcy6NcxjSesWtldUk7Buzpiq34B wg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qdc8xk0bn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 05:33:06 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3485X5or014161
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 05:33:05 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 7 May 2023 22:33:00 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v2 0/3] Enable IPQ9574 TSENS support
+Date:   Mon, 8 May 2023 11:02:37 +0530
+Message-ID: <cover.1683523370.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20230508003309.2363787-2-dmitry.baryshkov@linaro.org>
-References: <20230508003309.2363787-1-dmitry.baryshkov@linaro.org>
- <20230508003309.2363787-2-dmitry.baryshkov@linaro.org>
-Message-Id: <168350917132.3860853.17086591118019075384.robh@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: power: reset: qcom-pon: define
- pm8941-pon
-Date:   Sun, 07 May 2023 20:26:11 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Dr6KsS5idJzW0jUGenr6SGl0YRRvjJFi
+X-Proofpoint-GUID: Dr6KsS5idJzW0jUGenr6SGl0YRRvjJFi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_02,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 phishscore=0 mlxlogscore=862
+ suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305080038
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This patch set enables tsens in IPQ9574
 
-On Mon, 08 May 2023 03:33:04 +0300, Dmitry Baryshkov wrote:
-> On PM8941 pon doesn't store the reset reason. However we still need the
-> wrapping node for pwrkey and resin nodes. Add bindings for pm8941-pon
-> device.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Depends on
+	https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
+[v2]:
+	Drop the driver change (https://lore.kernel.org/lkml/b45d33d38a334aabbd52c83b0d6028af1f4c74c8.1682682753.git.quic_varada@quicinc.com/)
+	since the tsens device is compatible with 8074's tsens
+	and use 8074's compatible itself
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+	Rename clusterX nodes as cpussX
 
-yamllint warnings/errors:
+[v1]:
+	Fix DT node names
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+[v0]:
+	Initial patch introducing TSENS support
 
-doc reference errors (make refcheckdocs):
-Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
-MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+Praveenkumar I (1):
+  dt-bindings: thermal: tsens: Add ipq9574 compatible
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508003309.2363787-2-dmitry.baryshkov@linaro.org
+Varadarajan Narayanan (2):
+  arm64: dts: qcom: ipq9574: add tsens node
+  arm64: dts: qcom: ipq9574: add thermal zone nodes
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   9 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 217 +++++++++++++++++++++
+ 2 files changed, 224 insertions(+), 2 deletions(-)
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-- 
+2.7.4
 
