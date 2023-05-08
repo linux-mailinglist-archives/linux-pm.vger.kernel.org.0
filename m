@@ -2,106 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74F86F9D0D
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 02:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AC96F9D62
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 03:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjEHAdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 May 2023 20:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S232190AbjEHB0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 May 2023 21:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjEHAdS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 May 2023 20:33:18 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80588A60
-        for <linux-pm@vger.kernel.org>; Sun,  7 May 2023 17:33:16 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f00d41df22so26053377e87.1
-        for <linux-pm@vger.kernel.org>; Sun, 07 May 2023 17:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683505994; x=1686097994;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oEQDCOyFW88AgofKdbGFwc945Q39RQOUdRFCRSDEy4A=;
-        b=y9IkXDsAwbqXPLy4CCV5z82g+CmkqqbXvOuEKwpKwRK26EljXvzOqDXIgiDkIRYKVB
-         0CPVca372LKAWy8VvibYZ8UnwO8DCraceJKCtZsgNmR+uBCtvjeQ8j6spnsblxY22PBu
-         2lblNOJFYLu73gZwBFo+ULelUnDGDSqNnasLrWvaMLgaxja5JwGpgoOc494XSc1mARZ3
-         ndcyA1Hi9AE/aq6sHfjShEplyIZOzRwMH9I7CaK7yHNhq2Ed2dKurudO6OkX9KIMCsYn
-         Xz4Jo3bF+qs/zLAOkzmmRJWheDx8YHQ8kH/VFFYUZEexfUWfw7SEL0WVlquzcMGD+ZNJ
-         dc+g==
+        with ESMTP id S229757AbjEHB0R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 May 2023 21:26:17 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3542E12C;
+        Sun,  7 May 2023 18:26:14 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6ab087111faso69987a34.3;
+        Sun, 07 May 2023 18:26:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683505994; x=1686097994;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oEQDCOyFW88AgofKdbGFwc945Q39RQOUdRFCRSDEy4A=;
-        b=ilKXN3aVQ43rOyIWDOUGXBJ2C/LrU8BV4nm1XyGfbr0qJZiYgm83lv53779agSOVmg
-         2HpkQX04H7QvtDb1UaWxh/4SxAMnQFlufDA1aj7DUTU43XR9sjbKNuTaMJ5siKdB1mrR
-         8+EqzeZ5oEiINa/QzDGWAcl1OBwsAcNm6RFjLi5s4zesd+G4j9D1dka+VZg0XaCEFwVE
-         MLVwMXt0QpYUBbFLEAjcTeXccfd+GbjEcldpv2qvBm/dav+SDiuC4Lf5nys+GIK/hbO1
-         ib4OiLobpswRyoSF0TK/xXu/Jpem48AqJuCL3gmfpIKWniUbkafRiDWYpWM6O2gsE4+z
-         YI9w==
-X-Gm-Message-State: AC+VfDy8K1vemVkpDpBPLr/2mp0i+jutFcOy5DgTPUOWU45cD1xZMroi
-        kXtsePkOvMaM5RtgaihqS81mjg==
-X-Google-Smtp-Source: ACHHUZ56enFA9XXTyqGS4NKHXMm5OwkUAErfoCMn0N+pG4Pzb5367H6gEqKnmtEID/UCoHRjBDMSuw==
-X-Received: by 2002:a05:6512:3983:b0:4eb:41ac:e33 with SMTP id j3-20020a056512398300b004eb41ac0e33mr4860293lfu.19.1683505994800;
-        Sun, 07 May 2023 17:33:14 -0700 (PDT)
-Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
-        by smtp.gmail.com with ESMTPSA id m22-20020ac24256000000b004eca2b8b6bdsm1114807lfl.4.2023.05.07.17.33.13
+        d=1e100.net; s=20221208; t=1683509173; x=1686101173;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=E0WGVqQd3crr5/xk4aA5GRbZA5RzgIzcfwtNz3kKyK8=;
+        b=i5lHy7cFZsT2/NY/PJhYi7WA1mLt73CE8/CRULYBQoKXMYKNXCKWdXjt/ku909QoBp
+         YLgRxqWthu5uvWirLJ5wiCPYqiujHGURLHJi3qbmE+O+xOWkwJD3vpf0GIySdl9ug5Yj
+         Zp6X5EWROXsf/ooXEesgl8C2cy7Kz00962Ejtx7tuJdMntEJF3l7i75aHPGzbTJOjGns
+         vNXPOy1saILyQbdbjQ4ssnkV0Iu5KdmINCjvrtTtkqFV5ADZiKHCc+xgo5+trN3Z4OU/
+         rVwECx9N5ODSiy6FDck+ghLod9twK5lVQx9OMjoUOTge+fLFsA0n+9OnBbXo4XhXyVqR
+         bfLA==
+X-Gm-Message-State: AC+VfDxwyjJzptc8zaiSZWULu7RY+UaCw+X+DMdKkIF8jQzO+B4/Swhq
+        iRviDSw+8ODnnVGaCesIkg==
+X-Google-Smtp-Source: ACHHUZ6H9eBYio6qGDMOwk8cjb89NYIm3MN/qp2X9z0JKWHk2TFOrWQVDdy1An/FopnsmcrTn/TLiQ==
+X-Received: by 2002:a9d:7acf:0:b0:6aa:e821:88eb with SMTP id m15-20020a9d7acf000000b006aae82188ebmr2194275otn.4.1683509173213;
+        Sun, 07 May 2023 18:26:13 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t13-20020a05683022ed00b006a4244d2a7asm3592444otc.9.2023.05.07.18.26.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 17:33:14 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+        Sun, 07 May 2023 18:26:12 -0700 (PDT)
+Received: (nullmailer pid 3860869 invoked by uid 1000);
+        Mon, 08 May 2023 01:26:11 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 6/6] ARM: dts: qcom: apq8074-dragonboard: enable coincell charger
-Date:   Mon,  8 May 2023 03:33:09 +0300
-Message-Id: <20230508003309.2363787-7-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230508003309.2363787-1-dmitry.baryshkov@linaro.org>
+        devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20230508003309.2363787-2-dmitry.baryshkov@linaro.org>
 References: <20230508003309.2363787-1-dmitry.baryshkov@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ <20230508003309.2363787-2-dmitry.baryshkov@linaro.org>
+Message-Id: <168350917132.3860853.17086591118019075384.robh@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: power: reset: qcom-pon: define
+ pm8941-pon
+Date:   Sun, 07 May 2023 20:26:11 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable coincell charger for the coin battery which can be installed on
-the APQ8074 dragonboard.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8074-dragonboard.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Mon, 08 May 2023 03:33:04 +0300, Dmitry Baryshkov wrote:
+> On PM8941 pon doesn't store the reset reason. However we still need the
+> wrapping node for pwrkey and resin nodes. Add bindings for pm8941-pon
+> device.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-index 16d609b85dfe..1d1c08674254 100644
---- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-+++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-@@ -113,6 +113,12 @@ &mdss {
- 	status = "okay";
- };
- 
-+&pm8941_coincell {
-+	qcom,rset-ohms = <2100>;
-+	qcom,vset-millivolts = <3000>;
-+	status = "okay";
-+};
-+
- &pm8941_gpios {
-         msm_keys_default: pm8941-gpio-keys-state {
-                 pinconf {
--- 
-2.39.2
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+
+doc reference errors (make refcheckdocs):
+Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
+MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508003309.2363787-2-dmitry.baryshkov@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
