@@ -2,84 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA16A6FB179
-	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 15:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E779F6FB193
+	for <lists+linux-pm@lfdr.de>; Mon,  8 May 2023 15:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbjEHN2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 09:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S234246AbjEHNdp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 09:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbjEHN2M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 09:28:12 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F5C2FA10
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 06:27:50 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f14e499ffcso3265214e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 06:27:50 -0700 (PDT)
+        with ESMTP id S234213AbjEHNdn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 09:33:43 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1531D2FA3B
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 06:33:41 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso8288040a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 May 2023 06:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683552468; x=1686144468;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r+TBigWM2ehipDbkRUdAuCgzID6oBks8XaTBJDdkWFc=;
-        b=hTWTo7imOys4AFS87cJGEfMIEpOPXd14uhIiXwOPXLeclA6p9XMDcbEasRbbdZPaEV
-         R3aola0CtD9H550QWPPCXOHELxXgmpHin+WlAzlo6mosVOskSksL3/smUcDW18/3ztQk
-         cVySGYoIE15GscAZgT/wJfZwuSl+i2kAKi+rJRea7d40F6wlkhZY0r5JVtmRjLaogpPI
-         Xt9hXit6KOva2ndrVoD0ptwRzyx7hBvcz/UXpkIHRUtLyxv8VMJsFiPDyNCJIAY68X1r
-         gKhQr9jveLvMtvxMrRrRjuZDyUm9rrIYYvddGedDwibG6BpJFY39zRR6yQsjhBzVbujY
-         c0VA==
+        d=linaro.org; s=google; t=1683552819; x=1686144819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1tYR6P7sJcX8oTnpRUorpFral+vjD58DTCG1fvb35J4=;
+        b=K0Pl1X4E7bwAlAkGzbEs+5B6FpFXS/1au19R5NBCEt+BTR9L9vL+JJ7Q8We0MaeiTr
+         AXp8Q5O+3Zagr9DINU7ZJFFCdazz8yoLhImXOoF9Vx2D1+N94hEg51ETviAh40lpcF1L
+         MJozvy6Y+xYd1yipRQU/RYAo1QYxYnSKP+8Kt1B5y4ENseBtokBKir2yUNhkw4fYztA6
+         FoHQfrGLmHTs5Ol78OcTG5YUkbzMZAsgQjESMWW8UY7dq8G0EZUVCSDd/SV7wJtKag/Z
+         j6jfzQGt0hK8Jhj5yQIuIgSq7mEgazlur+m31ypVfX6K5FymykQGawkNSJJlvxzc7Kkn
+         65+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683552468; x=1686144468;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r+TBigWM2ehipDbkRUdAuCgzID6oBks8XaTBJDdkWFc=;
-        b=NA7ytbhoreCaIn+6hM+n13USzZsId5Hsci75FEO5K/o5Dp4/EadVxNN0nQctHPE0ne
-         OEyl1MighejmVjq/jaw8gj05cyp3MVHJFoldePvmotMG4QH+cMLZWM/fCVmJiX3+qIkr
-         I3oojuALK8W8YiETLT3nVyrZxjKk9cA+HAvxMWcF9MmYt88TWjI/b4Kih3lGNPlgslQi
-         9dKX6EdYpzfTBKpOCTnmReeYHVdb/UxoTETWk3Oug2UvWRWwKLBjBLat2lYS6etSlBlh
-         qcySI1EAi4IeF5lSQYEtohv6rQzR6+RTPQqWwJwNdFcbEjEKofIk45QBDJ7FF7GnnTWZ
-         H/fw==
-X-Gm-Message-State: AC+VfDzmbTIhRpowf/LKq1S7MJXXzWSQgQHw+1C4nyp123dPFdw1iKl5
-        +sylh5vHPqppLjaKVm0xZH5//w==
-X-Google-Smtp-Source: ACHHUZ6tSkDWh0vYddQ9hk5i8imyUIVF7oZz7m751SD3qNwFBLPxX7uzZ9yTb7bZHmVRYVKPW0RiCQ==
-X-Received: by 2002:a05:6512:38d1:b0:4f1:4468:ee65 with SMTP id p17-20020a05651238d100b004f14468ee65mr2639843lft.30.1683552468354;
-        Mon, 08 May 2023 06:27:48 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id 19-20020ac24833000000b004f0049433adsm1294617lft.307.2023.05.08.06.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 06:27:47 -0700 (PDT)
-Message-ID: <a4f72011-5505-77c2-da3c-dd4e22a4f8d8@linaro.org>
-Date:   Mon, 8 May 2023 16:27:47 +0300
+        d=1e100.net; s=20221208; t=1683552819; x=1686144819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1tYR6P7sJcX8oTnpRUorpFral+vjD58DTCG1fvb35J4=;
+        b=T3Dx3F7fsnU4m2GRAb/0ZNqnr9TjE4YRGj73lG+zbHwQQdbW75/+m6sxkg1Om6xi0g
+         cgD2ElpgpyBtPZHXDtacpmCBKdfoyw5D7P0aGa6BIE5y0qc8e/nGcdJeKzb9g6eac9oo
+         1rfhe63Q0Z+lh12Ko22m3LhL4tWt09eP8LBxHmHBqeO4wglfDu1FuvfNAM4WQaaJxHCO
+         fUNRKCSUTpf4VwxLE507yxoxAjNeMaD6yvKgqAz0HIhXbnKkM+V52vaQu0VicgyDqzb7
+         1QTlqatH2kkJ29M/C3USoUL9n2Bsau18TP6dZzkhCtjqg4NwzBNAu4/CG6TbZRHtCysw
+         JRmg==
+X-Gm-Message-State: AC+VfDwwUNYsllYeAywyFRyFf4RuzKI+ouqJZYdQjaMkYd+rxQHBcTp8
+        WRsRHE0nbvx7nPcklhN4r9Ghrg==
+X-Google-Smtp-Source: ACHHUZ7P68NqwCqkZU5gLXoPHzHQvITJ1zWXVGW18yaw8iQMK7pibINZp1l+7h5Fqnn+2VayEQJxGw==
+X-Received: by 2002:a17:906:fe04:b0:966:1984:9d21 with SMTP id wy4-20020a170906fe0400b0096619849d21mr5389819ejb.9.1683552819421;
+        Mon, 08 May 2023 06:33:39 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id ht7-20020a170907608700b00968242f8c37sm848320ejc.50.2023.05.08.06.33.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 06:33:38 -0700 (PDT)
+Date:   Mon, 8 May 2023 15:33:35 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     Praveenkumar I <quic_ipkumar@quicinc.com>, andersson@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, thara.gopinath@gmail.com,
+        rafael@kernel.org, linux-pm@vger.kernel.org, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, agross@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Message-ID: <20230508133335.rppr54ywbwwh7qth@krzk-bin>
+References: <cover.1683523370.git.quic_varada@quicinc.com>
+ <345a61f6cd56e504e1f82ac2328ffa6d89e2d510.1683523370.git.quic_varada@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/6] thermal: qcom: tsens-v0_1: Fix mdm9607 slope
- values
-Content-Language: en-GB
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230508-msm8909-tsens-v4-0-d9119622cb19@kernkonzept.com>
- <20230508-msm8909-tsens-v4-2-d9119622cb19@kernkonzept.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230508-msm8909-tsens-v4-2-d9119622cb19@kernkonzept.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <345a61f6cd56e504e1f82ac2328ffa6d89e2d510.1683523370.git.quic_varada@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,23 +77,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/05/2023 16:13, Stephan Gerhold wrote:
-> According to the msm-3.18 vendor kernel from Qualcomm [1], mdm9607 uses
-> a non-standard slope value of 3000 (instead of 3200) for all sensors.
-> Fill it properly similar to the 8939 code added recently.
+On Mon, 08 May 2023 11:02:38 +0530, Varadarajan Narayanan wrote:
+> From: Praveenkumar I <quic_ipkumar@quicinc.com>
 > 
-> [1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LE.UM.4.3.2.r1-04200-9x07/arch/arm/boot/dts/qcom/mdm9607.dtsi#L875
+> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
 > 
-> Fixes: a2149ab815fc ("thermal/drivers/qcom/tsens-v0_1: Add support for MDM9607")
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
->   drivers/thermal/qcom/tsens-v0_1.c | 24 +++++++++++++++++-------
->   1 file changed, 17 insertions(+), 7 deletions(-)
+> [v2]:
+> 	Thanks to Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 	for the tip to make qcom,ipq8074-tsens as fallback.
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-With best wishes
-Dmitry
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:67:9: [error] syntax error: expected <block end>, but found '-' (syntax)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:69:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
 
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts'
+Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:67:9: did not find expected key
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+./Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:67:9: did not find expected key
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml: ignoring, error parsing file
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
+MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+
+See https://patchwork.ozlabs.org/patch/1778256
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
