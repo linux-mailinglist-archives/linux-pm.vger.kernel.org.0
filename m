@@ -2,113 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD5D6FCCF1
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 19:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1757B6FCD33
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 20:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbjEIRnE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 May 2023 13:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
+        id S234713AbjEISFd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 14:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbjEIRnA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 13:43:00 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEB840F7
-        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 10:42:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1087789366b.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 May 2023 10:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683654174; x=1686246174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+6CqfpUOuhBdIMyw09BZEvQUMlZ2hFOGBcV2c6lnR3A=;
-        b=AjEyzOVffRUiFWnLDBmNtDe/ucBYt/5khszFHw6tm/dbF0kF3yzZgDjNA7WDufb08B
-         uzBy9ZyTRlDCm7YRIi8rcQWsUH7AaZCYDQUon7B1p9b+WAg86sk5zRyPGwCWdNiBR9vG
-         4J6STzl4OmM1bvOBmyOdfigRKfVsoa9lpD4eoMDeM0qU6Y4VRnkyvVpjM6TXtGNz2Lzd
-         38dlZmByEUfHcyaZ9bG1lwe8TP4cp7Mi4jn4eXkR9fSIuUclx8PW+Wo+m5XfQg8qmn/I
-         tsOBOl/zE6tghsvD+kr1FZgTsDjA+hbYVRXl0yAt7YcEP0sU4rkwuoq8GntYvtDRB0AS
-         JjLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683654174; x=1686246174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+6CqfpUOuhBdIMyw09BZEvQUMlZ2hFOGBcV2c6lnR3A=;
-        b=ZVc+TSyxamRT/rCPO/x60JoaSKb7kkre64ygcy5ZspD50MdX19UVW+eeHUwc1+HEKF
-         XZLIAgV2wBLQU6HXFYREmTnR0fr3BpMSUsnOOR1xybgnNPoGEeOqclLPWri+jF93sj2z
-         gR98TC2q86Ql/SW7Ab4t2oGVEbSPgXhYVDCwNcqovhVmVWrQzmVlsR07RSVBcilpZFFM
-         idFjBhXDeSDUWnePj5OmKj48l0P8uuSKm3ToqBhtvWkCtKc3yWqaghcDA+gx2eTRimOx
-         ZV+PfY8aZdAS+DeSI4DBUHjLvUK/VoIE4L4AyCw667wiuiU8H6t8K/Nalynmqry6x0VI
-         7Q9g==
-X-Gm-Message-State: AC+VfDxFnZVFeSntYf/LBaj9GcLO5gLh17SOEchBTA8UxCltz2VXChz4
-        2bONdidQ6ovFp1Xq50z6Wz8Ngg==
-X-Google-Smtp-Source: ACHHUZ5BzzC72uJ14K+MspznYU/rIVE1+W55VLdtM401cMlKeEaJ5ckngVP1kmYaHsBg4uUNYt4FlA==
-X-Received: by 2002:a17:907:72cc:b0:969:9118:a98f with SMTP id du12-20020a17090772cc00b009699118a98fmr4852570ejc.10.1683654174473;
-        Tue, 09 May 2023 10:42:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170906300d00b009659cdb2f98sm1574510ejz.23.2023.05.09.10.42.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 10:42:53 -0700 (PDT)
-Message-ID: <193f3489-4937-6d4a-2466-a67d335ac37c@linaro.org>
-Date:   Tue, 9 May 2023 19:42:52 +0200
+        with ESMTP id S234814AbjEISFb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 14:05:31 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD29944B0;
+        Tue,  9 May 2023 11:05:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MYu+TrtxE/O9YQd5wpEah3Kt/N05SWut1iBLdzWAVjPzxtAfC5HzcwiyWUbsKwounS46v3AJWgjpj+OYCVeA88so4FS7++TnOgt2Y/IkP49FWFFYaTgNpHXBslD5cj0v/Uy8gEP6n01/gnRny0uF1lRCeY9S9BPuX7kqkkDl8vnKPbRtC9FMxhcnNQvxT1vP52FZNJCIljz19cvjiiFXFrczToaL94jZikanO5Flvhh2HqqEOPTVu0Wp03SdOBqjIs9xaQfXpWII2IGakiPguFeVowATRtcTnf/8jxu6edWQA7gyuFoc5mj1bAz1+BXWxw1fdGrbdnHfqevNL66xKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NHt99vA/XKC1UR+xrhJqz937+6u/cZV1lA4Xq7/2E9g=;
+ b=bIpn1wXGOWfIL2Mf97VQeCZryqeyIkkqo2537ZtUZxeYjaFYEdYEH0J5CQO1NhnQAfKiVF8ery81kyLuUR7G8r66CKwhAzBCrg0VecQ2wm8EWC1T39I8PpMZ1szWMJ4jxK9wU9CjBC/bHdx0uzSY7+sSi3pRXhjNL6zw40dwd9jKAScNdwnOClFDPv/4ku8H+hh91DQj5rkOIvkLvzn4ykOx6ao3W/bLTeZ0ikp72Z5pUUzG5MGWvatFpATsrZG3qRy4eAP6aP4zNFXBpU/nledMVe24/J0xhxU5dMXf/jGvJ9ZHz++YuFUufN6vGQeuExP/J0ZsVjkj8GRrKAcAJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com;
+ dmarc=temperror action=none header.from=amd.com; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NHt99vA/XKC1UR+xrhJqz937+6u/cZV1lA4Xq7/2E9g=;
+ b=qrchPSGuBWAhE5YTij0nh89GdO/SC4OOsLlBgZKGCpqcT8ftVeDExPsZ4t2Q1yBja3CGgR1HlRumQauhgz8f3QhT8gpnyw757yNlD2QgiLZDUs38mr6Ovhs+1eE2KsOUECiikPrLN1P+rG++90Qx+8qxhKRKYlFVgGDiYjwKIwY=
+Received: from CH2PR07CA0062.namprd07.prod.outlook.com (2603:10b6:610:5b::36)
+ by IA1PR12MB8192.namprd12.prod.outlook.com (2603:10b6:208:3f9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
+ 2023 18:05:26 +0000
+Received: from MWH0EPF000971E2.namprd02.prod.outlook.com
+ (2603:10b6:610:5b:cafe::59) by CH2PR07CA0062.outlook.office365.com
+ (2603:10b6:610:5b::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
+ Transport; Tue, 9 May 2023 18:05:25 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=amd.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of amd.com: DNS Timeout)
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000971E2.mail.protection.outlook.com (10.167.243.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6387.19 via Frontend Transport; Tue, 9 May 2023 18:05:23 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 9 May
+ 2023 13:05:18 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <ray.huang@amd.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <srinivas.pandruvada@linux.intel.com>,
+        <lenb@kernel.org>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <joel@joelfernandes.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH v2 0/2] cpufreq/schedutil: Fix null pointer dereference in sugov_update_single_freq
+Date:   Tue, 9 May 2023 18:05:01 +0000
+Message-ID: <20230509180503.739208-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 08/13] Revert "phy: Remove SOC_EXYNOS4212 dep. from
- PHY_EXYNOS4X12_USB"
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230501195525.6268-1-aweber.kernel@gmail.com>
- <20230501195525.6268-9-aweber.kernel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501195525.6268-9-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E2:EE_|IA1PR12MB8192:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25aa7dbd-ab7b-4a38-d9d9-08db50b7f5f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6RvEYNUOmUTIcCGSukhzEn8qx1LE/y0lFVRbFoDU3CAIbYOPSQ+48ZOpRmI/3lTuMzjc0G8YXFnmr64dm24uizvMqZI3ibO9rEsUbWZ1iAYiKNQYNuTu5fRklaJ7i6Y4KM5bPtwDMSWb+1veIQzESZKxswa68sT8v3ed98McUMggL4QlreWGxBLlQmxBi3aqBUYW4C8TEx3iMxt+ifqnkvpJ+r+6Sn3CRvTExfnA1qnAhFgBL9HUnRlbavMPhaD9CZUFyE3tfaGjDW78bViOic6JLBv5yhHVSlcNE1fM70+mkmNfjg6k3bx75Niu1j8K1fOkMrrY+EgyGHD8GHf4rrxPo0Crmh90YXCpviCgPfpt6VdYtI4XK2h/0NgO6yVIFtuJKUwLg07zFKnrkHYErES7znM3eu2w1GbRBQe1hNq+BautWlKDvf6DKXGhQUTg1FRYjT9xN61Gb9wO8cNNYH66BFRNP/I7VTJQmpOEdfreE3AB0O7U3jmReHZJ/CaTc+RoM/p4g9/7TcCJ1Du2y4ZWMnaunDrhJ06uyEmsFMPPh3p0q0GH96kYpmCwIBpMtprD0MRSt08TBfDPXHPupZ8SW8+VBdmni8BF5lWRh5D2RerBLx3wJ+2Pu4VS/SY/afVsnauvN61DgxlU8UuOZwN4Hn5IgxQj1bTAH/PW0A+i7HrTErIdrs75MIQQ12f8Grz2btW/JY94mQ/kXXRYfO8ib2wmNoZL6BuYVbwBrBALJiA0NH4h25g5KC1l0MrA
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(8936002)(5660300002)(44832011)(7416002)(8676002)(54906003)(110136005)(7696005)(6666004)(316002)(966005)(41300700001)(1076003)(26005)(2906002)(4326008)(70586007)(70206006)(478600001)(47076005)(40460700003)(63350400001)(83380400001)(63370400001)(16526019)(426003)(336012)(2616005)(36860700001)(356005)(82740400003)(81166007)(40480700001)(186003)(86362001)(82310400005)(36756003)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 18:05:23.6777
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25aa7dbd-ab7b-4a38-d9d9-08db50b7f5f0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E2.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8192
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/05/2023 21:55, Artur Weber wrote:
-> Support for the Exynos4212 SoC was originally dropped as there were
-> no boards using it. We will be adding a device that uses it, so add
-> it back.
-> 
-> This reverts commit fee7e1d50c6e6da1d99035181ba5a5c88f5bb526.
+Currently, amd_pstate only uses `adjust_perf` and `target` callback
+functions to get the frequency/effective utilization data from scaling
+governors.  Schedutil generally avoids calling `target` and `fast_switch`
+functions if `adjust_perf` function pointer is set for the driver. But in
+some rare cases, schedutil tries to call `fast_switch` function even the
+function pointer is not set. This happens when frequency invariance is
+turned off.  When frequency invariance is turned off schedutil falls
+back to `sugov_update_single_freq` which currently relies on the
+`fast_switch` callback.
 
-Subject:
-phy: Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
+Currently, frequency invariance is turned off when any anomaly is
+detected with aperf/mperf readings. Which triggers this problem.
 
-I assume this will go via phy tree. If not, let me know.
+Fix this by disabling `fast_switch_enabled` flag if `fast_switch`
+callback is not set and removing `fast_switch_enabled` flag dependency
+for adjust_perf callback.  But this will force schedutil to take a slower
+path to update frequency.  Therefore to fix this add fast_switch
+function on amd_pstate to take advantage of fast frequency update.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changelog:
+v1 -> v2
+- Remove fast_switch_enabled flag dependency for adjust_perf callback
 
+v1: https://lore.kernel.org/linux-pm/20230410095045.14872-1-wyes.karny@amd.com/
 
-Best regards,
-Krzysztof
+Gautham R. Shenoy (1):
+  amd_pstate: Add ->fast_switch() callback
+
+Wyes Karny (1):
+  cpufreq/schedutil: Remove fast_switch_possible flag if driver doesn't
+    set fast_switch
+
+ drivers/cpufreq/amd-pstate.c     | 46 +++++++++++++++++++++++++-------
+ drivers/cpufreq/cpufreq.c        | 20 +++++++++++++-
+ drivers/cpufreq/intel_pstate.c   |  3 +--
+ include/linux/cpufreq.h          |  1 +
+ kernel/sched/cpufreq_schedutil.c |  2 +-
+ 5 files changed, 59 insertions(+), 13 deletions(-)
+
+-- 
+2.34.1
 
