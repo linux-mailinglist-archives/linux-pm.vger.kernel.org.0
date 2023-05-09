@@ -2,147 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57816FCB15
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 18:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70506FCB75
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 18:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjEIQSX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 9 May 2023 12:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S229695AbjEIQjA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 12:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEIQSW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 12:18:22 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87365A6;
-        Tue,  9 May 2023 09:18:21 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5068638856dso1446775a12.1;
-        Tue, 09 May 2023 09:18:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683649100; x=1686241100;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0PaErfZ7CFuBtAl5PK49szGukMRl5+5+t7uieLVNF3k=;
-        b=IGkTG8emTqYAYdhprseHuxIt2LKFcHelzLoR7/LO1EJYhfxhQqegR9L1EUYmnhtNxX
-         rCjvq9FQL8usKAQa5RwNaSGsKPoqVkVHRtztv96/7vRfq9vqwLzdoa2lEbOhdm4gafgT
-         38DHIECD5PDHxGQvsDwaYZMCsCymhBNp5uPmJKZXW0GJG/5fc6Da8mShopWjKo5JP8Lr
-         5xzmzqfWgDjQLymI7PXnG8wRFnrHBhdKGBjIar6OX0aZlhnMHSZdmhOH41xe0xRHlyeW
-         zXCE/fSEybaSjr/dKTZddrWczWb19OPblCiWGZnQ09X40F8E4NVbFMThvfEsva8SHdSA
-         SeAw==
-X-Gm-Message-State: AC+VfDw7IWiMymUKuvFyzI9weGV+ZQNFjKnSL2s6x/mF2xXYq49n/rU6
-        xDHfPq5TmMR6Z/tvJbQXPvkDsyE7qx0k5shOva0=
-X-Google-Smtp-Source: ACHHUZ5VvVh2YXPbdCQ+/kDWfNv8AsaUnyBBjPvTmT7MkhPyC1xgWUZ4lEdD8jDiuaVk8g4ag7V/4WDc1wznS3fa+Lk=
-X-Received: by 2002:a05:6402:3482:b0:508:40a5:beb4 with SMTP id
- v2-20020a056402348200b0050840a5beb4mr14832425edc.3.1683649099853; Tue, 09 May
- 2023 09:18:19 -0700 (PDT)
+        with ESMTP id S233820AbjEIQim (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 12:38:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184B13AAE;
+        Tue,  9 May 2023 09:38:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D2EE62906;
+        Tue,  9 May 2023 16:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F06C433EF;
+        Tue,  9 May 2023 16:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683650319;
+        bh=rUhrsUno5UKglRVnTSvs0i9Sqtx8GYNijNMIbG+2KZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tYIPeqQC8eQvgj6sCmgYFlKvVU6IQn7QeOxFA9EZLH8Ca9JeyfzS3jJYSHpl0E2cB
+         IGhCIX4JkIE0U4UuqU2X6H4fWUyoTbGywdal+kK8GjhTaTFdjo95GKyqAKvabQ2YQg
+         xMA0+dIoolZQO3aV5XT56GGpHKROYtxiBrDM4e8ammq4rLfCHkrnP8yov9HUA+BVEi
+         i2Wl6nOfRzjcPXiGqqlF4Eb9jfRwJm4jAaQuvjU1JKkLrdW8z5pHILDQWrmnp5A3I2
+         FfNU50o3L6Q6Y397uv/s87GErb4jxeb15+6pqneInPDZNqxrEpfoMLbNUupGtZxWmW
+         8kyikRGNNay8g==
+Date:   Tue, 9 May 2023 09:38:37 -0700
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 02/12] mm: page_alloc: move init_on_alloc/free() into
+ mm_init.c
+Message-ID: <20230509163837.GA4135@kernel.org>
+References: <20230508071200.123962-1-wangkefeng.wang@huawei.com>
+ <20230508071200.123962-3-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-References: <20230508211951.901961964@infradead.org> <20230508213147.990013706@infradead.org>
-In-Reply-To: <20230508213147.990013706@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 9 May 2023 18:18:08 +0200
-Message-ID: <CAJZ5v0jc29fSGFzN2Yeb+xRQZ9Y0V2_Ge17YnsEG5Um9OV25uw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 9/9] cpuidle: Use local_clock_noinstr()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508071200.123962-3-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 8, 2023 at 11:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> With the introduction of local_clock_noinstr(), local_clock() itself
-> is no longer marked noinstr, use the correct function.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  drivers/cpuidle/cpuidle.c    |    8 ++++----
->  drivers/cpuidle/poll_state.c |    4 ++--
->  2 files changed, 6 insertions(+), 6 deletions(-)
->
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -145,7 +145,7 @@ static noinstr void enter_s2idle_proper(
->
->         instrumentation_begin();
->
-> -       time_start = ns_to_ktime(local_clock());
-> +       time_start = ns_to_ktime(local_clock_noinstr());
->
->         tick_freeze();
->         /*
-> @@ -169,7 +169,7 @@ static noinstr void enter_s2idle_proper(
->         tick_unfreeze();
->         start_critical_timings();
->
-> -       time_end = ns_to_ktime(local_clock());
-> +       time_end = ns_to_ktime(local_clock_noinstr());
->
->         dev->states_usage[index].s2idle_time += ktime_us_delta(time_end, time_start);
->         dev->states_usage[index].s2idle_usage++;
-> @@ -243,7 +243,7 @@ noinstr int cpuidle_enter_state(struct c
->         sched_idle_set_state(target_state);
->
->         trace_cpu_idle(index, dev->cpu);
-> -       time_start = ns_to_ktime(local_clock());
-> +       time_start = ns_to_ktime(local_clock_noinstr());
->
->         stop_critical_timings();
->         if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE)) {
-> @@ -276,7 +276,7 @@ noinstr int cpuidle_enter_state(struct c
->         start_critical_timings();
->
->         sched_clock_idle_wakeup_event();
-> -       time_end = ns_to_ktime(local_clock());
-> +       time_end = ns_to_ktime(local_clock_noinstr());
->         trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
->
->         /* The cpu is no longer idle or about to enter idle. */
-> --- a/drivers/cpuidle/poll_state.c
-> +++ b/drivers/cpuidle/poll_state.c
-> @@ -15,7 +15,7 @@ static int __cpuidle poll_idle(struct cp
->  {
->         u64 time_start;
->
-> -       time_start = local_clock();
-> +       time_start = local_clock_noinstr();
->
->         dev->poll_time_limit = false;
->
-> @@ -32,7 +32,7 @@ static int __cpuidle poll_idle(struct cp
->                                 continue;
->
->                         loop_count = 0;
-> -                       if (local_clock() - time_start > limit) {
-> +                       if (local_clock_noinstr() - time_start > limit) {
->                                 dev->poll_time_limit = true;
->                                 break;
->                         }
->
+On Mon, May 08, 2023 at 03:11:50PM +0800, Kefeng Wang wrote:
+> Since commit f2fc4b44ec2b ("mm: move init_mem_debugging_and_hardening()
+> to mm/mm_init.c"), the init_on_alloc() and init_on_free() define is
+> better to move there too.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-The above LGTM, but the teo governors uses local_clock() too.  Should
-it use the _noinstr() version?
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
+> ---
+>  mm/mm_init.c    | 6 ++++++
+>  mm/page_alloc.c | 5 -----
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index da162b7a044c..15201887f8e0 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -2543,6 +2543,12 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+>  	__free_pages_core(page, order);
+>  }
+>  
+> +DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_ALLOC_DEFAULT_ON, init_on_alloc);
+> +EXPORT_SYMBOL(init_on_alloc);
+> +
+> +DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_FREE_DEFAULT_ON, init_on_free);
+> +EXPORT_SYMBOL(init_on_free);
+> +
+>  static bool _init_on_alloc_enabled_early __read_mostly
+>  				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
+>  static int __init early_init_on_alloc(char *buf)
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index d1086aeca8f2..4f094ba7c8fb 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -233,11 +233,6 @@ unsigned long totalcma_pages __read_mostly;
+>  
+>  int percpu_pagelist_high_fraction;
+>  gfp_t gfp_allowed_mask __read_mostly = GFP_BOOT_MASK;
+> -DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_ALLOC_DEFAULT_ON, init_on_alloc);
+> -EXPORT_SYMBOL(init_on_alloc);
+> -
+> -DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_FREE_DEFAULT_ON, init_on_free);
+> -EXPORT_SYMBOL(init_on_free);
+>  
+>  /*
+>   * A cached value of the page's pageblock's migratetype, used when the page is
+> -- 
+> 2.35.3
+> 
