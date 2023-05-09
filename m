@@ -2,117 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC116FCE00
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 20:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B206FCE30
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 21:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjEISuN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 May 2023 14:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S235006AbjEITDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 15:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjEISuM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 14:50:12 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C942D43
-        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 11:50:07 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so9508454a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 May 2023 11:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683658206; x=1686250206;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7vDwdI4Y0zhDRNPMOTcRtq2TPj7BphvfPLZ3WWPJT7s=;
-        b=dDk7hNdWSHdPiXlx2txnzdQ8whDxlg4yZNetGYJvUoAYTrywaDhZbApu9JTLZGR5Qu
-         8etrdRwat3yRGIjy1vyCkywzLvEXI1jzeIi3DZXVTT1Nam1CyZPuIJJg2CFt3teFl477
-         XRrMyOEqixZxxwHev98tEaS34+i2Cv3FExLcvl+GATfR0ThZI/XFhlfteaODKfCzKSiC
-         apDg1ls4qyFeUvfUPyyYSnDNXExilb//syx2rPgBvT4Wv2h47AcWpG7rBQX5hdqRT15v
-         0PoA641WADeOII3l0+DE7CcpeN1fAripoa5kWM4cyWWWC7hhDvQpAybiBln4bzr/l3dm
-         Bj0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683658206; x=1686250206;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7vDwdI4Y0zhDRNPMOTcRtq2TPj7BphvfPLZ3WWPJT7s=;
-        b=eYDlj7OmF/285WpCB8x2hy/IH7KScyzquLiG5x9zKSkKxyziUWhBR/Mlvg3qU14hOr
-         lG9KseDhBD0BnsHHKzRCrACdBykYUwRK3fC3GvFprivT62WCGBb5tjlYVrOPolYCxavg
-         7yVdw8MkfLaI7KihVvjwKFk4Kiao7OYVQLzpa7x1QAzuZBBKm0RCDAitUeXTFwOrayyb
-         gOCdAiENf21IhSAZjF4Ri8+Sed5Ys8MEXpYUuWSU28KFwM+fVmXEIOEGMWvERz1WxBVV
-         19GkFu6L1aTshLMOjHP2uwxy1u5tBbrDR6e65mv9cziu+YjeEebjs1wAviOkQQqaQ5zA
-         tYgw==
-X-Gm-Message-State: AC+VfDxZchEJmu+5/ipIVG4OeSjV9AwIv6Dc6rcJ9YN+dLVZ8tPbdK1h
-        NzXcFYsi/BSIxmQXl2F1It8=
-X-Google-Smtp-Source: ACHHUZ6IRaVlQNavyKreJUzKlq8F5+VTTntfW23W4708AokIbLGmaTKpNEip4Boxb98XHHUIHJP1bw==
-X-Received: by 2002:a17:907:36c6:b0:94f:562b:2979 with SMTP id bj6-20020a17090736c600b0094f562b2979mr12447551ejc.31.1683658206255;
-        Tue, 09 May 2023 11:50:06 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id ig13-20020a1709072e0d00b0096623c00727sm1649843ejc.136.2023.05.09.11.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 11:50:05 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id 39509BE2DE0; Tue,  9 May 2023 20:50:05 +0200 (CEST)
-Date:   Tue, 9 May 2023 20:50:05 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org
-Cc:     Ben Hutchings <ben@decadent.org.uk>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] cpupower: Bump soname version
-Message-ID: <ZFqV3ZFROy0m+/Xt@eldamar.lan>
-References: <20160610005619.GQ7555@decadent.org.uk>
+        with ESMTP id S234743AbjEITDl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 15:03:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA7C4494;
+        Tue,  9 May 2023 12:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=TSBh9Kcc3KUBCL5aBYO64M6mJ0lqBshLkhyf/of1TC0=; b=FCW62nSzYz/ok7iHxNvcDpG+dG
+        p6YklNcqU1xc1R5gABl7j+pzt4edhSw9O4ekmaa3xTKe85WxJ7j//bk1Hq0aCLl67UaBbwwxCCHk/
+        nBmP1Oh1U922UgmktErEM43hSE3cxvXYb9NGz9UhnoYMvGUoSgjnPgFVXoSKId4RFqoRyo4NHPoij
+        bcScWKk9g+9EmYD6JUcbQy52qy2HwBwNUmDY8rkGLXv4ab46T6LJkJ9XmnxOAcFAsQwz8NgGbcGaF
+        KscqydThd0TZMh7kkUKJjl966pJSmroQfUfcyEtrdVazmY6otdbItrWnRiZGbTqn4ostdQpRvv49n
+        n+gHUO8Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwSbb-006EfJ-1j;
+        Tue, 09 May 2023 19:02:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EA809300451;
+        Tue,  9 May 2023 21:02:31 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC6D620F0E418; Tue,  9 May 2023 21:02:31 +0200 (CEST)
+Date:   Tue, 9 May 2023 21:02:31 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
+        daniel.lezcano@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        longman@redhat.com, boqun.feng@gmail.com, pmladek@suse.com,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC][PATCH 9/9] cpuidle: Use local_clock_noinstr()
+Message-ID: <20230509190231.GA2148518@hirez.programming.kicks-ass.net>
+References: <20230508211951.901961964@infradead.org>
+ <20230508213147.990013706@infradead.org>
+ <CAJZ5v0jc29fSGFzN2Yeb+xRQZ9Y0V2_Ge17YnsEG5Um9OV25uw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20160610005619.GQ7555@decadent.org.uk>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jc29fSGFzN2Yeb+xRQZ9Y0V2_Ge17YnsEG5Um9OV25uw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Thomas,
+On Tue, May 09, 2023 at 06:18:08PM +0200, Rafael J. Wysocki wrote:
+> On Mon, May 8, 2023 at 11:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > --- a/drivers/cpuidle/poll_state.c
+> > +++ b/drivers/cpuidle/poll_state.c
+> > @@ -15,7 +15,7 @@ static int __cpuidle poll_idle(struct cp
+> >  {
+> >         u64 time_start;
+> >
+> > -       time_start = local_clock();
+> > +       time_start = local_clock_noinstr();
+> >
+> >         dev->poll_time_limit = false;
+> >
+> > @@ -32,7 +32,7 @@ static int __cpuidle poll_idle(struct cp
+> >                                 continue;
+> >
+> >                         loop_count = 0;
+> > -                       if (local_clock() - time_start > limit) {
+> > +                       if (local_clock_noinstr() - time_start > limit) {
+> >                                 dev->poll_time_limit = true;
+> >                                 break;
+> >                         }
+> >
+> 
+> The above LGTM, but the teo governors uses local_clock() too.  Should
+> it use the _noinstr() version?
 
-On Fri, Jun 10, 2016 at 01:56:20AM +0100, Ben Hutchings wrote:
-> Several functions in the libcpupower API are renamed or removed in
-> Linux 4.7.  This is an backward-incompatible ABI change, so the
-> library soname should change from libcpupower.so.0 to
-> libcpupower.so.1.
-> 
-> Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
-> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> ---
-> I have to say the choice of variable names here is rather confusing.
-> LIB_MIN is used for the soname version, which would normally be the
-> *major* part of the version.
-> 
-> I'll send a second patch that switches to more conventional library
-> versioning.
-> 
-> Ben.
-> 
->  tools/power/cpupower/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-> index 8358863259c5..0b85f5915ce8 100644
-> --- a/tools/power/cpupower/Makefile
-> +++ b/tools/power/cpupower/Makefile
-> @@ -64,7 +64,7 @@ DESTDIR ?=
->  
->  VERSION=			$(shell ./utils/version-gen.sh)
->  LIB_MAJ=			0.0.1
-> -LIB_MIN=			0
-> +LIB_MIN=			1
->  
->  PACKAGE =			cpupower
->  PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
-
-Repinging this patch. Thomas, we are shipping it in Debian since, and
-I'm wondering if the patch did just felt trough the cracks.
-
-Regards,
-Salvatore
+Only the callsites from noinstr or __cpuidle functions, IIRC the
+governors are neither and should be OK.
