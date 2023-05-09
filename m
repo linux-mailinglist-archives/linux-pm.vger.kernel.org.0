@@ -2,196 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE1A6FBD57
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 04:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F106FBD5A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 04:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbjEICm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 22:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S232665AbjEICpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 22:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbjEICmZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 22:42:25 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CC3E40D5
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 19:42:20 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.74])
-        by gateway (Coremail) with SMTP id _____8AxW+oLs1lkP9QGAA--.11316S3;
-        Tue, 09 May 2023 10:42:19 +0800 (CST)
-Received: from chenhuacai$loongson.cn ( [112.20.109.74] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Tue, 9 May 2023 10:42:17
- +0800 (GMT+08:00)
-X-Originating-IP: [112.20.109.74]
-Date:   Tue, 9 May 2023 10:42:17 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-To:     "Sebastian Reichel" <sebastian.reichel@collabora.com>
-Cc:     linux-pm@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>
-Subject: Re: Re: [PATCH] power: supply: Get battery info only if
- psy->battery_info is not NULL
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2023 www.mailtech.cn .loongson.cn
-In-Reply-To: <20230508121140.ojwcrptgsz7de3jf@mercury.elektranox.org>
-References: <20230504120636.2443331-1-chenhuacai@loongson.cn>
- <20230508121140.ojwcrptgsz7de3jf@mercury.elektranox.org>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: GF1qzGZvb3Rlcl90eHQ9NjI1Njo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S231372AbjEICpk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 22:45:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2088B4207
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 19:45:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABD6962754
+        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 02:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44245C433EF;
+        Tue,  9 May 2023 02:45:36 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     chenhuacai@kernel.org, linux-pm@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] power: supply: Fix power_supply_get_battery_info() if parent is NULL
+Date:   Tue,  9 May 2023 10:44:48 +0800
+Message-Id: <20230509024448.1322898-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Message-ID: <38de45d.1901.187fe635cd4.Coremail.chenhuacai@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8AxkOQJs1lkhAxSAA--.9241W
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAGBmRY5n0NlQAAs+
-X-Coremail-Antispam: 1Uk129KBjvJXoW3JFWDCFW7Aw1UJryDKryUWrg_yoWxXw1fpr
-        W5tr45KrW8XryUA3W2yF1jyrW3Gws8AF18Jr1xJr1xCr1UXr1qqryUJrW5JryUtr4rJF13
-        Jr1Dtw1ftr13G3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACY4xI67k04243AVAKzVAKj4
-        xxM4xvF2IEb7IF0Fy26I8I3I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-        CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAYjxAx
-        ZFUvcSsGvfC2KfnxnUUI43ZEXa7IU1SoGPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HEXHASH_WORD,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIFNlYmFzdGlhbiwKCj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7tuS6ujogIlNl
-YmFzdGlhbiBSZWljaGVsIiA8c2ViYXN0aWFuLnJlaWNoZWxAY29sbGFib3JhLmNvbT4KPiDlj5Hp
-gIHml7bpl7Q6MjAyMy0wNS0wOCAyMDoxMTo0MCAo5pif5pyf5LiAKQo+IOaUtuS7tuS6ujogIkh1
-YWNhaSBDaGVuIiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4KPiDmioTpgIE6IGxpbnV4LXBtQHZn
-ZXIua2VybmVsLm9yZywgIlh1ZWZlbmcgTGkiIDxsaXh1ZWZlbmdAbG9vbmdzb24uY24+Cj4g5Li7
-6aKYOiBSZTogW1BBVENIXSBwb3dlcjogc3VwcGx5OiBHZXQgYmF0dGVyeSBpbmZvIG9ubHkgaWYg
-cHN5LT5iYXR0ZXJ5X2luZm8gaXMgbm90IE5VTEwKPiAKPiBIaSwKPiAKPiBPbiBUaHUsIE1heSAw
-NCwgMjAyMyBhdCAwODowNjozNlBNICswODAwLCBIdWFjYWkgQ2hlbiB3cm90ZToKPiA+IEFmdGVy
-IGNvbW1pdCAyN2EyMTk1ZWZhOGQyNjQ0N2MgKCJwb3dlcjogc3VwcGx5OiBjb3JlOiBhdXRvLWV4
-cG9zdXJlCj4gPiBvZiBzaW1wbGUtYmF0dGVyeSBkYXRhIikgd2UgY2FsbCBwb3dlcl9zdXBwbHlf
-Z2V0X2JhdHRlcnlfaW5mbygpIGluCj4gPiBfX3Bvd2VyX3N1cHBseV9yZWdpc3RlcigpLCBidXQg
-aXQgY2F1c2VzIHRlc3RfYmF0dGVyeSBjcmFzaCB3aXRoIE5VTEwKPiA+IHBvaW50ZXI6Cj4gPiAK
-PiA+IFsgICAgNy41MjQ4NDZdIF9fcG93ZXJfc3VwcGx5X3JlZ2lzdGVyOiBFeHBlY3RlZCBwcm9w
-ZXIgcGFyZW50IGRldmljZSBmb3IgJ3Rlc3RfYmF0dGVyeScKPiAKPiBTbyB0aGVyZSBpcyBubyBw
-YXJlbnQgZGV2aWNlLiBUaGF0IG1lYW5zIHRoZSBmb2xsb3dpbmcgd2lsbCBjcmFzaDoKPiAKPiBw
-b3dlcl9zdXBwbHlfZ2V0X2JhdHRlcnlfaW5mbygpCj4gICBmd25vZGVfcHJvcGVydHlfZ2V0X3Jl
-ZmVyZW5jZV9hcmdzCj4gICAgIGRldl9md25vZGUocHN5LT5kZXYucGFyZW50KQo+IAo+IFNpbmNl
-IHRoZXJlIGlzIG5vIHBhcmVudCB0aGF0IHRyYW5zbGF0ZXMgdG8gZGV2X2Z3bm9kZShOVUxMKSBh
-bmQgdGhhdAo+IGNyYXNoZXMuCj4gCj4gVGhlIHByb3BlciBmaXggaXMgdG8gY2hhbmdlIHRoZSBl
-bHNlIGJyYW5jaCBpbgo+IHBvd2VyX3N1cHBseV9nZXRfYmF0dGVyeV9pbmZvKCkgdG8gYmUgJ2Vs
-c2UgaWYgKHBzeS0+ZGV2LnBhcmVudCknLgo+IFNpbmNlIHRoYXQgd2lsbCBsZWF2ZSBmd25vZGUg
-dW5pbml0aWFsaXplZCwgaXQgYWxzbyBuZWVkcyB0byBiZQo+IGluaXRpYWxpemVkIHRvIE5VTEwg
-YXQgZGVjbGFyYXRpb24gdGltZS4KT0ssIEkgd2lsbCBzZW5kIGEgbmV3IHZlcnNpb24sIHRoYW5r
-cy4KCkh1YWNhaQo+IAo+ID4gWyAgICA3LjUyNDg1Nl0gQ1BVIDMgVW5hYmxlIHRvIGhhbmRsZSBr
-ZXJuZWwgcGFnaW5nIHJlcXVlc3QgYXQgdmlydHVhbCBhZGRyZXNzIDAwMDAwMDAwMDAwMDAyNzgs
-IGVyYSA9PSA5MDAwMDAwMDAyZmIyNzljLCByYSA9PSA5MDAwMDAwMDAzMTczNDM0Cj4gPiBbICAg
-IDcuNTI0ODYyXSBPb3BzWyMxXToKPiA+IFsgICAgNy41MjQ4NjZdIENQVTogMyBQSUQ6IDEgQ29t
-bTogc3dhcHBlci8wIE5vdCB0YWludGVkIDYuMy4wKyAjNTI0Cj4gPiBbICAgIDcuNTI0ODcwXSBI
-YXJkd2FyZSBuYW1lOiBMb29uZ3NvbiBMb29uZ3Nvbi0zQTUwMDAtN0ExMDAwLTF3LUNSQi9Mb29u
-Z3Nvbi1MUzNBNTAwMC03QTEwMDAtMXctQ1JCLCBCSU9TIHZVREsyMDE4LUxvb25nQXJjaC1WMi4w
-LjAtcHJlYmV0YTkgMTAvMjEvMjAyMgo+ID4gWyAgICA3LjUyNDg3Ml0gcGMgOTAwMDAwMDAwMmZi
-Mjc5YyByYSA5MDAwMDAwMDAzMTczNDM0IHRwIDkwMDAwMDAxMDAxZjAwMDAgc3AgOTAwMDAwMDEw
-MDFmM2MwMAo+ID4gWyAgICA3LjUyNDg3NV0gYTAgMDAwMDAwMDAwMDAwMDAwMCBhMSAwMDAwMDAw
-MDAwMDAwMDAwIGEyIDAwMDAwMDAwMDAwMDAwMDAgYTMgOTAwMDAwMDAwNDU1M2UxMwo+ID4gWyAg
-ICA3LjUyNDg3OF0gYTQgOTAwMDAwMDAwNDU1M2UxNiBhNSBmZmZmZmZmZmZmZmZmZmZmIGE2IDkw
-MDAwMDAwMDNmZDA5NDggYTcgMDAwMDAwMDAwMDAwMDAzMAo+ID4gWyAgICA3LjUyNDg4MV0gdDAg
-OTAwMDAwMDAwMzE3MzQzNCB0MSA5MDAwMDAwMDAzNWUyYzAwIHQyIDAwMDAwMDAwMDAwMDAwMDEg
-dDMgMDAwMDAwMDBmZmZmZjJiMAo+ID4gWyAgICA3LjUyNDg4M10gdDQgMDAwMDAwMDAwMDAwMDAw
-NyB0NSBmZmZmZmZmZmZmZmZmZmZlIHQ2IDAwMDAwMDAwMDAwMDAwMDAgdDcgMDAwMDAwMDAwMDAw
-MDAxMAo+ID4gWyAgICA3LjUyNDg4Nl0gdDggMDAwMDAwMDAwMDAwMDBiNCB1MCAwMDAwMDAwMWMw
-ODQwYzc2IHM5IDAwMDAwMDAwMDAwMDAwMDAgczAgMDAwMDAwMDAwMDAwMDAwMAo+ID4gWyAgICA3
-LjUyNDg4OV0gczEgOTAwMDAwMDAwMzcwYzQ1OCBzMiAwMDAwMDAwMDAwMDAwMDAxIHMzIDkwMDAw
-MDAxMDFmODEwMDAgczQgOTAwMDAwMDEwMWY4MTAzOAo+ID4gWyAgICA3LjUyNDg5MV0gczUgOTAw
-MDAwMDEwMWY4MTNhMCBzNiA5MDAwMDAwMDAzNzBjMzk4IHM3IDkwMDAwMDAwMDNlZWJkMTggczgg
-OTAwMDAwMDAwMzdjMDA3MAo+ID4gWyAgICA3LjUyNDg5NF0gICAgcmE6IDkwMDAwMDAwMDMxNzM0
-MzQgcG93ZXJfc3VwcGx5X2dldF9iYXR0ZXJ5X2luZm8rMHhlNC8weDcxMAo+ID4gWyAgICA3LjU5
-MTIyNF0gICBFUkE6IDkwMDAwMDAwMDJmYjI3OWMgX19kZXZfZndub2RlKzB4OC8weDIwCj4gPiBb
-ICAgIDcuODUzNTgzXSAgQ1JNRDogMDAwMDAwYjAgKFBMVjAgLUlFIC1EQSArUEcgREFDRj1DQyBE
-QUNNPUNDIC1XRSkKPiA+IFsgICAgNy44NTk3NDBdICBQUk1EOiAwMDAwMDAwNCAoUFBMVjAgK1BJ
-RSAtUFdFKQo+ID4gWyAgICA3Ljg2NDA3M10gIEVVRU46IDAwMDAwMDAwICgtRlBFIC1TWEUgLUFT
-WEUgLUJURSkKPiA+IFsgICAgNy44Njg4MzldICBFQ0ZHOiAwMDA3MWMxYyAoTElFPTItNCwxMC0x
-MiBWUz03KQo+ID4gWyAgICA3Ljg3MzQzMF0gRVNUQVQ6IDAwMDEwMDAwIFtQSUxdIChJUz0gRUNv
-ZGU9MSBFc3ViQ29kZT0wKQo+ID4gWyAgICA3Ljg3ODg4NF0gIEJBRFY6IDAwMDAwMDAwMDAwMDAy
-NzgKPiA+IFsgICAgNy44ODIzNDZdICBQUklEOiAwMDE0YzAxMCAoTG9vbmdzb24tNjRiaXQsIExv
-b25nc29uLTNBNTAwMCkKPiA+IFsgICAgNy44ODgwNTZdIE1vZHVsZXMgbGlua2VkIGluOgo+ID4g
-WyAgICA3Ljg5MTA4OF0gUHJvY2VzcyBzd2FwcGVyLzAgKHBpZDogMSwgdGhyZWFkaW5mbz0wMDAw
-MDAwMDkxMzU3ZWU4LCB0YXNrPTAwMDAwMDAwMzEzZDk4Y2IpCj4gPiBbICAgIDcuODk5MzA3XSBT
-dGFjayA6IDAwMDAwMDAwMDAwMDAwYjQgOTAwMDAwMDAwMjc5YWNhOCAwMDAwMDAwMDAwMDAwMDAx
-IDAwMDAwMDAwMDAwMDAwMDAKPiA+IFsgICAgNy45MDcyNzRdICAgICAgICAgMDAwMDAwMDAwMDAw
-MDA0OSAwMDAwMDAwMDAwMDAwNDA4IDkwMDAwMDAxMDAwMDhjMDAgOTAwMDAwMDAwMzViNjM3MAo+
-ID4gWyAgICA3LjkxNTIzOF0gICAgICAgICA5MDAwMDAwMDBiODAxMDgwIDkwMDAwMDAwMDI5YTQ0
-MGMgOTAwMDAwMDAwM2ViNDY4MCA5MDAwMDAwMDAzZWI0NjgwCj4gPiBbICAgIDcuOTIzMjAyXSAg
-ICAgICAgIDkwMDAwMDAxMDFmODEwMzggOTAwMDAwMDAwMzU3Y2RjYyAwMDAwMDAwMDAwMDAwMDAx
-IDkwMDAwMDAwMDM3MGM0NTgKPiA+IFsgICAgNy45MzExNjZdICAgICAgICAgOTAwMDAwMDEwMWY4
-MTAwMCA5MDAwMDAwMDAzN2MwMDcwIDkwMDAwMDAwMDNlZWJkMTggOTAwMDAwMDAwMzcwYzM5OAo+
-ID4gWyAgICA3LjkzOTEzMV0gICAgICAgICA5MDAwMDAwMDA0NWY0NTMwIDkwMDAwMDAxMDFmODEw
-MzggMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMDAwMDAwMDAxCj4gPiBbICAgIDcuOTQ3MDk1XSAg
-ICAgICAgIDkwMDAwMDAwMDM3MGM0NTggOTAwMDAwMDEwMWY4MTAwMCAwMDAwMDAwMDAwMDAwMDAw
-IDkwMDAwMDAwMDMxNzNlNjQKPiA+IFsgICAgNy45NTUwNTldICAgICAgICAgMDAwMDAwMDAwMDAw
-MDAyNiA5MDAwMDAwMDAzZGUzODgwIDkwMDAwMDAxMDA1NjIwNDAgOTAwMDAwMDAwMzU3ZTA3Ywo+
-ID4gWyAgICA3Ljk2MzAyM10gICAgICAgICAwMDAwMDAwMDAwMDAwMjZmIDAwMDAwMDAwMDAwMDAw
-MDEgOTAwMDAwMDEwMDFmM2Q2OCBmZmZmZmZmZmZmZmZmZmY1Cj4gPiBbICAgIDcuOTcwOTg3XSAg
-ICAgICAgIDkwMDAwMDAwMDM2ZDJjYTggOTAwMDAwMDAwMjc0MjlkOCA5MDAwMDAwMDAzN2MwMDMw
-IDAwMDAwMDAwMDAwMDAwMDEKPiA+IFsgICAgNy45Nzg5NTFdICAgICAgICAgLi4uCj4gPiBbICAg
-IDcuOTgxMzc5XSBDYWxsIFRyYWNlOgo+ID4gWyAgICA3Ljk4MTM4Ml0gWzw5MDAwMDAwMDAyZmIy
-NzljPl0gX19kZXZfZndub2RlKzB4OC8weDIwCj4gPiBbICAgIDcuOTg4OTE2XSBbPDkwMDAwMDAw
-MDMxNzM0MzQ+XSBwb3dlcl9zdXBwbHlfZ2V0X2JhdHRlcnlfaW5mbysweGU0LzB4NzEwCj4gPiBb
-ICAgIDcuOTk1NjY2XSBbPDkwMDAwMDAwMDMxNzNlNjQ+XSBfX3Bvd2VyX3N1cHBseV9yZWdpc3Rl
-cisweDQwNC8weDU4MAo+ID4gWyAgICA4LjAwMTk4NF0gWzw5MDAwMDAwMDAzNzlkMzY4Pl0gdGVz
-dF9wb3dlcl9pbml0KzB4NmMvMHgxMjQKPiA+IFsgICAgOC4wMDc1MjddIFs8OTAwMDAwMDAwMjZl
-MDhmOD5dIGRvX29uZV9pbml0Y2FsbCsweDU4LzB4MWVjCj4gPiBbICAgIDguMDEzMDY2XSBbPDkw
-MDAwMDAwMDM3NjE2MTQ+XSBrZXJuZWxfaW5pdF9mcmVlYWJsZSsweDI5MC8weDMxMAo+ID4gWyAg
-ICA4LjAxOTEyN10gWzw5MDAwMDAwMDAzNWI0MGU4Pl0ga2VybmVsX2luaXQrMHgyNC8weDExYwo+
-ID4gWyAgICA4LjAyNDMyNF0gWzw5MDAwMDAwMDAyNmUyMDQ4Pl0gcmV0X2Zyb21fa2VybmVsX3Ro
-cmVhZCsweGMvMHhhNAo+ID4gWyAgICA4LjAzMDI5NV0KPiA+IFsgICAgOC4wMzE3NjldIENvZGU6
-IDRjMDAwMDIwICAwMDE1MDAyYyAgMDM0MDAwMDAgPDI4YzllMDhjPiA0MDAwMGQ4MCAgMDJjMDYx
-ODQgIDRjMDAwMDIwICAyOGNhMDA4NCAgNGMwMDAwMjAKPiA+IAo+ID4gRml4IHRoaXMgYnkgZ2V0
-dGluZyBiYXR0ZXJ5IGluZm8gb25seSBpZiBwc3ktPmJhdHRlcnlfaW5mbyBpcyBub3QgTlVMTC4K
-PiA+IAo+ID4gRml4ZXM6IDI3YTIxOTVlZmE4ZDI2NDQ3YyAoInBvd2VyOiBzdXBwbHk6IGNvcmU6
-IGF1dG8tZXhwb3N1cmUgb2Ygc2ltcGxlLWJhdHRlcnkgZGF0YSIpCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBIdWFjYWkgQ2hlbiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4KPiA+IC0tLQo+ID4gIGRyaXZl
-cnMvcG93ZXIvc3VwcGx5L3Bvd2VyX3N1cHBseV9jb3JlLmMgfCA0ICsrKy0KPiA+ICAxIGZpbGUg
-Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiAKPiA+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9zdXBwbHlfY29yZS5jIGIvZHJpdmVycy9w
-b3dlci9zdXBwbHkvcG93ZXJfc3VwcGx5X2NvcmUuYwo+ID4gaW5kZXggYWI5ODZkYmFjZTE2Li41
-ZGExYjQ4YTE0NzcgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9z
-dXBwbHlfY29yZS5jCj4gPiArKysgYi9kcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9zdXBwbHlf
-Y29yZS5jCj4gPiBAQCAtMTM5Miw3ICsxMzk0LDcgQEAgX19wb3dlcl9zdXBwbHlfcmVnaXN0ZXIo
-c3RydWN0IGRldmljZSAqcGFyZW50LAo+ID4gIAkgKiBzb21lIGNoYXJnZXJzIGFjY2Vzc2luZyBj
-b25zdGFudCBiYXR0ZXJ5IGRhdGEsIHdlIG9ubHkgd2FudCB0bwo+ID4gIAkgKiBleHBvc2UgYmF0
-dGVyeSBkYXRhIHRvIHVzZXJzcGFjZSBmb3IgYmF0dGVyeSBkZXZpY2VzLgo+ID4gIAkgKi8KPiA+
-IC0JaWYgKGRlc2MtPnR5cGUgPT0gUE9XRVJfU1VQUExZX1RZUEVfQkFUVEVSWSkgewo+ID4gKwlp
-ZiAoZGVzYy0+dHlwZSA9PSBQT1dFUl9TVVBQTFlfVFlQRV9CQVRURVJZICYmIHBzeS0+YmF0dGVy
-eV9pbmZvKSB7Cj4gCj4gcG93ZXJfc3VwcGx5X2dldF9iYXR0ZXJ5X2luZm8oKSBhbGxvY2F0ZXMg
-dGhlIHJlcXVpcmVkIG1lbW9yeQo+IGl0c2VsZi4gTlVMTCBpcyB0aGUgZXhwZWN0ZWQgdmFsdWUg
-YXQgdGhpcyBwb2ludCBhbmQgeW91cgo+IHBhdGNoIGlzIHRoZSBzYW1lIGFzIHJlbW92aW5nIHRo
-ZSBwb3dlcl9zdXBwbHlfZ2V0X2JhdHRlcnlfaW5mbygpCj4gY2FsbC4KPiAKPiBHcmVldGluZ3Ms
-Cj4gCj4gLS0gU2ViYXN0aWFuCj4gCj4gPiAgCQlyYyA9IHBvd2VyX3N1cHBseV9nZXRfYmF0dGVy
-eV9pbmZvKHBzeSwgJnBzeS0+YmF0dGVyeV9pbmZvKTsKPiA+ICAJCWlmIChyYyAmJiByYyAhPSAt
-RU5PREVWICYmIHJjICE9IC1FTk9FTlQpCj4gPiAgCQkJZ290byBjaGVja19zdXBwbGllc19mYWls
-ZWQ7Cj4gPiAtLSAKPiA+IDIuMzkuMQo+ID4gCg0KDQrmnKzpgq7ku7blj4rlhbbpmYTku7blkKvm
-nInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHnu5nk
-uIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbk
-u5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbp
-g6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTku7bk
-uK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPnlLXo
-r53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIgDQpUaGlzIGVt
-YWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24g
-ZnJvbSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhl
-IHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ug
-b2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5jbHVkaW5n
-LCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVwcm9k
-dWN0aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50ZW5k
-ZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMgZW1haWwg
-aW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBvciBlbWFpbCBpbW1l
-ZGlhdGVseSBhbmQgZGVsZXRlIGl0LiA=
+After commit 27a2195efa8d26447c ("power: supply: core: auto-exposure
+of simple-battery data") we call power_supply_get_battery_info() in
+__power_supply_register(), but it causes test_battery crash with NULL
+pointer:
+
+[    7.524846] __power_supply_register: Expected proper parent device for 'test_battery'
+[    7.524856] CPU 3 Unable to handle kernel paging request at virtual address 0000000000000278, era == 9000000002fb279c, ra == 9000000003173434
+[    7.524862] Oops[#1]:
+[    7.524866] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.3.0+ #524
+[    7.524870] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0-prebeta9 10/21/2022
+[    7.524872] pc 9000000002fb279c ra 9000000003173434 tp 90000001001f0000 sp 90000001001f3c00
+[    7.524875] a0 0000000000000000 a1 0000000000000000 a2 0000000000000000 a3 9000000004553e13
+[    7.524878] a4 9000000004553e16 a5 ffffffffffffffff a6 9000000003fd0948 a7 0000000000000030
+[    7.524881] t0 9000000003173434 t1 90000000035e2c00 t2 0000000000000001 t3 00000000fffff2b0
+[    7.524883] t4 0000000000000007 t5 fffffffffffffffe t6 0000000000000000 t7 0000000000000010
+[    7.524886] t8 00000000000000b4 u0 00000001c0840c76 s9 0000000000000000 s0 0000000000000000
+[    7.524889] s1 900000000370c458 s2 0000000000000001 s3 9000000101f81000 s4 9000000101f81038
+[    7.524891] s5 9000000101f813a0 s6 900000000370c398 s7 9000000003eebd18 s8 90000000037c0070
+[    7.524894]    ra: 9000000003173434 power_supply_get_battery_info+0xe4/0x710
+[    7.591224]   ERA: 9000000002fb279c __dev_fwnode+0x8/0x20
+[    7.853583]  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
+[    7.859740]  PRMD: 00000004 (PPLV0 +PIE -PWE)
+[    7.864073]  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
+[    7.868839]  ECFG: 00071c1c (LIE=2-4,10-12 VS=7)
+[    7.873430] ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
+[    7.878884]  BADV: 0000000000000278
+[    7.882346]  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
+[    7.888056] Modules linked in:
+[    7.891088] Process swapper/0 (pid: 1, threadinfo=0000000091357ee8, task=00000000313d98cb)
+[    7.899307] Stack : 00000000000000b4 900000000279aca8 0000000000000001 0000000000000000
+[    7.907274]         0000000000000049 0000000000000408 9000000100008c00 90000000035b6370
+[    7.915238]         900000000b801080 90000000029a440c 9000000003eb4680 9000000003eb4680
+[    7.923202]         9000000101f81038 900000000357cdcc 0000000000000001 900000000370c458
+[    7.931166]         9000000101f81000 90000000037c0070 9000000003eebd18 900000000370c398
+[    7.939131]         90000000045f4530 9000000101f81038 0000000000000000 0000000000000001
+[    7.947095]         900000000370c458 9000000101f81000 0000000000000000 9000000003173e64
+[    7.955059]         0000000000000026 9000000003de3880 9000000100562040 900000000357e07c
+[    7.963023]         000000000000026f 0000000000000001 90000001001f3d68 fffffffffffffff5
+[    7.970987]         90000000036d2ca8 90000000027429d8 90000000037c0030 0000000000000001
+[    7.978951]         ...
+[    7.981379] Call Trace:
+[    7.981382] [<9000000002fb279c>] __dev_fwnode+0x8/0x20
+[    7.988916] [<9000000003173434>] power_supply_get_battery_info+0xe4/0x710
+[    7.995666] [<9000000003173e64>] __power_supply_register+0x404/0x580
+[    8.001984] [<900000000379d368>] test_power_init+0x6c/0x124
+[    8.007527] [<90000000026e08f8>] do_one_initcall+0x58/0x1ec
+[    8.013066] [<9000000003761614>] kernel_init_freeable+0x290/0x310
+[    8.019127] [<90000000035b40e8>] kernel_init+0x24/0x11c
+[    8.024324] [<90000000026e2048>] ret_from_kernel_thread+0xc/0xa4
+[    8.030295]
+[    8.031769] Code: 4c000020  0015002c  03400000 <28c9e08c> 40000d80  02c06184  4c000020  28ca0084  4c000020
+
+Root cause: psy->dev.parent is NULL in power_supply_get_battery_info(),
+so change the else branch to be 'else if (psy->dev.parent)' and return
+-ENOENT if psy->dev.parent is NULL.
+
+Fixes: 27a2195efa8d26447c ("power: supply: core: auto-exposure of simple-battery data")
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ drivers/power/supply/power_supply_core.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index ab986dbace16..d1b19027f53b 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -573,7 +573,7 @@ int power_supply_get_battery_info(struct power_supply *psy,
+ 	struct power_supply_battery_info *info;
+ 	struct device_node *battery_np = NULL;
+ 	struct fwnode_reference_args args;
+-	struct fwnode_handle *fwnode;
++	struct fwnode_handle *fwnode = NULL;
+ 	const char *value;
+ 	int err, len, index;
+ 	const __be32 *list;
+@@ -585,7 +585,7 @@ int power_supply_get_battery_info(struct power_supply *psy,
+ 			return -ENODEV;
+ 
+ 		fwnode = fwnode_handle_get(of_fwnode_handle(battery_np));
+-	} else {
++	} else if (psy->dev.parent) {
+ 		err = fwnode_property_get_reference_args(
+ 					dev_fwnode(psy->dev.parent),
+ 					"monitored-battery", NULL, 0, 0, &args);
+@@ -595,6 +595,9 @@ int power_supply_get_battery_info(struct power_supply *psy,
+ 		fwnode = args.fwnode;
+ 	}
+ 
++	if (!fwnode)
++		return -ENOENT;
++
+ 	err = fwnode_property_read_string(fwnode, "compatible", &value);
+ 	if (err)
+ 		goto out_put_node;
+-- 
+2.39.1
 
