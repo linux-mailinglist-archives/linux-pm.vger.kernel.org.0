@@ -2,75 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B206FCE30
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 21:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323A46FD0C7
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 23:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235006AbjEITDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 May 2023 15:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S235726AbjEIVUG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 17:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234743AbjEITDl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 15:03:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA7C4494;
-        Tue,  9 May 2023 12:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=TSBh9Kcc3KUBCL5aBYO64M6mJ0lqBshLkhyf/of1TC0=; b=FCW62nSzYz/ok7iHxNvcDpG+dG
-        p6YklNcqU1xc1R5gABl7j+pzt4edhSw9O4ekmaa3xTKe85WxJ7j//bk1Hq0aCLl67UaBbwwxCCHk/
-        nBmP1Oh1U922UgmktErEM43hSE3cxvXYb9NGz9UhnoYMvGUoSgjnPgFVXoSKId4RFqoRyo4NHPoij
-        bcScWKk9g+9EmYD6JUcbQy52qy2HwBwNUmDY8rkGLXv4ab46T6LJkJ9XmnxOAcFAsQwz8NgGbcGaF
-        KscqydThd0TZMh7kkUKJjl966pJSmroQfUfcyEtrdVazmY6otdbItrWnRiZGbTqn4ostdQpRvv49n
-        n+gHUO8Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwSbb-006EfJ-1j;
-        Tue, 09 May 2023 19:02:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EA809300451;
-        Tue,  9 May 2023 21:02:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CC6D620F0E418; Tue,  9 May 2023 21:02:31 +0200 (CEST)
-Date:   Tue, 9 May 2023 21:02:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        longman@redhat.com, boqun.feng@gmail.com, pmladek@suse.com,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [RFC][PATCH 9/9] cpuidle: Use local_clock_noinstr()
-Message-ID: <20230509190231.GA2148518@hirez.programming.kicks-ass.net>
-References: <20230508211951.901961964@infradead.org>
- <20230508213147.990013706@infradead.org>
- <CAJZ5v0jc29fSGFzN2Yeb+xRQZ9Y0V2_Ge17YnsEG5Um9OV25uw@mail.gmail.com>
+        with ESMTP id S235398AbjEIVTv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 17:19:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF034499;
+        Tue,  9 May 2023 14:19:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A426347A;
+        Tue,  9 May 2023 21:19:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000B9C4339E;
+        Tue,  9 May 2023 21:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683667189;
+        bh=hVu+a8jVOMe7QOMCNpFFNUq9ZPHGBxRr2Ltzkk0kQoA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dLj+JmMvgEmv6JFrPiEMoDOYSNvTPE7f0XrdgCxiVIlor/uEyE9nkUqjQX95/kYGa
+         M51aXFGWns281LVTOIo8auh7kf0T7XpapLf9QyStFbR3QNs0R2jmy4xsd2UO2lmb9I
+         zudL6MpwlcaVtnReQwMdmiszuA+bGm1xjv8q2/jDX5WHK/iOGTn6JRu0uhDKx6f6zR
+         +QMZ0Ol6X1m/hOYfNBU6x8MM1rboYFHHOsQC0Vw+mC9tc21hxE8fwybxZ2GCY+usMD
+         JbMVF/0rlYMjJRCEzg2VBJiCUFS4b4cZGemsBMEvT7alxMOZwu2vqgmGVgbIpT+pXz
+         +WCK7yt2/TxHg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org, wens@csie.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 14/18] power: supply: axp288_charger: Use alt usb-id extcon on some x86 android tablets
+Date:   Tue,  9 May 2023 17:19:22 -0400
+Message-Id: <20230509211928.21010-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230509211928.21010-1-sashal@kernel.org>
+References: <20230509211928.21010-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jc29fSGFzN2Yeb+xRQZ9Y0V2_Ge17YnsEG5Um9OV25uw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,32 +57,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 09, 2023 at 06:18:08PM +0200, Rafael J. Wysocki wrote:
-> On Mon, May 8, 2023 at 11:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > --- a/drivers/cpuidle/poll_state.c
-> > +++ b/drivers/cpuidle/poll_state.c
-> > @@ -15,7 +15,7 @@ static int __cpuidle poll_idle(struct cp
-> >  {
-> >         u64 time_start;
-> >
-> > -       time_start = local_clock();
-> > +       time_start = local_clock_noinstr();
-> >
-> >         dev->poll_time_limit = false;
-> >
-> > @@ -32,7 +32,7 @@ static int __cpuidle poll_idle(struct cp
-> >                                 continue;
-> >
-> >                         loop_count = 0;
-> > -                       if (local_clock() - time_start > limit) {
-> > +                       if (local_clock_noinstr() - time_start > limit) {
-> >                                 dev->poll_time_limit = true;
-> >                                 break;
-> >                         }
-> >
-> 
-> The above LGTM, but the teo governors uses local_clock() too.  Should
-> it use the _noinstr() version?
+From: Hans de Goede <hdegoede@redhat.com>
 
-Only the callsites from noinstr or __cpuidle functions, IIRC the
-governors are neither and should be OK.
+[ Upstream commit ce38f3fc0f87a358a9560a3815265a94f1b38c37 ]
+
+x86 ACPI boards which ship with only Android as their factory image may
+have pretty broken ACPI tables. This includes broken _AEI ACPI GPIO event
+handlers, which are normally used to listen to the micro-USB ID pin and:
+
+1. Switch the USB-mux to the host / device USB controllers
+2. Disable Vbus path before enabling the 5V boost (AXP reg 0x30 bit 7)
+3. Turn 5V Vboost on / off
+
+On non broken systems where this is not done through an ACPI GPIO event
+handler, there is an ACPI INT3496 device describing the involved GPIOs
+which are handled by the extcon-intel-int3496 driver; and axp288-charger.ko
+listens to this extcon-device and disables the Vbus path when necessary.
+
+On x86 Android boards, with broken ACPI GPIO event handlers, these are
+disabled by acpi_quirk_skip_gpio_event_handlers() and an intel-int3496
+extcon device is manually instantiated by x86-android-tablets.ko .
+
+Add support to the axp288-charger code for this setup, so that it
+properly disables the Vbus path when necessary. Note this uses
+acpi_quirk_skip_gpio_event_handlers() to identify these systems,
+to avoid the need to add a separate DMI match table for this.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/axp288_charger.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
+index 15219ed43ce95..b5903193e2f96 100644
+--- a/drivers/power/supply/axp288_charger.c
++++ b/drivers/power/supply/axp288_charger.c
+@@ -836,6 +836,7 @@ static int axp288_charger_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
+ 	struct power_supply_config charger_cfg = {};
++	const char *extcon_name = NULL;
+ 	unsigned int val;
+ 
+ 	/*
+@@ -872,8 +873,18 @@ static int axp288_charger_probe(struct platform_device *pdev)
+ 		return PTR_ERR(info->cable.edev);
+ 	}
+ 
+-	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
+-		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
++	/*
++	 * On devices with broken ACPI GPIO event handlers there also is no ACPI
++	 * "INT3496" (USB_HOST_EXTCON_HID) device. x86-android-tablets.ko
++	 * instantiates an "intel-int3496" extcon on these devs as a workaround.
++	 */
++	if (acpi_quirk_skip_gpio_event_handlers())
++		extcon_name = "intel-int3496";
++	else if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1))
++		extcon_name = USB_HOST_EXTCON_NAME;
++
++	if (extcon_name) {
++		info->otg.cable = extcon_get_extcon_dev(extcon_name);
+ 		if (IS_ERR(info->otg.cable)) {
+ 			dev_err_probe(dev, PTR_ERR(info->otg.cable),
+ 				      "extcon_get_extcon_dev(%s) failed\n",
+-- 
+2.39.2
+
