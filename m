@@ -2,253 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266386FCDED
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 20:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC116FCE00
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 20:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjEISjn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 9 May 2023 14:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S229734AbjEISuN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 14:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjEISjn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 14:39:43 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B13359D;
-        Tue,  9 May 2023 11:39:35 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-965aa9d1d19so173776366b.0;
-        Tue, 09 May 2023 11:39:35 -0700 (PDT)
+        with ESMTP id S229595AbjEISuM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 14:50:12 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C942D43
+        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 11:50:07 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so9508454a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 May 2023 11:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683658206; x=1686250206;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7vDwdI4Y0zhDRNPMOTcRtq2TPj7BphvfPLZ3WWPJT7s=;
+        b=dDk7hNdWSHdPiXlx2txnzdQ8whDxlg4yZNetGYJvUoAYTrywaDhZbApu9JTLZGR5Qu
+         8etrdRwat3yRGIjy1vyCkywzLvEXI1jzeIi3DZXVTT1Nam1CyZPuIJJg2CFt3teFl477
+         XRrMyOEqixZxxwHev98tEaS34+i2Cv3FExLcvl+GATfR0ThZI/XFhlfteaODKfCzKSiC
+         apDg1ls4qyFeUvfUPyyYSnDNXExilb//syx2rPgBvT4Wv2h47AcWpG7rBQX5hdqRT15v
+         0PoA641WADeOII3l0+DE7CcpeN1fAripoa5kWM4cyWWWC7hhDvQpAybiBln4bzr/l3dm
+         Bj0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683657574; x=1686249574;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683658206; x=1686250206;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fk4TDLP8eBXdwBhXU6v4XzEa25SJ2T9VAd0f2AbruVE=;
-        b=HsKXg5j7xn2DroMQ8N8hGVgmdHNK6LCiW+giePIR740uT85/nWHknVePCX6fv7bBfA
-         EcOIRehJ+k2ipfZkexvMttUrWkrFwZK5DdnJ6npb+d963lH1vaxYED2+csO28NDE4krz
-         A1zEZeSOo68v+eFd0LaTt+EukaHM2ZyplbmrLqtJjGVthl2Zh8ZbrDXubBHBdTjyEDLq
-         hA3ugGvkzqqshvFDWUGYvwCMQVIIklwmLWAPsNfXOO652vOburzb/YAyqIO5gtNJUIZM
-         XKW3bab0561RYrKjfaLQ7ppNEKzIL+9h7OgPiD5IY1xSgNSdhlneJhofvW7SjHQeeIyf
-         NhxA==
-X-Gm-Message-State: AC+VfDzCXG/OAxciPSb1hXhgC6FB3wAh7b/MYMpDf1+nsWGZ5r2giT9B
-        uGlyWwdn8mrsAyl/0Hes0Au9CXMsp3BPxwpJUFw=
-X-Google-Smtp-Source: ACHHUZ5rax/xmMWs1z6JW/r//VY062uNlBtZrozPqNrkG3nHAgRy7pyaM4+uN/I9amqmlS4J3r9q8KvkMvqihsieEgs=
-X-Received: by 2002:a17:906:518a:b0:959:37cc:190e with SMTP id
- y10-20020a170906518a00b0095937cc190emr11911985ejk.3.1683657573653; Tue, 09
- May 2023 11:39:33 -0700 (PDT)
+        bh=7vDwdI4Y0zhDRNPMOTcRtq2TPj7BphvfPLZ3WWPJT7s=;
+        b=eYDlj7OmF/285WpCB8x2hy/IH7KScyzquLiG5x9zKSkKxyziUWhBR/Mlvg3qU14hOr
+         lG9KseDhBD0BnsHHKzRCrACdBykYUwRK3fC3GvFprivT62WCGBb5tjlYVrOPolYCxavg
+         7yVdw8MkfLaI7KihVvjwKFk4Kiao7OYVQLzpa7x1QAzuZBBKm0RCDAitUeXTFwOrayyb
+         gOCdAiENf21IhSAZjF4Ri8+Sed5Ys8MEXpYUuWSU28KFwM+fVmXEIOEGMWvERz1WxBVV
+         19GkFu6L1aTshLMOjHP2uwxy1u5tBbrDR6e65mv9cziu+YjeEebjs1wAviOkQQqaQ5zA
+         tYgw==
+X-Gm-Message-State: AC+VfDxZchEJmu+5/ipIVG4OeSjV9AwIv6Dc6rcJ9YN+dLVZ8tPbdK1h
+        NzXcFYsi/BSIxmQXl2F1It8=
+X-Google-Smtp-Source: ACHHUZ6IRaVlQNavyKreJUzKlq8F5+VTTntfW23W4708AokIbLGmaTKpNEip4Boxb98XHHUIHJP1bw==
+X-Received: by 2002:a17:907:36c6:b0:94f:562b:2979 with SMTP id bj6-20020a17090736c600b0094f562b2979mr12447551ejc.31.1683658206255;
+        Tue, 09 May 2023 11:50:06 -0700 (PDT)
+Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id ig13-20020a1709072e0d00b0096623c00727sm1649843ejc.136.2023.05.09.11.50.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 11:50:05 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Received: by eldamar.lan (Postfix, from userid 1000)
+        id 39509BE2DE0; Tue,  9 May 2023 20:50:05 +0200 (CEST)
+Date:   Tue, 9 May 2023 20:50:05 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org
+Cc:     Ben Hutchings <ben@decadent.org.uk>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] cpupower: Bump soname version
+Message-ID: <ZFqV3ZFROy0m+/Xt@eldamar.lan>
+References: <20160610005619.GQ7555@decadent.org.uk>
 MIME-Version: 1.0
-References: <20230509180503.739208-1-wyes.karny@amd.com> <20230509180503.739208-2-wyes.karny@amd.com>
- <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 9 May 2023 20:39:22 +0200
-Message-ID: <CAJZ5v0gb9TpH1qCqhqAb28c7uRRk8=iufTkzc5aCpC=OJm8QaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] cpufreq/schedutil: Remove fast_switch_possible
- flag if driver doesn't set fast_switch
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        joel@joelfernandes.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20160610005619.GQ7555@decadent.org.uk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 9, 2023 at 8:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, May 9, 2023 at 8:06 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> >
-> > The set value of `fast_switch_enabled` indicates that fast_switch
-> > callback is set.
+Hi Thomas,
 
-BTW, this is not true.  The ACPI cpufreq driver has fast_switch, but
-it doesn't always use it.
+On Fri, Jun 10, 2016 at 01:56:20AM +0100, Ben Hutchings wrote:
+> Several functions in the libcpupower API are renamed or removed in
+> Linux 4.7.  This is an backward-incompatible ABI change, so the
+> library soname should change from libcpupower.so.0 to
+> libcpupower.so.1.
+> 
+> Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
+> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+> ---
+> I have to say the choice of variable names here is rather confusing.
+> LIB_MIN is used for the soname version, which would normally be the
+> *major* part of the version.
+> 
+> I'll send a second patch that switches to more conventional library
+> versioning.
+> 
+> Ben.
+> 
+>  tools/power/cpupower/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+> index 8358863259c5..0b85f5915ce8 100644
+> --- a/tools/power/cpupower/Makefile
+> +++ b/tools/power/cpupower/Makefile
+> @@ -64,7 +64,7 @@ DESTDIR ?=
+>  
+>  VERSION=			$(shell ./utils/version-gen.sh)
+>  LIB_MAJ=			0.0.1
+> -LIB_MIN=			0
+> +LIB_MIN=			1
+>  
+>  PACKAGE =			cpupower
+>  PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
 
-> >  For some drivers such as amd_pstate and intel_pstate,
-> > the adjust_perf callback is used but it still sets
-> > `fast_switch_possible` flag. This is because this flag also decides
-> > whether schedutil governor selects adjust_perf function for frequency
-> > update. This condition in the schedutil governor forces the scaling
-> > driver to set the `fast_switch_possible` flag.
+Repinging this patch. Thomas, we are shipping it in Debian since, and
+I'm wondering if the patch did just felt trough the cracks.
 
-Yes, it does, but setting this flag is not sufficient.
-
-> > Remove `fast_switch_enabled` check when schedutil decides to select
-> > adjust_perf function for frequency update. Thus removing this drivers
-> > are now free to remove `fast_switch_possible` flag if they don't use
-> > fast_switch callback.
-> >
-> > This issue becomes apparent when aperf/mperf overflow occurs.  When this
-> > happens, kernel disables frequency invariance calculation which causes
-> > schedutil to fallback to sugov_update_single_freq which currently relies
-> > on the fast_switch callback.
-> >
-> > Normal flow:
-> >   sugov_update_single_perf
-> >     cpufreq_driver_adjust_perf
-> >       cpufreq_driver->adjust_perf
-> >
-> > Error case flow:
-> >   sugov_update_single_perf
-> >     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
-> >       cpufreq_driver_fast_switch
-> >          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
->
-> So you need to set fast_switch.
->
-> Please read the comment in sugov_update_single_perf().  It explains
-> why adjust_perf is not used when scale invariance is not enabled: the
-> mapping between the performance levels and frequency are not generally
-> defined in that case and it is up to the driver to figure out what
-> perf level to use to get the given frequency.  And this is exactly why
-> fast_switch is not optional: because scale invariance may be disabled.
->
-> Please feel free to update the documentation to clarify this, but the
-> way to fix the issue is to implement fast_switch in the driver.
->
-> > Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
-> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> >
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: stable@vger.kernel.org
-> > ---
-> >  drivers/cpufreq/amd-pstate.c     | 10 +++++++---
-> >  drivers/cpufreq/cpufreq.c        | 20 +++++++++++++++++++-
-> >  drivers/cpufreq/intel_pstate.c   |  3 +--
-> >  include/linux/cpufreq.h          |  1 +
-> >  kernel/sched/cpufreq_schedutil.c |  2 +-
-> >  5 files changed, 29 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index 5a3d4aa0f45a..007bfe724a6a 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -671,8 +671,14 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-> >         /* It will be updated by governor */
-> >         policy->cur = policy->cpuinfo.min_freq;
-> >
-> > +       /**
-> > +        * For shared memory system frequency update takes time that's why
-> > +        * do this in deferred kthread context.
-> > +        */
-> >         if (boot_cpu_has(X86_FEATURE_CPPC))
-> > -               policy->fast_switch_possible = true;
-> > +               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
-> > +       else
-> > +               current_pstate_driver->adjust_perf = NULL;
-> >
-> >         ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
-> >                                    FREQ_QOS_MIN, policy->cpuinfo.min_freq);
-> > @@ -697,8 +703,6 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-> >         policy->driver_data = cpudata;
-> >
-> >         amd_pstate_boost_init(cpudata);
-> > -       if (!current_pstate_driver->adjust_perf)
-> > -               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
-> >
-> >         return 0;
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 6b52ebe5a890..366747012104 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
-> >         if (!policy->fast_switch_possible)
-> >                 return;
-> >
-> > +       /**
-> > +        * It's not expected driver's fast_switch callback is not set
-> > +        * even fast_switch_possible is true.
-> > +        */
-> > +       if (WARN_ON(!cpufreq_driver_has_fast_switch()))
-> > +               return;
-> > +
-> >         mutex_lock(&cpufreq_fast_switch_lock);
-> >         if (cpufreq_fast_switch_count >= 0) {
-> >                 cpufreq_fast_switch_count++;
-> > @@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> >  }
-> >  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
-> >
-> > +/**
-> > + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
-> > + *
-> > + * Return 'true' if the ->fast_switch callback is present for the
-> > + * current driver or 'false' otherwise.
-> > + */
-> > +bool cpufreq_driver_has_fast_switch(void)
-> > +{
-> > +       return !!cpufreq_driver->fast_switch;
-> > +}
-> > +
-> >  /**
-> >   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-> >   * @cpu: Target CPU.
-> > @@ -2157,7 +2175,7 @@ EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
-> >   * and it is expected to select a suitable performance level equal to or above
-> >   * @min_perf and preferably equal to or below @target_perf.
-> >   *
-> > - * This function must not be called if policy->fast_switch_enabled is unset.
-> > + * By default this function takes the fast frequency update path.
-> >   *
-> >   * Governors calling this function must guarantee that it will never be invoked
-> >   * twice in parallel for the same CPU and that it will never be called in
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> > index 2548ec92faa2..007893514c87 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -2698,8 +2698,6 @@ static int __intel_pstate_cpu_init(struct cpufreq_policy *policy)
-> >
-> >         intel_pstate_init_acpi_perf_limits(policy);
-> >
-> > -       policy->fast_switch_possible = true;
-> > -
-> >         return 0;
-> >  }
-> >
-> > @@ -2955,6 +2953,7 @@ static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> >         if (ret)
-> >                 return ret;
-> >
-> > +       policy->fast_switch_possible = true;
-
-I'm not sure what this is about.  Is it a cleanup of intel_pstate?
-
-> >         policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
-> >         /* This reflects the intel_pstate_get_cpu_pstates() setting. */
-> >         policy->cur = policy->cpuinfo.min_freq;
-> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> > index 26e2eb399484..7a32cfca26c9 100644
-> > --- a/include/linux/cpufreq.h
-> > +++ b/include/linux/cpufreq.h
-> > @@ -604,6 +604,7 @@ struct cpufreq_governor {
-> >  /* Pass a target to the cpufreq driver */
-> >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> >                                         unsigned int target_freq);
-> > +bool cpufreq_driver_has_fast_switch(void);
-> >  void cpufreq_driver_adjust_perf(unsigned int cpu,
-> >                                 unsigned long min_perf,
-> >                                 unsigned long target_perf,
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index e3211455b203..f993ecf731a9 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -776,7 +776,7 @@ static int sugov_start(struct cpufreq_policy *policy)
-> >
-> >         if (policy_is_shared(policy))
-> >                 uu = sugov_update_shared;
-> > -       else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
-> > +       else if (cpufreq_driver_has_adjust_perf())
-> >                 uu = sugov_update_single_perf;
-> >         else
-> >                 uu = sugov_update_single_freq;
-> > --
+Regards,
+Salvatore
