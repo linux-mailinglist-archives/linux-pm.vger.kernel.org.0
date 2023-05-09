@@ -2,127 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970A06FD148
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 23:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3676FD23F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 00:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbjEIVYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 May 2023 17:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S234520AbjEIWKJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 18:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235757AbjEIVYJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 17:24:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58FF6A64;
-        Tue,  9 May 2023 14:21:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 985066375D;
-        Tue,  9 May 2023 21:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1498C433A4;
-        Tue,  9 May 2023 21:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683667238;
-        bh=3kq19NGPAGANm2mDx5FnD8IA4XA59hAw2umhEq1N1WM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VJs9+DDr0kOEWAOQ4qOD4ZeJ7NbDEZs594JT6NYOx6s1JHHzPocIxpFY6ZsYp1tiU
-         IwXRAvtm/U/4vtY0wsFvOO+VN44LTLJHo4Rnim3B2uuI+L0y50d9kIgSkPW89CBG7I
-         +utnmva79T6Cb1bVO5qGVDJUiq2aCEooJ7MAHq5diJfiw0uXHpTIyJsPewPPkchN7F
-         cr10fo1Pj1eq4eNNnASscp0rTrIzI75jaJ8vKrytEMw/LJHqwViyULbjhbZ8KA9rIp
-         QcpLUIejMt4fOULwVuQWqLHZRevim/eU3Jjgf+IIMmMxKKN941jEnq+TxBGrXdJ+4E
-         o1X8SEyqYt2mg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, sre@kernel.org, wens@csie.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 12/13] power: supply: axp288_charger: Use alt usb-id extcon on some x86 android tablets
-Date:   Tue,  9 May 2023 17:20:20 -0400
-Message-Id: <20230509212023.22105-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230509212023.22105-1-sashal@kernel.org>
-References: <20230509212023.22105-1-sashal@kernel.org>
+        with ESMTP id S229489AbjEIWKI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 18:10:08 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E2D4498
+        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 15:10:07 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-76c304efb8fso19135139f.1
+        for <linux-pm@vger.kernel.org>; Tue, 09 May 2023 15:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1683670207; x=1686262207;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s2k5UTerH0tzS6zId+E7KrJWjlGMZCSewICEjT1MB6Q=;
+        b=Gh0INJj/bEdyWQeEV6+CCZWIk0sKWaaOQXoVTddfV2BNyejYIkMMjtBzynUuXNlFdK
+         XhGwT94yHqRE7NQyGLjFVakuuzjp5WuD4WQjM0J6vti83qR/5unJh5pNdJCYurw1Li2C
+         YYesWWAtqoamH73GsZxRNUtLbnz1id9RJWnFk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683670207; x=1686262207;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s2k5UTerH0tzS6zId+E7KrJWjlGMZCSewICEjT1MB6Q=;
+        b=E8vcQtcs1jmw+wAZTVqu+90cQqwCa/8Jgnp7ERPEDJcU5H0h6NYYL4N+HcvNiQxGDa
+         z2RGcR+DIQXtxNrnziIr/CIgxyy6DBcrjSz4Skj3/UP05i7PMEbrEuYC8qr0mH7Y9DIt
+         GJmVmok1LDp9z83eNMWQEMzm/wamf7Ye4yJ8jtWdGYhcPXt/usF3POIFh1jP7xFKy/cF
+         7BY9e2OIAIl9XiFRJBMDQ8UVoTCQ/jyVUIi9ar/icE8X4HxDDQt7sYLtqvXdwFpGO+9d
+         vAoOBb1BA290UHVc5ImRkMLiPozoyVTaHGUpqA9pcBsOhDAIAO75wKoOI0Q38B6BzbCQ
+         zWmQ==
+X-Gm-Message-State: AC+VfDwI6ZBNYRDURqoFOuXgfX4p9wzky0afUS6x20lGiTmqBevmz1/w
+        eVGYYWHIE5Z0kF3hhdgPY1brej9Qwg0TNZZzHyE=
+X-Google-Smtp-Source: ACHHUZ7bh+LwNreqLxV+vW7oh85lQfN+hwQtZ2vnurjFV4k6RDaX/ZgKLA1MBAvm92SKIiGWZp704A==
+X-Received: by 2002:a6b:3b49:0:b0:76c:5c79:81bf with SMTP id i70-20020a6b3b49000000b0076c5c7981bfmr1527355ioa.2.1683670206876;
+        Tue, 09 May 2023 15:10:06 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t193-20020a0254ca000000b004142191a7b4sm3060402jaa.169.2023.05.09.15.10.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 15:10:06 -0700 (PDT)
+Message-ID: <eeca542a-eb7f-50a0-b62b-7bab8993185a@linuxfoundation.org>
+Date:   Tue, 9 May 2023 16:10:05 -0600
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] cpupower: Bump soname version
+Content-Language: en-US
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org
+Cc:     Ben Hutchings <ben@decadent.org.uk>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20160610005619.GQ7555@decadent.org.uk>
+ <ZFqV3ZFROy0m+/Xt@eldamar.lan>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZFqV3ZFROy0m+/Xt@eldamar.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+On 5/9/23 12:50, Salvatore Bonaccorso wrote:
+> Hi Thomas,
+> 
+> On Fri, Jun 10, 2016 at 01:56:20AM +0100, Ben Hutchings wrote:
+>> Several functions in the libcpupower API are renamed or removed in
+>> Linux 4.7.  This is an backward-incompatible ABI change, so the
+>> library soname should change from libcpupower.so.0 to
+>> libcpupower.so.1.
+>>
+>> Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
+>> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+>> ---
+>> I have to say the choice of variable names here is rather confusing.
+>> LIB_MIN is used for the soname version, which would normally be the
+>> *major* part of the version.
+>>
+>> I'll send a second patch that switches to more conventional library
+>> versioning.
+>>
+>> Ben.
+>>
+>>   tools/power/cpupower/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+>> index 8358863259c5..0b85f5915ce8 100644
+>> --- a/tools/power/cpupower/Makefile
+>> +++ b/tools/power/cpupower/Makefile
+>> @@ -64,7 +64,7 @@ DESTDIR ?=
+>>   
+>>   VERSION=			$(shell ./utils/version-gen.sh)
+>>   LIB_MAJ=			0.0.1
+>> -LIB_MIN=			0
+>> +LIB_MIN=			1
+>>   
+>>   PACKAGE =			cpupower
+>>   PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
+> 
+> Repinging this patch. Thomas, we are shipping it in Debian since, and
+> I'm wondering if the patch did just felt trough the cracks.
+> 
 
-[ Upstream commit ce38f3fc0f87a358a9560a3815265a94f1b38c37 ]
+Please resend the patch for review.
 
-x86 ACPI boards which ship with only Android as their factory image may
-have pretty broken ACPI tables. This includes broken _AEI ACPI GPIO event
-handlers, which are normally used to listen to the micro-USB ID pin and:
-
-1. Switch the USB-mux to the host / device USB controllers
-2. Disable Vbus path before enabling the 5V boost (AXP reg 0x30 bit 7)
-3. Turn 5V Vboost on / off
-
-On non broken systems where this is not done through an ACPI GPIO event
-handler, there is an ACPI INT3496 device describing the involved GPIOs
-which are handled by the extcon-intel-int3496 driver; and axp288-charger.ko
-listens to this extcon-device and disables the Vbus path when necessary.
-
-On x86 Android boards, with broken ACPI GPIO event handlers, these are
-disabled by acpi_quirk_skip_gpio_event_handlers() and an intel-int3496
-extcon device is manually instantiated by x86-android-tablets.ko .
-
-Add support to the axp288-charger code for this setup, so that it
-properly disables the Vbus path when necessary. Note this uses
-acpi_quirk_skip_gpio_event_handlers() to identify these systems,
-to avoid the need to add a separate DMI match table for this.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/supply/axp288_charger.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 22378dad4d9fc..a52e01676fbcc 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -811,6 +811,7 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
- 	struct power_supply_config charger_cfg = {};
-+	const char *extcon_name = NULL;
- 	unsigned int val;
- 
- 	/*
-@@ -839,8 +840,18 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 		return PTR_ERR(info->cable.edev);
- 	}
- 
--	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
--		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
-+	/*
-+	 * On devices with broken ACPI GPIO event handlers there also is no ACPI
-+	 * "INT3496" (USB_HOST_EXTCON_HID) device. x86-android-tablets.ko
-+	 * instantiates an "intel-int3496" extcon on these devs as a workaround.
-+	 */
-+	if (acpi_quirk_skip_gpio_event_handlers())
-+		extcon_name = "intel-int3496";
-+	else if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1))
-+		extcon_name = USB_HOST_EXTCON_NAME;
-+
-+	if (extcon_name) {
-+		info->otg.cable = extcon_get_extcon_dev(extcon_name);
- 		if (IS_ERR(info->otg.cable)) {
- 			dev_err_probe(dev, PTR_ERR(info->otg.cable),
- 				      "extcon_get_extcon_dev(%s) failed\n",
--- 
-2.39.2
+thanks,
+-- Shuah
 
