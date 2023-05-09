@@ -2,94 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B136FBC41
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 03:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE1A6FBD57
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 04:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjEIBBo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 May 2023 21:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S233827AbjEICm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 May 2023 22:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbjEIBBn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 21:01:43 -0400
-Received: from sonic307-7.consmr.mail.ir2.yahoo.com (sonic307-7.consmr.mail.ir2.yahoo.com [87.248.110.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4FA270F
-        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 18:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683594099; bh=XZkwtW0u4vlso9cBKVw2n7DK5kOM5HPTovVW04FEo00=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=AwfGVOOotX883i+WXzgrq7KHucOo81Ufg5IoeIFWfpFBIK/NIHNWNV2j091K5j7iIHMIwWdK01jYkaWCUPc4lZFUTxVQFkiD3NZ3yGfdCNyqQfX258+cFdcVaU4pulmSOg7hcjO9IOuFbvI5cVzh52uxOsaX60MM76YmVFnbvkewuLOsoxUxHM9cS2pwO9JRodFXO19SEOloHzbEMRYE2/maqJ+UObXJeZgFNOqsL8P0k9L1rtS6ULLh8v9mlFrs3/ntKOiLz7roqmdcdaUQGKTBRO2TruS114OlYJdDZyiRVLhEMUcbkXgRb25jiXEEQ9AzJeg5/Z0/7g2TygG5fA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683594099; bh=HFTdkLJk4shlQuPS0rdRDeEiD8oh2qhB0+DRkDhThW9=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=gHso3PbgMO4LnnkTicxPFtM7gAUjTXZbioyPMyVTrqy2/xfosvkaVJdlAsAmCNNsXDS8Sj4tVusynNTn/Kc4tg/pvc7v7ylp11xlqAWgpmPnqMO89gTubmS4ZhaaFNPe2MYUhdNhyP61UumrVOTafK+bY3fZWqxqwvQo3F66vhqSdv222Kjz3sxqO4zLjAn/1HB0Had/qLpHiTiSGPQfcd0rL54IV/Nqpe0oSwmNvFx0WyeDNDXpeyGYo3YjtNysei6X2RS+PRNz7Y1purPfEkFs+d2rzPjz3IBOvdYrKbREQWP+LdQz9Fne+ZcnIgbPDZElo/E4LOE3k66NfFG9+w==
-X-YMail-OSG: 1_hNPywVM1nTL7PbYVkmg2L6rc6BT0lZtoH_kr.DF6NQD06IouxMUg68n3uNdi9
- hzV1RcWFaYdrZpTlp6GP6Wjzrx578qp0AfatE1u6LX7HrlS31MRZkfwiwlG.bx5zqYFARlFEMU73
- SYBTPj3RSHBXd3HDz0DIY4Mtx13981MLXRk6h5s9er3z_ukqWKUd9lY28GFAKsbSnJhxQleQlFbQ
- 9geV4QBh_yKwmZ.7KzFsdpX.Ff.zcp7IH.QnWOh6LgC6woE5SOve69NHuwbvK5duZpcBwmmfjh5G
- uwmeCxF7Fj963kz.PQ1yqMcGMab8dI.He6in179dATQP7nq9HQ0s0QPZZ_DYA1CwXzV332RxAlEz
- Yp9NAVJsIDXModPBSFeAZ3lR7vn9lscyY070AkmSUFyiieBSoMuv5nvtUX4D5lX3sGB6jKeEmCKN
- fi5lifWAWxbI77_D6qb2W7VTsGMFLgl3JIu978ob5Yyn97PPiBh4aiTYHDvfiwTcap01S.yb2krr
- 3w5a4TZSJdIw7DNSNu0Xu5ONQBacq0Rm71.8Y2aZhWEbUTYE_dWXQ07IqS8S9rlkq48M0ab7ca15
- JTKZWAa3m0dYzLtvt5tPvX7I8UBDuAuLK5hLQbbKg0L5yi3z35v_Zu9p8MgmZgf6Pl.DHPdbu0Zr
- L0UeUsjtaveTTEpC5FVJkHKdvoa5RebH_29e5OOVoFnDqDCWqOC7ZbFtkVHvkI2zRxPCAJplGrsi
- jBAwhTehzQykdyu8WMBq4WISAhKUDmnyGONxsaGb1hxfSttUkoYs.FaoXCWszaAGoa6vG5MN6mLq
- 5D3easfIAXp4fKhJ0ob7S.ifqL_1xsJHD2bahIwyMj5cNCTs7S9yTygykYVdoQkSc4t1mdsx.hMD
- 8r2.3Lxqn_.9t7U8eOc4D1cwkg5daJ4HLDOkH9o6XvWs5K.3NK6zt0mwNSxzKDs3nEdNanwRAccc
- 8JbMHXWj9ZmpqVnnkIQTYuuPAaBVNr4kkSnLV1PT2zbHj51tf5GPU5luQsol9bjaUrrXdod4XB7_
- d7fAWbulmK3g_BDG7IFM26llAgAhIcTJansZmjtlMf0n53D1KK6UV61d3YT3zrfxznBd6pceuxFY
- ZSimMNpwEUvwllBa61AM6d3D.HgG1PMDjDne3Lf1nI4EtRIH3VBJXx1PTms8L.SRIKMuWmFzYKVS
- OJMwScxBY8_t3NDR0hftcnNEjU9SaoDohZdwgEqAMl1Mv1JSILM.PmNdE2eTqzsGLUxY8qd0iE9f
- e1RdfVMp.Ie2EZ5JVUxBDLSH_ITPeEAKCPUxvazCw9gvR3KYFK8C8Z.aRPaO52vrz50cTAXXUhr1
- wQ6Ci7RmFWMkMn0h9vUNHViv3clicbSAPYQnXTP1UIHBtPo2hoq.If_z3Cur6rejcPmwWxtWUmB9
- gENZBTS_CAHeVZJ6Cwu6HFPQpgiHdk1OJHipjKdPVeWPyb4jPKaj1gdU9w30GcQSat3snqBxSaK1
- TQLbeI.u5Y6opB7DrbhuOSGnzfCErySlIwScjIytmuFod9CkvZdr1l0jYc9CDCK009bndYDH3cvs
- wlHb34iq5GukOh1uXzxHdXJOG5sWuxwfGvF_E2TKKPxk89TuVmAykaHTmt.7OkdAZNkVvIYS7q1.
- UuxMZbj_tGlvx64LDFVwDhVtOYBcNGVCRdZ74KJQMgvpw0WtZytkICtSL5pVJS5ofDQ3Dh67BRZi
- oCQ9knHqoHdTZTMUoJvDIQeq_Q54lx.mlrCXnbcxZ6UJ7IMku3_BUVq0JhAXYGM7SwqSwjAeW.8x
- pSrchPslJBqRVam5DBqr6y8Jueieq35gVvnA07ulvTR98iC1ZE7ApXHhKEQ.m2lpuDS7_gKTae8L
- XMMXhoe1lzIHwrPjxwOasnBMdw83HSfLaGIkeX4ctJIK3q1UHqw.Bz.wxwjD7eGRNblIGLlfAswZ
- Si11MTEpuSdlGcnQlqJk0HeMaptkCynhCHahQjBvWs1i92pQzpLNtE9qlsUG9S90.JsaplDv4IuV
- ok6rO8rK6O9NibcHOrub6a9UV.4m6NraA.EuxrOAKTonLVpoiwrKHv8VNI8QEjkS2f1Wh3FcgMGR
- CaoCyO5d6oDIlePCliSJmAZlhT6ws6hrps7UERWSDTNRd29aQzl4y8iAyV8ifZFf0nXDWYVhS97S
- zD7YDJcN4Nu9gQvwE_GOrR39eM6nYMPb.hyVvudHcQRehtxyx8AK0._8fCp.kb_rGixNz4Abe_UU
- oMXHGZHrsS4qSeXWCAdAb_fmUObkavfvz45NR6mNofJkSv.NNTVjF27.asbEhkmGI6J9IkUyUS7q
- EdDU-
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 89fb71b9-7047-47cd-8ce5-db1cef7dbb64
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Tue, 9 May 2023 01:01:39 +0000
-Received: by hermes--production-ir2-74cd8fc864-msrld (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e39504d2ac763bd7ad95b4e52adf3d61;
-          Tue, 09 May 2023 01:01:34 +0000 (UTC)
-Message-ID: <55fd9835-4246-00e8-b641-c8b0ee3f7e22@rocketmail.com>
-Date:   Tue, 9 May 2023 03:01:32 +0200
+        with ESMTP id S233559AbjEICmZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 May 2023 22:42:25 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CC3E40D5
+        for <linux-pm@vger.kernel.org>; Mon,  8 May 2023 19:42:20 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.74])
+        by gateway (Coremail) with SMTP id _____8AxW+oLs1lkP9QGAA--.11316S3;
+        Tue, 09 May 2023 10:42:19 +0800 (CST)
+Received: from chenhuacai$loongson.cn ( [112.20.109.74] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Tue, 9 May 2023 10:42:17
+ +0800 (GMT+08:00)
+X-Originating-IP: [112.20.109.74]
+Date:   Tue, 9 May 2023 10:42:17 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+To:     "Sebastian Reichel" <sebastian.reichel@collabora.com>
+Cc:     linux-pm@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>
+Subject: Re: Re: [PATCH] power: supply: Get battery info only if
+ psy->battery_info is not NULL
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
+ Copyright (c) 2002-2023 www.mailtech.cn .loongson.cn
+In-Reply-To: <20230508121140.ojwcrptgsz7de3jf@mercury.elektranox.org>
+References: <20230504120636.2443331-1-chenhuacai@loongson.cn>
+ <20230508121140.ojwcrptgsz7de3jf@mercury.elektranox.org>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: GF1qzGZvb3Rlcl90eHQ9NjI1Njo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 7/8] power: supply: rt5033_battery: Adopt status
- property from charger
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230506155435.3005-1-jahau@rocketmail.com>
- <20230506155435.3005-8-jahau@rocketmail.com>
- <20230508113518.nfwchl5wusmnkjp6@mercury.elektranox.org>
- <899d6604-7b15-ac37-c624-987a2bb7875e@rocketmail.com>
- <20230508220605.kderc3nihhezouit@mercury.elektranox.org>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <20230508220605.kderc3nihhezouit@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Message-ID: <38de45d.1901.187fe635cd4.Coremail.chenhuacai@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf8AxkOQJs1lkhAxSAA--.9241W
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAGBmRY5n0NlQAAs+
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JFWDCFW7Aw1UJryDKryUWrg_yoWxXw1fpr
+        W5tr45KrW8XryUA3W2yF1jyrW3Gws8AF18Jr1xJr1xCr1UXr1qqryUJrW5JryUtr4rJF13
+        Jr1Dtw1ftr13G3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACY4xI67k04243AVAKzVAKj4
+        xxM4xvF2IEb7IF0Fy26I8I3I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAYjxAx
+        ZFUvcSsGvfC2KfnxnUUI43ZEXa7IU1SoGPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,138 +68,130 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+SGksIFNlYmFzdGlhbiwKCj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7tuS6ujogIlNl
+YmFzdGlhbiBSZWljaGVsIiA8c2ViYXN0aWFuLnJlaWNoZWxAY29sbGFib3JhLmNvbT4KPiDlj5Hp
+gIHml7bpl7Q6MjAyMy0wNS0wOCAyMDoxMTo0MCAo5pif5pyf5LiAKQo+IOaUtuS7tuS6ujogIkh1
+YWNhaSBDaGVuIiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4KPiDmioTpgIE6IGxpbnV4LXBtQHZn
+ZXIua2VybmVsLm9yZywgIlh1ZWZlbmcgTGkiIDxsaXh1ZWZlbmdAbG9vbmdzb24uY24+Cj4g5Li7
+6aKYOiBSZTogW1BBVENIXSBwb3dlcjogc3VwcGx5OiBHZXQgYmF0dGVyeSBpbmZvIG9ubHkgaWYg
+cHN5LT5iYXR0ZXJ5X2luZm8gaXMgbm90IE5VTEwKPiAKPiBIaSwKPiAKPiBPbiBUaHUsIE1heSAw
+NCwgMjAyMyBhdCAwODowNjozNlBNICswODAwLCBIdWFjYWkgQ2hlbiB3cm90ZToKPiA+IEFmdGVy
+IGNvbW1pdCAyN2EyMTk1ZWZhOGQyNjQ0N2MgKCJwb3dlcjogc3VwcGx5OiBjb3JlOiBhdXRvLWV4
+cG9zdXJlCj4gPiBvZiBzaW1wbGUtYmF0dGVyeSBkYXRhIikgd2UgY2FsbCBwb3dlcl9zdXBwbHlf
+Z2V0X2JhdHRlcnlfaW5mbygpIGluCj4gPiBfX3Bvd2VyX3N1cHBseV9yZWdpc3RlcigpLCBidXQg
+aXQgY2F1c2VzIHRlc3RfYmF0dGVyeSBjcmFzaCB3aXRoIE5VTEwKPiA+IHBvaW50ZXI6Cj4gPiAK
+PiA+IFsgICAgNy41MjQ4NDZdIF9fcG93ZXJfc3VwcGx5X3JlZ2lzdGVyOiBFeHBlY3RlZCBwcm9w
+ZXIgcGFyZW50IGRldmljZSBmb3IgJ3Rlc3RfYmF0dGVyeScKPiAKPiBTbyB0aGVyZSBpcyBubyBw
+YXJlbnQgZGV2aWNlLiBUaGF0IG1lYW5zIHRoZSBmb2xsb3dpbmcgd2lsbCBjcmFzaDoKPiAKPiBw
+b3dlcl9zdXBwbHlfZ2V0X2JhdHRlcnlfaW5mbygpCj4gICBmd25vZGVfcHJvcGVydHlfZ2V0X3Jl
+ZmVyZW5jZV9hcmdzCj4gICAgIGRldl9md25vZGUocHN5LT5kZXYucGFyZW50KQo+IAo+IFNpbmNl
+IHRoZXJlIGlzIG5vIHBhcmVudCB0aGF0IHRyYW5zbGF0ZXMgdG8gZGV2X2Z3bm9kZShOVUxMKSBh
+bmQgdGhhdAo+IGNyYXNoZXMuCj4gCj4gVGhlIHByb3BlciBmaXggaXMgdG8gY2hhbmdlIHRoZSBl
+bHNlIGJyYW5jaCBpbgo+IHBvd2VyX3N1cHBseV9nZXRfYmF0dGVyeV9pbmZvKCkgdG8gYmUgJ2Vs
+c2UgaWYgKHBzeS0+ZGV2LnBhcmVudCknLgo+IFNpbmNlIHRoYXQgd2lsbCBsZWF2ZSBmd25vZGUg
+dW5pbml0aWFsaXplZCwgaXQgYWxzbyBuZWVkcyB0byBiZQo+IGluaXRpYWxpemVkIHRvIE5VTEwg
+YXQgZGVjbGFyYXRpb24gdGltZS4KT0ssIEkgd2lsbCBzZW5kIGEgbmV3IHZlcnNpb24sIHRoYW5r
+cy4KCkh1YWNhaQo+IAo+ID4gWyAgICA3LjUyNDg1Nl0gQ1BVIDMgVW5hYmxlIHRvIGhhbmRsZSBr
+ZXJuZWwgcGFnaW5nIHJlcXVlc3QgYXQgdmlydHVhbCBhZGRyZXNzIDAwMDAwMDAwMDAwMDAyNzgs
+IGVyYSA9PSA5MDAwMDAwMDAyZmIyNzljLCByYSA9PSA5MDAwMDAwMDAzMTczNDM0Cj4gPiBbICAg
+IDcuNTI0ODYyXSBPb3BzWyMxXToKPiA+IFsgICAgNy41MjQ4NjZdIENQVTogMyBQSUQ6IDEgQ29t
+bTogc3dhcHBlci8wIE5vdCB0YWludGVkIDYuMy4wKyAjNTI0Cj4gPiBbICAgIDcuNTI0ODcwXSBI
+YXJkd2FyZSBuYW1lOiBMb29uZ3NvbiBMb29uZ3Nvbi0zQTUwMDAtN0ExMDAwLTF3LUNSQi9Mb29u
+Z3Nvbi1MUzNBNTAwMC03QTEwMDAtMXctQ1JCLCBCSU9TIHZVREsyMDE4LUxvb25nQXJjaC1WMi4w
+LjAtcHJlYmV0YTkgMTAvMjEvMjAyMgo+ID4gWyAgICA3LjUyNDg3Ml0gcGMgOTAwMDAwMDAwMmZi
+Mjc5YyByYSA5MDAwMDAwMDAzMTczNDM0IHRwIDkwMDAwMDAxMDAxZjAwMDAgc3AgOTAwMDAwMDEw
+MDFmM2MwMAo+ID4gWyAgICA3LjUyNDg3NV0gYTAgMDAwMDAwMDAwMDAwMDAwMCBhMSAwMDAwMDAw
+MDAwMDAwMDAwIGEyIDAwMDAwMDAwMDAwMDAwMDAgYTMgOTAwMDAwMDAwNDU1M2UxMwo+ID4gWyAg
+ICA3LjUyNDg3OF0gYTQgOTAwMDAwMDAwNDU1M2UxNiBhNSBmZmZmZmZmZmZmZmZmZmZmIGE2IDkw
+MDAwMDAwMDNmZDA5NDggYTcgMDAwMDAwMDAwMDAwMDAzMAo+ID4gWyAgICA3LjUyNDg4MV0gdDAg
+OTAwMDAwMDAwMzE3MzQzNCB0MSA5MDAwMDAwMDAzNWUyYzAwIHQyIDAwMDAwMDAwMDAwMDAwMDEg
+dDMgMDAwMDAwMDBmZmZmZjJiMAo+ID4gWyAgICA3LjUyNDg4M10gdDQgMDAwMDAwMDAwMDAwMDAw
+NyB0NSBmZmZmZmZmZmZmZmZmZmZlIHQ2IDAwMDAwMDAwMDAwMDAwMDAgdDcgMDAwMDAwMDAwMDAw
+MDAxMAo+ID4gWyAgICA3LjUyNDg4Nl0gdDggMDAwMDAwMDAwMDAwMDBiNCB1MCAwMDAwMDAwMWMw
+ODQwYzc2IHM5IDAwMDAwMDAwMDAwMDAwMDAgczAgMDAwMDAwMDAwMDAwMDAwMAo+ID4gWyAgICA3
+LjUyNDg4OV0gczEgOTAwMDAwMDAwMzcwYzQ1OCBzMiAwMDAwMDAwMDAwMDAwMDAxIHMzIDkwMDAw
+MDAxMDFmODEwMDAgczQgOTAwMDAwMDEwMWY4MTAzOAo+ID4gWyAgICA3LjUyNDg5MV0gczUgOTAw
+MDAwMDEwMWY4MTNhMCBzNiA5MDAwMDAwMDAzNzBjMzk4IHM3IDkwMDAwMDAwMDNlZWJkMTggczgg
+OTAwMDAwMDAwMzdjMDA3MAo+ID4gWyAgICA3LjUyNDg5NF0gICAgcmE6IDkwMDAwMDAwMDMxNzM0
+MzQgcG93ZXJfc3VwcGx5X2dldF9iYXR0ZXJ5X2luZm8rMHhlNC8weDcxMAo+ID4gWyAgICA3LjU5
+MTIyNF0gICBFUkE6IDkwMDAwMDAwMDJmYjI3OWMgX19kZXZfZndub2RlKzB4OC8weDIwCj4gPiBb
+ICAgIDcuODUzNTgzXSAgQ1JNRDogMDAwMDAwYjAgKFBMVjAgLUlFIC1EQSArUEcgREFDRj1DQyBE
+QUNNPUNDIC1XRSkKPiA+IFsgICAgNy44NTk3NDBdICBQUk1EOiAwMDAwMDAwNCAoUFBMVjAgK1BJ
+RSAtUFdFKQo+ID4gWyAgICA3Ljg2NDA3M10gIEVVRU46IDAwMDAwMDAwICgtRlBFIC1TWEUgLUFT
+WEUgLUJURSkKPiA+IFsgICAgNy44Njg4MzldICBFQ0ZHOiAwMDA3MWMxYyAoTElFPTItNCwxMC0x
+MiBWUz03KQo+ID4gWyAgICA3Ljg3MzQzMF0gRVNUQVQ6IDAwMDEwMDAwIFtQSUxdIChJUz0gRUNv
+ZGU9MSBFc3ViQ29kZT0wKQo+ID4gWyAgICA3Ljg3ODg4NF0gIEJBRFY6IDAwMDAwMDAwMDAwMDAy
+NzgKPiA+IFsgICAgNy44ODIzNDZdICBQUklEOiAwMDE0YzAxMCAoTG9vbmdzb24tNjRiaXQsIExv
+b25nc29uLTNBNTAwMCkKPiA+IFsgICAgNy44ODgwNTZdIE1vZHVsZXMgbGlua2VkIGluOgo+ID4g
+WyAgICA3Ljg5MTA4OF0gUHJvY2VzcyBzd2FwcGVyLzAgKHBpZDogMSwgdGhyZWFkaW5mbz0wMDAw
+MDAwMDkxMzU3ZWU4LCB0YXNrPTAwMDAwMDAwMzEzZDk4Y2IpCj4gPiBbICAgIDcuODk5MzA3XSBT
+dGFjayA6IDAwMDAwMDAwMDAwMDAwYjQgOTAwMDAwMDAwMjc5YWNhOCAwMDAwMDAwMDAwMDAwMDAx
+IDAwMDAwMDAwMDAwMDAwMDAKPiA+IFsgICAgNy45MDcyNzRdICAgICAgICAgMDAwMDAwMDAwMDAw
+MDA0OSAwMDAwMDAwMDAwMDAwNDA4IDkwMDAwMDAxMDAwMDhjMDAgOTAwMDAwMDAwMzViNjM3MAo+
+ID4gWyAgICA3LjkxNTIzOF0gICAgICAgICA5MDAwMDAwMDBiODAxMDgwIDkwMDAwMDAwMDI5YTQ0
+MGMgOTAwMDAwMDAwM2ViNDY4MCA5MDAwMDAwMDAzZWI0NjgwCj4gPiBbICAgIDcuOTIzMjAyXSAg
+ICAgICAgIDkwMDAwMDAxMDFmODEwMzggOTAwMDAwMDAwMzU3Y2RjYyAwMDAwMDAwMDAwMDAwMDAx
+IDkwMDAwMDAwMDM3MGM0NTgKPiA+IFsgICAgNy45MzExNjZdICAgICAgICAgOTAwMDAwMDEwMWY4
+MTAwMCA5MDAwMDAwMDAzN2MwMDcwIDkwMDAwMDAwMDNlZWJkMTggOTAwMDAwMDAwMzcwYzM5OAo+
+ID4gWyAgICA3LjkzOTEzMV0gICAgICAgICA5MDAwMDAwMDA0NWY0NTMwIDkwMDAwMDAxMDFmODEw
+MzggMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMDAwMDAwMDAxCj4gPiBbICAgIDcuOTQ3MDk1XSAg
+ICAgICAgIDkwMDAwMDAwMDM3MGM0NTggOTAwMDAwMDEwMWY4MTAwMCAwMDAwMDAwMDAwMDAwMDAw
+IDkwMDAwMDAwMDMxNzNlNjQKPiA+IFsgICAgNy45NTUwNTldICAgICAgICAgMDAwMDAwMDAwMDAw
+MDAyNiA5MDAwMDAwMDAzZGUzODgwIDkwMDAwMDAxMDA1NjIwNDAgOTAwMDAwMDAwMzU3ZTA3Ywo+
+ID4gWyAgICA3Ljk2MzAyM10gICAgICAgICAwMDAwMDAwMDAwMDAwMjZmIDAwMDAwMDAwMDAwMDAw
+MDEgOTAwMDAwMDEwMDFmM2Q2OCBmZmZmZmZmZmZmZmZmZmY1Cj4gPiBbICAgIDcuOTcwOTg3XSAg
+ICAgICAgIDkwMDAwMDAwMDM2ZDJjYTggOTAwMDAwMDAwMjc0MjlkOCA5MDAwMDAwMDAzN2MwMDMw
+IDAwMDAwMDAwMDAwMDAwMDEKPiA+IFsgICAgNy45Nzg5NTFdICAgICAgICAgLi4uCj4gPiBbICAg
+IDcuOTgxMzc5XSBDYWxsIFRyYWNlOgo+ID4gWyAgICA3Ljk4MTM4Ml0gWzw5MDAwMDAwMDAyZmIy
+NzljPl0gX19kZXZfZndub2RlKzB4OC8weDIwCj4gPiBbICAgIDcuOTg4OTE2XSBbPDkwMDAwMDAw
+MDMxNzM0MzQ+XSBwb3dlcl9zdXBwbHlfZ2V0X2JhdHRlcnlfaW5mbysweGU0LzB4NzEwCj4gPiBb
+ICAgIDcuOTk1NjY2XSBbPDkwMDAwMDAwMDMxNzNlNjQ+XSBfX3Bvd2VyX3N1cHBseV9yZWdpc3Rl
+cisweDQwNC8weDU4MAo+ID4gWyAgICA4LjAwMTk4NF0gWzw5MDAwMDAwMDAzNzlkMzY4Pl0gdGVz
+dF9wb3dlcl9pbml0KzB4NmMvMHgxMjQKPiA+IFsgICAgOC4wMDc1MjddIFs8OTAwMDAwMDAwMjZl
+MDhmOD5dIGRvX29uZV9pbml0Y2FsbCsweDU4LzB4MWVjCj4gPiBbICAgIDguMDEzMDY2XSBbPDkw
+MDAwMDAwMDM3NjE2MTQ+XSBrZXJuZWxfaW5pdF9mcmVlYWJsZSsweDI5MC8weDMxMAo+ID4gWyAg
+ICA4LjAxOTEyN10gWzw5MDAwMDAwMDAzNWI0MGU4Pl0ga2VybmVsX2luaXQrMHgyNC8weDExYwo+
+ID4gWyAgICA4LjAyNDMyNF0gWzw5MDAwMDAwMDAyNmUyMDQ4Pl0gcmV0X2Zyb21fa2VybmVsX3Ro
+cmVhZCsweGMvMHhhNAo+ID4gWyAgICA4LjAzMDI5NV0KPiA+IFsgICAgOC4wMzE3NjldIENvZGU6
+IDRjMDAwMDIwICAwMDE1MDAyYyAgMDM0MDAwMDAgPDI4YzllMDhjPiA0MDAwMGQ4MCAgMDJjMDYx
+ODQgIDRjMDAwMDIwICAyOGNhMDA4NCAgNGMwMDAwMjAKPiA+IAo+ID4gRml4IHRoaXMgYnkgZ2V0
+dGluZyBiYXR0ZXJ5IGluZm8gb25seSBpZiBwc3ktPmJhdHRlcnlfaW5mbyBpcyBub3QgTlVMTC4K
+PiA+IAo+ID4gRml4ZXM6IDI3YTIxOTVlZmE4ZDI2NDQ3YyAoInBvd2VyOiBzdXBwbHk6IGNvcmU6
+IGF1dG8tZXhwb3N1cmUgb2Ygc2ltcGxlLWJhdHRlcnkgZGF0YSIpCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBIdWFjYWkgQ2hlbiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4KPiA+IC0tLQo+ID4gIGRyaXZl
+cnMvcG93ZXIvc3VwcGx5L3Bvd2VyX3N1cHBseV9jb3JlLmMgfCA0ICsrKy0KPiA+ICAxIGZpbGUg
+Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiAKPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9zdXBwbHlfY29yZS5jIGIvZHJpdmVycy9w
+b3dlci9zdXBwbHkvcG93ZXJfc3VwcGx5X2NvcmUuYwo+ID4gaW5kZXggYWI5ODZkYmFjZTE2Li41
+ZGExYjQ4YTE0NzcgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9z
+dXBwbHlfY29yZS5jCj4gPiArKysgYi9kcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9zdXBwbHlf
+Y29yZS5jCj4gPiBAQCAtMTM5Miw3ICsxMzk0LDcgQEAgX19wb3dlcl9zdXBwbHlfcmVnaXN0ZXIo
+c3RydWN0IGRldmljZSAqcGFyZW50LAo+ID4gIAkgKiBzb21lIGNoYXJnZXJzIGFjY2Vzc2luZyBj
+b25zdGFudCBiYXR0ZXJ5IGRhdGEsIHdlIG9ubHkgd2FudCB0bwo+ID4gIAkgKiBleHBvc2UgYmF0
+dGVyeSBkYXRhIHRvIHVzZXJzcGFjZSBmb3IgYmF0dGVyeSBkZXZpY2VzLgo+ID4gIAkgKi8KPiA+
+IC0JaWYgKGRlc2MtPnR5cGUgPT0gUE9XRVJfU1VQUExZX1RZUEVfQkFUVEVSWSkgewo+ID4gKwlp
+ZiAoZGVzYy0+dHlwZSA9PSBQT1dFUl9TVVBQTFlfVFlQRV9CQVRURVJZICYmIHBzeS0+YmF0dGVy
+eV9pbmZvKSB7Cj4gCj4gcG93ZXJfc3VwcGx5X2dldF9iYXR0ZXJ5X2luZm8oKSBhbGxvY2F0ZXMg
+dGhlIHJlcXVpcmVkIG1lbW9yeQo+IGl0c2VsZi4gTlVMTCBpcyB0aGUgZXhwZWN0ZWQgdmFsdWUg
+YXQgdGhpcyBwb2ludCBhbmQgeW91cgo+IHBhdGNoIGlzIHRoZSBzYW1lIGFzIHJlbW92aW5nIHRo
+ZSBwb3dlcl9zdXBwbHlfZ2V0X2JhdHRlcnlfaW5mbygpCj4gY2FsbC4KPiAKPiBHcmVldGluZ3Ms
+Cj4gCj4gLS0gU2ViYXN0aWFuCj4gCj4gPiAgCQlyYyA9IHBvd2VyX3N1cHBseV9nZXRfYmF0dGVy
+eV9pbmZvKHBzeSwgJnBzeS0+YmF0dGVyeV9pbmZvKTsKPiA+ICAJCWlmIChyYyAmJiByYyAhPSAt
+RU5PREVWICYmIHJjICE9IC1FTk9FTlQpCj4gPiAgCQkJZ290byBjaGVja19zdXBwbGllc19mYWls
+ZWQ7Cj4gPiAtLSAKPiA+IDIuMzkuMQo+ID4gCg0KDQrmnKzpgq7ku7blj4rlhbbpmYTku7blkKvm
+nInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHnu5nk
+uIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbk
+u5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbp
+g6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTku7bk
+uK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPnlLXo
+r53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIgDQpUaGlzIGVt
+YWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24g
+ZnJvbSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhl
+IHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ug
+b2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5jbHVkaW5n
+LCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVwcm9k
+dWN0aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50ZW5k
+ZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMgZW1haWwg
+aW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBvciBlbWFpbCBpbW1l
+ZGlhdGVseSBhbmQgZGVsZXRlIGl0LiA=
 
-On 09.05.23 00:06, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Mon, May 08, 2023 at 11:18:28PM +0200, Jakob Hauser wrote:
->> On 08.05.23 13:35, Sebastian Reichel wrote:
->>> On Sat, May 06, 2023 at 05:54:34PM +0200, Jakob Hauser wrote:
->>>> The rt5033-battery fuelgauge can't get a status by itself. The rt5033-charger
->>>> can, let's get this value.
->>>>
->>>> Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
->>>> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
->>>> ---
->>>>    drivers/power/supply/rt5033_battery.c | 24 ++++++++++++++++++++++++
->>>>    1 file changed, 24 insertions(+)
->>>>
->>>> diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
->>>> index 5c04cf305219..a6520716d813 100644
->>>> --- a/drivers/power/supply/rt5033_battery.c
->>>> +++ b/drivers/power/supply/rt5033_battery.c
->>>> @@ -12,6 +12,26 @@
->>>>    #include <linux/mfd/rt5033-private.h>
->>>>    #include <linux/mfd/rt5033.h>
->>>> +static int rt5033_battery_get_status(struct i2c_client *client)
->>>> +{
->>>> +	struct power_supply *charger;
->>>> +	union power_supply_propval val;
->>>> +	int ret;
->>>> +
->>>> +	charger = power_supply_get_by_name("rt5033-charger");
->>>> +	if (!charger)
->>>> +		return POWER_SUPPLY_STATUS_UNKNOWN;
->>>> +
->>>> +	ret = power_supply_get_property(charger, POWER_SUPPLY_PROP_STATUS, &val);
->>>> +	if (ret) {
->>>> +		power_supply_put(charger);
->>>> +		return POWER_SUPPLY_STATUS_UNKNOWN;
->>>> +	}
->>>
->>> struct rt5033_battery *battery = i2c_get_clientdata(client);
->>> ret = power_supply_get_property_from_supplier(battery->psy, POWER_SUPPLY_PROP_STATUS, &val);
->>> if (ret)
->>>       val.intval = POWER_SUPPLY_STATUS_UNKNOWN;
->>
->> I don't think this works. There is no direct relationship between
->> rt5033-charger and rt5033-battery. They operate independently from each
->> other.
-> 
-> That should be fine as long as the supply dependency is properly declared.
-> 
->> I had a short try and the status property of rt5033-battery was "unknown".
->>
->> Just for the record, the full function I tried was:
->>
->> static int rt5033_battery_get_status(struct i2c_client *client)
->> {
->>          struct rt5033_battery *battery = i2c_get_clientdata(client);
->>          union power_supply_propval val;
->>          int ret;
->>
->>          ret = power_supply_get_property_from_supplier(battery->psy,
->>                                               POWER_SUPPLY_PROP_STATUS,
->>                                               &val);
->>          if (ret)
->>                  val.intval = POWER_SUPPLY_STATUS_UNKNOWN;
->>
->>          return val.intval;
->> }
->>
->> Later on I added a read-out of the "ret" value. It is "-19". I guess that's
->> the "return -ENODEV;" from function
->> power_supply_get_property_from_supplier(). [2]
->>
->> [2] https://github.com/torvalds/linux/blob/v6.4-rc1/drivers/power/supply/power_supply_core.c#L397-L421
-> 
-> I suppose your DT is missing the connection between the charger and
-> the battery:
-> 
-> rt5033_charger: charger {
->      compatible = "rt5033-charger";
->      ...
-> }
-> 
-> fuel-gauge {
->      compatible = "rt5033-battery";
->      ...
->      power-supplies = <&rt5033_charger>; // you are probably missing this
-> };
-> 
-> See also Documentation/devicetree/bindings/power/supply/power-supply.yaml
-
-...
-
-Thanks for the hints.
-
-This leads to updating the dt-bindings because adding the 
-"power-supplies" property is important to be aware of.
-
-Btw. first it didn't work. It took me quite some time to debug. I needed 
-to add "psy_cfg.of_node = client->dev.of_node;" to the rt5033-battery 
-probe function.
-
-Now it works. However, there is a new problem. The battery driver gets 
-probed first. The charger driver a bit later. In the meantime the 
-battery driver spams dmesg with several "Failed to register power 
-supply" because the charger driver isn't available yet. Once the charger 
-driver is there, it works fine and dmesg becomes silent.
-
-With the current state of the patchset:
-dmesg | grep rt5033
-[   13.628030] rt5033 6-0034: Device found (rev. 6)
-[   13.633552] rt5033-led: Failed to locate of_node [id: -1]
-[   13.790478] rt5033-charger rt5033-charger: DMA mask not set
-
-With the changes discussed here:
-dmesg | grep rt5033
-[   15.741915] rt5033-battery 4-0035: Failed to register power supply
-[   15.752894] rt5033-battery 4-0035: Failed to register power supply
-[   15.795458] rt5033-battery 4-0035: Failed to register power supply
-[   15.910760] rt5033-battery 4-0035: Failed to register power supply
-[   15.913187] rt5033 6-0034: Device found (rev. 6)
-[   15.914341] rt5033-led: Failed to locate of_node [id: -1]
-[   15.920052] rt5033-battery 4-0035: Failed to register power supply
-[   15.927262] rt5033-battery 4-0035: Failed to register power supply
-[   16.017131] rt5033-battery 4-0035: Failed to register power supply
-[   16.017401] rt5033-charger rt5033-charger: DMA mask not set
-
-The message is comming from the rt5033-battery probe function, it's the 
-power_supply_register() that fails.
-
-Any ideas what could be done about this?
-
-Kind regards,
-Jakob
