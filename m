@@ -2,125 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D2F6FCDAE
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 20:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266386FCDED
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 20:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjEISWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 May 2023 14:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S229826AbjEISjn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 9 May 2023 14:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbjEISWi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 14:22:38 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5B11BF
-        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 11:22:36 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9659e9bbff5so1125471766b.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 May 2023 11:22:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683656555; x=1686248555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7dMhyasFr9nXSZl5Z5p5MReNTd4O4eHsrz0nla4Qm+s=;
-        b=RMWGy7UP/JCkXpB3JKA2udiLxmUUOLWkyxxUMXXqsW+USiwJjT5yYUyCzL0hpyzENU
-         6b7S6DwQW3rs7FYIMNJxBIxNL8/wfZ6EU+0LJa2x/errkOe16fJQYOGvBZIhd1tTgDKd
-         5SxIHuICNQmrlSIRjzJ6ZcKgIVcF0TgB+KN6FCeXWkVac8W8U9t8+r5LvH+rZd//DDHO
-         b02IJrUqA3qMztIJjAYtsa8YLbmhQUKmQU3rYN/gwHueJH+g5qID4fFcYvHEgTRaj+gU
-         7OCv3HRUvrBa/+CHeBBd02Niw04FseRjJz7nojmaD6+Hl/afWqLYN2Lnkx5fmUefaxw9
-         qmMA==
+        with ESMTP id S229656AbjEISjn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 14:39:43 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B13359D;
+        Tue,  9 May 2023 11:39:35 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-965aa9d1d19so173776366b.0;
+        Tue, 09 May 2023 11:39:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683656555; x=1686248555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7dMhyasFr9nXSZl5Z5p5MReNTd4O4eHsrz0nla4Qm+s=;
-        b=HTuCDSY6evIkkW0ygCgiu9+ex6cZZUOvkIp1YAH4TZp8gFwRGMROmyxOQNYhz7viWZ
-         dlI1UIGUisJJHYE9UOiFsWfwtSgA+bmTI91i8zhyVNmwe31rVCVg7GdOgOuB+sMuy+zD
-         HF4m29h76j76dm1B8w7HgsedEMisRqEsbyaaXOpokuEOB7EmMeIIT9V8FIRHkhcJb1jK
-         0nFp4VrZl1cryRbGhIIz2B21Qp5rTYKgGdJR1Wy7FMobtvPXQKIrrQCWj+z6TAx1bkDB
-         u1NbPpjMrWwsnsbNwD+S6d9V8EZ3MbFG0LXKmoSWk7smLW5Eytc4X3SEXUnm85n1O4Ng
-         a6tA==
-X-Gm-Message-State: AC+VfDyelmBHMVgbKS8sYX8OdlZTLqJ7ZljLMnhazgScoJEBv8PyBR+J
-        /JI5XhkL9DkTAQoaQHFiiG6ZUw==
-X-Google-Smtp-Source: ACHHUZ7GGPqJakf4qQTpgmeEUROOguTzfeOp6RuEtJHlxvapmbgQvPl4hRK3FghMJ3pOX/WWzIFvEA==
-X-Received: by 2002:a17:906:58d5:b0:969:9fd0:7cee with SMTP id e21-20020a17090658d500b009699fd07ceemr5319936ejs.10.1683656554867;
-        Tue, 09 May 2023 11:22:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id hy26-20020a1709068a7a00b0095fd0462695sm1630087ejc.5.2023.05.09.11.22.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 11:22:34 -0700 (PDT)
-Message-ID: <7c724dc9-fef6-54e0-3470-7e8473494319@linaro.org>
-Date:   Tue, 9 May 2023 20:22:33 +0200
+        d=1e100.net; s=20221208; t=1683657574; x=1686249574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fk4TDLP8eBXdwBhXU6v4XzEa25SJ2T9VAd0f2AbruVE=;
+        b=HsKXg5j7xn2DroMQ8N8hGVgmdHNK6LCiW+giePIR740uT85/nWHknVePCX6fv7bBfA
+         EcOIRehJ+k2ipfZkexvMttUrWkrFwZK5DdnJ6npb+d963lH1vaxYED2+csO28NDE4krz
+         A1zEZeSOo68v+eFd0LaTt+EukaHM2ZyplbmrLqtJjGVthl2Zh8ZbrDXubBHBdTjyEDLq
+         hA3ugGvkzqqshvFDWUGYvwCMQVIIklwmLWAPsNfXOO652vOburzb/YAyqIO5gtNJUIZM
+         XKW3bab0561RYrKjfaLQ7ppNEKzIL+9h7OgPiD5IY1xSgNSdhlneJhofvW7SjHQeeIyf
+         NhxA==
+X-Gm-Message-State: AC+VfDzCXG/OAxciPSb1hXhgC6FB3wAh7b/MYMpDf1+nsWGZ5r2giT9B
+        uGlyWwdn8mrsAyl/0Hes0Au9CXMsp3BPxwpJUFw=
+X-Google-Smtp-Source: ACHHUZ5rax/xmMWs1z6JW/r//VY062uNlBtZrozPqNrkG3nHAgRy7pyaM4+uN/I9amqmlS4J3r9q8KvkMvqihsieEgs=
+X-Received: by 2002:a17:906:518a:b0:959:37cc:190e with SMTP id
+ y10-20020a170906518a00b0095937cc190emr11911985ejk.3.1683657573653; Tue, 09
+ May 2023 11:39:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 00/13] Re-introduce Exynos4212 support and add Samsung
- Galaxy Tab 3 8.0 boards
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230501195525.6268-1-aweber.kernel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501195525.6268-1-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230509180503.739208-1-wyes.karny@amd.com> <20230509180503.739208-2-wyes.karny@amd.com>
+ <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 9 May 2023 20:39:22 +0200
+Message-ID: <CAJZ5v0gb9TpH1qCqhqAb28c7uRRk8=iufTkzc5aCpC=OJm8QaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cpufreq/schedutil: Remove fast_switch_possible
+ flag if driver doesn't set fast_switch
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        joel@joelfernandes.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/05/2023 21:55, Artur Weber wrote:
-> This patches re-introduces the Exynos4212 platform and adds support
-> for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
-> 
->  - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
->  - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
->  - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
-> 
-> What works:
-> 
->  - Display and backlight
->  - Touchscreen (without touchkeys)
->  - GPIO buttons, hall sensor
->  - WiFi and Bluetooth
->  - USB, fuel gauge, charging
->  - Accelerometer and magnetometer
->  - WiFi model only: light sensor
+On Tue, May 9, 2023 at 8:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, May 9, 2023 at 8:06 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > The set value of `fast_switch_enabled` indicates that fast_switch
+> > callback is set.
 
+BTW, this is not true.  The ACPI cpufreq driver has fast_switch, but
+it doesn't always use it.
 
-Thanks for the patches, nice work.
+> >  For some drivers such as amd_pstate and intel_pstate,
+> > the adjust_perf callback is used but it still sets
+> > `fast_switch_possible` flag. This is because this flag also decides
+> > whether schedutil governor selects adjust_perf function for frequency
+> > update. This condition in the schedutil governor forces the scaling
+> > driver to set the `fast_switch_possible` flag.
 
-I applied parts of the set. Please:
-1. Split the patchset per subsystems, so separate to media, phy and me.
-2. Check reviews and resend bindings for display and LP855X.
-3. Rebase and check/fix DTS and send a new version. I cannot apply DTS
-without bindings being reviewed.
+Yes, it does, but setting this flag is not sufficient.
 
+> > Remove `fast_switch_enabled` check when schedutil decides to select
+> > adjust_perf function for frequency update. Thus removing this drivers
+> > are now free to remove `fast_switch_possible` flag if they don't use
+> > fast_switch callback.
+> >
+> > This issue becomes apparent when aperf/mperf overflow occurs.  When this
+> > happens, kernel disables frequency invariance calculation which causes
+> > schedutil to fallback to sugov_update_single_freq which currently relies
+> > on the fast_switch callback.
+> >
+> > Normal flow:
+> >   sugov_update_single_perf
+> >     cpufreq_driver_adjust_perf
+> >       cpufreq_driver->adjust_perf
+> >
+> > Error case flow:
+> >   sugov_update_single_perf
+> >     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
+> >       cpufreq_driver_fast_switch
+> >          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+>
+> So you need to set fast_switch.
+>
+> Please read the comment in sugov_update_single_perf().  It explains
+> why adjust_perf is not used when scale invariance is not enabled: the
+> mapping between the performance levels and frequency are not generally
+> defined in that case and it is up to the driver to figure out what
+> perf level to use to get the given frequency.  And this is exactly why
+> fast_switch is not optional: because scale invariance may be disabled.
+>
+> Please feel free to update the documentation to clarify this, but the
+> way to fix the issue is to implement fast_switch in the driver.
+>
+> > Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/cpufreq/amd-pstate.c     | 10 +++++++---
+> >  drivers/cpufreq/cpufreq.c        | 20 +++++++++++++++++++-
+> >  drivers/cpufreq/intel_pstate.c   |  3 +--
+> >  include/linux/cpufreq.h          |  1 +
+> >  kernel/sched/cpufreq_schedutil.c |  2 +-
+> >  5 files changed, 29 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> > index 5a3d4aa0f45a..007bfe724a6a 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -671,8 +671,14 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> >         /* It will be updated by governor */
+> >         policy->cur = policy->cpuinfo.min_freq;
+> >
+> > +       /**
+> > +        * For shared memory system frequency update takes time that's why
+> > +        * do this in deferred kthread context.
+> > +        */
+> >         if (boot_cpu_has(X86_FEATURE_CPPC))
+> > -               policy->fast_switch_possible = true;
+> > +               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+> > +       else
+> > +               current_pstate_driver->adjust_perf = NULL;
+> >
+> >         ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+> >                                    FREQ_QOS_MIN, policy->cpuinfo.min_freq);
+> > @@ -697,8 +703,6 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> >         policy->driver_data = cpudata;
+> >
+> >         amd_pstate_boost_init(cpudata);
+> > -       if (!current_pstate_driver->adjust_perf)
+> > -               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+> >
+> >         return 0;
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 6b52ebe5a890..366747012104 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
+> >         if (!policy->fast_switch_possible)
+> >                 return;
+> >
+> > +       /**
+> > +        * It's not expected driver's fast_switch callback is not set
+> > +        * even fast_switch_possible is true.
+> > +        */
+> > +       if (WARN_ON(!cpufreq_driver_has_fast_switch()))
+> > +               return;
+> > +
+> >         mutex_lock(&cpufreq_fast_switch_lock);
+> >         if (cpufreq_fast_switch_count >= 0) {
+> >                 cpufreq_fast_switch_count++;
+> > @@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >  }
+> >  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >
+> > +/**
+> > + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
+> > + *
+> > + * Return 'true' if the ->fast_switch callback is present for the
+> > + * current driver or 'false' otherwise.
+> > + */
+> > +bool cpufreq_driver_has_fast_switch(void)
+> > +{
+> > +       return !!cpufreq_driver->fast_switch;
+> > +}
+> > +
+> >  /**
+> >   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+> >   * @cpu: Target CPU.
+> > @@ -2157,7 +2175,7 @@ EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >   * and it is expected to select a suitable performance level equal to or above
+> >   * @min_perf and preferably equal to or below @target_perf.
+> >   *
+> > - * This function must not be called if policy->fast_switch_enabled is unset.
+> > + * By default this function takes the fast frequency update path.
+> >   *
+> >   * Governors calling this function must guarantee that it will never be invoked
+> >   * twice in parallel for the same CPU and that it will never be called in
+> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > index 2548ec92faa2..007893514c87 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -2698,8 +2698,6 @@ static int __intel_pstate_cpu_init(struct cpufreq_policy *policy)
+> >
+> >         intel_pstate_init_acpi_perf_limits(policy);
+> >
+> > -       policy->fast_switch_possible = true;
+> > -
+> >         return 0;
+> >  }
+> >
+> > @@ -2955,6 +2953,7 @@ static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> >         if (ret)
+> >                 return ret;
+> >
+> > +       policy->fast_switch_possible = true;
 
-Best regards,
-Krzysztof
+I'm not sure what this is about.  Is it a cleanup of intel_pstate?
 
+> >         policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
+> >         /* This reflects the intel_pstate_get_cpu_pstates() setting. */
+> >         policy->cur = policy->cpuinfo.min_freq;
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 26e2eb399484..7a32cfca26c9 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -604,6 +604,7 @@ struct cpufreq_governor {
+> >  /* Pass a target to the cpufreq driver */
+> >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >                                         unsigned int target_freq);
+> > +bool cpufreq_driver_has_fast_switch(void);
+> >  void cpufreq_driver_adjust_perf(unsigned int cpu,
+> >                                 unsigned long min_perf,
+> >                                 unsigned long target_perf,
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index e3211455b203..f993ecf731a9 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -776,7 +776,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+> >
+> >         if (policy_is_shared(policy))
+> >                 uu = sugov_update_shared;
+> > -       else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
+> > +       else if (cpufreq_driver_has_adjust_perf())
+> >                 uu = sugov_update_single_perf;
+> >         else
+> >                 uu = sugov_update_single_freq;
+> > --
