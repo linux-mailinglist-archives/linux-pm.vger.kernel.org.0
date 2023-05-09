@@ -2,68 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BADB6FC05C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 09:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B00D6FC105
+	for <lists+linux-pm@lfdr.de>; Tue,  9 May 2023 09:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjEIHZb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 May 2023 03:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S234692AbjEIHzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 May 2023 03:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEIHZa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 03:25:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A833C01;
-        Tue,  9 May 2023 00:25:25 -0700 (PDT)
+        with ESMTP id S235356AbjEIHzM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 May 2023 03:55:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440B3100D8
+        for <linux-pm@vger.kernel.org>; Tue,  9 May 2023 00:54:33 -0700 (PDT)
 Received: from mercury (195-23-45-170.net.novis.pt [195.23.45.170])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3F4846602E9A;
-        Tue,  9 May 2023 08:25:23 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F9B56603276;
+        Tue,  9 May 2023 08:54:23 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683617123;
-        bh=QCGh3lAq+6+hpDBYQxXcBfE6/30zBXbnB7ZBE++m248=;
+        s=mail; t=1683618863;
+        bh=fa0orNCQbdWnMh/CgkjAqe9Q8G4tEY0NpX/qhNkaGBQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nbkomN7Tvzin8TZA38FF5NgF4U8q7JxzcIvLI/mS2qExUPWu4K1Pmp/uXSG8nUb5W
-         av1+C2BiCxFT8XMwTFMFSpYFeDTSAQPcJgvWxvizi2KOrleGoHaQrmh4PghboHLNjc
-         jmqnKGNmqZfP5+o+5cFG9IICTO3LWq9J6br3rHIrJgzkag01vr1olRlXwmyGeGga3n
-         85WFg+ihga7Xno16IjeoYU7XL8IXw7V3DkRSNTDkSisbhixWAupiJXYRjyxKDJTkBJ
-         IBoSONEQXINbI6nWEd0kr6rNEzDf7nRk8XKj3yVfB4p4kBH/ImwsAzAga6qJjd5izL
-         prorw28QfDmiA==
+        b=arLVw8qtUnA+2cpRnk+mCEjF19r9hXHcqxUhNctCOrXQOcCHyP47WKG5toaL361b/
+         huoItxtDCdoMX0uIUXp8jKZ1yDyoEJj2mA0tL8O0OLMpyh0rtYXgrlwO4FjXXUPK3I
+         eMCRP0xR/2iU8RqyU0KKmf2LwJZZhCb2ljm4J/A75BSnGboBGZongpt2UMQrt2YgQt
+         BLwTumCezfRCdvJDXXp1hZ0X7dphdvWwArmEB/bxJHFMNdJZi7tVRgDlDE3L+TUxEC
+         HD0mjp36NU1O6IFBGm/ydsib0ewZIMRblexPv0Rpuzjk08Ld4Km5xAsB/xNaObIiuB
+         uXn/USIjfR62w==
 Received: by mercury (Postfix, from userid 1000)
-        id 9F0C71066FA2; Tue,  9 May 2023 09:25:20 +0200 (CEST)
-Date:   Tue, 9 May 2023 09:25:20 +0200
+        id 7ABA61066FA2; Tue,  9 May 2023 09:54:20 +0200 (CEST)
+Date:   Tue, 9 May 2023 09:54:20 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v4 7/8] power: supply: rt5033_battery: Adopt status
- property from charger
-Message-ID: <20230509072520.3e4jibiis654izom@mercury.elektranox.org>
-References: <20230506155435.3005-1-jahau@rocketmail.com>
- <20230506155435.3005-8-jahau@rocketmail.com>
- <20230508113518.nfwchl5wusmnkjp6@mercury.elektranox.org>
- <899d6604-7b15-ac37-c624-987a2bb7875e@rocketmail.com>
- <20230508220605.kderc3nihhezouit@mercury.elektranox.org>
- <55fd9835-4246-00e8-b641-c8b0ee3f7e22@rocketmail.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     chenhuacai@kernel.org, linux-pm@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] power: supply: Fix power_supply_get_battery_info() if
+ parent is NULL
+Message-ID: <20230509075420.nvv4j6patiibbmer@mercury.elektranox.org>
+References: <20230509024448.1322898-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iet7ywalyankg5v4"
+        protocol="application/pgp-signature"; boundary="7ukqottstepv4mtj"
 Content-Disposition: inline
-In-Reply-To: <55fd9835-4246-00e8-b641-c8b0ee3f7e22@rocketmail.com>
+In-Reply-To: <20230509024448.1322898-1-chenhuacai@loongson.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -75,195 +58,167 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---iet7ywalyankg5v4
+--7ukqottstepv4mtj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, May 09, 2023 at 03:01:32AM +0200, Jakob Hauser wrote:
-> On 09.05.23 00:06, Sebastian Reichel wrote:
-> > On Mon, May 08, 2023 at 11:18:28PM +0200, Jakob Hauser wrote:
-> > > On 08.05.23 13:35, Sebastian Reichel wrote:
-> > > > On Sat, May 06, 2023 at 05:54:34PM +0200, Jakob Hauser wrote:
-> > > > > The rt5033-battery fuelgauge can't get a status by itself. The rt=
-5033-charger
-> > > > > can, let's get this value.
-> > > > >=20
-> > > > > Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
-> > > > > Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> > > > > ---
-> > > > >    drivers/power/supply/rt5033_battery.c | 24 +++++++++++++++++++=
-+++++
-> > > > >    1 file changed, 24 insertions(+)
-> > > > >=20
-> > > > > diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/powe=
-r/supply/rt5033_battery.c
-> > > > > index 5c04cf305219..a6520716d813 100644
-> > > > > --- a/drivers/power/supply/rt5033_battery.c
-> > > > > +++ b/drivers/power/supply/rt5033_battery.c
-> > > > > @@ -12,6 +12,26 @@
-> > > > >    #include <linux/mfd/rt5033-private.h>
-> > > > >    #include <linux/mfd/rt5033.h>
-> > > > > +static int rt5033_battery_get_status(struct i2c_client *client)
-> > > > > +{
-> > > > > +	struct power_supply *charger;
-> > > > > +	union power_supply_propval val;
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	charger =3D power_supply_get_by_name("rt5033-charger");
-> > > > > +	if (!charger)
-> > > > > +		return POWER_SUPPLY_STATUS_UNKNOWN;
-> > > > > +
-> > > > > +	ret =3D power_supply_get_property(charger, POWER_SUPPLY_PROP_ST=
-ATUS, &val);
-> > > > > +	if (ret) {
-> > > > > +		power_supply_put(charger);
-> > > > > +		return POWER_SUPPLY_STATUS_UNKNOWN;
-> > > > > +	}
-> > > >=20
-> > > > struct rt5033_battery *battery =3D i2c_get_clientdata(client);
-> > > > ret =3D power_supply_get_property_from_supplier(battery->psy, POWER=
-_SUPPLY_PROP_STATUS, &val);
-> > > > if (ret)
-> > > >       val.intval =3D POWER_SUPPLY_STATUS_UNKNOWN;
-> > >=20
-> > > I don't think this works. There is no direct relationship between
-> > > rt5033-charger and rt5033-battery. They operate independently from ea=
-ch
-> > > other.
-> >=20
-> > That should be fine as long as the supply dependency is properly declar=
-ed.
-> >=20
-> > > I had a short try and the status property of rt5033-battery was "unkn=
-own".
-> > >=20
-> > > Just for the record, the full function I tried was:
-> > >=20
-> > > static int rt5033_battery_get_status(struct i2c_client *client)
-> > > {
-> > >          struct rt5033_battery *battery =3D i2c_get_clientdata(client=
-);
-> > >          union power_supply_propval val;
-> > >          int ret;
-> > >=20
-> > >          ret =3D power_supply_get_property_from_supplier(battery->psy,
-> > >                                               POWER_SUPPLY_PROP_STATU=
-S,
-> > >                                               &val);
-> > >          if (ret)
-> > >                  val.intval =3D POWER_SUPPLY_STATUS_UNKNOWN;
-> > >=20
-> > >          return val.intval;
-> > > }
-> > >=20
-> > > Later on I added a read-out of the "ret" value. It is "-19". I guess =
-that's
-> > > the "return -ENODEV;" from function
-> > > power_supply_get_property_from_supplier(). [2]
-> > >=20
-> > > [2] https://github.com/torvalds/linux/blob/v6.4-rc1/drivers/power/sup=
-ply/power_supply_core.c#L397-L421
-> >=20
-> > I suppose your DT is missing the connection between the charger and
-> > the battery:
-> >=20
-> > rt5033_charger: charger {
-> >      compatible =3D "rt5033-charger";
-> >      ...
-> > }
-> >=20
-> > fuel-gauge {
-> >      compatible =3D "rt5033-battery";
-> >      ...
-> >      power-supplies =3D <&rt5033_charger>; // you are probably missing =
-this
-> > };
-> >=20
-> > See also Documentation/devicetree/bindings/power/supply/power-supply.ya=
-ml
+On Tue, May 09, 2023 at 10:44:48AM +0800, Huacai Chen wrote:
+> After commit 27a2195efa8d26447c ("power: supply: core: auto-exposure
+> of simple-battery data") we call power_supply_get_battery_info() in
+> __power_supply_register(), but it causes test_battery crash with NULL
+> pointer:
 >=20
-> ...
+> [    7.524846] __power_supply_register: Expected proper parent device for=
+ 'test_battery'
+> [    7.524856] CPU 3 Unable to handle kernel paging request at virtual ad=
+dress 0000000000000278, era =3D=3D 9000000002fb279c, ra =3D=3D 900000000317=
+3434
+> [    7.524862] Oops[#1]:
+> [    7.524866] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.3.0+ #524
+> [    7.524870] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loon=
+gson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0-prebeta9 10/21/=
+2022
+> [    7.524872] pc 9000000002fb279c ra 9000000003173434 tp 90000001001f000=
+0 sp 90000001001f3c00
+> [    7.524875] a0 0000000000000000 a1 0000000000000000 a2 000000000000000=
+0 a3 9000000004553e13
+> [    7.524878] a4 9000000004553e16 a5 ffffffffffffffff a6 9000000003fd094=
+8 a7 0000000000000030
+> [    7.524881] t0 9000000003173434 t1 90000000035e2c00 t2 000000000000000=
+1 t3 00000000fffff2b0
+> [    7.524883] t4 0000000000000007 t5 fffffffffffffffe t6 000000000000000=
+0 t7 0000000000000010
+> [    7.524886] t8 00000000000000b4 u0 00000001c0840c76 s9 000000000000000=
+0 s0 0000000000000000
+> [    7.524889] s1 900000000370c458 s2 0000000000000001 s3 9000000101f8100=
+0 s4 9000000101f81038
+> [    7.524891] s5 9000000101f813a0 s6 900000000370c398 s7 9000000003eebd1=
+8 s8 90000000037c0070
+> [    7.524894]    ra: 9000000003173434 power_supply_get_battery_info+0xe4=
+/0x710
+> [    7.591224]   ERA: 9000000002fb279c __dev_fwnode+0x8/0x20
+> [    7.853583]  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=3DCC DACM=3DCC -WE)
+> [    7.859740]  PRMD: 00000004 (PPLV0 +PIE -PWE)
+> [    7.864073]  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
+> [    7.868839]  ECFG: 00071c1c (LIE=3D2-4,10-12 VS=3D7)
+> [    7.873430] ESTAT: 00010000 [PIL] (IS=3D ECode=3D1 EsubCode=3D0)
+> [    7.878884]  BADV: 0000000000000278
+> [    7.882346]  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
+> [    7.888056] Modules linked in:
+> [    7.891088] Process swapper/0 (pid: 1, threadinfo=3D0000000091357ee8, =
+task=3D00000000313d98cb)
+> [    7.899307] Stack : 00000000000000b4 900000000279aca8 0000000000000001=
+ 0000000000000000
+> [    7.907274]         0000000000000049 0000000000000408 9000000100008c00=
+ 90000000035b6370
+> [    7.915238]         900000000b801080 90000000029a440c 9000000003eb4680=
+ 9000000003eb4680
+> [    7.923202]         9000000101f81038 900000000357cdcc 0000000000000001=
+ 900000000370c458
+> [    7.931166]         9000000101f81000 90000000037c0070 9000000003eebd18=
+ 900000000370c398
+> [    7.939131]         90000000045f4530 9000000101f81038 0000000000000000=
+ 0000000000000001
+> [    7.947095]         900000000370c458 9000000101f81000 0000000000000000=
+ 9000000003173e64
+> [    7.955059]         0000000000000026 9000000003de3880 9000000100562040=
+ 900000000357e07c
+> [    7.963023]         000000000000026f 0000000000000001 90000001001f3d68=
+ fffffffffffffff5
+> [    7.970987]         90000000036d2ca8 90000000027429d8 90000000037c0030=
+ 0000000000000001
+> [    7.978951]         ...
+> [    7.981379] Call Trace:
+> [    7.981382] [<9000000002fb279c>] __dev_fwnode+0x8/0x20
+> [    7.988916] [<9000000003173434>] power_supply_get_battery_info+0xe4/0x=
+710
+> [    7.995666] [<9000000003173e64>] __power_supply_register+0x404/0x580
+> [    8.001984] [<900000000379d368>] test_power_init+0x6c/0x124
+> [    8.007527] [<90000000026e08f8>] do_one_initcall+0x58/0x1ec
+> [    8.013066] [<9000000003761614>] kernel_init_freeable+0x290/0x310
+> [    8.019127] [<90000000035b40e8>] kernel_init+0x24/0x11c
+> [    8.024324] [<90000000026e2048>] ret_from_kernel_thread+0xc/0xa4
+> [    8.030295]
+> [    8.031769] Code: 4c000020  0015002c  03400000 <28c9e08c> 40000d80  02=
+c06184  4c000020  28ca0084  4c000020
 >=20
-> Thanks for the hints.
+> Root cause: psy->dev.parent is NULL in power_supply_get_battery_info(),
+> so change the else branch to be 'else if (psy->dev.parent)' and return
+> -ENOENT if psy->dev.parent is NULL.
 >=20
-> This leads to updating the dt-bindings because adding the "power-supplies"
-> property is important to be aware of.
+> Fixes: 27a2195efa8d26447c ("power: supply: core: auto-exposure of simple-=
+battery data")
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
 
-It should already be part of the binding, because richtek,rt5033-battery.ya=
-ml has
-
-allOf:
-  - $ref: power-supply.yaml#
-
-> Btw. first it didn't work. It took me quite some time to debug. I needed =
-to
-> add "psy_cfg.of_node =3D client->dev.of_node;" to the rt5033-battery probe
-> function.
->=20
-> Now it works. However, there is a new problem. The battery driver gets
-> probed first. The charger driver a bit later. In the meantime the battery
-> driver spams dmesg with several "Failed to register power supply" because
-> the charger driver isn't available yet. Once the charger driver is there,=
- it
-> works fine and dmesg becomes silent.
->=20
-> With the current state of the patchset:
-> dmesg | grep rt5033
-> [   13.628030] rt5033 6-0034: Device found (rev. 6)
-> [   13.633552] rt5033-led: Failed to locate of_node [id: -1]
-> [   13.790478] rt5033-charger rt5033-charger: DMA mask not set
->=20
-> With the changes discussed here:
-> dmesg | grep rt5033
-> [   15.741915] rt5033-battery 4-0035: Failed to register power supply
-> [   15.752894] rt5033-battery 4-0035: Failed to register power supply
-> [   15.795458] rt5033-battery 4-0035: Failed to register power supply
-> [   15.910760] rt5033-battery 4-0035: Failed to register power supply
-> [   15.913187] rt5033 6-0034: Device found (rev. 6)
-> [   15.914341] rt5033-led: Failed to locate of_node [id: -1]
-> [   15.920052] rt5033-battery 4-0035: Failed to register power supply
-> [   15.927262] rt5033-battery 4-0035: Failed to register power supply
-> [   16.017131] rt5033-battery 4-0035: Failed to register power supply
-> [   16.017401] rt5033-charger rt5033-charger: DMA mask not set
->=20
-> The message is comming from the rt5033-battery probe function, it's the
-> power_supply_register() that fails.
->=20
-> Any ideas what could be done about this?
-
-Replace the dev_err() with dev_err_probe():
-
-if (IS_ERR(battery->psy))
-    return dev_err_probe(&client->dev, PTR_ERR(battery->psy), "Failed to re=
-gister power supply\n");
-
-That will avoid printing an error for -EPROBE_DEFER.
-
-Greetings,
+Thanks, queued to power-supply's fixes branch.
 
 -- Sebastian
 
---iet7ywalyankg5v4
+>  drivers/power/supply/power_supply_core.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index ab986dbace16..d1b19027f53b 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -573,7 +573,7 @@ int power_supply_get_battery_info(struct power_supply=
+ *psy,
+>  	struct power_supply_battery_info *info;
+>  	struct device_node *battery_np =3D NULL;
+>  	struct fwnode_reference_args args;
+> -	struct fwnode_handle *fwnode;
+> +	struct fwnode_handle *fwnode =3D NULL;
+>  	const char *value;
+>  	int err, len, index;
+>  	const __be32 *list;
+> @@ -585,7 +585,7 @@ int power_supply_get_battery_info(struct power_supply=
+ *psy,
+>  			return -ENODEV;
+> =20
+>  		fwnode =3D fwnode_handle_get(of_fwnode_handle(battery_np));
+> -	} else {
+> +	} else if (psy->dev.parent) {
+>  		err =3D fwnode_property_get_reference_args(
+>  					dev_fwnode(psy->dev.parent),
+>  					"monitored-battery", NULL, 0, 0, &args);
+> @@ -595,6 +595,9 @@ int power_supply_get_battery_info(struct power_supply=
+ *psy,
+>  		fwnode =3D args.fwnode;
+>  	}
+> =20
+> +	if (!fwnode)
+> +		return -ENOENT;
+> +
+>  	err =3D fwnode_property_read_string(fwnode, "compatible", &value);
+>  	if (err)
+>  		goto out_put_node;
+> --=20
+> 2.39.1
+>=20
+
+--7ukqottstepv4mtj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRZ9VUACgkQ2O7X88g7
-+pr/Ag//eBPYQF9XRUneLbrr48ySTBKivB7FqbLJzfJg1llA51Bu95ykEeNTnyFv
-EyrTeoQTUJt+NeXg7wpnNbWSgqpX0pLpuQBe9zekWfHYtPkdzc4zO2C1wngtCZfG
-lldbyh4HdDEU1rFw79EUlWpilgO68BNBl1cPl8RQsztWcNKqTRtoVRga5aTxq8q3
-LkC7j5q2StxkVgKGwbBhYXb+mTQER8lTP05gT9B+173jCtkuOz7Rs+JdJLEbuKVG
-rxFqYNps9oOMzhUXxHJ1zeXvZ8s3oxzt+iWN7wiMMYTgc0GVIlwFo+RCxXSb+boM
-tSQ7PWnhungvLXu+gP9KSzNLWgz+x7Ei+MjJcMvMs95s7sG8G8UtsByooxm9CCxG
-5GMavPtLppwbPTvimy5HuqFWsZmu2dcLRTszVgugceXA1ExCKJ4r75dDyGiRxkiM
-FAD0i4eJ4HPR3i9h9tq8xOGPWNncUlj2xdthdE7qMP3vOtm+1borjIaXL7W53VbM
-WkVE/DO2NTU7dJLS2sGK+IPmMO/pIOwyL/Od6yw7rvZxS5zR7+BsEupr6UYyxiFg
-pcei8d2mAIFtZjVK+90zPeB6BbpHAAbvwycKFE6/wDI1ltA7ym7tvdKVzZYy2It5
-tGOAakYDtqAQjSTHe1iyXnAES3LwG9g5KpPZZT89BZ3vfnLJ2vQ=
-=18VY
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRZ/CcACgkQ2O7X88g7
++prqpg/+OIQ4ewvcuU5PP7h03iMilUcAbdQGXw70UPZ3BU8Lz6aCRRYrkH3JpCKF
+NLYILKudUldlknOa+zIVNe6FenVNaFhPbO+W0Gb/oJiWoRIuBS3miPTh7jG+TMVU
+bLuI1HN1Mozis+fj8Q0KOAf6mwqkTi5HRDaVc5vN/qt8UtI3f1tVm2rc9dExxoaV
+k9+izJ13gHJIKvrjFfxxKM3OHy+lY+CJ14o/JbZflLjw9Lm+P1Zjux8T7aCGOM6F
+VQnQ2OR+AzS1dZ2ppZi6ITEqh3+HBmNzfP97Hgw7Ns00JImtPErzeJresGJUaPD4
+WqYdVPg+5H16apvf622/OSe5FFdKjeaYI5DGd30u9mnt1lLPQJv2pWYlK8Ab/j8G
+Q4+1nTt4T1rocd4zhbcPkJ8eNdkcLPXpp1JdKpBL777VE8rzT9Pva4rRbUImTYBs
+nOw2lEKNc2qxWD78CfyiI8lZTTYGRPv9DNkKP9Q9ANJG3S5ohPNhKqAG4xyH89d8
+PZ12ijwYWMIRw68sA5AEYLp/8VTOQK6W3HBwEAbhUbubz6ocALwj2oaFzF0jQpgJ
+/4GV2MdvCz5jdLKFcTzgpY2Jz0ZmFGGfpqh/ASen3ZBf+8hd8p3iolqWBh0iNFH1
+XUtd9T2u/GMUj/TY7nW4TR+JVfmxo/FmE7Aw2MoOvIp1t73SxNk=
+=iQXH
 -----END PGP SIGNATURE-----
 
---iet7ywalyankg5v4--
+--7ukqottstepv4mtj--
