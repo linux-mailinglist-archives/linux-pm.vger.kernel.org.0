@@ -2,97 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3799D6FDD2B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 13:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4186FDDA0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 14:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236792AbjEJLwB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 May 2023 07:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S236988AbjEJMVg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 10 May 2023 08:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbjEJLvx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 May 2023 07:51:53 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4049A7ABA;
-        Wed, 10 May 2023 04:51:52 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so7299595e9.0;
-        Wed, 10 May 2023 04:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683719510; x=1686311510;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ytZ68tiM2bcXYJ2+O2GzY517mWAuTLJSh4tOV0KVU9I=;
-        b=ijsTzZaAqckKfvhgTUMbkkTQpxnD4u2W9Cz8veW+Gr9jmU/jrxUmlq8raZiBy4nFCM
-         3aow/CgynVKCibGthN6xjpUjdusD/Ig9UjBh8L7kLKNR/86bIJIMCQNyR2me6qx82d9y
-         q2mEulNjQHMGjXPNfdHVptEckRrwQu4wSjxqQMccuHAibAGRuGdqsOHScATE+6k6xLyt
-         big9awMJzVzofMOVj6DRl9qGVgFCtDqFgsC50bUm1UJycr+jxDggXtVZCPPnVHIsTIzq
-         p0YlGWtufsS++XMr4QUyZaiFIo8OOBGFPJWW5W/J4GEOSWF70v8gso8XpMBzSOypTZRQ
-         5C1g==
+        with ESMTP id S236989AbjEJMVc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 May 2023 08:21:32 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C737AB7;
+        Wed, 10 May 2023 05:21:31 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5068638856dso1664776a12.1;
+        Wed, 10 May 2023 05:21:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683719510; x=1686311510;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683721290; x=1686313290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ytZ68tiM2bcXYJ2+O2GzY517mWAuTLJSh4tOV0KVU9I=;
-        b=isFIeX972H1cCuBH0VbvU7tGyauC4Kwv7IRZR043EX8EV8LmBGUeWp9upQAqbrnEmJ
-         3yCEZz6CcqvsY8GfJmDSRVDrktN4bWUojZfImhtLKayOeU4fRSbSU6gDp9HBCJNECIMc
-         0SY3SkneSeIRZKYaW5I9a6dQl8942qe1kRhvcUH7w7GjkG1lHgAePl8FRcEtPK7tUqrL
-         UPGdwgl7MGDOK/+0PjRdFVnGjOBm5v3YNAxCe06uXkYWd/KbvQmaECbxxq/enKAu26Zl
-         ZWWK2JfC5AnpGx8ts2eeVZ+CV/74fFK+K9GNAwaG48iBPqHnQGZAVGowuFUQa5ZTg4Go
-         xMcw==
-X-Gm-Message-State: AC+VfDydgbJIsTvH2lhJSPudKidchOWthK5JLIqZq7tYvIM+nwYfpq1Y
-        k9jYXU2rmk6/ADzLad05lVc=
-X-Google-Smtp-Source: ACHHUZ6vcbM76LKXsjFGd0HyW6zIsdRoJTDdn3zGzmZXAZ52hNkwLHW/umvPRaaOSWIk/jogehugzg==
-X-Received: by 2002:a1c:7406:0:b0:3f4:2e01:83fa with SMTP id p6-20020a1c7406000000b003f42e0183famr2868935wmc.26.1683719510520;
-        Wed, 10 May 2023 04:51:50 -0700 (PDT)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c214d00b003f42461ac75sm9560047wml.12.2023.05.10.04.51.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 04:51:50 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        wens@csie.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 7/7] dt-bindings: power: supply: axp20x: Add AXP192 compatible
-Date:   Wed, 10 May 2023 12:50:46 +0100
-Message-Id: <20230510115046.963432-8-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20230510115046.963432-1-aidanmacdonald.0x0@gmail.com>
-References: <20230510115046.963432-1-aidanmacdonald.0x0@gmail.com>
+        bh=e5pFNRwvf284sJgrDKRHuerqevx/y4may+eaccK7H28=;
+        b=Q2I7W+z9Yk3M0KpqxyKPFaIQ+PbQ6cOOnSpyTmkD8QQbJrh4+HUEmLUVRp+8VJ90Yz
+         O4hEQYUAlwhvXNANKw8PCmwaSD2zFgFSiCUO1x935jOTo0Bl4fQSmSV7umE0gHlDyRci
+         NkoHHFj6ZhsIN+Ak3lJHU6WAysAN2f6DrCOnzvpnvrT94lbMibDoddKdixGjNGzJQ/bz
+         TitxYlhAoAEMUXHYDAVZ1SV0hzT3TtEWt4V1gumeoEPpXb0ZYDClPndXxotPV5qxyHyD
+         uslHEd72QIptgItwPsuiLS7wpD15ujRus6D1ieNYi/nv9WU0vB6mgs1kG/ZZxJVr4mFp
+         8Aog==
+X-Gm-Message-State: AC+VfDwGPXQK5cyp5QduUvwx6ACoWvsz9mKaL2Dg41PlzeIGU1hJ9zxp
+        cQeQnox/8vB2TNvMhzlb9/SWbzeHcYUU/bEvZ/U=
+X-Google-Smtp-Source: ACHHUZ41wfVi8X4DwK1ieMwDRElM5/87L8s9/uueP7Vkui3iBwYAYZDD7pRoNFCbOsbvPe+mikiSR/fSovB6yhrLgSc=
+X-Received: by 2002:a17:906:14e:b0:965:9602:3ee1 with SMTP id
+ 14-20020a170906014e00b0096596023ee1mr13806894ejh.2.1683721289996; Wed, 10 May
+ 2023 05:21:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230316151036.10181-1-petr.pavlu@suse.com> <ZFreh8SDMX67EaB6@kevinlocke.name>
+ <d63c25f5-0b10-b153-023f-4b2d4a42f9a5@suse.com>
+In-Reply-To: <d63c25f5-0b10-b153-023f-4b2d4a42f9a5@suse.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 10 May 2023 14:21:17 +0200
+Message-ID: <CAJZ5v0jjVKxp-FC2yCbUcwDgBci-CAMvwc6Pp-bCR_PNrpBybw@mail.gmail.com>
+Subject: Re: [PATCH v4] ACPI: cpufreq: use a platform device to load ACPI PPC
+ and PCC drivers
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     Kevin Locke <kevin@kevinlocke.name>, rafael@kernel.org,
+        lenb@kernel.org, viresh.kumar@linaro.org, pmladek@suse.com,
+        mcgrof@kernel.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The AXP192 is most similar to the AXP202, but the current
-limits are different and the USB OTG status register has
-a different address (0x04 instead of 0x02).
+On Wed, May 10, 2023 at 10:48 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>
+> On 5/10/23 02:00, Kevin Locke wrote:
+> > On Thu, 2023-03-16 at 16:10 +0100, Petr Pavlu wrote:
+> >> The patch extends the ACPI parsing logic to check the ACPI namespace if
+> >> the PPC or PCC interface is present and creates a virtual platform
+> >> device for each if it is available. The acpi-cpufreq and pcc-cpufreq
+> >> drivers are then updated to map to these devices.
+> >>
+> >> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
+> >> boot and only if a given interface is available in the firmware.
+> >
+> > As a result of this patch (691a637123470bfe63bccf5836ead40fac4c7fab)
+> > my ThinkPad T430 with an i5-3320M CPU configured with
+> > CONFIG_X86_INTEL_PSTATE=y and CONFIG_X86_ACPI_CPUFREQ=m (Debian's
+> > amd64 kernel config) now logs
+> >
+> > kernel: acpi-cpufreq: probe of acpi-cpufreq failed with error -17
+> >
+> > during boot.  Presumably this occurs because loading acpi-cpufreq
+> > returns -EEXIST when intel-pstate is already loaded (or built-in, as
+> > in this case).  I'm unsure why the message was not printed before;
+> > perhaps a difference between driver probing for platform and cpu bus
+> > types?  Although the error message is not wrong, it may lead to
+> > unnecessary investigation by sysadmins, as it did for me.  I thought
+> > it was worth reporting so you can consider whether the change is
+> > desirable.
+>
+> Thanks for reporting this issue. The patch moved the setup of
+> acpi-cpufreq from being done directly in its module init function to
+> going through the probe logic. The reported warning newly comes from
+> call_driver_probe() when the probe fails.
+>
+> One immediate option that I can see to silence this warning would be to
+> change the return code for this case in acpi_cpufreq_probe() from
+> -EEXIST to -ENODEV/ENXIO. Function call_driver_probe() then prints only
+> a debug message about the probe rejecting the device.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- .../bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml  | 1 +
- 1 file changed, 1 insertion(+)
+-ENODEV, pretty please.  Or I can send a patch, whichever you prefer.
 
-diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
-index 3ce648dd91bd..34b7959d6772 100644
---- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
-@@ -22,6 +22,7 @@ properties:
-   compatible:
-     oneOf:
-       - enum:
-+          - x-powers,axp192-usb-power-supply
-           - x-powers,axp202-usb-power-supply
-           - x-powers,axp221-usb-power-supply
-           - x-powers,axp223-usb-power-supply
--- 
-2.39.2
-
+It would be a better error code for this condition anyway IMV.
