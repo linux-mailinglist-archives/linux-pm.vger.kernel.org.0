@@ -2,67 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A976FD9AD
-	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 10:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4376FD9E8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 10:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236604AbjEJIk4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 May 2023 04:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        id S236724AbjEJIta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 May 2023 04:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbjEJIkp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 May 2023 04:40:45 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F925255
-        for <linux-pm@vger.kernel.org>; Wed, 10 May 2023 01:40:23 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2ac785015d6so74781441fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 10 May 2023 01:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683708021; x=1686300021;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=opeeHjTpE8hf7IkSOrjrz4V6UTxg/7z0lzjIXtvA3kY=;
-        b=mJX5fL+Awdgf/Q3vuVWSv+2p/E0Bk+m/npLqSpztNQ2Q2ZvyIxpkxSYV1Nx7/u4jpw
-         fOW/VcyDZkpcwEXd0nRDcb67mY9S3oGILzP8h1p7o+nnY6X6LMthIa/wNx7yJjMXCOpV
-         s3zW2/e8UpsWLULP9ECzhoGfK3Zwl7DsZqA0fLK/FLEtFxFCj3c1Yo54KCLQGVAbqRyk
-         gHa/d8ZxgnO3G7OH0POBxoTKJnwgoIYSDxHrC2dp9xnOIBx1AJAh6VRBNK04qX0192qb
-         3G0chKnOHOp4PdLUIAWz6pbHTOehCKFBAKoSRSGlCSHmgHGOor4zwqxPqwjzsGhRuZIx
-         WIpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683708021; x=1686300021;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=opeeHjTpE8hf7IkSOrjrz4V6UTxg/7z0lzjIXtvA3kY=;
-        b=PueReibuSQAiK6fslu6qnQUdY9ajER7dZPeQNVrqbMHTxtT1oeWP/ICMVis9nkUhG7
-         hMcn53zvUI94IGh84hVf1c0B9Ou8ujeEuhJ2spDGO81qyAMeVuKTeGYJL8ZWRm9BI2/c
-         mx7wRFmTiR3Glxs7W4vORi/A6GFs6xqqq9N/nyp3a5gx1wzezkowrMF6CYJpXTQbX48O
-         IKfSmoPzvArhLeSA+L/6ZCoGaNgkizytrk4Mk+PEhEKaeVa9AbrH+AsQtnywa4IcXGl2
-         I14GHMzn5UV9a3eAsuqywzxnqmf5LAHwMyUtBr3if5JR1hds4+U/abWkxIj6ykTVrNo7
-         8gOQ==
-X-Gm-Message-State: AC+VfDyKR/T+sARMNuDQiltR442UZ8qBDSPY2LcSSOrlHcpKXJYIn8zu
-        9D2WU8V1HrqhbDA8axbedCpvtLrE/MgucUHGD+I=
-X-Google-Smtp-Source: ACHHUZ4q6FFSNrivLBnvkx4ypcvfk6i4jKSSSsTWLmX9P2YL41mqL5f+BogRmQMc+nH0ipNLEotTcfeVc/AGXlvKPe4=
-X-Received: by 2002:a05:651c:212:b0:2a8:c75c:96cb with SMTP id
- y18-20020a05651c021200b002a8c75c96cbmr1672897ljn.1.1683708021176; Wed, 10 May
- 2023 01:40:21 -0700 (PDT)
+        with ESMTP id S236732AbjEJIt2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 May 2023 04:49:28 -0400
+Received: from m1564.mail.126.com (m1564.mail.126.com [220.181.15.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65F5C1BEA;
+        Wed, 10 May 2023 01:49:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=laBzUBuY99rTCcA9sQMQ+5Qw29Kos5L9LHYh4Tc7P+c=; b=E
+        ieJRNE46xy03YCPlYyzc/vDmCWR+vQMfxLqtUM/9f93Or9gup74tDKDg+xwCg7Si
+        KEXVEvkH0J3+2DpfHIz3t3bqNar3jiyHrMuhW2WZxAcSPngQQqnrTGb+kZ4Op4rg
+        wXBQI0k9dX47xEJWMeQjxTvz+D7dsVhkdzVEOhcR5s=
+Received: from wangyouwan$126.com ( [103.163.180.46] ) by
+ ajax-webmail-wmsvr64 (Coremail) ; Wed, 10 May 2023 16:48:07 +0800 (CST)
+X-Originating-IP: [103.163.180.46]
+Date:   Wed, 10 May 2023 16:48:07 +0800 (CST)
+From:   wangyouwan <wangyouwan@126.com>
+To:     "Dhruva Gole" <d-gole@ti.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] cpufreq: create cooling device based on ACPI
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 126com
+In-Reply-To: <aa8386f8-6dce-0caf-a09f-a14347abf391@ti.com>
+References: <20230428070314.225560-1-wangyouwan@126.com>
+ <aa8386f8-6dce-0caf-a09f-a14347abf391@ti.com>
+X-NTES-SC: AL_QuyTAfubt0wj4SeeYulS/T1E/LZbI7jC0pRmlcYUXM0QuiLqxwcORnBBJmb84PsR+KGO3r7iyuDGfPK4wq0j
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Sender: ngountchetiyoa@gmail.com
-Received: by 2002:a05:6520:402c:b0:23b:ccd1:499e with HTTP; Wed, 10 May 2023
- 01:40:20 -0700 (PDT)
-From:   Kayla Manthey <sgtkylamanthey73@gmail.com>
-Date:   Wed, 10 May 2023 08:40:20 +0000
-X-Google-Sender-Auth: 0zP8wFUDjtI1f9edsCGSxwCjWUg
-Message-ID: <CAFDM7BbjGGE6fgP0RxdwEP49Ny58+JXYXBCUhtcUGEpUobmn0Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <3cf25b19.65d3.18804d8a859.Coremail.wangyouwan@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: QMqowAAn50RHWltkoCMaAA--.49155W
+X-CM-SenderInfo: 5zdqw5prxzt0a6rslhhfrp/1tbiHgJrFWIxqYnqAwACs6
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello, please did you receive my previous email?, thank you.
+CgpJJ20gc29ycnksIGJ1dCBJJ20gdXNpbmcgdGhlIDUuNCBrZXJuZWwsIGFuZCB0aGUgInNjcGkt
+Y3B1ZnJlcSIgZnVuY3Rpb24gaXMgdXNlZCBpbiB0aGUgc2NwaV9jbG9ja3NfcHJvYmVfYWNwaSBm
+dW5jdGlvbi4KCgoKQXQgMjAyMy0wNC0yOCAxNzo1NjowNywgIkRocnV2YSBHb2xlIiA8ZC1nb2xl
+QHRpLmNvbT4gd3JvdGU6Cj5IaSwKPgo+T24gMjgvMDQvMjMgMTI6MzMsIHdhbmd5b3V3YW5AMTI2
+LmNvbSB3cm90ZToKPj4gRnJvbTogeW91d2FuIFdhbmcgPHdhbmd5b3V3YW5AMTI2LmNvbT4KPj4g
+Cj4+IFdoZW4gdXNpbmcgdGhlICJzY3BpX2NwdWZyZXEiIGRyaXZlciwgYW4gZXJyb3IKPgo+UGFy
+ZG9uLCBkbyB5b3UgbWVhbiBkcml2ZXJzL2NwdWZyZXEvYWNwaS1jcHVmcmVxLmMgPwo+Cj4+IG9j
+Y3VyczpjcHVmcmVxX2Nvb2xpbmc6IE9GIG5vZGUgbm90IGF2YWlsYWJsZSBmb3IgY3B1Ki4KPgo+
+Cj5JZiB0aGlzIGlzIGZpeGluZyBzb21lIGVycm9ycy8gYnVncywgbWF5YmUgYWRkIGFuIGFwcHJv
+cHJpYXRlIGZpeGVzCj50YWc/Cj4KPj4gVGhlIGN1cnJlbnQgY29tcHV0ZXIgbW90aGVyYm9hcmQg
+aXMgdXNpbmcgQUNQSSBmaXJtd2FyZS4KPj4gR28gdG8gc2VlIHRoYXQgdGhlIGVycm9yIGlzIGNh
+dXNlZCBieSBjYWxsaW5nIHRoZQo+PiAib2ZfY3B1ZnJlcV9jb29saW5nX3JlZ2lzdGVyIiBpbnRl
+cmZhY2UuCj4+IGNvbW1lbnQ6Y3JlYXRlIGNwdWZyZXEgY29vbGluZyBkZXZpY2UgYmFzZWQgb24g
+RFQuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiB5b3V3YW4gV2FuZyA8d2FuZ3lvdXdhbkAxMjYuY29t
+Pgo+PiAtLS0KPj4gICBkcml2ZXJzL2NwdWZyZXEvY3B1ZnJlcS5jIHwgNyArKysrKystCj4+ICAg
+MSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+Wy4uLl0KPj4g
+ICAKPgo+LS0gCj5UaGFua3MgYW5kIFJlZ2FyZHMsCj5EaHJ1dmEgR29sZQo=
