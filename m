@@ -2,75 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC5F6FDFF3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 16:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648916FE250
+	for <lists+linux-pm@lfdr.de>; Wed, 10 May 2023 18:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237355AbjEJOWg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 May 2023 10:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S230316AbjEJQXa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 May 2023 12:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbjEJOWf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 May 2023 10:22:35 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEA73A96
-        for <linux-pm@vger.kernel.org>; Wed, 10 May 2023 07:22:33 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96649b412easo682322766b.0
-        for <linux-pm@vger.kernel.org>; Wed, 10 May 2023 07:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683728552; x=1686320552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Cq2dAXKen28TFRJxFUmJolJOIPagqM9lmyQejrbnP0=;
-        b=CRLLTkxpDNRBjKbcf/EKDbxrp5trWySYKgR+gWJ1yji7JfDBGtjR+yR5I/IDeFbs5S
-         FUXYSY4MSBforC2h+SBu1Yn44w8jBH3eKyEHwbYGSRb+Y+/VO2MrtAlh1d+/moKXWOii
-         j7ji9jTqlYIckeN/20CTedNK0jHeZUmVqHg4FUV3uXre+tUbWeMmBua+5CthWo/SLPde
-         TU4UU1G/2mwqbEpTgRz4Fd8fxz6fnDdPhfpHQrxFCsvJvO/a0cPuVY7f0DyeID5V1W8i
-         8w/nZP4LBKB8JnGYmZxYeciaE4aXmgGkmiz9YBGPjU6cEKOtnp+HiIisb6R1dqn3lcgi
-         7SIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683728552; x=1686320552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Cq2dAXKen28TFRJxFUmJolJOIPagqM9lmyQejrbnP0=;
-        b=SRqJ7QdecMbNluydbTK8F/USSAcL9cQINiA2fr36Lqq0dRi20z4xwcedjhCJWQbLtP
-         5uzC2Vt106u04P+BGAmkEzEWVAGsJK45hCXTXDLlDxrZ+sGl7oac3LGUg3gX15QHd2SE
-         wc/WsKmshlxN7xbRAXGp6xLV/S7uP1vwfIGcXi0sAuY2xJOaigalfwSmr23mx5hEWJCC
-         pUPEkZSIdA94oeDEFzH0atqlmT/3tX+n+BIBPfuJNVBlVKJ6ca1/c8R1UyRtHssGN0EC
-         oqADeWtfF+QvbBun9FBTFiwxQyeHfDdRXyMBSOLqQDaNJC+EH/dWVxXnWGUuOMZuY5rV
-         C2nA==
-X-Gm-Message-State: AC+VfDzAnFH5ImrRiz4O/OF8IB9/t57q8QJy4gDHY+eVtXSORoUle5sB
-        HfwACGWrf7bCYVDtX/5xcRL83g==
-X-Google-Smtp-Source: ACHHUZ5hF1/+EtCFaC53Xeuo+W2qUa0bKiM/oLJWXkNMc4r1wFlIqW/8j5HbrXL7lnjtCS+dVxD4NQ==
-X-Received: by 2002:a17:907:940e:b0:94d:69e0:6098 with SMTP id dk14-20020a170907940e00b0094d69e06098mr16660292ejc.45.1683728552300;
-        Wed, 10 May 2023 07:22:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id u18-20020a170906069200b00967004187b8sm2720364ejb.36.2023.05.10.07.22.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 07:22:31 -0700 (PDT)
-Message-ID: <06412b70-7c36-1a7e-3ef1-eb255285895a@linaro.org>
-Date:   Wed, 10 May 2023 16:22:30 +0200
+        with ESMTP id S231175AbjEJQX3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 May 2023 12:23:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E12C7295
+        for <linux-pm@vger.kernel.org>; Wed, 10 May 2023 09:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683735765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7LdhAJieegVHrXtma/ffaQ+dm+tSLZToc/pLp+pQaYE=;
+        b=fwsRWtTlzv6NwEzoEfsW8KPziIv2EE4FW/bCA9K/xCKquK1DYvJFyaneB/EUS+K2w3n8L/
+        azHJut4y13v1iAakF2F9b7iHeN0bDaArnjm2tD7EFBTVTYs2zdB2zia28hTnTcaUrMfpvx
+        j9dGRWyTNoc44VcT4cXuW5KtHfxqsj4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-318-Ay-rr86bMduvR9CcyruC3w-1; Wed, 10 May 2023 12:22:39 -0400
+X-MC-Unique: Ay-rr86bMduvR9CcyruC3w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55D54863E8A;
+        Wed, 10 May 2023 16:22:37 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.195.159])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B9004078906;
+        Wed, 10 May 2023 16:22:34 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-leds@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+Subject: [PATCH RESEND 0/4] Fix oops about sleeping in led_trigger_blink()
+Date:   Wed, 10 May 2023 18:22:30 +0200
+Message-Id: <20230510162234.291439-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 7/7] dt-bindings: power: supply: axp20x: Add AXP192
- compatible
-Content-Language: en-US
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, sre@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, wens@csie.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230510115046.963432-1-aidanmacdonald.0x0@gmail.com>
- <20230510115046.963432-8-aidanmacdonald.0x0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510115046.963432-8-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +65,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/05/2023 13:50, Aidan MacDonald wrote:
-> The AXP192 is most similar to the AXP202, but the current
-> limits are different and the USB OTG status register has
-> a different address (0x04 instead of 0x02).
-> 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  .../bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml  | 1 +
+Hi All,
+
+This is a resend with al the subsys maintainers of files touched
+by the small led_trigger_blink() / led_trigger_blink_oneshot()
+API/prototype change in the first patch in this series.
+
+ARCNet, power-supply, USB, MAC80211 and netfilter maintainers,
+may we please have your ack for merging patch 1/4 through Lee's
+LED tree: https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/
+?
+
+Orginal cover letter:
+
+Here is a patch series to fix an oops about sleeping in led_trigger_blink()
++ one other small bugfix.
+
+Fixes: 0b9536c95709 ("leds: Add ability to blink via simple trigger")
+
+tag, but Fixes tags tend to lead to patches getting automatically added
+to the stable series and I would prefer to see this series get some
+significant testing time in mainline first, so I have chosen to omit
+the tag.
+
+Regards,
+
+Hans
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hans de Goede (4):
+  leds: Change led_trigger_blink[_oneshot]() delay parameters to
+    pass-by-value
+  leds: Fix set_brightness_delayed() race
+  leds: Fix oops about sleeping in led_trigger_blink()
+  leds: Clear LED_INIT_DEFAULT_TRIGGER when clearing current trigger
 
-Best regards,
-Krzysztof
+ drivers/leds/led-core.c                  | 81 ++++++++++++++++++++----
+ drivers/leds/led-triggers.c              | 17 ++---
+ drivers/leds/trigger/ledtrig-disk.c      |  9 +--
+ drivers/leds/trigger/ledtrig-mtd.c       |  8 +--
+ drivers/net/arcnet/arcnet.c              |  8 +--
+ drivers/power/supply/power_supply_leds.c |  5 +-
+ drivers/usb/common/led.c                 |  4 +-
+ include/linux/leds.h                     | 43 ++++++++++---
+ net/mac80211/led.c                       |  2 +-
+ net/mac80211/led.h                       |  8 +--
+ net/netfilter/xt_LED.c                   |  3 +-
+ 11 files changed, 125 insertions(+), 63 deletions(-)
+
+-- 
+2.40.1
 
