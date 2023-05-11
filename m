@@ -2,62 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F52B6FF9F5
-	for <lists+linux-pm@lfdr.de>; Thu, 11 May 2023 21:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688446FFA0B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 May 2023 21:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238051AbjEKTOH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 May 2023 15:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S239119AbjEKTWc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 May 2023 15:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238790AbjEKTOF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 May 2023 15:14:05 -0400
+        with ESMTP id S239118AbjEKTWb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 May 2023 15:22:31 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1631FCD
-        for <linux-pm@vger.kernel.org>; Thu, 11 May 2023 12:13:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C937EC3
+        for <linux-pm@vger.kernel.org>; Thu, 11 May 2023 12:22:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=nSymzzpt1JEDs/GOQx703VjKGgzj
-        sDvD7bP2a/kUT7I=; b=K/gXAkHHjonaNKDPCrNMOJfcpn/MM3upIsWM94buSQWF
-        ebZRYTWbuhJeLS9bPHxY2NTNciIZAYMFupYHMuGkgrr8K0c4QuXd4UoQEs0OMhcf
-        GATfa08DITX8ZxmwPYsT9dYT+TU4xeqV/p7RzB6HgCp5nB+82tO0cbx1V9qYltQ=
-Received: (qmail 2933041 invoked from network); 11 May 2023 21:12:59 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 May 2023 21:12:59 +0200
-X-UD-Smtp-Session: l3s3148p1@N53Mxm/75swujnsI
-Date:   Thu, 11 May 2023 21:12:56 +0200
+        from:to:cc:subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=k1; bh=RRZQj4nBkrR9NFE2zBxx97pW/jO
+        S3vBpJjNEk+Dn3bQ=; b=iSoNI/ugjVZSCt5R6vpeJcW9IBZNFNezQl8HV6RUVLR
+        bTR8ZuESPkrOru5I2k08zLvOmUgqwAP3yOOixL7rrJDacDPt2JFqIRDiC1M13ltL
+        3TCy1I44/scISC/4qtzT8STS/JUCBN0bnl1MK2HycCA/quhRne0COqHfu6MMD4C4
+        =
+Received: (qmail 2935127 invoked from network); 11 May 2023 21:22:27 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 May 2023 21:22:27 +0200
+X-UD-Smtp-Session: l3s3148p1@CR606G/7XuAujnsI
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFT v2 3/3] drivers/thermal/rcar_gen3_thermal: add
- reading fuses for Gen4
-Message-ID: <ZF0+OIvCcaDGoJ51@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230420092128.6073-1-wsa+renesas@sang-engineering.com>
- <20230420092128.6073-4-wsa+renesas@sang-engineering.com>
- <TYBPR01MB53413B97CCBAC486C2CF7085D8609@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH RFT v3 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4 fuse support
+Date:   Thu, 11 May 2023 21:22:16 +0200
+Message-Id: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="E8UlnS00tFbKHZn8"
-Content-Disposition: inline
-In-Reply-To: <TYBPR01MB53413B97CCBAC486C2CF7085D8609@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -68,50 +45,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+R-Car Gen4 has the fuse registers at different locations and with
+different names, but with the same purpose. So, first refactor IP core
+differences into a 'info' struct, then add the fuse_read callback to it.
 
---E8UlnS00tFbKHZn8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since RFT v2:
+* In patch 3, I mixed up the PTAT and THCODE registers. Fixed now.
+  (Thanks, Shimoda-san!)
+* patches are rebased to 6.4-rc1
 
+They have been tested on R-Car H3 ES2.0 and M3-N against regressions.
+Actual testing of the new fuses on Gen4 still needs to be done because I
+don't have access to such HW.
 
-> > +	priv->ptat[0] =3D rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSF=
-MON01) &
-> > +		GEN4_FUSE_MASK;
->=20
-> s/REG_GEN4_THSFMON01/REG_GEN4_THSFMON16/
->=20
-> According to the table in 13.3.3.4 of R-Car {S4,V4H} Hardware manuals:
->=20
-> PTAT1	PTAT_PF_U_SR1 bits (of THSFMON16 register)
-> PTAT2	PTAT_PF_R_SR1 bits (of THSFMON17 register)
-> PTAT3	PTAT_PF_L_SR1 bits (of THSFMON15 register)
-> THCODE1	THCODE_U_SR1 bits (of THSFMON01 register)
-> THCODE2	THCODE_R_SR1 bits (of THSFMON02 register)
-> THCODE3	THCODE_L_SR1 bits (of THSFMON00 register)
+@Shimoda-san: maybe the BSP team or Test team can test these patches?
+A branch for testing can be found here:
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/for-thermal
 
-Oops, you are right, I mixed the two blocks :/ I'll send a fixed version
-right away!
+Looking forward to other review comments, too, of course.
+
+Happy hacking,
+
+   Wolfram
 
 
---E8UlnS00tFbKHZn8
-Content-Type: application/pgp-signature; name="signature.asc"
+Wolfram Sang (3):
+  drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
+  drivers/thermal/rcar_gen3_thermal: refactor reading fuses into
+    seprarate function
+  drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
 
------BEGIN PGP SIGNATURE-----
+ drivers/thermal/rcar_gen3_thermal.c | 141 ++++++++++++++++++++--------
+ 1 file changed, 102 insertions(+), 39 deletions(-)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRdPjgACgkQFA3kzBSg
-KbbBOQ//Un2jeKGr+C04Wx6HIeeqRXI+G47g1ImBzHTGtjZhvz4IBL3fVn3C4A20
-n7N1HQAGfohCmdzRg0X7uKWe6knY8m3SmDCwPMS7Z9WfQCdfNYZE7+isSylOTenh
-9Ow67waOknQBL7jYgq7vTu87oeCLAVeopvBEZgj5lda/7cIHU4YZx9MbKPaL096L
-NxiMZC3qyqmy6NlrRPoeUxlGgdAZMs6I28N8X8rB1OkOUz390EHW+S1SPrAkk08G
-IjpcHn7TYx1RBq2nQG1UGZLbYQbZCBVCSnp7rOepz5OHaR7Mtn448k4vIn4ELU7P
-hQ1Hx3Qtf9N8E67HaT2q+dXgF58CYIgXKgfJFfSxCuUPSRIUPjCnkufkRHZAGit9
-stUNAdQINgVb900Jg8pAxcMvdLn1a4ZgkgGY5iGWfEbvqZLtCNqYES0nZE9gErFc
-5bE9JoNDSXGVS2tEGOSra4AvzJrc+Js1ginvQ+zmhoclLE9pSvVLGz45VXO39tOf
-Mjl0rVVOZFy9c1B7UNZqntip3jcOmL35BFYNgBP9Up5CBD/DgQwrbqw2g2UJIVNL
-xyD579Ukl3Da/CDBms1PNx3vOnvGz5RewkuDpzxibZc+caY9hOmB6AlRrtGKbnyc
-FxwycsI/5H+jyLqYODmd+u4rzGbHl7CWeKe122AZWywGuAfgK9w=
-=PBCL
------END PGP SIGNATURE-----
+-- 
+2.35.1
 
---E8UlnS00tFbKHZn8--
