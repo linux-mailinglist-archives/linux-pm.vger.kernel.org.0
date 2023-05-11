@@ -2,194 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E947013DF
-	for <lists+linux-pm@lfdr.de>; Sat, 13 May 2023 04:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3937014EE
+	for <lists+linux-pm@lfdr.de>; Sat, 13 May 2023 09:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240765AbjEMCHM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 May 2023 22:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S229786AbjEMH1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 May 2023 03:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjEMCHL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 22:07:11 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688FBD1
-        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 19:07:09 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-306281edf15so9933842f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 19:07:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683943628; x=1686535628;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ri6DfJJiXodRZE4XO0pCUcvs/5LQusUOoMEf7lrh9AQ=;
-        b=wOd7tExQYofrH35omv+OsDMQMMKOvftHjJXWVYsapMHJGLUqBn8r/xt9bmt/eHciZn
-         N1KNeMl6R7xy9gq39n8u1++Uz/vGjZ5O1jJGUQslNwUO2uGSlVUK9mdZmtQq54SFSXVm
-         5pbpRmaaqWNafZX+S3432StDFVjsQl5I5u/+h+ceWh0OfgjRw7+D8yNwn/7+0Zp5AS1+
-         GCCmHvDmO0Vhzc2PWtVvxQUSbRMiUcgFEgoud8uJaL2eejVcD6oPpByB2R+LQy0RHYdO
-         wOGcq3uvSDb4To1hEDTIHk2UKVRqwzkQDUvGZZmthTGG9oiOzYiKK+Nsdn1zbXzhUj67
-         suWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683943628; x=1686535628;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ri6DfJJiXodRZE4XO0pCUcvs/5LQusUOoMEf7lrh9AQ=;
-        b=g5k/NLNiPCdnO3cLwU3aJacemR79vs+Rf8jjqK8lcYOwzyctyvu4L5QF3VkSelyx6L
-         CKXDqC9Yx4DppGst2GyOxJcI12lM3R4AGFRuzPoYnzBrwFKcWiErtDF52ymnjFCojF8M
-         IzPArCVMLfDzPRRJqQyMfj/CLxnAVsPDOPsx1YVjZzg+dFx4KX/2O8rQ3CUzrzOIEemT
-         RkhRqe748+5jVroDYwfvc2xwfoIHjX3i6Pt7zC2AQoRkMDeySyS73dUkt6SwyJXOfGSx
-         KiJPdKtcLsNUERgiijg+Fu3GT8UJl7SSoUFEMPo6cHy+06EYWghyLSspmRA2o0jfY3w5
-         wTbQ==
-X-Gm-Message-State: AC+VfDx9znTlyZ7nCAIOvRWPybVGPfC4qEOXXKoBNbm34D4k8yV9HyU5
-        97VqCTUhHZeXP+SVwZuyhP93HFBy7bBPiWu+tcPUuw==
-X-Google-Smtp-Source: ACHHUZ7kDK0x1ux72xu3F648weOC108BgVQ5USsBi69lf0rCEJA4C82rI2gNWUpO4uZtJsRyDCsRow==
-X-Received: by 2002:a5d:510a:0:b0:304:79c1:725d with SMTP id s10-20020a5d510a000000b0030479c1725dmr18364830wrt.45.1683943627891;
-        Fri, 12 May 2023 19:07:07 -0700 (PDT)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id r13-20020adfe68d000000b003012030a0c6sm24749701wrm.18.2023.05.12.19.07.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 19:07:07 -0700 (PDT)
-Message-ID: <008030d3-386d-bed0-ad31-f06b27ba00c5@linaro.org>
-Date:   Sat, 13 May 2023 02:07:06 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: power_supply cooling interface
-To:     Pavel Machek <pavel@ucw.cz>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
+        with ESMTP id S229519AbjEMH1l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 May 2023 03:27:41 -0400
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BC45583;
+        Sat, 13 May 2023 00:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1683962820;
+        bh=Zfh4d8B4LCdZL2rza0iU1oDtbQFTnh16x2qtx/eZP60=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=HDRzcSm7DoqCgKQLBwZ0ky+iszHNpckb9iAkuUPOcTix8KM+qg50OPiO2RGEOJD4p
+         636UEjrINApY5B9KxPtXxHCEypQHYBwaha5DBDaw9d4HKi8qXo0VBvVTXnH01hCJlT
+         Y0OOvd2W3Y9jzc7Q92L0HLo2nDIFlqGpoq1Wccc14TJ5woxY0NPDPPNn0io1RKx5rg
+         llEoMJmHbe9oNkkOlKzVG/R7tTa+t5b5zGTtWt0/g76JpvvVOEcxF5l9bAkYXFB//q
+         +jfR7A1BGSGPc89FQxAIxOGa/Av/aPWctlcvTcsPD163gg/nZ2vP0oU72Kl5wOENQz
+         Y3ehRES9UCdhw==
+X-secureTransport-forwarded: yes
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Complaints-To: abuse@cubewerk.de
+To:     Marek Vasut <marex@denx.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Viresh Kumar <viresh.kumar@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <164f2458-fb66-f238-7143-bdbe1e200870@linaro.org>
- <ZF5t5BWqLLEvDdfz@localhost>
- <b1237581-3ece-a358-f1ba-7a3ebb08d8d2@linaro.org>
- <ZF59BS77uUpEZK6X@duo.ucw.cz>
-Content-Language: en-US
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <ZF59BS77uUpEZK6X@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] cpufreq: imx6q: Disable only available frequencies
+Thread-Topic: [PATCH] cpufreq: imx6q: Disable only available frequencies
+Thread-Index: AQHZg+p2AXZhE0CYb0WkO6LusMFecq9VU2kAgAA31EA=
+Date:   Thu, 11 May 2023 20:51:33 +0000
+Message-ID: <a377e725107341a8bf57b5aaf63f058b@dh-electronics.com>
+References: <20230511092334.3017-1-cniedermaier@dh-electronics.com>
+ <898fe00e-43f4-a8aa-b2b4-5b293fc77640@denx.de>
+In-Reply-To: <898fe00e-43f4-a8aa-b2b4-5b293fc77640@denx.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 12/05/2023 17:53, Pavel Machek wrote:
-> Hi!
-> 
->>>> I've been working on a driver for the charger found in most Snapdragon
->>>> 845 phones (the OnePlus 6, SHIFT6mq, PocoPhone F1, etc). I wanted to
->>>> include support for the POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT
->>>> property.
->>>>
->>>> My understanding is that it exposes the current limit as a cooling
->>>> device so that userspace (or frameworks like DTPM) can optimise for
->>>> performance in a thermally constrained device by limiting the input
->>>> current and thus reducing the heat generated by the charger circuitry,
->>>> a similar idea was applied on the Pixel C:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4496d52b3430cb3c4c16d03cdd5f4ee97ad1241
->>>>
->>>> However, reading through the sysfs docs for cooling devices, and
->>>> looking at the implementation in power_supply_core.c, it seems like the
->>>> behavior here is wrong in a few ways:
->>>>   1. The values should scale from 0: no cooling to max_state: max
->>>> cooling, but the power_supply docs and the only existing implementation
->>>> (the smbb driver) just export the current_limit, such that increasing
->>>> cur_state would increase the current limit, not decrease it.
->>>>   2. (unsure?)The scale is completely different to most other cooling
->>>> devices, most cooling devices don't seem to have a max state much
->>>> beyond the double digits, but CHARGE_CONTROL_LIMIT is on the scale of
->>>> uA, so approaches like incrementing the cooling state by 1 don't really
->>>> work.
->>>
->>> Did this get solved somehow?
->>
->> Thanks for resurrecting the discussion.
->>
->>> Anyway, I am not sure mW will be useful here, as elsewhere it is mW
->>> thermal and here it is mW from charger. Most of that energy should be
->>> stored in battery, not converted to heat.
->>
->> I'm not sure to understand the comment. The question is about decreasing the
->> speed of the charge of the battery because the faster it charges the warmer
->> it gets. Doing a fast charge is ok, if the phone is for instance on a table
->> doing nothing. But if the environment is hot (a car, a pocket) or there are
->> other sources of heat on the phone like a game, the temperature of the
->> battery could be too high (or the skin temperature). In this case we have to
->> balance the heat contribution of the different components by reducing their
->> performances. The first knob to act on is to reduce the charge speed of the
->> battery by reducing the delivered power.
-> 
-> Understood.
-> 
->> For that we need a connection between the thermal framework which monitors
->> the battery temperature and the power supply to reduce the charge speed when
->> it is too hot. This connection is the cooling device.
->>
->> The cooling devices have opaque values where the min and max cooling effect
->> vary depending on the implementation (eg. a fan 0/1, a LCD light 0/1023).
-> 
-> Aha, ok.
-> 
->> Here the power supply has yet another unit (uA) to act on and difficult to
->> translate to a cooling device discrete numbers (that is my
->> understanding).
-> 
-> Well, if you can accept 1000 steps like you do for LCD, all you really
-> need is maximum current and then stepping in 1/100 of that.
-> 
->> With enough components in DTPM, it will be possible to create a generic
->> power cooling device using the unified unit uW with the powercap API.
-> 
-> I was trying to point out trouble with uW: you don't know them in case
-> of battery charging.
-> 
-> You know phone is drawing 500mA @ close to 5V (-> 2.5W), but you don't
-> really know how much is stored in battery, and how much is turned into
-> heat.
-
-You can know the thermal effect if the charger IC has a temperature
-probe, and use time constant estimates to figure out the power losses.
-> 
-> But I guess you could approximate that somehow.
-
-Also knowing the rough efficiency of the switching converter under the
-circumstances (current limited? proportion of input current going to the
-battery? voltage? battery voltage?)
-
-I can attest to charging losses being a pretty significant heat source,
-at least on the phones I've owned.
-
-It gets tricky with phones that use charge pumps (e.g. OnePlus/Oppo VOOC
-charging) to offload the thermal losses to the wall charger. Some
-devices also have 2 or more battery cells, enabling them to be charged
-in parallel for greater efficiency from a PD charger at 9V. My OnePlus 9
-gets noticeably hotter when charging at 5V@3A compared to 9V@2A.
-
-Most SDM845 devices use "parallel charging" with two discrete charger
-ICs (one in the PMIC, one external i2c), effectively allowing for much
-higher input current and much greater efficiency.
-
-Can these be modeled well via DTPM? As I don't think the existing PSY
-subsystem has a nice way to deal with this, and I don't think it's
-sensible to offload all of that to userspace.
-
-> 
-> BR,								Pavel
-> 
-> -- People of Russia, stop Putin before his war on Ukraine
-> escalates.
-
--- 
-Kind Regards,
-Caleb (they/them)
+RnJvbTogTWFyZWsgVmFzdXQgW21haWx0bzptYXJleEBkZW54LmRlXQ0KU2VudDogVGh1cnNkYXks
+IE1heSAxMSwgMjAyMyA5OjI2IFBNDQo+IE9uIDUvMTEvMjMgMTE6MjMsIENocmlzdG9waCBOaWVk
+ZXJtYWllciB3cm90ZToNCj4+IEluIHRoZSBleGFtcGxlIGluIERvY3VtZW50YXRpb24vcG93ZXIv
+b3BwLnJzdCwgYW4gYXZhaWxhYmlsaXR5IGNoZWNrDQo+PiBpcyBwcmVzZW50IGJlZm9yZSBkaXNh
+YmxpbmcgYSBzcGVjaWZpYyBmcmVxdWVuY3kuIElmIGEgZnJlcXVlbmN5IGlzbid0DQo+PiBhdmFp
+bGFibGUsIHRoZSB3YXJuaW5nIG9mIGEgZmFpbGVkIGRpc2FibGluZyBvZiBhIG5vbi1leGlzdGVu
+dA0KPj4gZnJlcXVlbmN5IGlzIG1pc2xlYWRpbmcuIFRoZXJlZm9yZSwgY2hlY2sgdGhlIGF2YWls
+YWJpbGl0eSBvZiB0aGUNCj4+IGZyZXF1ZW5jeSBpbiBhIHNlcGFyYXRlIGlubGluZSBmdW5jdGlv
+biBiZWZvcmUgZGlzYWJsaW5nIGl0Lg0KPiANCj4gWy4uLl0NCj4gDQo+PiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9jcHVmcmVxL2lteDZxLWNwdWZyZXEuYyBiL2RyaXZlcnMvY3B1ZnJlcS9pbXg2cS1j
+cHVmcmVxLmMNCj4+IGluZGV4IDQ4ZTE3NzJlOThmZC4uNGUyZDJiYzQ3YWJhIDEwMDY0NA0KPj4g
+LS0tIGEvZHJpdmVycy9jcHVmcmVxL2lteDZxLWNwdWZyZXEuYw0KPj4gKysrIGIvZHJpdmVycy9j
+cHVmcmVxL2lteDZxLWNwdWZyZXEuYw0KPj4gQEAgLTIwOSw2ICsyMDksMjEgQEAgc3RhdGljIHN0
+cnVjdCBjcHVmcmVxX2RyaXZlciBpbXg2cV9jcHVmcmVxX2RyaXZlciA9IHsNCj4+ICAgICAgIC5z
+dXNwZW5kID0gY3B1ZnJlcV9nZW5lcmljX3N1c3BlbmQsDQo+PiAgIH07DQo+Pg0KPj4gK3N0YXRp
+YyBpbmxpbmUgaW50IGRpc2FibGVfZnJlcV9pZl9hdmFpbGFibGUoc3RydWN0IGRldmljZSAqZGV2
+LA0KPiANCj4gVGhlIGlubGluZSBpc24ndCBuZWVkZWQsIGVzcC4gb24gc3RhdGljIGZ1bmN0aW9u
+LCBsZXQgdGhlIGNvbXBpbGVyDQo+IGZpZ3VyZSBpdCBvdXQuDQo+IA0KPiBBbHNvLCAiZGlzYWJs
+ZSBpZiBhdmFpbGFibGUiIHNob3VsZCByYXRoZXIgYmUgImRpc2FibGUgaWYgdW5hdmFpbGFibGUi
+IEkNCj4gdGhpbmsgPw0KDQpIZXJlIEkgbWVhbiB0aGUgT1BQIGFuZCBJIGNhbiBvbmx5IGRpc2Fi
+bGUgYW4gYXZhaWxhYmxlIGZyZXF1ZW5jeS4NCg0KPiANCj4+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcgZnJlcSkNCj4+ICt7DQo+PiArICAg
+ICBzdHJ1Y3QgZGV2X3BtX29wcCAqb3BwOw0KPj4gKyAgICAgaW50IHJldCA9IDA7DQo+PiArDQo+
+PiArICAgICBvcHAgPSBkZXZfcG1fb3BwX2ZpbmRfZnJlcV9leGFjdChkZXYsIGZyZXEsIHRydWUp
+Ow0KPj4gKyAgICAgaWYgKCFJU19FUlIob3BwKSkgew0KPj4gKyAgICAgICAgICAgICBkZXZfcG1f
+b3BwX3B1dChvcHApOw0KPj4gKyAgICAgICAgICAgICByZXQgPSBkZXZfcG1fb3BwX2Rpc2FibGUo
+ZGV2LCBmcmVxKTsNCj4+ICsgICAgIH0NCj4+ICsNCj4+ICsgICAgIHJldHVybiByZXQ7DQo+PiAr
+fQ0KPj4gKw0KPj4gICAjZGVmaW5lIE9DT1RQX0NGRzMgICAgICAgICAgICAgICAgICAweDQ0MA0K
+Pj4gICAjZGVmaW5lIE9DT1RQX0NGRzNfU1BFRURfU0hJRlQgICAgICAgICAgICAgIDE2DQo+PiAg
+ICNkZWZpbmUgT0NPVFBfQ0ZHM19TUEVFRF8xUDJHSFogICAgICAgICAgICAgMHgzDQo+PiBAQCAt
+MjU0LDE2ICsyNjksMTYgQEAgc3RhdGljIGludCBpbXg2cV9vcHBfY2hlY2tfc3BlZWRfZ3JhZGlu
+ZyhzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+PiAgICAgICB2YWwgJj0gMHgzOw0KPj4NCj4+ICAgICAg
+IGlmICh2YWwgPCBPQ09UUF9DRkczX1NQRUVEXzk5Nk1IWikNCj4+IC0gICAgICAgICAgICAgaWYg
+KGRldl9wbV9vcHBfZGlzYWJsZShkZXYsIDk5NjAwMDAwMCkpDQo+PiArICAgICAgICAgICAgIGlm
+IChkaXNhYmxlX2ZyZXFfaWZfYXZhaWxhYmxlKGRldiwgOTk2MDAwMDAwKSkNCj4+ICAgICAgICAg
+ICAgICAgICAgICAgICBkZXZfd2FybihkZXYsICJmYWlsZWQgdG8gZGlzYWJsZSA5OTZNSHogT1BQ
+XG4iKTsNCj4+DQo+PiAgICAgICBpZiAob2ZfbWFjaGluZV9pc19jb21wYXRpYmxlKCJmc2wsaW14
+NnEiKSB8fA0KPj4gICAgICAgICAgIG9mX21hY2hpbmVfaXNfY29tcGF0aWJsZSgiZnNsLGlteDZx
+cCIpKSB7DQo+IA0KPiBDYW4gd2UgaW50cm9kdWNlIGEgZnVuY3Rpb24gbGlrZToNCj4gDQo+IHZv
+aWQgaW14X2Rpc2FibGVfZnJlcV9pZl91bmF2YWlsYWJsZShzdHJ1Y3QgZGV2aWNlICpkZXYsIHUz
+MiBmcmVxX21oeiwNCj4gdTMyIHZhbCwgdTMyIG1hc2spDQo+IHsNCj4gICAgIGlmICh2YWwgPT0g
+bWFzaykNCj4gICAgICAgcmV0dXJuOw0KPiAgICAgaWYgKCFkaXNhYmxlX2ZyZXFfaWZfYXZhaWxh
+YmxlKGRldiwgZnJlcV9taHogKiAxMDAwMDAwKSkNCj4gICAgICAgcmV0dXJuOw0KPiAgICAgZGV2
+X3dhcm4oZGV2LCAiZmFpbGVkIHRvIGRpc2FibGUgJWRNSHogT1BQXG4iLCBtaHopOw0KPiB9DQo+
+IA0KPiBBbmQgdGhlbiBqdXN0IGNhbGwgaXQgbXVsdGlwbGUgdGltZXMgaW4gaGVyZSwgdG8gcmVk
+dWNlIGR1cGxpY2F0aW9uID8NCj4gDQo+PiAgICAgICAgICAgICAgIGlmICh2YWwgIT0gT0NPVFBf
+Q0ZHM19TUEVFRF84NTJNSFopDQo+PiAtICAgICAgICAgICAgICAgICAgICAgaWYgKGRldl9wbV9v
+cHBfZGlzYWJsZShkZXYsIDg1MjAwMDAwMCkpDQo+PiArICAgICAgICAgICAgICAgICAgICAgaWYg
+KGRpc2FibGVfZnJlcV9pZl9hdmFpbGFibGUoZGV2LCA4NTIwMDAwMDApKQ0KPj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgZGV2X3dhcm4oZGV2LCAiZmFpbGVkIHRvIGRpc2FibGUgODUy
+TUh6IE9QUFxuIik7DQo+IA0KDQpZZXMsIHVzaW5nIGEgZnVuY3Rpb24gdG8gcmVkdWNlIGR1cGxp
+Y2F0aW9ucyB3b3VsZCBiZSBnb29kLg0KDQoNClJlZ2FyZHMNCkNocmlzdG9waA0K
