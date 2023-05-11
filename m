@@ -2,153 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56D16FFA13
-	for <lists+linux-pm@lfdr.de>; Thu, 11 May 2023 21:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1B96FFA1D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 May 2023 21:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239161AbjEKTWg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 May 2023 15:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        id S239058AbjEKTZz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 May 2023 15:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238958AbjEKTWe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 May 2023 15:22:34 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E60C7EE6
-        for <linux-pm@vger.kernel.org>; Thu, 11 May 2023 12:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=k1; bh=G
-        7Fp/9JaQTJP0QCT0OfcvzIGyQ3ciiYzkRomf4h+i28=; b=NBnbQHjkg5ax5Sqw1
-        wHYzfN3po4gvT83g4gzPa8gZpa7ac4JnbwpnAqx1g8ofMHy1NjfBPVSljf4hKXAa
-        jOTHWA6wg9Y0XJHtvdu4KIMsEH48k9ADDlC2hhRLPKxcRpbogIWtJ+FvWKR7/gD+
-        LiWhxrOJ19tmhcBB3VlR6vJbI0=
-Received: (qmail 2935254 invoked from network); 11 May 2023 21:22:30 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 May 2023 21:22:30 +0200
-X-UD-Smtp-Session: l3s3148p1@LunX6G/7fuAujnsI
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFT v3 3/3] drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
-Date:   Thu, 11 May 2023 21:22:19 +0200
-Message-Id: <20230511192220.7523-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
-References: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
+        with ESMTP id S238397AbjEKTZy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 May 2023 15:25:54 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51086A76;
+        Thu, 11 May 2023 12:25:49 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 4896E8617A;
+        Thu, 11 May 2023 21:25:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1683833147;
+        bh=rHgsU9iR5Pjtdw37Mctvncab17xEMiFi6e0Q5zJkhRg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hHb17e/gL1rekh+QZtswChKgA9OlDsWRDuyHH41Tv1VOmaI2TX9BxIyMzGO+XN72m
+         9oN6FKHFIC0oJ3EOkGXZ0mxP3/iIZd4DSTx/I1ZKB9hydc89jYCN/ejSN9R3CF1eBR
+         yywRLFACaZkk9uMtwMd8p1CKQa0NA0B0Q5p1zPJyu2gxRDEh9vriFKLRb9vo7/ZS9r
+         DNxETqBgRikMpMj7tsJ2JSY7E1WW6iqxJx5Ppk07+8GAv0cOLZxtarAxNj/JCu7An1
+         McTTnSvmEEE5VwgrS025pdtEFRvCCxOwrHTXxn4wCUIS6fFm8GONUqpISdYSf05kLW
+         oTT3ThQqKBetA==
+Message-ID: <898fe00e-43f4-a8aa-b2b4-5b293fc77640@denx.de>
+Date:   Thu, 11 May 2023 21:25:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] cpufreq: imx6q: Disable only available frequencies
+Content-Language: en-US
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230511092334.3017-1-cniedermaier@dh-electronics.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230511092334.3017-1-cniedermaier@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The registers are differently named and at different offsets, but their
-functionality is the same as for Gen3.
+On 5/11/23 11:23, Christoph Niedermaier wrote:
+> In the example in Documentation/power/opp.rst, an availability check
+> is present before disabling a specific frequency. If a frequency isn't
+> available, the warning of a failed disabling of a non-existent
+> frequency is misleading. Therefore, check the availability of the
+> frequency in a separate inline function before disabling it.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/thermal/rcar_gen3_thermal.c | 44 +++++++++++++++++++++++++++--
- 1 file changed, 42 insertions(+), 2 deletions(-)
+[...]
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 39b382ee08c8..9029d01e029b 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -35,6 +35,12 @@
- #define REG_GEN3_PTAT2		0x60
- #define REG_GEN3_PTAT3		0x64
- #define REG_GEN3_THSCP		0x68
-+#define REG_GEN4_THSFMON00	0x180
-+#define REG_GEN4_THSFMON01	0x184
-+#define REG_GEN4_THSFMON02	0x188
-+#define REG_GEN4_THSFMON15	0x1BC
-+#define REG_GEN4_THSFMON16	0x1C0
-+#define REG_GEN4_THSFMON17	0x1C4
- 
- /* IRQ{STR,MSK,EN} bits */
- #define IRQ_TEMP1		BIT(0)
-@@ -55,6 +61,7 @@
- 
- #define MCELSIUS(temp)	((temp) * 1000)
- #define GEN3_FUSE_MASK	0xFFF
-+#define GEN4_FUSE_MASK	0xFFF
- 
- #define TSC_MAX_NUM	5
- 
-@@ -272,6 +279,34 @@ static void rcar_gen3_thermal_read_fuses_gen3(struct rcar_gen3_thermal_priv *pri
- 	}
- }
- 
-+static void rcar_gen3_thermal_read_fuses_gen4(struct rcar_gen3_thermal_priv *priv)
-+{
-+	unsigned int i;
-+
-+	/*
-+	 * Set the pseudo calibration points with fused values.
-+	 * PTAT is shared between all TSCs but only fused for the first
-+	 * TSC while THCODEs are fused for each TSC.
-+	 */
-+	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSFMON16) &
-+		GEN4_FUSE_MASK;
-+	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSFMON17) &
-+		GEN4_FUSE_MASK;
-+	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN4_THSFMON15) &
-+		GEN4_FUSE_MASK;
-+
-+	for (i = 0; i < priv->num_tscs; i++) {
-+		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-+
-+		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN4_THSFMON01) &
-+			GEN4_FUSE_MASK;
-+		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN4_THSFMON02) &
-+			GEN4_FUSE_MASK;
-+		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN4_THSFMON00) &
-+			GEN4_FUSE_MASK;
-+	}
-+}
-+
- static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
- {
- 	unsigned int i;
-@@ -343,6 +378,11 @@ static const struct rcar_thermal_info rcar_gen3_thermal_info = {
- 	.read_fuses = rcar_gen3_thermal_read_fuses_gen3,
- };
- 
-+static const struct rcar_thermal_info rcar_gen4_thermal_info = {
-+	.ths_tj_1 = 126,
-+	.read_fuses = rcar_gen3_thermal_read_fuses_gen4,
-+};
-+
- static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
- 	{
- 		.compatible = "renesas,r8a774a1-thermal",
-@@ -382,11 +422,11 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
- 	},
- 	{
- 		.compatible = "renesas,r8a779f0-thermal",
--		.data = &rcar_gen3_thermal_info,
-+		.data = &rcar_gen4_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a779g0-thermal",
--		.data = &rcar_gen3_thermal_info,
-+		.data = &rcar_gen4_thermal_info,
- 	},
- 	{},
- };
--- 
-2.35.1
+> diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
+> index 48e1772e98fd..4e2d2bc47aba 100644
+> --- a/drivers/cpufreq/imx6q-cpufreq.c
+> +++ b/drivers/cpufreq/imx6q-cpufreq.c
+> @@ -209,6 +209,21 @@ static struct cpufreq_driver imx6q_cpufreq_driver = {
+>   	.suspend = cpufreq_generic_suspend,
+>   };
+>   
+> +static inline int disable_freq_if_available(struct device *dev,
 
+The inline isn't needed, esp. on static function, let the compiler 
+figure it out.
+
+Also, "disable if available" should rather be "disable if unavailable" I 
+think ?
+
+> +					    unsigned long freq)
+> +{
+> +	struct dev_pm_opp *opp;
+> +	int ret = 0;
+> +
+> +	opp = dev_pm_opp_find_freq_exact(dev, freq, true);
+> +	if (!IS_ERR(opp)) {
+> +		dev_pm_opp_put(opp);
+> +		ret = dev_pm_opp_disable(dev, freq);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>   #define OCOTP_CFG3			0x440
+>   #define OCOTP_CFG3_SPEED_SHIFT		16
+>   #define OCOTP_CFG3_SPEED_1P2GHZ		0x3
+> @@ -254,16 +269,16 @@ static int imx6q_opp_check_speed_grading(struct device *dev)
+>   	val &= 0x3;
+>   
+>   	if (val < OCOTP_CFG3_SPEED_996MHZ)
+> -		if (dev_pm_opp_disable(dev, 996000000))
+> +		if (disable_freq_if_available(dev, 996000000))
+>   			dev_warn(dev, "failed to disable 996MHz OPP\n");
+>   
+>   	if (of_machine_is_compatible("fsl,imx6q") ||
+>   	    of_machine_is_compatible("fsl,imx6qp")) {
+
+Can we introduce a function like:
+
+void imx_disable_freq_if_unavailable(struct device *dev, u32 freq_mhz, 
+u32 val, u32 mask)
+{
+    if (val == mask)
+      return;
+    if (!disable_freq_if_available(dev, freq_mhz * 1000000))
+      return;
+    dev_warn(dev, "failed to disable %dMHz OPP\n", mhz);
+}
+
+And then just call it multiple times in here, to reduce duplication ?
+
+>   		if (val != OCOTP_CFG3_SPEED_852MHZ)
+> -			if (dev_pm_opp_disable(dev, 852000000))
+> +			if (disable_freq_if_available(dev, 852000000))
+>   				dev_warn(dev, "failed to disable 852MHz OPP\n");
+
+[...]
