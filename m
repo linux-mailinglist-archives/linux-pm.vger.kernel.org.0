@@ -2,74 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC2F6FFFF9
-	for <lists+linux-pm@lfdr.de>; Fri, 12 May 2023 07:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A4C700014
+	for <lists+linux-pm@lfdr.de>; Fri, 12 May 2023 08:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239562AbjELFoo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 May 2023 01:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S239890AbjELGBr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 May 2023 02:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbjELFoo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 01:44:44 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43A23172A;
-        Thu, 11 May 2023 22:44:40 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTP Server V5.0(20700:0:AUTH_RELAY)
-        (envelope-from <chiaen_wu@richtek.com>); Fri, 12 May 2023 13:44:26 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 12 May
- 2023 13:44:25 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Fri, 12 May 2023 13:44:25 +0800
-From:   ChiaEn Wu <chiaen_wu@richtek.com>
-To:     <sre@kernel.org>, <dan.carpenter@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <peterwu.pub@gmail.com>, <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [PATCH] power: supply: rt9467: Fix passing zero to 'dev_err_probe'
-Date:   Fri, 12 May 2023 13:44:23 +0800
-Message-ID: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
+        with ESMTP id S230490AbjELGBp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 02:01:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103B0449A;
+        Thu, 11 May 2023 23:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JgTBFDjjwSw1zqVfagUl7AKzd0vmwdZDo99pKCmQQP0=; b=eDdL5ePvbY/jB1rcT9W4xmiaH/
+        5m/v/TWCs08Qq8j4qKMc2vGMvLL5roJ3tIsKMaZQp2BX9VRHZfQWdfUwabjxBqW4Gn7SkBvwKP3ek
+        hUsEpADpLyHP4WYDo9ohbtNjzgyWj2N6lntMZ81jWY93R8LmicuYVMlBrzPNMnOQfvTzz18Vgc0t4
+        YqLaDv86aJFPGJaZXoaeUGbN4o5aQ25kK75TN2AVlkFlZ4fxuPUlMdnZeXqkbUvLVQ8HYrYY+YipA
+        jXwS+C4JUjbL4UND999W65sHHNBuZFwvPuCnGaugL8m/VLeHbPDw1MALFGqukWBIaNcHwHWrKFGbg
+        NW2Um0lA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pxLpq-000QcQ-7n; Fri, 12 May 2023 06:00:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 87025300338;
+        Fri, 12 May 2023 08:00:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6D0322C7DB768; Fri, 12 May 2023 08:00:54 +0200 (CEST)
+Date:   Fri, 12 May 2023 08:00:54 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        "ltykernel@gmail.com" <ltykernel@gmail.com>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "kernel@xen0n.name" <kernel@xen0n.name>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "longman@redhat.com" <longman@redhat.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [RFC][PATCH 7/9] x86/tsc: Provide sched_clock_noinstr()
+Message-ID: <20230512060054.GA2313201@hirez.programming.kicks-ass.net>
+References: <20230508211951.901961964@infradead.org>
+ <20230508213147.853677542@infradead.org>
+ <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
+ <ZFmGI1EN24xroPHa@liuwe-devbox-debian-v2>
+ <20230511202351.GE2296992@hirez.programming.kicks-ass.net>
+ <BYAPR21MB16883A65BBCFA19A30BADA4CD7749@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16883A65BBCFA19A30BADA4CD7749@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix passing zero to 'dev_err_probe()' in 'rt9467_request_interrupt()'
+On Thu, May 11, 2023 at 11:11:07PM +0000, Michael Kelley (LINUX) wrote:
+> From: Peter Zijlstra <peterz@infradead.org> Sent: Thursday, May 11, 2023 1:24 PM
 
-Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/202305111228.bHLWU6bq-lkp@intel.com/
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- drivers/power/supply/rt9467-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > Tianyu and Michael, what's your thought on this?
+> > >
+> > > Is the MSR-based GHCB usable at this point?
+> > >
+> > > What other clock source can be used?
+> > 
+> > You do have TSC support -- which is what I fixed for you. It's just the
+> > whole MSR thing that is comically broken.
+> > 
+> > You could do a read_hv_clock_msr() implementation using
+> > __rdmsr() and add some sanity checking that anything GHCB using (SEV?)
+> > *will* use TSC.
+> > 
+> > Anyway, will you guys do that, or should I pull out the chainsaw and fix
+> > it for you?
+> 
+> Peter -- I'll work on a fix.  But it will be the first half of next week before
+> I can do it.
 
-diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
-index 73f744a..ea33693 100644
---- a/drivers/power/supply/rt9467-charger.c
-+++ b/drivers/power/supply/rt9467-charger.c
-@@ -1023,7 +1023,7 @@ static int rt9467_request_interrupt(struct rt9467_chg_data *data)
- 	for (i = 0; i < num_chg_irqs; i++) {
- 		virq = regmap_irq_get_virq(data->irq_chip_data, chg_irqs[i].hwirq);
- 		if (virq <= 0)
--			return dev_err_probe(dev, virq, "Failed to get (%s) irq\n",
-+			return dev_err_probe(dev, -EINVAL, "Failed to get (%s) irq\n",
- 					     chg_irqs[i].name);
- 
- 		ret = devm_request_threaded_irq(dev, virq, NULL, chg_irqs[i].handler,
--- 
-2.7.4
-
+OK, Thanks!
