@@ -2,53 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B1070082D
-	for <lists+linux-pm@lfdr.de>; Fri, 12 May 2023 14:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFB2700B08
+	for <lists+linux-pm@lfdr.de>; Fri, 12 May 2023 17:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240690AbjELMjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 May 2023 08:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S241233AbjELPJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 May 2023 11:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240319AbjELMjt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 08:39:49 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F081910EA
-        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 05:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=s2NZcg55unREGVI0OwhK9zry2exN
-        8BKg42mDXxE31HQ=; b=0IeA5ymnNhDMyF3AOSSpQbc46bGkZJnHH9S6IQ2HmYnb
-        jp5MBGGT+A8H0kaMlYI9OB+vUN2RnW7C1iuy6yYYlkquvtDTsG8Re++3XC48Mpvm
-        laO2wl87s8jve736KiR7bPqYh0Cbz5YmPgBGt6ooSjYWgniTCAkmo/3sohSBA9c=
-Received: (qmail 3191189 invoked from network); 12 May 2023 14:39:42 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 May 2023 14:39:42 +0200
-X-UD-Smtp-Session: l3s3148p1@GMU0Zn77qqMujnsI
-Date:   Fri, 12 May 2023 14:39:42 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH RFT v3 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4
- fuse support
-Message-ID: <ZF4zjmkoE/njjG4x@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
- <TYBPR01MB5341AF3D9EB0F9A074283341D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+        with ESMTP id S241200AbjELPJN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 11:09:13 -0400
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2D5F5BA5;
+        Fri, 12 May 2023 08:09:08 -0700 (PDT)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id D3F8E5E85C;
+        Fri, 12 May 2023 17:08:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1683904108;
+        bh=mVNuMFQVfDKbGZ53v1bHBsJOGKRreCNyAVxU+AsY7a0=;
+        h=From:To:CC:Subject:Date:From;
+        b=LT5l4SC/dNI9XJjlIn9+Lb8w0goX2Fg9z4rIBVsVUGcD3h2xTrAf7kO3Ibo8R8Jvx
+         rDrYc55F9xuCUhAQg7aM85SjWQ5b4DsCAoqUU14dD8E95viwM25XssHTuaB6PWWkcs
+         jgz8LS0F0Z87Ip/S8AhOZzDBYgbtXfJXd+aaGoV0knlbvY+NtF7Ghes+jFPvh4BJ6l
+         CFhRr5jcVqc1NosImLvzq0DLVdLYOtGZYx+9hudiGIpJVdPuDgZmqcZ9ubkvao7PTq
+         bsrE7PLnt4ED7OvGNpZvneY2aCUdTo0ixMhW8M4xPMlmvppJj5io6rQuCZ+kcTB+KI
+         JxAds+/O99l/g==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 12 May 2023 17:08:25 +0200
+Received: from localhost.localdomain (172.16.51.5) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 17:08:24 +0200
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2] cpufreq: imx6q: No warning output when disabling a non-existing frequency of the OPP
+Date:   Fri, 12 May 2023 17:07:11 +0200
+Message-ID: <20230512150711.106854-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tZvcxKU0LyhGLxNP"
-Content-Disposition: inline
-In-Reply-To: <TYBPR01MB5341AF3D9EB0F9A074283341D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,43 +63,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+It is confusing if a warning is given for disabling a non-existent
+frequency of the operating performance points (OPP). In this case
+the function dev_pm_opp_disable() returns -ENODEV. Check the return
+value and avoid the output of a warning in this case. Avoid code
+duplication by using a separate function.
 
---tZvcxKU0LyhGLxNP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+---
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+To: linux-arm-kernel@lists.infradead.org
+---
+ drivers/cpufreq/imx6q-cpufreq.c | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
+diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
+index 48e1772e98fd..9fb1501033bb 100644
+--- a/drivers/cpufreq/imx6q-cpufreq.c
++++ b/drivers/cpufreq/imx6q-cpufreq.c
+@@ -209,6 +209,14 @@ static struct cpufreq_driver imx6q_cpufreq_driver = {
+ 	.suspend = cpufreq_generic_suspend,
+ };
+ 
++static void imx6x_disable_freq_in_opp(struct device *dev, unsigned long freq)
++{
++	int ret = dev_pm_opp_disable(dev, freq);
++
++	if (ret < 0 && ret != -ENODEV)
++		dev_warn(dev, "failed to disable %ldMHz OPP\n", freq / 1000000);
++}
++
+ #define OCOTP_CFG3			0x440
+ #define OCOTP_CFG3_SPEED_SHIFT		16
+ #define OCOTP_CFG3_SPEED_1P2GHZ		0x3
+@@ -254,17 +262,15 @@ static int imx6q_opp_check_speed_grading(struct device *dev)
+ 	val &= 0x3;
+ 
+ 	if (val < OCOTP_CFG3_SPEED_996MHZ)
+-		if (dev_pm_opp_disable(dev, 996000000))
+-			dev_warn(dev, "failed to disable 996MHz OPP\n");
++		imx6x_disable_freq_in_opp(dev, 996000000);
+ 
+ 	if (of_machine_is_compatible("fsl,imx6q") ||
+ 	    of_machine_is_compatible("fsl,imx6qp")) {
+ 		if (val != OCOTP_CFG3_SPEED_852MHZ)
+-			if (dev_pm_opp_disable(dev, 852000000))
+-				dev_warn(dev, "failed to disable 852MHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 852000000);
++
+ 		if (val != OCOTP_CFG3_SPEED_1P2GHZ)
+-			if (dev_pm_opp_disable(dev, 1200000000))
+-				dev_warn(dev, "failed to disable 1.2GHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 1200000000);
+ 	}
+ 
+ 	return 0;
+@@ -316,20 +322,16 @@ static int imx6ul_opp_check_speed_grading(struct device *dev)
+ 	val >>= OCOTP_CFG3_SPEED_SHIFT;
+ 	val &= 0x3;
+ 
+-	if (of_machine_is_compatible("fsl,imx6ul")) {
++	if (of_machine_is_compatible("fsl,imx6ul"))
+ 		if (val != OCOTP_CFG3_6UL_SPEED_696MHZ)
+-			if (dev_pm_opp_disable(dev, 696000000))
+-				dev_warn(dev, "failed to disable 696MHz OPP\n");
+-	}
++			imx6x_disable_freq_in_opp(dev, 696000000);
+ 
+ 	if (of_machine_is_compatible("fsl,imx6ull")) {
+ 		if (val != OCOTP_CFG3_6ULL_SPEED_792MHZ)
+-			if (dev_pm_opp_disable(dev, 792000000))
+-				dev_warn(dev, "failed to disable 792MHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 792000000);
+ 
+ 		if (val != OCOTP_CFG3_6ULL_SPEED_900MHZ)
+-			if (dev_pm_opp_disable(dev, 900000000))
+-				dev_warn(dev, "failed to disable 900MHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 900000000);
+ 	}
+ 
+ 	return ret;
+-- 
+2.11.0
 
-> Thank you for the patches!
-> I checked the patches. So:
->=20
-> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->=20
-> And, I tested on R-Car H3 ES3.0 and R-Car S4 and it worked. So,
->=20
-> Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-
-Awesome, thank you Shimoda-san!
-
-
---tZvcxKU0LyhGLxNP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmReM4oACgkQFA3kzBSg
-KbaR7Q//Y5e1EGDljIopLMY2e9FsTCgBG/ZHzSWpV3DnGgBLdm3IxkexqVP9IcNI
-DE1Kd9nxdDLnKVik5IFEe7Lh6k1BAdA4FJzsqvcsGXqm6VS6a5RaWYmcluTqqZ/O
-q6TaDbROSftcAvcV1+T11dhGpBVXYxfkPw3jZmFM66p+ITUKp2ha998eAlbEbP+C
-zd97yZRZC+VgGAPWYHIoXMPHr+pyuteU9rgPOparWtzp8nj8BzoEAEoAzMjnln5k
-6xxObgrzxOHJZA1Dc9JcparuA7qZgATiNvOtanEH3kIBg/cbf9HaQ0TRBGIEQw7z
-VSsQxakdadrakyKVstu/0bdP3SmGpJQRSEwzKCYmYTp1qNpasOi4wj/wkpM9L3m3
-8bxeOqsnD0skvnJTpL2NPKq3jz/PF1PJQyqFW5aFraVMGqansGufzeuU1JS1uksk
-qxjysMWUSvWhIRAvtBj/CvZkPPsSWO8y7L3c4BzH7tZcRq7jmwWGme92vkjAvC69
-nx3cwiqmngVn8ghYKXR6orvR60RPNELZl+2BQXBEK05uGzV8CetnNExzFIrZhEOq
-KGbTDBvK+TTagA0jTsuyA4g+idacnySmDCHFLxTEVp6Zjb4NGUvvUHEIV3YCHUkT
-Gx6p3JmS1Fa5InmuZIG7ANXww8AVM8/+oxhwAhCyJ4YaIkAmc+s=
-=ZnvZ
------END PGP SIGNATURE-----
-
---tZvcxKU0LyhGLxNP--
