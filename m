@@ -2,165 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1EC700F7B
-	for <lists+linux-pm@lfdr.de>; Fri, 12 May 2023 21:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E947013DF
+	for <lists+linux-pm@lfdr.de>; Sat, 13 May 2023 04:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjELT5d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 May 2023 15:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
+        id S240765AbjEMCHM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 May 2023 22:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjELT5d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 15:57:33 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B106861AE
-        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 12:57:28 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1861044066b.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 12:57:28 -0700 (PDT)
+        with ESMTP id S229507AbjEMCHL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 May 2023 22:07:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688FBD1
+        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 19:07:09 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-306281edf15so9933842f8f.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 May 2023 19:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683921447; x=1686513447;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jlPMLuufIECZcT1zxsxn1hbMSVzD+mvP7zfZQnR0RRA=;
-        b=DKBn7ZCl0YS2Kt9l6HjhHdI6QYFutE8YUJZztK9NY+emF5/XeMyNSExElPRaHuWBqV
-         06q/+zwjPYKHiJt9J/LG4l3VFCCUlCQ8iLCZjjdTdkxAX4CK0eTu9YdcwOC7CR6LhQto
-         2XRTatJgtgkvgkLCHj5Ik/hWp0eJ5PRRhUOsIsRoNWDarExbIDcGJ0RPRGO6du0Na4v0
-         YhI2sPwr7X0QHV+ZL7CwvZbhoYkazXHmdYN1CT54CPrEacINf4GEwF3SMr3Fw9A2epJz
-         LWFK45IOt79ytZ2WgzRDHq1lWPd6E4/Uw8MddfnjjEstdVAAMwS6bUJZtih7BPrQ4d42
-         aliQ==
+        d=linaro.org; s=google; t=1683943628; x=1686535628;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ri6DfJJiXodRZE4XO0pCUcvs/5LQusUOoMEf7lrh9AQ=;
+        b=wOd7tExQYofrH35omv+OsDMQMMKOvftHjJXWVYsapMHJGLUqBn8r/xt9bmt/eHciZn
+         N1KNeMl6R7xy9gq39n8u1++Uz/vGjZ5O1jJGUQslNwUO2uGSlVUK9mdZmtQq54SFSXVm
+         5pbpRmaaqWNafZX+S3432StDFVjsQl5I5u/+h+ceWh0OfgjRw7+D8yNwn/7+0Zp5AS1+
+         GCCmHvDmO0Vhzc2PWtVvxQUSbRMiUcgFEgoud8uJaL2eejVcD6oPpByB2R+LQy0RHYdO
+         wOGcq3uvSDb4To1hEDTIHk2UKVRqwzkQDUvGZZmthTGG9oiOzYiKK+Nsdn1zbXzhUj67
+         suWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683921447; x=1686513447;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jlPMLuufIECZcT1zxsxn1hbMSVzD+mvP7zfZQnR0RRA=;
-        b=kyQHalw8GbaqNLfeMjLl9d3S3ea3xpakORfa+Zn1qDdgsW3K/SVAEGC5pfLjMK5/Dq
-         dy9peD/Ai0Oxmq6XmL+aK1tVjvWEmEZ5zjzZPvwDR11RzxUt6u0DHkH+Uh6ICBYD+uGR
-         ZUE/oK9UIS+P2jYPsRBKfAXHUVWrHHzXP+QzQRFq5cLiCYSQP+Igrr9tNX3bDqu0tUHx
-         v9NvRZgXnKvhYQTHBgkRrsWVImcA1h9C4fF+q8sERXX6Ye06rAjbiCtrm57GBHaDAJmW
-         pvlqvcTBIlcGPaJUWDLtrEL1sVB5Ujqdi5R/G2aQZDyOm5bAukFVCB64RDiY1ZMus/GJ
-         iMpQ==
-X-Gm-Message-State: AC+VfDwXn594M3rgbdGlsDEDm+Bc0GtO3h2SStVc8zyqNeH/FU/9eBTp
-        ZK8i5uUx95/5QKav0Jj+y4Q=
-X-Google-Smtp-Source: ACHHUZ70mOqMiqD6D+6W09TKUor3r0Q4zvgOXoePTvAHiwBw1zPV5032zoFrsS4nd7bq1dI2bUGZzg==
-X-Received: by 2002:a17:907:3e88:b0:969:f0bd:5649 with SMTP id hs8-20020a1709073e8800b00969f0bd5649mr15281492ejc.60.1683921446953;
-        Fri, 12 May 2023 12:57:26 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id jl21-20020a17090775d500b00965b5540ad7sm5906901ejc.17.2023.05.12.12.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 12:57:26 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id BA189BE2DE0; Fri, 12 May 2023 21:57:25 +0200 (CEST)
-Date:   Fri, 12 May 2023 21:57:25 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] cpupower: Bump soname version
-Message-ID: <ZF6aJTqMkrlBb0Mm@eldamar.lan>
-References: <20160610005619.GQ7555@decadent.org.uk>
- <ZFqV3ZFROy0m+/Xt@eldamar.lan>
- <eeca542a-eb7f-50a0-b62b-7bab8993185a@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1683943628; x=1686535628;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ri6DfJJiXodRZE4XO0pCUcvs/5LQusUOoMEf7lrh9AQ=;
+        b=g5k/NLNiPCdnO3cLwU3aJacemR79vs+Rf8jjqK8lcYOwzyctyvu4L5QF3VkSelyx6L
+         CKXDqC9Yx4DppGst2GyOxJcI12lM3R4AGFRuzPoYnzBrwFKcWiErtDF52ymnjFCojF8M
+         IzPArCVMLfDzPRRJqQyMfj/CLxnAVsPDOPsx1YVjZzg+dFx4KX/2O8rQ3CUzrzOIEemT
+         RkhRqe748+5jVroDYwfvc2xwfoIHjX3i6Pt7zC2AQoRkMDeySyS73dUkt6SwyJXOfGSx
+         KiJPdKtcLsNUERgiijg+Fu3GT8UJl7SSoUFEMPo6cHy+06EYWghyLSspmRA2o0jfY3w5
+         wTbQ==
+X-Gm-Message-State: AC+VfDx9znTlyZ7nCAIOvRWPybVGPfC4qEOXXKoBNbm34D4k8yV9HyU5
+        97VqCTUhHZeXP+SVwZuyhP93HFBy7bBPiWu+tcPUuw==
+X-Google-Smtp-Source: ACHHUZ7kDK0x1ux72xu3F648weOC108BgVQ5USsBi69lf0rCEJA4C82rI2gNWUpO4uZtJsRyDCsRow==
+X-Received: by 2002:a5d:510a:0:b0:304:79c1:725d with SMTP id s10-20020a5d510a000000b0030479c1725dmr18364830wrt.45.1683943627891;
+        Fri, 12 May 2023 19:07:07 -0700 (PDT)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id r13-20020adfe68d000000b003012030a0c6sm24749701wrm.18.2023.05.12.19.07.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 19:07:07 -0700 (PDT)
+Message-ID: <008030d3-386d-bed0-ad31-f06b27ba00c5@linaro.org>
+Date:   Sat, 13 May 2023 02:07:06 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eeca542a-eb7f-50a0-b62b-7bab8993185a@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: power_supply cooling interface
+To:     Pavel Machek <pavel@ucw.cz>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <164f2458-fb66-f238-7143-bdbe1e200870@linaro.org>
+ <ZF5t5BWqLLEvDdfz@localhost>
+ <b1237581-3ece-a358-f1ba-7a3ebb08d8d2@linaro.org>
+ <ZF59BS77uUpEZK6X@duo.ucw.cz>
+Content-Language: en-US
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <ZF59BS77uUpEZK6X@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Shuah,
 
-Apologies for the delay!
 
-On Tue, May 09, 2023 at 04:10:05PM -0600, Shuah Khan wrote:
-> On 5/9/23 12:50, Salvatore Bonaccorso wrote:
-> > Hi Thomas,
-> > 
-> > On Fri, Jun 10, 2016 at 01:56:20AM +0100, Ben Hutchings wrote:
-> > > Several functions in the libcpupower API are renamed or removed in
-> > > Linux 4.7.  This is an backward-incompatible ABI change, so the
-> > > library soname should change from libcpupower.so.0 to
-> > > libcpupower.so.1.
-> > > 
-> > > Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
-> > > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> > > ---
-> > > I have to say the choice of variable names here is rather confusing.
-> > > LIB_MIN is used for the soname version, which would normally be the
-> > > *major* part of the version.
-> > > 
-> > > I'll send a second patch that switches to more conventional library
-> > > versioning.
-> > > 
-> > > Ben.
-> > > 
-> > >   tools/power/cpupower/Makefile | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-> > > index 8358863259c5..0b85f5915ce8 100644
-> > > --- a/tools/power/cpupower/Makefile
-> > > +++ b/tools/power/cpupower/Makefile
-> > > @@ -64,7 +64,7 @@ DESTDIR ?=
-> > >   VERSION=			$(shell ./utils/version-gen.sh)
-> > >   LIB_MAJ=			0.0.1
-> > > -LIB_MIN=			0
-> > > +LIB_MIN=			1
-> > >   PACKAGE =			cpupower
-> > >   PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
-> > 
-> > Repinging this patch. Thomas, we are shipping it in Debian since, and
-> > I'm wondering if the patch did just felt trough the cracks.
-> > 
+On 12/05/2023 17:53, Pavel Machek wrote:
+> Hi!
 > 
-> Please resend the patch for review.
+>>>> I've been working on a driver for the charger found in most Snapdragon
+>>>> 845 phones (the OnePlus 6, SHIFT6mq, PocoPhone F1, etc). I wanted to
+>>>> include support for the POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT
+>>>> property.
+>>>>
+>>>> My understanding is that it exposes the current limit as a cooling
+>>>> device so that userspace (or frameworks like DTPM) can optimise for
+>>>> performance in a thermally constrained device by limiting the input
+>>>> current and thus reducing the heat generated by the charger circuitry,
+>>>> a similar idea was applied on the Pixel C:
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4496d52b3430cb3c4c16d03cdd5f4ee97ad1241
+>>>>
+>>>> However, reading through the sysfs docs for cooling devices, and
+>>>> looking at the implementation in power_supply_core.c, it seems like the
+>>>> behavior here is wrong in a few ways:
+>>>>   1. The values should scale from 0: no cooling to max_state: max
+>>>> cooling, but the power_supply docs and the only existing implementation
+>>>> (the smbb driver) just export the current_limit, such that increasing
+>>>> cur_state would increase the current limit, not decrease it.
+>>>>   2. (unsure?)The scale is completely different to most other cooling
+>>>> devices, most cooling devices don't seem to have a max state much
+>>>> beyond the double digits, but CHARGE_CONTROL_LIMIT is on the scale of
+>>>> uA, so approaches like incrementing the cooling state by 1 don't really
+>>>> work.
+>>>
+>>> Did this get solved somehow?
+>>
+>> Thanks for resurrecting the discussion.
+>>
+>>> Anyway, I am not sure mW will be useful here, as elsewhere it is mW
+>>> thermal and here it is mW from charger. Most of that energy should be
+>>> stored in battery, not converted to heat.
+>>
+>> I'm not sure to understand the comment. The question is about decreasing the
+>> speed of the charge of the battery because the faster it charges the warmer
+>> it gets. Doing a fast charge is ok, if the phone is for instance on a table
+>> doing nothing. But if the environment is hot (a car, a pocket) or there are
+>> other sources of heat on the phone like a game, the temperature of the
+>> battery could be too high (or the skin temperature). In this case we have to
+>> balance the heat contribution of the different components by reducing their
+>> performances. The first knob to act on is to reduce the charge speed of the
+>> battery by reducing the delivered power.
+> 
+> Understood.
+> 
+>> For that we need a connection between the thermal framework which monitors
+>> the battery temperature and the power supply to reduce the charge speed when
+>> it is too hot. This connection is the cooling device.
+>>
+>> The cooling devices have opaque values where the min and max cooling effect
+>> vary depending on the implementation (eg. a fan 0/1, a LCD light 0/1023).
+> 
+> Aha, ok.
+> 
+>> Here the power supply has yet another unit (uA) to act on and difficult to
+>> translate to a cooling device discrete numbers (that is my
+>> understanding).
+> 
+> Well, if you can accept 1000 steps like you do for LCD, all you really
+> need is maximum current and then stepping in 1/100 of that.
+> 
+>> With enough components in DTPM, it will be possible to create a generic
+>> power cooling device using the unified unit uW with the powercap API.
+> 
+> I was trying to point out trouble with uW: you don't know them in case
+> of battery charging.
+> 
+> You know phone is drawing 500mA @ close to 5V (-> 2.5W), but you don't
+> really know how much is stored in battery, and how much is turned into
+> heat.
 
-Here is the patch again for a fresh review on it. If you want me to
-send it standalone with '[RESEND PATCH]' I can do that as well.
+You can know the thermal effect if the charger IC has a temperature
+probe, and use time constant estimates to figure out the power losses.
+> 
+> But I guess you could approximate that somehow.
 
-Regards,
-Salvatore
+Also knowing the rough efficiency of the switching converter under the
+circumstances (current limited? proportion of input current going to the
+battery? voltage? battery voltage?)
 
-From 9091eb3294bad8f7d79eaff8f52ebeb02cc7d210 Mon Sep 17 00:00:00 2001
-From: Ben Hutchings <ben@decadent.org.uk>
-Date: Thu, 9 Jun 2016 23:35:08 +0100
-Subject: [PATCH] cpupower: Bump soname version
+I can attest to charging losses being a pretty significant heat source,
+at least on the phones I've owned.
 
-Several functions in the libcpupower API are renamed or removed in
-Linux 4.7.  This is an backward-incompatible ABI change, so the
-library soname should change from libcpupower.so.0 to
-libcpupower.so.1.
+It gets tricky with phones that use charge pumps (e.g. OnePlus/Oppo VOOC
+charging) to offload the thermal losses to the wall charger. Some
+devices also have 2 or more battery cells, enabling them to be charged
+in parallel for greater efficiency from a PD charger at 9V. My OnePlus 9
+gets noticeably hotter when charging at 5V@3A compared to 9V@2A.
 
-Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
----
- tools/power/cpupower/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Most SDM845 devices use "parallel charging" with two discrete charger
+ICs (one in the PMIC, one external i2c), effectively allowing for much
+higher input current and much greater efficiency.
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 59bfa05dec5d..dc531805a570 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -53,7 +53,7 @@ DESTDIR ?=
- 
- VERSION:=			$(shell ./utils/version-gen.sh)
- LIB_MAJ=			0.0.1
--LIB_MIN=			0
-+LIB_MIN=			1
- 
- PACKAGE =			cpupower
- PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
+Can these be modeled well via DTPM? As I don't think the existing PSY
+subsystem has a nice way to deal with this, and I don't think it's
+sensible to offload all of that to userspace.
+
+> 
+> BR,								Pavel
+> 
+> -- People of Russia, stop Putin before his war on Ukraine
+> escalates.
+
 -- 
-2.40.1
-
+Kind Regards,
+Caleb (they/them)
