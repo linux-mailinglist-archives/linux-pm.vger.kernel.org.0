@@ -2,68 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53751702094
-	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 00:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A806270209C
+	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 00:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjENWvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 May 2023 18:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S229539AbjENWzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 May 2023 18:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjENWvN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 May 2023 18:51:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B04110EA;
-        Sun, 14 May 2023 15:51:12 -0700 (PDT)
+        with ESMTP id S234864AbjENWzE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 May 2023 18:55:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608B51BB;
+        Sun, 14 May 2023 15:55:02 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4ABD660574D;
-        Sun, 14 May 2023 23:51:10 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 21233660574D;
+        Sun, 14 May 2023 23:55:01 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684104670;
-        bh=5X6s/35EjIL/j/tIEBwv4UCLHvPjHhXLzzfqo9HA6O4=;
+        s=mail; t=1684104901;
+        bh=DU/1Wu1hqUE0C6lLNhKSAzwm16Syk8IrmHigAsAJxMM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UZ/Mi+tp3zrvSBufhtKmx4NGodOrfTryMzjxzIu3IwVG8CdHf0NxcW4FRKr9ztofe
-         b+XVurqqf301WnIrYSbxpyeMIwbpmyr2w4DAdpL2+xb+tbAN110T4oGKbXDZ7tQ5Qb
-         cfpgHyYJnQe8wphN/HLZokqiwq0QYH7QyU3JvcATMGpN5G0vvoDbeORwxFbb0ky4lx
-         3MYiOC5y76DWeplSwFGNBHDowYyIyxMdmiwr9QOdm4rRpVUH5nACHnkRsjUYSwyEhD
-         blul3AlIbAlAV1m4FjG4IxglGUWQh6jLTO7JhhTOB4PnT1lMzvSNV1oCvLqfP3U6FC
-         LI+SukIZZJEBA==
+        b=KSvlecfGk+9pSL4CPRCynPATN4gIX2BW5Cgx0XnjeoirIqrINuDPIq0OYxmCtV1Ub
+         +V62BbePkhFwoARybkfAiSZqPXv08gJWEXKRPs70EzeVVe+FL3L2QnTXyfI+kncCqV
+         /zCmabP7PlNDkjC/MUNbMYvlEe195cKmPmC/vPJzxmnNcSUiTFc9nYrNjvHNIDq0eQ
+         s3xyf3xL06UBSNig95vMGCwKTTQsxVIOg3ZZEtb41YV8LhnvSvJg1e2KW261KbyBc3
+         qBwhTuu1TfU2zT/bu94fbsPFQNFscD1Zb7GQsQyzUqYu9t3jvFqAE0JsWHVyk7Cpkp
+         uXfcMNhCk17Jg==
 Received: by mercury (Postfix, from userid 1000)
-        id 4949B1061381; Mon, 15 May 2023 00:51:08 +0200 (CEST)
-Date:   Mon, 15 May 2023 00:51:08 +0200
+        id 646BD1061381; Mon, 15 May 2023 00:54:58 +0200 (CEST)
+Date:   Mon, 15 May 2023 00:54:58 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v5 05/10] power: supply: rt5033_charger: Add RT5033
- charger device driver
-Message-ID: <20230514225108.pkn2zufrfgic7r4c@mercury.elektranox.org>
-References: <20230514123130.41172-1-jahau@rocketmail.com>
- <20230514123130.41172-6-jahau@rocketmail.com>
- <2e0f37ef-b80c-1a4d-2159-29598ac11156@wanadoo.fr>
- <b2a52060-6727-b91d-79aa-55cdb3cbc63c@rocketmail.com>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     dan.carpenter@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterwu.pub@gmail.com,
+        cy_huang@richtek.com
+Subject: Re: [PATCH] power: supply: rt9467: Fix passing zero to
+ 'dev_err_probe'
+Message-ID: <20230514225458.nngl45joh4crunal@mercury.elektranox.org>
+References: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="32wuacfcnymnc56n"
+        protocol="application/pgp-signature"; boundary="thiqvn36r3wkqzzv"
 Content-Disposition: inline
-In-Reply-To: <b2a52060-6727-b91d-79aa-55cdb3cbc63c@rocketmail.com>
+In-Reply-To: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -74,145 +58,68 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---32wuacfcnymnc56n
-Content-Type: text/plain; charset=iso-8859-1
+--thiqvn36r3wkqzzv
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, May 14, 2023 at 07:03:03PM +0200, Jakob Hauser wrote:
-> Hi Christophe, Hi all,
+On Fri, May 12, 2023 at 01:44:23PM +0800, ChiaEn Wu wrote:
+> Fix passing zero to 'dev_err_probe()' in 'rt9467_request_interrupt()'
 >=20
-> On 14.05.23 16:31, Christophe JAILLET wrote:
-> > Le 14/05/2023 =E0 14:31, Jakob Hauser a =E9crit=A0:
->=20
-> ...
->=20
-> > > +static int rt5033_charger_probe(struct platform_device *pdev)
-> > > +{
-> > > +=A0=A0=A0 struct rt5033_charger *charger;
-> > > +=A0=A0=A0 struct power_supply_config psy_cfg =3D {};
-> > > +=A0=A0=A0 int ret;
-> > > +
-> > > +=A0=A0=A0 charger =3D devm_kzalloc(&pdev->dev, sizeof(*charger), GFP=
-_KERNEL);
-> > > +=A0=A0=A0 if (!charger)
-> > > +=A0=A0=A0=A0=A0=A0=A0 return -ENOMEM;
-> > > +
-> > > +=A0=A0=A0 platform_set_drvdata(pdev, charger);
-> > > +=A0=A0=A0 charger->dev =3D &pdev->dev;
-> > > +=A0=A0=A0 charger->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
-> > > +
-> > > +=A0=A0=A0 psy_cfg.of_node =3D pdev->dev.of_node;
-> > > +=A0=A0=A0 psy_cfg.drv_data =3D charger;
-> > > +
-> > > +=A0=A0=A0 charger->psy =3D devm_power_supply_register(&pdev->dev,
-> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 &rt5033_charger_desc,
-> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 &psy_cfg);
-> > > +=A0=A0=A0 if (IS_ERR(charger->psy))
-> > > +=A0=A0=A0=A0=A0=A0=A0 return dev_err_probe(&pdev->dev, PTR_ERR(charg=
-er->psy),
-> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "Failed=
- to register power supply\n");
-> > > +
-> > > +=A0=A0=A0 charger->chg =3D rt5033_charger_dt_init(charger);
-> > > +=A0=A0=A0 if (IS_ERR_OR_NULL(charger->chg))
-> >=20
-> > Hi,
-> >=20
-> > Nit: charger->chg can't be NULL.
-> >=20
-> > > +=A0=A0=A0=A0=A0=A0=A0 return -ENODEV;
-> >=20
-> > Why bother returning specific error code in rt5033_charger_dt_init() if
-> > they are eaten here.
-> >=20
-> > return PTR_ERR(charger->chg)?
-> >=20
->=20
-> Thanks for the heads-up.
->=20
-> ...
->=20
-> Writing towards the list:
->=20
-> The way it is done in the current patchset is taken from the original
-> patchset of March 2015 [2]. I kept the original as far as possible.
->=20
-> By now I'm not happy with the way of initializing "struct
-> rt5033_charger_data". I realized this in the course of the review. As I
-> didn't want to disturb the review with this, I had planned a small clean-=
-up
-> patch after this review is finished.
->=20
-> The cause of the complicated handling of "struct rt5033_charger_data" lies
-> inside of the "struct rt5033_charger". There the "struct
-> rt5033_charger_data" is initialized as pointer *chg.
->=20
-> The clean-up would be:
->=20
->  - Inside of "struct rt5033_charger" change the
->    "struct rt5033_charger_data" to non-pointer "chg". It is then
->    initialized right away.
->=20
->       struct rt5033_charger_data      chg;
->=20
->  - Change function rt5033_charger_dt_init() from type
->    "struct rt5033_charger_data" to type "int".
->=20
->       static int rt5033_charger_dt_init(struct rt5033_charger *charger)
->=20
->  - In the probe function, call the function rt5033_charger_dt_init() in
->    the same way like e.g. the following rt5033_charger_reg_init():
->=20
->       ret =3D rt5033_charger_dt_init(charger);
->               if (ret)
->                       return ret;
->=20
->  - Within function rt5033_charger_dt_init() and all other functions
->    using the charger data, get the address of the already-initialized
->    struct &charger->chg.
->=20
->       struct rt5033_charger_data *chg =3D &charger->chg;
->=20
-> This would also solve the issue reported by Christophe because the errors
-> inside function rt5033_charger_dt_init() would be passed to the probe
-> function by the "ret =3D" and being returned there with "return ret".
->=20
-> I'm not sure how to handle this now. I would prefer to get the review of
-> this patchset finished and send a clean-up patch afterwards.
->=20
-> [2] https://lore.kernel.org/lkml/1425864191-4121-1-git-send-email-beomho.=
-seo@samsung.com/T/#u
+> Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger d=
+river")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202305111228.bHLWU6bq-lkp@intel.com/
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
-Sounds sensible, until then please use 'return PTR_ERR(charger->chg)'
-as suggested by Christophe. With this fixed:
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Thanks, queued to my fixes branch.
 
 -- Sebastian
 
---32wuacfcnymnc56n
+>  drivers/power/supply/rt9467-charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply=
+/rt9467-charger.c
+> index 73f744a..ea33693 100644
+> --- a/drivers/power/supply/rt9467-charger.c
+> +++ b/drivers/power/supply/rt9467-charger.c
+> @@ -1023,7 +1023,7 @@ static int rt9467_request_interrupt(struct rt9467_c=
+hg_data *data)
+>  	for (i =3D 0; i < num_chg_irqs; i++) {
+>  		virq =3D regmap_irq_get_virq(data->irq_chip_data, chg_irqs[i].hwirq);
+>  		if (virq <=3D 0)
+> -			return dev_err_probe(dev, virq, "Failed to get (%s) irq\n",
+> +			return dev_err_probe(dev, -EINVAL, "Failed to get (%s) irq\n",
+>  					     chg_irqs[i].name);
+> =20
+>  		ret =3D devm_request_threaded_irq(dev, virq, NULL, chg_irqs[i].handler,
+> --=20
+> 2.7.4
+>=20
+
+--thiqvn36r3wkqzzv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZdsACgkQ2O7X88g7
-+pqqGA/5Afn0kyYuYYCNeFMbpA31bUx5pcgtxQm3ln66uNZTQK5BOgyxagGQnTFY
-6lDDlMrWSNTe5gd/OehNmA9YPqKgREqZA4uVrC7LFrb2bghL5GCReDx3onB0rsKP
-7qb2wfG0vQs0eAFC7BMwHiLfxpdc6X5y9KWP55rW2bI8PFGDoDNNNw3SvyyvMbXi
-GY7+fWE75LluZmRNXOko1SK6OsuOLlHE6jsmilqgNVKadLZx3Q+wjLvttS1m4WnY
-1RNs7YWgnXdjEaoEXm6NtfMnbJMilCSfBDn2brlhfNTjNWxaHvdLEUH0ZOgscM0C
-UMl8BALb66LFFDHnO5Ok5YOqkZKo4S/ckTelc6LTeh/Y55Tl5lBR3LJwUKz92XjD
-SXIAWWpnqGls4zHyMNknqdLMTj39dB3Sp10x+Eg+R16ceOL/YGotn+9p0v9JHcy4
-njIf0y2kyeQa6xjRBQ6/j0RACvQKTkEazB4nDBJ92suehdUX8xXSji8FgWEQpiSy
-h9fhWh90KKHdy47kXP8oSb4xjmlX6tlXrjNv5ms2ayUL6hdlSB4C5B+Z4BnLjsaL
-UVrY1WaezXoxpdV64Ft7+UqynRNsYb++zGLdzNV1wd9qa16i/XFwAD073pGoNjoo
-AnPtnUc61zdidPSNPrRBRw5J+HwPyelqxUo6DID+tdeCVkqWZvA=
-=Zev5
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZsIACgkQ2O7X88g7
++poYAQ/+MFGVHXC+3x6i2hhmnmJI7GuTUczxKXd2FeERNJ2Key71XmCOFt9UgxD0
+sq+BhfHzV29tnF/NDVBPdmM8pBfmdphtx7UxTu11aqsc1KaiYP6A1wP0hLHeB++V
+4GP0gyipzK89IqYo06qpTpMaKzf1uM1t6wSIqVy7V+Ojx9EIQjN7bVGgMGaZW0w0
+2ZnI7LG38mSbujxurQWj4aYMyOoibgfCoTNu4+rVbH+y/9aR0PT2Q/iMuYSN9Dnr
+XgfSUzo72KYIEEwTSjThI+dLQ/4Azlec6XXtZSnjF6T+bLQN4yx52nbsS7+z6rlK
+ul+4Vu7/OpbMvyCYeLKERbUV3NCKOaURi29kLE5xQpo/Tbi71PXS1A12SQtMFu31
+/3rF+v4DbJRZZhf7pz1sGeE8mzqD0Pc1ORlNOf/K8ybruWKaPfJnCpFV3jhv6t6a
+bPq/cX+dQ5K0iI7RG5pS2C+SV0pBUUX6NQIN0rqqShmbcp+1KAfd1mhtO0S3mpnT
+zvctcuZASIr6rApckX2U9d9f5eMRXOesq7+7/j2nV/9F3w55iRMK7sX/67t5Qg1u
+w9t4GGUg3dq4kmwjQeN+RUeL+0Ku3xjLN+27tVpJOnSPy70ph3zdrOm/9Ycq8swa
+VgHT7sRNzd7McsJLyeTx5mUm4X5e36ydjEIXEcLPT8DxdKwUCwk=
+=2Hby
 -----END PGP SIGNATURE-----
 
---32wuacfcnymnc56n--
+--thiqvn36r3wkqzzv--
