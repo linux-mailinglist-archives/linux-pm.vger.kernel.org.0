@@ -2,105 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845F6701E46
-	for <lists+linux-pm@lfdr.de>; Sun, 14 May 2023 18:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12BB701E57
+	for <lists+linux-pm@lfdr.de>; Sun, 14 May 2023 19:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjENQo5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 May 2023 12:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S235618AbjENRAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 May 2023 13:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjENQo4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 May 2023 12:44:56 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B253C1B
-        for <linux-pm@vger.kernel.org>; Sun, 14 May 2023 09:44:54 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so104632331a12.0
-        for <linux-pm@vger.kernel.org>; Sun, 14 May 2023 09:44:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684082693; x=1686674693;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rINqlL2c8jKFx65s1S5lPme8A0ex2087xMbzH+6dEqQ=;
-        b=G0kkmhtRbuMAFyz5REUm85lg8GVuIkgDeDSSH9vb8lQNxaEYtzlJSwVLr4+WXYi976
-         uJLBhOoX/ti6pWc6runOZxS4loOkTJv/vcors1Phcix/U8R1c3xc3Bd5KcL+vRTmIlIU
-         bVoAUrjIg1o+wClpXqlON3C21pkWNq7/Sr4+yi/gQIWtlY0nluhHTYPszQZPSZG/GvDN
-         YCPce5ULfTeDkg1rp1WWnghJe5dBgpvvdozC3ihlLEGpuEtPVuDh+vNQzu0sqwLCS/ln
-         agh4tEw2DxvCi1upnBY2IH43eqt1COezkNJECcVdsoIjsG5rnvh+Zzcq6NOlbN6DR4NC
-         U7LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684082693; x=1686674693;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rINqlL2c8jKFx65s1S5lPme8A0ex2087xMbzH+6dEqQ=;
-        b=UZpSrf9mBiLo8qDwDtHKxBjD45wb2QGG/TJ33SGwh1ysQ8FRbNLlLDpswD6JA35/wg
-         BFaUBDD0Y4/aeEoryWIZfqFqXZvnpNUzHH6MXTnf4cBYWcv4jcyIx9ce7g4o0NuosFdT
-         2581LAjO8tsL+lGUc7e3CPh0O7o1hFSXN3mJgI3LM77mlnzr3icBlu0KYqyTcGVj/kVt
-         oNNr52ieVI3nVLQWAmLhOWQWd2Gi9SrBNzfiESAHJrlMVzKP/KWiHSF2k2OVfPNClRcl
-         DGeQwSFIHYKarEeRF8uAZVKuPgiOG4+X3Xsa4ilOib46bqZcrkedu9QA0VITtlgtH4Rc
-         njhw==
-X-Gm-Message-State: AC+VfDwyB7RLCPEART8gVQswnlLaByTmmA/4cLER4snP4x2CIhcFhoOP
-        jLmYbU7I9t3m/Txb/9JvcW7o3A==
-X-Google-Smtp-Source: ACHHUZ5/WyRf2UuM4SE6FMYjH1YFSP+Bj1lt5YCVb26J/gTV6zGBKP0EE75wnp8npwWVo/oUULu+kQ==
-X-Received: by 2002:a17:907:6da5:b0:94a:6229:8fc1 with SMTP id sb37-20020a1709076da500b0094a62298fc1mr28689766ejc.31.1684082693433;
-        Sun, 14 May 2023 09:44:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a146:6594:d73a:8280? ([2a02:810d:15c0:828:a146:6594:d73a:8280])
-        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b008f89953b761sm8311624ejc.3.2023.05.14.09.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 09:44:52 -0700 (PDT)
-Message-ID: <4d9944f9-b42b-fc66-8fc6-081f4a689ea1@linaro.org>
-Date:   Sun, 14 May 2023 18:44:51 +0200
+        with ESMTP id S230321AbjENRAr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 May 2023 13:00:47 -0400
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCDB3A8F
+        for <linux-pm@vger.kernel.org>; Sun, 14 May 2023 10:00:43 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id yF5Gptvct0mnzyF5HpzTYd; Sun, 14 May 2023 19:00:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1684083642;
+        bh=kwdEt+nhIevT/nV5jYgb0d1y6AicLUM3sr6p4iWxPOk=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=O6uo/asRYQ5IiGiP4W7iA2N11KQ5W1oZbifVuza6uohA3Q7rQl/cT9Oah+i8/wnhf
+         KdJ5U8Qi4S9L/henIwJewMqGAC+drJtKMdqScxyORgm+fQB7O116Yr8d99PePWRVs3
+         TO2lCDlbSPmKLm5v0aRHxO1e++ROOUNoTgNHmmHegYt7VlwEloUF3aNkUASvzNXLs5
+         m5xOc3P5UGDsSWGH/7J/VblU4fFtmBXivuvfCTRncEJ7Alco4VuDwC6dMErR1Zwt4A
+         9DJ6n0rAPzGBIIC7jVnIr/WH+cAYoQKbVTNgCP1NRZ1HjTP44LtweFT5/xcGFTW/Wg
+         MkrgTwqFW9AZQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 14 May 2023 19:00:41 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <9ae3f111-e13b-cdd7-317d-316585390952@wanadoo.fr>
+Date:   Sun, 14 May 2023 19:00:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 10/10] dt-bindings: Add rt5033 mfd, regulator and
- charger
-Content-Language: en-US
-To:     Jakob Hauser <jahau@rocketmail.com>,
-        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230514123130.41172-1-jahau@rocketmail.com>
- <20230514123130.41172-11-jahau@rocketmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230514123130.41172-11-jahau@rocketmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] thermal/drivers/sun8i: Fix some error handling paths in
+ sun8i_ths_probe()
+Content-Language: fr
+To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+References: <26f9e3bb3fcd0c12ea24a44c75b7960da993b68b.1684077651.git.christophe.jaillet@wanadoo.fr>
+ <yd37pz2nbs2i5m4a5avonj4w7ili4kx7d7w7fgbiss7z26jnfy@rwytm26i6v7h>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <yd37pz2nbs2i5m4a5avonj4w7ili4kx7d7w7fgbiss7z26jnfy@rwytm26i6v7h>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/05/2023 14:31, Jakob Hauser wrote:
-> Add device tree binding documentation for rt5033 multifunction device, voltage
-> regulator and battery charger.
+Le 14/05/2023 à 17:35, Ondřej Jirman a écrit :
+> Hello Christophe,
 > 
-> Cc: Beomho Seo <beomho.seo@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+> On Sun, May 14, 2023 at 05:21:35PM +0200, Christophe JAILLET wrote:
+>>
+>> Should an error occur after calling sun8i_ths_resource_init() in the probe
+>> function, some resources need to be released, as already done in the
+>> .remove() function.
+>>
+>> Switch to the devm_clk_get_enabled() helper and add a new devm_action to
+>> turn sun8i_ths_resource_init() into a fully managed function.
+>>
+>> This fixes the issue and removes some LoC at the same time.
+>>
+>> Fixes: dccc5c3b6f30 ("thermal/drivers/sun8i: Add thermal driver for H6/H5/H3/A64/A83T/R40")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> This changes the order of the release functions, but should be fine.
+>> ---
+>>   drivers/thermal/sun8i_thermal.c | 43 +++++++++------------------------
+>>   1 file changed, 12 insertions(+), 31 deletions(-)
+>>
+>> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+>> index 793ddce72132..8f4c29bc85aa 100644
+>> --- a/drivers/thermal/sun8i_thermal.c
+>> +++ b/drivers/thermal/sun8i_thermal.c
+>> @@ -319,6 +319,11 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+>>   	return ret;
+>>   }
+>>   
+>> +static void sun8i_ths_reset_control_assert(void *data)
+>> +{
+>> +	reset_control_assert(data);
+>> +}
+>> +
+>>   static int sun8i_ths_resource_init(struct ths_device *tmdev)
+>>   {
+>>   	struct device *dev = tmdev->dev;
+>> @@ -339,13 +344,13 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+>>   		if (IS_ERR(tmdev->reset))
+>>   			return PTR_ERR(tmdev->reset);
+>>   
+>> -		tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
+>> +		tmdev->bus_clk = devm_clk_get_enabled(&pdev->dev, "bus");
+>>   		if (IS_ERR(tmdev->bus_clk))
+>>   			return PTR_ERR(tmdev->bus_clk);
+>>   	}
+>>   
+>>   	if (tmdev->chip->has_mod_clk) {
+>> -		tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
+>> +		tmdev->mod_clk = devm_clk_get_enabled(&pdev->dev, "mod");
+> 
+> This changes the recommeded order of reset release/clock enable steps, eg. A64
+> manual says:
+> 
+> 	3.3.6.4. Gating and reset
+> 
+> 	Make sure that the reset signal has been released before the release of
+> 	module clock gating;
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ok, so moving reset_control_deassert() (and my proposed 
+devm_add_action_or_reset()) just after devm_reset_control_get() should 
+keep the expected order, right?
 
-Best regards,
-Krzysztof
+CJ
+
+> 
+> kind regards,
+> 	o.
+> 
+>>   		if (IS_ERR(tmdev->mod_clk))
+>>   			return PTR_ERR(tmdev->mod_clk);
+>>   	}
+>> @@ -354,32 +359,20 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	ret = clk_prepare_enable(tmdev->bus_clk);
+>> +	ret = devm_add_action_or_reset(dev, sun8i_ths_reset_control_assert,
+>> +				       tmdev->reset);
+>>   	if (ret)
+>> -		goto assert_reset;
+>> +		return ret;
+>>   
+>>   	ret = clk_set_rate(tmdev->mod_clk, 24000000);
+>>   	if (ret)
+>> -		goto bus_disable;
+>> -
+>> -	ret = clk_prepare_enable(tmdev->mod_clk);
+>> -	if (ret)
+>> -		goto bus_disable;
+>> +		return ret;
+>>   
+>>   	ret = sun8i_ths_calibrate(tmdev);
+>>   	if (ret)
+>> -		goto mod_disable;
+>> +		return ret;
+>>   
+>>   	return 0;
+>> -
+>> -mod_disable:
+>> -	clk_disable_unprepare(tmdev->mod_clk);
+>> -bus_disable:
+>> -	clk_disable_unprepare(tmdev->bus_clk);
+>> -assert_reset:
+>> -	reset_control_assert(tmdev->reset);
+>> -
+>> -	return ret;
+>>   }
+>>   
+>>   static int sun8i_h3_thermal_init(struct ths_device *tmdev)
+>> @@ -530,17 +523,6 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+>>   	return 0;
+>>   }
+>>   
+>> -static int sun8i_ths_remove(struct platform_device *pdev)
+>> -{
+>> -	struct ths_device *tmdev = platform_get_drvdata(pdev);
+>> -
+>> -	clk_disable_unprepare(tmdev->mod_clk);
+>> -	clk_disable_unprepare(tmdev->bus_clk);
+>> -	reset_control_assert(tmdev->reset);
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>   static const struct ths_thermal_chip sun8i_a83t_ths = {
+>>   	.sensor_num = 3,
+>>   	.scale = 705,
+>> @@ -642,7 +624,6 @@ MODULE_DEVICE_TABLE(of, of_ths_match);
+>>   
+>>   static struct platform_driver ths_driver = {
+>>   	.probe = sun8i_ths_probe,
+>> -	.remove = sun8i_ths_remove,
+>>   	.driver = {
+>>   		.name = "sun8i-thermal",
+>>   		.of_match_table = of_ths_match,
+>> -- 
+>> 2.34.1
+>>
+> 
 
