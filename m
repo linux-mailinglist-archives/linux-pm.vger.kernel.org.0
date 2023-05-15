@@ -2,62 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3B2702CDD
-	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 14:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9C77030B6
+	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 16:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241911AbjEOMje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 May 2023 08:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S240326AbjEOO46 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 May 2023 10:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241917AbjEOMhc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 08:37:32 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A471FC1;
-        Mon, 15 May 2023 05:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1684154031; bh=0yXiPXLG1mE9Cp0QFJsDToPAJuYXk6I4juqB/x64HMM=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=NmbH2EXdkDST+t545oWgvXbyEH2Wd6r/DrYWrzyAsN23XGFDWHKA7pxlCAsCS6+IV
-         Zw+JPcfhIAFVp67PipJyizpQpACFp9LNF4bnbYreZrVNqlz02nBiCkBYFv+73twX9R
-         qh9CbPY8WSaaQofjqHpNE6BAzwhfwJoJElQbnlD4=
-Date:   Mon, 15 May 2023 14:33:51 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths
- in sun8i_ths_probe()
-Message-ID: <u7mmywm63bm5q4zlsbnooeplscn4rrd3qnslkfq2xnquxgnkkd@n3tsnrutmfjp>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
-        Maxime Ripard <maxime@cerno.tech>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-        Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, 
-        "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>, 
-        Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-        Philipp Zabel <p.zabel@pengutronix.de>, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-        linux-sunxi@lists.linux.dev
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
- <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
+        with ESMTP id S238322AbjEOO4w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 10:56:52 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80A3100
+        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 07:56:45 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aae5c2423dso124639225ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 07:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684162605; x=1686754605;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kO9IRLef8pduSwic3Eq6AcLIlXzvh3sjqODzruAMNZA=;
+        b=wHpu0GZ+Gj/OVOb5dqPcZZGhp74fvxIWb8vGhmrXByPqHgyox88/BgNFX6a1BmK1RG
+         m/GC3VjptfSadOMyEhMKEDrHbG8XA/95FewnzDjpknYY97ref49HBb8YntbHMDo6dVz6
+         9Fw7h+C6/NSM0HaSIAljDZTLCa28Qleasw7scpFwn6/yK3jBThjur6QGp64nhs1mASIR
+         Y0olBVd/OajHAIfuzbAvJ7JZHa/LjhkBrZudPcC7P5ZUFw2ZEHSt3ZaJMRwLP3ES+9wN
+         kKxAOfqQAMr7dlpO7gftgMC4ydqJmtKu8CUkzbpOfc/NdloIgMoObkdeKdz3PSPlEOL1
+         DWDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684162605; x=1686754605;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kO9IRLef8pduSwic3Eq6AcLIlXzvh3sjqODzruAMNZA=;
+        b=NNl5l4dEL8XlE9myf101qPi69Cx2HPyCu0KnjywtfVDTfD/5cW2WhKHkKf1bkyhVpl
+         DPF3bxT306IyXYcXHzL5auJMD4Cjhx/kJi2yHWwWVto1dh/6jArRJGMySqHvK/NR5KmG
+         2ve6jU7+GboG0MHS+PA77ItNa0u4b+g5atD2ZeJP8mOO8B2cwYt/N+fkgCM3829YT+dm
+         HpcykcTl/MfEV6SkFpUMy+oULsswH1p4kfYcI+vMupPrUJ0KLwSw9cEaBkwOUM95jeSR
+         n89QZmCRLwaGQsu8U8lvnZ3Zhjza6iwqq8cLJV8OmhxwtdSa62k/S71D/hH+DPrevS2/
+         R0sg==
+X-Gm-Message-State: AC+VfDzM/04xoNfjB8dC+3jiDXWcO+FZ/zALU74aVbqe0cBSQBiH/Xm8
+        vf55qntMRoRhhRQjluzi4ULoRlxC1ZlPhRCHgchnmQ==
+X-Google-Smtp-Source: ACHHUZ5yP2M51JsClNwXNqtYuwMSztVgoR6JH/AhkpYOaKVwWXJ5q3YAsMej87F1YWgBM/mtGdWFUg==
+X-Received: by 2002:a17:902:ee8a:b0:1ac:6c26:c32f with SMTP id a10-20020a170902ee8a00b001ac6c26c32fmr29557406pld.46.1684162605113;
+        Mon, 15 May 2023 07:56:45 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id ix10-20020a170902f80a00b001a6d4ea7301sm13604013plb.251.2023.05.15.07.56.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 07:56:44 -0700 (PDT)
+Message-ID: <6462482c.170a0220.d5ea.a3c8@mx.google.com>
+Date:   Mon, 15 May 2023 07:56:44 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.4-rc2
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed, 7 warnings (v6.4-rc2)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,42 +70,114 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Maxime,
+pm/testing build: 8 builds: 0 failed, 8 passed, 7 warnings (v6.4-rc2)
 
-On Mon, May 15, 2023 at 01:54:41PM +0200, Maxime Ripard wrote:
-> Hi,
-> 
-> On Sun, May 14, 2023 at 08:46:05PM +0200, Christophe JAILLET wrote:
-> > Should an error occur after calling sun8i_ths_resource_init() in the probe
-> > function, some resources need to be released, as already done in the
-> > .remove() function.
-> > 
-> > Switch to the devm_clk_get_enabled() helper and add a new devm_action to
-> > turn sun8i_ths_resource_init() into a fully managed function.
-> > 
-> > Move the place where reset_control_deassert() is called so that the
-> > recommended order of reset release/clock enable steps is kept.
-> > A64 manual states that:
-> > 
-> > 	3.3.6.4. Gating and reset
-> > 
-> > 	Make sure that the reset signal has been released before the release of
-> > 	module clock gating;
-> > 
-> > This fixes the issue and removes some LoC at the same time.
-> 
-> It should really be three different patches:
->  - One to fix the resource release, that can be backported to stable
->    releases
->  - One to switch to devm_clk_get_enabled
->  - and one to change the order of clock enable vs reset deassertion
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+4-rc2/
 
-The order was correct before this patch. I don't think an incorrect order
-should be intorduced, even if temporarily between two patches.
+Tree: pm
+Branch: testing
+Git Describe: v6.4-rc2
+Git Commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-regards,
-	o.
+Warnings Detected:
 
-> Maxime
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+    x86_64_defconfig (gcc-10): 3 warnings
 
 
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redunda=
+nt UACCESS disable
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>
