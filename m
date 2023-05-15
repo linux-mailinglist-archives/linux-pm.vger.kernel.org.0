@@ -2,55 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0844A704110
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 00:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A64170411A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 00:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343534AbjEOWlw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 May 2023 18:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S245368AbjEOWtm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 May 2023 18:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343528AbjEOWlv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 18:41:51 -0400
+        with ESMTP id S229846AbjEOWtl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 18:49:41 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B9DD052;
-        Mon, 15 May 2023 15:41:49 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73FD2EB;
+        Mon, 15 May 2023 15:49:40 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F5EA66031CE;
-        Mon, 15 May 2023 23:41:48 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B75E66031CE;
+        Mon, 15 May 2023 23:49:39 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684190508;
-        bh=d4WOHz/itIcllAhUmjL5igj6NblYjaugfAkGrHLzvoU=;
+        s=mail; t=1684190979;
+        bh=cUOBGtMqBnVICL8/rpjyNFDo++WGvSZAvBD6cIIiFlo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EZCijq/Hg/aDRMsWxd5pPeUO1hSaUKXSVgLZFch4NrpZlq2KgAWlzx89iK11n++yp
-         sNfQ7AkrvVPVwDKtRsfWA7YwWoFKbpuCWa+9guYNZi/avzrirrwDjkO0m2lLrAbAes
-         iuUpYnZoBgohF+pbF3uUKh8+AGQb/FH9UChCeR+Kn2Ia4XJhln6MZ2KSoa/OqA46Fa
-         gz376SCpbEuxlkejCMR/eos2otMLIPPGRyopPivjMjkPdzq/PaNBRy/8FFYC4I88Ib
-         cxnOXVe/kEtwt7A0lQoplwh28zd11/n2lBvQw7gYO997pZaYN8IH/UnRO3Qw8kiOrF
-         3fmkfCY+P6cXw==
+        b=RjiCURQP1mfWIQDOB/fRLYu4w7+Ua4kBADtbxrD8tIByakm+d+7t+2s6DKZwtgt6z
+         tVUlIK63NOU0iBt7hidcy91ZlbotjS4zw/DouMOlX9fvH0/ZTpnSE4H4hF3hYFKln/
+         iyrvNJSol6ZogyZwG7tFQZVfpIfyJ23fawEuj9djT+Bh91/sf0XivBXGL5eNeEVzfl
+         InEjaNSkZkT1L5zJjiDRXlZN1Dr5igPvNdipiLnQwAaOq8x81iSaGoigZyUGkCbU8Z
+         zQU1q2f4VlNwzDabf5njUPDGtDcDOIXqfS+zYDyGwOSFCWdam5d+vVU4hhca/aJooU
+         UZJUqQbP/dltg==
 Received: by mercury (Postfix, from userid 1000)
-        id A1E2E1060F7F; Tue, 16 May 2023 00:41:45 +0200 (CEST)
-Date:   Tue, 16 May 2023 00:41:45 +0200
+        id A09FF1060F7F; Tue, 16 May 2023 00:49:36 +0200 (CEST)
+Date:   Tue, 16 May 2023 00:49:36 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Iskren Chernev <me@iskren.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/4] power: max17040: add passing props from supplier
-Message-ID: <20230515224145.u2fos4ln3n6hb567@mercury.elektranox.org>
-References: <20230308084419.11934-1-clamor95@gmail.com>
- <20230308084419.11934-4-clamor95@gmail.com>
+To:     void0red <void0red@gmail.com>
+Cc:     angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] power: supply: mt6360: add a check of
+ devm_work_autocancel in mt6360_charger_probe
+Message-ID: <20230515224936.kbb275kre6ulasmm@mercury.elektranox.org>
+References: <20230227031410.893593-1-void0red@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wzu5mul2aofxx4qc"
+        protocol="application/pgp-signature"; boundary="e5qewv2dhagmv6xn"
 Content-Disposition: inline
-In-Reply-To: <20230308084419.11934-4-clamor95@gmail.com>
+In-Reply-To: <20230227031410.893593-1-void0red@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,92 +59,69 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---wzu5mul2aofxx4qc
+--e5qewv2dhagmv6xn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Mar 08, 2023 at 10:44:18AM +0200, Svyatoslav Ryhel wrote:
-> Optionally pass status and health from supplier if
-> it supports those props. If cell is online assume it
-> is present as well.
+On Mon, Feb 27, 2023 at 11:14:10AM +0800, void0red wrote:
+> From: Kang Chen <void0red@gmail.com>
 >=20
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> devm_work_autocancel may fails, add a check and return early.
+>=20
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+> ---
 
-Charger health might be different from battery health, so it's not
-safe to inherit. Otherwise LGTM.
+Thanks, queued to my fixes branch with Fixes tag added.
 
 -- Sebastian
 
-> ---
->  drivers/power/supply/max17040_battery.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/power/supply/mt6360_charger.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supp=
-ly/max17040_battery.c
-> index 2778ed5b5c14..6dfce7b1309e 100644
-> --- a/drivers/power/supply/max17040_battery.c
-> +++ b/drivers/power/supply/max17040_battery.c
-> @@ -390,6 +390,7 @@ static int max17040_get_property(struct power_supply =
-*psy,
+> diff --git a/drivers/power/supply/mt6360_charger.c b/drivers/power/supply=
+/mt6360_charger.c
+> index 92e48e3a4..1305cba61 100644
+> --- a/drivers/power/supply/mt6360_charger.c
+> +++ b/drivers/power/supply/mt6360_charger.c
+> @@ -796,7 +796,9 @@ static int mt6360_charger_probe(struct platform_devic=
+e *pdev)
+>  	mci->vinovp =3D 6500000;
+>  	mutex_init(&mci->chgdet_lock);
+>  	platform_set_drvdata(pdev, mci);
+> -	devm_work_autocancel(&pdev->dev, &mci->chrdet_work, mt6360_chrdet_work);
+> +	ret =3D devm_work_autocancel(&pdev->dev, &mci->chrdet_work, mt6360_chrd=
+et_work);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to set delayed work\n");
 > =20
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_ONLINE:
-> +	case POWER_SUPPLY_PROP_PRESENT:
->  		val->intval =3D max17040_get_online(chip);
->  		break;
->  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> @@ -402,6 +403,10 @@ static int max17040_get_property(struct power_supply=
- *psy,
->  		val->intval =3D chip->low_soc_alert;
->  		break;
-> =20
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +	case POWER_SUPPLY_PROP_HEALTH:
-> +		power_supply_get_property_from_supplier(psy, psp, val);
-> +		break;
->  	case POWER_SUPPLY_PROP_TECHNOLOGY:
->  		val->intval =3D chip->batt_info->technology;
->  		break;
-> @@ -438,10 +443,13 @@ static const struct regmap_config max17040_regmap =
-=3D {
-> =20
->  static enum power_supply_property max17040_battery_props[] =3D {
->  	POWER_SUPPLY_PROP_ONLINE,
-> +	POWER_SUPPLY_PROP_PRESENT,
->  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
->  	POWER_SUPPLY_PROP_CAPACITY,
->  	POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN,
->  	POWER_SUPPLY_PROP_TECHNOLOGY,
-> +	POWER_SUPPLY_PROP_STATUS,
-> +	POWER_SUPPLY_PROP_HEALTH,
->  	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_TEMP_MIN,
+>  	ret =3D device_property_read_u32(&pdev->dev, "richtek,vinovp-microvolt"=
+, &mci->vinovp);
+>  	if (ret)
 > --=20
-> 2.37.2
+> 2.34.1
 >=20
 
---wzu5mul2aofxx4qc
+--e5qewv2dhagmv6xn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRitSkACgkQ2O7X88g7
-+pq/0A/+I4vXvShMtC+fNF3QMIgpJd9z/K/fBKnBmZUVEp5QaMFjf5tDQNtu5aAi
-Fif/vSRflgryt2E7/W0ijnepA+N+nuRS20M6XT6+UtEW9L93Tby74YA/C8qjJFSz
-ZAKdJnh0rI00yQohehXZLMCQYhJKSiv9LkbDyAihiF/DlKRbj4we1lMdcyNF2pO6
-bizrcDuFBB1uJ87kVJESuOn/Td4ToXECNHXNDjYjM3VSSMAY4JYtL6wDIfwTBX9I
-R9u8f2H2UZXNulwHvpcAt7u7VyATDg2xkXDoTtb9HTOOKaTdhauKLNHyvOK8Yz1G
-r3EJzuHVf2XGivD2YvVqEKD0CHuS0uAfQCkv9TND0GA1tuqonFtdUGs8Xvx0CM5q
-MQT4MLeco6qQkIBa7NyZO8GvKaGOak/Ci50JCjuXaDmehZmieY0mYFbJxkq6GO9E
-EsgoRVXNkMmXaofLIuuaHZJ3PBbRfmatGQNJaq8iWxixxeV4koGcshI2CbF86PEp
-n0CTKzzt1WCLf8xqYnWjssnrWACyycdls+hVI7W+xR5AlyKTYl5vqh5+qxyeDu5D
-WSi9vhMgxMe2P7Ol4FyZdAkKsU9xWw7M3qLBFxAKYdOGuztbcPESWB3TTf/vTrZI
-5DW6jsdKqxptcK2m3kVTdDlbukjVa971k4yXkLfbQ98L52Gxw3A=
-=OzHL
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRitwAACgkQ2O7X88g7
++pr/GQ//R5PP1j4DGfjnPOhBcBq5rCmy5rRw4mYwN8f7ldkAFNm327FtA1IBvGQk
+q4doC1b1DPb2INU0HfNmd2f5bw69hJQBLdYaZLnALELcvKhg1Rx+R/s+9Vx/wDP1
++8I5EO61l9kzzw5CR8iPo3pIYC8VS5qoW8O8D2KF75L5pKYYgsvtAL1EbrpARR7X
+xS2BATKDf8o+cnyX6+/uNyhm7Kwv2HJfmVH1/SqOxMxcW/VQPkf8dcJDwSCfodga
+CQgS9Ex4Mnj5Tf0STRYBseHgH/bxdzueS3G0zlXsuBPo02ADfi/5b2WnNmzNgke3
+Q5eRnCFIwaKTjI8x7TBYD1jcNc1x799/c26fUSb8qS1vQpDvw+g3P26yf+JjR5+R
+GMwrp7pTsWjeoq8B2T0vnp9HEmk7q1Axwn2fZYQg+CCROnn692JiUGvTjgSWZPay
+euw+yZXVje5JdCtOBQABHYb53xCUwMudzHyO4GbT3B5Iy0bkhJNhHAMp2mkozXFi
+vMRwwAbTplG9mRYT7GLXQxrhxMN6yjWTfQq1sBQ19SqDowA6tShuTd8/kwP54xG1
+DIC7bafpGgxU7acFPftdnZb8ifVIm6opZHdEXecqK9FQH49k/XDmc6LTOPaKhoDU
+vLLCTvT3o55DDxYzL8t0psZxZR0psAtMQXyIMoMpcs0zDMbTLj8=
+=uuij
 -----END PGP SIGNATURE-----
 
---wzu5mul2aofxx4qc--
+--e5qewv2dhagmv6xn--
