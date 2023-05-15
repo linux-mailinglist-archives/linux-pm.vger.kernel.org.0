@@ -2,124 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A806270209C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 00:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D6070225A
+	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 05:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjENWzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 May 2023 18:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S239252AbjEODbR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 May 2023 23:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbjENWzE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 May 2023 18:55:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608B51BB;
-        Sun, 14 May 2023 15:55:02 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S238790AbjEODaq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 May 2023 23:30:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE12C2D71;
+        Sun, 14 May 2023 20:29:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 21233660574D;
-        Sun, 14 May 2023 23:55:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684104901;
-        bh=DU/1Wu1hqUE0C6lLNhKSAzwm16Syk8IrmHigAsAJxMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KSvlecfGk+9pSL4CPRCynPATN4gIX2BW5Cgx0XnjeoirIqrINuDPIq0OYxmCtV1Ub
-         +V62BbePkhFwoARybkfAiSZqPXv08gJWEXKRPs70EzeVVe+FL3L2QnTXyfI+kncCqV
-         /zCmabP7PlNDkjC/MUNbMYvlEe195cKmPmC/vPJzxmnNcSUiTFc9nYrNjvHNIDq0eQ
-         s3xyf3xL06UBSNig95vMGCwKTTQsxVIOg3ZZEtb41YV8LhnvSvJg1e2KW261KbyBc3
-         qBwhTuu1TfU2zT/bu94fbsPFQNFscD1Zb7GQsQyzUqYu9t3jvFqAE0JsWHVyk7Cpkp
-         uXfcMNhCk17Jg==
-Received: by mercury (Postfix, from userid 1000)
-        id 646BD1061381; Mon, 15 May 2023 00:54:58 +0200 (CEST)
-Date:   Mon, 15 May 2023 00:54:58 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>
-Cc:     dan.carpenter@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterwu.pub@gmail.com,
-        cy_huang@richtek.com
-Subject: Re: [PATCH] power: supply: rt9467: Fix passing zero to
- 'dev_err_probe'
-Message-ID: <20230514225458.nngl45joh4crunal@mercury.elektranox.org>
-References: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E85B461E24;
+        Mon, 15 May 2023 03:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C28C4339C;
+        Mon, 15 May 2023 03:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684121361;
+        bh=4tkjjLigultxX06hgQhfDnpBDgfjBXuWZiQgBzAfQsk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qX/+RDFEikaqSjNDGyYOZiK/zPfebMUeOKrWlmWUlhNU1H5G+1S2ZbIMaaNkpizlJ
+         vxzcOR7uRCGJE1VZICFR39iiivLdmsN/7u/wtD7IR5FjUmfbFHyAk1/cxoDqqXeQcc
+         X84US/5NZgy+P77gnYMVniLdZh07ScJ+bAIdhwRzno+Ys3uCURk0tVKLBwfIzVVU6C
+         arfrY1qlPIQS+Yp3aui3VeCxt5jHePZOK3rnZhfTzlHy4iHApcvLIPblJxPGV8n1SH
+         mhjdJ7woI4OF/Q0RTbUDBY5TW/OSLHacpFuUJ7JLJMoh3lNcaGq0eg7UD2DvTC6VY0
+         DszqVEf8BN3Tg==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Will Deacon <will@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/3] arm64: qcom: fix the reboot reason handling on sa8775p
+Date:   Sun, 14 May 2023 20:33:00 -0700
+Message-Id: <168412158455.1260758.14595564908295968594.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230417145536.414490-1-brgl@bgdev.pl>
+References: <20230417145536.414490-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="thiqvn36r3wkqzzv"
-Content-Disposition: inline
-In-Reply-To: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 17 Apr 2023 16:55:33 +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> SA8775P uses nvmem to pass the reboot reason magic value to the bootloader.
+> Remove the reboot modes from the PON node and introduce an SDAM node passed
+> to the nvmem-reboot-mode driver. While at it: convert the bindings for
+> nvmem-reboot-mode to YAML and enable it for arm64 in defconfig.
+> 
+> [...]
 
---thiqvn36r3wkqzzv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-Hi,
+[1/3] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
+      commit: 40d5835998705c28b985b1325114114c6007546e
+[3/3] arm64: dts: qcom: sa8775p: pmic: add the sdam_0 node
+      commit: 6c92689a0a57b40c758a12c1ca668d6a36a805a6
 
-On Fri, May 12, 2023 at 01:44:23PM +0800, ChiaEn Wu wrote:
-> Fix passing zero to 'dev_err_probe()' in 'rt9467_request_interrupt()'
->=20
-> Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger d=
-river")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/r/202305111228.bHLWU6bq-lkp@intel.com/
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
-
-Thanks, queued to my fixes branch.
-
--- Sebastian
-
->  drivers/power/supply/rt9467-charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply=
-/rt9467-charger.c
-> index 73f744a..ea33693 100644
-> --- a/drivers/power/supply/rt9467-charger.c
-> +++ b/drivers/power/supply/rt9467-charger.c
-> @@ -1023,7 +1023,7 @@ static int rt9467_request_interrupt(struct rt9467_c=
-hg_data *data)
->  	for (i =3D 0; i < num_chg_irqs; i++) {
->  		virq =3D regmap_irq_get_virq(data->irq_chip_data, chg_irqs[i].hwirq);
->  		if (virq <=3D 0)
-> -			return dev_err_probe(dev, virq, "Failed to get (%s) irq\n",
-> +			return dev_err_probe(dev, -EINVAL, "Failed to get (%s) irq\n",
->  					     chg_irqs[i].name);
-> =20
->  		ret =3D devm_request_threaded_irq(dev, virq, NULL, chg_irqs[i].handler,
-> --=20
-> 2.7.4
->=20
-
---thiqvn36r3wkqzzv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZsIACgkQ2O7X88g7
-+poYAQ/+MFGVHXC+3x6i2hhmnmJI7GuTUczxKXd2FeERNJ2Key71XmCOFt9UgxD0
-sq+BhfHzV29tnF/NDVBPdmM8pBfmdphtx7UxTu11aqsc1KaiYP6A1wP0hLHeB++V
-4GP0gyipzK89IqYo06qpTpMaKzf1uM1t6wSIqVy7V+Ojx9EIQjN7bVGgMGaZW0w0
-2ZnI7LG38mSbujxurQWj4aYMyOoibgfCoTNu4+rVbH+y/9aR0PT2Q/iMuYSN9Dnr
-XgfSUzo72KYIEEwTSjThI+dLQ/4Azlec6XXtZSnjF6T+bLQN4yx52nbsS7+z6rlK
-ul+4Vu7/OpbMvyCYeLKERbUV3NCKOaURi29kLE5xQpo/Tbi71PXS1A12SQtMFu31
-/3rF+v4DbJRZZhf7pz1sGeE8mzqD0Pc1ORlNOf/K8ybruWKaPfJnCpFV3jhv6t6a
-bPq/cX+dQ5K0iI7RG5pS2C+SV0pBUUX6NQIN0rqqShmbcp+1KAfd1mhtO0S3mpnT
-zvctcuZASIr6rApckX2U9d9f5eMRXOesq7+7/j2nV/9F3w55iRMK7sX/67t5Qg1u
-w9t4GGUg3dq4kmwjQeN+RUeL+0Ku3xjLN+27tVpJOnSPy70ph3zdrOm/9Ycq8swa
-VgHT7sRNzd7McsJLyeTx5mUm4X5e36ydjEIXEcLPT8DxdKwUCwk=
-=2Hby
------END PGP SIGNATURE-----
-
---thiqvn36r3wkqzzv--
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
