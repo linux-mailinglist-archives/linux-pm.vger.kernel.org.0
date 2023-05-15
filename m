@@ -2,194 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19F2702BA4
-	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 13:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D99702C16
+	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 13:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240509AbjEOLjm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 May 2023 07:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S241389AbjEOL5v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 May 2023 07:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241380AbjEOLhl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 07:37:41 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2060.outbound.protection.outlook.com [40.107.95.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AEE1FC6;
-        Mon, 15 May 2023 04:35:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TT1agKCUUN0zIA7srugBfsYAP722x+2XD53CBBU6MFwbrb5pV25fcEgXIuqpvvengYZ7OTUzr54bOVIXNDg09X4Jf/SbhrEKOuOYNy3iJfTLUiwSUBLxTlUNZL+jB50vY6dCx6ShiE2nfDifMs/JVq0z0S+MLuVz8TNPmK0a34TOj3Len2vsqvcRepUmlwypt1eGj6JY7euWcN4QlqFRsKnKE3R0ZB7HLHqOzdAuAUPAOjqZTg4+P0hAXh4B7g499NeQ7vHhzJY5i+Rt+y2tPM1smlaQA5UfdYjoh8lsku5KDeDPAiOtHnsS3qn4JixipygxKHT6a1areiaBaBh6/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jRXhIKRZ/2FXxPqmOfRoyv9iskERzUU5hGr9oe2SNqQ=;
- b=Y39yXPOTu6V3tf9gaIIEwhKQXZRI9+CX7Bu3KMXuNpCPcLmTkjwXYt9VIjUvb9MxY6BiHqpg3Qih8PIm58/bxs9v2gr3ie1PXlbG3frPbsK7/HFq0uW1breKtrEklesIPVpF97wwqq+j+JHrMcBBE5slz3U2luQQQU7uCVjMd+XjA7+8BsRXs7tn8EvnpkWqbzrjHz45jA/ycBCletQYxpEbs87U3JiS1XauxSn3utIwPzbTjTCCMi+vlk7TbYzTDeODfhfTer9+6X3Kn4Ttfc1OawWN0eIaIS4mrHGy9LX5SEhEL6fL5sUUQWKREkHFTx8yX3g3v/95IKK+7oT5VQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jRXhIKRZ/2FXxPqmOfRoyv9iskERzUU5hGr9oe2SNqQ=;
- b=YWKanpUEyXoJhr+eLcEuDzbYru4thswFUDXA4ieE1c+OdBGIRro1VYWjk6olNawFP357wHj5m9gFwylD0w0jlIf9cfIYN70bV03mray3l0kHfd/przu1mNdV3c0yhcrrSzP08XX/bMOGN6mP+oa/p3GgTw2g6aBpnISrxF5p1S0=
-Received: from DM6PR02CA0133.namprd02.prod.outlook.com (2603:10b6:5:1b4::35)
- by SN7PR12MB6909.namprd12.prod.outlook.com (2603:10b6:806:263::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Mon, 15 May
- 2023 11:35:57 +0000
-Received: from DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b4:cafe::2b) by DM6PR02CA0133.outlook.office365.com
- (2603:10b6:5:1b4::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30 via Frontend
- Transport; Mon, 15 May 2023 11:35:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT027.mail.protection.outlook.com (10.13.172.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Mon, 15 May 2023 11:35:57 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 15 May
- 2023 06:35:54 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gautham.shenoy@amd.com>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH v3 2/2] cpufreq: Warn if fast_switch is not set
-Date:   Mon, 15 May 2023 11:34:04 +0000
-Message-ID: <20230515113404.4259-3-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230515113404.4259-1-wyes.karny@amd.com>
-References: <20230515113404.4259-1-wyes.karny@amd.com>
+        with ESMTP id S238242AbjEOL53 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 07:57:29 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762B526B6;
+        Mon, 15 May 2023 04:54:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D091B5C010F;
+        Mon, 15 May 2023 07:54:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 May 2023 07:54:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684151683; x=1684238083; bh=YN
+        2hehfhebmIswf1/JIgo//Dtk1KbSx4NssivhFQ048=; b=dkUb9tOVLQsK1ucevf
+        PxqBQ9/HL1CaFY8DERKLlLvBKWesFX3to23gFbHHn/PU2hCbKbUsGWGnovWK+sdO
+        mZTMnndEiGxt+KDOqwPtF4gu51pGo8iFmjsHragoMjW9Sw52DKTj6yXPVeR+uQY6
+        BuXIFC777I/xSBANw72S9AUmatINBBrPtw4BPhsksGBnezW7BDkxUuQ3iJzZuMs1
+        ew/ltpk44IYQDTEQxuAQppC1K+ejD+PfaPsWAswv49cx0mLvST7LeDyMc/lGSJKL
+        oi5j/NYbZgX2/4tWeEQtdVEkIhaanQIZkmRJFIbyRAUA34HZWhH0+2anhZfEvVRT
+        nPZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684151683; x=1684238083; bh=YN2hehfhebmIs
+        wf1/JIgo//Dtk1KbSx4NssivhFQ048=; b=DTiL8tEDchy/0FstCPucVIhziirSW
+        yO+pzo+dbqz7u35lHvfvktCJDhPnKbn/YOgJ5/tG+zHUye7C3t3Pt2TxcpQpn+VL
+        HNo+mcpzemSMyVU6f8bf6Iyq3JrVirlKDnlHDtilOoaIIAci3GZS4D2VhEgl94eX
+        Htn4XjGmXRa9sUxPS3r5Gzg/XH83AV9/BHI/SYkV6T0KxAmHuGWjOl/RC4ljEEGK
+        V8fXpxAH0rxHl69b99hly5vW1qjH/VpHqMdYZ3jSF7AfJCPDI9YnTcDpQDMjPIrg
+        Y0I9Wc8WdeFo+9ALMuxMlrzC+6hhHOGNtkGNOqe/7HfAAEIaspoGZdRtQ==
+X-ME-Sender: <xms:gx1iZF9En5sG5LkrrOiCKPNbCB9Hz7bpGredNE7j3ZP5y8vQdP0drA>
+    <xme:gx1iZJuSxwvB1bqp0yi3dsxfPvigvS4VJsahzndOe5W6qEj65kteXw2wcKfU5pyDo
+    fu3bJbGnZgfXn7cr1s>
+X-ME-Received: <xmr:gx1iZDAG9dkMp2Sl2_qOD6x-OG_XDWwdwD76nwYNeGquJs8jvxuj23SIDwEGslxctBead6w0m696ZVKyQR-Z6g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:gx1iZJcuBoqTUTRg551tq_CoQwBJNHWl99GKruhtBlLuB4seTxaO8g>
+    <xmx:gx1iZKNE9XMXZTU1acdRHkBpH2HnRBQy94WfighePUtG77Wvav3KCw>
+    <xmx:gx1iZLlHQ9wB4S6h4qZhBskAiJt5F6zZLc-wAglyBVYcl1x3smwM3g>
+    <xmx:gx1iZHsBDIWUXjk5uflsw_7BiqdU9XlqMy7dUXeqYejdcb-1yPZGKg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 May 2023 07:54:42 -0400 (EDT)
+Date:   Mon, 15 May 2023 13:54:41 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ondrej Jirman <megous@megous.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths
+ in sun8i_ths_probe()
+Message-ID: <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
+References: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT027:EE_|SN7PR12MB6909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 11278f8e-7ab8-4b47-fa31-08db55388cfe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hj8TMh6p7SkNGR+PDlFBS/ILqreUlau0lcZhtgaW4TSg3UK4IWNxl0lNaJacBbtE7W6GMBv7N003gYsW8YhUV9Yv3gyrqMVczq91ra+BoBjAj+xn84eUz/qdfFXpx07Vl5oLjHRYIfv7Q1W7lmV/8KBoCQUvBTF7m88qig6kjNF7pQJlK3S5RJ2Yu82XfVUoqnHE2NWExiTHR8EI9eOYfpc9ORHF5mzSYdA6OCZYf17WLSIPF3YYCAgE9bdpBVUDW47KK/YxkoptWijshGdLx3Kw3077F2X8GSRNAIyhfCfQTFZ8spvG/AQWGYc9E76XBCMDFHPBu4S7H8eYRtueWdRDp3lzAr53oobJ9udZn6Thu0VJ13WtuTPi/ZI+vd69POylM2I+Q5zzNLHTVa/BidYkY+xR58FUdDnHbCaAzoAEZWEqOMaXnEpCpyFtSYypfrHcHqBT9WLmC167OgT49N17LOcZgt42yPSU7uPkptTuRHOa26zXwk8Q30iQl/Hc5RgRIrXY0KJXaLZfGpBxC5ZPtAZ3bRqCXXvuWrr2MNdAYv4ewKkxS2lFfSXhsswAHLqpZ6rcWO170xM/sdZOGpUco1TAJn4RQPmcSvu38oGI2tVcnCR8Vyl4Drev40R0BgE2MXULua5hKgeF+GcLg+jZ+1fgZ2GHhrqedibdYzGdH9DT06nHnf6Fb/yOD09HZpX3XtIyArHix8X0BepeuDtaMivdw4KcTUiKoIR/N/CS3Czj9qxJVk26ziAwpJ5js+pBePY8ZLHRtpeH5EtstPscIql//hDwDyxmPS8njKFkHTGHAqhoSk7G2hJMuXhN
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199021)(36840700001)(46966006)(40470700004)(70206006)(36860700001)(426003)(4326008)(40460700003)(110136005)(47076005)(336012)(7696005)(2616005)(2906002)(83380400001)(6666004)(70586007)(316002)(478600001)(8676002)(5660300002)(8936002)(186003)(44832011)(16526019)(26005)(41300700001)(1076003)(40480700001)(54906003)(82310400005)(86362001)(82740400003)(356005)(36756003)(81166007)(36900700001)(2101003)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 11:35:57.4325
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11278f8e-7ab8-4b47-fa31-08db55388cfe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6909
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="va3mhj5nkg6jbttn"
+Content-Disposition: inline
+In-Reply-To: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If fast_switch_possible flag is set by the scaling driver, the governor
-is free to select fast_switch function even if adjust_perf is set. When
-the frequency invariance is disabled due to some reason governor
-fallbacks to fast_switch if fast_switch_possible is set. This could
-crash the kernel if the driver didn't set the fast_switch function
-pointer.
 
-This issue becomes apparent when aperf/mperf overflow occurs with
-amd_pstate (passive) + schedutil.  When this happens, kernel disables
-frequency invariance calculation which causes schedutil to fallback to
-sugov_update_single_freq which currently relies on the fast_switch
-callback.
+--va3mhj5nkg6jbttn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Normal flow:
-  sugov_update_single_perf
-    cpufreq_driver_adjust_perf
-      cpufreq_driver->adjust_perf
+Hi,
 
-Error case flow:
-  sugov_update_single_perf
-    sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
-      cpufreq_driver_fast_switch
-         cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+On Sun, May 14, 2023 at 08:46:05PM +0200, Christophe JAILLET wrote:
+> Should an error occur after calling sun8i_ths_resource_init() in the probe
+> function, some resources need to be released, as already done in the
+> .remove() function.
+>=20
+> Switch to the devm_clk_get_enabled() helper and add a new devm_action to
+> turn sun8i_ths_resource_init() into a fully managed function.
+>=20
+> Move the place where reset_control_deassert() is called so that the
+> recommended order of reset release/clock enable steps is kept.
+> A64 manual states that:
+>=20
+> 	3.3.6.4. Gating and reset
+>=20
+> 	Make sure that the reset signal has been released before the release of
+> 	module clock gating;
+>=20
+> This fixes the issue and removes some LoC at the same time.
 
-Put up a warning message if the driver sets fast_switch_possible flag
-but not fast_switch.
+It should really be three different patches:
+ - One to fix the resource release, that can be backported to stable
+   releases
+ - One to switch to devm_clk_get_enabled
+ - and one to change the order of clock enable vs reset deassertion
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- drivers/cpufreq/cpufreq.c | 18 ++++++++++++++++++
- include/linux/cpufreq.h   |  5 ++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
+Maxime
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 6b52ebe5a890..180be9235b08 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
- 	if (!policy->fast_switch_possible)
- 		return;
- 
-+	/**
-+	 * It's not expected driver's fast_switch callback is not set
-+	 * even fast_switch_possible is true.
-+	 */
-+	if (!cpufreq_driver_has_fast_switch())
-+		pr_alert_once("fast_switch callback is not set\n");
-+
- 	mutex_lock(&cpufreq_fast_switch_lock);
- 	if (cpufreq_fast_switch_count >= 0) {
- 		cpufreq_fast_switch_count++;
-@@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- }
- EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
- 
-+/**
-+ * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
-+ *
-+ * Return 'true' if the ->fast_switch callback is present for the
-+ * current driver or 'false' otherwise.
-+ */
-+bool cpufreq_driver_has_fast_switch(void)
-+{
-+	return !!cpufreq_driver->fast_switch;
-+}
-+
- /**
-  * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-  * @cpu: Target CPU.
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 26e2eb399484..4277d6f8e50c 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -340,7 +340,9 @@ struct cpufreq_driver {
- 	/*
- 	 * ->fast_switch() replacement for drivers that use an internal
- 	 * representation of performance levels and can pass hints other than
--	 * the target performance level to the hardware.
-+	 * the target performance level to the hardware. If driver is setting this,
-+	 * then it needs to set fast_switch also. Because in certain scenario scale
-+	 * invariance could be disabled and governor can switch back to fast_switch.
- 	 */
- 	void		(*adjust_perf)(unsigned int cpu,
- 				       unsigned long min_perf,
-@@ -604,6 +606,7 @@ struct cpufreq_governor {
- /* Pass a target to the cpufreq driver */
- unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq);
-+bool cpufreq_driver_has_fast_switch(void);
- void cpufreq_driver_adjust_perf(unsigned int cpu,
- 				unsigned long min_perf,
- 				unsigned long target_perf,
--- 
-2.34.1
+--va3mhj5nkg6jbttn
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZGIdgQAKCRDj7w1vZxhR
+xdmkAP9r4P7s+lWbUxXVJ+/Zx6Wfdpi7/HSi+H/K9rivRGupwAD/VW72Kfz4XlEp
+oAzjFCvvawU+fc7nkk/gA4tjCfH5MQ0=
+=KQEQ
+-----END PGP SIGNATURE-----
+
+--va3mhj5nkg6jbttn--
