@@ -2,66 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFDF702626
-	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 09:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68609702782
+	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 10:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbjEOHgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 May 2023 03:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S237142AbjEOIry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 May 2023 04:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjEOHge (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 03:36:34 -0400
-Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3167010D0
-        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 00:36:29 -0700 (PDT)
-Received: by mail.mahavavy.com (Postfix, from userid 1002)
-        id DBD6A2202E; Mon, 15 May 2023 07:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
-        t=1684136187; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
-        h=Date:From:To:Subject:From;
-        b=AinbDkl3MSEdVHSyUZfpEEOATsCGKi89ghHSt3nvB4W30Il5Zw7I1dq4wWt9bZGw6
-         Hy5NkamiN+mTI5gaegSNiflJHJCh8comm3r21Ygu3uhjFX8kDiM8fZQfJuDPGiw+k2
-         l7DlMP+CEOgkDydKQcEQC9C9tQ1O5xLxAp9wpOUkl+YHEAnP9+wHqUglm+APcoK8b2
-         r/J/qOFrXyYNcMpTD1UP5xx7LJWvAWmvsujiCo/V25hx9qjepiZzAdvoFaHJv3L/kn
-         oPq8Wt71EYvAp48inT3a/sjfeE+Ic1g7+54v7MW/AcKCHBHl4vGAttIesT37LmviwB
-         XE6GcYoqBY2Mw==
-Received: by mail.mahavavy.com for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 07:36:13 GMT
-Message-ID: <20230515064500-0.1.2i.4hmo.0.a46xpc6mcl@mahavavy.com>
-Date:   Mon, 15 May 2023 07:36:13 GMT
-From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
-        <kristian.pletanek@mahavavy.com>
-To:     <linux-pm@vger.kernel.org>
-Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
-X-Mailer: mail.mahavavy.com
+        with ESMTP id S237581AbjEOIrx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 04:47:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DE8BE49;
+        Mon, 15 May 2023 01:47:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BC402F4;
+        Mon, 15 May 2023 01:48:36 -0700 (PDT)
+Received: from [192.168.1.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89EBE3F67D;
+        Mon, 15 May 2023 01:47:48 -0700 (PDT)
+Message-ID: <9a69f5ae-86a1-5bd4-4564-e257fe64c826@arm.com>
+Date:   Mon, 15 May 2023 10:47:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Pierre Gondois <pierre.gondois@arm.com>
+Subject: Re: [PATCH 02/17] PM: EM: Find first CPU online while updating OPP
+ efficiency
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     dietmar.eggemann@arm.com, rui.zhang@intel.com, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org
+References: <20230314103357.26010-1-lukasz.luba@arm.com>
+ <20230314103357.26010-3-lukasz.luba@arm.com>
+ <c35741e3-f0c9-bec4-7e9a-c96e5949839f@arm.com>
+ <0cda1fc9-2e99-66a2-b833-fe5be676d815@arm.com>
+Content-Language: en-US
+In-Reply-To: <0cda1fc9-2e99-66a2-b833-fe5be676d815@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
+Hi Lukasz,
 
-zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
+On 5/10/23 09:08, Lukasz Luba wrote:
+> 
+> 
+> On 4/11/23 16:40, Pierre Gondois wrote:
+>> Hello Lukasz,
+>>
+>> On 3/14/23 11:33, Lukasz Luba wrote:
+>>> The Energy Model might be updated at runtime and the energy efficiency
+>>> for each OPP may change. Thus, there is a need to update also the
+>>> cpufreq framework and make it aligned to the new values. In order to
+>>> do that, use a first online CPU from the Performance Domain.
+>>>
+>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>> ---
+>>>    kernel/power/energy_model.c | 11 +++++++++--
+>>>    1 file changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+>>> index 265d51a948d4..3d8d1fad00ac 100644
+>>> --- a/kernel/power/energy_model.c
+>>> +++ b/kernel/power/energy_model.c
+>>> @@ -246,12 +246,19 @@ em_cpufreq_update_efficiencies(struct device
+>>> *dev, struct em_perf_state *table)
+>>>        struct em_perf_domain *pd = dev->em_pd;
+>>>        struct cpufreq_policy *policy;
+>>>        int found = 0;
+>>> -    int i;
+>>> +    int i, cpu;
+>>>        if (!_is_cpu_device(dev) || !pd)
+>>>            return;
+>>
+>> Since dev is a CPU, I think it shouldn be possible to get the cpu id via
+>> 'dev->id'.
+>> If so the code below should not be necessary anymore.
+> 
+> When you look at the code it does two things.
+> It tries to get the CPU id - this might be similar to what you
+> have proposed with the 'dev->id' but it's also looking at CPUs
+> which are 'active'. The 'dev' that we have might come from
+> some place, e.g. thermal cooling, which had a first CPU in
+> the domain stored somewhere. That CPU might be sometimes
+> not active, but the rest of the CPUs in the domain might be
+> running. We have to find an active CPU id and then we get the
+> 'policy'.
 
-M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
-=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
-robu mezi lokalitami.
+It seems that all the call chains look like (the first argument is important):
+em_dev_register_perf_domain(get_cpu_device(policy->cpu), ...)
+\-em_cpufreq_update_efficiencies()
 
-Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
-ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
-=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
-=AF.
-=20
-Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
-=C3=ADj=C3=ADme strukturu detailu.
+Whenever a CPU is unplugged in cpufreq, a new CPU is put in charge of
+the policy (cf. __cpufreq_offline(), policy->cpu is updated). So the
+'dev' that em_cpufreq_update_efficiencies() receives should be an active
+device, with no need to check that the device is active.
 
-Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
+This would be just an optimization, the present code seems also valid
+to me.
 
-Pozdravy
-Kristi=C3=A1n Plet=C3=A1nek
+Another NIT, I saw a cpumask_copy() in energy_model.c, but no
+free_cpumask_var(). This could be done separately from this patchset
+(if relevant).
+
+Regards,
+Pierre
+
+
+> 
+>>
+>>> -    policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
+>>> +    /* Try to get a CPU which is online and in this PD */
+>>> +    cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
+>>> +    if (cpu >= nr_cpu_ids) {
+>>> +        dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    policy = cpufreq_cpu_get(cpu);
+>>>        if (!policy) {
+>>>            dev_warn(dev, "EM: Access to CPUFreq policy failed");
+>>>            return;
+>>
+>> Regards,
+>> Pierre
