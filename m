@@ -2,234 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3587031BC
-	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 17:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F302A70325D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 May 2023 18:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239423AbjEOPkg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 May 2023 11:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S242421AbjEOQJ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 May 2023 12:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238157AbjEOPkf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 11:40:35 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1904DF4
-        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 08:40:34 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64ac461af60so4140180b3a.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 08:40:34 -0700 (PDT)
+        with ESMTP id S242624AbjEOQJt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 12:09:49 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2CE44
+        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 09:09:22 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50b8d2eed3dso19629467a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 09:09:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684165233; x=1686757233;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojSFcWQEZ3SlwmOYUC9Nri0vdKl3n6oWZDtr8tKSv0A=;
-        b=uc4IcXg2ImpPy9xWSDS0j+wLezzYafdhL+achv0k+Ts3Zrc2YyhnkVApLTpZDzHJQD
-         oWKZrKoaEnEwnQZW/CqO0VA+Cm4PgSJfZ4kzqIX9e1DFnQHOQT7X4PlUS8Gr2r3xvpId
-         nVh7RhWjkNDV/X/AklgdJe5y5lbeuPxL95wWZ5K7r2LDSvNSN+blR+TiKANLK7h5YC3W
-         e//yt+qrZxKvRBxs7n21+RpU78Ivd6BG8dMh6O55SOWvXVsHsLKbwLOfizKUzFbA2k0U
-         OMY2UFjkV+02zf8/0N4iCwiACu0rKLchDT+RZrCfbbsmtEXVw9Ejj1eTI45LZC/h8zX1
-         i/Bg==
+        d=linaro.org; s=google; t=1684166948; x=1686758948;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=341TNjLWrBgE06nFCXy3o4trQtS4Kz/UyWl3asj+o58=;
+        b=ONmAmt0S8b3OAN/l1TQZYtuIvY0578ZosX/w1FdaADgF8DjUcfRXTTvt6hP0d1v2cc
+         37EtDRvHGmFf4ep9TBiC40u+2tTqMMNYSuoa8B6CLxXznVl7Zj35gzWrnXen5rSXtF0a
+         BocBIDBVOBCCg7EFXXvjjEuecNXt2zn252WGHbfckcca8W/gGY3x/zvcscQtjUHbzkge
+         B2jmXvLUsvMd1doGDaq0ZGSCjWKA0li4kyHZMuAHXOTcDEgPmuv0soWQVLCqx507aqzr
+         b8xiTDG0qL3WGBSSM6vtYcp0LL1c7ZVjP6F6ZwVUa+cgJz/ns5O17zYKDsKb6V0g1t6R
+         4T0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684165233; x=1686757233;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ojSFcWQEZ3SlwmOYUC9Nri0vdKl3n6oWZDtr8tKSv0A=;
-        b=jtuGQsSa5r/b81mmk3TZ8hEB7U1af62cWOvyWkvR1rhylLKVmPJajb5aNUaBsyZ5Lm
-         PsqwNglsher8RwkhNVwI069LzIvBX+28hz4JB1gITqary2N22ceHb3wzIgCGbMvtewza
-         ccvrK6sYUzaZIlHUkXe3F98jRvLF3K3UWA8BEJDootyZw8YGXVjBPmzMUSQVzTrsF3R1
-         qP97paXhwP9u6DGU1qIbUuFLmet+Ti9O+53yKtjiOvZTRVTeKcTs6vIIBpwbsk3Zbcg9
-         TSDFABkNryrPgEmG/5d+U9aIPrpxtfUM5l0vgw7ukAhby+pfwXl4x4gdmPUiydjEH/KA
-         z6VQ==
-X-Gm-Message-State: AC+VfDwR8LAtf+tiAQM8Jr+o1XHLReuFu3dKpQAQJbJv/6HWbEtAotqx
-        vM7bY/NlCccixp9fmRoNgqnA0X/R8aHorToTprULIg==
-X-Google-Smtp-Source: ACHHUZ7xD+OcS6la0lvIIZ3O9C9xnaC4QfqxXAwOGtNMb1edZqXoVIVyRnjvMQFnurzEcyCXxKFLrw==
-X-Received: by 2002:a05:6a00:1882:b0:643:b8c2:b577 with SMTP id x2-20020a056a00188200b00643b8c2b577mr44736201pfh.22.1684165233519;
-        Mon, 15 May 2023 08:40:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 12-20020a63124c000000b00502ecb91940sm11657893pgs.55.2023.05.15.08.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 08:40:32 -0700 (PDT)
-Message-ID: <64625270.630a0220.ac2c8.4656@mx.google.com>
-Date:   Mon, 15 May 2023 08:40:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1684166948; x=1686758948;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=341TNjLWrBgE06nFCXy3o4trQtS4Kz/UyWl3asj+o58=;
+        b=ixLCB/yr1E0xroCdKdhMvCH2egXQbyE1VA+NtYmWFrneuEvgIbYXc2WfTp7LaTfvEL
+         s3pPMLqKsjF2QwD7GV2n5MUd3gHdvhhS9qBTnFt8afSoGHNySNhU0Ljcken+hZpue9Wd
+         BgwjgJw1j4xq9tm1lQX3s7EgvWZ3wsLivSMn/NOKgcVaeks+D9lo3+ecuZWbtLmfl5sc
+         1olnpkMbfV18BgcO9yP6oip50n1yw8pi5NEzONurUvHtcNiuiCG/nj5AxBDhWWy4QgpL
+         qvfiHMhDM5Mx1TD8GS6JdWk03dGtjFL31Yo32SGvU8wNLhJ7v3BcJlOdgcgqOUtxgyWR
+         c8Dg==
+X-Gm-Message-State: AC+VfDwPHoQ1CrQ/XB0KKyXcWM4o2dZbCgNiDN6s0WgRvqek/xlGDcto
+        FfwrjG6PBW/T229GXtn3s5GHEg==
+X-Google-Smtp-Source: ACHHUZ4odzxwMAuZw7Ku9tt9Loesq0gqkp8UBDEeokIAa/0wKQVcMK8RQ1H3FKZsj1eTfL2Hu17Z/w==
+X-Received: by 2002:a17:906:fd83:b0:94a:845c:3529 with SMTP id xa3-20020a170906fd8300b0094a845c3529mr29009595ejb.9.1684166948208;
+        Mon, 15 May 2023 09:09:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id bm11-20020a170906c04b00b00965ec1faf27sm9738207ejb.74.2023.05.15.09.09.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 09:09:07 -0700 (PDT)
+Message-ID: <d6ea080e-f16b-d5e3-d826-3d7d620af820@linaro.org>
+Date:   Mon, 15 May 2023 18:09:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.4-rc2
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 54 runs, 3 regressions (v6.4-rc2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: tsens: Fix "make dtbs_check"
+ error
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <72707b76a717b410b06ed7fcc854314104f5f845.1684140883.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <72707b76a717b410b06ed7fcc854314104f5f845.1684140883.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 54 runs, 3 regressions (v6.4-rc2)
+On 15/05/2023 12:13, Varadarajan Narayanan wrote:
+> While verifying make dtbs_check for ipq9574, qcm2290-tsens and
+> sm6375-tsens threw the following errors.
+> 	['qcom,qcm2290-tsens', 'qcom,tsens-v2'] is too long
+> 	...
+> 	['qcom,sm6375-tsens', 'qcom,tsens-v2'] is too long
 
-Regressions Summary
--------------------
-
-platform          | arch  | lab           | compiler | defconfig | regressi=
-ons
-------------------+-------+---------------+----------+-----------+---------=
----
-fsl-lx2160a-rdb   | arm64 | lab-nxp       | gcc-10   | defconfig | 1       =
-   =
-
-rk3399-rock-pi-4b | arm64 | lab-collabora | gcc-10   | defconfig | 2       =
-   =
+Subject: Fix error can be anything, so this should be specific, e.g.
+Document missing QCM2290
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.4-rc2=
-/plan/baseline/
+https://lore.kernel.org/all/20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org/
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.4-rc2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6 =
+Best regards,
+Krzysztof
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig | regressi=
-ons
-------------------+-------+---------------+----------+-----------+---------=
----
-fsl-lx2160a-rdb   | arm64 | lab-nxp       | gcc-10   | defconfig | 1       =
-   =
-
-
-  Details:     https://kernelci.org/test/plan/id/646249512f3efe8fc52e85f3
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc2/arm64/defc=
-onfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc2/arm64/defc=
-onfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230421.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/646249512f3efe8fc52e85f6
-        failing since 60 days (last pass: v6.1-rc5-55-g60453df62d30, first =
-fail: v6.3-rc2-33-g1240ce78c05e)
-
-    2023-05-15T15:00:40.134111  [   21.528047] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-1221989_1.5.2.4.1>
-    2023-05-15T15:00:40.239835  / # #
-    2023-05-15T15:00:40.341740  export SHELL=3D/bin/sh
-    2023-05-15T15:00:40.342242  #
-    2023-05-15T15:00:40.443664  / # export SHELL=3D/bin/sh. /lava-1221989/e=
-nvironment
-    2023-05-15T15:00:40.444152  =
-
-    2023-05-15T15:00:40.545590  / # . /lava-1221989/environment/lava-122198=
-9/bin/lava-test-runner /lava-1221989/1
-    2023-05-15T15:00:40.546380  =
-
-    2023-05-15T15:00:40.548108  / # /lava-1221989/bin/lava-test-runner /lav=
-a-1221989/1
-    2023-05-15T15:00:40.574966  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig | regressi=
-ons
-------------------+-------+---------------+----------+-----------+---------=
----
-rk3399-rock-pi-4b | arm64 | lab-collabora | gcc-10   | defconfig | 2       =
-   =
-
-
-  Details:     https://kernelci.org/test/plan/id/6462486972f29e6c6f2e8640
-
-  Results:     3 PASS, 3 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc2/arm64/defc=
-onfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc2/arm64/defc=
-onfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230421.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6462486972f29e6=
-c6f2e8647
-        new failure (last pass: v6.3-rc7-189-g704d7a52a540b)
-        2 lines
-
-    2023-05-15T14:57:35.507895  kern  :emerg : Internal error: Oops: 000000=
-0096000006 [#1] PREEMPT SMP
-
-    2023-05-15T14:57:35.508415  kern  :emerg : Code: 97fb1510 f9405680 5286=
-4a61 72a686c1 (b9400800) =
-
-
-    2023-05-15T14:57:35.508751  <8>[   23.025412] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
-
-    2023-05-15T14:57:35.509064  + set +x
-
-    2023-05-15T14:57:35.509389  <8>[   23.027254] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 10326050_1.5.2.4.1>
-   =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6462486972f29e6=
-c6f2e8648
-        new failure (last pass: v6.3-rc7-189-g704d7a52a540b)
-        12 lines
-
-    2023-05-15T14:57:35.459247  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 0000000000000008
-
-    2023-05-15T14:57:35.459763  kern  :alert : Mem abort info:
-
-    2023-05-15T14:57:35.460095  kern  :alert :   ESR =3D 0x0000000096000006
-
-    2023-05-15T14:57:35.460399  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits
-
-    2023-05-15T14:57:35.460694  kern  :alert :   SET =3D 0, FnV =3D 0
-
-    2023-05-15T14:57:35.460983  kern  :alert :   EA =3D 0, S1PTW =3D 0
-
-    2023-05-15T14:57:35.461265  kern  :alert :   FSC =3D 0x06: level 2 tran=
-slation fault
-
-    2023-05-15T14:57:35.461574  kern  :alert : Data abort info:
-
-    2023-05-15T14:57:35.461850  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
-006
-
-    2023-05-15T14:57:35.462126  kern  :alert :   CM =3D 0, WnR =3D 0
- =
-
-    ... (3 line(s) more)  =
-
- =20
