@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350737040DC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 00:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05F670410C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 00:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245754AbjEOWVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 May 2023 18:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S243631AbjEOWjm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 May 2023 18:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245707AbjEOWVR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 18:21:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB73283CF;
-        Mon, 15 May 2023 15:21:12 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
+        with ESMTP id S231416AbjEOWjl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 May 2023 18:39:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95BA5DA;
+        Mon, 15 May 2023 15:39:39 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.28])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E820966031F6;
-        Mon, 15 May 2023 23:21:10 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 573D366031CE;
+        Mon, 15 May 2023 23:39:38 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684189271;
-        bh=TljpJuryyNUQm+r5oLFgy7IGcSJ+Q9wT05wsiU65Aw8=;
+        s=mail; t=1684190378;
+        bh=6vM/tOGnmSln8Pv6kLk4Nazaz+fmc1Ds2gNBAqt+6QY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l5tcLAf4N5zEwsMORMvOFHVHWsYTdiFzxns8WMwhHXsOpqVOdtccj7HZ3QsOe9eWX
-         bDAck7J6tjdNMksodrmGOIMC9mgFAbizNjjPwwLwISSwB+w5Egbt4TXvgSd9gsOYGY
-         0bjD569lCcaUYtaPoy6ToJ/CssJxY5l+F61JkBNqxTcQ2Gjdzvduw2oDgjon1WvirK
-         SxlgvN1NTEAYwYdN12mbxVszflgXfs5iKz6jUlofh3/hMeMN1upA+lBWNcz5QHNRZ/
-         fHsFiLQwkkvS/QqN96r+jzqPkbynGwWNpFUPnnIhsV0vtm6e4/veFIlrIEfWHHy2Yj
-         8Zcz3vuBXy/JA==
+        b=DFnrYCBNczfCveW7dnMU+fPv/O26FpDbqbPIpYed+dTvvmEQ+MgMqX5tX0hg9XpvA
+         gYUcqumzHphpwrpQFmPiGPln0se6QiGfDu9zGvRozoyONGQcYQjCWB06+NH3zjo3OJ
+         NGLoh+zMdz1TV+Wtk1Yfk3yG2OmXHgze2qCtClJ7fQr+hhfwJkdahdx3Bk5QQeHjCR
+         hQqHcs00KcPTMU4+p9daYFfLZfgG98ty1X81iXopQUYqQ5ms3r8dK2so63/SCy5W1G
+         9tC5PAn1Px/zaRbIzggH7TrjKbJeiGbpPAj79+BJ/MXS5tHIM4ScXuTyYdRgIXEN9l
+         oriZFsc2waV7w==
 Received: by mercury (Postfix, from userid 1000)
-        id 5A7971060F7F; Tue, 16 May 2023 00:21:07 +0200 (CEST)
-Date:   Tue, 16 May 2023 00:21:07 +0200
+        id 26E0E1060F7F; Tue, 16 May 2023 00:39:36 +0200 (CEST)
+Date:   Tue, 16 May 2023 00:39:36 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Svyatoslav Ryhel <clamor95@gmail.com>
 Cc:     Iskren Chernev <me@iskren.info>,
@@ -42,15 +42,16 @@ Cc:     Iskren Chernev <me@iskren.info>,
         Matheus Castello <matheus@castello.eng.br>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] power: max17040: add simple battery cell support
-Message-ID: <20230515222107.kwcb6astisbmdcwe@mercury.elektranox.org>
+Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if
+ available
+Message-ID: <20230515223936.fwayzfd77hvgpscy@mercury.elektranox.org>
 References: <20230308084419.11934-1-clamor95@gmail.com>
- <20230308084419.11934-3-clamor95@gmail.com>
+ <20230308084419.11934-5-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hkrjka3iyhxlb5qx"
+        protocol="application/pgp-signature"; boundary="qf65dea75uga2xk7"
 Content-Disposition: inline
-In-Reply-To: <20230308084419.11934-3-clamor95@gmail.com>
+In-Reply-To: <20230308084419.11934-5-clamor95@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,122 +62,143 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---hkrjka3iyhxlb5qx
+--qf65dea75uga2xk7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Mar 08, 2023 at 10:44:17AM +0200, Svyatoslav Ryhel wrote:
-> Simple battery cell allows to pass some constant data
-> about battery controlled by this fuel gauge.
+On Wed, Mar 08, 2023 at 10:44:19AM +0200, Svyatoslav Ryhel wrote:
+> Since fuel gauge does not support thermal monitoring,
+> some vendors may couple this fuel gauge with thermal/adc
+> sensor to monitor battery cell exact temperature.
+>=20
+> Add this feature by adding optional iio thermal channel.
 >=20
 > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
-
-This patch is no longer needed, since the core should automatically
-expose the properties with the latest kernel:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D27a2195efa8d26447c40dd4a6299ea0247786d75
-
--- Sebastian
-
->  drivers/power/supply/max17040_battery.c | 34 +++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
+>  drivers/power/supply/max17040_battery.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 >=20
 > diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supp=
 ly/max17040_battery.c
-> index d1075959dd46..2778ed5b5c14 100644
+> index 6dfce7b1309e..8c743c26dc6e 100644
 > --- a/drivers/power/supply/max17040_battery.c
 > +++ b/drivers/power/supply/max17040_battery.c
-> @@ -141,6 +141,7 @@ struct max17040_chip {
->  	struct regmap			*regmap;
->  	struct delayed_work		work;
+> @@ -18,6 +18,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+> +#include <linux/iio/consumer.h>
+> =20
+>  #define MAX17040_VCELL	0x02
+>  #define MAX17040_SOC	0x04
+> @@ -143,6 +144,7 @@ struct max17040_chip {
 >  	struct power_supply		*battery;
-> +	struct power_supply_battery_info	*batt_info;
+>  	struct power_supply_battery_info	*batt_info;
 >  	struct chip_data		data;
+> +	struct iio_channel		*channel_temp;
 > =20
 >  	/* battery capacity */
-> @@ -400,6 +401,28 @@ static int max17040_get_property(struct power_supply=
+>  	int soc;
+> @@ -416,6 +418,11 @@ static int max17040_get_property(struct power_supply=
  *psy,
->  	case POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN:
->  		val->intval =3D chip->low_soc_alert;
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+>  		val->intval =3D chip->batt_info->charge_full_design_uah;
 >  		break;
-> +
-> +	case POWER_SUPPLY_PROP_TECHNOLOGY:
-> +		val->intval =3D chip->batt_info->technology;
+> +	case POWER_SUPPLY_PROP_TEMP:
+> +		iio_read_channel_raw(chip->channel_temp,
+> +				     &val->intval);
+> +		val->intval *=3D 10;
+
+return iio_read_channel_processed_scale(chip->channel_temp, &val->intval, 1=
+0);
+
 > +		break;
-> +	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> +		val->intval =3D chip->batt_info->energy_full_design_uwh;
-> +		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> +		val->intval =3D chip->batt_info->charge_full_design_uah;
-> +		break;
-> +	case POWER_SUPPLY_PROP_TEMP_MIN:
-> +		if (chip->batt_info->temp_min =3D=3D INT_MIN)
-> +			return -ENODATA;
-> +
-> +		val->intval =3D chip->batt_info->temp_min * 10;
-> +		break;
-> +	case POWER_SUPPLY_PROP_TEMP_MAX:
-> +		if (chip->batt_info->temp_max =3D=3D INT_MAX)
-> +			return -ENODATA;
-> +
-> +		val->intval =3D chip->batt_info->temp_max * 10;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -418,6 +441,11 @@ static enum power_supply_property max17040_battery_p=
-rops[] =3D {
->  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
->  	POWER_SUPPLY_PROP_CAPACITY,
->  	POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN,
-> +	POWER_SUPPLY_PROP_TECHNOLOGY,
-> +	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
-> +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-> +	POWER_SUPPLY_PROP_TEMP_MIN,
-> +	POWER_SUPPLY_PROP_TEMP_MAX,
+>  	case POWER_SUPPLY_PROP_TEMP_MIN:
+>  		if (chip->batt_info->temp_min =3D=3D INT_MIN)
+>  			return -ENODATA;
+> @@ -452,6 +459,7 @@ static enum power_supply_property max17040_battery_pr=
+ops[] =3D {
+>  	POWER_SUPPLY_PROP_HEALTH,
+>  	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
+>  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_TEMP,
+
+You should only expose this, if chip->channel_temp is not NULL. Use
+devm_kmemdup() to copy the array into a private copy in chip and
+modify it on the fly.
+   =20
+>  	POWER_SUPPLY_PROP_TEMP_MIN,
+>  	POWER_SUPPLY_PROP_TEMP_MAX,
 >  };
-> =20
->  static const struct power_supply_desc max17040_battery_desc =3D {
-> @@ -470,6 +498,12 @@ static int max17040_probe(struct i2c_client *client)
->  		return PTR_ERR(chip->battery);
+> @@ -560,9 +568,24 @@ static int max17040_probe(struct i2c_client *client)
+>  		}
 >  	}
 > =20
-> +	if (client->dev.of_node) {
-> +		if (power_supply_get_battery_info(chip->battery, &chip->batt_info))
-> +			dev_warn(&client->dev,
-> +				 "No monitored battery, some properties will be missing\n");
-> +	}
+> +	if (of_property_read_bool(client->dev.of_node, "io-channels")) {
+
+device_property_present()
+
+> +		chip->channel_temp =3D iio_channel_get(&client->dev, "temp");
+
+devm_iio_channel_get()
+
+> +		if (IS_ERR(chip->channel_temp))
+> +			return dev_err_probe(&client->dev, PTR_ERR(chip->channel_temp),
+> +					     "failed to get temp\n");
+> +	};
+
+Also this must be acquired before registering the power-supply device.
+
+-- Sebastian
+
 > +
->  	ret =3D max17040_get_version(chip);
->  	if (ret < 0)
->  		return ret;
+>  	return 0;
+>  }
+> =20
+> +static void max17040_remove(struct i2c_client *client)
+> +{
+> +	struct max17040_chip *chip =3D i2c_get_clientdata(client);
+> +
+> +	if (chip->channel_temp)
+> +		iio_channel_release(chip->channel_temp);
+> +}
+> +
+>  #ifdef CONFIG_PM_SLEEP
+> =20
+>  static int max17040_suspend(struct device *dev)
+> @@ -642,6 +665,7 @@ static struct i2c_driver max17040_i2c_driver =3D {
+>  		.pm	=3D MAX17040_PM_OPS,
+>  	},
+>  	.probe_new	=3D max17040_probe,
+> +	.remove		=3D max17040_remove,
+>  	.id_table	=3D max17040_id,
+>  };
+>  module_i2c_driver(max17040_i2c_driver);
 > --=20
 > 2.37.2
 >=20
 
---hkrjka3iyhxlb5qx
+--qf65dea75uga2xk7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRisFMACgkQ2O7X88g7
-+poBdQ//W4rRMW3jBCMvd0Ift+Be0vCAjMBzuaI/dNcZDI50E0Mvm0xFQXm6hgCQ
-S1tjwQ3iNsF3eYn+nUZlcOqyT/jk3AMOLipUmqbcsHIck1Yn1gaIp44K0/S6z96z
-rpFwYfge7CAE3JSZdfz3iSDlMeOSMX7gzdLuPAcL6rjF22bl54plFh7gCgD1URCr
-6ZBrdtEEgYlvT5wMyM0CTf0uctirG4LgULPPVd7gSJ4nQ8KalJ0M67fhvntGKAxP
-zAFM+VOKZVhFuQtxExjbUzKZ6kB9MNAtBhFfZ5Wbk5n8IzBn/X4j0aovfc3mJGPE
-PitJceG5YrbUaVrQ05Z8b0mkspoHLtOBkC+X4aMRWKh1rvmdYd4U7Ht6fMqB8W/v
-RGz9OlNdinkckrypi1UdP9Na3IqWpTR2m/QW8AGkz/E1dkcjUkl1tNDwsKj5Ff1W
-0K0WsDj13U2nCsDmAPEj3xkwBtpj0u1oh35EYpA87DEE58YmOUqQf+nESjaUt/U4
-KArMCBBWyUwQJJs1DCI/oHV5mrczHwU9HAkXTT+fla29NkJVoZ1ffg//skc5dgfY
-XJAdFZS5LueJcHrSifKKxWZDIcka7/e52Tt9dNIaPieWmLtWo7GYNPEE7S27UFiM
-6TNzt0C1orsvvKLeiYt5WeMlwtF1Av0rBq1PZ1nM7VfH3KPPz9k=
-=IFJn
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRitKQACgkQ2O7X88g7
++poRgBAAoaWYMbFxktJscB6lYr/T3va54JzJqn51XXuvWr1kUghcrL4NPSVlxfWS
+MVbgljHERs0DeNmnXTT0cPwBh7q0Bur9Fttn+hsRWN7iHsSb4DCPpZALdNO5f+gI
+d+eFiqSPPMm40gOBYn/vyQRVJ4TloU9yeglbCWkA1EKeG0Glg/PtYO3PYiXnkrE8
+5LNjRd8+zVyC0S678gDCIp6qhlLWh8vjQoJhxWT51OSnSEUnXSb9G1OO2bXyPiNU
++eqrPfvtpLP5PvYzuJAXoN3tH8wQxZQAgnGZvlvOC3FcvZYZuj6T8OUIVzCWTi5j
+sdidzm8sgAdHaQBq7uF7UtWgZU+FzFMZAtWaz73UuQErSqUB5gxaWS4jNU3ij92M
+ZgPop+nwTSWfW8bpd5ozmKoPqxdBghO3K02DdgPk2sAzWg/G6B5vDP2swDosgiX1
+Y5MMwYUQB1zPF01o6T0JEEapvqwWqNGE5i+0QBD8thqezFDZVrxlE95sAcwU6au2
+JKmqBsUppYR1qBhJFOhkmrpaYBMxBQpXiioUr5VLjoOX7dqDQOkDzWA783iAVMFS
+0NqdCv8VyTyDUUb/1asqaWZZ+YGhml4LYY/R8aJ89MczGEpgcEo8j3XStxSASzTz
+hsXURUNYifNWvPH0xWYEzNLsIBsnwpgFYi/SqpWNn+1tI8H7LJ8=
+=+09U
 -----END PGP SIGNATURE-----
 
---hkrjka3iyhxlb5qx--
+--qf65dea75uga2xk7--
