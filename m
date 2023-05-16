@@ -2,208 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFC9704EC4
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 15:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FD7704F5E
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 15:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbjEPNHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 09:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S233294AbjEPNdI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 09:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbjEPNHM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 09:07:12 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D769F4492
-        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 06:06:44 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51090206721so534842a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 06:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684242403; x=1686834403;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y5v71FLoqMz+RUxDIpAMnXyAxgkejquVbG/xCAcbJdU=;
-        b=M3FPgcFsAiM2X5YXNkTxJ2ewxrvUjaCL4p9om+mGfL2xhkjHLJjW/D8eoqyLBd4B1q
-         VKQNDqz1BqtmFk33x5ddKE/YkFg/ZmEJ83nEKDwfa8BQ6rQLHd+TZJhqbqHQcb/VonPQ
-         mmaRwInfCCyDulO9t3XuXwxQhuZwGV5l0rwuQz0+lpPFIPirRQ2N1iZ2S7dqd29GvcLQ
-         nEEziAPrxXY4ZXYjYEdZTxM56Ayh6UBG7+pvxs7UcHBMWzvERXkg9rApldZDCA9MSM4b
-         FO4GnMOwpJNV/Wd9IBsUAxQW5Q9OAxU6vZmMYLzzLT/dl0tFATkXvUK4rXU7qSYVH2HZ
-         HPKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684242403; x=1686834403;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5v71FLoqMz+RUxDIpAMnXyAxgkejquVbG/xCAcbJdU=;
-        b=Mjg5tFRBgfAhq2w+GcDnlGIKvWbTldl+i4s1sBn4iHBtAGQJ346EQf7khJYj1Kfx+c
-         t4MpSWKWtugt9K4avVJ4r1Q79oZOB4yVppTXngPeINKGO8s9O4X/0ZGgrB1sRGH/jGCK
-         hNeDQS9+pFyDSeOd1VgVsa8qtFlQgSe+vpmY4KwxgVSIwAvSHV00KMQktpsLQdQyiwCa
-         pntJ8LZBU5lpIvTGc+QP7jKdSX2V88jbJmEJsldcH1uAdczxbMsJj/8a24eFT050cnZ1
-         YquYALach8afXTTyP4zVcQiJqzp3lnbT0rVIWLO58q/ntzTPGSeFyD+k/qotfuToy5dl
-         FScA==
-X-Gm-Message-State: AC+VfDwOxuOp9TBIxWuedQYN10bEO2u65khcVtUKJBg1CC32AKYxl0tw
-        pNhoHwPrUdtCR7DXOGw/WYNHjQ==
-X-Google-Smtp-Source: ACHHUZ5go4YGvwMvuHkX/P2nKXUI6kO6rJj/HD94dK8KJ24a7KSOeuUBx0cQE4d1WftX21i+qsvZFg==
-X-Received: by 2002:a17:907:9444:b0:969:e304:7a22 with SMTP id dl4-20020a170907944400b00969e3047a22mr24064513ejc.18.1684242402864;
-        Tue, 16 May 2023 06:06:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id bu2-20020a170906a14200b0096654fdbe34sm11074552ejb.142.2023.05.16.06.06.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 06:06:42 -0700 (PDT)
-Message-ID: <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
-Date:   Tue, 16 May 2023 15:06:40 +0200
+        with ESMTP id S232641AbjEPNdH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 09:33:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB3D10DA;
+        Tue, 16 May 2023 06:33:06 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QLH9r5MzwzTkg4;
+        Tue, 16 May 2023 21:28:16 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 16 May
+ 2023 21:33:03 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <lenb@kernel.org>, <viresh.kumar@linaro.org>, <rafael@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>,
+        <liwei391@huawei.com>, <linux-acpi@vger.kernel.org>,
+        <weiyongjun1@huawei.com>
+Subject: [PATCH v2 1/2] cpufreq: CPPC: keep target core awake when reading its cpufreq rate
+Date:   Tue, 16 May 2023 21:32:46 +0800
+Message-ID: <20230516133248.712242-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
- compatible
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-References: <cover.1684140883.git.quic_varada@quicinc.com>
- <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
- <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
- <20230516120426.GA1679@varda-linux.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516120426.GA1679@varda-linux.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/05/2023 14:04, Varadarajan Narayanan wrote:
-> On Mon, May 15, 2023 at 06:10:29PM +0200, Krzysztof Kozlowski wrote:
->> On 15/05/2023 12:13, Varadarajan Narayanan wrote:
->>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>
->>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
->>>
->>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> ---
->>> [v3]:
->>> 	Fix dt_binding_check & dtbs_check errors (Used
->>> 	Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
->>> 	as reference/example)
->>>
->>> 	Drop 'Acked-by: Rob Herring' as suggested in review
->>>
->>> [v2]:
->>> 	Thanks to Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> 	for the tip to make qcom,ipq8074-tsens as fallback.
->>> ---
->>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 13 +++++++++++--
->>>  1 file changed, 11 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> index d9aa54c..57e3908 100644
->>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> @@ -19,6 +19,11 @@ description: |
->>>  properties:
->>>    compatible:
->>>      oneOf:
->>> +      - const: qcom,tsens-v0_1
->>> +      - const: qcom,tsens-v1
->>> +      - const: qcom,tsens-v2
->>
->> Nope, these are not correct.
->>
->>> +      - const: qcom,ipq8074-tsens
->>
->> Also nope, this is already there.
->>
->>> +
->>>        - description: msm8960 TSENS based
->>>          items:
->>>            - enum:
->>> @@ -66,8 +71,10 @@ properties:
->>>            - const: qcom,tsens-v2
->>>
->>>        - description: v2 of TSENS with combined interrupt
->>> -        enum:
->>> -          - qcom,ipq8074-tsens
->>
->> Why?
->>
->>> +        items:
->>> +          - enum:
->>> +              - qcom,ipq9574-tsens
->>> +          - const: qcom,ipq8074-tsens
-> 
-> Without changing it like this either dtbs_check or
-> dt_binding_check kept failing.
-> 
-> 	- description: v2 of TSENS with combined interrupt
-> 	  enum:
-> 	    - qcom,ipq8074-tsens
-> 	    - qcom,ipq9574-tsens
+As ARM AMU's document says, all counters are subject to any changes
+in clock frequency, including clock stopping caused by the WFI and WFE
+instructions.
 
-But we do not talk about this... Look, I commented out under specific
-hunks which are not correct. Not under the hunk which is correct.
+Therefore, using smp_call_on_cpu() to trigger target CPU to
+read self's AMU counters, which ensures the counters are working
+properly during calculation.
 
-> 
-> dtbs_check gave this kind of error
-> 	['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
-> 
-> After changing it like in https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
-> 
-> 	- description: v2 of TSENS with combined interrupt
-> 	  const: qcom,ipq8074-tsens
-> 	  - enum:
-> 	      - qcom,ipq9574-tsens
-> 	  - const: qcom,ipq8074-tsens
-> 
-> dt_binding_check gives the following error
-> 
-> 	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: did not find expected key
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-Because it is not even valid syntax.
-
-> 
-> and dtbs_check gives
-> 
-> 	./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: [error] syntax error: expected <block end>, but found '-' (syntax)
-> 	  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-> 	./Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
-> 	./Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
-> 	./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: did not find expected key
-> 	  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-> 	/local/mnt/workspace/varada/v3/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml: ignoring, error parsing file
-> 
-> If i change it like below,
-> 
-> 	- description: v2 of TSENS with combined interrupt
-> 	  enum:
-> 	    - qcom,ipq9574-tsens
-> 	  - const: qcom,ipq8074-tsens
-> 
-> dt_binding_check and dtbs_check gives same error as above.
-> 
-> Looked around and found Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> which seemed to do something similar to what is wanted in this
-> case. Hence changed qcom-tsens.yaml similar to the allwinner yaml
-> file. After which dt_binding_check and dtbs_check passed. Please
-> let me know if there is a better way to solve this. Will go with
-
-Changing one valid syntax to another valid syntax is not related to the
-patch. If you think such change as reasonable, please split it, but to
-me it does not look justified. As for actual change, so adding new
-compatible, it's not really related to the others. Why you cannot add
-the proper list (so the only valid hunk) and that's it?
-
-Best regards,
-Krzysztof
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 022e3555407c..910167f58bb3 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -837,9 +837,24 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+ 	return (reference_perf * delta_delivered) / delta_reference;
+ }
+ 
++static int cppc_get_perf_ctrs_smp(void *val)
++{
++	int cpu = smp_processor_id();
++	struct cppc_perf_fb_ctrs *fb_ctrs = val;
++	int ret;
++
++	ret = cppc_get_perf_ctrs(cpu, fb_ctrs);
++	if (ret)
++		return ret;
++
++	udelay(2); /* 2usec delay between sampling */
++
++	return cppc_get_perf_ctrs(cpu, fb_ctrs + 1);
++}
++
+ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ {
+-	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
++	struct cppc_perf_fb_ctrs fb_ctrs[2] = {0};
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+ 	struct cppc_cpudata *cpu_data = policy->driver_data;
+ 	u64 delivered_perf;
+@@ -847,19 +862,12 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ 
+ 	cpufreq_cpu_put(policy);
+ 
+-	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+-	if (ret)
+-		return ret;
+-
+-	udelay(2); /* 2usec delay between sampling */
+-
+-	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
++	ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_smp, fb_ctrs, 1);
+ 	if (ret)
+ 		return ret;
+ 
+-	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+-					       &fb_ctrs_t1);
+-
++	delivered_perf = cppc_perf_from_fbctrs(cpu_data, fb_ctrs,
++					       fb_ctrs + 1);
+ 	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
+ }
+ 
+-- 
+2.25.1
 
