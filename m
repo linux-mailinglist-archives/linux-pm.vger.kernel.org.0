@@ -2,173 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE3D704A84
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 12:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3330704ABB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 12:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbjEPK2Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 06:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S231847AbjEPKeh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 06:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjEPK2N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 06:28:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C18199C;
-        Tue, 16 May 2023 03:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684232892; x=1715768892;
-  h=date:from:to:cc:subject:message-id;
-  bh=m2/2Y661N/2+JEsw5oP3Cr26RUC0LHDqcj8BzMDyDQ0=;
-  b=QRHtEHYsLKgSkhpxaW08jTYlY11i2UYSgdmmOxcJ+Z+G7S5mHR8/r9hy
-   ljjkNiQKh1ApLe+cX4SP+Vkr7604/qPn4f2kzzaONp6thHJnWQ7grtOs8
-   uFRXMusrlDThETIHSR6MpaDpLJnYfoyOKM/7iHZAYhg0jUM6yes9DFBYl
-   Z+8i5xwnkk2qiAh0yhEoxuc1ek0pydlM1zycb5wHsadC9uGeCLiASNDEo
-   otNj41gDwkOGHmklYEiSdm9cVUS9piH9PFTL9ZCe8tebERgrtd4iRcGhc
-   69DhpN/nsvNU3W5jdRa+wlPffUuIQCLoVHq19y6iDizfQ3KPAw2+ng7in
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="353720644"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="353720644"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 03:28:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="651790355"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="651790355"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 16 May 2023 03:28:10 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pyrub-0007K8-1r;
-        Tue, 16 May 2023 10:28:09 +0000
-Date:   Tue, 16 May 2023 18:27:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 6394e2ae7babcc1f01f78432633bcf425500e960
-Message-ID: <20230516102727.4left%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231433AbjEPKef (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 06:34:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D575C5B9A
+        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 03:34:00 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so25350840a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 03:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684233231; x=1686825231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/s/b8eaU43q5xbDT+IsLyN9R6gUY2onB35bWiqiQfVQ=;
+        b=FVMvEJiPqhOQXhjXOb99WFShalGrKAuerHvbyeTpR2Z4/BzvjQwkO24qDPKoKmbrQx
+         0r71drMY3DWM54icVAz8ygeowkiUqGp2ztytda6/chM9Jj7Rk4eNvojd6B6ZlJ+NY2eJ
+         +aZoKwBszbw1XcxpIYehiuWjrX4HVKlAPBr4mKYSRiZlJ9skj+V4NTwp9NAEoBTqiIy0
+         ujCexKgDeDCm9MRQTCHrK2m5lsknNwbnSHNeeT6dXVmUGQEhiVEEHdJhRKFFddmu/e9t
+         RTV4raAUnkEFd0ecqc7JdyyS8XOimQxxLSr1FNPHKultErO4MwnKis0eGOEhlm2a8FIe
+         /fyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684233231; x=1686825231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/s/b8eaU43q5xbDT+IsLyN9R6gUY2onB35bWiqiQfVQ=;
+        b=P0+CEyTk2erHZbvM6Jh4qslphhd9q5+dGwe+nijoTaW1ogvLiEdbt9HNUf1ZXdnNOT
+         9VWfFSdX2Sobdi3pxeaEPRxIR9KJc7iqIAkkEo9yWW/9pWt4IasFou47xMFiCP7Nm1sr
+         xeGFcFnCF5kobuow9lY67Ms+DIJS/gNcHya54kkHj0vj3LiVkgDVhedw/ufZwMrDEqao
+         F+aP+uE+x6PAuxeDTCKyWn2SdhZh3ADuNSOTQiCHZODQvbOeOFb22cZhElogu80CzdQz
+         h8t7BQxHeZuDGA22dXhmew1j6CN+VFZntluWa+YZke8afhJNJkW84PabDTnUOSH1U3Y2
+         Kzfg==
+X-Gm-Message-State: AC+VfDxZrWS+VTGzGG3Jj5/Zed/MAzaQV5p7D+cb+8Oav/wN0G0g/CF0
+        8k05gpERsCLQF6toiNGsCozuNw==
+X-Google-Smtp-Source: ACHHUZ4E3loLNCVYpl/4ZNNE0tRB5XJnXmJHiqEn+7ptHeyKvrhzAdzam7JlqLZxnX2qqTeB7gnauA==
+X-Received: by 2002:a50:ed0b:0:b0:50b:d83b:9c61 with SMTP id j11-20020a50ed0b000000b0050bd83b9c61mr27778560eds.32.1684233230993;
+        Tue, 16 May 2023 03:33:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id n21-20020aa7c695000000b0050bdd7fafd8sm8262403edq.29.2023.05.16.03.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 03:33:50 -0700 (PDT)
+Message-ID: <3af2f676-66fb-1c10-372f-4fcf6f7d733e@linaro.org>
+Date:   Tue, 16 May 2023 12:33:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 4/5] dt-bindings: iommu: arm,smmu: enable clocks for
+ sa8775p Adreno SMMU
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230417125844.400782-1-brgl@bgdev.pl>
+ <20230417125844.400782-5-brgl@bgdev.pl>
+ <CAMRc=MeWEs7AoZSNWS9bZO=_12U5944VBq0ixrY2rx2h2=OOfw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMRc=MeWEs7AoZSNWS9bZO=_12U5944VBq0ixrY2rx2h2=OOfw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230516180935/lkp-src/repo/*/rafael-pm
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 6394e2ae7babcc1f01f78432633bcf425500e960  Merge branch 'pm-cpufreq' into bleeding-edge
+On 16/05/2023 12:07, Bartosz Golaszewski wrote:
+> On Mon, Apr 17, 2023 at 2:58 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>>
+>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>
+>> The GPU SMMU will require the clocks property to be set so put the
+>> relevant compatible into the adreno if-then block.
+>>
+>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> index ba677d401e24..53bed0160be8 100644
+>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> @@ -79,6 +79,7 @@ properties:
+>>        - description: Qcom Adreno GPUs implementing "qcom,smmu-500" and "arm,mmu-500"
+>>          items:
+>>            - enum:
+>> +              - qcom,sa8775p-smmu-500
+>>                - qcom,sc7280-smmu-500
+>>                - qcom,sm6115-smmu-500
+>>                - qcom,sm6125-smmu-500
+>> @@ -331,7 +332,9 @@ allOf:
+>>        properties:
+>>          compatible:
+>>            contains:
+>> -            const: qcom,sc7280-smmu-500
+>> +            enum:
+>> +              - qcom,sa8775p-smmu-500
+>> +              - qcom,sc7280-smmu-500
+>>      then:
+>>        properties:
+>>          clock-names:
+>> @@ -413,7 +416,6 @@ allOf:
+>>                - nvidia,smmu-500
+>>                - qcom,qcm2290-smmu-500
+>>                - qcom,qdu1000-smmu-500
+>> -              - qcom,sa8775p-smmu-500
+>>                - qcom,sc7180-smmu-500
+>>                - qcom,sc8180x-smmu-500
+>>                - qcom,sc8280xp-smmu-500
+>> --
+>> 2.37.2
+>>
+> 
+> Gentle ping for a review and a pick up. The DT patches that use this
+> schema are in next now so check_dtbs will now fail.
 
-elapsed time: 729m
+I assume this is not for me, as you got my tag in v2, which I repeated
+in v3.
 
-configs tested: 94
-configs skipped: 5
+Best regards,
+Krzysztof
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r003-20230515   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230515   gcc  
-alpha                randconfig-r025-20230515   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230515   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230515   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r005-20230515   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230515   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230515   clang
-hexagon              randconfig-r045-20230515   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230515   clang
-i386                 randconfig-a002-20230515   clang
-i386                 randconfig-a003-20230515   clang
-i386                 randconfig-a004-20230515   clang
-i386                 randconfig-a005-20230515   clang
-i386                 randconfig-a006-20230515   clang
-i386                 randconfig-i071-20230515   gcc  
-i386                 randconfig-i072-20230515   gcc  
-i386                 randconfig-i073-20230515   gcc  
-i386                 randconfig-i074-20230515   gcc  
-i386                 randconfig-i075-20230515   gcc  
-i386                 randconfig-i076-20230515   gcc  
-i386                 randconfig-i081-20230515   gcc  
-i386                 randconfig-i082-20230515   gcc  
-i386                 randconfig-i083-20230515   gcc  
-i386                 randconfig-i084-20230515   gcc  
-i386                 randconfig-i085-20230515   gcc  
-i386                 randconfig-i086-20230515   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r015-20230515   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r011-20230515   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r001-20230515   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r003-20230515   gcc  
-m68k                 randconfig-r022-20230515   gcc  
-microblaze           randconfig-r021-20230515   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r023-20230515   gcc  
-openrisc     buildonly-randconfig-r006-20230515   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r026-20230515   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230515   gcc  
-riscv                randconfig-r042-20230515   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r005-20230515   clang
-s390                 randconfig-r044-20230515   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r024-20230515   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230515   gcc  
-sparc64              randconfig-r012-20230515   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r002-20230515   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x051-20230515   gcc  
-x86_64               randconfig-x052-20230515   gcc  
-x86_64               randconfig-x053-20230515   gcc  
-x86_64               randconfig-x054-20230515   gcc  
-x86_64               randconfig-x055-20230515   gcc  
-x86_64               randconfig-x056-20230515   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r013-20230515   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
