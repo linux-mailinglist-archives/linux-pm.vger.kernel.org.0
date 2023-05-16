@@ -2,122 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725B9705782
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 21:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA36705814
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 21:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjEPTi5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 15:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S230030AbjEPT4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 15:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjEPTiq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 15:38:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8909ED0;
-        Tue, 16 May 2023 12:38:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D40863ED9;
-        Tue, 16 May 2023 19:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28787C433EF;
-        Tue, 16 May 2023 19:38:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684265889;
-        bh=xg0nY/5XuAoC5Y+aT1n09akQv/zFSJ5XVH0JIB0YwTQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lJHg8XNuGiy8jTFn+IFpgUXTvuRIAwq7VY4K/2aG+9oDXR9V6HWZw9BoV/Iby3Y3D
-         ciQJCcSCN88ZGK79OW2jW+p1Mcr53FymRzsq3aD57yhmrL6X5s0JHYpe2CHPA22HlU
-         vtyjpMlDJ94LuFullCZvqENjJQpN0VpNDcwlo9gDKsPudVss3sLnvUVGlKZDHrWJKC
-         9hYO4n8OiF35vwW0mCeLD6vxQ51+sc9aB2SOI5vmH0t/cuFzcMA5Ms2ki0dFUhjZ6z
-         F+j0NZXOgRpsDihxxL0McykAWvZ3icJuNiaB3wLMzOKImpSeGeJaJv64l87FCV2Wpu
-         UeiC9WTSfPICw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     x86@kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        with ESMTP id S230052AbjEPT4o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 15:56:44 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B479C76B8
+        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 12:56:39 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so8298359b3a.0
+        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 12:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684266999; x=1686858999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlgAAtiyihh7bx5P71pi2o6dPtZSer+A46AGpW/5WPM=;
+        b=kef7EitnyZ6qVVLdsWjYeAdWG/vB35cqybAGBIj/wVTjUV6BlKvSCGjnNbHNOsCEOL
+         h+BT20FpTWmXn29KSAWGRqAhQG7dYi4HpAICRT9xWClylv6xSJEyF5aX71CJi1iWwCBV
+         AskpSJ9ywL4mhKKAIE30RromysT+Wz3FHQz7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684266999; x=1686858999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QlgAAtiyihh7bx5P71pi2o6dPtZSer+A46AGpW/5WPM=;
+        b=EwJicXQEY6SwvQrDLklTPJ3qJxFy/hR0FXSbxaqVgCkOALJrng6z/EPd9KwFD0EJnF
+         uBgyXWVccdjYXDw9+jSbi+YMAiyutUKWxD6dXc+lezRP2BmrR3soAr2J9dtszpuKmyTh
+         fCeNehPxqKXVp8/DB8nVsyJIpqdaXKFvIS1g++dGA/3MI5HTfmav18SG9tN7lY1YayBE
+         0rzeW5RafSOwBgqlSJL2JDvjIQHYlg0Hk2Nma09uqbBpedchMyt6d2Jh8nTY3Cg4Bu8e
+         imxDlrnBbfqPmXejIOSzeKdYBNGGziJ465pu0B8PJhvvmIYkw3+G1kxBjr+auJCKnVrb
+         xU1g==
+X-Gm-Message-State: AC+VfDxF8rLX4iBU+fYjHkNX7MDayqW0Mz/7in0PJv+yXKt2QpfcwVXg
+        h4H6nZLIrNFcASAGfVJw6gM4Zg==
+X-Google-Smtp-Source: ACHHUZ504MnZSV1lW6m3lpadzxSZtXTyWWnmbMDexEhPigrkHEzEuE9njCOaI6ApJ1b+OCtl1rWdcQ==
+X-Received: by 2002:a05:6a00:e8f:b0:643:a6d1:b27 with SMTP id bo15-20020a056a000e8f00b00643a6d10b27mr34066068pfb.15.1684266999152;
+        Tue, 16 May 2023 12:56:39 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id m3-20020aa79003000000b006466f0af9b2sm14238048pfo.179.2023.05.16.12.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 12:56:38 -0700 (PDT)
+Date:   Tue, 16 May 2023 12:56:38 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Oleg Nesterov <oleg@redhat.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH 20/20] x86: olpc: avoid missing-prototype warnings
-Date:   Tue, 16 May 2023 21:35:49 +0200
-Message-Id: <20230516193549.544673-21-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516193549.544673-1-arnd@kernel.org>
-References: <20230516193549.544673-1-arnd@kernel.org>
+        Pavel Machek <pavel@ucw.cz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 00/16] ARM: address -Wmissing-prototype warnings
+Message-ID: <202305161256.F6C079EAA@keescook>
+References: <20230516154605.517690-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516154605.517690-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 16, 2023 at 05:45:49PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This addresses all arm specific warnings outside of the mach-*/ code,
+> which I've submitted separately. The majority of the patches should be
+> straightforward, either adding an #include statement to get the right
+> header, or ensuring that an unused global function is left out of the
+> build when the prototype is hidden.
+> 
+> The ones that are a bit awkward are those that just add a prototype to
+> shut up the warning, but the prototypes are never used for calling the
+> function because the only caller is in assembler code. I tried to come
+> up with other ways to shut up the compiler, and ideally this would be
+> triggered by the 'asmlinkage' keyword as Ard suggested in the past, but
+> I could not come up with a way to do this.
+> 
+> All of the warnings have to be addressed in some form before the
+> warning can be enabled by default.
 
-There are two functions in the olpc platform that have no prototype:
+Thanks! These are all long overdue. For the series:
 
-arch/x86/platform/olpc/olpc_dt.c:237:13: error: no previous prototype for 'olpc_dt_fixup' [-Werror=missing-prototypes]
-arch/x86/platform/olpc/olpc-xo1-pm.c:73:26: error: no previous prototype for 'xo1_do_sleep' [-Werror=missing-prototypes]
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-The first one should just be marked 'static' as there are no other
-callers, while the second one is called from assembler and is
-just a false-positive warning that can be silenced by adding a
-prototype.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/x86/platform/olpc/olpc_dt.c | 2 +-
- include/linux/olpc-ec.h          | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/platform/olpc/olpc_dt.c b/arch/x86/platform/olpc/olpc_dt.c
-index 75e3319e8bee..74ebd6882690 100644
---- a/arch/x86/platform/olpc/olpc_dt.c
-+++ b/arch/x86/platform/olpc/olpc_dt.c
-@@ -234,7 +234,7 @@ static int __init olpc_dt_compatible_match(phandle node, const char *compat)
- 	return 0;
- }
- 
--void __init olpc_dt_fixup(void)
-+static void __init olpc_dt_fixup(void)
- {
- 	phandle node;
- 	u32 board_rev;
-diff --git a/include/linux/olpc-ec.h b/include/linux/olpc-ec.h
-index c4602364e909..3c2891d85c41 100644
---- a/include/linux/olpc-ec.h
-+++ b/include/linux/olpc-ec.h
-@@ -56,6 +56,8 @@ extern int olpc_ec_sci_query(u16 *sci_value);
- 
- extern bool olpc_ec_wakeup_available(void);
- 
-+asmlinkage int xo1_do_sleep(u8 sleep_state);
-+
- #else
- 
- static inline int olpc_ec_cmd(u8 cmd, u8 *inbuf, size_t inlen, u8 *outbuf,
 -- 
-2.39.2
-
+Kees Cook
