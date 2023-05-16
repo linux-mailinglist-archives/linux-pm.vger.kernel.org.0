@@ -2,82 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1E37044E6
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 07:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F80704517
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 08:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjEPFws (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 01:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        id S230073AbjEPGVe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 02:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjEPFwr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 01:52:47 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B2540E1
-        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 22:52:46 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-643b7b8f8ceso7891346b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 May 2023 22:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684216366; x=1686808366;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZccG4uIRo7CsNZMhsJ6CCNSTyo4mWHxGlBVFG2V88w=;
-        b=VUCSQHNQ7T7rZJufnY+Z2j0d1XmZJ2oZ32+ajJ1XPcOqeByQccmeoxCBDZHgTjsTZy
-         X5cIMmzph8VZNxg/DrpKEEyWLdnhJsQT6RmaGPzudIFROFh4skDwR26yDXIY3QDgE0pp
-         duXiiD/AOdTwuksF+glpR/daurdXaZoUro0d3ZcIyU5AXq5XYGXl+KLE2oIPcY2YQ11w
-         Ay77u+Hh8wmgLXXFhB2ksVmYUTOVImNYAARmNaSdfKzdTIvJUlxtKlyJwqDfe4aHoZyg
-         juJSr2UkVRdMum1DToDnE5BsgdtCH8+txFU57z58pN7SNvExqLNcdFfpn+iuVtDj0t8K
-         V0sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684216366; x=1686808366;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ZccG4uIRo7CsNZMhsJ6CCNSTyo4mWHxGlBVFG2V88w=;
-        b=Sd5TnwwDmOCAxV3s0fkvyA0CTjoegr+Ob68QMZHTW3bcKZegRclSWfas8jAuWbQNla
-         Ue76n0L6Huis2xkZotpIrMO8HMNO3gJzyjR06w6GzDwXV76lPleHQlt+S9G9rk6uDkiU
-         POOkZE65/CI1FqE2dHDwmka3FnIkaHLVP+dHNehgYYDx7qKvMzdi1R5t1ax/7li+fV5D
-         +33CJkRDv7WHz40ZF2SrjQYHmnV0Q/NXb9bNqmC2Vd2awLz5wN2DmemQt+RmFTou36Tp
-         WCG3J/6z93iZt5svbbulyGt4UE9boyJBrnu4I5JIfvKqN2H1+NsYSsf8+Kms9Jl2nQEU
-         hq4Q==
-X-Gm-Message-State: AC+VfDzNxPLZ2R5QuiXkmBRHgjUlK9mykZJlkDGeg1RzGrjaj1u97Q0x
-        xLCqgg3XuOtqApwLmdxSl2PRkg==
-X-Google-Smtp-Source: ACHHUZ4g6s0Ec9Wt1DikFOpmCRplYseZbig/nabKGOh1A0zHibPlOtpL0Om/DkFQC3KoYIXBZ0O+Xw==
-X-Received: by 2002:a05:6a00:9a7:b0:638:7c22:6fd with SMTP id u39-20020a056a0009a700b006387c2206fdmr52364827pfg.1.1684216365743;
-        Mon, 15 May 2023 22:52:45 -0700 (PDT)
-Received: from localhost ([122.172.82.60])
-        by smtp.gmail.com with ESMTPSA id j22-20020aa78016000000b0063b87f47062sm12373415pfi.127.2023.05.15.22.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 22:52:44 -0700 (PDT)
-Date:   Tue, 16 May 2023 11:22:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com
-Subject: Re: [PATCH v3 2/2] cpufreq: Warn if fast_switch is not set
-Message-ID: <20230516055242.yfbf2jhdhz7uuwtx@vireshk-i7>
-References: <20230515113404.4259-1-wyes.karny@amd.com>
- <20230515113404.4259-3-wyes.karny@amd.com>
- <20230516011001.epa4xlvbiimu6ai3@vireshk-i7>
- <ZGMZUhWCU18Wn/47@BLR-5CG13462PL.amd.com>
+        with ESMTP id S230060AbjEPGVd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 02:21:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E2726BF;
+        Mon, 15 May 2023 23:21:31 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QL5f45G4jzLq2Y;
+        Tue, 16 May 2023 14:18:36 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 14:21:28 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>
+CC:     David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <ying.huang@intel.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next v2 00/13] mm: page_alloc: misc cleanup and refector
+Date:   Tue, 16 May 2023 14:38:08 +0800
+Message-ID: <20230516063821.121844-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGMZUhWCU18Wn/47@BLR-5CG13462PL.amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-05-23, 11:19, Wyes Karny wrote:
-> Sure, I'll do that. But one caution if we return failure, the drivers which
-> has the above conditions won't load.
+This is aim to reduce more space in page_alloc.c, also do some
+cleanup, no functional changes intended.
 
-They shouldn't :)
+This is based on next-20230515.
+
+v2: 
+- drop move of __pageblock_pfn_to_page(), suggested by Huang Ying
+- move __show_mem() below the __show_free_areas() in patch4
+- add new patch13
+- add RB from Mike
+
+Kefeng Wang (13):
+  mm: page_alloc: move mirrored_kernelcore into mm_init.c
+  mm: page_alloc: move init_on_alloc/free() into mm_init.c
+  mm: page_alloc: move set_zone_contiguous() into mm_init.c
+  mm: page_alloc: collect mem statistic into show_mem.c
+  mm: page_alloc: squash page_is_consistent()
+  mm: page_alloc: remove alloc_contig_dump_pages() stub
+  mm: page_alloc: split out FAIL_PAGE_ALLOC
+  mm: page_alloc: split out DEBUG_PAGEALLOC
+  mm: page_alloc: move mark_free_page() into snapshot.c
+  mm: page_alloc: move pm_* function into power
+  mm: vmscan: use gfp_has_io_fs()
+  mm: page_alloc: move sysctls into it own fils
+  mm: page_alloc: move is_check_pages_enabled() into page_alloc.c
+
+ include/linux/fault-inject.h   |   9 +
+ include/linux/gfp.h            |  15 +-
+ include/linux/memory_hotplug.h |   3 -
+ include/linux/mm.h             |  87 ++--
+ include/linux/mmzone.h         |  21 -
+ include/linux/suspend.h        |   9 +-
+ kernel/power/main.c            |  27 ++
+ kernel/power/power.h           |   5 +
+ kernel/power/snapshot.c        |  52 +++
+ kernel/sysctl.c                |  67 ---
+ lib/Makefile                   |   2 +-
+ lib/show_mem.c                 |  37 --
+ mm/Makefile                    |   4 +-
+ mm/debug_page_alloc.c          |  59 +++
+ mm/fail_page_alloc.c           |  66 +++
+ mm/internal.h                  |  21 +-
+ mm/mm_init.c                   |  32 ++
+ mm/page_alloc.c                | 799 ++++-----------------------------
+ mm/show_mem.c                  | 429 ++++++++++++++++++
+ mm/swapfile.c                  |   1 +
+ mm/vmscan.c                    |   2 +-
+ 21 files changed, 857 insertions(+), 890 deletions(-)
+ delete mode 100644 lib/show_mem.c
+ create mode 100644 mm/debug_page_alloc.c
+ create mode 100644 mm/fail_page_alloc.c
+ create mode 100644 mm/show_mem.c
 
 -- 
-viresh
+2.35.3
+
