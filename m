@@ -2,64 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F278570583E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 22:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167C17058FF
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 22:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjEPUDl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 16:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S229582AbjEPUlX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 16:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjEPUDk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 16:03:40 -0400
+        with ESMTP id S229502AbjEPUlV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 16:41:21 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6D619B;
-        Tue, 16 May 2023 13:03:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DD62112;
+        Tue, 16 May 2023 13:41:18 -0700 (PDT)
 Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7511C6605902;
-        Tue, 16 May 2023 21:03:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F2AB6605902;
+        Tue, 16 May 2023 21:41:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684267412;
-        bh=neBnBIFI0CIVAk8FH71HI3up4NB8vfsI9KknH645BgE=;
+        s=mail; t=1684269677;
+        bh=C9zDqyuOb63WjaYQL4pSv774nnw1AN03fB2+IgNujDU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oG++9agVNx+YfmqZ/xi5WTDJ6ENKtWAUyL1dKl4dT+/eF5WRm94oh4tNc8WdcjB5x
-         jIVuyFhwKKj9JGBMUXT+QhG8rGAzo81f2oCPcr7Wcf69X7TxhKoH0RgLKJA0ZPXevm
-         ZFA/OE7j6ErLBYk7mj83e76PWftkj5R1PDDHPwfHzrXCtNuvwAhsBIeI/s9O8YbNdT
-         WabTM8JZt3L+ZYDoIXmGaZc/XfOCZfvbI+QIbQsywJQeeUylcWoqx8t8Rq4wQ0TfQR
-         M7hMOhCZ/WkujL6APddqvUT4bBVoVdmeq00+FKazdS567hyr0qsE3cupOcX8QIQ4KD
-         2/p6vS5DD/9LQ==
+        b=BSHGgGTAPtElpz2DMg1YB3AsFPEtc6bFiMHdgt47HXaPmi4QZa7POQMs/rj4nSTxZ
+         74uX30i7bu6xoAtdbOsVlZ3jvci8fqGBr7Vk7gPE/x9aZ/IDMYQX1K1+cyEPZ0HlXF
+         2APD2YiRmzvLea+cszomdYj6iXe7tOs6a0bp5os10rWXDwuAR3TUqzGpWOkEB7CaSc
+         uFNeb4GGd3eW4ed9acaX4zSBNveCGcy+z9fhjLiFDFVCTH4gIzMxsVoVaE8leJ1V3b
+         /O4DBw9oIfBmZxsx//BKJqB2LGVWLuV3BdpSd61N1dEddN8JTYD5kj7O+Tq9vTNQl3
+         egkRQa9hb0uuQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 8121C10623DF; Tue, 16 May 2023 22:03:29 +0200 (CEST)
-Date:   Tue, 16 May 2023 22:03:29 +0200
+        id 5C5B610623DF; Tue, 16 May 2023 22:41:14 +0200 (CEST)
+Date:   Tue, 16 May 2023 22:41:14 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 27/41] power: add HAS_IOPORT dependencies
-Message-ID: <20230516200329.oxxgvnm5ivj46mph@mercury.elektranox.org>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-28-schnelle@linux.ibm.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     heikki.krogerus@linux.intel.com, rafael@kernel.org,
+        ajayg@nvidia.com, andriy.shevchenko@linux.intel.com,
+        linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Evan.Quan@amd.com, Lijo.Lazar@amd.com, Sanket.Goswami@amd.com
+Subject: Re: [PATCH 1/2] power: supply: Use the scope of power supplies to
+ tell if power is system supplied
+Message-ID: <20230516204114.vv5w2vmcyulmhmm4@mercury.elektranox.org>
+References: <20230516182541.5836-1-mario.limonciello@amd.com>
+ <20230516182541.5836-2-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jp3qgbjcymzuog6w"
+        protocol="application/pgp-signature"; boundary="loy7qsitjthxsozd"
 Content-Disposition: inline
-In-Reply-To: <20230516110038.2413224-28-schnelle@linux.ibm.com>
+In-Reply-To: <20230516182541.5836-2-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -71,67 +62,101 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---jp3qgbjcymzuog6w
+--loy7qsitjthxsozd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, May 16, 2023 at 01:00:23PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+On Tue, May 16, 2023 at 01:25:40PM -0500, Mario Limonciello wrote:
+> The logic used for power_supply_is_system_supplied() counts all power
+> supplies and:
+> * If no power supplies found assumes AC
+> * If non-battery power supplies found uses online to determine AC/DC.
+>   - If any are onlined, assumes AC
+>   - Othewise DC.
 >=20
-> Acked-by: Sebastian Reichel <sre@kernel.org>
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> This logic makes sense for desktop systems that don't export an ACPI
+> battery, but it fails once you include a dGPU that provides a UCSI
+> power supply on a desktop system without any other power supplies.
+>=20
+> The dGPU by default doesn't have anything plugged in so it's 'offline'.
+> This makes power_supply_is_system_supplied() return 0 with a count of
+> 1 meaning all drivers that use this get a wrong judgement.
+>=20
+> To fix this case adjust the logic to also examine the scope of the
+> power supply. If the power supply is deemed a device power supply,
+> then don't count it.
+>=20
+> Cc: Evan Quan <Evan.Quan@amd.com>
+> Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
-> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->       per-subsystem patches may be applied independently
 
-Thanks, queued to power-supply's for-next branch.
+Good find; the current logic should also break with a desktop PC
+once a POWER_SUPPLY_SCOPE_DEVICE battery device is attached (e.g.
+a HID device), because it increases the counter.
+
+I suppose I can just apply this to my fixes branch since there is
+no compile time dependency to the second patch?
 
 -- Sebastian
 
->  drivers/power/reset/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/power/supply/power_supply_core.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 8c87eeda0fec..fff07b2bd77b 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
->  config POWER_RESET_PIIX4_POWEROFF
->  	tristate "Intel PIIX4 power-off driver"
->  	depends on PCI
-> +	depends on HAS_IOPORT
->  	depends on MIPS || COMPILE_TEST
->  	help
->  	  This driver supports powering off a system using the Intel PIIX4
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index ab986dbace16..d57f420ba8c3 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -348,6 +348,10 @@ static int __power_supply_is_system_supplied(struct =
+device *dev, void *data)
+>  	struct power_supply *psy =3D dev_get_drvdata(dev);
+>  	unsigned int *count =3D data;
+> =20
+> +	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
+> +		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
+> +			return 0;
+> +
+>  	(*count)++;
+>  	if (psy->desc->type !=3D POWER_SUPPLY_TYPE_BATTERY)
+>  		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
+> @@ -366,8 +370,8 @@ int power_supply_is_system_supplied(void)
+>  				      __power_supply_is_system_supplied);
+> =20
+>  	/*
+> -	 * If no power class device was found at all, most probably we are
+> -	 * running on a desktop system, so assume we are on mains power.
+> +	 * If no system scope power class device was found at all, most probabl=
+y we
+> +	 * are running on a desktop system, so assume we are on mains power.
+>  	 */
+>  	if (count =3D=3D 0)
+>  		return 1;
 > --=20
-> 2.39.2
+> 2.34.1
 >=20
 
---jp3qgbjcymzuog6w
+--loy7qsitjthxsozd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj4Y0ACgkQ2O7X88g7
-+prvBQ//S5/2ZNXe0IRtGqYh6TrppJf6jIzcQKzwlDdsYrpaxPmNCo0K7y2IiVip
-uLF/HNmX2TzwGzwhiCn0qyEqfCpflQIzoVmRYI+QINGKDKki/x3diinsRQyovHat
-CtgvLc+n48bvV2a/4uiIaQKRFl5ALOWgf4d3xLy9xzSxHnJ2o/IHE9j+ggFqfaS0
-mfq0h0/iEldRbcYxn5Nc5M7JwkXurWI5eeLM7sFfzMl6Lt8WJtTIiEjmOsoDksR1
-rkqmYFZaj9N4w+0tfSXj58oPc4o0y2tBLP/6xYFKfHsix0s4yS69nGlPkJgvCdun
-diZdzVGavGLjmyndKIYTJOtP3xnl8/N9JdAMDprfJ+0Tp/Vrp+wUZWA/RPQyUMGV
-jddpFKhV3fs1FfVypVBQPJyi/NOl06hCmBrE6YwEgCWd9kA391qA9Zm38hDMHSqR
-b52OhqF9+yV2KHFx3KikzxDFZOHbqMuJV4VPHepmABk+TTys1FPsqsnSJOmenSmv
-dytYPdxhUOZBGv7zbjoA6/5zM70oNJqhqznYyUrAH+XC39Q5ss8VHeQ38BTEqI9M
-VBSSezMw2Avjp2I6SXvbb5t61Se4/V+sEVcsYlcJ3SsPbsx7b6jCxIe7CXRal+OU
-eemXHq+QLUY+a/y9XuVN9fn5nf1kKgou97yBWlxBp+GOj47L2So=
-=TeOZ
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj6mYACgkQ2O7X88g7
++prYYw/+J1BuDhX+ZFGDR0/voAC5dCfIpZGidEQyTgvGCXkk3ZoQr/saqgv5SwPf
+ED/OgJSCJWV/gvj8QTbdtFoEkWia30zwyjEw4Ny1GiOHq9FidHhMo4mUaKPyCr79
+p4EBPSLcD8EQlD0iQT3Gz5rEDm4qb43GBa/HT4odWpkd/AM1H0V9hNeXTrWB7F95
+SgAI7tru7pP9nhHszkn2phhX0AION0IszUhI3Eq92VFPojyPk9akh/HVtTPF4UbZ
+5pXoDrzup1Y46xlxB3lP7l0Hvy5HpVPYtevp350hvPB44ymvgfQ2XRjoPCQO/a8a
+uOudiWg05SFb7/uyp3+4vTGJKoWtZ96DWIX2Ihw6b2f+3atPSBNZaHZ695rJrPT7
+v1QXz8k1HViUAKxqFMWo1LMuv7pT5B0Iphyujr1RD0WyWw/Ib9UMTkmu6ZGkcu3/
+1Looi7Fqnfmd6lXjkVZWbgXmPLyaaRlviObAa/5we/MLWPPxsFCIJSAW7dbULpcq
+NTHviGtf/fUIAIhiy/hphCKmXMMjINsEjleHOjD8+GrMXEp3zvbl+nocrJA/v6K6
+2d48jfZnEheRyJAGkY8L2NibU2q61ABianuuiPzFbokxwoWfvIXwXPVpUNrHyR1t
+/GbgS+V1RmgP0wYzbXgPNkEVz8zXNWH53QH/z+zAIPwJvDj7DlA=
+=GZta
 -----END PGP SIGNATURE-----
 
---jp3qgbjcymzuog6w--
+--loy7qsitjthxsozd--
