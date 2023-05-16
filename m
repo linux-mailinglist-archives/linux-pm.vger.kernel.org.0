@@ -2,131 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D8270522D
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 17:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A61F70529F
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 17:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbjEPPdI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 11:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S234076AbjEPPrP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 11:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbjEPPct (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 11:32:49 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC1D72BD
-        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 08:32:42 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso26001825a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 08:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684251161; x=1686843161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+WfDmrqy+QvMst4XEpE/xoK4sak7nQ3C4hjNO9HTTG0=;
-        b=xDEJo0SLmGVlDXhX/NOriVq2mlAqG47xuhR/5aeirsLGvc7tkTl9nINt7oJZhqwU6o
-         koJhGF/IIzflE+YEoTP50NrniSiBi0YiQRxPW6iLxHejXOiDzRaDMgTVxhbW3e3EL5Dh
-         nuUQkhfOcADYBv3spwgyGfSZLOlDBU5J9PVGl3aATwbkjucWdrAxzPZuYLZBn9iDJm3S
-         A4/nurYAYt32tYoLTewVmH9oXggLmJ74/ynZ9y3ksrgZnbZQn4MOm6osU8cZ8D/XK7VR
-         hAvXQejna4ki7fOPorsJxh03h+xg2xP5CaH1XM+RGR4AjYLWCKw6LgH0+fhVeMYnrItR
-         LOvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684251161; x=1686843161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WfDmrqy+QvMst4XEpE/xoK4sak7nQ3C4hjNO9HTTG0=;
-        b=bkaGdEsuWuPfBl5E4j/uhjefSENQQkBotw6ZmBfc4FGqs2VQCbOoOjaN6mGBrjsTFy
-         wP0MZzILb38OMQzfQKEdo0ZcUe6Q8IPjMAh0ryZG+pZHrndHxwQIThCSjO2yyeVG7MBP
-         fmHH1iy+iER7DlXrF08S1Eb30+O26rAoamuS7C9lVrfStwPiQysoykafkwxITidA4SgK
-         L1I+5tCN/IWEOmTSvKP3PZOkREy+lhj25eyVbny/lQlUtWjU2qwHCdX7aJiHJ6dxBQ0u
-         XNKl8I7RBkbjOtnvAIB7ZeTukYO63M9IgBGKwmrlqFx9zNzouegf41o0TGVRsLfLsMza
-         0xgg==
-X-Gm-Message-State: AC+VfDx52n3WQzeUpzCqU9gN3ZzEWadlYo0EEuT4qvzQY3fdD+YL+rCd
-        TRFXFJZZscNvPbfqrrFArgWakA==
-X-Google-Smtp-Source: ACHHUZ7x0LFHxkX8C01IljtyBknQMJkvvH2qc+W3wIiGMrH81XlGSgasoeiOPj4uhkFFeOaCs2aTJg==
-X-Received: by 2002:a50:ed99:0:b0:50b:c41b:25d with SMTP id h25-20020a50ed99000000b0050bc41b025dmr27405434edr.7.1684251161319;
-        Tue, 16 May 2023 08:32:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b0050d89daaa70sm8389780edr.2.2023.05.16.08.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 08:32:40 -0700 (PDT)
-Message-ID: <5b818f32-33c4-3f89-ce02-eb803d34ea48@linaro.org>
-Date:   Tue, 16 May 2023 17:32:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, piyush.mehta@amd.com,
-        nava.kishore.manne@amd.com, sai.krishna.potthuri@amd.com,
-        shubhrajyoti.datta@amd.com, vishal.sagar@amd.com,
-        kalyani.akula@amd.com, bharat.kumar.gogada@amd.com,
-        linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        with ESMTP id S233481AbjEPPrO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 11:47:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAA97EDD;
+        Tue, 16 May 2023 08:46:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23F3D63B7C;
+        Tue, 16 May 2023 15:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536B2C4339B;
+        Tue, 16 May 2023 15:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684251976;
+        bh=HVMOSVBRtRWuvJiKuo6QBNcBWtc5UfnuPAacEuJdnH8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TXUqyuaWUan4sgxVkh+q9nw6WB4VKvsFJYDbi/5NVFQNyZO2rmxm7u5NqoMACYmiv
+         UEHy3KL9h28gXCgfIrVdJ350UaPLjpBsqm4PsvmtT6nCBQncl6Po8e8hz56o/71aeI
+         2FkdidLD6DXwvxqL8W/EKuby9Q7ggMuXCMz/ejLCZRP1GO4farriOFQrJX62SoJz55
+         oA1puvIJkcEJx+nxz+epdsGLg3xvYPcb2B7sE156jzMRJEqYIuF8tWa8P2xh4tsOns
+         6wufUcj0DvYREXR3SdjIf9UTgu5ylkyZ/8gVkI7zoiCM38BIPJj5qJJBXzcE3r+Y0Y
+         nlpXP/cESnu4Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Ard Biesheuvel <ardb@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 00/16] ARM: address -Wmissing-prototype warnings
+Date:   Tue, 16 May 2023 17:45:49 +0200
+Message-Id: <20230516154605.517690-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/05/2023 15:51, Michal Simek wrote:
-> @xilinx.com is still working but better to switch to new amd.com after
-> AMD/Xilinx acquisition.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
+From: Arnd Bergmann <arnd@arndb.de>
+
+This addresses all arm specific warnings outside of the mach-*/ code,
+which I've submitted separately. The majority of the patches should be
+straightforward, either adding an #include statement to get the right
+header, or ensuring that an unused global function is left out of the
+build when the prototype is hidden.
+
+The ones that are a bit awkward are those that just add a prototype to
+shut up the warning, but the prototypes are never used for calling the
+function because the only caller is in assembler code. I tried to come
+up with other ways to shut up the compiler, and ideally this would be
+triggered by the 'asmlinkage' keyword as Ard suggested in the past, but
+I could not come up with a way to do this.
+
+All of the warnings have to be addressed in some form before the
+warning can be enabled by default.
+
+    Arnd
+
+Link: https://people.kernel.org/arnd/missing-prototype-warnings-in-the-kernel
+
+Arnd Bergmann (16):
+  ARM: dma-mapping: hide unused dma_contiguous_early_fixup function
+  ARM: traps: hide unused functions on NOMMU
+  ARM: vfp: include asm/neon.h in vfpmodule.c
+  ARM: vdso: add missing prototypes
+  ARM: kprobes: avoid missing-declaration warnings
+  ARM: tcm: move tcm_init() prototype to asm/tcm.h
+  ARM: add prototype for function called only from asm
+  ARM: add clear/copy_user_highpage declarations
+  ARM: cacheflush: avoid __flush_anon_page() missing-prototype warning
+  ARM: nommu: include asm/idmap.h
+  ARM: move setup functions to header
+  ARM: fiq: include asm/mach/irq.h for prototypes
+  ARM: vfp: add vfp_entry prototype
+  ARM: add missing syscall prototypes
+  ARM: decompressor: move function prototypes to misc.h
+  ARM: xip-kernel: add __inflate_kernel_data prototype
+
+ arch/arm/boot/compressed/atags_to_fdt.c       |  1 +
+ .../arm/boot/compressed/fdt_check_mem_start.c |  1 +
+ arch/arm/boot/compressed/misc.c               |  6 ---
+ arch/arm/boot/compressed/misc.h               | 11 ++++
+ arch/arm/include/asm/ftrace.h                 |  4 ++
+ arch/arm/include/asm/page.h                   | 22 ++++++++
+ arch/arm/include/asm/ptrace.h                 |  3 ++
+ arch/arm/include/asm/setup.h                  |  7 +++
+ arch/arm/include/asm/signal.h                 |  5 ++
+ arch/arm/include/asm/spectre.h                |  4 ++
+ arch/arm/include/asm/suspend.h                |  1 +
+ arch/arm/include/asm/syscalls.h               | 51 +++++++++++++++++++
+ arch/arm/include/asm/tcm.h                    | 11 ++--
+ arch/arm/include/asm/traps.h                  |  9 ++++
+ arch/arm/include/asm/unwind.h                 |  4 ++
+ arch/arm/include/asm/vdso.h                   |  5 ++
+ arch/arm/include/asm/vfp.h                    |  1 +
+ arch/arm/kernel/fiq.c                         |  1 +
+ arch/arm/kernel/head-inflate-data.c           |  5 +-
+ arch/arm/kernel/head.h                        |  8 +++
+ arch/arm/kernel/setup.c                       |  7 ---
+ arch/arm/kernel/signal.c                      |  1 +
+ arch/arm/kernel/sys_arm.c                     |  1 +
+ arch/arm/kernel/sys_oabi-compat.c             |  2 +
+ arch/arm/kernel/traps.c                       |  2 +
+ arch/arm/mm/dma-mapping.c                     |  2 +
+ arch/arm/mm/fault.h                           |  4 ++
+ arch/arm/mm/flush.c                           |  1 +
+ arch/arm/mm/mmu.c                             |  2 +-
+ arch/arm/mm/nommu.c                           |  1 +
+ arch/arm/mm/tcm.h                             | 17 -------
+ arch/arm/probes/kprobes/checkers-common.c     |  2 +-
+ arch/arm/probes/kprobes/core.c                |  2 +-
+ arch/arm/probes/kprobes/opt-arm.c             |  2 -
+ arch/arm/probes/kprobes/test-core.c           |  2 +-
+ arch/arm/probes/kprobes/test-core.h           |  4 ++
+ arch/arm/vdso/vgettimeofday.c                 |  2 +
+ arch/arm/vfp/vfp.h                            |  3 ++
+ arch/arm/vfp/vfpmodule.c                      |  1 +
+ 39 files changed, 175 insertions(+), 43 deletions(-)
+ create mode 100644 arch/arm/include/asm/syscalls.h
+ create mode 100644 arch/arm/kernel/head.h
+ delete mode 100644 arch/arm/mm/tcm.h
+
+To: Russell King <linux@armlinux.org.uk>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+-- 
+2.39.2
 
