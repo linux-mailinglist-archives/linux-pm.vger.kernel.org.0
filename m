@@ -2,120 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6EB7052B3
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 17:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2301705573
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 19:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbjEPPsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 11:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S231144AbjEPRwB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 13:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbjEPPsC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 11:48:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A84A24D;
-        Tue, 16 May 2023 08:47:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDB6663B93;
-        Tue, 16 May 2023 15:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0070AC433A1;
-        Tue, 16 May 2023 15:47:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684252035;
-        bh=bjHzaX1S/XmMHS+pzx/BBsDEPRhhS8ndqsq/8qSoq9A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f2bOGMmanyE84V2/AE41WTMs80qf9pTZsHsD9F+/Ran0Loq1XnTWD9T1Xe/lEKv2Y
-         26KXijopJ1VoF2HSPy2rDYc4XU/QPS+Zund7IVhGRxHNHw9vNTL86eH4s8XWVe+esJ
-         GHxnqexAf5xknWy4Yonsml33IdsEstRyKq9sdNqaIejoDb1g5MSmONOYCsanOthNKJ
-         D+QslLecnNSqmq1ph9lvme/E4S0LiZmiQg9qzXyrdadHTL+NCJjLLu6zxCWjXyvqVt
-         4V5sahVD0mThIJeYsb2Qctrjw2FfeAYZ7OWb+ewqVNJiWbDv2ZF8YlLIH2bOXWAWg3
-         rAlpSAzcEWEKg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 16/16] ARM: xip-kernel: add __inflate_kernel_data prototype
-Date:   Tue, 16 May 2023 17:46:05 +0200
-Message-Id: <20230516154605.517690-17-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516154605.517690-1-arnd@kernel.org>
-References: <20230516154605.517690-1-arnd@kernel.org>
+        with ESMTP id S229852AbjEPRwA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 13:52:00 -0400
+X-Greylist: delayed 14069 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 10:51:55 PDT
+Received: from cp.ydms.co.nz (unknown [112.109.78.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13BE30F9
+        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 10:51:55 -0700 (PDT)
+Received: by cp.ydms.co.nz (Postfix, from userid 10007)
+        id 893F82EF90B; Wed, 17 May 2023 00:06:18 +1200 (NZST)
+To:     linux-pm@vger.kernel.org
+Subject: Your urgent feedback is highly appreciated.
+X-PHP-Originating-Script: 10007:ISY7DTO2vwW.php
+Date:   Wed, 17 May 2023 00:06:18 +1200
+From:   Eun-ji Ha <supporte@nzcu.co.nz>
+Reply-To: in123c@daum.net
+Message-ID: <02f198286b587784b02fd43ce193686b@www.nzcu.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DATE_IN_PAST_03_06,
+        FREEMAIL_FORGED_REPLYTO,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.6 DATE_IN_PAST_03_06 Date: is 3 to 6 hours before Received: date
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
+        *      dynamic-looking rDNS
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-The kernel .data decompression is called from assembler, so it does
-not need a prototype, but adding one avoids this W=1 warning:
-
-arch/arm/kernel/head-inflate-data.c:35:12: error: no previous prototype for '__inflate_kernel_data' [-Werror=missing-prototypes]
-
-The same file contains a few extern declarations for assembler
-symbols, move those into the header as well for consistency.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/kernel/head-inflate-data.c | 5 +----
- arch/arm/kernel/head.h              | 8 ++++++++
- 2 files changed, 9 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm/kernel/head.h
-
-diff --git a/arch/arm/kernel/head-inflate-data.c b/arch/arm/kernel/head-inflate-data.c
-index 89a52104d32a..225c0699a12c 100644
---- a/arch/arm/kernel/head-inflate-data.c
-+++ b/arch/arm/kernel/head-inflate-data.c
-@@ -8,16 +8,13 @@
- 
- #include <linux/init.h>
- #include <linux/zutil.h>
-+#include "head.h"
- 
- /* for struct inflate_state */
- #include "../../../lib/zlib_inflate/inftrees.h"
- #include "../../../lib/zlib_inflate/inflate.h"
- #include "../../../lib/zlib_inflate/infutil.h"
- 
--extern char __data_loc[];
--extern char _edata_loc[];
--extern char _sdata[];
--
- /*
-  * This code is called very early during the boot process to decompress
-  * the .data segment stored compressed in ROM. Therefore none of the global
-diff --git a/arch/arm/kernel/head.h b/arch/arm/kernel/head.h
-new file mode 100644
-index 000000000000..6eccf98fc2cc
---- /dev/null
-+++ b/arch/arm/kernel/head.h
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+extern char __data_loc[];
-+extern char _edata_loc[];
-+extern char _sdata[];
-+
-+int __init __inflate_kernel_data(void);
-+
--- 
-2.39.2
+Good day,
+My name is Mrs. Eun-ji Ha.
+I would like to get in touch with you.
+Did you receive my previous email for investment purposes?
+Please send your telephone number to enhance communication.
+Have a great day!
+Best regards,
 
