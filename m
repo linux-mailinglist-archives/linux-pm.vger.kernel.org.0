@@ -2,118 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE35704D1C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 13:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABEC704D74
+	for <lists+linux-pm@lfdr.de>; Tue, 16 May 2023 14:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbjEPLy0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 May 2023 07:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S233143AbjEPMJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 May 2023 08:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbjEPLyP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 07:54:15 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1E66A42
-        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 04:54:09 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f122ff663eso16067959e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 16 May 2023 04:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684238047; x=1686830047;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U/U9AOMWIVpnC8ZJ/nG62G/TxmeU88Cq42ECjWaNDuc=;
-        b=xxzf+tcELx3E0yLhL1kMvPFLIC9HxKkT2Dz6mG5MDFEj/jmjFgawVW19wfGBEFzvLY
-         /dtS1p2p80akvBQaXa44MvhYXUpLzqRagcWuWz75tXe0fzZBrBmUyJNM7oRW4k3V3Dg7
-         bv33zY88jiVdSGIal1dcSoDLQHxCEpCUy9HXb/2lzjT29N3RrPNLFLyNDmE44vpQFIzR
-         M6HTlTdK155eFsjZMoQhe6JY4T5bFqgjIZZ0N1k78clJGdvZRhieBQsCEGaWn2H5+p3L
-         p8rE6oSZ1f8+Nun8CTg0+RK2qH0g3NemkWTzlAAiOWWBGBSUI1mcmFcNiLh0lNBum4n7
-         /7Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684238047; x=1686830047;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U/U9AOMWIVpnC8ZJ/nG62G/TxmeU88Cq42ECjWaNDuc=;
-        b=CCQdk7mfR0PnPw/T5l11LBDWUZu3AgA/AakGwBv4+5Nj7GLKU+U8nU+Q/+j48UsPdK
-         gfi7KfXSpDktibescc0/ZUnATlKDDPT6RmqJTHkRc5BAMdmiubgjtKuybGgRUjTpKttv
-         784kIQADeFl7ikwx4LWuF09El2qz3e8yjwhuLEsW56SdQAtL5w/AfujM1216MfoNCRa1
-         KL9xTF80XmdApMOWZbm3iojLaTQuIV144nkrq7FhO5IeR91pvILuxyXXTdU5olNdOATm
-         tQMofRRvB6tJlemk6RgQeluo8IWLPNp3g7fwiWna+s8PNji9FGGJjht6NZ2mfeeyOfrp
-         mvbA==
-X-Gm-Message-State: AC+VfDx/mQi3AiVrEphzX3gAWEgUN19b2SNxyyDG8dDEhvEO6o2XeIgt
-        IdF8mUXdrdMrGggP9VzDTfJnKA==
-X-Google-Smtp-Source: ACHHUZ7al8ZSgMAfnhYMhVtIW3R1XeM4K9+1jw+RmmTpUlYvv6Iej0HkqaAvyKF4li93f6eg81YRVQ==
-X-Received: by 2002:ac2:5d26:0:b0:4dd:afd7:8f1 with SMTP id i6-20020ac25d26000000b004ddafd708f1mr6589759lfb.52.1684238047178;
-        Tue, 16 May 2023 04:54:07 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056512376d00b004f019d3eab4sm2951410lft.23.2023.05.16.04.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 04:54:06 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 16 May 2023 13:53:59 +0200
-Subject: [PATCH RESEND 2/2] dt-bindings: thermal: tsens: Add compatible for
- SM6375
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230516-topic-lost_tsens_bindings-v1-2-99715746ddb1@linaro.org>
-References: <20230516-topic-lost_tsens_bindings-v1-0-99715746ddb1@linaro.org>
-In-Reply-To: <20230516-topic-lost_tsens_bindings-v1-0-99715746ddb1@linaro.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        with ESMTP id S233116AbjEPMJP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 May 2023 08:09:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA945FD6;
+        Tue, 16 May 2023 05:09:14 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAelHI017020;
+        Tue, 16 May 2023 11:05:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=zKQnd4uCl/rhw32LGsiVvNh8GGFSIw6T5V4V90czzb0=;
+ b=QPXkpjXj3mAjvlFO1ds3iHTejHe9kI5eeX5QYlNAP5V+2y97Uw3wlm/YnI4PnKpNY9wR
+ LnvNPRPpXngPi/M8zOWX4LP37srDUFBxC1J+J6q3xgaAtGEbD2X8VRqj1OCppsX49Ltc
+ d9uLxZUSoVBs9JZIejRnH01Zoea2KeAdsVknX+8YRCfJttQfOz8coHnER6sb8e4DSkzy
+ A56KQVzf40od9kS1wSXnenEoY5N+VuiT1pfes876xkLnopXAExhvj6uG8FDGqILlv59j
+ 5ohaikHpDDz0DwbX755Z+5zKjxwpAX2Zey8CRo5nsg623nvdy6W/EKfYC/wj7T8mqIhC xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm82f0swm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:05:25 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAttGQ005341;
+        Tue, 16 May 2023 11:04:53 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm82f0pne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:04:53 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G5LLca028625;
+        Tue, 16 May 2023 11:01:05 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sk97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:01:05 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB13FV38142594
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 May 2023 11:01:03 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E99D2005A;
+        Tue, 16 May 2023 11:01:03 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B42C72004B;
+        Tue, 16 May 2023 11:01:02 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 16 May 2023 11:01:02 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Sebastian Reichel <sre@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684238042; l=944;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=I+wiNgFNMuppuk+Q4In4BSan/9TRWGs892V/JtEHGx0=;
- b=wy7N//zkdjcEG/NypauPBu9XBdEQ0ByzG+WNhTP55JUZcGBwa7+tfKQ+/VPfUSeWWzOTiEnvE
- azlPvtSZHC4DAcNvhLJZrf6c8HK5EYBGT2QEVoOJ8Tv9EJVBxgyesgq
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v4 27/41] power: add HAS_IOPORT dependencies
+Date:   Tue, 16 May 2023 13:00:23 +0200
+Message-Id: <20230516110038.2413224-28-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gC677OthMYI01q4JVlcqAclFGUKy6eql
+X-Proofpoint-ORIG-GUID: O-AEjRKOh3i3Wg5hvo4w2omSiYB1HJvh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ adultscore=0 phishscore=0 priorityscore=1501 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160094
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Qualcomm SM6375 platform has two instances of the tsens v2.8.0 block,
-add a compatible for these instances.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Acked-by: Sebastian Reichel <sre@kernel.org>
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+      per-subsystem patches may be applied independently
+
+ drivers/power/reset/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 2739b2bead7b..d9aa54c11663 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -57,6 +57,7 @@ properties:
-               - qcom,sdm845-tsens
-               - qcom,sm6115-tsens
-               - qcom,sm6350-tsens
-+              - qcom,sm6375-tsens
-               - qcom,sm8150-tsens
-               - qcom,sm8250-tsens
-               - qcom,sm8350-tsens
-
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 8c87eeda0fec..fff07b2bd77b 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
+ config POWER_RESET_PIIX4_POWEROFF
+ 	tristate "Intel PIIX4 power-off driver"
+ 	depends on PCI
++	depends on HAS_IOPORT
+ 	depends on MIPS || COMPILE_TEST
+ 	help
+ 	  This driver supports powering off a system using the Intel PIIX4
 -- 
-2.40.1
+2.39.2
 
