@@ -2,258 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD03706E03
-	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 18:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6C7706E25
+	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 18:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjEQQVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 May 2023 12:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S229590AbjEQQ2l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 May 2023 12:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEQQV2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 12:21:28 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A2BD2CA
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 09:21:19 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4effb818c37so1231764e87.3
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 09:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684340477; x=1686932477;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ChIVfbdP674iihHLcCeQgumGx8yk3INFc1OPHf7Gp3M=;
-        b=o5+4zGG4vLM3JtsbCVaRv8icO5k4KRyaqLIgm4nNXIEa3NKvVHVNNQ/LQBBsttlcoi
-         yHI9soeCj9MPwYzd2qtoP6IyGy1vWUMCpgxOyPXuCVHN8bXONHBEt/213Xy/8Xgezaam
-         pQy1ExSn4egGCGveDIgH/YbJ6HdA+PybZnIMZ+c81NseZLUJYelYJGsbSrpIlcnGcM8U
-         HJ1kp3Reo9erF5wOFwg+7njtC7+42Ady7kWCYjh3TkcwimZKnnelxqz6kjTFAq7TVyy8
-         HxK6fRRFPbwkOEnTqHJlUDHbgYoCVeaf1xx2csw3GRi8NJ5li8cNDXDr3LwoZ6VWI2KO
-         tkcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684340477; x=1686932477;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ChIVfbdP674iihHLcCeQgumGx8yk3INFc1OPHf7Gp3M=;
-        b=fO2Fk7vXdyrfdV4qj150vpXjTvWbwe/dsybeIuGe4C5wv7lGuVeG0eDQrZsGBrWYmo
-         iOdRMQIaa6GRkCvmbDFi7aYtARdmkb3Y9bpMsbtHq7rBxuRC02E3oaYmFas0gBc29RAu
-         aGBSPYCr0Y1To3dEsiQUs/fVJpOdliOjUnru6zudEDwh8XrTEiEHJLG4ODikPA/vcryn
-         edLRrEg1XwZoLB2Vlq7heObO9oDwr8Zq/u7S+SclJt07wHre+d28qC06tmfda6bjcRKM
-         ZVE/aQjnsxVjPPVT6+/IdlTl10FBNXWaUIz/qWiqrJC/xXhKrx+Op7+p3KGZ5TZd5X5x
-         kupA==
-X-Gm-Message-State: AC+VfDxlyU9GR3EpdhH6tmnqAUp8eJjEQOvFJK/j1oLwJfF/ivB6fP86
-        ovn+XFjiaC2mKp03Mh6CWPFGZw==
-X-Google-Smtp-Source: ACHHUZ7Kx9X9WbzBlqUy7R10/6IiExFzx1PtsoTdz59PYW4PPh2JL61/9upryDyHc2SoeR4gUWLw/w==
-X-Received: by 2002:ac2:596e:0:b0:4ef:eeaa:e9b9 with SMTP id h14-20020ac2596e000000b004efeeaae9b9mr387519lfp.35.1684340477151;
-        Wed, 17 May 2023 09:21:17 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id k27-20020ac257db000000b004e95f53adc7sm3433962lfo.27.2023.05.17.09.21.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 09:21:16 -0700 (PDT)
-Message-ID: <95f36218-c0eb-eb69-696d-044fd72cf8c4@linaro.org>
-Date:   Wed, 17 May 2023 18:21:15 +0200
+        with ESMTP id S229566AbjEQQ2k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 12:28:40 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2058.outbound.protection.outlook.com [40.107.92.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670748A78;
+        Wed, 17 May 2023 09:28:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vw3DZla6AWy1vVE5lviYPmUHaYm4sWqduB58oYu68DqSr7GPR06146x3TAFkLmzbBmpRzrGZ5zfV4STmgllOsqlzrBfR5WrUftouMhLE/M5EmWF2ysDiS/r0zytWldThNYkvKO9MvRNkS3qQIiDzQ0HdKhbOQiuaRg5KS8aos7FPlqOwD2zkSvj8Vo7B/R5NbcwqBk/ei+jB9X2QubvDV5t+nLSnOAUTtaNuXeM5CJu3lJe8/R04dcxO22hhRbTxqeYLuCOzfyJmK/kpK8d3e0q6DWfBoOIMm2cynsBAGcohvuLbsMYC8ReVk9mGW6JZSvi/ORv/vjc0Puec19skfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VoyPpKFq9KsvS7Kb7sR2LZ9N7PPYqZ7kLKJOSlZmrOY=;
+ b=VunBt0YS2o+kX+SW3ry8rtk73xkfwA0V/zFweM9vv26RXbyj++W56lo3HRn19KdEojWbJxT5B73Bo2UhU0wLIPD+C2U7gvjG+CxYlVLJA/cyGy9HqdgHmOuoHlltrnbEIdJP2/uKbm8cI6ZyPC9Ja6iHGuA1gn0RGbI7idxiPcF2Qpl45t3uEmdT1S2wueAcjCHVayzSNFwDSRyuIupbeZIw+Jal0ecEs9L2Z0xKi4IhlnVz0cHaa96AEyMBx0mCzGB/+KJz3RHZZptS0mJZQeOZkHS5Yl7JuOHyMoaPDL+arSvZ7tG0ckRLQSuZDbhr+wTMmIIBltSyXvxlgl1aZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VoyPpKFq9KsvS7Kb7sR2LZ9N7PPYqZ7kLKJOSlZmrOY=;
+ b=D8+ox+zzOSpZqVOQOqZ/+phJCnsdaJrb76pmnWCCVc0bb3mQGGSLXsDzPF66iAThim47hpaMron00zdS6TRvxoYr7RcKfz926utGpeDDEafwhuWcmBb/lNV1cza0Qsta3M/hjoebSBxdDHaFCtooLZWzYnJrfSSIazsU1hOJxTE=
+Received: from BN9PR03CA0901.namprd03.prod.outlook.com (2603:10b6:408:107::6)
+ by BY5PR12MB4308.namprd12.prod.outlook.com (2603:10b6:a03:20a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
+ 2023 16:28:33 +0000
+Received: from BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:107:cafe::90) by BN9PR03CA0901.outlook.office365.com
+ (2603:10b6:408:107::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
+ Transport; Wed, 17 May 2023 16:28:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT056.mail.protection.outlook.com (10.13.177.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.17 via Frontend Transport; Wed, 17 May 2023 16:28:33 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 17 May
+ 2023 11:28:30 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gautham.shenoy@amd.com>, Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH v4 0/3] cpufreq/amd-pstate: Fix null pointer dereference when frequency invariance is disabled
+Date:   Wed, 17 May 2023 16:28:14 +0000
+Message-ID: <20230517162817.8538-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v8 0/8] The great interconnecification fixation
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT056:EE_|BY5PR12MB4308:EE_
+X-MS-Office365-Filtering-Correlation-Id: f8211065-4cb4-4bdb-c4aa-08db56f3c213
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gxOauhvFUbTu+xt0yGj0o04Z65DlGCk7No0Pfjlp/pzgbYuNBs4kpwkb0I7dRAlClsZ5ML1eOPJipNPT7RDkKF1GwFnv4jTEenWTwMa4lXpzkZoAqjLYhx78NksckDMvsl2te1/r6GW7+4u8caH5WQWBeQUsojityd67BqTp7icLp0g1ztm/vSIGEzY6KTpil3VDLWD8ETa68N8uERjlz92ZTcy1/YShBLwwxgK5AiXQRnW+O9/t8D25sorRaArqKDjqo78TBN6nGtpKiLYy9VB4l7TkCxV3BwqgVoYlVUPB5Cv19AE3DjEJ2Ix3MHJxh3h9myxUli8C6xX3IW2O97rrj8kFwswO8R3xWo949IHm6zXrYfoakfU+M8gDJbg8y+jdDUFs51AgVH2vynl5OkdzUTR5yeyryT/V29MS8g08w6F/wkwANNKMNFoz0MvWqEbPuCtP4U+x1fmUliafHl884ANXalJhxG02GuPAbWIOX1GxM7UHSM9sdVRXBmnLfHpl/ygjfojzuot+7ZuV0ZCZ5p0Abxh5qXfwl+J3uSA4VRQ9qezv9dOWcs8TRcFBS5DlQftP0SIBhMVeYWd6w7Yahryp/9rh+/lgfgV/2PPP0DmbQ5t1kEWyy5DyBhrXITd6osYsaSiiBFqXPXG8FmlEzKpaf/7shAUmaiIy5LjUro7/QOSPFMnoOcqfZSs03uQDSxaVL+CskSCs5mSpNw9nwfNS8dU8G/C6rkuskpdOSL/xbezqIVuKaX3r3ssZuDHsYsDLXHlZ2rJBGIMIXU8QNaW5fe/oA0libPXcTv/nHcJxorvwWnvzuzon1yKv
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(83380400001)(36860700001)(47076005)(426003)(966005)(336012)(7696005)(110136005)(54906003)(478600001)(2616005)(6666004)(26005)(186003)(1076003)(16526019)(44832011)(8936002)(5660300002)(8676002)(36756003)(40460700003)(41300700001)(356005)(82740400003)(81166007)(4326008)(40480700001)(82310400005)(70206006)(70586007)(2906002)(86362001)(316002)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 16:28:33.5705
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8211065-4cb4-4bdb-c4aa-08db56f3c213
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4308
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Currently, amd_pstate only uses `adjust_perf` and `target` callback
+functions to get the frequency/effective utilization data from scaling
+governors. But the governor can switch back to fast_switch (as
+fast_switch_possible is set) when frequency invariance is disabled. In
+that case, if the driver didn't set fast_switch function pointer, null
+pointer dereference can happen and the kernel will crash.
 
+Currently, frequency invariance is turned off when any anomaly is
+detected with aperf/mperf readings. Which triggers this problem.
 
-On 7.04.2023 22:14, Konrad Dybcio wrote:
-> Hi!
-Bump!
+Fix this by adding `fast_switch` function in the amd_pstate driver.
 
-Konrad
-> 
-> v7 -> v8:
-> - Rebase (dropping has_bus_pd, picked patches from v7)
-> 
-> - Clean up the QoS-setting functions [3/8]
-> 
-> - Only set the QoS registers once [4/8] - Georgi talked to some
->   Qualcomm folks and we concluded that it's "good enough" as they
->   should:tm: persist until a full reboot on "almost all" platforms
-> 
-> - Move the intf clock enabling/disabling to correspond with /\ [5/8]
-> 
-> - DO NOT switch to associating an interface clock with a given node
->   (instead of a provider), as it makes little sense with the changes
->   with [4/8] and the new iteration of [5/8]
-> 
-> v7: https://lore.kernel.org/r/20230228-topic-qos-v7-0-815606092fff@linaro.org
-> 
-> v6 -> v7 changelog:
-> - Rebase on Johan's recent patches
-> 
-> Link to v6: https://lore.kernel.org/r/20230228-topic-qos-v6-0-3c37a349656f@linaro.org
-> 
-> v5 -> v6 changelog:
-> - Completely rewrite the commit message of [1/9], I realized that there
->   was actually no issue with the present upstream setups and the only
->   drivers suffering from ghost votes were.. my own OOT drivers..
->   As a consequence of that, all fixes tags were dropped and the patch
->   has been kept, since it was deemed useful for newer SoCs that don't
->   distinguish ap_owned nodes.
-> 
-> - Change the number of allowed bus_clocks from (0-2 in the previous
->   revision, 0-inf in the current upstream state) to {0, 2}. Scaling is
->   only possible with a pair of wake-sleep clocks, but some providers
->   don't do scaling at all (see 8996 A0NoC, 660 GNoC). Drop the cheeky
->   -1 / 0 / >0 checks from the previous revision. [7/9]
-> 
-> - bus_clocks are now forced to be named "bus", "bus_a", as there is no
->   need for variance here - we don't do scaling on non-SMD RPM bus clocks.
->   [7/9]
-> 
-> - The interface clocks are now only turned on when the associated bus
->   is running at a non-zero frequency [6/9] instead of being always on
->   and leaking power
-> 
-> Tested on MSM8996 Kagura, SM6375 PDX225 (OOT), MSM8998 Maple (OOT)
-> 
-> Link to v5: https://lore.kernel.org/linux-arm-msm/20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org/
-> 
-> v4 -> v5 changelog:
-> - Previously the "Always set QoS params on QNoC" contained part of what
->   should have been included in "make QoS INVALID default".. (very bad)
->   Fix it!
-> 
-> - Drop negative offset and keep_alive, they will be resubmitted with new
->   icc driver submissions
-> 
-> - use b4 this time.. hopefully the series gets to everybody now
-> 
-> Link to v4: https://lore.kernel.org/linux-arm-msm/20230214143720.2416762-1-konrad.dybcio@linaro.org/
-> 
-> v3 -> v4 changelog:
-> - Drop "Always set QoS params on QNoC", it only causes issues.. this
->   can be investigated another day, as it's not necessary for operation
-> 
-> - Drop "Add a way to always set QoS registers", same as /\
-> 
-> - Add a way (and use it) to have no bus_clocks (the ones we set rate on),
->   as at least msm8996 has a bus (A0NoC) that doesn't have any and does
->   all the scaling through RPM requests
-> 
-> - Promote 8996 icc to core_initcall
-> 
-> - Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
-> 
-> - Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
-> 
-> Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
-> 
-> v2 -> v3 changelog:
-> - Drop "Don't set QoS params before non-zero bw is requested"
-> 
-> - Rebase on next
-> 
-> - [1/9] ("..make QoS INVALID default.."): remove unused define for
->   MODE_INVALID_VAL
-> 
-> - Pick up tags
-> 
-> v1 -> v2 changelog:
-> - reorder "make QoS INVALID default", makes more sense to have it
->   before "Always set QoS params on QNoC"
-> 
-> - Limit ap_owned-independent QoS setting to QNoC only
-> 
-> - Add new patches for handling the 8996-and-friends clocks situation
->   and optional BIMC regardless-of-ap_owned QoS programming
-> 
-> [1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
-> [2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
-> 
-> This series grew quite a bit bigger than the previous [1] attempt, so
-> I decided to also add a cover letter.
-> 
-> Link to v2: [2]
-> 
-> It addresses a few things that were not quite right:
-> 
-> - Setting QoS params before a "real" (non-zero) bandwidth request
->   makes little sense (since there's no data supposed to flow through
->   the bus, why would the QoS matter) and (at least newer) downstream
->   prevents that from happening. Do the same in Patch 1.
-> 
-> - QNoC type buses expect to always have their QoS registers set as long
->   as there's a non-INVALID QoS mode set; ap_owned is not really a thing
->   on these anymore, Patch 3 handles that.
-> 
-> - The recent MSM8996 boot fix was done quickly and not quite properly,
->   leading to possibly setting the aggregate bus rate on "normal"
->   hardware interface clocks; this series handles that by limiting the
->   number of bus_clocks to 2 (which is the maximum that makes sense,
->   anyway) and handling the rest as "intf_clocks", which are required
->   to access the   hardware at the other end. Patches 5-8 take care of
->   that and Patch 10 reverts the _optional moniker in clk_get_ to make
->   sure we always have the bus scaling clocks, as they're well, kind
->   of important ;)
-> 
-> - Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
->   by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
->   always receive QoS programming, whereas BIMC on "older" SoCs cries
->   like a wild boar and crashes the platform when trying to do so
->   unconditionally. Patch 9 adds a way to take care of that for newer
->   SoCs (like SM6375)
-> 
-> - QoS mode INVALID was assumed by developers before to be the default
->   ("I didn't specify any QoS settings, so the driver can't assume I
->   did.. right? right!?" - wrong, partial struct initialization led to
->   0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
->   that's the logical choice. This allows the "Always set QoS params
->   on QNoC" patch to work without setting tons of what-should-
->   -obviously-be-the-default values everywhere, as well as fixes older
->   drivers that set ap_owned = true but left the QoS mode field unset.
->   Patch 2 cleans that up.
-> 
-> - Some nodes are physically connected over more than one channel
->   (usually DDR or other high-throughput paths). Patch 4 allows that
->   to be reflected in calculations. This will be required for at least
->   MSM8998 and SM6375 (which will be submitted soon after this lands)
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Konrad Dybcio (8):
->       interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
->       interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
->       interconnect: qcom: rpm: Drop unused parameters
->       interconnect: qcom: rpm: Set QoS registers only once
->       interconnect: qcom: rpm: Handle interface clocks
->       interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
->       interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
->       interconnect: qcom: msm8996: Promote to core_initcall
-> 
->  drivers/interconnect/qcom/icc-rpm.c | 110 +++++++++++++++++++-----------------
->  drivers/interconnect/qcom/icc-rpm.h |  22 ++++++--
->  drivers/interconnect/qcom/msm8996.c |  35 +++++++-----
->  drivers/interconnect/qcom/sdm660.c  |  17 +++---
->  4 files changed, 102 insertions(+), 82 deletions(-)
-> ---
-> base-commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
-> change-id: 20230228-topic-qos-5435cac88d89
-> 
-> Best regards,
+The same problem could arise with any scaling driver which doesn't set
+fast_switch but sets fast_switch_possible.  Return failure while loading
+such drivers.
+
+Changelog:
+v3 -> v4:
+- Add extra patch to remove fast_switch_possible flag from amd_pstate
+  active mode driver.
+- Fail to load such drivers which sets fast_switch_possible flag but not
+  fast_switch.
+
+v2 -> v3
+- Add fast_switch callback in amd_pstate and warn if any driver
+  sets fast_swich_possible flag but not fast_switch function pointer.
+
+v1 -> v2
+- Remove fast_switch_enabled flag dependency for adjust_perf callback
+
+v1: https://lore.kernel.org/linux-pm/20230410095045.14872-1-wyes.karny@amd.com/
+v2: https://lore.kernel.org/linux-pm/20230509180503.739208-1-wyes.karny@amd.com/
+v3: https://lore.kernel.org/lkml/20230515113404.4259-1-wyes.karny@amd.com/
+
+Gautham R. Shenoy (1):
+  amd_pstate: Add ->fast_switch() callback
+
+Wyes Karny (2):
+  cpufreq/amd-pstate: Remove fast_switch_possible flag from active
+    driver
+  cpufreq: Return failure if fast_switch is not set and
+    fast_switch_possible is set
+
+ drivers/cpufreq/amd-pstate.c | 38 ++++++++++++++++++++++++++++--------
+ drivers/cpufreq/cpufreq.c    |  5 +++++
+ include/linux/cpufreq.h      |  4 +++-
+ 3 files changed, 38 insertions(+), 9 deletions(-)
+
+-- 
+2.34.1
+
