@@ -2,135 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A120470700B
-	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 19:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D137070BF
+	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 20:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjEQRyH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 May 2023 13:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S229555AbjEQS07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 May 2023 14:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjEQRyC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 13:54:02 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27744FA
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 10:54:01 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-76c6ba5fafaso6631239f.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 10:54:01 -0700 (PDT)
+        with ESMTP id S229475AbjEQS06 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 14:26:58 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38CF1FDA
+        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 11:26:55 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-76c6ba5fafaso6875739f.1
+        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 11:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684346040; x=1686938040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fXutPRKbM379fHJ19Cv4c2+UOyKEPvzUNU2LTmwiWMI=;
-        b=ZhHGP90TuO7Skdy9lDU2lyWONj8hFmkCQCOp1i8kQJr7YqLaIqXZu8YUGWRR7+1xhG
-         lcTT9lWjZVq2ySX3CwS1AE3Z6S5pwfyKoz0hF9jvCEZDoUA3waRTQDCjr1x42gYmxXpn
-         RBUhUDCPQJ7++NlzxQlREWuHcgyKA5O1VTojA=
+        d=linuxfoundation.org; s=google; t=1684348015; x=1686940015;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=SefrbI4luUxkGPhDruiHFtUBNRN3yZ6zgSDA+Ss60NY=;
+        b=H3JFE1jHp5TEZJc7lLOVSzFimQ6OuqRvaHdKgsh+0FijfB4S8X+4Tpfty2B9sQuhxu
+         JavwJmSIC6V4ciE5nSbf0L13cOleRE84BdxZhvMy4Xhsu0bEvFRR8CJBkT7CMyKfC/44
+         MTt+JfNXAMlgq9M/jF4jAz+BKxEbqLw1jK6Rg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684346040; x=1686938040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXutPRKbM379fHJ19Cv4c2+UOyKEPvzUNU2LTmwiWMI=;
-        b=IKdEIjaDJYE1yZApiskwkajMzCEe2qOda+2Im+3BpkBhp8XzjM8dHGjmVGa9y4KQgv
-         P0cvag80J9mn7dlOJnHzYnexVPeN+La/NLvTPee/HEMPCFx/ZjpWh2Y2wLzWG+R3i7Lq
-         Va8JWjcTkp4atKtILQyBbz5Rb5F+TuvYAEHVkmcWjD2Si+R+a+wSj8uRUwMUMsp/+Dlg
-         cBspkrycys/7bCrmAg2uN2lQtTUijMPws1QmIHQ9r8/AH/ItWjewG+kuPVzeXjjPOz8V
-         KV18Z3SvtnHg1RgKHcyJsiNltTYVVFIGf5jkHNixaisW/Sf+pjpQIInML74QRJ1FE108
-         MboA==
-X-Gm-Message-State: AC+VfDy990GlvbcKEP65YcupWxIm2dVqYnP1Px3+cwxptyDs0CiBPBhJ
-        Cgr9IyQsYubGV9AVV5DjHlsIREO4tsUcAgDaxIU=
-X-Google-Smtp-Source: ACHHUZ7fvq3D47jwbMZ+/dsHvmy9roBTV/V5dLdbY1Z2h4gXmGEKeZg6ijJS0hLynREdg8v3brwJAg==
-X-Received: by 2002:a05:6e02:1b0d:b0:332:fcce:c26d with SMTP id i13-20020a056e021b0d00b00332fccec26dmr2651320ilv.0.1684346040428;
-        Wed, 17 May 2023 10:54:00 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684348015; x=1686940015;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SefrbI4luUxkGPhDruiHFtUBNRN3yZ6zgSDA+Ss60NY=;
+        b=WZbHx2Kh7sBSRY6sD+UUoG9beihE3xYP8XwJi/eR5EO0w3dxoNjk/SQ9GLkb2xumuJ
+         PEZTMwhQk8F6MMSZBaqsV9VIUoRdHCRqrkhPh38vqmYOfe2IWe89iuFhUwoXdEETS+jc
+         40nZKwcW+G+rcdw37BCSOVOGDQykyJxTM41tBJbI6uDvbuIrqlCYoa1aYQjIPaYzv1O2
+         0VpIeRPMIIOoacObhekqANy14YK3A84/cZdflVPC/flt/nfok/W0PjcjnSM0KpJICVt3
+         EjIJ16MyL3buadGbu9YUa78bQruqkfs04GiJhn16EpF7H8LvcFuLsE4shzZ5ZcM5f4+P
+         Q1HQ==
+X-Gm-Message-State: AC+VfDw8jWTux5TGINxmXYow0u3wUzXbCCLdElQJsoz2A+gmrwlssx75
+        u20e3Ex973TSLOzPZNKvAKLAUQ==
+X-Google-Smtp-Source: ACHHUZ4f//BL/tJ6X+98JURia5it3s8oKIZoUOVYBr7jSyI9pGhj6RAqk9wyfzBF1hn33q0tLld4YA==
+X-Received: by 2002:a05:6e02:1b0d:b0:332:fcce:c26d with SMTP id i13-20020a056e021b0d00b00332fccec26dmr2703997ilv.0.1684348014895;
+        Wed, 17 May 2023 11:26:54 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a17-20020a92d351000000b0032a8e1ba829sm3186981ilh.16.2023.05.17.10.53.59
+        by smtp.gmail.com with ESMTPSA id b6-20020a92dcc6000000b003350c8ae201sm7593874ilr.29.2023.05.17.11.26.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 10:53:59 -0700 (PDT)
-Message-ID: <d56c18e8-863b-1131-64dd-c84aeab1e968@linuxfoundation.org>
-Date:   Wed, 17 May 2023 11:53:59 -0600
+        Wed, 17 May 2023 11:26:54 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------9IyDAsnkaVQo7hLHfcxwSE0e"
+Message-ID: <8abea32a-4895-7826-8a9c-9ddc5a7ad2bd@linuxfoundation.org>
+Date:   Wed, 17 May 2023 12:26:53 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] cpupower: Bump soname version
 Content-Language: en-US
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20160610005619.GQ7555@decadent.org.uk>
- <ZFqV3ZFROy0m+/Xt@eldamar.lan>
- <eeca542a-eb7f-50a0-b62b-7bab8993185a@linuxfoundation.org>
- <ZF6aJTqMkrlBb0Mm@eldamar.lan>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZF6aJTqMkrlBb0Mm@eldamar.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: [GIT PULL] cpupower update for Linux 6.4-rc3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/12/23 13:57, Salvatore Bonaccorso wrote:
-> Hi Shuah,
-> 
-> Apologies for the delay!
-> 
-> On Tue, May 09, 2023 at 04:10:05PM -0600, Shuah Khan wrote:
->> On 5/9/23 12:50, Salvatore Bonaccorso wrote:
->>> Hi Thomas,
->>>
->>> On Fri, Jun 10, 2016 at 01:56:20AM +0100, Ben Hutchings wrote:
->>>> Several functions in the libcpupower API are renamed or removed in
->>>> Linux 4.7.  This is an backward-incompatible ABI change, so the
->>>> library soname should change from libcpupower.so.0 to
->>>> libcpupower.so.1.
->>>>
->>>> Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
->>>> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
->>>> ---
->>>> I have to say the choice of variable names here is rather confusing.
->>>> LIB_MIN is used for the soname version, which would normally be the
->>>> *major* part of the version.
->>>>
->>>> I'll send a second patch that switches to more conventional library
->>>> versioning.
->>>>
->>>> Ben.
->>>>
->>>>    tools/power/cpupower/Makefile | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
->>>> index 8358863259c5..0b85f5915ce8 100644
->>>> --- a/tools/power/cpupower/Makefile
->>>> +++ b/tools/power/cpupower/Makefile
->>>> @@ -64,7 +64,7 @@ DESTDIR ?=
->>>>    VERSION=			$(shell ./utils/version-gen.sh)
->>>>    LIB_MAJ=			0.0.1
->>>> -LIB_MIN=			0
->>>> +LIB_MIN=			1
->>>>    PACKAGE =			cpupower
->>>>    PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
->>>
->>> Repinging this patch. Thomas, we are shipping it in Debian since, and
->>> I'm wondering if the patch did just felt trough the cracks.
->>>
->>
->> Please resend the patch for review.
-> 
-> Here is the patch again for a fresh review on it. If you want me to
-> send it standalone with '[RESEND PATCH]' I can do that as well.
-> 
+This is a multi-part message in MIME format.
+--------------9IyDAsnkaVQo7hLHfcxwSE0e
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Yes please resend with RESEND tag. I won't be able to apply the patch
-when it is included in the reply.
+Hi Rafael,
+
+Please pull the following cpupower update for Linux 6.4-rc3 or for
+a later rc.
+
+This cpupower fixes update for Linux 6.4-rc3 consists of:
+
+- a resource leak fix
+- fix drift in C0 percentage calculation due to System-wide TSC read.
+   To lower this drift read TSC per CPU and also just after mperf read.
+   This technique improves C0 percentage calculation in Mperf monitor
+
+diff is attached.
 
 thanks,
 -- Shuah
 
+----------------------------------------------------------------
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.4-rc3
+
+for you to fetch changes up to c2adb1877b76fc81ae041e1db1a6ed2078c6746b:
+
+   cpupower: Make TSC read per CPU for Mperf monitor (2023-05-08 10:46:49 -0600)
+
+----------------------------------------------------------------
+linux-cpupower-6.4-rc3
+
+This cpupower fixes update for Linux 6.4-rc3 consists of:
+
+- a resource leak fix
+- fix drift in C0 percentage calculation due to System-wide TSC read.
+   To lower this drift read TSC per CPU and also just after mperf read.
+   This technique improves C0 percentage calculation in Mperf monitor
+
+----------------------------------------------------------------
+Hao Zeng (1):
+       cpupower:Fix resource leaks in sysfs_get_enabled()
+
+Wyes Karny (1):
+       cpupower: Make TSC read per CPU for Mperf monitor
+
+  tools/power/cpupower/lib/powercap.c                | 23 +++++++++++-----
+  .../cpupower/utils/idle_monitor/mperf_monitor.c    | 31 ++++++++++------------
+  2 files changed, 30 insertions(+), 24 deletions(-)
+
+----------------------------------------------------------------
+--------------9IyDAsnkaVQo7hLHfcxwSE0e
+Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.4-rc3.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.4-rc3.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9wb3dlcmNhcC5jIGIvdG9v
+bHMvcG93ZXIvY3B1cG93ZXIvbGliL3Bvd2VyY2FwLmMKaW5kZXggMGNlMjllZTRjMmU0Li5h
+N2E1OWM2YmFjZGEgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9wb3dl
+cmNhcC5jCisrKyBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9wb3dlcmNhcC5jCkBAIC00
+MCwyNSArNDAsMzQgQEAgc3RhdGljIGludCBzeXNmc19nZXRfZW5hYmxlZChjaGFyICpwYXRo
+LCBpbnQgKm1vZGUpCiB7CiAJaW50IGZkOwogCWNoYXIgeWVzX25vOworCWludCByZXQgPSAw
+OwogCiAJKm1vZGUgPSAwOwogCiAJZmQgPSBvcGVuKHBhdGgsIE9fUkRPTkxZKTsKLQlpZiAo
+ZmQgPT0gLTEpCi0JCXJldHVybiAtMTsKKwlpZiAoZmQgPT0gLTEpIHsKKwkJcmV0ID0gLTE7
+CisJCWdvdG8gb3V0OworCX0KIAogCWlmIChyZWFkKGZkLCAmeWVzX25vLCAxKSAhPSAxKSB7
+Ci0JCWNsb3NlKGZkKTsKLQkJcmV0dXJuIC0xOworCQlyZXQgPSAtMTsKKwkJZ290byBvdXRf
+Y2xvc2U7CiAJfQogCiAJaWYgKHllc19ubyA9PSAnMScpIHsKIAkJKm1vZGUgPSAxOwotCQly
+ZXR1cm4gMDsKKwkJZ290byBvdXRfY2xvc2U7CiAJfSBlbHNlIGlmICh5ZXNfbm8gPT0gJzAn
+KSB7Ci0JCXJldHVybiAwOworCQlnb3RvIG91dF9jbG9zZTsKKwl9IGVsc2UgeworCQlyZXQg
+PSAtMTsKKwkJZ290byBvdXRfY2xvc2U7CiAJfQotCXJldHVybiAtMTsKK291dF9jbG9zZToK
+KwljbG9zZShmZCk7CitvdXQ6CisJcmV0dXJuIHJldDsKIH0KIAogaW50IHBvd2VyY2FwX2dl
+dF9lbmFibGVkKGludCAqbW9kZSkKZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2Vy
+L3V0aWxzL2lkbGVfbW9uaXRvci9tcGVyZl9tb25pdG9yLmMgYi90b29scy9wb3dlci9jcHVw
+b3dlci91dGlscy9pZGxlX21vbml0b3IvbXBlcmZfbW9uaXRvci5jCmluZGV4IGU3ZDQ4Y2I1
+NjNjMC4uYWU2YWYzNTRhODFkIDEwMDY0NAotLS0gYS90b29scy9wb3dlci9jcHVwb3dlci91
+dGlscy9pZGxlX21vbml0b3IvbXBlcmZfbW9uaXRvci5jCisrKyBiL3Rvb2xzL3Bvd2VyL2Nw
+dXBvd2VyL3V0aWxzL2lkbGVfbW9uaXRvci9tcGVyZl9tb25pdG9yLmMKQEAgLTcwLDggKzcw
+LDggQEAgc3RhdGljIGludCBtYXhfZnJlcV9tb2RlOwogICovCiBzdGF0aWMgdW5zaWduZWQg
+bG9uZyBtYXhfZnJlcXVlbmN5OwogCi1zdGF0aWMgdW5zaWduZWQgbG9uZyBsb25nIHRzY19h
+dF9tZWFzdXJlX3N0YXJ0Owotc3RhdGljIHVuc2lnbmVkIGxvbmcgbG9uZyB0c2NfYXRfbWVh
+c3VyZV9lbmQ7CitzdGF0aWMgdW5zaWduZWQgbG9uZyBsb25nICp0c2NfYXRfbWVhc3VyZV9z
+dGFydDsKK3N0YXRpYyB1bnNpZ25lZCBsb25nIGxvbmcgKnRzY19hdF9tZWFzdXJlX2VuZDsK
+IHN0YXRpYyB1bnNpZ25lZCBsb25nIGxvbmcgKm1wZXJmX3ByZXZpb3VzX2NvdW50Owogc3Rh
+dGljIHVuc2lnbmVkIGxvbmcgbG9uZyAqYXBlcmZfcHJldmlvdXNfY291bnQ7CiBzdGF0aWMg
+dW5zaWduZWQgbG9uZyBsb25nICptcGVyZl9jdXJyZW50X2NvdW50OwpAQCAtMTY5LDcgKzE2
+OSw3IEBAIHN0YXRpYyBpbnQgbXBlcmZfZ2V0X2NvdW50X3BlcmNlbnQodW5zaWduZWQgaW50
+IGlkLCBkb3VibGUgKnBlcmNlbnQsCiAJYXBlcmZfZGlmZiA9IGFwZXJmX2N1cnJlbnRfY291
+bnRbY3B1XSAtIGFwZXJmX3ByZXZpb3VzX2NvdW50W2NwdV07CiAKIAlpZiAobWF4X2ZyZXFf
+bW9kZSA9PSBNQVhfRlJFUV9UU0NfUkVGKSB7Ci0JCXRzY19kaWZmID0gdHNjX2F0X21lYXN1
+cmVfZW5kIC0gdHNjX2F0X21lYXN1cmVfc3RhcnQ7CisJCXRzY19kaWZmID0gdHNjX2F0X21l
+YXN1cmVfZW5kW2NwdV0gLSB0c2NfYXRfbWVhc3VyZV9zdGFydFtjcHVdOwogCQkqcGVyY2Vu
+dCA9IDEwMC4wICogbXBlcmZfZGlmZiAvIHRzY19kaWZmOwogCQlkcHJpbnQoIiVzOiBUU0Mg
+UmVmIC0gbXBlcmZfZGlmZjogJWxsdSwgdHNjX2RpZmY6ICVsbHVcbiIsCiAJCSAgICAgICBt
+cGVyZl9jc3RhdGVzW2lkXS5uYW1lLCBtcGVyZl9kaWZmLCB0c2NfZGlmZik7CkBAIC0yMDYs
+NyArMjA2LDcgQEAgc3RhdGljIGludCBtcGVyZl9nZXRfY291bnRfZnJlcSh1bnNpZ25lZCBp
+bnQgaWQsIHVuc2lnbmVkIGxvbmcgbG9uZyAqY291bnQsCiAKIAlpZiAobWF4X2ZyZXFfbW9k
+ZSA9PSBNQVhfRlJFUV9UU0NfUkVGKSB7CiAJCS8qIENhbGN1bGF0ZSBtYXhfZnJlcSBmcm9t
+IFRTQyBjb3VudCAqLwotCQl0c2NfZGlmZiA9IHRzY19hdF9tZWFzdXJlX2VuZCAtIHRzY19h
+dF9tZWFzdXJlX3N0YXJ0OworCQl0c2NfZGlmZiA9IHRzY19hdF9tZWFzdXJlX2VuZFtjcHVd
+IC0gdHNjX2F0X21lYXN1cmVfc3RhcnRbY3B1XTsKIAkJdGltZV9kaWZmID0gdGltZXNwZWNf
+ZGlmZl91cyh0aW1lX3N0YXJ0LCB0aW1lX2VuZCk7CiAJCW1heF9mcmVxdWVuY3kgPSB0c2Nf
+ZGlmZiAvIHRpbWVfZGlmZjsKIAl9CkBAIC0yMjUsMzMgKzIyNSwyNyBAQCBzdGF0aWMgaW50
+IG1wZXJmX2dldF9jb3VudF9mcmVxKHVuc2lnbmVkIGludCBpZCwgdW5zaWduZWQgbG9uZyBs
+b25nICpjb3VudCwKIHN0YXRpYyBpbnQgbXBlcmZfc3RhcnQodm9pZCkKIHsKIAlpbnQgY3B1
+OwotCXVuc2lnbmVkIGxvbmcgbG9uZyBkYmc7CiAKIAljbG9ja19nZXR0aW1lKENMT0NLX1JF
+QUxUSU1FLCAmdGltZV9zdGFydCk7Ci0JbXBlcmZfZ2V0X3RzYygmdHNjX2F0X21lYXN1cmVf
+c3RhcnQpOwogCi0JZm9yIChjcHUgPSAwOyBjcHUgPCBjcHVfY291bnQ7IGNwdSsrKQorCWZv
+ciAoY3B1ID0gMDsgY3B1IDwgY3B1X2NvdW50OyBjcHUrKykgeworCQltcGVyZl9nZXRfdHNj
+KCZ0c2NfYXRfbWVhc3VyZV9zdGFydFtjcHVdKTsKIAkJbXBlcmZfaW5pdF9zdGF0cyhjcHUp
+OworCX0KIAotCW1wZXJmX2dldF90c2MoJmRiZyk7Ci0JZHByaW50KCJUU0MgZGlmZjogJWxs
+dVxuIiwgZGJnIC0gdHNjX2F0X21lYXN1cmVfc3RhcnQpOwogCXJldHVybiAwOwogfQogCiBz
+dGF0aWMgaW50IG1wZXJmX3N0b3Aodm9pZCkKIHsKLQl1bnNpZ25lZCBsb25nIGxvbmcgZGJn
+OwogCWludCBjcHU7CiAKLQlmb3IgKGNwdSA9IDA7IGNwdSA8IGNwdV9jb3VudDsgY3B1Kysp
+CisJZm9yIChjcHUgPSAwOyBjcHUgPCBjcHVfY291bnQ7IGNwdSsrKSB7CiAJCW1wZXJmX21l
+YXN1cmVfc3RhdHMoY3B1KTsKKwkJbXBlcmZfZ2V0X3RzYygmdHNjX2F0X21lYXN1cmVfZW5k
+W2NwdV0pOworCX0KIAotCW1wZXJmX2dldF90c2MoJnRzY19hdF9tZWFzdXJlX2VuZCk7CiAJ
+Y2xvY2tfZ2V0dGltZShDTE9DS19SRUFMVElNRSwgJnRpbWVfZW5kKTsKLQotCW1wZXJmX2dl
+dF90c2MoJmRiZyk7Ci0JZHByaW50KCJUU0MgZGlmZjogJWxsdVxuIiwgZGJnIC0gdHNjX2F0
+X21lYXN1cmVfZW5kKTsKLQogCXJldHVybiAwOwogfQogCkBAIC0zNTMsNyArMzQ3LDggQEAg
+c3RydWN0IGNwdWlkbGVfbW9uaXRvciAqbXBlcmZfcmVnaXN0ZXIodm9pZCkKIAlhcGVyZl9w
+cmV2aW91c19jb3VudCA9IGNhbGxvYyhjcHVfY291bnQsIHNpemVvZih1bnNpZ25lZCBsb25n
+IGxvbmcpKTsKIAltcGVyZl9jdXJyZW50X2NvdW50ID0gY2FsbG9jKGNwdV9jb3VudCwgc2l6
+ZW9mKHVuc2lnbmVkIGxvbmcgbG9uZykpOwogCWFwZXJmX2N1cnJlbnRfY291bnQgPSBjYWxs
+b2MoY3B1X2NvdW50LCBzaXplb2YodW5zaWduZWQgbG9uZyBsb25nKSk7Ci0KKwl0c2NfYXRf
+bWVhc3VyZV9zdGFydCA9IGNhbGxvYyhjcHVfY291bnQsIHNpemVvZih1bnNpZ25lZCBsb25n
+IGxvbmcpKTsKKwl0c2NfYXRfbWVhc3VyZV9lbmQgPSBjYWxsb2MoY3B1X2NvdW50LCBzaXpl
+b2YodW5zaWduZWQgbG9uZyBsb25nKSk7CiAJbXBlcmZfbW9uaXRvci5uYW1lX2xlbiA9IHN0
+cmxlbihtcGVyZl9tb25pdG9yLm5hbWUpOwogCXJldHVybiAmbXBlcmZfbW9uaXRvcjsKIH0K
+QEAgLTM2NCw2ICszNTksOCBAQCB2b2lkIG1wZXJmX3VucmVnaXN0ZXIodm9pZCkKIAlmcmVl
+KGFwZXJmX3ByZXZpb3VzX2NvdW50KTsKIAlmcmVlKG1wZXJmX2N1cnJlbnRfY291bnQpOwog
+CWZyZWUoYXBlcmZfY3VycmVudF9jb3VudCk7CisJZnJlZSh0c2NfYXRfbWVhc3VyZV9zdGFy
+dCk7CisJZnJlZSh0c2NfYXRfbWVhc3VyZV9lbmQpOwogCWZyZWUoaXNfdmFsaWQpOwogfQog
+Cg==
+
+--------------9IyDAsnkaVQo7hLHfcxwSE0e--
