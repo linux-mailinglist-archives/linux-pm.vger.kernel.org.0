@@ -2,115 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4003870608E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 09:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EB670612F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 09:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjEQHAz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 May 2023 03:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S229968AbjEQHcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 May 2023 03:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEQHAz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 03:00:55 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56771213D
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 00:00:53 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510b56724caso6614099a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 00:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684306852; x=1686898852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JAjF1NXEM4zGYNUukISUAOQ2ax8auRzyW2rSkhWnq7Q=;
-        b=hdRkNFTlt7MrqcSUjSKPfU+olaNsYieuYS0HQkLfFKT5mhZcveQN8ic4Jt2GSaG6oJ
-         PF5liBhs0A1D97/MnvEFJLvkmaVF0rL4AvEU7NiBtKDVhto2H8jpZRlb1Vmg+cAddNm8
-         KESA/O5auVtRs3Yt0+aNA/zUT7NzWf3Zw4JhO+PBDpbFCmdqwWf0VQ4mGI/OkNz5vfYd
-         lk2s1bYCEZJXGh1/OYzNvQPzTgOwJFQi8V9qk3i2i3fQeOICBa/O5vve1bjy+eyj7qUr
-         t4XtJirJHyajJiOvfDzNrSmx9/3vcvmbhbOyWtVPBptzAOMFHXxlwTuJlwugdDt0Zucx
-         pykA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684306852; x=1686898852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JAjF1NXEM4zGYNUukISUAOQ2ax8auRzyW2rSkhWnq7Q=;
-        b=Ik4XtfdAnNLoZihOj/spVDlZYNaDb4SVxAVvC+lKGxdpdg//2LOEH8w2IA3Sli8bN7
-         nz/S+F82jxdGl+/Huxl4+Wt62Klj2Cu17sOfDIk6FgqNEwJIyJOP+AJpsoobGpq4g3U/
-         IpDRwbtMoBpKzVaCgXqTOV/XbK0c5xjrN6GA8yKjPKTgH3xT9YgtsTbWbeDULB4S0guk
-         4gCxNvWnqaM6/ckAzI8esKEeFMBKsbF7vr6JA91hn07rgjCfrMo9PQndYzf6WwgP3pqa
-         tMOpD62QxjPZXNdXlQA4kE/BKt4zOA9Fw+FrLa60Wh+O82aoIkw9M0psCmDQD5A3U2x1
-         gXeA==
-X-Gm-Message-State: AC+VfDzulsXpSer4fzsmPLyVUJyZfLbyDjJ4KjFQgcKMtlET3svKYkxh
-        yKc2qH6vnWP0WFWw9eUam00dgw==
-X-Google-Smtp-Source: ACHHUZ6BjmcvhdPU38ZrpUfAaHbkeuBu2xxSZvXzuVAHV3S1jyt12w+dX7YUyco99giSrFC0CW/q6A==
-X-Received: by 2002:a17:907:3f0e:b0:96a:316f:8aaa with SMTP id hq14-20020a1709073f0e00b0096a316f8aaamr920201ejc.37.1684306851695;
-        Wed, 17 May 2023 00:00:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id mm10-20020a170906cc4a00b00960005e09a3sm11866796ejb.61.2023.05.17.00.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 00:00:51 -0700 (PDT)
-Message-ID: <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
-Date:   Wed, 17 May 2023 09:00:49 +0200
+        with ESMTP id S229964AbjEQHcB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 03:32:01 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34134170E;
+        Wed, 17 May 2023 00:31:57 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Bx7errgmRkL2oJAA--.16575S3;
+        Wed, 17 May 2023 15:31:55 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axmr3lgmRk_1plAA--.41619S2;
+        Wed, 17 May 2023 15:31:55 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1 0/3] soc: loongson2_pm: add power management support
+Date:   Wed, 17 May 2023 15:31:46 +0800
+Message-Id: <20230517073149.31980-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
- compatible
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-References: <cover.1684140883.git.quic_varada@quicinc.com>
- <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
- <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
- <20230516120426.GA1679@varda-linux.qualcomm.com>
- <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
- <20230517055726.GA3165@varda-linux.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230517055726.GA3165@varda-linux.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axmr3lgmRk_1plAA--.41619S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7GFWrJr18Xr4kXw1xtry8AFb_yoW3XwbE9a
+        s7Xay8ur47GFZrJa4DXw15Xry5WFWxJ3Z093Wqqr1I93WYyr15Jr4UZ343CF12qFWUuFs8
+        XrW8KryFyryFyjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jUManUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/05/2023 07:57, Varadarajan Narayanan wrote:
-> Part-1 is adding the 'const' entries at the beginning i.e.
-> 
-> 	+      - const: qcom,tsens-v0_1
-> 	+      - const: qcom,tsens-v1
-> 	+      - const: qcom,tsens-v2
-> 	+      - const: qcom,ipq8074-tsens
-> 
-> Part-2 is changing from one valid syntax to another i.e.
-> 
-> 	+        items:
-> 	+          - enum:
-> 	+              - qcom,ipq9574-tsens
-> 	+          - const: qcom,ipq8074-tsens
-> 
-> Without both of the above changes, either or both of dtbs_check
-> & dt_binding_check fails. So, it is not possible to just add the
-> "valid hunk" (part-2) alone.
+Loongson-2 platform support Power Management Controller (ACPI) and this
+series patch was to add PM driver that base on dts and PM binding support.
 
-Of course it is. All schema files work like that...
-> 
-> If having both part-1 and part-2 in the same patch is not
-> acceptable, shall I split them into two patches? Please let me know.
+Yinbo Zhu (3):
+  loongarch: export loongarch pm interface
+  dt-bindings: soc: add loongson-2 pm
+  soc: loongson2_pm: add power management support
 
-No, hunk one is not justified.
+ .../soc/loongson/loongson,ls2k-pmc.yaml       |  47 ++++
+ MAINTAINERS                                   |   7 +
+ arch/loongarch/include/asm/acpi.h             |   5 +-
+ arch/loongarch/include/asm/suspend.h          |  10 +
+ arch/loongarch/power/suspend.c                |  10 +-
+ arch/loongarch/power/suspend_asm.S            |   8 +-
+ drivers/soc/loongson/Kconfig                  |  10 +
+ drivers/soc/loongson/Makefile                 |   1 +
+ drivers/soc/loongson/loongson2_pm.c           | 237 ++++++++++++++++++
+ 9 files changed, 323 insertions(+), 12 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.20.1
 
