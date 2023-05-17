@@ -2,112 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E22706D52
-	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 17:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3258706D9A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 May 2023 18:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbjEQPwi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 May 2023 11:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S231517AbjEQQF1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 May 2023 12:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjEQPwV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 11:52:21 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313209EC6
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 08:51:17 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-561ca1918e5so9466577b3.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 08:51:17 -0700 (PDT)
+        with ESMTP id S230169AbjEQQF0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 12:05:26 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97109110;
+        Wed, 17 May 2023 09:05:25 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so816815a12.0;
+        Wed, 17 May 2023 09:05:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684338674; x=1686930674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
-        b=PxKg2pRCl/MeEqp5uvc8FI6+YOF8ZQ0EzboQ7hpfbuFJX3IIqChekL0/PSY6f6ZBkZ
-         urHQTw8B9Qu+ZY/1vJzTnbXCr75YfIhdSyy686/eLISuhgZHB6UQ3EVsl6FD9v625A/w
-         tjxES+HrRzg6bCh5g/2aKxK6aL5WAXk6n5hL6cNQ4DLvHOdkJN6i/f12VZINOcSbVDWY
-         Ht8TqiZDvyXTZ0hs/EBmu3kHn7bK+REyjKbHcdjwjITX645yBU2SclzoGsnZb8Qs2uwx
-         3eg3Vv2wpF9jKUnxeZFE5DWnz2u2DGzEAq8Ck0m/CDBEkeEBn1RCKj2gBMDNc7cK4SzS
-         DFJA==
+        d=gmail.com; s=20221208; t=1684339525; x=1686931525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JbDnB2PXIbg1nrLsvecGt1DuT+K73v6dCg1HZevcZvc=;
+        b=R+JAY/0n8zLGV8wFotOEzEJpiiGuPQJiOm3W4d16A9wrPM1VEk7cqZDc7jDh7VwHLe
+         bMfHTeB3HFe7LBnZYLy7u9GRO9cQp9E7/Jg/2Vbjq5L9P7NGAxrkq/yNS/oDK1S3rb0W
+         t9YJJ7xXTylFuZbhTJcmFSWCJJLRU12eopskn9Dy224gmIMOaP8JSFVepuxZfT10XCIw
+         0MjvLgzetNIOv0z0ngngo7kh8a3lsXnIfZ93k/eTETASKJZlEg2EBMgQDdx0Dmnrj3tY
+         nqyGZIaDur0HDgK+/Gy3hwzO3fth3LXQKpSiqX2QJsssWza9bQS3nZntIgG9rnIsZ30m
+         HADg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684338674; x=1686930674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
-        b=btpzdDgHoWWtgK+ECwOznIhQLbtIt4t8N5E+L/NGuuNpEJdHmvbrbGnxXqIxG0sFaY
-         +IPnRE4oM/Qbc//kIOuvTpk/luXT33TWpOnjem3nNpJyMvuf9+cOLUsBTPgy5DIVRD5+
-         IUt9SIEqjkzBgA0uFkXHSRLEwOPqp15aFfu6zVLEBucdV35zWBus8+lzQH4loA5smTsa
-         rkCRjvHrCKBMpCQvXWA/ZJGxZZb4IFaLOfPxVb2o6aeHy2cM/ovhWEy7t0Ua2sFwPDbx
-         GZ8+9H/ldLTpET9ltyzleLuq02sSyYtrfzHhPPJ0t7zdbMw01Z/43UDdk5UPBfpLQD82
-         835w==
-X-Gm-Message-State: AC+VfDzgNK0BF34LVecwfvkFp/xqARfEHxp1wqYdgb7UNrAdjyHBM0ny
-        gk+X6Bl2EY9t/mKDbMKFc9dzW+WISS8iNbJZBQGm
-X-Google-Smtp-Source: ACHHUZ7m7iuWUD5omxnx19xTgvLnN/+5Wgfo2oM56GLLAkTkIZomD+UUzUvvSVfeDFHavflonxguaAqx7fdYrFqY+DA=
-X-Received: by 2002:a81:53c5:0:b0:55d:c2c3:fbb8 with SMTP id
- h188-20020a8153c5000000b0055dc2c3fbb8mr34245755ywb.40.1684338674184; Wed, 17
- May 2023 08:51:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684339525; x=1686931525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JbDnB2PXIbg1nrLsvecGt1DuT+K73v6dCg1HZevcZvc=;
+        b=N/43dhOqs62g2dLEahPWPiMST66f4C8siv5W+I5AwMX5gBHu67KYSA8kmk4DFFvxe8
+         RuoTmt/fNT+PnVS9FxTcJdlfW703mxCrvlxNkv2ikWUTej74MJghpTtFr3UE46CeC3Pk
+         rq3cle3jufoEasf67AlqMoir51tXzZnaGSllQyqTjj8RqRez37eRa9QJ3ENa9ka36IOH
+         3rjCHLDJ7i78LuA6ETvwExmTSTlAxgV9Ga9nzZdcvomNph3F/nShGwPCEIe9AJDuBzfI
+         B0F9ldHl62q+wi1tlQQb28pUMC+o15yUCezzMchtSvHjUf7OFqkmWOmA6SRL9XxRbLIy
+         bzbw==
+X-Gm-Message-State: AC+VfDzCzWMt/e1j4KCHHUoUZaK3dC5ccXbbGQVIyl/NYz/HcHYkv7dA
+        0urb4yrXU7WCVtZBboXVPBQ=
+X-Google-Smtp-Source: ACHHUZ4oolr6vSu2DCsqdae9ZtsRnHqAr8S5wkd9TDaX6Pz+T6IL71zNKd6ul4I9LTk3ZBgpweyczA==
+X-Received: by 2002:a17:90b:3645:b0:250:d137:e2ae with SMTP id nh5-20020a17090b364500b00250d137e2aemr168165pjb.23.1684339524459;
+        Wed, 17 May 2023 09:05:24 -0700 (PDT)
+Received: from Osmten.. ([103.84.150.101])
+        by smtp.gmail.com with ESMTPSA id o4-20020a17090ad20400b00250c1392ed3sm1761949pju.55.2023.05.17.09.05.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 09:05:23 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
+        wenst@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH] lvts_thermal.c: Fix error checking for debugfs_create_dir
+Date:   Wed, 17 May 2023 21:03:26 +0500
+Message-Id: <20230517160326.10732-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230517131102.934196-5-arnd@kernel.org> <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
- <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
-In-Reply-To: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 May 2023 11:51:03 -0400
-Message-ID: <CAHC9VhQZyxVhDb0uB-+q7H=e++yq0qEAZGssPjepgnZ3i3_pnA@mail.gmail.com>
-Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:51=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
-> On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
-> > On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
->
-> > We probably should move the audit_serial() and auditsc_get_stamp()
-> > away from the watch/mark/tree functions, but that isn't your problem.
-> >
-> > Anyway, this looks okay to me; do you have a problem if I merge this
-> > via the audit/next branch or were you hoping to have this go in
-> > through a different tree?
->
-> Merging it through your tree is probably best, Andrew can either
-> pick the ones that nobody else took, or I can resend the rest.
+This patch fixes the error checking in lvts_thermal.c in
+debugfs_create_dir. The correct way to check if an error occurred
+is 'IS_ERR' inline function.
 
-Easy enough, merged to audit/next, thanks.
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---=20
-paul-moore.com
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index d0a3f95b7884..61386be78fa0 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -188,7 +188,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ 	int i;
+ 
+ 	lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
+-	if (!lvts_td->dom_dentry)
++	if (IS_ERR(lvts_td->dom_dentry))
+ 		return 0;
+ 
+ 	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+@@ -197,7 +197,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ 
+ 		sprintf(name, "controller%d", i);
+ 		dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
+-		if (!dentry)
++		if (IS_ERR(dentry))
+ 			continue;
+ 
+ 		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
+-- 
+2.34.1
+
