@@ -2,92 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ED37075A7
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 00:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73E1707775
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 03:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjEQWzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 May 2023 18:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
+        id S229559AbjERBff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 May 2023 21:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjEQWzV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 18:55:21 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634A5B99
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 15:55:20 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-76efb0f6f60so5218239f.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 May 2023 15:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684364120; x=1686956120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MGSN1Nd+0m+Dx+iSvAkTHo7MgydGEDZL7k++jM6pMD0=;
-        b=Aa0HqIG02gvWwhO3RkgkR35ePKeBJb7egh0JjxDJrw2hFxEGnHoLPabLH3kI8uIaK3
-         qfPIu9gAoaEv6j9YyP0I8IXjYj7YjPjYio01PZ2irwM+MYYEHxHtu6cJcEavK1wweAjp
-         DT2QbOrY4+TTTehiKpQeF6erOfslIIE/oGk/A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684364120; x=1686956120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MGSN1Nd+0m+Dx+iSvAkTHo7MgydGEDZL7k++jM6pMD0=;
-        b=hjQaJitNyv/Zy+6R73cN1OT+w31Wn5NsFR5+y8pBPr0DpLCkEkTEeWvhFSDsfyAHsl
-         BxZcxsb3BjUQdM+C8zOYf7y7gfZcDssfh3jb6pSFcYT3bnZbZctjE22bQqf1f4rx3yh+
-         nyCar1qpL+4WS//bpAjL7MAuZXq94ptAZKdd9M0gr8DtIHT3Z1cGQH01jsdie2sR41j4
-         47kDPntQ2xwQKg/887q5FIEhAQ6U2qQ7ErOT+Ja7MqPTf23ZZgpvlmF8rkbBaQoR5JvV
-         Jcg0AHwZGG4Hh15j+Ovb3I4crMxDh2wFBhtDnmeI2SnurKKACuqS0vTSnVaPkas475kR
-         FYsw==
-X-Gm-Message-State: AC+VfDzg46TOqjLEf3KQoqDckj4OP0hcADrkaNRVmVdFiwpu1Dg3KYk+
-        zxYPBIT7ID6CSHsaRHiSH/XI1Ib8WUkyT3NxSNk=
-X-Google-Smtp-Source: ACHHUZ45L3HPp5+wDoeOZPJvg6W6nA0bt2NRmRvRyB3OQS8hnC5o2tWW7Ur046bbpRBIu0EeQjY30g==
-X-Received: by 2002:a6b:3bce:0:b0:76c:67bb:11d1 with SMTP id i197-20020a6b3bce000000b0076c67bb11d1mr2208369ioa.1.1684364119737;
-        Wed, 17 May 2023 15:55:19 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c8-20020a5ea808000000b0075c37601b5csm27686ioa.4.2023.05.17.15.55.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 15:55:19 -0700 (PDT)
-Message-ID: <7e063b75-b115-eace-5ba9-a21c183eccf3@linuxfoundation.org>
-Date:   Wed, 17 May 2023 16:55:18 -0600
+        with ESMTP id S229452AbjERBfe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 21:35:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D2619BD;
+        Wed, 17 May 2023 18:35:32 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QMC8x4VnRzTkgf;
+        Thu, 18 May 2023 09:30:41 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 09:35:30 +0800
+Message-ID: <f7b5aec9-f9e0-dd51-f9a0-c6af227537fd@huawei.com>
+Date:   Thu, 18 May 2023 09:35:29 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND] cpupower: Bump soname version
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 08/13] mm: page_alloc: split out DEBUG_PAGEALLOC
 Content-Language: en-US
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        Thomas Renninger <trenn@suse.com>
-Cc:     linux-pm@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230517191019.643031-1-carnil@debian.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230517191019.643031-1-carnil@debian.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <ying.huang@intel.com>
+References: <20230516063821.121844-1-wangkefeng.wang@huawei.com>
+ <20230516063821.121844-9-wangkefeng.wang@huawei.com>
+ <20230516152212.95f4a6ebba475cb994a4429f@linux-foundation.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230516152212.95f4a6ebba475cb994a4429f@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/17/23 13:10, Salvatore Bonaccorso wrote:
-> From: Ben Hutchings <ben@decadent.org.uk>
-> 
-> Several functions in the libcpupower API are renamed or removed in
-> Linux 4.7.  This is an backward-incompatible ABI change, so the
-> library soname should change from libcpupower.so.0 to
-> libcpupower.so.1.
-> 
-> Fixes: ac5a181d065d ("cpupower: Add cpuidle parts into library")
-> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-> ---
 
-Thank you Salvatore. I will apply this for the next 6.4-rc
 
-thanks,
--- Shuah
+On 2023/5/17 6:22, Andrew Morton wrote:
+> On Tue, 16 May 2023 14:38:16 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> 
+>> DEBUG_PAGEALLOC
+>>
+>>   mm/debug_page_alloc.c | 59 +++++++++++++++++++++++++++++++++
+>>   mm/page_alloc.c       | 69 ---------------------------------------
+> 
+> and
+> 
+> FAIL_PAGE_ALLOC
+> 
+> We're irritatingly inconsistent about whether there's an underscore.
+> 
+> akpm:/usr/src/25> grep page_alloc mm/*c|wc -l
+> 49
+> akpm:/usr/src/25> grep pagealloc mm/*c|wc -l
+> 28
+
+All the 28 pagealloc naming is from DEBUG_PAGEALLOC feature, they chould
+be changed to page_alloc except the cmdline, but it will lead to long
+function name and don't gain too much advantage, so keep unchange?
+
+$ grep pagealloc mm/*c
+mm/debug_page_alloc.c:bool _debug_pagealloc_enabled_early __read_mostly
+mm/debug_page_alloc.c:EXPORT_SYMBOL(_debug_pagealloc_enabled_early);
+mm/debug_page_alloc.c:DEFINE_STATIC_KEY_FALSE(_debug_pagealloc_enabled);
+mm/debug_page_alloc.c:EXPORT_SYMBOL(_debug_pagealloc_enabled);
+mm/debug_page_alloc.c:static int __init early_debug_pagealloc(char *buf)
+mm/debug_page_alloc.c:	return kstrtobool(buf, 
+&_debug_pagealloc_enabled_early);
+mm/debug_page_alloc.c:early_param("debug_pagealloc", early_debug_pagealloc);
+mm/memory_hotplug.c:	 * Freeing the page with debug_pagealloc enabled 
+will try to unmap it,
+mm/memory_hotplug.c:	debug_pagealloc_map_pages(page, 1 << order);
+mm/mm_init.c:	      debug_pagealloc_enabled())) {
+mm/mm_init.c:	if (debug_pagealloc_enabled()) {
+mm/mm_init.c:		static_branch_enable(&_debug_pagealloc_enabled);
+mm/page_alloc.c:	 * page becomes unavailable via debug_pagealloc or 
+arch_free_page.
+mm/page_alloc.c:	debug_pagealloc_unmap_pages(page, 1 << order);
+mm/page_alloc.c:	debug_pagealloc_map_pages(page, 1 << order);
+mm/page_poison.c:		pr_err("pagealloc: single bit error\n");
+mm/page_poison.c:		pr_err("pagealloc: memory corruption\n");
+mm/page_poison.c:	dump_page(page, "pagealloc: corrupted page details");
+mm/slab.c:static inline bool is_debug_pagealloc_cache(struct kmem_cache 
+*cachep)
+mm/slab.c:	return debug_pagealloc_enabled_static() && OFF_SLAB(cachep) &&
+mm/slab.c:	if (!is_debug_pagealloc_cache(cachep))
+mm/slab.c:	if (is_debug_pagealloc_cache(cachep))
+mm/slab.c:	 * To activate debug pagealloc, off-slab management is necessary
+mm/slab.c:	if (debug_pagealloc_enabled_static() && (flags & SLAB_POISON) &&
+mm/slab.c:		is_debug_pagealloc_cache(cachep))
+mm/slub.c:	if (!debug_pagealloc_enabled_static())
+mm/vmalloc.c:	if (debug_pagealloc_enabled_static())
+mm/vmalloc.c:	if (debug_pagealloc_enabled_static())
+
+
+
+> 
+
 
