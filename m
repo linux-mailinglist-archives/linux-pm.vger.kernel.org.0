@@ -2,159 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4192A708708
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 19:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF1F7088C7
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 21:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjERRe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 May 2023 13:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S230142AbjERTza (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 May 2023 15:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjERRe5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 13:34:57 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BF7E46;
-        Thu, 18 May 2023 10:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684431296; x=1715967296;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=D7iAOI01Gi9wmLO0vTWTw5BNBSek5PUeMoj/auBHrTI=;
-  b=lyWEBvn0ZDRPwi43qx0kmrFDf9X3lR9HhK/0GepdNTxkEP8rv4KmIDsC
-   id8uZjyV8JQDbh1HXCy6HhhQV2fresJrD/K0IZ3AWN1mxmz525LAeDD6n
-   X4l2DrCBEOLIr+WGttIuMyPITuRcKIvHr4I/EInxKRsX638FBKcTaSofV
-   4gdXASGvdEhJdBy85UQDpGtB9vBW/7+Fz6sKDRbcBOK5QC9HjmbUIZqGZ
-   05qD19vJgMjExOtVAEHheew08C1nYYMo1ef+TSvF2CVe631t61kZEbus8
-   3+w2grJyFT7XZHYE6/3x/cV2+YC+Grtj3bkUT2ipDWhn34O00i/8mohhR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="352158117"
-X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
-   d="scan'208";a="352158117"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:33:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="679744042"
-X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
-   d="scan'208";a="679744042"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga006.jf.intel.com with ESMTP; 18 May 2023 10:33:06 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 18 May 2023 10:33:06 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 18 May 2023 10:33:06 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 18 May 2023 10:33:06 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.48) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 18 May 2023 10:33:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gVaJ0eRcm8yY84xcbWKTupBigEuq+pxgGzC/hFXMqr5eEXGN+6ZBNap9twX7t/gh89igPy0ndXKHKLuMz1OtHkDrX0Bpo2gbcN56Py0k67PGXPtqsWDvdU/DdSpzblV4oIFgtQgTgxHV7j26XRRmljQOJTOm+TVPvZYdhxJrKFvTJgT/ZUCtEpLTlUf8Uo/k9lwa8UxRc8Ak//MsuGvu6kXdNLVfGEOoAYv5E6vFT7BB0+qOoL65gjT/9x78Mp8V7KfdR6GyBO7LgD/amz7RZt7RhtcO3DuC8nCJMV7cvkzwyqqdDLeTfcc7CpLXRLeK9yqgFw8+sPMeRLrO2FRDjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oIqkD97y5xxNCZTVbE0OFq/8LqKLSPRmQPgqXKIJ9XY=;
- b=WYMpn40hpwYgpxhq+5wge9nWYHEkbT0BwUodhHMf19l8ZEfj0Ch/h3khjE7qqYGDSWEg5wiPZPC3uTSTa9NKwJkBQDZPcFOkNElbSROqoQDzjGOtQqy59N4/mZGTpNAN/5WnlrFPldMfONl6XirZvbxrfhMI3mAYRaKO6jWb5DQT5EwYXwWURFBmYqVzLpE0HICSntxrSsRc/7tUe/bUg4I+RQS0ELnLnTqlkY8TCn1ndL8MUPVFBjeRuboOkM7ohRTz53GGY0dIXCz9UozPWdt/3+L+4lpsKD3BmRLzRkJYwPZJUemA3x0qh0MNcUGeIGle5PBEjgawip/zCOOcVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7684.namprd11.prod.outlook.com (2603:10b6:8:dd::13) by
- IA1PR11MB6491.namprd11.prod.outlook.com (2603:10b6:208:3a5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 17:33:01 +0000
-Received: from DS0PR11MB7684.namprd11.prod.outlook.com
- ([fe80::b9ce:e5b1:5475:77fa]) by DS0PR11MB7684.namprd11.prod.outlook.com
- ([fe80::b9ce:e5b1:5475:77fa%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
- 17:33:01 +0000
-From:   "Pawnikar, Sumeet R" <sumeet.r.pawnikar@intel.com>
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>
-CC:     "rafael@kernel.org" <rafael@kernel.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Pawnikar, Sumeet R" <sumeet.r.pawnikar@intel.com>
-Subject: RE: [PATCH] powercap: RAPL: Add Power Limit4 support for Meteor Lake
- SoC
-Thread-Topic: [PATCH] powercap: RAPL: Add Power Limit4 support for Meteor Lake
- SoC
-Thread-Index: AQHZQTuU8aUWtcOEoUy+7lVVodX0X69VrrAAgAAezQCACvl9YA==
-Date:   Thu, 18 May 2023 17:33:01 +0000
-Message-ID: <DS0PR11MB76845B5BAD7EB99BF5A1349CBB7F9@DS0PR11MB7684.namprd11.prod.outlook.com>
-References: <20230215123249.4473-1-sumeet.r.pawnikar@intel.com>
- <28ead36b-2d9e-1a36-6f4e-04684e420260@intel.com>
- <ZF0bosUa2moFCoOj@agluck-desk3.sc.intel.com>
-In-Reply-To: <ZF0bosUa2moFCoOj@agluck-desk3.sc.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7684:EE_|IA1PR11MB6491:EE_
-x-ms-office365-filtering-correlation-id: 5bfbbd55-787b-474d-4600-08db57c5edd8
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: axkaTvMP+fX5H9SO6a3dLUzb2car6EkkPNucgnFWm7iB2UnqGZcsJoXA2am7uyz9cn2GeUAR5GKkhDnjU2DgjpUwwCPI6FxCSB942we7XJK4f3CRsuiRYSrwq6gTMNkTZENyNzlmBVzbPJlTts5+2w/DeKsg6UTbvwbOaIjQKkaBtQijaHLPyIxg5fDDkF6lj2E/65te7HopnPzSca23qTr2xHMPtPcIzkU16LWsRk6tzQb1Jv7gQL+W7Ecb/LHC54iCJh9N3dIg8lb3hquEcT9ZHDRrDiFWCXy1B89p8tgKySW75wC9Kshikq8z17XZbea+gpi5iSqO7cknzQ7j8yOQVp4DrdgcvT5nCU1J5Z5BD4ig0aBSQ47bZZ93EH1aAxWpHunx/4DdXdPDC/+H5fTUBImZj4Y6xqXKbrfZLG1XJurCnUk7TEw7NIAc/lfES5I1SFylgUspzb6KEIegpTHBRVaKj1Z2nOiHi2AZfVpvwOD0Tpdoh7uyRtpiVXGQ50WhsQxrkl3FAHEDWfsFE+jC37W1QV2qsfsKrq6NqR3/suoxg1fbL4T/zx4P43GHwuOQ4sYHQZcaHZJS57GNjN3HCwbTiXJAMiVLo4DpoqPBKE50eNOiMIAG5VhnBXTU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7684.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(136003)(396003)(346002)(39860400002)(451199021)(7696005)(83380400001)(186003)(110136005)(71200400001)(54906003)(66446008)(478600001)(6506007)(9686003)(26005)(53546011)(8936002)(8676002)(5660300002)(52536014)(6636002)(82960400001)(122000001)(33656002)(38100700002)(41300700001)(66556008)(66946007)(66476007)(76116006)(64756008)(55016003)(2906002)(4326008)(316002)(38070700005)(4744005)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fqnciLgU+7wq5vzsNMG/gcHU81lrGDQXzTHZ9vLGTflKAXUx3D1N1vPNR8a9?=
- =?us-ascii?Q?ME/5r+5F0H5wIY1uwTv4rNToyy0VDLgVsLgy9uyJy2b2O4Zgeralsl3v5Fpe?=
- =?us-ascii?Q?EmGzSE0+5ZQZCTGY2Ah+2NcUmOB3vATwUwdu9C6JbDiPi4m8+jhACs6Z6z5v?=
- =?us-ascii?Q?dvs1/c116hP5tQ3Ne4Q9Z2zg23MH0gjMqfQh+FaUR+DSRMR6A3OyW9/WoxDS?=
- =?us-ascii?Q?quI6l4lgZhOSy6IxJ8S3y0Kmizp5jgGOegCcohEC7NomKw8SccT3NAuRYYb0?=
- =?us-ascii?Q?rNN/hfRwum50Cu/42zVLuzYrz5pVZjZl9wGv3o2NBjX0j7r++g/fVJINbxKA?=
- =?us-ascii?Q?OA5QWXuBnk5R7VNYgfuzjAA/ZrLVu3QWRZJMwNpi0a8ze7wpNC9QbiG6XuRV?=
- =?us-ascii?Q?k+be8hIjzCmZVV2f7AwXSj4jIgNXtun7bi56ezEtwMhRQFQy3nsxDW3xjDUL?=
- =?us-ascii?Q?ENt+wK9Tex3E9BFUaqrDM/qAfYs6KkNPInfOzepNHoXaDXzNMRh315WcBIp8?=
- =?us-ascii?Q?SPOEnuwCuonX8/vohUw/zT4yRtaJSVGMwA6Sa2J2GsO1SvYUC+hPkMLiiA8f?=
- =?us-ascii?Q?x6c9TJl9DqZRhV388ETx/GFD1jzM09PyDr3r6J2r8AQbGTGgX7vyoohe3A3K?=
- =?us-ascii?Q?qmv+GIQJeIWvSrMjZYuKVG0CUhji9Ry47dlt9YySDXDmsrRVHHqPQ8NsbY7t?=
- =?us-ascii?Q?86jgIRCGFCsZ4Us1ZOzCLs2mIDsS3GT+NFtnHxuHQQV68K9Ls70wzcD8Nf/U?=
- =?us-ascii?Q?eqt7ZYWKoJlGcqL3i6IFPjzCDdV4jQfXF5YO2HxRRUUuLouvSR7NBsg7A+nY?=
- =?us-ascii?Q?59Thudtffk6Vf9U+gPRiuFBfkHRy9NzefRw+Oj23Yyt3Mu+rRTup35iptpqR?=
- =?us-ascii?Q?Vha4C7XSHp+iAhdQtsgxw6kLRMVbS98S82FrCBDKkQtlbNHY5gHIJWdicUDO?=
- =?us-ascii?Q?KXTicOkqlKYidWbgM8xnwuQDQcBRVprDT6bhpUUfdWld2H4giulPRULYXexK?=
- =?us-ascii?Q?i/PbTNA05gGAXeGbloo7wqKdLxDDyUXnk4uy85mtwrTdpzARbFx2RLneWfht?=
- =?us-ascii?Q?TgO/pWb/iqFJJWLIUvyqMJcp1ahoOkEst1ALCn92+1F95lFhYiNK8wINDa5l?=
- =?us-ascii?Q?wX2waLInIMpMhIQzt2pBWoZ12fawIU2vQoKUyZJhyYcS8k3nXdyPOL1Ckxvk?=
- =?us-ascii?Q?lgT3iF/9FWDPvCi7tagqCNzTFcuALmNgZ6KXhhs/z33dRvr0Nr/WUx8iFGne?=
- =?us-ascii?Q?HFqoUzr0N8EcvNUsTmQfpPZcu1NWMJ43euTAJ3C8iJheb5ctFDNeGvL/HdbV?=
- =?us-ascii?Q?Oj39di6KmQNMFnN2CWyzEQe1aqJ9wLPu7iGhuA2CeplI3UTHheKl065RafS8?=
- =?us-ascii?Q?qc/yUn8itwv3LmNXVogkFxdGPfmYFYMUprmQROWSpqIzM86hmgWa8Ja9gQdn?=
- =?us-ascii?Q?Xy1yW/e2l/dW0/Np4k4nXfruK4GdzmHDwIc5kye5zXePr/heW8viUqQIbCeY?=
- =?us-ascii?Q?SzLOx3/7b87Eqftzn40kAWqhgecKHlp5H1poV8VfWS7qh0hpYew/dHPQj196?=
- =?us-ascii?Q?yoXrs8S36f576uhQU1xiJu39O5nqVwofEicGHQkNr9Yd06wpFXWww8CYwPup?=
- =?us-ascii?Q?Mw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229926AbjERTz3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 15:55:29 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37116E43
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 12:55:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f3ac867f31so209133e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 12:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684439722; x=1687031722;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mLecpL00n5TydjOrekl+MdE1His/ixvKUL37QWFYUBk=;
+        b=IFnOtuGI2MiWd1lNTTXtiVt2dYO6ZtYasXYHC7Nf8v4oxRe0hx0s0V0yocqxTWY7/0
+         yT3zZs1ma7I6mJB9wdNe75wUTmROf3C59QjyLilK5FtT9A9Mh/VWGB4ZX2Z3bZXJplIY
+         BDa4ttNjSfrJ8bVqk+kMxLWQ7qFysMRvxi9Fgd/VjmW8ZyQB5SNEgNYrdydoqrOaT8BS
+         E3jMwOSFOsKw7gnrr0jSADl26Ji+nANyi0PMfXyVrzcJMYBrlYikrZyi8Oc0ZMIgLBIv
+         Xr/rFkr6PmtcyNatfiD+U8XIAuS0QrNvsZgyQ0oNTRSBhDcHT73KvRfFmpOzNhNfIWMF
+         9p/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684439722; x=1687031722;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLecpL00n5TydjOrekl+MdE1His/ixvKUL37QWFYUBk=;
+        b=V6TXFgBd2OnEfDXv6tDrsgxCfPMbNRg+9FQRaHHpK61oYZhvfYdFp0+YrMI+gawgu+
+         5fhNTNvOGVD6MKUagQciY4QI+jK20vUQBRFap0TqNLHy5YkjDtM35n37yAjBE5j/MXUr
+         oWT8b1ITFq/2NA9oauZgcTJxtwen4+4OfDHY4eH7Gr1VH+M+N4iVHelWiLqg9nHis+2B
+         z/AfCCwYOqIQ2OnLaqyB9yVpaFWBwiVtS5Rkr+iGoUWJIGAZ8UeV+8n4sAHI9Za8Ooyl
+         BiTXZEwc6le6AOPnHnWW6lPoHv9Drg5XPDRtD7Nd5qUEhoUtOOfcCkoVC0l8L+nD+VpK
+         NiOA==
+X-Gm-Message-State: AC+VfDxRc+lUn/e64pN9W+xm9b+L6wpylL57vrCXL/hym4wje+Ue8eUU
+        mCOsTmUyMr6ZrELEssWhEi2Djw==
+X-Google-Smtp-Source: ACHHUZ5Ade46KD9krlmh1S7mqe0UDW0Ksrdk7YYBQpxqWm0rC3czMniACR7cfcDpd3eB6v2CihVC6g==
+X-Received: by 2002:a19:f002:0:b0:4f2:6f3e:aaa7 with SMTP id p2-20020a19f002000000b004f26f3eaaa7mr25398lfc.20.1684439722425;
+        Thu, 18 May 2023 12:55:22 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id m5-20020a195205000000b004e8451948desm341519lfb.227.2023.05.18.12.55.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 12:55:21 -0700 (PDT)
+Message-ID: <bd722d46-4297-10bc-77fe-5285fc3b13ce@linaro.org>
+Date:   Thu, 18 May 2023 21:55:20 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7684.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bfbbd55-787b-474d-4600-08db57c5edd8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 17:33:01.3373
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TaoIPrNvCij9tBBdm80TCz8gPH511v6vh52E+MLTklOoAExiUI1oOYvAwucUGdMQk0rDVptLCX7YL28x4tf9IwDCHEn9qHdbaKBR+i9nkdU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6491
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 5/8] interconnect: qcom: rpm: Handle interface clocks
+Content-Language: en-US
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
+ <20230228-topic-qos-v8-5-ee696a2c15a9@linaro.org>
+ <b1990459-4780-b139-9656-f00f34a2a375@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <b1990459-4780-b139-9656-f00f34a2a375@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,27 +82,80 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-> -----Original Message-----
-> From: Luck, Tony <tony.luck@intel.com>
-> Sent: Thursday, May 11, 2023 10:15 PM
-> To: Hansen, Dave <dave.hansen@intel.com>
-> Cc: Pawnikar, Sumeet R <sumeet.r.pawnikar@intel.com>; rafael@kernel.org;
-> srinivas.pandruvada@linux.intel.com; Zhang, Rui <rui.zhang@intel.com>;
-> linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] powercap: RAPL: Add Power Limit4 support for Meteor
-> Lake SoC
->=20
-> On Thu, May 11, 2023 at 07:55:08AM -0700, Dave Hansen wrote:
-> > Could you please fix this up?  As penance, you could even fix the _ANY
-> > defines so that people can't do this accidentally any longer.
->=20
-> See the X86_MATCH_INTEL_FAM6_MODEL() for how to do this right.
->=20
+On 18.05.2023 17:59, Georgi Djakov wrote:
+> Hi Konrad,
+> Thanks for re-spinning the patches!
+> 
+> On 7.04.23 23:14, Konrad Dybcio wrote:
+>> Some (but not all) providers (or their specific nodes) require
+>> specific clocks to be turned on before they can be accessed. Failure
+>> to ensure that results in a seemingly random system crash (which
+>> would usually happen at boot with the interconnect driver built-in),
+>> resulting in the platform not booting up properly.
+>>
+>> Limit the number of bus_clocks to 2 (which is the maximum that SMD
+>> RPM interconnect supports anyway) and handle non-scaling clocks
+>> separately. Update MSM8996 and SDM660 drivers to make sure they do
+>> not regress with this change.
+>>
+>> This unfortunately has to be done in one patch to prevent either
+>> compile errors or broken bisect.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/icc-rpm.c | 40 ++++++++++++++++++++++++++++---------
+>>   drivers/interconnect/qcom/icc-rpm.h | 14 +++++++++++--
+>>   drivers/interconnect/qcom/msm8996.c | 22 +++++++++-----------
+>>   drivers/interconnect/qcom/sdm660.c  | 16 ++++++---------
+>>   4 files changed, 58 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index d79e508cb717..419b2122bebd 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>> @@ -424,21 +424,20 @@ int qnoc_probe(struct platform_device *pdev)
+>>       qnodes = desc->nodes;
+>>       num_nodes = desc->num_nodes;
+>>   -    if (desc->num_bus_clocks) {
+>> -        cds = desc->bus_clocks;
+>> -        cd_num = desc->num_bus_clocks;
+>> +    if (desc->num_intf_clocks) {
+>> +        cds = desc->intf_clocks;
+>> +        cd_num = desc->num_intf_clocks;
+>>       } else {
+>> -        cds = bus_clocks;
+>> -        cd_num = ARRAY_SIZE(bus_clocks);
+>> +        /* 0 intf clocks is perfectly fine */
+>> +        cd_num = 0;
+>>       }
+>>   -    qp = devm_kzalloc(dev, struct_size(qp, bus_clks, cd_num), GFP_KERNEL);
+>> +    qp = devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
+>>       if (!qp)
+>>           return -ENOMEM;
+>>   -    qp->bus_clk_rate = devm_kcalloc(dev, cd_num, sizeof(*qp->bus_clk_rate),
+>> -                    GFP_KERNEL);
+>> -    if (!qp->bus_clk_rate)
+>> +    qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
+>> +    if (!qp->intf_clks)
+>>           return -ENOMEM;
+>>         data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
+>> @@ -446,6 +445,18 @@ int qnoc_probe(struct platform_device *pdev)
+>>       if (!data)
+>>           return -ENOMEM;
+>>   +    qp->num_intf_clks = cd_num;
+>> +    for (i = 0; i < cd_num; i++)
+>> +        qp->intf_clks[i].id = cds[i];
+> 
+> Sadly, this is introducing a superfluous compiler warning, which is a bit annoying.
+> Could you please add some initialization to silence it and re-send just this patch.
+Ugh clang doesn't show it.. thanks
 
-Thanks Dave and Tony for this information.=20
-Let me check and submit the fix for this.=20
-
-Regards,=20
-Sumeet.=20
-
-> -Tony
+Konrad
+> 
+> drivers/interconnect/qcom/icc-rpm.c: In function ‘qnoc_probe’:
+> drivers/interconnect/qcom/icc-rpm.c:450:28: warning: ‘cds’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+>   450 |   qp->intf_clks[i].id = cds[i];
+>       |                         ~~~^~~
+> 
+> BR,
+> Georgi
