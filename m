@@ -2,166 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36027079FB
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 07:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F68F707A9C
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 09:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjERF6q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 May 2023 01:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S230039AbjERHJX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 May 2023 03:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjERF6p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 01:58:45 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20615.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::615])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11A72D64;
-        Wed, 17 May 2023 22:58:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wc6Lxvcqouwa+p6ZvgdyrBmwKoOGO0BB0dTylxhfzY+y5Kih6eLq1RIQmzgQupfaEuKg/mxMA1FgJlN0+PihmP+XXQQ5UJ6IFj0yYUPyJHH1AzBWTNBp9x9SqCPa3GM4/XQ0VD6lFFTjSBdOW1bAIOuySs45ZtCQbzBTwS28LpEeqc6lhxahHJ+nh7V3FGPfpS34AetB83dKuWSuxZvmUiypGWFojvZ2IafzGmjS0e5BcNoCVu9O0T48dYMy344MXi9FIbAB8+zLTgdrngOdHvV0EUy43CRu4hPcEVrwdA4zUVuyhdWiNCJSagzYNlsQEnZnYCm4WqJw7W1ttXv+hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z6WR2DgCXW3Kl6glbwSMRgvrsiAWS+FCAwJEX9Pr1jM=;
- b=SYHoDLIKEcExv76emApmlUpTq2D9F1ysZ68ikIB/sGeX7GxfiMBR7XmffHM5aCznJVumpn6lFETQNEoDRp1M+RIAIo6mYJ9A4Rc5bEnFfi3xFXEOlbxJJkKWuGZ8ZW/2uTJrFACWguTpwrkwF8s2l82FtCp3Pq30+etcXs+Vb7RFO5tD6mFFAP1SgTzHoWV4twfrGKlws0vOS0d4v0ePSJvtpesvANfhKwWr2SC9lIdHunTl41ZDU9c89fbJCiNJ++YDrHRkfq4pzBFmSXBRYN/dLbJ7JKrY5mbuGWHK4ePNHgFoaPyYnVRNovlsGYechFZLVjbrkik41oM2CM/7KQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z6WR2DgCXW3Kl6glbwSMRgvrsiAWS+FCAwJEX9Pr1jM=;
- b=XbGVRw3IYGJic/A8zKn29h91B4kzbC6uatWTMta2AzoOYs1cs2FMXFY3UUrkppmyjnoC+zIVkX2lZTdFsr4GsB+ReUvqe8UMhNi7OGjgGJN2+YVaChLEl02suvQBLglNRSZJQG6py7eRM3AX6wlN3jcOwHErvagxW1nDOTXsZEA=
-Received: from DM6PR08CA0004.namprd08.prod.outlook.com (2603:10b6:5:80::17) by
- PH0PR12MB7907.namprd12.prod.outlook.com (2603:10b6:510:28d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Thu, 18 May
- 2023 05:58:39 +0000
-Received: from DS1PEPF0000E634.namprd02.prod.outlook.com
- (2603:10b6:5:80:cafe::b2) by DM6PR08CA0004.outlook.office365.com
- (2603:10b6:5:80::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
- Transport; Thu, 18 May 2023 05:58:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E634.mail.protection.outlook.com (10.167.17.138) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.11 via Frontend Transport; Thu, 18 May 2023 05:58:39 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 00:58:33 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gautham.shenoy@amd.com>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH] cpufreq: amd-pstate: Update policy->cur for adjust perf
-Date:   Thu, 18 May 2023 05:58:19 +0000
-Message-ID: <20230518055819.71585-1-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230040AbjERHJS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 03:09:18 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85C11732
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 00:09:15 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96598a7c5e0so267573066b.3
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 00:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684393754; x=1686985754;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aaDmiGsy9nFlZUj/9Pg4tvEnC4K0/WQOgXIhBgkiyU0=;
+        b=R72HReIgiYADEeYmxfpQFpCU1UTit0oYnH6DFPeGVTPKxzAYdwvbmqgv0xCa6T4nOU
+         mLblWKNsTicxJPfQq3w5ZcaJ7CGRFf2DnBU0db3+G4S38gzMmiOggM0TV9og8nJTuqXK
+         yAO/0OgfaYNgbufKucg2K4hQ+uyH5969msY/sV0QEvF+67eIcJuTDuHl8w+lAZzTCdjA
+         0ZQFsiAj+H5vp0HaUgb8eyPj3gVyz+9wYK2k+PmPA44sajiREUyA2bdmJJpOClW3POIP
+         2P0BmIvSijO19a5xgErUe6S68mH57R9+8KFOF7rMcEBRXkXl9Jd3ce/VOobYrHwAHEP3
+         ybdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684393754; x=1686985754;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aaDmiGsy9nFlZUj/9Pg4tvEnC4K0/WQOgXIhBgkiyU0=;
+        b=Cggg9B94rnmqcLVUFkp2i+8eQi/OSCX+kqfOVnJwMZFhPJNsOjvwQENgYqHID7ArHx
+         YWrPBNdMnq5pGDaFZsdwC3IMMhaeaUf1EO9IFulUbdPpogVKzN1wm/43TH94GEmiiZVj
+         oo+cD9EsrOfkYwGGWdxS2I8cHcLujhNghsiLPF2ndkzzZjGp7Ol4VRzDeyPGHNM1JEaV
+         CaB1yECb8lNeMDQCx0WCZPIUXPKpzG9BFyoezvWqgew5MeD6JBO5O3fM367Bn7RAEGKP
+         VOf/O5J376OyCkzS6QuIyCZhaJDqS3Qb/gJ+XUxlQAXIp260Bpmqlarj0juwH0KCZ6Ak
+         WvkA==
+X-Gm-Message-State: AC+VfDz/h8gWzT5t43QD48KQWjD5ysD1ARfoKbVN5vGeuN+CwDaq3F9F
+        hDKXGkRHSKnOBCe6EccuxXTnjw==
+X-Google-Smtp-Source: ACHHUZ5Lw12WrXqhgxKK+FvUFNZ0gO6pcYiS1IjQ6lp/KSs9CGPZregunjo7am5TsJVwvzCCZC6hJQ==
+X-Received: by 2002:a17:906:fd8c:b0:94f:3cf5:6d7f with SMTP id xa12-20020a170906fd8c00b0094f3cf56d7fmr37246503ejb.46.1684393754126;
+        Thu, 18 May 2023 00:09:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id m14-20020a170906258e00b0096f272206b3sm560992ejb.125.2023.05.18.00.09.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 00:09:13 -0700 (PDT)
+Message-ID: <fe1d81d2-52e6-7d2d-8d6c-ffdcbb8ccc89@linaro.org>
+Date:   Thu, 18 May 2023 09:09:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E634:EE_|PH0PR12MB7907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12dd08a7-dd9d-48b8-77e3-08db5764ed3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 472hIJNPxvPRqF3vW2P54tHEU/F5PEKDcM1qKTgOSba7cvS7l1Peopq0HvCt3cz0xSx/s4OceiHxt2tIlXTz15tgUj7XN8p1eBsEmm9HC3gtt7mn5y82pkORTwAq72DyJuMplHmE03xIN/DHinqsL9A92qzMlvoWZnUtLCgxXpgX282HXaSHyKkTN4r2rLgiiix6zN71tVJxcwYkms20lGbPtTAayDemdDSWnbXxDr87SOanua076VgA4mRj3EugSDcGar6Q+KZFDuleiu2q2hnMbt+mRidxXn6G6pMSpttV9sJbvqnmklLuZh5VKj0iBQifbxcaevWFdqf4IxuPS4CqGCXXg0SSIvz1fwDNwZjxuLGIWsUgm1drTo5cAf9krlQGbfwuo7CL9uhElV7l81jdQM2ju9h3seotvx+QDT6TpKP0CJqJsSy6MkMbrzf/KXWg6lM/zc0C+y22Cbi1XsJn07x8AcBoRG+fJq1Ca0qCnhZqqCQOT2stbAwVbOVeNE4tuhFT2piJAzXikHLuAQg5q2JmlmY9iCCb0LSD6cMMwU3q/uBhnMliAgCNx2nBFUMRCk0g53ED6F3Nh/+O/9uILEuTJZhUcRFlqvzV/7n+8lkQ3/g1AJ/ENtmZRW4bF/Ef6hs/DpqlLDdZPUi/pAdQVJCGgTBT+qPddlPZZZOZzNwtVmHuq7cFD5ThueIF4/KpzyMmb35SQ2DsludWJa9xAUvFnrmct3zUrDhJqRV/WYO6cudLk1rtu05pS/tAK7rW17jc+6Kf+Dczf5BHsL8I3fBGMxeywxxfTK+b/dY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(136003)(396003)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(4326008)(47076005)(70586007)(70206006)(110136005)(316002)(54906003)(36756003)(86362001)(478600001)(7696005)(1076003)(186003)(336012)(16526019)(2616005)(426003)(83380400001)(36860700001)(6666004)(44832011)(8936002)(40480700001)(5660300002)(2906002)(15650500001)(81166007)(41300700001)(82310400005)(82740400003)(26005)(8676002)(356005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 05:58:39.0719
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12dd08a7-dd9d-48b8-77e3-08db5764ed3b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E634.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7907
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
+ <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
+ <20230516120426.GA1679@varda-linux.qualcomm.com>
+ <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
+ <20230517055726.GA3165@varda-linux.qualcomm.com>
+ <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
+ <20230518054054.GA998@varda-linux.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230518054054.GA998@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Driver should update policy->cur after updating the frequency.
-Currently amd_pstate doesn't update policy->cur when `adjust_perf`
-is used. Which causes /proc/cpuinfo to show wrong cpu frequency.
-Fix this by updating policy->cur with correct frequency value in
-adjust_perf function callback.
+On 18/05/2023 07:40, Varadarajan Narayanan wrote:
+> On Wed, May 17, 2023 at 09:00:49AM +0200, Krzysztof Kozlowski wrote:
+>> On 17/05/2023 07:57, Varadarajan Narayanan wrote:
+>>> Part-1 is adding the 'const' entries at the beginning i.e.
+>>>
+>>> 	+      - const: qcom,tsens-v0_1
+>>> 	+      - const: qcom,tsens-v1
+>>> 	+      - const: qcom,tsens-v2
+>>> 	+      - const: qcom,ipq8074-tsens
+>>>
+>>> Part-2 is changing from one valid syntax to another i.e.
+>>>
+>>> 	+        items:
+>>> 	+          - enum:
+>>> 	+              - qcom,ipq9574-tsens
+>>> 	+          - const: qcom,ipq8074-tsens
+>>>
+>>> Without both of the above changes, either or both of dtbs_check
+>>> & dt_binding_check fails. So, it is not possible to just add the
+>>> "valid hunk" (part-2) alone.
+>>
+>> Of course it is. All schema files work like that...
+>>>
+>>> If having both part-1 and part-2 in the same patch is not
+>>> acceptable, shall I split them into two patches? Please let me know.
+>>
+>> No, hunk one is not justified.
+> 
+> For the other compatibles, the enum entries and const/fallback
+> entries are different. For the 9574 & 8074 case, we want to have
+> qcom,ipq8074-tsens as both enum and const/fallback entry. Hence,
+> if we don't have the first hunk, dtbs_check fails for 8074
+> related dtbs
+> 
+> 	ipq8074-hk01.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+> 		['qcom,ipq8074-tsens'] is too short
 
-- Before the fix: (setting min freq to 1.5 MHz)
+Why? It is already there. Open the file and you will see that this is
+already covered.
 
-[root@amd]# cat /proc/cpuinfo | grep "cpu MHz" | sort | uniq --count
-      1 cpu MHz         : 1777.016
-      1 cpu MHz         : 1797.160
-      1 cpu MHz         : 1797.270
-    189 cpu MHz         : 400.000
+If you remove it, then yes, you will see errors and the answer is: do
+not remove it.
 
-- After the fix: (setting min freq to 1.5 MHz)
+> 
+> 	ipq8074-hk10-c2.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+> 		['qcom,ipq8074-tsens'] is too short
+> 
+> 	ipq8074-hk10-c1.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+> 		['qcom,ipq8074-tsens'] is too short
+> 
+> I'm not sure of the correct solution. Having the first hunk
+> solves the above dtbs_check errors, so went with it. I'm able to
+> avoid dtbs_check errors with just one entry in the first hunk.
 
-[root@amd]# cat /proc/cpuinfo | grep "cpu MHz" | sort | uniq --count
-      1 cpu MHz         : 1753.353
-      1 cpu MHz         : 1756.838
-      1 cpu MHz         : 1776.466
-      1 cpu MHz         : 1776.873
-      1 cpu MHz         : 1777.308
-      1 cpu MHz         : 1779.900
-    183 cpu MHz         : 1805.231
-      1 cpu MHz         : 1956.815
-      1 cpu MHz         : 2246.203
-      1 cpu MHz         : 2259.984
+You made multiple changes in one patch which is not correct. Your goal
+is to add only one change - ipq9574 followed by ipq8074. Add this one.
+Don't touch others.
 
-Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
+> 
+>  	+      - const: qcom,ipq8074-tsens
+> 
+> Please let me know if there is a better way to resolve this or we
+> can have just the 8074 entry in the first hunk.
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+You only need to add new item on the oneOf list:
+ - enum
+     - ipq9574
+ - const: ipq8074
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 5a3d4aa0f45a..736dab69ba1e 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -479,12 +479,14 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- 				   unsigned long capacity)
- {
- 	unsigned long max_perf, min_perf, des_perf,
--		      cap_perf, lowest_nonlinear_perf;
-+		      cap_perf, lowest_nonlinear_perf, max_freq;
- 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
- 	struct amd_cpudata *cpudata = policy->driver_data;
-+	unsigned int target_freq;
- 
- 	cap_perf = READ_ONCE(cpudata->highest_perf);
- 	lowest_nonlinear_perf = READ_ONCE(cpudata->lowest_nonlinear_perf);
-+	max_freq = READ_ONCE(cpudata->max_freq);
- 
- 	des_perf = cap_perf;
- 	if (target_perf < capacity)
-@@ -501,6 +503,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- 	if (max_perf < min_perf)
- 		max_perf = min_perf;
- 
-+	des_perf = clamp_t(unsigned long, des_perf, min_perf, max_perf);
-+	target_freq = div_u64(des_perf * max_freq, max_perf);
-+	policy->cur = target_freq;
-+
- 	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true,
- 			policy->governor->flags);
- 	cpufreq_cpu_put(policy);
--- 
-2.34.1
+Best regards,
+Krzysztof
 
