@@ -2,57 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73E1707775
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 03:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FF270778F
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 03:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjERBff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 May 2023 21:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
+        id S229577AbjERBo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 May 2023 21:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjERBfe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 21:35:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D2619BD;
-        Wed, 17 May 2023 18:35:32 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QMC8x4VnRzTkgf;
-        Thu, 18 May 2023 09:30:41 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+        with ESMTP id S229801AbjERBo5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 May 2023 21:44:57 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBC22D7D;
+        Wed, 17 May 2023 18:44:52 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QMCNF0Z0Pz18Ls7;
+        Thu, 18 May 2023 09:40:29 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 18 May 2023 09:35:30 +0800
-Message-ID: <f7b5aec9-f9e0-dd51-f9a0-c6af227537fd@huawei.com>
-Date:   Thu, 18 May 2023 09:35:29 +0800
+ 15.1.2507.23; Thu, 18 May 2023 09:44:48 +0800
+Message-ID: <72de6a0f-f8c9-2b3d-04b5-613f2d368b61@huawei.com>
+Date:   Thu, 18 May 2023 09:44:48 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 08/13] mm: page_alloc: split out DEBUG_PAGEALLOC
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] cpufreq: CPPC: keep target core awake when reading
+ its cpufreq rate
+To:     Sumit Gupta <sumitg@nvidia.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>,
+        <liwei391@huawei.com>, <linux-acpi@vger.kernel.org>,
+        <weiyongjun1@huawei.com>, <lenb@kernel.org>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        Yang Shi <yang@os.amperecomputing.com>
+References: <20230516133248.712242-1-zengheng4@huawei.com>
+ <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
+ <cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com>
 Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <ying.huang@intel.com>
-References: <20230516063821.121844-1-wangkefeng.wang@huawei.com>
- <20230516063821.121844-9-wangkefeng.wang@huawei.com>
- <20230516152212.95f4a6ebba475cb994a4429f@linux-foundation.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230516152212.95f4a6ebba475cb994a4429f@linux-foundation.org>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,66 +59,131 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-
-On 2023/5/17 6:22, Andrew Morton wrote:
-> On Tue, 16 May 2023 14:38:16 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> 
->> DEBUG_PAGEALLOC
+在 2023/5/17 23:03, Sumit Gupta 写道:
+>
+>
+> On 17/05/23 13:47, Pierre Gondois wrote:
+>> External email: Use caution opening links or attachments
 >>
->>   mm/debug_page_alloc.c | 59 +++++++++++++++++++++++++++++++++
->>   mm/page_alloc.c       | 69 ---------------------------------------
-> 
-> and
-> 
-> FAIL_PAGE_ALLOC
-> 
-> We're irritatingly inconsistent about whether there's an underscore.
-> 
-> akpm:/usr/src/25> grep page_alloc mm/*c|wc -l
-> 49
-> akpm:/usr/src/25> grep pagealloc mm/*c|wc -l
-> 28
+>>
+>> +Ionela, Sumit, Yang,
+>>
+>> Hello Zeng,
+>>
+>> I think solutions around related issues were suggested at:
+>>
+>> [1] 
+>> https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
+>> [2] 
+>> https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
+>> [3] https://lore.kernel.org/all/ZEl1Fms%2FJmdEZsVn@arm.com/
+>>
+>> About this patch, it seems to mean that CPPC counters of CPUx are always
+>> accessed from CPUx, even when they are not AMUs. For instance CPPC
+>> counters could be memory mapped and accessible from any CPU.
+>> cpu_has_amu_feat() should allow to probe if a CPU uses AMUs or not,
+>> and [2] had an implementation using it.
+>>
+>> Another comment about PATCH 2/2 is that if the counters are accessed
+>> through FFH, arm64 version of cpc_read_ffh() is calling
+>> counters_read_on_cpu(), and a comment in counters_read_on_cpu() seems
+>> to specify the function must be called with interrupt enabled.
+>>
+>> I think the best solution so far was the one at [3], suggested by 
+>> Ionela,
+>> but it doesn't seem to solve your issue. Indeed, it is not checked 
+>> whether
+>> the counters are AMU counters and that they must be remotely read (to
+>> have the CPU awake),
+>>
+>> Regards,
+>> Pierre
+>>
+>
+> I think the solution in [1] is simple and solves all the three cases.
+> Also, it provides better accuracy between the set and get frequency as 
+> compared to [3].
+>
+> This can be merged and can later still be improved in Upstream.
+>
+> If OK, I can send new version by changing the patch to apply for all 
+> ARM SoC's with AMU and not specific to Tegra.
+>
+> Thank you,
+> Sumit Gupta
+>
+I vote solution [1] and it should be applied to all ARM SoCs with AMU.
 
-All the 28 pagealloc naming is from DEBUG_PAGEALLOC feature, they chould
-be changed to page_alloc except the cmdline, but it will lead to long
-function name and don't gain too much advantage, so keep unchange?
+Zeng Heng
 
-$ grep pagealloc mm/*c
-mm/debug_page_alloc.c:bool _debug_pagealloc_enabled_early __read_mostly
-mm/debug_page_alloc.c:EXPORT_SYMBOL(_debug_pagealloc_enabled_early);
-mm/debug_page_alloc.c:DEFINE_STATIC_KEY_FALSE(_debug_pagealloc_enabled);
-mm/debug_page_alloc.c:EXPORT_SYMBOL(_debug_pagealloc_enabled);
-mm/debug_page_alloc.c:static int __init early_debug_pagealloc(char *buf)
-mm/debug_page_alloc.c:	return kstrtobool(buf, 
-&_debug_pagealloc_enabled_early);
-mm/debug_page_alloc.c:early_param("debug_pagealloc", early_debug_pagealloc);
-mm/memory_hotplug.c:	 * Freeing the page with debug_pagealloc enabled 
-will try to unmap it,
-mm/memory_hotplug.c:	debug_pagealloc_map_pages(page, 1 << order);
-mm/mm_init.c:	      debug_pagealloc_enabled())) {
-mm/mm_init.c:	if (debug_pagealloc_enabled()) {
-mm/mm_init.c:		static_branch_enable(&_debug_pagealloc_enabled);
-mm/page_alloc.c:	 * page becomes unavailable via debug_pagealloc or 
-arch_free_page.
-mm/page_alloc.c:	debug_pagealloc_unmap_pages(page, 1 << order);
-mm/page_alloc.c:	debug_pagealloc_map_pages(page, 1 << order);
-mm/page_poison.c:		pr_err("pagealloc: single bit error\n");
-mm/page_poison.c:		pr_err("pagealloc: memory corruption\n");
-mm/page_poison.c:	dump_page(page, "pagealloc: corrupted page details");
-mm/slab.c:static inline bool is_debug_pagealloc_cache(struct kmem_cache 
-*cachep)
-mm/slab.c:	return debug_pagealloc_enabled_static() && OFF_SLAB(cachep) &&
-mm/slab.c:	if (!is_debug_pagealloc_cache(cachep))
-mm/slab.c:	if (is_debug_pagealloc_cache(cachep))
-mm/slab.c:	 * To activate debug pagealloc, off-slab management is necessary
-mm/slab.c:	if (debug_pagealloc_enabled_static() && (flags & SLAB_POISON) &&
-mm/slab.c:		is_debug_pagealloc_cache(cachep))
-mm/slub.c:	if (!debug_pagealloc_enabled_static())
-mm/vmalloc.c:	if (debug_pagealloc_enabled_static())
-mm/vmalloc.c:	if (debug_pagealloc_enabled_static())
-
-
-
-> 
-
-
+>>
+>> On 5/16/23 15:32, Zeng Heng wrote:
+>>> As ARM AMU's document says, all counters are subject to any changes
+>>> in clock frequency, including clock stopping caused by the WFI and WFE
+>>> instructions.
+>>>
+>>> Therefore, using smp_call_on_cpu() to trigger target CPU to
+>>> read self's AMU counters, which ensures the counters are working
+>>> properly during calculation.
+>>>
+>>> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+>>> ---
+>>>   drivers/cpufreq/cppc_cpufreq.c | 30 +++++++++++++++++++-----------
+>>>   1 file changed, 19 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c 
+>>> b/drivers/cpufreq/cppc_cpufreq.c
+>>> index 022e3555407c..910167f58bb3 100644
+>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>> @@ -837,9 +837,24 @@ static int cppc_perf_from_fbctrs(struct 
+>>> cppc_cpudata *cpu_data,
+>>>       return (reference_perf * delta_delivered) / delta_reference;
+>>>   }
+>>>
+>>> +static int cppc_get_perf_ctrs_smp(void *val)
+>>> +{
+>>> +     int cpu = smp_processor_id();
+>>> +     struct cppc_perf_fb_ctrs *fb_ctrs = val;
+>>> +     int ret;
+>>> +
+>>> +     ret = cppc_get_perf_ctrs(cpu, fb_ctrs);
+>>> +     if (ret)
+>>> +             return ret;
+>>> +
+>>> +     udelay(2); /* 2usec delay between sampling */
+>>> +
+>>> +     return cppc_get_perf_ctrs(cpu, fb_ctrs + 1);
+>>> +}
+>>> +
+>>>   static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>>>   {
+>>> -     struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+>>> +     struct cppc_perf_fb_ctrs fb_ctrs[2] = {0};
+>>>       struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+>>>       struct cppc_cpudata *cpu_data = policy->driver_data;
+>>>       u64 delivered_perf;
+>>> @@ -847,19 +862,12 @@ static unsigned int 
+>>> cppc_cpufreq_get_rate(unsigned int cpu)
+>>>
+>>>       cpufreq_cpu_put(policy);
+>>>
+>>> -     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+>>> -     if (ret)
+>>> -             return ret;
+>>> -
+>>> -     udelay(2); /* 2usec delay between sampling */
+>>> -
+>>> -     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>> +     ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_smp, fb_ctrs, 1);
+>>>       if (ret)
+>>>               return ret;
+>>>
+>>> -     delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+>>> -                                            &fb_ctrs_t1);
+>>> -
+>>> +     delivered_perf = cppc_perf_from_fbctrs(cpu_data, fb_ctrs,
+>>> +                                            fb_ctrs + 1);
+>>>       return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
+>>>   }
+>>>
