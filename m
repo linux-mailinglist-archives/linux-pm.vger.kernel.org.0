@@ -2,85 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70411707EC9
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 13:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9721B7080DE
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 14:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjERLG4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 May 2023 07:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S231482AbjERMMm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 May 2023 08:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjERLGz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 07:06:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E1910EA
-        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 04:06:53 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-953343581a4so277790766b.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 04:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684408012; x=1687000012;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yeJXFRF7sbuSmGTwl5/y2NHZf03i5D97leo/Mm1jmPA=;
-        b=MjfqNjnPpIzx92qYzyVccFfBlsVJ8+9ROZDV6w+QVISVgL4MVL3AdF3Mh8FrK8cnOm
-         wHW6IB6uWI3uRraA3KtEA5TtALuzerEdegGTu0l7Vl/8dN76rFSPm7KcFkPCBs9YO1Md
-         thRZobFoifwp8/WHXagA42ih2WHxzXczGWkEXITjkYC0PdXzIRqkPSNXaNxFZURmxNva
-         SUqZROTPUozLgNYTgx6yiHS8MLuGLETlulPv9WLkJxcCtcffY3PG+xxVsIJgX+Khv+1F
-         Tm/u5v1fRrrsCylilQDaaBR0QLZV4+ryfeqdOu5Un4DFcaPrICGHy5rGXSYwjbyFWTZ6
-         8Gew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684408012; x=1687000012;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yeJXFRF7sbuSmGTwl5/y2NHZf03i5D97leo/Mm1jmPA=;
-        b=I3Q3euW2XTIBF9hP6Tt1bWHCsGPER4+90r5POPaEIepeoiX8ekQ08V8Q8gfo+DHhNX
-         ew5Rb87ytViP/HAA6CVAUvaw6Hw1rCKnFdIdQ1rxRhXCSYoRuuo5Cr07FvF93BSF9EdK
-         byfe9xeHOZ7xnsGtJf0hfKejA2kYwDfLiXdMgZyWqInoao8zWhwHxW66BBpqoXoGn6S8
-         SQXMk9XFazGX5fEVaRjOixocaN5ClzhqHH61hG1GgB6Hfq9MmRzYFmu2In+sHn1U0zMu
-         hXDb2kKMQl/JoUlXETDgQ4wMRsfI61JMuTZYN2/LMGgZDCDC1aXZsviH552YlmQJOT5h
-         ohRQ==
-X-Gm-Message-State: AC+VfDyow4OyuoV4/+8+OPcwsOAk6jhCcwtLNtqe8TpYP2u3vxPLUtiG
-        Ik1XU5iYwYr2752mctXwKdqEag==
-X-Google-Smtp-Source: ACHHUZ77B3+5K0JTlWbBlEvuo7J0nvSd9qNSA6L2iF+zlVo6gn+LFWwwVl6YZjX6L8F1UPtYxDep4w==
-X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr38722660ejb.60.1684408012085;
-        Thu, 18 May 2023 04:06:52 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
-        by smtp.gmail.com with ESMTPSA id pv27-20020a170907209b00b00882f9130eafsm824286ejb.26.2023.05.18.04.06.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 04:06:51 -0700 (PDT)
-Message-ID: <24b60ca3-b6b9-662f-03c8-df1536b52bc9@linaro.org>
-Date:   Thu, 18 May 2023 13:06:49 +0200
+        with ESMTP id S230308AbjERMMl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 08:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BEDE46;
+        Thu, 18 May 2023 05:12:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B003A64EC0;
+        Thu, 18 May 2023 12:12:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CA4C433EF;
+        Thu, 18 May 2023 12:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684411959;
+        bh=HQbrGsVEWGpBhnO+Kgnh4OFttxZ6LnaXdPUMdYq0FQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TUWMgZFdbGzjVGrh45IXRwY5fY9S25C+cCktX+MQhc9z2Gdb82NKa+siLaasFrQAh
+         EAjWyKqZygY3e//EKQxNPP/PANdDrwjP5PpU6V0ZE3VH3RyHFAnkR/OdLyL0twtgoX
+         cvQQ3RMPjPbhd637yWeLZAKwJbjm1tGjobsvkwsAesU7sloVoZDo5AWMP2ri5eHtLD
+         uh/wgXl3GTty6q7wLW5gAR2LINbwHYyOcVuEtqD+1cMonQNZ7z5GLhImoc49lgcPgN
+         6+Va9pcqeldMG43kRT5DPhxxkirg7FN+5NPrmhio0atSP11NgsUIplUieTg3MTSYi9
+         315kjE7Vl/d2Q==
+Date:   Thu, 18 May 2023 13:12:32 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Yauhen Kharuzhy <jekhor@gmail.com>
+Subject: Re: [PATCH RESEND 1/4] leds: Change led_trigger_blink[_oneshot]()
+ delay parameters to pass-by-value
+Message-ID: <20230518121232.GG404509@google.com>
+References: <20230510162234.291439-1-hdegoede@redhat.com>
+ <20230510162234.291439-2-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
- compatible
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-References: <cover.1684140883.git.quic_varada@quicinc.com>
- <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
- <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
- <20230516120426.GA1679@varda-linux.qualcomm.com>
- <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
- <20230517055726.GA3165@varda-linux.qualcomm.com>
- <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
- <20230518054054.GA998@varda-linux.qualcomm.com>
- <fe1d81d2-52e6-7d2d-8d6c-ffdcbb8ccc89@linaro.org>
- <20230518090503.GA9173@varda-linux.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230518090503.GA9173@varda-linux.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230510162234.291439-2-hdegoede@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,118 +66,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/05/2023 11:05, Varadarajan Narayanan wrote:
-> On Thu, May 18, 2023 at 09:09:12AM +0200, Krzysztof Kozlowski wrote:
->> On 18/05/2023 07:40, Varadarajan Narayanan wrote:
->>> On Wed, May 17, 2023 at 09:00:49AM +0200, Krzysztof Kozlowski wrote:
->>>> On 17/05/2023 07:57, Varadarajan Narayanan wrote:
->>>>> Part-1 is adding the 'const' entries at the beginning i.e.
->>>>>
->>>>> 	+      - const: qcom,tsens-v0_1
->>>>> 	+      - const: qcom,tsens-v1
->>>>> 	+      - const: qcom,tsens-v2
->>>>> 	+      - const: qcom,ipq8074-tsens
->>>>>
->>>>> Part-2 is changing from one valid syntax to another i.e.
->>>>>
->>>>> 	+        items:
->>>>> 	+          - enum:
->>>>> 	+              - qcom,ipq9574-tsens
->>>>> 	+          - const: qcom,ipq8074-tsens
->>>>>
->>>>> Without both of the above changes, either or both of dtbs_check
->>>>> & dt_binding_check fails. So, it is not possible to just add the
->>>>> "valid hunk" (part-2) alone.
->>>>
->>>> Of course it is. All schema files work like that...
->>>>>
->>>>> If having both part-1 and part-2 in the same patch is not
->>>>> acceptable, shall I split them into two patches? Please let me know.
->>>>
->>>> No, hunk one is not justified.
->>>
->>> For the other compatibles, the enum entries and const/fallback
->>> entries are different. For the 9574 & 8074 case, we want to have
->>> qcom,ipq8074-tsens as both enum and const/fallback entry. Hence,
->>> if we don't have the first hunk, dtbs_check fails for 8074
->>> related dtbs
->>>
->>> 	ipq8074-hk01.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
->>> 		['qcom,ipq8074-tsens'] is too short
->>
->> Why? It is already there. Open the file and you will see that this is
->> already covered.
+On Wed, 10 May 2023, Hans de Goede wrote:
+
+> led_blink_set[_oneshot]()'s delay_on and delay_off function parameters
+> are pass by reference, so that hw-blink implementations can report
+> back the actual achieved delays when the values have been rounded
+> to something the hw supports.
 > 
-> I guess dtbs_check doesn't like the same value being a const and
-> a oneof entry.
-
-I don't understand.
-
->  Have attached the file, please see if something is
-> not in order.
-
-I don't know what changed there. Please work on patches.
-
+> This is really only interesting for the sysfs API / the timer trigger.
+> Other triggers don't really care about this and none of the callers of
+> led_trigger_blink[_oneshot]() do anything with the returned delay values.
 > 
->> If you remove it, then yes, you will see errors and the answer is: do
->> not remove it.
+> Change the led_trigger_blink[_oneshot]() delay parameters to pass-by-value,
+> there are 2 reasons for this:
 > 
-> I haven't removed it. 
-
-You did. Look:
-
-       - description: v2 of TSENS with combined interrupt
--        enum:
--          - qcom,ipq8074-tsens
-
-The first character in the diff (-) means removal.
-
-> For this patch, ipq8074-tsens changed from
-> being an oneof enum entry to a const entry. Probably, that is why
-> dtbs_check is giving these errors.
-
-You removed the entry which you should not have touched.
-
+> 1. led_cdev->blink_set() may sleep, while led_trigger_blink() may not.
+> So on hw where led_cdev->blink_set() sleeps the call needs to be deferred
+> to a workqueue, in which case the actual achieved delays are unknown
+> (this is a preparation patch for the deferring).
 > 
->>> 	ipq8074-hk10-c2.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
->>> 		['qcom,ipq8074-tsens'] is too short
->>>
->>> 	ipq8074-hk10-c1.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
->>> 		['qcom,ipq8074-tsens'] is too short
->>>
->>> I'm not sure of the correct solution. Having the first hunk
->>> solves the above dtbs_check errors, so went with it. I'm able to
->>> avoid dtbs_check errors with just one entry in the first hunk.
->>
->> You made multiple changes in one patch which is not correct. Your goal
->> is to add only one change - ipq9574 followed by ipq8074. Add this one.
->> Don't touch others.
+> 2. Since the callers don't care about the actual achieved delays, allowing
+> callers to directly pass a value leads to simpler code for most callers.
 > 
-> But that breaks dtbs_check.
+> Reviewed-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Tested-by: Yauhen Kharuzhy <jekhor@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/leds/led-triggers.c              | 16 ++++++++--------
+>  drivers/leds/trigger/ledtrig-disk.c      |  9 +++------
+>  drivers/leds/trigger/ledtrig-mtd.c       |  8 ++------
+>  drivers/net/arcnet/arcnet.c              |  8 ++------
+>  drivers/power/supply/power_supply_leds.c |  5 +----
+>  drivers/usb/common/led.c                 |  4 +---
+>  include/linux/leds.h                     | 16 ++++++++--------
+>  net/mac80211/led.c                       |  2 +-
+>  net/mac80211/led.h                       |  8 ++------
+>  net/netfilter/xt_LED.c                   |  3 +--
+>  10 files changed, 29 insertions(+), 50 deletions(-)
 
-All other cases, hundreds of other binding files, do not have problem.
-Only this one "breaks dtbs_check". No, it does not.
+Applied, thanks
 
-Whatever is broken is result of your removal of unrelated pieces.
-
-> 
->>>  	+      - const: qcom,ipq8074-tsens
->>>
->>> Please let me know if there is a better way to resolve this or we
->>> can have just the 8074 entry in the first hunk.
->>
->> You only need to add new item on the oneOf list:
->>  - enum
->>      - ipq9574
->>  - const: ipq8074
-> 
-> The "['qcom,ipq8074-tsens'] is too short" errors were generated
-> with the above snippet only. Please see the attachment
-
-It's not true. The error you see is result because you removed something
-you should not. I did not ask you to remove anything. So repeating -
-"add new item". Adding is not "removal and adding". Adding is just "adding".
-
-Best regards,
-Krzysztof
-
+-- 
+Lee Jones [李琼斯]
