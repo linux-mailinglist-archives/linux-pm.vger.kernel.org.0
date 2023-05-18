@@ -2,351 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070547088D0
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 21:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC83C708AB8
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 23:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjERT6R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 May 2023 15:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S229498AbjERVtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 May 2023 17:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjERT6Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 15:58:16 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EFEE45
-        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 12:58:14 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac89e6a5a1so26811561fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 12:58:14 -0700 (PDT)
+        with ESMTP id S229456AbjERVtO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 17:49:14 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8156818F
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 14:49:13 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae408f4d1aso20586125ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 14:49:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684439893; x=1687031893;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J7HAbP/yq151wuxj+IP3o2G/SsWPNnr8yO3Lll2QflU=;
-        b=DTSq9hAGSuIti24AEdzReJdBr1vrJjgdpn4gGUcj3/EucZbTazgXRFGPH03hIhbpNA
-         jjtLAlTp//Vd9OkJUIhYvOkMMhcpo4+AXS/eK1VvqzJtCQQkREzHkgEFuGuqq5mVI3VJ
-         xvm7IHyX7XMcR+v44VdqRVXkNSE5vxFRy81movPhzYB5b8Z9cS3Q5ExUqvjd/A8kdplr
-         SxszdohNGa3IkQqF7S1u+dsOEUorJjKNCS13mqj6gAzZgmjKow5Win55cUCYriv+/VPb
-         q6qOmP4n3TJorrx54tTEXoDJ2BmUuwIO+N6oMLEhL7sV4owumcbj9fEC1Lfb1SrECyRY
-         R7Cg==
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684446553; x=1687038553;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iqx+9pV/YF/b/kDTwKh2bTt8NX/PCVLKC1HVp4fvZVo=;
+        b=rzcgIxzDs93HjZci2UY9/fVNE6wr6i9iR/knLUvVwJT84MTCWd9+s5ndTRcBFzArC7
+         gQ4cwihooRbJlh714OS3WYHJcTFarLo+POppQ1C6PjPPgXKGAIUJrh2QI4IogtEKIgZS
+         qybKLiObFGsspxxj+WNC66sXTnS7PeKI8OgqQQWhGWynN1qgtm+J3ZwoanbYDW9VpRju
+         gksuUMvlFX/bPGfHUihrnf8W+jp4rUlFssMuU8M5yYpi+1BAdSe8FlDgTgKHR/v+YR2c
+         PVXcVANEwdD9FiSP+UuNy5E8aUTajmDdKWgN5z4QSGLlyiR1K5UDa+B//e/TSKACL86u
+         V90Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684439893; x=1687031893;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684446553; x=1687038553;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J7HAbP/yq151wuxj+IP3o2G/SsWPNnr8yO3Lll2QflU=;
-        b=MV/Bcli5VHSe0GFD4ltxUpxgxGdiHKiZHySvIiKHve/yPlf7v2/bsY6w9sq8jBLOIh
-         U2eTXR1VLGCC5MdQWNIRo9fZ5Y8ddH3945MW7Lt2XoUpm6DCeDMkZl4SxCy4R8wE/DXl
-         cl6eMUmUuZbtEB5l3JasbwtkdrNCvSHqKZZSNUJ1lMsH4FX9bPbrSyTqe5FLqi81dfb5
-         TNkXL5qxO9ZqEziemdd2wIP6v/0dcSEmgq7J5gqPgAnDZ38iXmf+PH7z2bopukL6DSfh
-         FmKdfNIu/ERYHEvwC+6Jz6FfYrkMgjBHoLSIWEmQw6BMAm+YqFLBhmTgFDHvxfYRm8Wn
-         LgeA==
-X-Gm-Message-State: AC+VfDw7liK8lI47PPHJfSdimK5B1/U8eKMbvXRRlRiQk09kKBlTEUNZ
-        qvN4VIlBJHGPkwIu/GSvEwTAmA==
-X-Google-Smtp-Source: ACHHUZ6PIs31BhYpHna9WferESkJuodlHAjNNDFI2TSWcN25vzI2dM9FblLCGwlelglTUfb7rC9uMA==
-X-Received: by 2002:ac2:4423:0:b0:4f1:47ff:d330 with SMTP id w3-20020ac24423000000b004f147ffd330mr25492lfl.53.1684439893075;
-        Thu, 18 May 2023 12:58:13 -0700 (PDT)
-Received: from localhost.localdomain (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id c16-20020a2e9490000000b002a93e0605ebsm457727ljh.8.2023.05.18.12.58.11
+        bh=iqx+9pV/YF/b/kDTwKh2bTt8NX/PCVLKC1HVp4fvZVo=;
+        b=MIbszLQG+lgRvmVpBHk1dBsUruUu1s4JEAphwVDG4R8SoDl4AB/0VX4mSh0yamSYGt
+         xO4/b9k6hgIe11dbxQzPnz+B3Xm4JwZoJm6stc3vnzEqOCt3ez/owVTilit9t3fwNwgZ
+         fDET7K60e/tK+6jnnnXdhGy41Y01cj1unrQAzNda5ZsAk+QuZHuIYH8U003l5UnSecyn
+         Nb0eHLWz0mHlM7hHO1fuQ8DXh6mZKf9IcHRTqWpc70v8NTN7JH0SWYtyIrHD7sKsjMBM
+         7oHKgR8PtTL5kQuRDDCHY0r8cIM/ZH2+91NDqm0b0yuV3W0xk0KnkA7kiSR4pxRBWwnp
+         bShg==
+X-Gm-Message-State: AC+VfDyFjVOlHoviK/VzdzFwxyC+7EC29iubiV9JbHZ+1eD8oSozFQnY
+        mI3IcmVNMmbvZa4f7ZLN3cTKtg==
+X-Google-Smtp-Source: ACHHUZ6gVTyvI1pnnXfyguOz0f/f+oJQ9pib65fzjy99ooAnm/cF1R7cJCCJiFHDQxn+IN2XX02AcQ==
+X-Received: by 2002:a17:902:e749:b0:1a6:3ffb:8997 with SMTP id p9-20020a170902e74900b001a63ffb8997mr536801plf.42.1684446553025;
+        Thu, 18 May 2023 14:49:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id jc6-20020a17090325c600b001ab09f5ca61sm1950596plb.55.2023.05.18.14.49.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 12:58:12 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, djakov@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v9] interconnect: qcom: rpm: Handle interface clocks
-Date:   Thu, 18 May 2023 21:58:01 +0200
-Message-Id: <20230518195801.2556998-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.40.1
+        Thu, 18 May 2023 14:49:12 -0700 (PDT)
+Message-ID: <64669d58.170a0220.38b00.391b@mx.google.com>
+Date:   Thu, 18 May 2023 14:49:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.4-rc2-7-g150ab364fade5
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 7 warnings (v6.4-rc2-7-g150ab364fade5)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some (but not all) providers (or their specific nodes) require
-specific clocks to be turned on before they can be accessed. Failure
-to ensure that results in a seemingly random system crash (which
-would usually happen at boot with the interconnect driver built-in),
-resulting in the platform not booting up properly.
+pm/testing build: 8 builds: 0 failed, 8 passed, 7 warnings (v6.4-rc2-7-g150=
+ab364fade5)
 
-Limit the number of bus_clocks to 2 (which is the maximum that SMD
-RPM interconnect supports anyway) and handle non-scaling clocks
-separately. Update MSM8996 and SDM660 drivers to make sure they do
-not regress with this change.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+4-rc2-7-g150ab364fade5/
 
-This unfortunately has to be done in one patch to prevent either
-compile errors or broken bisect.
+Tree: pm
+Branch: testing
+Git Describe: v6.4-rc2-7-g150ab364fade5
+Git Commit: 150ab364fade572a52bfef4cb6526b441cbce352
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+    x86_64_defconfig (gcc-10): 3 warnings
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redunda=
+nt UACCESS disable
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
 ---
-Resending just this one as per Georgi's request in
-
-https://lore.kernel.org/linux-arm-msm/b1990459-4780-b139-9656-f00f34a2a375@kernel.org/
-
-Changes since v8:
-- Iniitalize cds at declaration time
-
- drivers/interconnect/qcom/icc-rpm.c | 42 ++++++++++++++++++++++-------
- drivers/interconnect/qcom/icc-rpm.h | 14 ++++++++--
- drivers/interconnect/qcom/msm8996.c | 22 +++++++--------
- drivers/interconnect/qcom/sdm660.c  | 16 +++++------
- 4 files changed, 59 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index d79e508cb717..c34f75703a66 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -409,7 +409,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	struct qcom_icc_provider *qp;
- 	struct icc_node *node;
- 	size_t num_nodes, i;
--	const char * const *cds;
-+	const char * const *cds = NULL;
- 	int cd_num;
- 	int ret;
- 
-@@ -424,21 +424,20 @@ int qnoc_probe(struct platform_device *pdev)
- 	qnodes = desc->nodes;
- 	num_nodes = desc->num_nodes;
- 
--	if (desc->num_bus_clocks) {
--		cds = desc->bus_clocks;
--		cd_num = desc->num_bus_clocks;
-+	if (desc->num_intf_clocks) {
-+		cds = desc->intf_clocks;
-+		cd_num = desc->num_intf_clocks;
- 	} else {
--		cds = bus_clocks;
--		cd_num = ARRAY_SIZE(bus_clocks);
-+		/* 0 intf clocks is perfectly fine */
-+		cd_num = 0;
- 	}
- 
--	qp = devm_kzalloc(dev, struct_size(qp, bus_clks, cd_num), GFP_KERNEL);
-+	qp = devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
- 	if (!qp)
- 		return -ENOMEM;
- 
--	qp->bus_clk_rate = devm_kcalloc(dev, cd_num, sizeof(*qp->bus_clk_rate),
--					GFP_KERNEL);
--	if (!qp->bus_clk_rate)
-+	qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
-+	if (!qp->intf_clks)
- 		return -ENOMEM;
- 
- 	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
-@@ -446,6 +445,18 @@ int qnoc_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	qp->num_intf_clks = cd_num;
-+	for (i = 0; i < cd_num; i++)
-+		qp->intf_clks[i].id = cds[i];
-+
-+	if (desc->num_bus_clocks) {
-+		cds = desc->bus_clocks;
-+		cd_num = desc->num_bus_clocks;
-+	} else {
-+		cds = bus_clocks;
-+		cd_num = ARRAY_SIZE(bus_clocks);
-+	}
-+
- 	for (i = 0; i < cd_num; i++)
- 		qp->bus_clks[i].id = cds[i];
- 	qp->num_bus_clks = cd_num;
-@@ -486,6 +497,10 @@ int qnoc_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	ret = devm_clk_bulk_get(dev, qp->num_intf_clks, qp->intf_clks);
-+	if (ret)
-+		return ret;
-+
- 	provider = &qp->provider;
- 	provider->dev = dev;
- 	provider->set = qcom_icc_set;
-@@ -496,6 +511,11 @@ int qnoc_probe(struct platform_device *pdev)
- 
- 	icc_provider_init(provider);
- 
-+	/* If this fails, bus accesses will crash the platform! */
-+	ret = clk_bulk_prepare_enable(qp->num_intf_clks, qp->intf_clks);
-+	if (ret)
-+		return ret;
-+
- 	for (i = 0; i < num_nodes; i++) {
- 		size_t j;
- 
-@@ -524,6 +544,8 @@ int qnoc_probe(struct platform_device *pdev)
- 	}
- 	data->num_nodes = num_nodes;
- 
-+	clk_bulk_disable_unprepare(qp->num_intf_clks, qp->intf_clks);
-+
- 	ret = icc_provider_register(provider);
- 	if (ret)
- 		goto err_remove_nodes;
-diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index 2436777820a4..b9b63860042f 100644
---- a/drivers/interconnect/qcom/icc-rpm.h
-+++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -20,24 +20,32 @@ enum qcom_icc_type {
- 	QCOM_ICC_QNOC,
- };
- 
-+#define NUM_BUS_CLKS	2
-+
- /**
-  * struct qcom_icc_provider - Qualcomm specific interconnect provider
-  * @provider: generic interconnect provider
-  * @num_bus_clks: the total number of bus_clks clk_bulk_data entries
-+ * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
-  * @type: the ICC provider type
-  * @regmap: regmap for QoS registers read/write access
-  * @qos_offset: offset to QoS registers
-  * @bus_clk_rate: bus clock rate in Hz
-  * @bus_clks: the clk_bulk_data table of bus clocks
-+ * @intf_clks: a clk_bulk_data array of interface clocks
-+ * @is_on: whether the bus is powered on
-  */
- struct qcom_icc_provider {
- 	struct icc_provider provider;
- 	int num_bus_clks;
-+	int num_intf_clks;
- 	enum qcom_icc_type type;
- 	struct regmap *regmap;
- 	unsigned int qos_offset;
--	u64 *bus_clk_rate;
--	struct clk_bulk_data bus_clks[];
-+	u64 bus_clk_rate[NUM_BUS_CLKS];
-+	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
-+	struct clk_bulk_data *intf_clks;
-+	bool is_on;
- };
- 
- /**
-@@ -93,6 +101,8 @@ struct qcom_icc_desc {
- 	size_t num_nodes;
- 	const char * const *bus_clocks;
- 	size_t num_bus_clocks;
-+	const char * const *intf_clocks;
-+	size_t num_intf_clocks;
- 	enum qcom_icc_type type;
- 	const struct regmap_config *regmap_cfg;
- 	unsigned int qos_offset;
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index 21f998cd19f0..9aedfc8de4bf 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -21,21 +21,17 @@
- #include "smd-rpm.h"
- #include "msm8996.h"
- 
--static const char * const bus_mm_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const mm_intf_clocks[] = {
- 	"iface"
- };
- 
--static const char * const bus_a0noc_clocks[] = {
-+static const char * const a0noc_intf_clocks[] = {
- 	"aggre0_snoc_axi",
- 	"aggre0_cnoc_ahb",
- 	"aggre0_noc_mpu_cfg"
- };
- 
--static const char * const bus_a2noc_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const a2noc_intf_clocks[] = {
- 	"aggre2_ufs_axi",
- 	"ufs_axi"
- };
-@@ -1821,8 +1817,8 @@ static const struct qcom_icc_desc msm8996_a0noc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = a0noc_nodes,
- 	.num_nodes = ARRAY_SIZE(a0noc_nodes),
--	.bus_clocks = bus_a0noc_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_a0noc_clocks),
-+	.intf_clocks = a0noc_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
- 	.regmap_cfg = &msm8996_a0noc_regmap_config
- };
- 
-@@ -1865,8 +1861,8 @@ static const struct qcom_icc_desc msm8996_a2noc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = a2noc_nodes,
- 	.num_nodes = ARRAY_SIZE(a2noc_nodes),
--	.bus_clocks = bus_a2noc_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_a2noc_clocks),
-+	.intf_clocks = a2noc_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
- 	.regmap_cfg = &msm8996_a2noc_regmap_config
- };
- 
-@@ -2004,8 +2000,8 @@ static const struct qcom_icc_desc msm8996_mnoc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = mnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(mnoc_nodes),
--	.bus_clocks = bus_mm_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_mm_clocks),
-+	.intf_clocks = mm_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
- 	.regmap_cfg = &msm8996_mnoc_regmap_config
- };
- 
-diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-index a22ba821efbf..0e8a96f4ce90 100644
---- a/drivers/interconnect/qcom/sdm660.c
-+++ b/drivers/interconnect/qcom/sdm660.c
-@@ -127,15 +127,11 @@ enum {
- 	SDM660_SNOC,
- };
- 
--static const char * const bus_mm_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const mm_intf_clocks[] = {
- 	"iface",
- };
- 
--static const char * const bus_a2noc_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const a2noc_intf_clocks[] = {
- 	"ipa",
- 	"ufs_axi",
- 	"aggre2_ufs_axi",
-@@ -1516,8 +1512,8 @@ static const struct qcom_icc_desc sdm660_a2noc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_a2noc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_a2noc_nodes),
--	.bus_clocks = bus_a2noc_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_a2noc_clocks),
-+	.intf_clocks = a2noc_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
- 	.regmap_cfg = &sdm660_a2noc_regmap_config,
- };
- 
-@@ -1659,8 +1655,8 @@ static const struct qcom_icc_desc sdm660_mnoc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_mnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_mnoc_nodes),
--	.bus_clocks = bus_mm_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_mm_clocks),
-+	.intf_clocks = mm_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
- 	.regmap_cfg = &sdm660_mnoc_regmap_config,
- };
- 
--- 
-2.40.1
-
+For more info write to <info@kernelci.org>
