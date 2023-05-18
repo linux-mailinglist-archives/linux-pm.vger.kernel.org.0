@@ -2,27 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6607080FB
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 14:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F387083C6
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 16:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjERMP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 May 2023 08:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S231361AbjEROP3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 May 2023 10:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjERMPz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 08:15:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5466210A;
-        Thu, 18 May 2023 05:15:52 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Dxi+r3FmZkStkJAA--.17269S3;
-        Thu, 18 May 2023 20:15:51 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axo8D2FmZkxNdnAA--.45800S3;
-        Thu, 18 May 2023 20:15:51 +0800 (CST)
+        with ESMTP id S231701AbjEROPU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 10:15:20 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E941738
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 07:15:16 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9659e9bbff5so373605666b.1
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 07:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684419315; x=1687011315;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8IhwvEpf+iZJb/gE6b3fJNEZ3XPbuQc9an/fybW+UgQ=;
+        b=xfOYp4aPqsOpItJx8cdc4w/ThTwXyWqgq/P4jGylRK8GV3Ieqp/dMUbYtUsygArWT4
+         aQ/brrc+usF19M6n8GhD+gN6bCEyUK/sUGAqHg02a3RhtMIqC6x+LXERj0T8ztPnVyAX
+         wGQdN6Ub0ScfWSq+x2HH3s7CSGLlumZrZ086SN0163jRkXj2wlx6efwWMGCwjmb6jGCh
+         KExaWToJrsw7h0P3hsrr0vUbDoOz5z+/rTP7GopljvFM4Fu/jzMwWGWET9MRwJ90cNKE
+         x4JhbcNtLgLc62l2GZNyu7P04Ie2ZLWDN2WDOULtI73q5OEIHazLgL2m+q4A7WBVHewu
+         oVvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684419315; x=1687011315;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8IhwvEpf+iZJb/gE6b3fJNEZ3XPbuQc9an/fybW+UgQ=;
+        b=TBc8rUmK57x8ymlOOMhy2vrZrR1xZKIhRnzBSl7KRSNyYqbifh5YJ7sjrtne7DSqQI
+         pa70CtiEquo4WZ2CFcePEaZDgvHmv3zgose1CqPAXsfLidv8QNZXjmdt82ayt0nZn1hY
+         I5hpDj/mWeOObG59W1LXE/3U5fy8yVWQMIa2/R7iS6yMDaExyzwbUtLnsEZN4Gyn0XDI
+         29p4sb6WHAbvLH0OHx3mDrXtEcYs1UONB+gD0xOuRbI8bT3vEhcbehA1+H/xjRSwbHbi
+         JnKESZKi3V5PTCO4si3l9mSvuROf76GFxe3YGO0ae3087E6sgaPvFzUYsSRUSPuvWjwC
+         xgbQ==
+X-Gm-Message-State: AC+VfDw2xDu4X6bvhsIU+fqG69IDHjVBMaLJ8mBXq2r8h/QAJhvAiCsu
+        NKYujk4M8u8SgA+TFqF2PCu8sA==
+X-Google-Smtp-Source: ACHHUZ5wOOK+/4Zdzkn8mKF6Qord3DGh5wFhoqa1tc+QlxDQBLIOmHdccwSwVCSJ9tggUv/ST2PGNw==
+X-Received: by 2002:a17:906:58d5:b0:969:9fd0:7cee with SMTP id e21-20020a17090658d500b009699fd07ceemr34329664ejs.10.1684419314959;
+        Thu, 18 May 2023 07:15:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e24:6d1b:6bf:4249? ([2a02:810d:15c0:828:7e24:6d1b:6bf:4249])
+        by smtp.gmail.com with ESMTPSA id ju4-20020a17090798a400b0094f698073e0sm1012419ejc.123.2023.05.18.07.15.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 07:15:14 -0700 (PDT)
+Message-ID: <3f81816a-b7a8-cc3a-0052-a2177bfb58c4@linaro.org>
+Date:   Thu, 18 May 2023 16:15:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
 Subject: Re: [PATCH v1 2/3] dt-bindings: soc: add loongson-2 pm
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -38,43 +72,20 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
 Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
         Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+        loongson-kernel@lists.loongnix.cn
 References: <20230517073149.31980-1-zhuyinbo@loongson.cn>
  <20230517073149.31980-3-zhuyinbo@loongson.cn>
  <d3791702-4d41-0208-1346-34738a2883b6@linaro.org>
  <4521c591-6fcd-c96a-e2f6-f41f5c191036@loongson.cn>
  <1bbabe6d-b013-9837-8986-205a2b04de14@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
-Date:   Thu, 18 May 2023 20:15:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <1bbabe6d-b013-9837-8986-205a2b04de14@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+ <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axo8D2FmZkxNdnAA--.45800S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGw4DuFy3tw45CFWrZF17trb_yoW5Zw13pa
-        yjgF4jy34DJr1Fyw48tw18CwsYy395KFWYgr1DW34I9wsrXw1SvFy7KF45u34Ikryxt3yI
-        vF1Ut398ZFs8AFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxV
-        WUtVW8ZwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mFADUUUU
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,115 +93,148 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-在 2023/5/18 下午3:15, Krzysztof Kozlowski 写道:
-> On 18/05/2023 05:23, zhuyinbo wrote:
->>
->>
->> 在 2023/5/17 下午11:00, Krzysztof Kozlowski 写道:
->>> On 17/05/2023 09:31, Yinbo Zhu wrote:
->>>> Add the Loongson-2 SoC Power Management Controller binding with DT
->>>> schema format using json-schema.
+On 18/05/2023 14:15, zhuyinbo wrote:
+> 
+> 
+> 在 2023/5/18 下午3:15, Krzysztof Kozlowski 写道:
+>> On 18/05/2023 05:23, zhuyinbo wrote:
+>>>
+>>>
+>>> 在 2023/5/17 下午11:00, Krzysztof Kozlowski 写道:
+>>>> On 17/05/2023 09:31, Yinbo Zhu wrote:
+>>>>> Add the Loongson-2 SoC Power Management Controller binding with DT
+>>>>> schema format using json-schema.
+>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 >>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ...
+>>>>
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    items:
+>>>>> +      - enum:
+>>>>> +          - loongson,ls2k-pmc
+>>>>> +      - const: syscon
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  interrupts:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  suspend-address:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    description:
+>>>>> +      This option indicate this PM suspend address.
+>>>>
+>>>> This tells me nothing. Drop "This option indicate this" and rephrase
+>>>> everything to actually describe this property. Why would the address
+>>>> differ on given, specific SoC? It looks like you just miss compatibles.
+>>>> Anyway this needs much more explanation so we can judge whether it fits DT.
 >>>
->>> ...
+>>> Hi Krzysztof,
 >>>
->>>> +properties:
->>>> +  compatible:
->>>> +    items:
->>>> +      - enum:
->>>> +          - loongson,ls2k-pmc
->>>> +      - const: syscon
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  interrupts:
->>>> +    maxItems: 1
->>>> +
->>>> +  suspend-address:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    description:
->>>> +      This option indicate this PM suspend address.
+>>> I will add following description about "suspend-address", please review.
+>>
+>> Thanks.
+>>
 >>>
->>> This tells me nothing. Drop "This option indicate this" and rephrase
->>> everything to actually describe this property. Why would the address
->>> differ on given, specific SoC? It looks like you just miss compatibles.
->>> Anyway this needs much more explanation so we can judge whether it fits DT.
+>>> The "suspend-address" is a ACPI S3 (Suspend To RAM) firmware entry
 >>
->> Hi Krzysztof,
+>> Why do we add properties for ACPI? This does not seem right. 
+> 
+> 
+> 1.  The suspend-address value was dependent on specific platform
+>      firmware code and it tends to be confiurable. if it is a fixed value
+>      that seems not friendly or the ACPI S3 will not work.
+
+> 2. the PM driver need according to it to indicate that current SoC
+>     whether support ACPI S3, because some Loongson-2 SoC doesn't support
+
+For this you have dedicated compatibles. Which points to the fact that
+you missed them here.
+
+>     ACPI S3 but support other ACPI mode, so the PM driver need has a
+>     check. if no this check and other ACPI mode will not work.
+
+Sure, but it is not really relevant to the bindings... or rather: should
+not be relevant. Bindings are for hardware or in this case also for
+firmware, but not for driver.
+
+> 
+> Base on the above two points, this property was necessary.
+
+I did not object in my last response...
+
+> Using this property "suspend-address" can make the firmware entry
+> address configurable, and then the kernel can also indicate whether
+> the current SoC supports S3
+> 
+> In addition, from kernel code perspective, the property
+> "suspend-address" was to initialize "loongarch_suspend_addr"
+
+Again, how does it matter what kernel does?
+
+> 
+> S3 call flow:
+> enter_state -> loongson_suspend_enter -> bios's loongarch_suspend_addr
+> 
+> SYM_FUNC_START(loongson_suspend_enter)
+>          SETUP_SLEEP
+>          bl              __flush_cache_all
+> 
+>          /* Pass RA and SP to BIOS */
+>          addi.d          a1, sp, 0
+>          la.pcrel        a0, loongson_wakeup_start
+>          la.pcrel        t0, loongarch_suspend_addr
+>          ld.d            t0, t0, 0
+>          jirl            a0, t0, 0 /* Call BIOS's STR sleep routine */
+> 
+> 
+> Please
+>> reword to skip ACPI stuff, e.g. deep sleep states (Suspend to RAM).
+> 
+> 
+> Sorry, I don't got your point.
+
+You have DT platform, so why do you use it with ACPI in the first place?
+If you have ACPI, then please drop all this and make your life easier.
+
+If this is booted without ACPI, which would justify DT, drop the
+references to ACPI. I gave you example what to use instead. If you don't
+like it, no problem, reword in different way.
+
+> 
 >>
->> I will add following description about "suspend-address", please review.
+>>
+>>> address which was jumped from kernel and it's value was dependent on
+>>> specific platform firmware code.
+>>
+>> "entry address which was jumped" <- the address cannot jump. Please
+>> explain who is jumping here - boot CPU? each suspended CPU? I guess the
+>> first as CPUs are offlined, right?
 > 
-> Thanks.
+> The boot CPU was jumping to firmware and finish remaining process in
+> firmware that was what ACPI S3 required and other CPUs (No-boot CPU)
+> have been offline before entering firmware.
+
+Then fix the description.
+
 > 
 >>
->> The "suspend-address" is a ACPI S3 (Suspend To RAM) firmware entry
-> 
-> Why do we add properties for ACPI? This does not seem right. 
-
-
-1.  The suspend-address value was dependent on specific platform
-     firmware code and it tends to be confiurable. if it is a fixed value
-     that seems not friendly or the ACPI S3 will not work.
-2. the PM driver need according to it to indicate that current SoC
-    whether support ACPI S3, because some Loongson-2 SoC doesn't support
-    ACPI S3 but support other ACPI mode, so the PM driver need has a
-    check. if no this check and other ACPI mode will not work.
-
-Base on the above two points, this property was necessary.
-Using this property "suspend-address" can make the firmware entry
-address configurable, and then the kernel can also indicate whether
-the current SoC supports S3
-
-In addition, from kernel code perspective, the property
-"suspend-address" was to initialize "loongarch_suspend_addr"
-
-S3 call flow:
-enter_state -> loongson_suspend_enter -> bios's loongarch_suspend_addr
-
-SYM_FUNC_START(loongson_suspend_enter)
-         SETUP_SLEEP
-         bl              __flush_cache_all
-
-         /* Pass RA and SP to BIOS */
-         addi.d          a1, sp, 0
-         la.pcrel        a0, loongson_wakeup_start
-         la.pcrel        t0, loongarch_suspend_addr
-         ld.d            t0, t0, 0
-         jirl            a0, t0, 0 /* Call BIOS's STR sleep routine */
-
-
-Please
-> reword to skip ACPI stuff, e.g. deep sleep states (Suspend to RAM).
-
-
-Sorry, I don't got your point.
-
+>>> In addition, the PM driver need
+>>> according to it to indicate that current SoC whether support ACPI S3.
+>>
+>> Skip references to driver.
 > 
 > 
->> address which was jumped from kernel and it's value was dependent on
->> specific platform firmware code.
-> 
-> "entry address which was jumped" <- the address cannot jump. Please
-> explain who is jumping here - boot CPU? each suspended CPU? I guess the
-> first as CPUs are offlined, right?
+> Sorry, I don't got your point.  Could you elaborate on it?
 
-The boot CPU was jumping to firmware and finish remaining process in
-firmware that was what ACPI S3 required and other CPUs (No-boot CPU)
-have been offline before entering firmware.
+If you change driver, you change bindings? No.
 
-> 
->> In addition, the PM driver need
->> according to it to indicate that current SoC whether support ACPI S3.
-> 
-> Skip references to driver.
+Bindings are for hardware, not for driver. Whatever your driver is doing
+usually does not matter for the bindings and should not be included.
 
-
-Sorry, I don't got your point.  Could you elaborate on it?
-
-Thanks
-Yinbo.
+Best regards,
+Krzysztof
 
