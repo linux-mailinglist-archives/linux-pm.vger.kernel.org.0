@@ -2,57 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF289707E6A
-	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 12:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70411707EC9
+	for <lists+linux-pm@lfdr.de>; Thu, 18 May 2023 13:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjERKqu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 May 2023 06:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S230324AbjERLG4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 May 2023 07:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjERKqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 06:46:47 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAFB1FE0;
-        Thu, 18 May 2023 03:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684406791; x=1715942791;
-  h=date:from:to:cc:subject:message-id;
-  bh=0/tCe5j0RZX8uCy0GhUzHNzNLG1RWf4eXVHOKU/AEAY=;
-  b=kWHtVdJiYi1bSEo1sxFGE7K2K+cKQepQ2zJeo3OJh9gCAuX0oSBRc3W7
-   V883wxE/BGOCukhfb30HR2dDxA0eS9Z0A/wqF9H7u71VTxvAsYmufWHzO
-   30kSj5DS1f9BnGlnSU49am1u9bqCYiXNe/O6GQzdZDyyFe0EmO3vnxpuE
-   Qrbg6O4XLTveGvkTFJ9GZezlBUrybAPH7PjUELedQNbtMBgbegkqxX2cf
-   75SiumAjEUW5nZUkRUexlxWy65iS+EuWzNchvOKrfpWO5UlMDQZ7gnWoY
-   N05aUpwBWiYHRxwkCq7u8zv4k7vNc1WtCiro/WaKOTbYPezqhy7lak9fg
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349546336"
-X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="349546336"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 03:46:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="791931443"
-X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="791931443"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 May 2023 03:46:23 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pzb9K-0009uP-2Y;
-        Thu, 18 May 2023 10:46:22 +0000
-Date:   Thu, 18 May 2023 18:45:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- dac0c6388ff86af74dc6f4dd6e90a7db5a429e3d
-Message-ID: <20230518104552.Qvelm%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S230321AbjERLGz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 May 2023 07:06:55 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E1910EA
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 04:06:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-953343581a4so277790766b.3
+        for <linux-pm@vger.kernel.org>; Thu, 18 May 2023 04:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684408012; x=1687000012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yeJXFRF7sbuSmGTwl5/y2NHZf03i5D97leo/Mm1jmPA=;
+        b=MjfqNjnPpIzx92qYzyVccFfBlsVJ8+9ROZDV6w+QVISVgL4MVL3AdF3Mh8FrK8cnOm
+         wHW6IB6uWI3uRraA3KtEA5TtALuzerEdegGTu0l7Vl/8dN76rFSPm7KcFkPCBs9YO1Md
+         thRZobFoifwp8/WHXagA42ih2WHxzXczGWkEXITjkYC0PdXzIRqkPSNXaNxFZURmxNva
+         SUqZROTPUozLgNYTgx6yiHS8MLuGLETlulPv9WLkJxcCtcffY3PG+xxVsIJgX+Khv+1F
+         Tm/u5v1fRrrsCylilQDaaBR0QLZV4+ryfeqdOu5Un4DFcaPrICGHy5rGXSYwjbyFWTZ6
+         8Gew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684408012; x=1687000012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yeJXFRF7sbuSmGTwl5/y2NHZf03i5D97leo/Mm1jmPA=;
+        b=I3Q3euW2XTIBF9hP6Tt1bWHCsGPER4+90r5POPaEIepeoiX8ekQ08V8Q8gfo+DHhNX
+         ew5Rb87ytViP/HAA6CVAUvaw6Hw1rCKnFdIdQ1rxRhXCSYoRuuo5Cr07FvF93BSF9EdK
+         byfe9xeHOZ7xnsGtJf0hfKejA2kYwDfLiXdMgZyWqInoao8zWhwHxW66BBpqoXoGn6S8
+         SQXMk9XFazGX5fEVaRjOixocaN5ClzhqHH61hG1GgB6Hfq9MmRzYFmu2In+sHn1U0zMu
+         hXDb2kKMQl/JoUlXETDgQ4wMRsfI61JMuTZYN2/LMGgZDCDC1aXZsviH552YlmQJOT5h
+         ohRQ==
+X-Gm-Message-State: AC+VfDyow4OyuoV4/+8+OPcwsOAk6jhCcwtLNtqe8TpYP2u3vxPLUtiG
+        Ik1XU5iYwYr2752mctXwKdqEag==
+X-Google-Smtp-Source: ACHHUZ77B3+5K0JTlWbBlEvuo7J0nvSd9qNSA6L2iF+zlVo6gn+LFWwwVl6YZjX6L8F1UPtYxDep4w==
+X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr38722660ejb.60.1684408012085;
+        Thu, 18 May 2023 04:06:52 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id pv27-20020a170907209b00b00882f9130eafsm824286ejb.26.2023.05.18.04.06.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 04:06:51 -0700 (PDT)
+Message-ID: <24b60ca3-b6b9-662f-03c8-df1536b52bc9@linaro.org>
+Date:   Thu, 18 May 2023 13:06:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
+ <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
+ <20230516120426.GA1679@varda-linux.qualcomm.com>
+ <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
+ <20230517055726.GA3165@varda-linux.qualcomm.com>
+ <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
+ <20230518054054.GA998@varda-linux.qualcomm.com>
+ <fe1d81d2-52e6-7d2d-8d6c-ffdcbb8ccc89@linaro.org>
+ <20230518090503.GA9173@varda-linux.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230518090503.GA9173@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,131 +89,118 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230517200055/lkp-src/repo/*/rafael-pm
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: dac0c6388ff86af74dc6f4dd6e90a7db5a429e3d  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On 18/05/2023 11:05, Varadarajan Narayanan wrote:
+> On Thu, May 18, 2023 at 09:09:12AM +0200, Krzysztof Kozlowski wrote:
+>> On 18/05/2023 07:40, Varadarajan Narayanan wrote:
+>>> On Wed, May 17, 2023 at 09:00:49AM +0200, Krzysztof Kozlowski wrote:
+>>>> On 17/05/2023 07:57, Varadarajan Narayanan wrote:
+>>>>> Part-1 is adding the 'const' entries at the beginning i.e.
+>>>>>
+>>>>> 	+      - const: qcom,tsens-v0_1
+>>>>> 	+      - const: qcom,tsens-v1
+>>>>> 	+      - const: qcom,tsens-v2
+>>>>> 	+      - const: qcom,ipq8074-tsens
+>>>>>
+>>>>> Part-2 is changing from one valid syntax to another i.e.
+>>>>>
+>>>>> 	+        items:
+>>>>> 	+          - enum:
+>>>>> 	+              - qcom,ipq9574-tsens
+>>>>> 	+          - const: qcom,ipq8074-tsens
+>>>>>
+>>>>> Without both of the above changes, either or both of dtbs_check
+>>>>> & dt_binding_check fails. So, it is not possible to just add the
+>>>>> "valid hunk" (part-2) alone.
+>>>>
+>>>> Of course it is. All schema files work like that...
+>>>>>
+>>>>> If having both part-1 and part-2 in the same patch is not
+>>>>> acceptable, shall I split them into two patches? Please let me know.
+>>>>
+>>>> No, hunk one is not justified.
+>>>
+>>> For the other compatibles, the enum entries and const/fallback
+>>> entries are different. For the 9574 & 8074 case, we want to have
+>>> qcom,ipq8074-tsens as both enum and const/fallback entry. Hence,
+>>> if we don't have the first hunk, dtbs_check fails for 8074
+>>> related dtbs
+>>>
+>>> 	ipq8074-hk01.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+>>> 		['qcom,ipq8074-tsens'] is too short
+>>
+>> Why? It is already there. Open the file and you will see that this is
+>> already covered.
+> 
+> I guess dtbs_check doesn't like the same value being a const and
+> a oneof entry.
 
-elapsed time: 720m
+I don't understand.
 
-configs tested: 111
-configs skipped: 6
+>  Have attached the file, please see if something is
+> not in order.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I don't know what changed there. Please work on patches.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r013-20230517   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r022-20230517   gcc  
-arc                  randconfig-r043-20230517   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r036-20230517   gcc  
-arm                  randconfig-r046-20230517   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r026-20230517   gcc  
-hexagon              randconfig-r041-20230517   clang
-hexagon              randconfig-r045-20230517   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r005-20230517   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r011-20230517   gcc  
-ia64                 randconfig-r025-20230517   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r002-20230517   gcc  
-m68k                                defconfig   gcc  
-microblaze   buildonly-randconfig-r001-20230517   gcc  
-microblaze           randconfig-r021-20230517   gcc  
-microblaze           randconfig-r031-20230517   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r003-20230517   gcc  
-mips                 randconfig-r015-20230517   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r002-20230517   gcc  
-openrisc     buildonly-randconfig-r004-20230517   gcc  
-openrisc             randconfig-r035-20230517   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230517   clang
-riscv                randconfig-r005-20230517   clang
-riscv                randconfig-r042-20230517   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230517   clang
-s390                 randconfig-r023-20230517   gcc  
-s390                 randconfig-r044-20230517   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r006-20230517   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r012-20230517   gcc  
-sparc64              randconfig-r024-20230517   gcc  
-sparc64              randconfig-r033-20230517   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-x051   gcc  
-x86_64                        randconfig-x052   clang
-x86_64                        randconfig-x053   gcc  
-x86_64                        randconfig-x054   clang
-x86_64                        randconfig-x055   gcc  
-x86_64                        randconfig-x056   clang
-x86_64                        randconfig-x061   gcc  
-x86_64                        randconfig-x062   clang
-x86_64                        randconfig-x063   gcc  
-x86_64                        randconfig-x064   clang
-x86_64                        randconfig-x065   gcc  
-x86_64                        randconfig-x066   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r001-20230517   gcc  
-xtensa               randconfig-r034-20230517   gcc  
+> 
+>> If you remove it, then yes, you will see errors and the answer is: do
+>> not remove it.
+> 
+> I haven't removed it. 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+You did. Look:
+
+       - description: v2 of TSENS with combined interrupt
+-        enum:
+-          - qcom,ipq8074-tsens
+
+The first character in the diff (-) means removal.
+
+> For this patch, ipq8074-tsens changed from
+> being an oneof enum entry to a const entry. Probably, that is why
+> dtbs_check is giving these errors.
+
+You removed the entry which you should not have touched.
+
+> 
+>>> 	ipq8074-hk10-c2.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+>>> 		['qcom,ipq8074-tsens'] is too short
+>>>
+>>> 	ipq8074-hk10-c1.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+>>> 		['qcom,ipq8074-tsens'] is too short
+>>>
+>>> I'm not sure of the correct solution. Having the first hunk
+>>> solves the above dtbs_check errors, so went with it. I'm able to
+>>> avoid dtbs_check errors with just one entry in the first hunk.
+>>
+>> You made multiple changes in one patch which is not correct. Your goal
+>> is to add only one change - ipq9574 followed by ipq8074. Add this one.
+>> Don't touch others.
+> 
+> But that breaks dtbs_check.
+
+All other cases, hundreds of other binding files, do not have problem.
+Only this one "breaks dtbs_check". No, it does not.
+
+Whatever is broken is result of your removal of unrelated pieces.
+
+> 
+>>>  	+      - const: qcom,ipq8074-tsens
+>>>
+>>> Please let me know if there is a better way to resolve this or we
+>>> can have just the 8074 entry in the first hunk.
+>>
+>> You only need to add new item on the oneOf list:
+>>  - enum
+>>      - ipq9574
+>>  - const: ipq8074
+> 
+> The "['qcom,ipq8074-tsens'] is too short" errors were generated
+> with the above snippet only. Please see the attachment
+
+It's not true. The error you see is result because you removed something
+you should not. I did not ask you to remove anything. So repeating -
+"add new item". Adding is not "removal and adding". Adding is just "adding".
+
+Best regards,
+Krzysztof
+
