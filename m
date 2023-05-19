@@ -2,76 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5AC7092F9
-	for <lists+linux-pm@lfdr.de>; Fri, 19 May 2023 11:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D327092CE
+	for <lists+linux-pm@lfdr.de>; Fri, 19 May 2023 11:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjESJZa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 May 2023 05:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S230467AbjESJQQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 May 2023 05:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjESJZ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 May 2023 05:25:29 -0400
-X-Greylist: delayed 101 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 May 2023 02:25:16 PDT
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C228B10D2;
-        Fri, 19 May 2023 02:25:15 -0700 (PDT)
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 5C6AF7A025C;
-        Fri, 19 May 2023 10:59:23 +0200 (CEST)
-From:   Ondrej Zary <linux@zary.sk>
-To:     rjw@rjwysocki.net
-Cc:     gottwald@igel.com, helgaas@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, mika.westerberg@linux.intel.com
-Subject: [PATCH] PCI: PM: Extend Elo i2 quirk to all systems using Continental Z2 board
-Date:   Fri, 19 May 2023 10:58:53 +0200
-Message-Id: <20230519085853.1079-1-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <11980172.O9o76ZdvQC@kreacher>
-References: <11980172.O9o76ZdvQC@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230026AbjESJQP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 May 2023 05:16:15 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57B8125;
+        Fri, 19 May 2023 02:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684487773; x=1716023773;
+  h=date:from:to:cc:subject:message-id;
+  bh=2YhrVlL4FZOpjVcFPhJDwXoO8LpS8gLXgkECnRCFB04=;
+  b=cAq59fO7DeqbpYEB5hWDprkTP7HUA7vIBOns+W0qBSuKDr4FRDbppKw8
+   do+z540NH3tAg31NUD6LNve+2o6/C73c1CQZ/MbB8tJy+ZZ9WSbqATjdm
+   OgQfuUzjE+G3O4/uJoZHJqyfq8SdxhBR8YkcdDm2aSQZbWFpxmtO23D8y
+   u1KumaejBRiXpNbHysUNJ/sVUgxmSwHeLb7GSQ6UnA9UG1ljfjDoO0jdV
+   O6LaQKTzrbkv5t0E76H8u+Ta3QlXar+Jzt8s2R3Lve31q9J6rbvPIVUPS
+   5AGpgy+EagA9m77Cx19c3ZVpctBgIQiPa+/LitmXp4ESOA2L7MgKKKth/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="352345043"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="352345043"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 02:16:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792305631"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="792305631"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2023 02:16:05 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pzwDU-000AjG-0u;
+        Fri, 19 May 2023 09:16:04 +0000
+Date:   Fri, 19 May 2023 17:15:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 27d75d398f66b653fe4f3a6f17fc5652b7837c5a
+Message-ID: <20230519091517.llzIn%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The quirk for Elo i2 is also needed by EloPOS E2/S2/H2 which uses the
-same Continental Z2 board. Change the quirk to match the board instead
-of system.
----
- drivers/pci/pci.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+tree/branch: INFO setup_repo_specs: /db/releases/20230519164737/lkp-src/repo/*/rafael-pm
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 27d75d398f66b653fe4f3a6f17fc5652b7837c5a  Merge branch 'acpi-video' into bleeding-edge
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 5ede93222bc1..c779eb4d7fb8 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -2949,13 +2949,13 @@ static const struct dmi_system_id bridge_d3_blacklist[] = {
- 	{
- 		/*
- 		 * Downstream device is not accessible after putting a root port
--		 * into D3cold and back into D0 on Elo i2.
-+		 * into D3cold and back into D0 on Elo Continental Z2 board
- 		 */
--		.ident = "Elo i2",
-+		.ident = "Elo Continental Z2",
- 		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
--			DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
-+			DMI_MATCH(DMI_BOARD_VENDOR, "Elo Touch Solutions"),
-+			DMI_MATCH(DMI_BOARD_NAME, "Geminilake"),
-+			DMI_MATCH(DMI_BOARD_VERSION, "Continental Z2"),
- 		},
- 	},
- #endif
+elapsed time: 875m
+
+configs tested: 129
+configs skipped: 7
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r012-20230517   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     haps_hs_smp_defconfig   gcc  
+arc                  randconfig-r043-20230517   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         at91_dt_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                          pxa3xx_defconfig   gcc  
+arm                             pxa_defconfig   gcc  
+arm                  randconfig-r046-20230517   clang
+arm                        vexpress_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230517   clang
+arm64                               defconfig   gcc  
+csky         buildonly-randconfig-r005-20230517   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r006-20230517   gcc  
+csky                 randconfig-r013-20230517   gcc  
+csky                 randconfig-r024-20230517   gcc  
+csky                 randconfig-r025-20230517   gcc  
+csky                 randconfig-r032-20230517   gcc  
+hexagon              randconfig-r041-20230517   clang
+hexagon              randconfig-r045-20230517   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r004-20230517   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r005-20230517   gcc  
+ia64                 randconfig-r023-20230517   gcc  
+ia64                 randconfig-r031-20230517   gcc  
+ia64                 randconfig-r036-20230517   gcc  
+loongarch                        alldefconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r003-20230517   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5275evb_defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+m68k                 randconfig-r011-20230517   gcc  
+microblaze           randconfig-r034-20230517   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ci20_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r004-20230517   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r002-20230517   gcc  
+parisc64                            defconfig   gcc  
+powerpc                    adder875_defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      arches_defconfig   gcc  
+powerpc                        cell_defconfig   gcc  
+powerpc                     ksi8560_defconfig   clang
+powerpc                 linkstation_defconfig   gcc  
+powerpc                     mpc83xx_defconfig   gcc  
+powerpc                      pcm030_defconfig   gcc  
+powerpc              randconfig-r014-20230517   gcc  
+powerpc              randconfig-r016-20230517   gcc  
+powerpc              randconfig-r035-20230517   clang
+powerpc                    sam440ep_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230517   gcc  
+riscv                          rv32_defconfig   clang
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230517   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r022-20230517   gcc  
+sh                   secureedge5410_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r001-20230517   gcc  
+sparc64              randconfig-r015-20230517   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-x051   gcc  
+x86_64                        randconfig-x052   clang
+x86_64                        randconfig-x053   gcc  
+x86_64                        randconfig-x054   clang
+x86_64                        randconfig-x055   gcc  
+x86_64                        randconfig-x056   clang
+x86_64                        randconfig-x061   gcc  
+x86_64                        randconfig-x062   clang
+x86_64                        randconfig-x063   gcc  
+x86_64                        randconfig-x064   clang
+x86_64                        randconfig-x065   gcc  
+x86_64                        randconfig-x066   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r002-20230517   gcc  
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
