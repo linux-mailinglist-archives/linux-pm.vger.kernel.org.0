@@ -2,320 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868BA709C92
-	for <lists+linux-pm@lfdr.de>; Fri, 19 May 2023 18:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD46C709CA7
+	for <lists+linux-pm@lfdr.de>; Fri, 19 May 2023 18:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjESQji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 May 2023 12:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S229565AbjESQqM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 May 2023 12:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjESQji (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 May 2023 12:39:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FA0F11F;
-        Fri, 19 May 2023 09:39:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03EDE1FB;
-        Fri, 19 May 2023 09:40:19 -0700 (PDT)
-Received: from e120325.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C01D3F793;
-        Fri, 19 May 2023 09:39:31 -0700 (PDT)
-Date:   Fri, 19 May 2023 17:39:26 +0100
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     Yang Shi <yang@os.amperecomputing.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Zeng Heng <zengheng4@huawei.com>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        wangxiongfeng2@huawei.com, xiexiuqi@huawei.com,
-        liwei391@huawei.com, linux-acpi@vger.kernel.org,
-        weiyongjun1@huawei.com, lenb@kernel.org, viresh.kumar@linaro.org,
-        rafael@kernel.org
-Subject: Re: [PATCH v2 1/2] cpufreq: CPPC: keep target core awake when
- reading its cpufreq rate
-Message-ID: <ZGemPss01YollQKp@e120325.cambridge.arm.com>
-References: <20230516133248.712242-1-zengheng4@huawei.com>
- <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
- <cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com>
- <7caa9878-c910-06f2-6eee-64cc55d8a207@os.amperecomputing.com>
- <0dc000e3-9b85-0841-03c0-3589e2e5d34b@nvidia.com>
+        with ESMTP id S229501AbjESQqM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 May 2023 12:46:12 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8C3D2
+        for <linux-pm@vger.kernel.org>; Fri, 19 May 2023 09:46:10 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d24136663so1398869b3a.0
+        for <linux-pm@vger.kernel.org>; Fri, 19 May 2023 09:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684514769; x=1687106769;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Fnc/qY1paOy/nrJCJwq3b7NFx+VGdz8mF7EmLC+CHU=;
+        b=BZ7i46cy5/uq+AXcdE3wGxih0kvLLuT8fSg845sV7r0SCvwKciu5peR6ReOPSwrOHp
+         qPxsICUcn1uJ00J0TjhIyG+q1mU+9f/mPK5fz0zuVh7jKX6i6IS5RHny0ASEPBIT7UyI
+         spx45hJVaCHAVOCwOuyEkkEnfHlxAhWg7JJGEY/f95sqbapbYR8NP+j0j7L04IcCcY15
+         CJkVROwudUWiA7AZXqHIdzYGc7QvfF0XgIwYc+/LbAyEAcPhixP81gi1fqBqM0Ly9JAU
+         XqlNMOvubl6WHvpoKALBUDyb/oXy3g4QZfBIghHQdr+HmpiPGw8u3Qltv15jBLk3s/8g
+         sr6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684514769; x=1687106769;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Fnc/qY1paOy/nrJCJwq3b7NFx+VGdz8mF7EmLC+CHU=;
+        b=SjL93QMXpJrPj8Tp65h5cO0eeJ0Gr6uN5vuUCDVLoHvkRPAXEhn0oePixKfPqeZKD7
+         5znDTSG5AtzsToIt8VtKCmwVqlrz/nSfYN37GLGqGTObHkK5LatsT06btK30Obi5xJk1
+         8X7BMt2gU6yBjpdeSZmoQToHRATB6yee6GfMB6H7pyPtYv1iXmEByUEQxtOFckgcETNh
+         4bKoWyo/nfYv7kh8AZO7FovEKQOUr5YZCy3+1pGrDgV/Fv0/qeIsY2kpgyFchXuhydKt
+         VAl68gYZKm3QAsaEsW2VsHcXcCH5FHP+EWrEoi/kglhp7LOdGFHgc4Ih+q3GM4i+INvo
+         rVXQ==
+X-Gm-Message-State: AC+VfDyyMI9jefjMYDGR+BHvoa/DJUVFy29OoklJ0Odyt9rr3dB7InVw
+        sCN8QGGubHZF9tC7gbfhB2jipqVMfE3k6psb3658Yg==
+X-Google-Smtp-Source: ACHHUZ4QOefGsYsQ631+iZwk5t+VXK+iK8+6VRoNclvXywwL/eicZDWFjwB2i0qh1YmqLMxL49TqMQ==
+X-Received: by 2002:a05:6a20:d90b:b0:105:dafa:fec2 with SMTP id jd11-20020a056a20d90b00b00105dafafec2mr2229138pzb.53.1684514769590;
+        Fri, 19 May 2023 09:46:09 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a31-20020a630b5f000000b005134fc049d7sm3230806pgl.31.2023.05.19.09.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 09:46:08 -0700 (PDT)
+Message-ID: <6467a7d0.630a0220.d8829.5acd@mx.google.com>
+Date:   Fri, 19 May 2023 09:46:08 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0dc000e3-9b85-0841-03c0-3589e2e5d34b@nvidia.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: acpi-6.4-rc3-14-gf677d4bc2b910
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 52 runs,
+ 3 regressions (acpi-6.4-rc3-14-gf677d4bc2b910)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 18, 2023 at 08:10:36PM +0530, Sumit Gupta wrote:
-> > > > 
-> > > > +Ionela, Sumit, Yang,
-> > > > 
-> > > > Hello Zeng,
-> > > > 
-> > > > I think solutions around related issues were suggested at:
-> > > > 
-> > > > [1]
-> > > > https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
-> > > > [2]
-> > > > https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-> > > > [3] https://lore.kernel.org/all/ZEl1Fms%2FJmdEZsVn@arm.com/
-> > > > 
-> > > > About this patch, it seems to mean that CPPC counters of CPUx are always
-> > > > accessed from CPUx, even when they are not AMUs. For instance CPPC
-> > > > counters could be memory mapped and accessible from any CPU.
-> > > > cpu_has_amu_feat() should allow to probe if a CPU uses AMUs or not,
-> > > > and [2] had an implementation using it.
-> > > > 
-> > > > Another comment about PATCH 2/2 is that if the counters are accessed
-> > > > through FFH, arm64 version of cpc_read_ffh() is calling
-> > > > counters_read_on_cpu(), and a comment in counters_read_on_cpu() seems
-> > > > to specify the function must be called with interrupt enabled.
-> > > > 
-> > > > I think the best solution so far was the one at [3], suggested by
-> > > > Ionela,
-> > > > but it doesn't seem to solve your issue. Indeed, it is not checked
-> > > > whether
-> > > > the counters are AMU counters and that they must be remotely read (to
-> > > > have the CPU awake),
-> > > > 
-> > > > Regards,
-> > > > Pierre
-> > > > 
-> > > 
-> > > I think the solution in [1] is simple and solves all the three cases.
-> > > Also, it provides better accuracy between the set and get frequency as
-> > > compared to [3].
-> > 
-> > I don't think [1] patches work for our case. We use mmio instead of AMU.
-> > Increasing delay could help to mitigate it somehow, buyt 25us is not
-> > good enough for our case. IIRC the fix proposed by Ionela works for both
-> > yours and mine.
-> > 
-FWIW, we are preparing a change providing an arch specific implementation of
-_arch_freq_get_on_cpu_ that will leverage existing support for FIE with AMU
-counters. This will give a reliable way of querying current CPU frequency
-reflecting the last sched tick period. The only case when we would fall back
-to cpufreq_gov's get functionality would be for CPUs with dynamic ticks when
-those are the only ones withing given policy or there is no available
-housekeeping CPU to query the frequency from. This should solve most of the
-experienced issues. To be posted soon.
+pm/testing baseline: 52 runs, 3 regressions (acpi-6.4-rc3-14-gf677d4bc2b910)
 
----
-BR
-B.
+Regressions Summary
+-------------------
 
-> 
-> I have added the CPC_IN_SYSTEM_MEMORY check from [2] in [1].
-> Could you please test if the below change works for you.
-> 
-> -----------------------------------------
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 7ff269a78c20..67aa09b5f15c 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1315,6 +1315,7 @@ int cppc_get_perf_ctrs(int cpunum, struct
-> cppc_perf_fb_ctrs *perf_fb_ctrs)
->  	struct cppc_pcc_data *pcc_ss_data = NULL;
->  	u64 delivered, reference, ref_perf, ctr_wrap_time;
->  	int ret = 0, regs_in_pcc = 0;
-> +	unsigned long flags;
-> 
->  	if (!cpc_desc) {
->  		pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
-> @@ -1350,8 +1351,17 @@ int cppc_get_perf_ctrs(int cpunum, struct
-> cppc_perf_fb_ctrs *perf_fb_ctrs)
->  		}
->  	}
-> 
-> +	if (CPC_IN_SYSTEM_MEMORY(delivered_reg) &&
-> +	    CPC_IN_SYSTEM_MEMORY(reference_reg))
-> +		local_irq_save(flags);
-> +
->  	cpc_read(cpunum, delivered_reg, &delivered);
->  	cpc_read(cpunum, reference_reg, &reference);
-> +
-> +	if (CPC_IN_SYSTEM_MEMORY(delivered_reg) &&
-> +	    CPC_IN_SYSTEM_MEMORY(reference_reg))
-> +		local_irq_restore(flags);
-> +
->  	cpc_read(cpunum, ref_perf_reg, &ref_perf);
-> 
->  	/*
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 5e6a132a525e..23e690854459 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -46,6 +46,8 @@ static bool boost_supported;
->  /* default 2usec delay between sampling */
->  static unsigned int sampling_delay_us = 2;
-> 
-> +static bool get_rate_use_wq;
-> +
->  static void cppc_check_hisi_workaround(void);
->  static void cppc_nvidia_workaround(void);
-> 
-> @@ -99,6 +101,12 @@ struct cppc_freq_invariance {
->  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
->  static struct kthread_worker *kworker_fie;
-> 
-> +struct feedback_ctrs {
-> +	u32 cpu;
-> +	struct cppc_perf_fb_ctrs fb_ctrs_t0;
-> +	struct cppc_perf_fb_ctrs fb_ctrs_t1;
-> +};
-> +
->  static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
->  static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->  				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-> @@ -851,28 +859,44 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata
-> *cpu_data,
->  	return (reference_perf * delta_delivered) / delta_reference;
->  }
-> 
-> +static int cppc_get_perf_ctrs_sync(void *fb_ctrs)
-> +{
-> +	struct feedback_ctrs *ctrs = fb_ctrs;
-> +	int ret;
-> +
-> +	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t0));
-> +	if (ret)
-> +		return ret;
-> +
-> +	udelay(sampling_delay_us);
-> +
-> +	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t1));
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ret;
-> +}
-> +
->  static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->  {
-> -	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
->  	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->  	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	struct feedback_ctrs fb_ctrs = {0};
->  	u64 delivered_perf;
->  	int ret;
-> 
->  	cpufreq_cpu_put(policy);
-> +	fb_ctrs.cpu = cpu;
-> 
-> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-> -	if (ret)
-> -		return ret;
-> -
-> -	udelay(sampling_delay_us);
-> -
-> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-> +	if (get_rate_use_wq)
-> +		ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_sync, &fb_ctrs, false);
-> +	else
-> +		ret = cppc_get_perf_ctrs_sync(&fb_ctrs);
->  	if (ret)
->  		return ret;
-> 
-> -	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-> -					       &fb_ctrs_t1);
-> +	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &(fb_ctrs.fb_ctrs_t0),
-> +					       &(fb_ctrs.fb_ctrs_t1));
-> 
->  	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
->  }
-> @@ -1002,10 +1026,18 @@ static void cppc_apply_workarounds(void)
->  static int __init cppc_cpufreq_init(void)
->  {
->  	int ret;
-> +	int cpu;
-> 
->  	if (!acpi_cpc_valid())
->  		return -ENODEV;
-> 
-> +#ifdef CONFIG_ARM64_AMU_EXTN
-> +	cpu = get_cpu_with_amu_feat();
-> +
-> +	if (cpu < nr_cpu_ids)
-> +		get_rate_use_wq = true;
-> +#endif
-> 
-> --------------------------------------------
-> 
-> We can add additional check to call smp_call_on_cpu() only when CPC_IN_FFH
-> if we want to reduce the scope of calling smp_call_on_cpu.
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 67aa09b5f15c..3d8348911403 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -110,6 +110,11 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
->                                 (cpc)->cpc_entry.reg.space_id ==        \
->                                 ACPI_ADR_SPACE_SYSTEM_IO)
-> 
-> +/* Check if a CPC register is in FFH */
-> +#define CPC_IN_FFH(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&    \
-> +                               (cpc)->cpc_entry.reg.space_id ==        \
-> +                               ACPI_ADR_SPACE_FIXED_HARDWARE)
-> +
->  /* Evaluates to True if reg is a NULL register descriptor */
->  #define IS_NULL_REG(reg) ((reg)->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY
-> && \
->                                 (reg)->address == 0 &&                  \
-> @@ -437,6 +442,29 @@ bool acpi_cpc_valid(void)
->  }
->  EXPORT_SYMBOL_GPL(acpi_cpc_valid);
-> 
-> +bool acpi_cpc_in_ffh(void)
-> +{
-> +       struct cpc_register_resource *delivered_reg, *reference_reg;
-> +       struct cpc_desc *cpc_ptr;
-> +       int cpu;
-> +
-> +       if (acpi_disabled)
-> +               return false;
-> +
-> +       for_each_possible_cpu(cpu) {
-> +               cpc_ptr = per_cpu(cpc_desc_ptr, cpu);
-> +               delivered_reg = &cpc_ptr->cpc_regs[DELIVERED_CTR];
-> +               reference_reg = &cpc_ptr->cpc_regs[REFERENCE_CTR];
-> +
-> +               if (!CPC_IN_FFH(delivered_reg) ||
-> +                   !CPC_IN_FFH(reference_reg))
-> +                       return false;
-> +       }
-> +
-> +       return true;
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_cpc_in_ffh);
-> +
->  bool cppc_allow_fast_switch(void)
->  {
->         struct cpc_register_resource *desired_reg;
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 23e690854459..4109e00b957e 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -1034,7 +1034,7 @@ static int __init cppc_cpufreq_init(void)
->  #ifdef CONFIG_ARM64_AMU_EXTN
->         cpu = get_cpu_with_amu_feat();
-> 
-> -       if (cpu < nr_cpu_ids)
-> +       if ((cpu < nr_cpu_ids) && acpi_cpc_in_ffh())
->                 get_rate_use_wq = true;
->  #endif
-> 
-> > > 
-> > > This can be merged and can later still be improved in Upstream.
-> > > 
-> > > If OK, I can send new version by changing the patch to apply for all
-> > > ARM SoC's with AMU and not specific to Tegra.
-> > > 
-> > > Thank you,
-> > > Sumit Gupta
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
+ 1          =
+
+rk3399-rock-pi-4b        | arm64 | lab-collabora   | gcc-10   | defconfig |=
+ 2          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-6.4=
+-rc3-14-gf677d4bc2b910/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: acpi-6.4-rc3-14-gf677d4bc2b910
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      f677d4bc2b91058f37c5fea5c3bd7485db31f794 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64679d9c6e5d1e7b6f2e86a1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.4-rc3-14-gf6=
+77d4bc2b910/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm=
+-wb15-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.4-rc3-14-gf6=
+77d4bc2b910/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm=
+-wb15-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230512.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64679d9c6e5d1e7b6f2e8=
+6a2
+        new failure (last pass: v6.4-rc2-7-g150ab364fade5) =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+rk3399-rock-pi-4b        | arm64 | lab-collabora   | gcc-10   | defconfig |=
+ 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64679dcc973f8e13d32e85f3
+
+  Results:     3 PASS, 3 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.4-rc3-14-gf6=
+77d4bc2b910/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b=
+.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.4-rc3-14-gf6=
+77d4bc2b910/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230512.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/64679dcc973f8e1=
+3d32e85fa
+        failing since 4 days (last pass: v6.3-rc7-189-g704d7a52a540b, first=
+ fail: v6.4-rc2)
+        2 lines
+
+    2023-05-19T16:03:00.939294  kern  :emerg : Internal error: Oops: 000000=
+0096000006 [#1] PREEMPT SMP
+
+    2023-05-19T16:03:00.939806  kern  :emerg : Code: 97fca110 f9405680 5286=
+4a61 72a686c1 (b9400800) =
+
+
+    2023-05-19T16:03:00.940145  <8>[   19.529590] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
+
+    2023-05-19T16:03:00.940460  + set +x
+
+    2023-05-19T16:03:00.940768  <8>[   19.531462] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 10391016_1.5.2.4.1>
+   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/64679dcc973f8e1=
+3d32e85fb
+        failing since 4 days (last pass: v6.3-rc7-189-g704d7a52a540b, first=
+ fail: v6.4-rc2)
+        12 lines
+
+    2023-05-19T16:03:00.911197  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+006
+
+    2023-05-19T16:03:00.911715  kern  :alert :   CM =3D 0, WnR =3D 0
+
+    2023-05-19T16:03:00.912088  kern  :alert : user pgtable: 4k pages, 48-b=
+it VAs, pgdp=3D0000000078c65000
+
+    2023-05-19T16:03:00.912382  kern  :alert : [0000000000000008] pgd=3D080=
+0000078c6b003, p4d=3D0800000078c6b003, pud=3D080000007910e003, pmd=3D000000=
+0000000000
+
+    2023-05-19T16:03:00.912663  <8>[   19.503079] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
+   =
+
+ =20
