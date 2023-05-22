@@ -2,129 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3230170BABB
-	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 12:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F9670BEAF
+	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 14:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbjEVKyC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 May 2023 06:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
+        id S233460AbjEVMsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 May 2023 08:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbjEVKwQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 06:52:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E5CE7A;
-        Mon, 22 May 2023 03:51:33 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M8hwQs024922;
-        Mon, 22 May 2023 10:51:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=dKfLoHPLieLGfuOq/Db847WlBv3dR+C2SQLGOgoYf3Y=;
- b=UfHn4y8OjIOokZuqeZUJZJzpa+B+qU7iFIPO9l9u1UekGtDrCIqcnFNfSpnlT7GRjKno
- exVD1jCm/V+0YZ+g0/Mf0plXWxv7G6S4m+3zHj6bBdklJoiN6+CTKwF/oJBGC5Swh7Qe
- 1bSK02+sU7NtRNlZQjwFjN+vM+m4ZNblwGxawzCTE5i5Mb/3Wk5taLcGDQnkYucbwP+t
- 8v6IV7tpB7uiwhFz5Dnzdg0sfYNJ7cXdOVBPnx9K0VizR9C6My+CfSFGqnl9fisEqfMu
- SElSqZduSitT9DhEAbvgtDrPbIRK0xK4pkO1tQqR4OH94x/N1X10H4agO/2FqBQpt/gq Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgk8s34m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:21 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAbKXd022924;
-        Mon, 22 May 2023 10:51:20 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgk8s33y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:20 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M3P0dr016258;
-        Mon, 22 May 2023 10:51:18 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qppdk0w9a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:17 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MApFTs58261996
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 10:51:15 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 842DD20040;
-        Mon, 22 May 2023 10:51:15 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2411B20043;
-        Mon, 22 May 2023 10:51:15 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 22 May 2023 10:51:15 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Sebastian Reichel <sre@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v5 29/44] power: add HAS_IOPORT dependencies
-Date:   Mon, 22 May 2023 12:50:34 +0200
-Message-Id: <20230522105049.1467313-30-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230522105049.1467313-1-schnelle@linux.ibm.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+        with ESMTP id S234012AbjEVMsG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 08:48:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E30AA;
+        Mon, 22 May 2023 05:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684759684; x=1716295684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yxKglgoCICqxCp/YUO9N6SBOqlY2w1KxWsoJyA/AVRs=;
+  b=euuvFxzxlC2BYJDjvt/ixzQH3txQF5bjN4zvABJLU5mzlUD6J8bi9BR2
+   hVAFNVvp8psHmXKAEfYHpcvdbsc/5eeUyuKXLr2YvdQ+UoSW3OFpyBgvr
+   aushmZe8KUyXU+sY5EkAGd003i4X1s8Cr7i2tv8tjMGMWLvWNo86av15H
+   nfL1TmFZJQwN2XIlFh3R6oYE9yJHoPMdlEls02XRa6HWa/I3PfCS0YaOi
+   5jZUsCINhxH2o1skq6yWcgSdcAm8QumsDxR8cC7Nt+oGkqFZtYYRowNOn
+   g5RIrmUGD31MkO2YXN7b76e20F2cwFmhfK6e9NQNoI+JIvJVw5vTzb4gi
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="asc'?scan'208";a="214906449"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 05:48:03 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 05:48:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 22 May 2023 05:47:59 -0700
+Date:   Mon, 22 May 2023 13:47:37 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
+        <loongson-kernel@lists.loongnix.cn>
+Subject: Re: [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
+Message-ID: <20230522-kooky-outbid-82662b45d305@wendy>
+References: <20230522093156.7108-1-zhuyinbo@loongson.cn>
+ <20230522093156.7108-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5F9JYAt8_MT5CSlDrdJVjX3PB3dorMz2
-X-Proofpoint-ORIG-GUID: vp5H0BZvp_k7S3sYvFowlTQ7dwtZNwOu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- mlxscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- priorityscore=1501 adultscore=0 impostorscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gKHvUwRJNqoRSsho"
+Content-Disposition: inline
+In-Reply-To: <20230522093156.7108-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+--gKHvUwRJNqoRSsho
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Hey!
+
+On Mon, May 22, 2023 at 05:31:55PM +0800, Yinbo Zhu wrote:
+> Add the Loongson-2 SoC Power Management Controller binding with DT
+> schema format using json-schema.
+
+Grabbing thread from lore.kernel.org/all/20230522093156.7108-3-zhuyinbo%40l=
+oongson.cn/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Checking attestation on all messages, may take a moment...
 ---
- drivers/power/reset/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+  [PATCH v2 1/3] loongarch: export loongarch pm interface
+    + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
+    + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  ERROR: missing [3/3]!
+---
+Total patches: 2
+---
+WARNING: Thread incomplete!
+Applying: loongarch: export loongarch pm interface
+Applying: dt-bindings: soc: add loongson-2 pm
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 8c87eeda0fec..fff07b2bd77b 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
- config POWER_RESET_PIIX4_POWEROFF
- 	tristate "Intel PIIX4 power-off driver"
- 	depends on PCI
-+	depends on HAS_IOPORT
- 	depends on MIPS || COMPILE_TEST
- 	help
- 	  This driver supports powering off a system using the Intel PIIX4
--- 
-2.39.2
+Looks like the user for these bindings got lost somewhere along the way?
+Please make sure to keep a series threaded.
 
+>=20
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../soc/loongson/loongson,ls2k-pmc.yaml       | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongs=
+on,ls2k-pmc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k=
+-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pm=
+c.yaml
+> new file mode 100644
+> index 000000000000..ddad62889c60
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.ya=
+ml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson-2 Power Manager controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - loongson,ls2k-pmc
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  suspend-address:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+> +      firmware entry address which was jumped from kernel and it's
+> +      value was dependent on specific platform firmware code. In
+> +      addition, the PM need according to it to indicate that current
+> +      SoC whether support Suspend To RAM.
+
+I (still) think this property is rather odd, maybe I am just not really
+understanding the property as it seems to be described partly in terms
+of operating system behaviour rather than its actual function. "was
+jumped from kernel" I don't get.
+
+The whole setup here seems a bit odd, but that's for the loongson arch
+folks reviewing the actual code to comment on!
+
+Thanks,
+Conor.
+
+--gKHvUwRJNqoRSsho
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGtkaQAKCRB4tDGHoIJi
+0lI/AP9QXb2RsmKR29etNH1JpHYidwCCU9a2ysUEbVebSFyQYwD6AytJGE2GQLfa
+2xQLm5VNuuHYmHeEFacgzuPyui/L4gg=
+=xr43
+-----END PGP SIGNATURE-----
+
+--gKHvUwRJNqoRSsho--
