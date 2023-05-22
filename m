@@ -2,109 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2998D70C150
-	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 16:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0AE70C191
+	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 16:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjEVOl7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 May 2023 10:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S233638AbjEVO5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 May 2023 10:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEVOl7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 10:41:59 -0400
+        with ESMTP id S230015AbjEVO5L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 10:57:11 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC6B5B0;
-        Mon, 22 May 2023 07:41:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86C69BB;
+        Mon, 22 May 2023 07:57:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 742BD11FB;
-        Mon, 22 May 2023 07:42:38 -0700 (PDT)
-Received: from [10.57.22.146] (unknown [10.57.22.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A6163F67D;
-        Mon, 22 May 2023 07:41:50 -0700 (PDT)
-Message-ID: <e5a75077-e3e6-7a77-c4d0-c55fa120acce@arm.com>
-Date:   Mon, 22 May 2023 15:41:53 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/3] Add basic tracing for uclamp and schedutil
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 446CC11FB;
+        Mon, 22 May 2023 07:57:55 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.22.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1262E3F6C4;
+        Mon, 22 May 2023 07:57:06 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org
 Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
         peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com,
-        qyousef@layalina.io, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20230509122246.1702397-1-lukasz.luba@arm.com>
- <88fcd266-301a-f6e1-cf1c-69c20e74ef35@arm.com>
- <CAJZ5v0juOwCHNoCo8gX+NopuzK18d+v3QV0qkGcg1BvDVcPpKQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0juOwCHNoCo8gX+NopuzK18d+v3QV0qkGcg1BvDVcPpKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        vschneid@redhat.com, delyank@fb.com, lukasz.luba@arm.com,
+        qyousef@google.com, qyousef@layalina.io
+Subject: [RESEND][PATCH v2 0/3] Add basic tracing for uclamp and schedutil
+Date:   Mon, 22 May 2023 15:56:59 +0100
+Message-Id: <20230522145702.2419654-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi all,
+
+The task scheduler feature: Uclamp, begins to take off. To better understand
+the dynamics in the task scheduler and CPU frequency requests we need some
+better tracing.
+In schedutil (cpufreq governor) we allow to enter the scheduler
+and make the frequency change. Although, there is some limit in regards to how
+often this can happen. That min period is provided by the cpufreq driver.
+Thus, some of the cpufreq requests might be filter out and the frequency won't
+be changed (hopefuly will be set a bit later). We would like to know about
+those situations, especially in context of the user-space hints made via
+Uclamp for particular tasks.
+This patch set aims to add base for our toolkits and post-processing trace
+analyzes.
+
+Changelog:
+v2:
+- solved the issue from CI build warning, dropped schedutil.h and re-used
+  the sched.h which is available in build_utility.c where cpufreq_schedutil.c
+  is included
+- added tag for the last patch 3/3 for the CI robot helping hend 
+- re-based on top of v6.4-rc1
+v1:
+- implementation can be found here [1]
 
 
-On 5/22/23 15:40, Rafael J. Wysocki wrote:
-> Hi Lukasz,
-> 
-> On Mon, May 22, 2023 at 3:38 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Rafael,
->>
->>
->>
->> On 5/9/23 13:22, Lukasz Luba wrote:
->>> Hi all,
->>>
->>> The task scheduler feature: Uclamp, begins to take off. To better understand
->>> the dynamics in the task scheduler and CPU frequency requests we need some
->>> better tracing.
->>> In schedutil (cpufreq governor) we allow to enter the scheduler
->>> and make the frequency change. Although, there is some limit in regards to how
->>> often this can happen. That min period is provided by the cpufreq driver.
->>> Thus, some of the cpufreq requests might be filter out and the frequency won't
->>> be changed (hopefuly will be set a bit later). We would like to know about
->>> those situations, especially in context of the user-space hints made via
->>> Uclamp for particular tasks.
->>> This patch set aims to add base for our toolkits and post-processing trace
->>> analyzes.
->>
->>> Changelog:
->>> v2:
->>> - solved the issue from CI build warning, dropped schedutil.h and re-used
->>>     the sched.h which is available in build_utility.c where cpufreq_schedutil.c
->>>     is included
->>> - added tag for the last patch 3/3 for the CI robot helping hend
->>> - re-based on top of v6.4-rc1
->>> v1:
->>> - implementation can be found here [1]
->>>
->>
->> I was going to gently ping you, while I've realized that you
->> are not on CC list :( I don't know what happened, my apologies.
-> 
-> No worries.
-> 
->> Shell I resend this patch set so you can have it in a proper way
->> in your mailbox?
-> 
-> Well, for schedutil you should also CC linux-pm (done now), so please resend it.
-> 
->> Could you have a look at this, please?
-> 
-> I could, but if I'm to reply, it will be much more convenient for me
-> if it is there in my inbox.
-> 
+Regards,
+Lukasz Luba
 
-Thanks Rafael for instant response. I'll resend it with the proper CC
-list this time.
+[1] https://lore.kernel.org/lkml/20230322151843.14390-1-lukasz.luba@arm.com/
+
+
+Lukasz Luba (3):
+  sched/tp: Add new tracepoint to track uclamp set from user-space
+  cpufreq: schedutil: Refactor sugov_update_shared() internals
+  schedutil: trace: Add tracing to capture filter out requests
+
+ include/trace/events/sched.h     |  8 ++++++++
+ kernel/sched/core.c              |  5 +++++
+ kernel/sched/cpufreq_schedutil.c | 28 ++++++++++++++++++----------
+ 3 files changed, 31 insertions(+), 10 deletions(-)
+
+-- 
+2.25.1
+
