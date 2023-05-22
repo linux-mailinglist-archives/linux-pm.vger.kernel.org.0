@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F2870B8F4
-	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 11:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6086970B8FA
+	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 11:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjEVJcK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 May 2023 05:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S232170AbjEVJcN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 May 2023 05:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjEVJcH (ORCPT
+        with ESMTP id S232041AbjEVJcH (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 05:32:07 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EDDDA8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 795AEAF;
         Mon, 22 May 2023 02:32:05 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Ax1eiTNmtkuOEKAA--.18717S3;
-        Mon, 22 May 2023 17:32:03 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8BxqOmUNmtkwOEKAA--.18806S3;
+        Mon, 22 May 2023 17:32:04 +0800 (CST)
 Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrCNNmtkfuNuAA--.55564S2;
-        Mon, 22 May 2023 17:32:02 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrCNNmtkfuNuAA--.55564S3;
+        Mon, 22 May 2023 17:32:03 +0800 (CST)
 From:   Yinbo Zhu <zhuyinbo@loongson.cn>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -38,31 +38,33 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
         Liu Peibao <liupeibao@loongson.cn>,
         loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v2 0/3] soc: loongson2_pm: add power management support
-Date:   Mon, 22 May 2023 17:31:53 +0800
-Message-Id: <20230522093156.7108-1-zhuyinbo@loongson.cn>
+Subject: [PATCH v2 1/3] loongarch: export loongarch pm interface
+Date:   Mon, 22 May 2023 17:31:54 +0800
+Message-Id: <20230522093156.7108-2-zhuyinbo@loongson.cn>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230522093156.7108-1-zhuyinbo@loongson.cn>
+References: <20230522093156.7108-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxkrCNNmtkfuNuAA--.55564S2
+X-CM-TRANSID: AQAAf8BxkrCNNmtkfuNuAA--.55564S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7GFW5Kw4kWF1kZw4fXrWkJFb_yoWfKwcE9a
-        srWay8Wr47WFZrJayDXw4SvryDuay8Gas093Wjqr1xW3Wayr13JF18Z343Cr42qFWUZFs8
-        XFW8KryrCrySyjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        J7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84
-        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8I
-        j28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwI
-        xGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAF
-        wI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-        CI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-        WIevJa73UjIFyTuYvjxU2mFADUUUU
+X-Coremail-Antispam: 1Uk129KBjvJXoWxCr4rXF1rtw47WFWDtw4fKrg_yoWrCry7p3
+        sFyrn8Kw4Fkr1rZryDtas8Xr15JrZ5Kr429a9rK3yUCwsrXw1rur1kKr98WF1jkw1rGF40
+        9ryFga1Y9F1UG3JanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bf8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64
+        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
+        14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryU
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU86yIUUUUUU==
 X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
@@ -73,31 +75,135 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Loongson-2 platform support Power Management Controller (ACPI) and this
-series patch was to add PM driver that base on dts and PM binding support.
+Some Power Management Controllers need to support DTS and will use
+the suspend interface thus this patch was to export such interface
+for their use.
 
-Change in v2:
-		1. Fixup the "suspend-address" description.
-		2. Remove the "return -EINVAL" in PM driver probe when firmware
-		   no configure "suspend-address" property in dts in oder to
-		   other PM state to work.
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ arch/loongarch/include/asm/acpi.h    |  5 ++---
+ arch/loongarch/include/asm/suspend.h | 10 ++++++++++
+ arch/loongarch/power/suspend.c       | 10 +++++-----
+ arch/loongarch/power/suspend_asm.S   |  8 ++++----
+ 4 files changed, 21 insertions(+), 12 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/suspend.h
 
-Yinbo Zhu (3):
-  loongarch: export loongarch pm interface
-  dt-bindings: soc: add loongson-2 pm
-  soc: loongson2_pm: add power management support
-
- .../soc/loongson/loongson,ls2k-pmc.yaml       |  51 ++++
- MAINTAINERS                                   |   7 +
- arch/loongarch/include/asm/acpi.h             |   5 +-
- arch/loongarch/include/asm/suspend.h          |  10 +
- arch/loongarch/power/suspend.c                |  10 +-
- arch/loongarch/power/suspend_asm.S            |   8 +-
- drivers/soc/loongson/Kconfig                  |  10 +
- drivers/soc/loongson/Makefile                 |   1 +
- drivers/soc/loongson/loongson2_pm.c           | 235 ++++++++++++++++++
- 9 files changed, 325 insertions(+), 12 deletions(-)
-
+diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+index 976a810352c6..d63507cc705f 100644
+--- a/arch/loongarch/include/asm/acpi.h
++++ b/arch/loongarch/include/asm/acpi.h
+@@ -8,6 +8,7 @@
+ #ifndef _ASM_LOONGARCH_ACPI_H
+ #define _ASM_LOONGARCH_ACPI_H
+ 
++#include <asm/suspend.h>
+ #ifdef CONFIG_ACPI
+ extern int acpi_strict;
+ extern int acpi_disabled;
+@@ -37,13 +38,11 @@ extern struct list_head acpi_wakeup_device_list;
+ 
+ extern int loongarch_acpi_suspend(void);
+ extern int (*acpi_suspend_lowlevel)(void);
+-extern void loongarch_suspend_enter(void);
+ 
+ static inline unsigned long acpi_get_wakeup_address(void)
+ {
+ #ifdef CONFIG_SUSPEND
+-	extern void loongarch_wakeup_start(void);
+-	return (unsigned long)loongarch_wakeup_start;
++	return (unsigned long)loongson_wakeup_start;
+ #endif
+ 	return 0UL;
+ }
+diff --git a/arch/loongarch/include/asm/suspend.h b/arch/loongarch/include/asm/suspend.h
+new file mode 100644
+index 000000000000..a40b42f4f7f3
+--- /dev/null
++++ b/arch/loongarch/include/asm/suspend.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_SUSPEND_H
++#define __ASM_SUSPEND_H
++
++void loongson_common_resume(void);
++void loongson_common_suspend(void);
++void loongson_suspend_enter(void);
++void loongson_wakeup_start(void);
++
++#endif
+diff --git a/arch/loongarch/power/suspend.c b/arch/loongarch/power/suspend.c
+index 5e19733e5e05..0587681b33ce 100644
+--- a/arch/loongarch/power/suspend.c
++++ b/arch/loongarch/power/suspend.c
+@@ -27,7 +27,7 @@ struct saved_registers {
+ };
+ static struct saved_registers saved_regs;
+ 
+-static void arch_common_suspend(void)
++void loongson_common_suspend(void)
+ {
+ 	save_counter();
+ 	saved_regs.pgd = csr_read64(LOONGARCH_CSR_PGDL);
+@@ -40,7 +40,7 @@ static void arch_common_suspend(void)
+ 	loongarch_suspend_addr = loongson_sysconf.suspend_addr;
+ }
+ 
+-static void arch_common_resume(void)
++void loongson_common_resume(void)
+ {
+ 	sync_counter();
+ 	local_flush_tlb_all();
+@@ -62,12 +62,12 @@ int loongarch_acpi_suspend(void)
+ 	enable_gpe_wakeup();
+ 	enable_pci_wakeup();
+ 
+-	arch_common_suspend();
++	loongson_common_suspend();
+ 
+ 	/* processor specific suspend */
+-	loongarch_suspend_enter();
++	loongson_suspend_enter();
+ 
+-	arch_common_resume();
++	loongson_common_resume();
+ 
+ 	return 0;
+ }
+diff --git a/arch/loongarch/power/suspend_asm.S b/arch/loongarch/power/suspend_asm.S
+index e2fc3b4e31f0..809abd3b119d 100644
+--- a/arch/loongarch/power/suspend_asm.S
++++ b/arch/loongarch/power/suspend_asm.S
+@@ -57,13 +57,13 @@
+ 	.align 12
+ 
+ /* Sleep/wakeup code for Loongson-3 */
+-SYM_FUNC_START(loongarch_suspend_enter)
++SYM_FUNC_START(loongson_suspend_enter)
+ 	SETUP_SLEEP
+ 	bl		__flush_cache_all
+ 
+ 	/* Pass RA and SP to BIOS */
+ 	addi.d		a1, sp, 0
+-	la.pcrel	a0, loongarch_wakeup_start
++	la.pcrel	a0, loongson_wakeup_start
+ 	la.pcrel	t0, loongarch_suspend_addr
+ 	ld.d		t0, t0, 0
+ 	jirl		a0, t0, 0 /* Call BIOS's STR sleep routine */
+@@ -72,7 +72,7 @@ SYM_FUNC_START(loongarch_suspend_enter)
+ 	 * This is where we return upon wakeup.
+ 	 * Reload all of the registers and return.
+ 	 */
+-SYM_INNER_LABEL(loongarch_wakeup_start, SYM_L_GLOBAL)
++SYM_INNER_LABEL(loongson_wakeup_start, SYM_L_GLOBAL)
+ 	li.d		t0, CSR_DMW0_INIT	# UC, PLV0
+ 	csrwr		t0, LOONGARCH_CSR_DMWIN0
+ 	li.d		t0, CSR_DMW1_INIT	# CA, PLV0
+@@ -89,4 +89,4 @@ SYM_INNER_LABEL(loongarch_wakeup_start, SYM_L_GLOBAL)
+ 	SETUP_WAKEUP
+ 	addi.d		sp, sp, PT_SIZE
+ 	jr		ra
+-SYM_FUNC_END(loongarch_suspend_enter)
++SYM_FUNC_END(loongson_suspend_enter)
 -- 
 2.20.1
 
