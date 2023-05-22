@@ -2,71 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC28570B69E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 09:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A554A70B70B
+	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 09:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjEVHgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 May 2023 03:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S231665AbjEVHv2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 May 2023 03:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEVHgI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 03:36:08 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0103EA6
-        for <linux-pm@vger.kernel.org>; Mon, 22 May 2023 00:36:07 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-ba1815e12efso4870581276.3
-        for <linux-pm@vger.kernel.org>; Mon, 22 May 2023 00:36:07 -0700 (PDT)
+        with ESMTP id S232706AbjEVHvH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 03:51:07 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB1410F3
+        for <linux-pm@vger.kernel.org>; Mon, 22 May 2023 00:49:28 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-309550d4f73so2039245f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 May 2023 00:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684740967; x=1687332967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oYO6QyeT/vE0/dLal+mOoUvrbx/vhy+FOFfMUworJUI=;
-        b=xDDT/+bIDGyUkQVLK9/FgK0mSNOUdgqdlxiCGabcrZlU8t9IA++ddilBYK93nb/EOn
-         NSmWclPrefvWOGhbCXrB+X25RWUQRnUgWujGNtHx9ScLuEJET/R+5EBhtv+PCk6CTtlU
-         n7ZF9PeLvX+DcBJMpayABvk9ky54qVIzosJkZ3e4dnUiF3UGkI1zt6gpfKN9+mo+ozCu
-         pw/KJu2WDIoFhBzh6tKHUFLIE+dLKzT6uYo599qbezzlNDZv0ESm7suJh/4q+Oi/AKId
-         Ehfbw43Ozb13E/PbEA/IfW0xLmtjHO1eKpM4h0e5/zphDWl8knJJ50AV3LCQm+Y1B2hg
-         hs/g==
+        d=linaro.org; s=google; t=1684741708; x=1687333708;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i8dj8yxA8aTR556/ywnr0LTSwlcZxI32LcOw4Zuf/m8=;
+        b=MioEID9u6itRUSE9iD5ycmvk1UKAPr15DXwMmPU2p1DaUF4zsNMd+lxYcD2Ie36Deq
+         tq1nbbuomtFiqSq+zorMeM3IHxy+kkHJjQEGcGLWkW2QovESxXAtno5CJ7j9OUxKAwhi
+         yBmfxiewLtrXigjswJLJVSsB36bMw2/xRctH+klR7urSzrKyqPWMulK305FJVaaC2l80
+         jWKKLNzF5ctwTvfR70v21k/qy9nISQzURWbWVJpEWkAXKatFWoem8KUHq2n8H4WVEm3h
+         lZUcOl7z0Ip2uN01LxVF5cnu2m2rnEmOqXhwpLB/lHUYiUtVh9mrzsSrpFNrSsRZPG9Y
+         ecZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684740967; x=1687332967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oYO6QyeT/vE0/dLal+mOoUvrbx/vhy+FOFfMUworJUI=;
-        b=NwKjHLPTPDS0ynEiBRar7bsbpfQdIXimO7LKOE2jC7n4dPdR78D2qcsQTGDUklrW8G
-         HepdGlN+jrBSQRDhIhuojW8i12C0ci3ZMzDdEnJDepat0DxjeY7TCI7GTOdCGy72+h4y
-         bYtuVQCHWHgK2TMmSfGIW5cZApBSrY5ml83u+4HtNWzA9qE1Fzuo6CoSdsbRx7vpHcKk
-         pzith0ebXvdhxg8vQfFeL8X7dfrbNFF3qyK3g5OkflNfBCau+VxpVqdjodCXzLxBwii0
-         nxjnPGce+zqWueF5Bo25HKEomkE2ubcy47EzoMVMV3KQc65iE1PJvmApHvO8dWlBt8ha
-         S8pA==
-X-Gm-Message-State: AC+VfDzW3gterAPzgAKOHMkHpLSL9cDUqQrgO+kX5DHvx0YxUICYwypz
-        WIL9dALK8pWJnXTC8mD9wBeej2bOR6oZfjuWCwDE9w==
-X-Google-Smtp-Source: ACHHUZ68CRANHGe6xAuOw1CpSWwlTGVc+dACk1dfiCmZPpQD6rOxHUDm2AJP7afAyAVJgTKG4e5g40VwzefbCRkUQ8o=
-X-Received: by 2002:a25:a524:0:b0:ba7:4977:465d with SMTP id
- h33-20020a25a524000000b00ba74977465dmr9343957ybi.47.1684740967218; Mon, 22
- May 2023 00:36:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684741708; x=1687333708;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8dj8yxA8aTR556/ywnr0LTSwlcZxI32LcOw4Zuf/m8=;
+        b=Ai8ASybPfViKmHT4HzEqaO2+Y8CWN1tR7MxGjAGxvnmyoLRo8YsnwovgIFDedLBsWe
+         UYaoFNkzlGj+nfqaDg6wK5HKzSaXUFeha7aWENQOLgoSsQ1tBGPJ0Ud/zzyFPfVtO7ek
+         Kbx9FjAbnruzOgvW9Qp6nfaNu6arG7Vo8hIwhc6+c5jBCSeg/sBMwt2+jBCaZDLmdPfO
+         24QzSTfrmrYCZE84Z2wGK3mKHpjSoPhFdRp+CvBmppj3xbyrOa3JPy8brjuzXmbtajVR
+         8c6ffA2K52FTIh8GYCt3DgdX/33b665RmGa64AFLR8Cun3HzP1gSCQ/VkOC42RwWh0HD
+         oPTg==
+X-Gm-Message-State: AC+VfDzyixhev0G1jBlhdaiGlNmJEoML93kwDzreKCqFnnvyYDuB8/yo
+        2DdlIDk8Qnffu4Eswcg7aP6rGA==
+X-Google-Smtp-Source: ACHHUZ50N1YblPjsdry9S5GwGyC3kPtnmgqDIwZKDz4lleoi3tlCpsFTeTnW6JHAUEbE2t6e9RZutA==
+X-Received: by 2002:a05:6000:1002:b0:307:c0c4:1094 with SMTP id a2-20020a056000100200b00307c0c41094mr6873367wrx.34.1684741708134;
+        Mon, 22 May 2023 00:48:28 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m4-20020a5d56c4000000b003062d815fa6sm6777613wrw.85.2023.05.22.00.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 00:48:26 -0700 (PDT)
+Date:   Mon, 22 May 2023 10:48:24 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     ulf.hansson@linaro.org
+Cc:     linux-pm@vger.kernel.org
+Subject: [bug report] PM: domains: Allocate governor data dynamically based
+ on a genpd governor
+Message-ID: <5c11bb92-313e-43c9-8ac5-ea95810a27a7@kili.mountain>
 MIME-Version: 1.0
-References: <20230516154605.517690-1-arnd@kernel.org> <20230516154605.517690-12-arnd@kernel.org>
-In-Reply-To: <20230516154605.517690-12-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 May 2023 09:35:56 +0200
-Message-ID: <CACRpkdZKQVZrU05xKG1fgbgcVaJ2Jvg8V2Hx3eHDsiGQqUtGcw@mail.gmail.com>
-Subject: Re: [PATCH 11/16] ARM: move setup functions to header
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,33 +67,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 16, 2023 at 5:46=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+Hello Ulf Hansson,
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A couple of functions are declared in arch/arm/mm/mmu.c rather than in a =
-header,
-> which causes W=3D1 build warnings:
->
-> arch/arm/mm/init.c:97:13: error: no previous prototype for 'setup_dma_zon=
-e' [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:118:13: error: no previous prototype for 'init_default_=
-cache_policy' [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:1195:13: error: no previous prototype for 'adjust_lowme=
-m_bounds' [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:1761:13: error: no previous prototype for 'paging_init'=
- [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:1794:13: error: no previous prototype for 'early_mm_ini=
-t' [-Werror=3Dmissing-prototypes]
->
-> Move the declaratsion to asm/setup.h so they can be seen by the compiler
-> while building the definition.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This is a semi-automatic email about new static checker warnings.
 
-This looks cleaner to me:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The patch f38d1a6d0025: "PM: domains: Allocate governor data 
+dynamically based on a genpd governor" from May 11, 2022, leads to 
+the following Smatch complaint:
 
-Yours,
-Linus Walleij
+    drivers/base/power/domain.c:1635 genpd_add_device()
+    warn: variable dereferenced before IS_ERR check 'genpd' (see line 1629)
+
+drivers/base/power/domain.c
+  1628	{
+  1629		struct genpd_governor_data *gd = genpd->gd;
+                                                 ^^^^^^^^^
+Patch adds a dereference
+
+  1630		struct generic_pm_domain_data *gpd_data;
+  1631		int ret;
+  1632	
+  1633		dev_dbg(dev, "%s()\n", __func__);
+  1634	
+  1635		if (IS_ERR_OR_NULL(genpd) || IS_ERR_OR_NULL(dev))
+                                   ^^^^^
+Checked too late.
+
+  1636			return -EINVAL;
+  1637	
+
+regards,
+dan carpenter
