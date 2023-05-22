@@ -2,51 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE4270C3BD
-	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 18:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF6E70C410
+	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 19:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjEVQvK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 22 May 2023 12:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S229940AbjEVRMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 May 2023 13:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbjEVQvJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 12:51:09 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABEDF4;
-        Mon, 22 May 2023 09:51:07 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-513debc49e8so458132a12.0;
-        Mon, 22 May 2023 09:51:07 -0700 (PDT)
+        with ESMTP id S229569AbjEVRMw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 13:12:52 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E301B3
+        for <linux-pm@vger.kernel.org>; Mon, 22 May 2023 10:12:52 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-504d149839bso675638a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 May 2023 10:12:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684774265; x=1687366265;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=prsCEJ6oGGjSe0Cvn82lvxEASIZfzQmdFsTTFy0EMdI=;
-        b=MGjQFEtKzDnkiWAP+bIyLxtMAJiNwsvLTd3Vn/RS1FCcsgEKBTleYAl/VeYRhFh3QO
-         unQ57Qj8aZzoO1a0wnriI/F6iXUJ+KyUg5IwS3Z2vBP+8Uu/74KaZKnXXFuPmBLAVTUH
-         wQe2KPGwyjcWH6/pTzIYEe2O/AL4eu7oqPwLMeuW7OD2lzGpEZm4KPDl52S96/XNoRbP
-         Vg/rL+LN7isnY118ZZOO4ktXx3nt2gJsm86m8vkvqUkeQNaqudq+KnENRW8jMWDKQM6Q
-         J64iO7GaVlGNn4G4vdHKb0r+Yag1Bc7CbK/PglALJgY8jSHxF6s+iYJAvDU9rncsPzRS
-         nufA==
-X-Gm-Message-State: AC+VfDzXr2ueisRB6sS2mPXM7uMSP9Q9JgmYfal5WF+4TrmHa9b98Zmm
-        l1A0d0dPQQ7VcDsGo58kE9jEy/Hz0FJ15Efp/Hz0nDBO
-X-Google-Smtp-Source: ACHHUZ40eA7KPDT+SqOa4Nsm/sQnxkFPSXWB3IQj0l3Y5cpLcBljg+SD+WKn9IKigDiHQrxr4sIIxUKnfVLMf0LIkLo=
-X-Received: by 2002:a17:906:72d4:b0:96f:da08:d451 with SMTP id
- m20-20020a17090672d400b0096fda08d451mr3730896ejl.6.1684774265481; Mon, 22 May
- 2023 09:51:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684775570; x=1687367570;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iJ8shFRLQxgVxyay7H7lw+jqurdFnL+yY/g0KRPDCv4=;
+        b=bSd9T2fbXfQrRYJ28ZMkQotWCYOa4cI+4/uC/oF9JdbDFkrzfRU/MD9wyQqK19nULj
+         49T4JWlQhPUqThtPXITQvOoYrjJTrIGSVx11BuwVGGFKJmglIupwwiggB4NkXGAN+xxe
+         UO5u087sDlCnILapln+8zA06xhAWwYUi4EExyIwRP/ngujPga4CJKrxxdsfWrI13CaY8
+         9DpmcShRvG1Zx245rtF32RY9uI1MbvP0PZYLgKTV+mQlw/h5u6KTkRxGudADLNoyEQ79
+         iXxlVwFkEuzyLcj06B2SrST3+QeMEoOdE4/M2gPnda7Ziw+qDrH+NneG9neKHC3KBCdc
+         z9uA==
+X-Gm-Message-State: AC+VfDxzykMPceVHmyYdU+c/maWOhiTzJTvT2AIVvfupESSPEVCDo0c8
+        +foEOjHqtH9qqnXmrsj/GA77yB+vfv/gBtETjfwZh1nNCQo=
+X-Google-Smtp-Source: ACHHUZ6MxBD1JqlZ/NtcbJrPcqgLwsxkiWP9jWTzVy+Un1lkPsQWB2iQPaCGtHx7hPliidA/U4ucgCHM1olf0vWASf4=
+X-Received: by 2002:a17:906:74dd:b0:929:b101:937d with SMTP id
+ z29-20020a17090674dd00b00929b101937dmr10359168ejl.1.1684775570321; Mon, 22
+ May 2023 10:12:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230520133249.22689-1-kweifat@gmail.com>
-In-Reply-To: <20230520133249.22689-1-kweifat@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 22 May 2023 18:50:54 +0200
-Message-ID: <CAJZ5v0guY16bicakMokQtp=_DGbBb4hk6B=RuPp_8+bd0jt+6w@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Avoid initializing variables prematurely
-To:     Fieah Lim <kweifat@gmail.com>
-Cc:     srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Mon, 22 May 2023 19:12:39 +0200
+Message-ID: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
+Subject: [CfP] Power Management and Thermal Control MC (LPC2023)
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -57,15 +59,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 20, 2023 at 3:32 PM Fieah Lim <kweifat@gmail.com> wrote:
->
-> all_cpu_data struct is pretty large,
+Hi Folks,
 
-all_cpu_data is not a structure, it is an array of pointers.
+I'm going to submit a Power Management and Thermal Control
+micro-conference proposal for LPC2023 along the lines of what happened
+in the previous iterations of it.
 
-If you want to clean up the code, please make sure that your cleanups
-really make sense.
+If you have topics that you'd like to be discussed there, please let
+me know by Friday, May 26.
 
-Also please don't make unrelated changes in one patch, this doesn't help much.
+Please note that LPC MC topics are expected to cover work in progress
+or at the concept stage.  They are not supposed to be about work that
+has been done already.
 
-Thanks!
+Kind regards,
+Rafael
