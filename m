@@ -2,101 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1504170B3D9
-	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 05:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9954370B518
+	for <lists+linux-pm@lfdr.de>; Mon, 22 May 2023 08:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjEVDmh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 21 May 2023 23:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S231653AbjEVGdz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 May 2023 02:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjEVDmh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 May 2023 23:42:37 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA901C2
-        for <linux-pm@vger.kernel.org>; Sun, 21 May 2023 20:42:33 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d3fbb8c1cso2668827b3a.3
-        for <linux-pm@vger.kernel.org>; Sun, 21 May 2023 20:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684726953; x=1687318953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=s9j2M1WNdnl0wS4KkpJmTBxkz0ogLnfExxOtrv4eeMc=;
-        b=xUG/etby2OkzSe+4dY9MbvZoWlp4sVh5TQMOOdjJNfPrMYyXqYRyPWta4Z7z7TL1na
-         r0Fs50sglqD7axI6u2nXCSckA82QVylrn4nL2VO4bCgz0/GdowZCGCrka2kIVySr+TtU
-         715AKAYg4Ddsf01Lr6T5sVi0nzYXl/yqw5uR9haGE696jQ8vdX/RWWGERzf6RogYkTiz
-         s8S3xoYS0Zp3+0NGR6xkZ7zmJk3vhjHcYKBESLh3U2mpqaVEwxUCLvVFJEZnyHthu+zj
-         eChyV9RzWqSjUeS4l/IzO3I/BZhsGTHhBwH/SNw4tFS/cm6LDlmUv74LN+FKWzU9FMKi
-         loLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684726953; x=1687318953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s9j2M1WNdnl0wS4KkpJmTBxkz0ogLnfExxOtrv4eeMc=;
-        b=JL0LKxaZr/hhxuEgR5cRbvuNIucK4h7ruIUkUfobpkMyXz2gWQmx4g14/jykwowE5j
-         lqPvdcfS7f1XpFGsqoPpl0b43EsiLAqaFa7QpekhUy9g/Jh82Kj9VJYXmCQyq+7FGVUW
-         fyKtwiHGdNWApXfjeaDejvn8TvHELXhLeRNrZa83wPRHezJSlaDn0PuFFAqwk+ARB/Lg
-         6nWDktkIyLONYe9tliCbQ1lsIy4lOc1kJj7WfLc9izNMzCxWZMCNIlwK5WAdSlSv5PyO
-         vV9+D2uSnneDFAdQsi9TeP6M9l3i02UtWlMsUIXcKM1V8Oq38Wl66pOod21w0sK7tOD8
-         lCag==
-X-Gm-Message-State: AC+VfDzx6YOnSlQCxLR2fYWEaMXO2N/KwzAGofgysNVk2bEBAdU6Nler
-        UBGaF+M6QTQiwxkvdNAED9Hzow==
-X-Google-Smtp-Source: ACHHUZ7v03JiUp496qOgpNNts2cT0VIZTgPMwg64SA0VFTWlboIElXtct8gUoFb8BRiU3vtdBwIDvw==
-X-Received: by 2002:a05:6a00:2405:b0:640:f313:efba with SMTP id z5-20020a056a00240500b00640f313efbamr11427681pfh.19.1684726953284;
-        Sun, 21 May 2023 20:42:33 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id a23-20020aa78657000000b0064d29d5c8e7sm3182645pfo.58.2023.05.21.20.42.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 20:42:32 -0700 (PDT)
-Date:   Mon, 22 May 2023 09:12:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?Q?Adri=C3=A1n?= Larumbe <adrian.larumbe@collabora.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] OPP: rate-limit debug messages when no change in OPP is
- required
-Message-ID: <20230522034230.zzxmtusrqtqkjnd5@vireshk-i7>
-References: <20230520170035.2540438-1-adrian.larumbe@collabora.com>
+        with ESMTP id S229470AbjEVGdw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 02:33:52 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34439B;
+        Sun, 21 May 2023 23:33:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VqZ9EmSXUB2TnwnYlA4G0FdF9z/vfO+fKsGcv/gm/wvqfjETq3t8g8WOTvj99sZA1U/Phn1R+RvNmjU+OeomdQn40tpqgKOC3Oiy0p3seaY0HT9LPllzxCWOGrcvjkAIjXr0E8W6ZPuldYWszWLk9kOTJZ1Gsw28Fa7PyXmVee6QpWSKi/JUYK9/zpYWdAv5kJnG1+RhvcSOBuSOkVgxNMhRx2VP8FUEl18gQXgDxirhFUzNc2kCixtAIXokERgfMUMwaq5OfW5aakSIKnfU180YKMXk1DkMbs10a2nVj6Y5uXcZ8pZichqonGWss95tb6MpYOelsswlDvrPM7Ezpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=scsB6jiqpDttYKZeh4iNtEIp9JIeI5nfSIdowqotk+8=;
+ b=BWs4CyJ63KTAV1G79JEfBbZt0/jPHzgHtyAZOrwCsKtO2OYHzgih311xMM+A/DA6wCaqLktwENJEUo3/qY7ggCWb7mTafKy6bQ9e8LYdR37ewXWFfecRK2rCXHLfJTGrlb0X7ZmKZsTEr8DHYgmEztVsANf/oLJPhkKesGUXtMSTu8PH0eHIlRfm+O0ATLB+FDVxvERABAq30ap2c9CZPTum5FBgZ3RXvED6uVVtWaISZunGkyFvQwY/ByMDTkpJ9bXUtYdeQoaEO+pBzrZL9hfSeyDe8Xxo00NrBMYjV+ktkX+sIq1eFMKnQuvHvCeLW9lEKFJxyHPf0a6RiY7OfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=scsB6jiqpDttYKZeh4iNtEIp9JIeI5nfSIdowqotk+8=;
+ b=SNUhwu02rCyyFvOD91noO4g3l1Vxf18ndoUsRSBXm+UzeGRPA3COcobKtWnqQaFXG+UPVJG1EytdQRrNUkXn7QOfyHvinmlR3yRz3djyHJpzvjm5O9bARNkp+HNvtoyl63lSP51qnw4kSFAbgCdverf9FMN4oswA3/Ta0tlpv+8=
+Received: from DS7PR06CA0037.namprd06.prod.outlook.com (2603:10b6:8:54::12) by
+ BY5PR12MB4885.namprd12.prod.outlook.com (2603:10b6:a03:1de::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 06:33:47 +0000
+Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::5a) by DS7PR06CA0037.outlook.office365.com
+ (2603:10b6:8:54::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
+ Transport; Mon, 22 May 2023 06:33:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.28 via Frontend Transport; Mon, 22 May 2023 06:33:46 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 22 May
+ 2023 01:33:43 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <Mario.Limonciello@amd.com>, <Jinzhou.Su@amd.com>,
+        <Perry.Yuan@amd.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH 0/2] amd-pstate: amd_pstate related fixes
+Date:   Mon, 22 May 2023 06:33:23 +0000
+Message-ID: <20230522063325.80193-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230520170035.2540438-1-adrian.larumbe@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT022:EE_|BY5PR12MB4885:EE_
+X-MS-Office365-Filtering-Correlation-Id: bff0d857-67a2-4177-6f1d-08db5a8e7f27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qjfc9nSnxc6TulzPvZ54ztdAyw0m4XTCb92n6hrEP2bkr1cMnuOJUzn0rkOK3OJek44Dn/85WtweupSnPqwIGYZwrOO84gzg72ph1LnQA5qWRdIdWGgf/cJP6q4rbdRp2IEgAUMcb4wa2CEkJjkInKBRq3oYqFoygr4mRY6tE5J+RuV2QoQdf1iaGNyQBcgNyfTaE/jH11YnyMKCm4IQO3lrwU1RVc23wwMVAgYp3S1JCg733iF/Enl6lg4zyyqmlMTN+ZjKc3Bt6b1hlU5xJekarrK4irQav1jFDNCxX1IR8VZZVkH9OoNduOvlTqByAHW6S6v6qn/TGQNAHD+DlhivnKRdObGuo2nhZ0RnUenpPQlITB8lksHYBmJlLqvHE6T5p374SENNkPjmg9w3kzJ29roW56hbbUfYer+RxsEvvcW5frH2M/3Roembw2NOVLx8M7Ug5twXa2CScF5J5xntp9CanI3zeC6t+yrjB1I5ya9hrnN15XR1Mu5g+VKESKwpj3eNeXQ0fkzWAoBnb8eA/WAmZpgHzL5siTBygB/hFPCLNctRU26ehy46ExxrbXAUkfZQToZiE9jg+dLsZkZwuhI7alDjN/scvtQzdrH9RcGiAzoPY6RrOjEufLS49mXHT8rbV7ctDQ/SSI/BDLJ3XPdhQVs34UaVck8hQJapEHw5fxny24k2hbcdP2yXOrMFHEQhHcEILYS+NSZ4cm2DbUSiuwyCa6PzsysQa9aVPaHvSqP2r+RdtHSEU1LCFneSnl8GK9Aldb3P0+oYs3u1gB5BvqpkkfVsyotJUN4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(39850400004)(136003)(451199021)(36840700001)(46966006)(40470700004)(44832011)(5660300002)(40460700003)(8936002)(8676002)(36860700001)(83380400001)(47076005)(2906002)(4744005)(16526019)(186003)(426003)(336012)(36756003)(2616005)(356005)(82740400003)(81166007)(86362001)(82310400005)(40480700001)(1076003)(26005)(110136005)(54906003)(316002)(6666004)(478600001)(4326008)(70586007)(70206006)(7696005)(41300700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 06:33:46.7422
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bff0d857-67a2-4177-6f1d-08db5a8e7f27
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4885
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-05-23, 18:00, Adrián Larumbe wrote:
-> Otherwise, when enabling a debug build and dynamic debug in the kernel, it
-> quickly floods the kernel ring buffer and makes debugging of other
-> subsystems almost impossible, unless manually disabled.
-> 
-> Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
-> ---
->  drivers/opp/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 954c94865cf5..85cbc8de407c 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1091,7 +1091,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  
->  	/* Return early if nothing to do */
->  	if (!forced && old_opp == opp && opp_table->enabled) {
-> -		dev_dbg(dev, "%s: OPPs are same, nothing to do\n", __func__);
-> +		dev_dbg_ratelimited(dev, "%s: OPPs are same, nothing to do\n", __func__);
->  		return 0;
->  	}
+This 2 patch series has the following 2 fixes for amd_pstate:
+- Currently, amd_pstate sets CPPC enable MSR for a single CPU. But ACPI
+  specification recommends driver to set CPPC enable register per-core.
+  Align amd_pstate driver with the spec.
 
-Applied. Thanks.
+- Remove some extra checks for active mode which are not required.
+
+Wyes Karny (2):
+  cpufreq/amd-pstate: Write CPPC enable bit for each core
+  cpufreq/amd-pstate: Remove unnecessary active state checks
+
+ drivers/cpufreq/amd-pstate.c | 64 ++++++++++++++++--------------------
+ 1 file changed, 28 insertions(+), 36 deletions(-)
 
 -- 
-viresh
+2.34.1
+
