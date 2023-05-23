@@ -2,111 +2,245 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B915770D797
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 10:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB9570D7E1
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 10:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjEWIfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 04:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        id S229604AbjEWIvY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 04:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236174AbjEWIeG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 04:34:06 -0400
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A922E56
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:32:30 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2b03d3e41fcso2687361fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:32:30 -0700 (PDT)
+        with ESMTP id S230487AbjEWIvX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 04:51:23 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D80C95;
+        Tue, 23 May 2023 01:51:22 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d44b198baso2296672b3a.0;
+        Tue, 23 May 2023 01:51:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684830688; x=1687422688;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aqoLnPSfzNBEJLzNJAPohzVk9qbOTTKvfqApSvbpZ+c=;
-        b=ELy+Lp+OvEhcap5C0YrUMC1dMKfxBvdVuOJFeYxBcIYZBR+8ScE4WnTd21oY5McKlP
-         1QdyGlR4Hxw+sdMXaL4IcbKIgS4RT4yWZDHkhxKLrSwVjkx9kSsitjC/e1g3MgjqJgd0
-         Kn+Lrn77TkmOlvWiIZ2wpKIazbIxqCdFc8n0SUKOvA+SdNkbzSfJqrEtKXtj1rMyB+eG
-         asr48JKDGCvPPZOnXUE/hiP8EregYHs+mfhz0qNEfV63YLpFvg6QI6rvK8OGXdfsVTqy
-         sum6j6GzqE8JeRiM/NBQeJDIaWRUmN771jtV+YCD/V0nX9PNtxZXvojMeVVd9xl7We8i
-         beKA==
+        d=gmail.com; s=20221208; t=1684831882; x=1687423882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vd9VcsDJ8elNncryM1wYDU//sBkMxzd/B1cmsfb/p9A=;
+        b=KRfyQ2yxg+B7sqQkFqe1Icwkw7vdlDlF4Jjm18E2uU/CLmX3WGaWEIal3LtT87uU3L
+         YINOR4HoEE0OHEq6xiRw7CX3WGxnjr5t8vqR5jEXtL0C6uVg+gHJQHm/qZw2pUrwU+Fv
+         HbgB3fy4g/axMQFx50hIFJi96+sfyb310fOumH7g1iaSQ44+hAAQHcRlo0O7uCMWFln1
+         /MX5oaccf6cTe9aI2IVfTWTncK6f29rODp0zmbjgbTPX/zfKWJzBqwJ4zN96rsB/9Mg4
+         Cs1RRVmqHCjxxExJOMty8JQp3uGr8yBIsFUqinpKOu8mjTgkoBjQfX6X6IT7n4J9xyH3
+         3lcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684830688; x=1687422688;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqoLnPSfzNBEJLzNJAPohzVk9qbOTTKvfqApSvbpZ+c=;
-        b=At+74UQh9az9M+PsPxBK69eVcDulEDw4mYyLTu8jlBz9+5Tx0yaX2hfbccVR6IBZQt
-         3BNocAS/yQrPio1iawdBCxPadTBQUWBHtsF34aenC7kbtDkJFzdoXin5RklPaOT1sCYK
-         hzVmfBsVBf+D83PEDN9tKt6IDqfCD+CBlk+DXHfWO++yg/shF07IIEd+btspE6gyqIS7
-         lNXUs/tskug8C/zop5WQ12YympE5ZRQKIGXXa7a0Ayb4dnwXWfak23bO7lPaud6HoUF1
-         6Qsn0joUJIwB8pWP7lg01I+OACWxcIAEBkRkjr36ZBzLpGTOoHHO7pee7NEew4lI39gb
-         cpTw==
-X-Gm-Message-State: AC+VfDwQ70TPzVW+1vRG1YAvWae6TJ92U89rv5qiEIiR1nCKBy/G7vRr
-        JDidvorJF8AtaY6q9jdBha4ygQ==
-X-Google-Smtp-Source: ACHHUZ7JyrwZTrtDlI3Rdt3V59245cL6RCr1E3O4A6gzrvtZmmfKgGhM1zhi1+TwYl6PjHb0U6btSA==
-X-Received: by 2002:a05:6512:24e:b0:4eb:e8e:4139 with SMTP id b14-20020a056512024e00b004eb0e8e4139mr4888297lfo.2.1684830688603;
-        Tue, 23 May 2023 01:31:28 -0700 (PDT)
-Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
-        by smtp.gmail.com with ESMTPSA id h26-20020a19701a000000b004ece331c830sm1259533lfc.206.2023.05.23.01.31.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 01:31:28 -0700 (PDT)
-Message-ID: <2f03fa9a-1b4b-d208-f399-a31ab8c5b4cc@linaro.org>
-Date:   Tue, 23 May 2023 10:31:27 +0200
+        d=1e100.net; s=20221208; t=1684831882; x=1687423882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vd9VcsDJ8elNncryM1wYDU//sBkMxzd/B1cmsfb/p9A=;
+        b=HP+vu6S54ZdXwWuPno4mrPeKcsD8VKycLyh3e9aX5hseb7JBkb+8JokSRrCjYBXzsV
+         NbRTfB7ibPGMo6B8LO26k50veOVehULyYOgdLhWkefrguvzA+GTeQO4A7S1NFatOcjda
+         mByTOFE/L+tf9FtPX4i/MB92wys5eULU/rdlU4iCyWg5CaDGJryiZ9SRpY+hXcPpzZ09
+         rTDXxDPnYIDlEpSvBrj5AimjdoKCTQH3Ry3QL+Y2Qq9v54fY3byCbIyVnxPlxg0rdqC3
+         ZZH9harVjYGI5nHcpdeAFCn5JB2Dtb7WZU9lq87T+5JlX6XRj9zxL+NSbu1SR20kJGAD
+         9/Pw==
+X-Gm-Message-State: AC+VfDyKiBeJdcpBQjJjByrxtgCnh0Zi9ckIkEeUo1kxegDtwMKb9Dsa
+        ey4QR6DqCd9+Z3ddG6dLA5t4ofOuiYEKQA==
+X-Google-Smtp-Source: ACHHUZ6YH8rNBdpo5UrIZanYvNELj214VsoUYf3zvSmBtNnTx4OfnO3JhnekIwU2fCxyUD17miL9xw==
+X-Received: by 2002:a05:6a00:806:b0:64f:3840:3c24 with SMTP id m6-20020a056a00080600b0064f38403c24mr2313324pfk.16.1684831881574;
+        Tue, 23 May 2023 01:51:21 -0700 (PDT)
+Received: from localhost.localdomain ([202.160.36.160])
+        by smtp.googlemail.com with ESMTPSA id l15-20020a62be0f000000b0064d57ecaa1dsm786417pff.28.2023.05.23.01.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 01:51:20 -0700 (PDT)
+From:   Fieah Lim <kweifat@gmail.com>
+To:     srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fieah Lim <kweifat@gmail.com>
+Subject: [PATCH v2] cpufreq: intel_pstate: Avoid initializing variables prematurely
+Date:   Tue, 23 May 2023 16:50:45 +0800
+Message-Id: <20230523085045.29391-1-kweifat@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] interconnect: qcom: rpm: allocate enough data in probe()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <a0f6184c-c2b5-4e8d-9b8a-867ae83f3094@kili.mountain>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <a0f6184c-c2b5-4e8d-9b8a-867ae83f3094@kili.mountain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+We should avoid initializing some rather expensive data
+when the function has a chance to bail out earlier
+before actually using it.
+This applies to the following initializations:
 
+ - cpudata *cpu = all_cpu_data; (in everywhere)
+ - this_cpu = smp_processor_id(); (in notify_hwp_interrupt)
+ - hwp_cap = READ_ONCE(cpu->hwp_cap_cached); (in intel_pstate_hwp_boost_up)
 
-On 23.05.2023 10:11, Dan Carpenter wrote:
-> This was allocating "sizeof(qp->intf_clks)" which is the size of a
-> pointer instead of "sizeof(*qp->intf_clks)" which is the size of the
-> struct (8 bytes vs 16 bytes on a 64bit system).
-> 
-> Fixes: 2e2113c8a64f ("interconnect: qcom: rpm: Handle interface clocks")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-Whoops. Guess I was just really really lucky that nothing blew up for me.
+These initializations are premature because there is a chance
+that the function will bail out before actually using the data.
+I think this qualifies as a micro-optimization,
+especially in such a hot path.
 
-Thanks.
+While at it, tidy up how and when we initialize
+all of the cpu_data pointers, for the sake of consistency.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+A side note on the intel_pstate_cpu_online change:
+we simply don't have to initialize cpudata just
+for the pr_debug, while policy->cpu is being there.
 
-Konrad
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index f4627c4a1bdd..7a21a03a0382 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -436,7 +436,7 @@ int qnoc_probe(struct platform_device *pdev)
->  	if (!qp)
->  		return -ENOMEM;
->  
-> -	qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
-> +	qp->intf_clks = devm_kzalloc(dev, sizeof(*qp->intf_clks), GFP_KERNEL);
->  	if (!qp->intf_clks)
->  		return -ENOMEM;
->  
+Signed-off-by: Fieah Lim <kweifat@gmail.com>
+---
+V1 -> V2: Rewrite changelog for better explanation.
+---
+ drivers/cpufreq/intel_pstate.c | 35 +++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 2548ec92faa2..b85e340520d9 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -464,9 +464,8 @@ static void intel_pstate_init_acpi_perf_limits(struct cpufreq_policy *policy)
+ 
+ static void intel_pstate_exit_perf_limits(struct cpufreq_policy *policy)
+ {
+-	struct cpudata *cpu;
++	struct cpudata *cpu = all_cpu_data[policy->cpu];
+ 
+-	cpu = all_cpu_data[policy->cpu];
+ 	if (!cpu->valid_pss_table)
+ 		return;
+ 
+@@ -539,9 +538,8 @@ static void intel_pstate_hybrid_hwp_adjust(struct cpudata *cpu)
+ static inline void update_turbo_state(void)
+ {
+ 	u64 misc_en;
+-	struct cpudata *cpu;
++	struct cpudata *cpu = all_cpu_data[0];
+ 
+-	cpu = all_cpu_data[0];
+ 	rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
+ 	global.turbo_disabled =
+ 		(misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE ||
+@@ -769,7 +767,7 @@ static struct cpufreq_driver intel_pstate;
+ static ssize_t store_energy_performance_preference(
+ 		struct cpufreq_policy *policy, const char *buf, size_t count)
+ {
+-	struct cpudata *cpu = all_cpu_data[policy->cpu];
++	struct cpudata *cpu;
+ 	char str_preference[21];
+ 	bool raw = false;
+ 	ssize_t ret;
+@@ -802,6 +800,8 @@ static ssize_t store_energy_performance_preference(
+ 	if (!intel_pstate_driver)
+ 		return -EAGAIN;
+ 
++	cpu = all_cpu_data[policy->cpu];
++
+ 	mutex_lock(&intel_pstate_limits_lock);
+ 
+ 	if (intel_pstate_driver == &intel_pstate) {
+@@ -1297,7 +1297,7 @@ static void update_qos_request(enum freq_qos_req_type type)
+ 	int i;
+ 
+ 	for_each_possible_cpu(i) {
+-		struct cpudata *cpu = all_cpu_data[i];
++		struct cpudata *cpu;
+ 		unsigned int freq, perf_pct;
+ 
+ 		policy = cpufreq_cpu_get(i);
+@@ -1310,6 +1310,8 @@ static void update_qos_request(enum freq_qos_req_type type)
+ 		if (!req)
+ 			continue;
+ 
++		cpu = all_cpu_data[i];
++
+ 		if (hwp_active)
+ 			intel_pstate_get_hwp_cap(cpu);
+ 
+@@ -1579,7 +1581,7 @@ static cpumask_t hwp_intr_enable_mask;
+ 
+ void notify_hwp_interrupt(void)
+ {
+-	unsigned int this_cpu = smp_processor_id();
++	unsigned int this_cpu;
+ 	struct cpudata *cpudata;
+ 	unsigned long flags;
+ 	u64 value;
+@@ -1591,6 +1593,8 @@ void notify_hwp_interrupt(void)
+ 	if (!(value & 0x01))
+ 		return;
+ 
++	this_cpu = smp_processor_id();
++
+ 	spin_lock_irqsave(&hwp_notify_lock, flags);
+ 
+ 	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
+@@ -2024,8 +2028,8 @@ static int hwp_boost_hold_time_ns = 3 * NSEC_PER_MSEC;
+ 
+ static inline void intel_pstate_hwp_boost_up(struct cpudata *cpu)
+ {
++	u64 hwp_cap;
+ 	u64 hwp_req = READ_ONCE(cpu->hwp_req_cached);
+-	u64 hwp_cap = READ_ONCE(cpu->hwp_cap_cached);
+ 	u32 max_limit = (hwp_req & 0xff00) >> 8;
+ 	u32 min_limit = (hwp_req & 0xff);
+ 	u32 boost_level1;
+@@ -2052,6 +2056,7 @@ static inline void intel_pstate_hwp_boost_up(struct cpudata *cpu)
+ 		cpu->hwp_boost_min = min_limit;
+ 
+ 	/* level at half way mark between min and guranteed */
++	hwp_cap = READ_ONCE(cpu->hwp_cap_cached);
+ 	boost_level1 = (HWP_GUARANTEED_PERF(hwp_cap) + min_limit) >> 1;
+ 
+ 	if (cpu->hwp_boost_min < boost_level1)
+@@ -2389,9 +2394,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[] = {
+ 
+ static int intel_pstate_init_cpu(unsigned int cpunum)
+ {
+-	struct cpudata *cpu;
+-
+-	cpu = all_cpu_data[cpunum];
++	struct cpudata *cpu = all_cpu_data[cpunum];
+ 
+ 	if (!cpu) {
+ 		cpu = kzalloc(sizeof(*cpu), GFP_KERNEL);
+@@ -2431,11 +2434,13 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
+ 
+ static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
+ {
+-	struct cpudata *cpu = all_cpu_data[cpu_num];
++	struct cpudata *cpu;
+ 
+ 	if (hwp_active && !hwp_boost)
+ 		return;
+ 
++	cpu = all_cpu_data[cpu_num];
++
+ 	if (cpu->update_util_set)
+ 		return;
+ 
+@@ -2638,9 +2643,7 @@ static int intel_cpufreq_cpu_offline(struct cpufreq_policy *policy)
+ 
+ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+ {
+-	struct cpudata *cpu = all_cpu_data[policy->cpu];
+-
+-	pr_debug("CPU %d going online\n", cpu->cpu);
++	pr_debug("CPU %d going online\n", policy->cpu);
+ 
+ 	intel_pstate_init_acpi_perf_limits(policy);
+ 
+@@ -2649,6 +2652,8 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+ 		 * Re-enable HWP and clear the "suspended" flag to let "resume"
+ 		 * know that it need not do that.
+ 		 */
++		struct cpudata *cpu = all_cpu_data[policy->cpu];
++
+ 		intel_pstate_hwp_reenable(cpu);
+ 		cpu->suspended = false;
+ 	}
+-- 
+2.40.1
+
