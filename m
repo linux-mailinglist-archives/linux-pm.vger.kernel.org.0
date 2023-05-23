@@ -2,105 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E698470D7F2
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 10:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013E970D90E
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 11:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbjEWIzc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 04:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S233015AbjEWJcr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 05:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbjEWIza (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 04:55:30 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EAD118
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:55:27 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-114-wfYMCpxpPx2Orn_grdK5TA-1; Tue, 23 May 2023 09:55:10 +0100
-X-MC-Unique: wfYMCpxpPx2Orn_grdK5TA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 23 May
- 2023 09:55:08 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 23 May 2023 09:55:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Geert Uytterhoeven' <geert@linux-m68k.org>
-CC:     Tony Lindgren <tony@atomide.com>, Stephen Boyd <sboyd@kernel.org>,
-        "Tomasz Figa" <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] iopoll: Call cpu_relax() in busy loops
-Thread-Topic: [PATCH v2 1/2] iopoll: Call cpu_relax() in busy loops
-Thread-Index: AQHZg9SqgvUK/klkyEy9n2eMPFqMgK9U5DUggBKUGYCAACeioA==
-Date:   Tue, 23 May 2023 08:55:08 +0000
-Message-ID: <515a4c94ce764c58ab9a311d6cc5187f@AcuMS.aculab.com>
-References: <cover.1683722688.git.geert+renesas@glider.be>
- <fe235a1f65bb6c86d2afcdf52d85f80ae728dcc5.1683722688.git.geert+renesas@glider.be>
- <20230511064839.GG14287@atomide.com>
- <494a000774b546e4aae00ae0a7dfeae4@AcuMS.aculab.com>
- <CAMuHMdXttS3mkA+BNC69e6MYniRyGtR2vde35BYgBZ_+SuYs_Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdXttS3mkA+BNC69e6MYniRyGtR2vde35BYgBZ_+SuYs_Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S232553AbjEWJcq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 05:32:46 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE6494;
+        Tue, 23 May 2023 02:32:44 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 692C81BF208;
+        Tue, 23 May 2023 09:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684834363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X9Qn8AqTo/sXg8jlDCBz4izis3PpHn0GZ9QSR6MiR2o=;
+        b=nDLTR3vUfrTOLo3EM5MuxyetQ0aQdZJM+Ho1A4w2GfIirH7p4eH4c2TDG/3OEXvma9vKPC
+        obbBH7nmZo1SiIwLKlU/noxPyVUnR1SsgXwrP5iRZCGDyCaU7xO/Vk7vWlbnLit0NmV8kV
+        m02z5NwwFnxYe40ugcnK7LQmb5c+jb8MwLtLJfdcoV5cUZMb2QnzyuzEauviQLaTcLqw6m
+        2ya4z3/LN47E29vcHLvs21LUmJ/zNFLig5VUwQni0fOM8/6P94Hx0DxoYg7aecPc0wmLND
+        6dqjmGBlVobsq2X/SZb7YaYswGocBo6i9e+marQku6QRSGtv5Ak72OaDQiwxew==
+Date:   Tue, 23 May 2023 11:32:36 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 22/24] mtd: block2mtd: factor the early block device
+ open logic into a helper
+Message-ID: <20230523113236.7003c303@xps-13>
+In-Reply-To: <20230523074535.249802-23-hch@lst.de>
+References: <20230523074535.249802-1-hch@lst.de>
+        <20230523074535.249802-23-hch@lst.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RnJvbTogR2VlcnQgVXl0dGVyaG9ldmVuDQo+IFNlbnQ6IDIzIE1heSAyMDIzIDA4OjMwDQo+IA0K
-PiBIaSBEYXZpZCwNCj4gDQo+IE9uIFRodSwgTWF5IDExLCAyMDIzIGF0IDEyOjQ54oCvUE0gRGF2
-aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAYWN1bGFiLmNvbT4gd3JvdGU6DQo+ID4gPiAqIEdlZXJ0
-IFV5dHRlcmhvZXZlbiA8Z2VlcnQrcmVuZXNhc0BnbGlkZXIuYmU+IFsyMzA1MTAgMTM6MjNdOg0K
-PiA+ID4gPiBJdCBpcyBjb25zaWRlcmVkIGdvb2QgcHJhY3RpY2UgdG8gY2FsbCBjcHVfcmVsYXgo
-KSBpbiBidXN5IGxvb3BzLCBzZWUNCj4gPiA+ID4gRG9jdW1lbnRhdGlvbi9wcm9jZXNzL3ZvbGF0
-aWxlLWNvbnNpZGVyZWQtaGFybWZ1bC5yc3QuICBUaGlzIGNhbiBub3QNCj4gPiA+ID4gb25seSBs
-b3dlciBDUFUgcG93ZXIgY29uc3VtcHRpb24gb3IgeWllbGQgdG8gYSBoeXBlcnRocmVhZGVkIHR3
-aW4NCj4gPiA+ID4gcHJvY2Vzc29yLCBidXQgYWxzbyBhbGxvd3MgYW4gYXJjaGl0ZWN0dXJlIHRv
-IG1pdGlnYXRlIGhhcmR3YXJlIGlzc3Vlcw0KPiA+ID4gPiAoZS5nLiBBUk0gRXJyYXR1bSA3NTQz
-MjcgZm9yIENvcnRleC1BOSBwcmlvciB0byByMnAwKSBpbiB0aGUNCj4gPiA+ID4gYXJjaGl0ZWN0
-dXJlLXNwZWNpZmljIGNwdV9yZWxheCgpIGltcGxlbWVudGF0aW9uLg0KPiA+DQo+ID4gRG9uJ3Qg
-eW91IGFsc28gbmVlZCB0byBjYWxsIGNvbmRfcmVzY2hlZCgpIChhdCBsZWFzdCBzb21lIHRpbWVz
-KS4NCj4gPiBPdGhlcndpc2UgdGhlIHByb2Nlc3MgY2FuJ3QgYmUgcHJlLWVtcHRlZCBhbmQgYSBS
-VCBwcm9jZXNzDQo+ID4gdGhhdCBsYXN0IHJhbiBvbiB0aGF0IGNwdSB3aWxsIG5ldmVyIGJlIHNj
-aGVkdWxlZC4NCj4gDQo+IEFjY29yZGluZyB0byBbMV0sIGNvbmRfcmVzY2hlZCgpIG11c3QgYmUg
-Y2FsbGVkIGF0IGxlYXN0IG9uY2UgcGVyIGZldw0KPiB0ZW5zIG9mIG1pbGxpc2Vjb25kcy4NCg0K
-SG1tbS4uLi4gdGVucyBvZiBtaWxsaXNlY29uZHMgaXMgcmVhbGx5IG11Y2ggdG9vIGxvbmcgZm9y
-IFJUIHRocmVhZHMuDQpBIGxpbWl0IG5lYXJlciAxbXMgd291bGQgYmUgYmFyZWx5IGFjY2VwdGFi
-bGUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
-Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
-biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Hi Christoph,
 
+hch@lst.de wrote on Tue, 23 May 2023 09:45:33 +0200:
+
+> Simply add_device a bit by splitting out the cumbersome early boot logic
+
+I guess you meant "Simplify..."
+
+Otherwise lgtm so,
+
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+> into a separate helper.
+>=20
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/mtd/devices/block2mtd.c | 53 +++++++++++++++++++--------------
+>  1 file changed, 30 insertions(+), 23 deletions(-)
+>=20
+
+Thanks,
+Miqu=C3=A8l
