@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F8E70E4E4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 20:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A708670E68E
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 22:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbjEWStM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 14:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S232151AbjEWUfX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 16:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234984AbjEWStL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 14:49:11 -0400
+        with ESMTP id S231758AbjEWUfW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 16:35:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23E591;
-        Tue, 23 May 2023 11:49:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53366BF;
+        Tue, 23 May 2023 13:35:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DF1F61D46;
-        Tue, 23 May 2023 18:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77566C433D2;
-        Tue, 23 May 2023 18:49:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E47956191D;
+        Tue, 23 May 2023 20:35:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C48C4339B;
+        Tue, 23 May 2023 20:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684867749;
-        bh=iKyVdrNdupf6FLPN38zfHmfs/Nd6a0SWOFcdapufsBw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mhGWyFqAUIiIiIEpykYA95zO4MY9L61Oq6pg8Y7hxTBcJJri5cml0pw55QB3duh2i
-         dfpVTdmg6UqqQPTkuFyxRdPoZCRsXQDzgPwEdodP4AcZJVnR/m9abkpHwT3sIfppTd
-         HRPIvcW7z05HZa+SmBu9zqJRkpphUr0DPiilbxK2JKy25CZgD4LJuDRJ9GSMRJxZts
-         tudUfwoWs/DFroseSdgeHbi2/pFC4hKtT9IMjrs16E8L8MFSryUKuKChW9XHe+mP7k
-         osPPBjyzC9Zlac4gM0wCs0hfG+wTxc7J0p0VWFer+3rLsRLHKJDKshY1A1wXZOW0qS
-         ZNfW9nD4Rs7og==
-Date:   Tue, 23 May 2023 19:49:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
- convert to yaml
-Message-ID: <20230523-remission-ageless-0880ed49765d@spud>
-References: <20230523061512.195271-1-claudiu.beznea@microchip.com>
- <20230523061512.195271-4-claudiu.beznea@microchip.com>
+        s=k20201202; t=1684874120;
+        bh=WD3DNIqNipkAXxMXZFy+ceH8xcUnwhSbZvx+tfZCIqs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Sbs3xYlaJO1k9XwN45xPjRdavvzjZ0TMYdX/kS/wSacQ78T8GZanQ3K+ha9WqP6Zb
+         c5thxqiYHQVCra5Bam6DfJOs2VwDpTlvw8d7QbnHXRGi5z03lEPKjQHZd6VyZvhA+4
+         IWiVRoZrCk8xwqg1Itt3pynO7gCNyjkiqfBp6LdInBgoDBsJuA7Qlenzx8ouX5n+/M
+         Y4o2V1A5r3biyvgckZHIsSnzi1KD44am8wqkr1opVFqvCTFg4yc8qhBrCJHgRV9isD
+         w3qTDxyKWWEuYD13BXOoHuagzp+GjDJWOKSkR4WSen0f8GcZyT1NWgfH+2LrPrcA5s
+         AJ+otgQ3sHwdw==
+Date:   Tue, 23 May 2023 15:35:18 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        Iain Lane <iain@orangesquash.org.uk>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: Don't assume root ports from > 2015 are power
+ manageable
+Message-ID: <ZG0jhvzAZnfscSeC@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WWGOvCNCU6jCwAEm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230523061512.195271-4-claudiu.beznea@microchip.com>
+In-Reply-To: <20230517150827.89819-1-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -59,124 +60,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+[+cc Rafael, Lukas, linux-pm]
 
---WWGOvCNCU6jCwAEm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 17, 2023 at 10:08:27AM -0500, Mario Limonciello wrote:
+> Using an XHCI device to wakeup the system from s2idle fails when
+> that XHCI device is connected to a USB-C port for an AMD USB4
+> router.
 
-Hey Claudiu,
+Are XHCI, USB-C, and the AMD USB4 router just examples?  I assume the
+same issue could happen with non-XHCI and non-AMD devices, too?
 
-On Tue, May 23, 2023 at 09:15:11AM +0300, Claudiu Beznea wrote:
-> Convert Atmel SAMA5D2 shutdown controller to YAML.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+I assume the problem has something to do with PME_Support and some
+device being put in a power state where it cannot generate or forward
+PME messages?  I think the PCIe protocol details would be helpful
+here.
+
+> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during
+> suspend") all root port go into D3 during s2idle.
+> When the root ports are in D3 over s2idle it's not possible for the
+> platform firmware to properly identify the wakeup source.
+
+I'm not sure what the critical device is here.  9d26d3a8f1b0 and the
+current pci_bridge_d3_possible() are not specific to Root Ports.  The
+PCIe protocol details would probably clear this up.
+
+> Comparing registers between Linux and Windows 11 this behavior to put root
+> ports into D3 at suspend is unique to Linux.  On an affected system
+> Windows does not put the root ports into D3 over Modern Standby.
+> 
+> Windows doesn't put the root ports into D3 because root ports are not
+> power manageable; they're missing _PRW and _S0W.
+
+platform_pci_power_manageable() tests adev->flags.power_manageable,
+which is set by acpi_bus_get_power_flags() when a device has _PS0 or
+_PR0.
+
+So I don't know what's relevant out of _PRW, _S0W, _PS0, _PR0, but
+this sentence doesn't seem to match the code.
+
+> Linux shouldn't be assuming they support D3 just because they're newer
+> than 2015, the ports should also be deemed power manageable.
+> Add an extra check for this to ensure D3 isn't selected for such machines.
+
+Is this talking about D3hot or D3cold or both?  If we can make this
+explicit, it will help me out.  It's probably obvious to power
+experts, but I'm not one.
+
+> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  .../devicetree/bindings/arm/atmel-sysregs.txt |  63 ----------
->  .../power/reset/atmel,sama5d2-shdwc.yaml      | 114 ++++++++++++++++++
->  2 files changed, 114 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,s=
-ama5d2-shdwc.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
-dwc.yaml
-> new file mode 100644
-> index 000000000000..613668d6099b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
-aml
-> @@ -0,0 +1,114 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-
-Same comment on the license here. Figure you need a Rob Ack.
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  drivers/pci/pci.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 5ede93222bc1..3fe27aef09e6 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+>  		if (dmi_check_system(bridge_d3_blacklist))
+>  			return false;
+>  
+> +		if (!platform_pci_power_manageable(bridge))
+> +			return false;
 > +
-> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description: |
-
-Also, you don't need the | if you do not need to preserve formatting.
-
-> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and =
-VDDCORE
-> +  and the wake-up detection on debounced input lines.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: microchip,sama7g5-shdwc
-> +          - const: syscon
-
-^ you should probably mention in the commit message where the syscon
-came from, as it doesn't appear in the txt binding AFAICT.
-
-> +      - items:
-> +          enum:
-> +            - atmel,sama5d2-shdwc
-> +            - microchip,sam9x60-shdwc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  debounce-delay-us:
-> +    description: |
-> +      Minimum wake-up inputs debouncer period in microseconds. It is usu=
-ally a
-> +      board-related property.
-> +
-> +  atmel,wakeup-rtc-timer:
-> +    description: enable real-time clock wake-up
-> +    type: boolean
-> +
-> +patternProperties:
-> +  "^input@[0-15]$":
-> +    description: |
-> +      Wake-up input nodes. These are usually described in the "board" pa=
-rt of
-> +      the Device Tree. Note also that input 0 is linked to the wake-up p=
-in and
-> +      is frequently used.
-> +    type: object
-> +    properties:
-> +      reg:
-> +        description: contains the wake-up input index
-> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
-
-Same here with minimum & maximum, no?
-
-Otherwise, this seems fine to me...
-
-Cheers,
-Conor.
-
-
---WWGOvCNCU6jCwAEm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG0KoAAKCRB4tDGHoIJi
-0kdhAQCskLgP2mlO/lNxcX/CGR6mGvWUEPUc12bU7z8iCSk3TQEAiudITCr1jawD
-4NCyoquvEKgbjWtwsLyE6VyjqrF5Sgc=
-=4RFH
------END PGP SIGNATURE-----
-
---WWGOvCNCU6jCwAEm--
+>  		/*
+>  		 * It should be safe to put PCIe ports from 2015 or newer
+>  		 * to D3.
+> -- 
+> 2.34.1
+> 
