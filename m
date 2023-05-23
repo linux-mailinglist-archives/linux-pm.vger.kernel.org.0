@@ -2,43 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EA870E347
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 19:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C912D70E3A8
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 19:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjEWQue (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 12:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S232592AbjEWQzp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 12:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235630AbjEWQue (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 12:50:34 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 09:50:27 PDT
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FBFE0
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 09:50:27 -0700 (PDT)
+        with ESMTP id S237698AbjEWQzn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 12:55:43 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E2611A
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 09:55:40 -0700 (PDT)
 Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id c4f33e1d-f989-11ed-b3cf-005056bd6ce9;
-        Tue, 23 May 2023 19:49:23 +0300 (EEST)
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id a4647b55-f98a-11ed-abf4-005056bdd08f;
+        Tue, 23 May 2023 19:55:38 +0300 (EEST)
 From:   andy.shevchenko@gmail.com
-Date:   Tue, 23 May 2023 19:49:22 +0300
+Date:   Tue, 23 May 2023 19:55:37 +0300
 To:     Mario Limonciello <mario.limonciello@amd.com>
 Cc:     rafael@kernel.org, hdegoede@redhat.com, linus.walleij@linaro.org,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
         Basavaraj.Natikar@amd.com
-Subject: Re: [PATCH v2 2/4] ACPI: x86: Add pm_debug_messages for LPS0 _DSM
- state tracking
-Message-ID: <ZGzukhSTqWzXJRAL@surfacebook>
+Subject: Re: [PATCH v2 3/4] pinctrl: amd: Use pm_pr_dbg to show debugging
+ messages
+Message-ID: <ZGzwCdTO2LptPeQs@surfacebook>
 References: <20230522200033.2605-1-mario.limonciello@amd.com>
- <20230522200033.2605-2-mario.limonciello@amd.com>
+ <20230522200033.2605-3-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522200033.2605-2-mario.limonciello@amd.com>
+In-Reply-To: <20230522200033.2605-3-mario.limonciello@amd.com>
 X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,69 +45,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Mon, May 22, 2023 at 03:00:31PM -0500, Mario Limonciello kirjoitti:
-> Enabling debugging messages for the state requires turning on dynamic
-> debugging for the file. To make it more accessible, use
-> `pm_debug_messages` and clearer strings for what is happening.
+Mon, May 22, 2023 at 03:00:32PM -0500, Mario Limonciello kirjoitti:
+> To make the GPIO tracking around suspend easier for end users to
+> use, link it with pm_debug_messages.  This will make discovering
+> sources of spurious GPIOs around suspend easier.
+
+Unfortunatelly this has two regressions.
 
 ...
 
-> +		switch (state) {
-> +		case ACPI_LPS0_SCREEN_OFF:
-> +			return "screen off";
-> +		case ACPI_LPS0_SCREEN_ON:
-> +			return "screen on";
-> +		case ACPI_LPS0_ENTRY:
-> +			return "lps0 entry";
-> +		case ACPI_LPS0_EXIT:
-> +			return "lps0 exit";
-> +		case ACPI_LPS0_MS_ENTRY:
-> +			return "lps0 ms entry";
-> +		case ACPI_LPS0_MS_EXIT:
-> +			return "lps0 ms exit";
+> -				dev_dbg(&gpio_dev->pdev->dev,
+> -					"GPIO %d is active: 0x%x",
+> -					irqnr + i, regval);
+> +				pm_pr_dbg("GPIO %d is active: 0x%x",
+> +					  irqnr + i, regval);
 
-No default?
-
-> +		}
-
-...
-
-> +		switch (state) {
-> +		case ACPI_LPS0_SCREEN_ON_AMD:
-> +			return "screen on";
-> +		case ACPI_LPS0_SCREEN_OFF_AMD:
-> +			return "screen off";
-> +		case ACPI_LPS0_ENTRY_AMD:
-> +			return "lps0 entry";
-> +		case ACPI_LPS0_EXIT_AMD:
-> +			return "lps0 exit";
-> +		}
-> +	}
-> +
-> +	return "unknown";
-
-Make it default in each switch-case. That way we might have an option to alter
-them if needed.
-
-...
-
-> -	acpi_handle_debug(lps0_device_handle, "_DSM function %u evaluation %s\n",
-> -			  func, out_obj ? "successful" : "failed");
-> +	lps0_dsm_state = func;
-> +	if (pm_debug_messages_on) {
-> +		acpi_handle_info(lps0_device_handle,
-> +				"%s transitioned to state %s\n",
-> +				 out_obj ? "Successfully" : "Failed to",
-> +				 acpi_sleep_dsm_state_to_str(lps0_dsm_state));
-> +	}
-
-Can we keep the original choice (i.e. 
-
-	? "successful" : "failed");
-
-) unmodified? The rationale is that we migh add something like
-str_successful_failed() to the string_helpers.h for wider use and common
-standardization.
+Regression 1: The device is now omitted from the output.
+Regression 2: See https://stackoverflow.com/a/43957671/2511795
 
 -- 
 With Best Regards,
