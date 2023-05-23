@@ -2,123 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0B970E4CE
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 20:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F8E70E4E4
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 20:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238087AbjEWSho convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 23 May 2023 14:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S235795AbjEWStM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 14:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbjEWShf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 14:37:35 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA13018B;
-        Tue, 23 May 2023 11:37:20 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso108858166b.0;
-        Tue, 23 May 2023 11:37:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684867022; x=1687459022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FOckud4CsGpi42vHzY/iN1xEHfyZzu8tYLlnQmf3XXU=;
-        b=lPIgigwZ11iBv8vgKFH9/Ir3BNZpyjgySuC1i1WFp3quETnbhTdcsMvkIczDcTNYXs
-         Pd/Z8dqB3bXIgfzQEQ2gaCjus3zjd2VQpsCl3e28JeeWkdo2jchb8a3ch7rE1EVwV+Er
-         +mnJ9B4tkQA43cmK/bai/cAhBdGZvaBg82H3mUtr96fkuiW28UO2N8i6Vp6b+r09xNpe
-         9OJvJ6pUihSJAalsJ9NV5vCB+z4UPZ8H3dkRG1JHzjEG7MGk9n88r/BiFrzw5bz9fjs/
-         BSeEEf0KexWhWQYPpncR+Sxk+z026FBT8tq9RdQyg4GZpNXBAsddQPYlrcqAR89whnfV
-         K2Ag==
-X-Gm-Message-State: AC+VfDxukIGenn0F+ZJeCtjC39DSnGkh4hpB0K4wMr7pAMkiOkl3qwdV
-        OtfdQUgRPGCsKQ9egjDQ59DGRpmOYlloeHGjcaw=
-X-Google-Smtp-Source: ACHHUZ6nbFDPqkJycDJLopbKTUzhoYKAgpRsCSCy+ygpw6i+jItGXHdrxW/6BlRArGGvUIQ7qUgo8pqVVYhtrNaQv8U=
-X-Received: by 2002:a17:906:6495:b0:966:2210:4065 with SMTP id
- e21-20020a170906649500b0096622104065mr14890560ejm.4.1684867022285; Tue, 23
- May 2023 11:37:02 -0700 (PDT)
+        with ESMTP id S234984AbjEWStL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 14:49:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23E591;
+        Tue, 23 May 2023 11:49:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DF1F61D46;
+        Tue, 23 May 2023 18:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77566C433D2;
+        Tue, 23 May 2023 18:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684867749;
+        bh=iKyVdrNdupf6FLPN38zfHmfs/Nd6a0SWOFcdapufsBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mhGWyFqAUIiIiIEpykYA95zO4MY9L61Oq6pg8Y7hxTBcJJri5cml0pw55QB3duh2i
+         dfpVTdmg6UqqQPTkuFyxRdPoZCRsXQDzgPwEdodP4AcZJVnR/m9abkpHwT3sIfppTd
+         HRPIvcW7z05HZa+SmBu9zqJRkpphUr0DPiilbxK2JKy25CZgD4LJuDRJ9GSMRJxZts
+         tudUfwoWs/DFroseSdgeHbi2/pFC4hKtT9IMjrs16E8L8MFSryUKuKChW9XHe+mP7k
+         osPPBjyzC9Zlac4gM0wCs0hfG+wTxc7J0p0VWFer+3rLsRLHKJDKshY1A1wXZOW0qS
+         ZNfW9nD4Rs7og==
+Date:   Tue, 23 May 2023 19:49:05 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor.dooley@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, sre@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ convert to yaml
+Message-ID: <20230523-remission-ageless-0880ed49765d@spud>
+References: <20230523061512.195271-1-claudiu.beznea@microchip.com>
+ <20230523061512.195271-4-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-22-hch@lst.de>
-In-Reply-To: <20230523074535.249802-22-hch@lst.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 20:36:51 +0200
-Message-ID: <CAJZ5v0grAY02dx__4=ezxT=HuPU=2gD6bErV2fYTQiv5mRL1yg@mail.gmail.com>
-Subject: Re: [PATCH 21/24] PM: hibernate: don't use early_lookup_bdev in resume_store
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WWGOvCNCU6jCwAEm"
+Content-Disposition: inline
+In-Reply-To: <20230523061512.195271-4-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 23, 2023 at 9:46 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> resume_store is a sysfs attribute written during normal kernel runtime,
-> and it should not use the early_lookup_bdev API that bypasses all normal
-> path based permission checking, and might cause problems with certain
-> container environments renaming devices.
->
-> Switch to lookup_bdev, which does a normal path lookup instead, and fall
-> back to trying to parse a numeric dev_t just like early_lookup_bdev did.
->
-> Note that this strictly speaking changes the kernel ABI as the PARTUUID=
-> and PARTLABEL= style syntax is now not available during a running
-> systems.  They never were intended for that, but this breaks things
-> we'll have to figure out a way to make them available again.  But if
-> avoidable in any way I'd rather avoid that.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Fixes: 421a5fa1a6cf ("PM / hibernate: use name_to_dev_t to parse resume")
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+--WWGOvCNCU6jCwAEm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hey Claudiu,
+
+On Tue, May 23, 2023 at 09:15:11AM +0300, Claudiu Beznea wrote:
+> Convert Atmel SAMA5D2 shutdown controller to YAML.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->  kernel/power/hibernate.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index c52dedb9f7c8e8..7ae95ec72f9902 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -1178,7 +1178,23 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
->         if (!name)
->                 return -ENOMEM;
->
-> -       error = early_lookup_bdev(name, &dev);
-> +       error = lookup_bdev(name, &dev);
-> +       if (error) {
-> +               unsigned maj, min, offset;
-> +               char *p, dummy;
+>  .../devicetree/bindings/arm/atmel-sysregs.txt |  63 ----------
+>  .../power/reset/atmel,sama5d2-shdwc.yaml      | 114 ++++++++++++++++++
+>  2 files changed, 114 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,s=
+ama5d2-shdwc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
+shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
+dwc.yaml
+> new file mode 100644
+> index 000000000000..613668d6099b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
+aml
+> @@ -0,0 +1,114 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+
+Same comment on the license here. Figure you need a Rob Ack.
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +               if (sscanf(name, "%u:%u%c", &maj, &min, &dummy) == 2 ||
-> +                   sscanf(name, "%u:%u:%u:%c", &maj, &min, &offset,
-> +                               &dummy) == 3) {
-> +                       dev = MKDEV(maj, min);
-> +                       if (maj != MAJOR(dev) || min != MINOR(dev))
-> +                               error = -EINVAL;
-> +               } else {
-> +                       dev = new_decode_dev(simple_strtoul(name, &p, 16));
-> +                       if (*p)
-> +                               error = -EINVAL;
-> +               }
-> +       }
->         kfree(name);
->         if (error)
->                 return error;
-> --
-> 2.39.2
->
+> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description: |
+
+Also, you don't need the | if you do not need to preserve formatting.
+
+> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and =
+VDDCORE
+> +  and the wake-up detection on debounced input lines.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: microchip,sama7g5-shdwc
+> +          - const: syscon
+
+^ you should probably mention in the commit message where the syscon
+came from, as it doesn't appear in the txt binding AFAICT.
+
+> +      - items:
+> +          enum:
+> +            - atmel,sama5d2-shdwc
+> +            - microchip,sam9x60-shdwc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  debounce-delay-us:
+> +    description: |
+> +      Minimum wake-up inputs debouncer period in microseconds. It is usu=
+ally a
+> +      board-related property.
+> +
+> +  atmel,wakeup-rtc-timer:
+> +    description: enable real-time clock wake-up
+> +    type: boolean
+> +
+> +patternProperties:
+> +  "^input@[0-15]$":
+> +    description: |
+> +      Wake-up input nodes. These are usually described in the "board" pa=
+rt of
+> +      the Device Tree. Note also that input 0 is linked to the wake-up p=
+in and
+> +      is frequently used.
+> +    type: object
+> +    properties:
+> +      reg:
+> +        description: contains the wake-up input index
+> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
+
+Same here with minimum & maximum, no?
+
+Otherwise, this seems fine to me...
+
+Cheers,
+Conor.
+
+
+--WWGOvCNCU6jCwAEm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG0KoAAKCRB4tDGHoIJi
+0kdhAQCskLgP2mlO/lNxcX/CGR6mGvWUEPUc12bU7z8iCSk3TQEAiudITCr1jawD
+4NCyoquvEKgbjWtwsLyE6VyjqrF5Sgc=
+=4RFH
+-----END PGP SIGNATURE-----
+
+--WWGOvCNCU6jCwAEm--
