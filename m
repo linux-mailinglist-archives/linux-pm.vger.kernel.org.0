@@ -2,178 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E2070D5EF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 09:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC82670D6D1
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 10:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbjEWHsU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 03:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S235795AbjEWINT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 04:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235814AbjEWHrp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 03:47:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A391E5C;
-        Tue, 23 May 2023 00:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=9B9Q5RDcOkQVHhQcbSUKb6IuqOR/HrhtGX8DsjrEY38=; b=Np9j14NJ3gyLQvNx0tekwf7Ovf
-        uQnoq7NH4MC7d2AAqT1B+qQNaq73b06tsCSBmoNWRNfBW6F0BTzu5oePtSiUmH8+E3PWScBXuzlLS
-        M8kGgMKX6BxZmy5iUngyne92c3aF0Y5Dbm6S7XdV37mN1ihXYho4P4LCOELU/xbQU+eKlD/aFMQk8
-        jxn1CchGb8AgZSMCDZjfvL/NoOOrv0aLZQ3LDUPLSl6YOd30I5Phg/xONcm8hWqY/FWhUvx35IgjW
-        6Hb26MVfy3n+1S0oPfv03VjKucGProqJJrY3NcUzIBfp1Z80xEHEIXNWttkaz+L26SAMYKor/7QPN
-        ZVduL80Q==;
-Received: from [2001:4bb8:188:23b2:6ade:85c9:530f:6eb0] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1MjF-009HS4-3A;
-        Tue, 23 May 2023 07:46:46 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH 24/24] block: mark early_lookup_bdev as __init
-Date:   Tue, 23 May 2023 09:45:35 +0200
-Message-Id: <20230523074535.249802-25-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230523074535.249802-1-hch@lst.de>
-References: <20230523074535.249802-1-hch@lst.de>
+        with ESMTP id S236162AbjEWIMo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 04:12:44 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4419E1FC2
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:11:23 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30a892c45c4so1708932f8f.3
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684829473; x=1687421473;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dGUDGH7rhz14YCB1cVpAZLKAtrf81F9TTztogU96Cm0=;
+        b=EvnGzmJUPfQ8KdtpEigUXryImN6v0v/3K7eIiy7Ar6Nv7RtCwMROvVxOUOAALvft7s
+         g8flhowqXn1kaqGSjamvwA16iTu8BIR29qrnUQ5Fx0hXpDWI19+U9rDrOt6ZXpV4it2n
+         xVjPiehnMvYulSHcDUNmztqZM0+ImwrMimMPE7o/PoAlvyI6+GFbKjVO2nJmimvP3Tkr
+         EHHixinnO8VmqTlKt1jOKf2yfsNJLFO1ohhWiLvvbK32GmG0zLTnU9f8EXj+zORGCq33
+         0pO/LtCHjw9Ycy1k2km2jN8HMHCTGBcrZDmFyxAB+lMMu6MRjtRcEFsT/RVgpR7ZnqeG
+         rsoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684829473; x=1687421473;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dGUDGH7rhz14YCB1cVpAZLKAtrf81F9TTztogU96Cm0=;
+        b=Nh9/3mXRUoyVk/vaqi9muTNvaen+T5uZR/GtoRYys7StUcIB3moAv+Nh+qeKvmq1gQ
+         QdfK6kxGlX06TxFjnnuTytoDH//xaQeWlbj3vxfzRLCnTti9mTrZwnJhWfUvU0PBD5+M
+         QTWUIBjvtZfx9N5jf2HxIECNCjYTv/gnYfYRW2egSSVIFDOGY9Xzk8qcH4JJWd6m9WwM
+         MeXXcFXj+K5B03iWbaH/rVBG9eMAztSGeYTkpVQrxumxUNw+/f5FeNQKX0YXEdZPVBaG
+         TJVsffIiw1+6JTyEKgqIgsxSR0OBbDqds66x6388xCwua/Xxg+Iu0X+JVpb27fTGzxin
+         4zuA==
+X-Gm-Message-State: AC+VfDzY7E8GU4yYkmnbMyvO9KbKrBLxvsLX03XIktEjiQSbtOa1tUTX
+        mZLMWS9aM3rL8f2SOWQPOnFznQ==
+X-Google-Smtp-Source: ACHHUZ74BDXgDTVesfh4PK5yfNReO97zBxk9tr7IB8NXqFzhBagMkPdIOkquK4+vZRWk9dR79qOjzQ==
+X-Received: by 2002:adf:f1ce:0:b0:306:64b7:5413 with SMTP id z14-20020adff1ce000000b0030664b75413mr8935653wro.71.1684829472945;
+        Tue, 23 May 2023 01:11:12 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o16-20020a5d62d0000000b002fb60c7995esm10343562wrv.8.2023.05.23.01.11.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 01:11:11 -0700 (PDT)
+Date:   Tue, 23 May 2023 11:11:08 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] interconnect: qcom: rpm: allocate enough data in probe()
+Message-ID: <a0f6184c-c2b5-4e8d-9b8a-867ae83f3094@kili.mountain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-early_lookup_bdev is now only used during the early boot code as it
-should, so mark it __init to not waste run time memory on it.
+This was allocating "sizeof(qp->intf_clks)" which is the size of a
+pointer instead of "sizeof(*qp->intf_clks)" which is the size of the
+struct (8 bytes vs 16 bytes on a 64bit system).
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 2e2113c8a64f ("interconnect: qcom: rpm: Handle interface clocks")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
- block/early-lookup.c   | 19 +++++++++----------
- include/linux/blkdev.h |  2 +-
- 2 files changed, 10 insertions(+), 11 deletions(-)
+ drivers/interconnect/qcom/icc-rpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/early-lookup.c b/block/early-lookup.c
-index 6016e781b6a0e2..3ff0d2e4dcbfb8 100644
---- a/block/early-lookup.c
-+++ b/block/early-lookup.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Code for looking up block devices in the early boot code before mounting the
-- * root file system.  Unfortunately currently also abused in a few other places.
-+ * root file system.
-  */
- #include <linux/blkdev.h>
- #include <linux/ctype.h>
-@@ -18,7 +18,7 @@ struct uuidcmp {
-  *
-  * Returns 1 if the device matches, and 0 otherwise.
-  */
--static int match_dev_by_uuid(struct device *dev, const void *data)
-+static int __init match_dev_by_uuid(struct device *dev, const void *data)
- {
- 	struct block_device *bdev = dev_to_bdev(dev);
- 	const struct uuidcmp *cmp = data;
-@@ -42,7 +42,7 @@ static int match_dev_by_uuid(struct device *dev, const void *data)
-  *
-  * Returns the matching dev_t on success or 0 on failure.
-  */
--static int devt_from_partuuid(const char *uuid_str, dev_t *devt)
-+static int __init devt_from_partuuid(const char *uuid_str, dev_t *devt)
- {
- 	struct uuidcmp cmp;
- 	struct device *dev = NULL;
-@@ -98,7 +98,7 @@ static int devt_from_partuuid(const char *uuid_str, dev_t *devt)
-  *
-  * Returns 1 if the device matches, and 0 otherwise.
-  */
--static int match_dev_by_label(struct device *dev, const void *data)
-+static int __init match_dev_by_label(struct device *dev, const void *data)
- {
- 	struct block_device *bdev = dev_to_bdev(dev);
- 	const char *label = data;
-@@ -108,7 +108,7 @@ static int match_dev_by_label(struct device *dev, const void *data)
- 	return 1;
- }
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index f4627c4a1bdd..7a21a03a0382 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -436,7 +436,7 @@ int qnoc_probe(struct platform_device *pdev)
+ 	if (!qp)
+ 		return -ENOMEM;
  
--static int devt_from_partlabel(const char *label, dev_t *devt)
-+static int __init devt_from_partlabel(const char *label, dev_t *devt)
- {
- 	struct device *dev;
+-	qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
++	qp->intf_clks = devm_kzalloc(dev, sizeof(*qp->intf_clks), GFP_KERNEL);
+ 	if (!qp->intf_clks)
+ 		return -ENOMEM;
  
-@@ -120,7 +120,7 @@ static int devt_from_partlabel(const char *label, dev_t *devt)
- 	return 0;
- }
- 
--static dev_t blk_lookup_devt(const char *name, int partno)
-+static dev_t __init blk_lookup_devt(const char *name, int partno)
- {
- 	dev_t devt = MKDEV(0, 0);
- 	struct class_dev_iter iter;
-@@ -149,7 +149,7 @@ static dev_t blk_lookup_devt(const char *name, int partno)
- 	return devt;
- }
- 
--static int devt_from_devname(const char *name, dev_t *devt)
-+static int __init devt_from_devname(const char *name, dev_t *devt)
- {
- 	int part;
- 	char s[32];
-@@ -193,7 +193,7 @@ static int devt_from_devname(const char *name, dev_t *devt)
- 	return -EINVAL;
- }
- 
--static int devt_from_devnum(const char *name, dev_t *devt)
-+static int __init devt_from_devnum(const char *name, dev_t *devt)
- {
- 	unsigned maj, min, offset;
- 	char *p, dummy;
-@@ -240,7 +240,7 @@ static int devt_from_devnum(const char *name, dev_t *devt)
-  *	name contains slashes, the device name has them replaced with
-  *	bangs.
-  */
--int early_lookup_bdev(const char *name, dev_t *devt)
-+int __init early_lookup_bdev(const char *name, dev_t *devt)
- {
- 	if (strncmp(name, "PARTUUID=", 9) == 0)
- 		return devt_from_partuuid(name + 9, devt);
-@@ -250,7 +250,6 @@ int early_lookup_bdev(const char *name, dev_t *devt)
- 		return devt_from_devname(name + 5, devt);
- 	return devt_from_devnum(name, devt);
- }
--EXPORT_SYMBOL_GPL(early_lookup_bdev);
- 
- static char __init *bdevt_str(dev_t devt, char *buf)
- {
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 361341aea82ce5..a07776e5b27940 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1493,7 +1493,7 @@ int sync_blockdev_nowait(struct block_device *bdev);
- void sync_bdevs(bool wait);
- void bdev_statx_dioalign(struct inode *inode, struct kstat *stat);
- void printk_all_partitions(void);
--int early_lookup_bdev(const char *pathname, dev_t *dev);
-+int __init early_lookup_bdev(const char *pathname, dev_t *dev);
- #else
- static inline void invalidate_bdev(struct block_device *bdev)
- {
 -- 
 2.39.2
 
