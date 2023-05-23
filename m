@@ -2,98 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC82670D6D1
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 10:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B915770D797
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 10:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbjEWINT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 04:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        id S229943AbjEWIfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 04:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236162AbjEWIMo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 04:12:44 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4419E1FC2
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:11:23 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30a892c45c4so1708932f8f.3
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:11:23 -0700 (PDT)
+        with ESMTP id S236174AbjEWIeG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 04:34:06 -0400
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A922E56
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:32:30 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2b03d3e41fcso2687361fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 01:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684829473; x=1687421473;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google; t=1684830688; x=1687422688;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dGUDGH7rhz14YCB1cVpAZLKAtrf81F9TTztogU96Cm0=;
-        b=EvnGzmJUPfQ8KdtpEigUXryImN6v0v/3K7eIiy7Ar6Nv7RtCwMROvVxOUOAALvft7s
-         g8flhowqXn1kaqGSjamvwA16iTu8BIR29qrnUQ5Fx0hXpDWI19+U9rDrOt6ZXpV4it2n
-         xVjPiehnMvYulSHcDUNmztqZM0+ImwrMimMPE7o/PoAlvyI6+GFbKjVO2nJmimvP3Tkr
-         EHHixinnO8VmqTlKt1jOKf2yfsNJLFO1ohhWiLvvbK32GmG0zLTnU9f8EXj+zORGCq33
-         0pO/LtCHjw9Ycy1k2km2jN8HMHCTGBcrZDmFyxAB+lMMu6MRjtRcEFsT/RVgpR7ZnqeG
-         rsoA==
+        bh=aqoLnPSfzNBEJLzNJAPohzVk9qbOTTKvfqApSvbpZ+c=;
+        b=ELy+Lp+OvEhcap5C0YrUMC1dMKfxBvdVuOJFeYxBcIYZBR+8ScE4WnTd21oY5McKlP
+         1QdyGlR4Hxw+sdMXaL4IcbKIgS4RT4yWZDHkhxKLrSwVjkx9kSsitjC/e1g3MgjqJgd0
+         Kn+Lrn77TkmOlvWiIZ2wpKIazbIxqCdFc8n0SUKOvA+SdNkbzSfJqrEtKXtj1rMyB+eG
+         asr48JKDGCvPPZOnXUE/hiP8EregYHs+mfhz0qNEfV63YLpFvg6QI6rvK8OGXdfsVTqy
+         sum6j6GzqE8JeRiM/NBQeJDIaWRUmN771jtV+YCD/V0nX9PNtxZXvojMeVVd9xl7We8i
+         beKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684829473; x=1687421473;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1684830688; x=1687422688;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dGUDGH7rhz14YCB1cVpAZLKAtrf81F9TTztogU96Cm0=;
-        b=Nh9/3mXRUoyVk/vaqi9muTNvaen+T5uZR/GtoRYys7StUcIB3moAv+Nh+qeKvmq1gQ
-         QdfK6kxGlX06TxFjnnuTytoDH//xaQeWlbj3vxfzRLCnTti9mTrZwnJhWfUvU0PBD5+M
-         QTWUIBjvtZfx9N5jf2HxIECNCjYTv/gnYfYRW2egSSVIFDOGY9Xzk8qcH4JJWd6m9WwM
-         MeXXcFXj+K5B03iWbaH/rVBG9eMAztSGeYTkpVQrxumxUNw+/f5FeNQKX0YXEdZPVBaG
-         TJVsffIiw1+6JTyEKgqIgsxSR0OBbDqds66x6388xCwua/Xxg+Iu0X+JVpb27fTGzxin
-         4zuA==
-X-Gm-Message-State: AC+VfDzY7E8GU4yYkmnbMyvO9KbKrBLxvsLX03XIktEjiQSbtOa1tUTX
-        mZLMWS9aM3rL8f2SOWQPOnFznQ==
-X-Google-Smtp-Source: ACHHUZ74BDXgDTVesfh4PK5yfNReO97zBxk9tr7IB8NXqFzhBagMkPdIOkquK4+vZRWk9dR79qOjzQ==
-X-Received: by 2002:adf:f1ce:0:b0:306:64b7:5413 with SMTP id z14-20020adff1ce000000b0030664b75413mr8935653wro.71.1684829472945;
-        Tue, 23 May 2023 01:11:12 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o16-20020a5d62d0000000b002fb60c7995esm10343562wrv.8.2023.05.23.01.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 01:11:11 -0700 (PDT)
-Date:   Tue, 23 May 2023 11:11:08 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+        bh=aqoLnPSfzNBEJLzNJAPohzVk9qbOTTKvfqApSvbpZ+c=;
+        b=At+74UQh9az9M+PsPxBK69eVcDulEDw4mYyLTu8jlBz9+5Tx0yaX2hfbccVR6IBZQt
+         3BNocAS/yQrPio1iawdBCxPadTBQUWBHtsF34aenC7kbtDkJFzdoXin5RklPaOT1sCYK
+         hzVmfBsVBf+D83PEDN9tKt6IDqfCD+CBlk+DXHfWO++yg/shF07IIEd+btspE6gyqIS7
+         lNXUs/tskug8C/zop5WQ12YympE5ZRQKIGXXa7a0Ayb4dnwXWfak23bO7lPaud6HoUF1
+         6Qsn0joUJIwB8pWP7lg01I+OACWxcIAEBkRkjr36ZBzLpGTOoHHO7pee7NEew4lI39gb
+         cpTw==
+X-Gm-Message-State: AC+VfDwQ70TPzVW+1vRG1YAvWae6TJ92U89rv5qiEIiR1nCKBy/G7vRr
+        JDidvorJF8AtaY6q9jdBha4ygQ==
+X-Google-Smtp-Source: ACHHUZ7JyrwZTrtDlI3Rdt3V59245cL6RCr1E3O4A6gzrvtZmmfKgGhM1zhi1+TwYl6PjHb0U6btSA==
+X-Received: by 2002:a05:6512:24e:b0:4eb:e8e:4139 with SMTP id b14-20020a056512024e00b004eb0e8e4139mr4888297lfo.2.1684830688603;
+        Tue, 23 May 2023 01:31:28 -0700 (PDT)
+Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
+        by smtp.gmail.com with ESMTPSA id h26-20020a19701a000000b004ece331c830sm1259533lfc.206.2023.05.23.01.31.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 01:31:28 -0700 (PDT)
+Message-ID: <2f03fa9a-1b4b-d208-f399-a31ab8c5b4cc@linaro.org>
+Date:   Tue, 23 May 2023 10:31:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] interconnect: qcom: rpm: allocate enough data in probe()
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Georgi Djakov <djakov@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-Subject: [PATCH] interconnect: qcom: rpm: allocate enough data in probe()
-Message-ID: <a0f6184c-c2b5-4e8d-9b8a-867ae83f3094@kili.mountain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <a0f6184c-c2b5-4e8d-9b8a-867ae83f3094@kili.mountain>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <a0f6184c-c2b5-4e8d-9b8a-867ae83f3094@kili.mountain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This was allocating "sizeof(qp->intf_clks)" which is the size of a
-pointer instead of "sizeof(*qp->intf_clks)" which is the size of the
-struct (8 bytes vs 16 bytes on a 64bit system).
 
-Fixes: 2e2113c8a64f ("interconnect: qcom: rpm: Handle interface clocks")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index f4627c4a1bdd..7a21a03a0382 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -436,7 +436,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	if (!qp)
- 		return -ENOMEM;
- 
--	qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
-+	qp->intf_clks = devm_kzalloc(dev, sizeof(*qp->intf_clks), GFP_KERNEL);
- 	if (!qp->intf_clks)
- 		return -ENOMEM;
- 
--- 
-2.39.2
+On 23.05.2023 10:11, Dan Carpenter wrote:
+> This was allocating "sizeof(qp->intf_clks)" which is the size of a
+> pointer instead of "sizeof(*qp->intf_clks)" which is the size of the
+> struct (8 bytes vs 16 bytes on a 64bit system).
+> 
+> Fixes: 2e2113c8a64f ("interconnect: qcom: rpm: Handle interface clocks")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+Whoops. Guess I was just really really lucky that nothing blew up for me.
 
+Thanks.
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> ---
+>  drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index f4627c4a1bdd..7a21a03a0382 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -436,7 +436,7 @@ int qnoc_probe(struct platform_device *pdev)
+>  	if (!qp)
+>  		return -ENOMEM;
+>  
+> -	qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
+> +	qp->intf_clks = devm_kzalloc(dev, sizeof(*qp->intf_clks), GFP_KERNEL);
+>  	if (!qp->intf_clks)
+>  		return -ENOMEM;
+>  
