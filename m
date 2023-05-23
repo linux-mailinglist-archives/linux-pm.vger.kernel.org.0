@@ -2,63 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B8C70DAE7
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 12:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3906870DB30
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 13:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbjEWKwX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 23 May 2023 06:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S236612AbjEWLIa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 07:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236644AbjEWKwO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 06:52:14 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FADE50
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 03:52:04 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-94ea38c90ccso90048566b.1
-        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 03:52:04 -0700 (PDT)
+        with ESMTP id S236585AbjEWLI3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 07:08:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C47121
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 04:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684840060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TgAfeWGrsZZYnBL05wn3YJIuhT7jiDrtSHb3+2pNJ5c=;
+        b=TTlnBzLXCbyiO7ZBf5AN18ieEyD4DNR859GiI9qbuh6taxDdJmy7KmIBofpVSefvPRmIbf
+        ZHuRgmaDR2zGvat2vzGeuNVDODm9d704aKlnmhxnAtmu0Umr5Zq3gTBt7/+WkbGcqS3dxj
+        q+ilDIdiweCd/weWZOg09etJNDCQi2I=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-88-qqysBfVAMomnAML078Z_Ww-1; Tue, 23 May 2023 07:07:39 -0400
+X-MC-Unique: qqysBfVAMomnAML078Z_Ww-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9698409b9bfso623958366b.1
+        for <linux-pm@vger.kernel.org>; Tue, 23 May 2023 04:07:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684839123; x=1687431123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IeR2559/IBhCTk+4cTxI4IyLsNHqo6jbECyyR2Nc+pk=;
-        b=Jtb5DYzMQh5j397OqZ1FBml8nNpPzk79S1qz0cIxmSGebPoBTADQZbbqr5wX/zYVqt
-         LY9HctLCUMxPGoBsbE0Ndf1NgX6xd5VrCCe6uPy+uR+BjPjcXNpJ9IyHMtegdh94PBgF
-         fRiUCdvJTvZ6qBFOEPB/GCTWIMLRaJNrqSud7qZzCZrLs5xaKmZuKkqVzYUxBjEtpOGb
-         jzohQyBSwJW8SfY+kKLmBet8bhEkzdTvIXUv7QQfdvmahPIhrk81PFN/CImvuFD2SCHw
-         x/r/0WuOt4+g35lVisFRKs72n2sqPNKMZZjvHMdAc//PlqGz+BGlAs544NMZQ2ZeSJoV
-         ZvRw==
-X-Gm-Message-State: AC+VfDzxSC2ItKpA+7cothz4T5zuLrchOuRDkId8u7bA1Ent/WAfCJfa
-        4fXJExDq3inOmNDDZ9Q7Fx08SgvwhdFHD36PRKs=
-X-Google-Smtp-Source: ACHHUZ7dFsUmMoI8pNQVyraKDrNF1E1YQzV4Merv92Hu5DIAgNFBPyPVEWaHuJM1sJWMJ5nDQnfE6PAbuOBYdY0WeME=
-X-Received: by 2002:a17:906:748c:b0:965:9c7d:df96 with SMTP id
- e12-20020a170906748c00b009659c7ddf96mr13003047ejl.1.1684839123232; Tue, 23
- May 2023 03:52:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684840058; x=1687432058;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TgAfeWGrsZZYnBL05wn3YJIuhT7jiDrtSHb3+2pNJ5c=;
+        b=LlQZiNeHqpfKk5XUWDqULhjr1lE298fdPTtx7oFkDXUr+kHD3JP4rCVpIvbMiPgnI3
+         PVqrBdpdUL/eBhJAC2iuiiOipUbUQ+dIWf+YpsWSgwSjqLy4R01tsI8uD+DrDm6sLFfU
+         oPxl/31DhNCCBW7NfwtSY1kb2lLZGa/YXKisa7E1GM9TXV42+PaV6y36WC/pPTLpUdLm
+         VTYykR2vcqrHjPyXGuHBqTLONA/HTNunQPI5bQORS+1Xn/wcyqex2Nfamyioe16j0hNu
+         btnRRsTsGDXLC39M6q6BzELepUZ6SKlUnUpGco/Q66Pxf3qwWbb5XxVjxdqwVRYeqH2r
+         CvdA==
+X-Gm-Message-State: AC+VfDxjW7ukcdjGPRMgvoVJcEQggm3mUjlCSzzPrzcFTn7KlmmSDwvy
+        WcLq0+rvVvukBdOdmrwG4kprho+t3wwHIyEg9xhSFSStuJQpkg8BYdfEQpHh5TeTb7nveRcqFjs
+        sP7+JoybtTUuD0a0AP7U=
+X-Received: by 2002:a17:907:6287:b0:966:a691:55f9 with SMTP id nd7-20020a170907628700b00966a69155f9mr11068564ejc.30.1684840057963;
+        Tue, 23 May 2023 04:07:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4caVLW/8Ni1Ot2OEe8VHt0hfZFf8rele1i6QgoUF5MCgzUhu+7eQSnBFXZ045menh2EQYUAw==
+X-Received: by 2002:a17:907:6287:b0:966:a691:55f9 with SMTP id nd7-20020a170907628700b00966a69155f9mr11068553ejc.30.1684840057699;
+        Tue, 23 May 2023 04:07:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id j26-20020a17090686da00b0096f7500502csm4299108ejy.199.2023.05.23.04.07.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 04:07:37 -0700 (PDT)
+Message-ID: <e9eb526d-84fe-b814-67a3-6f7977aa0078@redhat.com>
+Date:   Tue, 23 May 2023 13:07:36 +0200
 MIME-Version: 1.0
-References: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
- <abcc6689c283bbe91b6fd16572cfd4a8d5e78cc6.camel@linux.intel.com>
-In-Reply-To: <abcc6689c283bbe91b6fd16572cfd4a8d5e78cc6.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 12:51:50 +0200
-Message-ID: <CAJZ5v0gNC+39S7snmYNfRmTmFWXhftjYCDkHYMoCxWHCt7r4rg@mail.gmail.com>
-Subject: Re: [CfP] Power Management and Thermal Control MC (LPC2023)
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend
+ related messages
+Content-Language: en-US, nl
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
+        linus.walleij@linaro.org
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
+        Basavaraj.Natikar@amd.com
+References: <20230522200033.2605-1-mario.limonciello@amd.com>
+ <20230522200033.2605-4-mario.limonciello@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230522200033.2605-4-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +86,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+Hi Mario,
 
-On Tue, May 23, 2023 at 12:34 AM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On Mon, 2023-05-22 at 19:12 +0200, Rafael J. Wysocki wrote:
-> > Hi Folks,
-> >
-> > I'm going to submit a Power Management and Thermal Control
-> > micro-conference proposal for LPC2023 along the lines of what
-> > happened
-> > in the previous iterations of it.
-> >
-> > If you have topics that you'd like to be discussed there, please let
-> > me know by Friday, May 26.
-> >
-> > Please note that LPC MC topics are expected to cover work in progress
-> > or at the concept stage.  They are not  supposed to be about work
-> > that
-> > has been done already.
-> "
-> 1.
-> Idle injection and soft IRQs:
-> We still have no good solution to avoid races with soft IRQ scheduling
-> while using idle injection. The previous post to kernel to solve this
-> issue is rejected. Peter proposed a change, that also didn't work.
->
-> I am proposing a discussion on how the solve this:
-> - May be we need to use some in kernel IRQ affinity change for the
-> forced idle CPUs
-> - Other potential solution?
->
-> "
->
-> 2.
-> Thermal sysfs/API Update
->
-> Thermal sysfs v2
-> There was proposal to correctly abstract thermal zones, sensors,
-> cooling devices and policies. Are we happy with the current state?
->
-> - Add capability to define additional private attributes for a zone
-> like cpufreq
+On 5/22/23 22:00, Mario Limonciello wrote:
+> Using pm_pr_dbg() allows users to toggle `/sys/power/pm_debug_messages`
+> as a single knob to turn on messages that amd-pmc can emit to aid in
+> any s2idle debugging.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/platform/x86/amd/pmc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
+> index 427905714f79..1304cd6f13f6 100644
+> --- a/drivers/platform/x86/amd/pmc.c
+> +++ b/drivers/platform/x86/amd/pmc.c
+> @@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
+>  	}
+>  
+>  	if (dev)
+> -		dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
+> +		pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
+>  
+>  	if (s)
+>  		seq_printf(s, "SMU idlemask : 0x%x\n", val);
 
-Good topics both, thanks!
+This does not compile, amd/pmc.c may be build as an amd-pmc.ko module
+and currently the pm_debug_messages_on flag used by pm_pr_dbg()
+is not exported to modules:
+
+  CC [M]  drivers/platform/x86/amd/pmc.o
+  LD [M]  drivers/platform/x86/amd/amd-pmc.o
+  MODPOST Module.symvers
+ERROR: modpost: "pm_debug_messages_on" [drivers/platform/x86/amd/amd-pmc.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+make: *** [Makefile:1978: modpost] Error 2
+
+Regards,
+
+Hans
+
+
