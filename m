@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241C770E4AF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 20:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AD270E4BF
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 20:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237820AbjEWSa3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 23 May 2023 14:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S237694AbjEWSd7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 23 May 2023 14:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbjEWSa2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 14:30:28 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7B191;
-        Tue, 23 May 2023 11:30:26 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f44435d92so118662566b.0;
-        Tue, 23 May 2023 11:30:26 -0700 (PDT)
+        with ESMTP id S229897AbjEWSd6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 14:33:58 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8E4119;
+        Tue, 23 May 2023 11:33:57 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-96ffba243b1so62410366b.0;
+        Tue, 23 May 2023 11:33:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684866625; x=1687458625;
+        d=1e100.net; s=20221208; t=1684866836; x=1687458836;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GfbS4pJKMPIQHwf0r8ONmf3iSeCg8srHtIH+ip6lF6w=;
-        b=c2I4gnbE0B5uus84l81GrVI6fKlPuMnekiQtOl5K51ztaCGRzYXLfm1mwSA69Nry5t
-         bG8qnyOeF/QrNZvGYKBrrhGHhRIxVrpROpvgE/YvAa+253L6aNC1AfhNQh9OmB8j+zd4
-         4VR90vAs+DZTNj4GNOnqTtg3rvbwHotdLw9jQbRBcZrVGLq/60vCS0X459Bl1cfd37Gf
-         zsoitHWpJXP8aa9FzQebpsEGB4IMuhxCNkSSwQveCwN1ZnnQG1/xSfXiLbgxtR7SFbjb
-         S1Qo3cw6dOkLvvL7QynYLe5YlUoqp510xm33EJfZRColfVWBVJ5vppou1w7SbeaqH9GD
-         CVwQ==
-X-Gm-Message-State: AC+VfDzOh8xYvpeTaXHdk8/QcgmRQq7k9VNjth/b7RbhJxL/Fi0WSBuv
-        1aVsg8krUw3SR6YivG2dz1uGyfN0AoUziBg+Uug=
-X-Google-Smtp-Source: ACHHUZ66A+UCP5ILB6WJL7gRZr76fIg5QdK7B+g3Ms7DfUP8/uUNDY//3EMNEWFb62fc2+afiPxc0qNLsKcnm/cWsh8=
-X-Received: by 2002:a17:906:77d8:b0:959:37cc:190e with SMTP id
- m24-20020a17090677d800b0095937cc190emr13117908ejn.3.1684866625139; Tue, 23
- May 2023 11:30:25 -0700 (PDT)
+        bh=i2+6ZeOuWaMysW6pOftnvqcNpFa0QK0NSRKjideDKrk=;
+        b=cq5rWfUqMn4qFJsZr/VXv7yONOYg3dfueq+X6jw8TKayt04JcDi0NO/RvLvusKF6uX
+         3BFy8tP/Xb/yp3rW39/PpeBFRNVSH7rcz1yvyWJZa48+vZSuqPq7agoamgXNuaQoJMjq
+         J72O2NSZJBhUFzEGpX/kroRJhPGYj4j8AfExpXPnUbI/GQYKGn0T2BoBNxu/ZgSb0Bt9
+         X5GbeXySslyufFS8eEXqheE5n83+5fYb5MXZ0/wg3VVDglMfsAxy8NBxPAlOFfLfAePB
+         HaboPHFPIhwJ5uCBIGQVa7QbGDey+rUhexE45X+KH1vHQJiNpQ96/Sd3Bw/VNr6umc+S
+         2E5w==
+X-Gm-Message-State: AC+VfDzHXsUN0l2EJUu5OyutNeu9eHLYSSHd/MTpet5P8FFsbBCUJyru
+        y9+FbwL0PPGvr4QpauKggHv3Y5DU2UNEXqMM+64=
+X-Google-Smtp-Source: ACHHUZ74qE46raE7hGqKO0rIs0tcDFMUtKQ9FPO83vqo+TKQ8WKbpVYAKFIYoGywc2NBe5UcG4EZWgMxDbsnjHTCn2U=
+X-Received: by 2002:a17:906:748c:b0:965:9c7d:df96 with SMTP id
+ e12-20020a170906748c00b009659c7ddf96mr14578825ejl.1.1684866835592; Tue, 23
+ May 2023 11:33:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-4-hch@lst.de>
-In-Reply-To: <20230523074535.249802-4-hch@lst.de>
+References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-5-hch@lst.de>
+In-Reply-To: <20230523074535.249802-5-hch@lst.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 20:30:13 +0200
-Message-ID: <CAJZ5v0i2eXi+UEqm0W2eiadjUw5AHT-c1OHTQkemacfL0-jo2A@mail.gmail.com>
-Subject: Re: [PATCH 03/24] PM: hibernate: remove the global snapshot_test variable
+Date:   Tue, 23 May 2023 20:33:44 +0200
+Message-ID: <CAJZ5v0jrj3PaC5oZt22DQoJARUcpXaerS-Cmx+34du7=p9WDSw@mail.gmail.com>
+Subject: Re: [PATCH 04/24] PM: hibernate: move finding the resume device out
+ of software_resume
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Jens Axboe <axboe@kernel.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,131 +69,144 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Tue, May 23, 2023 at 9:45 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Passing call dependent variable in global variables is a huge
-> antipattern.  Fix it up.
+> software_resume can be called either from an init call in the boot code,
+> or from sysfs once the system has finished booting, and the two
+> invocation methods this can't race with each other.
+>
+> For the latter case we did just parse the suspend device manually, while
+> the former might not have one.  Split software_resume so that the search
+> only happens for the boot case, which also means the special lockdep
+> nesting annotation can go away as the system transition mutex can be
+> taken a little later and doesn't have the sysfs locking nest inside it.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
 Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
 > ---
->  kernel/power/hibernate.c | 17 ++++++-----------
->  kernel/power/power.h     |  3 +--
->  kernel/power/swap.c      |  2 +-
->  3 files changed, 8 insertions(+), 14 deletions(-)
+>  kernel/power/hibernate.c | 80 ++++++++++++++++++++--------------------
+>  1 file changed, 39 insertions(+), 41 deletions(-)
 >
 > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 07279506366255..78696aa04f5ca3 100644
+> index 78696aa04f5ca3..45e24b02cd50b6 100644
 > --- a/kernel/power/hibernate.c
 > +++ b/kernel/power/hibernate.c
-> @@ -64,7 +64,6 @@ enum {
->  static int hibernation_mode = HIBERNATION_SHUTDOWN;
+> @@ -907,7 +907,7 @@ int hibernate_quiet_exec(int (*func)(void *data), void *data)
+>  }
+>  EXPORT_SYMBOL_GPL(hibernate_quiet_exec);
 >
->  bool freezer_test_done;
-> -bool snapshot_test;
->
->  static const struct platform_hibernation_ops *hibernation_ops;
->
-> @@ -684,7 +683,7 @@ static void power_down(void)
->                 cpu_relax();
+> -static int find_resume_device(void)
+> +static int __init find_resume_device(void)
+>  {
+>         if (!strlen(resume_file))
+>                 return -ENOENT;
+> @@ -942,53 +942,16 @@ static int find_resume_device(void)
+>         return 0;
 >  }
 >
-> -static int load_image_and_restore(void)
-> +static int load_image_and_restore(bool snapshot_test)
+> -/**
+> - * software_resume - Resume from a saved hibernation image.
+> - *
+> - * This routine is called as a late initcall, when all devices have been
+> - * discovered and initialized already.
+> - *
+> - * The image reading code is called to see if there is a hibernation image
+> - * available for reading.  If that is the case, devices are quiesced and the
+> - * contents of memory is restored from the saved image.
+> - *
+> - * If this is successful, control reappears in the restored target kernel in
+> - * hibernation_snapshot() which returns to hibernate().  Otherwise, the routine
+> - * attempts to recover gracefully and make the kernel return to the normal mode
+> - * of operation.
+> - */
+>  static int software_resume(void)
 >  {
 >         int error;
->         unsigned int flags;
-> @@ -721,6 +720,7 @@ static int load_image_and_restore(void)
->   */
->  int hibernate(void)
->  {
-> +       bool snapshot_test = false;
->         unsigned int sleep_flags;
->         int error;
 >
-> @@ -748,9 +748,6 @@ int hibernate(void)
->         if (error)
->                 goto Exit;
->
-> -       /* protected by system_transition_mutex */
-> -       snapshot_test = false;
+> -       /*
+> -        * If the user said "noresume".. bail out early.
+> -        */
+> -       if (noresume || !hibernation_available())
+> -               return 0;
 > -
->         lock_device_hotplug();
->         /* Allocate memory management structures */
->         error = create_basic_memory_bitmaps();
-> @@ -792,9 +789,9 @@ int hibernate(void)
->         unlock_device_hotplug();
->         if (snapshot_test) {
->                 pm_pr_dbg("Checking hibernation image\n");
-> -               error = swsusp_check();
-> +               error = swsusp_check(snapshot_test);
->                 if (!error)
-> -                       error = load_image_and_restore();
-> +                       error = load_image_and_restore(snapshot_test);
->         }
->         thaw_processes();
->
-> @@ -982,8 +979,6 @@ static int software_resume(void)
->          */
->         mutex_lock_nested(&system_transition_mutex, SINGLE_DEPTH_NESTING);
->
-> -       snapshot_test = false;
+> -       /*
+> -        * name_to_dev_t() below takes a sysfs buffer mutex when sysfs
+> -        * is configured into the kernel. Since the regular hibernate
+> -        * trigger path is via sysfs which takes a buffer mutex before
+> -        * calling hibernate functions (which take system_transition_mutex)
+> -        * this can cause lockdep to complain about a possible ABBA deadlock
+> -        * which cannot happen since we're in the boot code here and
+> -        * sysfs can't be invoked yet. Therefore, we use a subclass
+> -        * here to avoid lockdep complaining.
+> -        */
+> -       mutex_lock_nested(&system_transition_mutex, SINGLE_DEPTH_NESTING);
 > -
->         if (!swsusp_resume_device) {
->                 error = find_resume_device();
->                 if (error)
-> @@ -994,7 +989,7 @@ static int software_resume(void)
+> -       if (!swsusp_resume_device) {
+> -               error = find_resume_device();
+> -               if (error)
+> -                       goto Unlock;
+> -       }
+> -
+>         pm_pr_dbg("Hibernation image partition %d:%d present\n",
 >                 MAJOR(swsusp_resume_device), MINOR(swsusp_resume_device));
 >
 >         pm_pr_dbg("Looking for hibernation image.\n");
-> -       error = swsusp_check();
-> +       error = swsusp_check(false);
+> +
+> +       mutex_lock(&system_transition_mutex);
+>         error = swsusp_check(false);
 >         if (error)
 >                 goto Unlock;
+> @@ -1035,7 +998,39 @@ static int software_resume(void)
+>         goto Finish;
+>  }
 >
-> @@ -1022,7 +1017,7 @@ static int software_resume(void)
->                 goto Close_Finish;
->         }
+> -late_initcall_sync(software_resume);
+> +/**
+> + * software_resume_initcall - Resume from a saved hibernation image.
+> + *
+> + * This routine is called as a late initcall, when all devices have been
+> + * discovered and initialized already.
+> + *
+> + * The image reading code is called to see if there is a hibernation image
+> + * available for reading.  If that is the case, devices are quiesced and the
+> + * contents of memory is restored from the saved image.
+> + *
+> + * If this is successful, control reappears in the restored target kernel in
+> + * hibernation_snapshot() which returns to hibernate().  Otherwise, the routine
+> + * attempts to recover gracefully and make the kernel return to the normal mode
+> + * of operation.
+> + */
+> +static int __init software_resume_initcall(void)
+> +{
+> +       /*
+> +        * If the user said "noresume".. bail out early.
+> +        */
+> +       if (noresume || !hibernation_available())
+> +               return 0;
+> +
+> +       if (!swsusp_resume_device) {
+> +               int error = find_resume_device();
+> +
+> +               if (error)
+> +                       return error;
+> +       }
+> +
+> +       return software_resume();
+> +}
+> +late_initcall_sync(software_resume_initcall);
 >
-> -       error = load_image_and_restore();
-> +       error = load_image_and_restore(false);
->         thaw_processes();
->   Finish:
->         pm_notifier_call_chain(PM_POST_RESTORE);
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index b83c8d5e188dec..978189fcafd124 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -59,7 +59,6 @@ asmlinkage int swsusp_save(void);
 >
->  /* kernel/power/hibernate.c */
->  extern bool freezer_test_done;
-> -extern bool snapshot_test;
+>  static const char * const hibernation_modes[] = {
+> @@ -1176,6 +1171,9 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+>         char *name;
+>         dev_t res;
 >
->  extern int hibernation_snapshot(int platform_mode);
->  extern int hibernation_restore(int platform_mode);
-> @@ -174,7 +173,7 @@ extern int swsusp_swap_in_use(void);
->  #define SF_HW_SIG              8
->
->  /* kernel/power/hibernate.c */
-> -extern int swsusp_check(void);
-> +int swsusp_check(bool snapshot_test);
->  extern void swsusp_free(void);
->  extern int swsusp_read(unsigned int *flags_p);
->  extern int swsusp_write(unsigned int flags);
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 92e41ed292ada8..efed11568bfc72 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1514,7 +1514,7 @@ int swsusp_read(unsigned int *flags_p)
->   *      swsusp_check - Check for swsusp signature in the resume device
->   */
->
-> -int swsusp_check(void)
-> +int swsusp_check(bool snapshot_test)
->  {
->         int error;
->         void *holder;
+> +       if (!hibernation_available())
+> +               return 0;
+> +
+>         if (len && buf[len-1] == '\n')
+>                 len--;
+>         name = kstrndup(buf, len, GFP_KERNEL);
 > --
 > 2.39.2
 >
