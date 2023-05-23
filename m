@@ -2,114 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7773A70E763
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 23:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D437570E886
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 00:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238596AbjEWVcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 May 2023 17:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S238229AbjEWWBH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 18:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbjEWVcp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 17:32:45 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2010.outbound.protection.outlook.com [40.92.20.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F9AFA;
-        Tue, 23 May 2023 14:32:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZN7FBFOqKhNKGRKsiAdaCP1QLqYRlegjSdxJQqRHTAnB4c+fja5QB04k+pAX/gzql9QTdI3UO0wugpW9xTRSL5jFN6KV11MHLj7WIPnvD5YfcqmcRN3OtZVWbEIwCySvyTzcExuOC6qRdU2BuFo/v6/o1ouMQreYcGJrJalc8SE2fWakkkDsVtF1531UMlGXyAQs66/vxOqQ/Hc7q4L5wAuRklkGCUFrdJTTjWzOqbBVrb5QTGhYaoJWu1z8io9gON9I1zMd+m3bjgrLl+MtRxr8QNkb7HoE0c6DPNn0KQ5xMtK9D0vHXsWNjuDcITYQIk1PXe1PnpXZnSIsUbWHdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5BMzOby1gFlEcEntUs9n4xqQBnkvV9+N/lcBbLWpZqM=;
- b=Ol4Uw9bxtnrIYpNWciWzxOvfio86GQFsvHSFUh+f8AleakndQVIhrrnwKS4sS4Psqe/Kr2gErd8F4BnX9sGV0WKQYbl1sfqUd+h1EshbeIPi/rX1u8wx6Sg+saeweDCye9Olwrlxw0iW+vMV/V1q6HLN58utIBTP2lX50Vx2wyK+hQvCJOPDLKYtL6q4s9IXAQuEsC1Knnqv5nkDXjIZzLhfYoLJFKd3gG0bVWr5Wdq+nqLqPEVk5A/RBYQeFd7/+MOefVg7zeRwCdWnObsB3Is6T3gyYMFU1NCcwRfooZ9wVsWzt0qvUwpl01p8bp6p18YqKaXggmKODmTwI3fTFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5BMzOby1gFlEcEntUs9n4xqQBnkvV9+N/lcBbLWpZqM=;
- b=tsQPxH9vggRS0f0g/WvZIyKN+TNXP1E7E0WtgWVLIAyByL/CTgHa6TIC8SSelMeoX/ygHzxKSi05BDkw1iT/SBIOoHGwt2QtLzfiwooCLrJgtuciFmUdEwavea/nkg0BaNcUMex0tQtO0fTcbdTfeWsn9+K7u0wr9dEJefEuCKFjscbstu/NuaxoirZeoPfVjP/h9BuAutohf0iE7WlYZsxplItrWuOWGCMoSgWyfYBt6y9Q7NFXxlTfUHtEaDUOskpXVtMs9HuNhA4Ojqizgiq809xXrqCcMLxaifMtkgTREZvFb0/mqH4hp0TdwIhGydEByEVW1h0ocdHtqf7CCA==
-Received: from DM6PR19MB2780.namprd19.prod.outlook.com (2603:10b6:5:13d::26)
- by PH0PR19MB4775.namprd19.prod.outlook.com (2603:10b6:510:20::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Tue, 23 May
- 2023 21:32:42 +0000
-Received: from DM6PR19MB2780.namprd19.prod.outlook.com
- ([fe80::c62c:7fe7:679d:6a42]) by DM6PR19MB2780.namprd19.prod.outlook.com
- ([fe80::c62c:7fe7:679d:6a42%4]) with mapi id 15.20.6433.013; Tue, 23 May 2023
- 21:32:42 +0000
-Message-ID: <DM6PR19MB2780DAE87B67BD49B6159A5ABC409@DM6PR19MB2780.namprd19.prod.outlook.com>
-Date:   Wed, 24 May 2023 04:32:34 +0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: ACPI: what should Linux do for "call-order-swap" quirk from
- firmware?
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <DM6PR19MB2780634FE9D96D6FB72712B2BC429@DM6PR19MB2780.namprd19.prod.outlook.com>
- <CAJZ5v0j5hFbVh05wP5t49_j2kSkW9XY3WaqtrOb6YA9NJYHKcQ@mail.gmail.com>
- <ba0d326f-cace-3b39-00a5-4307a78045e3@amd.com>
-From:   Ratchanan Srirattanamet <peathot@hotmail.com>
-In-Reply-To: <ba0d326f-cace-3b39-00a5-4307a78045e3@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [KQ/SHW7ZH8NPbqeXYFK2fxogguM8demz]
-X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
- (2603:1096:4:196::10) To DM6PR19MB2780.namprd19.prod.outlook.com
- (2603:10b6:5:13d::26)
-X-Microsoft-Original-Message-ID: <f9863bc6-872c-768d-753b-757c59743a3f@hotmail.com>
+        with ESMTP id S229813AbjEWWBG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 18:01:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFB283;
+        Tue, 23 May 2023 15:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684879264; x=1716415264;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J6Na125DBGnnjEUgVwbh2WXtdLkhkSeDqrC0HQ/Ip/0=;
+  b=adBVj+JCPadYwgmnIy+BiLpIEXlyAAG6jAMIZlFtNHEUQB76I03bRXJq
+   jatLbcDcHiixKm+ozKtV+V6qp2970r29jIpEfaGlsTNW0mBMlk3IoUEmD
+   DV/VDaHKWzSRaUBZFhvzpu3N2+eQkCTKfb6XvFQI3TeyCg9V0N9QvFU3m
+   jZRUz5G5SyvFdTiC995hZRxD+Jki3KLylHe90JYd9ICXYS4ObT/Y/TMrC
+   /EGkuFIe6mULZ1ewJUdUZNd99UY2B8MGf4i2SHU9zFVLSUEBgcfxNJ2e/
+   gFhM2BmA1UHLK90rEPxKvNr7yRlfNdjmUqNJDgAprkkkZ8NFg3ZKfumZu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="416834102"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="416834102"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 15:01:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="1034225865"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="1034225865"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga005.fm.intel.com with ESMTP; 23 May 2023 15:01:03 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel: int340x_thermal: New IOCTLs for thermal
+Date:   Tue, 23 May 2023 15:00:59 -0700
+Message-Id: <20230523220102.2377173-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR19MB2780:EE_|PH0PR19MB4775:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1a20bb2-4dd4-480c-2c66-08db5bd53ce3
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4KascVaf6ymu89dEdlh9OE4K8GoNnhJlvQQrDFo5BpQ/gqPVgK5Zwrg0vhLwjpjhgaRsBkucntaFiXuX4iLgIfD/e2hRl+Z8+NifxmYk8Tv7F7oCJgqVDs7nxvU+rIz9FxCIY0uw3M/NQ8ndVFfKclBZnXwfnOZ94K3u2Pu24NYF+RcJbc6M42BzgvTHb7AgNsB6kGkfaWZsISvrGHXPeVNYIMYfeeZuVv8FAxr6iZuj4oEkRGntqukhVIExHqMvazc9SJJUmWlg0PtTvy2t15MZOujZVM0XmGZCOI5mSZ0TiIMIcxcXQ8oC2l+qMtLyNzHWNmEWOi7XpqiPi7NxpKAPEApIUNHSPKUPFht59QOsKnmehszHaTvNXi6RyQXptjvZIafXPu5iaJN635TSpyO31gvTURPgNMoRfmcM5ffRdfV9x/kz1pOJXEWHCLiEGV8ZikhWHFHuJCjZ+Zhz578Iyvbql/SkEe3gVuJLR7EMCDjiZuCJ+dcEksYVMc86UmR9GjfAD0GkgRcA55/1ggHCofQLQ6kUB40Sq9I1xJlsFZdn/g5JryXyxnqRSS/X9yQS22XwUofd5g78o+If77I+tqdCksxBt1Hsf1MsqxE=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dFJxM0VaaUJBa1Z3MmRGSERram9hbU1MNGFSbUFRSGJLMVZDTUtIMmkxajlm?=
- =?utf-8?B?bis4bGJXNnN3K2h1cndyZzVsRzdSK3h4eXhUTkpTdEVTdFZmYmRYQ2ZDOTRX?=
- =?utf-8?B?Zm5UWW1RTHZQcUV1c3M5YlRuRjJHOC94TFNGMk1mcVZOeFRwVzErOThmVnJJ?=
- =?utf-8?B?MGkwaVJQSXBIUGhLeTJSRUZZYkx2TytCeWhPTkd3a25pWXZWV1lWMXc2REpK?=
- =?utf-8?B?ZXAzOGRWYXNlS1E1eVk3RWVDMVUxbm5FQW1jcmdRbnI3Y0NEOVBLRDNHN2tJ?=
- =?utf-8?B?QW4rOTBFU3E4cmsvOGZNU2dYM2hDWGRaSkVYblg1WFIyaCsrNVdLK0Q3dUpr?=
- =?utf-8?B?TVRNbUJ1NjVHSTFqTWlndnpUM00zd3M4dkhHVkpUOXN5TkNKQWo0RUhncWZ3?=
- =?utf-8?B?dTBYQnc2L01yVHZtVTFteEZpOWVhcTRvZ1JIN3ZDdUUrcmhBZ09SZDJkVkdS?=
- =?utf-8?B?SWpBVHBTdnBGMGViZWhCQ0hZa242TFZqL0dRanBwbnhuU2JlS3JRWC82YTJo?=
- =?utf-8?B?aDZPelphSWhicWJadE1TZVpDY0tBSTkzYUVtSVdQSUp5NVBKVlRXL1pOaTBw?=
- =?utf-8?B?TnNRYUp1S21UL2tYQ2VUamoxc1duQnpYQnpyUFRmTTFiMnlIbHNEVG9hVjVJ?=
- =?utf-8?B?Q1VKSnJwSDBjT1V1UGdtV2JOMG8vTElTODZ4QU45UExlY3A3Qy9aMnFzempW?=
- =?utf-8?B?SFhvTFJSNTNYckRxck9vb25rVllldzF2ZWN2V0JjaWkvS0JUalUwVWMwTWxp?=
- =?utf-8?B?MGhmNEoySnBaSndIWjB3MnZrVGdUazQ0VnFXcVorTGx6emdOUUdZVDFUVitU?=
- =?utf-8?B?TFhIWlNra095WVZuQmFvNTVTeUU5S2lPYTdKMFQwaFE2VGxwSWV3VGs2Ym00?=
- =?utf-8?B?cGw1RVRYc3ZLMGNtQWJDRS9HMUFSbnhNcnI4MWpsZWtuZGpGc3orTE9oUWNI?=
- =?utf-8?B?bGd4N2JvR0x2RXd3cHUybnRUckw3bHFHNHplMDdBUE1GREQvZ0lrbC9GdHNl?=
- =?utf-8?B?VXNmRnN5SFBXM0FNcHBxQitKRTBZRDRJU04xemptTkxacEE0SWtPdzdUck5U?=
- =?utf-8?B?OWRqZTI3TmhrdW1HSzdIbnJPa2J5QnNSYmZKZ1IyQWIyVCs5aW1FVytQRXBI?=
- =?utf-8?B?T2lMdkJzVW1FemxlSWdiNXFRc2tsMFpBOUZ5VDF2WkZkbTkxNU9QNVh2VURF?=
- =?utf-8?B?UWlDaTdCTXIzZkRHYXZWYlZwZ3VGTU96bElwVnNwUXE2YklFZXNOVmQvTFFQ?=
- =?utf-8?B?aTZueTQ1cFpQZEg3ZWt3M0paSU9KME5ncTZJWEE1andvTmhOSFVvVUxzcytK?=
- =?utf-8?B?ZWk1dWVNZ2pZaUJIbnZ6VngwZWJkbWlZejZhSENrOVRVaWJOS2t1TVZaSmNM?=
- =?utf-8?B?TUsrZFNtTW0yWUVqaE1zWnZSM3o0SU02RlMvUUhPcldDWG1ZbUh1ZiswK3l1?=
- =?utf-8?B?MUlLaU1TUkJUUGt3NFNtVkVlaHhxd3QxaVJEYWZ0WG5tMWFOR2w4WkJoMmhT?=
- =?utf-8?B?aTBacXFGcGNyNlRkWjhKdkZtUVZTWkR3UXlWWUJ1b3luelM1eUtLQ1o3VEhY?=
- =?utf-8?B?NWpMdnQvOTBRcjc0dEVLMEF0YzlPS01NZXBxZVpzdXJXZ0s4Sk5pQzhYNGRy?=
- =?utf-8?B?VkZ5RkUrWkh5K0RGeGZ1VWpPUUZQRVE9PQ==?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-e7757.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1a20bb2-4dd4-480c-2c66-08db5bd53ce3
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR19MB2780.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 21:32:41.9532
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR19MB4775
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,96 +58,383 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Export Passive version 2 table similar to the way _TRT and _ART tables
+via IOCTLs.
 
+This removes need for binary utility to read ACPI Passive 2 table by
+providing open source support. This table already has open source
+implementation in the user space thermald, when the table is part of
+data vault exported by the int3400 sysfs.
 
-เมื่อ 22/5/66 เวลา 20:13 Mario Limonciello เขียนว่า:
-> On 5/22/23 04:44, Rafael J. Wysocki wrote:
->> +Mario and linux-acpi
->>
->> On Sun, May 21, 2023 at 9:26 PM Ratchanan Srirattanamet
->> <peathot@hotmail.com> wrote:
->>>
->>> Hello,
->>>
->>> I'm trying to debug an issue where Nouveau is unable to runtime-resume
->>> an Nvidia GTX 1650 Ti in an AMD-based laptop [1]. As part of this, I've
->>> traced ACPI calls for the same device on Windows. And it seems like this
->>> device has a weird quirk, which I call it "call-order-swap" for a lack
->>> of better words, when it transitions from D3cold to D0.
+This table is supported in some older platforms before Ice Lake
+generation.
 
-Hello,
+Passive 2 tables contain multiple entries. Each entry has following
+fields:
 
-Turns out, the problem is actually elsewhere and the current method call 
-ordering in Linux, while seemingly differs from Windows, doesn't seem to 
-actually be a problem.
+Source: Named Reference (String). This is the source device for
+temperature.
+Target: Named Reference (String). This is the target device to control.
+Priority: Priority of this device compared to others.
+SamplingPeriod: Time Period in 1/10 of seconds unit.
+PassiveTemp: Passive Temperature in 1/10 of Kelvin.
+SourceDomain: Domain for the source (00:Processor, others reserved).
+ControlKnob: Type of control knob (00:Power Limit 1, others: reserved)
+Limit: The target state to set on reaching passive temperature.
+This can be a string "max", "min" or a power limit value.
+LimitStepSize: Step size during activation.
+UnLimitStepSize: Step size during deactivation.
+Reserved1: Reserved
 
-For reference, the actual problem comes from Nouveau incorrectly 
-re-initializing the GPU after it returns from D3cold, which is 
-subsequently masked by Nouveau mis-detecting the presence of power 
-resource causing it to use a custom DSM, confusing the ACPI code.
+Four IOCTLs are added similar to IOCTLs for reading TRT:
 
-Sorry for the earlier email.
+ACPI_THERMAL_GET_PSVT_COUNT: Number of passive 2 entries.
+ACPI_THERMAL_GET_PSVT_LEN: Total return data size (count x each
+passive 2 entry size).
+ACPI_THERMAL_GET_PSVT: Get the data as an array of objects with
+passive 2 entries.
 
-Ratchanan
+This change is based on original development done by:
+Todd Brandt <todd.e.brandt@linux.intel.com>
 
->>> So, a bit of context: Lenovo Legion 5-15ARH05 [2] is a laptop sporting
->>> AMD Ryzen 7 4800H with Radeon Graphics + Nvidia GTX 1650 Ti. This
->>> device's PCI-E topology to the GPU is:
->>>
->>> 00:01.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Renoir
->>> PCIe GPP Bridge [1022:1633]
->>>           +- 01:00.0 VGA compatible controller [0300]: NVIDIA 
->>> Corporation
->>> TU117M [GeForce GTX 1650 Ti Mobile] [10de:1f95] (rev a1)
->>>
->>> And for ACPI perspective (according to my interpretation), a power
->>> resource \_SB.PCI0.GPP0 seems to represent the PCI bridge, having
->>> \_SB.PCI0.GPP0.PG00 as a power resource, and \_SB.PCI0.GPP0.PEGP seems
->>> to represent the GPU itself, which doesn't seem to have its own power
->>> resource. All ACPI table dumps and infos can be found in the issue on
->>> Freedesktop GitLab [1].
->>>
->>> Now, if I understand the specs correctly, when transitioning the GPU &
->>> the bridge back from D3cold to D0, the kernel should start up the bridge
->>> before the GPU itself. From the ACPI perspective, I should see calls for
->>> .PG00._ON() (power resource for the bridge) before .PEGP.PS0().
->>>
->>> However, on Windows [3], instead it seems like .PEGP.PS0() is called
->>> before .PG00._ON(), for some reason. This is weird, because if
->>> .PG00._ON() has not been called yet, .PEGP.PS0() should be even valid to
->>> call. Now, I have no idea on what part of the Windows system is supposed
->>> to call those ACPI functions, but my feeling is that it must be either
->>> Nvidia or AMD driver that does this kind of quirks.
-> 
-> I don't think it could be an AMD driver in this case for Windows as the 
-> PCIe root port uses "inbox" drivers.
-> 
->>>
->>> As for what Linux does... well it seems like when Linux resumes the PCI
->>> bridge, it calls only .PG00._ON(), skipping .PEGP.PS0() on the ground
->>> that the downstream devices must have been reset when that happens. I'm
->>> not sure that's the right thing to happen either, but at least it makes
->>> more sense. Nvidia's proprietary driver seems to disable runtime D3
->>> support inside it completely on this device, so I think Nvidia must have
->>> a quirk for this chipset, as I briefly borrowed my friend's laptop
->>> sporting AMD 6000 series CPU and it doesn't disable runtime D3. >>
->>> So... I'm not sure what the correct behavior is here. I'm a developer
->>> myself, but kernel is not where I'm familiar with. Please advise me on
->>> where I should look next.
-> 
-> Yeah if it's working properly on newer hardware it does seem like a good 
-> argument for a quirk in the Nouveau driver to me when this older 
-> combination is encountered.
-> 
->>>
->>> Ratchanan.
->>>
->>> P.S. please make sure to include me in the reply, as I'm not the list's
->>> subscriber.
->>>
->>> [1] https://gitlab.freedesktop.org/drm/nouveau/-/issues/79
->>> [2]
->>> https://pcsupport.lenovo.com/th/en/products/laptops-and-netbooks/legion-series/legion-5-15arh05/82b5/82b500fqta
->>> [3]
->>> https://gitlab.freedesktop.org/drm/nouveau/uploads/2659e5cb41a52290ebf18d9906408d62/nvamli1-processed.txt
-> 
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../intel/int340x_thermal/acpi_thermal_rel.c  | 218 ++++++++++++++++++
+ .../intel/int340x_thermal/acpi_thermal_rel.h  |  57 +++++
+ 2 files changed, 275 insertions(+)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+index 01b80331eab6..c6c4c6ef9e32 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+@@ -203,6 +203,151 @@ int acpi_parse_art(acpi_handle handle, int *art_count, struct art **artp,
+ }
+ EXPORT_SYMBOL(acpi_parse_art);
+ 
++/*
++ * acpi_parse_psvt - Passive Table (PSVT) for passive cooling
++ *
++ * @handle: ACPI handle of the device which contains PSVT
++ * @psvt_count: the number of valid entries resulted from parsing PSVT
++ * @psvtp: pointer to array of psvt entries
++ *
++ */
++int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **psvtp)
++{
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	int nr_bad_entries = 0, revision;
++	union acpi_object *p;
++	acpi_status status;
++	int i, result = 0;
++	struct psvt *psvts;
++
++	if (!acpi_has_method(handle, "PSVT"))
++		return -ENODEV;
++
++	status = acpi_evaluate_object(handle, "PSVT", NULL, &buffer);
++	if (ACPI_FAILURE(status))
++		return -ENODEV;
++
++	p = buffer.pointer;
++	if (!p || (p->type != ACPI_TYPE_PACKAGE)) {
++		result = -EFAULT;
++		goto end;
++	}
++
++	/* first package is the revision number */
++	if (p->package.count > 0) {
++		union acpi_object *prev = &(p->package.elements[0]);
++
++		if (prev->type == ACPI_TYPE_INTEGER)
++			revision = (int)prev->integer.value;
++	} else {
++		result = -EFAULT;
++		goto end;
++	}
++
++	/* Support only version 2 */
++	if (revision != 2) {
++		result = -EFAULT;
++		goto end;
++	}
++
++	*psvt_count = p->package.count - 1;
++	if (!*psvt_count) {
++		result = -EFAULT;
++		goto end;
++	}
++
++	psvts = kcalloc(*psvt_count, sizeof(*psvts), GFP_KERNEL);
++	if (!psvts) {
++		result = -ENOMEM;
++		goto end;
++	}
++
++	/* Start index is 1 because the first package is the revision number */
++	for (i = 1; i < p->package.count; i++) {
++		struct acpi_buffer psvt_int_format = { sizeof("RRNNNNNNNNNN"), "RRNNNNNNNNNN" };
++		struct acpi_buffer psvt_str_format = { sizeof("RRNNNNNSNNNN"), "RRNNNNNSNNNN" };
++		union acpi_object *package = &(p->package.elements[i]);
++		struct psvt *psvt = &psvts[i - 1 - nr_bad_entries];
++		struct acpi_buffer *psvt_format = &psvt_int_format;
++		struct acpi_buffer element = { 0, NULL };
++		union acpi_object *knob;
++		struct acpi_device *res;
++		struct psvt *psvt_ptr;
++
++		element.length = ACPI_ALLOCATE_BUFFER;
++		element.pointer = NULL;
++
++		if (package->package.count >= ACPI_NR_PSVT_ELEMENTS) {
++			knob = &(package->package.elements[ACPI_PSVT_CONTROL_KNOB]);
++		} else {
++			nr_bad_entries++;
++			pr_info("PSVT package %d is invalid, ignored\n", i);
++			continue;
++		}
++
++		if (knob->type == ACPI_TYPE_STRING) {
++			psvt_format = &psvt_str_format;
++			if (knob->string.length > ACPI_LIMIT_STR_MAX_LEN) {
++				pr_info("PSVT package %d limit string len exceeds max\n", i);
++				knob->string.length = ACPI_LIMIT_STR_MAX_LEN;
++			}
++		}
++
++		status = acpi_extract_package(&(p->package.elements[i]), psvt_format, &element);
++		if (ACPI_FAILURE(status)) {
++			nr_bad_entries++;
++			pr_info("PSVT package %d is invalid, ignored\n", i);
++			continue;
++		}
++
++		psvt_ptr = (struct psvt *)element.pointer;
++
++		memcpy(psvt, psvt_ptr, sizeof(*psvt_ptr));
++
++		/* The limit element can be string or U64 */
++		psvt->control_knob_type = (u64)knob->type;
++
++		if (knob->type == ACPI_TYPE_STRING) {
++			memset(&psvt->limit, 0, sizeof(u64));
++			strncpy(psvt->limit.string, psvt_ptr->limit.str_ptr, knob->string.length);
++		} else {
++			psvt->limit.integer = psvt_ptr->limit.integer;
++		}
++
++		kfree(element.pointer);
++
++		res = acpi_fetch_acpi_dev(psvt->source);
++		if (!res) {
++			nr_bad_entries++;
++			pr_info("Failed to get source ACPI device\n");
++			continue;
++		}
++
++		res = acpi_fetch_acpi_dev(psvt->target);
++		if (!res) {
++			nr_bad_entries++;
++			pr_info("Failed to get target ACPI device\n");
++			continue;
++		}
++	}
++
++	/* don't count bad entries */
++	*psvt_count -= nr_bad_entries;
++
++	if (!*psvt_count) {
++		result = -EFAULT;
++		kfree(psvts);
++		goto end;
++	}
++
++	*psvtp = psvts;
++
++	return 0;
++
++end:
++	kfree(buffer.pointer);
++	return result;
++}
+ 
+ /* get device name from acpi handle */
+ static void get_single_name(acpi_handle handle, char *name)
+@@ -289,6 +434,57 @@ static int fill_trt(char __user *ubuf)
+ 	return ret;
+ }
+ 
++static int fill_psvt(char __user *ubuf)
++{
++	int i, ret, count, psvt_len;
++	union psvt_object *psvt_user;
++	struct psvt *psvts;
++
++	ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
++	if (ret)
++		return ret;
++
++	psvt_len = count * sizeof(*psvt_user);
++
++	psvt_user = kzalloc(psvt_len, GFP_KERNEL);
++	if (!psvt_user) {
++		ret = -ENOMEM;
++		goto free_psvt;
++	}
++
++	/* now fill in user psvt data */
++	for (i = 0; i < count; i++) {
++		/* userspace psvt needs device name instead of acpi reference */
++		get_single_name(psvts[i].source, psvt_user[i].source_device);
++		get_single_name(psvts[i].target, psvt_user[i].target_device);
++
++		psvt_user[i].priority = psvts[i].priority;
++		psvt_user[i].sample_period = psvts[i].sample_period;
++		psvt_user[i].passive_temp = psvts[i].passive_temp;
++		psvt_user[i].source_domain = psvts[i].source_domain;
++		psvt_user[i].control_knob = psvts[i].control_knob;
++		psvt_user[i].step_size = psvts[i].step_size;
++		psvt_user[i].limit_coeff = psvts[i].limit_coeff;
++		psvt_user[i].unlimit_coeff = psvts[i].unlimit_coeff;
++		psvt_user[i].control_knob_type = psvts[i].control_knob_type;
++		if (psvt_user[i].control_knob_type == ACPI_TYPE_STRING)
++			strncpy(psvt_user[i].limit.string, psvts[i].limit.string,
++				ACPI_LIMIT_STR_MAX_LEN);
++		else
++			psvt_user[i].limit.integer = psvts[i].limit.integer;
++
++	}
++
++	if (copy_to_user(ubuf, psvt_user, psvt_len))
++		ret = -EFAULT;
++
++	kfree(psvt_user);
++
++free_psvt:
++	kfree(psvts);
++	return ret;
++}
++
+ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+ 				   unsigned long __arg)
+ {
+@@ -298,6 +494,7 @@ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+ 	char __user *arg = (void __user *)__arg;
+ 	struct trt *trts = NULL;
+ 	struct art *arts = NULL;
++	struct psvt *psvts;
+ 
+ 	switch (cmd) {
+ 	case ACPI_THERMAL_GET_TRT_COUNT:
+@@ -336,6 +533,27 @@ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+ 	case ACPI_THERMAL_GET_ART:
+ 		return fill_art(arg);
+ 
++	case ACPI_THERMAL_GET_PSVT_COUNT:
++		ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
++		if (!ret) {
++			kfree(psvts);
++			return put_user(count, (unsigned long __user *)__arg);
++		}
++		return ret;
++
++	case ACPI_THERMAL_GET_PSVT_LEN:
++		/* total length of the data retrieved (count * PSVT entry size) */
++		ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
++		length = count * sizeof(union psvt_object);
++		if (!ret) {
++			kfree(psvts);
++			return put_user(length, (unsigned long __user *)__arg);
++		}
++		return ret;
++
++	case ACPI_THERMAL_GET_PSVT:
++		return fill_psvt(arg);
++
+ 	default:
+ 		return -ENOTTY;
+ 	}
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+index 78d942477035..ac376d8f9ee4 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+@@ -14,6 +14,16 @@
+ #define ACPI_THERMAL_GET_TRT	_IOR(ACPI_THERMAL_MAGIC, 5, unsigned long)
+ #define ACPI_THERMAL_GET_ART	_IOR(ACPI_THERMAL_MAGIC, 6, unsigned long)
+ 
++/*
++ * ACPI_THERMAL_GET_PSVT_COUNT = Number of PSVT entries
++ * ACPI_THERMAL_GET_PSVT_LEN = Total return data size (PSVT count x each
++ * PSVT entry size)
++ * ACPI_THERMAL_GET_PSVT = Get the data as an array of psvt_objects
++ */
++#define ACPI_THERMAL_GET_PSVT_LEN _IOR(ACPI_THERMAL_MAGIC, 7, unsigned long)
++#define ACPI_THERMAL_GET_PSVT_COUNT _IOR(ACPI_THERMAL_MAGIC, 8, unsigned long)
++#define ACPI_THERMAL_GET_PSVT	_IOR(ACPI_THERMAL_MAGIC, 9, unsigned long)
++
+ struct art {
+ 	acpi_handle source;
+ 	acpi_handle target;
+@@ -43,6 +53,32 @@ struct trt {
+ 	u64 reserved4;
+ } __packed;
+ 
++#define ACPI_NR_PSVT_ELEMENTS	12
++#define ACPI_PSVT_CONTROL_KNOB	7
++#define ACPI_LIMIT_STR_MAX_LEN	8
++
++struct psvt {
++	acpi_handle source;
++	acpi_handle target;
++	u64 priority;
++	u64 sample_period;
++	u64 passive_temp;
++	u64 source_domain;
++	u64 control_knob;
++	union {
++		/* For limit_type = ACPI_TYPE_INTEGER */
++		u64 integer;
++		/* For limit_type = ACPI_TYPE_STRING */
++		char string[ACPI_LIMIT_STR_MAX_LEN];
++		char *str_ptr;
++	} limit;
++	u64 step_size;
++	u64 limit_coeff;
++	u64 unlimit_coeff;
++	/* Spec calls this field reserved, so we borrow it for type info */
++	u64 control_knob_type; /* ACPI_TYPE_STRING or ACPI_TYPE_INTEGER */
++} __packed;
++
+ #define ACPI_NR_ART_ELEMENTS 13
+ /* for usrspace */
+ union art_object {
+@@ -77,6 +113,27 @@ union trt_object {
+ 	u64 __data[8];
+ };
+ 
++union psvt_object {
++	struct {
++		char source_device[8];
++		char target_device[8];
++		u64 priority;
++		u64 sample_period;
++		u64 passive_temp;
++		u64 source_domain;
++		u64 control_knob;
++		union {
++			u64 integer;
++			char string[ACPI_LIMIT_STR_MAX_LEN];
++		} limit;
++		u64 step_size;
++		u64 limit_coeff;
++		u64 unlimit_coeff;
++		u64 control_knob_type;
++	};
++	u64 __data[ACPI_NR_PSVT_ELEMENTS];
++};
++
+ #ifdef __KERNEL__
+ int acpi_thermal_rel_misc_device_add(acpi_handle handle);
+ int acpi_thermal_rel_misc_device_remove(acpi_handle handle);
+-- 
+2.34.1
+
