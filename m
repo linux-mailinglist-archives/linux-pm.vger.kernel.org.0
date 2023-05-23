@@ -2,185 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BB770D24E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 05:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74ADC70D3B8
+	for <lists+linux-pm@lfdr.de>; Tue, 23 May 2023 08:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjEWDWd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 May 2023 23:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S235049AbjEWGPf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 May 2023 02:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjEWDWb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 May 2023 23:22:31 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51EE8B6;
-        Mon, 22 May 2023 20:22:29 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxI_B0MWxkficLAA--.18907S3;
-        Tue, 23 May 2023 11:22:28 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuRwMWxkvdtvAA--.57042S3;
-        Tue, 23 May 2023 11:22:25 +0800 (CST)
-Subject: Re: [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Baoqi Zhang <zhangbaoqi@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230522093156.7108-1-zhuyinbo@loongson.cn>
- <20230522093156.7108-3-zhuyinbo@loongson.cn>
- <20230522-kooky-outbid-82662b45d305@wendy>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <d88c0965-8f72-7be1-b67f-1bcf3be60da3@loongson.cn>
-Date:   Tue, 23 May 2023 11:22:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S235055AbjEWGPe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 May 2023 02:15:34 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7853121;
+        Mon, 22 May 2023 23:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684822530; x=1716358530;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yDCojzLYsG5wKsp06o/NDvm2B9gu67JEh/QTra7lVj8=;
+  b=fIVQETAuGfzLlJ4Os0+z/4bOCDFT88qiWawG45xw+k9tOomnNi46Wsry
+   m7F5zYAg5vq2S+025Rt/H2vBZRWxPjd8Hjaky7Fn/j/pWrrZTTb3K5rSm
+   f5+4fOAn8YsEFcBPTMPx/817ESq2hBtlqdylH+fQ6tpN6BaJQYeog/uJA
+   qwtRPT9UXCKYwYlfZ9SoREzhLDPoXhLpDLxY/cirr4Ibdu65pwoxjHZ+w
+   9oDiOZ6S76u0VcKGGrlLz1VPvidMnY/TISkLxZh7EUf7HvoLUtSX4ONFp
+   vnVYCpB7y3egQIAZJ2SF5tG3uDIGUrwTdWoVHJVhE/Wk9/Ohu+5CPe+ZS
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="153433835"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 23:15:29 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 23:15:27 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Mon, 22 May 2023 23:15:23 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor.dooley@microchip.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <sre@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/4] dt-bindings: power: reset: at91: convert to YAML
+Date:   Tue, 23 May 2023 09:15:08 +0300
+Message-ID: <20230523061512.195271-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20230522-kooky-outbid-82662b45d305@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxHuRwMWxkvdtvAA--.57042S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAr45tr1fWw1xZF17WrWkXrb_yoW5tr1fpa
-        n7Ca1Ykr48ZF13uws5JFy8Aw1Y9rZakFsrXFZrJry0kr98u3WFq3y7KF98ZFW3ArykGFW2
-        vFyIgw4jgF4DCFJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYnmiUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
+Series convert AT91 shutdown controllers documentation to YAML.
+Along with it device trees were updated and also entries to
+MAINTAINERS with documentation files.
 
-在 2023/5/22 下午8:47, Conor Dooley 写道:
-> Hey!
-> 
-> On Mon, May 22, 2023 at 05:31:55PM +0800, Yinbo Zhu wrote:
->> Add the Loongson-2 SoC Power Management Controller binding with DT
->> schema format using json-schema.
-> 
-> Grabbing thread from lore.kernel.org/all/20230522093156.7108-3-zhuyinbo%40loongson.cn/t.mbox.gz
-> Checking for newer revisions
-> Grabbing search results from lore.kernel.org
-> Analyzing 3 messages in the thread
-> Checking attestation on all messages, may take a moment...
-> ---
->    [PATCH v2 1/3] loongarch: export loongarch pm interface
->      + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->    [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
->      + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->    ERROR: missing [3/3]!
-> ---
-> Total patches: 2
-> ---
-> WARNING: Thread incomplete!
-> Applying: loongarch: export loongarch pm interface
-> Applying: dt-bindings: soc: add loongson-2 pm
-> 
-> Looks like the user for these bindings got lost somewhere along the way?
-> Please make sure to keep a series threaded.
+Thank you,
+Claudiu
 
-okay, I got it.  I will use a thread to send a series patch.
+Claudiu Beznea (4):
+  ARM: dts: at91: use generic name for shutdown controller
+  dt-bindings: power: reset: atmel,at91sam9260-shdwc: convert to yaml
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: convert to yaml
+  MAINTAINERS: add documentation file for Microchip SAMA5D2 shutdown
+    controller
 
-> 
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../soc/loongson/loongson,ls2k-pmc.yaml       | 51 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
->>   2 files changed, 57 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->> new file mode 100644
->> index 000000000000..ddad62889c60
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->> @@ -0,0 +1,51 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson-2 Power Manager controller
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - loongson,ls2k-pmc
->> +      - const: syscon
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  suspend-address:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
->> +      firmware entry address which was jumped from kernel and it's
->> +      value was dependent on specific platform firmware code. In
->> +      addition, the PM need according to it to indicate that current
->> +      SoC whether support Suspend To RAM.
-> 
-> I (still) think this property is rather odd, maybe I am just not really
-> understanding the property as it seems to be described partly in terms
-> of operating system behaviour rather than its actual function. "was
-> jumped from kernel" I don't get.
+ .../devicetree/bindings/arm/atmel-sysregs.txt |  94 ---------------
+ .../power/reset/atmel,at91sam9260-shdwc.yaml  |  81 +++++++++++++
+ .../power/reset/atmel,sama5d2-shdwc.yaml      | 114 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/at91-qil_a9260.dts          |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts   |   2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9260ek.dts           |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi   |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   2 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
+ arch/arm/boot/dts/usb_a9260.dts               |   2 +-
+ arch/arm/boot/dts/usb_a9263.dts               |   2 +-
+ 24 files changed, 216 insertions(+), 114 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
 
-The function Suspend-To-RAM include kernel logic and firmware logic and
-if no define "suspend-address" that kernel will can't into firmware 
-after suspend to ram and the Suspend-To-RAM function will not be 
-finished in LoongArch.
-
-
-> 
-> The whole setup here seems a bit odd, but that's for the loongson arch
-> folks reviewing the actual code to comment on!
-
-okay, I got it.
-
-Thanks
-Yinbo.
-> 
-> Thanks,
-> Conor.
-> 
+-- 
+2.34.1
 
