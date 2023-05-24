@@ -2,153 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAAD70FC9C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 728D270FCA3
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjEXRZd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S232199AbjEXR3V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjEXRZb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:25:31 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1A21A1;
-        Wed, 24 May 2023 10:25:19 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96f66fbd770so34818066b.1;
-        Wed, 24 May 2023 10:25:19 -0700 (PDT)
+        with ESMTP id S229799AbjEXR3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:29:20 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1ED93;
+        Wed, 24 May 2023 10:29:18 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96f66fbd770so34915366b.1;
+        Wed, 24 May 2023 10:29:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684949118; x=1687541118;
+        d=1e100.net; s=20221208; t=1684949357; x=1687541357;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pfy6ZF4afL0J7QBU8FDsTmh4rkOfTgkO/F08PTuQ2i0=;
-        b=CPMWfAx+P7i4MkgNhxZArIHr/6tILS/F1yvQ7ayxxekXcP7ZaTNXkUuPkmLNSqdv5+
-         Tpjg+ILFL9eyVgtNxj7O0WzYFMwKTWVHb2otVN4x0zxvHx5CltfHGw/7CiiUCUjDToKf
-         FAV7ZnyTrdvLg8mze1b6TdyX5wSKtSny6JsPOGKivN/OtdCsa2Uu2GoGkB6y/V7KmY7+
-         hpsniLEHnoh+rQ5802yjajvludySU4aLKUvcxG52fd5nmGOAiQKuphhyyLhH1M4lXYxc
-         9TO6aNoTuh40ZpjSKvxAaXEhx6i1qn4Zmqc3xV5WkUHkSj7nPoyygXzmUl6cHK7uUNyw
-         TRww==
-X-Gm-Message-State: AC+VfDyneTcAcsLU63HDsVjAZtuZi6XkG53/U6FmAw89fGaNltEDj0zx
-        ki6CRLt2peOqVQc35IfXEc0QtyP8D5afUlBRejU=
-X-Google-Smtp-Source: ACHHUZ62HtPg0Ya/eYDJkq5f7Bfn91Vpe4lJNO/1jKLVHaOvrlKctqKg0UJg+4F6eK1KRc3M1Dy2WAEXkUZhzSvLYxY=
-X-Received: by 2002:a17:906:7495:b0:94e:9efa:a9ed with SMTP id
- e21-20020a170906749500b0094e9efaa9edmr17370712ejl.7.1684949117892; Wed, 24
- May 2023 10:25:17 -0700 (PDT)
+        bh=Uyb/BR/z8u3ulReGvvxK6Q0tGW6dyhXAau/A1unrmWs=;
+        b=hVQq4ZCvYb+27wRpNueRjG/O+V6fx6A/v4zsfyvLocyprT5vMzLN+Gxk47HVcgDzJ/
+         Uz7orqWux45huwdloHrDt/csCkcvtLlOzgVqB1vMP0KtcLJuxzZ768FvxSkk9+AcrkVx
+         lqyPDdL7taAoxnpPOPlX50z78rU5JxuGIzbLyTeaDgg6NtlG/HqneY8/9qlhnJb5f1cv
+         magJJQgtbjjzXRbeO80hhaMCs3N9cF1Vh6wPv7GNMVbnkuj1N+QrVm+It5s5N/rwHk+j
+         QX8oXrK4dfHSf6UE6ZQZYFdBHCIIP2ixWkUynLOarppxj6x56rMm9e5MJWKcAXKf1Z5W
+         XvEw==
+X-Gm-Message-State: AC+VfDymHAOfFBKFao3NuN3uhEvC0Soa2DZ8DWnyEjuIPnG/VggYBIfj
+        qp4GgWqxPbwEf3PxMu2qIANd4rZasa5GIbZSYY2ebjjz
+X-Google-Smtp-Source: ACHHUZ7YqrPutCJvrzN1P8ylXeBNhlIpe2oavSEzUDQT7bXKqG1xa+Q8A0BHKiN0Jo5gxjlCGtNpixDrC6t8HPqz+x8=
+X-Received: by 2002:a17:906:729e:b0:96f:6590:cbdb with SMTP id
+ b30-20020a170906729e00b0096f6590cbdbmr16630454ejl.6.1684949357047; Wed, 24
+ May 2023 10:29:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
-In-Reply-To: <20230512095743.3393563-1-lukasz.luba@arm.com>
+References: <20230524152136.1033-1-mario.limonciello@amd.com>
+ <20230524154454.GA28455@wunner.de> <MN0PR12MB6101E8F181DA892B0D6D7C1BE2419@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <MN0PR12MB6101E8F181DA892B0D6D7C1BE2419@MN0PR12MB6101.namprd12.prod.outlook.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:25:06 +0200
-Message-ID: <CAJZ5v0g5rTBiWOAzWSHqb+YgGxsLfMuYyYj7ChRZAYFHE1Aoaw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Introduce runtime modifiable Energy Model
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, Pierre.Gondois@arm.com,
-        ionela.voinescu@arm.com, rostedt@goodmis.org, mhiramat@kernel.org
+Date:   Wed, 24 May 2023 19:29:05 +0200
+Message-ID: <CAJZ5v0gv_7CVk4JoEvoxC6ZiRXF=HoHbXytmGKDs_x67GdRaWw@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power manageable
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Iain Lane <iain@orangesquash.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+On Wed, May 24, 2023 at 6:16 PM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
+>
+> [AMD Official Use Only - General]
+>
+> > -----Original Message-----
+> > From: Lukas Wunner <lukas@wunner.de>
+> > Sent: Wednesday, May 24, 2023 10:45 AM
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>; Mika Westerberg
+> > <mika.westerberg@linux.intel.com>; Rafael J . Wysocki <rafael@kernel.org>;
+> > linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org; S-k, Shyam-sundar
+> > <Shyam-sundar.S-k@amd.com>; Natikar, Basavaraj
+> > <Basavaraj.Natikar@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; linux-pm@vger.kernel.org; Iain Lane
+> > <iain@orangesquash.org.uk>
+> > Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power
+> > manageable
+> >
+> > On Wed, May 24, 2023 at 10:21:36AM -0500, Mario Limonciello wrote:
+> > > --- a/drivers/pci/pci.c
+> > > +++ b/drivers/pci/pci.c
+> > > @@ -2976,6 +2976,9 @@ bool pci_bridge_d3_possible(struct pci_dev
+> > *bridge)
+> > >
+> > >     switch (pci_pcie_type(bridge)) {
+> > >     case PCI_EXP_TYPE_ROOT_PORT:
+> > > +           if (!platform_pci_power_manageable(bridge))
+> > > +                   return false;
+> > > +           fallthrough;
+> > >     case PCI_EXP_TYPE_UPSTREAM:
+> > >     case PCI_EXP_TYPE_DOWNSTREAM:
+> > >             if (pci_bridge_d3_disable)
+> >
+> > This will exempt the Root Ports from pcie_port_pm=force.
+> > Not sure if that's desirable.
+>
+> Right; It will only exempt root ports from pcie_port_pm=force
+> if they aren't power manageable.
+>
+> If it's still desirable to let pcie_port_pm=force work on these
+> I think it's worth refactoring the function otherwise it's going
+> to be a nested if that matches the same variable as the
+> switch.
+>
+> Something like this:
+>
+> bool pci_bridge_d3_possible(struct pci_dev *bridge)
+> {
+>         if (!pci_is_pcie(bridge))
+>                 return false;
+>
+>         switch (pci_pcie_type(bridge)) {
+>         case PCI_EXP_TYPE_ROOT_PORT:
+>         case PCI_EXP_TYPE_UPSTREAM:
+>         case PCI_EXP_TYPE_DOWNSTREAM:
+>                 break;
+>         default:
+>                 return false;
+>         }
+>
+>         if (pci_bridge_d3_disable)
+>                 return false;
+>
+>         /*
+>          * Hotplug ports handled by firmware in System Management Mode
+>          * may not be put into D3 by the OS (Thunderbolt on non-Macs).
+>          */
+>         if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
+>                 return false;
+>
+>         if (pci_bridge_d3_force)
+>                 return true;
+>
+>         /* Even the oldest 2010 Thunderbolt controller supports D3. */
+>         if (bridge->is_thunderbolt)
+>                 return true;
+>
+>         /* Platform might know better if the bridge supports D3 */
+>         if (platform_pci_bridge_d3(bridge))
+>                 return true;
+>
+>         /*
+>          * Hotplug ports handled natively by the OS were not validated
+>          * by vendors for runtime D3 at least until 2018 because there
+>          * was no OS support.
+>          */
+>         if (bridge->is_hotplug_bridge)
+>                 return false;
+>
+>         if (dmi_check_system(bridge_d3_blacklist))
+>                 return false;
+>
+>         /*
+>          * It should be safe to put PCIe ports from 2015 or newer
+>          * to D3.
+>          */
+>         if (dmi_get_bios_year() >= 2015)
+>                 return true;
+>
+>         return false;
+> }
+>
+> Then the check I'm proposing can injected anywhere after the force like this:
+>
+> if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
+>     !platform_pci_power_manageable(bridge)))
+>         return false;
 
-On Fri, May 12, 2023 at 11:58 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi all,
->
-> This patch set adds a new feature which allows to modify Energy Model (EM)
-> power values at runtime. It will allow to better reflect power model of
-> a recent SoCs and silicon. Different characteristics of the power usage
-> can be leveraged and thus better decisions made during task placement in EAS.
->
-> It's part of feature set know as Dynamic Energy Model. It has been presented
-> and discussed recently at OSPM2023 [3]. This patch set implements the 1st
-> improvement for the EM.
->
-> The concepts:
-> 1. The CPU power usage can vary due to the workload that it's running or due
-> to the temperature of the SoC. The same workload can use more power when the
-> temperature of the silicon has increased (e.g. due to hot GPU or ISP).
-> In such situation or EM can be adjusted and reflect the fact of increased
-> power usage. That power increase is due to a factor called static power
-> (sometimes called simply: leakage). The CPUs in recent SoCs are different.
-> We have heterogeneous SoCs with 3 (or even 4) different microarchitectures.
-> They are also built differently with High Performance (HP) cells or
-> Low Power (LP) cells. They are affected by the temperature increase
-> differently: HP cells have bigger leakage. The SW model can leverage that
-> knowledge.
-> 2. It is also possible to change the EM to better reflect the currently
-> running workload. Usually the EM is derived from some average power values
-> taken from experiments with benchmark (e.g. Dhrystone). The model derived
-> from such scenario might not represent properly the workloads usually running
-> on the device. Therefore, runtime modification of the EM allows to switch to
-> a different model, when there is a need.
-> 3. The EM can be adjusted after boot, when all the modules are loaded and
-> more information about the SoC is available e.g. chip binning. This would help
-> to better reflect the silicon characteristics. Thus, this EM modification
-> API allows it now. It wasn't possible in the past and the EM had to be
-> 'set in stone'.
->
-> Some design details:
-> The internal mechanisms for the memory allocation are handled internally in the
-> EM. Kernel modules can just call the new API to update the EM data and the
-> new memory would be provided and owned by the EM. The EM memory is used by
-> EAS, which impacts those design decisions. The EM writers are protected by
-> a mutex. This new runtime modified EM table is protected using RCU mechanism,
-> which fits the current EAS hot path (which already uses RCU read lock).
-> The unregister API handles only non-CPU (e.g. GPU, ISP) devices and uses the
-> same mutex as EM modifiers to make sure the memory is safely freed.
->
-> More detailed explanation and background can be found in presentations
-> during LPC2022 [1][2] or in the documentation patches.
->
-> Changelog:
-> v2:
-> - solved build warning of unused variable in patch 13/17 when EM is
->   not compiled in, e.g. on Intel platform for this cpufreq_cooling
-> - re-based on top of v6.4-rc1
-> v1:
-> - implementation can be found here [4]
->
-> [1] https://lpc.events/event/16/contributions/1341/attachments/955/1873/Dynamic_Energy_Model_to_handle_leakage_power.pdf
-> [2] https://lpc.events/event/16/contributions/1194/attachments/1114/2139/LPC2022_Energy_model_accuracy.pdf
-> [3] https://www.youtube.com/watch?v=2C-5uikSbtM&list=PL0fKordpLTjKsBOUcZqnzlHShri4YBL1H
-> [4] https://lore.kernel.org/lkml/20230314103357.26010-1-lukasz.luba@arm.com/
->
-> Lukasz Luba (17):
->   PM: EM: Refactor em_cpufreq_update_efficiencies() arguments
->   PM: EM: Find first CPU online while updating OPP efficiency
->   PM: EM: Refactor em_pd_get_efficient_state() to be more flexible
->   PM: EM: Create a new function em_compute_costs()
->   trace: energy_model: Add trace event for EM runtime modifications
->   PM: EM: Add update_power() callback for runtime modifications
->   PM: EM: Check if the get_cost() callback is present in
->     em_compute_costs()
->   PM: EM: Introduce runtime modifiable table
->   PM: EM: Add RCU mechanism which safely cleans the old data
->   PM: EM: Add runtime update interface to modify EM power
->   PM: EM: Use runtime modified EM for CPUs energy estimation in EAS
->   PM: EM: Add argument to get_cost() for runtime modification
->   PM: EM: Refactor struct em_perf_domain and add default_table
->   Documentation: EM: Add a new section about the design
->   Documentation: EM: Add a runtime modifiable EM design description
->   Documentation: EM: Add example with driver modifying the EM
->   Documentation: EM: Describe the API of runtime modifications
-
-I haven't seen any responses from anyone having a vested interest in
-the Energy Model code.
-
-I'm not sure what this means, but I surely can't do much about it
-myself without any input from the potentially interested parties.
-
-Thanks!
+Sounds reasonable.  I would even put it after the Thunderbolt check.
