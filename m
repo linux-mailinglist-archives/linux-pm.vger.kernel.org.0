@@ -2,103 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF90070FD39
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA0D70FDD2
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 20:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjEXRwE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S237191AbjEXSZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 14:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEXRwD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:52:03 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD236B6;
-        Wed, 24 May 2023 10:52:01 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f44435d92so36069866b.0;
-        Wed, 24 May 2023 10:52:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950720; x=1687542720;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A8s+iCfLGhAWMeUCmISWbcng6Ztiz5xZ2WYWKuHiGSM=;
-        b=lF4CE7v3mkS5uyHcSO3DBJsY2RIW2jmgW7C2ODtdsVJjqUwAU9J20fCEvLMVFdD/GZ
-         w1E38YNRYMWyBgxeMz7wY40FTrUvw2gvt0npA9vyqdHtWRrl7WSQ5sU+170Fc3J/2WGp
-         VZrbHcktcSUTxTnNqh1TRtmZTQnMdxqn/XvVuazkN0865Q6FYBM9vNjh4Op8UFzYkT6g
-         25mXHJPWvCloZMugvWwsd8QOz/YCcCmMkDSX/byTEZDdLTPeuI3KB54IvDLODwjKEUY3
-         cGhy5a8LyXoiiTGGaURqEhxz6EF9fukhYJbYmHlwjVVvO90f6UtV3s5xw0hlXWI20VKB
-         mHbQ==
-X-Gm-Message-State: AC+VfDysLP9+W0FFnabPqAYDkKNo+g7qB8m4d9eCeCkL86IPOUe+cxAh
-        WQc+1olkRUWMa9o9zQvDHEDT+indzuuilqjy8pg=
-X-Google-Smtp-Source: ACHHUZ4YXBkzSuEfty00UMlynnqkeyUgeGVEfPlZ+2J8FPdlV5kw/fEgWNxRTkh05T2PyijTLADuM1aNeKD5o0+b3Sk=
-X-Received: by 2002:a17:906:77d8:b0:959:37cc:190e with SMTP id
- m24-20020a17090677d800b0095937cc190emr16001159ejn.3.1684950719996; Wed, 24
- May 2023 10:51:59 -0700 (PDT)
+        with ESMTP id S237775AbjEXSZH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 14:25:07 -0400
+X-Greylist: delayed 1712 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 May 2023 11:25:02 PDT
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6578613E;
+        Wed, 24 May 2023 11:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=Cc:To:Message-Id:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Subject:Date:From:References:In-Reply-To:Sender:
+        Reply-To:Content-ID:Content-Description;
+        bh=SPrqV6ntExTuKWUGea554T7MrMdxYL653Yvti6t/SiQ=; b=QxbJe9w+BZfDdaA+dQgy0917EL
+        /AGNlLaD6S2fxjGnGhkr9zUNSsXN67n/7C1/hCqU7sQwp31g1SSiBKuRluPdKJdT5kVWn0TCBq/Nf
+        coK8ehnJxJgzCvV0lSlzRBLsWcdRERV9AZiJAXE1F+EdmjsOg4BkjMEBtl59SdPZYKBslHubkmx4H
+        FlVhfuAhpsYhGdeF4XAkcSYaz+KxChhAcyJJN7YtpfKbgPwM6yRE+nu0Y8412hCotoJqi3/QR6I1l
+        +yqQEX13g05r68Ga3dmwVH8phbTvG2ikw+W3oYqlAaPik1WnlgJXKWIcOTZwAZjlv/aqlCbdsnbpr
+        dHpziR2Q==;
+Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1q1sio-002A2x-Ty; Wed, 24 May 2023 19:56:26 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Date:   Wed, 24 May 2023 19:56:21 +0200
+Subject: [PATCH] opp: Fix use-after-free in lazy_opp_tables after probe
+ deferral
 MIME-Version: 1.0
-References: <20230522223844.2330343-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230522223844.2330343-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:51:48 +0200
-Message-ID: <CAJZ5v0izNboNVZHvtV+-hB7e7P73MfJAMj5i0SjFRJwVAt4D3g@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: Add new line for UUID display
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
+X-B4-Tracking: v=1; b=H4sIAMVPbmQC/x2N0QqDMAwAf0XybCCrOsRfGT6kXZyBUkuLsk389
+ 4U93sFxJ1QpKhWm5oQih1bdksGtbSCsnF6C+jQGR66jwfW45YyRvx/cecE7MVHvu3GQAJZ4roK
+ +cAqrRWmP0WQusuj7/3jM1/UDqZFnUnMAAAA=
+To:     Viresh Kumar <vireshk@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        stable@vger.kernel.org,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 23, 2023 at 12:39 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Prior to the commit:
-> "763bd29fd3d1 ("thermal: int340x_thermal: Use sysfs_emit_at() instead of
-> scnprintf()"
-> there was a new line after each UUID string. With the newline removed,
-> existing user space like "thermald" fails to compare each supported UUID
-> as it is using getline() to read UUID and apply correct thermal table.
->
-> To avoid breaking existing user space, add newline after each UUID string.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Fixes: 763bd29fd3d1 ("thermal: int340x_thermal: Use sysfs_emit_at() instead of scnprintf()")
-> Cc: stable@vger.kernel.org # v6.3+
-> ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 810231b59dcd..5e1164226ada 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -131,7 +131,7 @@ static ssize_t available_uuids_show(struct device *dev,
->
->         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; i++) {
->                 if (priv->uuid_bitmap & (1 << i))
-> -                       length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
-> +                       length += sysfs_emit_at(buf, length, "%s\n", int3400_thermal_uuids[i]);
->         }
->
->         return length;
-> @@ -149,7 +149,7 @@ static ssize_t current_uuid_show(struct device *dev,
->
->         for (i = 0; i <= INT3400_THERMAL_CRITICAL; i++) {
->                 if (priv->os_uuid_mask & BIT(i))
-> -                       length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
-> +                       length += sysfs_emit_at(buf, length, "%s\n", int3400_thermal_uuids[i]);
->         }
->
->         if (length)
-> --
+When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
+-EPROBE_DEFER, the opp_table is freed again, to wait until all the
+interconnect paths are available.
 
-Applied as 6.4-rc material, thanks!
+However, if the OPP table is using required-opps then it may already
+have been added to the global lazy_opp_tables list. The error path
+does not remove the opp_table from the list again.
+
+This can cause crashes later when the provider of the required-opps
+is added, since we will iterate over OPP tables that have already been
+freed. E.g.:
+
+  Unable to handle kernel NULL pointer dereference when read
+  CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
+  PC is at _of_add_opp_table_v2 (include/linux/of.h:949
+  drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
+  drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
+
+Fix this by removing the opp_table from the list before freeing it.
+
+Cc: stable@vger.kernel.org
+Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+---
+This fixes the crash I ran into after adding an OPP table with
+both "required-opps" and interconnect paths (opp-peak-kBps).
+
+By the way, the "lazy_opp_tables" does not seem to be protected by any
+locks(?) so I could imagine that theoretically there could be a race
+condition while adding/removing OPP tables there. This is unrelated
+to the crash I saw, though.
+---
+ drivers/opp/core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 85cbc8de407c..6a3a320be7df 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1358,6 +1358,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 	return opp_table;
+ 
+ remove_opp_dev:
++	list_del(&opp_table->lazy);
+ 	_remove_opp_dev(opp_dev, opp_table);
+ err:
+ 	kfree(opp_table);
+
+---
+base-commit: 9e28f7a74581204807f20ae46568939038e327aa
+change-id: 20230524-opp-lazy-uaf-60a004b385ec
+
+Best regards,
+-- 
+Stephan Gerhold
+Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+
