@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E526670ECC4
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 06:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A533970ECC8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 07:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjEXE7Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 00:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
+        id S239085AbjEXFAC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 01:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjEXE7P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 00:59:15 -0400
+        with ESMTP id S239078AbjEXFAA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 01:00:00 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9A13E;
-        Tue, 23 May 2023 21:59:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C267718C;
+        Tue, 23 May 2023 21:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=3cqLQxSD9pGuqgjwI40zZQxFCK7ZM0myf/djuDV5MFg=; b=fwDNoeFbu59alevHNXxjQ4UtcX
-        z4Nmn91xZTx2tfK9c/84TCrR7U0lEPaXIyi0YCtlrOsdU0yI3kfG6hgm3vxKv0txBywb0QQn8xo7b
-        WA/TJqaIhOTkyK/+PsT8Wo5aXRNWSiLAft36+EU9A76hU1hw/EdjynpSBKuiPw2jZpjHJPtvSOWpX
-        aHnd8xa+vN0kWv4BYUWLZc4Q3mrRO2zubNbtWLOWzmm7wNxU5XO87vRbWAskvdWzCz0wQbyAmk6AJ
-        +BBFUKXtbaVsYD9KLE2Zg8ZsGWIruTEeftNL95FFSumG+Z52rQocISza4Jh3Eva6F/Cxi/8xGYTqE
-        vVXHccEQ==;
+        bh=edfaHMR4YECUnGbotyyMF5SacmYMp3ZU5F4DQmNY/7s=; b=uOXqxTrJImRqsmHMilxK6MCQEv
+        KI3v8/yqFEgl4ulo+p+bdyVTA3kY0O1FXw40ENov2CvbludFu26kje+1Ml+5uQI2CCpeyoGnTrthO
+        cVzWJvRbrDa7dZ81etpc9bjOaqGhAGjRE5cHe3eMbqsfknhSjkPPf+BCmpmNkkVncRYLDrgykPe4V
+        y867kdNdppijjZlgV9pJx1R61tAcVtonnEXY3FkV6iN+M98KQ+mXt8hNg/R9fA7qdRxMhBLbRGldL
+        twTRvHoXRNjTxnrEApCmu1Vqt7XVb3qC7n01O87thLWmrjewHv3AdxLvpwEH21KZEYFvvmPvYAkgb
+        5DaICZJQ==;
 Received: from [2601:1c2:980:9ec0::2764]
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1gaM-00CMV4-1i;
-        Wed, 24 May 2023 04:58:54 +0000
-Message-ID: <b384f464-92c6-6a14-4072-1faa9fa6a6a8@infradead.org>
-Date:   Tue, 23 May 2023 21:58:53 -0700
+        id 1q1gbH-00CMaO-18;
+        Wed, 24 May 2023 04:59:51 +0000
+Message-ID: <e96e4e85-7371-2859-b9a5-0f2c1f3b97d9@infradead.org>
+Date:   Tue, 23 May 2023 21:59:50 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 Subject: Re: [PATCH 15/24] block: move the code to do early boot lookup of
  block devices to block/
 Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
 To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -49,8 +50,8 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
 References: <20230523074535.249802-1-hch@lst.de>
  <20230523074535.249802-16-hch@lst.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230523074535.249802-16-hch@lst.de>
+ <b384f464-92c6-6a14-4072-1faa9fa6a6a8@infradead.org>
+In-Reply-To: <b384f464-92c6-6a14-4072-1faa9fa6a6a8@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,25 +66,31 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 5/23/23 00:45, Christoph Hellwig wrote:
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f08b83e62c6222..3f8cf6dc7de887 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5452,7 +5452,7 @@
->  			port and the regular usb controller gets disabled.
->  
+On 5/23/23 21:58, Randy Dunlap wrote:
+> 
+> 
+> On 5/23/23 00:45, Christoph Hellwig wrote:
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index f08b83e62c6222..3f8cf6dc7de887 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -5452,7 +5452,7 @@
+>>  			port and the regular usb controller gets disabled.
+>>  
+>>  	root=		[KNL] Root filesystem
+>> -			See early_lookup_bdev comment in init/do_mounts.c.
+>> +			See early_lookup_bdev comment in block/early-lookup.c
+> 
+> Patch 13 does this:
+> 
 >  	root=		[KNL] Root filesystem
-> -			See early_lookup_bdev comment in init/do_mounts.c.
-> +			See early_lookup_bdev comment in block/early-lookup.c
+> -			See name_to_dev_t comment in init/do_mounts.c.
+> +			See early_lookup_bdev comment in init/do_mounts.c.
+> 
+> Should this latter chunk be dropped?
+> 
 
-Patch 13 does this:
-
- 	root=		[KNL] Root filesystem
--			See name_to_dev_t comment in init/do_mounts.c.
-+			See early_lookup_bdev comment in init/do_mounts.c.
-
-Should this latter chunk be dropped?
+Oh, oops, reverse order of patches?
 
 -- 
 ~Randy
