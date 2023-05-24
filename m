@@ -2,135 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A23470F394
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 11:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FB270F3FA
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 12:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjEXJ5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 05:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S232469AbjEXKTk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 06:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjEXJ5H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 05:57:07 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CABD130
-        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 02:57:05 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9e27684b53so692653276.0
-        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 02:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684922224; x=1687514224;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vH2+XRfLbLSg7dX3ECLEuFafMqGcT0nmYiMVQ0VO/PQ=;
-        b=iOEW2/dj0DCI7mcTXMDXrLv+AO07KE9MkpVYnkH81hXbJ6cXQRNIVP3lE3INLp8FPc
-         BigpxgYT8Md1dDGHyDIUmFA4vG28TXl1inmwRqaODbWcX1vok0M/XdW4X8EwqxS/veNL
-         yy3SVWB9ZkTu5r68coUC7ubnxT3zweVbl9u7wEztcCHHkySZlUKQ28+kT8q8qx4aI5ND
-         kgPqvxpr/StwubC+NmjOg+usoBLi9r7GCBNPG4U8W7si/W8byF0xJi7vgvKCa8v9RsKX
-         n4NP7ua7JiDxWL8Iv4uSc6eAFKfhEoWmPsk15EOzV4hWx2b1Zc1cNqL43XFGpYdRp+LH
-         gMEQ==
+        with ESMTP id S232495AbjEXKSf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 06:18:35 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98973E6C;
+        Wed, 24 May 2023 03:18:08 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96f72e6925cso15689566b.1;
+        Wed, 24 May 2023 03:18:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684922224; x=1687514224;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vH2+XRfLbLSg7dX3ECLEuFafMqGcT0nmYiMVQ0VO/PQ=;
-        b=TUr35/HPTVincEFAC+uwEGOhf6NO5zY6TthjEXalA0D0lfuPlPFUHpC7+WlOCYMkgM
-         yB3cUatHxJoYVjwZyikcMpuEVrnK2fatxFWA/FE6bm+hH+vzb1QFcADxp4znlg0sdPAx
-         32l/O0iODhVlJ7Y+MYqRshyR/Z9D0/JYudZfp/d8cuQzBzZYgjak+5yDvZXP7kSsskKV
-         fPJoE1kMFbhuaqPZuDDtOmM+hnvl0LmtDoRLFSTs281e/lunnaGAGMduZJHnufM/ZreY
-         g8czwUjB16zRum6Lm2NpL8Bv6Fv1fmG29YbQPdfGETM2DE53Bo5aogf8SqxeQ7T91apd
-         VTww==
-X-Gm-Message-State: AC+VfDz8vWRb2mj1wRQuHFHPOEsqZ6z/4VrgLOHLyCQysKtBKAnmF387
-        AY8Zap9SijVhX6T/EgeLlpSHPPrLi/CPWAZqupV6/A==
-X-Google-Smtp-Source: ACHHUZ5g3w1b7BDAEbgQDZk9MGbN4UM4FbejYnoo/ZcxSc23w+cGK0C5F6MQyriujIDtYDLoCJamTLG9MfMQCDMK+lY=
-X-Received: by 2002:a25:73c5:0:b0:b8c:54d:c60c with SMTP id
- o188-20020a2573c5000000b00b8c054dc60cmr16230310ybc.34.1684922224229; Wed, 24
- May 2023 02:57:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684923487; x=1687515487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kIbASmk4FtEgWrqVYhKPUtwtIiST0CQZcy/ybdN1tZk=;
+        b=Y6910eTfj9aEfs0Ls+yYeG2938rtzbqHLvbCJwGed9VjTHpm0pNPNWN3kAm0mwMc+b
+         IBmm0W5sFUnavvcfTQ8yPsQ4Qpf39GpI++djl80kejHmV74Md+NFd1oBrDzKq4GISALx
+         ntwsnDfVDzYKech88Yx9Q1g5o1hdvL7IMIrpLVeoBLTzCtOAhklRy7/s6HaTiItc8P+r
+         qeIdFtRmhqjeAvASDvIf5XHa49ISrZXFxn97rjXEX0taMnjixEKNgxpiURZO9pSMPwVp
+         VrjasSiQaHF05109BgO4J7nC8Q61tM1z67A29KjwvElQqCAJc2xRiU4oFKbK1NIxGPc6
+         PXgg==
+X-Gm-Message-State: AC+VfDzLP7xNa/wS7iPWOdP6QLIOFf5EKqnl8kuxAqadzsVJmbjbDThr
+        l4rDkQ/TmwnuoRz+RUuGzF5J4Xn4EzpMDpEtMnQ=
+X-Google-Smtp-Source: ACHHUZ6MfeW4Iz0iuqbb/1bCIMVmiJssD4zE344ftV+J1YfKEI/cSISP7O/SQjiOiT3Mf9B/3DqQuKn/DFk7ERvm5zc=
+X-Received: by 2002:a17:906:77c5:b0:966:1f60:fd32 with SMTP id
+ m5-20020a17090677c500b009661f60fd32mr1471924ejn.6.1684923486802; Wed, 24 May
+ 2023 03:18:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
-In-Reply-To: <20230424110933.3908-1-quic_mkshah@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 24 May 2023 11:56:28 +0200
-Message-ID: <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
-To:     andersson@kernel.org, Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     dianders@chromium.org, swboyd@chromium.org, wingers@google.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        jwerner@chromium.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com
+References: <ZG0jhvzAZnfscSeC@bhelgaas> <654d2a59-9836-cc6d-c521-6835d725284d@amd.com>
+In-Reply-To: <654d2a59-9836-cc6d-c521-6835d725284d@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 May 2023 12:17:53 +0200
+Message-ID: <CAJZ5v0gTWJWR=cO+DXD15UW-CcCMaGRxxX11L8UWLm61w6gvbw@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: Don't assume root ports from > 2015 are power manageable
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        Iain Lane <iain@orangesquash.org.uk>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+On Tue, May 23, 2023 at 11:30 PM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
 >
-> Changes in v4:
-> - Add missing s-o-b line and reviewed by in patch 1
-> - Address ulf's comments for error handling in patch 2
 >
-> Changes in v3:
-> - Add new change to provide helper function dt_idle_pd_remove_topology()
-> - Address ulf's comments for error handling
-> - Add reviewed by ulf for devicetree change
+> On 5/23/2023 3:35 PM, Bjorn Helgaas wrote:
+> > [+cc Rafael, Lukas, linux-pm]
+> >
+> > On Wed, May 17, 2023 at 10:08:27AM -0500, Mario Limonciello wrote:
+> >> Using an XHCI device to wakeup the system from s2idle fails when
+> >> that XHCI device is connected to a USB-C port for an AMD USB4
+> >> router.
+> > Are XHCI, USB-C, and the AMD USB4 router just examples?
 >
-> Changes in v2:
-> - Add new change to Move enabling OSI mode after power domains creation
-> - Fix compatible string to domains-idle-states for cluster idle state.
-> - Update cover letter with some more details on OSI and PC mode
->   comparision
+> They're very specific to this case.  If XHCI
+> keyboard/mouse is connected to a type-C port that is
+> not connected to AMD USB4 router this issue doesn't occur.
 >
-> The dependency [2] is now merged in trustedfirmware project.
+> > I assume the
+> > same issue could happen with non-XHCI and non-AMD devices, too?
+> Based on what's wrong with Linux and fixed by this patch,
+> yes this *can* happen to any vendor that the root port doesn't
+> support waking from for D3 but Linux uses it anyway.
+> >
+> > I assume the problem has something to do with PME_Support and some
+> > device being put in a power state where it cannot generate or forward
+> > PME messages?  I think the PCIe protocol details would be helpful
+> > here.
 >
-> Stats comparision between OSI and PC mode are captured at [3] with
-> usecase
-> details, where during multiple CPUs online the residency in cluster idle
-> state is better with OSI and also inline with single CPU mode. In PC
-> mode
-> with multiple CPUs cluster idle state residency is dropping compare to
-> single CPU mode.
+> No; it's specific to an internal sequence in the SoC.
 >
-> Recording of this meeting is also available at [4].
+> If the problematic root port is in D3 during s0i3 this
+> problematic sequence happens.  If the root port is in D0
+> then it doesn't.
 >
-> This change adds power-domains for cpuidle states to use PSCI OS
-> initiated mode for sc7280.
+>  From discussion with others in AMD that's at least one
+> reason why the firmware doesn't advertise any power management
+> on this root port and why Linux shouldn't be using it.
 >
-> This change depends on external project changes [1] & [2] which are
-> under review/discussion to add PSCI os-initiated support in Arm Trusted
-> Firmware.
+> >> Comparing registers between Linux and Windows 11 this behavior to put root
+> >> ports into D3 at suspend is unique to Linux.  On an affected system
+> >> Windows does not put the root ports into D3 over Modern Standby.
+> >>
+> >> Windows doesn't put the root ports into D3 because root ports are not
+> >> power manageable; they're missing _PRW and _S0W.
+> > platform_pci_power_manageable() tests adev->flags.power_manageable,
+> > which is set by acpi_bus_get_power_flags() when a device has _PS0 or
+> > _PR0.
+> >
+> > So I don't know what's relevant out of _PRW, _S0W, _PS0, _PR0, but
+> > this sentence doesn't seem to match the code.
 >
-> I can update here once the dependency are in and change is ready to
-> merge.
+> The firmware doesn't have _PS0 or _PR0 either for this root
+> port.
 >
-> [1] https://review.trustedfirmware.org/q/topic:psci-osi
-> [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
-> [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
-> [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
->
-> Maulik Shah (3):
->   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
->   cpuidle: psci: Move enabling OSI mode after power domains creation
->   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
->
->  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
->  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
->  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
->  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
->  4 files changed, 117 insertions(+), 51 deletions(-)
->
+> >> Linux shouldn't be assuming they support D3 just because they're newer
+> >> than 2015, the ports should also be deemed power manageable.
+> >> Add an extra check for this to ensure D3 isn't selected for such machines.
+> > Is this talking about D3hot or D3cold or both?  If we can make this
+> > explicit, it will help me out.  It's probably obvious to power
+> > experts, but I'm not one.
+> Both.
+> >> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> >> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> >> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> ---
+> >>   drivers/pci/pci.c | 3 +++
+> >>   1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> >> index 5ede93222bc1..3fe27aef09e6 100644
+> >> --- a/drivers/pci/pci.c
+> >> +++ b/drivers/pci/pci.c
+> >> @@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+> >>              if (dmi_check_system(bridge_d3_blacklist))
+> >>                      return false;
+> >>
+> >> +            if (!platform_pci_power_manageable(bridge))
+> >> +                    return false;
+> >> +
 
-Looks like this series has not been queued up yet. Note that patch1
-and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
-DTS change) is dependent on patch 1 and patch2.
+This goes too far, because it causes all ports, not just root ports.
 
-Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
-Bjorn, is that okay for you?
+If the intention is to address a problem with a root port, then the
+change in behavior should be limited to root ports.
 
-Kind regards
-Uffe
+And yes, you can argue that for root ports, specifically, power
+management without firmware support is rather pointless if not
+harmful.
+
+> >>              /*
+> >>               * It should be safe to put PCIe ports from 2015 or newer
+> >>               * to D3.
+> >> --
+> >> 2.34.1
+> Something that this patch makes me wonder is if the original
+> heuristic was actually correct.
+
+Do you mean the cutoff date?
+
+> Did the PCIe ports from "older" machine have everything needed
+> to let them go to D3?
+>
+> Or would this change also let the heuristic be dropped?
+
+For root ports - probably.  In general - not at all.
