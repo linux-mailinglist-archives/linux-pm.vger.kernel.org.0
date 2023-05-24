@@ -2,178 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728D270FCA3
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EFD70FCB9
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjEXR3V convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S235366AbjEXRdV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjEXR3U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:29:20 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1ED93;
-        Wed, 24 May 2023 10:29:18 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96f66fbd770so34915366b.1;
-        Wed, 24 May 2023 10:29:18 -0700 (PDT)
+        with ESMTP id S235060AbjEXRdT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:33:19 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FF812E;
+        Wed, 24 May 2023 10:33:18 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51097a4f330so311391a12.0;
+        Wed, 24 May 2023 10:33:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684949357; x=1687541357;
+        d=1e100.net; s=20221208; t=1684949597; x=1687541597;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uyb/BR/z8u3ulReGvvxK6Q0tGW6dyhXAau/A1unrmWs=;
-        b=hVQq4ZCvYb+27wRpNueRjG/O+V6fx6A/v4zsfyvLocyprT5vMzLN+Gxk47HVcgDzJ/
-         Uz7orqWux45huwdloHrDt/csCkcvtLlOzgVqB1vMP0KtcLJuxzZ768FvxSkk9+AcrkVx
-         lqyPDdL7taAoxnpPOPlX50z78rU5JxuGIzbLyTeaDgg6NtlG/HqneY8/9qlhnJb5f1cv
-         magJJQgtbjjzXRbeO80hhaMCs3N9cF1Vh6wPv7GNMVbnkuj1N+QrVm+It5s5N/rwHk+j
-         QX8oXrK4dfHSf6UE6ZQZYFdBHCIIP2ixWkUynLOarppxj6x56rMm9e5MJWKcAXKf1Z5W
-         XvEw==
-X-Gm-Message-State: AC+VfDymHAOfFBKFao3NuN3uhEvC0Soa2DZ8DWnyEjuIPnG/VggYBIfj
-        qp4GgWqxPbwEf3PxMu2qIANd4rZasa5GIbZSYY2ebjjz
-X-Google-Smtp-Source: ACHHUZ7YqrPutCJvrzN1P8ylXeBNhlIpe2oavSEzUDQT7bXKqG1xa+Q8A0BHKiN0Jo5gxjlCGtNpixDrC6t8HPqz+x8=
-X-Received: by 2002:a17:906:729e:b0:96f:6590:cbdb with SMTP id
- b30-20020a170906729e00b0096f6590cbdbmr16630454ejl.6.1684949357047; Wed, 24
- May 2023 10:29:17 -0700 (PDT)
+        bh=LCSKoj+QaYMGiALxKIVygFGEfEGQMG7Gw+jdrUBXjYI=;
+        b=QjmIs1SU39Gf2T4z3QvfIc/ApguHIhSJ13yhSoq2Z2Z491ppcXJa/1Do1+O55SZ2Rc
+         ZyKbgbX7jUNe06FYYeOKsM3k2E+2Gw+l/Z+PbhVyBzYtQNAyDpOM2j8PBYMHZjLfj+dP
+         eNPtk544mJteUsEpVixGQ5FNkyx05edYhqmN/yzNyq4aNouXS2vyxD03ATiqft/Q1wAI
+         7tzAb98CNu+ASWudQfpUjR8Cj596jFEiS333QjZK+i8C4CJgbZ/b/e7JZ6FY32eD1gMs
+         ViFhfpr8R8U4Wd5MYGI7MMja7skAYBCiKIw8rYz8fIBYW2tOdypvdvSKhb77vo88QeXH
+         Nu1w==
+X-Gm-Message-State: AC+VfDz6xnZ4fu0Be/1bShT3ZJ2zPG6phusACDzxBLqD9V4H0MAjdvJB
+        0pIpEdblBPjHNbRzmvUg+UAph5oGHnd78R5BDZI=
+X-Google-Smtp-Source: ACHHUZ75t5LOoP5fPEw1B3B8AOZ5QAW3p/uA3PR3RjFQ63NrJQ3bU0l+qjgSiV2WQ1zsptMKJ1KiCOsk0UIwyQ0utjI=
+X-Received: by 2002:a17:906:2218:b0:96f:4c38:4b1a with SMTP id
+ s24-20020a170906221800b0096f4c384b1amr16403004ejs.5.1684949596574; Wed, 24
+ May 2023 10:33:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230524152136.1033-1-mario.limonciello@amd.com>
- <20230524154454.GA28455@wunner.de> <MN0PR12MB6101E8F181DA892B0D6D7C1BE2419@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB6101E8F181DA892B0D6D7C1BE2419@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230517131102.934196-1-arnd@kernel.org> <20230517131102.934196-11-arnd@kernel.org>
+ <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com> <6b7f6f66-7890-47a3-a22d-e29f2944823a@app.fastmail.com>
+In-Reply-To: <6b7f6f66-7890-47a3-a22d-e29f2944823a@app.fastmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:29:05 +0200
-Message-ID: <CAJZ5v0gv_7CVk4JoEvoxC6ZiRXF=HoHbXytmGKDs_x67GdRaWw@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power manageable
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Iain Lane <iain@orangesquash.org.uk>
+Date:   Wed, 24 May 2023 19:33:05 +0200
+Message-ID: <CAJZ5v0h+HNTMcfxFuOeO92D__NzJSTHfjzP5VQG4D+WuNmHpdw@mail.gmail.com>
+Subject: Re: [PATCH 10/14] suspend: add a arch_resume_nosmt() prototype
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        audit@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 24, 2023 at 6:16 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
+On Wed, May 17, 2023 at 4:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> [AMD Official Use Only - General]
->
-> > -----Original Message-----
-> > From: Lukas Wunner <lukas@wunner.de>
-> > Sent: Wednesday, May 24, 2023 10:45 AM
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>; Mika Westerberg
-> > <mika.westerberg@linux.intel.com>; Rafael J . Wysocki <rafael@kernel.org>;
-> > linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org; S-k, Shyam-sundar
-> > <Shyam-sundar.S-k@amd.com>; Natikar, Basavaraj
-> > <Basavaraj.Natikar@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; linux-pm@vger.kernel.org; Iain Lane
-> > <iain@orangesquash.org.uk>
-> > Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power
-> > manageable
+> On Wed, May 17, 2023, at 15:48, Rafael J. Wysocki wrote:
+> > On Wed, May 17, 2023 at 3:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >>
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >>
+> >> The arch_resume_nosmt() has a __weak definition, plus an x86
+> >> specific override, but no prototype that ensures the two have
+> >> the same arguments. This causes a W=1 warning:
+> >>
+> >> arch/x86/power/hibernate.c:189:5: error: no previous prototype for 'arch_resume_nosmt' [-Werror=missing-prototypes]
+> >>
+> >> Add the prototype in linux/suspend.h, which is included in
+> >> both places.
+> >>
+> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > >
-> > On Wed, May 24, 2023 at 10:21:36AM -0500, Mario Limonciello wrote:
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -2976,6 +2976,9 @@ bool pci_bridge_d3_possible(struct pci_dev
-> > *bridge)
-> > >
-> > >     switch (pci_pcie_type(bridge)) {
-> > >     case PCI_EXP_TYPE_ROOT_PORT:
-> > > +           if (!platform_pci_power_manageable(bridge))
-> > > +                   return false;
-> > > +           fallthrough;
-> > >     case PCI_EXP_TYPE_UPSTREAM:
-> > >     case PCI_EXP_TYPE_DOWNSTREAM:
-> > >             if (pci_bridge_d3_disable)
-> >
-> > This will exempt the Root Ports from pcie_port_pm=force.
-> > Not sure if that's desirable.
+> > Do you want me to pick this up?
 >
-> Right; It will only exempt root ports from pcie_port_pm=force
-> if they aren't power manageable.
->
-> If it's still desirable to let pcie_port_pm=force work on these
-> I think it's worth refactoring the function otherwise it's going
-> to be a nested if that matches the same variable as the
-> switch.
->
-> Something like this:
->
-> bool pci_bridge_d3_possible(struct pci_dev *bridge)
-> {
->         if (!pci_is_pcie(bridge))
->                 return false;
->
->         switch (pci_pcie_type(bridge)) {
->         case PCI_EXP_TYPE_ROOT_PORT:
->         case PCI_EXP_TYPE_UPSTREAM:
->         case PCI_EXP_TYPE_DOWNSTREAM:
->                 break;
->         default:
->                 return false;
->         }
->
->         if (pci_bridge_d3_disable)
->                 return false;
->
->         /*
->          * Hotplug ports handled by firmware in System Management Mode
->          * may not be put into D3 by the OS (Thunderbolt on non-Macs).
->          */
->         if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
->                 return false;
->
->         if (pci_bridge_d3_force)
->                 return true;
->
->         /* Even the oldest 2010 Thunderbolt controller supports D3. */
->         if (bridge->is_thunderbolt)
->                 return true;
->
->         /* Platform might know better if the bridge supports D3 */
->         if (platform_pci_bridge_d3(bridge))
->                 return true;
->
->         /*
->          * Hotplug ports handled natively by the OS were not validated
->          * by vendors for runtime D3 at least until 2018 because there
->          * was no OS support.
->          */
->         if (bridge->is_hotplug_bridge)
->                 return false;
->
->         if (dmi_check_system(bridge_d3_blacklist))
->                 return false;
->
->         /*
->          * It should be safe to put PCIe ports from 2015 or newer
->          * to D3.
->          */
->         if (dmi_get_bios_year() >= 2015)
->                 return true;
->
->         return false;
-> }
->
-> Then the check I'm proposing can injected anywhere after the force like this:
->
-> if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
->     !platform_pci_power_manageable(bridge)))
->         return false;
+> Yes, please do. Thanks,
 
-Sounds reasonable.  I would even put it after the Thunderbolt check.
+Done, thanks!
